@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://toolify-delta.vercel.app
+
+# Sitemaps
+Sitemap: https://toolify-delta.vercel.app/sitemap.xml
