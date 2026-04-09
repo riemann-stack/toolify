@@ -7,8 +7,9 @@ export const metadata: Metadata = {
 }
 
 const tools = [
-  { href: '/tools/finance/salary', icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 기준 세후 월 실수령액 계산' },
-  { href: '/tools/finance/loan',   icon: '💳', name: '대출이자 계산기',      desc: '원리금균등/원금균등 상환 비교' },
+  { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 기준 세후 월 실수령액 계산' },
+  { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등/원금균등 상환 비교' },
+  { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 투자 수익 계산' },
 ]
 
 export default function FinancePage() {

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 const tools = [
   { href: '/tools/life/lotto',  icon: '🎰', name: '로또 번호 생성기', desc: '이번 주 행운의 번호를 자동 추첨' },
   { href: '/tools/life/random', icon: '🎲', name: '랜덤 추첨기',      desc: '숫자 또는 항목을 무작위로 추첨' },
+  { href: '/tools/life/ladder', icon: '🪜', name: '사다리타기',       desc: '공정한 무작위 사다리 게임' },
 ]
 
 export default function LifePage() {
