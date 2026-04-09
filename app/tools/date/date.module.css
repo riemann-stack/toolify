@@ -1,0 +1,312 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ── DATE SELECTS (만 나이) ── */
+.dateRow {
+  display: flex;
+  gap: 8px;
+}
+
+.dateSelect {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.dateSelect:focus { border-color: rgba(200,255,62,0.5); }
+
+/* ── DATE INPUT ── */
+.dateInputFull {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 18px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color-scheme: dark;
+}
+.dateInputFull:focus {
+  border-color: rgba(200,255,62,0.5);
+  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+}
+
+/* ── SWAP DATE BTN ── */
+.swapDateBtn {
+  align-self: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.swapDateBtn:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* ── RESULT HERO ── */
+.resultHero {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+
+.resultHeroLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.resultHeroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 10vw, 72px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.resultHeroUnit {
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.resultHeroSub {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* ── INFO GRID ── */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.infoCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.infoNum {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.infoSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── BIRTHDAY BANNER ── */
+.birthdayBanner {
+  background: rgba(200,255,62,0.12);
+  border: 1px solid rgba(200,255,62,0.4);
+  border-radius: 12px;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  animation: fadeUp 0.3s ease;
+}
+
+/* ── DDAY LIST ── */
+.ddayList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ddayCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  animation: fadeUp 0.25s ease;
+}
+
+.ddayToday {
+  border-color: rgba(200,255,62,0.4);
+  background: rgba(200,255,62,0.04);
+}
+
+.ddayPast {
+  opacity: 0.6;
+}
+
+.ddayLeft { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+
+.ddayBadge {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 64px;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+.ddayLabel {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ddayDate {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.removeBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.removeBtn:hover { border-color: rgba(255,62,62,0.4); color: #FF6B6B; }
+
+/* ── ADD FORM ── */
+.addRow {
+  display: flex;
+  gap: 8px;
+}
+
+.textInput {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  min-width: 0;
+}
+.textInput::placeholder { color: var(--muted); }
+.textInput:focus { border-color: rgba(200,255,62,0.5); }
+
+.dateInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  color-scheme: dark;
+  transition: border-color 0.2s;
+}
+.dateInput:focus { border-color: rgba(200,255,62,0.5); }
+
+.addBtn {
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #0D0D0D;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.addBtn:hover:not(:disabled) { opacity: 0.85; }
+.addBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── EMPTY ── */
+.empty {
+  padding: 32px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+}
+
+/* ── 4 column info grid ── */
+.infoGrid:has(.infoCard:nth-child(4)) {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 500px) {
+  .dateRow { flex-direction: column; }
+  .addRow  { flex-wrap: wrap; }
+  .infoGrid { grid-template-columns: repeat(2, 1fr); }
+}
