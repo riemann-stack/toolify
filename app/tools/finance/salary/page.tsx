@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import SalaryClient from './SalaryClient'
 
 export const metadata: Metadata = {
-  title: '연봉 실수령액 계산기 2026 — 세후 월급 계산 | Toolify',
-  description: '2026년 기준 연봉 실수령액 계산기. 국민연금(4.75%), 건강보험(3.595%), 장기요양보험(13.14%), 고용보험(0.9%)을 자동 계산해 세후 월 실수령액을 알려드립니다.',
-  keywords: ['연봉실수령액', '연봉계산기2026', '세후연봉', '실수령액계산', '4대보험계산기', '월급실수령액'],
+  title: '연봉 실수령액 계산기 2026 — 세후 월급 계산 | Youtil',
+  description: '2026년 기준 연봉 실수령액 계산기. 국민연금(4.75%), 건강보험(3.595%), 장기요양보험, 고용보험, 근로소득세 자동 계산.',
+  keywords: ['연봉실수령액', '연봉계산기2026', '세후연봉', '실수령액계산', '4대보험계산기', '월급실수령액', '연봉실수령액표'],
 }
 
 export default function SalaryPage() {
@@ -22,25 +22,112 @@ export default function SalaryPage() {
 
       <SalaryClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* SEO 콘텐츠 */}
+      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 700, marginBottom: '12px' }}>연봉 실수령액 계산 방법</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            실수령액 = 월급여 − 4대보험 − 근로소득세 − 지방소득세입니다. 4대보험은 국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건강보험료×13.14%), 고용보험(0.9%)으로 구성됩니다.
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>2026년 연봉별 실수령액 표</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            아래 표는 부양가족 1인(본인만) 기준으로 계산한 2026년 연봉 실수령액입니다. 4대보험과 근로소득세를 모두 반영했습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>연봉</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 총급여</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 공제액</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>월 실수령액</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['2,400만원', '2,000,000', '288,190', '1,711,810'],
+                  ['3,000만원', '2,500,000', '362,650', '2,137,350'],
+                  ['3,600만원', '3,000,000', '441,750', '2,558,250'],
+                  ['4,200만원', '3,500,000', '524,190', '2,975,810'],
+                  ['4,800만원', '4,000,000', '613,780', '3,386,220'],
+                  ['5,400만원', '4,500,000', '727,200', '3,772,800'],
+                  ['6,000만원', '5,000,000', '854,890', '4,145,110'],
+                  ['7,000만원', '5,833,333', '1,046,680', '4,786,653'],
+                  ['8,000만원', '6,666,667', '1,266,250', '5,400,417'],
+                  ['1억원',     '8,333,333', '1,737,270', '6,596,063'],
+                ].map(([salary, gross, deduct, net], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{salary}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{parseInt(gross).toLocaleString()}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B' }}>{parseInt(deduct).toLocaleString()}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>{parseInt(net).toLocaleString()}원</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
+            ※ 부양가족 1인(본인) 기준, 비과세 없는 순수 급여 기준. 실제와 다를 수 있습니다.
           </p>
         </div>
+
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 700, marginBottom: '12px' }}>2026년 달라진 점</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            2026년 국민연금 보험료율이 27년 만에 9.0%에서 9.5%로 인상되어 근로자 부담분이 4.5%→4.75%로 올랐습니다. 건강보험도 7.09%→7.19%로, 장기요양보험도 12.95%→13.14%로 인상되었습니다. 국민연금 기준소득월액 상한도 637만 원으로 상향 조정되었습니다.
-          </p>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>2026년 4대보험 요율</h2>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>항목</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>근로자 부담</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>사업주 부담</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>변경사항</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['국민연금',    '4.75%', '4.75%', '▲ 4.5% → 4.75% (27년 만의 인상)'],
+                  ['건강보험',    '3.595%', '3.595%', '▲ 3.545% → 3.595%'],
+                  ['장기요양보험', '건강보험료 × 13.14%', '동일', '▲ 12.95% → 13.14%'],
+                  ['고용보험',    '0.9%', '0.9%+α', '동결'],
+                ].map(([label, worker, employer, change], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{label}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{worker}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{employer}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{change}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 700, marginBottom: '12px' }}>계산 시 주의사항</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            본 계산기는 비과세 수당(식대, 교통비 등)을 제외한 순수 급여 기준입니다. 회사별 복리후생, 성과급, 비과세 항목에 따라 실제 수령액과 차이가 있을 수 있습니다.
-          </p>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              {
+                q: '연봉 실수령액 계산 시 부양가족 수가 중요한 이유는?',
+                a: '근로소득세는 부양가족 수에 따라 차등 공제됩니다. 부양가족이 많을수록 소득공제 금액이 커져 납부할 세금이 줄어듭니다. 본인만 있는 경우(1인), 배우자까지 있으면 2인으로 입력하세요.',
+              },
+              {
+                q: '식대, 교통비 등 비과세 수당이 있으면 어떻게 되나요?',
+                a: '월 20만 원 이내 식대, 월 20만 원 이내 자가운전보조금 등 비과세 수당은 4대보험과 근로소득세 산정 기준에서 제외됩니다. 비과세 수당이 있으면 실제 공제액이 본 계산기보다 적게 나옵니다.',
+              },
+              {
+                q: '2026년 국민연금이 왜 오른 건가요?',
+                a: '국민연금 기금 고갈 문제를 해결하기 위해 정부는 2026년부터 보험료율을 기존 9%에서 9.5%로 인상했습니다. 이는 1998년 이후 27년 만의 인상으로, 2033년까지 단계적으로 13%까지 올릴 계획입니다.',
+              },
+              {
+                q: '연봉 협상 시 세전과 세후 중 어느 기준으로 이야기해야 하나요?',
+                a: '대부분의 연봉 계약은 세전(gross) 기준으로 이루어집니다. 하지만 실제 생활비 계획은 세후(net) 실수령액을 기준으로 해야 합니다. 연봉 협상 시 세전 금액을 확인하고 실수령액 계산기로 실제 수령액을 미리 확인해보세요.',
+              },
+            ].map((faq, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
+
       </div>
     </div>
   )

@@ -19,7 +19,6 @@ function calcCompound(
   monthly: number
 ) {
   const r = rate / 100 / 12
-  const n = years * 12
   const rows: { year: number; total: number; principal: number; interest: number }[] = []
 
   let total = principal
