@@ -16,7 +16,7 @@ export default function Nav() {
   return (
     <nav className={styles.nav}>
       <Link href="/" className={styles.logo}>
-        Tool<span>ify</span>
+        You<span>til</span>
       </Link>
       <ul className={styles.links}>
         {categories.map((c) => (

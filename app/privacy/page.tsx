@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '개인정보처리방침 | Toolify',
-  description: 'Toolify 개인정보처리방침입니다.',
+  title: '개인정보처리방침 | Youtil',
+  description: 'Youtil 개인정보처리방침입니다.',
 }
 
 const LAST_UPDATED = '2026년 4월 9일'
-const SITE_NAME = 'Toolify'
-const SITE_URL = 'https://toolify-delta.vercel.app'
-const CONTACT_EMAIL = 'contact@toolify.kr'
+const SITE_NAME = 'Youtil'
+const SITE_URL = 'https://youtil-delta.vercel.app'
+const CONTACT_EMAIL = 'contact@youtil.kr'
 
 export default function PrivacyPage() {
   return (
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
             1. 총칙
           </h2>
           <p>
-            {SITE_NAME}(이하 "서비스")은 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 및 관련 법령을 준수합니다.
+            {SITE_NAME}(이하 서비스)은 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 및 관련 법령을 준수합니다.
             본 방침은 {SITE_URL} 에서 제공하는 모든 서비스에 적용됩니다.
           </p>
         </section>

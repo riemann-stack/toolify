@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://toolify-delta.vercel.app',
+  siteUrl: 'https://youtil-delta.vercel.app',
   generateRobotsTxt: true,
   changefreq: 'weekly',
   priority: 0.7,

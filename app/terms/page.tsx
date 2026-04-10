@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '이용약관 | Toolify',
-  description: 'Toolify 이용약관입니다.',
+  title: '이용약관 | Youtil',
+  description: 'Youtil 이용약관입니다.',
 }
 
 const LAST_UPDATED = '2026년 4월 9일'
-const SITE_NAME = 'Toolify'
-const SITE_URL = 'https://toolify-delta.vercel.app'
-const CONTACT_EMAIL = 'contact@toolify.kr'
+const SITE_NAME = 'Youtil'
+const SITE_URL = 'https://youtil-delta.vercel.app'
+const CONTACT_EMAIL = 'contact@youtil.kr'
 
 export default function TermsPage() {
   return (
