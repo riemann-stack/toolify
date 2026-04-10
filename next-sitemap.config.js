@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://youtil-delta.vercel.app',
+  siteUrl: 'https://youtil.kr',
   generateRobotsTxt: true,
   changefreq: 'weekly',
   priority: 0.7,
@@ -10,6 +10,7 @@ module.exports = {
     await config.transform(config, '/about'),
     await config.transform(config, '/privacy'),
     await config.transform(config, '/terms'),
+    await config.transform(config, '/tools'),
     await config.transform(config, '/tools/finance'),
     await config.transform(config, '/tools/finance/salary'),
     await config.transform(config, '/tools/finance/loan'),
@@ -36,8 +37,14 @@ module.exports = {
     await config.transform(config, '/tools/dev/json'),
   ],
   transform: async (config, path) => {
-    // 홈페이지와 인기 툴은 우선순위 높게
-    const highPriority = ['/', '/tools/finance/salary', '/tools/date/age', '/tools/life/lotto', '/tools/health/bmi']
+    const highPriority = [
+      '/',
+      '/tools/finance/salary',
+      '/tools/date/age',
+      '/tools/life/lotto',
+      '/tools/health/bmi',
+      '/tools/life/ladder',
+    ]
     return {
       loc: path,
       changefreq: config.changefreq,

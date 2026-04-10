@@ -4,12 +4,12 @@ import Link from 'next/link'
 import styles from './Nav.module.css'
 
 const categories = [
-  { label: '금융·재테크', href: '/tools/finance' },
-  { label: '건강·피트니스', href: '/tools/health' },
-  { label: '생활·재미', href: '/tools/life' },
-  { label: '단위·변환', href: '/tools/unit' },
-  { label: '날짜·시간', href: '/tools/date' },
-  { label: '개발자', href: '/tools/dev' },
+  { label: '금융·재테크',   href: '/tools/finance' },
+  { label: '건강·피트니스', href: '/tools/health'  },
+  { label: '생활·재미',    href: '/tools/life'    },
+  { label: '단위·변환',    href: '/tools/unit'    },
+  { label: '날짜·시간',    href: '/tools/date'    },
+  { label: '개발자',       href: '/tools/dev'     },
 ]
 
 export default function Nav() {
