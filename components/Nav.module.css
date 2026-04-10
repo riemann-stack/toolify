@@ -1,14 +1,14 @@
 .nav {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
   height: 60px;
   border-bottom: 1px solid var(--border);
-  background: rgba(13,13,13,0.85);
+  background: rgba(13,13,13,0.92);
   backdrop-filter: blur(12px);
 }
 
@@ -18,9 +18,12 @@
   font-size: 22px;
   letter-spacing: -0.5px;
   color: var(--text);
+  text-decoration: none;
+  flex-shrink: 0;
 }
 .logo span { color: var(--accent); }
 
+/* ── 데스크탑 링크 ── */
 .links {
   display: flex;
   gap: 32px;
@@ -29,14 +32,117 @@
 .links a {
   font-size: 13px;
   color: var(--muted);
+  text-decoration: none;
   letter-spacing: 0.02em;
   transition: color 0.2s;
 }
 .links a:hover { color: var(--text); }
+.linkActive { color: var(--accent) !important; }
 
+/* ── 햄버거 버튼 ── */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.burgerLine {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+  transform-origin: center;
+}
+
+.burgerLineTop  { transform: translateY(7px) rotate(45deg); }
+.burgerLineMid  { opacity: 0; }
+.burgerLineBot  { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── 모바일 드로어 ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 150;
+  backdrop-filter: blur(2px);
+}
+
+.drawer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  z-index: 160;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.drawerInner {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawerLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+}
+
+.drawerItem {
+  display: block;
+  padding: 12px 8px;
+  font-size: 15px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+.drawerItem:hover { background: var(--bg3); }
+.drawerItemActive { color: var(--accent) !important; }
+
+.drawerItemSub {
+  display: block;
+  padding: 10px 8px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.drawerItemSub:hover { background: var(--bg3); color: var(--text); }
+
+.drawerDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0;
+}
+
+/* ── 반응형 ── */
 @media (max-width: 900px) {
   .nav { padding: 0 24px; }
 }
-@media (max-width: 600px) {
-  .links { display: none; }
+
+@media (max-width: 768px) {
+  .links  { display: none; }
+  .burger { display: flex; }
 }
