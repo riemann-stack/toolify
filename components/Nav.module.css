@@ -1,14 +1,15 @@
+/* ── NAV ── */
 .nav {
   position: sticky;
   top: 0;
-  z-index: 200;
+  z-index: 300;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
   height: 60px;
   border-bottom: 1px solid var(--border);
-  background: rgba(13,13,13,0.92);
+  background: rgba(13,13,13,0.94);
   backdrop-filter: blur(12px);
 }
 
@@ -23,23 +24,239 @@
 }
 .logo span { color: var(--accent); }
 
-/* ── 데스크탑 링크 ── */
+/* ── 데스크탑 카테고리 ── */
 .links {
   display: flex;
-  gap: 32px;
+  gap: 0;
   list-style: none;
+  align-items: center;
+  height: 100%;
 }
-.links a {
+
+.catItem {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.catLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  height: 100%;
   font-size: 13px;
   color: var(--muted);
   text-decoration: none;
   letter-spacing: 0.02em;
-  transition: color 0.2s;
+  transition: color 0.15s;
+  white-space: nowrap;
 }
-.links a:hover { color: var(--text); }
-.linkActive { color: var(--accent) !important; }
+.catLink:hover { color: var(--text); }
+.catLinkActive { color: var(--accent) !important; }
 
-/* ── 햄버거 버튼 ── */
+.chevron {
+  opacity: 0.4;
+  transition: transform 0.2s;
+}
+.catItem:hover .chevron {
+  transform: rotate(180deg);
+  opacity: 0.8;
+}
+
+/* ── 카테고리 호버 드롭다운 ── */
+.catDropdown {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 400;
+  animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.catDropdownHeader {
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.catDropdownTitle {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.catDropdownTitle:hover { opacity: 1; }
+
+.catDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+.catDropdownItem:hover { background: var(--bg3); }
+
+.catDropdownIcon { font-size: 15px; flex-shrink: 0; }
+.catDropdownName { font-size: 13px; color: var(--text); }
+
+/* ── 오른쪽 액션 버튼 영역 ── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* 검색 버튼 */
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.searchBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.searchBtnActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+  color: var(--accent);
+}
+
+/* ── 검색 슬라이드다운 바 ── */
+.searchBar {
+  position: sticky;
+  top: 60px;
+  z-index: 290;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 48px 0;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.searchBarInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.searchBarInner:focus-within {
+  border-color: rgba(200,255,62,0.5);
+  box-shadow: 0 0 0 3px rgba(200,255,62,0.06);
+}
+.searchBarIcon { color: var(--muted); flex-shrink: 0; }
+.searchBarInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+}
+.searchBarInput::placeholder { color: var(--muted); }
+.searchClear {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.searchClear:hover { color: var(--text); }
+
+/* 검색 결과 */
+.searchResults {
+  padding: 8px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+.searchResultItem:hover { background: var(--bg3); padding-left: 8px; }
+.searchResultIcon { font-size: 18px; }
+.searchResultName { font-size: 14px; color: var(--text); }
+
+.searchEmpty {
+  padding: 16px 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* 빠른 접근 */
+.searchQuick { padding: 12px 0; }
+.searchQuickLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+.searchQuickList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+.searchQuickItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 5px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.searchQuickItem:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── 햄버거 ── */
 .burger {
   display: none;
   flex-direction: column;
@@ -52,7 +269,6 @@
   cursor: pointer;
   padding: 4px;
 }
-
 .burgerLine {
   display: block;
   width: 22px;
@@ -62,17 +278,16 @@
   transition: transform 0.25s, opacity 0.25s;
   transform-origin: center;
 }
-
-.burgerLineTop  { transform: translateY(7px) rotate(45deg); }
-.burgerLineMid  { opacity: 0; }
-.burgerLineBot  { transform: translateY(-7px) rotate(-45deg); }
+.burgerLineTop { transform: translateY(7px) rotate(45deg); }
+.burgerLineMid { opacity: 0; }
+.burgerLineBot { transform: translateY(-7px) rotate(-45deg); }
 
 /* ── 모바일 드로어 ── */
 .overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 150;
+  z-index: 200;
   backdrop-filter: blur(2px);
 }
 
@@ -81,22 +296,19 @@
   top: 60px;
   left: 0;
   right: 0;
-  z-index: 160;
+  bottom: 0;
+  z-index: 250;
+  overflow-y: auto;
   animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 .drawerInner {
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
-  padding: 16px 24px 20px;
+  padding: 16px 24px 32px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .drawerLabel {
@@ -108,38 +320,47 @@
   margin-bottom: 4px;
 }
 
-.drawerItem {
+.drawerSection { margin-bottom: 8px; }
+
+.drawerCatLink {
   display: block;
-  padding: 12px 8px;
+  padding: 10px 8px;
   font-size: 15px;
+  font-weight: 600;
   color: var(--text);
   text-decoration: none;
   border-radius: 8px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
 }
-.drawerItem:hover { background: var(--bg3); }
-.drawerItemActive { color: var(--accent) !important; }
+.drawerCatLink:hover { background: var(--bg3); }
 
-.drawerItemSub {
-  display: block;
-  padding: 10px 8px;
-  font-size: 14px;
+.drawerTools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.drawerToolItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
   color: var(--muted);
   text-decoration: none;
-  border-radius: 8px;
-  transition: background 0.15s;
+  border-radius: 6px;
+  transition: all 0.12s;
+  font-family: 'Noto Sans KR', sans-serif;
 }
-.drawerItemSub:hover { background: var(--bg3); color: var(--text); }
-
-.drawerDivider {
-  height: 1px;
-  background: var(--border);
-  margin: 8px 0;
-}
+.drawerToolItem:hover { background: var(--bg3); color: var(--text); }
 
 /* ── 반응형 ── */
 @media (max-width: 900px) {
   .nav { padding: 0 24px; }
+  .searchBar { padding-left: 24px; padding-right: 24px; }
+  .catLink { padding: 0 10px; font-size: 12px; }
 }
 
 @media (max-width: 768px) {
