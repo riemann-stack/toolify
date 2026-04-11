@@ -2,14 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: '건강·피트니스 계산기 모음 | Toolify',
-  description: 'BMI 계산기, 기초대사량 계산기, 러닝 페이스 계산기 등 건강·피트니스 무료 도구 모음.',
+  title: '건강·피트니스 계산기 모음 | Youtil',
+  description: 'BMI, 기초대사량, 러닝 페이스, 체중 감량 기간 계산기 등 건강·피트니스 무료 도구 모음.',
 }
 
 const tools = [
-  { href: '/tools/health/bmi',  icon: '⚖️', name: 'BMI 계산기',        desc: '체질량지수로 비만도 확인' },
-  { href: '/tools/health/bmr',  icon: '🔥', name: '기초대사량 계산기',  desc: 'Harris-Benedict 공식 기준 하루 칼로리' },
-  { href: '/tools/health/pace', icon: '🏃', name: '러닝 페이스 계산기', desc: '목표 기록으로 킬로미터당 페이스 계산' },
+  { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',               desc: '체질량지수·비만도 확인' },
+  { href: '/tools/health/bmr',        icon: '🔥', name: '기초대사량 계산기',         desc: '하루 권장 칼로리 계산' },
+  { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 목표 기록별 페이스' },
+  { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
 ]
 
 export default function HealthPage() {
@@ -20,18 +21,18 @@ export default function HealthPage() {
         🏃 건강·피트니스
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        건강 관리에 필요한 계산을 바로 해보세요.
+        건강한 생활을 위한 계산기 모음입니다.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {tools.map(t => (
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: '16px',
             background: 'var(--bg2)', border: '1px solid var(--border)',
-            borderRadius: '14px', padding: '20px 24px',
+            borderRadius: '14px', padding: '20px 24px', textDecoration: 'none',
           }}>
             <span style={{ fontSize: '24px', flexShrink: 0 }}>{t.icon}</span>
             <div>
-              <div style={{ fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>{t.name}</div>
+              <div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>{t.desc}</div>
             </div>
           </Link>

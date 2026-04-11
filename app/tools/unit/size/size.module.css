@@ -1,0 +1,86 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+.tabs { display: flex; gap: 8px; }
+.tab {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+  text-align: center;
+}
+.tab:hover { border-color: var(--border-hover); color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.searchBox {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.searchInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.searchInput::placeholder { color: var(--muted); }
+.searchInput:focus { border-color: rgba(200,255,62,0.5); }
+
+/* ── 테이블 — 전체 가운데 정렬 ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 헤더: 가운데 정렬 */
+.th {
+  padding: 10px 14px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+  white-space: nowrap;
+}
+
+/* 바디 행 */
+.tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tr:hover { background: var(--bg3); }
+
+/* 바디 셀: 가운데 정렬 */
+.td {
+  padding: 10px 14px;
+  text-align: center;         /* ← 가운데 정렬 */
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.tr:last-child .td { border-bottom: none; }
+
+/* 한국 사이즈 강조 */
+.tdAccent {
+  color: var(--accent);
+  font-weight: 700;
+}

@@ -22,13 +22,12 @@ export default function SalaryPage() {
 
       <SalaryClient />
 
-      {/* SEO 콘텐츠 */}
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>2026년 연봉별 실수령액 표</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            아래 표는 부양가족 1인(본인만) 기준으로 계산한 2026년 연봉 실수령액입니다. 4대보험과 근로소득세를 모두 반영했습니다.
+            아래 표는 부양가족 1인(본인만) 기준으로 계산한 2026년 연봉 실수령액입니다. 국민연금(4.75%), 건강보험(3.595%), 장기요양보험, 고용보험(0.9%), 근로소득세를 모두 반영했습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -42,29 +41,29 @@ export default function SalaryPage() {
               </thead>
               <tbody>
                 {[
-                  ['2,400만원', '2,000,000', '288,190', '1,711,810'],
-                  ['3,000만원', '2,500,000', '362,650', '2,137,350'],
-                  ['3,600만원', '3,000,000', '441,750', '2,558,250'],
-                  ['4,200만원', '3,500,000', '524,190', '2,975,810'],
-                  ['4,800만원', '4,000,000', '613,780', '3,386,220'],
-                  ['5,400만원', '4,500,000', '727,200', '3,772,800'],
-                  ['6,000만원', '5,000,000', '854,890', '4,145,110'],
-                  ['7,000만원', '5,833,333', '1,046,680', '4,786,653'],
-                  ['8,000만원', '6,666,667', '1,266,250', '5,400,417'],
-                  ['1억원',     '8,333,333', '1,737,270', '6,596,063'],
+                  ['2,400만원', '2,000,000', '278,380',   '1,721,620'],
+                  ['3,000만원', '2,500,000', '409,460',   '2,090,540'],
+                  ['3,600만원', '3,000,000', '540,550',   '2,459,450'],
+                  ['4,200만원', '3,500,000', '715,630',   '2,784,370'],
+                  ['4,800만원', '4,000,000', '896,230',   '3,103,770'],
+                  ['5,400만원', '4,500,000', '1,076,810', '3,423,190'],
+                  ['6,000만원', '5,000,000', '1,317,900', '3,682,100'],
+                  ['7,000만원', '5,833,333', '1,719,680', '4,113,653'],
+                  ['8,000만원', '6,666,666', '2,107,410', '4,559,256'],
+                  ['1억원',     '8,333,333', '2,831,860', '5,501,473'],
                 ].map(([salary, gross, deduct, net], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{salary}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{parseInt(gross).toLocaleString()}원</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B' }}>{parseInt(deduct).toLocaleString()}원</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>{parseInt(net).toLocaleString()}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{gross}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B' }}>{deduct}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>{net}원</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            ※ 부양가족 1인(본인) 기준, 비과세 없는 순수 급여 기준. 실제와 다를 수 있습니다.
+            ※ 부양가족 1인(본인) 기준, 비과세 없는 순수 급여 기준. 실제와 다소 차이가 있을 수 있습니다.
           </p>
         </div>
 
@@ -82,10 +81,10 @@ export default function SalaryPage() {
               </thead>
               <tbody>
                 {[
-                  ['국민연금',    '4.75%', '4.75%', '▲ 4.5% → 4.75% (27년 만의 인상)'],
-                  ['건강보험',    '3.595%', '3.595%', '▲ 3.545% → 3.595%'],
-                  ['장기요양보험', '건강보험료 × 13.14%', '동일', '▲ 12.95% → 13.14%'],
-                  ['고용보험',    '0.9%', '0.9%+α', '동결'],
+                  ['국민연금',     '4.75%',               '4.75%',  '▲ 4.5% → 4.75% (27년 만의 인상)'],
+                  ['건강보험',     '3.595%',              '3.595%', '▲ 3.545% → 3.595%'],
+                  ['장기요양보험', '건강보험료 × 13.14%', '동일',   '▲ 12.95% → 13.14%'],
+                  ['고용보험',     '0.9%',                '0.9%+α', '동결'],
                 ].map(([label, worker, employer, change], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{label}</td>
@@ -105,7 +104,7 @@ export default function SalaryPage() {
             {[
               {
                 q: '연봉 실수령액 계산 시 부양가족 수가 중요한 이유는?',
-                a: '근로소득세는 부양가족 수에 따라 차등 공제됩니다. 부양가족이 많을수록 소득공제 금액이 커져 납부할 세금이 줄어듭니다. 본인만 있는 경우(1인), 배우자까지 있으면 2인으로 입력하세요.',
+                a: '근로소득세는 부양가족 수에 따라 차등 공제됩니다. 부양가족이 많을수록 소득공제 금액이 커져 납부할 세금이 줄어듭니다. 본인만 있는 경우 1인, 배우자까지 있으면 2인으로 입력하세요.',
               },
               {
                 q: '식대, 교통비 등 비과세 수당이 있으면 어떻게 되나요?',

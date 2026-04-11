@@ -1,0 +1,35 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+.dateInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: 'Noto Sans KR', sans-serif; color: var(--text); outline: none; box-sizing: border-box; transition: border-color 0.2s; }
+.dateInput:focus { border-color: rgba(200,255,62,0.5); }
+
+.typeGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.typeBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: left; }
+.typeBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.typeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
+
+.heroCard { background: var(--bg2); border: 1px solid rgba(200,255,62,0.3); border-radius: 14px; padding: 28px 24px; text-align: center; }
+.heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(22px, 4vw, 36px); font-weight: 800; color: var(--accent); }
+.heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.heroDone { font-size: 18px; color: var(--accent); margin-top: 8px; font-weight: 700; }
+
+.progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.progressPct { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--accent); }
+.progressBar { width: 100%; height: 12px; background: var(--bg3); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.progressFill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.5s ease; }
+.progressInfo { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+.statsGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.statCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.statLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.statValue { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+
+.empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }
+
+@media (max-width: 500px) {
+  .typeGrid { grid-template-columns: 1fr; }
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+}

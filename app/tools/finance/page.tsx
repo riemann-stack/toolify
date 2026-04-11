@@ -2,14 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: '금융·재테크 계산기 모음 | Toolify',
-  description: '연봉 실수령액 계산기, 대출이자 계산기, 복리 계산기 등 금융·재테크 무료 도구 모음.',
+  title: '금융·재테크 계산기 모음 | Youtil',
+  description: '연봉 실수령액, 대출이자, 복리, 주식 물타기 계산기 등 금융·재테크 무료 도구 모음.',
 }
 
 const tools = [
   { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 기준 세후 월 실수령액 계산' },
-  { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등/원금균등 상환 비교' },
+  { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등 상환 비교' },
   { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 투자 수익 계산' },
+  { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가·수익률 계산' },
 ]
 
 export default function FinancePage() {
@@ -27,11 +28,11 @@ export default function FinancePage() {
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: '16px',
             background: 'var(--bg2)', border: '1px solid var(--border)',
-            borderRadius: '14px', padding: '20px 24px',
+            borderRadius: '14px', padding: '20px 24px', textDecoration: 'none',
           }}>
             <span style={{ fontSize: '24px', flexShrink: 0 }}>{t.icon}</span>
             <div>
-              <div style={{ fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>{t.name}</div>
+              <div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>{t.desc}</div>
             </div>
           </Link>

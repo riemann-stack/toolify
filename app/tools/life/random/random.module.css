@@ -5,6 +5,8 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 20px 22px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .cardLabel {
   display: block;
@@ -32,20 +34,29 @@
 .modeBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .modeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
 
-/* ── RANGE ── */
-.rangeRow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+/* ── RANGE — overflow 방지 ── */
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
+  min-width: 0;
+}
 .rangeInput {
   flex: 1;
+  min-width: 0;          /* ← overflow 방지 핵심 */
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 22px;
+  padding: 12px 10px;
+  font-size: 20px;
   font-family: 'Syne', sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
   text-align: center;
+  box-sizing: border-box;
   transition: border-color 0.2s;
 }
 .rangeInput:focus { border-color: rgba(200,255,62,0.5); }
@@ -91,6 +102,7 @@
 /* ── TEXTAREA ── */
 .textarea {
   width: 100%;
+  box-sizing: border-box;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -151,7 +163,6 @@
   text-align: center;
   animation: fadeUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .resultLabel {
   font-size: 11px;
   color: var(--muted);
@@ -159,22 +170,14 @@
   text-transform: uppercase;
   margin-bottom: 16px;
 }
-
 .resultItems { display: flex; flex-direction: column; gap: 10px; }
-
 .resultItem {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
 }
-
-.resultRank {
-  font-size: 12px;
-  color: var(--muted);
-  min-width: 28px;
-}
-
+.resultRank { font-size: 12px; color: var(--muted); min-width: 28px; }
 .resultVal {
   font-family: 'Syne', sans-serif;
   font-size: clamp(32px, 8vw, 56px);
@@ -200,4 +203,5 @@
 @media (max-width: 500px) {
   .modeRow { flex-direction: column; }
   .optRow  { flex-direction: column; align-items: flex-start; }
+  .rangeInput { font-size: 16px; padding: 10px 8px; }
 }

@@ -41,11 +41,11 @@ function calcBmi(height: number, weight: number): BmiResult {
 }
 
 const BMI_RANGES = [
-  { label: '저체중',    max: 18.5, color: '#3EC8FF' },
-  { label: '정상',      max: 23,   color: '#3EFF9B' },
-  { label: '과체중',    max: 25,   color: '#C8FF3E' },
-  { label: '비만1',     max: 30,   color: '#FF8C3E' },
-  { label: '비만2',     max: 40,   color: '#FF3E3E' },
+  { label: '저체중',  max: 18.5, color: '#3EC8FF' },
+  { label: '정상',    max: 23,   color: '#3EFF9B' },
+  { label: '과체중',  max: 25,   color: '#C8FF3E' },
+  { label: '비만1',   max: 30,   color: '#FF8C3E' },
+  { label: '비만2',   max: 40,   color: '#FF3E3E' },
 ]
 
 export default function BmiClient() {
@@ -59,42 +59,51 @@ export default function BmiClient() {
     return calcBmi(h, w)
   }, [height, weight])
 
-  // BMI 게이지 위치 (0~40 범위 기준 %)
   const gaugePos = result ? Math.min(Math.max((result.bmi / 40) * 100, 0), 100) : null
 
   return (
     <div className={styles.wrap}>
 
-      {/* 입력 */}
-      <div className={styles.inputGrid}>
+      {/* 키·체중 — 가로 2열로 나란히 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>키</label>
-          <div className={styles.inputRow}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <input
-              className={styles.numInput}
-              type="number"
-              inputMode="decimal"
-              placeholder="170"
-              value={height}
+              style={{
+                flex: 1, minWidth: 0,
+                background: 'var(--bg3)', border: '1px solid var(--border)',
+                borderRadius: '10px', padding: '12px 10px',
+                fontSize: '22px', fontFamily: 'Syne, sans-serif', fontWeight: 700,
+                color: 'var(--text)', outline: 'none',
+                MozAppearance: 'textfield',
+              } as React.CSSProperties}
+              type="number" inputMode="decimal"
+              placeholder="170" value={height}
               onChange={e => setHeight(e.target.value)}
               min={100} max={250}
             />
-            <span className={styles.unit}>cm</span>
+            <span style={{ fontSize: '14px', color: 'var(--muted)', flexShrink: 0 }}>cm</span>
           </div>
         </div>
         <div className={styles.card}>
           <label className={styles.cardLabel}>체중</label>
-          <div className={styles.inputRow}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <input
-              className={styles.numInput}
-              type="number"
-              inputMode="decimal"
-              placeholder="65"
-              value={weight}
+              style={{
+                flex: 1, minWidth: 0,
+                background: 'var(--bg3)', border: '1px solid var(--border)',
+                borderRadius: '10px', padding: '12px 10px',
+                fontSize: '22px', fontFamily: 'Syne, sans-serif', fontWeight: 700,
+                color: 'var(--text)', outline: 'none',
+                MozAppearance: 'textfield',
+              } as React.CSSProperties}
+              type="number" inputMode="decimal"
+              placeholder="65" value={weight}
               onChange={e => setWeight(e.target.value)}
               min={20} max={300}
             />
-            <span className={styles.unit}>kg</span>
+            <span style={{ fontSize: '14px', color: 'var(--muted)', flexShrink: 0 }}>kg</span>
           </div>
         </div>
       </div>

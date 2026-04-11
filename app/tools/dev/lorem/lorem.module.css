@@ -1,0 +1,164 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ── 언어 선택 ── */
+.langRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.langBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+.langBtn:hover { border-color: var(--border-hover); }
+.langActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+}
+.langFlag { font-size: 24px; flex-shrink: 0; }
+.langText { display: flex; flex-direction: column; gap: 2px; }
+.langName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.langActive .langName { color: var(--accent); }
+.langDesc {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 문단 수 입력 ── */
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.numInput {
+  flex: 1; min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 20px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
+.numInput:focus { border-color: rgba(200,255,62,0.5); }
+.numInput::-webkit-outer-spin-button,
+.numInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+.numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.unit { font-size: 14px; color: var(--muted); flex-shrink: 0; }
+
+.presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.presetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.presetBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.presetActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+
+/* ── 생성 버튼 ── */
+.generateBtn {
+  width: 100%;
+  padding: 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #0D0D0D;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.generateBtn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── 출력 영역 ── */
+.outputCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.outputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copyBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.copyBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.copiedBtn {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+  color: var(--accent);
+}
+
+/* ── textarea: 잘리지 않게, 줄간격 자연스럽게 ── */
+.outputTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  line-height: 1.75;        /* 줄간격 적당히 */
+  resize: vertical;         /* 세로 조절 가능 */
+  outline: none;
+  min-height: 160px;        /* 최소 높이 */
+  overflow-y: auto;         /* 스크롤로 전체 내용 확인 */
+}
+
+@media (max-width: 500px) {
+  .langRow { grid-template-columns: 1fr; }
+}
