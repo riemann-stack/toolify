@@ -1,0 +1,40 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* 미리보기 */
+.previewCard { border-radius: 14px; padding: 24px 20px; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.1); }
+.previewTop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.previewLabel { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; }
+.previewHex { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; letter-spacing: 2px; }
+.colorPicker { width: 40px; height: 40px; border: none; border-radius: 8px; cursor: pointer; padding: 0; background: none; }
+.colorPicker::-webkit-color-swatch-wrapper { padding: 0; }
+.colorPicker::-webkit-color-swatch { border-radius: 8px; border: 2px solid rgba(255,255,255,0.3); }
+
+/* 코드 입력 행 */
+.codeRow { display: flex; align-items: center; gap: 10px; }
+.codeLabel { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); width: 36px; flex-shrink: 0; }
+.codeInput { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 14px; font-family: monospace; color: var(--text); outline: none; transition: border-color 0.2s; }
+.codeInput:focus { border-color: rgba(200,255,62,0.5); }
+
+/* RGB/HSL 입력 */
+.rgbInputs { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.rgbItem { display: flex; flex-direction: column; gap: 3px; }
+.rgbLabel { font-size: 10px; color: var(--muted); text-align: center; letter-spacing: 0.05em; }
+.rgbInput { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 6px 4px; font-size: 13px; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); outline: none; text-align: center; width: 100%; box-sizing: border-box; }
+.rgbInput:focus { border-color: rgba(200,255,62,0.5); }
+.rgbInput::-webkit-outer-spin-button, .rgbInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+.rgbInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* 복사 버튼 */
+.copyBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--muted); cursor: pointer; flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
+.copyBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.copied { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+
+/* 프리셋 */
+.presetGrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.presetItem { width: 100%; aspect-ratio: 1; border-radius: 8px; cursor: pointer; transition: transform 0.15s; }
+.presetItem:hover { transform: scale(1.1); }
+
+@media (max-width: 500px) { .presetGrid { grid-template-columns: repeat(4, 1fr); } }

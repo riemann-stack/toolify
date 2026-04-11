@@ -31,6 +31,8 @@ module.exports = {
     await config.transform(config, '/tools/life/random'),
     await config.transform(config, '/tools/life/ladder'),
     await config.transform(config, '/tools/life/dutch'),
+    await config.transform(config, '/tools/life/zodiac'),
+    await config.transform(config, '/tools/life/pomodoro'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -50,6 +52,7 @@ module.exports = {
     await config.transform(config, '/tools/dev/base64'),
     await config.transform(config, '/tools/dev/json'),
     await config.transform(config, '/tools/dev/lorem'),
+    await config.transform(config, '/tools/dev/color'),
   ],
   transform: async (config, path) => {
     const highPriority = [

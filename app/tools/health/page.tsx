@@ -1,41 +1,44 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { categories } from '@/lib/tools'
+
+const CATEGORY_ID = 'health'
+const cat = categories.find(c => c.id === CATEGORY_ID)!
 
 export const metadata: Metadata = {
-  title: '건강·피트니스 계산기 모음 | Youtil',
-  description: 'BMI, 기초대사량, 러닝 페이스, 체중 감량 기간 계산기 등 건강·피트니스 무료 도구 모음.',
+  title: `${cat.name} 계산기 모음 | Youtil`,
+  description: `${cat.tools.map(t => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
 }
 
-const tools = [
-  { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',               desc: '체질량지수·비만도 확인' },
-  { href: '/tools/health/bmr',        icon: '🔥', name: '기초대사량 계산기',         desc: '하루 권장 칼로리 계산' },
-  { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 목표 기록별 페이스' },
-  { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
-  { href: '/tools/health/pregnancy', icon: '🤰', name: '임신 주수 계산기', desc: '출산 예정일·삼분기·산전 검사 일정' },
-]
-
-export default function HealthPage() {
+export default function CategoryPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>카테고리</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏃 건강·피트니스
+        {cat.icon} {cat.name}
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        건강한 생활을 위한 계산기 모음입니다.
+        총 {cat.tools.length}개 도구 · 로그인 없이 즉시 사용
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {tools.map(t => (
+        {cat.tools.map(t => (
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: '16px',
             background: 'var(--bg2)', border: '1px solid var(--border)',
             borderRadius: '14px', padding: '20px 24px', textDecoration: 'none',
+            position: 'relative',
           }}>
             <span style={{ fontSize: '24px', flexShrink: 0 }}>{t.icon}</span>
             <div>
               <div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>{t.desc}</div>
             </div>
+            {t.badge === 'hot' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(255,62,62,0.15)', color: '#FF6B6B', border: '1px solid rgba(255,62,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>HOT</span>
+            )}
+            {t.badge === 'new' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(200,255,62,0.12)', color: 'var(--accent)', border: '1px solid rgba(200,255,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>NEW</span>
+            )}
           </Link>
         ))}
       </div>

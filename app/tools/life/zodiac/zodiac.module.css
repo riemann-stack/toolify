@@ -1,0 +1,105 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── 드롭다운 ── */
+.selectRow {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr;
+  gap: 8px;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 36px 12px 14px;
+  font-size: 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.select:focus { border-color: rgba(200,255,62,0.5); }
+.select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* 기본 option 색상 */
+.select option { background: #1a1a1a; color: var(--text); }
+
+/* 커스텀 화살표 */
+.selectArrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ── 결과 카드 ── */
+.resultRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.resultCard {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.2);
+  border-radius: 14px;
+  padding: 24px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.resultEmoji { font-size: 52px; line-height: 1; }
+.resultType { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.resultName { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
+.traitsRow { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--muted); }
+.element { font-size: 12px; font-weight: 600; }
+
+/* ── 같은 띠 연도 ── */
+.yearRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.yearTag {
+  font-size: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+}
+.yearTagActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 빈 상태 ── */
+.empty {
+  padding: 32px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 480px) {
+  .resultRow { grid-template-columns: 1fr; }
+  .selectRow { grid-template-columns: 1fr 1fr 1fr; }
+  .select { font-size: 13px; padding: 10px 28px 10px 10px; }
+}

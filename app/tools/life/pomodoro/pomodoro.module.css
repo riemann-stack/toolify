@@ -1,0 +1,41 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* 페이즈 선택 */
+.phaseRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
+.phaseBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.phaseBtnActive { background: var(--bg2); font-weight: 600; }
+
+/* 원형 타이머 */
+.timerWrap { position: relative; width: 200px; margin: 8px auto; }
+.timerCenter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.timerPhase { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+.timerTime { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
+.timerCycle { font-size: 12px; color: var(--muted); }
+
+/* 컨트롤 */
+.controls { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }
+.ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #0D0D0D; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+.mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
+
+/* 통계 */
+.statsRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.statItem { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.statNum { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); }
+.statLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* 설정 */
+.settingsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.settingItem { display: flex; flex-direction: column; gap: 8px; }
+.settingLabel { font-size: 12px; color: var(--muted); }
+.settingRow { display: flex; align-items: center; gap: 10px; }
+.settingBtn { width: 30px; height: 30px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+.settingBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.settingValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 28px; text-align: center; }
+
+@media (max-width: 480px) { .settingsGrid { grid-template-columns: 1fr 1fr; } }

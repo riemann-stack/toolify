@@ -1,41 +1,44 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { categories } from '@/lib/tools'
+
+const CATEGORY_ID = 'finance'
+const cat = categories.find(c => c.id === CATEGORY_ID)!
 
 export const metadata: Metadata = {
-  title: '금융·재테크 계산기 모음 | Youtil',
-  description: '연봉 실수령액, 대출이자, 복리, 주식 물타기 계산기 등 금융·재테크 무료 도구 모음.',
+  title: `${cat.name} 계산기 모음 | Youtil`,
+  description: `${cat.tools.map(t => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
 }
 
-const tools = [
-  { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 기준 세후 월 실수령액 계산' },
-  { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등 상환 비교' },
-  { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 투자 수익 계산' },
-  { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가·수익률 계산' },
-  { href: '/tools/finance/vat',    icon: '🧾', name: '부가세 계산기',   desc: '공급가액·부가세 추가·역산 계산' },
-]
-
-export default function FinancePage() {
+export default function CategoryPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>카테고리</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 금융·재테크
+        {cat.icon} {cat.name}
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        돈 계산이 필요할 때 바로 사용하세요.
+        총 {cat.tools.length}개 도구 · 로그인 없이 즉시 사용
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {tools.map(t => (
+        {cat.tools.map(t => (
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: '16px',
             background: 'var(--bg2)', border: '1px solid var(--border)',
             borderRadius: '14px', padding: '20px 24px', textDecoration: 'none',
+            position: 'relative',
           }}>
             <span style={{ fontSize: '24px', flexShrink: 0 }}>{t.icon}</span>
             <div>
               <div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>{t.desc}</div>
             </div>
+            {t.badge === 'hot' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(255,62,62,0.15)', color: '#FF6B6B', border: '1px solid rgba(255,62,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>HOT</span>
+            )}
+            {t.badge === 'new' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(200,255,62,0.12)', color: 'var(--accent)', border: '1px solid rgba(200,255,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>NEW</span>
+            )}
           </Link>
         ))}
       </div>

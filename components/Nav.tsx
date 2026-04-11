@@ -4,69 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './Nav.module.css'
+import { categories, allTools } from '@/lib/tools'
 
-const categories = [
-  {
-    label: '금융·재테크', href: '/tools/finance',
-    tools: [
-      { name: '연봉 실수령액 계산기', href: '/tools/finance/salary',   icon: '💴' },
-      { name: '대출이자 계산기',      href: '/tools/finance/loan',     icon: '💳' },
-      { name: '복리 계산기',          href: '/tools/finance/compound', icon: '📈' },
-      { name: '주식 물타기 계산기',   href: '/tools/finance/stock',    icon: '📉' },
-      { name: '부가세 계산기',        href: '/tools/finance/vat',      icon: '🧾' },
-    ],
-  },
-  {
-    label: '건강·피트니스', href: '/tools/health',
-    tools: [
-      { name: 'BMI 계산기',               href: '/tools/health/bmi',        icon: '⚖️' },
-      { name: '기초대사량 계산기',         href: '/tools/health/bmr',        icon: '🔥' },
-      { name: '러닝 페이스 계산기',       href: '/tools/health/pace',       icon: '🏃' },
-      { name: '목표 체중 감량 기간 계산기', href: '/tools/health/weightloss', icon: '🎯' },
-      { name: '임신 주수 계산기', href: '/tools/health/pregnancy', icon: '🤰'},
-
-    ],
-  },
-  {
-    label: '생활·재미', href: '/tools/life',
-    tools: [
-      { name: '로또 번호 생성기',     href: '/tools/life/lotto',  icon: '🎰' },
-      { name: '랜덤 추첨기',          href: '/tools/life/random', icon: '🎲' },
-      { name: '사다리타기',           href: '/tools/life/ladder', icon: '🪜' },
-      { name: '더치페이(N빵) 계산기', href: '/tools/life/dutch',  icon: '🍻' },
-    ],
-  },
-  {
-    label: '단위·변환', href: '/tools/unit',
-    tools: [
-      { name: '평수 ↔ ㎡ 변환기',       href: '/tools/unit/area',   icon: '🏠' },
-      { name: '길이 변환기',             href: '/tools/unit/length', icon: '📏' },
-      { name: '무게 변환기',             href: '/tools/unit/weight', icon: '⚖️' },
-      { name: '해외 직구 사이즈 변환기', href: '/tools/unit/size',   icon: '🛍️' },
-      { name: '온도 변환기',             href: '/tools/unit/temperature', icon: '🌡️' },
-    ],
-  },
-  {
-    label: '날짜·시간', href: '/tools/date',
-    tools: [
-      { name: '만 나이 계산기',          href: '/tools/date/age',      icon: '🎂' },
-      { name: 'D-day 계산기',            href: '/tools/date/dday',     icon: '📅' },
-      { name: '날짜 차이 계산기',        href: '/tools/date/diff',     icon: '📆' },
-      { name: '군 전역일·복무율 계산기', href: '/tools/date/military', icon: '🎖️' },
-    ],
-  },
-  {
-    label: '개발자', href: '/tools/dev',
-    tools: [
-      { name: '글자수 세기',          href: '/tools/dev/charcount', icon: '🔡' },
-      { name: 'Base64 인코더/디코더', href: '/tools/dev/base64',    icon: '🔐' },
-      { name: 'JSON 포맷터',          href: '/tools/dev/json',      icon: '📋' },
-      { name: '더미 텍스트 생성기',   href: '/tools/dev/lorem',     icon: '📝' },
-    ],
-  },
-]
-
-const allTools = categories.flatMap(c => c.tools)
 
 export default function Nav() {
   const [mobileOpen,  setMobileOpen]  = useState(false)
@@ -129,27 +68,27 @@ export default function Nav() {
         {/* 데스크탑 카테고리 */}
         <ul className={styles.links}>
           {categories.map(cat => (
-            <li key={cat.href} className={styles.catItem}
-              onMouseEnter={() => handleCatEnter(cat.href)}
+            <li key={cat.id} className={styles.catItem}
+              onMouseEnter={() => handleCatEnter(`/tools/${cat.id}`)}
               onMouseLeave={handleCatLeave}>
               <Link
-                href={cat.href}
-                className={`${styles.catLink} ${pathname.startsWith(cat.href) ? styles.catLinkActive : ''}`}>
-                {cat.label}
+                href={`/tools/${cat.id}`}
+                className={`${styles.catLink} ${pathname.startsWith(`/tools/${cat.id}`) ? styles.catLinkActive : ''}`}>
+                {cat.name}
                 <svg className={styles.chevron} width="10" height="10" viewBox="0 0 10 10" fill="none">
                   <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </Link>
 
               {/* 호버 드롭다운 */}
-              {activecat === cat.href && (
+              {activecat === `/tools/${cat.id}` && (
                 <div className={styles.catDropdown}
                   onMouseEnter={handleDropdownEnter}
                   onMouseLeave={handleCatLeave}>
                   <div className={styles.catDropdownHeader}>
-                    <Link href={cat.href} className={styles.catDropdownTitle}
+                    <Link href={`/tools/${cat.id}`} className={styles.catDropdownTitle}
                       onClick={() => setActivecat(null)}>
-                      {cat.label} 전체 보기 →
+                      {cat.name} 전체 보기 →
                     </Link>
                   </div>
                   {cat.tools.map(tool => (
@@ -268,10 +207,10 @@ export default function Nav() {
             <div className={styles.drawerInner}>
               <p className={styles.drawerLabel}>카테고리</p>
               {categories.map(cat => (
-                <div key={cat.href} className={styles.drawerSection}>
-                  <Link href={cat.href} className={styles.drawerCatLink}
+                <div key={cat.id} className={styles.drawerSection}>
+                  <Link href={`/tools/${cat.id}`} className={styles.drawerCatLink}
                     onClick={() => setMobileOpen(false)}>
-                    {cat.label}
+                    {cat.name}
                   </Link>
                   <div className={styles.drawerTools}>
                     {cat.tools.map(tool => (

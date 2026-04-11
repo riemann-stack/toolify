@@ -1,41 +1,44 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { categories } from '@/lib/tools'
+
+const CATEGORY_ID = 'unit'
+const cat = categories.find(c => c.id === CATEGORY_ID)!
 
 export const metadata: Metadata = {
-  title: '단위·변환 도구 모음 | Youtil',
-  description: '평수 변환, 길이 변환, 무게 변환, 해외 직구 사이즈 변환기 등 단위 변환 무료 도구 모음.',
+  title: `${cat.name} 계산기 모음 | Youtil`,
+  description: `${cat.tools.map(t => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
 }
 
-const tools = [
-  { href: '/tools/unit/area',   icon: '🏠', name: '평수 ↔ ㎡ 변환기',       desc: '아파트 면적 단위 변환' },
-  { href: '/tools/unit/length', icon: '📏', name: '길이 변환기',             desc: 'cm·m·inch·ft·mile 변환' },
-  { href: '/tools/unit/weight', icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
-  { href: '/tools/unit/size',   icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU 신발·옷 → 한국 사이즈' },
-  { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기', desc: '섭씨·화씨·켈빈 즉시 변환' },
-]
-
-export default function UnitPage() {
+export default function CategoryPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>카테고리</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📐 단위·변환
+        {cat.icon} {cat.name}
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        단위 변환이 필요할 때 바로 사용하세요.
+        총 {cat.tools.length}개 도구 · 로그인 없이 즉시 사용
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {tools.map(t => (
+        {cat.tools.map(t => (
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: '16px',
             background: 'var(--bg2)', border: '1px solid var(--border)',
             borderRadius: '14px', padding: '20px 24px', textDecoration: 'none',
+            position: 'relative',
           }}>
             <span style={{ fontSize: '24px', flexShrink: 0 }}>{t.icon}</span>
             <div>
               <div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>{t.desc}</div>
             </div>
+            {t.badge === 'hot' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(255,62,62,0.15)', color: '#FF6B6B', border: '1px solid rgba(255,62,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>HOT</span>
+            )}
+            {t.badge === 'new' && (
+              <span style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '10px', background: 'rgba(200,255,62,0.12)', color: 'var(--accent)', border: '1px solid rgba(200,255,62,0.3)', borderRadius: '99px', padding: '2px 8px' }}>NEW</span>
+            )}
           </Link>
         ))}
       </div>
