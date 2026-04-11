@@ -1,0 +1,52 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+.modeRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.modeBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center; line-height: 1.4; }
+.modeBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.modeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
+
+.dateInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: 'Noto Sans KR', sans-serif; color: var(--text); outline: none; box-sizing: border-box; transition: border-color 0.2s; }
+.dateInput:focus { border-color: rgba(200,255,62,0.5); }
+
+.heroCard { background: var(--bg2); border: 1px solid rgba(255,107,213,0.3); border-radius: 14px; padding: 28px 24px; text-align: center; }
+.heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(32px, 6vw, 52px); font-weight: 800; color: #FF6BD9; letter-spacing: -1px; }
+.heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+.progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.progressPct { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); }
+.progressBar { width: 100%; height: 10px; background: var(--bg3); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+.progressFill { height: 100%; background: linear-gradient(90deg, #3EC8FF, #FF6BD9); border-radius: 99px; transition: width 0.5s ease; }
+
+.trimesterRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.trimesterItem { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.trimesterActive { background: rgba(255,107,217,0.06); font-weight: 600; }
+.trimesterLabel { font-size: 12px; color: var(--muted); font-weight: 500; font-family: 'Noto Sans KR', sans-serif; }
+.trimesterActive .trimesterLabel { font-weight: 700; }
+.trimesterRange { font-size: 11px; color: var(--muted); }
+
+.statCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.statLabel { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.statValue { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
+.accentValue { color: #FF6BD9; font-weight: 700; }
+
+.scheduleList { display: flex; flex-direction: column; gap: 2px; }
+.scheduleItem { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+.scheduleItem:last-child { border-bottom: none; }
+.scheduleDone { color: var(--text); }
+.scheduleCheck { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; color: #FF6BD9; }
+.scheduleWeek { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); width: 36px; flex-shrink: 0; }
+.scheduleLabel { flex: 1; }
+.scheduleDone .scheduleLabel { text-decoration: line-through; opacity: 0.6; }
+
+.empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }
+
+@media (max-width: 500px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .modeRow { grid-template-columns: 1fr; }
+  .trimesterRow { grid-template-columns: 1fr; }
+}

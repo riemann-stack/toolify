@@ -11,6 +11,7 @@ const tools = [
   { href: '/tools/unit/length', icon: '📏', name: '길이 변환기',             desc: 'cm·m·inch·ft·mile 변환' },
   { href: '/tools/unit/weight', icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
   { href: '/tools/unit/size',   icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU 신발·옷 → 한국 사이즈' },
+  { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기', desc: '섭씨·화씨·켈빈 즉시 변환' },
 ]
 
 export default function UnitPage() {

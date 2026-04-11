@@ -15,6 +15,7 @@ const categories = [
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등 비교' },
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 수익' },
       { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '새 평단가·수익률 계산' },
+      { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',    desc: '공급가액·부가세 역산 계산' },
     ],
   },
   {
@@ -24,6 +25,7 @@ const categories = [
       { href: '/tools/health/bmr',        icon: '🔥', name: '기초대사량 계산기',         desc: '하루 권장 칼로리 계산' },
       { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 목표 페이스 계산' },
       { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 달성일 예측' },
+      { href: '/tools/health/pregnancy', icon: '🤰', name: '임신 주수 계산기', desc: '출산 예정일·산전 검사 일정' },
     ],
   },
   {
@@ -42,6 +44,7 @@ const categories = [
       { href: '/tools/unit/length', icon: '📏', name: '길이 변환기',             desc: 'cm·m·inch·ft·mile' },
       { href: '/tools/unit/weight', icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈' },
       { href: '/tools/unit/size',   icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU → 한국 사이즈' },
+      { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',      desc: '섭씨·화씨·켈빈 즉시 변환' },
     ],
   },
   {

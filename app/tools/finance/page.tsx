@@ -11,6 +11,7 @@ const tools = [
   { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등 상환 비교' },
   { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 투자 수익 계산' },
   { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가·수익률 계산' },
+  { href: '/tools/finance/vat',    icon: '🧾', name: '부가세 계산기',   desc: '공급가액·부가세 추가·역산 계산' },
 ]
 
 export default function FinancePage() {

@@ -17,12 +17,14 @@ module.exports = {
     await config.transform(config, '/tools/finance/loan'),
     await config.transform(config, '/tools/finance/compound'),
     await config.transform(config, '/tools/finance/stock'),
+    await config.transform(config, '/tools/finance/vat'),
     // 건강
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
     await config.transform(config, '/tools/health/bmr'),
     await config.transform(config, '/tools/health/pace'),
     await config.transform(config, '/tools/health/weightloss'),
+    await config.transform(config, '/tools/health/pregnancy'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -35,6 +37,7 @@ module.exports = {
     await config.transform(config, '/tools/unit/length'),
     await config.transform(config, '/tools/unit/weight'),
     await config.transform(config, '/tools/unit/size'),
+    await config.transform(config, '/tools/unit/temperature'),
     // 날짜
     await config.transform(config, '/tools/date'),
     await config.transform(config, '/tools/date/age'),

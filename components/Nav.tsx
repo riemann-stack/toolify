@@ -13,6 +13,7 @@ const categories = [
       { name: '대출이자 계산기',      href: '/tools/finance/loan',     icon: '💳' },
       { name: '복리 계산기',          href: '/tools/finance/compound', icon: '📈' },
       { name: '주식 물타기 계산기',   href: '/tools/finance/stock',    icon: '📉' },
+      { name: '부가세 계산기',        href: '/tools/finance/vat',      icon: '🧾' },
     ],
   },
   {
@@ -22,6 +23,8 @@ const categories = [
       { name: '기초대사량 계산기',         href: '/tools/health/bmr',        icon: '🔥' },
       { name: '러닝 페이스 계산기',       href: '/tools/health/pace',       icon: '🏃' },
       { name: '목표 체중 감량 기간 계산기', href: '/tools/health/weightloss', icon: '🎯' },
+      { name: '임신 주수 계산기', href: '/tools/health/pregnancy', icon: '🤰'},
+
     ],
   },
   {
@@ -40,6 +43,7 @@ const categories = [
       { name: '길이 변환기',             href: '/tools/unit/length', icon: '📏' },
       { name: '무게 변환기',             href: '/tools/unit/weight', icon: '⚖️' },
       { name: '해외 직구 사이즈 변환기', href: '/tools/unit/size',   icon: '🛍️' },
+      { name: '온도 변환기',             href: '/tools/unit/temperature', icon: '🌡️' },
     ],
   },
   {

@@ -11,6 +11,7 @@ const tools = [
   { href: '/tools/health/bmr',        icon: '🔥', name: '기초대사량 계산기',         desc: '하루 권장 칼로리 계산' },
   { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 목표 기록별 페이스' },
   { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
+  { href: '/tools/health/pregnancy', icon: '🤰', name: '임신 주수 계산기', desc: '출산 예정일·삼분기·산전 검사 일정' },
 ]
 
 export default function HealthPage() {
