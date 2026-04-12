@@ -1,80 +1,88 @@
 .wrap { display: flex; flex-direction: column; gap: 10px; }
-
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-.card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 22px;
-  box-sizing: border-box;
-}
-.cardLabel {
-  display: block;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
 .inputRow { display: flex; align-items: center; gap: 10px; }
 .numInput {
   flex: 1; min-width: 0;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 20px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.2s;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  font-size: 20px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
 .numInput:focus { border-color: rgba(200,255,62,0.5); }
-.numInput::-webkit-outer-spin-button,
-.numInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+.numInput::-webkit-outer-spin-button, .numInput::-webkit-inner-spin-button { -webkit-appearance: none; }
 .numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .unit { font-size: 14px; color: var(--muted); flex-shrink: 0; }
 
-.heroCard {
-  background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.3);
-  border-radius: 14px;
-  padding: 28px 24px;
-  text-align: center;
+/* ── 수수료 옵션 ── */
+.feeRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.feeToggle {
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; user-select: none;
 }
-.heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(28px, 5vw, 44px); font-weight: 800; color: var(--accent); letter-spacing: -1px; }
-.heroSub { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.feeToggle input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+.feeLabel { font-size: 14px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.feeInputWrap { display: flex; align-items: center; gap: 6px; }
+.feeInput {
+  width: 72px; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px; font-size: 14px;
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--accent); outline: none; text-align: right;
+}
+.feeInput:focus { border-color: rgba(200,255,62,0.5); }
+.feeInput::-webkit-outer-spin-button, .feeInput::-webkit-inner-spin-button { -webkit-appearance: none; }
+.feeInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.feeUnit { font-size: 13px; color: var(--muted); }
+.feeHint { margin-top: 8px; font-size: 12px; color: var(--muted); line-height: 1.6; }
 
-.rateCard {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  text-align: center;
-}
+/* ── 결과 ── */
+.heroCard { background: var(--bg2); border: 1px solid rgba(200,255,62,0.3); border-radius: 14px; padding: 24px; text-align: center; }
+.heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(28px, 5vw, 44px); font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.feeBadge { font-size: 11px; background: var(--accent-dim); border: 1px solid rgba(200,255,62,0.3); color: var(--accent); border-radius: 99px; padding: 2px 8px; }
+
+.rateCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
 .rateLabel { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 .rateNum { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
+
+/* ── 탈출 상승률 ── */
+.escapeCard {
+  background: var(--bg2);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.escapeTitle { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; font-family: 'Noto Sans KR', sans-serif; }
+.escapeRow { display: flex; align-items: center; gap: 12px; }
+.escapeItem { flex: 1; background: var(--bg3); border-radius: 10px; padding: 12px 14px; text-align: center; }
+.escapeLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
+.escapeRate { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+.escapeArrow { font-size: 20px; color: var(--muted); flex-shrink: 0; }
+.escapeDiff {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--accent);
+  text-align: center;
+  background: var(--accent-dim);
+  border-radius: 8px;
+  padding: 6px 12px;
+}
 
 .summaryGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .summaryItem { display: flex; flex-direction: column; gap: 4px; }
 .summaryLabel { font-size: 12px; color: var(--muted); }
 .summaryValue { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
 
-.empty {
-  padding: 32px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--muted);
-  background: var(--bg2);
-  border: 1px dashed var(--border);
-  border-radius: 14px;
-}
+.empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }
 
 @media (max-width: 500px) {
   .grid2 { grid-template-columns: 1fr; }
-  .summaryGrid { grid-template-columns: 1fr; }
+  .summaryGrid { grid-template-columns: 1fr 1fr; }
+  .escapeRow { flex-direction: column; }
+  .escapeArrow { transform: rotate(90deg); }
 }
