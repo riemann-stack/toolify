@@ -31,7 +31,7 @@ export default function CompoundPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             복리(複利)는 원금에서 발생한 이자가 다시 원금에 합산되어 그 다음 기간의 이자를 계산하는 방식입니다.
-            시간이 지날수록 이자가 이자를 낳는 <strong style={{ color: 'var(--text)' }}>'눈덩이 효과(Snowball Effect)'</strong>가 발생합니다.
+            시간이 지날수록 이자가 이자를 낳는 <strong style={{ color: 'var(--text)' }}>「눈덩이 효과(Snowball Effect)」</strong>가 발생합니다.
             처음에는 단리와 큰 차이가 없어 보이지만, 10년이 넘어가면서 그 차이가 기하급수적으로 벌어집니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -90,7 +90,7 @@ export default function CompoundPage() {
         {/* ── 3. 72의 법칙 ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            복리의 마법: 원금이 2배가 되는 '72의 법칙'
+            복리의 마법: 원금이 2배가 되는 「72의 법칙」
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             <strong style={{ color: 'var(--text)' }}>72를 연 수익률(%)로 나누면</strong> 원금이 약 2배가 되는 기간(년)을 빠르게 계산할 수 있습니다.

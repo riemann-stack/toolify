@@ -4,7 +4,19 @@ import { useState, useMemo } from 'react'
 import { calcSalary } from '@/lib/salaryCalc'
 import styles from './salary.module.css'
 
-const PRESET_SALARIES = [30, 35, 40, 45, 50, 60, 70, 80, 100]
+// 프리셋: 만원 단위 (표시용 라벨, 실제 만원 값)
+const PRESETS = [
+  { label: '2,400만', value: 2400 },
+  { label: '3,000만', value: 3000 },
+  { label: '3,600만', value: 3600 },
+  { label: '4,200만', value: 4200 },
+  { label: '4,800만', value: 4800 },
+  { label: '5,400만', value: 5400 },
+  { label: '6,000만', value: 6000 },
+  { label: '7,000만', value: 7000 },
+  { label: '8,000만', value: 8000 },
+  { label: '1억',     value: 10000 },
+]
 
 function formatWon(n: number): string {
   return n.toLocaleString('ko-KR') + '원'
@@ -21,7 +33,7 @@ function formatEok(n: number): string {
 
 export default function SalaryClient() {
   const [annualInput, setAnnualInput] = useState('')
-  const [dependents, setDependents] = useState(1)
+  const [dependents,  setDependents]  = useState(1)
 
   const annual = useMemo(() => {
     const n = parseFloat(annualInput.replace(/,/g, ''))
@@ -33,16 +45,20 @@ export default function SalaryClient() {
     return calcSalary(annual, dependents)
   }, [annual, dependents])
 
+  // 프리셋 클릭 → 입력칸에도 반영
   const handlePreset = (manwon: number) => {
-    setAnnualInput(manwon.toLocaleString())
+    setAnnualInput(String(manwon))
   }
+
+  // 현재 입력값과 일치하는 프리셋 강조
+  const activePreset = PRESETS.find(p => String(p.value) === annualInput.replace(/,/g, ''))?.value ?? null
 
   return (
     <div className={styles.wrap}>
 
-      {/* 입력 */}
+      {/* 연봉 입력 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>연봉 입력 (만원)</label>
+        <label className={styles.cardLabel}>연봉 (만원)</label>
         <div className={styles.inputRow}>
           <input
             className={styles.input}
@@ -57,13 +73,13 @@ export default function SalaryClient() {
 
         {/* 프리셋 버튼 */}
         <div className={styles.presets}>
-          {PRESET_SALARIES.map(v => (
+          {PRESETS.map(p => (
             <button
-              key={v}
-              className={`${styles.presetBtn} ${annualInput === v.toLocaleString() ? styles.presetActive : ''}`}
-              onClick={() => handlePreset(v * 100)}
+              key={p.value}
+              className={`${styles.presetBtn} ${activePreset === p.value ? styles.presetActive : ''}`}
+              onClick={() => handlePreset(p.value)}
             >
-              {v * 100 >= 10000 ? `${v * 100 / 10000}억` : `${v * 100}만`}
+              {p.label}
             </button>
           ))}
         </div>
@@ -88,18 +104,14 @@ export default function SalaryClient() {
       {/* 결과 */}
       {result && (
         <>
-          {/* 핵심 결과 */}
           <div className={styles.resultHero}>
             <div className={styles.resultHeroLabel}>월 실수령액</div>
-            <div className={styles.resultHeroNum}>
-              {formatWon(result.monthlyNet)}
-            </div>
+            <div className={styles.resultHeroNum}>{formatWon(result.monthlyNet)}</div>
             <div className={styles.resultHeroSub}>
               연 {formatEok(result.annualNet)} · 공제율 {result.effectiveRate.toFixed(1)}%
             </div>
           </div>
 
-          {/* 월급 흐름 */}
           <div className={styles.flowRow}>
             <div className={styles.flowBox}>
               <span className={styles.flowLabel}>월 총급여</span>
@@ -117,7 +129,6 @@ export default function SalaryClient() {
             </div>
           </div>
 
-          {/* 상세 공제 내역 */}
           <div className={styles.detail}>
             <div className={styles.detailTitle}>공제 내역 상세</div>
 
@@ -169,7 +180,6 @@ export default function SalaryClient() {
         </>
       )}
 
-      {/* 입력 안내 */}
       {!result && (
         <div className={styles.empty}>
           위에 연봉을 입력하면 실수령액이 바로 계산됩니다
