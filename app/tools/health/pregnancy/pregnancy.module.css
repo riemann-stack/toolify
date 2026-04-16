@@ -4,36 +4,104 @@
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
+/* 태명 입력 */
+.nicknameInput {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.nicknameInput::placeholder { color: var(--muted); }
+.nicknameInput:focus { border-color: rgba(255,107,217,0.5); }
+
+/* 입력 방식 탭 */
 .modeRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.modeBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center; line-height: 1.4; }
+.modeBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 8px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s; text-align: center; line-height: 1.4;
+}
 .modeBtn:hover { border-color: var(--border-hover); color: var(--text); }
-.modeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
+.modeBtnActive {
+  background: rgba(255,107,217,0.1);
+  border-color: rgba(255,107,217,0.4);
+  color: #FF6BD9;
+  font-weight: 500;
+}
 
-.dateInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: 'Noto Sans KR', sans-serif; color: var(--text); outline: none; box-sizing: border-box; transition: border-color 0.2s; }
-.dateInput:focus { border-color: rgba(200,255,62,0.5); }
+/* ── 드롭다운 날짜 선택 ── */
+.selectRow {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr;
+  gap: 8px;
+}
+.selectWrap { position: relative; }
+.select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 36px 12px 14px;
+  font-size: 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.select:focus { border-color: rgba(255,107,217,0.5); }
+.select:disabled { opacity: 0.4; cursor: not-allowed; }
+.select option { background: #1a1a1a; color: var(--text); }
+.selectArrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+  pointer-events: none;
+}
 
+/* 히어로 */
 .heroCard { background: var(--bg2); border: 1px solid rgba(255,107,213,0.3); border-radius: 14px; padding: 28px 24px; text-align: center; }
 .heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 .heroNum { font-family: 'Syne', sans-serif; font-size: clamp(32px, 6vw, 52px); font-weight: 800; color: #FF6BD9; letter-spacing: -1px; }
-.heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
+/* 태아 크기 */
+.fetalCard { background: var(--bg2); border: 1px solid rgba(200,255,62,0.2); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+.fetalEmoji { font-size: 42px; flex-shrink: 0; }
+.fetalTitle { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 4px; }
+.fetalSub { font-size: 11px; color: var(--muted); opacity: 0.7; }
+
+/* 진행률 */
 .progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .progressPct { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); }
 .progressBar { width: 100%; height: 10px; background: var(--bg3); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
 .progressFill { height: 100%; background: linear-gradient(90deg, #3EC8FF, #FF6BD9); border-radius: 99px; transition: width 0.5s ease; }
-
 .trimesterRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .trimesterItem { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
 .trimesterActive { background: rgba(255,107,217,0.06); font-weight: 600; }
-.trimesterLabel { font-size: 12px; color: var(--muted); font-weight: 500; font-family: 'Noto Sans KR', sans-serif; }
-.trimesterActive .trimesterLabel { font-weight: 700; }
+.trimesterLabel { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
 .trimesterRange { font-size: 11px; color: var(--muted); }
 
+/* 체크리스트 */
+.checklistGrid { display: flex; flex-direction: column; gap: 8px; }
+.checklistItem { display: flex; align-items: flex-start; gap: 10px; }
+.checklistDot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
+
+/* 날짜 카드 */
 .statCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
 .statLabel { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
 .statValue { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
 .accentValue { color: #FF6BD9; font-weight: 700; }
 
+/* 산전 검사 */
 .scheduleList { display: flex; flex-direction: column; gap: 2px; }
 .scheduleItem { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); }
 .scheduleItem:last-child { border-bottom: none; }
@@ -43,10 +111,22 @@
 .scheduleLabel { flex: 1; }
 .scheduleDone .scheduleLabel { text-decoration: line-through; opacity: 0.6; }
 
+/* 면책 조항 */
+.disclaimer {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px; padding: 14px 16px;
+  font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+
 .empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }
 
 @media (max-width: 500px) {
   .grid2 { grid-template-columns: 1fr; }
   .modeRow { grid-template-columns: 1fr; }
   .trimesterRow { grid-template-columns: 1fr; }
+  .fetalCard { flex-direction: column; text-align: center; }
+  .selectRow { grid-template-columns: 1fr 1fr 1fr; }
+  .select { font-size: 13px; padding: 10px 28px 10px 10px; }
 }
