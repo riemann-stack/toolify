@@ -1,0 +1,131 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 11px 8px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+/* ── 탭 콘텐츠 ── */
+.tabContent { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 공통 카드 ── */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-sizing: border-box; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── 프리셋 카드 ── */
+.presetCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; }
+.presetTop { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.presetLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+
+.presetTargetBtns { display: flex; gap: 5px; flex-wrap: wrap; }
+.targetBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+  padding: 4px 10px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.targetBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.targetBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+.presets { display: flex; gap: 5px; flex-wrap: wrap; }
+.presetBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.presetBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.presetApplied { font-size: 12px; color: var(--accent); margin-top: 8px; }
+
+/* ── 재료 행 ── */
+.itemList { display: flex; flex-direction: column; gap: 8px; }
+.itemHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.nameInput {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: 14px; color: var(--text); outline: none;
+  font-family: 'Noto Sans KR', sans-serif; transition: border-color 0.2s;
+}
+.nameInput:focus { border-color: rgba(200,255,62,0.5); }
+.nameInput::placeholder { color: var(--muted); font-size: 13px; }
+
+.removeBtn {
+  background: transparent; border: 1px solid var(--border); border-radius: 8px;
+  width: 30px; height: 30px; font-size: 16px; color: var(--muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0; margin-left: 8px;
+}
+.removeBtn:hover { border-color: #FF6B6B; color: #FF6B6B; }
+
+.itemInputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fieldGroup { display: flex; flex-direction: column; gap: 6px; }
+.fieldLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+.inputRow { display: flex; align-items: center; gap: 6px; }
+.numInput {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 10px; font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.numInput:focus { border-color: rgba(200,255,62,0.5); }
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
+.numInputError { border-color: rgba(255,107,107,0.5) !important; }
+
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; min-width: 18px; }
+
+.addBtn {
+  width: 100%; background: var(--bg3); border: 1px dashed var(--border);
+  border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.addBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.errorMsg { font-size: 12px; color: #FF6B6B; margin-top: 8px; }
+
+/* ── 결과 카드 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  border-radius: 14px; padding: 20px 22px; animation: fadeUp 0.25s ease;
+}
+.heroRow { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; margin-bottom: 16px; }
+.heroBlock { text-align: center; }
+.heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(32px, 7vw, 48px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; }
+.heroUnit { font-size: 18px; font-weight: 400; margin-left: 3px; }
+.heroDivider { width: 1px; height: 60px; background: var(--border); }
+
+.alcInfoGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.alcInfoItem { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+.alcInfoNum { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.alcInfoLabel { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.stdNote { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+/* ── 빈 상태 ── */
+.empty {
+  padding: 32px; text-align: center; font-size: 14px; color: var(--muted);
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+  .tab { font-size: 12px; padding: 10px 4px; }
+  .heroRow { gap: 10px; }
+  .heroNum { font-size: 30px; }
+  .heroUnit { font-size: 15px; }
+  .heroDivider { height: 48px; }
+}

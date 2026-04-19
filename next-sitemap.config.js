@@ -33,6 +33,8 @@ module.exports = {
     await config.transform(config, '/tools/life/dutch'),
     await config.transform(config, '/tools/life/zodiac'),
     await config.transform(config, '/tools/life/pomodoro'),
+    await config.transform(config, '/tools/life/recipe'),
+    await config.transform(config, '/tools/life/alcohol'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -46,6 +48,9 @@ module.exports = {
     await config.transform(config, '/tools/date/dday'),
     await config.transform(config, '/tools/date/diff'),
     await config.transform(config, '/tools/date/military'),
+    // 음악
+    await config.transform(config, '/tools/music'),
+    await config.transform(config, '/tools/music/bpm'),
     // 개발자
     await config.transform(config, '/tools/dev'),
     await config.transform(config, '/tools/dev/charcount'),

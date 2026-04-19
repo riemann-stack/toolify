@@ -44,6 +44,8 @@ export const categories: Category[] = [
       { href: '/tools/life/dutch',    icon: '🍻', name: '더치페이(N빵) 계산기',   desc: '술값 따로, 단위 올림 옵션' },
       { href: '/tools/life/zodiac',   icon: '🐯', name: '띠·별자리 계산기',      desc: '생년월일로 띠·별자리 확인', badge: 'new' },
       { href: '/tools/life/pomodoro', icon: '🍅', name: '뽀모도로 타이머',        desc: '25분 집중·5분 휴식 사이클' },
+      { href: '/tools/life/recipe',   icon: '📐', name: '레시피 비율 계산기',    desc: '인분 수에 맞게 재료 비율 자동 계산', badge: 'new' },
+      { href: '/tools/life/alcohol',  icon: '🍺', name: '알코올 도수 계산기',    desc: '혼합 음료 도수·표준 음주량 계산',    badge: 'new' },
     ],
   },
   {
@@ -63,6 +65,12 @@ export const categories: Category[] = [
       { href: '/tools/date/dday',     icon: '📅', name: 'D-day 계산기',            desc: '목표까지 남은 일수' },
       { href: '/tools/date/diff',     icon: '📆', name: '날짜 차이 계산기',        desc: '두 날짜 사이 기간 계산' },
       { href: '/tools/date/military', icon: '🎖️', name: '군 전역일·복무율 계산기', desc: '전역일·복무율 계산', badge: 'new' },
+    ],
+  },
+  {
+    id: 'music', icon: '🎵', name: '음악', color: '#C83EFF',
+    tools: [
+      { href: '/tools/music/bpm', icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산', badge: 'new' },
     ],
   },
   {
