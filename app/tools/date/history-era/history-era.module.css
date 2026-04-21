@@ -1,0 +1,214 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 11px 6px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+/* ── 섹션 공통 ── */
+.section { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 라디오 그룹 ── */
+.radioGroup { display: flex; gap: 6px; flex-wrap: wrap; }
+.radioLabel {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 20px; cursor: pointer;
+  background: var(--bg2); border: 1px solid var(--border);
+  font-size: 13px; color: var(--muted); transition: all 0.15s;
+}
+.radioLabel input { display: none; }
+.radioLabel:hover { border-color: var(--border-hover); color: var(--text); }
+.radioActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+/* ── 폼 행 ── */
+.fieldRow { display: flex; align-items: center; gap: 10px; }
+.fieldLabel { font-size: 13px; color: var(--muted); white-space: nowrap; flex-shrink: 0; min-width: 110px; }
+
+.select {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 36px 11px 14px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text); outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  transition: border-color 0.2s;
+}
+.select:focus { border-color: rgba(200,255,62,0.5); }
+
+.numInput {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 14px; font-size: 22px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.numInput:focus { border-color: rgba(200,255,62,0.5); }
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
+
+/* ── 에러·빈 상태 ── */
+.errorMsg {
+  background: rgba(255,62,62,0.08); border: 1px solid rgba(255,62,62,0.25);
+  border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #ff7070; line-height: 1.6;
+}
+.mutedNote { font-size: 13px; color: var(--muted); padding: 8px 0; text-align: center; }
+
+/* ── 결과 박스 ── */
+.resultBox {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25); border-radius: 14px;
+  padding: 20px 22px; animation: heraFadeUp 0.22s ease;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.resultBig {
+  font-family: 'Syne', sans-serif; font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800; color: var(--accent); letter-spacing: -1px; line-height: 1.1;
+}
+.resultSub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ── Tab 2: BCE 입력 ── */
+.bceRow { display: flex; gap: 10px; align-items: center; }
+.numInputWide {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 14px; font-size: 22px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.numInputWide::-webkit-inner-spin-button, .numInputWide::-webkit-outer-spin-button { -webkit-appearance: none; }
+.numInputWide:focus { border-color: rgba(200,255,62,0.5); }
+.numInputWide::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
+
+.bceToggle {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 20px; cursor: pointer;
+  background: var(--bg2); border: 1px solid var(--border);
+  font-size: 13px; color: var(--muted); transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
+}
+.bceToggle input { display: none; }
+.bceToggle:hover { border-color: var(--border-hover); color: var(--text); }
+.bceActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+/* ── 연호 테이블 ── */
+.eraTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.eraTable th {
+  padding: 8px 10px; text-align: left; color: var(--muted);
+  font-weight: 500; border-bottom: 1px solid var(--border);
+}
+.eraTable td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
+.eraTable tr:last-child td { border-bottom: none; }
+.eraYear { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); }
+.eraGroup { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+/* ── Tab 3: 간지 피커 ── */
+.ganjjiPicker { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.pickerCol { display: flex; flex-direction: column; gap: 8px; }
+.pickerTitle { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.stemGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.branchGrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+
+.pickerBtn {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 4px; cursor: pointer; transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.pickerBtn:hover { border-color: var(--border-hover); }
+.pickerActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; }
+.pickerKr { font-size: 16px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); line-height: 1.2; }
+.pickerActive .pickerKr { color: var(--accent); }
+.pickerHj { font-size: 10px; color: var(--muted); font-family: serif; line-height: 1; }
+.pickerAnimal { font-size: 9px; color: var(--muted); line-height: 1; }
+
+/* ── 연도 목록 ── */
+.yearList { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.yearItem {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border);
+}
+.yearCurrent { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); }
+.yearFuture { border-color: rgba(255,255,255,0.05); }
+.yearNum { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 50px; }
+.yearCurrent .yearNum { color: var(--accent); }
+.yearSub { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; }
+.yearBadge {
+  font-size: 10px; color: #000; background: var(--accent);
+  border-radius: 4px; padding: 2px 6px; font-weight: 700; flex-shrink: 0;
+}
+.yearBadgeNext {
+  font-size: 10px; color: var(--muted); background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; flex-shrink: 0;
+}
+
+/* ── Tab 4: 필터 ── */
+.filterRow { display: flex; gap: 5px; flex-wrap: wrap; }
+.filterBtn {
+  padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg2); font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.filterBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.filterActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+.searchInput {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 14px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.searchInput:focus { border-color: rgba(200,255,62,0.5); }
+.searchInput::placeholder { color: var(--muted); }
+
+/* ── 타임라인 ── */
+.timeline { display: flex; flex-direction: column; }
+.timelineRow {
+  display: grid; grid-template-columns: 80px 18px 1fr; gap: 8px; align-items: start;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.timelineRow:last-child { border-bottom: none; }
+.timelineLeft { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
+.tlYear {
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text);
+  line-height: 1.2; text-align: right; white-space: nowrap;
+}
+.tlGanjji { font-size: 10px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.timelineLine {
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 4px; position: relative;
+}
+.timelineLine::before {
+  content: ''; position: absolute; top: 14px; bottom: -14px;
+  width: 1px; background: var(--border); left: 50%;
+}
+.timelineRow:last-child .timelineLine::before { display: none; }
+.timelineDot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; position: relative; z-index: 1;
+}
+.tlLabel { font-size: 13px; color: var(--muted); line-height: 1.6; padding-top: 2px; }
+
+@keyframes heraFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 540px) {
+  .tabs { grid-template-columns: repeat(2, 1fr); }
+  .tab { font-size: 12px; padding: 10px 4px; }
+  .ganjjiPicker { grid-template-columns: 1fr; }
+  .stemGrid { grid-template-columns: repeat(5, 1fr); }
+  .branchGrid { grid-template-columns: repeat(6, 1fr); }
+  .fieldRow { flex-direction: column; align-items: stretch; }
+  .fieldLabel { min-width: auto; }
+  .timelineRow { grid-template-columns: 66px 18px 1fr; }
+  .tlYear { font-size: 11px; }
+}

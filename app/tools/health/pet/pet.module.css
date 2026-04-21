@@ -1,0 +1,197 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 13px 8px; border-radius: 10px; border: none;
+  font-size: 14px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabDogActive { background: #FFB347 !important; color: #000 !important; font-weight: 700 !important; }
+.tabCatActive { background: #C084FC !important; color: #000 !important; font-weight: 700 !important; }
+
+/* ── 색상 변수 (강아지/고양이) ── */
+.dogSection { --pet: #FFB347; --pet-dim: rgba(255,179,71,.15); --pet-border: rgba(255,179,71,.4); }
+.catSection { --pet: #C084FC; --pet-dim: rgba(192,132,252,.15); --pet-border: rgba(192,132,252,.4); }
+
+/* ── 공통 ── */
+.section { display: flex; flex-direction: column; gap: 10px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── 나이 ── */
+.ageRow { display: flex; gap: 10px; }
+.ageSelect {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 36px 10px 14px; font-size: 16px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  transition: border-color 0.2s;
+}
+.ageSelect:focus { border-color: var(--pet-border); }
+
+/* ── 체중 ── */
+.weightRow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.weightInput {
+  flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; font-size: 24px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.weightInput::-webkit-inner-spin-button, .weightInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.weightInput:focus { border-color: var(--pet-border); }
+.weightUnit { font-size: 18px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; flex-shrink: 0; }
+.slider { width: 100%; accent-color: var(--pet); cursor: pointer; height: 6px; display: block; margin-bottom: 6px; }
+.sliderLabels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-family: 'Syne', sans-serif; }
+
+/* ── 품종 크기 ── */
+.sizeGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sizeBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 4px; cursor: pointer; transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.sizeBtn:hover { border-color: var(--border-hover); }
+.sizeBtnIcon { font-size: 20px; line-height: 1; }
+.sizeBtnText { font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); }
+.sizeBtnDesc { font-size: 10px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 토글 버튼 ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btnGroup { display: flex; gap: 6px; }
+.toggleBtn {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 10px; cursor: pointer; transition: all 0.15s;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; color: var(--muted); text-align: center;
+}
+.toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* ── 공통 활성 버튼 (CSS 변수 활용) ── */
+.petBtnActive {
+  background: var(--pet-dim) !important;
+  border-color: var(--pet-border) !important;
+  color: var(--pet) !important;
+}
+
+/* ── 생애 단계 바 ── */
+.stageBar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stageSegment {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 4px; text-align: center; cursor: default;
+  font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.2s; font-weight: 400;
+}
+
+/* ── 히어로 카드 ── */
+.heroCard {
+  background: var(--bg2); border: 1px solid var(--pet-border);
+  border-radius: 14px; padding: 22px 24px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  animation: petFadeUp 0.25s ease;
+}
+.heroLeft {}
+.heroTop { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(44px, 10vw, 60px); font-weight: 800; line-height: 1; color: var(--pet); }
+.heroUnit { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--muted); }
+.heroSub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.heroRight { text-align: right; flex-shrink: 0; }
+.heroStage { font-size: 17px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; margin-bottom: 4px; }
+.heroFactor { font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; }
+
+/* ── 사료 밀도 ── */
+.presetRow { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.presetBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+  padding: 6px 12px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.presetBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.presetDogActive { background: rgba(255,179,71,.15) !important; border-color: rgba(255,179,71,.4) !important; color: #FFB347 !important; }
+.presetCatActive { background: rgba(192,132,252,.15) !important; border-color: rgba(192,132,252,.4) !important; color: #C084FC !important; }
+
+.calDenRow { display: flex; align-items: center; gap: 10px; }
+.calDenInput {
+  flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 9px 14px; font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.calDenInput::-webkit-inner-spin-button, .calDenInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.calDenInput:focus { border-color: var(--pet-border); }
+.calDenUnit { font-size: 13px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+
+/* ── 칼로리 카드 ── */
+.calGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; animation: petFadeUp 0.25s ease; }
+.calGrid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; animation: petFadeUp 0.25s ease; }
+.calCard { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 16px 10px; text-align: center; }
+.calTitle { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-bottom: 8px; line-height: 1.4; min-height: 28px; display: flex; align-items: flex-end; justify-content: center; }
+.calNum { font-family: 'Syne', sans-serif; font-size: clamp(20px, 4vw, 26px); font-weight: 800; line-height: 1; color: var(--pet); }
+.calNumTreat { color: #FF8C3E !important; }
+.calUnit { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Syne', sans-serif; }
+.calSub { font-size: 10px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+
+/* ── 물 섭취 (강아지) ── */
+.waterCard {
+  background: var(--bg2); border: 1px solid rgba(62,200,255,0.2); border-radius: 12px;
+  padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+  animation: petFadeUp 0.25s ease;
+}
+.waterIcon { font-size: 22px; flex-shrink: 0; }
+.waterNum { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #3EC8FF; }
+.waterLabel { font-size: 13px; color: var(--muted); }
+
+/* ── 복사 버튼 ── */
+.copyBtn {
+  width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.copyBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.copyBtnDone { border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+/* ── 면책 조항 ── */
+.disclaimer {
+  background: rgba(255,62,62,0.07); border: 1px solid rgba(255,62,62,0.2);
+  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+
+/* ── 고양이 음식 모드 ── */
+.foodModeRow { display: flex; gap: 6px; }
+.foodModeBtn {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 6px; cursor: pointer; font-size: 12px; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center;
+}
+.foodModeBtn:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* ── 고양이 밀도 2열 ── */
+.densityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.densityLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
+
+/* ── 수분 팁 (고양이) ── */
+.waterTip {
+  background: rgba(62,200,255,0.07); border: 1px solid rgba(62,200,255,0.2);
+  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+
+@keyframes petFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .sizeGrid { grid-template-columns: repeat(2, 1fr); }
+  .row2 { grid-template-columns: 1fr; }
+  .calGrid { grid-template-columns: 1fr 1fr; }
+  .calGrid4 { grid-template-columns: 1fr 1fr; }
+  .stageBar { grid-template-columns: repeat(2, 1fr); }
+  .heroNum { font-size: 40px; }
+  .densityGrid { grid-template-columns: 1fr; }
+}

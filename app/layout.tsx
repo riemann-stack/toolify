@@ -6,8 +6,8 @@ import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://youtil.kr'),
-  title: 'Youtil — 무료 온라인 도구 모음',
-  description: '연봉 계산기, 로또 번호 생성기, BMI 계산기 등 일상에서 자주 쓰는 무료 도구 모음. 로그인 없이 즉시 사용.',
+  title: 'Youtil | 자주 쓰는 계산기와 무료 온라인 도구 모음',
+  description: '금융, 건강, 생활, 날짜, 음악, 변환, 개발자 도구까지 한곳에. 자주 쓰는 무료 계산기와 실용 도구를 로그인 없이 즉시 사용.',
   verification: {
     google: '-iy41VlIHWNyy-1njszGVK2UM6dq-0vAkhaEbSvOTlI',
     other: {

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
 
 export const metadata: Metadata = {
-  title: 'Youtil 소개 — Your Utility, 무료 온라인 도구 모음',
-  description: 'Youtil은 연봉 계산기, BMI, 로또 번호 생성기 등 일상과 업무 속 번거로운 계산을 가장 빠르고 정확하게 해결해 드리는 무료 서비스입니다.',
+  title: 'Youtil 소개 | 자주 쓰는 계산기와 무료 온라인 도구 모음',
+  description: 'Youtil은 연봉 계산기, BMI, 날짜 계산, 텍스트 도구 등 일상과 업무 속 번거로운 계산을 가장 빠르고 정확하게 해결해 드리는 무료 서비스입니다.',
 }
 
 export default function AboutPage() {
@@ -20,7 +20,7 @@ export default function AboutPage() {
         <span style={{ color: 'var(--accent)' }}>당신의 시간에 집중하세요.</span>
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-        <strong style={{ color: 'var(--text)' }}>Youtil</strong>은 <strong style={{ color: 'var(--text)' }}>"Your Utility"</strong>의 약자로, 일상과 업무 속에서 마주하는 번거로운 계산들을 가장 빠르고 정확하게 해결해 드리기 위해 탄생했습니다.
+        <strong style={{ color: 'var(--text)' }}>Youtil</strong>은 <strong style={{ color: 'var(--text)' }}>「Your Utility」</strong>의 약자로, 일상과 업무 속에서 마주하는 번거로운 계산들을 가장 빠르고 정확하게 해결해 드리기 위해 탄생했습니다.
       </p>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '48px' }}>
         수많은 정보 속에서 믿을 수 있는 수치를 찾는 수고를 덜어드리는 것이 우리의 목표입니다. 단순한 도구 모음을 넘어, <strong style={{ color: 'var(--text)' }}>정확성과 편의성</strong>을 최우선으로 설계된 유틸리티 서비스입니다.

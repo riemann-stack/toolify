@@ -25,6 +25,7 @@ module.exports = {
     await config.transform(config, '/tools/health/pace'),
     await config.transform(config, '/tools/health/weightloss'),
     await config.transform(config, '/tools/health/pregnancy'),
+    await config.transform(config, '/tools/health/pet'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -35,6 +36,7 @@ module.exports = {
     await config.transform(config, '/tools/life/pomodoro'),
     await config.transform(config, '/tools/life/recipe'),
     await config.transform(config, '/tools/life/alcohol'),
+    await config.transform(config, '/tools/life/golden-ratio'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -42,15 +44,18 @@ module.exports = {
     await config.transform(config, '/tools/unit/weight'),
     await config.transform(config, '/tools/unit/size'),
     await config.transform(config, '/tools/unit/temperature'),
+    await config.transform(config, '/tools/unit/cooking'),
     // 날짜
     await config.transform(config, '/tools/date'),
     await config.transform(config, '/tools/date/age'),
     await config.transform(config, '/tools/date/dday'),
     await config.transform(config, '/tools/date/diff'),
     await config.transform(config, '/tools/date/military'),
+    await config.transform(config, '/tools/date/history-era'),
     // 음악
     await config.transform(config, '/tools/music'),
     await config.transform(config, '/tools/music/bpm'),
+    await config.transform(config, '/tools/music/frequency'),
     // 개발자
     await config.transform(config, '/tools/dev'),
     await config.transform(config, '/tools/dev/charcount'),

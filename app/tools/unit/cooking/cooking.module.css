@@ -1,0 +1,178 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 11px 8px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+.tabContent { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 카드 ── */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── 입력 ── */
+.inputRow { display: flex; align-items: center; gap: 8px; }
+.numInput {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 14px; font-size: 22px; font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.numInput:focus { border-color: rgba(200,255,62,0.5); }
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 16px; }
+.unitSym { font-size: 16px; color: var(--muted); flex-shrink: 0; font-weight: 600; font-family: 'Syne', sans-serif; min-width: 36px; }
+
+/* ── 드롭다운 select ── */
+.unitSelect {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 36px 11px 14px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text); outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  transition: border-color 0.2s; flex-shrink: 0;
+}
+.unitSelect:focus { border-color: rgba(200,255,62,0.5); }
+
+/* ── 프리셋 ── */
+.presetRow { display: flex; gap: 5px; flex-wrap: wrap; }
+.presetBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+  padding: 6px 14px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.presetBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── 결과 카드 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  border-radius: 14px; padding: 16px 20px; animation: fadeUp 0.25s ease;
+  display: flex; flex-direction: column; gap: 0;
+}
+.resultHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.resultHeaderLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.fracToggle {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; font-size: 12px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.fracToggle:hover { border-color: var(--border-hover); color: var(--text); }
+.fracToggleActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+
+.resultRow {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 0; border-bottom: 1px solid var(--border); gap: 8px;
+}
+.resultRow:last-child { border-bottom: none; }
+.resultRowActive { background: transparent; }
+.resultRowActive .resultUnitName { color: var(--accent); }
+.resultRowActive .resultVal { color: var(--accent); }
+
+.resultInfo { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.resultUnitName { font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; white-space: nowrap; }
+.currentBadge {
+  font-size: 10px; color: var(--accent); background: var(--accent-dim);
+  border: 1px solid rgba(200,255,62,0.3); border-radius: 4px; padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.resultRight { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.resultVal { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+.resultUnitSym { font-size: 12px; color: var(--muted); }
+.resultFrac { font-size: 13px; color: var(--accent); font-family: 'Syne', sans-serif; }
+.copyBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+  padding: 3px 8px; font-size: 12px; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copyBtnDone { border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.copyBtnFull {
+  width: 100%; padding: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 12px;
+  border-radius: 8px; margin-top: 8px;
+}
+
+/* ── 온도 탭 단위 버튼 ── */
+.unitRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.unitBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 8px; cursor: pointer; transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.unitBtn:hover { border-color: var(--border-hover); }
+.unitBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); }
+.unitBtnSym { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+.unitBtnActive .unitBtnSym { color: var(--accent); }
+.unitBtnLabel { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 온도 결과 ── */
+.tempResultRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.tempBlock {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 10px; text-align: center;
+}
+.tempBlockActive { border-color: rgba(200,255,62,0.4); background: var(--accent-dim); }
+.tempBlockLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.tempBlockVal {
+  font-family: 'Syne', sans-serif; font-size: clamp(20px, 4.5vw, 28px);
+  font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.5px;
+}
+.tempBlockSym { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 2px; }
+
+.presetTag {
+  text-align: center; padding: 8px 14px; border-radius: 8px;
+  border: 1px solid; font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+}
+
+/* ── 오븐 프리셋 그리드 ── */
+.ovenGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ovenBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 8px; cursor: pointer; transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border-top: 3px solid var(--oven-color, var(--border));
+}
+.ovenBtn:hover { border-color: var(--oven-color, var(--accent)); background: rgba(255,255,255,0.03); }
+.ovenBtnLabel { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.ovenBtnTemp {
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+  color: var(--oven-color, var(--accent)); line-height: 1.2;
+}
+.ovenBtnF { font-size: 10px; color: var(--muted); font-family: 'Syne', sans-serif; }
+.ovenBtnDesc { font-size: 10px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; text-align: center; line-height: 1.3; margin-top: 2px; }
+
+/* ── 빈 상태 ── */
+.empty {
+  padding: 32px; text-align: center; font-size: 14px; color: var(--muted);
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .tab { font-size: 12px; padding: 10px 4px; }
+  .ovenGrid { grid-template-columns: repeat(2, 1fr); }
+  .tempResultRow { gap: 6px; }
+  .tempBlockVal { font-size: 18px; }
+  .inputRow { flex-wrap: wrap; }
+  .unitSelect { flex: 1; }
+}

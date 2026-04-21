@@ -33,6 +33,7 @@ export const categories: Category[] = [
       { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 목표 기록별 페이스' },
       { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 달성일 예측' },
       { href: '/tools/health/pregnancy',  icon: '🤰', name: '임신 주수 계산기',         desc: '출산 예정일·산전 검사 일정', badge: 'new' },
+      { href: '/tools/health/pet',        icon: '🐾', name: '반려동물 나이·칼로리 계산기', desc: '강아지·고양이 사람 나이 환산·하루 사료량 계산', badge: 'new' },
     ],
   },
   {
@@ -46,6 +47,7 @@ export const categories: Category[] = [
       { href: '/tools/life/pomodoro', icon: '🍅', name: '뽀모도로 타이머',        desc: '25분 집중·5분 휴식 사이클' },
       { href: '/tools/life/recipe',   icon: '📐', name: '레시피 비율 계산기',    desc: '인분 수에 맞게 재료 비율 자동 계산', badge: 'new' },
       { href: '/tools/life/alcohol',  icon: '🍺', name: '알코올 도수 계산기',    desc: '혼합 음료 도수·표준 음주량 계산',    badge: 'new' },
+      { href: '/tools/life/golden-ratio', icon: '🌀', name: '황금 비율 계산기', desc: '황금 비율·피보나치 나선 계산 및 시각화', badge: 'new' },
     ],
   },
   {
@@ -56,6 +58,7 @@ export const categories: Category[] = [
       { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
       { href: '/tools/unit/size',        icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU → 한국 사이즈' },
       { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',             desc: '섭씨·화씨·켈빈 즉시 변환' },
+      { href: '/tools/unit/cooking',    icon: '🥄', name: '요리 단위 변환기',         desc: '컵·큰술·oz·근 등 요리 단위 즉시 변환', badge: 'new' },
     ],
   },
   {
@@ -64,13 +67,15 @@ export const categories: Category[] = [
       { href: '/tools/date/age',      icon: '🎂', name: '만 나이 계산기',          desc: '법 개정 기준 만 나이',   badge: 'hot' },
       { href: '/tools/date/dday',     icon: '📅', name: 'D-day 계산기',            desc: '목표까지 남은 일수' },
       { href: '/tools/date/diff',     icon: '📆', name: '날짜 차이 계산기',        desc: '두 날짜 사이 기간 계산' },
-      { href: '/tools/date/military', icon: '🎖️', name: '군 전역일·복무율 계산기', desc: '전역일·복무율 계산', badge: 'new' },
+      { href: '/tools/date/military',     icon: '🎖️', name: '군 전역일·복무율 계산기', desc: '전역일·복무율 계산', badge: 'new' },
+      { href: '/tools/date/history-era', icon: '📜', name: '역사 연호·연대 변환기',   desc: '단기·조선 왕 연호·간지 ↔ 서기 변환', badge: 'new' },
     ],
   },
   {
     id: 'music', icon: '🎵', name: '음악', color: '#C83EFF',
     tools: [
-      { href: '/tools/music/bpm', icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산', badge: 'new' },
+      { href: '/tools/music/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산', badge: 'new' },
+      { href: '/tools/music/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음정 변환·MIDI 번호·파장 계산', badge: 'new' },
     ],
   },
   {
