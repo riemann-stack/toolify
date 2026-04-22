@@ -23,6 +23,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 수익' },
       { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가 계산' },
       { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',        desc: '공급가액·부가세 역산 계산' },
+      { href: '/tools/finance/dividend', icon: '💰', name: '월배당 목표 자산 계산기', desc: '목표 월배당금을 받기 위한 필요 투자 원금 계산', badge: 'new' },
     ],
   },
   {
@@ -34,15 +35,17 @@ export const categories: Category[] = [
       { href: '/tools/health/weightloss',    icon: '🎯', name: '목표 체중 감량 기간 계산기',  desc: '칼로리 적자로 달성일 예측' },
       { href: '/tools/health/pregnancy',     icon: '🤰', name: '임신 주수 계산기',          desc: '출산 예정일·산전 검사 일정' },
       { href: '/tools/health/pet',           icon: '🐾', name: '반려동물 나이·칼로리 계산기', desc: '강아지·고양이 사람 나이 환산·하루 사료량 계산' },
-      { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기',     desc: '음주량·체중 기반 BAC 추정·운전 가능 시각 계산', badge: 'new' },
+      { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기',     desc: '음주량·체중 기반 BAC 추정·운전 가능 시각 계산' },
+      { href: '/tools/health/race-predictor', icon: '🏅', name: '마라톤 레이스 기록 예측 계산기', desc: 'Riegel·VDOT·Cameron 공식으로 레이스 예상 기록 계산', badge: 'new' },
     ],
   },
   {
     id: 'cooking', icon: '🍳', name: '요리·식품', color: '#FFB83E',
     tools: [
       { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',      desc: '인분 수에 맞게 재료 비율 자동 계산' },
-      { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',    desc: '식품 두께·무게 기반 해동 시간 예측·식품 안전 가이드', badge: 'new' },
+      { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',    desc: '식품 두께·무게 기반 해동 시간 예측·식품 안전 가이드' },
       { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',         desc: '컵·큰술·oz·근 등 요리 단위 즉시 변환' },
+      { href: '/tools/cooking/sourdough', icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화 진단·피크 시간 예측·급이 스케줄러', badge: 'new' },
     ],
   },
   {
@@ -57,6 +60,9 @@ export const categories: Category[] = [
       { href: '/tools/life/alcohol',       icon: '🍺', name: '알코올 도수 계산기',  desc: '혼합 음료 도수·표준 음주량 계산' },
       { href: '/tools/life/golden-ratio',  icon: '🌀', name: '황금 비율 계산기',    desc: '황금 비율·피보나치 나선 계산 및 시각화' },
       { href: '/tools/life/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',  desc: 'WHS 방식 핸디캡 지수·코스 핸디캡·네트 스코어 계산' },
+      { href: '/tools/life/drake',         icon: '👽', name: '드레이크 방정식 계산기', desc: '우주의 지적 문명 수 추정·변수 조정 시뮬레이터' },
+      { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 건조 예상 시간 및 단축 팁' },
+      { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 문제 시뮬레이터', desc: '바꾸기 vs 유지하기 — 직접 1,000번 돌려보는 확률 실험', badge: 'new' },
     ],
   },
   {
@@ -84,7 +90,8 @@ export const categories: Category[] = [
     tools: [
       { href: '/tools/music/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
       { href: '/tools/music/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음정 변환·MIDI 번호·파장 계산' },
-      { href: '/tools/music/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·쉬운 코드 추천', badge: 'new' },
+      { href: '/tools/music/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·쉬운 코드 추천' },
+      { href: '/tools/music/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정·메트로놈·박자감 테스트', badge: 'new' },
     ],
   },
   {

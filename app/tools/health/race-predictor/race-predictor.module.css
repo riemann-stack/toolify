@@ -1,0 +1,478 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 탭 ───────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.tab {
+  flex: 1;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tabActive {
+  background: var(--bg3);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* ── 라벨 ─────────────────────────── */
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.labelSub {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* ── 거리 그리드 ─────────────────── */
+.distGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+.distBtn {
+  padding: 14px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.distBtn:hover { color: var(--text); border-color: rgba(200, 255, 62, 0.3); }
+.distBtnActive {
+  background: rgba(200, 255, 62, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.customRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.customInput {
+  flex: 1;
+  padding: 12px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.customInput:focus { outline: none; border-color: var(--accent); }
+.unit {
+  font-size: 13px;
+  color: var(--muted);
+  padding-right: 4px;
+}
+
+/* ── 시간 입력 ─────────────────── */
+.timeRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.timeSelect {
+  flex: 1;
+  padding: 12px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.timeSelect:focus { outline: none; border-color: var(--accent); }
+.timeColon {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ── 예측 거리 선택 ──────────── */
+.targetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 8px;
+}
+.targetBtn {
+  padding: 12px 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.targetBtn:hover { color: var(--text); }
+.targetBtnActive {
+  background: rgba(200, 255, 62, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── Hero (풀 마라톤 예측) ──────────── */
+.hero {
+  background: linear-gradient(135deg, rgba(200,255,62,0.08) 0%, rgba(62,200,255,0.05) 100%);
+  border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.heroTime {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 9vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  line-height: 1;
+}
+.heroPace {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+.heroPace strong { color: var(--text); font-family: 'Syne', sans-serif; }
+
+/* ── 비교 테이블 ─────────────────── */
+.tableWrap { overflow-x: auto; margin: 0 -4px; }
+.predTable, .splitsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 500px;
+}
+.predTable thead th,
+.splitsTable thead th {
+  padding: 10px 12px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.predTable thead th:first-child,
+.splitsTable thead th:first-child { text-align: left; }
+.predTable tbody td,
+.splitsTable tbody td {
+  padding: 11px 12px;
+  text-align: center;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.predTable tbody tr:nth-child(even),
+.splitsTable tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.distCell, .segCell {
+  text-align: left !important;
+  color: var(--muted) !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+}
+.avgCol, .avgCell {
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+}
+.paceCell {
+  color: #3EC8FF !important;
+  font-weight: 700 !important;
+}
+
+/* ── 서브 목표 ─────────────────── */
+.subGoals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+.subCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.subCardYes {
+  background: rgba(62, 255, 155, 0.07);
+  border-color: rgba(62, 255, 155, 0.35);
+}
+.subCardNo {
+  background: var(--bg3);
+  border-color: var(--border);
+  opacity: 0.55;
+}
+.subLabel {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.subStatus {
+  font-size: 11px;
+  font-weight: 600;
+}
+.subCardYes .subStatus { color: #3EFF9B; }
+.subCardNo .subStatus { color: var(--muted); }
+
+/* ── VDOT Hero ─────────────────── */
+.vdotHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.vdotNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(56px, 12vw, 72px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.vdotTag {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ── Zone Cards ───────────────── */
+.zoneList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.zoneCard {
+  padding: 16px 18px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.zoneHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.zoneKey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+}
+.zoneName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.zonePaces {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.zonePaces > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.zonePaceLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.zonePaceVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.zoneDesc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Strategy ─────────────────── */
+.stratRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+@media (min-width: 540px) {
+  .stratRow { grid-template-columns: repeat(3, 1fr); }
+}
+.stratBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: left;
+}
+.stratBtn:hover { border-color: rgba(200,255,62,0.3); }
+.stratBtnActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+}
+.stratLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.stratBtnActive .stratLabel { color: var(--accent); }
+.stratDesc {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Weather 보정 ──────────────── */
+.wGroup { margin-bottom: 14px; }
+.wGroup:last-child { margin-bottom: 0; }
+.wTitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 8px;
+  letter-spacing: 0.04em;
+}
+.wRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 6px;
+}
+.wBtn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.wBtn:hover { border-color: rgba(200,255,62,0.3); }
+.wBtnActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.wPct {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.wBtnActive .wPct { color: var(--accent); }
+
+.adjHero {
+  margin-top: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(62,200,255,0.08) 0%, rgba(200,255,62,0.04) 100%);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 14px;
+  text-align: center;
+}
+.adjLabel {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 8px;
+  letter-spacing: 0.04em;
+}
+.adjSub { color: #FF8C3E; font-weight: 700; font-family: 'Syne', sans-serif; }
+.adjTime {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 7vw, 48px);
+  font-weight: 800;
+  color: #3EC8FF;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  line-height: 1;
+}
+.adjPace {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+.adjPace strong { color: var(--text); font-family: 'Syne', sans-serif; }

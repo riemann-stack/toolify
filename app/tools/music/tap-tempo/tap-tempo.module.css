@@ -1,0 +1,404 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 11px 8px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+.tabContent { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 카드 공통 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 22px; box-sizing: border-box;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── 탭 템포 메인 버튼 ── */
+.tapCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 14px; padding: 28px 22px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.tapButton {
+  position: relative; overflow: hidden;
+  width: 100%; max-width: 320px; aspect-ratio: 1 / 1;
+  border-radius: 50%; border: 2px solid rgba(200,255,62,0.4);
+  background: radial-gradient(circle at center, rgba(200,255,62,0.1), var(--bg3));
+  color: var(--text); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; transition: transform 0.08s, border-color 0.18s;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.tapButton:hover { border-color: var(--accent); }
+.tapButton:active { transform: scale(0.97); }
+.ripple {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,62,0.35) 0%, rgba(200,255,62,0) 70%);
+  opacity: 0; pointer-events: none;
+  animation: ripple 0.5s ease-out;
+}
+.tapBpmWrap {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+}
+.tapBpm {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(52px, 14vw, 84px); color: var(--accent);
+  line-height: 1; letter-spacing: -2px;
+}
+.tapBpmLabel {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 14px; color: var(--muted);
+  letter-spacing: 0.1em; margin-top: 4px;
+}
+.tapCount {
+  position: relative; z-index: 1;
+  font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+}
+.kbdHint {
+  font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; text-align: center;
+}
+.kbdHint kbd {
+  display: inline-block; padding: 2px 7px; margin: 0 2px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 5px; font-family: 'Syne', sans-serif; font-size: 11px;
+  color: var(--text);
+}
+
+/* ── 템포 이름 ── */
+.tempoBadge {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  animation: fadeUp 0.25s ease;
+}
+.tempoName {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); letter-spacing: -0.3px;
+}
+.tempoKo {
+  font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 정확도 ── */
+.accCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.accLabel { font-size: 12px; color: var(--muted); }
+.accBar {
+  width: 100%; height: 6px; background: var(--bg3); border-radius: 999px; overflow: hidden;
+}
+.accBarFill {
+  height: 100%; background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  transition: width 0.25s ease;
+}
+
+/* ── 탭 간격 차트 ── */
+.chart {
+  display: flex; gap: 6px; align-items: flex-end;
+  height: 120px; padding: 8px 4px 0;
+}
+.chartCol {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  height: 100%; justify-content: flex-end;
+}
+.chartBar {
+  width: 100%; max-width: 34px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px 6px 2px 2px; transition: height 0.2s, background 0.2s;
+}
+.chartBarActive {
+  background: color-mix(in srgb, var(--accent) 35%, transparent) !important;
+  border-color: var(--accent);
+}
+.chartLabel {
+  font-family: 'Syne', sans-serif; font-size: 10px; color: var(--muted);
+}
+
+/* ── 컨트롤 ── */
+.controlRow {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.ctrlBtn {
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+  text-decoration: none; text-align: center;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.ctrlBtn:hover { color: var(--text); border-color: var(--accent); }
+.ctrlBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ctrlBtnActive {
+  background: var(--accent) !important; color: #0D0D0D !important;
+  border-color: var(--accent) !important;
+}
+.ctrlBtnLink {
+  grid-column: 1 / -1;
+  background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.3);
+  color: var(--accent);
+}
+.ctrlBtnLink:hover { background: rgba(200,255,62,0.15); color: var(--accent); }
+
+/* ── 메트로놈 BPM 입력 ── */
+.bpmInputRow {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;
+  justify-content: center;
+}
+.bpmInput {
+  width: 140px; padding: 8px 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+  color: var(--accent); text-align: center; letter-spacing: -0.5px;
+  -moz-appearance: textfield;
+}
+.bpmInput::-webkit-outer-spin-button, .bpmInput::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+.bpmInput:focus { outline: none; border-color: var(--accent); }
+.bpmUnit {
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.08em;
+}
+.bpmSlider {
+  width: 100%; accent-color: var(--accent); margin: 6px 0 10px;
+}
+.bpmAdjustRow {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+}
+.adjBtn {
+  padding: 8px; border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border);
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  color: var(--text); cursor: pointer; transition: all 0.15s;
+}
+.adjBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── 박자 선택 ── */
+.sigRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sigBtn {
+  padding: 12px 6px; border-radius: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.sigBtn:hover { color: var(--text); }
+.sigBtnActive {
+  background: var(--accent) !important; color: #0D0D0D !important;
+  border-color: var(--accent) !important;
+}
+
+/* ── 펄스 원 ── */
+.pulseCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px 22px;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.pulse {
+  width: 140px; height: 140px; border-radius: 50%;
+  background: var(--bg3); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.08s, border-color 0.08s, transform 0.08s;
+}
+.pulseActive { animation: pulseBeat 1s infinite; }
+.pulseAccent { background: rgba(200,255,62,0.2); border-color: var(--accent); }
+.pulseBeat {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px;
+  color: var(--text); letter-spacing: 0.05em;
+}
+.playBtn {
+  padding: 13px 40px; border-radius: 10px;
+  background: var(--accent); border: 1px solid var(--accent);
+  color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  cursor: pointer; transition: all 0.15s;
+}
+.playBtn:hover { filter: brightness(1.1); }
+.playBtnStop {
+  background: var(--bg3) !important; color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 6px;
+}
+.presetBtn {
+  padding: 10px 6px; border-radius: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.presetBtn:hover { border-color: var(--accent); color: var(--text); }
+.presetBtnActive {
+  background: rgba(200,255,62,0.12) !important;
+  border-color: var(--accent) !important; color: var(--accent) !important;
+}
+.presetBpm { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; line-height: 1; }
+.presetName { font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; }
+
+/* ── 박자감 테스트 ── */
+.randomRow { display: flex; justify-content: center; margin-top: 4px; }
+.testInfoCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.testInfoText {
+  font-size: 13px; color: var(--muted); line-height: 1.9; margin: 0;
+}
+.testInfoText strong { color: var(--accent); font-weight: 700; }
+.startBtn {
+  padding: 14px; border-radius: 12px;
+  background: var(--accent); border: 1px solid var(--accent);
+  color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  cursor: pointer; transition: all 0.15s;
+}
+.startBtn:hover { filter: brightness(1.1); }
+
+.testStageCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 14px; padding: 32px 22px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.testStageLabel {
+  font-size: 13px; color: var(--muted); letter-spacing: 0.04em;
+}
+.testTarget {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(52px, 14vw, 84px); color: var(--accent);
+  line-height: 1; letter-spacing: -2px;
+}
+.testTargetSub {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 14px; color: var(--muted); letter-spacing: 0.1em;
+  margin-top: -4px;
+}
+.previewDots { display: flex; gap: 14px; margin-top: 6px; }
+.previewDot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  transition: all 0.1s;
+}
+.previewDotActive { background: var(--accent); border-color: var(--accent); }
+.previewDotAccent { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(200,255,62,0.2); }
+.testHint {
+  font-size: 12px; color: var(--muted); margin: 0; text-align: center;
+}
+.testTapBtn {
+  width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
+  border-radius: 50%; border: 2px solid var(--accent);
+  background: radial-gradient(circle at center, rgba(200,255,62,0.15), var(--bg3));
+  color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 44px; letter-spacing: 0.05em;
+  cursor: pointer; transition: transform 0.08s;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.testTapBtn:active { transform: scale(0.96); }
+.tapDotsRow {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-top: 4px;
+}
+.tapDot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.tapDotDone { background: var(--accent); border-color: var(--accent); }
+
+/* ── 결과 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  border-radius: 14px; padding: 28px 22px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  animation: fadeUp 0.3s ease;
+}
+.resultStars { font-size: 40px; letter-spacing: 4px; }
+.resultTitle {
+  font-size: 17px; font-weight: 700;
+  text-align: center; line-height: 1.4;
+}
+.resultRow {
+  display: flex; align-items: center; gap: 16px;
+  width: 100%; justify-content: center; margin-top: 8px;
+}
+.resultBlock {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1; max-width: 140px;
+}
+.resultSub {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.resultNum {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(32px, 8vw, 48px); color: var(--text);
+  letter-spacing: -0.5px; line-height: 1;
+}
+.resultArrow {
+  font-family: 'Syne', sans-serif; font-size: 16px; color: var(--muted);
+  font-weight: 700; letter-spacing: 0.1em;
+}
+.resultErrRow {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  margin-top: 6px;
+}
+.resultErrLabel {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.resultErrBar {
+  flex: 1; height: 8px; background: var(--bg3); border-radius: 999px; overflow: hidden;
+}
+.resultErrBarFill { height: 100%; transition: width 0.4s ease; border-radius: 999px; }
+.resultErrValue {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  color: var(--text); min-width: 48px; text-align: right;
+}
+.resultActions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 6px;
+}
+
+/* ── 애니메이션 ── */
+@keyframes ripple {
+  0%   { opacity: 0.8; transform: scale(0.4); }
+  100% { opacity: 0;   transform: scale(1.4); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseBeat {
+  0%, 100% { transform: scale(1); }
+  10%      { transform: scale(1.08); }
+}
+
+/* ── 모바일 ── */
+@media (max-width: 500px) {
+  .tab { font-size: 12px; padding: 10px 4px; }
+  .card, .tapCard, .pulseCard, .testStageCard, .resultCard { padding: 18px 16px; }
+  .bpmInput { font-size: 26px; width: 120px; }
+  .pulse { width: 120px; height: 120px; }
+  .pulseBeat { font-size: 22px; }
+  .controlRow { grid-template-columns: 1fr; }
+  .ctrlBtnLink { grid-column: auto; }
+  .chart { height: 100px; }
+  .chartLabel { font-size: 9px; }
+  .resultRow { gap: 10px; }
+}

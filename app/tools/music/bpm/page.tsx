@@ -8,7 +8,15 @@ export const metadata: Metadata = {
   keywords: ['BPM딜레이계산기', '딜레이타임계산', '음악제작계산기', 'BPM딜레이', '딜레이ms계산', 'DAW딜레이설정', '음악템포계산기'],
 }
 
-export default function BpmPage() {
+export default async function BpmPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ bpm?: string }>
+}) {
+  const sp = (await searchParams) ?? {}
+  const raw = typeof sp.bpm === 'string' ? sp.bpm : ''
+  const parsed = parseFloat(raw)
+  const initialBpm = parsed > 0 && parsed <= 300 ? String(Math.round(parsed)) : '120'
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
@@ -19,7 +27,7 @@ export default function BpmPage() {
         BPM을 입력하면 딜레이·리버브 프리딜레이 설정에 필요한 ms 값을 즉시 계산합니다.
       </p>
 
-      <BpmClient />
+      <BpmClient initialBpm={initialBpm} />
 
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 

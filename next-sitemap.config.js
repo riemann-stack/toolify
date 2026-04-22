@@ -18,6 +18,7 @@ module.exports = {
     await config.transform(config, '/tools/finance/compound'),
     await config.transform(config, '/tools/finance/stock'),
     await config.transform(config, '/tools/finance/vat'),
+    await config.transform(config, '/tools/finance/dividend'),
     // 건강·안전
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
@@ -27,11 +28,13 @@ module.exports = {
     await config.transform(config, '/tools/health/pregnancy'),
     await config.transform(config, '/tools/health/pet'),
     await config.transform(config, '/tools/health/blood-alcohol'),
+    await config.transform(config, '/tools/health/race-predictor'),
     // 요리·식품
     await config.transform(config, '/tools/cooking'),
     await config.transform(config, '/tools/cooking/recipe'),
     await config.transform(config, '/tools/cooking/thawing'),
     await config.transform(config, '/tools/cooking/unit'),
+    await config.transform(config, '/tools/cooking/sourdough'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -43,6 +46,9 @@ module.exports = {
     await config.transform(config, '/tools/life/alcohol'),
     await config.transform(config, '/tools/life/golden-ratio'),
     await config.transform(config, '/tools/life/golf-handicap'),
+    await config.transform(config, '/tools/life/drake'),
+    await config.transform(config, '/tools/life/laundry-dry'),
+    await config.transform(config, '/tools/life/monty-hall'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -62,6 +68,7 @@ module.exports = {
     await config.transform(config, '/tools/music/bpm'),
     await config.transform(config, '/tools/music/frequency'),
     await config.transform(config, '/tools/music/capo'),
+    await config.transform(config, '/tools/music/tap-tempo'),
     // 개발자
     await config.transform(config, '/tools/dev'),
     await config.transform(config, '/tools/dev/charcount'),

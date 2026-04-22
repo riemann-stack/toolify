@@ -16,8 +16,8 @@ function calcDelay(bpm: number, factor: number) {
   return Math.round((60000 / bpm) * factor)
 }
 
-export default function BpmClient() {
-  const [bpm, setBpm] = useState('120')
+export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string } = {}) {
+  const [bpm, setBpm] = useState(initialBpm)
   const [copied, setCopied] = useState<string | null>(null)
 
   const bpmNum = useMemo(() => {
