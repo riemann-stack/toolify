@@ -188,7 +188,7 @@ export default function AlcoholPage() {
             {[
               { href: '/tools/life/dutch',    icon: '🍻', name: '더치페이 계산기',  desc: '술자리 비용 n빵 계산' },
               { href: '/tools/life/pomodoro', icon: '🍅', name: '뽀모도로 타이머',  desc: '음주 후 휴식·회복 타이머' },
-              { href: '/tools/life/recipe',   icon: '📐', name: '레시피 비율 계산기', desc: '안주 인분 수 자동 계산' },
+              { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '안주 인분 수 자동 계산' },
               { href: '/tools/unit/weight',   icon: '⚖️', name: '무게 변환기',       desc: 'g·ml·oz 단위 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

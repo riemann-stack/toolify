@@ -26,9 +26,10 @@ function fmt(n: number, d: Decimals): string {
 
 /* ──────────────────────── 탭 1: 황금 비율 계산기 ──────────────────────── */
 function RatioTab({ decimals }: { decimals: Decimals }) {
-  const [mode, setMode] = useState<'A' | 'B'>('A')
+  const [mode, setMode] = useState<'A' | 'B' | 'T'>('A')
   const [a, setA] = useState('')
   const [b, setB] = useState('')
+  const [t, setT] = useState('')
   const [unit, setUnit] = useState<Unit>('px')
   const [copied, setCopied] = useState(false)
 
@@ -38,19 +39,26 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
       if (!A || A <= 0) return null
       const B = A / PHI
       return { A, B, total: A + B }
-    } else {
+    } else if (mode === 'B') {
       const B = parseFloat(b)
       if (!B || B <= 0) return null
       const A = B * PHI
       return { A, B, total: A + B }
+    } else {
+      const T = parseFloat(t)
+      if (!T || T <= 0) return null
+      const A = T / PHI
+      const B = T - A
+      return { A, B, total: T }
     }
-  }, [mode, a, b])
+  }, [mode, a, b, t])
 
   const applyPreset = useCallback((p: typeof PRESETS[0]) => {
     setUnit(p.unit)
     setMode('A')
     setA(String(p.long))
     setB('')
+    setT('')
   }, [])
 
   const handleCopy = useCallback(async () => {
@@ -72,11 +80,15 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
           <button
             className={`${styles.modeTab} ${mode === 'A' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('A')}
-          >긴 변(A) 입력 → B 계산</button>
+          >긴 변(A) → B 계산</button>
           <button
             className={`${styles.modeTab} ${mode === 'B' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('B')}
-          >짧은 변(B) 입력 → A 계산</button>
+          >짧은 변(B) → A 계산</button>
+          <button
+            className={`${styles.modeTab} ${mode === 'T' ? styles.modeTabActive : ''}`}
+            onClick={() => setMode('T')}
+          >전체(T) → A·B 계산</button>
         </div>
 
         <div className={styles.inputGrid}>
@@ -106,6 +118,21 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
                 value={mode === 'B' ? b : (result ? fmt(result.B, decimals) : '')}
                 onChange={e => setB(e.target.value)}
                 disabled={mode !== 'B'}
+              />
+              <span className={styles.unit}>{unit}</span>
+            </div>
+          </div>
+          <div className={styles.fieldGroup} style={{ gridColumn: '1 / -1' }}>
+            <label className={styles.fieldLabel}>전체 길이 (T = A + B)</label>
+            <div className={styles.inputRow}>
+              <input
+                className={styles.numInput}
+                type="number"
+                inputMode="decimal"
+                placeholder="161.8"
+                value={mode === 'T' ? t : (result ? fmt(result.total, decimals) : '')}
+                onChange={e => setT(e.target.value)}
+                disabled={mode !== 'T'}
               />
               <span className={styles.unit}>{unit}</span>
             </div>
@@ -304,46 +331,37 @@ function SpiralTab() {
   const fibs = [1, 1, 2, 3, 5, 8, 13, 21]
   const unit = 18 // 1 유닛 = 18px
 
-  // 각 사각형 정렬: 오른쪽 → 위 → 왼쪽 → 아래 → 오른쪽 ... 반복
-  // 간단하게 하드코딩된 배치로 그림
+  // 사각형 배치 (원점 좌상단, 단위 u = 18px):
+  //  21: 13..34,  0..21    13: 0..13,  0..13    8: 0..8, 13..21    5: 8..13, 16..21
+  //   3: 10..13, 13..16     2: 8..10, 13..15   1a: 8..9, 15..16   1b: 9..10, 15..16
+  //
+  // 황금 나선은 8개의 사분원 호가 접선 연속으로 이어진 하나의 path.
+  // 각 호는 해당 사각형의 한 꼭짓점에 중심을 두고, 인접 두 꼭짓점을 잇는 90° 호.
   const squares = useMemo(() => {
-    // 배치 기준: 각 사각형의 (x, y, size)와 호의 시작/종료
-    // 시작 두 개(1,1)는 오른쪽 위에 위치
-    // 총 크기: 13 + 21 = 34 (가로), 21 + 13 = 34 (세로) — (직접 배치)
-    const s = fibs.map(f => f * unit)
-    // 직사각형 전체 크기
-    const W = (fibs[6] + fibs[7]) * unit // 13 + 21 = 34
-    const H = (fibs[5] + fibs[7]) * unit // 8 + 21 = 29? 확인 필요
-    // 올바른 황금 직사각형 배치: 21(아래 오른쪽), 13(아래 왼쪽), 8(위 왼쪽), 5(위 오른쪽), ...
-    // 표준 배치 (원점 좌상단):
-    //  21: x=13*u..34*u, y=0..21*u (오른쪽)
-    //  13: x=0..13*u,    y=0..13*u (왼쪽 위)
-    //   8: x=0..8*u,     y=13*u..21*u (왼쪽 아래)
-    //   5: x=8*u..13*u,  y=16*u..21*u (오른쪽 아래 안쪽)
-    //   3: x=10*u..13*u, y=13*u..16*u
-    //   2: x=8*u..10*u,  y=13*u..15*u
-    //   1: x=9*u..10*u,  y=14*u..15*u
-    //   1: x=8*u..9*u,   y=14*u..15*u
     const u = unit
-    const placements: { x: number; y: number; size: number; label: number; arc: { cx: number; cy: number; r: number; startAngle: number; endAngle: number } }[] = [
-      // 21 — 오른쪽 큰 사각형, 호는 왼쪽 위→오른쪽 아래 방향
-      { x: 13 * u, y: 0,       size: 21 * u, label: 21, arc: { cx: 13 * u, cy: 21 * u, r: 21 * u, startAngle: 270, endAngle: 360 } },
-      // 13 — 왼쪽 위, 호는 오른쪽 아래→왼쪽 위
-      { x: 0,      y: 0,       size: 13 * u, label: 13, arc: { cx: 13 * u, cy: 13 * u, r: 13 * u, startAngle: 180, endAngle: 270 } },
-      //  8 — 왼쪽 아래, 호는 오른쪽 위→왼쪽 아래
-      { x: 0,      y: 13 * u,  size: 8 * u,  label: 8,  arc: { cx: 8 * u,  cy: 13 * u, r: 8 * u,  startAngle: 90,  endAngle: 180 } },
-      //  5 — 오른쪽 아래 안쪽
-      { x: 8 * u,  y: 16 * u,  size: 5 * u,  label: 5,  arc: { cx: 8 * u,  cy: 16 * u, r: 5 * u,  startAngle: 0,   endAngle: 90 } },
-      //  3
-      { x: 10 * u, y: 13 * u,  size: 3 * u,  label: 3,  arc: { cx: 10 * u, cy: 16 * u, r: 3 * u,  startAngle: 270, endAngle: 360 } },
-      //  2
-      { x: 8 * u,  y: 13 * u,  size: 2 * u,  label: 2,  arc: { cx: 10 * u, cy: 15 * u, r: 2 * u,  startAngle: 180, endAngle: 270 } },
-      //  1
-      { x: 8 * u,  y: 15 * u,  size: 1 * u,  label: 1,  arc: { cx: 9 * u,  cy: 15 * u, r: 1 * u,  startAngle: 90,  endAngle: 180 } },
-      //  1
-      { x: 9 * u,  y: 15 * u,  size: 1 * u,  label: 1,  arc: { cx: 9 * u,  cy: 16 * u, r: 1 * u,  startAngle: 0,   endAngle: 90 } },
+    const placements: { x: number; y: number; size: number; label: number }[] = [
+      { x: 13 * u, y: 0,      size: 21 * u, label: 21 },
+      { x: 0,      y: 0,      size: 13 * u, label: 13 },
+      { x: 0,      y: 13 * u, size: 8 * u,  label: 8  },
+      { x: 8 * u,  y: 16 * u, size: 5 * u,  label: 5  },
+      { x: 10 * u, y: 13 * u, size: 3 * u,  label: 3  },
+      { x: 8 * u,  y: 13 * u, size: 2 * u,  label: 2  },
+      { x: 8 * u,  y: 15 * u, size: 1 * u,  label: 1  },
+      { x: 9 * u,  y: 15 * u, size: 1 * u,  label: 1  },
     ]
-    return { placements, vbW: 34 * u, vbH: 21 * u }
+    // 모든 사분원: large-arc-flag=0, sweep-flag=0 (나선이 사각형 바깥쪽으로 휘어짐)
+    const spiralPath = [
+      `M ${34 * u} ${21 * u}`,
+      `A ${21 * u} ${21 * u} 0 0 0 ${13 * u} 0`,
+      `A ${13 * u} ${13 * u} 0 0 0 0 ${13 * u}`,
+      `A ${8 * u} ${8 * u} 0 0 0 ${8 * u} ${21 * u}`,
+      `A ${5 * u} ${5 * u} 0 0 0 ${13 * u} ${16 * u}`,
+      `A ${3 * u} ${3 * u} 0 0 0 ${10 * u} ${13 * u}`,
+      `A ${2 * u} ${2 * u} 0 0 0 ${8 * u} ${15 * u}`,
+      `A ${1 * u} ${1 * u} 0 0 0 ${9 * u} ${16 * u}`,
+      `A ${1 * u} ${1 * u} 0 0 0 ${10 * u} ${15 * u}`,
+    ].join(' ')
+    return { placements, spiralPath, vbW: 34 * u, vbH: 21 * u }
   }, [])
 
   const bg = theme === 'dark' ? '#141414' : '#F0EFE8'
@@ -427,15 +445,16 @@ function SpiralTab() {
                   textAnchor="middle"
                   dominantBaseline="central"
                 >{p.label}</text>
-                <path
-                  d={arcPath(p.arc.cx, p.arc.cy, p.arc.r, p.arc.startAngle, p.arc.endAngle)}
-                  fill="none"
-                  stroke={stroke}
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                />
               </g>
             ))}
+            <path
+              d={squares.spiralPath}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
 
@@ -445,18 +464,6 @@ function SpiralTab() {
       </div>
     </div>
   )
-}
-
-/* SVG 호 경로 생성 (시계 반대 방향) */
-function arcPath(cx: number, cy: number, r: number, startAngle: number, endAngle: number): string {
-  const start = polar(cx, cy, r, endAngle)
-  const end   = polar(cx, cy, r, startAngle)
-  const largeArc = endAngle - startAngle <= 180 ? 0 : 1
-  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`
-}
-function polar(cx: number, cy: number, r: number, angleDeg: number) {
-  const a = (angleDeg - 90) * Math.PI / 180
-  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) }
 }
 
 /* ──────────────────────── 메인 ──────────────────────── */

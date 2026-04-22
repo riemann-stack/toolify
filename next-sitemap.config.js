@@ -18,7 +18,7 @@ module.exports = {
     await config.transform(config, '/tools/finance/compound'),
     await config.transform(config, '/tools/finance/stock'),
     await config.transform(config, '/tools/finance/vat'),
-    // 건강
+    // 건강·안전
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
     await config.transform(config, '/tools/health/bmr'),
@@ -26,6 +26,12 @@ module.exports = {
     await config.transform(config, '/tools/health/weightloss'),
     await config.transform(config, '/tools/health/pregnancy'),
     await config.transform(config, '/tools/health/pet'),
+    await config.transform(config, '/tools/health/blood-alcohol'),
+    // 요리·식품
+    await config.transform(config, '/tools/cooking'),
+    await config.transform(config, '/tools/cooking/recipe'),
+    await config.transform(config, '/tools/cooking/thawing'),
+    await config.transform(config, '/tools/cooking/unit'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -34,9 +40,9 @@ module.exports = {
     await config.transform(config, '/tools/life/dutch'),
     await config.transform(config, '/tools/life/zodiac'),
     await config.transform(config, '/tools/life/pomodoro'),
-    await config.transform(config, '/tools/life/recipe'),
     await config.transform(config, '/tools/life/alcohol'),
     await config.transform(config, '/tools/life/golden-ratio'),
+    await config.transform(config, '/tools/life/golf-handicap'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -44,7 +50,6 @@ module.exports = {
     await config.transform(config, '/tools/unit/weight'),
     await config.transform(config, '/tools/unit/size'),
     await config.transform(config, '/tools/unit/temperature'),
-    await config.transform(config, '/tools/unit/cooking'),
     // 날짜
     await config.transform(config, '/tools/date'),
     await config.transform(config, '/tools/date/age'),
@@ -56,6 +61,7 @@ module.exports = {
     await config.transform(config, '/tools/music'),
     await config.transform(config, '/tools/music/bpm'),
     await config.transform(config, '/tools/music/frequency'),
+    await config.transform(config, '/tools/music/capo'),
     // 개발자
     await config.transform(config, '/tools/dev'),
     await config.transform(config, '/tools/dev/charcount'),

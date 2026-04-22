@@ -188,7 +188,7 @@ export default function GoldenRatioPage() {
             {[
               { href: '/tools/dev/color',   icon: '🎨', name: '색상 코드 변환기',  desc: 'HEX·RGB·HSL 즉시 변환' },
               { href: '/tools/unit/length', icon: '📏', name: '길이 변환기',       desc: 'cm·m·inch·ft 단위 변환' },
-              { href: '/tools/life/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '인분 수 비율 자동 계산' },
+              { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '인분 수 비율 자동 계산' },
               { href: '/tools/dev/lorem',   icon: '📝', name: '더미 텍스트 생성기', desc: '레이아웃 검증용 더미' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

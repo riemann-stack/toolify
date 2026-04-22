@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CookingUnitPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🥄 요리 단위 변환기
       </h1>
@@ -277,7 +277,7 @@ export default function CookingUnitPage() {
             {[
               { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',       desc: '섭씨·화씨·켈빈 즉시 변환' },
               { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',       desc: 'kg·g·lb·oz·근·돈 변환' },
-              { href: '/tools/life/recipe',      icon: '📐', name: '레시피 비율 계산기', desc: '인분 수에 맞게 재료 비율 자동 계산' },
+              { href: '/tools/cooking/recipe',   icon: '📐', name: '레시피 비율 계산기', desc: '인분 수에 맞게 재료 비율 자동 계산' },
               { href: '/tools/life/dutch',       icon: '🍻', name: '더치페이 계산기',    desc: '식사비 n빵 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
