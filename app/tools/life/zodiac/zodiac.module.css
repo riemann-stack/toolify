@@ -1,7 +1,8 @@
-.wrap { display: flex; flex-direction: column; gap: 10px; }
+.wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.cardTitle { font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 12px; }
 
 /* ── 드롭다운 ── */
 .selectRow {
@@ -9,11 +10,7 @@
   grid-template-columns: 2fr 1.5fr 1.5fr;
   gap: 8px;
 }
-
-.selectWrap {
-  position: relative;
-}
-
+.selectWrap { position: relative; }
 .select {
   width: 100%;
   appearance: none;
@@ -33,11 +30,7 @@
 }
 .select:focus { border-color: rgba(200,255,62,0.5); }
 .select:disabled { opacity: 0.4; cursor: not-allowed; }
-
-/* 기본 option 색상 */
 .select option { background: #1a1a1a; color: var(--text); }
-
-/* 커스텀 화살표 */
 .selectArrow {
   position: absolute;
   right: 12px;
@@ -48,7 +41,7 @@
   pointer-events: none;
 }
 
-/* ── 결과 카드 ── */
+/* ── 결과 카드 (기존) ── */
 .resultRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .resultCard {
   background: var(--bg2);
@@ -68,16 +61,212 @@
 .trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--muted); }
 .element { font-size: 12px; font-weight: 600; }
 
-/* ── 같은 띠 연도 ── */
-.yearRow { display: flex; flex-wrap: wrap; gap: 6px; }
-.yearTag {
+/* ── 간지 카드 ── */
+.ganjiCard {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.2);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.ganjiHanja {
+  font-family: 'Syne', 'Noto Serif KR', serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 4px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.ganjiHangul {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.ganjiSub {
   font-size: 12px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
   color: var(--muted);
   font-family: 'Syne', sans-serif;
+}
+.ganjiSub strong { color: var(--accent); font-weight: 700; }
+
+/* ── 궁합 카드 ── */
+.compatGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+@media (max-width: 480px) {
+  .compatGrid { grid-template-columns: 1fr; }
+}
+.compatBox {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.compatBest { border: 1px solid rgba(62,255,155,0.35); }
+.compatAvoid { border: 1px solid rgba(255,140,62,0.35); }
+.compatHead {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.compatBest .compatHead { color: #3EFF9B; }
+.compatAvoid .compatHead { color: #FF8C3E; }
+.compatList {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.compatPill {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.elementCompat {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.elementCompat strong { color: var(--text); font-weight: 700; }
+.elementCompat .elementTag {
+  display: inline-block;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+/* ── 유명인 카드 ── */
+.famousGroup { margin-bottom: 12px; }
+.famousGroup:last-child { margin-bottom: 0; }
+.famousLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.famousRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.famousPill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 음력 안내 배너 ── */
+.lunarBanner {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.lunarText {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+  flex: 1;
+  min-width: 220px;
+}
+.lunarText strong { color: #3EC8FF; }
+.lunarLink {
+  background: rgba(62,200,255,0.15);
+  border: 1px solid rgba(62,200,255,0.4);
+  color: #3EC8FF;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.lunarLink:hover { background: rgba(62,200,255,0.25); }
+
+/* ── 공유 카드 ── */
+.shareCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.shareText {
+  font-size: 13px;
+  color: var(--muted);
+  flex: 1;
+  min-width: 200px;
+}
+.shareText strong { color: var(--text); }
+.shareBtn {
+  background: var(--accent);
+  color: #0D0D0D;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.shareBtn:hover { opacity: 0.85; }
+.shareBtn.copied { background: #3EFF9B; }
+
+/* ── 같은 띠 연도 ── */
+.yearSection {
+  margin-top: 10px;
+}
+.yearHead {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.yearRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.yearTag {
+  font-size: 13px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
 }
 .yearTagActive {
   background: var(--accent-dim);
@@ -102,4 +291,5 @@
   .resultRow { grid-template-columns: 1fr; }
   .selectRow { grid-template-columns: 1fr 1fr 1fr; }
   .select { font-size: 13px; padding: 10px 28px 10px 10px; }
+  .ganjiHanja { font-size: 40px; letter-spacing: 3px; }
 }

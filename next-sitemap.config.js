@@ -35,6 +35,9 @@ module.exports = {
     await config.transform(config, '/tools/cooking/thawing'),
     await config.transform(config, '/tools/cooking/unit'),
     await config.transform(config, '/tools/cooking/sourdough'),
+    await config.transform(config, '/tools/cooking/frying'),
+    await config.transform(config, '/tools/cooking/nuts'),
+    await config.transform(config, '/tools/cooking/serving'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -49,6 +52,7 @@ module.exports = {
     await config.transform(config, '/tools/life/drake'),
     await config.transform(config, '/tools/life/laundry-dry'),
     await config.transform(config, '/tools/life/monty-hall'),
+    await config.transform(config, '/tools/life/fart-risk'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -63,6 +67,7 @@ module.exports = {
     await config.transform(config, '/tools/date/diff'),
     await config.transform(config, '/tools/date/military'),
     await config.transform(config, '/tools/date/history-era'),
+    await config.transform(config, '/tools/date/lunar'),
     // 음악
     await config.transform(config, '/tools/music'),
     await config.transform(config, '/tools/music/bpm'),

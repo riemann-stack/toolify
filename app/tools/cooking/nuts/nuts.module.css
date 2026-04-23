@@ -1,0 +1,427 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.cardSub {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+/* ── NUT GRID ── */
+.nutGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 560px) {
+  .nutGrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 400px) {
+  .nutGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.nutBtn {
+  position: relative;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 6px;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nutBtn:hover {
+  border-color: rgba(200,255,62,0.4);
+}
+.nutEmoji { font-size: 26px; line-height: 1; }
+.nutName {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+}
+.nutKcal {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.nutActive {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.nutActive .nutName { color: #0D0D0D; font-weight: 700; }
+.nutActive .nutKcal { color: #0D0D0D; opacity: 0.7; }
+.nutBadge {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 16px; height: 16px;
+  background: #0D0D0D;
+  color: var(--accent);
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+
+/* ── CONDITION BUTTONS ── */
+.condRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.condBtn {
+  flex: 1;
+  min-width: 90px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+  text-align: center;
+}
+.condBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.condActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.5);
+  color: var(--accent);
+  font-weight: 700;
+}
+.condWarn {
+  border-color: rgba(255,140,62,0.4);
+}
+.condWarn.condActive {
+  background: rgba(255,140,62,0.12);
+  border-color: rgba(255,140,62,0.5);
+  color: #FF8C3E;
+}
+
+/* ── SLIDER ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 99px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #0D0D0D;
+}
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #0D0D0D;
+}
+.sliderValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 64px;
+  text-align: right;
+}
+
+.numInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.numInput:focus {
+  border-color: rgba(200,255,62,0.5);
+}
+
+/* ── RESULT CARD ── */
+.result {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 14px;
+  padding: 22px 24px;
+  animation: fadeUp 0.3s ease;
+}
+.resultHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.resultEmoji { font-size: 34px; line-height: 1; }
+.resultName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.resultAllergyTag {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.amountHero {
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.amountLead {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.amountValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.amountSub {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 6px;
+}
+
+.nutriGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+@media (max-width: 500px) {
+  .nutriGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.nutriBox {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.nutriLabel {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.nutriVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.keyBadge {
+  background: var(--accent-dim);
+  border: 1px solid rgba(200,255,62,0.4);
+  color: var(--accent);
+  padding: 5px 11px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.benefitBadge {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 11px;
+  border-radius: 99px;
+  font-size: 11px;
+}
+
+/* warning */
+.warnBox {
+  background: rgba(255,140,62,0.06);
+  border: 1px solid rgba(255,140,62,0.3);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+/* danger (brazil nut) */
+.dangerBox {
+  background: rgba(255,50,50,0.08);
+  border: 2px solid rgba(255,80,80,0.5);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-top: 8px;
+}
+.dangerBox strong {
+  color: #FF6B6B;
+  font-weight: 700;
+}
+
+/* ── SUMMARY ── */
+.summary {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.summaryHead {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.summaryKcal {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.summaryKcalSub {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.progressLabel {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 110px;
+}
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.progressFillGreen { background: linear-gradient(90deg, #3EFF9B, #3EC8FF); }
+.progressFillAccent { background: linear-gradient(90deg, var(--accent), #FFC83E); }
+.progressFillOrange { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
+.progressPct {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 50px;
+  text-align: right;
+}
+
+.summaryNutri {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+}
+@media (max-width: 500px) {
+  .summaryNutri { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* processing warning card */
+.procWarn {
+  background: rgba(255,140,62,0.06);
+  border: 1px solid rgba(255,140,62,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.procWarn strong { color: #FF8C3E; }
+
+.disclaimer {
+  background: rgba(200,255,62,0.04);
+  border: 1px solid rgba(200,255,62,0.15);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.disclaimer strong { color: var(--text); }
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

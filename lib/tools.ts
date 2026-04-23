@@ -45,7 +45,10 @@ export const categories: Category[] = [
       { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',      desc: '인분 수에 맞게 재료 비율 자동 계산' },
       { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',    desc: '식품 두께·무게 기반 해동 시간 예측·식품 안전 가이드' },
       { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',         desc: '컵·큰술·oz·근 등 요리 단위 즉시 변환' },
-      { href: '/tools/cooking/sourdough', icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화 진단·피크 시간 예측·급이 스케줄러', badge: 'new' },
+      { href: '/tools/cooking/sourdough', icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화 진단·피크 시간 예측·급이 스케줄러' },
+      { href: '/tools/cooking/frying',    icon: '🍳', name: '튀김 시간·온도 계산기',   desc: '재료별 최적 기름 온도·튀김 시간·에어프라이어 변환 가이드' },
+      { href: '/tools/cooking/nuts',      icon: '🌰', name: '견과류 적정 섭취량 계산기', desc: '견과류별 하루 권장 섭취량·칼로리·영양소 계산' },
+      { href: '/tools/cooking/serving',   icon: '🍽️', name: '1인분 분량 계산기',         desc: '파스타·고기·쌀 등 재료별 인분 분량·장보기 가이드', badge: 'new' },
     ],
   },
   {
@@ -62,7 +65,8 @@ export const categories: Category[] = [
       { href: '/tools/life/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',  desc: 'WHS 방식 핸디캡 지수·코스 핸디캡·네트 스코어 계산' },
       { href: '/tools/life/drake',         icon: '👽', name: '드레이크 방정식 계산기', desc: '우주의 지적 문명 수 추정·변수 조정 시뮬레이터' },
       { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 건조 예상 시간 및 단축 팁' },
-      { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 문제 시뮬레이터', desc: '바꾸기 vs 유지하기 — 직접 1,000번 돌려보는 확률 실험', badge: 'new' },
+      { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 문제 시뮬레이터', desc: '바꾸기 vs 유지하기 — 직접 1,000번 돌려보는 확률 실험' },
+      { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 유발 가능성 계산기', desc: '오늘 먹은 음식으로 가스 유발 가능성 체크', badge: 'new' },
     ],
   },
   {
@@ -83,6 +87,7 @@ export const categories: Category[] = [
       { href: '/tools/date/diff',        icon: '📆', name: '날짜 차이 계산기',       desc: '두 날짜 사이 기간 계산' },
       { href: '/tools/date/military',    icon: '🎖️', name: '군 전역일·복무율 계산기', desc: '전역일·복무율 계산' },
       { href: '/tools/date/history-era', icon: '📜', name: '역사 연호·연대 변환기',   desc: '단기·조선 왕 연호·간지 ↔ 서기 변환' },
+      { href: '/tools/date/lunar',       icon: '🌙', name: '양음력 변환기',           desc: '음력 ↔ 양력 날짜 변환 · 간지 확인', badge: 'new' },
     ],
   },
   {
