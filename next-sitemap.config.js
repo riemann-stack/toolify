@@ -29,6 +29,8 @@ module.exports = {
     await config.transform(config, '/tools/health/pet'),
     await config.transform(config, '/tools/health/blood-alcohol'),
     await config.transform(config, '/tools/health/race-predictor'),
+    await config.transform(config, '/tools/health/supplement'),
+    await config.transform(config, '/tools/health/one-rm'),
     // 요리·식품
     await config.transform(config, '/tools/cooking'),
     await config.transform(config, '/tools/cooking/recipe'),
@@ -53,6 +55,7 @@ module.exports = {
     await config.transform(config, '/tools/life/laundry-dry'),
     await config.transform(config, '/tools/life/monty-hall'),
     await config.transform(config, '/tools/life/fart-risk'),
+    await config.transform(config, '/tools/life/unit-price'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -68,6 +71,7 @@ module.exports = {
     await config.transform(config, '/tools/date/military'),
     await config.transform(config, '/tools/date/history-era'),
     await config.transform(config, '/tools/date/lunar'),
+    await config.transform(config, '/tools/date/jet-lag'),
     // 음악
     await config.transform(config, '/tools/music'),
     await config.transform(config, '/tools/music/bpm'),
@@ -81,6 +85,7 @@ module.exports = {
     await config.transform(config, '/tools/dev/json'),
     await config.transform(config, '/tools/dev/lorem'),
     await config.transform(config, '/tools/dev/color'),
+    await config.transform(config, '/tools/dev/css-converter'),
   ],
   transform: async (config, path) => {
     const highPriority = [

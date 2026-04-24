@@ -36,7 +36,9 @@ export const categories: Category[] = [
       { href: '/tools/health/pregnancy',     icon: '🤰', name: '임신 주수 계산기',          desc: '출산 예정일·산전 검사 일정' },
       { href: '/tools/health/pet',           icon: '🐾', name: '반려동물 나이·칼로리 계산기', desc: '강아지·고양이 사람 나이 환산·하루 사료량 계산' },
       { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기',     desc: '음주량·체중 기반 BAC 추정·운전 가능 시각 계산' },
-      { href: '/tools/health/race-predictor', icon: '🏅', name: '마라톤 레이스 기록 예측 계산기', desc: 'Riegel·VDOT·Cameron 공식으로 레이스 예상 기록 계산', badge: 'new' },
+      { href: '/tools/health/race-predictor', icon: '🏅', name: '마라톤 레이스 기록 예측 계산기', desc: 'Riegel·VDOT·Cameron 공식으로 레이스 예상 기록 계산' },
+      { href: '/tools/health/supplement', icon: '💊', name: '영양제 성분 체크 계산기', desc: '영양제 중복 성분 합산·상한량 초과 체크·복용 타이밍 가이드' },
+      { href: '/tools/health/one-rm', icon: '🏋️', name: '1RM & 훈련 중량 계산기', desc: '1RM 추정·강도별 훈련 중량·원판 조합 계산', badge: 'new' },
     ],
   },
   {
@@ -66,7 +68,8 @@ export const categories: Category[] = [
       { href: '/tools/life/drake',         icon: '👽', name: '드레이크 방정식 계산기', desc: '우주의 지적 문명 수 추정·변수 조정 시뮬레이터' },
       { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 건조 예상 시간 및 단축 팁' },
       { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 문제 시뮬레이터', desc: '바꾸기 vs 유지하기 — 직접 1,000번 돌려보는 확률 실험' },
-      { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 유발 가능성 계산기', desc: '오늘 먹은 음식으로 가스 유발 가능성 체크', badge: 'new' },
+      { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 유발 가능성 계산기', desc: '오늘 먹은 음식으로 가스 유발 가능성 체크' },
+      { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',        desc: '용량·덤·할인·배송비 반영 가성비 단가 비교', badge: 'new' },
     ],
   },
   {
@@ -87,7 +90,8 @@ export const categories: Category[] = [
       { href: '/tools/date/diff',        icon: '📆', name: '날짜 차이 계산기',       desc: '두 날짜 사이 기간 계산' },
       { href: '/tools/date/military',    icon: '🎖️', name: '군 전역일·복무율 계산기', desc: '전역일·복무율 계산' },
       { href: '/tools/date/history-era', icon: '📜', name: '역사 연호·연대 변환기',   desc: '단기·조선 왕 연호·간지 ↔ 서기 변환' },
-      { href: '/tools/date/lunar',       icon: '🌙', name: '양음력 변환기',           desc: '음력 ↔ 양력 날짜 변환 · 간지 확인', badge: 'new' },
+      { href: '/tools/date/lunar',       icon: '🌙', name: '양음력 변환기',           desc: '음력 ↔ 양력 날짜 변환 · 간지 확인' },
+      { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정·수면 타이밍 계산', badge: 'new' },
     ],
   },
   {
@@ -107,6 +111,7 @@ export const categories: Category[] = [
       { href: '/tools/dev/json',      icon: '📋', name: 'JSON 포맷터',          desc: 'JSON 정렬·압축·유효성 검사' },
       { href: '/tools/dev/lorem',     icon: '📝', name: '더미 텍스트 생성기',   desc: 'Lorem Ipsum·한글 더미 생성' },
       { href: '/tools/dev/color',     icon: '🎨', name: '색상 코드 변환기',     desc: 'HEX·RGB·HSL 즉시 변환' },
+      { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',    desc: 'px·rem·em·clamp()·aspect-ratio CSS 단위 변환 및 생성', badge: 'new' },
     ],
   },
 ]
