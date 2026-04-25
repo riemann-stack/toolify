@@ -1,0 +1,205 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 12px 6px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── 입력 ── */
+.inputRow {
+  display: grid; grid-template-columns: 1fr 110px; gap: 8px;
+}
+.input {
+  width: 100%; box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  color: var(--text); outline: none;
+  transition: border 0.15s;
+  letter-spacing: -0.5px;
+}
+.input:focus { border-color: var(--accent); }
+.inputFilled { border-color: var(--accent) !important; }
+
+/* ── 단위 버튼 그리드 ── */
+.unitGrid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  margin-top: 12px;
+}
+.unitBtn {
+  padding: 8px 4px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg3); color: var(--muted);
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: all 0.15s;
+}
+.unitBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.unitBtnActive {
+  background: var(--accent-dim) !important;
+  border-color: rgba(200,255,62,0.5) !important;
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+}
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 12px;
+}
+.presetBtn {
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.presetBtn:hover {
+  color: var(--accent); border-color: rgba(200,255,62,0.4);
+}
+
+/* ── 결과 표 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.resultHeader {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.resultHeaderLabel {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.resultHeaderValue {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+
+.resultRow {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.resultRow:last-child { border-bottom: none; }
+.resultRow:hover { background: var(--bg3); }
+.resultRowHighlight {
+  background: rgba(200,255,62,0.05);
+}
+.resultLabel {
+  font-size: 12px; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.resultValue {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--text); text-align: right;
+  letter-spacing: -0.3px; word-break: break-all;
+}
+.resultValueSelf {
+  color: var(--accent); font-weight: 800;
+}
+.copyBtn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+  font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
+  flex-shrink: 0; min-width: 50px;
+}
+.copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
+.copyBtnDone {
+  color: var(--accent) !important;
+  border-color: rgba(200,255,62,0.4) !important;
+}
+
+/* ── 근무 기준 ── */
+.workInputs {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.workInputCell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+}
+.workInputLabel {
+  font-size: 10px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 4px;
+}
+.workInput {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  color: var(--text); padding: 0;
+}
+
+.workResultGrid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  margin-top: 12px;
+}
+.workResultCell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.workResultLabel {
+  font-size: 11px; color: var(--muted); margin-bottom: 4px;
+}
+.workResultValue {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+  color: var(--accent); letter-spacing: -0.3px;
+}
+.workResultMeta {
+  font-size: 11px; color: var(--muted); margin-top: 2px;
+}
+
+/* ── 10,000시간 카드 ── */
+.tenKCard {
+  background: rgba(200,255,62,0.05);
+  border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 14px; padding: 16px 18px;
+}
+.tenKTitle {
+  font-size: 13px; color: var(--accent); font-weight: 700;
+  margin-bottom: 4px;
+}
+.tenKDesc {
+  font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 10px;
+}
+.tenKList { display: flex; flex-direction: column; gap: 6px; }
+.tenKItem {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px;
+  background: var(--bg2); border-radius: 8px;
+  font-size: 13px;
+}
+.tenKItemLabel { color: var(--muted); font-size: 12px; }
+.tenKItemValue {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  color: var(--accent); font-size: 14px;
+}
+
+/* ── 모바일 ── */
+@media (max-width: 600px) {
+  .unitGrid { grid-template-columns: repeat(3, 1fr); }
+  .workInputs { grid-template-columns: 1fr; }
+  .workResultGrid { grid-template-columns: 1fr; }
+  .resultRow { grid-template-columns: 70px 1fr auto; padding: 10px 14px; gap: 8px; }
+  .resultValue { font-size: 14px; }
+  .resultHeaderValue { font-size: 18px; }
+}

@@ -1,0 +1,584 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 모드 토글 ── */
+.modeToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.modeBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.modeBtn:hover { color: var(--text); }
+.modeActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.cardDimmed { opacity: 0.5; }
+
+/* ── 입력 ── */
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.numInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 18px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
+.numInput:focus {
+  border-color: rgba(200,255,62,0.5);
+  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+}
+.numInput::-webkit-outer-spin-button,
+.numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; }
+.helperText {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.subLabel {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+.firstSub { margin-top: 0; }
+
+/* ── 연료 타입 버튼 ── */
+.fuelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.fuelBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.fuelBtn:hover { color: var(--text); }
+.fuelGas { border-color: rgba(255,140,62,0.4); }
+.fuelEv { border-color: rgba(62,255,155,0.4); }
+.fuelHybrid { border-color: rgba(62,200,255,0.4); }
+
+.fuelGas.fuelActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.fuelEv.fuelActive { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.fuelHybrid.fuelActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+
+/* ── PILL ── */
+.pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.pill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.pill:hover { border-color: var(--border-hover); color: var(--text); }
+.pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+
+/* ── 토글 (체크박스 형태) ── */
+.toggleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.toggleSwitch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--bg3);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.toggleSwitchOn {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--muted);
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.toggleSwitchOn .toggleKnob {
+  background: var(--accent);
+  left: 22px;
+}
+
+/* ── 방식 선택 (감가) ── */
+.methodTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+.methodBtn {
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.methodBtn:hover { color: var(--text); }
+.methodActive {
+  background: var(--bg2);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 2열 ── */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .twoCol { grid-template-columns: 1fr; }
+}
+
+/* 월환산 표시 */
+.monthlyHint {
+  font-size: 12px;
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── 소모품 테이블 ── */
+.consumablesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.consumableRow {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.consumableRow.disabled { opacity: 0.4; }
+.consumableName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+.consumableHeader {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+  gap: 8px;
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.smallNum {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 8px;
+  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+.smallNum:focus { border-color: rgba(200,255,62,0.5); }
+.smallNum::-webkit-outer-spin-button,
+.smallNum::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.smallNum[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.modifiedValue { color: var(--accent); }
+
+.consumableMonthly {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 13px;
+  text-align: right;
+}
+.miniToggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.miniToggle:hover { color: var(--text); }
+.miniToggleOff { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
+
+@media (max-width: 580px) {
+  .consumableHeader { display: none; }
+  .consumableRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .consumableName { grid-column: 1 / -1; }
+  .consumableMonthly { grid-column: 1 / -1; text-align: left; }
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.35);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  word-break: keep-all;
+}
+.heroDual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 18px;
+}
+.heroDualBox {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+}
+.heroDualLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.heroDualVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 4px;
+}
+.heroDualSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── breakdown ── */
+.breakdownLayout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .breakdownLayout { grid-template-columns: 1fr; }
+}
+.breakdownTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.breakdownTable th {
+  text-align: left;
+  background: var(--bg3);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.breakdownTable td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.breakdownTable td.numCell {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  text-align: right;
+}
+.breakdownTable tr.deprRow td {
+  background: rgba(255,107,107,0.06);
+  color: #FF6B6B;
+}
+.breakdownTable tr.maxRow td:first-child {
+  border-left: 3px solid var(--accent);
+}
+.breakdownTable tr.totalRow td {
+  font-weight: 700;
+  background: var(--bg3);
+  border-bottom: none;
+  color: var(--accent);
+}
+.pctCell {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* 도넛 */
+.donutWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.donutCenter {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  fill: var(--text);
+}
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  font-size: 11px;
+}
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legendLabel { color: var(--muted); flex: 1; }
+.legendVal { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; }
+
+/* 환산 카드 3개 */
+.convertGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 520px) {
+  .convertGrid { grid-template-columns: 1fr; }
+}
+.convertCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.convertLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.convertVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+.convertSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* 연간 카드 */
+.annualCard {
+  background: var(--bg2);
+  border: 1px solid rgba(255,140,62,0.3);
+  border-radius: 12px;
+  padding: 18px 22px;
+  text-align: center;
+}
+.annualLabel {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.annualVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #FF8C3E;
+  letter-spacing: -0.8px;
+}
+.annualSub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* 대중교통 비교 */
+.transitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.transitBox {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.transitLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+.transitVal { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+.transitDiff {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* 절약 팁 */
+.tipsCard {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+}
+.tipsCard ul { margin: 0; padding-left: 0; list-style: none; }
+.tipsCard li { padding: 4px 0; }
+
+/* 면책 */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* 복사 버튼 */
+.actionRow { display: flex; gap: 8px; flex-wrap: wrap; }
+.copyBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+/* 외부 링크 */
+.extLink {
+  font-size: 12px;
+  color: #3EC8FF;
+  text-decoration: none;
+  margin-top: 6px;
+  display: inline-block;
+}
+.extLink:hover { text-decoration: underline; }

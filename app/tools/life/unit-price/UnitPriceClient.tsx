@@ -78,13 +78,9 @@ function calcTotalAmount(p: Product): number {
   }
 }
 
-/** 실제 지불 가격 (배송비 포함) */
+/** 실제 지불 가격 (배송비 포함) — price는 전체 가격(총 결제액) */
 function calcFinalPrice(p: Product): number {
-  const price = num(p.price)
-  const count = Math.max(1, num(p.count))
-  // 묶음 가격: 1+1은 1개 가격, 2+1은 2개 가격, 3+1은 3개 가격; 그 외엔 count
-  const multiplier = p.deal === '1+1' ? 1 : p.deal === '2+1' ? 2 : p.deal === '3+1' ? 3 : count
-  let base = price * multiplier
+  let base = num(p.price)
   base -= num(p.instantDiscount)
   const cp = num(p.couponPercent)
   if (cp > 0) base *= 1 - cp / 100
@@ -253,7 +249,7 @@ export default function UnitPriceClient() {
 
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>가격 (원)</label>
+                <label className={s.fieldLabel}>전체 가격 (원)</label>
                 <input
                   className={`${s.input} ${s.inputRight}`}
                   inputMode="numeric"
@@ -263,7 +259,7 @@ export default function UnitPriceClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>묶음 수량</label>
+                <label className={s.fieldLabel}>갯수</label>
                 <input
                   className={`${s.input} ${s.inputRight}`}
                   inputMode="numeric"
@@ -276,7 +272,7 @@ export default function UnitPriceClient() {
 
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>용량 / 수량</label>
+                <label className={s.fieldLabel}>용량</label>
                 <input
                   className={`${s.input} ${s.inputRight}`}
                   inputMode="decimal"

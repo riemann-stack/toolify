@@ -1,0 +1,453 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 조항 ── */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #FF8C8C; }
+
+/* ── TABS ── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ── INPUTS ── */
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.numInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 20px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
+.numInput:focus {
+  border-color: rgba(200,255,62,0.5);
+  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+}
+.numInput::-webkit-outer-spin-button,
+.numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.unit { font-size: 14px; color: var(--muted); flex-shrink: 0; }
+.helperText {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ── 관계 버튼 ── */
+.relGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+@media (max-width: 520px) {
+  .relGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.relBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.relBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.relSpouse { border-color: rgba(255,215,0,0.4); }
+.relAdult { border-color: rgba(200,255,62,0.4); }
+.relMinor { border-color: rgba(62,200,255,0.4); }
+.relParent { border-color: rgba(255,140,62,0.4); }
+.relRelative { border-color: var(--border); }
+.relOther { border-color: var(--border); }
+
+.relSpouse.relActive { background: rgba(255,215,0,0.12); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.relAdult.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.relMinor.relActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.relParent.relActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.relRelative.relActive,
+.relOther.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* ── 토글 버튼 (Yes/No) ── */
+.toggleRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.toggleBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.toggleBtn:hover { color: var(--text); }
+.toggleActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── PILL 버튼 ── */
+.pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.pill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.pill:hover { border-color: var(--border-hover); color: var(--text); }
+.pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+
+/* ── select ── */
+.selectInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.35);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  word-break: keep-all;
+}
+.heroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroSubAccent {
+  font-size: 14px;
+  color: var(--text);
+  margin-top: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 계산 과정 카드 (접이식) ── */
+.detailToggle {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.detailToggle:hover { color: var(--text); border-color: var(--border-hover); }
+.detailBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.9;
+}
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.detailRow span:first-child { color: var(--muted); }
+.detailDivider {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 8px 0;
+}
+.detailFinal {
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+.detailFinal span:first-child { color: var(--accent) !important; }
+
+/* ── 주의 체크 항목 ── */
+.warnList {
+  background: rgba(255,215,0,0.06);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+}
+.warnList ul { margin: 0; padding-left: 0; list-style: none; }
+.warnList li { padding: 3px 0; }
+
+/* ── 비교 카드 ── */
+.compareGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .compareGrid { grid-template-columns: 1fr; }
+}
+.compareCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.compareGift { border-top: 3px solid #3EC8FF; }
+.compareInherit { border-top: 3px solid #FF8C3E; }
+.compareLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.compareValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.compareSub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.winnerBadge {
+  display: inline-block;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* ── 비교 표 ── */
+.compareTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.compareTable th,
+.compareTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.compareTable th {
+  background: var(--bg3);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 12px;
+}
+.compareTable td.numCell {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+.compareTable tr.bestRow td {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+.compareTable tr.zeroTaxRow td.numCell {
+  color: #3EFF9B;
+}
+
+/* ── 설명 카드 ── */
+.explainCard {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+}
+.explainCard ul { margin: 6px 0 0; padding-left: 18px; }
+.explainCard li { margin: 4px 0; }
+
+/* ── 수증자 행 (분할) ── */
+.recipientRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+@media (max-width: 520px) {
+  .recipientRow { grid-template-columns: 1fr 1fr; }
+}
+.removeBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+
+.addBtn {
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 10px;
+  width: 100%;
+  transition: all 0.15s;
+}
+.addBtn:hover { color: var(--accent); border-color: var(--accent); }
+
+.smallSelect {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+}
+.smallNum {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.smallNum::-webkit-outer-spin-button,
+.smallNum::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+
+/* 비교 분석 시나리오 입력 */
+.scenarioRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+@media (max-width: 520px) {
+  .scenarioRow { grid-template-columns: 1fr; }
+}

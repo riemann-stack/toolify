@@ -1,0 +1,269 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 12px 6px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── 입력 행 ── */
+.inputRow {
+  display: grid; grid-template-columns: 1fr 110px; gap: 8px;
+}
+.input {
+  width: 100%; box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  color: var(--text); outline: none;
+  transition: border 0.15s;
+  letter-spacing: -0.5px;
+}
+.input:focus { border-color: var(--accent); }
+.inputFilled { border-color: var(--accent) !important; }
+
+.unitSelect {
+  width: 100%; box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--accent); outline: none; cursor: pointer;
+  transition: border 0.15s;
+}
+.unitSelect:focus { border-color: var(--accent); }
+
+/* ── 전압 버튼 그리드 ── */
+.voltGrid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  margin-top: 12px;
+}
+.voltBtn {
+  padding: 8px 4px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg3); color: var(--muted);
+  font-size: 12px; font-family: 'Syne', sans-serif; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.voltBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.voltBtnActive {
+  background: var(--accent-dim) !important;
+  border-color: rgba(200,255,62,0.5) !important;
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+}
+
+.voltCustomRow {
+  margin-top: 8px;
+  display: grid; grid-template-columns: 1fr 60px; gap: 8px; align-items: center;
+}
+.voltCustomLabel {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.04em;
+  padding-left: 4px;
+}
+.voltCustomInput {
+  width: 100%; box-sizing: border-box;
+  padding: 9px 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--text); outline: none;
+  transition: border 0.15s;
+}
+.voltCustomInput:focus { border-color: var(--accent); }
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 12px;
+}
+.presetBtn {
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.presetBtn:hover {
+  color: var(--accent); border-color: rgba(200,255,62,0.4);
+}
+
+/* ── 결과 표 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.resultHeader {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.resultHeaderLabel {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.resultHeaderValue {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+
+.resultRow {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.resultRow:last-child { border-bottom: none; }
+.resultRow:hover { background: var(--bg3); }
+.resultLabel {
+  font-size: 12px; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.resultLabelSub {
+  font-size: 10px; color: var(--muted);
+  opacity: 0.7;
+}
+.resultValue {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--text); text-align: right;
+  letter-spacing: -0.3px; word-break: break-all;
+}
+.copyBtn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+  font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
+  flex-shrink: 0; min-width: 50px;
+}
+.copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
+.copyBtnDone {
+  color: var(--accent) !important;
+  border-color: rgba(200,255,62,0.4) !important;
+}
+
+/* ── 항공 판정 박스 ── */
+.flightCard {
+  border-radius: 14px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+  border: 1px solid var(--border);
+}
+.flightSafe {
+  background: rgba(62,255,155,0.08);
+  border-color: rgba(62,255,155,0.4);
+}
+.flightWarn {
+  background: rgba(255,140,62,0.08);
+  border-color: rgba(255,140,62,0.4);
+}
+.flightBanned {
+  background: rgba(255,107,107,0.08);
+  border-color: rgba(255,107,107,0.4);
+}
+.flightTitle {
+  font-size: 16px; font-weight: 800;
+}
+.flightSafe .flightTitle { color: #3EFF9B; }
+.flightWarn .flightTitle { color: #FF8C3E; }
+.flightBanned .flightTitle { color: #FF6B6B; }
+
+.flightDesc {
+  font-size: 12px; color: var(--muted); line-height: 1.7;
+}
+
+.flightWh {
+  font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+  letter-spacing: -1px;
+}
+.flightSafe .flightWh { color: #3EFF9B; }
+.flightWarn .flightWh { color: #FF8C3E; }
+.flightBanned .flightWh { color: #FF6B6B; }
+
+/* ── 공식 박스 ── */
+.formulaBox {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.3px;
+  text-align: center;
+}
+.formulaBox span {
+  color: var(--accent); font-weight: 800;
+}
+.formulaSub {
+  font-size: 11px; color: var(--muted); margin-top: 6px;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ── 항공 규정 안내 ── */
+.ruleBox {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 12px; padding: 14px 16px;
+}
+.ruleTitle {
+  font-size: 13px; color: #3EC8FF; font-weight: 700;
+  margin-bottom: 8px;
+}
+.ruleList {
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+  padding-left: 4px;
+}
+.ruleList strong { color: var(--text); }
+
+/* ── 참조표 ── */
+.refTable {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+  background: var(--bg2);
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.refTable th {
+  padding: 10px 8px; text-align: center;
+  background: var(--bg3); color: var(--muted);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+.refTable td {
+  padding: 10px 8px; text-align: center;
+  font-family: 'Syne', sans-serif; font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.refTable tr:last-child td { border-bottom: none; }
+.refTable tr:hover { background: var(--bg3); }
+.refMah { color: var(--accent); font-weight: 800; }
+.refSafe { color: #3EFF9B; }
+.refWarn { color: #FF8C3E; }
+.refBanned { color: #FF6B6B; }
+
+/* ── 모바일 ── */
+@media (max-width: 600px) {
+  .voltGrid { grid-template-columns: repeat(3, 1fr); }
+  .resultRow { grid-template-columns: 110px 1fr auto; padding: 10px 14px; gap: 8px; }
+  .resultValue { font-size: 14px; }
+  .resultHeaderValue { font-size: 18px; }
+  .flightWh { font-size: 22px; }
+  .refTable th, .refTable td { padding: 8px 6px; font-size: 11px; }
+}

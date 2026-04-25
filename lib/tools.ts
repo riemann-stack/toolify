@@ -23,7 +23,9 @@ export const categories: Category[] = [
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 수익' },
       { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가 계산' },
       { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',        desc: '공급가액·부가세 역산 계산' },
-      { href: '/tools/finance/dividend', icon: '💰', name: '월배당 목표 자산 계산기', desc: '목표 월배당금을 받기 위한 필요 투자 원금 계산', badge: 'new' },
+      { href: '/tools/finance/dividend', icon: '💰', name: '월배당 목표 자산 계산기', desc: '목표 월배당금을 받기 위한 필요 투자 원금 계산' },
+      { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 비교 계산기', desc: '증여세·상속세 예상 세액 비교 및 분할 증여 시뮬레이션' },
+      { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', desc: '유류비·보험·소모품·감가상각 월·일 단위 환산', badge: 'new' },
     ],
   },
   {
@@ -50,7 +52,9 @@ export const categories: Category[] = [
       { href: '/tools/cooking/sourdough', icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화 진단·피크 시간 예측·급이 스케줄러' },
       { href: '/tools/cooking/frying',    icon: '🍳', name: '튀김 시간·온도 계산기',   desc: '재료별 최적 기름 온도·튀김 시간·에어프라이어 변환 가이드' },
       { href: '/tools/cooking/nuts',      icon: '🌰', name: '견과류 적정 섭취량 계산기', desc: '견과류별 하루 권장 섭취량·칼로리·영양소 계산' },
-      { href: '/tools/cooking/serving',   icon: '🍽️', name: '1인분 분량 계산기',         desc: '파스타·고기·쌀 등 재료별 인분 분량·장보기 가이드', badge: 'new' },
+      { href: '/tools/cooking/serving',   icon: '🍽️', name: '1인분 분량 계산기',         desc: '파스타·고기·쌀 등 재료별 인분 분량·장보기 가이드' },
+      { href: '/tools/cooking/food-storage', icon: '🧊', name: '식재료 보관 기간 계산기', desc: '냉장·냉동 식재료 보관 기간 추적·소비 기한 알림' },
+      { href: '/tools/cooking/substitute', icon: '🔄', name: '식재료 대체 비율 계산기', desc: '버터·설탕·계란·생크림 등 재료 대체 비율 및 주의사항' },
     ],
   },
   {
@@ -69,7 +73,9 @@ export const categories: Category[] = [
       { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 건조 예상 시간 및 단축 팁' },
       { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 문제 시뮬레이터', desc: '바꾸기 vs 유지하기 — 직접 1,000번 돌려보는 확률 실험' },
       { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 유발 가능성 계산기', desc: '오늘 먹은 음식으로 가스 유발 가능성 체크' },
-      { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',        desc: '용량·덤·할인·배송비 반영 가성비 단가 비교', badge: 'new' },
+      { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',        desc: '용량·덤·할인·배송비 반영 가성비 단가 비교' },
+      { href: '/tools/life/golf-cost',     icon: '⛳', name: '골프 라운딩 비용 계산기', desc: '그린피·카트비·캐디피·식사·교통비 합산 1인당 비용 정산' },
+      { href: '/tools/life/golf-distance', icon: '🏌️', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리 추정·Gap 분석·보완 클럽 추천', badge: 'new' },
     ],
   },
   {
@@ -80,6 +86,8 @@ export const categories: Category[] = [
       { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
       { href: '/tools/unit/size',        icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU → 한국 사이즈' },
       { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',             desc: '섭씨·화씨·켈빈 즉시 변환' },
+      { href: '/tools/unit/time',        icon: '⏱️', name: '시간 단위 변환기',         desc: '초·분·시간·일·주·월·년 + 근무시간 기준 변환' },
+      { href: '/tools/unit/battery',     icon: '🔋', name: '배터리 용량 변환기',       desc: 'mAh·Wh·Ah 변환 및 비행기 반입 가능 여부', badge: 'new' },
     ],
   },
   {
@@ -100,7 +108,8 @@ export const categories: Category[] = [
       { href: '/tools/music/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
       { href: '/tools/music/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음정 변환·MIDI 번호·파장 계산' },
       { href: '/tools/music/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·쉬운 코드 추천' },
-      { href: '/tools/music/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정·메트로놈·박자감 테스트', badge: 'new' },
+      { href: '/tools/music/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정·메트로놈·박자감 테스트' },
+      { href: '/tools/music/chord',     icon: '🎹', name: '코드 구성음 계산기',     desc: 'Cmaj7·Dm7 등 코드 구성음·역방향 검색·다이아토닉 코드표', badge: 'new' },
     ],
   },
   {

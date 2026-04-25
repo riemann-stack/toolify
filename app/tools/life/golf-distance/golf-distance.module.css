@@ -1,0 +1,281 @@
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 12px 6px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+
+/* ── 공통 카드 ── */
+.section { display: flex; flex-direction: column; gap: 10px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+.cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.cardTitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 안내 박스 ── */
+.infoBox {
+  background: rgba(200,255,62,0.06); border: 1px solid rgba(200,255,62,0.2);
+  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+
+/* ── 토글 그룹 ── */
+.toggleRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.toggleBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; font-size: 13px; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.toggleBtnActive {
+  background: rgba(200,255,62,0.15) !important;
+  border-color: rgba(200,255,62,0.4) !important;
+  color: var(--accent) !important;
+}
+
+/* ── 클럽 입력 ── */
+.fieldLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+.clubInputRow {
+  display: grid; grid-template-columns: 60px 1fr; gap: 10px; align-items: center;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; transition: border-color 0.15s;
+}
+.clubInputRowActive { border-color: rgba(200,255,62,0.4); }
+.clubInputName {
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--text); letter-spacing: 0.04em;
+}
+.clubInputName small { display: block; font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+.clubInputBox { position: relative; }
+.clubInput {
+  width: 100%; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 36px 10px 12px; font-size: 16px;
+  font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text);
+  outline: none; transition: border-color 0.15s;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.clubInput::-webkit-inner-spin-button, .clubInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.clubInput::placeholder { color: var(--muted); font-size: 13px; font-weight: 500; opacity: 0.7; }
+.clubInput:focus { border-color: rgba(200,255,62,0.4); }
+.clubInputUnit {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700;
+  pointer-events: none;
+}
+
+/* 상세 입력 모드 토글 버튼 */
+.expandBtn {
+  width: 100%; background: var(--bg3); border: 1px dashed var(--border); border-radius: 10px;
+  padding: 12px; cursor: pointer; color: var(--muted);
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  margin-top: 10px;
+}
+.expandBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── 바 차트 ── */
+.chartWrap {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px 18px; margin-top: 4px;
+  animation: gdFadeUp 0.25s ease;
+}
+.chartLegend {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; font-size: 11px; color: var(--muted);
+}
+.legendItem { display: flex; align-items: center; gap: 6px; }
+.legendDot {
+  display: inline-block; width: 14px; height: 8px; border-radius: 2px; flex-shrink: 0;
+}
+.legendDotActual { background: var(--accent); }
+.legendDotEst {
+  background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px);
+  opacity: 0.7;
+}
+.legendDotAvg {
+  background: transparent; border-top: 1.5px dashed #ffffff; height: 0; width: 14px; opacity: 0.5;
+}
+
+.barRow {
+  display: grid; grid-template-columns: 56px 1fr; gap: 10px;
+  align-items: center; padding: 4px 0;
+}
+.barLabel {
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  color: var(--text); letter-spacing: 0.04em; text-align: right;
+}
+.barTrack {
+  position: relative; background: var(--bg3); border-radius: 6px;
+  height: 22px; overflow: visible;
+}
+.barFill {
+  position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 6px; transition: width 0.4s ease;
+}
+.barActual { background: var(--accent); opacity: 1; }
+.barEst {
+  background: repeating-linear-gradient(90deg, var(--muted) 0 5px, rgba(255,255,255,0.05) 5px 10px);
+  opacity: 0.7;
+}
+.barNum {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; color: #000;
+  white-space: nowrap;
+}
+.barNumOutside {
+  position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%);
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--text); white-space: nowrap;
+}
+.avgMarker {
+  position: absolute; top: -2px; bottom: -2px; width: 0;
+  border-left: 1.5px dashed rgba(255,255,255,0.45);
+  pointer-events: none;
+}
+.barTagWrap { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; }
+.barTag {
+  display: inline-block; padding: 2px 7px; border-radius: 10px;
+  font-size: 10px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  flex-shrink: 0;
+}
+.tagActual {
+  background: rgba(200,255,62,0.15); color: var(--accent);
+  border: 1px solid rgba(200,255,62,0.4);
+}
+.tagEst {
+  background: var(--bg3); color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* ── 비거리 표 ── */
+.distanceTable {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.distanceTable th {
+  text-align: left; padding: 10px 12px; color: var(--muted);
+  font-weight: 500; border-bottom: 1px solid var(--border); font-size: 11px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.distanceTable td {
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+  color: var(--text); font-size: 13px;
+}
+.tdClub { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+.tdNum  { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); text-align: right; }
+.tdMuted { color: var(--muted); font-family: 'Syne', sans-serif; text-align: right; }
+.tdDiff  { font-family: 'Syne', sans-serif; font-weight: 700; text-align: right; }
+.diffPlus  { color: var(--accent); }
+.diffMinus { color: var(--muted); }
+.diffZero  { color: var(--muted); }
+.tdStatus { text-align: center; font-size: 12px; }
+
+/* ── Gap 분석 카드 ── */
+.gapTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.gapTable th {
+  text-align: left; padding: 10px 12px; color: var(--muted);
+  font-weight: 500; border-bottom: 1px solid var(--border); font-size: 11px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.gapTable td {
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+  color: var(--text); font-size: 13px;
+}
+.gapBadge {
+  display: inline-block; padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
+  white-space: nowrap;
+}
+.gapOk    { background: rgba(62,255,155,0.15); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.4); }
+.gapTight { background: rgba(62,200,255,0.15); color: #3EC8FF; border: 1px solid rgba(62,200,255,0.4); }
+.gapWide  { background: rgba(255,107,107,0.15); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.4); }
+
+/* ── 추천 카드 ── */
+.recommendCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 12px; padding: 16px 18px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.recommendIcon {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(200,255,62,0.1); border: 1px solid rgba(200,255,62,0.3);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.recommendBody { flex: 1; }
+.recommendBadge {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  background: rgba(200,255,62,0.15); color: var(--accent);
+  border: 1px solid rgba(200,255,62,0.4);
+  font-size: 10px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
+  margin-bottom: 6px;
+}
+.recommendText { font-size: 13px; color: var(--text); line-height: 1.7; }
+.recommendText strong { color: var(--accent); }
+
+/* ── 총평 카드 ── */
+.summaryGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; animation: gdFadeUp 0.25s ease; }
+.summaryCell {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px;
+}
+.summaryLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
+.summaryValue {
+  font-family: 'Syne', sans-serif; font-size: clamp(20px, 4vw, 26px); font-weight: 800;
+  color: var(--accent); line-height: 1.1;
+}
+.summarySub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* ── 평가 등급 ── */
+.gradeBadge {
+  display: inline-block; padding: 6px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: 0.04em;
+}
+.gradeTop  { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid rgba(255,215,0,0.4); }
+.gradeHigh { background: rgba(62,255,155,0.15); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.4); }
+.gradeMid  { background: rgba(200,255,62,0.15); color: var(--accent); border: 1px solid rgba(200,255,62,0.4); }
+.gradeLow  { background: rgba(255,140,62,0.15); color: #FF8C3E; border: 1px solid rgba(255,140,62,0.4); }
+.gradeBeg  { background: rgba(255,107,107,0.15); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.4); }
+
+.evalCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  border-radius: 14px; padding: 22px 24px;
+  display: flex; flex-direction: column; gap: 12px;
+  animation: gdFadeUp 0.25s ease;
+}
+.evalTop { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.evalLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.evalNum { font-family: 'Syne', sans-serif; font-size: clamp(36px, 9vw, 56px); font-weight: 800; color: var(--accent); line-height: 1; }
+.evalSub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+/* ── 빈 상태 ── */
+.emptyCard {
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+  padding: 36px 22px; text-align: center;
+  color: var(--muted); font-size: 13px; line-height: 1.7;
+}
+.emptyCard strong { color: var(--text); display: block; margin-bottom: 6px; font-weight: 600; }
+
+@keyframes gdFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .grid3 { grid-template-columns: 1fr 1fr; }
+  .summaryGrid { grid-template-columns: 1fr; }
+  .clubInputRow { grid-template-columns: 50px 1fr; padding: 10px 12px; }
+  .barRow { grid-template-columns: 44px 1fr; gap: 8px; }
+  .barLabel { font-size: 11px; }
+  .distanceTable th, .distanceTable td { padding: 8px 6px; font-size: 12px; }
+  .gapTable th, .gapTable td { padding: 8px 6px; font-size: 12px; }
+}

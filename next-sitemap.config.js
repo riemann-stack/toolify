@@ -19,6 +19,8 @@ module.exports = {
     await config.transform(config, '/tools/finance/stock'),
     await config.transform(config, '/tools/finance/vat'),
     await config.transform(config, '/tools/finance/dividend'),
+    await config.transform(config, '/tools/finance/inheritance'),
+    await config.transform(config, '/tools/finance/car-cost'),
     // 건강·안전
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
@@ -40,6 +42,8 @@ module.exports = {
     await config.transform(config, '/tools/cooking/frying'),
     await config.transform(config, '/tools/cooking/nuts'),
     await config.transform(config, '/tools/cooking/serving'),
+    await config.transform(config, '/tools/cooking/food-storage'),
+    await config.transform(config, '/tools/cooking/substitute'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -56,6 +60,8 @@ module.exports = {
     await config.transform(config, '/tools/life/monty-hall'),
     await config.transform(config, '/tools/life/fart-risk'),
     await config.transform(config, '/tools/life/unit-price'),
+    await config.transform(config, '/tools/life/golf-cost'),
+    await config.transform(config, '/tools/life/golf-distance'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -63,6 +69,8 @@ module.exports = {
     await config.transform(config, '/tools/unit/weight'),
     await config.transform(config, '/tools/unit/size'),
     await config.transform(config, '/tools/unit/temperature'),
+    await config.transform(config, '/tools/unit/time'),
+    await config.transform(config, '/tools/unit/battery'),
     // 날짜
     await config.transform(config, '/tools/date'),
     await config.transform(config, '/tools/date/age'),
@@ -78,6 +86,7 @@ module.exports = {
     await config.transform(config, '/tools/music/frequency'),
     await config.transform(config, '/tools/music/capo'),
     await config.transform(config, '/tools/music/tap-tempo'),
+    await config.transform(config, '/tools/music/chord'),
     // 개발자
     await config.transform(config, '/tools/dev'),
     await config.transform(config, '/tools/dev/charcount'),
