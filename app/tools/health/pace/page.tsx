@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import PaceClient from './PaceClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '러닝 페이스 계산기 — 마라톤 완주 시간·트레드밀 시속 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/pace',
+  title: '러닝 페이스 계산기 — 마라톤 완주 시간·트레드밀 시속 변환',
   description: '목표 페이스로 5km·10km·하프·풀 마라톤 완주 예상 시간 계산. 트레드밀 시속 ↔ 페이스 변환, 400m 트랙 바퀴당 소요 시간, 구간별 스플릿 표 제공.',
   keywords: ['러닝페이스계산기', '마라톤페이스계산기', '트레드밀시속변환', '달리기페이스', '마라톤완주시간', '400m트랙페이스', '러닝스플릿'],
-}
+})
 
 export default function PacePage() {
   return (

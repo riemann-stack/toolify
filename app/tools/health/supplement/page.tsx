@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import SupplementClient from './SupplementClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '영양제 성분 체크 계산기 — 중복 성분 합산·상한량 초과 확인 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/supplement',
+  title: '영양제 성분 체크 계산기 — 중복 성분 합산·상한량 초과 확인',
   description: '여러 영양제의 중복 성분을 합산하고 1일 상한 섭취량 초과 여부를 확인합니다. 시너지·주의 조합, 복용 타이밍 가이드 제공. 비타민D·철분·아연·칼슘 중복 체크.',
   keywords: ['영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량', '영양제복용조합', '영양제계산기'],
-}
+})
 
 const cell: React.CSSProperties = {
   padding: '10px 14px',

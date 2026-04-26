@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import FrequencyClient from './FrequencyClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '주파수 음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/music/frequency',
+  title: '주파수 음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산',
   description: '주파수(Hz)를 음정 이름(A4, C#3 등)으로 변환하거나, 음정에서 정확한 주파수를 계산합니다. MIDI 번호, 파장, 센트 오차, 음정 간격 계산 지원. 작곡가·사운드 엔지니어 필수.',
   keywords: ['주파수음정변환기', 'Hz음정변환', '음정주파수계산기', 'MIDI번호계산', '음정계산기', '튜닝계산기', '음악계산기'],
-}
+})
 
 export default function FrequencyPage() {
   return (

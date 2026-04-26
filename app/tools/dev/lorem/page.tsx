@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import LoremClient from './LoremClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '더미 텍스트 생성기 — Lorem Ipsum 한글 영문 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/lorem',
+  title: '더미 텍스트 생성기 — Lorem Ipsum 한글 영문',
   description: '한글 및 영문 더미 텍스트(Lorem Ipsum)를 문단·문장·단어 단위로 생성합니다. UI 목업, 디자인 시안, 개발 테스트에 유용.',
   keywords: ['로렘입숨', '더미텍스트생성기', 'lorem ipsum', '한글더미텍스트', '텍스트생성기', '목업텍스트'],
-}
+})
 
 export default function LoremPage() {
   return (

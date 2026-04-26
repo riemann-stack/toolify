@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import LunarClient from './LunarClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '양음력 변환기 2026 — 음력 ↔ 양력 · 간지 확인 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/lunar',
+  title: '양음력 변환기 2026 — 음력 ↔ 양력 · 간지 확인',
   description: '음력 생일을 양력으로, 양력을 음력으로 즉시 변환합니다. 윤달 지원, 60갑자 간지와 띠까지 한눈에 확인.',
   keywords: ['양음력변환', '음력양력변환', '음력달력', '양력음력', '음력생일', '윤달계산', '60갑자', '간지계산'],
-}
+})
 
 export default function LunarPage() {
   return (

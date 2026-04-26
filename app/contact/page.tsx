@@ -1,10 +1,11 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '문의 | Youtil',
+export const metadata = buildMetadata({
+  path: '/contact',
+  title: '문의',
   description: 'Youtil 운영팀에 버그 제보, 도구 추천, 광고·제휴 문의를 보내실 수 있습니다.',
-}
+})
 
 const EMAIL = 'contact@youtil.kr'
 

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import GoldenRatioClient from './GoldenRatioClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '황금 비율 계산기 — 피보나치 나선·디자인 비율 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/golden-ratio',
+  title: '황금 비율 계산기 — 피보나치 나선·디자인 비율 계산',
   description: '황금 비율(1:1.618)로 가로·세로를 자동 계산합니다. 피보나치 나선 시각화, 명함·A4·유튜브 썸네일 등 디자인 프리셋 제공. 디자이너·건축가 필수 도구.',
   keywords: ['황금비율계산기', '황금비계산기', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선'],
-}
+})
 
 export default function GoldenRatioPage() {
   return (

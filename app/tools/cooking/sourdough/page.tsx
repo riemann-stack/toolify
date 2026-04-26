@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import SourdoughClient from './SourdoughClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '사워도우 스타터 계산기 — 르방 안정화 진단·피크 시간 예측 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/sourdough',
+  title: '사워도우 스타터 계산기 — 르방 안정화 진단·피크 시간 예측',
   description: '사워도우 스타터(르방) 상태를 진단하고 안정화까지 남은 기간을 예측합니다. 온도·급이 비율별 피크 시간 계산, 급이 스케줄러, 베이킹 적정 타이밍 안내.',
   keywords: ['사워도우스타터계산기', '르방피크시간', '사워도우안정화', '르방계산기', '사워도우급이', '르방스타터', '천연발효빵계산기'],
-}
+})
 
 export default function SourdoughPage() {
   return (

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import JsonClient from './JsonClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'JSON 포맷터 — JSON 정렬·압축·유효성 검사 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/json',
+  title: 'JSON 포맷터 — JSON 정렬·압축·유효성 검사',
   description: 'JSON을 보기 좋게 정렬(Beautify)하거나 한 줄로 압축(Minify)합니다. 유효성 검사로 JSON 오류 위치를 즉시 확인.',
   keywords: ['JSON포맷터', 'JSON정렬', 'JSON압축', 'JSON유효성검사', 'JSON뷰어', 'JSONbeautify'],
-}
+})
 
 export default function JsonPage() {
   return (

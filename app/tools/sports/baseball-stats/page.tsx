@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import BaseballStatsClient from './BaseballStatsClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '야구 타율·OPS 계산기 — 출루율·장타율·ERA·WHIP 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/sports/baseball-stats',
+  title: '야구 타율·OPS 계산기 — 출루율·장타율·ERA·WHIP 계산',
   description:
     '야구 타격 기록(타율·출루율·장타율·OPS)과 투수 기록(ERA·WHIP·K/9) 자동 계산. KBO·MLB 리그 평균 비교, 시즌 페이스 환산, 세이버메트릭스 지표 지원.',
   keywords: ['야구타율계산기', 'OPS계산기', '출루율계산기', '장타율계산기', 'ERA계산기', 'WHIP계산기', 'KBO기록', '야구통계계산기'],
-}
+})
 
 export default function BaseballStatsPage() {
   return (

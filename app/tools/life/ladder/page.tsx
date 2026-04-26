@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import LadderClient from './LadderClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '사다리타기 — 온라인 무료 사다리 게임 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/ladder',
+  title: '사다리타기 — 온라인 무료 사다리 게임',
   description: '온라인 사다리타기 게임. 참가자와 결과를 입력하고 공정한 무작위 사다리를 생성합니다. 최대 8명 지원. 당번 정하기, 팀 나누기에 유용.',
   keywords: ['사다리타기', '온라인사다리타기', '사다리게임', '무료사다리타기', '당번정하기', '사다리타기게임'],
-}
+})
 
 export default function LadderPage() {
   return (

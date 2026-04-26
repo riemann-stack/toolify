@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import LaundryDryClient from './LaundryDryClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '빨래 건조 시간 계산기 — 온도·습도·소재별 건조 예상 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/laundry-dry',
+  title: '빨래 건조 시간 계산기 — 온도·습도·소재별 건조 예상',
   description: '온도·습도·바람·소재·탈수 강도를 입력해 빨래 건조 예상 시간을 계산합니다. 겉마름·완전건조 시간 구분, 건조 단축 팁 자동 제공. 실내·베란다·실외 환경 지원.',
   keywords: ['빨래건조시간계산기', '빨래건조시간', '세탁건조시간', '실내빨래건조', '청바지건조시간', '빨래빨리말리는법', '빨래건조팁'],
-}
+})
 
 export default function LaundryDryPage() {
   return (

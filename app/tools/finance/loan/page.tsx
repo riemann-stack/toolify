@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import LoanClient from './LoanClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '대출이자 계산기 2026 — 원리금균등·원금균등 상환 비교 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/loan',
+  title: '대출이자 계산기 2026 — 원리금균등·원금균등 상환 비교',
   description: '대출 원금, 금리, 기간을 입력해 원리금균등과 원금균등 상환 방식을 비교합니다. 월 납입액·총 이자·상환 스케줄 즉시 계산. DSR·LTV 용어 설명 제공.',
   keywords: ['대출이자계산기', '원리금균등', '원금균등', '주택담보대출계산기', '대출상환계산기', '대출이자계산', 'DSR계산기'],
-}
+})
 
 export default function LoanPage() {
   return (

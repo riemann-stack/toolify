@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import PetClient from './PetClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '강아지·고양이 나이 계산기 — 사람 나이 환산·하루 사료량 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/pet',
+  title: '강아지·고양이 나이 계산기 — 사람 나이 환산·하루 사료량',
   description: '강아지·고양이 나이를 사람 나이로 환산합니다. 품종 크기·중성화 여부·활동량을 반영한 하루 권장 칼로리와 사료 그램 계산. 반려동물 건강 관리 필수 도구.',
   keywords: ['강아지나이계산기','고양이나이계산기','반려동물나이환산','강아지사료량계산기','고양이칼로리계산','개나이사람나이','강아지하루사료량'],
-}
+})
 
 export default function PetPage() {
   return (

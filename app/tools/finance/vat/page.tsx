@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import VatClient from './VatClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '부가세 계산기 2026 — 공급가액·역산·간이과세 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/vat',
+  title: '부가세 계산기 2026 — 공급가액·역산·간이과세',
   description: '공급가액에 부가세(VAT) 추가, 합계에서 공급가액 역산, 간이과세·면세·프리랜서 3.3% 안내. 원/천 단위 절사 옵션 지원.',
   keywords: ['부가세계산기', 'vat계산기', '부가가치세계산기', '공급가액역산', '간이과세계산기', '부가세역산', '프리랜서부가세'],
-}
+})
 
 const Section = ({ children }: { children: React.ReactNode }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>{children}</div>

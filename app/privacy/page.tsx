@@ -1,9 +1,10 @@
-import type { Metadata } from 'next'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '개인정보처리방침 | Youtil',
+export const metadata = buildMetadata({
+  path: '/privacy',
+  title: '개인정보처리방침',
   description: 'Youtil 개인정보처리방침입니다.',
-}
+})
 
 const LAST_UPDATED  = '2026년 4월 12일'
 const SITE_NAME     = 'Youtil'

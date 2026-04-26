@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import FuelEconomyClient from './FuelEconomyClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '연비 변환기 km/L ↔ mpg ↔ L/100km — 전기차 전비 포함 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/fuel-economy',
+  title: '연비 변환기 km/L ↔ mpg ↔ L/100km — 전기차 전비 포함',
   description: 'km/L, L/100km, mpg(미국·영국) 연비 단위를 즉시 변환합니다. 전기차 전비(km/kWh·MPGe), 100km 주행 비용 계산 지원.',
   keywords: ['연비변환기', 'km/L mpg', 'L/100km 변환', '미국연비', '전기차전비', 'MPGe', 'mpg km 변환'],
-}
+})
 
 export default function FuelEconomyPage() {
   return (

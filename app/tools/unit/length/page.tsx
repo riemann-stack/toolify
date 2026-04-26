@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import LengthClient from './LengthClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '길이 변환기 — cm m km 인치 피트 마일 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/length',
+  title: '길이 변환기 — cm m km 인치 피트 마일 변환',
   description: 'cm, m, km, 인치(inch), 피트(ft), 마일(mile), 야드(yd) 등 길이 단위를 즉시 변환. 신장 변환, 거리 변환 지원.',
   keywords: ['길이변환기', '인치cm변환', '피트미터변환', '마일km변환', 'cm인치변환', '길이단위변환'],
-}
+})
 
 export default function LengthPage() {
   return (

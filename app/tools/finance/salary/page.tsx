@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import SalaryClient from './SalaryClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '연봉 실수령액 계산기 2026 — 세후 월급·4대보험 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/salary',
+  title: '연봉 실수령액 계산기 2026 — 세후 월급·4대보험 계산',
   description: '2026년 기준 연봉 실수령액 계산기. 국민연금(4.75%), 건강보험(3.595%), 장기요양보험, 고용보험, 근로소득세 자동 계산. 연봉별 실수령액 표 제공.',
   keywords: ['연봉실수령액', '연봉계산기2026', '세후연봉', '실수령액계산', '4대보험계산기', '월급실수령액', '연봉실수령액표'],
-}
+})
 
 // 숫자를 한국식 천단위 콤마 + 원 포맷으로 변환
 const won = (n: number) => n.toLocaleString('ko-KR') + '원'

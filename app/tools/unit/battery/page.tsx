@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import BatteryClient from './BatteryClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '배터리 용량 변환기 mAh ↔ Wh — 비행기 반입 가능 체크 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/battery',
+  title: '배터리 용량 변환기 mAh ↔ Wh — 비행기 반입 가능 체크',
   description: '보조배터리 mAh를 Wh로 변환합니다. 비행기 휴대 반입 가능 여부(100Wh 기준) 자동 체크. 5V·3.7V 등 전압별 변환 지원.',
   keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입'],
-}
+})
 
 export default function BatteryPage() {
   return (

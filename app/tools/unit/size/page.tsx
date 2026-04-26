@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import SizeClient from './SizeClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '해외 직구 사이즈 변환기 — 신발·옷·반지·모자 한국 사이즈 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/size',
+  title: '해외 직구 사이즈 변환기 — 신발·옷·반지·모자 한국 사이즈 변환',
   description: '미국·유럽·영국·일본 사이즈를 한국 사이즈로 즉시 변환합니다. 신발·상의·하의·속옷·반지·모자·장갑·벨트 8가지 카테고리 지원. 측정법·브랜드별 차이·반품 정책 안내.',
   keywords: ['해외직구사이즈변환기', '신발사이즈변환', '의류사이즈US', '반지사이즈변환', '모자사이즈', '장갑사이즈', '벨트사이즈', '브라사이즈US', '아마존사이즈'],
-}
+})
 
 export default function SizePage() {
   return (

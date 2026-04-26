@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import AgeClient from './AgeClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '만 나이 계산기 2026 — 법 개정 기준 만 나이 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/age',
+  title: '만 나이 계산기 2026 — 법 개정 기준 만 나이',
   description: '2023년 6월 시행된 만 나이 통일법 기준으로 만 나이를 즉시 계산합니다. 세는 나이·연 나이 비교, 다음 생일까지 D-day 제공.',
   keywords: ['만나이계산기', '만나이계산', '나이계산기', '만나이통일법', '세는나이', '만나이변환'],
-}
+})
 
 export default function AgePage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import TemperatureClient from './TemperatureClient'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '온도 변환기 — 섭씨 화씨 켈빈 변환 계산기 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/temperature',
+  title: '온도 변환기 — 섭씨 화씨 켈빈 변환 계산기',
   description: '섭씨(°C), 화씨(°F), 켈빈(K) 온도를 즉시 변환합니다. 체온·날씨·요리·과학 실험 등 다양한 상황에서 활용하세요.',
   keywords: ['온도변환기', '섭씨화씨변환', '화씨섭씨변환', '온도계산기', '켈빈변환', '°C°F변환'],
-}
+})
 
 export default function TemperaturePage() {
   return (

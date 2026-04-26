@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import HistoryEraClient from './HistoryEraClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '역사 연호·연대 변환기 — 단기·조선왕·간지 ↔ 서기 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/history-era',
+  title: '역사 연호·연대 변환기 — 단기·조선왕·간지 ↔ 서기 변환',
   description: '단기·불기·황기, 조선 27대 왕 연호, 일본·중국 연호를 서기로 즉시 변환합니다. 60갑자 간지 변환기, 한국사 연표 내장.',
   keywords: ['역사연호변환기','단기변환','조선왕연호','간지변환기','60갑자','불기변환','연호계산기','한국사연표','임진왜란연도','훈민정음연도'],
-}
+})
 
 const JOSEON_TABLE = [
   {num:1, name:'태조',   s:1392, e:1398, event:'조선 건국'},

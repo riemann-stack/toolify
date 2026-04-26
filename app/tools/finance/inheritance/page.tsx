@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import InheritanceClient from './InheritanceClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '상속·증여세 비교 계산기 2026 — 절세 시뮬레이션 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/inheritance',
+  title: '상속·증여세 비교 계산기 2026 — 절세 시뮬레이션',
   description: '상속세와 증여세를 비교하는 간편 계산기. 관계별 공제, 10년 합산 규정, 배우자 상속공제, 분할 증여 시뮬레이션. 세무사 상담 전 참고용.',
   keywords: ['상속세계산기', '증여세계산기', '상속증여비교', '증여세공제', '상속세공제', '분할증여계산기', '자녀증여세', '배우자상속공제'],
-}
+})
 
 const cell: React.CSSProperties = {
   padding: '10px 14px',

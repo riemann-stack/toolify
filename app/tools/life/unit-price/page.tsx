@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import UnitPriceClient from './UnitPriceClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '단가 비교 계산기 — 마트 용량·덤·1+1 가성비 비교 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/unit-price',
+  title: '단가 비교 계산기 — 마트 용량·덤·1+1 가성비 비교',
   description: '용량이 다른 상품의 10ml당·100g당 단가를 비교합니다. 덤·1+1·2+1 행사, 쿠폰 할인, 배송비 포함 반영. 마트·쿠팡·코스트코 가성비 계산.',
   keywords: ['단가계산기', '가성비계산기', '마트단가비교', '코스트코단가', '100ml당단가', '1+1가성비', '쿠팡단가비교', '용량비교계산기'],
-}
+})
 
 export default function UnitPricePage() {
   return (

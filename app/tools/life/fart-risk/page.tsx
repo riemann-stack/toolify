@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import FartRiskClient from './FartRiskClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '방귀 유발 가능성 계산기 — 오늘 내 가스 점수는? | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/fart-risk',
+  title: '방귀 유발 가능성 계산기 — 오늘 내 가스 점수는?',
   description: '오늘 먹은 음식으로 방귀·가스 유발 가능성을 계산합니다. 콩류·유제품·탄산의 조합 점수, 원인 TOP3, 완화 팁 제공. 재미로 확인하는 장 건강 체크!',
   keywords: ['방귀유발음식', '가스유발음식', '방귀계산기', '고구마방귀', '콩방귀', '탄산방귀', '방귀원인음식', 'FODMAP'],
-}
+})
 
 export default function FartRiskPage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import SubstituteClient from './SubstituteClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '식재료 대체 비율 계산기 — 버터·설탕·계란·생크림 대체 가이드 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/substitute',
+  title: '식재료 대체 비율 계산기 — 버터·설탕·계란·생크림 대체 가이드',
   description: '버터 대신 오일, 설탕 대신 꿀, 생크림 대신 우유+버터 등 요리·베이킹 재료 대체 비율을 즉시 계산합니다. 맛·질감 차이, 주의사항, 비건·글루텐프리 옵션 포함.',
   keywords: ['식재료대체', '버터대신오일', '설탕대신꿀', '생크림대체', '베이킹소다베이킹파우더', '계란대체', '비건베이킹', '레몬즙대체'],
-}
+})
 
 export default function SubstitutePage() {
   return (

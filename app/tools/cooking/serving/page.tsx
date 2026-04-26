@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import ServingClient from './ServingClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '1인분 분량 계산기 — 파스타·고기·쌀 인분별 장보기 가이드 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/serving',
+  title: '1인분 분량 계산기 — 파스타·고기·쌀 인분별 장보기 가이드',
   description: '파스타 1인분 몇 g, 소면 2인분, 불고기 3인분 장보기 분량을 계산합니다. 면류·고기류·쌀·채소 건면/생고기 기준, 식사량·탄수화물 포함 여부 반영.',
   keywords: ['1인분분량계산기', '파스타1인분몇g', '소면1인분', '불고기인분계산', '장보기분량', '인분계산기', '요리분량가이드', '샤브샤브1인분'],
-}
+})
 
 export default function ServingPage() {
   return (

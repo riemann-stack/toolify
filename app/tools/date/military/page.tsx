@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import MilitaryClient from './MilitaryClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '군 전역일 계산기 — 복무율 D-day | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/military',
+  title: '군 전역일 계산기 — 복무율 D-day',
   description: '입대일과 복무 형태(육군·해군·공군·해병대·사회복무요원)를 선택하면 전역일과 현재 복무율을 계산합니다.',
   keywords: ['전역일계산기', '군복무기간계산기', '전역일계산', '복무율계산기', '군대전역일', '사회복무요원전역일'],
-}
+})
 
 export default function MilitaryPage() {
   return (

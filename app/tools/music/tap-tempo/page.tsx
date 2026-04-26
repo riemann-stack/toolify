@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import TapTempoClient from './TapTempoClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '탭 템포 계산기 — BPM 측정·메트로놈·박자감 테스트 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/music/tap-tempo',
+  title: '탭 템포 계산기 — BPM 측정·메트로놈·박자감 테스트',
   description: '노래나 연주의 BPM을 탭으로 즉시 측정하고, 메트로놈으로 박자를 연습하며, 박자감 테스트로 리듬감을 확인하세요. 장르별 BPM 프리셋, 템포 용어 가이드 포함.',
   keywords: ['탭템포', 'BPM측정', '메트로놈', '박자감테스트', '템포계산기', 'BPM계산기', 'tap tempo'],
-}
+})
 
 export default function TapTempoPage() {
   return (

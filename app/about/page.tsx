@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
+  path: '/about',
   title: 'Youtil 소개 | 자주 쓰는 계산기와 무료 온라인 도구 모음',
   description: 'Youtil은 연봉 계산기, BMI, 날짜 계산, 텍스트 도구 등 일상과 업무 속 번거로운 계산을 가장 빠르고 정확하게 해결해 드리는 무료 서비스입니다.',
-}
+})
 
 export default function AboutPage() {
   return (

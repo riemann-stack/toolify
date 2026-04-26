@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import RecipeClient from './RecipeClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '레시피 비율 계산기 — 인분 수 맞춤 재료 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/recipe',
+  title: '레시피 비율 계산기 — 인분 수 맞춤 재료 계산',
   description: '요리 레시피 재료를 원하는 인분 수에 맞게 자동으로 비율 계산합니다. 2인분 레시피를 5인분으로 변환, 큰술·컵·g 단위 지원.',
   keywords: ['레시피계산기', '인분계산기', '요리재료계산기', '레시피비율', '요리계산기'],
-}
+})
 
 export default function RecipePage() {
   return (

@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import TirePressureClient from './TirePressureClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '타이어 공기압 변환기 psi ↔ kPa ↔ bar — 권장 공기압 체크 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/tire-pressure',
+  title: '타이어 공기압 변환기 psi ↔ kPa ↔ bar — 권장 공기압 체크',
   description: 'psi, kPa, bar, kgf/cm² 타이어 공기압 단위를 즉시 변환합니다. 차량별 권장 공기압 비교, 부족·과다 진단, 자전거·오토바이 지원.',
   keywords: ['타이어공기압변환', 'psi kPa 변환', '타이어공기압', '자전거공기압', '권장공기압', 'bar psi 변환'],
-}
+})
 
 export default function TirePressurePage() {
   return (

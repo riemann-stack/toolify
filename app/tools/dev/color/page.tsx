@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import ColorClient from './ColorClient'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '색상 코드 변환기 — HEX RGB HSL 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/color',
+  title: '색상 코드 변환기 — HEX RGB HSL 변환',
   description: 'HEX, RGB, HSL 색상 코드를 즉시 변환합니다. 컬러 피커로 색상 선택, 클립보드 복사 지원. 웹 개발·디자인 필수 도구.',
   keywords: ['색상코드변환기', 'hex rgb변환', 'rgb hsl변환', '컬러코드변환', '색상변환기', 'hex변환'],
-}
+})
 
 export default function ColorPage() {
   return (

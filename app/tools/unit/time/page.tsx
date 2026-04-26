@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import TimeUnitClient from './TimeUnitClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '시간 단위 변환기 — 초·분·시간·일·주·월·년 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/time',
+  title: '시간 단위 변환기 — 초·분·시간·일·주·월·년 변환',
   description: '초, 분, 시간, 일, 주, 월, 년 시간 단위를 즉시 변환합니다. 근무시간 기준(8시간/일, 40시간/주) 변환 지원. 10,000시간 법칙 등 인기 사례.',
   keywords: ['시간변환기', '시간단위변환', '10000시간', '근무시간계산', '시간초변환', '주시간변환'],
-}
+})
 
 export default function TimeUnitPage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import CapoClient from './CapoClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '기타 카포 계산기 — 카포 위치별 코드 변환·쉬운 코드 추천 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/music/capo',
+  title: '기타 카포 계산기 — 카포 위치별 코드 변환·쉬운 코드 추천',
   description: '원하는 키에서 카포 위치별 코드 변환을 계산합니다. 쉬운 오픈 코드 추천, 전조 계산, 다이아토닉 코드 표. 기타 입문자도 쉽게 코드 편곡 가능.',
   keywords: ['기타카포계산기', '카포위치계산', '기타전조계산기', '코드변환계산기', '카포코드표', '기타코드이동', '전조계산기'],
-}
+})
 
 export default function CapoPage() {
   return (

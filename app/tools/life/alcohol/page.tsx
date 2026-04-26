@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import AlcoholClient from './AlcoholClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '알코올 도수 계산기 — 혼합 음료·소맥 도수 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/alcohol',
+  title: '알코올 도수 계산기 — 혼합 음료·소맥 도수 계산',
   description: '소맥, 폭탄주 등 혼합 음료의 알코올 도수를 계산합니다. 표준 음주량(g), 목표 도수에 맞는 희석 비율 계산. 절주 계획에 활용하세요.',
   keywords: ['알코올도수계산기', '소맥도수계산기', '혼합주도수', '폭탄주도수', '표준음주량', '알코올계산기'],
-}
+})
 
 export default function AlcoholPage() {
   return (

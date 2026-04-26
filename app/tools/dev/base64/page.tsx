@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import Base64Client from './Base64Client'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Base64 인코더/디코더 — 텍스트 Base64 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/base64',
+  title: 'Base64 인코더/디코더 — 텍스트 Base64 변환',
   description: '텍스트를 Base64로 인코딩하거나 Base64를 텍스트로 디코딩합니다. URL-safe Base64 지원. JWT, 이미지 데이터URI 변환에 활용.',
   keywords: ['base64인코더', 'base64디코더', 'base64변환기', '텍스트base64', 'base64온라인', 'base64decode'],
-}
+})
 
 export default function Base64Page() {
   return (

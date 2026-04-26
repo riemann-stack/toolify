@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import CookingUnitClient from './CookingUnitClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '요리 단위 변환기 — 컵·큰술·oz·근·오븐온도 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/unit',
+  title: '요리 단위 변환기 — 컵·큰술·oz·근·오븐온도 변환',
   description: '요리할 때 필요한 모든 단위를 즉시 변환합니다. 컵·큰술·작은술·ml·oz·g·근·냥, 섭씨·화씨·가스마크 오븐 온도 변환. 해외 레시피 번역에 필수.',
   keywords: ['요리단위변환기', '컵ml변환', '큰술ml', '온스그램변환', '오븐온도변환', '화씨섭씨변환', '해외레시피단위', '요리계량'],
-}
+})
 
 export default function CookingUnitPage() {
   return (

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import AreaClient from './AreaClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '평수 ㎡ 변환기 — 평방미터 계산기 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/area',
+  title: '평수 ㎡ 변환기 — 평방미터 계산기',
   description: '평수를 제곱미터(㎡)로, 제곱미터를 평수로 즉시 변환. 아파트·오피스텔 평수 계산. 전용면적·공급면적 구분 안내.',
   keywords: ['평수계산기', '평수변환', '제곱미터변환', '㎡평수', '아파트평수', '평수㎡변환'],
-}
+})
 
 export default function AreaPage() {
   return (

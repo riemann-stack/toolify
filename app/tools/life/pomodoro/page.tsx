@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import PomodoroClient from './PomodoroClient'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '뽀모도로 타이머 — 집중력 향상 25분 공부 타이머 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/pomodoro',
+  title: '뽀모도로 타이머 — 집중력 향상 25분 공부 타이머',
   description: '뽀모도로 기법으로 25분 집중·5분 휴식을 반복합니다. 집중/휴식 시간 커스텀, 사이클 카운트, 알림음 지원.',
   keywords: ['뽀모도로타이머', '포모도로타이머', '공부타이머', '집중타이머', '뽀모도로기법', '타이머'],
-}
+})
 
 export default function PomodoroPage() {
   return (

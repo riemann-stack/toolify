@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import PregnancyClient from './PregnancyClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '임신 주수 계산기 — 출산 예정일·태아 크기·산전 검사 일정 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/pregnancy',
+  title: '임신 주수 계산기 — 출산 예정일·태아 크기·산전 검사 일정',
   description: '마지막 생리일·수정일·출산 예정일로 현재 임신 주수를 계산합니다. 태아 크기 비유, D-day 카운트다운, 산전 검사 일정, 시기별 체크리스트 제공. 참고: 산부인과 전문의 상담 권장.',
   keywords: ['임신주수계산기', '출산예정일계산기', '임신주수', '임신계산기', '출산예정일', '산전검사일정', '태아크기', '네겔레공식'],
-}
+})
 
 export default function PregnancyPage() {
   return (

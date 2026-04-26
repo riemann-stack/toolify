@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import ZodiacClient from './ZodiacClient'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '띠·별자리 계산기 — 60갑자·궁합·유명인 확인 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/zodiac',
+  title: '띠·별자리 계산기 — 60갑자·궁합·유명인 확인',
   description: '생년월일로 띠(12간지)와 별자리를 확인합니다. 60갑자(간지), 띠 궁합, 별자리 원소 궁합, 같은 띠 유명인까지 한 번에 확인하세요.',
   keywords: ['띠계산기', '별자리계산기', '12간지', '60갑자', '띠궁합', '생년월일띠', '간지계산기', '나의별자리', '띠별자리'],
-}
+})
 
 // 60갑자 데이터 생성
 const STEMS_HANJA = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']

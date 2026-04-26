@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import DividendClient from './DividendClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '월배당 목표 자산 계산기 2026 — 배당 FIRE 필요 원금 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/dividend',
+  title: '월배당 목표 자산 계산기 2026 — 배당 FIRE 필요 원금 계산',
   description: '목표 월배당금을 받기 위해 필요한 투자 원금을 계산합니다. 세후 배당수익률 기준 현실적인 자산 규모 확인. 배당소득세, 안전계수, 배당 성장률 반영.',
   keywords: ['월배당계산기', '배당투자계산기', '월배당목표자산', 'FIRE계산기', '배당FIRE', '월100만원배당', '필요투자원금계산', '배당소득세계산기'],
-}
+})
 
 export default function DividendPage() {
   return (

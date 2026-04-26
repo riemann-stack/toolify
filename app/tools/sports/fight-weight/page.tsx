@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import FightWeightClient from './FightWeightClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '격투기 체급 계산기 — 복싱·UFC·MMA 감량 계획 D-day | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/sports/fight-weight',
+  title: '격투기 체급 계산기 — 복싱·UFC·MMA 감량 계획 D-day',
   description:
     '복싱, UFC, ONE Championship, 킥복싱, 유도, 태권도 체급별 감량 필요량과 D-day별 안전한 감량 일정을 계산합니다. 종목별 감량 정책·재수화 가이드 포함.',
   keywords: ['격투기체급계산기', 'UFC체급', '복싱체급', 'MMA감량', '계체감량', '격투기감량계획', '체급별감량', 'UFC라이트급', '복싱웰터급'],
-}
+})
 
 export default function FightWeightPage() {
   return (

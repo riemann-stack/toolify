@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import RacePredictorClient from './RacePredictorClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '마라톤 레이스 기록 예측 계산기 — VDOT·Riegel·훈련 페이스 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/race-predictor',
+  title: '마라톤 레이스 기록 예측 계산기 — VDOT·Riegel·훈련 페이스',
   description: '5km·10km·하프 기록으로 풀 마라톤 예상 기록 계산. Riegel·VDOT·Cameron 3가지 공식 비교, Jack Daniels 훈련 페이스(E/M/T/I/R), 구간별 스플릿, 기온·습도·고도 보정까지.',
   keywords: ['마라톤예측계산기', '레이스기록예측', 'VDOT계산기', 'Riegel공식', '잭다니엘스훈련페이스', '마라톤서브3', '마라톤서브4', '네거티브스플릿', '페이스전략'],
-}
+})
 
 export default function RacePredictorPage() {
   return (

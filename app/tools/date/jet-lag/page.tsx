@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import JetLagClient from './JetLagClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '시차 적응 계산기 — 여행 전·기내·도착 후 수면 타이밍 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/jet-lag',
+  title: '시차 적응 계산기 — 여행 전·기내·도착 후 수면 타이밍',
   description: '시차 적응 예상 기간, 출국 전 수면 조정 스케줄, 기내 수면 타이밍, 도착 후 낮잠·햇빛 노출 계산. 서울-뉴욕·런던·파리 시차 극복 가이드.',
   keywords: ['시차적응계산기', '시차극복방법', '해외여행시차', '기내수면타이밍', '시차적응기간', '제트래그', '유럽시차적응', '미국시차적응'],
-}
+})
 
 export default function JetLagPage() {
   return (

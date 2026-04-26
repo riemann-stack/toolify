@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import CompoundClient from './CompoundClient'
 import CompoundChart from './CompoundChart'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '복리 계산기 — 투자 수익·72의 법칙 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/compound',
+  title: '복리 계산기 — 투자 수익·72의 법칙 계산',
   description: '원금, 연 수익률, 기간을 입력해 복리 투자 수익을 계산합니다. 거치식·적립식 모두 지원. 72의 법칙, 눈덩이 효과, 실질 수익률(인플레이션) 설명 제공.',
   keywords: ['복리계산기', '복리투자', '투자수익계산기', '적립식복리', '72의법칙', '장기투자계산기', '눈덩이효과', '실질수익률'],
-}
+})
 
 export default function CompoundPage() {
   return (

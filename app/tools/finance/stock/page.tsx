@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import StockClient from './StockClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '주식 물타기 계산기 — 평단가·탈출 상승률 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/stock',
+  title: '주식 물타기 계산기 — 평단가·탈출 상승률 계산',
   description: '현재 평단가와 보유 수량, 현재 주가, 추가 매수 수량을 입력해 물타기 후 새 평단가와 수익률, 본전을 위한 필요 상승률을 계산합니다. 수수료 포함 계산 지원.',
   keywords: ['주식물타기계산기', '평단가계산기', '물타기계산', '주식평균단가', '추가매수계산기', '코스트에버리지', '주식수수료계산'],
-}
+})
 
 export default function StockPage() {
   return (

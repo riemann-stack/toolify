@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import WeightLossClient from './WeightLossClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '목표 체중 감량 기간 계산기 — 칼로리 적자·요요 방지 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/weightloss',
+  title: '목표 체중 감량 기간 계산기 — 칼로리 적자·요요 방지',
   description: '현재 체중과 목표 체중, 하루 칼로리 적자를 입력해 목표 체중 달성일을 계산합니다. 요요 방지 감량 속도, TDEE 연동 가이드, 안전한 감량 속도 안내.',
   keywords: ['체중감량계산기', '다이어트기간계산기', '칼로리적자계산기', '감량기간계산', '목표체중달성일', '요요방지다이어트'],
-}
+})
 
 export default function WeightLossPage() {
   return (

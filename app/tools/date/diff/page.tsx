@@ -1,12 +1,13 @@
 // ── 날짜 차이 계산기 ──
-import type { Metadata } from 'next'
 import DiffClient from './DiffClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '날짜 차이 계산기 — 두 날짜 사이 일수 기간 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/diff',
+  title: '날짜 차이 계산기 — 두 날짜 사이 일수 기간 계산',
   description: '두 날짜 사이의 일수, 주수, 개월수, 연수를 계산합니다. 근속 기간, 프로젝트 기간, 나이 차이 계산에 유용합니다.',
   keywords: ['날짜계산기', '날짜차이계산', '일수계산기', '기간계산기', '날짜간격계산', '날짜차이'],
-}
+})
 
 export default function DiffPage() {
   return (

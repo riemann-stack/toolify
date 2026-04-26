@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import NutsClient from './NutsClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '견과류 하루 적정 섭취량 계산기 — 아몬드·호두·브라질너트 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/nuts',
+  title: '견과류 하루 적정 섭취량 계산기 — 아몬드·호두·브라질너트',
   description: '아몬드·호두·캐슈넛·브라질너트 등 견과류별 하루 적정 섭취량(g·알 수)과 칼로리·영양소를 계산합니다. 브라질너트 셀레늄 위험, 가공 상태별 주의사항 안내.',
   keywords: ['견과류섭취량', '아몬드하루몇개', '호두하루몇개', '브라질너트하루', '견과류칼로리', '견과류영양소', '혼합견과류하루권장량'],
-}
+})
 
 export default function NutsPage() {
   return (

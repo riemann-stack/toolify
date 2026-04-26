@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import RandomClient from './RandomClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '랜덤 추첨기 — 숫자·항목 무작위 뽑기 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/random',
+  title: '랜덤 추첨기 — 숫자·항목 무작위 뽑기',
   description: '숫자 범위에서 랜덤 번호를 뽑거나, 직접 입력한 항목 중에서 무작위로 추첨합니다. 경품 추첨, 당번 정하기, 팀 나누기에 유용.',
   keywords: ['랜덤추첨기', '무작위추첨', '랜덤뽑기', '경품추첨기', '번호추첨기', '무작위번호'],
-}
+})
 
 export default function RandomPage() {
   return (

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import DutchClient from './DutchClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '더치페이 N빵 계산기 — 술값 따로, 1원 단위 절삭 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/dutch',
+  title: '더치페이 N빵 계산기 — 술값 따로, 1원 단위 절삭',
   description: '총액과 인원수를 입력해 1인당 금액을 계산합니다. 술값 따로 계산, 100원·1,000원 단위 올림 옵션 지원.',
   keywords: ['더치페이계산기', 'N빵계산기', '더치페이', '회식비계산기', '1인당금액계산기', '술값계산기'],
-}
+})
 
 export default function DutchPage() {
   return (

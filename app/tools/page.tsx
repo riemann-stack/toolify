@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
 import AdSlot from '@/components/AdSlot'
 import styles from './tools.module.css'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: `전체 도구 목록 — 무료 계산기·유틸리티 ${totalTools}가지 | Youtil`,
+export const metadata = buildMetadata({
+  path: '/tools',
+  title: `전체 도구 목록 — 무료 계산기·유틸리티 ${totalTools}가지`,
   description: `연봉 계산기, BMI, 로또 번호 생성기, 부가세, 임신 주수 등 ${totalTools}가지 무료 온라인 도구를 한눈에 확인하세요.`,
-}
+})
 
 export default function ToolsPage() {
   return (

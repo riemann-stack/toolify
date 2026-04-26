@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import GolfCostClient from './GolfCostClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '골프 라운딩 비용 계산기 — 그린피·캐디피·1인당 비용 정산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/golf-cost',
+  title: '골프 라운딩 비용 계산기 — 그린피·캐디피·1인당 비용 정산',
   description: '그린피, 카트비, 캐디피, 식사비, 교통비를 합산해 1인당 라운딩 비용을 계산합니다. 캐디피 N빵, 카풀 교통비 정산, 월·연간 골프 비용 예측까지 한 번에.',
   keywords: ['골프라운딩비용계산기', '그린피계산기', '캐디피정산', '골프비용계산기', '라운딩비용1인당', '골프장비용', '골프카트비', '캐디피N빵'],
-}
+})
 
 export default function GolfCostPage() {
   return (

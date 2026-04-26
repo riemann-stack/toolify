@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import CharCountClient from './CharCountClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '글자수 세기 — 공백 포함·제외 실시간 카운트 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/charcount',
+  title: '글자수 세기 — 공백 포함·제외 실시간 카운트',
   description: '텍스트 글자수를 실시간으로 세어드립니다. 공백 포함·제외, 단어수, 줄수, 바이트 수 확인. SNS 글자수 제한 비교 지원.',
   keywords: ['글자수세기', '글자수계산기', '자수세기', '단어수세기', '글자수확인', '바이트계산'],
-}
+})
 
 export default function CharCountPage() {
   return (

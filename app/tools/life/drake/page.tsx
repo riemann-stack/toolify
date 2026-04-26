@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import DrakeEquationClient from './DrakeEquationClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '드레이크 방정식 계산기 — 우주 지적 생명체 수 추정 시뮬레이터 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/drake',
+  title: '드레이크 방정식 계산기 — 우주 지적 생명체 수 추정 시뮬레이터',
   description: '드레이크 방정식으로 우주에 교신 가능한 지적 문명의 수를 계산합니다. 7가지 변수를 직접 조정해보는 인터랙티브 시뮬레이터. 칼 세이건·페르미 역설 관점 비교.',
   keywords: ['드레이크방정식계산기', '외계인존재확률', '드레이크방정식', '우주문명계산기', '외계생명체확률', '페르미역설', '지적생명체계산기'],
-}
+})
 
 function parseNumParam(v: string | undefined, min: number, max: number): number | undefined {
   if (!v) return undefined

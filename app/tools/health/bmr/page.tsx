@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import BmrClient from './BmrClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '기초대사량 계산기 2026 — BMR·TDEE·하루 칼로리 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/bmr',
+  title: '기초대사량 계산기 2026 — BMR·TDEE·하루 칼로리 계산',
   description: 'Harris-Benedict 공식으로 기초대사량(BMR)과 활동량별 하루 권장 칼로리(TDEE)를 계산합니다. 다이어트·벌크업·마라톤 훈련 칼로리 목표 제공.',
   keywords: ['기초대사량계산기', 'BMR계산기', '하루칼로리', 'TDEE계산기', '다이어트칼로리', '칼로리계산기', '마라톤칼로리'],
-}
+})
 
 export default function BmrPage() {
   return (

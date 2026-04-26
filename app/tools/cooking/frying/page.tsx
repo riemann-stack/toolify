@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import FryingClient from './FryingClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '튀김 시간·온도 계산기 — 재료별 기름 온도·에어프라이어 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/frying',
+  title: '튀김 시간·온도 계산기 — 재료별 기름 온도·에어프라이어 변환',
   description: '감자튀김·돈까스·치킨·새우튀김 등 재료 상태·두께·튀김옷 조건별 최적 기름 온도와 튀김 시간을 계산합니다. 2차 튀김 여부, 에어프라이어 변환 가이드 제공.',
   keywords: ['튀김시간계산기', '감자튀김온도', '돈까스튀기는시간', '치킨튀김온도', '튀김기름온도', '에어프라이어변환', '새우튀김시간', '냉동만두튀기기'],
-}
+})
 
 export default function FryingPage() {
   return (

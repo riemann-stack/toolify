@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import OneRMClient from './OneRMClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '1RM 계산기 — 벤치프레스·스쿼트·데드리프트 최대 중량 추정 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/one-rm',
+  title: '1RM 계산기 — 벤치프레스·스쿼트·데드리프트 최대 중량 추정',
   description: '반복 횟수와 중량으로 1RM(최대 근력)을 추정합니다. Epley·Brzycki·Lombardi·O\'Conner 4가지 공식 비교, 강도별 훈련 중량표, 반복수별 예상 중량, 원판 조합 계산.',
   keywords: ['1RM계산기', '벤치프레스1RM', '스쿼트1RM', '데드리프트1RM', '최대중량계산기', '훈련중량계산기', '헬스1RM', '1RM공식'],
-}
+})
 
 const cell: React.CSSProperties = {
   padding: '10px 14px',

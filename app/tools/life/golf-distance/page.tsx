@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import GolfDistanceClient from './GolfDistanceClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '골프 클럽 비거리 계산기 — 클럽별 거리표·Gap 분석 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/golf-distance',
+  title: '골프 클럽 비거리 계산기 — 클럽별 거리표·Gap 분석',
   description: '드라이버·7번 아이언 비거리만 입력하면 전체 클럽 비거리를 자동 추정합니다. 클럽 간 거리 간격(Gap) 분석, 보완 클럽 추천, 아마추어 평균 비교까지 한 번에.',
   keywords: ['골프비거리계산기', '클럽비거리표', '7번아이언비거리', '골프클럽거리', '드라이버비거리', '웨지비거리', '골프갭분석', '갭웨지'],
-}
+})
 
 export default function GolfDistancePage() {
   return (

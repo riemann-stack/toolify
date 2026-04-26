@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import GolfHandicapClient from './GolfHandicapClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '골프 핸디캡 계산기 2026 — WHS 방식 핸디캡 지수·코스 핸디캡 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/golf-handicap',
+  title: '골프 핸디캡 계산기 2026 — WHS 방식 핸디캡 지수·코스 핸디캡',
   description: 'WHS(세계핸디캡시스템) 방식으로 골프 핸디캡 지수를 계산합니다. 스코어 디퍼런셜, 코스 핸디캡, 네트 스코어, 스태블포드 포인트 계산. 최근 20라운드 관리 지원.',
   keywords: ['골프핸디캡계산기', '핸디캡지수계산', 'WHS핸디캡', '코스핸디캡계산기', '스코어디퍼런셜', '네트스코어계산기', '스태블포드계산기', '골프핸디캡'],
-}
+})
 
 export default function GolfHandicapPage() {
   return (

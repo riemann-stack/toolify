@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import BloodAlcoholClient from './BloodAlcoholClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '음주 후 혈중알코올 소멸 계산기 — BAC 추정·운전 가능 시각 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/blood-alcohol',
+  title: '음주 후 혈중알코올 소멸 계산기 — BAC 추정·운전 가능 시각',
   description: '체중·음주량 기반으로 혈중알코올농도(BAC)를 추정하고 면허정지·취소 기준 해소 시각을 계산합니다. Widmark 공식 적용. 음주운전 예방 참고 도구.',
   keywords: ['혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산', '음주운전기준', '알코올소멸시간', '음주측정계산기'],
-}
+})
 
 export default function BloodAlcoholPage() {
   return (

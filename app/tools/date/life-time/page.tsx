@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import LifeTimeClient from './LifeTimeClient'
 import AdSlot from '@/components/AdSlot'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '생애 시간 계산기 — 기대수명 기준 시간 환산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/life-time',
+  title: '생애 시간 계산기 — 기대수명 기준 시간 환산',
   description:
     '기대수명 기준 살아온 날·앞으로의 날을 계산하고, 매일 30분의 행동이 누적되어 만드는 시간 가치를 환산합니다. 메멘토 모리 철학 기반 동기부여 도구.',
   keywords: ['생애시간계산기', '메멘토모리', '인생진행률', '기대수명계산', '시간가치환산', '인생시계', '하루의가치'],
-}
+})
 
 export default function LifeTimePage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import BmiClient from './BmiClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'BMI 계산기 2026 — 체질량지수·비만도·러닝 체중 관리 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/health/bmi',
+  title: 'BMI 계산기 2026 — 체질량지수·비만도·러닝 체중 관리',
   description: '키와 체중을 입력해 BMI(체질량지수)를 계산합니다. WHO·대한비만학회 기준 비만도 판정, 키별 정상 체중 범위, 러너 전용 체중 관리 팁 제공.',
   keywords: ['BMI계산기', '체질량지수', '비만도계산기', 'BMI비만', '체중계산기', 'BMI정상범위', '러닝체중관리'],
-}
+})
 
 export default function BmiPage() {
   return (

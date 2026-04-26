@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import CarCostClient from './CarCostClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '자동차 유지비 계산기 — 하루 유지비·감가상각·1km당 비용 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/finance/car-cost',
+  title: '자동차 유지비 계산기 — 하루 유지비·감가상각·1km당 비용',
   description: '유류비, 보험료, 자동차세, 소모품, 감가상각까지 자동차 유지비를 월·일 단위로 계산합니다. 내 차 하루 유지비, 1km당 비용, 연간 총 유지비 즉시 확인.',
   keywords: ['자동차유지비계산기', '내차유지비', '차유지비계산기', '자동차감가상각계산기', '1km당비용', '유류비계산기', '차량유지비월환산'],
-}
+})
 
 const cell: React.CSSProperties = {
   padding: '10px 14px',

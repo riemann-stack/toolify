@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import ThawingClient from './ThawingClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '냉동·해동 시간 계산기 — 고기·생선 해동 시간 예측 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/cooking/thawing',
+  title: '냉동·해동 시간 계산기 — 고기·생선 해동 시간 예측',
   description: '식품 종류·두께·무게를 입력해 냉장/흐르는물/실온/전자레인지 해동 시간을 계산합니다. 식품별 냉동 보관 기간, 식중독 예방 안전 가이드 제공.',
   keywords: ['해동시간계산기', '고기해동시간', '냉동해동계산기', '냉장해동시간', '생선해동시간', '식품해동방법', '냉동보관기간'],
-}
+})
 
 export default function ThawingPage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '페이지를 찾을 수 없습니다 (404) | Youtil',
+export const metadata = buildMetadata({
+  path: '/404',
+  title: '페이지를 찾을 수 없습니다 (404)',
   description: '요청하신 페이지를 찾을 수 없습니다. Youtil의 다른 무료 도구를 둘러보세요.',
-  robots: { index: false, follow: false },
-}
+  noIndex: true,
+})
 
 // 인기 카테고리 진입점 — 사용자가 길을 잃었을 때 빠르게 복귀할 수 있도록
 const QUICK_LINKS: Array<{ href: string; label: string; icon: string }> = [

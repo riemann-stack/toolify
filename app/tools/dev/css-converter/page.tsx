@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import CssConverterClient from './CssConverterClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'CSS 값 변환기 — px·rem·em·clamp()·aspect-ratio 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/dev/css-converter',
+  title: 'CSS 값 변환기 — px·rem·em·clamp()·aspect-ratio 계산',
   description: 'px, rem, em, %, vw, vh 단위 변환부터 line-height, letter-spacing, aspect-ratio, clamp() 생성까지 CSS에서 자주 헷갈리는 값을 빠르게 변환하고 코드를 복사하세요.',
   keywords: ['CSS단위변환기', 'px rem 변환', 'clamp생성기', 'aspect-ratio계산기', 'line-height변환', 'letter-spacing변환', 'CSS계산기', 'rem변환기'],
-}
+})
 
 const codeBox: React.CSSProperties = {
   background: 'var(--bg3)',

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import WeightClient from './WeightClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '무게 변환기 — kg g lb oz 파운드 온스 근 돈 변환 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/unit/weight',
+  title: '무게 변환기 — kg g lb oz 파운드 온스 근 돈 변환',
   description: 'kg, g, mg, 파운드(lb), 온스(oz), 근, 돈 등 무게 단위를 즉시 변환. 요리, 헬스, 금 거래 등 다양한 상황에 활용.',
   keywords: ['무게변환기', '파운드kg변환', '온스그램변환', 'lb kg변환', '근kg변환', '무게단위변환'],
-}
+})
 
 export default function WeightPage() {
   return (

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import MontyHallClient from './MontyHallClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '몬티홀 문제 시뮬레이터 — 바꾸기 vs 유지하기 확률 직접 체험 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/monty-hall',
+  title: '몬티홀 문제 시뮬레이터 — 바꾸기 vs 유지하기 확률 직접 체험',
   description: '몬티홀 문제를 직접 플레이하고 1,000번 자동 시뮬레이션해 "바꾸면 2/3, 유지하면 1/3"을 눈으로 확인하세요. 베이즈 증명·100문 확장 해설 포함.',
   keywords: ['몬티홀문제', '몬티홀시뮬레이터', '바꾸기유지하기', '조건부확률', '베이즈정리', '확률퍼즐', '확률실험'],
-}
+})
 
 export default function MontyHallPage() {
   return (

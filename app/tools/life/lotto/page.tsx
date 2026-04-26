@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import LottoClient from './LottoClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '로또 번호 생성기 — 무료 자동 추첨 6/45 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/life/lotto',
+  title: '로또 번호 생성기 — 무료 자동 추첨 6/45',
   description: '로또 6/45 번호를 무료로 자동 생성합니다. 1~5게임 동시 생성 가능. 로또 당첨 확률과 역대 많이 나온 번호 정보 제공.',
   keywords: ['로또번호생성기', '로또자동', '로또번호추천', '로또6/45', '로또당첨번호', '로또번호'],
-}
+})
 
 export default function LottoPage() {
   return (

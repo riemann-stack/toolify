@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import ChordClient from './ChordClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: '코드 구성음 계산기 — Cmaj7·Dm7·G7 코드 음이름 확인 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/music/chord',
+  title: '코드 구성음 계산기 — Cmaj7·Dm7·G7 코드 음이름 확인',
   description: 'Cmaj7, Dm7, G7 등 코드의 구성음을 즉시 확인합니다. 피아노 건반 시각화, 역방향 코드 검색(구성음→코드명), 다이아토닉 코드표 제공. 초보 작곡가·기타·피아노 입문자 필수.',
   keywords: ['코드구성음계산기', 'Cmaj7구성음', '코드음계산기', '다이아토닉코드표', '코드역방향검색', '기타코드구성음', '피아노코드계산기', '음악이론계산기'],
-}
+})
 
 export default function ChordPage() {
   return (

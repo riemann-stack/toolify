@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import DdayClient from './DdayClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'D-day 계산기 — 날짜 카운트다운 디데이 계산 | Youtil',
+export const metadata = buildMetadata({
+  path: '/tools/date/dday',
+  title: 'D-day 계산기 — 날짜 카운트다운 디데이 계산',
   description: '특정 날짜까지 남은 일수를 계산합니다. 수능, 결혼식, 시험, 여행, 군 전역일 등 중요한 날짜를 디데이로 관리하세요.',
   keywords: ['디데이계산기', 'D-day계산기', '날짜카운트다운', '남은일수계산', '디데이', 'dday계산기'],
-}
+})
 
 export default function DdayPage() {
   return (
