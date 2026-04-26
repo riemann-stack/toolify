@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
+import AdSlot from '@/components/AdSlot'
 import styles from './tools.module.css'
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function ToolsPage() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-        {categories.map(cat => (
+        {categories.map((cat, idx) => (
           <div key={cat.id}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -47,8 +48,20 @@ export default function ToolsPage() {
                 </Link>
               ))}
             </div>
+
+            {/* 카테고리 중간에 광고 슬롯 1회 삽입 */}
+            {idx === Math.floor(categories.length / 2) - 1 && (
+              <div style={{ marginTop: '32px' }}>
+                <AdSlot position="between-tools" minHeight={250} />
+              </div>
+            )}
           </div>
         ))}
+      </div>
+
+      {/* 푸터 광고 슬롯 */}
+      <div style={{ marginTop: '48px' }}>
+        <AdSlot position="footer" minHeight={250} />
       </div>
     </div>
   )

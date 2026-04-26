@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import TimeUnitClient from './TimeUnitClient'
+import AdSlot from '@/components/AdSlot'
 
 export const metadata: Metadata = {
   title: '시간 단위 변환기 — 초·분·시간·일·주·월·년 변환 | Youtil',
@@ -20,6 +21,9 @@ export default function TimeUnitPage() {
       </p>
 
       <TimeUnitClient />
+
+      {/* 본문 광고 — 도구 결과 직후 */}
+      <AdSlot position="in-article" minHeight={200} />
 
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
@@ -222,6 +226,9 @@ export default function TimeUnitPage() {
             ))}
           </div>
         </div>
+
+        {/* FAQ 직후 광고 슬롯 */}
+        <AdSlot position="between-tools" minHeight={250} />
 
         {/* ── 7. 관련 도구 ── */}
         <div>

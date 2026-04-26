@@ -1,0 +1,572 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #FF8C8C; }
+
+/* ── 리그 프리셋 ── */
+.leagueGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+@media (max-width: 700px) {
+  .leagueGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.leagueBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.5;
+}
+.leagueBtn small {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+.leagueBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.leagueKBO    { border-color: rgba(200,255,62,0.45); }
+.leagueMLB    { border-color: rgba(62,200,255,0.45); }
+.leagueNPB    { border-color: rgba(255,107,107,0.40); }
+.leagueAmateur { border-color: var(--border); }
+.leagueCustom { border-color: var(--border); }
+.leagueActive {
+  background: var(--accent);
+  color: #0D0D0D;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.leagueActive small { color: #0D0D0D; opacity: 0.75; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* ── 입력 그룹 (섹션 헤더) ── */
+.groupHeader {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-top: 14px;
+}
+.groupHeader:first-child { margin-top: 0; }
+
+/* ── 입력 그리드 ── */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .statGrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 380px) {
+  .statGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.statGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 380px) {
+  .statGrid3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCell {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 8px;
+  text-align: center;
+}
+.statLabel {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.statLabel small {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  opacity: 0.7;
+}
+.statInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-size: 19px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  padding: 2px 0;
+}
+.statInput::-webkit-outer-spin-button,
+.statInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.statInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* 색상 강조 (안타·홈런 등) */
+.cellH       { border-left: 3px solid var(--accent); }
+.cellHR      { border-left: 3px solid #FFD700; }
+.cellWalk    { border-left: 3px solid #3EC8FF; }
+.cellOut     { border-left: 3px solid #FF8C3E; }
+.cellRun     { border-left: 3px solid #3EFF9B; }
+.cellWin     { border-left: 3px solid #3EFF9B; }
+.cellLoss    { border-left: 3px solid #FF6B6B; }
+
+/* ── 고급 토글 ── */
+.advancedToggle {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  margin-top: 14px;
+  width: 100%;
+}
+.advancedToggle:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* ── 검증 메시지 ── */
+.validMsg {
+  font-size: 12px;
+  color: #FF8C3E;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(255,140,62,0.08);
+  border: 1px solid rgba(255,140,62,0.3);
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.35);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 9vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.heroBadge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.lvMVP    { background: rgba(255,215,0,0.15);   color: #FFD700; }
+.lvAllStar{ background: var(--accent-dim);       color: var(--accent); }
+.lvRegular{ background: rgba(62,255,155,0.15);  color: #3EFF9B; }
+.lvAvg    { background: rgba(255,255,255,0.06); color: var(--muted); }
+.lvBelow  { background: rgba(255,140,62,0.15);  color: #FF8C3E; }
+.lvBackup { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── KPI 그리드 ── */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 600px) {
+  .kpiGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.kpiCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.kpiLabel {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+.kpiValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.8px;
+  transition: color 0.2s;
+}
+.kpiValueAccent { color: var(--accent); }
+
+/* ── 리그 평균 비교 막대 ── */
+.compareCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.compareRow {
+  margin-bottom: 12px;
+}
+.compareRow:last-child { margin-bottom: 0; }
+.compareTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.compareTitle {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.compareValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+}
+.compareBar {
+  position: relative;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.compareBarMine {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+.compareBarLeague {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--muted);
+}
+.compareLegend {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 12px;
+  align-items: center;
+}
+.legendDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.legendDotMine   { background: var(--accent); }
+.legendDotLeague { background: var(--muted); }
+
+/* ── 고급 지표 ── */
+.advGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+@media (max-width: 520px) {
+  .advGrid { grid-template-columns: 1fr; }
+}
+.advCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.advLabel {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.advTip {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 10px;
+  text-align: center;
+  line-height: 14px;
+  cursor: help;
+  position: relative;
+}
+.advTip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.advValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.advSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── 파이 차트 (타격 분포) ── */
+.pieWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+@media (max-width: 480px) {
+  .pieWrap { grid-template-columns: 1fr; justify-items: center; }
+}
+.pieSvg {
+  width: 160px;
+  height: 160px;
+  display: block;
+  margin: 0 auto;
+}
+.pieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pieRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.pieRow span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+.pieDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.pieRow strong {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── 명선수 비교 표 ── */
+.legendTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.legendTable th, .legendTable td {
+  padding: 8px 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.legendTable th:first-child, .legendTable td:first-child { text-align: left; }
+.legendTable th {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.legendTable td {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+.legendTable td:first-child {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+}
+.legendTable .ourRow td {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 800;
+}
+.legendTable .ourRow td:first-child { color: var(--accent); }
+
+/* ── 마일스톤 카드 ── */
+.milestoneCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 6px;
+}
+.milestoneInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.milestoneTitle {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.milestoneSub {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.milestoneSub strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.milestoneBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.msReach    { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+.msHard     { background: rgba(255,140,62,0.15); color: #FF8C3E; }
+.msImpossible { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+
+/* 결과 복사 */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

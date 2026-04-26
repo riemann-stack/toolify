@@ -1,0 +1,795 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 리그 프리셋 ── */
+.leagueGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 700px) {
+  .leagueGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.leagueBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.5;
+}
+.leagueBtn span.flag { font-size: 14px; margin-right: 4px; }
+.leagueBtn small {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.leagueBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.leagueActive {
+  background: var(--accent);
+  color: #0D0D0D;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.leagueActive small { color: #0D0D0D; opacity: 0.75; }
+.leagueK {
+  border-color: rgba(200,255,62,0.45);
+}
+
+/* ── 탭 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* ── 팀 이름 입력 ── */
+.teamNameInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 16px;       /* iOS 줌 방지 */
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  margin-bottom: 14px;
+}
+.teamNameInput:focus { border-color: rgba(200,255,62,0.5); }
+
+/* ── 승무패 입력 (3열) ── */
+.wdlGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.wdlCell {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+}
+.wdlWin  { border-left: 3px solid #3EFF9B; }
+.wdlDraw { border-left: 3px solid #FFD700; }
+.wdlLoss { border-left: 3px solid #FF6B6B; }
+.wdlLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.wdlInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  padding: 4px 0;
+}
+.wdlInput::-webkit-outer-spin-button,
+.wdlInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.wdlInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* ── 득점/실점 입력 ── */
+.gfGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.gfCell {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.gfLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.gfInputRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.gfSign { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+.gfPositive { color: #3EFF9B; }
+.gfNegative { color: #FF6B6B; }
+.gfInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  min-width: 0;
+}
+.gfInput::-webkit-outer-spin-button,
+.gfInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.gfInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.gdLine {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 10px;
+}
+.gdValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+}
+.gdValue.pos { color: #3EFF9B; }
+.gdValue.neg { color: #FF6B6B; }
+
+/* ── 고급 옵션 ── */
+.advancedToggle {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  margin-top: 14px;
+}
+.advancedToggle:hover { color: var(--text); border-color: var(--border-hover); }
+.advancedBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 8px;
+}
+.systemRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.systemBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.systemBtn:hover { color: var(--text); }
+.systemActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid rgba(200,255,62,0.35);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 9vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.heroUnit {
+  font-size: 18px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── KPI 그리드 ── */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 520px) {
+  .kpiGrid { grid-template-columns: 1fr 1fr; }
+}
+.kpiCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.kpiLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.kpiValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  transition: color 0.2s;
+}
+.kpiValueAccent { color: var(--accent); }
+.kpiValuePos    { color: #3EFF9B; }
+.kpiValueNeg    { color: #FF6B6B; }
+
+/* ── 시즌 종료 시나리오 3카드 ── */
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .scenarioGrid { grid-template-columns: 1fr; }
+}
+.scenarioCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 14px;
+  text-align: center;
+}
+.scenarioCons { border-left: 3px solid #FF8C3E; }
+.scenarioBase { border-left: 3px solid var(--accent); background: rgba(200,255,62,0.04); }
+.scenarioOpt  { border-left: 3px solid #3EFF9B; }
+.scenarioLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.scenarioPts {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.scenarioBase .scenarioPts { color: var(--accent); }
+
+/* ── 목표 입력 ── */
+.targetGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .targetGrid { grid-template-columns: 1fr 1fr; }
+}
+.targetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.5;
+}
+.targetBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.targetBtn small {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent);
+  margin-top: 2px;
+}
+.targetActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.targetInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 24px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  margin-top: 12px;
+  box-sizing: border-box;
+}
+.targetInput:focus { border-color: rgba(200,255,62,0.5); }
+.targetInput::-webkit-outer-spin-button,
+.targetInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.targetInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* ── 가능성 배지 ── */
+.feasibilityBadge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 10px;
+}
+.fbEasy   { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+.fbMid    { background: rgba(255,140,62,0.15); color: #FF8C3E; }
+.fbHard   { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.fbImpossible {
+  background: rgba(255,70,70,0.18);
+  color: #FF4646;
+  border: 1px solid rgba(255,70,70,0.4);
+}
+.feasibilityCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+  text-align: center;
+}
+.fbValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+.fbValue.posVal { color: #3EFF9B; }
+.fbValue.negVal { color: #FF6B6B; }
+.fbSub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.fbSub strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* ── 시나리오 조합 표 ── */
+.scenarioTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.scenarioTable th, .scenarioTable td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.scenarioTable th {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+.scenarioTable td {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+.scWin  { color: #3EFF9B; }
+.scDraw { color: #FFD700; }
+.scLoss { color: #FF6B6B; }
+.scPts  { color: var(--accent); }
+
+/* ── 시뮬레이션 슬라이더 ── */
+.simulator {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.simRow {
+  display: grid;
+  grid-template-columns: 60px 1fr 50px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.simLabel {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+}
+.simNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+  text-align: right;
+}
+.simNumLocked { color: var(--muted); }
+.simSlider {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 99px;
+  outline: none;
+  cursor: pointer;
+}
+.simWinSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #3EFF9B;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.simWinSlider::-moz-range-thumb {
+  width: 18px; height: 18px; background: #3EFF9B;
+  border-radius: 50%; cursor: pointer; border: none;
+}
+.simLossSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #FF6B6B;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.simLossSlider::-moz-range-thumb {
+  width: 18px; height: 18px; background: #FF6B6B;
+  border-radius: 50%; cursor: pointer; border: none;
+}
+
+.simResult {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--bg3);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.simResultPts {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  transition: color 0.2s;
+}
+.simResultPts.reachedTarget { color: #3EFF9B; }
+.simResultPts.missedTarget { color: #FF6B6B; }
+.simHint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── 라이벌 비교 ── */
+.rivalRow {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 0.5fr;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+@media (max-width: 600px) {
+  .rivalRow { grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 0.4fr; gap: 4px; }
+}
+.rivalNameInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.rivalNumInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;       /* iOS 줌 방지 */
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+.rivalNumInput::-webkit-outer-spin-button,
+.rivalNumInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.rivalNumInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.rivalRemoveBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.rivalRemoveBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+
+.addRivalBtn {
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: all 0.15s;
+}
+.addRivalBtn:hover { color: var(--accent); border-color: var(--accent); }
+
+.rivalSubInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.rivalSubLabel {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 2px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 비교 표 ── */
+.compareTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.compareTable th, .compareTable td {
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.compareTable th:first-child, .compareTable td:first-child { text-align: left; }
+.compareTable th {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+.compareTable td {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+.compareTable td:first-child {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+}
+.compareTable .ourRow td {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 800;
+}
+.compareTable .ourRow td:first-child { color: var(--accent); }
+.gapPos { color: #3EFF9B !important; }
+.gapNeg { color: #FF6B6B !important; }
+
+/* ── 추격 분석 카드 ── */
+.overtakeCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.overtakeCardLead { border-left: 3px solid #3EFF9B; }
+.overtakeCardChase { border-left: 3px solid #FF8C3E; }
+.overtakeCardImpossible { border-left: 3px solid #FF4646; }
+
+.overtakeTitle {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.overtakeBody {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.overtakeBody strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* ── 시즌 종료 예상 순위 ── */
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rankRow {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+.rankBadge {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+.rankGold   { color: #FFD700; }
+.rankSilver { color: #C0C0C0; }
+.rankBronze { color: #CD7F32; }
+.rankOther  { color: var(--muted); }
+.rankName {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.rankPts {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.rankRow.ourRank { border-color: var(--accent); background: rgba(200,255,62,0.05); }
+
+/* ── 결과 텍스트 복사 ── */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

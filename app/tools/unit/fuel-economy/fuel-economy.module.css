@@ -1,0 +1,195 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px;
+}
+.tab {
+  padding: 12px 6px; border-radius: 10px; border: none;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── 입력 ── */
+.inputRow {
+  display: grid; grid-template-columns: 1fr 130px; gap: 8px;
+}
+.input {
+  width: 100%; box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  color: var(--text); outline: none;
+  transition: border 0.15s;
+  letter-spacing: -0.5px;
+}
+.input:focus { border-color: var(--accent); }
+.inputFilled { border-color: var(--accent) !important; }
+.unitSelect {
+  width: 100%; box-sizing: border-box;
+  padding: 12px 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 600;
+  color: var(--accent); outline: none; cursor: pointer;
+  transition: border 0.15s;
+}
+.unitSelect:focus { border-color: var(--accent); }
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 12px;
+}
+.presetBtn {
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.presetBtn:hover {
+  color: var(--accent); border-color: rgba(200,255,62,0.4);
+}
+
+/* ── 결과 표 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.resultHeader {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.resultHeaderLabel {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.resultHeaderValue {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+
+.resultRow {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.resultRow:last-child { border-bottom: none; }
+.resultRow:hover { background: var(--bg3); }
+.resultRowHighlight {
+  background: rgba(200,255,62,0.05);
+}
+.resultLabel {
+  font-size: 13px; color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+}
+.resultLabelSub {
+  font-size: 10px; color: var(--muted);
+  opacity: 0.75; margin-top: 2px;
+}
+.resultValue {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  color: var(--text); text-align: right;
+  letter-spacing: -0.3px; word-break: break-all;
+}
+.resultValueSelf {
+  color: var(--accent); font-weight: 800;
+}
+.copyBtn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+  font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
+  flex-shrink: 0; min-width: 50px;
+}
+.copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
+.copyBtnDone {
+  color: var(--accent) !important;
+  border-color: rgba(200,255,62,0.4) !important;
+}
+
+/* ── 등급 박스 ── */
+.gradeCard {
+  border-radius: 14px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+  border: 1px solid var(--border);
+}
+.gradeStar { background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.4); }
+.gradeGood { background: rgba(62,255,155,0.08); border-color: rgba(62,255,155,0.4); }
+.gradeMid  { background: var(--bg2); }
+.gradeLow  { background: rgba(255,140,62,0.08); border-color: rgba(255,140,62,0.4); }
+.gradeBad  { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.4); }
+
+.gradeStar .gradeTitle { color: var(--accent); }
+.gradeGood .gradeTitle { color: #3EFF9B; }
+.gradeMid  .gradeTitle { color: var(--text); }
+.gradeLow  .gradeTitle { color: #FF8C3E; }
+.gradeBad  .gradeTitle { color: #FF6B6B; }
+
+.gradeTitle { font-size: 16px; font-weight: 800; }
+.gradeDesc  { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* ── 비용 박스 ── */
+.costGrid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-top: 12px;
+}
+.costCell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.costLabel {
+  font-size: 11px; color: var(--muted); margin-bottom: 4px;
+}
+.costValue {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+  color: var(--accent); letter-spacing: -0.3px;
+}
+.costMeta {
+  font-size: 11px; color: var(--muted); margin-top: 2px;
+}
+
+.costInputs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-top: 8px;
+}
+.costInputCell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+}
+.costInputLabel {
+  font-size: 10px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 4px;
+}
+.costInput {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  color: var(--text); padding: 0;
+}
+
+/* ── 모바일 ── */
+@media (max-width: 600px) {
+  .resultRow { grid-template-columns: 90px 1fr auto; padding: 10px 14px; gap: 8px; }
+  .resultValue { font-size: 14px; }
+  .resultHeaderValue { font-size: 18px; }
+  .costGrid { grid-template-columns: 1fr; }
+  .costInputs { grid-template-columns: 1fr; }
+}

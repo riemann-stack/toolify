@@ -320,6 +320,12 @@
 .cat_music::before { background: #C83EFF; }
 .cat_music:hover   { border-color: rgba(200,62,255,0.3); background: rgba(200,62,255,0.04); }
 
+.cat_cooking::before { background: #FFB83E; }
+.cat_cooking:hover   { border-color: rgba(255,184,62,0.3); background: rgba(255,184,62,0.04); }
+
+.cat_sports::before { background: #FFD93E; }
+.cat_sports:hover   { border-color: rgba(255,217,62,0.3); background: rgba(255,217,62,0.04); }
+
 /* ── TOOLS GRID ── */
 .toolsGrid {
   display: grid;

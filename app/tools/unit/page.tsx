@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { categories } from '@/lib/tools'
+import AdSlot from '@/components/AdSlot'
 
 const CATEGORY_ID = 'unit'
 const cat = categories.find(c => c.id === CATEGORY_ID)!
@@ -41,6 +42,11 @@ export default function CategoryPage() {
             )}
           </Link>
         ))}
+      </div>
+
+      {/* 카테고리 푸터 광고 슬롯 */}
+      <div style={{ marginTop: '40px' }}>
+        <AdSlot position="footer" minHeight={250} />
       </div>
     </div>
   )

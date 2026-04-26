@@ -7,7 +7,8 @@
   --border: rgba(255,255,255,0.08);
   --border-hover: rgba(255,255,255,0.18);
   --text: #F0EFE8;
-  --muted: #A0A098;
+  --muted: #B8B8B0;          /* 일반 보조 텍스트 (대비 약 9.5:1) */
+  --muted-strong: #D0D0C8;   /* 더 강한 대비 필요한 작은 글씨용 */
   --accent: #C8FF3E;
   --accent-dim: rgba(200,255,62,0.12);
 

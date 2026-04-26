@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import BatteryClient from './BatteryClient'
+import AdSlot from '@/components/AdSlot'
 
 export const metadata: Metadata = {
   title: '배터리 용량 변환기 mAh ↔ Wh — 비행기 반입 가능 체크 | Youtil',
@@ -20,6 +21,9 @@ export default function BatteryPage() {
       </p>
 
       <BatteryClient />
+
+      {/* 본문 광고 — 도구 결과 직후 */}
+      <AdSlot position="in-article" minHeight={200} />
 
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
@@ -211,6 +215,9 @@ export default function BatteryPage() {
             ))}
           </div>
         </div>
+
+        {/* FAQ 직후 광고 슬롯 */}
+        <AdSlot position="between-tools" minHeight={250} />
 
         {/* ── 7. 관련 도구 ── */}
         <div>

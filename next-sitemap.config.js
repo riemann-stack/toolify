@@ -8,6 +8,7 @@ module.exports = {
   additionalPaths: async (config) => [
     await config.transform(config, '/'),
     await config.transform(config, '/about'),
+    await config.transform(config, '/contact'),
     await config.transform(config, '/privacy'),
     await config.transform(config, '/terms'),
     await config.transform(config, '/tools'),
@@ -21,6 +22,7 @@ module.exports = {
     await config.transform(config, '/tools/finance/dividend'),
     await config.transform(config, '/tools/finance/inheritance'),
     await config.transform(config, '/tools/finance/car-cost'),
+    await config.transform(config, '/tools/finance/real-estate'),
     // 건강·안전
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
@@ -62,6 +64,11 @@ module.exports = {
     await config.transform(config, '/tools/life/unit-price'),
     await config.transform(config, '/tools/life/golf-cost'),
     await config.transform(config, '/tools/life/golf-distance'),
+    // 스포츠
+    await config.transform(config, '/tools/sports'),
+    await config.transform(config, '/tools/sports/football-points'),
+    await config.transform(config, '/tools/sports/baseball-stats'),
+    await config.transform(config, '/tools/sports/fight-weight'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),
@@ -71,6 +78,8 @@ module.exports = {
     await config.transform(config, '/tools/unit/temperature'),
     await config.transform(config, '/tools/unit/time'),
     await config.transform(config, '/tools/unit/battery'),
+    await config.transform(config, '/tools/unit/fuel-economy'),
+    await config.transform(config, '/tools/unit/tire-pressure'),
     // 날짜
     await config.transform(config, '/tools/date'),
     await config.transform(config, '/tools/date/age'),
@@ -80,6 +89,7 @@ module.exports = {
     await config.transform(config, '/tools/date/history-era'),
     await config.transform(config, '/tools/date/lunar'),
     await config.transform(config, '/tools/date/jet-lag'),
+    await config.transform(config, '/tools/date/life-time'),
     // 음악
     await config.transform(config, '/tools/music'),
     await config.transform(config, '/tools/music/bpm'),

@@ -28,7 +28,7 @@ export default function UnitPricePage() {
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px 22px' }}>
             <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-              진짜 단가는 <strong style={{ color: 'var(--text)' }}>"내가 실제로 낸 돈 ÷ 실제로 받은 양"</strong>입니다. 정가나 용량만 보면 속기 쉽습니다.
+              진짜 단가는 <strong style={{ color: 'var(--text)' }}>「내가 실제로 낸 돈 ÷ 실제로 받은 양」</strong>입니다. 정가나 용량만 보면 속기 쉽습니다.
             </p>
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 18px', fontFamily: 'Syne, monospace', fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
               <p><span style={{ color: 'var(--accent)' }}>단가</span> = (가격 − 즉시할인) × (1 − 쿠폰%) + 배송비 <span style={{ color: 'var(--muted)' }}>÷</span> (용량 × 개수 × 덤 배율) × 기준단위</p>

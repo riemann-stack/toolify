@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { categories, allTools, totalTools } from '@/lib/tools'
+import AdSlot from '@/components/AdSlot'
 import styles from './page.module.css'
 
 // 인기 툴 — badge 있는 것 우선, 나머지는 카테고리별 첫 번째
@@ -131,6 +132,9 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+
+        {/* AD SLOT */}
+        <AdSlot position="in-article" minHeight={200} />
 
         {/* POPULAR TOOLS */}
         <div className={styles.sectionHeader}>
