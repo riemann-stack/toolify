@@ -138,23 +138,28 @@ export default function TapTempoPage() {
         {/* ── 5. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '측정한 BPM이 실제 곡과 2배 차이나요.',
-                a: '하프타임(Half-time)으로 체감되는 장르에서 흔히 발생합니다. 트랩·DnB는 드럼이 65~85로 들리지만 공식 BPM은 130~170입니다. 반대로 발라드에서 8분음표로 탭하면 실제의 2배가 측정됩니다. 곡의 강박(킥 드럼, 기타 스트로크)에 맞춰 다시 탭해보세요.' },
+                a: '<strong>하프타임(Half-time)</strong>으로 체감되는 장르에서 흔히 발생합니다. 트랩·DnB는 드럼이 65~85로 들리지만 공식 BPM은 130~170입니다. 반대로 발라드에서 8분음표로 탭하면 실제의 2배가 측정됩니다. 곡의 강박(킥 드럼, 기타 스트로크)에 맞춰 다시 탭해보세요.' },
               { q: '메트로놈에서 소리가 안 나요.',
-                a: '브라우저 자동재생 정책 때문에 ▶ 시작 버튼을 누른 뒤에만 소리가 나옵니다. iOS Safari는 묵음 모드(벨 스위치)에서도 Web Audio가 재생되지 않을 수 있으니 확인하세요. 볼륨도 함께 체크하세요.' },
+                a: '브라우저 자동재생 정책 때문에 <strong>▶ 시작 버튼을 누른 뒤에만</strong> 소리가 나옵니다. iOS Safari는 묵음 모드(벨 스위치)에서도 Web Audio가 재생되지 않을 수 있으니 확인하세요. 볼륨도 함께 체크하세요.' },
               { q: '박자감 테스트의 별점 기준은?',
-                a: '오차율 기준입니다. ⭐⭐⭐(1% 이하) = 프로 수준 · ⭐⭐(3% 이하) = 훌륭함 · ⭐(5% 이하) = 좋음 · 연습 필요(10% 이하) · 메트로놈 연습 권장(그 이상). 참고로 BPM 120 기준 1% 오차는 1.2 BPM, 즉 탭 간격 5ms 차이입니다.' },
+                a: '오차율 기준입니다. <strong>⭐⭐⭐(1% 이하) = 프로 수준 · ⭐⭐(3% 이하) = 훌륭함 · ⭐(5% 이하) = 좋음</strong> · 연습 필요(10% 이하) · 메트로놈 연습 권장(그 이상). 참고로 BPM 120 기준 1% 오차는 1.2 BPM, 즉 탭 간격 5ms 차이입니다.' },
               { q: '정확도(%)는 어떻게 계산되나요?',
-                a: '탭 간격의 표준편차(stdDev)를 기반으로 계산합니다. 간격이 매번 일정할수록 표준편차가 작고 정확도가 100%에 가깝습니다. 표준편차 20ms 이하면 거의 100%, 100ms 이상이면 0%로 선형 환산됩니다.' },
+                a: '탭 간격의 <strong>표준편차(stdDev)</strong>를 기반으로 계산합니다. 간격이 매번 일정할수록 표준편차가 작고 정확도가 100%에 가깝습니다. 표준편차 20ms 이하면 거의 100%, 100ms 이상이면 0%로 선형 환산됩니다.' },
               { q: '모바일에서도 사용 가능한가요?',
-                a: '네, 터치에 최적화되어 있습니다. 큰 원형 버튼을 손가락으로 탭하면 되고, 메트로놈과 박자감 테스트 모두 모바일에서 동일하게 작동합니다. 단, 배경에서 앱 전환 시 Web Audio가 일시 정지될 수 있습니다.' },
-            ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+                a: '네, <strong>터치에 최적화</strong>되어 있습니다. 큰 원형 버튼을 손가락으로 탭하면 되고, 메트로놈과 박자감 테스트 모두 모바일에서 동일하게 작동합니다. 단, 배경에서 앱 전환 시 Web Audio가 일시 정지될 수 있습니다.' },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

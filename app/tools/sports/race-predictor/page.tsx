@@ -3,7 +3,7 @@ import RacePredictorClient from './RacePredictorClient'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
-  path: '/tools/health/race-predictor',
+  path: '/tools/sports/race-predictor',
   title: '마라톤 레이스 기록 예측 계산기 — VDOT·Riegel·훈련 페이스',
   description: '5km·10km·하프 기록으로 풀 마라톤 예상 기록 계산. Riegel·VDOT·Cameron 3가지 공식 비교, Jack Daniels 훈련 페이스(E/M/T/I/R), 구간별 스플릿, 기온·습도·고도 보정까지.',
   keywords: ['마라톤예측계산기', '레이스기록예측', 'VDOT계산기', 'Riegel공식', '잭다니엘스훈련페이스', '마라톤서브3', '마라톤서브4', '네거티브스플릿', '페이스전략'],
@@ -215,7 +215,7 @@ export default function RacePredictorPage() {
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '페이스 ↔ 완주 시간·시속 변환' },
+              { href: '/tools/sports/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '페이스 ↔ 완주 시간·시속 변환' },
               { href: '/tools/health/bmr',        icon: '🔥', name: '기초대사량(BMR) 계산기',   desc: '훈련일 하루 칼로리 산정' },
               { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '레이스 전 체중 조절 계획' },
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',              desc: '다음 마라톤까지 남은 날' },

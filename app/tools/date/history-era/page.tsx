@@ -198,9 +198,9 @@ export default function HistoryEraPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/age',    icon: '🎂', name: '만 나이 계산기',     desc: '2023 만 나이 통일법 기준' },
-              { href: '/tools/date/dday',   icon: '📅', name: 'D-day 계산기',       desc: '목표일까지 남은 일수' },
-              { href: '/tools/date/diff',   icon: '📆', name: '날짜 차이 계산기',   desc: '두 날짜 사이 기간 계산' },
+              { href: '/tools/date/dday',   icon: '📅', name: 'D-day 계산기·일정 관리', desc: '두 날짜 사이·페이스 통합' },
               { href: '/tools/date/military',icon:'🎖️', name: '군 전역일 계산기',   desc: '전역일·복무율 계산' },
+              { href: '/tools/date/lunar',  icon: '🌙', name: '음양력 변환기',       desc: '띠·세시풍속' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

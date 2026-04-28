@@ -229,7 +229,7 @@ export default function BmrPage() {
             {[
               { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',               desc: '현재 체중이 적정 범위인지 확인' },
               { href: '/tools/health/weightloss',  icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
-              { href: '/tools/health/pace',        icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 훈련 시 목표 페이스 계산' },
+              { href: '/tools/sports/pace',        icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 훈련 시 목표 페이스 계산' },
               { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',           desc: '식사·운동 루틴을 집중해서 관리' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

@@ -125,23 +125,28 @@ export default async function BpmPage({
         {/* ── 4. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '점음표(dotted)는 왜 ×1.5인가요?',
-                a: '점음표는 원래 음표 길이에 절반을 더한 값입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 딜레이에서 점음표 설정은 Slapback echo나 핑퐁 딜레이에서 리듬감을 극대화할 때 많이 사용합니다.' },
+                a: '점음표는 원래 음표 길이에 <strong>절반을 더한 값</strong>입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 딜레이에서 점음표 설정은 Slapback echo나 핑퐁 딜레이에서 리듬감을 극대화할 때 많이 사용합니다.' },
               { q: '셋잇단음표(triplet)는 ×⅔인 이유는?',
-                a: '셋잇단음표는 2박자 공간에 3개의 음을 넣는 방식으로, 1개 음의 길이가 원래 값의 2/3입니다. BPM 120의 4분음표는 500ms이지만 셋잇단 4분음표는 약 333ms입니다. 트리플렛 딜레이는 펑키하고 스윙감 있는 그루브를 만들 때 효과적입니다.' },
+                a: '셋잇단음표는 <strong>2박자 공간에 3개의 음을 넣는 방식</strong>으로, 1개 음의 길이가 원래 값의 2/3입니다. BPM 120의 4분음표는 500ms이지만 셋잇단 4분음표는 약 333ms입니다. 트리플렛 딜레이는 펑키하고 스윙감 있는 그루브를 만들 때 효과적입니다.' },
               { q: 'BPM이 소수(예: 128.5)여도 계산되나요?',
-                a: '네, 이 계산기는 소수점 BPM도 지원합니다. 예를 들어 128.5 BPM의 4분음표 딜레이는 60,000 ÷ 128.5 ≈ 467ms입니다. 하드웨어 드럼머신이나 빈티지 신디사이저의 경우 정수가 아닌 BPM이 있을 수 있습니다.' },
+                a: '네, 이 계산기는 소수점 BPM도 지원합니다. 예를 들어 128.5 BPM의 4분음표 딜레이는 <code>60,000 ÷ 128.5 ≈ 467ms</code>입니다. 하드웨어 드럼머신이나 빈티지 신디사이저의 경우 정수가 아닌 BPM이 있을 수 있습니다.' },
               { q: '딜레이 피드백(Feedback)은 어떻게 설정하나요?',
-                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 20~40% 설정이 자연스럽고, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
+                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 <strong>20~40% 설정이 자연스럽고</strong>, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
               { q: '리버브 프리딜레이와 딜레이 타임의 차이는?',
-                a: '딜레이 타임은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. 리버브 프리딜레이는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 16분음표 이하의 짧은 값(10~125ms)을 사용합니다.' },
-            ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+                a: '<strong>딜레이 타임</strong>은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. <strong>리버브 프리딜레이</strong>는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 16분음표 이하의 짧은 값(10~125ms)을 사용합니다.' },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

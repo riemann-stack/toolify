@@ -1,0 +1,592 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #FF8C8C; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 6px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+.subLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 입력 모드 ── */
+.modeToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.modeBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.modeBtn:hover { color: var(--text); }
+.modeRecord { border-color: rgba(255,217,62,0.40); }
+.modeTarget { border-color: rgba(62,200,255,0.40); }
+.modeRecord.modeActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
+.modeTarget.modeActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+
+/* ── 시간 입력 (분:초 / 시:분:초) ── */
+.timeInputRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.timeInputRow3 {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.timeColon { color: var(--muted); font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 800; text-align: center; }
+.timeInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  font-size: 18px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+.timeInput:focus { border-color: #FFD93E; }
+.timeInput::-webkit-outer-spin-button,
+.timeInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.timeInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.distSelect {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) center, calc(100% - 12px) center;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+.distSelect:focus { border-color: #FFD93E; }
+.distSelect option { background: #1a1a1a; color: var(--text); }
+
+.recordTabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.recordTabBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.recordTabBtn:hover { color: var(--text); }
+.recordTabActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
+
+.vdotShow {
+  font-size: 12px;
+  color: #FFD93E;
+  margin-top: 6px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ── 훈련 목적 5종 ── */
+.goalGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .goalGrid { grid-template-columns: 1fr 1fr; }
+}
+.goalBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.goalBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.goalIcon { font-size: 18px; }
+.goalLabel { font-size: 11.5px; font-weight: 600; }
+.goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: 0.04em; }
+
+.goalSpeed { border-color: rgba(255,107,107,0.40); }
+.goal5k    { border-color: var(--accent); }
+.goal10k   { border-color: rgba(255,140,62,0.40); }
+.goalHalf  { border-color: rgba(62,200,255,0.40); }
+.goalMar   { border-color: rgba(155,89,182,0.40); }
+.goalSpeed.goalActive { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.goal5k.goalActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.goal10k.goalActive   { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.goalHalf.goalActive  { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.goalMar.goalActive   { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+
+/* ── 인터벌 거리 체크박스 ── */
+.distGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .distGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.distBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  position: relative;
+}
+.distBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.distActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.dist800 .distYassoBadge {
+  position: absolute;
+  top: -8px;
+  right: -2px;
+  background: #FFD93E;
+  color: #000;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid rgba(255,217,62,0.40);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 9vw, 56px);
+  font-weight: 800;
+  color: #FFD93E;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 랩타임 표 ── */
+.lapTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.lapTable th, .lapTable td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.lapTable th:first-child, .lapTable td:first-child { text-align: left; }
+.lapTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Syne', sans-serif; }
+.lapTable td:nth-child(2) { font-family: 'Syne', sans-serif; font-weight: 800; color: #FFD93E; font-size: 14px; }
+.lapTable td:nth-child(3) { font-family: 'Syne', sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
+.lapTable .standardRow td { background: rgba(255,217,62,0.04); }
+.lapCopyBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.12s;
+}
+.lapCopyBtn:hover { color: #FFD93E; border-color: #FFD93E; }
+.lapCopyBtn.copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; }
+
+/* ── 추천 훈련 카드 ── */
+.recoCard {
+  background: rgba(255,217,62,0.05);
+  border: 1px solid rgba(255,217,62,0.30);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.recoTitle {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #FFD93E;
+  margin-bottom: 12px;
+}
+.recoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.recoRow:last-child { border-bottom: none; }
+.recoRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* ── 회복 가이드 표 ── */
+.recoveryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.recoveryTable th, .recoveryTable td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.recoveryTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.recoveryTable td:first-child {
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+/* ── 경고 카드 ── */
+.warnCard {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+.warnTitle {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #FF6B6B;
+  margin-bottom: 10px;
+}
+.warnList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.warnList li {
+  padding-left: 18px;
+  position: relative;
+}
+.warnList li::before {
+  content: '•';
+  color: #FF6B6B;
+  position: absolute;
+  left: 6px;
+  font-weight: 800;
+}
+
+/* ── 야소 800 신뢰도 배지 ── */
+.relBadge {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 8px;
+}
+.relLow    { background: rgba(255,140,62,0.15); color: #FF8C3E; }
+.relMid    { background: rgba(255,217,62,0.15); color: #FFD93E; }
+.relHigh   { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+
+/* ── 야소 800 안내 카드 ── */
+.yassoNote {
+  background: rgba(255,140,62,0.06);
+  border: 2px solid rgba(255,140,62,0.30);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+.yassoNoteTitle {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #FF8C3E;
+  margin-bottom: 10px;
+}
+.yassoNoteText {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.yassoNoteText ul { padding-left: 18px; margin: 8px 0 0; }
+.yassoNoteText li { padding: 2px 0; color: var(--muted); }
+
+/* ── 야소 진행 표 ── */
+.yassoTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.yassoTable th, .yassoTable td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.yassoTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.yassoTable td:first-child { color: #FFD93E; font-family: 'Syne', sans-serif; font-weight: 700; }
+.yassoTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.yassoTable td:last-child { color: var(--muted); font-size: 12px; }
+
+/* ── 후반 분석 ── */
+.splitsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+}
+.splitInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+.splitInput:focus { border-color: #FFD93E; }
+
+/* ── 슬라이더 ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.sliderRow input[type=range] {
+  flex: 1;
+  accent-color: #FFD93E;
+}
+.sliderValue {
+  min-width: 64px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: #FFD93E;
+  text-align: right;
+}
+
+/* ── 스케줄 표 ── */
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.scheduleTable th, .scheduleTable td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.scheduleTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.scheduleTable td:first-child {
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.scheduleTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
+.scheduleTable td:last-child {
+  text-align: right;
+  font-size: 11.5px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.phaseAdapt  td:last-child { color: #3EFF9B; }
+.phaseDevel  td:last-child { color: var(--accent); }
+.phaseRecov  td:last-child { color: #3EC8FF; }
+.phasePeak   td:last-child { color: #FF8C3E; }
+.phaseTaper  td:last-child { color: #C485E0; }
+
+.scheduleDetailCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+.scheduleDetailCard div { color: var(--muted); padding: 3px 0; }
+.scheduleDetailCard strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+.marathonExtra {
+  background: rgba(155,89,182,0.06);
+  border: 1px solid rgba(155,89,182,0.30);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.marathonExtra strong { color: #C485E0; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.marathonExtra ul { padding-left: 18px; margin: 8px 0 0; color: var(--muted); }
+
+/* ── 결과 복사 ── */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: #FFD93E; color: #FFD93E; }
+.copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }

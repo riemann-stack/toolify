@@ -225,7 +225,7 @@ export default function FightWeightPage() {
               { href: '/tools/health/bmi',         icon: '⚖️', name: '비만도(BMI) 계산기',       desc: '체질량지수로 비만도 빠르게 확인' },
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기',  desc: '하루 권장 칼로리·BMR 계산' },
               { href: '/tools/health/weightloss',  icon: '🎯', name: '체중 감량 기간 계산기',    desc: '목표 체중까지 칼로리 적자' },
-              { href: '/tools/health/one-rm',      icon: '🏋️', name: '1RM 계산기',               desc: '근력 훈련 최대 중량 추정' },
+              { href: '/tools/sports/one-rm',      icon: '🏋️', name: '1RM 계산기',               desc: '근력 훈련 최대 중량 추정' },
               { href: '/tools/health/supplement',  icon: '💊', name: '영양제 성분 체크 계산기',  desc: '영양제 성분 중복·상한량 체크' },
             ].map((t, i) => (
               <Link

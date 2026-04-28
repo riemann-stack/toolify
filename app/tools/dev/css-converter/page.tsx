@@ -221,19 +221,26 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
 
         {/* 7. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            자주 묻는 질문 (FAQ)
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { q: 'rem과 em의 차이는 무엇인가요?', a: 'rem은 root 요소(html)의 font-size를 기준으로, em은 부모 요소의 font-size를 기준으로 합니다. 중첩된 컴포넌트에서 em은 누적 계산되어 예상과 다른 결과가 나올 수 있어 일관성이 필요한 경우 rem을 권장합니다.' },
-              { q: 'line-height에 unitless가 권장되는 이유는?', a: 'line-height: 1.5처럼 단위 없는 값은 자식 요소에 상속될 때 자식의 font-size를 기준으로 재계산됩니다. 반면 em이나 %는 계산된 px값이 그대로 상속되어 자식의 font-size가 다를 때 의도와 다른 결과가 나올 수 있습니다.' },
-              { q: 'clamp()에서 vw 단위만 쓰면 안 되나요?', a: 'font-size: 2vw처럼 vw만 쓰면 최솟값·최댓값 제한이 없어 매우 좁거나 넓은 화면에서 글자가 너무 작거나 커집니다. clamp(min, preferred, max)로 안전한 범위를 설정하는 것이 권장됩니다.' },
-              { q: 'letter-spacing에 % 단위를 쓸 수 있나요?', a: 'CSS 명세상 letter-spacing은 % 단위를 공식 지원하지 않습니다. 실무에서는 em 단위를 권장합니다. 1em = font-size와 같은 크기이므로 font-size가 변경되어도 자간 비율이 자동으로 유지됩니다.' },
-              { q: 'aspect-ratio와 padding-top 방식 중 어느 것을 써야 하나요?', a: 'IE를 지원하지 않는다면 aspect-ratio가 훨씬 직관적이고 권장됩니다. IE 지원이 필요하거나 레거시 코드를 다룬다면 padding-top 방식을 사용하세요. 이 계산기에서 두 방법의 코드를 모두 확인하고 복사할 수 있습니다.' },
-            ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--accent)', marginBottom: '8px' }}>Q. {item.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{item.a}</p>
-              </div>
+              { q: 'rem과 em의 차이는 무엇인가요?', a: '<strong>rem</strong>은 root 요소(html)의 font-size를 기준으로, <strong>em</strong>은 부모 요소의 font-size를 기준으로 합니다. 중첩된 컴포넌트에서 em은 누적 계산되어 예상과 다른 결과가 나올 수 있어 <strong>일관성이 필요한 경우 rem을 권장</strong>합니다.' },
+              { q: 'line-height에 unitless가 권장되는 이유는?', a: '<code>line-height: 1.5</code>처럼 <strong>단위 없는 값은 자식 요소에 상속될 때 자식의 font-size를 기준으로 재계산</strong>됩니다. 반면 em이나 %는 계산된 px값이 그대로 상속되어 자식의 font-size가 다를 때 의도와 다른 결과가 나올 수 있습니다.' },
+              { q: 'clamp()에서 vw 단위만 쓰면 안 되나요?', a: '<code>font-size: 2vw</code>처럼 vw만 쓰면 최솟값·최댓값 제한이 없어 매우 좁거나 넓은 화면에서 글자가 너무 작거나 커집니다. <strong>clamp(min, preferred, max)</strong>로 안전한 범위를 설정하는 것이 권장됩니다.' },
+              { q: 'letter-spacing에 % 단위를 쓸 수 있나요?', a: 'CSS 명세상 <strong>letter-spacing은 % 단위를 공식 지원하지 않습니다.</strong> 실무에서는 em 단위를 권장합니다. 1em = font-size와 같은 크기이므로 font-size가 변경되어도 자간 비율이 자동으로 유지됩니다.' },
+              { q: 'aspect-ratio와 padding-top 방식 중 어느 것을 써야 하나요?', a: 'IE를 지원하지 않는다면 <strong>aspect-ratio가 훨씬 직관적</strong>이고 권장됩니다. IE 지원이 필요하거나 레거시 코드를 다룬다면 padding-top 방식을 사용하세요. 이 계산기에서 두 방법의 코드를 모두 확인하고 복사할 수 있습니다.' },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

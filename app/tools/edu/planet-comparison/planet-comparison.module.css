@@ -1,0 +1,619 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 우주 분위기 ── */
+.spaceBg {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(62,91,255,0.12), transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(155,89,182,0.10), transparent 55%),
+    var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 22px;
+  overflow: hidden;
+}
+.spaceBg::before {
+  /* 별 점들 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%,  #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 64%,      #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 47% 22%,  rgba(255,255,255,0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 60% 80%,      #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 75% 12%,  rgba(255,255,255,0.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 50%,      #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 92% 90%,      rgba(255,255,255,0.5) 50%, transparent 51%);
+  background-size: 100% 100%;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.spaceBg > * { position: relative; z-index: 1; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(62,255,208,0.06);
+  border: 1px solid rgba(62,255,208,0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #3EFFD0; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+.subLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 입력 ── */
+.bigInput, .smallInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+.bigInput { font-size: 18px; padding: 12px 14px; }
+.smallInput { font-size: 15px; }
+.bigInput:focus, .smallInput:focus { border-color: #3EFFD0; }
+.bigInput::-webkit-outer-spin-button,
+.bigInput::-webkit-inner-spin-button,
+.smallInput::-webkit-outer-spin-button,
+.smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.bigInput[type=number], .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.textInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.textInput:focus { border-color: #3EFFD0; }
+
+.gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
+.gridThree { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .gridThree { grid-template-columns: 1fr; } }
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sliderRow input[type=range] {
+  flex: 1;
+  accent-color: #3EFFD0;
+}
+.sliderValue {
+  min-width: 80px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: #3EFFD0;
+  text-align: right;
+}
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+@media (max-width: 600px) { .presetRow { grid-template-columns: 1fr; } }
+.presetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.presetActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+
+/* ── 행성 선택 ── */
+.planetCheckGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) { .planetCheckGrid { grid-template-columns: repeat(2, 1fr); } }
+
+.planetCheckBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+.planetCheckBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.planetCheckActive {
+  background: rgba(62,255,208,0.08);
+  border-color: rgba(62,255,208,0.50);
+  color: var(--text);
+  font-weight: 700;
+}
+.planetCheckDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── 크기 비교 시각화 (Hero) ── */
+.sizeCompareWrap {
+  background: rgba(0,0,0,0.20);
+  border-radius: 14px;
+  padding: 16px 12px;
+  overflow-x: auto;
+}
+.sizeCompareSvg {
+  display: block;
+  height: auto;
+  min-width: 720px;
+  max-width: 100%;
+}
+
+.sizeCompareTitle {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #3EFFD0;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.sizeCompareLabel {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--muted);
+}
+.sizeCompareLabelEarth { fill: #3EC8FF; }
+
+/* ── 행성 카드 그리드 ── */
+.planetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 720px) { .planetGrid { grid-template-columns: 1fr; } }
+
+.planetCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: 14px;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.planetCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.planetCardEmoji { font-size: 28px; }
+.planetCardName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+}
+.planetCardNameEn {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.planetIllustration {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 6px;
+}
+.planetIllustration svg {
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(0,0,0,0.5));
+}
+
+.planetStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+.planetStatItem {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.planetStatItem strong {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+.planetStatHint {
+  font-size: 10px;
+  color: var(--muted);
+  opacity: 0.75;
+  margin-top: 1px;
+  display: block;
+}
+
+.funFact {
+  background: rgba(62,255,208,0.05);
+  border-left: 3px solid #3EFFD0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 4px;
+}
+.funFact strong { color: #3EFFD0; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+
+/* 행성별 border-top 색상 */
+.borderMercury { border-top-color: #A8A29E; }
+.borderVenus   { border-top-color: #FFC857; }
+.borderEarth   { border-top-color: #3EC8FF; }
+.borderMars    { border-top-color: #FF6B6B; }
+.borderJupiter { border-top-color: #FF8C3E; }
+.borderSaturn  { border-top-color: #FFD700; }
+.borderUranus  { border-top-color: #3EFFD0; }
+.borderNeptune { border-top-color: #3E5BFF; }
+
+/* ── 비교 표 ── */
+.compareTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.compareTable th, .compareTable td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.compareTable th:first-child, .compareTable td:first-child { text-align: left; }
+.compareTable th {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.compareTable td:first-child {
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.compareTable td:not(:first-child) {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+.compareTable .earthRow td {
+  background: rgba(62,200,255,0.06);
+}
+.compareTable .earthRow td:first-child { color: #3EC8FF; }
+
+.planetDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.tableScroll { overflow-x: auto; }
+
+/* ── 중력 낙하 시뮬레이션 ── */
+.gravitySim {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 16px 12px;
+}
+.gravityRunBtn {
+  background: rgba(62,255,208,0.10);
+  border: 1px solid #3EFFD0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  color: #3EFFD0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 12px;
+}
+.gravityRunBtn:hover { background: rgba(62,255,208,0.18); }
+.gravityRunBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.gravityLanes {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 200px;
+  position: relative;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--border);
+}
+.gravityLane {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+.gravityBall {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  top: 0;
+  transition: top 3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+  box-shadow: 0 0 8px currentColor;
+}
+.gravityLabel {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── 1일 길이 비교 ── */
+.dayBars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dayBarRow {
+  display: grid;
+  grid-template-columns: 64px 1fr 110px;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+}
+@media (max-width: 480px) {
+  .dayBarRow {
+    grid-template-columns: 56px 1fr 95px;
+  }
+}
+.dayBarLabel {
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.dayBarTrack {
+  position: relative;
+  height: 16px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.dayBarFill {
+  height: 100%;
+  border-radius: 4px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+.dayBarValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+  font-size: 11.5px;
+}
+.retroFlag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 800;
+  background: rgba(255,107,107,0.14);
+  color: #FF8C8C;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-left: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 공유 카드 ── */
+.shareCard {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(62,255,208,0.18), transparent 55%),
+    radial-gradient(ellipse at 70% 80%, rgba(62,91,255,0.18), transparent 60%),
+    #0a0e1a;
+  border: 1px solid #3EFFD0;
+  border-radius: 18px;
+  padding: 24px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.shareCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 40% 70%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 75% 35%, rgba(255,255,255,0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 60%, #fff 50%, transparent 51%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.shareCard > * { position: relative; }
+.shareTitle {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: #3EFFD0;
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.shareSubtitle {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 18px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.shareSubtitle strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; }
+
+.shareList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.shareListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  padding: 4px 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.shareListItem strong {
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+.shareRecommend {
+  background: rgba(62,255,208,0.10);
+  border: 1px solid rgba(62,255,208,0.30);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.shareRecommend strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; }
+
+.shareWatermark {
+  position: absolute;
+  bottom: 10px;
+  right: 16px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  color: rgba(62,255,208,0.6);
+  letter-spacing: 0.04em;
+}
+
+/* ── 안내 카드 ── */
+.warningCard {
+  background: rgba(255,107,107,0.05);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.warningCard strong { color: #FF8C8C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warningCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
+
+.sourceCard {
+  background: rgba(62,200,255,0.05);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.sourceCard strong { color: #3EC8FF; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+
+/* ── 결과 복사 ── */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
+.copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

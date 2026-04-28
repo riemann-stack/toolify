@@ -208,9 +208,8 @@ export default function LaundryDryPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/pomodoro',    icon: '🍅', name: '뽀모도로 타이머',  desc: '건조 시간 동안 집중 작업' },
-              { href: '/tools/date/dday',        icon: '📅', name: 'D-day 계산기',     desc: '빨래 완료 예정 시각 관리' },
+              { href: '/tools/date/dday',        icon: '📅', name: 'D-day 계산기·일정 관리', desc: '두 날짜 사이·시간 단위 기간' },
               { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',       desc: '°C ↔ °F ↔ K 즉시 변환' },
-              { href: '/tools/date/diff',        icon: '📆', name: '날짜 차이 계산기',  desc: '시간 단위 기간 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

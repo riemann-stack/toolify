@@ -326,6 +326,9 @@
 .cat_sports::before { background: #FFD93E; }
 .cat_sports:hover   { border-color: rgba(255,217,62,0.3); background: rgba(255,217,62,0.04); }
 
+.cat_interior::before { background: #E89757; }
+.cat_interior:hover   { border-color: rgba(232,151,87,0.3); background: rgba(232,151,87,0.04); }
+
 /* ── TOOLS GRID ── */
 .toolsGrid {
   display: grid;

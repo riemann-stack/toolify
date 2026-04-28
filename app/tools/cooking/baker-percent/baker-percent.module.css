@@ -1,0 +1,707 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #FF8C8C; }
+
+/* ── 탭 4개 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+@media (max-width: 600px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+.subLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 입력 ── */
+.bigInput, .smallInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+.bigInput { font-size: 18px; padding: 12px 14px; }
+.smallInput { font-size: 15px; }
+.bigInput:focus, .smallInput:focus { border-color: var(--accent); }
+.bigInput::-webkit-outer-spin-button,
+.bigInput::-webkit-inner-spin-button,
+.smallInput::-webkit-outer-spin-button,
+.smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.bigInput[type=number], .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.textInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.textInput:focus { border-color: var(--accent); }
+
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 슬라이더 ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sliderRow input[type=range] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.sliderValue {
+  min-width: 88px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--accent);
+  text-align: right;
+}
+
+/* ── 프리셋 카드 8개 ── */
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 720px) { .presetGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .presetGrid { grid-template-columns: 1fr 1fr; } }
+
+.presetCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.presetCard:hover { border-color: var(--border-hover); }
+.presetIcon { font-size: 28px; }
+.presetName { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 4px; }
+.presetNote { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
+.presetActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.presetActive .presetName { color: var(--accent); }
+.presetActive::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* ── 빠른 스케일 버튼 ── */
+.scaleRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+.scaleBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.scaleBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.scaleHalf  { border-color: rgba(62,200,255,0.40); }
+.scaleOne   { border-color: var(--accent); }
+.scaleTwo   { border-color: rgba(255,140,62,0.40); }
+.scaleThree { border-color: rgba(255,107,107,0.40); }
+
+/* 빠른 밀가루 양 버튼 */
+.flourQuickRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.flourQuickBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.flourQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.flourQuickActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+
+/* ── 카테고리 선택 ── */
+.catSelect {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 12px) center, calc(100% - 8px) center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+.catSelect option { background: #1a1a1a; color: var(--text); }
+
+/* ── 재료 행 (탭 1·2·3) ── */
+.ingredientList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ingredientRow {
+  display: grid;
+  grid-template-columns: 12px 1fr 90px 70px 30px;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+@media (max-width: 600px) {
+  .ingredientRow {
+    grid-template-columns: 12px 1fr 80px 28px;
+    gap: 6px;
+  }
+  .ingredientRow .catCell { display: none; }
+}
+.ingredientRow input { background: transparent; border: 1px dashed transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }
+.ingredientRow input:focus { border-color: var(--accent); background: var(--bg2); }
+.ingredientRow .nameCell input { color: var(--text); font-weight: 600; font-size: 13px; }
+.ingredientRow .weightCell { display: flex; align-items: center; gap: 4px; }
+.ingredientRow .weightCell input { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); text-align: right; }
+.ingredientRow .pctCell { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; padding-right: 4px; }
+.ingredientRow .pctCell input { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; }
+
+.ingFlour    { border-left-color: var(--accent); }
+.ingLiquid   { border-left-color: #3EC8FF; }
+.ingSalt     { border-left-color: #FFD93E; }
+.ingYeast    { border-left-color: #9B59B6; }
+.ingSugar    { border-left-color: #FF8C3E; }
+.ingFat      { border-left-color: #FFD700; }
+.ingOther    { border-left-color: var(--muted); }
+
+.removeBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
+
+.addRowBtn {
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: all 0.15s;
+}
+.addRowBtn:hover { color: var(--accent); border-color: var(--accent); }
+
+.dotIcon { width: 8px; height: 8px; border-radius: 50%; }
+.dotFlour    { background: var(--accent); }
+.dotLiquid   { background: #3EC8FF; }
+.dotSalt     { background: #FFD93E; }
+.dotYeast    { background: #9B59B6; }
+.dotSugar    { background: #FF8C3E; }
+.dotFat      { background: #FFD700; }
+.dotOther    { background: var(--muted); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 26px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 8vw, 50px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 핵심 지표 4개 ── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 600px) { .metricsGrid { grid-template-columns: 1fr 1fr; } }
+
+.metricCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: 12px;
+  padding: 12px 12px;
+  text-align: center;
+}
+.metricLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-family: 'Noto Sans KR', sans-serif; }
+.metricValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.metricHint { font-size: 10.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+.metricHydration { border-top-color: #3EC8FF; }
+.metricHydration .metricValue { color: #3EC8FF; }
+.metricSalt      { border-top-color: #FFD93E; }
+.metricSalt      .metricValue { color: #FFD93E; }
+.metricYeast     { border-top-color: #9B59B6; }
+.metricYeast     .metricValue { color: #C485E0; }
+.metricSugar     { border-top-color: #FF8C3E; }
+.metricSugar     .metricValue { color: #FF8C3E; }
+
+/* ── 수분율 게이지 ── */
+.gaugeWrap {
+  margin-top: 14px;
+}
+.gaugeBar {
+  position: relative;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(90deg,
+    #3EFF9B 0%,
+    #3EFF9B 35%,
+    var(--accent) 35%,
+    var(--accent) 65%,
+    #FF8C3E 65%,
+    #FF8C3E 85%,
+    #FF6B6B 85%,
+    #FF6B6B 100%
+  );
+  overflow: visible;
+}
+.gaugeMarker {
+  position: absolute;
+  top: -4px;
+  width: 4px;
+  height: 26px;
+  background: var(--text);
+  border-radius: 2px;
+  transform: translateX(-2px);
+  box-shadow: 0 0 0 2px var(--bg2);
+}
+.gaugeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+/* ── 합계 표 ── */
+.summaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.summaryTable th, .summaryTable td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.summaryTable th:first-child, .summaryTable td:first-child { text-align: left; }
+.summaryTable th:nth-child(2), .summaryTable td:nth-child(2) { text-align: left; }
+.summaryTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.summaryTable td:first-child { color: var(--text); font-weight: 600; }
+.summaryTable td:nth-child(2) { color: var(--muted); font-size: 11.5px; }
+.summaryTable td:nth-child(3) { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.summaryTable td:nth-child(4) { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+
+.summaryTable tr.flourRow td { background: rgba(200,255,62,0.05); }
+.summaryTable tr.liquidRow td { background: rgba(62,200,255,0.04); }
+.summaryTable tr.totalRow td {
+  background: var(--accent-dim);
+  border-top: 2px solid rgba(200,255,62,0.3);
+  border-bottom: none;
+  font-weight: 800;
+}
+.summaryTable tr.totalRow td:first-child { color: var(--accent); }
+.summaryTable tr.totalRow td:nth-child(3) { color: var(--accent); font-size: 14px; }
+.summaryTable tr.totalRow td:nth-child(4) { color: var(--accent); font-size: 14px; }
+
+/* ── 분석 문구 ── */
+.analysisCard {
+  background: var(--bg3);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.analysisCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.analysisCard ul { padding-left: 20px; margin: 6px 0 0; color: var(--muted); }
+.analysisCard li { padding: 2px 0; }
+
+/* ── 빵 종류별 예상 완성품 ── */
+.outputCard {
+  background: rgba(255,140,62,0.05);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+.outputTitle {
+  font-size: 13px;
+  color: #FF8C3E;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.outputGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 6px;
+}
+.outputItem {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.outputItem p:first-child { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+.outputItem p:last-child {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: var(--text);
+  font-size: 16px;
+}
+
+/* ── 르방 분리 표 (탭 4) ── */
+.prefermentTypeRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) { .prefermentTypeRow { grid-template-columns: 1fr 1fr; } }
+.prefermentTypeBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.prefermentTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.prefermentActive {
+  background: rgba(155,89,182,0.12);
+  color: #C485E0;
+  border-color: #9B59B6;
+  font-weight: 700;
+}
+
+.dualTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.dualTable th, .dualTable td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.dualTable th:first-child, .dualTable td:first-child { text-align: left; }
+.dualTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.dualTable td:first-child { color: var(--text); font-weight: 600; }
+.dualTable .colMain      { background: var(--bg2);                     color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.dualTable .colPreferment{ background: rgba(155,89,182,0.06);          color: #C485E0;     font-family: 'Syne', sans-serif; font-weight: 700; }
+.dualTable .colTotal     { background: var(--accent-dim);              color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.dualTable .zero { color: var(--muted); opacity: 0.6; font-weight: 500; }
+.dualTable tr.totalRow td {
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+  font-size: 14px;
+}
+
+/* ── 이스트 변환기 ── */
+.yeastCard {
+  background: rgba(155,89,182,0.06);
+  border: 1px solid rgba(155,89,182,0.30);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+.yeastTitle {
+  font-size: 13px;
+  color: #C485E0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.yeastConvRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.yeastConvRow:last-child { border-bottom: none; }
+.yeastConvRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* ── 수분율 가이드 카드 ── */
+.hydroGuide {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.hydroGuide th, .hydroGuide td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.hydroGuide th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.hydroGuide td:first-child { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 800; }
+.hydroLow    td:first-child { color: #3EFF9B !important; }
+.hydroMid    td:first-child { color: var(--accent) !important; }
+.hydroHigh   td:first-child { color: #FF8C3E !important; }
+.hydroVHigh  td:first-child { color: #FF6B6B !important; }
+
+/* ── 즐겨찾기 ── */
+.favSection { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.favHeader { display: flex; justify-content: space-between; align-items: center; }
+.favTitle {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.favSaveRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+.favSaveBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.favSaveBtn:hover { color: var(--accent); border-color: var(--accent); }
+
+.favList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px;
+}
+.favItem {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+.favItemName { font-size: 13px; color: var(--text); font-weight: 700; font-family: 'Noto Sans KR', sans-serif; }
+.favItemMeta { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; }
+.favItemBtns { display: flex; gap: 4px; margin-top: 4px; }
+.favLoadBtn, .favDeleteBtn {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.favLoadBtn:hover { color: var(--accent); border-color: var(--accent); }
+.favDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
+
+/* ── 결과 복사 ── */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

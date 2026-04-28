@@ -209,23 +209,28 @@ export default function CapoPage() {
         {/* ── 6. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '카포를 쓰면 음질이 나빠지나요?',
-                a: '고품질 카포 사용 시 음질 차이는 거의 없습니다. 다만 카포가 너무 느슨하거나 타이트하면 음정이 틀어질 수 있습니다. 카포 장착 후 반드시 튜닝을 다시 확인하세요.' },
+                a: '<strong>고품질 카포 사용 시 음질 차이는 거의 없습니다.</strong> 다만 카포가 너무 느슨하거나 타이트하면 음정이 틀어질 수 있습니다. 카포 장착 후 반드시 튜닝을 다시 확인하세요.' },
               { q: '카포 7프렛 이상은 왜 잘 안 쓰나요?',
-                a: '프렛이 높아질수록 현의 장력이 높아져 음정이 불안정해지고 코드 잡기도 어려워집니다. 또한 가청 음역대가 너무 높아져 기타 특유의 따뜻한 음색이 사라집니다. 일반적으로 카포 5프렛 이하를 권장합니다.' },
+                a: '프렛이 높아질수록 현의 장력이 높아져 음정이 불안정해지고 코드 잡기도 어려워집니다. 또한 가청 음역대가 너무 높아져 기타 특유의 따뜻한 음색이 사라집니다. 일반적으로 <strong>카포 5프렛 이하를 권장</strong>합니다.' },
               { q: '카포 없이 전조하려면 어떻게 하나요?',
-                a: '모든 코드를 반음 단위로 이동하면 됩니다. 예를 들어 C키를 D키로 올리려면 모든 코드를 2반음 올립니다. C→D, Am→Bm, F→G, G→A. 이 계산기의 "전조" 탭을 활용하세요.' },
+                a: '모든 코드를 반음 단위로 이동하면 됩니다. 예를 들어 C키를 D키로 올리려면 모든 코드를 2반음 올립니다. <code>C→D, Am→Bm, F→G, G→A</code>. 이 계산기의 "전조" 탭을 활용하세요.' },
               { q: '같은 키라도 카포 위치에 따라 음색이 다른가요?',
-                a: '네, 다릅니다. 카포가 높을수록 현의 진동 부분이 짧아져 더 밝고 날카로운 소리가 납니다. 카포 없는 낮은 포지션은 따뜻하고 풍부한 음색, 카포 5프렛 이상은 맑고 영롱한 음색입니다. 같은 C키라도 카포 없음(C코드)과 카포 3프렛(A코드)은 음색이 확실히 다릅니다.' },
+                a: '네, 다릅니다. 카포가 높을수록 현의 진동 부분이 짧아져 <strong>더 밝고 날카로운 소리</strong>가 납니다. 카포 없는 낮은 포지션은 따뜻하고 풍부한 음색, 카포 5프렛 이상은 맑고 영롱한 음색입니다. 같은 C키라도 카포 없음(C코드)과 카포 3프렛(A코드)은 음색이 확실히 다릅니다.' },
               { q: '우쿨렐레에도 카포를 쓸 수 있나요?',
-                a: '네. 우쿨렐레용 카포가 별도로 있으며 기타와 같은 원리로 작동합니다. 다만 우쿨렐레는 G-C-E-A 조율이 기본이라 코드 이름이 기타와 다를 수 있습니다. 이 계산기의 반음 단위 계산 원리는 동일하게 적용됩니다.' },
-            ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+                a: '네. <strong>우쿨렐레용 카포가 별도로 있으며</strong> 기타와 같은 원리로 작동합니다. 다만 우쿨렐레는 G-C-E-A 조율이 기본이라 코드 이름이 기타와 다를 수 있습니다. 이 계산기의 반음 단위 계산 원리는 동일하게 적용됩니다.' },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

@@ -272,8 +272,7 @@ export default function ZodiacPage() {
               { href: '/tools/date/age',          icon: '🎂', name: '만 나이 계산기',            desc: '법 개정 기준 만 나이' },
               { href: '/tools/date/lunar',        icon: '🌙', name: '양음력 변환기',             desc: '음력 ↔ 양력 변환·간지 확인' },
               { href: '/tools/date/history-era',  icon: '📜', name: '역사 연호·연대 변환기',     desc: '단기·조선 왕 연호·간지' },
-              { href: '/tools/date/diff',         icon: '📆', name: '날짜 차이 계산기',          desc: '두 날짜 사이 기간' },
-              { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',              desc: '생일까지 남은 날 계산' },
+              { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기·일정 관리',    desc: '생일까지·두 날짜 사이·페이스' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

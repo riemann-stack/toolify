@@ -1,0 +1,575 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong { color: #FF8C8C; }
+.disclaimer a { color: #FF8C8C; text-decoration: underline; }
+
+/* ── 탭 (4개, 컬러별) ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+@media (max-width: 600px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+}
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabEmployee.tabActive  { background: var(--accent-dim);     color: var(--accent); font-weight: 700; }
+.tabEmployer.tabActive  { background: rgba(255,140,62,0.12); color: #FF8C3E;       font-weight: 700; }
+.tabPartTime.tabActive  { background: rgba(62,255,155,0.12); color: #3EFF9B;       font-weight: 700; }
+.tabFreelance.tabActive { background: rgba(155,89,182,0.14); color: #C485E0;       font-weight: 700; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0.85;
+}
+.subLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 입력 ── */
+.bigInput, .smallInput, .selectInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.bigInput { font-size: 18px; text-align: center; }
+.smallInput { font-size: 16px; padding: 11px 14px; font-weight: 600; }
+.selectInput {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) center, calc(100% - 12px) center;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+}
+.bigInput:focus, .smallInput:focus, .selectInput:focus { border-color: var(--accent); }
+.bigInput::-webkit-outer-spin-button,
+.bigInput::-webkit-inner-spin-button,
+.smallInput::-webkit-outer-spin-button,
+.smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.bigInput[type=number], .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.selectInput option { background: #1a1a1a; color: var(--text); }
+
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+
+.gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
+
+/* ── 슬라이더 ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sliderRow input[type=range] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.sliderValue {
+  min-width: 90px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--accent);
+  text-align: right;
+}
+
+/* ── 연도 토글 ── */
+.yearToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+}
+.yearBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.yearBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.yearActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+
+/* ── 사업장 규모 / 업종 / 시나리오 버튼 ── */
+.choiceRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.choiceBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.choiceBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.choiceActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+.heroEmployee  { border-color: var(--accent); }
+.heroEmployer  { border-color: rgba(255,140,62,0.50); }
+.heroPartTime  { border-color: rgba(62,255,155,0.50); }
+.heroFreelance { border-color: rgba(155,89,182,0.50); }
+
+.heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 8vw, 50px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.heroEmployee  .heroNum { color: #FF6B6B; }
+.heroEmployer  .heroNum { color: #FF8C3E; }
+.heroPartTime  .heroNum { color: #3EFF9B; }
+.heroFreelance .heroNum { color: #C485E0; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSecondary {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-size: 13px;
+  color: var(--muted);
+}
+.heroSecondary strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 항목별 표 ── */
+.itemTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.itemTable th, .itemTable td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.itemTable th:first-child, .itemTable td:first-child { text-align: left; }
+.itemTable th {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.itemTable td:first-child { color: var(--text); font-weight: 600; }
+.itemTable td:nth-child(2) { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; }
+.itemTable td:last-child { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; white-space: nowrap; }
+
+/* 보험별 left-border 색상 */
+.itemTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
+.itemTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #FF6B6B; padding-left: 14px; }
+.itemTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #FF8C3E; padding-left: 14px; }
+.itemTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #3EC8FF; padding-left: 14px; }
+.itemTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #FFD700; padding-left: 14px; }
+
+.itemTable tr.totalRow td {
+  background: var(--accent-dim);
+  font-weight: 800;
+  border-top: 2px solid rgba(200,255,62,0.3);
+  border-bottom: none;
+}
+.itemTable tr.totalRow td:first-child { color: var(--accent); }
+.itemTable tr.totalRow td:last-child  { color: var(--accent); font-size: 15px; }
+
+/* 근로자 vs 사업주 분리 표 */
+.dualTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.dualTable th, .dualTable td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.dualTable th:first-child, .dualTable td:first-child { text-align: left; }
+.dualTable th {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.dualTable td:first-child { color: var(--text); font-weight: 600; }
+.dualTable .colEmployee {
+  background: rgba(200,255,62,0.04);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.dualTable .colEmployer {
+  background: rgba(255,140,62,0.04);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.dualTable td.zero { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 500; opacity: 0.7; }
+.dualTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
+.dualTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #FF6B6B; padding-left: 14px; }
+.dualTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #FF8C3E; padding-left: 14px; }
+.dualTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #3EC8FF; padding-left: 14px; }
+.dualTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #FFD700; padding-left: 14px; }
+.dualTable tr.totalRow td {
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+  font-weight: 800;
+  font-size: 13.5px;
+}
+.dualTable tr.totalRow td:first-child { color: var(--text); }
+.dualTable tr.totalRow .colEmployee  { background: var(--accent-dim); color: var(--accent); }
+.dualTable tr.totalRow .colEmployer  { background: rgba(255,140,62,0.14); color: #FF8C3E; }
+
+/* ── 안내 카드 (2026 변경, 두루누리, 위장도급) ── */
+.noticeCard {
+  background: rgba(200,255,62,0.06);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.noticeBadge {
+  display: inline-block;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 10.5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.noticeCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
+.noticeCard li { padding: 2px 0; }
+.noticeCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+
+.duruCard {
+  background: rgba(62,255,155,0.06);
+  border: 1px solid #3EFF9B;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.duruBadge {
+  display: inline-block;
+  background: rgba(62,255,155,0.12);
+  color: #3EFF9B;
+  font-size: 10.5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.duruCard strong { color: #3EFF9B; font-family: 'Syne', sans-serif; font-weight: 800; }
+.duruCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
+
+.disguisedCard {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.disguisedCard strong { color: #FF8C8C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.disguisedCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
+
+/* 국민연금 상하한 안내 */
+.pensionCapNote {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.75;
+  margin-top: 8px;
+}
+.pensionCapNote strong { color: #3EC8FF; font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* ── 시나리오 비교 카드 (탭 3, 탭 4) ── */
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 600px) { .scenarioGrid { grid-template-columns: 1fr; } }
+
+.scenarioGrid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 720px) { .scenarioGrid3 { grid-template-columns: 1fr; } }
+
+.scenarioCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.scenarioCardA { border-color: var(--accent); background: rgba(200,255,62,0.04); }
+.scenarioCardB { border-color: #3EFF9B;       background: rgba(62,255,155,0.04); }
+.scenarioCardC { border-color: #FF8C3E;       background: rgba(255,140,62,0.04); }
+.scenarioCardP { border-color: #C485E0;       background: rgba(155,89,182,0.05); }
+
+.scenarioTitle {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.scenarioCardA .scenarioTitle { color: var(--accent); }
+.scenarioCardB .scenarioTitle { color: #3EFF9B; }
+.scenarioCardC .scenarioTitle { color: #FF8C3E; }
+.scenarioCardP .scenarioTitle { color: #C485E0; }
+
+.scenarioName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.scenarioRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 4px 0;
+}
+.scenarioRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.scenarioBig {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--muted);
+}
+.scenarioBig strong {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.scenarioCardA .scenarioBig strong { color: var(--accent); }
+.scenarioCardB .scenarioBig strong { color: #3EFF9B; }
+.scenarioCardC .scenarioBig strong { color: #FF8C3E; }
+.scenarioCardP .scenarioBig strong { color: #C485E0; }
+
+/* ── 차이 분석 ── */
+.diffCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.diffRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text);
+}
+.diffRow:last-child { border-bottom: none; }
+.diffRow strong { font-family: 'Syne', sans-serif; font-weight: 700; }
+.diffPositive { color: #3EFF9B; }
+.diffWarn     { color: #FF8C3E; }
+
+/* ── 혜택 리스트 ── */
+.benefitCard {
+  background: rgba(62,200,255,0.05);
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.benefitTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3EC8FF;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.benefitCard ul { padding-left: 18px; margin: 0; font-size: 12.5px; color: var(--text); line-height: 1.85; }
+.benefitCard li { padding: 2px 0; }
+
+/* ── 해석 카드 ── */
+.interpretCard {
+  background: var(--bg3);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.interpretCard a { color: var(--accent); text-decoration: underline; }
+.interpretCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+/* 알바 의무 가입 배지 */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 6px;
+}
+.statusYes  { background: rgba(62,255,155,0.14); color: #3EFF9B; }
+.statusNo   { background: rgba(255,107,107,0.12); color: #FF8C8C; }
+.statusOnly { background: rgba(255,217,62,0.14);  color: #FFD93E; }
+
+/* 회사 총 인건비 박스 */
+.companyCostCard {
+  background: rgba(255,140,62,0.06);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.companyCostRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.companyCostRow:last-child { border-bottom: none; }
+.companyCostRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.companyCostRow.totalRow {
+  border-bottom: none;
+  border-top: 2px solid rgba(255,140,62,0.3);
+  margin-top: 6px;
+  padding-top: 12px;
+  font-size: 14px;
+}
+.companyCostRow.totalRow strong { color: #FF8C3E; font-size: 18px; }
+
+/* ── 결과 복사 ── */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

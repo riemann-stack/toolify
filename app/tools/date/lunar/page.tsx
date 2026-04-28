@@ -78,8 +78,8 @@ export default function LunarPage() {
             {[
               { href: '/tools/life/zodiac', emoji: '🐲', name: '띠·별자리 계산기', desc: '60갑자·궁합까지' },
               { href: '/tools/date/age', emoji: '🎂', name: '만 나이 계산기', desc: '통일법 기준' },
-              { href: '/tools/date/dday', emoji: '📅', name: 'D-day 계산기', desc: '날짜 카운트' },
-              { href: '/tools/date/diff', emoji: '📆', name: '날짜 차이 계산기', desc: '두 날짜 사이' },
+              { href: '/tools/date/dday', emoji: '📅', name: 'D-day 계산기·일정 관리', desc: '두 날짜 사이·페이스 통합' },
+              { href: '/tools/date/military', emoji: '🎖️', name: '군 전역일 계산기', desc: '전역일·복무율' },
             ].map((t) => (
               <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>

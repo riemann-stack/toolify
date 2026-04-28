@@ -1,0 +1,645 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.disclaimer strong { color: #3EC8FF; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 4px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive    { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActiveDday      { background: rgba(255,107,107,0.12);  color: #FF6B6B; font-weight: 700; }
+.tabActiveStats     { background: rgba(155,89,182,0.12);   color: #C485E0; font-weight: 700; }
+.tabActiveMilestone { background: rgba(255,215,0,0.10);    color: #FFD700; font-weight: 700; }
+.tabActiveCulture   { background: rgba(62,200,255,0.10);   color: #3EC8FF; font-weight: 700; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+
+/* ── 날짜 입력 ── */
+.dateRow {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 8px;
+}
+.dateSelect {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  outline: none;
+}
+.dateSelect:focus { border-color: var(--accent); }
+
+.dateInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.dateInput:focus { border-color: var(--accent); }
+
+.refRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+@media (max-width: 480px) { .refRow { grid-template-columns: repeat(2, 1fr); } }
+.refBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.refBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.refActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* ── 만 나이 히어로 ── */
+.ageHero {
+  background: linear-gradient(140deg, rgba(200,255,62,0.06), rgba(155,89,182,0.05));
+  border: 1px solid rgba(200,255,62,0.25);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.ageHeroLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.ageHeroNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(64px, 14vw, 96px);
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(200,255,62,0.25);
+}
+.ageHeroUnit {
+  font-size: 0.4em;
+  color: var(--text);
+  font-weight: 700;
+  margin-left: 8px;
+}
+.ageHeroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.birthdayBanner {
+  background: linear-gradient(135deg, rgba(255,107,107,0.18), rgba(255,215,0,0.18));
+  border: 1px solid rgba(255,107,107,0.50);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #FFD700;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 3종 나이 비교 */
+.compareGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 480px) { .compareGrid { grid-template-columns: 1fr; } }
+.compareCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.compareCardActive { background: rgba(200,255,62,0.08); border-color: var(--accent); }
+.compareLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+.compareNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.compareCardActive .compareNum { color: var(--accent); }
+.compareSub {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 보조 정보 ── */
+.infoGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 540px) { .infoGrid3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 380px) { .infoGrid3 { grid-template-columns: 1fr; } }
+.infoCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.infoNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.infoLabel {
+  font-size: 11.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.infoSub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+
+.empty {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 30px 20px;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ───────── D-day 탭 ───────── */
+.ddayHero {
+  background: linear-gradient(140deg, rgba(255,107,107,0.10), rgba(255,140,62,0.05));
+  border: 1px solid rgba(255,107,107,0.35);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.ddayHeroLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.ddayHeroNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(56px, 12vw, 84px);
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #FF6B6B;
+  text-shadow: 0 0 28px rgba(255,107,107,0.30);
+}
+.ddayHeroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.ddayHeroSub strong { color: var(--text); }
+
+.countdownLive {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+}
+.countdownBox {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+}
+.countdownNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #FF6B6B;
+  line-height: 1;
+  margin-bottom: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.countdownLabel {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.upcomingTable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.upcomingRow {
+  display: grid;
+  grid-template-columns: 1fr 110px 70px;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+}
+@media (max-width: 480px) { .upcomingRow { grid-template-columns: 1fr 80px 60px; gap: 6px; font-size: 11.5px; } }
+.upcomingName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.upcomingDate { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; text-align: right; }
+.upcomingDday {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ddayClose { color: #FF6B6B; }
+.ddayMid   { color: #FFD700; }
+.ddayFar   { color: var(--muted); }
+
+/* ───────── 인생 통계 탭 ───────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 720px) { .statsGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 380px) { .statsGrid { grid-template-columns: 1fr; } }
+
+.statBigCard {
+  background: linear-gradient(140deg, rgba(155,89,182,0.06), rgba(62,200,255,0.04));
+  border: 1px solid rgba(155,89,182,0.25);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.statBigNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 4.5vw, 30px);
+  color: #C485E0;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.statBigLabel {
+  font-size: 11.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.statBigSub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+.funStatsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.funStatRow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.funStatIcon { font-size: 18px; }
+.funStatLabel { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.funStatLabel small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+.funStatValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: #C485E0;
+  font-variant-numeric: tabular-nums;
+}
+
+.cosmicCompare {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cosmicRow {
+  display: grid;
+  grid-template-columns: 130px 1fr 110px;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (max-width: 480px) {
+  .cosmicRow { grid-template-columns: 90px 1fr 80px; gap: 6px; font-size: 11.5px; }
+}
+.cosmicName { color: var(--text); font-weight: 600; }
+.cosmicBarBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.cosmicBar { height: 100%; background: linear-gradient(90deg, #9B59B6, #3EC8FF, #3EFF9B); border-radius: 999px; transition: width 0.4s; }
+.cosmicValue { color: var(--muted); font-family: 'JetBrains Mono', monospace; text-align: right; font-size: 11.5px; }
+
+/* ───────── 마일스톤 탭 ───────── */
+.milestoneGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.milestoneRow {
+  display: grid;
+  grid-template-columns: 28px 1fr 130px 80px;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+  transition: all 0.15s;
+}
+@media (max-width: 540px) {
+  .milestoneRow { grid-template-columns: 24px 1fr 90px 60px; gap: 6px; font-size: 11.5px; padding: 9px 12px; }
+}
+.milestonePassed {
+  opacity: 0.55;
+}
+.milestoneNext {
+  background: rgba(255,215,0,0.08);
+  border-color: #FFD700;
+  box-shadow: 0 0 0 3px rgba(255,215,0,0.10);
+}
+.milestoneIcon { font-size: 18px; text-align: center; }
+.milestoneName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.milestoneDate { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-align: right; }
+.milestoneDday {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px;
+}
+
+/* ───────── 문화 정보 탭 ───────── */
+.cultureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 480px) { .cultureGrid { grid-template-columns: 1fr; } }
+
+.cultureCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+}
+.cultureEmoji { font-size: 44px; line-height: 1; margin-bottom: 8px; }
+.cultureName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.cultureMeta {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+.cultureTraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+}
+.cultureTrait {
+  background: rgba(62,200,255,0.10);
+  border: 1px solid rgba(62,200,255,0.30);
+  color: #3EC8FF;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+
+.traditionalCard {
+  background: linear-gradient(140deg, rgba(255,215,0,0.06), rgba(255,140,62,0.04));
+  border: 1px solid rgba(255,215,0,0.30);
+  border-radius: 14px;
+  padding: 20px 22px;
+  text-align: center;
+}
+.traditionalHanja {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  color: #FFD700;
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: 4px;
+}
+.traditionalName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.traditionalMeaning {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 타임라인 SVG */
+.timelineWrap {
+  background: rgba(0,0,0,0.20);
+  border-radius: 14px;
+  padding: 20px 16px;
+  overflow-x: auto;
+}
+.timelineSvg {
+  display: block;
+  min-width: 720px;
+  max-width: 100%;
+  height: auto;
+}
+.timelineLabel {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* 같은 날 태어난 유명인·그 시절 정보 */
+.eraGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 540px) { .eraGrid { grid-template-columns: 1fr; } }
+.eraCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.eraTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.eraList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.85;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.eraList li::before { content: '· '; color: var(--accent); }
+
+/* 공통 버튼 */
+.actionBtn {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 13px;
+  color: var(--accent);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.actionBtn:hover { background: rgba(200,255,62,0.18); }
+
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* timeline 옵션 */
+.timelineOpt {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.timelineBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+}
+.timelineActive { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }

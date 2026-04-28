@@ -154,23 +154,28 @@ export default function FrequencyPage() {
         {/* ── 4. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '440 Hz와 432 Hz의 차이는 무엇인가요?',
-                a: '440 Hz는 ISO 16:1975 국제 표준이고, 432 Hz는 그보다 약 32센트(0.32 반음) 낮은 대안 피치입니다. 일부 음악가들이 432 Hz가 더 편안하다고 주장하지만, 과학적으로 유의미한 청각적 차이는 입증되지 않았습니다. 실제로 이 차이는 훈련된 귀로도 구분이 어려울 정도로 미묘합니다.' },
+                a: '<strong>440 Hz는 ISO 16:1975 국제 표준</strong>이고, 432 Hz는 그보다 약 32센트(0.32 반음) 낮은 대안 피치입니다. 일부 음악가들이 432 Hz가 더 편안하다고 주장하지만, 과학적으로 유의미한 청각적 차이는 입증되지 않았습니다. 실제로 이 차이는 훈련된 귀로도 구분이 어려울 정도로 미묘합니다.' },
               { q: '센트(cent)란 무엇인가요?',
-                a: '센트는 음정 차이를 측정하는 단위입니다. 1옥타브 = 1200센트, 1반음 = 100센트. 따라서 1센트는 반음의 1/100입니다. ±50센트 범위 내에 있으면 "올바른 음정"으로 간주합니다. 전문 연주자는 ±5센트 이내의 정확도를 목표로 합니다.' },
+                a: '센트는 음정 차이를 측정하는 단위입니다. <strong>1옥타브 = 1200센트, 1반음 = 100센트</strong>. 따라서 1센트는 반음의 1/100입니다. ±50센트 범위 내에 있으면 "올바른 음정"으로 간주합니다. 전문 연주자는 ±5센트 이내의 정확도를 목표로 합니다.' },
               { q: 'MIDI 번호는 어떻게 활용하나요?',
-                a: 'MIDI(Musical Instrument Digital Interface) 번호는 0~127 범위의 정수로 음정을 표현합니다. 중간 C(C4) = MIDI 60, A4 = MIDI 69. DAW(디지털 오디오 워크스테이션), 미디 편집 소프트웨어, 신디사이저에서 음정을 숫자로 다룰 때 필수적입니다.' },
+                a: 'MIDI(Musical Instrument Digital Interface) 번호는 0~127 범위의 정수로 음정을 표현합니다. <strong>중간 C(C4) = MIDI 60, A4 = MIDI 69</strong>. DAW(디지털 오디오 워크스테이션), 미디 편집 소프트웨어, 신디사이저에서 음정을 숫자로 다룰 때 필수적입니다.' },
               { q: '인간이 들을 수 있는 주파수 범위는?',
-                a: '일반적으로 20 Hz ~ 20,000 Hz (20 kHz)입니다. 나이가 들면서 고주파 가청 범위가 줄어들어 성인은 보통 16 kHz까지 잘 들립니다. 음악에서 실용적으로 사용되는 범위는 약 16 Hz(피아노 최저음 C0) ~ 4,186 Hz(피아노 최고음 C8)입니다.' },
+                a: '일반적으로 <strong>20 Hz ~ 20,000 Hz (20 kHz)</strong>입니다. 나이가 들면서 고주파 가청 범위가 줄어들어 성인은 보통 16 kHz까지 잘 들립니다. 음악에서 실용적으로 사용되는 범위는 약 16 Hz(피아노 최저음 C0) ~ 4,186 Hz(피아노 최고음 C8)입니다.' },
               { q: '기타 개방현의 표준 튜닝 주파수는?',
-                a: '기타 6번줄(E2) = 82.41 Hz, 5번줄(A2) = 110 Hz, 4번줄(D3) = 146.83 Hz, 3번줄(G3) = 196 Hz, 2번줄(B3) = 246.94 Hz, 1번줄(E4) = 329.63 Hz입니다. 이 계산기의 "음정 → Hz" 탭에서 각 음을 선택해 정확한 주파수를 확인하고 튜닝에 활용할 수 있습니다.' },
-            ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+                a: '<code>기타 6번줄(E2) = 82.41 Hz, 5번줄(A2) = 110 Hz, 4번줄(D3) = 146.83 Hz, 3번줄(G3) = 196 Hz, 2번줄(B3) = 246.94 Hz, 1번줄(E4) = 329.63 Hz</code>입니다. 이 계산기의 "음정 → Hz" 탭에서 각 음을 선택해 정확한 주파수를 확인하고 튜닝에 활용할 수 있습니다.' },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

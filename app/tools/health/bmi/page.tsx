@@ -193,7 +193,7 @@ export default function BmiPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',       icon: '🔥', name: '기초대사량 계산기',         desc: '내 몸이 하루에 소비하는 기본 칼로리' },
-              { href: '/tools/health/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '목표 기록별 적정 페이스 계산' },
+              { href: '/tools/sports/pace',       icon: '🏃', name: '러닝 페이스 계산기',       desc: '목표 기록별 적정 페이스 계산' },
               { href: '/tools/health/weightloss', icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
               { href: '/tools/date/age',          icon: '🎂', name: '만 나이 계산기',           desc: '나이에 맞는 건강 관리 계획 수립' },
             ].map(t => (

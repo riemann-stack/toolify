@@ -3,7 +3,7 @@ import OneRMClient from './OneRMClient'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
-  path: '/tools/health/one-rm',
+  path: '/tools/sports/one-rm',
   title: '1RM 계산기 — 벤치프레스·스쿼트·데드리프트 최대 중량 추정',
   description: '반복 횟수와 중량으로 1RM(최대 근력)을 추정합니다. Epley·Brzycki·Lombardi·O\'Conner 4가지 공식 비교, 강도별 훈련 중량표, 반복수별 예상 중량, 원판 조합 계산.',
   keywords: ['1RM계산기', '벤치프레스1RM', '스쿼트1RM', '데드리프트1RM', '최대중량계산기', '훈련중량계산기', '헬스1RM', '1RM공식'],
@@ -358,7 +358,7 @@ export default function OneRMPage() {
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>체중 감량 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>칼로리 적자로 달성일 예측</div>
         </Link>
-        <Link href="/tools/health/pace" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
+        <Link href="/tools/sports/pace" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>🏃</div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>러닝 페이스 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>마라톤 목표 기록별 페이스</div>

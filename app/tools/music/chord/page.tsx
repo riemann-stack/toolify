@@ -202,33 +202,38 @@ export default function ChordPage() {
         {/* ── 5. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
                 q: 'maj7과 7(도미넌트7)의 차이는 무엇인가요?',
-                a: 'maj7은 장7도(근음에서 11반음)를 포함하고, 7(도미넌트7)은 단7도(10반음)를 포함합니다. Cmaj7 = C, E, G, B이고 C7 = C, E, G, B♭입니다. 도미넌트7은 긴장감이 있어 다음 코드(토닉)로 해결되려는 느낌이 강합니다.',
+                a: '<strong>maj7</strong>은 장7도(근음에서 11반음)를 포함하고, <strong>7(도미넌트7)</strong>은 단7도(10반음)를 포함합니다. <code>Cmaj7 = C, E, G, B</code>이고 <code>C7 = C, E, G, B♭</code>입니다. 도미넌트7은 긴장감이 있어 다음 코드(토닉)로 해결되려는 느낌이 강합니다.',
               },
               {
                 q: 'sus4 코드는 어떨 때 사용하나요?',
-                a: 'sus4는 3도 음 대신 4도 음을 사용해 장단 구별이 없는 모호하고 떠있는 느낌을 줍니다. Csus4 = C, F, G로 C 코드의 E 대신 F를 사용합니다. 해결(resolution) 직전이나 감정적 여운을 남길 때 자주 쓰입니다.',
+                a: 'sus4는 <strong>3도 음 대신 4도 음을 사용</strong>해 장단 구별이 없는 모호하고 떠있는 느낌을 줍니다. <code>Csus4 = C, F, G</code>로 C 코드의 E 대신 F를 사용합니다. 해결(resolution) 직전이나 감정적 여운을 남길 때 자주 쓰입니다.',
               },
               {
                 q: '다이아토닉 코드란 무엇인가요?',
-                a: '특정 조성(Key)의 음계 안의 음들만으로 만들 수 있는 코드입니다. C 메이저 조성에서는 C, D, E, F, G, A, B 7개 음만으로 만든 Cmaj7, Dm7, Em7, Fmaj7, G7, Am7, Bm7♭5가 다이아토닉 코드입니다. 조성 안에서 자연스럽게 어울리는 코드들입니다.',
+                a: '특정 조성(Key)의 음계 안의 음들만으로 만들 수 있는 코드입니다. C 메이저 조성에서는 C, D, E, F, G, A, B 7개 음만으로 만든 <strong>Cmaj7, Dm7, Em7, Fmaj7, G7, Am7, Bm7♭5</strong>가 다이아토닉 코드입니다. 조성 안에서 자연스럽게 어울리는 코드들입니다.',
               },
               {
                 q: '코드 전위(Inversion)는 무엇인가요?',
-                a: '코드의 구성음 순서를 바꾼 것입니다. C 코드(C, E, G)에서 E를 가장 아래로 내리면 1전위(E, G, C), G를 가장 아래로 내리면 2전위(G, C, E)가 됩니다. 같은 코드이지만 음색과 진행감이 달라집니다.',
+                a: '코드의 구성음 순서를 바꾼 것입니다. C 코드(C, E, G)에서 E를 가장 아래로 내리면 <strong>1전위(E, G, C)</strong>, G를 가장 아래로 내리면 <strong>2전위(G, C, E)</strong>가 됩니다. 같은 코드이지만 음색과 진행감이 달라집니다.',
               },
               {
                 q: '텐션(Tension)이 포함된 코드는 어렵게 느껴지는데 어떻게 이해하나요?',
-                a: '9th, 11th, 13th는 7th 코드에 색채를 더하는 음들입니다. 9 = 옥타브 위의 2도, 11 = 옥타브 위의 4도, 13 = 옥타브 위의 6도입니다. 처음에는 maj7(4음)만 익히고, 익숙해지면 9th를 추가하는 방식으로 단계적으로 접근하면 어렵지 않습니다.',
+                a: '9th, 11th, 13th는 7th 코드에 색채를 더하는 음들입니다. <strong>9 = 옥타브 위의 2도, 11 = 옥타브 위의 4도, 13 = 옥타브 위의 6도</strong>입니다. 처음에는 maj7(4음)만 익히고, 익숙해지면 9th를 추가하는 방식으로 단계적으로 접근하면 어렵지 않습니다.',
               },
-            ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

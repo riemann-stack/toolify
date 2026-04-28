@@ -238,10 +238,9 @@ export default function TimeUnitPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { href: '/tools/date/dday',     icon: '📅', name: 'D-day 계산기',     desc: '목표일까지 남은 일수' },
+              { href: '/tools/date/dday',     icon: '📅', name: 'D-day 계산기·일정 관리', desc: '여러 D-day·페이스·두 날짜 사이' },
               { href: '/tools/date/age',      icon: '🎂', name: '만 나이 계산기',     desc: '법 개정 기준 만 나이' },
               { href: '/tools/life/pomodoro', icon: '🍅', name: '뽀모도로 타이머',    desc: '25분 집중·5분 휴식 사이클' },
-              { href: '/tools/date/diff',     icon: '📆', name: '날짜 차이 계산기',   desc: '두 날짜 사이 기간 계산' },
             ].map((t, i) => (
               <Link
                 key={i}

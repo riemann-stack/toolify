@@ -174,10 +174,10 @@ export default function JetLagPage() {
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
-              { href: '/tools/date/dday',      emoji: '📅', name: 'D-day 계산기',      desc: '여행 출발까지 D-day' },
-              { href: '/tools/date/diff',      emoji: '📆', name: '날짜 차이 계산기',  desc: '여행 기간 계산' },
+              { href: '/tools/date/dday',      emoji: '📅', name: 'D-day 계산기·일정 관리', desc: '여행 출발 D-day·기간' },
               { href: '/tools/life/pomodoro',  emoji: '🍅', name: '뽀모도로 타이머',   desc: '기내 활동 루틴' },
               { href: '/tools/date/age',       emoji: '🎂', name: '만 나이 계산기',    desc: '여권 만료 확인용' },
+              { href: '/tools/date/lunar',     emoji: '🌙', name: '음양력 변환기',     desc: '여행지 명절 확인' },
             ].map((t) => (
               <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
