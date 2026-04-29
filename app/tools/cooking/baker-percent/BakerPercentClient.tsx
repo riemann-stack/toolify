@@ -40,6 +40,187 @@ const CATEGORIES: { key: Category; label: string; emoji: string; cls: string; do
 ]
 const catMeta = (k: Category) => CATEGORIES.find(c => c.key === k) ?? CATEGORIES[6]
 
+// 카테고리별 SVG 색상 (CSS dot 색상과 일치)
+const CATEGORY_COLORS: Record<Category, string> = {
+  flour:  '#C8FF3E',
+  liquid: '#3EC8FF',
+  salt:   '#FFD93E',
+  yeast:  '#9B59B6',
+  sugar:  '#FF8C3E',
+  fat:    '#E8B947',
+  other:  '#94A3B8',
+}
+const CATEGORY_DESC: Record<Category, string> = {
+  flour:  '곡물',
+  liquid: '수분',
+  salt:   '발효 조절',
+  yeast:  '발효',
+  sugar:  '단맛·갈변',
+  fat:    '부드러움',
+  other:  '부재료',
+}
+
+// SVG 도넛 슬라이스 path 생성
+function describeDonutSlice(cx: number, cy: number, ro: number, ri: number, startDeg: number, endDeg: number): string {
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const sweep = endDeg - startDeg
+
+  // 100% 단일 슬라이스 — 동심원 두 개로 도넛 그리기
+  if (sweep >= 359.99) {
+    return [
+      `M ${cx + ro} ${cy}`,
+      `A ${ro} ${ro} 0 1 1 ${cx - ro} ${cy}`,
+      `A ${ro} ${ro} 0 1 1 ${cx + ro} ${cy}`,
+      `M ${cx + ri} ${cy}`,
+      `A ${ri} ${ri} 0 1 0 ${cx - ri} ${cy}`,
+      `A ${ri} ${ri} 0 1 0 ${cx + ri} ${cy}`,
+      'Z',
+    ].join(' ')
+  }
+
+  const x1o = cx + ro * Math.cos(toRad(startDeg))
+  const y1o = cy + ro * Math.sin(toRad(startDeg))
+  const x2o = cx + ro * Math.cos(toRad(endDeg))
+  const y2o = cy + ro * Math.sin(toRad(endDeg))
+  const x2i = cx + ri * Math.cos(toRad(endDeg))
+  const y2i = cy + ri * Math.sin(toRad(endDeg))
+  const x1i = cx + ri * Math.cos(toRad(startDeg))
+  const y1i = cy + ri * Math.sin(toRad(startDeg))
+  const largeArc = sweep > 180 ? 1 : 0
+
+  return [
+    `M ${x1o} ${y1o}`,
+    `A ${ro} ${ro} 0 ${largeArc} 1 ${x2o} ${y2o}`,
+    `L ${x2i} ${y2i}`,
+    `A ${ri} ${ri} 0 ${largeArc} 0 ${x1i} ${y1i}`,
+    'Z',
+  ].join(' ')
+}
+
+// 카테고리별 무게 합산 → 도넛 차트 데이터
+type CompositionGroup = { category: Category; weight: number; pct: number; color: string; path: string }
+function buildComposition(ings: Ingredient[]): { groups: CompositionGroup[]; totalWeight: number } {
+  const totalWeight = ings.reduce((sum, i) => sum + i.weight, 0)
+  if (totalWeight <= 0) return { groups: [], totalWeight: 0 }
+
+  // CATEGORIES 순서 유지 (시각적 일관성)
+  const groups: CompositionGroup[] = []
+  let angle = -90 // 12시 방향에서 시작
+  for (const cm of CATEGORIES) {
+    const w = ings.filter(i => i.category === cm.key).reduce((s, i) => s + i.weight, 0)
+    if (w <= 0) continue
+    const pct = (w / totalWeight) * 100
+    const sweep = (w / totalWeight) * 360
+    const path = describeDonutSlice(100, 100, 90, 50, angle, angle + sweep)
+    angle += sweep
+    groups.push({ category: cm.key, weight: w, pct, color: CATEGORY_COLORS[cm.key], path })
+  }
+  return { groups, totalWeight }
+}
+
+/* ─────── 식감·외관 추정 ─────── */
+type AnalysisLike = {
+  hydration: number; fatPct: number; sugarPct: number; saltPct: number; yeastPct: number
+}
+function textureDesc(a: AnalysisLike): { headline: string; detail: string; tags: string[] } {
+  const { hydration: h, fatPct: f, sugarPct: sg, saltPct: sa } = a
+
+  // 크럼 — 수분율 기반
+  let crumb: string
+  if (h < 60)      crumb = '조밀하고 쫄깃한 크럼'
+  else if (h < 70) crumb = '부드럽고 균일한 크럼'
+  else if (h < 80) crumb = '탄력 있고 기포가 적당한 오픈 크럼'
+  else if (h < 90) crumb = '촉촉하고 큰 기포가 풍부한 오픈 크럼'
+  else             crumb = '매우 촉촉하고 불규칙한 큰 기포의 크럼'
+
+  // 풍부함 — 지방
+  let richness: string
+  if (f < 2)       richness = '담백한 린(lean) 빵 결'
+  else if (f < 8)  richness = '약간 부드러운 결'
+  else if (f < 15) richness = '버터 풍미가 풍부한 부드러운 결'
+  else             richness = '매우 풍부한 버터·페이스트리 결'
+
+  // 단맛
+  let sweet: string | null = null
+  if (sg >= 2 && sg < 8) sweet = '은은한 단맛'
+  else if (sg >= 8)      sweet = '또렷한 단맛 (단과자빵 수준)'
+
+  // 크러스트
+  const crust = (sg > 5 || f > 5) ? '진한 갈색의 부드러운 크러스트' : '바삭한 크러스트'
+
+  const headline = `${crumb} · ${richness}${sweet ? ' · ' + sweet : ''}, ${crust}`
+  const detail =
+    `수분율 ${round1(h)}% 가 크럼의 결을 결정하고, 지방 ${round1(f)}% 가 부드러움을 더합니다. ` +
+    `${sg >= 5 ? `당분 ${round1(sg)}% 로 발효와 갈변이 활발하며, ` : ''}` +
+    `소금 ${round1(sa)}% 가 글루텐을 강화하고 발효 속도를 조절합니다.`
+
+  // 빵 종류 추정 태그
+  const tags: string[] = []
+  if (h < 58 && f < 5)                        tags.push('베이글·비스킷 류')
+  else if (h < 68 && f < 5 && sg < 3)         tags.push('린 식빵·바게트')
+  else if (h < 70 && f >= 4 && sg >= 4)       tags.push('단과자빵·식빵')
+  else if (h < 75 && f >= 15)                 tags.push('브리오슈·크루아상')
+  else if (h >= 75 && h < 82 && f < 5)        tags.push('사워도우·캄파뉴')
+  else if (h >= 80 && f < 8)                  tags.push('치아바타·포카치아')
+  else if (h >= 90)                            tags.push('극고수분 — 다루기 어려움')
+
+  if (sa >= 1.8 && sa <= 2.2) tags.push('소금 표준')
+  if (f >= 8)                  tags.push('지방 풍부')
+  if (sg >= 5)                 tags.push('당분 충분')
+
+  return { headline, detail, tags }
+}
+
+/* ─────── 도넛 차트 컴포넌트 ─────── */
+function CompositionChart({ ingredients }: { ingredients: Ingredient[] }) {
+  const { groups, totalWeight } = buildComposition(ingredients)
+  if (totalWeight <= 0 || groups.length === 0) return null
+
+  return (
+    <div className={s.pieWrap}>
+      <svg viewBox="0 0 200 200" className={s.pieSvg} aria-hidden="true">
+        <circle cx={100} cy={100} r={90} fill="rgba(255,255,255,0.03)" stroke="var(--border)" strokeWidth={1} />
+        {groups.map((g, i) => (
+          <path key={i} d={g.path} fill={g.color} stroke="rgba(0,0,0,0.35)" strokeWidth={1.5} />
+        ))}
+        <text x={100} y={88} textAnchor="middle" className={s.pieCenterLabel}>총 반죽</text>
+        <text x={100} y={108} textAnchor="middle" className={s.pieCenterValue}>{fmt(totalWeight)}</text>
+        <text x={100} y={124} textAnchor="middle" className={s.pieCenterUnit}>g</text>
+      </svg>
+      <div className={s.pieLegend}>
+        {groups.map((g, i) => (
+          <div key={i} className={s.pieLegendRow}>
+            <span className={s.pieLegendDot} style={{ background: g.color }} />
+            <span className={s.pieLegendName}>
+              {catMeta(g.category).label}
+              <small>· {CATEGORY_DESC[g.category]}</small>
+            </span>
+            <span className={s.pieLegendWeight}>{fmt(g.weight)}g</span>
+            <span className={s.pieLegendPct}>{round1(g.pct)}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ─────── 식감 카드 컴포넌트 ─────── */
+function TextureCard({ analysis }: { analysis: AnalysisLike }) {
+  const t = textureDesc(analysis)
+  return (
+    <div className={s.textureCard}>
+      <div className={s.textureLabel}>🧁 예상 식감·외관</div>
+      <p className={s.textureBody}>{t.headline}</p>
+      <p className={s.textureBody} style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6 }}>{t.detail}</p>
+      {t.tags.length > 0 && (
+        <div className={s.textureTags}>
+          {t.tags.map(tag => <span key={tag} className={s.textureTag}>{tag}</span>)}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const liquidRatioOf = (name: string): number => {
   if (name.includes('우유') || name.includes('버터밀크')) return 0.9
   if (name.includes('계란') || name.includes('달걀')) return 0.75
@@ -666,6 +847,18 @@ export default function BakerPercentClient() {
                   현재 <strong style={{ color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
+
+              {/* 재료 배합 도넛 차트 */}
+              <div className={s.card}>
+                <div className={s.cardLabel}>
+                  <span>🥧 재료 배합 비율</span>
+                  <span className={s.cardLabelHint}>전체 반죽 중 차지 비중</span>
+                </div>
+                <CompositionChart ingredients={ing1} />
+              </div>
+
+              {/* 식감 추정 */}
+              <TextureCard analysis={analysis1} />
             </>
           )}
 
@@ -808,6 +1001,20 @@ export default function BakerPercentClient() {
               </table>
             </div>
           )}
+
+          {/* 재료 배합 도넛 차트 */}
+          {analysis2.flourTotal > 0 && (
+            <div className={s.card}>
+              <div className={s.cardLabel}>
+                <span>🥧 재료 배합 비율</span>
+                <span className={s.cardLabelHint}>전체 반죽 중 차지 비중</span>
+              </div>
+              <CompositionChart ingredients={ing2} />
+            </div>
+          )}
+
+          {/* 식감 추정 */}
+          {analysis2.flourTotal > 0 && <TextureCard analysis={analysis2} />}
 
           {/* 빵 종류별 예상 완성품 */}
           {analysis2.totalWeight > 0 && (

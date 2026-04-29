@@ -48,7 +48,7 @@ export const categories: Category[] = [
   {
     id: 'cooking', icon: '🍳', name: '요리·식품', color: '#FFB83E',
     tools: [
-      { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',      desc: '인분 수에 맞게 재료 비율 자동 계산' },
+      { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율·단위 변환 계산기', desc: '인분 자동 계산, 큰술↔g↔ml 단위 환산, 양념 자동 보정, 레시피 저장, 장보기 리스트' },
       { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',    desc: '식품 두께·무게 기반 해동 시간 예측·식품 안전 가이드' },
       { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',         desc: '재료별 컵·큰술·g 정확 환산' },
       { href: '/tools/cooking/sourdough', icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화 진단·피크 시간 예측·급이 스케줄러' },
@@ -58,12 +58,13 @@ export const categories: Category[] = [
       { href: '/tools/cooking/food-storage', icon: '🧊', name: '식재료 보관 기간 계산기', desc: '냉장·냉동 식재료 보관 기간 추적·소비 기한 알림' },
       { href: '/tools/cooking/substitute', icon: '🔄', name: '식재료 대체 비율 계산기', desc: '버터·설탕·계란·생크림 등 재료 대체 비율 및 주의사항' },
       { href: '/tools/cooking/baker-percent', icon: '🥖', name: '베이커 퍼센트 계산기', desc: '제빵 배합비·수분율·르방 자동 계산, 빵 종류별 프리셋 8종' },
+      { href: '/tools/cooking/baking-schedule', icon: '🍞', name: '제빵 타임라인 계산기', desc: '빵 종류·시작·완성 시간으로 오토리즈, 폴딩, 발효, 굽기 일정 자동 생성', badge: 'new' },
     ],
   },
   {
     id: 'life', icon: '🎲', name: '생활·재미', color: '#FF8C3E',
     tools: [
-      { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기',    desc: '행운의 번호 자동 추첨',                 badge: 'hot' },
+      { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기·확률 시뮬레이터', desc: '8가지 생성 모드, 번호 분석, 가상 추첨, 1등 체감 시뮬, 당첨금 세후 계산', badge: 'hot' },
       { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기',         desc: '숫자·항목 무작위 뽑기' },
       { href: '/tools/life/ladder',        icon: '🪜', name: '사다리타기',          desc: '공정한 무작위 사다리' },
       { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이(N빵) 계산기', desc: '술값 따로, 단위 올림 옵션' },
@@ -117,7 +118,7 @@ export const categories: Category[] = [
       { href: '/tools/unit/time',        icon: '⏱️', name: '시간 단위 변환기',         desc: '초·분·시간·일·주·월·년 + 근무시간 기준 변환' },
       { href: '/tools/unit/battery',     icon: '🔋', name: '배터리 용량 변환기',       desc: 'mAh·Wh·Ah 변환 및 비행기 반입 가능 여부' },
       { href: '/tools/unit/fuel-economy',icon: '⛽', name: '연비 단위 변환기',         desc: 'km/L · L/100km · mpg · 전기차 전비 변환' },
-      { href: '/tools/unit/tire-pressure',icon: '🛞', name: '타이어 공기압 변환기',    desc: 'psi · kPa · bar 변환 및 권장 공기압 체크', badge: 'new' },
+      { href: '/tools/unit/tire-pressure',icon: '🛞', name: '타이어 공기압 변환기',    desc: 'psi · kPa · bar 변환 및 권장 공기압 체크' },
     ],
   },
   {
@@ -129,7 +130,7 @@ export const categories: Category[] = [
       { href: '/tools/date/history-era', icon: '📜', name: '역사 연호·연대 변환기',   desc: '단기·조선 왕 연호·간지 ↔ 서기 변환' },
       { href: '/tools/date/lunar',       icon: '🌙', name: '양음력 변환기',           desc: '음력 ↔ 양력 날짜 변환 · 간지 확인' },
       { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정·수면 타이밍 계산' },
-      { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간·행동 가치 환산', badge: 'new' },
+      { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간·행동 가치 환산' },
     ],
   },
   {
@@ -139,7 +140,7 @@ export const categories: Category[] = [
       { href: '/tools/music/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음정 변환·MIDI 번호·파장 계산' },
       { href: '/tools/music/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·쉬운 코드 추천' },
       { href: '/tools/music/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정·메트로놈·박자감 테스트' },
-      { href: '/tools/music/chord',     icon: '🎹', name: '코드 구성음 계산기',     desc: 'Cmaj7·Dm7 등 코드 구성음·역방향 검색·다이아토닉 코드표', badge: 'new' },
+      { href: '/tools/music/chord',     icon: '🎹', name: '코드 구성음 계산기',     desc: 'Cmaj7·Dm7 등 코드 구성음·역방향 검색·다이아토닉 코드표' },
     ],
   },
   {
@@ -151,7 +152,7 @@ export const categories: Category[] = [
       { href: '/tools/edu/sound-speed',        icon: '🔊', name: '음속 시뮬레이터',     desc: '천둥·번개 거리, 소리 도달 시간, 빛 vs 소리 비교, 반향·에코·RT60' },
       { href: '/tools/edu/review-interval',    icon: '🧠', name: '복습 간격 계산기',     desc: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일 계산, 학습 항목 관리' },
       { href: '/tools/edu/cognitive-test',     icon: '🧠', name: '인지 능력 테스트',     desc: '반응속도·스트룹 효과·이중 과제로 집중력과 인지 처리 속도를 측정하는 게임' },
-      { href: '/tools/edu/fermi-estimate',     icon: '🧮', name: '페르미 추정 계산기',   desc: '문제를 변수로 쪼개고 시나리오로 비교해 대략적인 답을 추정하는 사고력 도구', badge: 'new' },
+      { href: '/tools/edu/fermi-estimate',     icon: '🧮', name: '페르미 추정 계산기',   desc: '문제를 변수로 쪼개고 시나리오로 비교해 대략적인 답을 추정하는 사고력 도구' },
     ],
   },
   {

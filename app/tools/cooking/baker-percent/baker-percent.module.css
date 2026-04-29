@@ -488,6 +488,125 @@
 .analysisCard ul { padding-left: 20px; margin: 6px 0 0; color: var(--muted); }
 .analysisCard li { padding: 2px 0; }
 
+/* ── 재료 배합 파이차트 ── */
+.pieWrap {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+@media (max-width: 540px) { .pieWrap { grid-template-columns: 1fr; justify-items: center; gap: 14px; } }
+
+.pieSvg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.25));
+}
+.pieCenterLabel {
+  fill: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.pieCenterValue {
+  fill: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.pieCenterUnit {
+  fill: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+}
+
+.pieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+.pieLegendRow {
+  display: grid;
+  grid-template-columns: 14px 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 12px;
+}
+.pieLegendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.18);
+}
+.pieLegendName  { color: var(--text); font-weight: 600; }
+.pieLegendName small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.pieLegendWeight {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.pieLegendPct {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  min-width: 48px;
+}
+
+/* 식감 설명 카드 */
+.textureCard {
+  background: linear-gradient(140deg, rgba(255,215,0,0.06), rgba(62,200,255,0.04));
+  border: 1px solid rgba(255,215,0,0.30);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.textureLabel {
+  font-size: 11px;
+  color: #FFD700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.textureBody {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.85;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.textureBody strong { color: #FFD700; font-weight: 700; }
+.textureTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+.textureTag {
+  background: rgba(255,215,0,0.10);
+  border: 1px solid rgba(255,215,0,0.30);
+  color: #FFD700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+
 /* ── 빵 종류별 예상 완성품 ── */
 .outputCard {
   background: rgba(255,140,62,0.05);
