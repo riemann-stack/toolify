@@ -642,3 +642,18 @@
 }
 .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* ─── 평면도 + 3D 박스 그리드 (NEW) ─── */
+.visGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 720px) { .visGrid { grid-template-columns: 1fr; } }
+.visGrid .boxSvg {
+  width: 100%;
+  height: auto;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}

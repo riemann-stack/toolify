@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import styles from './room-area.module.css'
+import {
+  projectCabinet, autoScale, getVisibleFaces, pathPolygon,
+} from './projectionUtils'
 
 const PYUNG_TO_M2 = 3.3058
 
@@ -100,12 +103,15 @@ export default function RoomAreaClient() {
     h: number   // 천장 높이
     floorW: number; floorL: number  // 바닥 가로/세로 (천장도 동일)
   }
+  // ID 생성 — Date.now()/Math.random()은 렌더 외부에서 호출 (이벤트 핸들러·useState 초기값)
+  // eslint-disable-next-line react-hooks/purity
+  const newId = () => String(Date.now()) + '-' + Math.floor(Math.random() * 1e6)
   function makeWall(label: string, w = 4, h = 2.4): WallInput {
-    return { id: String(Date.now() + Math.random()), label, wallW: w, wallH: h, openings: [] }
+    return { id: newId(), label, wallW: w, wallH: h, openings: [] }
   }
   function makeRoom(name: string, w = 5, l = 4, h = 2.4): RoomInput {
     return {
-      id: String(Date.now() + Math.random()),
+      id: newId(),
       name,
       walls: [
         makeWall('A — 정면', w, h),
@@ -434,106 +440,115 @@ export default function RoomAreaClient() {
             </div>
           )}
 
-          {/* 3D 박스 SVG (isometric) */}
+          {/* 시각화 — 평면도 + 3D 박스 (NEW: cabinet projection 정확 구현) */}
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>3D 박스 시각화</span>
+              <span>평면도 + 3D 박스 시각화</span>
               <span className={styles.cardLabelHint}>{tab1Dims.width.toFixed(1)} × {tab1Dims.length.toFixed(1)} × {heightM}m</span>
             </div>
-            <div className={styles.boxWrap}>
+            <div className={styles.visGrid}>
+              {/* ─── 평면도 (top-down) ─── */}
               {(() => {
-                const VBW = 360, VBH = 240
-                // isometric projection — 30° angle
-                const w = tab1Dims.width
-                const l = tab1Dims.length
-                const h = heightM
-                // 비례 스케일 — 가장 큰 차원이 캔버스의 ~50%
-                const maxDim = Math.max(w, l, h * 1.5)
-                const scale = 60 / Math.max(2, maxDim)  // 60px/m 기본
-                const dx = w * scale * 0.866  // cos 30°
-                const dy = l * scale * 0.866
-                const dxx = l * scale * 0.866
-                const dyy = w * scale * 0.5    // sin 30°
-                const dh = h * scale * 1.5     // 높이 (시각적으로 강조)
+                const VBW = 360, VBH = 280, MARGIN = 40
+                const W = tab1Dims.width, L = tab1Dims.length
+                if (W <= 0 || L <= 0) return null
+                const scale = Math.min((VBW - MARGIN * 2) / W, (VBH - MARGIN * 2) / L)
+                const w = W * scale, d = L * scale
+                const x0 = (VBW - w) / 2
+                const y0 = (VBH - d) / 2
+                return (
+                  <svg className={styles.boxSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-label="평면도">
+                    {/* 외곽선 */}
+                    <rect x={x0} y={y0} width={w} height={d}
+                      fill="rgba(200,255,62,0.08)" stroke="#C8FF3E" strokeWidth={2} />
+                    {/* 면적 라벨 */}
+                    <text x={x0 + w / 2} y={y0 + d / 2 - 4} textAnchor="middle"
+                      fill="#C8FF3E" fontSize="14" fontFamily="Syne, sans-serif" fontWeight={800}>
+                      {fmt(t1.floorArea)}㎡
+                    </text>
+                    <text x={x0 + w / 2} y={y0 + d / 2 + 14} textAnchor="middle"
+                      fill="var(--muted)" fontSize="11" fontFamily="Noto Sans KR">
+                      ({fmt(t1.floorPyeong, 1)}평)
+                    </text>
+                    {/* 가로 치수 */}
+                    <line x1={x0} y1={y0 + d + 14} x2={x0 + w} y2={y0 + d + 14} stroke="var(--muted)" strokeWidth={1} />
+                    <line x1={x0} y1={y0 + d + 10} x2={x0} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
+                    <line x1={x0 + w} y1={y0 + d + 10} x2={x0 + w} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
+                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="Syne, sans-serif">
+                      {W.toFixed(1)}m
+                    </text>
+                    {/* 세로 치수 */}
+                    <line x1={x0 + w + 14} y1={y0} x2={x0 + w + 14} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
+                    <line x1={x0 + w + 10} y1={y0} x2={x0 + w + 18} y2={y0} stroke="var(--muted)" strokeWidth={1} />
+                    <line x1={x0 + w + 10} y1={y0 + d} x2={x0 + w + 18} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
+                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11" fontFamily="Syne, sans-serif">
+                      {L.toFixed(1)}m
+                    </text>
+                    {/* 라벨 */}
+                    <text x={x0 + 6} y={y0 + 14} fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR">평면도 (위에서 본 모습)</text>
+                  </svg>
+                )
+              })()}
 
-                // 박스 중심
-                const cx = VBW / 2
-                const cy = VBH / 2 + 20
+              {/* ─── 3D 박스 (cabinet projection) ─── */}
+              {(() => {
+                const VBW = 360, VBH = 280
+                const dim = { width: tab1Dims.width, depth: tab1Dims.length, height: heightM }
+                if (dim.width <= 0 || dim.depth <= 0 || dim.height <= 0) return null
+                const cfg = autoScale(dim, VBW, VBH, 40)
+                const box = projectCabinet(dim, cfg)
+                const faces = getVisibleFaces(box)
 
-                // 8 코너
-                const A = { x: cx - dx, y: cy + dyy }      // 앞-좌-하
-                const B = { x: cx + dxx, y: cy + dy + dyy } // 앞-우-하 (잘못됨, 단순화)
-                // Re-compute simpler isometric
-                const ix = (x: number, y: number) => x * 0.866
-                const iy = (x: number, y: number) => x * 0.5 - y * 0.5
-
-                // 바닥 사각형
-                const bottomA = { x: cx + ix(0, 0), y: cy + iy(0, 0) }
-                const bottomB = { x: cx + ix(w * scale, 0), y: cy + iy(w * scale, 0) }
-                const bottomC = { x: cx + ix(w * scale, l * scale), y: cy + iy(w * scale, l * scale) }
-                const bottomD = { x: cx + ix(0, l * scale), y: cy + iy(0, l * scale) }
-
-                // 천장 사각형 (위쪽 dh만큼 이동)
-                const topA = { x: bottomA.x, y: bottomA.y - dh }
-                const topB = { x: bottomB.x, y: bottomB.y - dh }
-                const topC = { x: bottomC.x, y: bottomC.y - dh }
-                const topD = { x: bottomD.x, y: bottomD.y - dh }
-
-                // 시각적 보정 — 박스 전체를 캔버스 중앙으로
-                const allX = [bottomA.x, bottomB.x, bottomC.x, bottomD.x, topA.x, topB.x, topC.x, topD.x]
-                const allY = [bottomA.y, bottomB.y, bottomC.y, bottomD.y, topA.y, topB.y, topC.y, topD.y]
-                const minX = Math.min(...allX), maxX = Math.max(...allX)
-                const minY = Math.min(...allY), maxY = Math.max(...allY)
-                const offX = (VBW - (maxX - minX)) / 2 - minX
-                const offY = (VBH - (maxY - minY)) / 2 - minY
-
-                const shift = (p: { x: number; y: number }) => ({ x: p.x + offX, y: p.y + offY })
-                const bA = shift(bottomA), bB = shift(bottomB), bC = shift(bottomC), bD = shift(bottomD)
-                const tA = shift(topA),    tB = shift(topB),    tC = shift(topC),    tD = shift(topD)
-
-                const path = (pts: Array<{ x: number; y: number }>) =>
-                  'M ' + pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L ') + ' Z'
+                // 라벨 위치 계산 (각 면의 중심)
+                const center = (pts: { x: number; y: number }[]) => ({
+                  x: pts.reduce((s, p) => s + p.x, 0) / pts.length,
+                  y: pts.reduce((s, p) => s + p.y, 0) / pts.length,
+                })
+                const floorC = center([box.flf, box.frf, box.frb, box.flb])
+                const frontC = center([box.flf, box.frf, box.crf, box.clf])
+                const rightC = center([box.frf, box.frb, box.crb, box.crf])
+                const ceilC = center([box.clf, box.crf, box.crb, box.clb])
 
                 return (
-                  <svg className={styles.boxSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
-                    {/* 바닥 (앞쪽 보임) */}
-                    <path d={path([bA, bB, bC, bD])} fill="rgba(200,255,62,0.18)" stroke="#C8FF3E" strokeWidth={1.5} />
-                    {/* 우측 벽 (B-C-tC-tB) */}
-                    <path d={path([bB, bC, tC, tB])} fill="rgba(255,140,62,0.18)" stroke="#FF8C3E" strokeWidth={1.5} />
-                    {/* 후면 벽 (C-D-tD-tC) */}
-                    <path d={path([bC, bD, tD, tC])} fill="rgba(232,151,87,0.10)" stroke="#FF8C3E" strokeWidth={1.2} opacity={0.85} />
-                    {/* 천장 (top) */}
-                    <path d={path([tA, tB, tC, tD])} fill="rgba(155,89,182,0.18)" stroke="#9B59B6" strokeWidth={1.5} />
-
-                    {/* 라벨 — 바닥 */}
-                    <text x={(bA.x + bC.x) / 2} y={(bA.y + bC.y) / 2 + 5} textAnchor="middle" fill="#C8FF3E" fontSize="11" fontFamily="monospace" fontWeight={700}>
+                  <svg className={styles.boxSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-label="3D 박스 시각화">
+                    {faces.map((face, i) => (
+                      <path key={i} d={pathPolygon(...face.points)}
+                        fill={face.fill} stroke={face.stroke} strokeWidth={1.5} />
+                    ))}
+                    {/* 면적 라벨 */}
+                    <text x={floorC.x} y={floorC.y + 4} textAnchor="middle" fill="#C8FF3E" fontSize="10" fontFamily="Syne, sans-serif" fontWeight={700}>
                       바닥 {fmt(t1.floorArea)}㎡
                     </text>
-                    {/* 라벨 — 우측 벽 */}
-                    <text x={(bB.x + tC.x) / 2 + 8} y={(bB.y + tC.y) / 2} textAnchor="start" fill="#FF8C3E" fontSize="10" fontFamily="monospace" fontWeight={700}>
-                      벽
+                    <text x={frontC.x} y={frontC.y + 4} textAnchor="middle" fill="#FF8C3E" fontSize="10" fontFamily="Syne, sans-serif" fontWeight={700}>
+                      정면 {fmt(tab1Dims.width * heightM)}㎡
                     </text>
-                    {/* 라벨 — 천장 */}
-                    <text x={(tA.x + tC.x) / 2} y={(tA.y + tC.y) / 2} textAnchor="middle" fill="#9B59B6" fontSize="10" fontFamily="monospace" fontWeight={700}>
+                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#FF8C3E" fontSize="10" fontFamily="Syne, sans-serif" fontWeight={700}>
+                      우측 {fmt(tab1Dims.length * heightM)}㎡
+                    </text>
+                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="10" fontFamily="Syne, sans-serif" fontWeight={700}>
                       천장
                     </text>
-
-                    {/* 치수 — 가로 (앞쪽 바닥 라인) */}
-                    <text x={(bA.x + bB.x) / 2} y={bA.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">
+                    {/* 치수선 — 가로 */}
+                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 16} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="Syne, sans-serif">
                       {tab1Dims.width.toFixed(1)}m
                     </text>
-                    {/* 치수 — 세로 (오른쪽 바닥 라인) */}
-                    <text x={bB.x + 14} y={(bB.y + bC.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="10" fontFamily="monospace">
+                    {/* 치수선 — 세로 (깊이) */}
+                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="10" fontFamily="Syne, sans-serif">
                       {tab1Dims.length.toFixed(1)}m
                     </text>
-                    {/* 치수 — 높이 (왼쪽 수직) */}
-                    <text x={tA.x - 8} y={(tA.y + bA.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="monospace">
+                    {/* 치수선 — 높이 */}
+                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="Syne, sans-serif">
                       {heightM}m
                     </text>
+                    {/* 라벨 */}
+                    <text x={6} y={14} fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR">3D 박스 (캐비넷 투영)</text>
                   </svg>
                 )
               })()}
             </div>
+            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
+              ⓘ 평면도는 가로·세로 정확한 비율, 3D 박스는 캐비넷 투영(깊이 50% 축소)으로 표시됩니다. 본 시각화는 입력값 기반 비례 도형이며 실제 시공 도면이 아닙니다.
+            </p>
           </div>
 
           {/* 활용 추천 */}

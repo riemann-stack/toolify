@@ -626,7 +626,7 @@ function BottomView({ gender, waist, setWaist, search, setSearch }: { gender: Ge
               return (
                 <tr key={r.kr} className={`${styles.tr} ${isHi ? styles.trHighlight : ''}`}>
                   <td className={`${styles.td} ${styles.tdAccent}`}>{r.kr}</td>
-                  <td className={styles.td}>{r.us}"</td>
+                  <td className={styles.td}>{r.us}&quot;</td>
                   <td className={styles.td}>{r.eu}</td>
                   <td className={styles.td}>{r.waist}cm</td>
                 </tr>
@@ -1042,8 +1042,8 @@ function BeltView({ cm, setCm, search, setSearch }: { cm: string; setCm: (v: str
               return (
                 <tr key={r.waist} className={`${styles.tr} ${isHi ? styles.trHighlight : ''}`}>
                   <td className={styles.td}>{r.waist}cm</td>
-                  <td className={`${styles.td} ${styles.tdAccent}`}>{r.krIn}"</td>
-                  <td className={styles.td}>{r.usIn}"</td>
+                  <td className={`${styles.td} ${styles.tdAccent}`}>{r.krIn}&quot;</td>
+                  <td className={styles.td}>{r.usIn}&quot;</td>
                   <td className={styles.td}>{r.eu}</td>
                 </tr>
               )

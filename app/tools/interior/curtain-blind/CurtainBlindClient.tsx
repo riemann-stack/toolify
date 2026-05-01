@@ -488,7 +488,7 @@ export default function CurtainBlindClient() {
             </div>
             <div className={styles.vizWrap}>
               {(() => {
-                const VBW = 360, VBH = 220
+                const VBW = 360, VBH = 240
                 // 창문 비율
                 const winRatio = winW / winH
                 const maxWinW = 180
@@ -500,7 +500,13 @@ export default function CurtainBlindClient() {
                   drawWinW = maxWinH * winRatio
                 }
                 const winX = (VBW - drawWinW) / 2
-                const winY = 50
+                const winY = 64  // 봉 라벨·창문 너비 라벨이 분리되도록 위쪽 여유 확보
+
+                // 커튼 모드일 때 봉이 양쪽으로 확장 → 높이 라벨 위치 미리 계산
+                const isCurtain = productId === 'curtain' && result.type === 'curtain'
+                const rodExt = isCurtain ? (drawWinW * (result.rodLength / winW) - drawWinW) / 2 : 0
+                const heightLabelX = winX + drawWinW + 8 + rodExt  // 커튼 외곽 + 8px
+
                 return (
                   <svg className={styles.vizSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     {/* 바닥 */}
@@ -512,12 +518,9 @@ export default function CurtainBlindClient() {
                     {/* 창문 격자 (4분할) */}
                     <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="#3EC8FF" strokeWidth="0.8" opacity="0.5" />
                     <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="#3EC8FF" strokeWidth="0.8" opacity="0.5" />
-                    <text x={winX + drawWinW / 2} y={winY - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">창문 {winW}cm</text>
-                    <text x={winX + drawWinW + 8} y={winY + drawWinH / 2 + 3} textAnchor="start" fill="var(--muted)" fontSize="10" fontFamily="monospace">{winH}cm</text>
 
                     {/* 제품별 시각화 */}
                     {productId === 'curtain' && result.type === 'curtain' && (() => {
-                      const rodExt = (drawWinW * (result.rodLength / winW) - drawWinW) / 2
                       const rodX1 = winX - rodExt
                       const rodX2 = winX + drawWinW + rodExt
                       const rodY = winY - 12
@@ -551,7 +554,6 @@ export default function CurtainBlindClient() {
                           <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#FFD700" strokeWidth="2.5" />
                           <circle cx={rodX1} cy={rodY} r="3" fill="#FFD700" />
                           <circle cx={rodX2} cy={rodY} r="3" fill="#FFD700" />
-                          <text x={(rodX1 + rodX2) / 2} y={rodY - 5} textAnchor="middle" fill="#FFD700" fontSize="9" fontFamily="monospace">봉 {fmt(result.rodLength)}cm</text>
                           {/* 커튼 패널 */}
                           {panels}
                         </>
@@ -596,6 +598,30 @@ export default function CurtainBlindClient() {
                         </>
                       )
                     })()}
+
+                    {/* 라벨 — 항상 마지막에 그려서 패널 위에 보이도록 (z-order) */}
+                    {/* 봉 라벨 — 커튼 모드일 때만 위쪽에 분리 배치 */}
+                    {isCurtain && (
+                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#FFD700" fontSize="11" fontFamily="monospace" fontWeight="700">
+                        봉 {fmt(result.rodLength)}cm
+                      </text>
+                    )}
+                    {/* 창문 너비 라벨 — 커튼 모드일 땐 창문 안쪽 상단 (봉·끝마개와 안 겹침) / 그 외엔 창문 위쪽 */}
+                    {isCurtain ? (
+                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="#3EC8FF" fontSize="10" fontFamily="monospace" fontWeight="700">
+                        창문 {winW}cm
+                      </text>
+                    ) : (
+                      <text x={winX + drawWinW / 2} y={winY - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">
+                        창문 {winW}cm
+                      </text>
+                    )}
+                    {/* 창문 높이 라벨 — 커튼 모드일 땐 커튼 바깥 우측, 그 외엔 창문 바로 옆 */}
+                    <text x={heightLabelX} y={winY + drawWinH / 2 + 3} textAnchor="start"
+                      fill={isCurtain ? '#3EC8FF' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
+                      fontWeight={isCurtain ? '700' : '400'}>
+                      {winH}cm
+                    </text>
                   </svg>
                 )
               })()}

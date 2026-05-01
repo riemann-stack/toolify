@@ -4,28 +4,34 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/health/pet',
-  title: '강아지·고양이 나이 계산기 — 사람 나이 환산·하루 사료량',
-  description: '강아지·고양이 나이를 사람 나이로 환산합니다. 품종 크기·중성화 여부·활동량을 반영한 하루 권장 칼로리와 사료 그램 계산. 반려동물 건강 관리 필수 도구.',
-  keywords: ['강아지나이계산기','고양이나이계산기','반려동물나이환산','강아지사료량계산기','고양이칼로리계산','개나이사람나이','강아지하루사료량'],
+  title: '반려동물 나이·칼로리 계산기 — 강아지·고양이 사람 나이·사료량·체중 평가',
+  description:
+    '품종 크기·중성화·활동량으로 강아지·고양이 사람 나이, 일일 권장 칼로리(RER/DER), 건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률까지 자동 계산.',
+  keywords: [
+    '강아지나이계산기', '고양이나이계산기', '반려동물나이환산',
+    '강아지사료량계산기', '고양이칼로리계산', '개나이사람나이', '강아지하루사료량',
+    'RER 계산', 'DER 계산', '강아지 적정 체중', '평균 수명',
+  ],
 })
 
 export default function PetPage() {
   return (
-    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🐾 반려동물 나이·칼로리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        강아지·고양이 나이를 사람 나이로 환산하고, 품종 크기·중성화·활동량에 맞는 하루 권장 칼로리와 사료량을 계산합니다.
+        강아지·고양이 사람 나이 환산, RER/DER 칼로리, <strong style={{ color: 'var(--text)' }}>건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률</strong>까지.
+        품종 크기·중성화·활동량을 명시적 매핑 테이블로 정확히 반영합니다.
       </p>
 
       <PetClient />
 
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* ── 1. 나이 환산표 ── */}
-        <div>
+        {/* ── 1. 나이 환산표 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 환산표</h2>
           <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -83,13 +89,13 @@ export default function PetPage() {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
 
-        {/* ── 2. ×7 공식이 틀린 이유 ── */}
-        <div>
+        {/* ── 2. ×7 공식이 틀린 이유 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 = ×7이 틀린 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            "개 나이 × 7 = 사람 나이"는 오랫동안 통용된 속설이지만 수의학적으로 부정확합니다. 강아지는 첫 1~2년 동안 <strong style={{ color: 'var(--text)' }}>사람의 청소년기까지 극도로 빠르게</strong> 성장하며, 이후 품종 크기에 따라 노화 속도가 크게 달라집니다.
+            &quot;개 나이 × 7 = 사람 나이&quot;는 오랫동안 통용된 속설이지만 수의학적으로 부정확합니다. 강아지는 첫 1~2년 동안 <strong style={{ color: 'var(--text)' }}>사람의 청소년기까지 극도로 빠르게</strong> 성장하며, 이후 품종 크기에 따라 노화 속도가 크게 달라집니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             {[
@@ -103,10 +109,10 @@ export default function PetPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 3. RER/DER 공식 ── */}
-        <div>
+        {/* ── 3. RER/DER 공식 (기존 유지 + 표 정확화) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 계산 공식 (RER / DER)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
@@ -118,7 +124,7 @@ export default function PetPage() {
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', marginBottom: '8px' }}>DER — 일일 에너지 요구량 (Daily Energy Requirement)</p>
               <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '10px' }}>DER = RER × 생활계수</p>
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--border)' }}>
                       <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
@@ -127,12 +133,14 @@ export default function PetPage() {
                   </thead>
                   <tbody>
                     {[
-                      ['퍼피 / 성장기', '× 2.5'],
-                      ['중성화 성견·성묘 (활동 낮음)', '× 1.2'],
-                      ['중성화 성견·성묘 (활동 보통)', '× 1.4'],
-                      ['미중성화 성견·성묘 (활동 보통)', '× 1.4~1.6'],
-                      ['운동견 / 실외 고양이 (활동 높음)', '× 1.6~1.8'],
-                      ['노령견·시니어 고양이', '× 1.1'],
+                      ['퍼피 / 키튼 / 성장기',                    '× 2.5'],
+                      ['중성화 + 활동 낮음 (실내)',              '× 1.2'],
+                      ['중성화 + 활동 보통',                      '× 1.4'],
+                      ['중성화 + 활동 높음',                      '× 1.6'],
+                      ['미중성화 + 활동 낮음',                    '× 1.4'],
+                      ['미중성화 + 활동 보통',                    '× 1.6'],
+                      ['미중성화 + 활동 높음 (실외 고양이 포함)', '× 1.8'],
+                      ['노령견·시니어 고양이',                    '× 1.1'],
                     ].map(([sit, fac], i) => (
                       <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg3)' }}>
                         <td style={{ padding: '7px 8px', color: 'var(--muted)' }}>{sit}</td>
@@ -142,12 +150,15 @@ export default function PetPage() {
                   </tbody>
                 </table>
               </div>
+              <p style={{ fontSize: '11.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+                ⓘ 본 도구는 <strong style={{ color: 'var(--text)' }}>중성화 × 활동량 6가지 조합</strong>을 명시적 매핑 테이블로 정확히 반영합니다 (조건문 분기 누락 방지).
+              </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ── 4. 시나리오 예시 ── */}
-        <div>
+        {/* ── 4. 시나리오 예시 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>계산 예시</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
             {[
@@ -175,10 +186,110 @@ export default function PetPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 5. 연령대별 건강 가이드 ── */}
-        <div>
+        {/* ── 5. 적정 체중 평가 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가 (NEW)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+            본 도구는 입력한 체중을 품종 크기 기준 정상 범위와 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 자동 평가합니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '8px' }}>🐶 강아지 정상 체중</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 초소형: <strong style={{ color: 'var(--text)' }}>1.5~5kg</strong></li>
+                <li>· 소형: <strong style={{ color: 'var(--text)' }}>5~10kg</strong></li>
+                <li>· 중형: <strong style={{ color: 'var(--text)' }}>10~25kg</strong></li>
+                <li>· 대형: <strong style={{ color: 'var(--text)' }}>25~45kg</strong></li>
+              </ul>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(192,132,252,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#C084FC', marginBottom: '8px' }}>🐱 고양이 정상 체중</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 적정: <strong style={{ color: 'var(--text)' }}>3.0~5.5kg</strong></li>
+                <li>· 과체중: 5.5~7.0kg</li>
+                <li>· 비만: 7.0kg+</li>
+                <li>· 일부 대형 품종(메인쿤·노르웨이숲)은 6~9kg 정상</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+            ⓘ 정확한 BCS(Body Condition Score 1~9 또는 1~5)는 수의사가 갈비뼈·허리·복부를 직접 만져 평가합니다. 같은 체중이라도 골격·근육량·품종에 따라 달라질 수 있으니 연 1회 건강검진 시 수의사 평가를 권장합니다.
+          </p>
+        </section>
+
+        {/* ── 6. 평균 수명 가이드 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평균 수명 가이드 (NEW)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+            본 도구는 품종 크기·생활 환경별 평균 수명과 진행률을 자동 계산합니다.
+          </p>
+          <div style={{ overflowX: 'auto', marginBottom: '12px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
+                  <th style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>평균 수명</th>
+                  <th style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>최장수</th>
+                  <th style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['🐶 초소형견', '14년', '18년+', '가장 오래 삽니다 (치와와·말티즈)'],
+                  ['🐶 소형견',   '13년', '16년',  '치와와 출신은 18년+ 사례도 있음'],
+                  ['🐶 중형견',   '12년', '15년',  ''],
+                  ['🐶 대형견',   '10년', '13년',  '대형견은 노화 속도가 빠름'],
+                  ['🐱 실내 고양이', '15년', '20년+', '실내·중성화 고양이는 18~20세 사례도 흔함'],
+                  ['🐱 실외 고양이', '7년',  '10년',  '사고·질병 위험으로 평균 수명 ↓'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+            ⓘ 평균 수명은 통계 평균이며 개체차가 매우 큽니다. 유전·식이·운동·검진·환경에 따라 평균보다 훨씬 오래 사는 사례 많습니다. 본 도구의 진행률은 보호자의 건강 관리 인식 도구이며 <strong style={{ color: 'var(--text)' }}>수명 예측이 아닙니다</strong>.
+          </p>
+        </section>
+
+        {/* ── 7. 건식 vs 습식 vs 혼합 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>건식 vs 습식 사료 — 칼로리 밀도 차이 (NEW)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            <strong style={{ color: 'var(--text)' }}>같은 일일 칼로리도 사료 종류에 따라 그램 수가 크게 다릅니다.</strong> 건식은 100g당 약 350~380kcal, 습식은 약 70~120kcal로 4배 정도 차이.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '6px' }}>🥣 건식 (Dry · Kibble)</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>350~400kcal/100g</strong></li>
+                <li>· 장점: 보관 편함·치석 ↓·가성비</li>
+                <li>· 단점: 수분 부족 (약 10%)</li>
+              </ul>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>🥫 습식 (Wet · Pâté)</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>70~120kcal/100g</strong></li>
+                <li>· 장점: 수분 70~80%·기호성 ↑</li>
+                <li>· 단점: 보관 어려움·가격 ↑</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+            <strong style={{ color: 'var(--text)' }}>혼합 (건식 + 습식)</strong> — 한국에서 점점 표준이 되어가는 방식. 건식 70% + 습식 30% 비율 권장 — 보관·가성비는 건식, 수분·기호성은 습식으로 보완. 본 도구의 <strong style={{ color: 'var(--text)' }}>고양이 [건식+습식] 모드</strong>에서 자동 분배 그램 수를 계산합니다.
+          </p>
+        </section>
+
+        {/* ── 8. 연령대별 건강 가이드 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
             {[
@@ -200,12 +311,12 @@ export default function PetPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 6. FAQ ── */}
-        <div>
+        {/* ── 9. FAQ (accordion) — 기존 5개 + 신규 2개 ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
                 q: '강아지 나이를 사람 나이로 곱하기 7을 하면 안 되나요?',
@@ -213,7 +324,7 @@ export default function PetPage() {
               },
               {
                 q: '하루 사료량이 포장지와 다른 이유는?',
-                a: '포장지의 급여량은 평균적인 미중성화 성견 기준입니다. 중성화 여부, 활동량, 개체 대사율에 따라 실제 필요량은 10~30% 차이날 수 있습니다. 이 계산기는 RER(기초대사량)과 생활계수를 기반으로 개인화된 값을 제공합니다.',
+                a: '포장지의 급여량은 평균적인 미중성화 성견 기준입니다. 중성화 여부, 활동량, 개체 대사율에 따라 실제 필요량은 10~30% 차이날 수 있습니다. 본 도구는 RER(기초대사량)과 생활계수(중성화 × 활동량 6조합 명시 매핑)를 기반으로 개인화된 값을 제공합니다.',
               },
               {
                 q: '간식은 하루에 얼마나 줘도 되나요?',
@@ -227,32 +338,50 @@ export default function PetPage() {
                 q: '노령견·노령묘는 사료를 얼마나 줄여야 하나요?',
                 a: '노령 반려동물은 기초대사량이 줄어들어 성견 대비 약 10~20% 칼로리를 감량하는 것이 일반적입니다. 다만 근감소증 예방을 위해 단백질 함량은 유지해야 합니다. 고단백·저지방의 시니어 전용 사료를 선택하고, 정확한 관리는 수의사와 상담하시기 바랍니다.',
               },
+              {
+                q: '우리 강아지 체중이 정상인지 어떻게 알 수 있나요?',
+                a: '본 도구는 품종 크기 기준 정상 범위를 자동 표시합니다 (예: 소형견 5~10kg, 중형 10~25kg). 다만 같은 체중이라도 골격·근육량에 따라 다르므로 집에서 간단히 확인하는 방법:<br>· <strong>갈비뼈</strong>: 손바닥으로 살짝 만질 때 느껴짐 (보이면 저체중, 안 만져지면 과체중)<br>· <strong>허리</strong>: 위에서 봤을 때 모래시계 모양 (사라지면 과체중)<br>· <strong>복부</strong>: 옆에서 봤을 때 약간 들어감 (처지면 과체중)<br>정확한 BCS(Body Condition Score)는 연 1회 건강검진 시 수의사가 1~9 또는 1~5 척도로 평가합니다.',
+              },
+              {
+                q: '강아지·고양이 평균 수명을 넘겼는데 괜찮을까요?',
+                a: '평균 수명은 통계 평균일 뿐입니다. 유전·식이·운동·검진·환경 관리가 좋다면 평균보다 훨씬 오래 사는 사례가 많습니다. 다만 평균 수명을 지난 고령 반려동물은:<br>· 검진 빈도 ↑ (반기 1회 → 분기 1회)<br>· 신장·간·심장 기능 정기 모니터링<br>· 관절·치아 통증 신호 관찰<br>· 식욕·활동·배변 변화 즉시 수의사 상담<br>본 도구의 진행률 게이지는 보호자의 건강 관리 인식 도구이며, <strong>&quot;수명 예측&quot;이 아닙니다.</strong>',
+              },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: faq.a }}
+                />
+              </details>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 7. 면책 조항 ── */}
-        <div style={{ background: 'rgba(255,62,62,0.07)', border: '1px solid rgba(255,62,62,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '13px', fontWeight: 600, color: '#ff7070', marginBottom: '8px' }}>⚠️ 수의학적 면책 조항</p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-            본 계산기는 수의영양학 기반 참고용 도구입니다. 개별 반려동물의 건강 상태, 질병 유무, 특수 식이 요건에 따라 실제 필요량은 다를 수 있습니다. 정확한 영양 관리와 건강 진단은 반드시 수의사와 상담하시기 바랍니다.
-          </p>
-        </div>
+        {/* ── 면책 조항 (기존 유지·강화) ── */}
+        <section>
+          <div style={{ background: 'rgba(255,62,62,0.07)', border: '1px solid rgba(255,62,62,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: '#ff7070', marginBottom: '8px' }}>⚠️ 수의학적 면책 조항</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+              본 계산기는 수의영양학 기반 <strong style={{ color: 'var(--text)' }}>참고용 도구</strong>입니다.
+              <strong style={{ color: 'var(--text)' }}> 의료 진단·치료 도구 X / 약물 용량 계산 X / 영양제 추천 X.</strong>
+              개별 반려동물의 건강 상태, 질병 유무, 특수 식이 요건에 따라 실제 필요량은 다를 수 있습니다.
+              체중 증감·식욕 변화·활동량 변화가 있다면 반드시 수의사와 상담하시기 바랍니다.
+            </p>
+          </div>
+        </section>
 
-        {/* ── 8. 함께 쓰면 좋은 도구 ── */}
-        <div>
+        {/* ── 함께 쓰면 좋은 도구 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',          desc: '보호자 건강도 챙기세요' },
-              { href: '/tools/health/weightloss',  icon: '🎯', name: '목표 체중 감량 계산기', desc: '칼로리 적자로 달성일 예측' },
+              { href: '/tools/health/weightloss',  icon: '🎯', name: '체중 감량 기간 계산기', desc: '칼로리 적자로 달성일 예측' },
+              { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량 계산기',     desc: '보호자 일일 칼로리 계산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',         desc: '예방접종·검진 일정 관리' },
-              { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',       desc: '반려동물 산책 루틴 설정' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
@@ -267,7 +396,7 @@ export default function PetPage() {
               </Link>
             ))}
           </div>
-        </div>
+        </section>
 
       </div>
     </div>

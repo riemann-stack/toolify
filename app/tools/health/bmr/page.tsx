@@ -4,28 +4,34 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmr',
-  title: '기초대사량 계산기 2026 — BMR·TDEE·하루 칼로리 계산',
-  description: 'Harris-Benedict 공식으로 기초대사량(BMR)과 활동량별 하루 권장 칼로리(TDEE)를 계산합니다. 다이어트·벌크업·마라톤 훈련 칼로리 목표 제공.',
-  keywords: ['기초대사량계산기', 'BMR계산기', '하루칼로리', 'TDEE계산기', '다이어트칼로리', '칼로리계산기', '마라톤칼로리'],
+  title: '기초대사량 계산기 2026 — BMR·TDEE·4공식 비교·운동일/휴식일',
+  description:
+    'BMR과 TDEE를 4가지 공식(Mifflin·Harris·Katch·Cunningham)으로 비교 계산. 직업+운동 분리 정밀 활동 분석, 운동일/휴식일 칼로리, 목표별 식단, 스마트워치 연동, 안전 하한선 가이드까지.',
+  keywords: [
+    '기초대사량 계산기', 'BMR 계산기', 'TDEE 계산기', '하루 칼로리',
+    'Mifflin-St Jeor', 'Katch-McArdle', '운동일 칼로리', '활동량 계산',
+    '다이어트 칼로리', '칼로리 계산기', '마라톤 칼로리',
+  ],
 })
 
 export default function BmrPage() {
   return (
-    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔥 기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        기초대사량(BMR)과 활동 수준에 따른 하루 권장 칼로리를 계산합니다.
+        BMR·TDEE를 <strong style={{ color: 'var(--text)' }}>4공식 비교, 운동일/휴식일 분리, 목표별 칼로리, 스마트워치 연동</strong>까지.
+        활동 정밀화로 직업·걸음·운동(횟수·시간·강도)을 분리해 정확하게 계산합니다.
       </p>
 
       <BmrClient />
 
       <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* ── 1. BMR이란? + TDEE 개념 ── */}
-        <div>
+        {/* ── 1. BMR과 TDEE란? (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             기초대사량(BMR)과 TDEE란?
           </h2>
@@ -35,7 +41,6 @@ export default function BmrPage() {
             전체 에너지 소비의 약 <strong style={{ color: 'var(--text)' }}>60~70%</strong>를 차지합니다.
           </p>
 
-          {/* BMR vs TDEE 구분 박스 */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>BMR</p>
@@ -60,10 +65,41 @@ export default function BmrPage() {
               체중을 관리하려면 BMR이 아닌 <strong style={{ color: 'var(--accent)' }}>TDEE를 기준으로 식단을 설계</strong>해야 합니다.
             </p>
           </div>
-        </div>
+        </section>
 
-        {/* ── 2. Harris-Benedict 공식 시각화 ── */}
-        <div>
+        {/* ── 2. BMR 4공식 비교 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            BMR 4공식 비교 (NEW)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구는 4가지 BMR 공식을 모두 비교 표시합니다. 각 공식은 입력값과 정확도가 다릅니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { name: '① Mifflin-St Jeor (1990)', tag: '권장', tagColor: '#3EFF9B', desc: '현대 의료계 표준. 일반 성인에게 가장 정확 (±5~10%). 입력: 키·체중·나이·성별.' },
+              { name: '② Harris-Benedict (1919)', tag: '한국 표준', tagColor: '#FFD700', desc: '가장 오래되고 널리 사용. 정확도 ±10%. Mifflin보다 약간 높게 추정. 한국 의료/연구 일관성 ↑.' },
+              { name: '③ Katch-McArdle', tag: '체지방률 정확 시', tagColor: '#3EC8FF', desc: '체지방률 정확 입력 시 ±3~5%. 운동선수·체성분 검사 받은 사람에게 정확. 입력: 체중·체지방률.' },
+              { name: '④ Cunningham', tag: 'LBM 정확 시', tagColor: '#FF8C3E', desc: '제지방량(LBM) 정확 입력 시 ±3~5%. 근육량 많은 사람에게 정확. 입력: LBM.' },
+            ].map((f, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{f.name}</span>
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: f.tagColor, border: `1px solid ${f.tagColor}50`, borderRadius: 4, padding: '2px 6px' }}>
+                    {f.tag}
+                  </span>
+                </div>
+                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+            ⓘ 실용적 권장 — 일반인: <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>, 운동선수: <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>, 한국 의료/연구: <strong style={{ color: 'var(--text)' }}>Harris-Benedict</strong>.
+          </p>
+        </section>
+
+        {/* ── 3. Harris-Benedict 공식 시각화 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             Harris-Benedict 공식
           </h2>
@@ -73,7 +109,6 @@ export default function BmrPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* 남성 */}
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.3)', borderRadius: '12px', padding: '20px 22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <span style={{ fontSize: '18px' }}>👨</span>
@@ -91,7 +126,6 @@ export default function BmrPage() {
               </p>
             </div>
 
-            {/* 여성 */}
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,213,0.3)', borderRadius: '12px', padding: '20px 22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <span style={{ fontSize: '18px' }}>👩</span>
@@ -109,10 +143,10 @@ export default function BmrPage() {
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ── 3. 활동 수준별 TDEE 표 ── */}
-        <div>
+        {/* ── 4. 활동 수준별 TDEE 표 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             활동 수준별 TDEE 계산
           </h2>
@@ -147,7 +181,6 @@ export default function BmrPage() {
             </table>
           </div>
 
-          {/* 마라톤 러너 팁 */}
           <div style={{ marginTop: '12px', background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '14px 18px', display: 'flex', gap: '12px' }}>
             <span style={{ fontSize: '20px', flexShrink: 0 }}>🏃</span>
             <div>
@@ -159,10 +192,105 @@ export default function BmrPage() {
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ── 4. 목표별 칼로리 설정 가이드 ── */}
-        <div>
+        {/* ── 5. 정밀 활동 수준 분석 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            정밀 활동 수준 분석 — 5단계의 한계 (NEW)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            5단계 활동 계수는 빠른 추정에는 좋지만 다음 한계가 있습니다 —
+          </p>
+          <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0, marginBottom: 14 }}>
+            <li>· &lsquo;보통 활동&rsquo; = 주 3~5회 운동 (너무 광범위)</li>
+            <li>· 30분 산책과 90분 러닝을 동일 분류</li>
+            <li>· 직업 활동량(사무·서비스·육체노동) 무시</li>
+            <li>· 일일 걸음 수 반영 X</li>
+          </ul>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,215,0,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFD700', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
+            <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
+              <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
+              <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 (3차원)</strong> — 250~800kcal/h</li>
+              <li>④ <strong style={{ color: 'var(--text)' }}>활동계수 자동 계산</strong> — 6문항 퀴즈</li>
+            </ul>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 10 }}>
+              결과: 5단계 활동 수준보다 <strong style={{ color: 'var(--text)' }}>±5~10% 더 정확</strong>합니다.
+            </p>
+          </div>
+        </section>
+
+        {/* ── 6. 운동일/휴식일 칼로리 사이클링 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            운동일/휴식일 칼로리 사이클링 (NEW)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            한국에서 잘 알려지지 않은 개념이지만, 해외 다이어트 커뮤니티에서는 표준 전략입니다.
+            <strong style={{ color: 'var(--text)' }}> 운동일에 더 먹고, 휴식일에 적게 먹는 방식</strong> —
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#3EFF9B', marginBottom: '6px' }}>✅ 장점</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 운동일 충분한 영양 → 회복·근성장</li>
+                <li>· 휴식일 적정 칼로리 → 체지방 감소</li>
+                <li>· 식단 만족감 (운동일 보상)</li>
+                <li>· 호르몬 안정 (장기 지속)</li>
+              </ul>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF8C3E', marginBottom: '6px' }}>⚠️ 주의</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 단순 평균 TDEE 사용 시 운동일 영양 부족</li>
+                <li>· 휴식일 잉여 칼로리 → 체지방 증가</li>
+                <li>· 한국 다이어트 실패의 흔한 원인</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+            ⓘ 본 도구의 <strong style={{ color: 'var(--text)' }}>[운동/휴식일] 탭</strong>에서 요일별 칼로리 자동 분리 계산이 가능합니다.
+          </p>
+        </section>
+
+        {/* ── 7. 안전 하한선 — 거식증 예방 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            안전 하한선 — 거식증·식이장애 예방 (NEW)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            본 도구는 다음 조건에서 강한 경고를 표시합니다 —
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
+            <div style={{ background: 'rgba(255,107,107,0.06)', border: '2px solid #FF6B6B', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '6px' }}>🔴 매우 위험</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 여성 1,200kcal 미만</li>
+                <li>· 남성 1,500kcal 미만</li>
+                <li>· 18세 미만 사용</li>
+              </ul>
+            </div>
+            <div style={{ background: 'rgba(255,140,62,0.06)', border: '1px solid #FF8C3E', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF8C3E', marginBottom: '6px' }}>🟡 주의</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· BMR 미만 섭취</li>
+                <li>· TDEE 대비 −25% 이상</li>
+                <li>· 운동량 매우 높은데 섭취 부족</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 10 }}>
+            <strong style={{ color: 'var(--text)' }}>왜 안전한가?</strong> — 1,200kcal 미만은 비타민·미네랄 부족 거의 확실, BMR 미만은 대사 적응 시작(장기 BMR↓), −25% 이상은 근손실 비율↑.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+            <strong style={{ color: 'var(--text)' }}>건강한 감량</strong> — 천천히(−10%) 주당 0.2~0.3kg, 보통(−15%) 주당 0.4~0.5kg. 빠른 감량(−20% 이상)은 단기만 권장.
+          </p>
+        </section>
+
+        {/* ── 8. 목표별 칼로리 가이드 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             목표별 칼로리 설정 가이드
           </h2>
@@ -190,16 +318,44 @@ export default function BmrPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 5. FAQ ── */}
-        <div>
+        {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            스마트워치 vs 공식 — 어느 게 정확? (NEW)
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>📐 공식 BMR/TDEE</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 장점: 빠른 추정</li>
+                <li>· 단점: 개인 차이 반영 X</li>
+                <li>· 정확도: ±10%</li>
+              </ul>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#C485E0', marginBottom: '6px' }}>⌚ Apple/Garmin/Fitbit</p>
+              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>· 장점: 실시간·개인화</li>
+                <li>· 단점: 운동 강도 추정 오차</li>
+                <li>· 정확도: ±10~20%</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+            💡 <strong style={{ color: 'var(--text)' }}>실용적 결론</strong> — 둘 다 추정치(절대값 X). 본 도구는 평균값을 권장하며, 7일 이상 데이터가 일일 측정보다 정확합니다. 가장 정확한 검증은 <strong style={{ color: 'var(--text)' }}>2~4주 동일 칼로리 식사 후 체중 변화 측정</strong>(체중 안정 = 그 칼로리가 본인 TDEE).
+          </p>
+        </section>
+
+        {/* ── 10. FAQ (accordion 방식) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
                 q: 'Harris-Benedict 공식이란?',
-                a: '1919년 개발된 기초대사량 계산 공식으로 현재 가장 널리 사용됩니다. 남성: 88.362 + (13.397×체중kg) + (4.799×키cm) - (5.677×나이), 여성: 447.593 + (9.247×체중kg) + (3.098×키cm) - (4.330×나이)로 계산합니다. 이후 Mifflin-St Jeor 공식도 개발되었으나 두 공식 모두 ±10% 수준의 오차가 있을 수 있습니다.',
+                a: '1919년 개발된 기초대사량 계산 공식으로 현재 가장 널리 사용됩니다. 남성: 88.362 + (13.397×체중kg) + (4.799×키cm) − (5.677×나이), 여성: 447.593 + (9.247×체중kg) + (3.098×키cm) − (4.330×나이)로 계산합니다. 이후 Mifflin-St Jeor 공식도 개발되었으나 두 공식 모두 ±10% 수준의 오차가 있을 수 있습니다. 본 도구는 4공식을 모두 비교 표시합니다.',
               },
               {
                 q: '기초대사량은 왜 사람마다 다른가요?',
@@ -207,30 +363,81 @@ export default function BmrPage() {
               },
               {
                 q: '다이어트 중 기초대사량이 낮아지나요?',
-                a: '장기간 칼로리를 심하게 제한하면 신체가 적응해 기초대사량이 낮아질 수 있습니다. 이를 방지하려면 급격한 칼로리 제한보다 TDEE의 10~20% 수준에서 조절하고 규칙적인 근력 운동을 병행하는 것이 좋습니다.',
+                a: '장기간 칼로리를 심하게 제한하면 신체가 적응해 기초대사량이 낮아질 수 있습니다 (대사 적응). 이를 방지하려면 급격한 칼로리 제한보다 <strong>TDEE의 10~20% 수준</strong>에서 조절하고 규칙적인 근력 운동을 병행하는 것이 좋습니다.',
               },
               {
                 q: 'TDEE는 매일 같은가요?',
-                a: '아닙니다. TDEE는 그날의 활동량에 따라 달라집니다. 장거리 달리기를 한 날은 TDEE가 평소보다 수백~1,000kcal 높을 수 있고, 완전 휴식일은 BMR에 가까워집니다. 주간 평균 TDEE를 기준으로 주간 총 칼로리 목표를 설정하는 방법이 실용적입니다.',
+                a: '아닙니다. TDEE는 그날의 활동량에 따라 달라집니다. 장거리 달리기를 한 날은 TDEE가 평소보다 수백~1,000kcal 높을 수 있고, 완전 휴식일은 BMR에 가까워집니다. 본 도구의 <strong>[운동/휴식일] 탭</strong>에서 요일별 분리 계산이 가능합니다.',
+              },
+              {
+                q: '어떤 공식을 사용해야 하나요?',
+                a: '일반인은 <strong>Mifflin-St Jeor</strong> 공식을 권장합니다 (현대 의료계 표준). 상황별 추천 — 일반 성인 다이어트: Mifflin-St Jeor / 한국 의료 기록 일관성: Harris-Benedict / 체지방률 정확 측정(InBody): Katch-McArdle / 운동선수·근육량 많음: Cunningham. 본 도구는 4공식을 모두 비교 표시하므로 본인 상황에 맞는 결과를 참고할 수 있습니다.',
+              },
+              {
+                q: '운동일과 휴식일의 칼로리를 따로 계산해야 하나요?',
+                a: '권장됩니다. 단순 주간 평균 TDEE만 사용하면 — 운동일: 영양·탄수화물 부족 → 회복↓·근손실↑ / 휴식일: 잉여 칼로리 → 체지방 증가. 따라서 <strong>운동일에 더 먹고, 휴식일에 적게 먹는 칼로리 사이클링</strong>이 장기적으로 효과적입니다. 본 도구의 [운동/휴식일] 탭에서 자동 계산할 수 있습니다.',
+              },
+              {
+                q: '스마트워치 측정값이 공식보다 높게 나옵니다. 어느 걸 따라야 하나요?',
+                a: '두 값의 평균을 사용하는 것이 가장 안전합니다. 예: 공식 TDEE 2,558 / 워치 TDEE 2,870 → 권장 기준 약 2,714kcal. 이유 — 둘 다 ±10~20% 오차 가능 / 공식은 일반화(개인 차이 X) / 스마트워치는 운동 강도 추정 오차. <strong>가장 정확한 검증은 2~4주 동안 동일 칼로리로 식사한 후 체중 변화를 측정</strong>하는 것입니다 (체중 안정 = 그 칼로리가 본인 TDEE).',
+              },
+              {
+                q: '권장 최소 칼로리(여성 1,200·남성 1,500) 미만으로 먹으면 안 되나요?',
+                a: '단기적으로 가능하지만 <strong>장기(2주 이상) 지속은 권장하지 않습니다.</strong><br><br>장기 위험 — 영양 부족(비타민·미네랄) / 대사 적응(BMR 감소 → 요요) / 근손실 증가 / 호르몬 이상(특히 여성: 생리 불순) / 거식증·폭식증 위험 / 골밀도 감소.<br><br>대안 — 1,200/1,500kcal 이상으로 천천히 감량 / 운동량↑(근육 유지) / 충분한 단백질(체중 1kg당 1.6~2.2g) / 의료 전문가 상담(영양사·내과). 극단적 다이어트는 단기 결과 + 장기 손실입니다.',
+              },
+              {
+                q: '청소년·임산부도 본 계산기를 사용할 수 있나요?',
+                a: '<strong>권장하지 않습니다.</strong><br><br>· <strong>청소년(18세 미만)</strong> — 성장기 영양 필요량이 성인 공식과 다름. BMR이 성인보다 높음(성장 에너지). 본 도구 부적합 → 소아청소년과 전문의 상담.<br>· <strong>임산부</strong> — 임신 시기별 칼로리 필요량 다름(1·2·3분기). 일반 BMR 공식 부적합. 산부인과·영양사 상담 필수.<br>· <strong>65세 이상</strong> — 근감소증 고려 필요. 본 도구 결과는 참고만, 노인병학 의료 상담 권장.<br>· <strong>만성질환자(당뇨·심혈관·갑상선)</strong> — 의료 전문가 상담 필수. 본 도구 결과만으로 식단 결정 X.',
+              },
+              {
+                q: 'BMR을 높이려면 어떻게 해야 하나요?',
+                a: '단기간 BMR을 크게 높이는 것은 어렵지만, 장기적 방법은 있습니다.<br><br><strong>효과적</strong> — 근력 운동 (근육 1kg = BMR ~13kcal/일) / 단백질 충분(소화 시 칼로리↑) / 충분한 수면(7~8시간) / 카페인(단기 ~5%).<br><br><strong>비효과적·잘못된 정보</strong> — &lsquo;5분마다 식사&rsquo;(효과 미미) / &lsquo;특정 음식(마늘·생강 등)&rsquo;(큰 효과 X) / &lsquo;찬물 마시기&rsquo;(1회 4~5kcal, 무시 가능).<br><br><strong>현실적</strong> — 근육 1kg 증가 → BMR 약 13kcal/일↑ / 체중 5kg 증가 → BMR 약 50kcal/일↑ / 단기간보다 장기간(수개월) 시각으로.',
               },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: faq.a }}
+                />
+              </details>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ── 6. 함께 쓰면 좋은 도구 ── */}
-        <div>
+        {/* ── 면책 강화 ── */}
+        <section>
+          <div style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '16px 20px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '10px' }}>
+              ⚠️ 본 BMR/TDEE 계산기는 건강 정보 참고용입니다
+            </p>
+            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
+              <strong style={{ color: 'var(--text)' }}>의학적 진단·치료 도구가 아닙니다.</strong> 실제 에너지 소비량은 다음에 따라 달라집니다 —
+              근육량·체지방률 / 호르몬 상태(갑상선·인슐린·코르티솔) / 수면 질·시간 / 만성질환·약물 복용 / 운동 강도·기술 / 측정기 정확도.
+            </p>
+            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
+              <strong style={{ color: 'var(--text)' }}>다음의 경우 사용 X 또는 의료 상담 필수</strong> — 18세 미만(성장기 별도 기준) / 임산부·수유부 / 당뇨·심혈관·갑상선 등 만성질환 / 거식증·폭식증 등 식이 장애 / 약물 복용 중.
+            </p>
+            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
+              <strong style={{ color: 'var(--text)' }}>극단적 칼로리 제한·지속적 피로·체중 강박 시</strong> — 의료 전문가(영양사·내과·정신과) 상담 / 정신건강 위기상담 <strong style={{ color: '#FF6B6B' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#FF6B6B' }}>1393</strong> (24시간).
+              <br /><br />건강한 체중 관리는 단순 칼로리 계산을 넘어 <strong style={{ color: 'var(--text)' }}>영양 균형·운동·수면·정신 건강</strong>을 함께 고려해야 합니다.
+            </p>
+          </div>
+        </section>
+
+        {/* ── 함께 쓰면 좋은 도구 ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',               desc: '현재 체중이 적정 범위인지 확인' },
-              { href: '/tools/health/weightloss',  icon: '🎯', name: '목표 체중 감량 기간 계산기', desc: '칼로리 적자로 목표 달성일 예측' },
-              { href: '/tools/sports/pace',        icon: '🏃', name: '러닝 페이스 계산기',       desc: '마라톤 훈련 시 목표 페이스 계산' },
-              { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',           desc: '식사·운동 루틴을 집중해서 관리' },
+              { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수·키별 정상 체중·허리둘레' },
+              { href: '/tools/health/weightloss',  icon: '🎯', name: '체중 감량 기간 계산기',       desc: '칼로리 적자로 목표 달성일 예측' },
+              { href: '/tools/sports/pace',        icon: '🏃', name: '러닝 페이스 계산기',         desc: '마라톤 훈련 시 목표 페이스' },
+              { href: '/tools/health/supplement',  icon: '💊', name: '영양제 성분 체크',          desc: '영양제 중복·상한량 체크' },
+              { href: '/tools/date/age',           icon: '🎂', name: '만 나이 계산기',             desc: '나이별 건강 관리 계획' },
+              { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',            desc: '식사·운동 루틴 집중 관리' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
@@ -245,7 +452,7 @@ export default function BmrPage() {
               </Link>
             ))}
           </div>
-        </div>
+        </section>
 
       </div>
     </div>

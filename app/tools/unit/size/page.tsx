@@ -263,10 +263,14 @@ export default function SizePage() {
               { q: '해외 직구 시 사이즈 실패를 줄이려면?',
                 a: '① 브랜드 공식 측정값(measurements) 확인 ② 무료 반품 가능 사이트 우선 이용 (아마존·자라) ③ 사이즈 후기 검색 ("이 사이즈는 작게/크게 나옴") ④ 의심스러우면 한 사이즈 크게 주문 ⑤ 본인 사이즈를 cm로 정확히 측정해 두기 — 이 5가지를 지키면 실패 확률이 크게 줄어듭니다.' },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
+                  {faq.a}
+                </p>
+              </details>
             ))}
           </div>
         </div>

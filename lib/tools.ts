@@ -18,7 +18,7 @@ export const categories: Category[] = [
   {
     id: 'finance', icon: '💰', name: '금융·재테크', color: '#3EFF9B',
     tools: [
-      { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 기준 세후 월 실수령액',    badge: 'hot' },
+      { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '2026년 4대보험·세금 자동, 월 실수령 역산, 인상률 시뮬, 시급 환산, 연봉표', badge: 'hot' },
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등 비교' },
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치식·적립식 복리 수익' },
       { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 후 새 평단가 계산' },
@@ -35,11 +35,11 @@ export const categories: Category[] = [
   {
     id: 'health', icon: '🏃', name: '건강·웰빙', color: '#3EC8FF',
     tools: [
-      { href: '/tools/health/bmi',           icon: '⚖️', name: '비만도(BMI) 계산기',         desc: '체질량지수로 비만도 빠르게 확인' },
-      { href: '/tools/health/bmr',           icon: '🔥', name: '기초대사량(BMR) 계산기',     desc: '하루 권장 칼로리·BMR 계산' },
-      { href: '/tools/health/weightloss',    icon: '🎯', name: '체중 감량 기간 계산기',     desc: '목표 체중까지 칼로리 적자 계산' },
-      { href: '/tools/health/pregnancy',     icon: '🤰', name: '임신 주수 계산기',          desc: '출산 예정일·산전 검사 일정' },
-      { href: '/tools/health/pet',           icon: '🐾', name: '반려동물 나이·칼로리 계산기', desc: '강아지·고양이 나이·하루 사료량' },
+      { href: '/tools/health/bmi',           icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수, 키별 정상 체중, 목표 BMI, 허리둘레·복부비만, 체중 시뮬, 체지방률 추정' },
+      { href: '/tools/health/bmr',           icon: '🔥', name: '기초대사량 계산기',          desc: 'BMR·TDEE, 4공식 비교, 운동일/휴식일, 목표별 칼로리, 스마트워치 연동' },
+      { href: '/tools/health/weightloss',    icon: '🎯', name: '체중 감량 기간 계산기',     desc: '안전 감량 속도, BMI 자동 체크, 목표일 역산, 정체기 반영, 식단·운동 분리, 탄단지 자동' },
+      { href: '/tools/health/pregnancy',     icon: '🤰', name: '임신 주수 계산기',          desc: '임신 타임라인, 산전 검사 일정, 태아 크기 비교, 출산 준비 체크리스트, 생리주기 보정' },
+      { href: '/tools/health/pet',           icon: '🐾', name: '반려동물 나이·칼로리 계산기', desc: '강아지·고양이 사람 나이, RER/DER 칼로리, 사료량(건식·습식), 체중 평가, 수명 진행률' },
       { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기',     desc: '음주량·체중 기반 BAC·운전 가능 시각' },
       { href: '/tools/health/supplement',    icon: '💊', name: '영양제 성분 체크 계산기',   desc: '영양제 성분 중복·상한량 초과 체크' },
       { href: '/tools/health/uv-protection', icon: '☀️', name: '자외선 노출 가이드 계산기', desc: 'UV 지수·피부 타입·SPF 기준 일광화상 위험 시간과 자외선 차단 가이드' },
@@ -65,9 +65,9 @@ export const categories: Category[] = [
     id: 'life', icon: '🎲', name: '생활·재미', color: '#FF8C3E',
     tools: [
       { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기·확률 시뮬레이터', desc: '8가지 생성 모드, 번호 분석, 가상 추첨, 1등 체감 시뮬, 당첨금 세후 계산', badge: 'hot' },
-      { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기',         desc: '숫자·항목 무작위 뽑기' },
-      { href: '/tools/life/ladder',        icon: '🪜', name: '사다리타기',          desc: '공정한 무작위 사다리' },
-      { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이(N빵) 계산기', desc: '술값 따로, 단위 올림 옵션' },
+      { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨, 룰렛, 팀 나누기, 발표 순서, 자리 배치, 공정성 검증까지' },
+      { href: '/tools/life/ladder',        icon: '🪜', name: '사다리타기',          desc: '캐릭터 16종, 6가지 공개 모드(한 명씩·전체·익명·역추적), 자동 채우기, 6 템플릿' },
+      { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이·N빵 계산기', desc: '술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유, 8가지 상황 프리셋' },
       { href: '/tools/life/zodiac',        icon: '🐯', name: '띠·별자리 계산기',    desc: '생년월일로 띠·별자리 확인' },
       { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',     desc: '25분 집중·5분 휴식 사이클' },
       { href: '/tools/life/alcohol',       icon: '🍺', name: '알코올 도수 계산기',  desc: '혼합 음료 도수·표준 음주량 계산' },
@@ -95,9 +95,10 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'interior', icon: '🛋️', name: '인테리어', color: '#E89757',
+    id: 'interior', icon: '🏠', name: '주거·인테리어', color: '#E89757',
     tools: [
       { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피 한 번에 (도배·페인트·에어컨 활용)' },
+      { href: '/tools/interior/ventilation',   icon: '💨', name: '실내 환기량·CADR 계산기',     desc: '공간 부피·인원·ACH로 필요 환기량, 공기청정기 CADR, CO₂ 위험, 창문 환기 시간', badge: 'new' },
       { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 소요량 계산기',         desc: '벽지 롤 수·면적·셀프 시공 비용 견적' },
       { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 소요량 계산기',       desc: '벽·천장 면적·칠할 횟수·페인트 종류별 필요량 및 구매 조합' },
       { href: '/tools/interior/curtain-blind', icon: '🪟', name: '커튼·블라인드 사이즈 계산기', desc: '창문 사이즈로 커튼·블라인드·롤스크린 추천 사이즈' },
@@ -110,15 +111,12 @@ export const categories: Category[] = [
   {
     id: 'unit', icon: '📐', name: '단위·변환', color: '#B03EFF',
     tools: [
-      { href: '/tools/unit/area',        icon: '🏠', name: '평수 ↔ ㎡ 변환기',       desc: '아파트 면적 단위 변환' },
-      { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',             desc: 'cm·m·inch·ft·mile 변환' },
-      { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
-      { href: '/tools/unit/size',        icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: 'US·EU → 한국 사이즈' },
-      { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',             desc: '섭씨·화씨·켈빈 즉시 변환' },
-      { href: '/tools/unit/time',        icon: '⏱️', name: '시간 단위 변환기',         desc: '초·분·시간·일·주·월·년 + 근무시간 기준 변환' },
-      { href: '/tools/unit/battery',     icon: '🔋', name: '배터리 용량 변환기',       desc: 'mAh·Wh·Ah 변환 및 비행기 반입 가능 여부' },
-      { href: '/tools/unit/fuel-economy',icon: '⛽', name: '연비 단위 변환기',         desc: 'km/L · L/100km · mpg · 전기차 전비 변환' },
-      { href: '/tools/unit/tire-pressure',icon: '🛞', name: '타이어 공기압 변환기',    desc: 'psi · kPa · bar 변환 및 권장 공기압 체크' },
+      { href: '/tools/unit/converter',     icon: '📐', name: '통합 단위 변환기',         desc: '길이·면적·무게·부피·온도·시간·속도·압력·데이터 9개 + 한국 전통 단위(자·근·돈·평·홉·되)', badge: 'new' },
+      { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',          desc: '아파트 평형 환산, 전용·공급·계약면적, 평형별 방 크기 가이드' },
+      { href: '/tools/unit/size',          icon: '🛍️', name: '해외 직구 사이즈 변환기',    desc: 'US·EU·UK → 한국 의류·신발·속옷·반지 사이즈, 브랜드별 차이 가이드' },
+      { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',         desc: 'mAh·Wh·Ah 변환, 비행기 반입 가능 여부, 보조배터리 가이드' },
+      { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 단위 변환기',           desc: 'km/L·L/100km·mpg, 전기차 전비, 연료별 100km 비용 비교' },
+      { href: '/tools/unit/tire-pressure', icon: '🛞', name: '타이어 공기압 변환기',       desc: 'psi·kPa·bar, 차량별 권장 공기압, 계절별 관리 가이드' },
     ],
   },
   {
@@ -136,6 +134,7 @@ export const categories: Category[] = [
   {
     id: 'music', icon: '🎵', name: '음악', color: '#C83EFF',
     tools: [
+      { href: '/tools/music/vocal-range', icon: '🎤', name: '보컬 음역대 측정기', desc: '마이크로 실시간 음정 감지, 최저음·최고음 자동 측정, 한국 노래 30+ 곡 키 매칭', badge: 'new' },
       { href: '/tools/music/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
       { href: '/tools/music/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음정 변환·MIDI 번호·파장 계산' },
       { href: '/tools/music/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·쉬운 코드 추천' },

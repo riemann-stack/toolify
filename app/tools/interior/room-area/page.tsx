@@ -250,6 +250,18 @@ export default function RoomAreaPage() {
                 q: '한국 아파트 평수와 실제 사용 평수가 다른 이유는?',
                 a: '한국 아파트의 <strong>"공급면적"은 전용면적 + 공용면적</strong>(엘리베이터·복도 등)을 포함합니다. 예를 들어 24평 아파트는 보통 전용면적 약 18~20평 정도입니다. 본 계산기에서 입력하는 가로·세로는 실제 거주 공간(전용면적)이 기준이 됩니다. 정확한 면적은 등기부등본 또는 건축물대장에서 확인할 수 있습니다.',
               },
+              {
+                q: '방이 ㄱ자 모양인데 어떻게 계산하나요?',
+                a: '두 가지 방법이 있습니다 — ① <strong>[상세 계산 (방·벽별)] 탭</strong>에서 큰 사각형 + 작은 사각형을 별도 방으로 입력 후 합산. 큰 사각형 면적에서 ㄱ자로 빠진 부분을 음수로 추가하면 정확한 ㄱ자 면적이 나옵니다. ② 빠른 계산 시 [간편 계산]에서 ㄱ자를 둘러싸는 큰 사각형 면적을 입력 후 빠진 부분(예: 1.5m × 1.5m = 2.25㎡)을 별도 메모로 빼주세요. ㄱ자 모양은 <strong>외부 둘레가 늘어나는 만큼 벽 면적도 증가</strong>하므로 도배·페인트 계산 시 주의가 필요합니다.',
+              },
+              {
+                q: '다락방·경사 천장은 어떻게 계산하나요?',
+                a: '경사 천장은 평면 천장보다 면적이 큽니다. 계산 방법 — <strong>가로 × √(세로² + (최고높이 − 최저높이)²)</strong>. 예: 4m × 5m 다락방, 최저 1.2m / 최고 2.6m → 경사 길이 = √(5² + 1.4²) ≈ 5.19m → 경사 천장 = 4 × 5.19 ≈ 20.8㎡ (평면 천장 20㎡보다 4% 큼). 양쪽 측면도 사다리꼴(낮은벽 + 높은벽 합)로 별도 계산하며, 부피는 바닥 면적 × 평균 높이를 사용합니다. 정확한 시공량은 인테리어 업체와 상담하세요.',
+              },
+              {
+                q: '3D 시각화의 박스가 실제 비율과 같나요?',
+                a: '네, 본 도구의 3D 박스는 입력한 가로·세로·천장 높이를 <strong>정확한 비율</strong>로 표시합니다. 예 — 5m × 4m × 2.4m → 가로가 세로보다 25% 김, 정사각형 7m × 7m × 2.4m → 가로·세로 동일. <strong>캐비넷 투영(cabinet projection)</strong> 방식으로 깊이 방향만 50% 축소 표시하므로 실제 직육면체보다 약간 납작하게 보일 수 있습니다. 정확한 평면 비율은 함께 표시되는 <strong>평면도(top-down)</strong>에서 확인하세요.',
+              },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
@@ -274,7 +286,7 @@ export default function RoomAreaPage() {
               { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 소요량 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
               { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 소요량 계산기', desc: '벽·천장 페인트 양·구매 조합' },
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',    desc: '아파트 면적 단위 변환' },
-              { href: '/tools/unit/length',        icon: '📏', name: '길이 변환기',          desc: 'cm·m·inch·ft 변환' },
+              { href: '/tools/unit/converter',     icon: '📐', name: '통합 단위 변환기',     desc: '길이·면적·무게 9개 카테고리' },
             ].map((t, i) => (
               <Link
                 key={i}

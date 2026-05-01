@@ -1,69 +1,15 @@
 'use client'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import styles from './pet.module.css'
+import {
+  Activity, DogSize,
+  calculateAll, BodyEvaluation, LifeProgress,
+} from './petUtils'
 
 // ─── 타입 ───────────────────────────────────────────────────────────────────
 
-type DogSize = 'tiny' | 'small' | 'medium' | 'large'
-type Activity = 'low' | 'normal' | 'high'
 type CatEnv   = 'indoor' | 'both' | 'outdoor'
 type FoodMode = 'dry' | 'wet' | 'mix'
-
-// ─── 계산 함수 ───────────────────────────────────────────────────────────────
-
-function rer(weight: number): number {
-  return 70 * Math.pow(weight, 0.75)
-}
-
-function dogHumanAge(yrs: number, mos: number, size: DogSize): number {
-  const a = yrs + mos / 12
-  const inc = size === 'large' ? 6 : size === 'medium' ? 5 : 4.5
-  if (a <= 0) return 0
-  if (a <= 1) return Math.round(15 * a)
-  if (a <= 2) return Math.round(15 + 9 * (a - 1))
-  return Math.round(24 + inc * (a - 2))
-}
-
-function catHumanAge(yrs: number, mos: number): number {
-  const a = yrs + mos / 12
-  if (a <= 0) return 0
-  if (a <= 1) return Math.round(15 * a)
-  if (a <= 2) return Math.round(15 + 9 * (a - 1))
-  return Math.round(24 + 4 * (a - 2))
-}
-
-function getDogStage(yrs: number, mos: number, size: DogSize): string {
-  const a = yrs + mos / 12
-  const seniorAt = size === 'large' ? 5 : 7
-  if (a < 1) return '퍼피'
-  if (a < 3) return '청년견'
-  if (a < seniorAt) return '중년견'
-  return '노령견'
-}
-
-function getCatStage(yrs: number, mos: number): string {
-  const a = yrs + mos / 12
-  if (a < 1) return '키튼'
-  if (a < 7) return '성묘'
-  if (a < 11) return '시니어'
-  return '슈퍼시니어'
-}
-
-function getDogFactor(stage: string, neutered: boolean, activity: Activity): number {
-  if (stage === '퍼피') return 2.5
-  if (stage === '노령견') return neutered ? 1.1 : 1.2
-  if (activity === 'high') return 1.8
-  if (activity === 'low') return neutered ? 1.2 : 1.4
-  return neutered ? 1.4 : 1.6
-}
-
-function getCatFactor(stage: string, neutered: boolean, env: CatEnv, activity: Activity): number {
-  if (stage === '키튼') return 2.5
-  if (stage === '시니어' || stage === '슈퍼시니어') return 1.1
-  if (env === 'outdoor' || activity === 'high') return 1.6
-  if (env === 'both' || !neutered) return 1.4
-  return 1.2
-}
 
 // ─── 공통 서브컴포넌트 ─────────────────────────────────────────────────────
 
@@ -101,9 +47,83 @@ function CalCard({ title, num, unit, sub, treat = false }: {
   )
 }
 
+function BodyConditionCard({ body, weight }: { body: BodyEvaluation; weight: number }) {
+  // 막대 위치 — 비율 계산 (0=저체중, 50=적정, 100=비만)
+  let pct = 50
+  if (body.range) {
+    const idealMid = (body.range.min + body.range.max) / 2
+    const ratio = weight / idealMid
+    // 0.7 → 0%, 1.0 → 50%, 1.4 → 100%
+    pct = Math.max(0, Math.min(100, ((ratio - 0.7) / 0.7) * 100))
+  } else {
+    // 고양이 (3.0~5.5kg 적정)
+    if (weight < 3.0) pct = 10
+    else if (weight <= 5.5) pct = 30 + ((weight - 3.0) / 2.5) * 30  // 30~60
+    else if (weight <= 7.0) pct = 65 + ((weight - 5.5) / 1.5) * 15  // 65~80
+    else pct = Math.min(100, 85 + (weight - 7.0) * 5)
+  }
+
+  return (
+    <div className={styles.bcsCard} style={{ borderLeftColor: body.color }}>
+      <div className={styles.bcsHeader}>
+        <span className={styles.bcsTitle}>체중 평가</span>
+        <span className={styles.bcsBadge}
+          style={{ background: `${body.color}22`, color: body.color, border: `1px solid ${body.color}66` }}>
+          {body.label}
+        </span>
+      </div>
+      <div className={styles.bcsWeight} style={{ color: body.color }}>
+        {weight}<span style={{ fontSize: 14, color: 'var(--muted)', marginLeft: 4 }}>kg</span>
+      </div>
+      {body.range && (
+        <div className={styles.bcsRange}>
+          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
+        </div>
+      )}
+      <div className={styles.bcsBar}>
+        <div className={styles.bcsMarker} style={{ left: `${pct}%` }} />
+      </div>
+      <div className={styles.bcsMessage}>{body.message}</div>
+      <div className={styles.lifeNote}>
+        ⓘ 본 평가는 품종 크기·체중만 반영한 추정입니다. 정확한 BCS(1~9 또는 1~5)는 수의사가 갈비뼈·허리·복부를 직접 만져 평가합니다.
+      </div>
+    </div>
+  )
+}
+
+function LifeProgressCard({ life, color }: { life: LifeProgress; color: string }) {
+  return (
+    <div className={styles.lifeCard}>
+      <div className={styles.lifeHeader}>
+        <span className={styles.lifeTitle}>평균 수명 진행률</span>
+        <span className={styles.lifePercent} style={{ color }}>
+          {Math.round(life.progressPercent)}%
+        </span>
+      </div>
+      <div className={styles.lifeGauge}>
+        <div className={styles.lifeFill} style={{ width: `${Math.min(100, life.progressPercent)}%` }} />
+      </div>
+      <div className={styles.lifeAxis}>
+        <span>0세</span>
+        <span>{life.avg}세 (평균)</span>
+        <span>{life.max}세 (최장수)</span>
+      </div>
+      <div className={styles.lifeStage}>
+        {life.stageLabel} · 평균까지 약 {life.remainingYears}년
+      </div>
+      <div className={styles.lifeMsg}>{life.stageMessage}</div>
+      {life.note && <div className={styles.lifeNote}>ⓘ {life.note}</div>}
+      <div className={styles.lifeNote}>
+        ⓘ 평균 수명은 통계 평균이며 개체차가 매우 큽니다. 본 진행률은 보호자의 건강 관리 인식 도구이며 &lsquo;수명 예측&rsquo;이 아닙니다.
+      </div>
+    </div>
+  )
+}
+
 const Disclaimer = () => (
   <div className={styles.disclaimer}>
-    ⚠️ 본 계산기는 수의영양학 기반 참고용 도구입니다. 개별 반려동물의 건강 상태와 질병 유무에 따라 실제 필요량은 다를 수 있습니다. 정확한 영양 관리는 수의사와 상담하시기 바랍니다.
+    ⚠️ 본 계산기는 수의영양학 기반 참고용 도구입니다. 의료 진단·약물 용량·영양제 추천 X.
+    개별 반려동물의 건강 상태와 질병 유무에 따라 실제 필요량은 다를 수 있습니다. 정확한 영양 관리는 수의사와 상담하시기 바랍니다.
   </div>
 )
 
@@ -145,21 +165,25 @@ function DogTab() {
   const [calDen,   setCalDen]   = useState(350)
   const [copied,   setCopied]   = useState(false)
 
-  const humanAge = dogHumanAge(ageYrs, ageMos, size)
-  const stage    = getDogStage(ageYrs, ageMos, size)
-  const stageIdx = DOG_STAGES.indexOf(stage)
-  const rerVal   = Math.round(rer(weight))
-  const factor   = getDogFactor(stage, neutered, activity)
-  const der      = Math.round(rerVal * factor)
-  const foodG    = calDen > 0 ? Math.round(der / calDen * 100) : 0
-  const treatCal = Math.round(der * 0.1)
-  const water    = Math.round(weight * 55)
+  // ★ 단일 useMemo로 모든 결과 계산 — 의존성 변경 시 즉시 리렌더
+  const result = useMemo(
+    () => calculateAll({
+      species: 'dog', yrs: ageYrs, mos: ageMos, weight, size,
+      isNeutered: neutered, activity, foodKcalPer100g: calDen,
+    }),
+    [ageYrs, ageMos, weight, size, neutered, activity, calDen],
+  )
+
+  const stageIdx = DOG_STAGES.indexOf(result.stage)
+  const foodG = calDen > 0 ? Math.round(result.der / calDen * 100) : 0
 
   function handleCopy() {
     navigator.clipboard.writeText(
-      `🐶 강아지 계산 결과\n사람 나이: ${humanAge}세 (${stage})\n` +
-      `일일 권장 칼로리: ${der}kcal\n사료 권장량: ${foodG}g/일 (${calDen}kcal/100g 기준)\n` +
-      `간식 허용: ${treatCal}kcal/일\n권장 수분: ${water}ml/일`
+      `🐶 강아지 계산 결과\n사람 나이: ${result.humanAge}세 (${result.stage})\n` +
+      `일일 권장 칼로리: ${result.der}kcal (RER ${result.rerVal} × ${result.derFactor})\n` +
+      `사료 권장량: ${foodG}g/일 (${calDen}kcal/100g 기준)\n` +
+      `간식 허용: ${result.treatKcal}kcal/일\n권장 수분: ${result.waterMl}ml/일\n` +
+      `체중 평가: ${result.body.label} · 수명 진행률: ${Math.round(result.life.progressPercent)}%`,
     ).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
   }
 
@@ -225,7 +249,7 @@ function DogTab() {
         <div className={styles.card}>
           <span className={styles.cardLabel}>활동량</span>
           <div className={styles.btnGroup}>
-            {([['low','낮음'],['normal','보통'],['high','높음']] as [Activity, string][]).map(([v, l]) => (
+            {([['low', '낮음'], ['normal', '보통'], ['high', '높음']] as [Activity, string][]).map(([v, l]) => (
               <button key={v}
                 className={`${styles.toggleBtn}${activity === v ? ' ' + styles.petBtnActive : ''}`}
                 onClick={() => setActivity(v)}>{l}</button>
@@ -235,27 +259,36 @@ function DogTab() {
       </div>
 
       {/* 결과 */}
-      <LifeStageBar stages={DOG_STAGES} current={stage} />
+      <LifeStageBar stages={DOG_STAGES} current={result.stage} />
 
       <div className={styles.heroCard}>
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
-            <span className={styles.heroNum}>{humanAge}</span>
+            <span className={styles.heroNum}>{result.humanAge}</span>
             <span className={styles.heroUnit}>세</span>
           </div>
           <div className={styles.heroSub}>사람 나이 환산 (품종 크기 보정)</div>
         </div>
         <div className={styles.heroRight}>
-          <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{stage}</div>
-          <div className={styles.heroFactor}>생활계수 ×{factor}</div>
+          <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{result.stage}</div>
+          <div className={styles.heroFactor}>생활계수 ×{result.derFactor}</div>
+          <div className={styles.factorBadge}>
+            <b>×{result.derFactor}</b> = {result.derFactorLabel}
+          </div>
         </div>
       </div>
+
+      {/* NEW: 체중 평가 */}
+      <BodyConditionCard body={result.body} weight={weight} />
+
+      {/* NEW: 수명 진행률 */}
+      <LifeProgressCard life={result.life} color="#FFB347" />
 
       {/* 사료 칼로리 밀도 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>사료 칼로리 밀도 (kcal / 100g)</span>
         <div className={styles.presetRow}>
-          {[{n:'로얄캐닌',v:380},{n:'힐스',v:360},{n:'퓨리나',v:350}].map(p => (
+          {[{ n: '로얄캐닌', v: 380 }, { n: '힐스', v: 360 }, { n: '퓨리나', v: 350 }].map(p => (
             <button key={p.n}
               className={`${styles.presetBtn}${calDen === p.v ? ' ' + styles.presetDogActive : ''}`}
               onClick={() => setCalDen(p.v)}>{p.n} {p.v}</button>
@@ -270,15 +303,15 @@ function DogTab() {
       </div>
 
       <div className={styles.calGrid}>
-        <CalCard title="일일 권장 칼로리" num={der} unit="kcal / 일" sub={`RER ${rerVal} × ${factor}`} />
+        <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
         <CalCard title="사료 권장량" num={foodG} unit="g / 일" sub={`${calDen}kcal/100g 기준`} />
-        <CalCard title="간식 허용 칼로리" num={treatCal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
+        <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
       </div>
 
       <div className={styles.waterCard}>
         <span className={styles.waterIcon}>💧</span>
         <div>
-          <span className={styles.waterNum}>{water}ml</span>
+          <span className={styles.waterNum}>{result.waterMl}ml</span>
           <span className={styles.waterLabel}> 권장 수분 섭취량 / 일</span>
         </div>
       </div>
@@ -305,25 +338,37 @@ function CatTab() {
   const [wetDen,    setWetDen]    = useState(90)
   const [copied,    setCopied]    = useState(false)
 
-  const humanAge  = catHumanAge(ageYrs, ageMos)
-  const stage     = getCatStage(ageYrs, ageMos)
-  const stageIdx  = CAT_STAGES.indexOf(stage)
-  const rerVal    = Math.round(rer(weight))
-  const factor    = getCatFactor(stage, neutered, env, activity)
-  const der       = Math.round(rerVal * factor)
-  const dryG      = dryDen > 0 ? Math.round(der / dryDen * 100) : 0
-  const wetG      = wetDen > 0 ? Math.round(der / wetDen * 100) : 0
-  const mixDryG   = dryDen > 0 ? Math.round(der * 0.5 / dryDen * 100) : 0
-  const mixWetG   = wetDen > 0 ? Math.round(der * 0.5 / wetDen * 100) : 0
-  const treatCal  = Math.round(der * 0.1)
+  // ★ 환경(env) → 활동(activity) 보정: 실외/겸용은 활동 한 단계 ↑로 환산
+  // 단, 사용자가 명시적으로 활동을 설정한 경우엔 그대로 적용 (env는 보조)
+  const effectiveActivity: Activity = useMemo(() => {
+    if (env === 'outdoor' && activity !== 'high') return 'high'
+    if (env === 'both' && activity === 'low') return 'normal'
+    return activity
+  }, [env, activity])
+
+  const result = useMemo(
+    () => calculateAll({
+      species: 'cat', yrs: ageYrs, mos: ageMos, weight, size: 'small',
+      isNeutered: neutered, activity: effectiveActivity, foodKcalPer100g: dryDen,
+    }),
+    [ageYrs, ageMos, weight, neutered, effectiveActivity, dryDen],
+  )
+
+  const stageIdx = CAT_STAGES.indexOf(result.stage)
+  const dryG    = dryDen > 0 ? Math.round(result.der / dryDen * 100) : 0
+  const wetG    = wetDen > 0 ? Math.round(result.der / wetDen * 100) : 0
+  const mixDryG = dryDen > 0 ? Math.round(result.der * 0.5 / dryDen * 100) : 0
+  const mixWetG = wetDen > 0 ? Math.round(result.der * 0.5 / wetDen * 100) : 0
 
   function handleCopy() {
     const foodTxt = foodMode === 'dry' ? `건식 ${dryG}g` :
       foodMode === 'wet' ? `습식 ${wetG}g` :
       `건식 ${mixDryG}g + 습식 ${mixWetG}g`
     navigator.clipboard.writeText(
-      `🐱 고양이 계산 결과\n사람 나이: ${humanAge}세 (${stage})\n` +
-      `일일 권장 칼로리: ${der}kcal\n사료 권장량: ${foodTxt}/일\n간식 허용: ${treatCal}kcal/일`
+      `🐱 고양이 계산 결과\n사람 나이: ${result.humanAge}세 (${result.stage})\n` +
+      `일일 권장 칼로리: ${result.der}kcal (RER ${result.rerVal} × ${result.derFactor})\n` +
+      `사료 권장량: ${foodTxt}/일\n간식 허용: ${result.treatKcal}kcal/일\n` +
+      `체중 평가: ${result.body.label} · 수명 진행률: ${Math.round(result.life.progressPercent)}%`,
     ).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
   }
 
@@ -368,7 +413,7 @@ function CatTab() {
         <div className={styles.card}>
           <span className={styles.cardLabel}>생활 환경</span>
           <div className={styles.btnGroup}>
-            {([['indoor','🏠실내'],['both','🏡겸용'],['outdoor','🌳실외']] as [CatEnv, string][]).map(([v, l]) => (
+            {([['indoor', '🏠실내'], ['both', '🏡겸용'], ['outdoor', '🌳실외']] as [CatEnv, string][]).map(([v, l]) => (
               <button key={v}
                 className={`${styles.toggleBtn}${env === v ? ' ' + styles.petBtnActive : ''}`}
                 onClick={() => setEnv(v)}>{l}</button>
@@ -381,36 +426,52 @@ function CatTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>활동량</span>
         <div className={styles.btnGroup}>
-          {([['low','낮음'],['normal','보통'],['high','높음']] as [Activity, string][]).map(([v, l]) => (
+          {([['low', '낮음'], ['normal', '보통'], ['high', '높음']] as [Activity, string][]).map(([v, l]) => (
             <button key={v}
               className={`${styles.toggleBtn}${activity === v ? ' ' + styles.petBtnActive : ''}`}
               onClick={() => setActivity(v)}>{l}</button>
           ))}
         </div>
+        {effectiveActivity !== activity && (
+          <div className={styles.factorBadge} style={{ marginTop: 8 }}>
+            ⓘ <b>{env === 'outdoor' ? '실외' : '겸용'}</b> 환경 보정으로 활동 <b>{
+              effectiveActivity === 'high' ? '높음' : effectiveActivity === 'normal' ? '보통' : '낮음'
+            }</b>으로 적용
+          </div>
+        )}
       </div>
 
       {/* 결과 */}
-      <LifeStageBar stages={CAT_STAGES} current={stage} />
+      <LifeStageBar stages={CAT_STAGES} current={result.stage} />
 
       <div className={styles.heroCard}>
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
-            <span className={styles.heroNum}>{humanAge}</span>
+            <span className={styles.heroNum}>{result.humanAge}</span>
             <span className={styles.heroUnit}>세</span>
           </div>
           <div className={styles.heroSub}>사람 나이 환산</div>
         </div>
         <div className={styles.heroRight}>
-          <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{stage}</div>
-          <div className={styles.heroFactor}>생활계수 ×{factor}</div>
+          <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{result.stage}</div>
+          <div className={styles.heroFactor}>생활계수 ×{result.derFactor}</div>
+          <div className={styles.factorBadge}>
+            <b>×{result.derFactor}</b> = {result.derFactorLabel}
+          </div>
         </div>
       </div>
+
+      {/* NEW: 체중 평가 */}
+      <BodyConditionCard body={result.body} weight={weight} />
+
+      {/* NEW: 수명 진행률 */}
+      <LifeProgressCard life={result.life} color="#C084FC" />
 
       {/* 사료 모드 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>사료 구성</span>
         <div className={styles.foodModeRow}>
-          {([['dry','건식만'],['wet','습식만'],['mix','건식+습식']] as [FoodMode, string][]).map(([v, l]) => (
+          {([['dry', '건식만'], ['wet', '습식만'], ['mix', '건식+습식']] as [FoodMode, string][]).map(([v, l]) => (
             <button key={v}
               className={`${styles.foodModeBtn}${foodMode === v ? ' ' + styles.petBtnActive : ''}`}
               onClick={() => setFoodMode(v)}>{l}</button>
@@ -426,7 +487,7 @@ function CatTab() {
             <div>
               <div className={styles.densityLabel}>건식 사료</div>
               <div className={styles.presetRow}>
-                {[{n:'로얄캐닌',v:380},{n:'힐스',v:360},{n:'퓨리나',v:350}].map(p => (
+                {[{ n: '로얄캐닌', v: 380 }, { n: '힐스', v: 360 }, { n: '퓨리나', v: 350 }].map(p => (
                   <button key={p.n}
                     className={`${styles.presetBtn}${dryDen === p.v ? ' ' + styles.presetCatActive : ''}`}
                     onClick={() => setDryDen(p.v)}>{p.n}</button>
@@ -443,7 +504,7 @@ function CatTab() {
             <div>
               <div className={styles.densityLabel}>습식 사료</div>
               <div className={styles.presetRow}>
-                {[{n:'로얄캐닌',v:85},{n:'힐스',v:90},{n:'퓨리나',v:95}].map(p => (
+                {[{ n: '로얄캐닌', v: 85 }, { n: '힐스', v: 90 }, { n: '퓨리나', v: 95 }].map(p => (
                   <button key={p.n}
                     className={`${styles.presetBtn}${wetDen === p.v ? ' ' + styles.presetCatActive : ''}`}
                     onClick={() => setWetDen(p.v)}>{p.n}</button>
@@ -462,16 +523,16 @@ function CatTab() {
       {/* 칼로리 카드 */}
       {foodMode === 'mix' ? (
         <div className={styles.calGrid4}>
-          <CalCard title="일일 권장 칼로리" num={der} unit="kcal / 일" sub={`RER ${rerVal} × ${factor}`} />
+          <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
           <CalCard title="건식 사료 (50%)" num={mixDryG} unit="g / 일" sub={`${dryDen}kcal/100g`} />
           <CalCard title="습식 사료 (50%)" num={mixWetG} unit="g / 일" sub={`${wetDen}kcal/100g`} />
-          <CalCard title="간식 허용 칼로리" num={treatCal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
+          <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
         </div>
       ) : (
         <div className={styles.calGrid}>
-          <CalCard title="일일 권장 칼로리" num={der} unit="kcal / 일" sub={`RER ${rerVal} × ${factor}`} />
+          <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
           <CalCard title={foodMode === 'dry' ? '건식 사료량' : '습식 사료량'} num={foodMode === 'dry' ? dryG : wetG} unit="g / 일" sub={`${foodMode === 'dry' ? dryDen : wetDen}kcal/100g`} />
-          <CalCard title="간식 허용 칼로리" num={treatCal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
+          <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10%" treat />
         </div>
       )}
 

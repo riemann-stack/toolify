@@ -1,163 +1,558 @@
-.wrap { display: flex; flex-direction: column; gap: 10px; }
+.wrap { display: flex; flex-direction: column; gap: 12px; }
 
-/* ── INPUT ── */
-.inputSection { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.inputCol {
+/* ── 면책 ── */
+.disclaimer {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.disclaimer strong { color: #3EC8FF; }
+
+/* ── 카드 ── */
+.card {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+
+/* ── 입력 표 (참가자·결과) ── */
+.inputSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 540px) { .inputSection { grid-template-columns: 1fr; } }
+
+.inputCol { display: flex; flex-direction: column; gap: 5px; }
 .colHeader {
   font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-weight: 700;
   margin-bottom: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
-.inputWithDot { display: flex; align-items: center; gap: 8px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.nameInput {
-  flex: 1;
-  width: 100%;
+
+.inputWithDot {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 1px solid rgba(0,0,0,0.20);
+}
+
+.nameInput, .resultInput {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13.5px;
   color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
   outline: none;
-  transition: border-color 0.2s;
-}
-.nameInput::placeholder { color: var(--muted); }
-.nameInput:focus { border-color: rgba(200,255,62,0.5); }
-.resultInput:focus { border-color: rgba(255,140,62,0.5); }
-
-/* ── COUNT ── */
-.countRow { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.countBtn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: var(--muted);
-  cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
-  transition: all 0.15s;
-}
-.countBtn:hover:not(:disabled) { border-color: var(--border-hover); color: var(--text); }
-.countBtn:disabled { opacity: 0.3; cursor: not-allowed; }
-.countNum { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
-
-/* ── GENERATE ── */
-.generateBtn {
   width: 100%;
-  padding: 18px;
-  background: var(--accent);
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: #0D0D0D;
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  box-sizing: border-box;
 }
-.generateBtn:hover { opacity: 0.9; transform: translateY(-1px); }
+.nameInput:focus, .resultInput:focus { border-color: var(--accent); }
+.resultInput { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
 
-/* ── LADDER BOX ── */
-.ladderBox {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 0 16px;
-  overflow: hidden;
-}
-
-/* ── NAME ROW ── */
-/*
-  SVG: viewBox="0 0 600 H", width="100%"
-  colX(i) = 50 + i * colW  (PAD_X=50)
-  첫 열 중심 = 50px, 마지막 열 중심 = 550px (SVG 좌표)
-  SVG가 width:100%로 스케일되므로 비율이 유지됨.
-  nameRow는 SVG와 같은 폭에 padding-x를 50/600 비율로 줌.
-  즉, padding-left = 50/600 * 100% = 8.333%
-      padding-right = 50/600 * 100% = 8.333%
-  그 안에서 flex with space-between → 각 칸 중심이 colX와 일치.
-*/
-.nameRow {
+/* 인원 조절 */
+.countRow {
   display: flex;
-  justify-content: space-between;
-  padding: 6px 8.333% ;
-  gap: 6px;
-}
-
-.nameTag {
-  flex: 1;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
   background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 4px;
-  font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: var(--muted);
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.15s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-.nameTag:hover:not(.nameTagOn) { border-color: var(--border-hover); color: var(--text); }
-.nameTagOn { font-weight: 700; }
-
-.resultTag {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 4px;
-  font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: var(--muted);
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-  transition: all 0.3s;
-}
-.resultTagOn {
-  font-weight: 700;
-  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* ── REVEAL ALL ── */
-.revealAllBtn {
-  width: 100%;
-  background: transparent;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px;
+  padding: 8px 12px;
+}
+.countBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
   font-size: 13px;
-  color: var(--muted);
-  cursor: pointer;
+  color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+}
+.countBtn:hover { border-color: var(--accent); color: var(--accent); }
+.countBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.countNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ── 옵션 그룹 ── */
+.optionRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+@media (max-width: 540px) { .optionRow { grid-template-columns: repeat(2, 1fr); } }
+.optionBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-align: center;
+}
+.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.optionBtn small { display: block; font-size: 16px; margin-bottom: 2px; }
+.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+.fillRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+/* 토글 */
+.advancedToggle {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.advancedToggle:hover { color: var(--accent); border-color: var(--accent); }
+.advancedToggle strong { color: var(--text); margin-right: 6px; }
+
+/* ── 빠른 템플릿 ── */
+.tplGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 540px) { .tplGrid { grid-template-columns: repeat(2, 1fr); } }
+.tplCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 8px;
+  cursor: pointer;
+  text-align: center;
   transition: all 0.15s;
 }
-.revealAllBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.tplCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
+.tplEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+.tplName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.tplDesc { font-size: 10.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
-@media (max-width: 500px) {
-  .nameTag, .resultTag { font-size: 10px; padding: 5px 2px; }
+/* ── CTA 버튼 ── */
+.bigGenerate {
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #000;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.15s;
 }
+.bigGenerate:hover { background: #d8ff5e; }
+.bigGenerate:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.actionBtn {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-size: 13px;
+  color: var(--accent);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.actionBtn:hover { background: rgba(200,255,62,0.18); }
+
+.miniBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+}
+.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
+.miniDanger:hover { background: rgba(255,107,107,0.10); }
+
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+.miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
+
+/* ── 사다리 박스 ── */
+.ladderBox {
+  background: rgba(0,0,0,0.20);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 12px 18px;
+  overflow-x: auto;
+}
+
+/* 참가자 이름 행 (상단) */
+.nameRow {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 6px;
+  min-width: 600px;
+}
+.nameTag {
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 4px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.15s;
+  word-break: keep-all;
+  overflow: hidden;
+}
+.nameTag:hover { transform: translateY(-2px); }
+.nameTagOn { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.nameEmoji { font-size: 22px; line-height: 1; }
+.nameLabel { font-size: 11.5px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 결과 행 (하단) */
+.resultRow {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  min-width: 600px;
+}
+.resultTag {
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.resultTagOn { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 800; }
+
+/* SVG */
+.ladderSvg {
+  display: block;
+  min-width: 600px;
+  width: 100%;
+  overflow: visible;
+}
+
+/* 캐릭터 (애니메이션 중) */
+.charDot {
+  font-size: 22px;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.30));
+}
+
+/* 사다리 기본 선 — 다채로운 모드 (기본) */
+.baseLine {
+  stroke: rgba(255,255,255,0.18);
+}
+.rungLine {
+  stroke: rgba(200,255,62,0.50);
+  stroke-linecap: round;
+}
+
+/* 경로 — stroke-dasharray로 선 그리기 애니메이션 */
+.pathLine {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* dasharray·dashoffset 은 인라인 style 로 설정 */
+  animation: drawLine var(--draw-dur, 700ms) ease-out forwards;
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+.pathLineInstant {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 결과 카드 (한명씩 모드) */
+.singleResult {
+  background: linear-gradient(140deg, rgba(200,255,62,0.08), rgba(62,200,255,0.04));
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 16px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.singleEmoji { font-size: 56px; line-height: 1; margin-bottom: 10px; }
+.singleParticipant {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.singleArrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  color: var(--accent);
+  margin: 8px 0;
+}
+.singleResultName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 40px);
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+.singleProgress {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 결과 표 (전체·즉시 모드) */
+.resultTable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.resultTableRow {
+  display: grid;
+  grid-template-columns: 36px 1fr 24px 1fr;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.resultTableEmoji { font-size: 22px; text-align: center; }
+.resultTableName { color: var(--text); font-weight: 600; }
+.resultTableArrow { color: var(--muted); text-align: center; font-family: 'Syne', sans-serif; font-weight: 700; }
+.resultTableValue { color: var(--accent); font-weight: 800; font-family: 'Noto Sans KR', sans-serif; }
+
+/* 익명 모드 카드 */
+.anonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 540px) { .anonGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 380px) { .anonGrid { grid-template-columns: repeat(2, 1fr); } }
+.anonCard {
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.anonCard:hover { transform: translateY(-2px); border-color: var(--accent); }
+.anonCardRevealed { background: var(--accent-dim); border-color: var(--accent); }
+.anonEmoji { font-size: 32px; line-height: 1; margin-bottom: 4px; }
+.anonLabel { font-size: 11.5px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.anonResult {
+  font-size: 13px;
+  color: var(--accent);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 800;
+  margin-top: 4px;
+  word-break: keep-all;
+}
+
+/* 역추적 — 결과 클릭 */
+.reverseGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 540px) { .reverseGrid { grid-template-columns: repeat(2, 1fr); } }
+.reverseCard {
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.reverseCard:hover { transform: translateY(-2px); border-color: #FFD700; }
+.reverseLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.reverseResult { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
+.reverseRevealed { background: rgba(255,215,0,0.10); border-color: #FFD700; }
+.reverseRevealed .reverseResult { color: #FFD700; }
+.reverseAnswer {
+  font-size: 12.5px;
+  color: var(--accent);
+  margin-top: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+
+/* 결과 액션 */
+.resultActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+@media (max-width: 480px) { .resultActions { grid-template-columns: 1fr; } }
+
+/* 저장된 게임 */
+.savedRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.savedName { color: var(--text); font-weight: 600; }
+.savedName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
+
+.empty {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 30px 20px;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
+
+/* 클릭 안내 배너 */
+.clickHint {
+  text-align: center;
+  background: rgba(62,200,255,0.05);
+  border: 1px dashed rgba(62,200,255,0.30);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.clickHint strong { color: #3EC8FF; }
+
+/* 시작·공개 버튼 2개 행 */
+.startBtnRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+@media (max-width: 480px) { .startBtnRow { grid-template-columns: 1fr; } }
+.startBtnSecondary {
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--accent);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.startBtnSecondary:hover { background: var(--accent-dim); }
+.startBtnSecondary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.shuffleBtn {
+  background: rgba(155,89,182,0.10);
+  border: 1px solid rgba(155,89,182,0.40);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: #C485E0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+.shuffleBtn:hover { background: rgba(155,89,182,0.18); }
