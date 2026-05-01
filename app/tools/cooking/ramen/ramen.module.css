@@ -1,0 +1,515 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* 면책 */
+.disclaimer {
+  background: rgba(255,140,62,0.06);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.disclaimer strong { color: #FF8C3E; }
+
+.warnBox {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.warnBox strong { color: #FF6B6B; }
+
+.infoBox {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.infoBox strong { color: #3EC8FF; }
+
+.adviceBox {
+  background: rgba(255,215,0,0.06);
+  border: 1px solid rgba(255,215,0,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.adviceBox strong { color: #FFD700; }
+
+/* ─── 탭 (4개) ─── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+@media (max-width: 600px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActiveTopping   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
+.tabActivePreset    { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
+.tabActiveNutrition { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
+
+/* 카드 */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
+
+.threeCol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.twoCol   { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 600px) { .threeCol { grid-template-columns: 1fr; } .twoCol { grid-template-columns: 1fr; } }
+
+/* 입력 */
+.inputRow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.numInput {
+  flex: 1; width: 100%; min-width: 0; box-sizing: border-box;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-size: 18px;
+  color: var(--text);
+  outline: none;
+}
+.numInput:focus { border-color: var(--accent); }
+.numInput::-webkit-inner-spin-button,
+.numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.unit { font-size: 13px; color: var(--muted); white-space: nowrap; flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+
+/* 옵션 버튼 */
+.optionRow  { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.optionRow3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.optionRow4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.optionRow5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+@media (max-width: 540px) {
+  .optionRow4, .optionRow5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.optionBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.4;
+}
+.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionEmoji { font-size: 18px; display: block; margin-bottom: 4px; }
+.optionLabel { font-size: 12px; }
+.optionDesc  { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* 라면 개수 큰 카드 */
+.countGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+@media (max-width: 540px) { .countGrid { grid-template-columns: repeat(3, 1fr); } }
+.countBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+}
+.countBtn:hover { border-color: var(--accent); }
+.countBtnActive { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.countBtnNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.countBtnActive .countBtnNum { color: var(--accent); }
+.countBtnLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* 라면 빠른 선택 그리드 */
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+}
+.quickBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+}
+.quickBtn:hover { border-color: var(--accent); }
+.quickBtnActive { background: var(--accent-dim); border-color: var(--accent); }
+.quickBtnEmoji { font-size: 22px; display: block; margin-bottom: 4px; }
+.quickBtnName { font-size: 12px; color: var(--text); font-weight: 600; }
+.quickBtnActive .quickBtnName { color: var(--accent); }
+.quickBtnDesc { font-size: 10.5px; color: var(--muted); margin-top: 2px; font-family: 'Syne', sans-serif; }
+
+/* 농도 슬라이더 5단계 */
+.brothRow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+@media (max-width: 540px) { .brothRow { grid-template-columns: repeat(3, 1fr); } }
+.brothBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+}
+.brothBtn:hover { border-color: var(--border-hover); }
+.brothBtnActive { font-weight: 700; }
+.brothBtnLabel { font-size: 12px; color: var(--text); }
+.brothBtnDelta { font-size: 10.5px; font-family: 'Syne', sans-serif; color: var(--muted); margin-top: 2px; }
+
+/* 토핑 그리드 */
+.toppingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+}
+.toppingBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+  position: relative;
+}
+.toppingBtn:hover { border-color: var(--accent); }
+.toppingBtnActive { background: var(--accent-dim); border-color: var(--accent); }
+.toppingBtnEmoji { font-size: 22px; display: block; margin-bottom: 4px; }
+.toppingBtnName { font-size: 12px; color: var(--text); font-weight: 600; }
+.toppingBtnActive .toppingBtnName { color: var(--accent); }
+.toppingBtnInfo { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: 'Syne', sans-serif; }
+.toppingBtnCheck {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* ─── 히어로 ─── */
+.hero {
+  border-radius: 16px;
+  padding: 26px 22px;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  background: var(--bg2);
+  border-color: rgba(200,255,62,0.30);
+}
+.heroAccent { background: var(--bg2); border-color: rgba(200,255,62,0.30); }
+.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
+.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
+.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
+
+.heroLabel {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.heroNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(40px, 10vw, 72px);
+  letter-spacing: -2px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.heroNumOrange { color: #FF8C3E; }
+.heroNumGold   { color: #FFD700; }
+.heroNumCyan   { color: #3EC8FF; }
+.heroSub  { font-size: 14px; color: var(--text); margin-top: 12px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.heroRange {
+  display: inline-block;
+  margin-top: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+/* 다개수 비교 박스 */
+.compareBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.compareRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  padding: 4px 0;
+}
+.compareRowBad span:last-child { color: #FF6B6B; text-decoration: line-through; opacity: 0.7; }
+.compareRowGood span:last-child { color: var(--accent); font-weight: 700; }
+.compareRow span:first-child { color: var(--muted); }
+.compareRow span:last-child { font-family: 'Syne', sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* 4 메트릭 */
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 540px) { .metrics { grid-template-columns: 1fr; } }
+.metric {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.metricLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.metricValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.metricValueAccent { color: var(--accent); }
+.metricValueOrange { color: #FF8C3E; }
+.metricValueRed    { color: #FF6B6B; }
+.metricSub { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; }
+
+/* 조리 타임라인 */
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.timelineRow {
+  display: grid;
+  grid-template-columns: 70px 24px 1fr;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.timelineTime {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.timelineEmoji { font-size: 18px; text-align: center; }
+.timelineLabel { color: var(--text); }
+.timelineNote { color: var(--muted); font-size: 11px; margin-top: 2px; }
+.timelineRowFinal {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.timelineRowFinal .timelineLabel { color: var(--accent); font-weight: 700; }
+
+/* 영양 표 */
+.nutritionTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nutritionTable thead th {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: right;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+.nutritionTable thead th:first-child { text-align: left; }
+.nutritionTable tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.nutritionTable tbody td:first-child {
+  text-align: left;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.nutritionTable tbody td.warnCell { color: #FF6B6B; }
+
+.nutritionBar {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 10px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.nutritionBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #3EC8FF);
+}
+.nutritionBarFillWarn { background: linear-gradient(90deg, #FFD700, #FF8C3E); }
+.nutritionBarFillDanger { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
+
+/* 라면 프리셋 카테고리별 그리드 */
+.presetSection { display: flex; flex-direction: column; gap: 12px; }
+.presetCategory {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.presetCategoryTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+.presetCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+}
+.presetCard:hover { border-color: var(--accent); }
+.presetCardActive { background: var(--accent-dim); border-color: var(--accent); }
+.presetCardName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.presetCardActive .presetCardName { color: var(--accent); }
+.presetCardSpec {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  margin-bottom: 2px;
+}
+.presetCardBrand { font-size: 10.5px; color: var(--muted); }
+
+/* 결과 액션 */
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 540px) { .actionGrid { grid-template-columns: 1fr; } }
+.actionBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 8px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+}
+.actionBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* 빈 상태 */
+.empty {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 30px 20px;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}

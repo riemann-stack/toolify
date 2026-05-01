@@ -4,9 +4,14 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
-  title: '음주 후 혈중알코올 소멸 계산기 — BAC 추정·운전 가능 시각',
-  description: '체중·음주량 기반으로 혈중알코올농도(BAC)를 추정하고 면허정지·취소 기준 해소 시각을 계산합니다. Widmark 공식 적용. 음주운전 예방 참고 도구.',
-  keywords: ['혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산', '음주운전기준', '알코올소멸시간', '음주측정계산기'],
+  title: '혈중알코올 소멸 계산기 — BAC·운전 가능 시각·다음날 아침·면허정지 해소 | Youtil',
+  description: '체중·음주량으로 혈중알코올농도(BAC) 추정. 면허정지·취소 해소 시각, 다음날 아침 출근 BAC 체크, 1차·2차·3차 누적 음주 시뮬, ALDH2 분해 속도 보정, 약물·알코올 위험. Widmark 공식 기반.',
+  keywords: [
+    '혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산',
+    '음주운전기준', '알코올소멸시간', '음주측정계산기',
+    '다음날아침음주측정', '숙취운전', '면허정지시각', '여러자리음주',
+    'ALDH2알코올분해', '윤창호법처벌', '자전거음주운전', '카카오T대리',
+  ],
 })
 
 export default function BloodAlcoholPage() {
@@ -17,7 +22,8 @@ export default function BloodAlcoholPage() {
         🍺 혈중알코올 소멸 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        체중·음주량을 바탕으로 혈중알코올농도(BAC)를 추정하고 면허정지·취소 기준 해소 시각을 안내합니다.
+        BAC 추정·<strong style={{ color: 'var(--text)' }}>다음날 아침 출근 운전 체크·1차·2차·3차 누적·ALDH2 분해 속도·약물 상호작용</strong>까지.
+        Widmark 공식 기반 음주 예방 교육 도구.
       </p>
 
       {/* 상단 법적 면책 */}
@@ -159,53 +165,209 @@ export default function BloodAlcoholPage() {
           </div>
         </div>
 
-        {/* ── 5. FAQ ── */}
+        {/* ── 5. 다음날 아침 운전 — 한국 단속 최다 케이스 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            🌅 다음날 아침 운전 — 한국 단속 최다 케이스
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            한국 음주운전 단속이 가장 많이 일어나는 시각은 <strong style={{ color: 'var(--text)' }}>오전 7~9시</strong>입니다.
+            전날 과음 후 출근길에 단속되는 사례가 매우 많습니다. 「잠 자고 일어났으니 깼겠지」는 잘못된 통념.
+            본 도구의 「🌅 다음날 아침」 탭에서 자동 체크 가능.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+            <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 10 }}>📌 예시: 70kg 남성, 식후, 소주 1병 (45g), 음주 종료 23:00</p>
+            <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              <li>최고 BAC: <strong style={{ color: '#FF6B6B' }}>0.095</strong> (면허취소 수준)</li>
+              <li>면허취소 해소 (0.08): 익일 <strong>00:00</strong></li>
+              <li>면허정지 해소 (0.03): 익일 <strong>03:22</strong></li>
+              <li>완전 소멸: 익일 <strong>05:22</strong></li>
+              <li>익일 08:00 BAC: <strong style={{ color: '#FF8C3E' }}>약 0.022</strong> (정지 미만이지만 측정 시 양성 가능)</li>
+            </ul>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            ⚠️ 0.03 미만이라도 측정 시 양성 → 단속 가능. 안전 여유: 완전 소멸 후 1~2시간.
+          </p>
+        </div>
+
+        {/* ── 6. 여러 자리 음주 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            🔢 1차·2차·3차 누적 음주 위험
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            여러 자리 음주는 BAC 누적이 매우 빠릅니다. 본 도구의 「🔢 여러 자리 누적」 탭에서 곡선 시각화.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>자리</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음주</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontWeight: 700 }}>알코올</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>1차 (19~20:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>소주 1병 + 맥주 500cc</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 60g</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>2차 (22~23:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>맥주 500cc 2잔</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 28g</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>3차 (0~1:00)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>양주 2샷</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 28g</td></tr>
+                <tr style={{ background: 'rgba(255,107,107,0.06)' }}>
+                  <td style={{ padding: '10px 12px', color: '#FF6B6B', fontWeight: 700 }}>합계</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>표준잔 14.5잔 (WHO 위험 음주 4배)</td>
+                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>116g</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            최고 BAC ≈ 0.158 → 면허취소 + 형사처벌. 다음날 9시까지도 0.03 초과 가능. 70kg 남성 기준.
+          </p>
+        </div>
+
+        {/* ── 7. ALDH2 결손 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            🧬 ALDH2 결손 — 한국인 30~40%
+          </h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+            <p style={{ fontSize: 14, color: '#C485E0', fontWeight: 700, marginBottom: 8 }}>알코올 분해 효소 변이 (Asian flush)</p>
+            <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              <li>알코올 분해 30~50% 느림</li>
+              <li>같은 음주량에도 BAC 더 오래 유지</li>
+              <li>아세트알데히드(1급 발암물질) 축적 ↑</li>
+              <li>식도암 위험 5~50배 ↑ (음주량 따라)</li>
+              <li>간암·구강암 위험 ↑</li>
+            </ul>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, marginTop: 12 }}>
+              <strong style={{ color: '#C485E0' }}>특징:</strong> 술 마시면 얼굴 빨개짐 / 심박수 빠르게 ↑ / 두통·구역질 빨리.
+              본인이 술에 약한 편이라면 본 도구의 「분해 속도」를 「느림」 또는 「매우 느림」으로 설정 권장.
+            </p>
+          </div>
+        </div>
+
+        {/* ── 8. 자전거·전동킥보드 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            🚲 자전거·전동킥보드 음주운전 (2021~)
+          </h2>
+          <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 「자전거니까 괜찮아」 잘못된 통념</p>
+            <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              <li>자전거 음주운전 (BAC 0.03+): 3만원 범칙금</li>
+              <li>전동킥보드 음주운전: 10~20만원 범칙금 + 면허취소 (BAC 0.08+)</li>
+              <li>사고 발생 시 추가 처벌 (보행자·자동차 모두)</li>
+              <li>2021년 도로교통법 개정으로 처벌 강화</li>
+              <li>특히 도심 자전거·킥보드는 보행자 사고 위험 큼</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* ── 9. 약물 + 알코올 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            💊 약물 + 알코올 위험
+          </h2>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#FF6B6B', fontWeight: 700 }}>위험</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>수면제 + 알코올</td><td style={{ padding: '10px 12px', color: '#FF6B6B' }}>호흡 억제 → <strong>사망 가능성</strong></td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>진통제 (타이레놀)</td><td style={{ padding: '10px 12px', color: '#FF6B6B' }}>간 손상 (아세트아미노펜)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항우울제</td><td style={{ padding: '10px 12px', color: '#FF6B6B' }}>부작용 증폭·과다 진정</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>혈압약</td><td style={{ padding: '10px 12px', color: '#FF6B6B' }}>저혈압 쇼크 위험</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>당뇨약</td><td style={{ padding: '10px 12px', color: '#FF6B6B' }}>저혈당 쇼크 위험</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항알레르기·항생제</td><td style={{ padding: '10px 12px', color: '#FF8C3E' }}>졸음·진정 효과 증폭 / 일부 항생제 디설피람 반응</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            ※ 정확한 약물·알코올 상호작용은 약사·의사 상담 필수. 한국 식약처 의약품안전사용서비스: 1577-2334
+          </p>
+        </div>
+
+        {/* ── 10. FAQ (accordion - salary style) ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              {
-                q: 'Widmark 공식은 얼마나 정확한가요?',
-                a: 'Widmark 공식은 1930년대 스웨덴의 Erik Widmark가 개발한 표준 법의학 공식으로, 수사기관과 법원에서도 사용됩니다. 다만 개인의 신진대사율, 음식 섭취, 간 기능 등에 따라 ±20~30%의 오차가 발생할 수 있어 참고용으로만 활용해야 합니다. 실제 음주 측정기 결과와는 다를 수 있습니다.',
-              },
-              {
-                q: '커피나 물을 마시면 술이 빨리 깨나요?',
-                a: '아니요. 커피(카페인)는 각성 효과로 술에 덜 취한 것처럼 느껴지게 할 수 있지만 BAC 자체는 변하지 않습니다. 물도 BAC를 직접적으로 낮추지 않으나 탈수 예방에 도움됩니다. 알코올 분해는 간에서 이루어지며, 시간이 유일한 해결책입니다.',
-              },
-              {
-                q: '음주 후 잠을 자면 더 빨리 깨나요?',
-                a: '수면 자체가 알코올 분해를 빠르게 하지는 않습니다. 시간당 0.015 g/dL 감소율은 수면 중에도 동일하게 적용됩니다. 다만 수면 후에도 BAC가 여전히 높을 수 있으며, 아침에 운전하기 전 반드시 충분한 시간이 경과했는지 확인해야 합니다. 전날 과음한 경우 숙취 운전으로 단속되는 사례가 매우 많습니다.',
-              },
-              {
-                q: "'숙취'가 없으면 술이 다 깬 건가요?",
-                a: '아닙니다. 숙취 증상(두통, 구역질, 피로감)과 BAC는 별개입니다. 숙취가 없어도 혈중알코올이 단속 기준치 이상 남아있을 수 있습니다. 특히 대량 음주 후 다음 날 아침에는 여전히 단속 기준(0.03%)을 초과하는 경우가 많으므로, 반드시 시간 경과를 확인하고 불확실하면 대중교통을 이용하세요.',
-              },
-              {
-                q: '음주 측정 거부 시 처벌은?',
-                a: '음주 측정 거부는 그 자체로 형사처벌 대상입니다. 면허 취소(5년 결격)와 1~5년 징역 또는 500만~2000만원 벌금이 부과될 수 있습니다. 측정 거부는 사실상 BAC 0.2% 이상 음주와 동일한 처벌을 받으며, "측정하지 않으면 불리하지 않다"는 생각은 잘못된 통념입니다.',
-              },
+              { q: 'Widmark 공식은 얼마나 정확한가요?', a: 'Widmark 공식은 1930년대 스웨덴의 Erik Widmark가 개발한 표준 법의학 공식으로, 수사기관과 법원에서도 사용됩니다. 다만 개인의 신진대사율, 음식 섭취, 간 기능 등에 따라 ±20~30%의 오차가 발생할 수 있어 참고용으로만 활용해야 합니다. 실제 음주 측정기 결과와는 다를 수 있습니다.' },
+              { q: '커피나 물을 마시면 술이 빨리 깨나요?', a: '아니요. 커피(카페인)는 각성 효과로 술에 덜 취한 것처럼 느껴지게 할 수 있지만 BAC 자체는 변하지 않습니다. 물도 BAC를 직접적으로 낮추지 않으나 탈수 예방에 도움됩니다. 알코올 분해는 간에서 이루어지며, 시간이 유일한 해결책입니다.' },
+              { q: '음주 후 잠을 자면 더 빨리 깨나요?', a: '수면 자체가 알코올 분해를 빠르게 하지는 않습니다. 시간당 0.015 g/dL 감소율은 수면 중에도 동일하게 적용됩니다. 다만 수면 후에도 BAC가 여전히 높을 수 있으며, 아침에 운전하기 전 반드시 충분한 시간이 경과했는지 확인해야 합니다. 전날 과음한 경우 숙취 운전으로 단속되는 사례가 매우 많습니다.' },
+              { q: "'숙취'가 없으면 술이 다 깬 건가요?", a: '아닙니다. 숙취 증상(두통, 구역질, 피로감)과 BAC는 별개입니다. 숙취가 없어도 혈중알코올이 단속 기준치 이상 남아있을 수 있습니다. 특히 대량 음주 후 다음 날 아침에는 여전히 단속 기준(0.03%)을 초과하는 경우가 많으므로, 반드시 시간 경과를 확인하고 불확실하면 대중교통을 이용하세요.' },
+              { q: '음주 측정 거부 시 처벌은?', a: '음주 측정 거부는 그 자체로 형사처벌 대상입니다. 면허 취소(5년 결격)와 1~5년 징역 또는 500만~2000만원 벌금이 부과될 수 있습니다. 측정 거부는 사실상 BAC 0.2% 이상 음주와 동일한 처벌을 받으며, "측정하지 않으면 불리하지 않다"는 생각은 잘못된 통념입니다.' },
+              { q: '어제 12시까지 술 마셨는데 오늘 아침 8시에 운전해도 되나요?', a: '음주량과 신체 조건에 따라 다릅니다. 70kg 남성 + 소주 1병(45g) 가정: 음주 종료 자정 → 면허정지 해소 04:22, 8시 BAC 약 0.02. 그러나 소주 2병+ 또는 ALDH2 결손 또는 공복 음주 시 8시에도 0.03 초과 가능. 안전 권장: 완전 소멸 + 1~2시간 여유. 불확실하면 택시·지하철. 본 도구의 「🌅 다음날 아침」 탭에서 정확 체크.' },
+              { q: '1차·2차·3차 여러 자리 마셨는데 BAC 어떻게 계산하나요?', a: '본 도구의 「🔢 여러 자리 누적」 탭에서 자리별 시작·종료 시각과 음주 종류를 입력하면 누적 BAC 자동 계산 + 곡선 시각화. ⚠️ 1차 소주 1병 + 2차 맥주 + 3차 양주 = 표준잔 14.5잔 (알코올 116g) = WHO 위험 음주 4배. 본인뿐 아니라 다른 사람에게도 위험.' },
+              { q: '자전거나 전동킥보드는 음주운전 단속 안 되나요?', a: '처벌 대상입니다. 2021년 도로교통법 개정: 자전거 음주운전 3만원 범칙금 (BAC 0.03+), 전동킥보드 10~20만원 범칙금 + 면허취소. 사고 발생 시 추가 처벌. 「자전거니까 괜찮아」 잘못된 통념. 특히 도심 자전거·킥보드는 보행자 사고 위험 큼.' },
+              { q: '술이 빨리 깨는 방법이 있나요?', a: '의학적으로 「빨리 깨는 방법」 존재 X. 알코올 분해는 간이 시간당 약 0.015 g/dL로 일정. 다음은 효과 X 또는 미미: 커피·카페인 (각성만 ↑, BAC 그대로) / 차가운 물·샤워 (정신 차림만) / 운동 (효과 미미·심혈관 부담) / 콩나물국·해장국 (위장 보호만). 유일한 방법은 시간. 본 도구의 시간별 BAC 곡선으로 정확 확인.' },
+              { q: 'ALDH2 결손이면 술을 끊어야 하나요?', a: '본인 결정 영역이지만 다음 의학적 사실 인지: ALDH2 결손 (한국인 30~40%) 시 알코올 분해 30~50% 느림, 아세트알데히드(1급 발암물질) 축적 ↑, 식도암 위험 5~50배 ↑, 간암·구강암 위험 ↑. 특징: 술 마시면 얼굴 빨개짐, 심박 ↑, 두통·구역질 빨리. WHO·세계암연구재단 권장: ALDH2 결손인 경우 음주 절대 자제 또는 매우 적은 양. 도움: 한국알코올중독상담센터 1899-0975.' },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
+                  {faq.a}
+                </p>
+              </details>
             ))}
           </div>
         </div>
 
-        {/* ── 6. 안전 귀가 ── */}
+        {/* ── 11. 안전 귀가 (강화) ── */}
         <div style={{ background: 'rgba(62,200,255,0.07)', border: '1px solid rgba(62,200,255,0.3)', borderRadius: '14px', padding: '20px 22px' }}>
           <p style={{ fontSize: '16px', fontWeight: 700, color: '#3EC8FF', marginBottom: '12px' }}>
             🚕 음주 후 운전은 절대 안 됩니다
           </p>
           <ul style={{ paddingLeft: '18px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
-            <li><strong style={{ color: 'var(--text)' }}>카카오 T 대리 · 티맵 대리</strong> 앱으로 즉시 호출</li>
-            <li><strong style={{ color: 'var(--text)' }}>지정운전 서비스</strong> · 지역 대리운전 업체 이용</li>
-            <li><strong style={{ color: 'var(--text)' }}>택시 · 지하철 · 버스</strong> 등 대중교통 이용</li>
-            <li><strong style={{ color: 'var(--text)' }}>동행자 중 비음주자</strong>에게 운전 부탁</li>
+            <li><strong style={{ color: 'var(--text)' }}>카카오 T 대리</strong>: 1577-1577</li>
+            <li><strong style={{ color: 'var(--text)' }}>티맵 대리</strong>: 1644-3030</li>
+            <li><strong style={{ color: 'var(--text)' }}>음주운전 신고</strong>: 080-911-7700</li>
+            <li><strong style={{ color: 'var(--text)' }}>응급</strong>: 119</li>
+            <li><strong style={{ color: 'var(--text)' }}>한국알코올중독상담센터</strong>: 1899-0975</li>
+            <li><strong style={{ color: 'var(--text)' }}>정신건강 위기상담</strong>: 1577-0199</li>
           </ul>
           <p style={{ fontSize: '13px', color: '#3EC8FF', lineHeight: 1.7, fontWeight: 600 }}>
             💡 가장 안전한 방법은 <strong>술자리 시작 전에 미리 대리운전을 예약</strong>하거나 아예 차를 두고 가는 것입니다.
+            자가용·자전거·전동킥보드 모두 음주 후 운전 절대 X.
+          </p>
+        </div>
+
+        {/* 면책 강화 */}
+        <div style={{
+          background: 'rgba(255, 107, 107, 0.06)',
+          border: '2px solid rgba(255, 107, 107, 0.40)',
+          borderRadius: '12px',
+          padding: '18px 20px',
+          fontSize: '12.5px',
+          color: 'var(--muted)',
+          lineHeight: 1.85,
+        }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF6B6B', marginBottom: 10 }}>⚖️ 법적 면책 (강화)</p>
+          <p style={{ marginBottom: 8 }}>
+            본 혈중알코올 소멸 계산기는 <strong style={{ color: 'var(--text)' }}>음주 예방 교육 참고용 도구</strong>이며, 법적 면책·판단 근거가 되지 않습니다.
+          </p>
+          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
+            <li>±20~30% 오차 가능 (Widmark 공식 한계)</li>
+            <li>음주 측정기 결과와 다를 수 있음</li>
+            <li>「0.03 미만 = 안 마신 것」 X</li>
+            <li>본 도구 결과 ≠ 운전 가능 보장</li>
+            <li>음주 후 운전 절대 X (자가용·자전거·전동킥보드 모두)</li>
+            <li>다음날 아침에도 BAC 남아 있을 수 있음</li>
+          </ul>
+          <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>음주운전 처벌 (윤창호법):</p>
+          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
+            <li>면허정지·취소</li>
+            <li>1~5년 징역</li>
+            <li>500만~2,000만원 벌금</li>
+            <li>사망사고 시 무기징역까지</li>
+          </ul>
+          <p style={{ color: 'var(--text)', fontWeight: 700, fontSize: 13.5 }}>
+            본인과 타인의 생명을 지키는 가장 안전한 방법: <strong style={{ color: '#FF6B6B' }}>음주 후에는 절대 운전하지 마세요.</strong>
           </p>
         </div>
 

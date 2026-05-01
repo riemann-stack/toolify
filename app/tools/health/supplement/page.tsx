@@ -4,9 +4,14 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
-  title: '영양제 성분 체크 계산기 — 중복 성분 합산·상한량 초과 확인',
-  description: '여러 영양제의 중복 성분을 합산하고 1일 상한 섭취량 초과 여부를 확인합니다. 시너지·주의 조합, 복용 타이밍 가이드 제공. 비타민D·철분·아연·칼슘 중복 체크.',
-  keywords: ['영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량', '영양제복용조합', '영양제계산기'],
+  title: '영양제 성분 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전 | Youtil',
+  description: '50종 영양소 자동 합산, 권장량·상한 비교, 오메가3 EPA+DHA 합산, 약물 상호작용(항응고제·갑상선약·항생제 등) 체크, 임산부·고령자·청소년 안전 모드까지. 한국 식약처 기준.',
+  keywords: [
+    '영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량',
+    '영양제복용조합', '영양제계산기', '오메가3합산', 'EPA DHA',
+    '영양제약물상호작용', '임산부영양제', '고령자영양제', '갑상선약철분',
+    '항응고제비타민E', 'PPI비타민B12', '센트룸실버', '임산부엽산',
+  ],
 })
 
 const cell: React.CSSProperties = {
@@ -34,7 +39,8 @@ export default function SupplementPage() {
         💊 영양제 성분 체크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        여러 영양제를 등록하면 중복 성분을 합산하고 1일 권장량·상한 섭취량과 비교해드려요. 시너지·주의 조합과 복용 타이밍 가이드까지 한 번에 확인하세요.
+        50종 영양소 자동 합산·권장량/상한 비교 + <strong style={{ color: 'var(--text)' }}>오메가3 EPA+DHA 합산·약물 상호작용·임산부·고령자 안전 체크</strong>까지.
+        시너지·주의 조합, 복용 타이밍 가이드도 한 번에.
       </p>
 
       {/* 상단 면책 */}
@@ -48,9 +54,10 @@ export default function SupplementPage() {
         color: 'var(--text)',
         lineHeight: 1.7,
       }}>
-        ⚕️ <strong style={{ color: '#FF8C8C' }}>본 계산기는 영양제 성분 정보를 정리하는 참고용 도구입니다.</strong><br />
-        의학적 진단이나 복용 처방이 아니며, 개인의 건강 상태·약물 복용 여부에 따라 적절한 섭취량이 다를 수 있습니다. 영양제 복용 전 의사·약사와 상담하시기 바랍니다.<br />
-        <span style={{ color: 'var(--muted)', fontSize: 12 }}>참고: 한국영양학회, 보건복지부 한국인 영양소 섭취 기준</span>
+        ⚕️ <strong style={{ color: '#FF8C8C' }}>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
+        처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담.<br />
+        도움: 한국 식약처 식품안전정보 <strong style={{ color: '#FF8C8C' }}>1577-1255</strong> · 의약품안전사용서비스 <strong style={{ color: '#FF8C8C' }}>1577-2334</strong><br />
+        <span style={{ color: 'var(--muted)', fontSize: 12 }}>참고: 한국영양학회, 보건복지부 한국인 영양소 섭취 기준 (2026)</span>
       </div>
 
       <SupplementClient />
@@ -178,38 +185,214 @@ export default function SupplementPage() {
           </div>
         </div>
 
-        {/* 5. FAQ */}
+        {/* 5. 오메가3 EPA + DHA 합산 가이드 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🐟 오메가3 EPA + DHA 합산 가이드</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            오메가3는 EPA + DHA <strong style={{ color: 'var(--text)' }}>합산</strong>으로 평가하는 게 표준입니다.
+            본 도구의 「성분 분석」 탭에서 자동 합산.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>EPA + DHA 합산</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EC8FF', fontWeight: 700 }}>구간</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>설명</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#FFD700' }}>🟡 권장 미달</strong></td><td style={cell}>식사 (등푸른 생선) 보충 권장</td></tr>
+                <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>🟢 적정 (일반 권장)</strong></td><td style={cell}>WHO·미국심장협회 일반 권장 범위</td></tr>
+                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#FF8C3E' }}>🟠 약간 초과 (안전)</strong></td><td style={cell}>심혈관 치료 목적이면 의사 상담</td></tr>
+                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#FF6B6B' }}>🔴 상한 초과</strong></td><td style={cell}>FDA 상한 초과 — 출혈 위험 ↑, 즉시 조정</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            ※ 일반 건강 목적 EPA+DHA 250~500mg/일 / 심혈관 치료 1,000mg+ (의사 처방). rTG 형태 &gt; EE 형태 (흡수율).
+          </p>
+        </div>
+
+        {/* 6. 약물별 영양제 주의 (NEW) */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>💊 약물별 영양제 주의 가이드</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            처방약 복용 중에는 영양제와 상호작용으로 흡수가 방해되거나 부작용이 생길 수 있습니다.
+            본 도구의 「약물·특수 상황」 탭에서 약물 선택 시 자동 매칭.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#FF6B6B', fontWeight: 700 }}>주의 영양제</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>대응</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={cell}>🩸 항응고제 (와파린·아스피린)</td><td style={cell}>비타민E·K·오메가3·강황</td><td style={cell}>출혈 위험 ↑ → 의사 상담</td></tr>
+                <tr><td style={cell}>🦋 갑상선약 (신지로이드)</td><td style={cell}>철분·칼슘·마그네슘</td><td style={cell}>흡수 큰 폭 방해 → 4시간 간격</td></tr>
+                <tr><td style={cell}>💊 항생제 (테트라사이클린)</td><td style={cell}>칼슘·마그네슘·철분</td><td style={cell}>흡수 방해 → 2시간 간격</td></tr>
+                <tr><td style={cell}>🦴 골다공증약 (비스포스포네이트)</td><td style={cell}>칼슘·철분·마그네슘</td><td style={cell}>골다공증약 후 2시간 이상</td></tr>
+                <tr><td style={cell}>💗 혈압약 (ACE·ARB)</td><td style={cell}>칼륨</td><td style={cell}>고칼륨혈증 위험 → 주치의 상담</td></tr>
+                <tr><td style={cell}>🍬 당뇨약</td><td style={cell}>크롬·알파리포산</td><td style={cell}>혈당 변화 가능</td></tr>
+                <tr><td style={cell}>🫃 위산억제제 (PPI)</td><td style={cell}>비타민B12·철분·칼슘·마그네슘</td><td style={cell}>장기 복용 시 결핍 → 주기적 검사</td></tr>
+                <tr><td style={cell}>🫀 콜레스테롤약 (스타틴)</td><td style={cell}>코엔자임Q10 (보충 권장) / 나이아신 고용량 X</td><td style={cell}>CoQ10 보충 OK</td></tr>
+                <tr><td style={cell}>🧠 우울증약 (SSRI)</td><td style={cell}>오메가3 (시너지 가능)</td><td style={cell}>긍정적 — 의사와 협의</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            ⚠️ 본 데이터는 가장 흔한 패턴만 표시. 정확한 평가는 단골 약사·주치의 상담 필수.
+          </p>
+        </div>
+
+        {/* 7. 임산부·수유부 가이드 (NEW) */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🤰 임산부·수유부 영양제 가이드</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 임신 시 권장</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
+                <li>엽산 600~800μg (신경관 결손 예방, 임신 전 3개월부터)</li>
+                <li>철분 27mg (빈혈 예방)</li>
+                <li>요오드 150μg 정확</li>
+                <li>DHA 200mg+ (태아 뇌·시각)</li>
+                <li>콜린 450mg (뇌 발달)</li>
+              </ul>
+            </div>
+            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 임신 시 주의</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
+                <li>비타민A 레티놀 고용량 (3,000μg+) — 1삼분기 기형아 위험. 베타카로틴 형태로 변경</li>
+                <li>비타민D 4,000IU 초과 — 태아 위험</li>
+                <li>성요한초 — 안전성 미입증</li>
+                <li>카페인 200mg/일 이하 (커피 1~2잔)</li>
+              </ul>
+            </div>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+            ※ 임산부 전용 종합비타민 권장. 산부인과 상담 필수. 본 도구의 「약물·특수 상황」 탭에서 「임신 중」 모드 선택 시 자동 체크.
+          </p>
+        </div>
+
+        {/* 8. 고령자(65세+) 가이드 (NEW) */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>👴 65세 이상 고령자 영양제 가이드</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 고령자 권장 추가</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
+                <li>비타민D 800~1,000IU (낙상·골절 예방)</li>
+                <li>칼슘 1,200mg (남 1,000 / 여 1,200)</li>
+                <li>비타민B12 2.4μg+ (위산 ↓로 흡수 ↓)</li>
+                <li>오메가3 EPA+DHA 250mg+ (심혈관)</li>
+                <li>마그네슘 (부족 흔함, 수면·근육)</li>
+              </ul>
+            </div>
+            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 고령자 주의</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
+                <li>비타민E 400IU 초과 X (출혈 위험)</li>
+                <li>철분 결핍 진단 X면 비섭취 (산화 스트레스)</li>
+                <li>약물 복용률 ↑ → 상호작용 주의</li>
+                <li>「실버 종합비타민」 권장</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* 9. 시너지 조합 (NEW) */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🟢 영양제 시너지 조합 (상호 보완)</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { q: '종합비타민과 개별 비타민을 같이 먹어도 되나요?', a: '종합비타민에 이미 여러 성분이 포함되어 있어 개별 비타민을 추가하면 중복 과잉이 될 수 있습니다. 특히 비타민 A·D·E, 철분, 아연은 상한량 초과에 주의해야 합니다. 본 계산기로 각 성분의 합산량을 먼저 확인하세요.' },
-              { q: '수용성 비타민은 과잉 섭취해도 괜찮나요?', a: '비타민C·B군 등 수용성 비타민은 소변으로 배출되어 지용성 비타민(A·D·E·K)보다 축적 위험이 낮습니다. 하지만 비타민C 2,000mg 이상은 신장 결석 위험, 비타민B6 100mg 이상 장기 복용은 신경 손상 가능성이 있습니다. 수용성도 상한량 초과는 주의가 필요합니다.' },
-              { q: '영양제와 약을 같이 먹을 때 주의사항은?', a: '오메가3·비타민E는 혈액 응고를 억제해 항응고제(와파린 등)와 상호작용할 수 있습니다. 칼슘·마그네슘은 일부 항생제 흡수를 방해하고, 철분은 갑상선약(신지로이드 등)과 2시간 이상 간격이 필요합니다. 처방약 복용 중이라면 반드시 의사·약사와 상담하세요.' },
-              { q: '영양제는 언제 먹는 게 가장 효과적인가요?', a: '지용성 비타민(A·D·E·K)과 오메가3·코엔자임Q10은 지방이 포함된 식사 후가 흡수율이 높습니다. 철분은 공복에 비타민C와 함께 복용하면 흡수율이 올라가지만 위 자극이 강하면 식후 복용도 가능합니다. 마그네슘은 저녁에 복용하면 수면 개선 효과를 볼 수 있습니다.' },
-              { q: '이 계산기로 나온 결과를 믿어도 되나요?', a: '본 계산기는 공개된 영양소 섭취 기준(한국영양학회, WHO)을 바탕으로 성분 합산량을 정리하는 참고용 도구입니다. 개인의 건강 상태, 체중, 기저 질환, 복용 약물에 따라 적정 섭취량이 달라질 수 있으므로 의사·약사와 상담하는 것을 권장합니다.' },
-            ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--accent)', marginBottom: '8px' }}>Q. {item.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{item.a}</p>
+              { pair: '비타민D + 칼슘',     desc: '비타민D는 칼슘 흡수를 50%+ 향상' },
+              { pair: '비타민C + 철분',     desc: '비타민C가 비헴철 흡수율 3배 향상' },
+              { pair: '마그네슘 + 비타민B6', desc: 'B6가 마그네슘 세포 흡수와 활용 도움' },
+              { pair: '비타민E + 셀레늄',   desc: '두 항산화제 시너지 — 활성산소 제거 효과 ↑' },
+              { pair: '아연 + 비타민C',     desc: '면역력 강화 시너지' },
+              { pair: '프로 + 프리바이오틱스', desc: '유산균 + 유산균 먹이 시너지' },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 4 }}>✅ {s.pair}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 6. 하단 면책 */}
+        {/* 10. FAQ (accordion - salary style) */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { q: '종합비타민과 개별 비타민을 같이 먹어도 되나요?', a: '종합비타민에 이미 여러 성분이 포함되어 있어 개별 비타민을 추가하면 중복 과잉이 될 수 있습니다. 특히 비타민 A·D·E, 철분, 아연은 상한량 초과에 주의해야 합니다. 본 계산기로 각 성분의 합산량을 먼저 확인하세요.' },
+              { q: '수용성 비타민은 과잉 섭취해도 괜찮나요?', a: '비타민C·B군 등 수용성 비타민은 소변으로 배출되어 지용성 비타민(A·D·E·K)보다 축적 위험이 낮습니다. 하지만 비타민C 2,000mg 이상은 신장 결석 위험, 비타민B6 100mg 이상 장기 복용은 신경 손상 가능성이 있습니다. 수용성도 상한량 초과는 주의가 필요합니다.' },
+              { q: '영양제와 약을 같이 먹을 때 주의사항은?', a: '오메가3·비타민E는 혈액 응고를 억제해 항응고제(와파린 등)와 상호작용할 수 있습니다. 칼슘·마그네슘은 일부 항생제 흡수를 방해하고, 철분은 갑상선약(신지로이드 등)과 4시간 이상 간격이 필요합니다. 본 도구의 「약물·특수 상황」 탭에서 자동 체크 가능. 처방약 복용 중이라면 반드시 의사·약사와 상담하세요.' },
+              { q: '영양제는 언제 먹는 게 가장 효과적인가요?', a: '지용성 비타민(A·D·E·K)과 오메가3·코엔자임Q10은 지방이 포함된 식사 후가 흡수율이 높습니다. 철분은 공복에 비타민C와 함께 복용하면 흡수율이 올라가지만 위 자극이 강하면 식후 복용도 가능합니다. 마그네슘은 저녁에 복용하면 수면 개선 효과를 볼 수 있습니다.' },
+              { q: '이 계산기로 나온 결과를 믿어도 되나요?', a: '본 계산기는 공개된 영양소 섭취 기준(한국영양학회, WHO)을 바탕으로 성분 합산량을 정리하는 참고용 도구입니다. 개인의 건강 상태, 체중, 기저 질환, 복용 약물에 따라 적정 섭취량이 달라질 수 있으므로 의사·약사와 상담하는 것을 권장합니다.' },
+              { q: '오메가3 EPA와 DHA를 따로 보지 않고 합산해도 되나요?', a: '일반 건강 목적에서는 EPA+DHA 합산 기준이 더 의미 있습니다 (WHO·미국심장협회 250~500mg/일). 다만 심혈관 (EPA 비중 ↑) / 뇌·시각 (DHA 비중 ↑) / 우울증 (EPA ↑) / 임산부 (DHA ↑) 등 목적에 따라 비율도 고려. 본 도구가 자동 합산 표시.' },
+              { q: '임산부는 어떤 영양제를 먹어야 하나요?', a: '임산부 전용 종합비타민 권장. 핵심: 엽산 600~800μg (신경관 결손 예방), 철분 27mg (빈혈 예방), 요오드 150μg, DHA 200mg+, 콜린 450mg. 주의: 비타민A 레티놀 고용량 X (베타카로틴 OK), 성요한초 X. 본 도구의 「약물·특수 상황」 탭 「임신 중」 모드에서 자동 체크.' },
+              { q: '65세 이상 고령자는 일반 종합비타민으로 충분한가요?', a: '충분하지 않을 수 있습니다. 고령자 권장 추가: 비타민D 800~1,000IU, B12 2.4μg+, 칼슘 1,200mg, 오메가3 EPA+DHA 250mg+, 마그네슘. 주의: 비타민E 고용량 X, 약물 복용률 ↑로 상호작용 주의. 「실버 종합비타민」 권장.' },
+              { q: '영양제 라벨 보고 입력하기 어려운데 도움이 있나요?', a: '본 도구의 「영양제 등록」 탭 빠른 입력 프리셋에서 종합비타민·비타민D 1,000~5,000IU·오메가3 (rTG)·임산부 종합비타민·프로바이오틱스·글루코사민·콜라겐 등 인기 제품 자동 입력 가능. 정확한 성분량은 제품마다 다를 수 있으니 라벨 확인 후 조정 권장.' },
+              { q: '본 도구는 영양제를 추천해주나요?', a: '아닙니다. 본 도구는 일반 정보 제공 목적의 「성분 정보 정리」 참고용이며, 영양제 권유·복용 처방 도구가 아닙니다. 영양제는 식품(한국 식약처 분류)이며 효과·안전성은 의약품 수준 평가 X. 「많이 먹을수록 좋다」는 절대 X — 영양제는 부족분 보충용이며, 균형 잡힌 식단이 우선. 영양 상태 정확 평가는 혈액 검사 (병원·건강검진) 권장.' },
+            ].map((faq, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+
+        {/* 11. 면책 강화 */}
         <div style={{
           background: 'rgba(255, 107, 107, 0.06)',
-          border: '1px solid rgba(255, 107, 107, 0.25)',
+          border: '1px solid rgba(255, 107, 107, 0.30)',
           borderRadius: '12px',
-          padding: '14px 18px',
+          padding: '18px 20px',
           fontSize: '12.5px',
           color: 'var(--muted)',
-          lineHeight: 1.8,
-          textAlign: 'center',
+          lineHeight: 1.85,
         }}>
-          ⚕️ 본 계산기의 수치는 <strong style={{ color: '#FF8C8C' }}>한국영양학회·보건복지부 한국인 영양소 섭취 기준</strong>을 참고한 일반적인 성인 기준입니다.<br />
-          임산부, 수유부, 소아, 기저 질환자, 처방약 복용자는 반드시 전문 의료인과 상담 후 복용하시기 바랍니다.
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C8C', marginBottom: 10 }}>⚕️ 면책 조항 (강화)</p>
+          <p style={{ marginBottom: 8 }}>
+            본 영양제 성분 체크 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다.
+            의학적 진단·처방·복용 권유 도구가 아닙니다.
+          </p>
+          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
+            <li>영양제는 식품, 약 X (한국 식약처 분류)</li>
+            <li>효과·안전성은 의약품 수준 평가 X</li>
+            <li>개인의 건강 상태·약물에 따라 영향 다름</li>
+            <li>라벨 표시량 vs 실제 함량 차이 가능</li>
+            <li>정책·기준 변경 가능</li>
+          </ul>
+          <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>다음 경우 반드시 의료 전문가 상담:</p>
+          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
+            <li>처방약 복용 중</li>
+            <li>임신·수유 중</li>
+            <li>만성질환 (당뇨·간·신장·심혈관·갑상선)</li>
+            <li>65세 이상 / 18세 미만</li>
+            <li>영양제 부작용 의심</li>
+            <li>효과 미흡 또는 의심</li>
+          </ul>
+          <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>도움 받기:</p>
+          <ul style={{ paddingLeft: 18 }}>
+            <li>단골 약사 상담 (가장 빠르고 정확)</li>
+            <li>한국 식약처 식품안전정보: <strong style={{ color: '#FF8C8C' }}>1577-1255</strong></li>
+            <li>의약품안전사용서비스: <strong style={{ color: '#FF8C8C' }}>1577-2334</strong></li>
+            <li>한국임상영양학회</li>
+          </ul>
+          <p style={{ marginTop: 10, color: 'var(--text)', fontWeight: 600 }}>
+            ⚠️ &ldquo;많이 먹을수록 좋다&rdquo;는 절대 X. 영양제는 부족분 보충용이며, 균형 잡힌 식단이 우선.
+            영양 상태 정확 평가는 혈액 검사 (병원·건강검진) 권장.
+          </p>
         </div>
 
         {/* 7. 관련 도구 */}

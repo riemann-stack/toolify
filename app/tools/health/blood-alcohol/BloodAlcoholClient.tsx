@@ -2,9 +2,25 @@
 
 import { useState, useMemo } from 'react'
 import s from './blood-alcohol.module.css'
+import {
+  DECAY_RATES,
+  FOOD_STATES,
+  DRUG_ALCOHOL_RISKS,
+  BAC_THRESHOLDS,
+  calcTomorrowMorning,
+  calcCumulativeBAC,
+  alcoholGrams as calcAlcoholGrams,
+  fmtTimeMin,
+  fmtBAC,
+  pad2 as utilPad2,
+  type DrinkingSession,
+} from './bacUtils'
 
 type Sex = 'male' | 'female'
 type Drink = { id: number; name: string; volume: string; abv: string }
+type TabId = 'main' | 'tomorrow' | 'cumulative' | 'guide'
+
+void utilPad2  // 타입 호환 위해 import만
 
 const PRESETS: { name: string; volume: number; abv: number; label: string }[] = [
   { name: '소주',   volume: 50,  abv: 16,   label: '소주 1잔 (50ml, 16%)' },
@@ -46,9 +62,12 @@ function getStatus(bac: number): { label: string; cls: string; heroCls: string; 
 const DECAY = 0.015 // g/dL per hour
 
 export default function BloodAlcoholClient() {
+  const [tab, setTab] = useState<TabId>('main')
   const [sex, setSex] = useState<Sex>('male')
   const [weight, setWeight] = useState('70')
   const [empty, setEmpty] = useState(false)
+  const [decayRateId, setDecayRateId] = useState('normal')
+  const [foodStateId, setFoodStateId] = useState<string>('normal')
 
   const [startH, setStartH] = useState(19)
   const [startM, setStartM] = useState(0)
@@ -166,13 +185,38 @@ export default function BloodAlcoholClient() {
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)
   const minOptions  = [0, 10, 20, 30, 40, 50]
 
+  // 분해 속도·식사 상태
+  const decayRate = DECAY_RATES.find(d => d.id === decayRateId)?.rate ?? 0.015
+  const foodMultiplier = FOOD_STATES.find(f => f.id === foodStateId)?.multiplier ?? 1.0
+
   return (
     <div className={s.wrap}>
       <div className={s.disclaimer}>
         <strong>⚠️ 참고용 도구입니다</strong>
-        개인의 신체 상태·음식 섭취량·건강 상태에 따라 실제 BAC와 크게 다를 수 있습니다.
+        개인의 신체 상태·음식 섭취량·건강 상태에 따라 실제 BAC와 크게 다를 수 있습니다 (±20~30% 오차).
         계산 결과와 관계없이 <strong style={{ color: '#FF6B6B', display: 'inline', margin: 0 }}>음주 후에는 절대 운전하지 마시고</strong> 대리운전 또는 대중교통을 이용하세요.
+        🚕 카카오 T 대리: <strong>1577-1577</strong> · 티맵 대리: <strong>1644-3030</strong>
       </div>
+
+      {/* 4개 탭 */}
+      <div className={s.tabs}>
+        {[
+          { id: 'main',       label: '🍺 BAC 계산',       cls: s.tabActive },
+          { id: 'tomorrow',   label: '🌅 다음날 아침',     cls: s.tabActiveTomorrow },
+          { id: 'cumulative', label: '🔢 여러 자리 누적',  cls: s.tabActiveCumul },
+          { id: 'guide',      label: '📖 영향·면허 가이드', cls: s.tabActiveGuide },
+        ].map(t => (
+          <button key={t.id}
+            className={`${s.tabBtn} ${tab === t.id ? t.cls : ''}`}
+            onClick={() => setTab(t.id as TabId)}
+          >{t.label}</button>
+        ))}
+      </div>
+
+      {tab !== 'main' && tab !== 'tomorrow' && tab !== 'cumulative' && tab !== 'guide' ? null : null}
+
+      {/* ──────── TAB 1: BAC 계산 (메인, 기존 유지) ──────── */}
+      {tab === 'main' && <>
 
       {/* ── 섹션 1: 신체 정보 ── */}
       <div className={s.card}>
@@ -487,6 +531,36 @@ export default function BloodAlcoholClient() {
         </>
       )}
 
+      {/* ── 분해 속도·식사 상태 (NEW, 메인 탭 안) ── */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>분해 속도·식사 상태 (정밀 보정)</span>
+        <div className={s.drinkLabel} style={{ marginTop: 6 }}>알코올 분해 속도 (개인차)</div>
+        <div className={s.optionRow5}>
+          {DECAY_RATES.map(d => (
+            <button key={d.id}
+              className={`${s.optionBtn} ${decayRateId === d.id ? s.optionActive : ''}`}
+              onClick={() => setDecayRateId(d.id)} title={d.desc}>
+              {d.label}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{d.rate.toFixed(3)}/h</span>
+            </button>
+          ))}
+        </div>
+        <div className={s.drinkLabel} style={{ marginTop: 12 }}>음주 시 식사 상태</div>
+        <div className={s.optionRow5}>
+          {FOOD_STATES.map(f => (
+            <button key={f.id}
+              className={`${s.optionBtn} ${foodStateId === f.id ? s.optionActive : ''}`}
+              onClick={() => setFoodStateId(f.id)} title={f.desc}>
+              {f.label}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>×{f.multiplier.toFixed(2)}</span>
+            </button>
+          ))}
+        </div>
+        <div className={s.infoBox} style={{ marginTop: 10 }}>
+          💡 <strong>ALDH2 결손 (한국인 30~40%)</strong>이면 분해 속도 30~50% 느림.
+          술 마시면 얼굴 빨개짐·심박 ↑·구역질 빨리 → 「느림」 또는 「매우 느림」 선택 권장.
+          공복 음주는 흡수 25% 빠름 → BAC 더 오래 유지.
+        </div>
+      </div>
+
       {/* ── 안전 귀가 ── */}
       <div className={s.safeBox}>
         <div className={s.safeTitle}>🚕 안전 귀가 안내</div>
@@ -506,6 +580,538 @@ export default function BloodAlcoholClient() {
         본 계산기는 음주 예방 교육 목적이며, 법적 판단 근거로 사용할 수 없습니다.
         본인과 타인의 생명을 지키기 위해 음주 후 운전은 절대 금지입니다.
       </div>
+
+      </>}
+
+      {/* ──────── TAB 2: 다음날 아침 ──────── */}
+      {tab === 'tomorrow' && (
+        <TomorrowMorningTab
+          peakBAC={peakBAC}
+          decayRate={decayRate}
+          endH={endH}
+          endM={endM}
+        />
+      )}
+
+      {/* ──────── TAB 3: 여러 자리 누적 ──────── */}
+      {tab === 'cumulative' && (
+        <CumulativeTab
+          weightKg={weightN}
+          sex={sex}
+          foodMultiplier={foodMultiplier}
+          decayRate={decayRate}
+        />
+      )}
+
+      {/* ──────── TAB 4: 영향·면허 가이드 ──────── */}
+      {tab === 'guide' && <GuideTab />}
+
     </div>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   TAB 2 — 다음날 아침 BAC (NEW)
+   ════════════════════════════════════════════════════════════ */
+function TomorrowMorningTab({ peakBAC, decayRate, endH, endM }: {
+  peakBAC: number
+  decayRate: number
+  endH: number
+  endM: number
+}) {
+  const [morningH, setMorningH] = useState(8)
+  const [morningM, setMorningM] = useState(0)
+
+  const result = useMemo(() => calcTomorrowMorning({
+    drinkEndH: endH, drinkEndM: endM, drinkEndDayOffset: 0,
+    morningH, morningM,
+    peakBAC, decayRate,
+  }), [endH, endM, morningH, morningM, peakBAC, decayRate])
+
+  const hourOptions = Array.from({ length: 24 }, (_, i) => i)
+  const minOptions = [0, 10, 20, 30, 40, 50]
+
+  if (peakBAC <= 0) {
+    return (
+      <div className={s.infoBox}>
+        💡 먼저 「BAC 계산」 탭에서 음주량과 음주 종료 시각을 입력해주세요.
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className={s.infoBox}>
+        💡 <strong>한국 음주운전 단속 가장 흔한 시각: 오전 7~9시</strong>.
+        전날 과음 후 다음날 출근길 단속 매우 많음.「잠 자고 일어났으니 깼겠지」는 잘못된 통념.
+      </div>
+
+      <div className={s.card}>
+        <span className={s.cardLabel}>다음날 운전 예정 시각</span>
+        <div className={s.timeRow}>
+          <select className={s.timeSelect} value={morningH} onChange={e => setMorningH(+e.target.value)}>
+            {hourOptions.map(h => <option key={h} value={h}>{h < 10 ? '0' + h : h}시</option>)}
+          </select>
+          <span className={s.timeColon}>:</span>
+          <select className={s.timeSelect} value={morningM} onChange={e => setMorningM(+e.target.value)}>
+            {minOptions.map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
+          </select>
+        </div>
+        <div className={s.drinkLabel} style={{ marginTop: 10, color: 'var(--muted)' }}>
+          빠른 선택:
+        </div>
+        <div className={s.btnGroup} style={{ flexWrap: 'wrap' }}>
+          {[7, 8, 9, 10, 12].map(h => (
+            <button key={h}
+              className={`${s.toggleBtn} ${morningH === h && morningM === 0 ? s.toggleActive : ''}`}
+              onClick={() => { setMorningH(h); setMorningM(0) }}>
+              {h}:00
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 히어로 */}
+      <div className={s.tomorrowHero}>
+        <div className={s.tomorrowHeroLabel}>
+          내일 {morningH < 10 ? '0' + morningH : morningH}:{morningM < 10 ? '0' + morningM : morningM} 운전 시 BAC
+        </div>
+        <div className={s.tomorrowHeroNum}
+          style={{ color: result.statusColor }}>
+          {fmtBAC(result.morningBAC)}
+        </div>
+        <div className={s.tomorrowHeroSub}>
+          음주 종료 후 {result.hoursElapsed.toFixed(1)}시간 경과
+        </div>
+        <div className={s.tomorrowStatusBadge}
+          style={{ background: `${result.statusColor}1A`, color: result.statusColor, border: `1px solid ${result.statusColor}55` }}>
+          {result.statusLabel}
+        </div>
+      </div>
+
+      {/* 타임라인 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>📅 안전 운전 타임라인</span>
+        <div className={s.timelineList}>
+          <div className={s.timelineRow}>
+            <span className={s.timelineTime}>{fmtTimeMin(result.endMin)}</span>
+            <span className={s.timelineLabel}>🍺 음주 종료 (최고 BAC {fmtBAC(peakBAC)})</span>
+          </div>
+          {peakBAC > BAC_THRESHOLDS.REVOKE && (
+            <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
+              <span className={s.timelineTime}>{fmtTimeMin(result.revokeClearMin)}</span>
+              <span className={s.timelineLabel}>❌ 면허취소 해소 (0.08 미만)</span>
+            </div>
+          )}
+          {peakBAC > BAC_THRESHOLDS.GENERAL_SUSPEND && (
+            <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
+              <span className={s.timelineTime}>{fmtTimeMin(result.suspendClearMin)}</span>
+              <span className={s.timelineLabel}>🚫 면허정지 해소 (0.03 미만)</span>
+            </div>
+          )}
+          <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
+            <span className={s.timelineTime}>{fmtTimeMin(result.zeroMin)}</span>
+            <span className={s.timelineLabel}>✅ 알코올 완전 분해</span>
+          </div>
+          <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
+            <span className={s.timelineTime}>{fmtTimeMin(result.recommendedSafeMin)}</span>
+            <span className={s.timelineLabel}>⭐ 권장 안전 운전 시각 (1시간 여유)</span>
+          </div>
+          <div className={s.timelineRow}
+            style={{ background: result.status === 'safe' ? 'rgba(62,255,155,0.06)' : 'rgba(255,107,107,0.06)',
+              borderColor: result.status === 'safe' ? 'rgba(62,255,155,0.30)' : 'rgba(255,107,107,0.30)' }}>
+            <span className={s.timelineTime}
+              style={{ color: result.status === 'safe' ? '#3EFF9B' : '#FF6B6B' }}>
+              {fmtTimeMin(result.morningMin)}
+            </span>
+            <span className={s.timelineLabel} style={{ fontWeight: 700 }}>
+              내일 운전 예정 — BAC {fmtBAC(result.morningBAC)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 안전 출근 가이드 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>🚕 안전 출근 가이드</span>
+        <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+          <li><strong style={{ color: 'var(--text)' }}>택시·지하철·버스 이용</strong> — 가장 안전</li>
+          <li>재택 근무 또는 휴가 검토</li>
+          <li>오후 출근으로 변경 (회사 협의)</li>
+          <li>출근 직전까지 BAC가 0.03 미만이라도 측정 시 양성 가능</li>
+        </ul>
+      </div>
+
+      <div className={s.warnBox}>
+        <strong>⚠️ 한국 음주운전 단속 최다 케이스:</strong> 새벽 2~3시까지 음주 → 다음날 8시 운전 시 BAC 0.05~0.08 초과 가능성 큼.
+        「술이 깬 것 같다」는 주관적 판단 ≠ 실제 BAC. 본 도구 결과 ±20~30% 오차 가능 — 안전 여유 두기.
+      </div>
+    </>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   TAB 3 — 여러 자리 누적 음주 (NEW)
+   ════════════════════════════════════════════════════════════ */
+type CumulSession = {
+  id: string
+  startH: number
+  startM: number
+  endH: number
+  endM: number
+  drinks: { id: string; name: string; volume: string; abv: string }[]
+}
+
+function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
+  weightKg: number
+  sex: 'male' | 'female'
+  foodMultiplier: number
+  decayRate: number
+}) {
+  const [sessions, setSessions] = useState<CumulSession[]>([
+    { id: '1', startH: 19, startM: 0, endH: 20, endM: 30,
+      drinks: [
+        { id: 'd1', name: '소주 1병', volume: '360', abv: '16' },
+        { id: 'd2', name: '맥주 500cc', volume: '500', abv: '4.5' },
+      ] },
+    { id: '2', startH: 22, startM: 0, endH: 23, endM: 30,
+      drinks: [{ id: 'd3', name: '맥주 500cc 2잔', volume: '1000', abv: '4.5' }] },
+  ])
+
+  const drinkingSessions = useMemo<DrinkingSession[]>(() => {
+    return sessions.map(ses => {
+      // 익일 새벽이면 24시간 더하기
+      const startMin = ses.startH * 60 + ses.startM
+      const endMin = ses.endH * 60 + ses.endM
+      const adjEndMin = endMin < startMin ? endMin + 24 * 60 : endMin
+      const grams = ses.drinks.reduce((s, d) => s + calcAlcoholGrams(parseFloat(d.volume) || 0, parseFloat(d.abv) || 0), 0)
+      return { id: ses.id, startMin, endMin: adjEndMin, alcoholGrams: grams }
+    })
+  }, [sessions])
+
+  const result = useMemo(() => calcCumulativeBAC({
+    sessions: drinkingSessions,
+    weightKg, sex, foodMultiplier, decayRate,
+  }), [drinkingSessions, weightKg, sex, foodMultiplier, decayRate])
+
+  const standardDrinks = result.totalAlcoholGrams / 8
+
+  const updateSession = (id: string, patch: Partial<CumulSession>) =>
+    setSessions(sessions.map(s => s.id === id ? { ...s, ...patch } : s))
+
+  const updateDrink = (sesId: string, drinkId: string, field: 'name' | 'volume' | 'abv', value: string) =>
+    setSessions(sessions.map(s =>
+      s.id === sesId ? { ...s, drinks: s.drinks.map(d => d.id === drinkId ? { ...d, [field]: value } : d) } : s))
+
+  const addSession = () => {
+    if (sessions.length >= 5) return
+    const lastEnd = sessions[sessions.length - 1]
+    const newStartH = (lastEnd.endH + 1) % 24
+    setSessions([...sessions, {
+      id: String(Date.now()),
+      startH: newStartH, startM: 0,
+      endH: (newStartH + 1) % 24, endM: 0,
+      drinks: [{ id: 'd' + Date.now(), name: '', volume: '', abv: '' }],
+    }])
+  }
+  const removeSession = (id: string) => setSessions(sessions.filter(s => s.id !== id))
+  const addDrink = (sesId: string) => setSessions(sessions.map(s =>
+    s.id === sesId ? { ...s, drinks: [...s.drinks, { id: 'd' + Date.now(), name: '', volume: '', abv: '' }] } : s))
+  const removeDrink = (sesId: string, drinkId: string) => setSessions(sessions.map(s =>
+    s.id === sesId ? { ...s, drinks: s.drinks.filter(d => d.id !== drinkId) } : s))
+
+  if (weightKg <= 0) {
+    return (
+      <div className={s.infoBox}>
+        💡 먼저 「BAC 계산」 탭에서 체중·성별을 설정해주세요.
+      </div>
+    )
+  }
+
+  // 곡선 차트 (간단 SVG)
+  const W = 600, H = 200, P = 30
+  const minTime = result.curve.length > 0 ? result.curve[0].min : 0
+  const maxTime = result.curve.length > 0 ? result.curve[result.curve.length - 1].min : 1440
+  const maxBAC = Math.max(result.peakBAC * 1.1, 0.12)
+  const xs = (t: number) => P + ((t - minTime) / Math.max(1, maxTime - minTime)) * (W - P * 2)
+  const ys = (b: number) => H - P - (b / maxBAC) * (H - P * 1.5)
+
+  return (
+    <>
+      <div className={s.infoBox}>
+        💡 <strong>1차·2차·3차 누적 음주</strong> 시뮬. 자리별 시작·종료 시각과 음주 항목을 입력하면 BAC 곡선·면허정지 해소 시각 자동 계산.
+      </div>
+
+      {/* 자리 입력 */}
+      {sessions.map((ses, idx) => (
+        <div key={ses.id} className={s.sessionCard}>
+          <div className={s.sessionHeader}>
+            <span className={s.sessionTitle}>{idx + 1}차</span>
+            {sessions.length > 1 && (
+              <button className={s.sessionDelBtn} onClick={() => removeSession(ses.id)}>×</button>
+            )}
+          </div>
+          <div className={s.sessionTimeRow}>
+            <div>
+              <div className={s.drinkLabel}>시작</div>
+              <div className={s.timeRow}>
+                <select className={s.timeSelect} value={ses.startH} onChange={e => updateSession(ses.id, { startH: +e.target.value })}>
+                  {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
+                </select>
+                <span className={s.timeColon}>:</span>
+                <select className={s.timeSelect} value={ses.startM} onChange={e => updateSession(ses.id, { startM: +e.target.value })}>
+                  {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
+                </select>
+              </div>
+            </div>
+            <div>
+              <div className={s.drinkLabel}>종료</div>
+              <div className={s.timeRow}>
+                <select className={s.timeSelect} value={ses.endH} onChange={e => updateSession(ses.id, { endH: +e.target.value })}>
+                  {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
+                </select>
+                <span className={s.timeColon}>:</span>
+                <select className={s.timeSelect} value={ses.endM} onChange={e => updateSession(ses.id, { endM: +e.target.value })}>
+                  {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+          {ses.drinks.map(d => (
+            <div key={d.id} className={s.sessionAlcoholRow}>
+              <input type="text" className={s.drinkInputText} value={d.name}
+                onChange={e => updateDrink(ses.id, d.id, 'name', e.target.value)} placeholder="주류" />
+              <input type="number" className={s.drinkInput} value={d.volume}
+                onChange={e => updateDrink(ses.id, d.id, 'volume', e.target.value)} placeholder="용량(ml)" />
+              <input type="number" step="0.1" className={s.drinkInput} value={d.abv}
+                onChange={e => updateDrink(ses.id, d.id, 'abv', e.target.value)} placeholder="도수(%)" />
+              <button className={s.drinkDelete} onClick={() => removeDrink(ses.id, d.id)}>×</button>
+            </div>
+          ))}
+          <button className={s.addBtn} onClick={() => addDrink(ses.id)}>+ 주류 추가</button>
+        </div>
+      ))}
+
+      {sessions.length < 5 && (
+        <button className={s.addSessionBtn} onClick={addSession}>+ 자리 추가 ({sessions.length}/5)</button>
+      )}
+
+      {/* 결과 */}
+      {result.peakBAC > 0 && (
+        <>
+          <div className={s.tomorrowHero} style={{ borderColor: 'rgba(255,107,107,0.40)', background: 'rgba(255,107,107,0.04)' }}>
+            <div className={s.tomorrowHeroLabel}>최고 BAC ({result.totalAlcoholGrams.toFixed(1)}g 알코올 = 표준잔 {standardDrinks.toFixed(1)})</div>
+            <div className={s.tomorrowHeroNum} style={{ color: '#FF6B6B' }}>
+              {fmtBAC(result.peakBAC)}
+            </div>
+            <div className={s.tomorrowHeroSub}>
+              피크 시각 {fmtTimeMin(result.peakMin)} · 음주 종료 {fmtTimeMin(result.finalEndMin)}
+            </div>
+          </div>
+
+          {/* SVG 곡선 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>BAC 누적 곡선</span>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 200, display: 'block', background: 'var(--bg3)', borderRadius: 8 }}>
+              {[0.03, 0.08].map(t => (
+                <g key={t}>
+                  <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} strokeWidth="1.5" strokeDasharray="4 4" />
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} fontSize="10" textAnchor="end" fontFamily="Syne">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
+                </g>
+              ))}
+              {/* 자리별 영역 */}
+              {drinkingSessions.map(ses => (
+                <rect key={ses.id} x={xs(ses.startMin)} y={P / 2}
+                  width={Math.max(2, xs(ses.endMin) - xs(ses.startMin))}
+                  height={H - P * 1.5}
+                  fill="rgba(200,255,62,0.04)" stroke="rgba(200,255,62,0.2)" strokeWidth="1" />
+              ))}
+              {/* BAC 곡선 */}
+              {result.curve.length > 1 && (
+                <path d={result.curve.map((c, i) => `${i === 0 ? 'M' : 'L'} ${xs(c.min)} ${ys(c.bac)}`).join(' ')}
+                  fill="none" stroke="var(--accent)" strokeWidth="2" />
+              )}
+            </svg>
+          </div>
+
+          {/* 자리별 표 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>자리별 음주 합계</span>
+            <div style={{ overflowX: 'auto' }}>
+              <table className={s.cumTable}>
+                <thead>
+                  <tr><th>자리</th><th>시간</th><th>음주</th><th>알코올(g)</th></tr>
+                </thead>
+                <tbody>
+                  {sessions.map((ses, idx) => {
+                    const grams = ses.drinks.reduce((s, d) => s + calcAlcoholGrams(parseFloat(d.volume) || 0, parseFloat(d.abv) || 0), 0)
+                    return (
+                      <tr key={ses.id}>
+                        <td>{idx + 1}차</td>
+                        <td>{utilPad2(ses.startH)}:{utilPad2(ses.startM)}~{utilPad2(ses.endH)}:{utilPad2(ses.endM)}</td>
+                        <td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>
+                          {ses.drinks.map(d => d.name || '?').join(', ')}
+                        </td>
+                        <td>{grams.toFixed(1)}</td>
+                      </tr>
+                    )
+                  })}
+                  <tr className={s.totalRow}>
+                    <td colSpan={3}>합계 ({standardDrinks.toFixed(1)} 표준잔)</td>
+                    <td>{result.totalAlcoholGrams.toFixed(1)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className={s.timelineList} style={{ marginTop: 12 }}>
+              <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
+                <span className={s.timelineTime}>{fmtTimeMin(result.suspendClearMin)}</span>
+                <span className={s.timelineLabel}>면허정지 해소 (0.03 미만)</span>
+              </div>
+              <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
+                <span className={s.timelineTime}>{fmtTimeMin(result.zeroMin)}</span>
+                <span className={s.timelineLabel}>완전 소멸</span>
+              </div>
+            </div>
+          </div>
+
+          {result.totalAlcoholGrams > 80 && (
+            <div className={s.warnBox}>
+              <strong>⚠️ 위험 음주 수준</strong> — 알코올 {result.totalAlcoholGrams.toFixed(0)}g (표준잔 {standardDrinks.toFixed(1)})은
+              WHO 위험 음주 (남 60g·여 40g) 초과. 본인뿐 아니라 다른 사람에게도 위험 (사고·폭력·건강).
+              한국알코올중독상담센터 <strong>1899-0975</strong>.
+            </div>
+          )}
+        </>
+      )}
+    </>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   TAB 4 — 영향·면허 가이드 (NEW)
+   ════════════════════════════════════════════════════════════ */
+function GuideTab() {
+  const [selectedDrugs, setSelectedDrugs] = useState<string[]>([])
+
+  const toggleDrug = (id: string) =>
+    setSelectedDrugs(selectedDrugs.includes(id)
+      ? selectedDrugs.filter(d => d !== id)
+      : [...selectedDrugs, id])
+
+  return (
+    <>
+      {/* BAC 단계별 영향 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>📊 BAC 단계별 신체·정신 영향</span>
+        <div style={{ overflowX: 'auto' }}>
+          <table className={s.cumTable}>
+            <thead>
+              <tr>
+                <th>BAC (g/dL)</th>
+                <th>한국 처벌</th>
+                <th>신체·정신 영향</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.00~0.02</td><td style={{ color: '#3EFF9B' }}>정상</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>거의 영향 없음</td></tr>
+              <tr><td>0.02~0.03</td><td style={{ color: '#FFD700' }}>영업용 정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>약간 어지러움·기분 상승</td></tr>
+              <tr><td style={{ color: '#FF8C3E' }}>0.03~0.05</td><td style={{ color: '#FF8C3E' }}>일반 정지 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>판단력 약간 ↓</td></tr>
+              <tr><td>0.05~0.08</td><td style={{ color: '#FF8C3E' }}>정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>운동 능력 ↓·반응 속도 ↓</td></tr>
+              <tr><td style={{ color: '#FF6B6B' }}>0.08~0.10</td><td style={{ color: '#FF6B6B' }}>취소 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>명확한 인지 장애</td></tr>
+              <tr><td>0.10~0.20</td><td style={{ color: '#FF6B6B' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>균형 잃음·언어 둔화</td></tr>
+              <tr><td>0.20~0.30</td><td style={{ color: '#FF6B6B' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>의식 혼탁·구토</td></tr>
+              <tr><td>0.30~0.40</td><td style={{ color: '#FF3E3E' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#FF6B6B', fontWeight: 700 }}>의식 상실 위험 ⚠️</td></tr>
+              <tr><td style={{ color: '#FF3E3E' }}>0.40+</td><td style={{ color: '#FF3E3E' }}>응급</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#FF3E3E', fontWeight: 700 }}>사망 가능성 🚨</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 면허 종류별 기준 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>🚗 운전 면허 종류별 기준</span>
+        <div style={{ overflowX: 'auto' }}>
+          <table className={s.cumTable}>
+            <thead>
+              <tr>
+                <th>직군</th>
+                <th>면허정지</th>
+                <th>면허취소</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>일반 면허</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>자가용</td></tr>
+              <tr><td>영업용 (택시·버스·화물)</td><td style={{ color: '#FF8C3E' }}>0.02</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>직업 운전자</td></tr>
+              <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>2021년부터 처벌 (3만원 범칙금)</td></tr>
+              <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>도로교통법 (10~20만원)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div className={s.warnBox} style={{ marginTop: 10 }}>
+          <strong>⚠️ 자전거·전동킥보드도 음주운전 처벌 대상.</strong>{' '}
+          「자전거니까 괜찮아」 잘못된 통념. 2021년 도로교통법 개정 — 도심 자전거·킥보드는 보행자 사고 위험 큼.
+        </div>
+      </div>
+
+      {/* 약물 + 알코올 위험 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>💊 약물 + 알코올 위험 체크</span>
+        <div className={s.drinkLabel}>현재 복용 중인 약물 (해당 시 모두 선택)</div>
+        <div className={s.drugGrid}>
+          {DRUG_ALCOHOL_RISKS.map(d => (
+            <button key={d.id}
+              className={`${s.drugBtn} ${selectedDrugs.includes(d.id) ? s.drugBtnActive : ''}`}
+              onClick={() => toggleDrug(d.id)}>
+              {selectedDrugs.includes(d.id) ? '✓ ' : ''}{d.name}
+            </button>
+          ))}
+        </div>
+
+        {selectedDrugs.length > 0 && (
+          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {DRUG_ALCOHOL_RISKS.filter(d => selectedDrugs.includes(d.id)).map(d => (
+              <div key={d.id} className={s.warnBox}
+                style={{
+                  background: d.risk === 'high' ? 'rgba(255,107,107,0.06)' : 'rgba(255,140,62,0.06)',
+                  borderColor: d.risk === 'high' ? 'rgba(255,107,107,0.40)' : 'rgba(255,140,62,0.40)',
+                }}>
+                <strong style={{ color: d.risk === 'high' ? '#FF6B6B' : '#FF8C3E' }}>
+                  {d.risk === 'high' ? '🚨' : '⚠️'} {d.name} + 알코올
+                </strong>{' '}
+                — {d.desc}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className={s.infoBox} style={{ marginTop: 12 }}>
+          ⚠️ 본 정보는 일반 안내. 정확한 약물·알코올 상호작용은 약사·의사 상담 필수.
+          한국 식약처 의약품안전사용서비스: <strong>1577-2334</strong>
+        </div>
+      </div>
+
+      {/* 면책 강화 */}
+      <div className={s.disclaimerStrong}>
+        <strong>🚨 음주운전은 범죄 — 절대 X</strong>
+        <ul>
+          <li>음주운전 처벌 (윤창호법): 면허정지·취소 + 1~5년 징역, 500만~2,000만원 벌금</li>
+          <li>사망사고 시 무기징역까지</li>
+          <li>본 도구 결과 ≠ 면책 근거 (±20~30% 오차)</li>
+          <li>「측정기에 안 잡힐 정도」 X — 측정 시 양성이면 단속</li>
+          <li>자가용·자전거·전동킥보드 모두 처벌</li>
+        </ul>
+        <strong>🚕 안전 귀가</strong>
+        <ul>
+          <li>카카오 T 대리: <strong>1577-1577</strong></li>
+          <li>티맵 대리: <strong>1644-3030</strong></li>
+          <li>음주운전 신고: <strong>080-911-7700</strong></li>
+          <li>응급: <strong>119</strong></li>
+          <li>한국알코올중독상담센터: <strong>1899-0975</strong></li>
+          <li>정신건강 위기상담: <strong>1577-0199</strong></li>
+        </ul>
+      </div>
+    </>
   )
 }

@@ -2,6 +2,16 @@
 
 import { useState, useMemo } from 'react'
 import s from './thawing.module.css'
+import {
+  FOOD_TIPS,
+  KOREA_FROZEN_PRESETS,
+  MICROWAVE_POWERS,
+  QUICK_WARNINGS,
+  evaluateRisk,
+  reverseStartTime,
+  type FoodKey as UFoodKey,
+  type Method as UMethod,
+} from './thawingUtils'
 
 type FoodKey = 'beef_pork' | 'chicken' | 'fish' | 'vegetable' | 'bread' | 'cooked'
 type Method = 'fridge' | 'water' | 'room' | 'micro'
@@ -67,6 +77,11 @@ function ThawTab() {
   const [frozen, setFrozen] = useState<FrozenState>('full')
   const [method, setMethod] = useState<Method>('fridge')
   const [copied, setCopied] = useState(false)
+  // ★ 새 입력
+  const [microPower, setMicroPower] = useState('900')
+  const [reverseMode, setReverseMode] = useState(false)
+  const [cookH, setCookH] = useState(19)
+  const [cookM, setCookM] = useState(0)
 
   const f = FOODS.find(x => x.key === food)!
   const t = parseFloat(thickness) || 0
@@ -163,8 +178,66 @@ function ThawTab() {
     } catch {}
   }
 
+  // 빠른 경고 매칭
+  const activeWarnings = useMemo(() => {
+    const expectedHrs = method === 'fridge' ? fridgeHours
+      : method === 'water' ? waterHours
+      : method === 'room' ? roomHours
+      : microMinutes / 60
+    return QUICK_WARNINGS.filter(w => w.matches({
+      foodKey: food as UFoodKey,
+      method: method as UMethod,
+      thicknessCm: t,
+      expectedHours: expectedHrs,
+    }))
+  }, [food, method, t, fridgeHours, waterHours, roomHours, microMinutes])
+
+  // 위험도 평가
+  const expectedHours = method === 'fridge' ? fridgeHours
+    : method === 'water' ? waterHours
+    : method === 'room' ? roomHours
+    : microMinutes / 60
+  const risk = useMemo(() => evaluateRisk({
+    foodKey: food as UFoodKey,
+    thicknessCm: t,
+    weightG: w,
+    method: method as UMethod,
+    expectedHours,
+  }), [food, t, w, method, expectedHours])
+
+  // 전자레인지 W 보정
+  const microPowerObj = MICROWAVE_POWERS.find(p => p.id === microPower) ?? MICROWAVE_POWERS[1]
+  const adjustedMicroMinutes = microMinutes * microPowerObj.factor
+
+  // 역산
+  const reverseInfo = useMemo(() => {
+    if (!reverseMode) return null
+    const totalMin = method === 'micro' ? adjustedMicroMinutes : selected.totalMin
+    return reverseStartTime(cookH, cookM, totalMin)
+  }, [reverseMode, cookH, cookM, method, adjustedMicroMinutes, selected.totalMin])
+
   return (
     <div className={s.wrap}>
+      {/* ★ 한국 인기 프리셋 (NEW) */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>🇰🇷 한국 인기 냉동 식품 (빠른 입력)</span>
+        <div className={s.presetGrid2}>
+          {KOREA_FROZEN_PRESETS.map(p => (
+            <button key={p.id} className={s.presetBtn2} onClick={() => {
+              setFood(p.foodKey === 'beef_pork' || p.foodKey === 'chicken' || p.foodKey === 'fish' ||
+                p.foodKey === 'vegetable' || p.foodKey === 'bread' || p.foodKey === 'cooked'
+                ? (p.foodKey as FoodKey) : 'beef_pork')
+              setWeight(String(p.weightG))
+              setThickness(String(p.thicknessCm))
+            }}>
+              <span className={s.presetBtnEmoji}>{p.emoji}</span>
+              <div className={s.presetBtnName}>{p.name}</div>
+              <div className={s.presetBtnSpec}>{p.weightG}g · {p.thicknessCm}cm</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* 식품 선택 */}
       <div className={s.card}>
         <span className={s.cardLabel}>1. 식품 종류</span>
@@ -248,6 +321,43 @@ function ThawTab() {
         </div>
       </div>
 
+      {/* ★ 전자레인지 출력 (NEW) */}
+      {method === 'micro' && (
+        <div className={s.card}>
+          <span className={s.cardLabel}>5. 전자레인지 출력 (W)</span>
+          <div className={s.microPowerRow}>
+            {MICROWAVE_POWERS.map(p => (
+              <button key={p.id}
+                className={`${s.microPowerBtn} ${microPower === p.id ? s.microPowerBtnActive : ''}`}
+                onClick={() => setMicroPower(p.id)}>
+                {p.name}
+              </button>
+            ))}
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+            본인 전자레인지 출력 확인: 본체 라벨 또는 매뉴얼의 「정격 출력 / Output Power」.
+            한국 가정용은 보통 700~900W.
+          </p>
+          {microMinutes > 0 && (
+            <div style={{ overflowX: 'auto', marginTop: 10 }}>
+              <table className={s.microCompareTable}>
+                <thead>
+                  <tr><th>출력</th><th>해동 시간</th></tr>
+                </thead>
+                <tbody>
+                  {MICROWAVE_POWERS.map(p => (
+                    <tr key={p.id} className={microPower === p.id ? s.activePower : ''}>
+                      <td>{p.name}</td>
+                      <td>{Math.round(microMinutes * p.factor)}분</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 해동 방법 4카드 */}
       <div>
         <div className={s.cardTitle} style={{ padding: '0 4px', marginBottom: '10px' }}>해동 방법별 예상 시간</div>
@@ -300,10 +410,97 @@ function ThawTab() {
         </div>
       )}
 
+      {/* ★ 빠른 위험 경고 (NEW) */}
+      {activeWarnings.length > 0 && (
+        <div>
+          {activeWarnings.map(w => (
+            <div key={w.id} className={s.quickWarn}>{w.message}</div>
+          ))}
+        </div>
+      )}
+
+      {/* ★ 위험도 평가 카드 (NEW) */}
+      {fridgeHours > 0 && (
+        <div className={`${s.riskCard} ${
+          risk.level === 'safe' ? s.riskCardSafe :
+          risk.level === 'caution' ? s.riskCardCaution :
+          risk.level === 'warning' ? s.riskCardWarning : s.riskCardDanger
+        }`}>
+          <div className={s.riskHeader}>
+            <div className={s.riskTitle}>📊 식품 안전 위험도 평가</div>
+            <span className={s.riskBadge}
+              style={{ background: `${risk.levelColor}20`, color: risk.levelColor, border: `1px solid ${risk.levelColor}55` }}>
+              {risk.levelLabel}
+            </span>
+          </div>
+          <div className={s.riskFactorList}>
+            {risk.factors.map((f2, i) => (
+              <div key={i} className={s.riskFactorRow}>
+                <span className={s.riskFactorIcon}>{f2.icon}</span>
+                <span className={s.riskFactorLabel}><strong>{f2.label}</strong>{f2.status}</span>
+              </div>
+            ))}
+          </div>
+          <div className={s.riskRecommendation}>{risk.recommendation}</div>
+        </div>
+      )}
+
       {/* 식품별 안전 ── */}
       <div className={s.infoBox}>
         <strong>{f.icon} {f.label} 맞춤 팁</strong><br/>
         {f.tip}
+      </div>
+
+      {/* ★ 역산: 조리 시각 → 해동 시작 (NEW) */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>⏰ 역산: 조리 예정 시각 → 해동 시작 시각</span>
+        <div className={s.btnGroup} style={{ marginBottom: 10 }}>
+          <button className={`${s.toggleBtn} ${!reverseMode ? s.toggleActive : ''}`}
+            onClick={() => setReverseMode(false)}>정방향 (지금 시작)</button>
+          <button className={`${s.toggleBtn} ${reverseMode ? s.toggleActive : ''}`}
+            onClick={() => setReverseMode(true)}>역산 (조리 예정)</button>
+        </div>
+        {reverseMode && (
+          <>
+            <div className={s.reverseRow}>
+              <div>
+                <label className={s.fieldLabel}>조리 예정 시각</label>
+                <div className={s.btnGroup}>
+                  <select value={cookH} onChange={e => setCookH(+e.target.value)}
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Syne', sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
+                  </select>
+                  <select value={cookM} onChange={e => setCookM(+e.target.value)}
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Syne', sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className={s.fieldLabel}>선택한 해동 방법</label>
+                <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+                  {selected.icon} {selected.name}
+                </div>
+              </div>
+            </div>
+            {reverseInfo && (
+              <div className={s.reverseResultCard} style={{ marginTop: 10 }}>
+                <div className={s.reverseResultRow}>
+                  <span>조리 예정</span>
+                  <span>{cookH < 10 ? '0' + cookH : cookH}:{cookM < 10 ? '0' + cookM : cookM}</span>
+                </div>
+                <div className={s.reverseResultRow}>
+                  <span>해동 시작 권장</span>
+                  <span style={{ color: '#FFD700', fontSize: 16 }}>{reverseInfo.display}</span>
+                </div>
+                <div className={s.reverseResultRow}>
+                  <span>현재 시점 대비</span>
+                  <span>{reverseInfo.hoursAgo > 0 ? `${reverseInfo.hoursAgo.toFixed(1)}시간 전 시작 필요` : `${Math.abs(reverseInfo.hoursAgo).toFixed(1)}시간 후 시작 가능`}</span>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* 위험 온도대 경고 */}
@@ -528,9 +725,55 @@ function ThermometerBox() {
   )
 }
 
+// ── 식품별 가이드 탭 (NEW) ──
+function GuideTab() {
+  return (
+    <div className={s.wrap}>
+      <div className={s.infoBox2}>
+        💡 <strong>식품별 정확한 해동 후 조리 팁</strong> — 6종 (소·돼지고기·닭·생선·채소·빵·조리음식). 살모넬라 등 고위험 식품은 별도 표시.
+      </div>
+
+      <div className={s.foodGuideGrid}>
+        {FOOD_TIPS.map(food => (
+          <div key={food.key} className={`${s.foodGuideCard} ${food.isHighRisk ? s.foodGuideCardHigh : ''}`}>
+            <div className={s.foodGuideHeader}>
+              <span className={s.foodGuideEmoji}>{food.emoji}</span>
+              <span className={s.foodGuideName}>{food.name}</span>
+              {food.isHighRisk && <span className={s.foodGuideHighRisk}>⚠️ 고위험</span>}
+            </div>
+            <ul className={s.foodGuideTipList}>
+              {food.tips.map((tip, i) => <li key={i}>{tip}</li>)}
+            </ul>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 11.5, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+              ⏰ 해동 후 조리 권장: <strong style={{ color: 'var(--text)' }}>{food.cookingHours}시간 내</strong>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={s.disclaimerStrong2}>
+        <strong>⚠️ 식품 안전 일반 가이드</strong>
+        <ul>
+          <li>실제 해동 시간은 냉동고 온도·식품 포장·냉장고 성능에 따라 다름</li>
+          <li>위험 온도대 (4~60°C) 2시간 초과 시 폐기 권장</li>
+          <li>의심스러운 냄새·색·식감 시 즉시 폐기</li>
+          <li>면역력 약한 분 (임산부·고령자·환자·영유아) 더 엄격</li>
+          <li>본 도구 결과 따라 식중독 발생 시 책임 X</li>
+        </ul>
+        <strong>식품 안전 도움</strong>
+        <ul>
+          <li>식약처 식품안전정보: <strong>1399</strong></li>
+          <li>식품안전나라: foodsafetykorea.go.kr</li>
+          <li>식중독 의심 시 응급: <strong>119</strong></li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 // ── 메인 ──
 export default function ThawingClient() {
-  const [tab, setTab] = useState<'thaw' | 'freeze'>('thaw')
+  const [tab, setTab] = useState<'thaw' | 'freeze' | 'guide'>('thaw')
 
   return (
     <div className={s.wrap}>
@@ -543,9 +786,15 @@ export default function ThawingClient() {
           className={`${s.tab} ${tab === 'freeze' ? s.tabFreezeActive : ''}`}
           onClick={() => setTab('freeze')}
         >🧊 냉동 시간</button>
+        <button
+          className={`${s.tab} ${tab === 'guide' ? s.tabGuideActive : ''}`}
+          onClick={() => setTab('guide')}
+        >📖 식품별 가이드</button>
       </div>
 
-      {tab === 'thaw' ? <ThawTab /> : <FreezeTab />}
+      {tab === 'thaw' && <ThawTab />}
+      {tab === 'freeze' && <FreezeTab />}
+      {tab === 'guide' && <GuideTab />}
 
       <ThermometerBox />
     </div>

@@ -2,6 +2,16 @@
 
 import { useState, useMemo } from 'react'
 import s from './supplement.module.css'
+import {
+  DRUG_INTERACTIONS,
+  LIFE_STAGES,
+  SPECIAL_MODE_ALERTS,
+  EXTRA_SYNERGY,
+  KOREA_POPULAR_PRESETS,
+  analyzeOmega3,
+  gaugeStatus,
+  type LifeStage,
+} from './supplementUtils'
 
 /* ════════════════════════════════════════════════════════════
    데이터 정의
@@ -227,11 +237,13 @@ const PRESETS: { label: string; make: () => Supplement[] }[] = [
 /* ════════════════════════════════════════════════════════════
    메인 컴포넌트
    ════════════════════════════════════════════════════════════ */
-type TabKey = 'register' | 'analysis' | 'guide'
+type TabKey = 'register' | 'analysis' | 'guide' | 'drug' | 'synergy'
 
 export default function SupplementClient() {
   const [tab, setTab] = useState<TabKey>('register')
   const [sups, setSups] = useState<Supplement[]>([emptySupplement()])
+  const [lifeStage, setLifeStage] = useState<LifeStage>('general')
+  const [selectedDrugs, setSelectedDrugs] = useState<string[]>([])
 
   const addSup = () => {
     if (sups.length >= 10) return
@@ -262,7 +274,9 @@ export default function SupplementClient() {
   return (
     <div className={s.wrap}>
       <div className={s.disclaimer}>
-        ⚕️ <strong>본 계산기는 참고용 정보 도구입니다.</strong> 정확한 영양제 복용 계획은 반드시 의사·약사와 상담하세요.
+        ⚕️ <strong>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
+        처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담 필수.<br />
+        도움: 한국 식약처 식품안전정보 <strong>1577-1255</strong> · 의약품안전사용서비스 <strong>1577-2334</strong>
       </div>
 
       <div className={s.tabs}>
@@ -271,6 +285,8 @@ export default function SupplementClient() {
         </button>
         <button className={`${s.tab} ${tab === 'analysis' ? s.tabActive : ''}`} onClick={() => setTab('analysis')}>성분 분석</button>
         <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>복용 가이드</button>
+        <button className={`${s.tab} ${tab === 'drug' ? s.tabActiveDrug : ''}`} onClick={() => setTab('drug')}>약물·특수 상황</button>
+        <button className={`${s.tab} ${tab === 'synergy' ? s.tabActiveSyn : ''}`} onClick={() => setTab('synergy')}>시너지·주의 조합</button>
       </div>
 
       {tab === 'register' && (
@@ -288,6 +304,16 @@ export default function SupplementClient() {
       )}
       {tab === 'analysis' && <AnalysisTab sups={sups} />}
       {tab === 'guide' && <GuideTab sups={sups} />}
+      {tab === 'drug' && (
+        <DrugSpecialTab
+          sups={sups}
+          lifeStage={lifeStage}
+          setLifeStage={setLifeStage}
+          selectedDrugs={selectedDrugs}
+          setSelectedDrugs={setSelectedDrugs}
+        />
+      )}
+      {tab === 'synergy' && <SynergyDetailTab sups={sups} />}
     </div>
   )
 }
@@ -486,6 +512,13 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
   const aggregates = useMemo(() => aggregate(sups), [sups])
   const hasAny = aggregates.length > 0
 
+  // ★ 오메가3 EPA + DHA 합산 분석 (NEW)
+  const omega3 = useMemo(() => {
+    const epa = aggregates.find(a => a.ing.name === '오메가3(EPA)')?.total ?? 0
+    const dha = aggregates.find(a => a.ing.name === '오메가3(DHA)')?.total ?? 0
+    return analyzeOmega3(epa, dha)
+  }, [aggregates])
+
   const productNames = useMemo(
     () => sups.map((s, i) => s.name.trim() || `제품 ${i + 1}`),
     [sups]
@@ -510,6 +543,24 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
 
   return (
     <>
+      {/* ★ 오메가3 합산 카드 (NEW) */}
+      {omega3 && (
+        <div className={s.omega3Card}>
+          <div className={s.omega3Title}>🐟 오메가3 EPA + DHA 합산 분석</div>
+          <div className={s.omega3Row}><span>EPA</span><span>{omega3.epa.toFixed(0)} mg</span></div>
+          <div className={s.omega3Row}><span>DHA</span><span>{omega3.dha.toFixed(0)} mg</span></div>
+          <div className={s.omega3Total}><span>EPA + DHA 합계</span><span>{omega3.total.toFixed(0)} mg</span></div>
+          <div className={s.omega3Status}
+            style={{ background: `${omega3.statusColor}1A`, color: omega3.statusColor, border: `1px solid ${omega3.statusColor}55` }}>
+            {omega3.statusLabel}
+          </div>
+          <div className={s.omega3Interpretation}>
+            <strong>📌 일반 권장 250~500mg/일 (WHO·미국심장협회) · 상한 3,000mg/일 (FDA)</strong><br />
+            {omega3.interpretation}
+          </div>
+        </div>
+      )}
+
       {/* 합산표 */}
       <div className={s.card}>
         <span className={s.cardLabel}>성분별 합산 · 상태</span>
@@ -753,3 +804,265 @@ function GuideTab({ sups }: { sups: Supplement[] }) {
     </>
   )
 }
+
+/* ════════════════════════════════════════════════════════════
+   TAB 4 — 약물·특수 상황 (NEW)
+   ════════════════════════════════════════════════════════════ */
+function DrugSpecialTab({
+  sups, lifeStage, setLifeStage, selectedDrugs, setSelectedDrugs,
+}: {
+  sups: Supplement[]
+  lifeStage: LifeStage
+  setLifeStage: (s: LifeStage) => void
+  selectedDrugs: string[]
+  setSelectedDrugs: (d: string[]) => void
+}) {
+  // 등록된 성분 → 매칭
+  const ingredientSet = useMemo(() => {
+    const set = new Set<string>()
+    for (const sup of sups) {
+      for (const ing of sup.ingredients) {
+        if (ing.name && ing.amount && parseFloat(ing.amount) > 0) set.add(ing.name)
+      }
+    }
+    return set
+  }, [sups])
+
+  // 약물 상호작용 알림
+  const drugAlerts = useMemo(() => {
+    const alerts: { drugName: string; ingredientName: string; risk: 'high' | 'medium' | 'low'; desc: string }[] = []
+    for (const drugId of selectedDrugs) {
+      const cat = DRUG_INTERACTIONS.find(d => d.id === drugId)
+      if (!cat) continue
+      for (const r of cat.risky) {
+        if (ingredientSet.has(r.ingredientName)) {
+          alerts.push({ drugName: cat.name, ingredientName: r.ingredientName, risk: r.risk, desc: r.desc })
+        }
+      }
+    }
+    return alerts
+  }, [selectedDrugs, ingredientSet])
+
+  // 특수 상황 알림
+  const specialAlerts = useMemo(() => {
+    const alerts = SPECIAL_MODE_ALERTS[lifeStage] ?? []
+    return alerts.map(a => ({ ...a, registered: ingredientSet.has(a.ingredientName) }))
+  }, [lifeStage, ingredientSet])
+
+  const toggleDrug = (id: string) => {
+    setSelectedDrugs(selectedDrugs.includes(id) ? selectedDrugs.filter(d => d !== id) : [...selectedDrugs, id])
+  }
+
+  return (
+    <>
+      {/* 특수 상황 토글 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>현재 상태 (특수 상황 자동 체크)</span>
+        <div className={s.lifeStageRow}>
+          {LIFE_STAGES.map(ls => (
+            <button key={ls.id}
+              className={`${s.lifeStageBtn} ${lifeStage === ls.id ? s.lifeStageBtnActive : ''}`}
+              onClick={() => setLifeStage(ls.id)}>
+              <span className={s.lifeStageBtnEmoji}>{ls.emoji}</span>
+              <div className={s.lifeStageBtnLabel}>{ls.name}</div>
+            </button>
+          ))}
+        </div>
+        <div style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
+          💡 {LIFE_STAGES.find(l => l.id === lifeStage)?.desc}
+        </div>
+      </div>
+
+      {/* 특수 상황 알림 */}
+      {specialAlerts.length > 0 && (
+        <div className={s.card}>
+          <span className={s.cardLabel}>
+            {LIFE_STAGES.find(l => l.id === lifeStage)?.emoji} {LIFE_STAGES.find(l => l.id === lifeStage)?.name} — 권장·주의 영양제
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {specialAlerts.map((a, i) => {
+              const cls = a.type === 'recommend' ? s.specialAlertRecommend
+                : a.type === 'caution' ? s.specialAlertCaution
+                : s.specialAlertAvoid
+              const icon = a.type === 'recommend' ? '✅' : a.type === 'caution' ? '⚠️' : '🚫'
+              const label = a.type === 'recommend' ? '권장' : a.type === 'caution' ? '주의' : '회피'
+              return (
+                <div key={i} className={`${s.specialAlertCard} ${cls}`}>
+                  <strong className={s[a.type]}>{icon} {a.ingredientName}</strong>{' '}
+                  <span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 4 }}>
+                    [{label}{a.registered ? ' · 현재 복용 중' : ''}]
+                  </span>
+                  <div style={{ marginTop: 4, fontSize: 12.5, color: 'var(--muted)' }}>{a.desc}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 약물 선택 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>현재 복용 중인 처방약 (해당 시 모두 선택)</span>
+        <div className={s.drugCategoryGrid}>
+          {DRUG_INTERACTIONS.map(d => {
+            const checked = selectedDrugs.includes(d.id)
+            return (
+              <button key={d.id}
+                className={`${s.drugCategoryBtn} ${checked ? s.drugCategoryBtnActive : ''}`}
+                onClick={() => toggleDrug(d.id)}>
+                <span className={s.drugCategoryBtnEmoji}>{d.emoji}</span>
+                <span className={s.drugCategoryBtnName}>{d.name.split(' (')[0]}</span>
+                {checked && <span className={s.drugCategoryBtnCheck}>✓</span>}
+              </button>
+            )
+          })}
+        </div>
+        <div style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
+          ※ 처방약 + 등록된 영양제 자동 매칭. 「영양제 등록」 탭에 영양제 입력 후 확인.
+        </div>
+      </div>
+
+      {/* 약물 알림 결과 */}
+      {drugAlerts.length > 0 ? (
+        <div className={s.card}>
+          <span className={s.cardLabel}>⚠️ 주의 사항 ({drugAlerts.length}건)</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {drugAlerts.map((a, i) => {
+              const cls = a.risk === 'high' ? s.drugAlertHigh : a.risk === 'medium' ? s.drugAlertMedium : s.drugAlertLow
+              const riskLabel = a.risk === 'high' ? '높음' : a.risk === 'medium' ? '중간' : '낮음'
+              const riskIcon = a.risk === 'high' ? '🚨' : a.risk === 'medium' ? '⚠️' : 'ℹ️'
+              return (
+                <div key={i} className={`${s.drugAlertCard} ${cls}`}>
+                  <strong>{riskIcon} {a.drugName.split(' (')[0]} + {a.ingredientName} (위험도 {riskLabel})</strong>
+                  <div style={{ marginTop: 6, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{a.desc}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      ) : selectedDrugs.length > 0 ? (
+        <div className={s.card}>
+          <div style={{ fontSize: 13, color: 'var(--muted)', textAlign: 'center', padding: 20 }}>
+            ✅ 선택한 약물과 등록한 영양제 사이에 알려진 주요 상호작용 없음.<br />
+            <span style={{ fontSize: 11 }}>※ 본 도구의 데이터베이스 기준. 정확한 평가는 약사 상담 필수.</span>
+          </div>
+        </div>
+      ) : null}
+
+      <div className={s.disclaimerStrong}>
+        <strong>⚠️ 매우 중요 — 본 정보는 일반 가이드입니다.</strong>
+        <ul>
+          <li>정확한 약물 상호작용 평가는 약사·의사 영역</li>
+          <li>복용 약물 전체·시간·용량을 모두 평가해야 정확</li>
+          <li>본 도구는 가장 흔한 상호작용 패턴만 표시</li>
+        </ul>
+        <strong>도움 받기:</strong>
+        <ul>
+          <li>단골 약사 직접 상담 (가장 가깝고 정확)</li>
+          <li>한국 식약처 식품안전정보: <strong>1577-1255</strong></li>
+          <li>의약품안전사용서비스: <strong>1577-2334</strong></li>
+        </ul>
+      </div>
+    </>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   TAB 5 — 시너지·주의 조합 상세 (NEW)
+   ════════════════════════════════════════════════════════════ */
+function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
+  const ingredientSet = useMemo(() => {
+    const set = new Set<string>()
+    for (const sup of sups) {
+      for (const ing of sup.ingredients) {
+        if (ing.name && ing.amount && parseFloat(ing.amount) > 0) set.add(ing.name)
+      }
+    }
+    return set
+  }, [sups])
+
+  // 활성 조합
+  const activeSynergy = SYNERGY.filter(syn => ingredientSet.has(syn.a) && ingredientSet.has(syn.b))
+  const activeExtraSynergy = EXTRA_SYNERGY.filter(c => ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]))
+  const activeCaution = CAUTION.filter(c => ingredientSet.has(c.a) && ingredientSet.has(c.b))
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>📊 본인 영양제 기준 — 활성 조합 분석</span>
+        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+          시너지 {activeSynergy.length + activeExtraSynergy.length}건 / 주의 {activeCaution.length}건 감지.{' '}
+          {ingredientSet.size === 0 && '먼저 「영양제 등록」 탭에 입력해주세요.'}
+        </p>
+      </div>
+
+      {/* 시너지 조합 (전체) */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>🟢 시너지 조합 (상호 보완)</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[...SYNERGY.map(syn => ({
+            title: `${syn.a} + ${syn.b}`,
+            desc: syn.effect,
+            active: ingredientSet.has(syn.a) && ingredientSet.has(syn.b),
+          })), ...EXTRA_SYNERGY.map(c => ({
+            title: c.title,
+            desc: c.desc,
+            active: ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]),
+          }))].map((c, i) => (
+            <div key={i} className={`${s.hintCard} ${s.synergyCard}`}
+              style={c.active ? { background: 'rgba(62,255,155,0.06)', borderColor: 'rgba(62,255,155,0.40)' } : { opacity: 0.6 }}>
+              <div className={s.hintHead}>{c.active ? '✅' : '○'} {c.title}</div>
+              <div className={s.hintBody}>{c.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 주의 조합 (전체) */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>⚠️ 주의 조합 (상충·방해)</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {CAUTION.map((c, i) => {
+            const active = ingredientSet.has(c.a) && ingredientSet.has(c.b)
+            return (
+              <div key={i} className={`${s.hintCard} ${s.cautionCard}`}
+                style={active ? { background: 'rgba(255,140,62,0.08)', borderColor: 'rgba(255,140,62,0.50)' } : { opacity: 0.6 }}>
+                <div className={s.hintHead}>{active ? '⚡' : '○'} {c.a} + {c.b}</div>
+                <div className={s.hintBody}>
+                  <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />
+                  💡 {c.tip}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className={s.disclaimer}>
+        ⚕️ 위 조합 정보는 일반적인 참고 자료입니다. <strong>처방약 복용 중·임신·수유·만성질환</strong> 시에는
+        반드시 의사·약사 상담 후 복용. 본 도구의 「약물·특수 상황」 탭에서 약물별 주의 사항 확인 가능.
+      </div>
+    </>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   한국 인기 프리셋 추가 (RegisterTab 내 사용을 위한 헬퍼)
+   ════════════════════════════════════════════════════════════ */
+export function applyKoreaPreset(preset: typeof KOREA_POPULAR_PRESETS[number]): Supplement {
+  return {
+    id: genId(),
+    name: preset.name,
+    timing: 'morningAfter',
+    collapsed: false,
+    ingredients: preset.ingredients.map(ing => ({
+      id: genId(),
+      name: ing.name,
+      amount: String(ing.amount),
+      unit: ing.unit,
+    })),
+  }
+}
+
+// gaugeStatus는 미래 사용 위해 export 유지
+export { gaugeStatus }

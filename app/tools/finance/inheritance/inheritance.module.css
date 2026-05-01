@@ -12,22 +12,24 @@
 }
 .disclaimer strong { color: #FF8C8C; }
 
-/* ── TABS ── */
+/* ── TABS (5개) ── */
 .tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
+@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;
   border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 9px 4px;
+  font-size: 11.5px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -35,11 +37,11 @@
   transition: all 0.15s;
 }
 .tabBtn:hover { color: var(--text); }
-.tabActive {
-  background: var(--accent-dim);
-  color: var(--accent);
-  font-weight: 700;
-}
+.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActiveInherit { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
+.tabActiveHeirs   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
+.tabActiveSplit   { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
+.tabActiveCompare { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
 
 /* ── CARDS ── */
 .card {
@@ -451,3 +453,308 @@
 @media (max-width: 520px) {
   .scenarioRow { grid-template-columns: 1fr; }
 }
+
+/* ─── 새 컴포넌트 (5탭 업그레이드) ─── */
+
+/* 부모 컨테이너 — grid overflow 방지 */
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.threeCol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .twoCol, .threeCol { grid-template-columns: 1fr; }
+}
+.numInput { width: 100%; box-sizing: border-box; }
+.smallNum { width: 100%; box-sizing: border-box; }
+
+/* ─── 정보 박스 ─── */
+.infoBox {
+  background: rgba(62,200,255,0.06);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.infoBox strong { color: #3EC8FF; }
+
+.warnBox {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.warnBox strong { color: #FF6B6B; }
+
+.cautionBox {
+  background: rgba(255,140,62,0.05);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.cautionBox strong { color: #FF8C3E; }
+.cautionBox ul { margin: 6px 0 0; padding-left: 18px; }
+.cautionBox li { margin: 3px 0; color: var(--muted); }
+
+/* 히어로 색상 변형 */
+.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
+.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
+.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
+.heroPurple { background: rgba(155,89,182,0.04); border-color: rgba(155,89,182,0.30); }
+.heroNumGold   { color: #FFD700; }
+.heroNumOrange { color: #FF8C3E; }
+.heroNumCyan   { color: #3EC8FF; }
+.heroNumPurple { color: #C485E0; }
+
+/* ─── 상속인 분배 표 ─── */
+.heirsTableWrap { overflow-x: auto; }
+.heirsTable {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heirsTable thead th {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: right;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+.heirsTable thead th:first-child { text-align: left; }
+.heirsTable tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.heirsTable tbody td:first-child {
+  text-align: left;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+}
+.heirsTable tbody tr.totalRow {
+  background: var(--accent-dim);
+}
+.heirsTable tbody tr.totalRow td:first-child { color: var(--accent); }
+
+.heirRatioInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  width: 64px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  text-align: right;
+}
+.heirRatioInput:focus { border-color: var(--accent); }
+
+/* ─── 배우자 시뮬 행 ─── */
+.spouseSimTable { display: flex; flex-direction: column; gap: 4px; }
+.spouseSimRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.spouseSimRow.headerRow {
+  background: transparent; border: none;
+  font-size: 10.5px; color: var(--muted);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  font-weight: 700; padding: 3px 14px;
+}
+.spouseSimRow span { text-align: right; }
+.spouseSimRow span:first-child { text-align: left; color: var(--text); font-weight: 700; }
+.spouseSimRow span:not(:first-child) {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.spouseSimRowOptimal {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.spouseSimRowOptimal span:first-child { color: var(--accent); }
+
+@media (max-width: 540px) {
+  .spouseSimRow { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+  .spouseSimRow.headerRow { display: none; }
+  .spouseSimRow span:first-child { grid-column: span 2; font-size: 13px; }
+}
+
+/* ─── 10년 주기 타임라인 ─── */
+.timelineWrap {
+  position: relative;
+  padding: 30px 0 50px;
+  margin: 10px 0;
+}
+.timelineLine {
+  position: absolute;
+  top: 50px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), #3EC8FF, var(--accent));
+}
+.timelineNodes {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5%;
+}
+.timelineNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+}
+.timelineDot {
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 3px solid var(--bg);
+  margin-top: 36px;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.timelineYear {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+  position: absolute;
+  top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.timelineLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.timelineAmount {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+}
+
+/* ─── 부동산 / 부담부증여 ─── */
+.propertyToggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+.propertyToggle:hover { border-color: var(--accent); }
+.propertyToggleActive { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+/* ─── 메트릭 그리드 ─── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.metric {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.metricLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+.metricValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.metricValueAccent { color: var(--accent); }
+.metricValueGreen  { color: #3EFF9B; }
+.metricValueRed    { color: #FF6B6B; }
+@media (max-width: 540px) { .metrics { grid-template-columns: 1fr; } }
+
+/* 옵션 버튼 그리드 */
+.optionRow3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.optionRow4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+@media (max-width: 540px) {
+  .optionRow4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.optionBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.4;
+}
+.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  user-select: none;
+}
+.checkRow input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+

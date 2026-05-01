@@ -52,6 +52,7 @@ module.exports = {
     await config.transform(config, '/tools/cooking/substitute'),
     await config.transform(config, '/tools/cooking/baker-percent'),
     await config.transform(config, '/tools/cooking/baking-schedule'),
+    await config.transform(config, '/tools/cooking/ramen'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),

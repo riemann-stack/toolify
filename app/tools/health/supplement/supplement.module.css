@@ -38,13 +38,15 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 6px;
+  padding: 5px;
 }
+@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tab {
   background: transparent;
   border: none;
@@ -437,3 +439,241 @@
   font-weight: 600;
   margin-left: 8px;
 }
+
+/* ─── 5탭 추가 색상 ─── */
+.tabActiveDrug    { background: rgba(255,107,107,0.20); color: #FF6B6B; font-weight: 700; }
+.tabActiveDrug:hover { background: rgba(255,107,107,0.20); color: #FF6B6B; }
+.tabActiveSyn     { background: rgba(155,89,182,0.20); color: #C485E0; font-weight: 700; }
+.tabActiveSyn:hover { background: rgba(155,89,182,0.20); color: #C485E0; }
+
+/* ─── 특수 상황 토글 ─── */
+.lifeStageRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (max-width: 600px) { .lifeStageRow { grid-template-columns: repeat(2, 1fr); } }
+.lifeStageBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.lifeStageBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.lifeStageBtnActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.lifeStageBtnEmoji { font-size: 22px; display: block; margin-bottom: 4px; }
+.lifeStageBtnLabel { font-size: 12px; }
+
+/* ─── 약물 카테고리 카드 ─── */
+.drugCategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (max-width: 600px) { .drugCategoryGrid { grid-template-columns: 1fr; } }
+.drugCategoryBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12.5px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.drugCategoryBtn:hover { border-color: var(--border-hover); }
+.drugCategoryBtnActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.drugCategoryBtnEmoji { font-size: 20px; flex-shrink: 0; }
+.drugCategoryBtnName { font-weight: 600; }
+.drugCategoryBtnActive .drugCategoryBtnName { color: #FF6B6B; }
+.drugCategoryBtnCheck { margin-left: auto; color: #FF6B6B; font-size: 14px; }
+
+/* ─── 약물 상호작용 결과 카드 ─── */
+.drugAlertCard {
+  background: rgba(255,107,107,0.04);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.drugAlertCard strong { color: #FF6B6B; }
+.drugAlertHigh   { background: rgba(255,107,107,0.06); border-color: rgba(255,107,107,0.40); }
+.drugAlertMedium { background: rgba(255,140,62,0.06); border-color: rgba(255,140,62,0.40); }
+.drugAlertLow    { background: rgba(62,200,255,0.06); border-color: rgba(62,200,255,0.30); }
+.drugAlertHigh strong   { color: #FF6B6B; }
+.drugAlertMedium strong { color: #FF8C3E; }
+.drugAlertLow strong    { color: #3EC8FF; }
+
+/* ─── 특수 상황 결과 ─── */
+.specialAlertCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.specialAlertRecommend { background: rgba(62,255,155,0.04); border-color: rgba(62,255,155,0.30); }
+.specialAlertCaution   { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
+.specialAlertAvoid     { background: rgba(255,107,107,0.04); border-color: rgba(255,107,107,0.30); }
+.specialAlertCard strong.recommend { color: #3EFF9B; }
+.specialAlertCard strong.caution   { color: #FF8C3E; }
+.specialAlertCard strong.avoid     { color: #FF6B6B; }
+
+/* ─── 오메가3 합산 카드 ─── */
+.omega3Card {
+  background: rgba(62,200,255,0.04);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.omega3Title { font-size: 13px; font-weight: 700; color: #3EC8FF; margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif; }
+.omega3Row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--muted);
+}
+.omega3Row span:last-child {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.omega3Total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  font-weight: 700;
+}
+.omega3Total span:last-child {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #3EC8FF;
+  font-variant-numeric: tabular-nums;
+}
+.omega3Status {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.omega3Interpretation {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ─── 한국 프리셋 그리드 ─── */
+.koreaPresetSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.koreaPresetCategory {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.koreaPresetTitle {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.koreaPresetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 5px;
+}
+.koreaPresetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.4;
+}
+.koreaPresetBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── 게이지 막대 (성분별 권장량 대비) ─── */
+.gaugeWrap {
+  margin-top: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  height: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.gaugeFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+.gaugeMarker {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--text);
+}
+.gaugeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Syne', sans-serif;
+}
+
+/* 면책 강화 */
+.disclaimerStrong {
+  background: rgba(255,107,107,0.04);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.disclaimerStrong strong { color: #FF6B6B; }
+.disclaimerStrong ul { margin: 6px 0 0; padding-left: 18px; }
+.disclaimerStrong li { margin-bottom: 3px; color: var(--muted); }
+
