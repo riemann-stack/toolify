@@ -522,12 +522,13 @@
 }
 .clickHint strong { color: #3EC8FF; }
 
-/* 시작·공개 버튼 2개 행 */
+/* 시작·공개 버튼 행 (3개) */
 .startBtnRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 6px;
 }
+@media (max-width: 720px) { .startBtnRow { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 480px) { .startBtnRow { grid-template-columns: 1fr; } }
 .startBtnSecondary {
   background: var(--bg2);

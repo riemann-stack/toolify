@@ -4,9 +4,9 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/life/golden-ratio',
-  title: '황금 비율 계산기 — 피보나치 나선·디자인 비율 계산',
-  description: '황금 비율(1:1.618)로 가로·세로를 자동 계산합니다. 피보나치 나선 시각화, 명함·A4·유튜브 썸네일 등 디자인 프리셋 제공. 디자이너·건축가 필수 도구.',
-  keywords: ['황금비율계산기', '황금비계산기', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선'],
+  title: '황금 비율 계산기 — 피보나치 나선·비율 비교·디자인 계산',
+  description: 'φ = 1.618 가로·세로 자동 계산, 황금 직사각형·피보나치 나선 시각화, 비율 비교 (황금·백은·16:9·A4·인스타·유튜브). 명함·A4·유튜브 썸네일 프리셋 제공. 디자이너·건축가 참고 도구.',
+  keywords: ['황금비율계산기', '황금비계산기', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선', '비율비교', '백은비율', '16:9 비율'],
 })
 
 export default function GoldenRatioPage() {
@@ -17,7 +17,7 @@ export default function GoldenRatioPage() {
         🌀 황금 비율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        φ = 1.618 기반으로 가로·세로를 자동 계산하고, 피보나치 나선까지 시각화하세요.
+        φ = 1.618 기반 가로·세로 자동 계산, 황금 직사각형 시각화, <strong style={{ color: 'var(--text)' }}>비율 비교</strong>(황금·백은·16:9·A4·인스타·유튜브)까지.
       </p>
 
       <GoldenRatioClient />
@@ -158,26 +158,73 @@ export default function GoldenRatioPage() {
           </p>
         </div>
 
-        {/* ── 5. FAQ ── */}
+        {/* ── 5. 황금 비율 vs 다른 비율 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            황금 비율 vs 다른 비율
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            황금 비율은 디자인·예술의 미적 가이드입니다. 매체·목적에 따라 다른 비율이 더 적합할 수 있으니 본 도구의 [비율 비교 시각화]에서 한눈에 확인하세요.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>비율</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>값 (가로/세로)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>주요 사용처</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { n: '황금 비율 (φ)', v: '1.618', u: '디자인·예술·자연 — 가장 미적 비율', c: '#C8FF3E' },
+                  { n: '백은 비율 (√2)', v: '1.414', u: 'A4·B5 등 종이 규격 — 반 접어도 같은 비율', c: '#3EC8FF' },
+                  { n: '16:9 (HD)',     v: '1.778', u: '유튜브·TV·모니터·가로 영상',           c: '#FFD700' },
+                  { n: '4:3',           v: '1.333', u: '구식 TV·아이패드·일부 카메라',         c: '#9B59B6' },
+                  { n: '21:9 (시네마)', v: '2.333', u: '울트라와이드 모니터·영화관',           c: '#FF6B9D' },
+                  { n: '3:2',           v: '1.500', u: '35mm 카메라 사진 표준',                 c: '#3EFF9B' },
+                  { n: '1:1 (정사각)',  v: '1.000', u: '인스타 피드·앨범 커버·로고',           c: '#FFFFFF' },
+                  { n: '9:16 (세로)',   v: '0.563', u: '인스타 스토리·릴스·틱톡 (모바일 세로)', c: '#FF8C3E' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.n}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            * &ldquo;반드시 황금 비율을 따라야 한다&rdquo;는 절대화는 피하세요. 디자인은 목적·문맥·타깃·매체에 따라 다른 비율도 효과적입니다.
+          </p>
+        </div>
+
+        {/* ── 6. FAQ (accordion) ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '황금 비율과 황금 분할의 차이는?',
-                a: '같은 개념의 다른 표현입니다. "황금 비율(Golden Ratio)"은 비율 자체인 φ = 1.618...을 가리키고, "황금 분할(Golden Section)"은 선분을 이 비율로 나누는 작업을 뜻합니다. 실무에서는 구분 없이 혼용하는 경우가 많습니다.' },
+                a: '같은 개념의 다른 표현입니다. &ldquo;황금 비율(Golden Ratio)&rdquo;은 비율 자체인 φ = 1.618...을 가리키고, &ldquo;황금 분할(Golden Section)&rdquo;은 선분을 이 비율로 나누는 작업을 뜻합니다. 실무에서는 구분 없이 혼용하는 경우가 많습니다.' },
               { q: '황금 비율이 아름답게 느껴지는 이유는?',
                 a: '인간의 시지각이 자연에서 반복적으로 학습한 비율이라는 진화적 설명과, 수학적으로 자기 유사성(fractal)이 있어 시선의 흐름을 안정적으로 유도한다는 인지심리학적 설명이 공존합니다. 다만 모든 사람이 황금 비율만을 아름답다고 느끼는 것은 아니며, 실험 결과는 문화·개인차에 따라 다릅니다.' },
               { q: '유튜브 썸네일에 황금 비율을 어떻게 적용하나요?',
-                a: '유튜브 썸네일 규격은 1280×720px(16:9)로 정해져 있어 이미지 규격 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px을 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 "비율 변환" 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
+                a: '유튜브 썸네일 규격은 1280×720px(16:9)로 정해져 있어 이미지 규격 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px을 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 [비율 변환] 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
               { q: '황금 비율과 백은 비율(√2:1)의 차이는?',
                 a: '백은 비율(Silver Ratio)은 √2 ≈ 1.414로, A4 용지(297×210mm)에 적용된 비율입니다. 반을 접어도 같은 비율이 유지되는 실용적 특성이 있어 종이 규격(A/B 시리즈)에 사용됩니다. 황금 비율은 미적·디자인적 비율, 백은 비율은 실용적·기능적 비율이라고 보면 구분하기 쉽습니다.' },
               { q: '피보나치 수열이 황금 비율과 연관된 이유는?',
                 a: '피보나치 수열의 점화식 F(n+1) = F(n) + F(n-1)을 비율 F(n+1)/F(n) = R로 정리하면 R² - R - 1 = 0이라는 이차방정식이 됩니다. 이 방정식의 양의 해가 정확히 (1+√5)/2, 즉 φ입니다. 그래서 피보나치 수열의 인접 비율은 필연적으로 φ에 수렴합니다.' },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {faq.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: faq.a }}
+                />
+              </details>
             ))}
           </div>
         </div>

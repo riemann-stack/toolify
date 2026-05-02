@@ -1,5 +1,117 @@
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px;
+}
+.tabBtn {
+  padding: 10px 4px; border-radius: 8px; border: none;
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  color: var(--muted); background: transparent; cursor: pointer; transition: all 0.15s;
+}
+.tabBtn:hover { color: var(--text); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+/* ── 히어로 (3축 점수 위) ── */
+.heroCard {
+  border-radius: 16px; padding: 28px 22px; text-align: center;
+  border: 1.5px solid; animation: fadeUp 0.3s ease;
+}
+.heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.heroScore { font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
+.heroUnit { font-size: 22px; font-weight: 700; margin-left: 4px; }
+.heroRiskBadge {
+  display: inline-block; margin-top: 12px; padding: 6px 16px;
+  border-radius: 99px; border: 1px solid; font-size: 13px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 3축 게이지 ── */
+.gaugeRow { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.gaugeRow:last-child { margin-bottom: 0; }
+.gaugeLabel { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--text); font-weight: 600; }
+.gaugeVal { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.gaugeBar { height: 12px; background: var(--bg3); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
+.gaugeFill { height: 100%; transition: width 0.4s; border-radius: 99px; }
+
+/* ── 원인 유형 카드 ── */
+.causeList { display: flex; flex-direction: column; gap: 8px; }
+.causeCard {
+  display: flex; gap: 14px; align-items: center;
+  background: var(--bg3); border: 1px solid; border-radius: 10px; padding: 12px 14px;
+}
+.causeIcon { font-size: 28px; flex-shrink: 0; }
+.causeName { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.causeDesc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── TOP 음식 리스트 (재정렬) ── */
+.topList { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── 대체 음식 탭 ── */
+.altPickGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+.altHint { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+.altCard {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 20px;
+}
+.altHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.altEmoji { font-size: 26px; }
+.altTitle { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.altOptionList { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px; }
+.altOption {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; display: flex; flex-direction: column; gap: 4px;
+}
+.altOptName { font-size: 13px; color: var(--text); font-weight: 600; }
+.altOptReason { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ── 증상 대처 탭 ── */
+.symCard {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 20px;
+}
+.symHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.symEmoji { font-size: 26px; }
+.symName { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.symGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
+.symSubHead { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: 8px; border-left: 3px solid #FF8C3E; }
+
+@media (max-width: 500px) {
+  .tabBtn { font-size: 11px; padding: 9px 2px; }
+  .heroScore { font-size: 50px; }
+  .symGrid { grid-template-columns: 1fr; gap: 10px; }
+  .altOptionList { grid-template-columns: 1fr; }
+}
+
+/* ── 위험 신호 카드 (★★★★) ── */
+.redFlagCard {
+  background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.4);
+  border-radius: 14px; padding: 18px 22px;
+}
+.redFlagHead { font-size: 14px; font-weight: 700; color: #FF6B6B; margin-bottom: 12px; }
+.redFlagList { margin: 0 0 12px 18px; padding: 0; font-size: 13px; color: var(--text); line-height: 1.9; }
+.redFlagFooter { background: var(--bg3); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.9; }
+.redFlagFooter p { margin: 0; }
+.redFlagFooter strong { color: var(--accent); }
+
+/* ── 면책 강화 카드 (모든 탭 공통 하단) ── */
+.disclaimerCard {
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  padding: 14px 18px; margin-top: 4px;
+}
+.disclaimerTitle { font-size: 13px; font-weight: 700; color: #FF8C3E; margin: 0 0 8px; }
+.disclaimerBody { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 0; }
+
+/* ── 팁 카드 보조 ── */
+.tipSubHead { font-size: 12px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
+.tipUl { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.85; }
+.tipUl li { margin-bottom: 2px; }
+.tipWarn { font-size: 12px; color: #FF6B6B; margin-top: 12px; padding: 8px 12px; background: rgba(255,107,107,0.08); border-radius: 8px; line-height: 1.6; }
+
+
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);

@@ -6,6 +6,118 @@
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: 14px; padding: 6px;
 }
+.tabs4 {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px;
+}
+.tabs4 .tab { padding: 10px 4px; font-size: 12px; }
+@media (max-width: 480px) {
+  .tabs4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 단위 토글 ── */
+.unitToggleRow {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 14px;
+}
+.unitLabel { font-size: 12px; color: var(--muted); }
+.unitToggle {
+  display: flex; gap: 4px; background: var(--bg3); border-radius: 8px; padding: 3px;
+}
+.unitBtn {
+  background: transparent; border: none; padding: 6px 12px;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; border-radius: 6px;
+}
+.unitBtn:hover { color: var(--text); }
+.unitBtnActive { background: var(--bg2); color: var(--accent) !important; font-weight: 700; }
+
+/* ── 성별·연령 4-grid ── */
+.gaGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+
+/* ── 환경 보정 ── */
+.envFactorRow {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;
+}
+.envFactorLabel { font-size: 12px; color: var(--text); font-weight: 600; }
+.envSliderRow { display: flex; align-items: center; gap: 12px; }
+.envSlider {
+  flex: 1; accent-color: var(--accent);
+}
+.envSliderValue {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  color: var(--accent); min-width: 60px; text-align: right;
+}
+.lieGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; flex: 1; }
+@media (max-width: 480px) {
+  .lieGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 환경 결과 카드 */
+.envResultCard {
+  background: var(--bg2); border: 1.5px solid rgba(200,255,62,0.35);
+  border-radius: 14px; padding: 18px 22px;
+}
+.envResultHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.envResultBadge {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+  border: 1px solid; border-radius: 99px; padding: 4px 12px;
+}
+.envResultRow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+.envResultBlock { text-align: center; }
+.envResultLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.envResultValue {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px;
+  color: var(--text); letter-spacing: -1px;
+}
+.envResultArrow { font-size: 22px; color: var(--accent); }
+.envChangeTable { width: 100%; border-collapse: collapse; font-size: 12px; }
+.envChangeTable thead th {
+  padding: 8px 6px; text-align: left; color: var(--muted);
+  font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.envChangeTable tbody td { padding: 8px 6px; border-bottom: 1px solid var(--border); }
+.envHint { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
+
+/* ── 내 기록 ── */
+.recordStatsCard {
+  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  border-radius: 14px; padding: 16px 20px;
+}
+.recordStatsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.recordStat {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; text-align: center;
+}
+.recordStatLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.recordStatValue {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+.recordStatSub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+.recordFormGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.recordDateInput, .recordSelect, .recordInput {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; font-size: 14px; color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  min-height: 42px;
+}
+.recordSelect { appearance: none; -webkit-appearance: none; cursor: pointer; }
+.recordSelect option { background: #1a1a1a; }
+.recordSaveBtn {
+  width: 100%; margin-top: 14px;
+  background: var(--accent); color: #0D0D0D; border: none;
+  padding: 12px; border-radius: 10px;
+  font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+}
+.recordSaveBtn:hover { opacity: 0.88; }
+
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;

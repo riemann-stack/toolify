@@ -293,3 +293,303 @@
   .select { font-size: 16px; padding: 10px 26px 10px 10px; }  /* iOS 줌 방지 위해 16px 유지 */
   .ganjiHanja { font-size: 40px; letter-spacing: 3px; }
 }
+
+/* ─── 3탭 (NEW) ─── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+  margin-bottom: 12px;
+}
+@media (max-width: 540px) { .tabs { grid-template-columns: 1fr; } }
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+.tabBtn:hover { color: var(--text); }
+.tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActiveCompat    { background: rgba(255,107,107,0.12); color: #FF6B6B; font-weight: 700; }
+.tabActiveFamily    { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
+
+/* 면책 강화 */
+.disclaimerStrong {
+  background: rgba(255,140,62,0.04);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.disclaimerStrong strong { color: #FF8C3E; }
+.disclaimerStrong ul { margin: 6px 0 0; padding-left: 18px; }
+.disclaimerStrong li { margin-bottom: 3px; color: var(--muted); }
+
+/* 통합 프로필 카드 */
+.profileCard {
+  background: linear-gradient(135deg, rgba(200,255,62,0.04), rgba(62,200,255,0.04));
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 16px;
+  padding: 22px 22px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.profileTitle {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.profileBigRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  text-align: center;
+}
+@media (max-width: 540px) { .profileBigRow { grid-template-columns: 1fr; } }
+.profileBigItem {
+  padding: 14px 8px;
+  background: var(--bg3);
+  border-radius: 12px;
+}
+.profileBigEmoji {
+  font-size: clamp(36px, 9vw, 48px);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.profileBigName {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(20px, 4.5vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.profileBigType { font-size: 11px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.profileMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+@media (max-width: 540px) { .profileMeta { grid-template-columns: 1fr; } }
+.profileMetaCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.profileMetaLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.profileMetaValue {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+.profileMetaSub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* 두 사람 입력 */
+.twoPersonRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 540px) { .twoPersonRow { grid-template-columns: 1fr; } }
+
+.personPanel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.personPanelTitle {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.personPanelRow {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.personPanelSelect {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.personSummary {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.personSummary strong { color: var(--text); }
+
+/* 궁합 결과 */
+.compatScoreCard {
+  border-radius: 14px;
+  padding: 18px 18px;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+}
+.compatScoreCardSamhap { background: rgba(62,255,155,0.04); border-color: rgba(62,255,155,0.40); }
+.compatScoreCardYukhap { background: rgba(200,255,62,0.04); border-color: rgba(200,255,62,0.40); }
+.compatScoreCardOk     { background: rgba(255,215,0,0.04);  border-color: rgba(255,215,0,0.30); }
+.compatScoreCardChung  { background: rgba(255,107,107,0.04); border-color: rgba(255,107,107,0.40); }
+.compatScoreLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.compatScoreNum {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 40px);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.compatScoreType {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 8px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.compatScoreDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
+
+/* 별 5개 시각화 */
+.starRow { display: inline-flex; gap: 4px; margin-top: 6px; }
+.starOn { color: #FFD700; font-size: 18px; }
+.starOff { color: var(--muted); font-size: 18px; opacity: 0.4; }
+
+/* 가족 표 */
+.familyTableWrap { overflow-x: auto; }
+.familyTable {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.familyTable thead th {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+.familyTable tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.familyTable tbody td.numCol { font-family: 'Syne', sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.familyAddRow {
+  display: grid;
+  grid-template-columns: 90px 1fr 80px 80px 80px 36px;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+@media (max-width: 540px) {
+  .familyAddRow {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'rel name'
+      'y m'
+      'd del';
+  }
+  .familyAddRow > *:nth-child(1) { grid-area: rel; }
+  .familyAddRow > *:nth-child(2) { grid-area: name; }
+  .familyAddRow > *:nth-child(3) { grid-area: y; }
+  .familyAddRow > *:nth-child(4) { grid-area: m; }
+  .familyAddRow > *:nth-child(5) { grid-area: d; }
+  .familyAddRow > *:nth-child(6) { grid-area: del; }
+}
+
+.familyDelBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 16px;
+}
+.familyDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+
+.familyAddBtn {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 11px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.familyAddBtn:hover { border-color: #3EC8FF; color: #3EC8FF; }
+
+/* 관계 유형 옵션 */
+.relationKindRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+@media (max-width: 540px) { .relationKindRow { grid-template-columns: repeat(2, 1fr); } }
+.relationKindBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  text-align: center;
+}
+.relationKindBtn:hover { color: var(--text); }
+.relationKindBtnActive { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.relationKindEmoji { font-size: 16px; display: block; margin-bottom: 2px; }
+
+/* 관계 팁 */
+.relationTipBox {
+  background: rgba(62,200,255,0.04);
+  border: 1px solid rgba(62,200,255,0.30);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 8px;
+}
+.relationTipBox strong { color: #3EC8FF; }
+

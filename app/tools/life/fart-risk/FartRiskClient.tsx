@@ -2,224 +2,114 @@
 
 import { useMemo, useState } from 'react'
 import s from './fart-risk.module.css'
+import {
+  FOOD_DATA, CATEGORIES, CAUSE_TYPES, CONDITIONS, FODMAP_ALTERNATIVES,
+  SYMPTOM_RESPONSES, RED_FLAGS,
+  calcFartScore,
+  type CondKey, type SymptomKey,
+} from './fartRiskUtils'
 
-type FoodKey =
-  | 'beans' | 'lentils' | 'chickpeas'
-  | 'milk' | 'cheese' | 'yogurt' | 'iceCream'
-  | 'cabbage' | 'broccoli' | 'onion' | 'garlic' | 'sweetPotato' | 'potato' | 'asparagus'
-  | 'flour' | 'friedFood' | 'processed'
-  | 'soda' | 'beer' | 'soju' | 'energyDrink'
-  | 'egg' | 'redMeat' | 'protein'
-  | 'spicy' | 'sweetener' | 'fruit'
+type TabId = 'main' | 'alt' | 'symptom'
 
-type FoodInfo = { score: number; emoji: string; reason: string; name: string; category: string }
-
-const FOOD_SCORES: Record<FoodKey, FoodInfo> = {
-  beans:       { score: 3, emoji: '🫘', reason: '올리고당 함량 높음', name: '콩류', category: 'beans' },
-  lentils:     { score: 3, emoji: '🫛', reason: '콩류 특성', name: '렌틸콩', category: 'beans' },
-  chickpeas:   { score: 3, emoji: '🟡', reason: '콩류 특성', name: '병아리콩', category: 'beans' },
-  milk:        { score: 3, emoji: '🥛', reason: '유당 함량', name: '우유', category: 'dairy' },
-  cheese:      { score: 2, emoji: '🧀', reason: '유제품', name: '치즈', category: 'dairy' },
-  yogurt:      { score: 2, emoji: '🥛', reason: '유제품 (유익균도 있음)', name: '요거트', category: 'dairy' },
-  iceCream:    { score: 2, emoji: '🍦', reason: '유당+지방', name: '아이스크림', category: 'dairy' },
-  cabbage:     { score: 2, emoji: '🥬', reason: '황 함유 채소', name: '양배추', category: 'veggie' },
-  broccoli:    { score: 2, emoji: '🥦', reason: '황 함유 채소', name: '브로콜리', category: 'veggie' },
-  onion:       { score: 2, emoji: '🧅', reason: '프럭탄 함유', name: '양파', category: 'veggie' },
-  garlic:      { score: 2, emoji: '🧄', reason: '프럭탄 함유', name: '마늘', category: 'veggie' },
-  sweetPotato: { score: 2, emoji: '🍠', reason: '식이섬유+전분', name: '고구마', category: 'veggie' },
-  potato:      { score: 1, emoji: '🥔', reason: '전분 함유', name: '감자', category: 'veggie' },
-  asparagus:   { score: 2, emoji: '🌿', reason: '아스파라긴산', name: '아스파라거스', category: 'veggie' },
-  flour:       { score: 2, emoji: '🍞', reason: '글루텐+발효', name: '밀가루 음식', category: 'flour' },
-  friedFood:   { score: 1, emoji: '🍟', reason: '기름 소화 부담', name: '튀긴 음식', category: 'flour' },
-  processed:   { score: 1, emoji: '🥫', reason: '첨가물 포함', name: '가공식품', category: 'flour' },
-  soda:        { score: 2, emoji: '🥤', reason: '탄산가스 직접 흡입', name: '탄산음료', category: 'drink' },
-  beer:        { score: 2, emoji: '🍺', reason: '탄산+발효', name: '맥주', category: 'drink' },
-  soju:        { score: 1, emoji: '🍶', reason: '공기 삼킴', name: '소주', category: 'drink' },
-  energyDrink: { score: 2, emoji: '⚡', reason: '탄산+카페인', name: '에너지드링크', category: 'drink' },
-  egg:         { score: 2, emoji: '🥚', reason: '황 함유 단백질', name: '계란', category: 'protein' },
-  redMeat:     { score: 1, emoji: '🥩', reason: '단백질 발효', name: '고기류(적색육)', category: 'protein' },
-  protein:     { score: 3, emoji: '💪', reason: '고단백 발효 가스', name: '단백질 보충제', category: 'protein' },
-  spicy:       { score: 1, emoji: '🌶️', reason: '장 자극', name: '매운 음식', category: 'etc' },
-  sweetener:   { score: 3, emoji: '🍬', reason: '소르비톨/자일리톨', name: '인공감미료', category: 'etc' },
-  fruit:       { score: 2, emoji: '🍎', reason: '과당+수분', name: '과일(사과/배/수박)', category: 'etc' },
-}
-
-const CATEGORIES: { id: string; label: string; items: FoodKey[] }[] = [
-  { id: 'beans',   label: '🫘 콩·곡류',   items: ['beans', 'lentils', 'chickpeas'] },
-  { id: 'dairy',   label: '🥛 유제품',    items: ['milk', 'cheese', 'yogurt', 'iceCream'] },
-  { id: 'veggie',  label: '🥦 채소류',    items: ['cabbage', 'broccoli', 'onion', 'garlic', 'sweetPotato', 'potato', 'asparagus'] },
-  { id: 'flour',   label: '🌾 밀가루·가공', items: ['flour', 'friedFood', 'processed'] },
-  { id: 'drink',   label: '🥤 음료',      items: ['soda', 'beer', 'soju', 'energyDrink'] },
-  { id: 'protein', label: '🍖 단백질',    items: ['egg', 'redMeat', 'protein'] },
-  { id: 'etc',     label: '🍬 기타',      items: ['spicy', 'sweetener', 'fruit'] },
+const TABS: { id: TabId; label: string }[] = [
+  { id: 'main',    label: '🧮 오늘 점수' },
+  { id: 'alt',     label: '🔄 대체 음식' },
+  { id: 'symptom', label: '🩺 증상 대처' },
 ]
-
-type ComboDef = { foods: FoodKey[]; bonus: number; label: string }
-const COMBOS: ComboDef[] = [
-  { foods: ['beans', 'onion', 'soda'],       bonus: 3, label: '🚨 콩+양파+탄산 콤보 발동!' },
-  { foods: ['beer', 'friedFood'],             bonus: 2, label: '🍺 맥주+튀김 조합' },
-  { foods: ['milk', 'sweetPotato'],           bonus: 2, label: '🥛 우유+고구마 조합' },
-  { foods: ['beans', 'egg', 'broccoli'],      bonus: 3, label: '💣 콩+계란+브로콜리 황 폭탄' },
-  { foods: ['protein', 'beans'],              bonus: 2, label: '💪 단백질 더블 콤보' },
-]
-
-type CondKey = 'overate' | 'eatFast' | 'drankSoda' | 'lactoseIntol' | 'sensitiveGut' | 'stressed'
-const CONDITIONS: { key: CondKey; add: number; factor: number; label: string; short: string }[] = [
-  { key: 'overate',      add: 0, factor: 1.5, label: '평소보다 많이 먹었다 (과식)',                short: '과식으로 소화 부담 증가' },
-  { key: 'eatFast',      add: 1, factor: 1.0, label: '식사 속도가 빨랐다',                      short: '빠른 식사로 공기 삼킴 증가' },
-  { key: 'drankSoda',    add: 1, factor: 1.0, label: '탄산음료와 함께 먹었다',                  short: '탄산 함께 섭취' },
-  { key: 'lactoseIntol', add: 2, factor: 1.0, label: '유제품 먹으면 속이 불편한 편이다 (유당불내증 의심)', short: '유제품 민감 (유당불내증 의심)' },
-  { key: 'sensitiveGut', add: 2, factor: 1.0, label: '평소 장이 예민한 편이다 (IBS 등)',         short: '장 예민 체질' },
-  { key: 'stressed',     add: 1, factor: 1.0, label: '스트레스를 많이 받은 날이다',               short: '스트레스로 장 운동 영향' },
-]
-
-const DAIRY: FoodKey[] = ['milk', 'cheese', 'yogurt', 'iceCream']
-
-function levelFor(score: number) {
-  if (score <= 3)  return { key: 'calm',    emoji: '😌', name: '평온한 배',      cls: s.levelCalm,   verdict: '오늘은 장이 평화로운 하루예요. 특별히 가스 유발 식품을 많이 먹지 않았거나, 체질적으로 잘 견디는 날입니다. 산책으로 가볍게 마무리해보세요.' }
-  if (score <= 7)  return { key: 'slight',  emoji: '😐', name: '살짝 빵빵',       cls: s.levelSlight, verdict: '배가 조금 묵직할 수 있어요. 아직 위험 수준은 아니지만 저녁 식사 뒤 가벼운 스트레칭과 따뜻한 물 한 잔을 추천합니다.' }
-  if (score <= 11) return { key: 'warn',    emoji: '😬', name: '경고 단계',       cls: s.levelWarn,   verdict: '오늘의 조합이 다소 위험합니다. 회의·데이트·대중교통 이용 시 조심하세요. 생강차와 함께 천천히 식사 후 휴식을 추천합니다.' }
-  return            { key: 'bomb',    emoji: '💨', name: '가스 폭탄 주의',  cls: s.levelBomb,   verdict: '오늘은 폭탄급입니다. 좁은 공간은 피하고 창문을 열어두세요. 무릎 당기기 스트레칭과 따뜻한 차로 가스 배출을 도와주세요.' }
-}
 
 export default function FartRiskClient() {
-  const [selected, setSelected] = useState<Set<FoodKey>>(new Set())
+  const [tab, setTab] = useState<TabId>('main')
+
+  return (
+    <div className={s.wrap}>
+      <div className={s.tabs}>
+        {TABS.map(t => (
+          <button key={t.id}
+            className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
+            onClick={() => setTab(t.id)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'main'    && <MainTab />}
+      {tab === 'alt'     && <AlternativeTab />}
+      {tab === 'symptom' && <SymptomTab />}
+
+      {/* 면책 (모든 탭 공통, 강화) */}
+      <div className={s.disclaimerCard}>
+        <p className={s.disclaimerTitle}>⚠️ 본 도구는 재미·교육용 참고 도구입니다</p>
+        <p className={s.disclaimerBody}>
+          의학적 진단·처방·치료 도구가 아닙니다. 모든 점수는 추정이며 개인 체질에 따라 다릅니다.
+          IBS·유당불내증·SIBO·셀리악 의심 시 영양사·소화기내과 전문의 상담 권장.
+        </p>
+        <p className={s.disclaimerBody} style={{ marginTop: 8 }}>
+          ⚠️ <strong>다음 증상 시 즉시 의료 상담</strong>: 혈변·검은 변 / 갑작스러운 체중 감소 / 심한 복통(한밤중) / 발열·구토 반복 / 1주+ 지속 변비·설사 / 임산부.
+        </p>
+        <p className={s.disclaimerBody} style={{ marginTop: 8 }}>
+          📞 <strong>도움</strong>: 한국 의료진 상담(보건복지부) <strong style={{ color: '#FF8C3E' }}>1339</strong> · 응급 <strong style={{ color: '#FF8C3E' }}>119</strong> · 소화기내과 직접 방문.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/* ──────────────────────── 탭 1: 오늘 점수 ──────────────────────── */
+function MainTab() {
+  const [selected, setSelected] = useState<Set<string>>(new Set())
   const [conds, setConds] = useState<Set<CondKey>>(new Set())
   const [copied, setCopied] = useState(false)
 
-  const toggleFood = (k: FoodKey) => {
-    setSelected((prev) => {
-      const next = new Set(prev)
-      if (next.has(k)) next.delete(k); else next.add(k)
-      return next
+  const toggleFood = (id: string) => {
+    setSelected(prev => {
+      const n = new Set(prev)
+      if (n.has(id)) n.delete(id); else n.add(id)
+      return n
     })
   }
   const toggleCond = (k: CondKey) => {
-    setConds((prev) => {
-      const next = new Set(prev)
-      if (next.has(k)) next.delete(k); else next.add(k)
-      return next
+    setConds(prev => {
+      const n = new Set(prev)
+      if (n.has(k)) n.delete(k); else n.add(k)
+      return n
     })
   }
   const reset = () => { setSelected(new Set()); setConds(new Set()); setCopied(false) }
 
-  const result = useMemo(() => {
-    if (selected.size === 0 && conds.size === 0) return null
-
-    const foods = Array.from(selected)
-
-    // 1. 음식 점수 합산
-    let base = foods.reduce((sum, f) => sum + FOOD_SCORES[f].score, 0)
-
-    // 2. 조합 보너스
-    const triggeredCombos: ComboDef[] = []
-    let comboBonus = 0
-    for (const c of COMBOS) {
-      if (c.foods.every((f) => selected.has(f as FoodKey))) {
-        triggeredCombos.push(c)
-        comboBonus += c.bonus
-      }
-    }
-    base += comboBonus
-
-    // 3. 과식 배수 & 4. 조건 add
-    let total = base
-    const activeConds: typeof CONDITIONS = []
-    for (const c of CONDITIONS) {
-      if (conds.has(c.key)) {
-        activeConds.push(c)
-        if (c.factor !== 1.0) total *= c.factor
-        total += c.add
-      }
-    }
-
-    // 5. 유당불내증 + 유제품 → +2
-    let lactoseBonus = 0
-    if (conds.has('lactoseIntol') && DAIRY.some((d) => selected.has(d))) {
-      lactoseBonus = 2
-      total += lactoseBonus
-    }
-
-    const score = Math.round(total)
-
-    // TOP 3 (선택된 음식 중 점수 높은 순)
-    const top3 = [...foods]
-      .map((f) => ({ key: f, ...FOOD_SCORES[f] }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3)
-
-    // 이유 목록
-    const reasons: string[] = []
-    const cats = new Set(foods.map((f) => FOOD_SCORES[f].category))
-    if (cats.has('beans')) reasons.push('콩류 섭취 (올리고당)')
-    if (cats.has('dairy')) reasons.push('유제품 섭취 (유당)')
-    if (cats.has('veggie')) reasons.push('황 함유 채소·프럭탄 섭취')
-    if (selected.has('soda') || selected.has('beer') || selected.has('energyDrink')) reasons.push('탄산음료 함께 마심')
-    if (selected.has('sweetener')) reasons.push('인공감미료 (소르비톨/자일리톨)')
-    if (selected.has('protein')) reasons.push('단백질 보충제 발효')
-    if (selected.has('egg')) reasons.push('계란의 황 성분')
-    for (const c of activeConds) reasons.push(c.short)
-
-    // 완화 팁
-    const tips: string[] = []
-    if (cats.has('beans')) tips.push('다음엔 콩을 물에 충분히 불렸다가 요리하면 가스가 줄어요.')
-    if (cats.has('dairy')) tips.push('유당불내증이라면 락타아제 효소 보충제나 락토프리 제품을 시도해보세요.')
-    if (selected.has('soda') || selected.has('beer') || selected.has('energyDrink')) tips.push('탄산 대신 물을 마시면 가스가 줄어요.')
-    if (conds.has('overate')) tips.push('식사량을 조금 줄이고 천천히 먹으면 소화가 편해져요.')
-    if (selected.has('sweetener')) tips.push('인공감미료 대신 소량의 설탕이나 천연 감미료(스테비아)를 고려해보세요.')
-    if (conds.has('stressed')) tips.push('스트레스 관리로 장 운동이 안정됩니다. 심호흡이나 가벼운 명상이 도움돼요.')
-    tips.push('식사 후 가벼운 산책 10~15분이 장 운동을 도와요.')
-
-    return {
-      score,
-      level: levelFor(score),
-      top3,
-      combos: triggeredCombos,
-      reasons,
-      tips,
-      comboBonus,
-      lactoseBonus,
-    }
-  }, [selected, conds])
+  const result = useMemo(() => calcFartScore(Array.from(selected), conds), [selected, conds])
 
   const handleShare = async () => {
     if (!result) return
-    const topText = result.top3.map((t, i) => `${i + 1}위 ${t.name}`).join(' ')
-    const text = `오늘 내 방귀 유발 가능성 점수: ${result.score}점 💨
-단계: ${result.level.emoji} ${result.level.name}
-원인 TOP3: ${topText}
-youtil.kr/tools/life/fart-risk`
+    const types = result.primaryTypes.map(p => CAUSE_TYPES[p.type].name).join(' + ')
+    const text = `오늘 내 가스 리스크: ${result.total}점 (${result.riskLabel})\n` +
+      `💨 가스량 ${result.gas} · 🦨 냄새 ${result.smell} · 🎈 팽만 ${result.bloat}\n` +
+      `🫧 조합: ${types || '단순'}\n` +
+      `youtil.kr/tools/life/fart-risk`
     try {
       await navigator.clipboard.writeText(text)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    } catch {
-      // noop
-    }
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
+    } catch { /* noop */ }
   }
 
   return (
-    <div className={s.wrap}>
-      {/* 입력: 음식 */}
+    <>
+      {/* 음식 */}
       <div className={s.card}>
         <span className={s.cardLabel}>오늘 먹은 음식 (복수 선택)</span>
-        {CATEGORIES.map((cat) => (
+        {CATEGORIES.map(cat => (
           <div key={cat.id} className={s.catGroup}>
             <div className={s.catHead}>{cat.label}</div>
             <div className={s.foodGrid}>
-              {cat.items.map((k) => {
-                const f = FOOD_SCORES[k]
-                const on = selected.has(k)
+              {cat.ids.map(id => {
+                const f = FOOD_DATA.find(x => x.id === id)
+                if (!f) return null
+                const on = selected.has(id)
                 return (
-                  <button
-                    key={k}
-                    type="button"
+                  <button key={id} type="button"
                     className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
-                    onClick={() => toggleFood(k)}
-                  >
+                    onClick={() => toggleFood(id)}>
                     <span className={s.foodEmoji}>{f.emoji}</span>
                     <span>{f.name}</span>
-                    {on && <span className={s.scoreBadge}>+{f.score}</span>}
                   </button>
                 )
               })}
@@ -228,20 +118,16 @@ youtil.kr/tools/life/fart-risk`
         ))}
       </div>
 
-      {/* 입력: 조건 */}
+      {/* 조건 */}
       <div className={s.card}>
         <span className={s.cardLabel}>추가 조건</span>
         <div className={s.condGrid}>
-          {CONDITIONS.map((c) => {
+          {CONDITIONS.map(c => {
             const on = conds.has(c.key)
             return (
               <label key={c.key} className={`${s.condItem} ${on ? s.condActive : ''}`}>
-                <input
-                  type="checkbox"
-                  className={s.condCheck}
-                  checked={on}
-                  onChange={() => toggleCond(c.key)}
-                />
+                <input type="checkbox" className={s.condCheck}
+                  checked={on} onChange={() => toggleCond(c.key)} />
                 <span className={s.condLabel}>{c.label}</span>
               </label>
             )
@@ -254,81 +140,279 @@ youtil.kr/tools/life/fart-risk`
         <div className={s.empty}>음식을 선택하거나 조건을 체크하면 점수가 계산됩니다.</div>
       ) : (
         <>
-          <div className={`${s.charBadge} ${result.level.cls}`}>
-            <div className={s.charEmoji}>{result.level.emoji}</div>
-            <div className={s.charName}>{result.level.name}</div>
-            <div className={s.charScoreLabel}>가스 유발 가능성 점수</div>
-            <div className={s.charScore}>{result.score}<span className={s.charUnit}>점</span></div>
+          {/* 히어로 */}
+          <div className={s.heroCard} style={{ borderColor: result.riskColor + 'aa', background: result.riskColor + '14' }}>
+            <div className={s.heroLabel}>💨 오늘의 가스 리스크</div>
+            <div className={s.heroScore} style={{ color: result.riskColor }}>{result.total}<span className={s.heroUnit}>점</span></div>
+            <div className={s.heroRiskBadge} style={{ color: result.riskColor, borderColor: result.riskColor + '55' }}>
+              {result.riskLabel}
+            </div>
           </div>
 
-          <div className={s.verdictCard}>{result.level.verdict}</div>
+          {/* 3축 점수 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>📊 3축 점수</span>
+            {[
+              { label: '💨 가스량',    val: result.gas,   color: '#C8FF3E' },
+              { label: '🦨 냄새',      val: result.smell, color: '#FF6B9D' },
+              { label: '🎈 복부팽만',  val: result.bloat, color: '#3EC8FF' },
+            ].map((g, i) => (
+              <div key={i} className={s.gaugeRow}>
+                <div className={s.gaugeLabel}>
+                  <span>{g.label}</span>
+                  <span className={s.gaugeVal} style={{ color: g.color }}>{g.val}점</span>
+                </div>
+                <div className={s.gaugeBar}>
+                  <div className={s.gaugeFill} style={{ width: `${g.val}%`, background: g.color }} />
+                </div>
+              </div>
+            ))}
+          </div>
 
-          {result.top3.length > 0 && (
-            <div className={s.topCard}>
-              <div className={s.topHead}>🏆 오늘의 원인 TOP {result.top3.length}</div>
-              {result.top3.map((t, i) => (
-                <div key={t.key} className={s.topRow}>
-                  <div className={`${s.topRank} ${i === 0 ? s.rank1 : i === 1 ? s.rank2 : s.rank3}`}>{i + 1}</div>
-                  <span className={s.topEmoji}>{t.emoji}</span>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    <span className={s.topName}>{t.name}</span>
-                    <span className={s.topReason}>{t.reason}</span>
+          {/* 원인 유형 */}
+          {result.primaryTypes.length > 0 && (
+            <div className={s.card}>
+              <span className={s.cardLabel}>오늘의 원인 유형 TOP {result.primaryTypes.length}</span>
+              <div className={s.causeList}>
+                {result.primaryTypes.map(p => {
+                  const ct = CAUSE_TYPES[p.type]
+                  return (
+                    <div key={p.type} className={s.causeCard} style={{ borderColor: ct.color + '55' }}>
+                      <span className={s.causeIcon}>{ct.icon}</span>
+                      <div>
+                        <div className={s.causeName} style={{ color: ct.color }}>{ct.name}</div>
+                        <div className={s.causeDesc}>{ct.desc}</div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 음식 TOP 3 */}
+          {result.topFoods.length > 0 && (
+            <div className={s.card}>
+              <span className={s.cardLabel}>🏆 원인 음식 TOP {result.topFoods.length}</span>
+              <div className={s.topList}>
+                {result.topFoods.map((f, i) => (
+                  <div key={f.id} className={s.topRow}>
+                    <span className={`${s.topRank} ${i === 0 ? s.rank1 : i === 1 ? s.rank2 : s.rank3}`}>{i + 1}</span>
+                    <span className={s.topEmoji}>{f.emoji}</span>
+                    <div style={{ flex: 1 }}>
+                      <div className={s.topName}>{f.name}</div>
+                      <div className={s.topReason}>{f.causeTypes.map(t => CAUSE_TYPES[t].name).join(' · ')}</div>
+                    </div>
+                    <span className={s.topScore}>가스 {f.gas} · 냄새 {f.smell} · 팽만 {f.bloat}</span>
                   </div>
-                  <span className={s.topScore}>+{t.score}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
-          {result.combos.length > 0 && (
+          {/* 위험 조합 */}
+          {result.comboWarnings.length > 0 && (
             <div className={s.comboCard}>
-              <div className={s.comboHead}>🚨 특별 조합 감지</div>
-              {result.combos.map((c, i) => (
-                <div key={i} className={s.comboItem}>
-                  <span>{c.label}</span>
-                  <span className={s.comboBonus}>+{c.bonus}점</span>
-                </div>
+              <div className={s.comboHead}>🚨 위험 조합 감지</div>
+              {result.comboWarnings.map((w, i) => (
+                <div key={i} className={s.comboItem}>{w}</div>
               ))}
             </div>
           )}
 
-          {result.reasons.length > 0 && (
-            <div className={s.reasonCard}>
-              <div className={s.reasonHead}>가스 유발이 높아진 이유</div>
-              <ul className={s.reasonList}>
-                {result.reasons.map((r, i) => <li key={i} className={s.reasonItem}>{r}</li>)}
-              </ul>
-            </div>
-          )}
-
+          {/* 완화 팁 */}
           <div className={s.tipCard}>
             <div className={s.tipHead}>💡 완화 팁</div>
-            <div className={s.tipList}>
-              {result.tips.map((t, i) => (
-                <div key={i} className={s.tipItem}>
-                  <span className={s.tipEmoji}>💡</span>
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
+            <p className={s.tipSubHead}>✅ 즉시</p>
+            <ul className={s.tipUl}>
+              <li>식후 10~15분 가벼운 산책</li>
+              <li>따뜻한 물 또는 페퍼민트차·생강차</li>
+              <li>무릎 당기기 스트레칭 (가스 배출)</li>
+            </ul>
+            <p className={s.tipSubHead} style={{ marginTop: 10 }}>✅ 다음 식사</p>
+            <ul className={s.tipUl}>
+              {result.primaryTypes.some(p => p.type === 'fermentation') && <li>양파·마늘·콩류·인공감미료 양 ↓</li>}
+              {result.primaryTypes.some(p => p.type === 'lactose') && <li>유제품 → 락토프리 또는 식물성 음료</li>}
+              {result.primaryTypes.some(p => p.type === 'air') && <li>탄산 대신 물·따뜻한 차</li>}
+              {result.primaryTypes.some(p => p.type === 'slow') && <li>식사량 ↓, 천천히 씹기 (한 입 30회)</li>}
+              {result.primaryTypes.some(p => p.type === 'smell') && <li>황 성분(계란·고기·브로콜리) 양 조절</li>}
+              <li>본 도구의 [🔄 대체 음식] 탭에서 저FODMAP 대체 확인</li>
+            </ul>
+            {result.riskLevel === 'extreme' && (
+              <p className={s.tipWarn}>
+                ⚠️ 폭탄급 — 좁은 공간 피하고 환기. 본 도구의 [🩺 증상 대처] 탭 활용.
+              </p>
+            )}
           </div>
 
+          {/* 액션 */}
           <div className={s.actionRow}>
-            <button
-              type="button"
-              className={`${s.shareBtn} ${copied ? s.copied : ''}`}
-              onClick={handleShare}
-            >
-              {copied ? '✅ 복사됨!' : '오늘 나의 가스 점수 공유하기 💨'}
+            <button type="button" className={`${s.shareBtn} ${copied ? s.copied : ''}`} onClick={handleShare}>
+              {copied ? '✅ 복사됨!' : '오늘 점수 공유 💨'}
             </button>
-            <button type="button" className={s.resetBtn} onClick={reset}>다시 계산하기</button>
+            <button type="button" className={s.resetBtn} onClick={reset}>다시 계산</button>
           </div>
         </>
       )}
+    </>
+  )
+}
 
-      <p className={s.disclaimer}>
-        본 계산기는 재미를 위한 참고용이며 의학적 진단이 아닙니다.
-      </p>
-    </div>
+/* ──────────────────────── 탭 2: 대체 음식 ──────────────────────── */
+function AlternativeTab() {
+  const [picked, setPicked] = useState<Set<string>>(new Set())
+
+  const togglePick = (id: string) => {
+    setPicked(prev => {
+      const n = new Set(prev)
+      if (n.has(id)) n.delete(id); else n.add(id)
+      return n
+    })
+  }
+
+  const showItems = picked.size === 0
+    ? FODMAP_ALTERNATIVES   // 아무것도 선택 안 했으면 전체 보여줌
+    : FODMAP_ALTERNATIVES.filter(a => picked.has(a.highId))
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>본인이 자주 가스 차게 하는 음식 (복수)</span>
+        <div className={s.altPickGrid}>
+          {FODMAP_ALTERNATIVES.map(a => {
+            const on = picked.has(a.highId)
+            return (
+              <button key={a.highId} type="button"
+                className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
+                onClick={() => togglePick(a.highId)}>
+                <span className={s.foodEmoji}>{a.highEmoji}</span>
+                <span>{a.highName}</span>
+              </button>
+            )
+          })}
+        </div>
+        <p className={s.altHint}>
+          {picked.size === 0
+            ? '↓ 아래는 모든 고FODMAP 음식의 대체 가이드입니다. 위에서 선택하면 해당 항목만 표시.'
+            : `↓ 선택한 ${picked.size}개 음식의 저FODMAP 대체 추천`}
+        </p>
+      </div>
+
+      {showItems.map(a => (
+        <div key={a.highId} className={s.altCard}>
+          <div className={s.altHead}>
+            <span className={s.altEmoji}>{a.highEmoji}</span>
+            <span className={s.altTitle}>{a.highName} → 대체</span>
+          </div>
+          <div className={s.altOptionList}>
+            {a.options.map((opt, i) => (
+              <div key={i} className={s.altOption}>
+                <span className={s.altOptName}>{opt.name}</span>
+                <span className={s.altOptReason}>{opt.reason}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div className={s.tipCard}>
+        <div className={s.tipHead}>💡 저FODMAP 대체 사용 가이드</div>
+        <ul className={s.tipUl}>
+          <li>새 음식 시도 시 <strong>소량부터</strong> 시작</li>
+          <li>한 번에 여러 변경 X — 효과 구분 어려움</li>
+          <li>1~2주 일기로 본인 패턴 확인</li>
+          <li>저FODMAP은 <strong>평생 식단이 아님</strong> — 진단·재도입 도구</li>
+          <li>지속 증상 시 영양사·소화기내과 상담</li>
+        </ul>
+      </div>
+    </>
+  )
+}
+
+/* ──────────────────────── 탭 3: 증상 대처 ──────────────────────── */
+function SymptomTab() {
+  const [picked, setPicked] = useState<Set<SymptomKey>>(new Set())
+
+  const togglePick = (k: SymptomKey) => {
+    setPicked(prev => {
+      const n = new Set(prev)
+      if (n.has(k)) n.delete(k); else n.add(k)
+      return n
+    })
+  }
+
+  const showSymptoms = picked.size === 0
+    ? SYMPTOM_RESPONSES
+    : SYMPTOM_RESPONSES.filter(sym => picked.has(sym.key))
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>겪고 있는 증상 (복수 선택)</span>
+        <div className={s.altPickGrid}>
+          {SYMPTOM_RESPONSES.map(sym => {
+            const on = picked.has(sym.key)
+            return (
+              <button key={sym.key} type="button"
+                className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
+                onClick={() => togglePick(sym.key)}>
+                <span className={s.foodEmoji}>{sym.emoji}</span>
+                <span>{sym.name}</span>
+              </button>
+            )
+          })}
+        </div>
+        <p className={s.altHint}>
+          {picked.size === 0
+            ? '↓ 아래는 8가지 증상별 가이드 전체입니다. 위에서 선택하면 해당 증상만 표시.'
+            : `↓ 선택한 ${picked.size}개 증상에 대한 대처`}
+        </p>
+      </div>
+
+      {showSymptoms.map(sym => (
+        <div key={sym.key} className={s.symCard} style={sym.severity === 'urgent' ? { borderColor: 'rgba(255,107,107,0.4)' } : {}}>
+          <div className={s.symHead}>
+            <span className={s.symEmoji}>{sym.emoji}</span>
+            <span className={s.symName}>{sym.name}</span>
+          </div>
+          <div className={s.symGrid}>
+            <div>
+              <p className={s.symSubHead} style={{ color: '#3EC8FF' }}>✅ 즉시</p>
+              <ul className={s.tipUl}>
+                {sym.immediate.map((t, i) => <li key={i}>{t}</li>)}
+              </ul>
+            </div>
+            <div>
+              <p className={s.symSubHead} style={{ color: 'var(--accent)' }}>✅ 다음 식사</p>
+              <ul className={s.tipUl}>
+                {sym.nextMeal.map((t, i) => <li key={i}>{t}</li>)}
+              </ul>
+            </div>
+          </div>
+          <div className={s.symDoctor}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: sym.severity === 'urgent' ? '#FF6B6B' : '#FF8C3E' }}>
+              ⚕️ 의료 상담:
+            </span>
+            <span style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{sym.seeDoctor}</span>
+          </div>
+        </div>
+      ))}
+
+      {/* 위험 신호 카드 (★★★★) */}
+      <div className={s.redFlagCard}>
+        <div className={s.redFlagHead}>⚠️ 위험 신호 — 다음 증상 시 즉시 의료 상담</div>
+        <ul className={s.redFlagList}>
+          {RED_FLAGS.map((flag, i) => <li key={i}>{flag}</li>)}
+        </ul>
+        <div className={s.redFlagFooter}>
+          <p>📞 <strong>응급</strong>: 119</p>
+          <p>📞 <strong>한국 의료진 상담 (보건복지부)</strong>: 1339</p>
+          <p>🏥 <strong>소화기내과</strong> 직접 방문 권장</p>
+          <p style={{ marginTop: 8, fontSize: 11, color: 'var(--muted)', lineHeight: 1.7 }}>
+            가능한 의학적 원인: IBS(과민성대장증후군) · SIBO(소장세균과증식) · 셀리악(글루텐 알레르기) · 유당불내증 · 췌장 효소 부족 · 담즙 문제. 자가 진단 X, 전문의 상담 필수.
+          </p>
+        </div>
+      </div>
+    </>
   )
 }

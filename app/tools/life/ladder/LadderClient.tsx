@@ -31,6 +31,7 @@ export default function LadderClient() {
   /* 사다리·게임 상태 */
   const [regenKey, setRegenKey] = useState(0)
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
+  const [rungsVisible, setRungsVisible] = useState(false)   // 가로줄 공개 여부 (스포일러 방지)
   const [copied, setCopied] = useState(false)
 
   /* 카운트·행 수 */
@@ -60,9 +61,10 @@ export default function LadderClient() {
     }
   }, [count]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* 인원 변경·셔플·새 가로줄 시 공개 상태 초기화 */
+  /* 인원 변경·셔플·새 가로줄 시 공개 상태 + 가로줄 모두 초기화 (스포일러 방지) */
   useEffect(() => {
     setRevealed(new Set())
+    setRungsVisible(false)
   }, [count, regenKey, difficulty])
 
   /* 셋터들 */
@@ -124,15 +126,30 @@ export default function LadderClient() {
   }, [ladder, colX, rows, svgH])
 
   const handleRevealAll = () => {
+    setRungsVisible(true)
     setRevealed(new Set(Array.from({ length: count }, (_, i) => i)))
   }
-  const handleHideAll = () => setRevealed(new Set())
+  const handleHideAll = () => {
+    setRevealed(new Set())
+    setRungsVisible(false)   // 다시 가리기
+  }
   const handleNewRungs = () => {
     setRegenKey(k => k + 1)
     setRevealed(new Set())
+    setRungsVisible(false)
+  }
+
+  /* 🆕 새 게임 (초기화) — 명단·결과 기본값 + 새 사다리 + 모두 가리기 */
+  const handleNewGame = () => {
+    setNames(['김민수', '이지은', '박서준', '최수아'])
+    setResults(['커피 사기', '꽝', '꽝', '발표'])
+    setRegenKey(k => k + 1)
+    setRevealed(new Set())
+    setRungsVisible(false)
   }
 
   const handleClickPerson = (i: number) => {
+    setRungsVisible(true)   // 한 명이라도 공개 시 가로줄 노출
     setRevealed(prev => {
       const next = new Set(prev)
       if (next.has(i)) next.delete(i)
@@ -288,8 +305,8 @@ export default function LadderClient() {
               x1={colX(i)} y1={0} x2={colX(i)} y2={svgH}
               strokeWidth={2} />
           ))}
-          {/* 가로줄 */}
-          {ladder.map((row, r) =>
+          {/* 가로줄 — 공개 전에는 숨김 (스포일러 방지) */}
+          {rungsVisible && ladder.map((row, r) =>
             row.map((has, c) => has ? (
               <line key={`h${r}-${c}`} className={s.rungLine}
                 x1={colX(c)} y1={r * ROW_H + ROW_H * 0.5}
@@ -338,9 +355,10 @@ export default function LadderClient() {
         </div>
       </div>
 
-      {/* ── 안내 + 시작 버튼 2개 ── */}
+      {/* ── 안내 + 시작 버튼 ── */}
       <div className={s.clickHint}>
-        💡 <strong>이름이나 결과를 클릭하면 해당 경로만 공개</strong>됩니다. 원하는 사람부터 자유롭게 공개해 보세요.
+        🙈 <strong>가로선은 공개 전까지 숨겨져 있어요</strong> (암산 스포일러 방지).
+        한 번에 공개하거나, 이름·결과를 클릭해 한 명씩 공개하세요.
       </div>
 
       <div className={s.startBtnRow}>
@@ -351,6 +369,9 @@ export default function LadderClient() {
         <button className={s.startBtnSecondary} onClick={handleNewRungs}
           disabled={count < MIN_PARTICIPANTS}>
           🔄 가로선 새로 만들기
+        </button>
+        <button className={s.startBtnSecondary} onClick={handleNewGame}>
+          🆕 새 게임 (초기화)
         </button>
       </div>
 

@@ -1,13 +1,19 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
 import s from './one-rm.module.css'
+import {
+  generateWarmup, suggestRestForIntensity, rpeAdjustReps, adjustLevels,
+  AGE_BAND_LABEL,
+  type Gender, type AgeBand, type WarmupSet,
+} from './oneRMUtils'
 
 /* ════════════════════════════════════════════════════════════
    데이터
    ════════════════════════════════════════════════════════════ */
 type Unit = 'kg' | 'lb'
-type TabKey = 'calc' | 'training' | 'plate'
+type TabKey = 'calc' | 'training' | 'plate' | 'records'
 type FormulaKey = 'auto' | 'epley' | 'brzycki' | 'lombardi' | 'oconner'
 
 interface Exercise {
@@ -18,12 +24,18 @@ interface Exercise {
 }
 
 const EXERCISES: Exercise[] = [
-  { key: 'bench',    emoji: '🏋️', name: '벤치프레스',    levels: { 초보: 0.5,  중급: 1.0,  상급: 1.25, 엘리트: 1.5 } },
-  { key: 'squat',    emoji: '🦵', name: '스쿼트',        levels: { 초보: 0.75, 중급: 1.25, 상급: 1.5,  엘리트: 2.0 } },
-  { key: 'deadlift', emoji: '💀', name: '데드리프트',    levels: { 초보: 1.0,  중급: 1.5,  상급: 2.0,  엘리트: 2.5 } },
-  { key: 'ohp',      emoji: '🏋️', name: '오버헤드프레스', levels: { 초보: 0.35, 중급: 0.65, 상급: 0.85, 엘리트: 1.1 } },
-  { key: 'row',      emoji: '🔙', name: '바벨로우',      levels: { 초보: 0.5,  중급: 0.9,  상급: 1.15, 엘리트: 1.4 } },
-  { key: 'other',    emoji: '➕', name: '기타' },
+  { key: 'bench',         emoji: '🏋️', name: '벤치프레스',     levels: { 초보: 0.5,  중급: 1.0,  상급: 1.25, 엘리트: 1.5 } },
+  { key: 'squat',         emoji: '🦵', name: '스쿼트',         levels: { 초보: 0.75, 중급: 1.25, 상급: 1.5,  엘리트: 2.0 } },
+  { key: 'deadlift',      emoji: '💀', name: '데드리프트',     levels: { 초보: 1.0,  중급: 1.5,  상급: 2.0,  엘리트: 2.5 } },
+  { key: 'ohp',           emoji: '🏋️', name: '오버헤드프레스', levels: { 초보: 0.35, 중급: 0.65, 상급: 0.85, 엘리트: 1.1 } },
+  { key: 'row',           emoji: '🔙', name: '바벨로우',       levels: { 초보: 0.5,  중급: 0.9,  상급: 1.15, 엘리트: 1.4 } },
+  { key: 'incline-bench', emoji: '📐', name: '인클라인 벤치',  levels: { 초보: 0.4,  중급: 0.85, 상급: 1.05, 엘리트: 1.3 } },
+  { key: 'front-squat',   emoji: '🤸', name: '프론트 스쿼트',  levels: { 초보: 0.6,  중급: 1.0,  상급: 1.25, 엘리트: 1.6 } },
+  { key: 'rdl',           emoji: '🪢', name: '루마니안 데드',  levels: { 초보: 0.85, 중급: 1.3,  상급: 1.7,  엘리트: 2.1 } },
+  { key: 'pullup',        emoji: '🔝', name: '풀업 (체중+α)',  levels: { 초보: 0.05, 중급: 0.25, 상급: 0.5,  엘리트: 0.75 } },
+  { key: 'dips',          emoji: '💪', name: '딥스 (체중+α)',  levels: { 초보: 0.05, 중급: 0.3,  상급: 0.55, 엘리트: 0.85 } },
+  { key: 'chinup',        emoji: '🔝', name: '친업 (체중+α)',  levels: { 초보: 0.05, 중급: 0.3,  상급: 0.55, 엘리트: 0.8 } },
+  { key: 'other',         emoji: '➕', name: '기타' },
 ]
 
 const FORMULAS = {
@@ -105,9 +117,13 @@ export default function OneRMClient() {
   const [unit, setUnit] = useState<Unit>('kg')
   const [includesBar, setIncludesBar] = useState(true)
   const [reps, setReps] = useState(5)
+  const [rpe, setRpe] = useState<number>(10)  // RPE 6~10 (NEW)
+  const [useRpe, setUseRpe] = useState(false)
   const [formulaKey, setFormulaKey] = useState<FormulaKey>('auto')
   const [roundUnit, setRoundUnit] = useState(2.5)
   const [bodyWeight, setBodyWeight] = useState('')  // kg
+  const [gender, setGender] = useState<Gender>('male')         // NEW
+  const [ageBand, setAgeBand] = useState<AgeBand>('20-30')      // NEW
 
   // 훈련 탭 직접 입력 overide
   const [trainingOverride, setTrainingOverride] = useState('')
@@ -148,15 +164,17 @@ export default function OneRMClient() {
 
   const oneRMs = useMemo(() => {
     if (!validCalc) return null
+    // RPE 보정 — useRpe 활성화 시 reps 증가
+    const effReps = useRpe ? rpeAdjustReps(reps, rpe) : reps
     const vals = {
-      epley:    FORMULAS.epley(weightKg, reps),
-      brzycki:  FORMULAS.brzycki(weightKg, reps),
-      lombardi: FORMULAS.lombardi(weightKg, reps),
-      oconner:  FORMULAS.oconner(weightKg, reps),
+      epley:    FORMULAS.epley(weightKg, effReps),
+      brzycki:  FORMULAS.brzycki(weightKg, effReps),
+      lombardi: FORMULAS.lombardi(weightKg, effReps),
+      oconner:  FORMULAS.oconner(weightKg, effReps),
     }
     const avg = (vals.epley + vals.brzycki + vals.lombardi + vals.oconner) / 4
     return { ...vals, auto: avg }
-  }, [weightKg, reps, validCalc])
+  }, [weightKg, reps, validCalc, useRpe, rpe])
 
   const oneRM = oneRMs ? oneRMs[formulaKey] : 0
   const oneRMRounded = roundTo(oneRM, roundUnit)
@@ -171,10 +189,11 @@ export default function OneRMClient() {
   const validBw = isFinite(bwKg) && bwKg > 0
   const bwRatio = validBw && oneRM > 0 ? oneRM / bwKg : 0
 
-  // 수준 판정
+  // 수준 판정 — 성별·연령 보정
+  const adjustedLevels = exercise.levels ? adjustLevels(exercise.levels, gender, ageBand) : null
   let level: string | null = null
-  if (validBw && exercise.levels && oneRM > 0) {
-    const { 초보, 중급, 상급, 엘리트 } = exercise.levels
+  if (validBw && adjustedLevels && oneRM > 0) {
+    const { 초보, 중급, 상급, 엘리트 } = adjustedLevels
     if (bwRatio >= 엘리트) level = '엘리트'
     else if (bwRatio >= 상급) level = '상급'
     else if (bwRatio >= 중급) level = '중급'
@@ -206,10 +225,11 @@ export default function OneRMClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.tabs}>
+      <div className={`${s.tabs} ${s.tabs4}`}>
         <button className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>1RM 계산</button>
         <button className={`${s.tab} ${tab === 'training' ? s.tabActive : ''}`} onClick={() => setTab('training')}>훈련 중량</button>
-        <button className={`${s.tab} ${tab === 'plate' ? s.tabActive : ''}`} onClick={() => setTab('plate')}>원판 계산</button>
+        <button className={`${s.tab} ${tab === 'plate' ? s.tabActive : ''}`} onClick={() => setTab('plate')}>원판</button>
+        <button className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>내 기록</button>
       </div>
 
       {tab === 'calc' && (
@@ -225,6 +245,14 @@ export default function OneRMClient() {
           setIncludesBar={setIncludesBar}
           reps={reps}
           setReps={setReps}
+          rpe={rpe}
+          setRpe={setRpe}
+          useRpe={useRpe}
+          setUseRpe={setUseRpe}
+          gender={gender}
+          setGender={setGender}
+          ageBand={ageBand}
+          setAgeBand={setAgeBand}
           formulaKey={formulaKey}
           setFormulaKey={setFormulaKey}
           roundUnit={roundUnit}
@@ -238,11 +266,10 @@ export default function OneRMClient() {
           rangeMaxDisplay={rangeMaxDisplay}
           bwRatio={bwRatio}
           level={level}
+          adjustedLevels={adjustedLevels}
           validBw={validBw}
-          history={history}
-          setHistory={setHistory}
           addRecord={addRecord}
-          mounted={mounted}
+          historyCount={history.length}
         />
       )}
 
@@ -273,8 +300,27 @@ export default function OneRMClient() {
         />
       )}
 
+      {tab === 'records' && (
+        <RecordsTab
+          history={history}
+          setHistory={setHistory}
+          mounted={mounted}
+        />
+      )}
+
       <div className={s.safetyCard}>
-        <strong>⚠️ 안전 안내</strong> — 1RM은 추정값입니다. 실제 최대 중량 도전 시 반드시 안전 보조자(스포터) 또는 세이프티 랙이 있는 환경에서 진행하세요.
+        <strong>⚠️ 안전 안내</strong> — 1RM은 추정값입니다. 실제 최대 중량 도전 시 반드시 안전 보조자(스포터) 또는 세이프티 랙이 있는 환경에서 진행하세요. 통증·부상 시 즉시 중단하고 의료진과 상담하세요.
+      </div>
+
+      <div className={s.injuryCard}>
+        <strong>🛡️ 부상 예방 체크리스트</strong>
+        <ul className={s.injuryList}>
+          <li>관절·허리 통증이 있는 날에는 1RM 도전 금지</li>
+          <li>워밍업 5세트(최소 3세트) 필수 — 빈 봉부터 점진적 증가</li>
+          <li>스쿼트·벤치는 세이프티 바, 데드는 미끄럼 방지 신발</li>
+          <li>호흡 멈춤(발살바)은 5초 이내, 어지러움 시 즉시 중단</li>
+          <li>혼자 도전 X — 스포터 또는 랙 안전장치 필수</li>
+        </ul>
       </div>
     </div>
   )
@@ -295,6 +341,14 @@ interface CalcTabProps {
   setIncludesBar: (v: boolean) => void
   reps: number
   setReps: (v: number) => void
+  rpe: number
+  setRpe: (v: number) => void
+  useRpe: boolean
+  setUseRpe: (v: boolean) => void
+  gender: Gender
+  setGender: (g: Gender) => void
+  ageBand: AgeBand
+  setAgeBand: (a: AgeBand) => void
   formulaKey: FormulaKey
   setFormulaKey: (k: FormulaKey) => void
   roundUnit: number
@@ -308,11 +362,10 @@ interface CalcTabProps {
   rangeMaxDisplay: number
   bwRatio: number
   level: string | null
+  adjustedLevels: { 초보: number; 중급: number; 상급: number; 엘리트: number } | null
   validBw: boolean
-  history: HistoryRecord[]
-  setHistory: React.Dispatch<React.SetStateAction<HistoryRecord[]>>
   addRecord: () => void
-  mounted: boolean
+  historyCount: number
 }
 
 function CalcTab(props: CalcTabProps) {
@@ -320,11 +373,13 @@ function CalcTab(props: CalcTabProps) {
     exercise, exerciseKey, setExerciseKey,
     weight, setWeight, unit, setUnit,
     includesBar, setIncludesBar, reps, setReps,
+    rpe, setRpe, useRpe, setUseRpe,
+    gender, setGender, ageBand, setAgeBand,
     formulaKey, setFormulaKey, roundUnit, setRoundUnit,
     bodyWeight, setBodyWeight,
     oneRMs, oneRMDisplay, rangeMinDisplay, rangeMaxDisplay,
-    bwRatio, level, validBw,
-    history, setHistory, addRecord, mounted,
+    bwRatio, level, adjustedLevels, validBw,
+    addRecord, historyCount,
   } = props
 
   return (
@@ -390,6 +445,33 @@ function CalcTab(props: CalcTabProps) {
         </div>
 
         <div className={s.field}>
+          <label className={s.checkRow}>
+            <input type="checkbox" checked={useRpe} onChange={(e) => setUseRpe(e.target.checked)} />
+            RPE 보정 사용 (체감 강도)
+          </label>
+          {useRpe && (
+            <div className={s.rpeRow}>
+              <div className={s.pillRow}>
+                {[6, 7, 8, 9, 10].map((v) => (
+                  <button
+                    key={v}
+                    className={`${s.pill} ${rpe === v ? s.pillActive : ''}`}
+                    onClick={() => setRpe(v)}
+                  >RPE {v}</button>
+                ))}
+              </div>
+              <div className={s.rpeHint}>
+                {rpe === 10 && '한 번도 더 불가능 (AMRAP)'}
+                {rpe === 9 && '1회 더 가능'}
+                {rpe === 8 && '2~3회 더 가능'}
+                {rpe === 7 && '3~4회 더 가능'}
+                {rpe === 6 && '5회 이상 가능 (워밍업)'}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className={s.field}>
           <label className={s.fieldLabel}>계산 공식</label>
           <div className={s.pillRow}>
             {(['auto', 'epley', 'brzycki', 'lombardi', 'oconner'] as FormulaKey[]).map((k) => {
@@ -418,9 +500,32 @@ function CalcTab(props: CalcTabProps) {
           </div>
         </div>
 
-        <div className={s.field} style={{ marginBottom: 0 }}>
+        <div className={s.field}>
           <label className={s.fieldLabel}>체중 (선택, kg) — 수준 판정용</label>
           <input type="number" inputMode="decimal" className={s.input} placeholder="75" value={bodyWeight} min={0} onChange={(e) => setBodyWeight(e.target.value)} />
+        </div>
+
+        <div className={s.field} style={{ marginBottom: 0 }}>
+          <label className={s.fieldLabel}>성별 · 연령대 (선택) — 수준 보정</label>
+          <div className={s.ageGenderRow}>
+            <div className={s.pillRow} style={{ flex: 1 }}>
+              <button className={`${s.pill} ${gender === 'male' ? s.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
+              <button className={`${s.pill} ${gender === 'female' ? s.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
+            </div>
+            <select
+              className={s.select}
+              value={ageBand}
+              onChange={(e) => setAgeBand(e.target.value as AgeBand)}
+              aria-label="연령대"
+            >
+              {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((k) => (
+                <option key={k} value={k}>{AGE_BAND_LABEL[k]}</option>
+              ))}
+            </select>
+          </div>
+          <div className={s.rpeHint} style={{ marginTop: 6 }}>
+            여성·고연령일수록 같은 무게가 더 높은 수준으로 평가됩니다.
+          </div>
         </div>
       </div>
 
@@ -475,9 +580,9 @@ function CalcTab(props: CalcTabProps) {
             </table>
           </div>
 
-          {validBw && exercise.levels && level && (
+          {validBw && adjustedLevels && level && (
             <div className={s.card}>
-              <span className={s.cardLabel}>체중 대비 수준</span>
+              <span className={s.cardLabel}>체중 대비 수준 ({gender === 'female' ? '여성' : '남성'} · {AGE_BAND_LABEL[ageBand]})</span>
               <div className={s.levelCard}>
                 <div className={s.levelHead}>
                   <span className={s.levelLabel}>{exercise.name}</span>
@@ -488,16 +593,16 @@ function CalcTab(props: CalcTabProps) {
                 </div>
                 <div className={s.levelBar}>
                   {(() => {
-                    const { 초보, 중급, 상급, 엘리트 } = exercise.levels!
+                    const { 초보, 엘리트 } = adjustedLevels
                     const pct = Math.min(100, Math.max(0, ((bwRatio - 초보) / (엘리트 - 초보)) * 100))
                     return <div className={s.levelMarker} style={{ left: `${pct}%` }} />
                   })()}
                 </div>
                 <div className={s.levelLabels}>
-                  <span>초보 ×{exercise.levels.초보}</span>
-                  <span>중급 ×{exercise.levels.중급}</span>
-                  <span>상급 ×{exercise.levels.상급}</span>
-                  <span>엘리트 ×{exercise.levels.엘리트}</span>
+                  <span>초보 ×{adjustedLevels.초보}</span>
+                  <span>중급 ×{adjustedLevels.중급}</span>
+                  <span>상급 ×{adjustedLevels.상급}</span>
+                  <span>엘리트 ×{adjustedLevels.엘리트}</span>
                 </div>
               </div>
             </div>
@@ -508,34 +613,9 @@ function CalcTab(props: CalcTabProps) {
             <button className={s.addRecordBtn} onClick={addRecord}>
               + 오늘 기록 추가 ({exercise.name} · {fmt(oneRMDisplay, 0)}{unit})
             </button>
-            {mounted && history.length > 0 && (
-              <>
-                <div style={{ height: 10 }} />
-                <HistoryChart history={history.filter((h) => h.exerciseKey === exercise.key)} />
-                <div style={{ height: 10 }} />
-                <div className={s.historyList}>
-                  {history.slice().reverse().map((rec, idx, arr) => {
-                    const prev = arr.slice(idx + 1).find((h) => h.exerciseKey === rec.exerciseKey)
-                    const diff = prev ? rec.oneRM - prev.oneRM : 0
-                    const diffClass = diff > 0 ? s.historyDiffUp : diff < 0 ? s.historyDiffDown : s.historyDiffSame
-                    const diffText = prev ? (diff > 0 ? `+${fmt(diff, 1)}` : diff < 0 ? fmt(diff, 1) : '±0') : '—'
-                    return (
-                      <div key={rec.id} className={s.historyItem}>
-                        <span className={s.historyDate}>{rec.date}</span>
-                        <span className={s.historyEx}>{rec.exerciseName}</span>
-                        <span className={s.historyVal}>{fmt(rec.oneRM, 0)}kg</span>
-                        <span className={`${s.historyDiff} ${diffClass}`}>{diffText}</span>
-                        <button
-                          className={s.historyRemove}
-                          onClick={() => setHistory((p) => p.filter((h) => h.id !== rec.id))}
-                          aria-label="삭제"
-                        >✕</button>
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            )}
+            <div className={s.recordsHint}>
+              저장된 기록 <strong>{historyCount}개</strong> · <strong>내 기록</strong> 탭에서 진행 그래프를 확인하세요.
+            </div>
           </div>
         </>
       )}
@@ -595,6 +675,7 @@ interface TrainingTabProps {
 
 function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setTrainingOverride, exercise }: TrainingTabProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
+  const [warmupPct, setWarmupPct] = useState<number>(80)
   const copy = async (text: string, key: string) => {
     try {
       await copyText(text)
@@ -604,6 +685,16 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
   }
 
   const hasOneRM = oneRMKg > 0
+
+  const warmupSets: WarmupSet[] = useMemo(() => {
+    if (!hasOneRM) return []
+    return generateWarmup(oneRMKg, warmupPct).map((w) => ({
+      ...w,
+      weightKg: roundTo(w.weightKg, roundUnit),
+    }))
+  }, [oneRMKg, warmupPct, roundUnit, hasOneRM])
+
+  const restAdvice = useMemo(() => suggestRestForIntensity(warmupPct), [warmupPct])
 
   const intensityRows = useMemo(() => {
     if (!hasOneRM) return []
@@ -672,6 +763,54 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 )
               })}
             </div>
+          </div>
+
+          <div className={s.card}>
+            <span className={s.cardLabel}>워밍업 자동 설계</span>
+            <div className={s.field}>
+              <label className={s.fieldLabel}>본 세트 강도 (%1RM)</label>
+              <div className={s.pillRow}>
+                {[60, 70, 75, 80, 85, 90, 95].map((p) => (
+                  <button
+                    key={p}
+                    className={`${s.pill} ${warmupPct === p ? s.pillActive : ''}`}
+                    onClick={() => setWarmupPct(p)}
+                  >{p}%</button>
+                ))}
+              </div>
+            </div>
+            {warmupSets.length > 0 ? (
+              <>
+                <table className={s.resultTable}>
+                  <thead>
+                    <tr>
+                      <th>세트</th>
+                      <th>중량</th>
+                      <th>반복</th>
+                      <th>휴식</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {warmupSets.map((w) => {
+                      const display = unit === 'kg' ? w.weightKg : roundTo(kgToLb(w.weightKg), roundUnit === 2.5 ? 5 : roundUnit)
+                      return (
+                        <tr key={w.setNumber}>
+                          <td className={s.formulaName}>{w.setNumber}세트 ({Math.round(w.weightPercent)}%)</td>
+                          <td className={s.formulaVal}>{fmt(display, 0)}{unit}</td>
+                          <td className={s.formulaNote}>×{w.reps}회</td>
+                          <td className={s.formulaNote}>{w.restSec}초{w.notes ? ` · ${w.notes}` : ''}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+                <div className={s.warmupHint}>
+                  본 세트 휴식 권장: <strong>{restAdvice.label}</strong> ({restAdvice.sec}초) — {warmupPct}% 강도 기준
+                </div>
+              </>
+            ) : (
+              <div className={s.warmupHint}>1RM이 입력되면 워밍업이 자동 생성됩니다.</div>
+            )}
           </div>
 
           <div className={s.card}>
@@ -969,7 +1108,6 @@ function PlateViz({ barKg, perSide }: { barKg: number; perSide: number[] }) {
 
   // 슬리브 길이 확보 위해 한쪽에 최대 10개 원판
   const maxPerSide = Math.min(plates.length, 10)
-  const sliceLen = maxPerSide * plateWidth + 6
 
   return (
     <div className={s.plateViz}>
@@ -1027,5 +1165,140 @@ function PlateViz({ barKg, perSide }: { barKg: number; perSide: number[] }) {
         </text>
       </svg>
     </div>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
+   탭 4 — 내 기록
+   ════════════════════════════════════════════════════════════ */
+interface RecordsTabProps {
+  history: HistoryRecord[]
+  setHistory: React.Dispatch<React.SetStateAction<HistoryRecord[]>>
+  mounted: boolean
+}
+
+function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
+  const [filterKey, setFilterKey] = useState<string>('all')
+
+  const exerciseKeys = useMemo(() => {
+    const set = new Set(history.map((h) => h.exerciseKey))
+    return Array.from(set)
+  }, [history])
+
+  const filtered = useMemo(() => {
+    if (filterKey === 'all') return history
+    return history.filter((h) => h.exerciseKey === filterKey)
+  }, [history, filterKey])
+
+  const stats = useMemo(() => {
+    if (filtered.length === 0) return null
+    const max = Math.max(...filtered.map((r) => r.oneRM))
+    const first = filtered[0]
+    const last = filtered[filtered.length - 1]
+    const diff = last.oneRM - first.oneRM
+    return { max, first, last, diff, count: filtered.length }
+  }, [filtered])
+
+  if (!mounted) {
+    return (
+      <div className={s.card}>
+        <p className={s.recordsEmpty}>로딩 중…</p>
+      </div>
+    )
+  }
+
+  if (history.length === 0) {
+    return (
+      <div className={s.card}>
+        <p className={s.recordsEmpty}>
+          아직 저장된 기록이 없습니다.<br />
+          <strong style={{ color: 'var(--text)' }}>1RM 계산</strong> 탭에서 결과를 계산한 뒤 <strong style={{ color: 'var(--text)' }}>+ 오늘 기록 추가</strong> 버튼을 눌러주세요.<br />
+          <span style={{ fontSize: 12 }}>※ 기록은 이 브라우저(localStorage)에만 저장됩니다.</span>
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>운동 필터</span>
+        <div className={s.pillRow}>
+          <button
+            className={`${s.pill} ${filterKey === 'all' ? s.pillActive : ''}`}
+            onClick={() => setFilterKey('all')}
+          >전체</button>
+          {exerciseKeys.map((k) => {
+            const ex = EXERCISES.find((e) => e.key === k)
+            return (
+              <button
+                key={k}
+                className={`${s.pill} ${filterKey === k ? s.pillActive : ''}`}
+                onClick={() => setFilterKey(k)}
+              >{ex?.emoji ?? '•'} {ex?.name ?? k}</button>
+            )
+          })}
+        </div>
+      </div>
+
+      {stats && (
+        <div className={s.statsGrid}>
+          <div className={s.statCard}>
+            <span className={s.statLabel}>기록 수</span>
+            <span className={s.statValue}>{stats.count}회</span>
+          </div>
+          <div className={s.statCard}>
+            <span className={s.statLabel}>최고 1RM</span>
+            <span className={s.statValue}>{fmt(stats.max, 0)}kg</span>
+          </div>
+          <div className={s.statCard}>
+            <span className={s.statLabel}>변화량</span>
+            <span className={`${s.statValue} ${stats.diff > 0 ? s.statUp : stats.diff < 0 ? s.statDown : ''}`}>
+              {stats.diff > 0 ? '+' : ''}{fmt(stats.diff, 1)}kg
+            </span>
+          </div>
+        </div>
+      )}
+
+      {filtered.length >= 1 && (
+        <div className={s.card}>
+          <span className={s.cardLabel}>진행 그래프</span>
+          <HistoryChart history={filtered} />
+        </div>
+      )}
+
+      <div className={s.card}>
+        <span className={s.cardLabel}>전체 기록</span>
+        <div className={s.historyList}>
+          {filtered.slice().reverse().map((rec, idx, arr) => {
+            const prev = arr.slice(idx + 1).find((h) => h.exerciseKey === rec.exerciseKey)
+            const diff = prev ? rec.oneRM - prev.oneRM : 0
+            const diffClass = diff > 0 ? s.historyDiffUp : diff < 0 ? s.historyDiffDown : s.historyDiffSame
+            const diffText = prev ? (diff > 0 ? `+${fmt(diff, 1)}` : diff < 0 ? fmt(diff, 1) : '±0') : '—'
+            return (
+              <div key={rec.id} className={s.historyItem}>
+                <span className={s.historyDate}>{rec.date}</span>
+                <span className={s.historyEx}>{rec.exerciseName}</span>
+                <span className={s.historyVal}>{fmt(rec.oneRM, 0)}kg</span>
+                <span className={`${s.historyDiff} ${diffClass}`}>{diffText}</span>
+                <button
+                  className={s.historyRemove}
+                  onClick={() => setHistory((p) => p.filter((h) => h.id !== rec.id))}
+                  aria-label="삭제"
+                >✕</button>
+              </div>
+            )
+          })}
+        </div>
+        {history.length > 0 && (
+          <button
+            className={s.clearBtn}
+            onClick={() => {
+              if (confirm('모든 기록을 삭제하시겠습니까?')) setHistory([])
+            }}
+          >전체 기록 삭제</button>
+        )}
+      </div>
+    </>
   )
 }

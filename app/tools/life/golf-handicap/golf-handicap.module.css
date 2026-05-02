@@ -1,5 +1,106 @@
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
+/* ── 4탭 네비 ── */
+.tabs4 {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px;
+}
+.tabs4 .tab { padding: 10px 4px; font-size: 12px; }
+.tabs4 .tabActive { background: var(--bg3) !important; color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); font-weight: 700 !important; }
+@media (max-width: 480px) {
+  .tabs4 { grid-template-columns: repeat(2, 1fr); }
+  .tabs4 .tab { font-size: 11px; }
+}
+
+/* ── 발전 추이 차트 ── */
+.chart {
+  width: 100%; height: auto; max-height: 220px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px;
+}
+.chartStats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  margin-top: 12px;
+}
+.chartStats > div {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;
+}
+.statLabel { font-size: 10px; color: var(--muted); }
+.statValue { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
+.bestRound {
+  font-size: 12px; color: var(--muted); margin: 12px 0 0;
+  padding: 8px 10px; background: rgba(255,215,0,0.06); border-radius: 8px;
+  border-left: 3px solid #FFD700;
+}
+.encourageHint {
+  font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 10px 0 0;
+}
+@media (max-width: 480px) {
+  .chartStats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 입력 폼 큰 버튼 ── */
+.bigSaveBtn {
+  width: 100%; margin-top: 14px;
+  background: var(--accent); color: #0D0D0D; border: none;
+  padding: 14px; border-radius: 10px;
+  font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+}
+.bigSaveBtn:hover { opacity: 0.88; }
+.smallSaveBtn {
+  background: var(--accent); color: #0D0D0D; border: none;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; min-height: 44px; white-space: nowrap;
+}
+.smallSaveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.smallActionBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 12px; font-size: 12px; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.smallActionBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── 골프장 목록 ── */
+.savedCourseList { display: flex; flex-direction: column; gap: 6px; }
+.savedCourseItem {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px;
+}
+.savedCourseName { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.savedCourseMeta { font-size: 11px; color: var(--muted); }
+.smallDelBtn {
+  background: transparent; border: 1px solid var(--border); border-radius: 6px;
+  width: 28px; height: 28px; font-size: 14px; color: var(--muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.smallDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+
+/* ── 라운드 목록 표 ── */
+.recordsTable { width: 100%; border-collapse: collapse; font-size: 12px; }
+.recordsTable th {
+  padding: 8px 8px; text-align: left; color: var(--muted);
+  font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border);
+}
+.recordsTable td { padding: 10px 8px; border-bottom: 1px solid var(--border); }
+
+/* ── 빈 상태 ── */
+.empty {
+  padding: 20px; text-align: center; font-size: 13px; color: var(--muted);
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  line-height: 1.7;
+}
+.empty strong { display: block; color: var(--text); margin-bottom: 6px; font-size: 14px; }
+
+.helperText { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+
+
+
 /* ── 탭 ── */
 .tabs {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;

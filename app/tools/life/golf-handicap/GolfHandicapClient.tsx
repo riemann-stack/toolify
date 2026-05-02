@@ -1,7 +1,14 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import s from './golf-handicap.module.css'
+import {
+  loadRounds, saveRounds, loadCourses, saveCourses, newId, todayStr,
+  calcHandicapIndex, getProgressPoints, analyzeProgress, downloadCsv,
+  TEE_LABEL, WEATHER_LABEL,
+  type RoundRecord, type SavedCourse, type TeeColor, type Weather,
+} from './golfHandicapUtils'
 
 // ── 라운드 수별 사용 디퍼런셜 개수 ──
 function getUsedCount(n: number): number {
@@ -589,22 +596,25 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
 
 // ── 메인 ──
 export default function GolfHandicapClient() {
-  const [tab, setTab] = useState<'index' | 'course' | 'score'>('index')
+  const [tab, setTab] = useState<'index' | 'course' | 'score' | 'records'>('index')
   const [rounds, setRounds] = useState<Round[]>([])
   const [indexValue, setIndexValue] = useState('12.5')
   const [courseHandicap, setCourseHandicap] = useState('14')
 
   return (
     <div className={s.wrap}>
-      <div className={s.tabs}>
+      <div className={s.tabs4}>
         <button className={`${s.tab} ${tab === 'index' ? s.tabActive : ''}`} onClick={() => setTab('index')}>
-          핸디캡 지수
+          📊 핸디캡 지수
         </button>
         <button className={`${s.tab} ${tab === 'course' ? s.tabActive : ''}`} onClick={() => setTab('course')}>
-          코스 핸디캡
+          ⛳ 코스 핸디캡
         </button>
         <button className={`${s.tab} ${tab === 'score' ? s.tabActive : ''}`} onClick={() => setTab('score')}>
-          네트·스태블포드
+          🎯 네트·스태블포드
+        </button>
+        <button className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>
+          📅 내 기록
         </button>
       </div>
 
@@ -627,6 +637,445 @@ export default function GolfHandicapClient() {
           setCourseHandicap={setCourseHandicap}
         />
       )}
+      {tab === 'records' && <RecordsTab />}
     </div>
+  )
+}
+
+/* ──────────────────────── 내 기록 탭 (NEW) ──────────────────────── */
+function RecordsTab() {
+  const [records, setRecords] = useState<RoundRecord[]>([])
+  const [courses, setCourses] = useState<SavedCourse[]>([])
+  const [hydrated, setHydrated] = useState(false)
+
+  // 라운드 입력 폼
+  const [date, setDate] = useState(todayStr())
+  const [courseSelect, setCourseSelect] = useState<string>('')
+  const [courseInput, setCourseInput] = useState('')
+  const [tee, setTee] = useState<TeeColor>('white')
+  const [cr, setCr] = useState('72.0')
+  const [slope, setSlope] = useState('124')
+  const [par, setPar] = useState('72')
+  const [grossScore, setGrossScore] = useState('')
+  const [is9Holes, setIs9Holes] = useState(false)
+  const [weather, setWeather] = useState<Weather>('')
+  const [notes, setNotes] = useState('')
+
+  // 골프장 저장 폼
+  const [newCourseName, setNewCourseName] = useState('')
+
+  useEffect(() => {
+    setRecords(loadRounds())
+    setCourses(loadCourses())
+    setHydrated(true)
+  }, [])
+
+  const stats = useMemo(() => analyzeProgress(records), [records])
+  const points = useMemo(() => getProgressPoints(records), [records])
+
+  const handleAddRound = () => {
+    const grossN = parseFloat(grossScore); const crN = parseFloat(cr)
+    const slopeN = parseFloat(slope); const parN = parseFloat(par)
+    if (!grossN || !crN || !slopeN || !parN) return
+    const r: RoundRecord = {
+      id: newId(),
+      date,
+      ts: new Date(date + 'T12:00:00').getTime(),
+      course: courseInput.trim() || (courseSelect ? courses.find(c => c.id === courseSelect)?.name : undefined),
+      tee, cr: crN, slope: slopeN, par: parN,
+      grossScore: grossN,
+      is9Holes,
+      weather: weather || undefined,
+      notes: notes.trim() || undefined,
+    }
+    const updated = [r, ...records]
+    setRecords(updated); saveRounds(updated)
+    // 폼 리셋 (날짜·코스 정보는 유지)
+    setGrossScore(''); setNotes(''); setWeather('')
+  }
+
+  const handleDeleteRound = (id: string) => {
+    const updated = records.filter(r => r.id !== id)
+    setRecords(updated); saveRounds(updated)
+  }
+
+  const handleClearAll = () => {
+    if (!confirm('모든 라운드 기록을 삭제하시겠습니까? 복구 불가.')) return
+    setRecords([]); saveRounds([])
+  }
+
+  const handleApplyCourse = (c: SavedCourse) => {
+    const teeData = c.tees.find(t => t.name === tee) || c.tees[0]
+    if (teeData) {
+      setCr(String(teeData.cr))
+      setSlope(String(teeData.slope))
+      setPar(String(teeData.par))
+      setTee(teeData.name)
+    }
+    setCourseSelect(c.id)
+    setCourseInput(c.name)
+    // 마지막 사용일 갱신
+    const updated = courses.map(x => x.id === c.id ? { ...x, lastUsed: todayStr() } : x)
+    setCourses(updated); saveCourses(updated)
+  }
+
+  const handleSaveCourse = () => {
+    if (!newCourseName.trim()) return
+    const newCourse: SavedCourse = {
+      id: newId(),
+      name: newCourseName.trim(),
+      tees: [{ name: tee, cr: parseFloat(cr), slope: parseFloat(slope), par: parseFloat(par) }],
+      lastUsed: todayStr(),
+    }
+    const updated = [newCourse, ...courses]
+    setCourses(updated); saveCourses(updated)
+    setNewCourseName('')
+  }
+
+  const handleDeleteCourse = (id: string) => {
+    const updated = courses.filter(c => c.id !== id)
+    setCourses(updated); saveCourses(updated)
+  }
+
+  const currentIndex = useMemo(() => calcHandicapIndex(records), [records])
+
+  if (!hydrated) return null
+
+  return (
+    <div className={s.section}>
+      {/* 핸디캡 추이 차트 */}
+      {points.length >= 2 && (
+        <div className={s.card}>
+          <span className={s.cardLabel}>📈 발전 추이 ({records.length}라운드)</span>
+          <ProgressChart points={points} />
+          {stats.startIndex !== null && stats.currentIndex !== null && (
+            <div className={s.chartStats}>
+              <div>
+                <span className={s.statLabel}>시작 핸디캡</span>
+                <span className={s.statValue}>{stats.startIndex.toFixed(1)}</span>
+              </div>
+              <div>
+                <span className={s.statLabel}>현재 핸디캡</span>
+                <span className={s.statValue} style={{ color: 'var(--accent)' }}>
+                  {stats.currentIndex.toFixed(1)}
+                </span>
+              </div>
+              <div>
+                <span className={s.statLabel}>변화</span>
+                <span className={s.statValue} style={{
+                  color: (stats.change ?? 0) <= 0 ? '#3EFF9B' : '#FF8C3E',
+                }}>
+                  {stats.change !== null ? `${stats.change > 0 ? '+' : ''}${stats.change.toFixed(1)}` : '—'}
+                </span>
+              </div>
+              <div>
+                <span className={s.statLabel}>월 평균</span>
+                <span className={s.statValue}>{stats.monthlyAvg}회</span>
+              </div>
+            </div>
+          )}
+          {stats.bestDifferential !== null && (
+            <p className={s.bestRound}>
+              🏆 최고 라운드: {stats.bestRoundDate} (디퍼런셜 {stats.bestDifferential.toFixed(1)})
+            </p>
+          )}
+          <p className={s.encourageHint}>
+            💪 꾸준한 발전이 가장 중요. 핸디캡은 결과, 즐거움이 본질. 부상 시 즉시 휴식·코치 상담.
+          </p>
+        </div>
+      )}
+
+      {/* 현재 핸디캡 (없으면 안내) */}
+      {currentIndex !== null && (
+        <div className={s.hero}>
+          <div className={s.heroLeft}>
+            <div className={s.heroLabel}>현재 핸디캡 지수 (저장된 {records.length}라운드 기준)</div>
+            <div className={s.heroNum}>{currentIndex.toFixed(1)}</div>
+          </div>
+        </div>
+      )}
+
+      {/* 새 라운드 추가 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>➕ 새 라운드 추가</span>
+
+        {courses.length > 0 && (
+          <div style={{ marginBottom: 12 }}>
+            <label className={s.fieldLabel}>저장된 골프장 빠른 선택</label>
+            <select
+              className={s.bigInput}
+              value={courseSelect}
+              onChange={e => {
+                const c = courses.find(x => x.id === e.target.value)
+                if (c) handleApplyCourse(c)
+                else setCourseSelect('')
+              }}>
+              <option value="">— 직접 입력 —</option>
+              {courses.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.name} (CR {c.tees[0]?.cr} / Slope {c.tees[0]?.slope})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className={s.grid2}>
+          <div>
+            <label className={s.fieldLabel}>날짜</label>
+            <input type="date" className={s.bigInput}
+              value={date} onChange={e => setDate(e.target.value)} />
+          </div>
+          <div>
+            <label className={s.fieldLabel}>골프장 (선택)</label>
+            <input type="text" className={s.bigInput}
+              value={courseInput}
+              onChange={e => setCourseInput(e.target.value)}
+              placeholder="스카이힐 청주" maxLength={40} />
+          </div>
+        </div>
+
+        <div className={s.grid2} style={{ marginTop: 10 }}>
+          <div>
+            <label className={s.fieldLabel}>티</label>
+            <select className={s.bigInput} value={tee}
+              onChange={e => setTee(e.target.value as TeeColor)}>
+              {(Object.keys(TEE_LABEL) as TeeColor[]).map(t => (
+                <option key={t} value={t}>{TEE_LABEL[t]}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={s.fieldLabel}>홀</label>
+            <div className={s.holeToggle}>
+              <button className={`${s.holeBtn} ${!is9Holes ? s.holeBtnActive : ''}`}
+                onClick={() => setIs9Holes(false)}>18홀</button>
+              <button className={`${s.holeBtn} ${is9Holes ? s.holeBtnActive : ''}`}
+                onClick={() => setIs9Holes(true)}>9홀</button>
+            </div>
+          </div>
+        </div>
+
+        <div className={s.grid2} style={{ marginTop: 10 }}>
+          <div>
+            <label className={s.fieldLabel}>코스 레이팅 (CR)</label>
+            <input type="text" inputMode="decimal" className={s.bigInput}
+              value={cr} onChange={e => setCr(e.target.value.replace(/[^0-9.]/g, ''))} />
+          </div>
+          <div>
+            <label className={s.fieldLabel}>슬로프</label>
+            <input type="text" inputMode="numeric" className={s.bigInput}
+              value={slope} onChange={e => setSlope(e.target.value.replace(/[^0-9]/g, ''))} />
+          </div>
+        </div>
+
+        <div className={s.grid2} style={{ marginTop: 10 }}>
+          <div>
+            <label className={s.fieldLabel}>파</label>
+            <input type="text" inputMode="numeric" className={s.bigInput}
+              value={par} onChange={e => setPar(e.target.value.replace(/[^0-9]/g, ''))} />
+          </div>
+          <div>
+            <label className={s.fieldLabel}>그로스 스코어 *</label>
+            <input type="text" inputMode="numeric" className={s.bigInput}
+              value={grossScore}
+              onChange={e => setGrossScore(e.target.value.replace(/[^0-9]/g, ''))}
+              placeholder="92" />
+          </div>
+        </div>
+
+        <div className={s.grid2} style={{ marginTop: 10 }}>
+          <div>
+            <label className={s.fieldLabel}>날씨 (선택)</label>
+            <select className={s.bigInput} value={weather}
+              onChange={e => setWeather(e.target.value as Weather)}>
+              {(Object.keys(WEATHER_LABEL) as Weather[]).map(w => (
+                <option key={w} value={w}>{WEATHER_LABEL[w]}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={s.fieldLabel}>메모 (선택)</label>
+            <input type="text" className={s.bigInput}
+              value={notes} onChange={e => setNotes(e.target.value)}
+              placeholder="컨디션·동반자 등" maxLength={60} />
+          </div>
+        </div>
+
+        <button type="button" className={s.bigSaveBtn} onClick={handleAddRound}>
+          📅 라운드 저장
+        </button>
+      </div>
+
+      {/* 골프장 저장 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>💾 자주 가는 골프장 저장</span>
+        <p className={s.helperText} style={{ marginBottom: 10 }}>
+          위 입력한 CR·슬로프·파·티 값을 골프장 이름과 함께 저장. 다음 라운드 입력 시 한 번의 선택으로 자동 입력됩니다.
+        </p>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input type="text" className={s.bigInput}
+            placeholder="골프장 이름 (예: 스카이힐 청주)"
+            value={newCourseName}
+            onChange={e => setNewCourseName(e.target.value)}
+            maxLength={40} style={{ flex: 1 }} />
+          <button type="button" className={s.smallSaveBtn}
+            onClick={handleSaveCourse} disabled={!newCourseName.trim()}>
+            💾 저장
+          </button>
+        </div>
+
+        {courses.length > 0 && (
+          <div style={{ marginTop: 14 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>저장된 골프장 ({courses.length})</p>
+            <div className={s.savedCourseList}>
+              {courses.map(c => (
+                <div key={c.id} className={s.savedCourseItem}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className={s.savedCourseName}>{c.name}</div>
+                    <div className={s.savedCourseMeta}>
+                      {TEE_LABEL[c.tees[0]?.name ?? 'white']} · CR {c.tees[0]?.cr} / Slope {c.tees[0]?.slope} / Par {c.tees[0]?.par}
+                    </div>
+                  </div>
+                  <button type="button" className={s.smallDelBtn}
+                    onClick={() => handleDeleteCourse(c.id)} aria-label="삭제">×</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 저장된 라운드 목록 */}
+      {records.length > 0 ? (
+        <div className={s.card}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <span className={s.cardLabel} style={{ marginBottom: 0 }}>📅 저장된 라운드 ({records.length})</span>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button type="button" onClick={() => downloadCsv(records)}
+                className={s.smallActionBtn}>
+                📊 CSV
+              </button>
+              <button type="button" onClick={handleClearAll}
+                className={s.smallActionBtn} style={{ color: '#FF6B6B' }}>
+                전체 삭제
+              </button>
+            </div>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className={s.recordsTable}>
+              <thead>
+                <tr>
+                  <th>날짜</th>
+                  <th>골프장</th>
+                  <th style={{ textAlign: 'right' }}>그로스</th>
+                  <th style={{ textAlign: 'right' }}>디퍼</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {records.slice(0, 30).map(r => {
+                  const diff = (r.is9Holes ? r.grossScore * 2 : r.grossScore) - (r.is9Holes ? r.cr * 2 : r.cr)
+                  const d = diff * 113 / r.slope
+                  return (
+                    <tr key={r.id}>
+                      <td style={{ fontSize: 12, fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>
+                        {r.date}
+                        {r.is9Holes && <span style={{ marginLeft: 4, color: '#FF8C3E', fontSize: 10 }}>9H</span>}
+                      </td>
+                      <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
+                        {d.toFixed(1)}
+                      </td>
+                      <td>
+                        <button type="button"
+                          onClick={() => handleDeleteRound(r.id)}
+                          style={{ background: 'transparent', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: 14 }}>×</button>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className={s.empty}>
+          <strong>아직 저장된 라운드가 없습니다</strong>
+          위에서 첫 라운드를 추가해 보세요. WHS 핸디캡은 20라운드 누적 시 안정화됩니다.
+        </div>
+      )}
+
+      <div className={s.disclaimer}>
+        🔒 모든 데이터는 본인 브라우저(localStorage)에만 저장. 서버 전송 X · 다른 기기 동기화 X. 정기 CSV 백업 권장.
+        <br />
+        ⚠️ 본 도구는 <strong>비공식 산출</strong> (WHS 표준 적용). 공식 인증은 대한골프협회(KGA) 또는 소속 클럽 문의.
+      </div>
+    </div>
+  )
+}
+
+/* ──────────────────────── 발전 추이 SVG 차트 ──────────────────────── */
+function ProgressChart({ points }: { points: ReturnType<typeof getProgressPoints> }) {
+  const W = 600
+  const H = 200
+  const padX = 30, padY = 20
+  const plotW = W - padX * 2
+  const plotH = H - padY * 2
+
+  // 핸디캡 라인 (handicapAtTime 사용)
+  const validPoints = points.filter(p => p.handicapAtTime !== null) as Array<typeof points[number] & { handicapAtTime: number }>
+  if (validPoints.length < 2) {
+    // 디퍼런셜만 표시
+    const diffs = points.map(p => p.differential)
+    const maxV = Math.max(...diffs, 30) * 1.05
+    const minV = Math.max(0, Math.min(...diffs) * 0.95)
+    const toX = (i: number) => padX + (i / Math.max(1, points.length - 1)) * plotW
+    const toY = (v: number) => padY + plotH - ((v - minV) / (maxV - minV)) * plotH
+    const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(1)},${toY(p.differential).toFixed(1)}`).join(' ')
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} className={s.chart} preserveAspectRatio="xMidYMid meet">
+        <path d={path} fill="none" stroke="var(--accent)" strokeWidth="2" />
+        {points.map((p, i) => (
+          <circle key={i} cx={toX(i)} cy={toY(p.differential)} r="3" fill="var(--accent)" />
+        ))}
+      </svg>
+    )
+  }
+
+  const handicaps = validPoints.map(p => p.handicapAtTime)
+  const maxV = Math.max(...handicaps) * 1.1 + 1
+  const minV = Math.max(0, Math.min(...handicaps) - 1)
+  const toX = (i: number) => padX + (i / Math.max(1, validPoints.length - 1)) * plotW
+  const toY = (v: number) => padY + plotH - ((v - minV) / (maxV - minV)) * plotH
+
+  const path = validPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(1)},${toY(p.handicapAtTime).toFixed(1)}`).join(' ')
+
+  // Y축 눈금
+  const yTicks = [Math.round(minV), Math.round((minV + maxV) / 2), Math.round(maxV)]
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className={s.chart} preserveAspectRatio="xMidYMid meet">
+      {yTicks.map(y => (
+        <g key={y}>
+          <line x1={padX} x2={W - padX} y1={toY(y)} y2={toY(y)}
+            stroke="rgba(255,255,255,0.06)" strokeDasharray="2,2" />
+          <text x={padX - 4} y={toY(y) + 4} textAnchor="end" fontSize="10" fill="var(--muted)">{y}</text>
+        </g>
+      ))}
+      <path d={path} fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinejoin="round" />
+      {validPoints.map((p, i) => (
+        <circle key={i} cx={toX(i)} cy={toY(p.handicapAtTime)} r="3" fill="var(--accent)" />
+      ))}
+      {/* 마지막 포인트 강조 */}
+      {validPoints.length > 0 && (
+        <circle
+          cx={toX(validPoints.length - 1)}
+          cy={toY(validPoints[validPoints.length - 1].handicapAtTime)}
+          r="6" fill="var(--accent)" stroke="var(--bg2)" strokeWidth="2"
+        />
+      )}
+    </svg>
   )
 }

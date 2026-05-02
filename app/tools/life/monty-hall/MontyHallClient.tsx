@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import styles from './monty-hall.module.css'
 
 // ── 타입 ─────────────────────────────────
@@ -21,6 +21,94 @@ function simulatePair(): { switchWin: boolean; stayWin: boolean } {
   const opened = pickHostDoor(car, pick)
   const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
   return { switchWin: switched === car, stayWin: pick === car }
+}
+
+// ── N문 표준 몬티홀 시뮬 (진행자 N-2개 염소 공개) ──
+function simulateNDoors(N: number): { switchWin: boolean; stayWin: boolean } {
+  const car = Math.floor(Math.random() * N)
+  const pick = Math.floor(Math.random() * N)
+  // 진행자가 N-2개 염소 공개. 마지막 1개 = switch 대상
+  // pick === car이면 switchedDoor는 무작위 다른 문 (염소)
+  // pick !== car이면 switchedDoor === car
+  let switched: number
+  if (pick === car) {
+    // 자동차 골랐음 — switch 대상은 무작위 염소 (뭐가 됐든 패배)
+    const others = []
+    for (let d = 0; d < N; d++) if (d !== pick) others.push(d)
+    switched = others[Math.floor(Math.random() * others.length)]
+  } else {
+    switched = car
+  }
+  return { switchWin: switched === car, stayWin: pick === car }
+}
+
+// ── 4가지 변형 규칙 (3문) ──
+type VariantId = 'standard' | 'random-host' | 'monty-fall' | 'evil-monty'
+
+type VariantInfo = {
+  id: VariantId
+  emoji: string
+  name: string
+  desc: string
+  switchTheory: number  // 0~1
+  stayTheory: number
+}
+
+const VARIANTS: VariantInfo[] = [
+  { id: 'standard', emoji: '🟢', name: '표준 몬티홀',
+    desc: '진행자가 자동차 위치를 알고 의도적으로 염소 문을 공개. 본 문제.',
+    switchTheory: 2/3, stayTheory: 1/3 },
+  { id: 'random-host', emoji: '🟡', name: '무작위 진행자',
+    desc: '진행자가 아무 문이나 염. 자동차 노출 시 게임 무효 (그 경우 제외).',
+    switchTheory: 1/2, stayTheory: 1/2 },
+  { id: 'monty-fall', emoji: '🟠', name: '몬티 폴 (랜덤 공개)',
+    desc: '진행자가 무작위로 1개를 열었는데 우연히 염소였던 경우만 카운트. 정보 X → 50:50.',
+    switchTheory: 1/2, stayTheory: 1/2 },
+  { id: 'evil-monty', emoji: '🔴', name: '악마 몬티',
+    desc: '진행자가 참가자가 자동차를 골랐을 때만 염소 공개. 함정 → 바꾸면 100% 패배.',
+    switchTheory: 0, stayTheory: 1 },
+]
+
+// 변형 규칙 시뮬 (3문 고정)
+function simulateVariant(variant: VariantId): { switchWin: boolean; stayWin: boolean; valid: boolean } {
+  const car = Math.floor(Math.random() * 3)
+  const pick = Math.floor(Math.random() * 3)
+
+  if (variant === 'standard') {
+    const opened = pickHostDoor(car, pick)
+    const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
+    return { switchWin: switched === car, stayWin: pick === car, valid: true }
+  }
+
+  if (variant === 'random-host') {
+    // 진행자가 참가자가 안 고른 2개 중 1개 무작위 (자동차 일 수도)
+    const available = [0, 1, 2].filter(d => d !== pick)
+    const opened = available[Math.floor(Math.random() * available.length)]
+    if (opened === car) return { switchWin: false, stayWin: false, valid: false }
+    const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
+    return { switchWin: switched === car, stayWin: pick === car, valid: true }
+  }
+
+  if (variant === 'monty-fall') {
+    // 진행자가 무작위로 1개를 열었는데 우연히 염소였던 경우만 (= random-host와 같은 베이지안)
+    const available = [0, 1, 2].filter(d => d !== pick)
+    const opened = available[Math.floor(Math.random() * available.length)]
+    if (opened === car) return { switchWin: false, stayWin: false, valid: false }
+    const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
+    return { switchWin: switched === car, stayWin: pick === car, valid: true }
+  }
+
+  // evil-monty
+  if (variant === 'evil-monty') {
+    // 참가자가 자동차 안 골랐으면 진행자가 게임 종료 (선택권 없음)
+    if (pick !== car) return { switchWin: false, stayWin: false, valid: false }
+    // 자동차 골랐을 때만 염소 공개 (함정)
+    const opened = pickHostDoor(car, pick)
+    const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
+    return { switchWin: switched === car, stayWin: pick === car, valid: true }
+  }
+
+  return { switchWin: false, stayWin: false, valid: false }
 }
 
 // 로그 스페이스 체크포인트
@@ -251,16 +339,32 @@ function StatsRow({ label, win, lose, rate, color, theory }: {
 // ═══════════════════════════════════════
 function SimTab() {
   const [n, setN] = useState(1000)
+  const [doorCount, setDoorCount] = useState(3)
+  const [variant, setVariant] = useState<VariantId>('standard')
   const [strategy, setStrategy] = useState<Strategy>('switch')
   const [speed, setSpeed] = useState<Speed>('fast')
   const [running, setRunning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState<{
-    switchWin: number; stayWin: number; n: number
+    switchWin: number; stayWin: number; n: number; doors: number; variant: VariantId
+    validTrials: number
     curveSwitch: { x: number; y: number }[]; curveStay: { x: number; y: number }[]
+    switchTheory: number; stayTheory: number
   } | null>(null)
   const cancelRef = useRef(false)
   const [copied, setCopied] = useState(false)
+
+  // 변형 규칙 선택 시 N=3으로 잠금
+  const isVariantMode = variant !== 'standard'
+  const effectiveDoors = isVariantMode ? 3 : doorCount
+
+  // 이론값 계산
+  const switchTheory = isVariantMode
+    ? VARIANTS.find(v => v.id === variant)!.switchTheory * 100
+    : ((effectiveDoors - 1) / effectiveDoors) * 100
+  const stayTheory = isVariantMode
+    ? VARIANTS.find(v => v.id === variant)!.stayTheory * 100
+    : (1 / effectiveDoors) * 100
 
   async function runSim() {
     setRunning(true)
@@ -274,6 +378,7 @@ function SimTab() {
 
     let switchWin = 0
     let stayWin = 0
+    let validTrials = 0
 
     const delay = speed === 'slow' ? 30 : speed === 'normal' ? 5 : 0
     const batchSize = speed === 'slow' ? 1 : speed === 'normal' ? 20 : 500
@@ -282,19 +387,43 @@ function SimTab() {
       if (cancelRef.current) break
       const end = Math.min(n, i + batchSize)
       for (let j = i; j < end; j++) {
-        const r = simulatePair()
-        if (r.switchWin) switchWin++
-        if (r.stayWin) stayWin++
-        if (checkpoints.has(j + 1)) {
-          curveSwitch.push({ x: j + 1, y: (switchWin / (j + 1)) * 100 })
-          curveStay.push({ x: j + 1, y: (stayWin / (j + 1)) * 100 })
+        let valid = true
+        let switchHit = false
+        let stayHit = false
+        if (isVariantMode) {
+          const r = simulateVariant(variant)
+          valid = r.valid
+          switchHit = r.switchWin
+          stayHit = r.stayWin
+        } else if (effectiveDoors === 3) {
+          const r = simulatePair()
+          switchHit = r.switchWin
+          stayHit = r.stayWin
+        } else {
+          const r = simulateNDoors(effectiveDoors)
+          switchHit = r.switchWin
+          stayHit = r.stayWin
+        }
+        if (valid) {
+          validTrials++
+          if (switchHit) switchWin++
+          if (stayHit) stayWin++
+        }
+        if (checkpoints.has(j + 1) && validTrials > 0) {
+          curveSwitch.push({ x: j + 1, y: (switchWin / validTrials) * 100 })
+          curveStay.push({ x: j + 1, y: (stayWin / validTrials) * 100 })
         }
       }
       setProgress(end)
       if (delay > 0) await new Promise(r => setTimeout(r, delay))
     }
 
-    setResult({ switchWin, stayWin, n, curveSwitch, curveStay })
+    setResult({
+      switchWin, stayWin, n, validTrials,
+      doors: effectiveDoors, variant,
+      curveSwitch, curveStay,
+      switchTheory, stayTheory,
+    })
     setRunning(false)
   }
 
@@ -302,12 +431,14 @@ function SimTab() {
     cancelRef.current = true
   }
 
-  const switchRate = result ? (result.switchWin / result.n) * 100 : 0
-  const stayRate = result ? (result.stayWin / result.n) * 100 : 0
+  const validN = result?.validTrials || 0
+  const switchRate = validN > 0 ? (result!.switchWin / validN) * 100 : 0
+  const stayRate = validN > 0 ? (result!.stayWin / validN) * 100 : 0
 
   async function share() {
     if (!result) return
-    const text = `몬티홀 시뮬레이터 ${result.n}회 결과:\n바꾸기 전략 승률 ${switchRate.toFixed(1)}% (이론 66.7%)\n유지 전략 승률 ${stayRate.toFixed(1)}% (이론 33.3%)\n직접 확인 → youtil.kr/tools/life/monty-hall`
+    const variantName = VARIANTS.find(v => v.id === result.variant)?.name ?? '표준'
+    const text = `몬티홀 시뮬레이터 ${result.n.toLocaleString()}회 결과 (문 ${result.doors}개 · ${variantName}):\n바꾸기 ${switchRate.toFixed(1)}% (이론 ${result.switchTheory.toFixed(1)}%)\n유지 ${stayRate.toFixed(1)}% (이론 ${result.stayTheory.toFixed(1)}%)\n직접 확인 → youtil.kr/tools/life/monty-hall`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -317,6 +448,43 @@ function SimTab() {
 
   return (
     <div className={styles.panel}>
+      {/* 변형 규칙 (4가지) */}
+      <div className={styles.field}>
+        <p className={styles.fieldLabel}>변형 규칙 <span className={styles.fieldSub}>(진행자의 의도에 따라 결과 달라짐)</span></p>
+        <div className={styles.variantGrid}>
+          {VARIANTS.map(v => (
+            <button key={v.id}
+              className={`${styles.variantCard} ${variant === v.id ? styles.variantCardActive : ''}`}
+              onClick={() => setVariant(v.id)} disabled={running}>
+              <div className={styles.variantHead}>
+                <span>{v.emoji} {v.name}</span>
+                <span className={styles.variantTheory}>
+                  바꾸기 {(v.switchTheory * 100).toFixed(0)}%
+                </span>
+              </div>
+              <p className={styles.variantDesc}>{v.desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 문 갯수 (표준 모드에서만 N 변경 가능) */}
+      <div className={styles.field}>
+        <p className={styles.fieldLabel}>
+          문 갯수 (N) <span className={styles.fieldSub}>{isVariantMode ? '— 변형 규칙은 N=3 고정' : `— 이론 바꾸기 ${switchTheory.toFixed(1)}%`}</span>
+        </p>
+        <div className={styles.nRow}>
+          {[3, 5, 10, 100, 1000].map(v => (
+            <button key={v}
+              className={`${styles.nBtn} ${doorCount === v ? styles.nBtnActive : ''}`}
+              onClick={() => setDoorCount(v)}
+              disabled={running || isVariantMode}>
+              {v}개
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* 시뮬레이션 횟수 */}
       <div className={styles.field}>
         <p className={styles.fieldLabel}>시뮬레이션 횟수</p>
@@ -379,34 +547,44 @@ function SimTab() {
             <ResultCard
               label="🔄 바꾸기 전략"
               wins={result.switchWin}
-              losses={result.n - result.switchWin}
+              losses={validN - result.switchWin}
               rate={switchRate}
-              theory={66.67}
+              theory={result.switchTheory}
               color="var(--accent)"
             />
             <ResultCard
               label="🎯 유지 전략"
               wins={result.stayWin}
-              losses={result.n - result.stayWin}
+              losses={validN - result.stayWin}
               rate={stayRate}
-              theory={33.33}
+              theory={result.stayTheory}
               color="#3EC8FF"
             />
           </div>
 
+          {result.validTrials < result.n && (
+            <p className={styles.interpret} style={{ background: 'rgba(255,140,62,0.08)', borderColor: 'rgba(255,140,62,0.3)' }}>
+              ⚠️ 변형 규칙으로 인해 {result.n - result.validTrials}회는 무효 처리됨 (예: 진행자가 자동차를 우연히 공개). 유효 시행 {validN.toLocaleString()}회 기준 결과.
+            </p>
+          )}
+
           {/* 수렴 그래프 */}
           <div className={styles.graphWrap}>
-            <p className={styles.graphTitle}>시행 횟수에 따른 승률 수렴</p>
+            <p className={styles.graphTitle}>
+              시행 횟수에 따른 승률 수렴 (문 {result.doors}개)
+            </p>
             <ConvergenceGraph
               curveSwitch={result.curveSwitch}
               curveStay={result.curveStay}
               n={result.n}
+              switchTheory={result.switchTheory}
+              stayTheory={result.stayTheory}
             />
             <div className={styles.graphLegend}>
               <span><span className={styles.legDot} style={{ background: 'var(--accent)' }} /> 바꾸기 실제</span>
               <span><span className={styles.legDot} style={{ background: '#3EC8FF' }} /> 유지 실제</span>
-              <span><span className={styles.legDash} style={{ background: 'rgba(255,107,107,0.8)' }} /> 이론 66.7%</span>
-              <span><span className={styles.legDash} style={{ background: 'rgba(62,200,255,0.8)' }} /> 이론 33.3%</span>
+              <span><span className={styles.legDash} style={{ background: 'rgba(255,107,107,0.8)' }} /> 이론 {result.switchTheory.toFixed(1)}%</span>
+              <span><span className={styles.legDash} style={{ background: 'rgba(62,200,255,0.8)' }} /> 이론 {result.stayTheory.toFixed(1)}%</span>
             </div>
           </div>
 
@@ -414,20 +592,20 @@ function SimTab() {
           <div className={styles.compareTable}>
             <table>
               <thead>
-                <tr><th></th><th>이론값</th><th>실제({result.n.toLocaleString()}회)</th><th>오차</th></tr>
+                <tr><th></th><th>이론값</th><th>실제({validN.toLocaleString()}회)</th><th>오차</th></tr>
               </thead>
               <tbody>
                 <tr>
                   <td className={styles.compLabel}>바꾸기</td>
-                  <td>66.67%</td>
+                  <td>{result.switchTheory.toFixed(2)}%</td>
                   <td className={styles.compAccent}>{switchRate.toFixed(2)}%</td>
-                  <td>{(switchRate - 66.67 >= 0 ? '+' : '')}{(switchRate - 66.67).toFixed(2)}%</td>
+                  <td>{(switchRate - result.switchTheory >= 0 ? '+' : '')}{(switchRate - result.switchTheory).toFixed(2)}%</td>
                 </tr>
                 <tr>
                   <td className={styles.compLabel}>유지하기</td>
-                  <td>33.33%</td>
+                  <td>{result.stayTheory.toFixed(2)}%</td>
                   <td className={styles.compBlue}>{stayRate.toFixed(2)}%</td>
-                  <td>{(stayRate - 33.33 >= 0 ? '+' : '')}{(stayRate - 33.33).toFixed(2)}%</td>
+                  <td>{(stayRate - result.stayTheory >= 0 ? '+' : '')}{(stayRate - result.stayTheory).toFixed(2)}%</td>
                 </tr>
               </tbody>
             </table>
@@ -436,7 +614,7 @@ function SimTab() {
           {/* 해석 */}
           <div className={styles.interpret}>
             {result.n >= 1000
-              ? '✅ 대수의 법칙이 확인됐습니다! 시행 횟수가 많을수록 이론값(66.7% / 33.3%)에 가까워집니다.'
+              ? `✅ 대수의 법칙이 확인됐습니다! 시행 횟수가 많을수록 이론값(${result.switchTheory.toFixed(1)}% / ${result.stayTheory.toFixed(1)}%)에 가까워집니다.`
               : result.n >= 100
                 ? '📊 시행 횟수를 1,000회 이상으로 늘리면 이론값에 훨씬 가깝게 수렴합니다.'
                 : '⚠️ 시행 횟수가 적어 편차가 클 수 있습니다. 1,000회 이상 실행해 보세요.'}
@@ -467,11 +645,13 @@ function ResultCard({ label, wins, losses, rate, theory, color }: {
 
 // ── 수렴 그래프 ────────────────────
 function ConvergenceGraph({
-  curveSwitch, curveStay, n,
+  curveSwitch, curveStay, n, switchTheory = 66.7, stayTheory = 33.3,
 }: {
   curveSwitch: { x: number; y: number }[]
   curveStay: { x: number; y: number }[]
   n: number
+  switchTheory?: number
+  stayTheory?: number
 }) {
   const W = 600, H = 280
   const padL = 40, padR = 16, padT = 16, padB = 34
@@ -488,18 +668,21 @@ function ConvergenceGraph({
 
   const xTicks = [1, 10, 100, 1000, 10000].filter(t => t <= n)
   if (!xTicks.includes(n)) xTicks.push(n)
-  const yTicks = [0, 33.3, 50, 66.7, 100]
+  const yTicks = Array.from(new Set([0, Math.round(stayTheory), 50, Math.round(switchTheory), 100])).sort((a, b) => a - b)
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={styles.graph} preserveAspectRatio="xMidYMid meet">
       {/* Y 그리드 + 레이블 */}
-      {yTicks.map(y => (
-        <g key={`y${y}`}>
-          <line x1={padL} x2={W - padR} y1={toY(y)} y2={toY(y)}
-            stroke={y === 33.3 || y === 66.7 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)'} />
-          <text x={padL - 6} y={toY(y) + 4} textAnchor="end" className={styles.graphAxis}>{y.toFixed(y === 33.3 || y === 66.7 ? 1 : 0)}%</text>
-        </g>
-      ))}
+      {yTicks.map(y => {
+        const isTheory = Math.abs(y - switchTheory) < 1 || Math.abs(y - stayTheory) < 1
+        return (
+          <g key={`y${y}`}>
+            <line x1={padL} x2={W - padR} y1={toY(y)} y2={toY(y)}
+              stroke={isTheory ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)'} />
+            <text x={padL - 6} y={toY(y) + 4} textAnchor="end" className={styles.graphAxis}>{y}%</text>
+          </g>
+        )
+      })}
       {/* X 그리드 + 레이블 */}
       {xTicks.map(x => (
         <g key={`x${x}`}>
@@ -511,9 +694,9 @@ function ConvergenceGraph({
       ))}
 
       {/* 이론값 선 */}
-      <line x1={padL} x2={W - padR} y1={toY(66.7)} y2={toY(66.7)}
+      <line x1={padL} x2={W - padR} y1={toY(switchTheory)} y2={toY(switchTheory)}
         stroke="rgba(255,107,107,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
-      <line x1={padL} x2={W - padR} y1={toY(33.3)} y2={toY(33.3)}
+      <line x1={padL} x2={W - padR} y1={toY(stayTheory)} y2={toY(stayTheory)}
         stroke="rgba(62,200,255,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
 
       {/* 실제 곡선 */}
@@ -532,8 +715,8 @@ function ConvergenceGraph({
           r={4} fill="#3EC8FF" />
       )}
 
-      <text x={W - padR - 4} y={toY(66.7) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(255,107,107,0.8)' }}>2/3</text>
-      <text x={W - padR - 4} y={toY(33.3) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(62,200,255,0.8)' }}>1/3</text>
+      <text x={W - padR - 4} y={toY(switchTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(255,107,107,0.8)' }}>{switchTheory.toFixed(0)}%</text>
+      <text x={W - padR - 4} y={toY(stayTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(62,200,255,0.8)' }}>{stayTheory.toFixed(0)}%</text>
     </svg>
   )
 }

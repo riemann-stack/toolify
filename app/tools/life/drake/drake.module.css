@@ -219,6 +219,42 @@
 }
 .contribHint strong { color: #FF8C3E; font-weight: 700; }
 
+/* ── 배지 (스케일 카드 내) ── */
+.badge { font-size: 13px; color: var(--muted); margin: 10px 0 0; line-height: 1.6; }
+.badge strong { font-family: 'Noto Sans KR', sans-serif; color: var(--accent); font-weight: 700; }
+
+/* ── 거리·통신 카드 ── */
+.distCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px;
+}
+.distLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+.distGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.distItem { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.distItemLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; line-height: 1.4; }
+.distItemValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.distHint { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
+
+/* ── 페르미 가설 카드 ── */
+.fermiCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px;
+}
+.fermiList { display: flex; flex-direction: column; gap: 8px; }
+.fermiItem {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.fermiRank {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800;
+  color: var(--accent); background: var(--accent-dim);
+  border: 1px solid rgba(200,255,62,0.3); border-radius: 6px;
+  padding: 4px 8px; flex-shrink: 0; letter-spacing: 0.04em;
+}
+.fermiTitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.fermiDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
 /* ── 공유 ── */
 .shareRow { display: flex; justify-content: center; margin-top: 4px; }
 .shareBtn {
@@ -246,7 +282,10 @@
   .presetBtn { padding: 12px 4px; }
   .presetName { font-size: 12px; }
   .presetSub { font-size: 9px; }
-  .slidersCard, .hero, .scaleCard, .galaxyCard, .contribCard { padding: 16px 14px; }
+  .slidersCard, .hero, .scaleCard, .galaxyCard, .contribCard, .distCard, .fermiCard { padding: 16px 14px; }
+  .distGrid { grid-template-columns: 1fr; }
+  .distItemValue { font-size: 16px; }
+  .fermiItem { padding: 10px 12px; }
   .galaxySvg { width: 250px; height: 250px; }
   .contribRow { grid-template-columns: 40px 1fr 70px; gap: 8px; }
   .contribName { font-size: 12px; }

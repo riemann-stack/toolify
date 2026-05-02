@@ -53,6 +53,7 @@ const GROUPS: { id: string; label: string; emoji: string }[] = [
   { id: 'season',  label: '양념',     emoji: '🧄' },
   { id: 'herb',    label: '허브·향신료', emoji: '🌿' },
   { id: 'plant',   label: '식물성',   emoji: '🥥' },
+  { id: 'korean',  label: '한국 식재료', emoji: '🇰🇷' },
 ]
 
 // ──────────────────────────────────────
@@ -364,6 +365,139 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '두유',     ratio: 1.0, grade: 'perfect', useFor: ['모든 용도'], taste: '콩 풍미', texture: '약간 진함' },
       { name: '귀리밀크', ratio: 1.0, grade: 'perfect', useFor: ['모든 용도'], taste: '단맛', texture: '크리미함' },
       { name: '우유',     ratio: 1.0, grade: 'good',    useFor: ['비건 X'], taste: '동물성 풍미', texture: '진함' },
+    ],
+  },
+  // ─── 한국 식재료 (NEW, 14종) ───
+  sesameOil: {
+    original: '참기름', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '들기름',          ratio: 1.0, grade: 'perfect', useFor: ['나물·비빔·미역국'], taste: '비슷·들깨 향 ↑', texture: '동일', warning: '오메가3 ↑ 건강' },
+      { name: '땅콩기름',        ratio: 1.0, grade: 'good',    useFor: ['한·중식'], taste: '비슷한 고소함', texture: '동일', warning: '땅콩 알레르기 주의' },
+      { name: '올리브유 (엑스트라버진)', ratio: 1.0, grade: 'okay', useFor: ['서양 요리·드레싱'], taste: '풍미 다름', texture: '동일', warning: '한식 끝맛 약함' },
+      { name: '아보카도 오일',   ratio: 1.0, grade: 'okay',    useFor: ['튀김·고온 조리'], taste: '거의 무향', texture: '동일', warning: '한식 풍미 X' },
+    ],
+  },
+  perillaOil: {
+    original: '들기름', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '참기름',     ratio: 1.0, grade: 'good', useFor: ['나물·비빔'], taste: '비슷·고소함 ↑', texture: '동일' },
+      { name: '아마씨 오일', ratio: 1.0, grade: 'okay', useFor: ['저온 조리'], taste: '비슷한 향', texture: '동일', warning: '고온 X (산화 빠름)' },
+    ],
+  },
+  gochujang: {
+    original: '고추장', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '미소된장 + 고춧가루 + 설탕', ratio: 1.0, ratioNote: '미소 1큰술 + 고춧가루 1큰술 + 설탕 0.5작은술', combinedWith: '고춧가루+설탕', grade: 'good', useFor: ['비빔·찌개·볶음'], taste: '비슷한 단·매·짠맛', texture: '비슷', warning: '약간 짜짐' },
+      { name: '스리라차 + 미소', ratio: 1.0, ratioNote: '스리라차 1큰술 + 미소 0.5큰술', combinedWith: '미소', grade: 'okay', useFor: ['비비기'], taste: '동남아 풍', texture: '비슷' },
+      { name: '칠리 페이스트 + 설탕', ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '발효감 부족', texture: '비슷' },
+    ],
+  },
+  doenjangKr: {
+    original: '된장', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '일본 미소된장 (적·백)', ratio: 1.0, grade: 'good', useFor: ['국·찌개·쌈장'], taste: '비슷·발효 깊이 ↓', texture: '비슷', warning: '발효 짧아 깊이 X' },
+      { name: '낫토 (으깬 것)',        ratio: 0.5, grade: 'okay', useFor: ['찌개·소스'], taste: '비슷한 발효감', texture: '끈적', warning: '식감 다름' },
+      { name: '템페 (으깬 것)',        ratio: 1.0, grade: 'okay', useFor: ['찌개'], taste: '발효향', texture: '단단' },
+    ],
+  },
+  soySauceKr: {
+    original: '간장 (양조)', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '진간장',        ratio: 0.7, grade: 'good', useFor: ['조림·구이'], taste: '단맛 ↑', texture: '동일' },
+      { name: '국간장 (조선)', ratio: 0.5, grade: 'good', useFor: ['국·나물'], taste: '맑고 짠맛', texture: '맑음', warning: '진하지 않음' },
+      { name: '액젓',          ratio: 0.7, grade: 'okay', useFor: ['김치·찌개'], taste: '생선 향', texture: '맑음', warning: '비린향' },
+      { name: '코코넛 아미노',  ratio: 1.0, grade: 'okay', useFor: ['저나트륨 요리'], taste: '단맛 ↑·소금기 ↓', texture: '비슷', warning: '한식 깊이 X' },
+    ],
+  },
+  fishSauce: {
+    original: '멸치액젓', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '까나리액젓',   ratio: 1.0, grade: 'perfect', useFor: ['김치·국'], taste: '비슷', texture: '동일' },
+      { name: '베트남 느억맘', ratio: 1.0, grade: 'good', useFor: ['김치 응급'], taste: '비슷·동남아 풍', texture: '동일', warning: '한식 풍 약간 다름' },
+      { name: '간장 + 다시다',  ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '풍미 약함', texture: '동일' },
+    ],
+  },
+  dashida: {
+    original: '다시다', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '멸치 다시팩 (10~15분 우림)', ratio: 1.0, grade: 'good', useFor: ['국·전골·국수'], taste: '깊은 천연 감칠맛', texture: '동일', warning: '시간 ↑ (10~15분 우림)' },
+      { name: '진한 멸치 육수',           ratio: 1.0, grade: 'good', useFor: ['국·찌개'], taste: '비슷', texture: '동일' },
+      { name: '치킨스톡',                ratio: 1.0, grade: 'okay', useFor: ['국·전골'], taste: '서양식', texture: '비슷' },
+    ],
+  },
+  makgeolli: {
+    original: '막걸리 (요리용)', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '청주 + 물 + 설탕', ratio: 1.0, ratioNote: '청주 1/2 + 물 1/2 + 설탕 1작은술', combinedWith: '물+설탕', grade: 'okay', useFor: ['탕수육·잡채'], taste: '비슷', texture: '맑음' },
+      { name: '사케',          ratio: 0.7, grade: 'okay', useFor: ['요리용'], taste: '맑음·도수 ↑', texture: '맑음', warning: '도수 ↑로 적게' },
+    ],
+  },
+  cheongju: {
+    original: '청주 (요리용)', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '미림',           ratio: 0.7, grade: 'good', useFor: ['조림·구이'], taste: '단맛 ↑', texture: '동일', warning: '단맛 강해 적게' },
+      { name: '맛술',           ratio: 1.0, grade: 'good', useFor: ['모든 용도'], taste: '비슷', texture: '동일' },
+      { name: '드라이 화이트와인', ratio: 1.0, grade: 'okay', useFor: ['조림·졸임'], taste: '와인 향', texture: '동일' },
+      { name: '사과식초 + 물',   ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '신맛', texture: '동일', warning: '신맛' },
+    ],
+  },
+  gochugaru: {
+    original: '고춧가루', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '카이엔페퍼 + 파프리카', ratio: 1.0, ratioNote: '카이엔 1/2 + 파프리카 1/2', combinedWith: '파프리카', grade: 'good', useFor: ['김치·고추장 응급'], taste: '비슷한 매·색', texture: '동일' },
+      { name: '레드 페퍼 플레이크',   ratio: 0.7, grade: 'okay', useFor: ['파스타·이탈리안'], taste: '비슷·거친 입자', texture: '거침' },
+      { name: '칠리파우더 (멕시칸)',  ratio: 0.7, grade: 'okay', useFor: ['응급 대체'], taste: '쿠민·마늘 향 포함', texture: '동일', warning: '쿠민·마늘 향 포함' },
+    ],
+  },
+  cheongyang: {
+    original: '청양고추', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '할라피뇨',     ratio: 1.0, grade: 'good', useFor: ['찌개·요리'], taste: '비슷·약간 단맛', texture: '동일' },
+      { name: '세라노 고추',   ratio: 1.0, grade: 'good', useFor: ['찌개·요리'], taste: '약간 매움', texture: '동일' },
+      { name: '태국 버드아이 칠리', ratio: 0.5, grade: 'okay', useFor: ['응급 대체'], taste: '훨씬 맵음', texture: '작음', warning: '훨씬 매움 — 적게' },
+      { name: '풋고추 + 카이엔',   ratio: 1.0, ratioNote: '풋고추 1개 + 카이엔 약간', combinedWith: '카이엔 약간', grade: 'okay', useFor: ['단계 조절'], taste: '풋풋함', texture: '동일' },
+    ],
+  },
+  buchu: {
+    original: '부추', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '쪽파',         ratio: 1.0, grade: 'good', useFor: ['전·국·반찬'], taste: '비슷·약간 더 매움', texture: '동일' },
+      { name: '실파',         ratio: 1.0, grade: 'good', useFor: ['모든 용도'], taste: '비슷', texture: '동일' },
+      { name: '대파 (잎 부분)', ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '약간 다름', texture: '동일' },
+      { name: '차이브',        ratio: 1.0, grade: 'okay', useFor: ['장식·서양식'], taste: '향 약함', texture: '동일', warning: '향 약함' },
+    ],
+  },
+  tteok: {
+    original: '떡볶이 떡', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '가래떡 (썰어서)', ratio: 1.0, grade: 'good', useFor: ['떡볶이·궁중떡볶이'], taste: '동일', texture: '약간 단단', warning: '식감 약간 단단' },
+      { name: '떡국 떡',        ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '동일', texture: '얇음', warning: '얇아서 빨리 풀어짐' },
+      { name: '뇨키',          ratio: 1.0, grade: 'okay', useFor: ['서양식 변형'], taste: '서양식', texture: '부드러움', warning: '식감 부드러움' },
+    ],
+  },
+  kimchi: {
+    original: '김치', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '사우어크라우트 + 고춧가루 + 마늘', ratio: 1.0, ratioNote: '사우어크라우트 1컵 + 고춧가루 1큰술 + 다진 마늘', combinedWith: '고춧가루+마늘', grade: 'okay', useFor: ['찌개·볶음밥'], taste: '비슷한 발효·매운맛', texture: '비슷', warning: '한국 김치 향 X' },
+      { name: '독일식 자우어크라우트', ratio: 1.0, grade: 'okay', useFor: ['응급 대체'], taste: '신맛만', texture: '비슷', warning: '한국 김치 향 X' },
+    ],
+  },
+  moolyeot: {
+    original: '물엿', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '꿀',          ratio: 0.7, grade: 'good', useFor: ['조림·반찬'], taste: '단맛 ↑·향 추가', texture: '동일', warning: '160°C 이하 (탐)' },
+      { name: '옥수수시럽',   ratio: 1.0, grade: 'good', useFor: ['모든 용도'], taste: '비슷', texture: '동일' },
+      { name: '쌀엿',        ratio: 1.0, grade: 'good', useFor: ['전통 한과'], taste: '비슷·전통적', texture: '동일' },
+      { name: '메이플시럽',   ratio: 0.8, grade: 'okay', useFor: ['응급 대체'], taste: '메이플 향', texture: '동일' },
+      { name: '아가베시럽',   ratio: 0.7, grade: 'okay', useFor: ['저GI 옵션'], taste: '비슷·약간 약함', texture: '동일' },
+    ],
+  },
+  mincedGarlic: {
+    original: '다진 마늘', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
+    options: [
+      { name: '마늘가루',     ratio: 0.125, ratioNote: '다진 마늘 1작은술 = 마늘가루 1/8작은술', grade: 'good', useFor: ['드레싱·소스'], taste: '비슷', texture: '식감 없음' },
+      { name: '마늘즙',       ratio: 0.5, grade: 'good', useFor: ['양념·소스'], taste: '비슷·신선', texture: '액체' },
+      { name: '구운 마늘',     ratio: 1.0, grade: 'okay', useFor: ['특수 요리'], taste: '단맛 ↑', texture: '부드러움' },
     ],
   },
 }

@@ -189,13 +189,48 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
               <div className={styles.infoLabel}>비율 (B : A)</div>
             </div>
           </div>
-          <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy}>
+
+          {/* 미니 황금 직사각형 시각화 */}
+          <MiniGoldenRect A={result.A} B={result.B} unit={unit} />
+
+          <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy} style={{ marginTop: 10 }}>
             {copied ? '✓ 복사됨' : '📋 결과 복사'}
           </button>
         </div>
       ) : (
         <div className={styles.empty}>긴 변 또는 짧은 변 중 하나를 입력하면 나머지 변이 계산됩니다</div>
       )}
+    </div>
+  )
+}
+
+/* ── 미니 황금 직사각형 (입력값 시각화) ── */
+function MiniGoldenRect({ A, B, unit }: { A: number; B: number; unit: string }) {
+  if (!A || !B) return null
+  // viewBox 기준 A를 가로, B를 세로로 정규화
+  const W = 320
+  const H = Math.round(W * (B / A))
+  return (
+    <div className={styles.miniRectWrap}>
+      <svg className={styles.miniRectSvg} viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: W }}>
+        {/* 전체 직사각형 */}
+        <rect x={0} y={0} width={W} height={H} fill="none" stroke="var(--accent)" strokeWidth={1.5} />
+        {/* B × B 정사각형 (왼쪽) — 황금 분할 */}
+        <rect x={0} y={0} width={H} height={H} fill="rgba(200,255,62,0.07)" stroke="rgba(200,255,62,0.5)" strokeWidth={1} />
+        {/* 분할 호 (사분원) */}
+        <path
+          d={`M ${H} 0 A ${H} ${H} 0 0 1 0 ${H}`}
+          fill="none" stroke="var(--accent)" strokeWidth={1.5} strokeLinecap="round"
+        />
+        {/* A 라벨 (가로 전체) */}
+        <text x={W / 2} y={H - 6} fill="var(--muted)" fontFamily="Syne, sans-serif" fontSize="11" fontWeight={700} textAnchor="middle">
+          A = {A.toFixed(1)}{unit}
+        </text>
+        {/* B 라벨 (세로) */}
+        <text x={H / 2} y={14} fill="var(--accent)" fontFamily="Syne, sans-serif" fontSize="11" fontWeight={700} textAnchor="middle">
+          B = {B.toFixed(1)}{unit}
+        </text>
+      </svg>
     </div>
   )
 }
@@ -327,8 +362,6 @@ function SpiralTab() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const svgRef = useRef<SVGSVGElement>(null)
 
-  // 피보나치 수 8단계
-  const fibs = [1, 1, 2, 3, 5, 8, 13, 21]
   const unit = 18 // 1 유닛 = 18px
 
   // 사각형 배치 (원점 좌상단, 단위 u = 18px):
@@ -507,6 +540,61 @@ export default function GoldenRatioClient() {
       {tab === 'ratio'   && <RatioTab decimals={decimals} />}
       {tab === 'convert' && <ConvertTab decimals={decimals} />}
       {tab === 'spiral'  && <SpiralTab />}
+
+      {/* 비율 비교 시각화 (모든 탭 공통) */}
+      <RatioCompareCard />
+    </div>
+  )
+}
+
+/* ──────────────────────── 비율 비교 시각화 ──────────────────────── */
+const RATIO_PRESETS = [
+  { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       color: '#C8FF3E' },
+  { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       color: '#3EC8FF' },
+  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#FFD700' },
+  { name: '4:3',           ratio: 1.333, sub: '구식 TV·아이패드',       color: '#9B59B6' },
+  { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     color: '#FF6B9D' },
+  { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      color: '#3EFF9B' },
+  { name: '1:1',           ratio: 1.000, sub: '인스타 피드',            color: '#FFFFFF' },
+  { name: '9:16',          ratio: 0.563, sub: '스토리·릴스·틱톡(세로)', color: '#FF8C3E' },
+]
+
+function RatioCompareCard() {
+  // 같은 세로(고정 32px) 기준 가로 길이 비교
+  const fixedHeight = 32
+  // 가장 긴 가로 = 21:9 (2.333) → 최대 픽셀 폭 280
+  const maxWidth = 280
+  const maxRatio = 2.333
+
+  return (
+    <div className={styles.compareCard}>
+      <span className={styles.compareLabel}>📐 비율 비교 시각화</span>
+      <p className={styles.compareDesc}>
+        같은 세로 높이 기준 가로 길이 비교. 황금 비율(φ = 1.618)의 균형감을 다른 표준 비율과 함께 확인하세요.
+      </p>
+      <div className={styles.compareList}>
+        {RATIO_PRESETS.map(p => {
+          const widthPx = (p.ratio / maxRatio) * maxWidth
+          return (
+            <div key={p.name} className={styles.compareRow}>
+              <div>
+                <div className={styles.compareName}>{p.name}</div>
+                <div className={styles.compareNameSub}>{p.sub}</div>
+              </div>
+              <div
+                className={styles.compareBar}
+                style={{
+                  width: `${widthPx}px`,
+                  background: p.color === '#FFFFFF' ? 'rgba(255,255,255,0.15)' : `${p.color}25`,
+                  borderColor: `${p.color}55`,
+                  height: fixedHeight,
+                }}
+              />
+              <span className={styles.compareValue} style={{ color: p.color }}>{p.ratio.toFixed(3)}</span>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

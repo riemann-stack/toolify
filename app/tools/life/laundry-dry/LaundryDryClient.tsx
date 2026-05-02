@@ -1,7 +1,15 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
 import styles from './laundry-dry.module.css'
+import {
+  LAUNDRY_EQUIPMENT, recommendCombos, evaluateCombo,
+  fmtMinutes, fmtKrw,
+  type Priority,
+} from './laundryUtils'
+
+type TabId = 'main' | 'combo' | 'target'
 
 /* ──────────────────────── 상수 ──────────────────────── */
 type EnvId      = 'indoor' | 'balcony' | 'outdoor'
@@ -130,6 +138,7 @@ function formatTime(d: Date): string {
 
 /* ──────────────────────── 메인 ──────────────────────── */
 export default function LaundryDryClient() {
+  const [tab, setTab] = useState<TabId>('main')
   const [env, setEnv]             = useState<EnvId>('balcony')
   const [temp, setTemp]           = useState(18)
   const [humidity, setHumidity]   = useState(60)
@@ -202,6 +211,11 @@ export default function LaundryDryClient() {
     const totalFactor = itemFactor * envFactor * optionFactor
     const dryHours = baseHours * totalFactor
 
+    // 장비(추가 옵션) 영향 제외 baseline — 조합 추천·역산 탭용
+    const baselineHours = baseHours * itemFactor * (
+      tempFactorOf(temp) * humidFactorOf(humidity) * WIND_FACTOR[wind] * SUN_FACTOR[sun] * eF
+    )
+
     return {
       dryHours,
       surfaceDry: dryHours * 0.6,
@@ -210,6 +224,7 @@ export default function LaundryDryClient() {
       totalFactor,
       tF, hF, wF, sF, eF, materialF, thickF, spinF, spaceF, optionFactor,
       adjTemp, adjHumidity, adjWind,
+      baselineHours,
     }
   }, [env, temp, humidity, wind, sun, items, material, thick, spin, space, fan, dehumid, heating, windowOpen])
 
@@ -268,6 +283,37 @@ export default function LaundryDryClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* ── 탭 네비 ── */}
+      <div className={styles.tabs}>
+        {([
+          { id: 'main',   label: '🧮 건조 시간 계산' },
+          { id: 'combo',  label: '⚡ 최단 조합 추천' },
+          { id: 'target', label: '🎯 목표 시간 역산' },
+        ] as { id: TabId; label: string }[]).map(t => (
+          <button key={t.id}
+            className={`${styles.tabBtn} ${tab === t.id ? styles.tabBtnActive : ''}`}
+            onClick={() => setTab(t.id)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab !== 'main' && (
+        <>
+          {tab === 'combo' && (
+            <ComboTab baselineHours={result.baselineHours} env={env} />
+          )}
+          {tab === 'target' && (
+            <TargetTab baselineHours={result.baselineHours} now={now} />
+          )}
+          {/* 면책 */}
+          <p style={{ fontSize: 11, color: 'var(--muted)', padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, lineHeight: 1.7, marginTop: 4 }}>
+            ⚠️ 본 추천은 일반 가이드입니다. 실제 건조 시간은 의류 두께·소재·빨래량·통풍·날씨에 따라 ±20% 차이 가능. 전기료는 한국 평균 200원/kWh 기준 (누진제 단계에 따라 ±50% 차이 가능). 정확한 정보는 한국전력 고객센터 <strong style={{ color: '#FF8C3E' }}>123</strong> 또는 기상청 빨래건조지수(weather.go.kr).
+          </p>
+        </>
+      )}
+
+      {tab === 'main' && (<>
       {/* ── 섹션 1: 환경 ── */}
       <div className={styles.card}>
         <div className={styles.cardLabel}>① 건조 환경</div>
@@ -576,9 +622,334 @@ export default function LaundryDryClient() {
           </div>
         </div>
       )}
+      </>)}
     </div>
   )
 }
+
+/* ──────────────────────── 최단 조합 추천 탭 ──────────────────────── */
+function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId }) {
+  const [owned, setOwned] = useState<Set<string>>(() => new Set(['fan', 'dehumidifier', 'extra-spin']))
+  const [priority, setPriority] = useState<Priority>('balanced')
+  const [bathroomMode, setBathroomMode] = useState(false)
+
+  const toggleEq = (id: string) => {
+    setOwned(prev => {
+      const n = new Set(prev)
+      if (n.has(id)) n.delete(id); else n.add(id)
+      return n
+    })
+  }
+
+  const baseMin = Math.max(30, baselineHours * 60)
+
+  // 욕실 모드면 욕실 환풍기 자동 포함
+  const effectiveOwned = useMemo(() => {
+    const arr = Array.from(owned)
+    if (bathroomMode && !arr.includes('bathroom-fan')) arr.push('bathroom-fan')
+    return arr
+  }, [owned, bathroomMode])
+
+  const recommendations = useMemo(() => {
+    return recommendCombos(effectiveOwned, baseMin, priority).slice(0, 6)
+  }, [effectiveOwned, baseMin, priority])
+
+  const best = recommendations[0]
+  const noEq = useMemo(() => evaluateCombo([], baseMin), [baseMin])
+
+  return (
+    <div className={styles.tabContent}>
+      <div className={styles.card}>
+        <div className={styles.cardLabel}>① 보유 장비 (체크)</div>
+        <div className={styles.eqGrid}>
+          {LAUNDRY_EQUIPMENT.map(eq => (
+            <button key={eq.id}
+              className={`${styles.eqCard} ${owned.has(eq.id) ? styles.eqCardActive : ''}`}
+              onClick={() => toggleEq(eq.id)}>
+              <span className={styles.eqIcon}>{eq.icon}</span>
+              <span className={styles.eqName}>{eq.name}</span>
+              <span className={styles.eqMeta}>{eq.powerW > 0 ? `${eq.powerW}W` : '전력 0'}</span>
+              <span className={styles.eqDesc}>{eq.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <div className={styles.cardLabel}>② 우선순위</div>
+        <div className={styles.segRow3}>
+          {([
+            { id: 'speed',    label: '⚡ 시간 최우선' },
+            { id: 'balanced', label: '⚖️ 균형 (추천)' },
+            { id: 'cost',     label: '💰 전기료 최저' },
+          ] as { id: Priority; label: string }[]).map(p => (
+            <button key={p.id}
+              className={`${styles.segBtn} ${priority === p.id ? styles.segBtnActive : ''}`}
+              onClick={() => setPriority(p.id)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        {env === 'indoor' && (
+          <button
+            className={`${styles.toggleRow} ${bathroomMode ? styles.toggleRowOn : ''}`}
+            style={{ marginTop: 10 }}
+            onClick={() => setBathroomMode(!bathroomMode)}>
+            <span className={styles.toggleIcon}>🚿</span>
+            <span className={styles.toggleBody}>
+              <span className={styles.toggleLabel}>욕실 건조 모드 (한국 가정 인기)</span>
+              <span className={styles.toggleSub}>욕실 환풍기 자동 추가 (-25%) · 1~2명분만 권장</span>
+            </span>
+            <span className={`${styles.toggle} ${bathroomMode ? styles.toggleOn : ''}`} aria-hidden>
+              <span className={styles.toggleKnob} />
+            </span>
+          </button>
+        )}
+      </div>
+
+      {best ? (
+        <>
+          {/* 최우선 추천 */}
+          <div className={styles.hero}>
+            <div className={styles.heroLabel}>⭐ 최우선 추천 조합</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+              {best.combo.map(id => {
+                const eq = LAUNDRY_EQUIPMENT.find(e => e.id === id)
+                return eq ? (
+                  <span key={id} className={styles.eqChip}>{eq.icon} {eq.name}</span>
+                ) : null
+              })}
+            </div>
+            <div className={styles.heroRow}>
+              <div className={styles.heroBlock}>
+                <div className={styles.heroSub}>예상 시간</div>
+                <div className={styles.heroNumMain}>{fmtMinutes(best.minutes)}</div>
+                <div className={styles.heroRange}>기본 {fmtMinutes(noEq.minutes)} 대비 -{best.reductionPct}%</div>
+              </div>
+              <div className={styles.heroDivider} aria-hidden />
+              <div className={styles.heroBlock}>
+                <div className={styles.heroSubAccent}>예상 전기료</div>
+                <div className={styles.heroNumMain} style={{ color: best.cost < 50 ? '#3EFF9B' : best.cost < 300 ? 'var(--accent)' : '#FF8C3E' }}>{fmtKrw(best.cost)}</div>
+                <div className={styles.heroRange}>{best.kwh} kWh · 200원/kWh 기준</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 차순위 비교 */}
+          {recommendations.length > 1 && (
+            <div className={styles.card}>
+              <div className={styles.cardLabel}>다른 조합 비교 (상위 6개)</div>
+              <div style={{ overflowX: 'auto' }}>
+                <table className={styles.compareTable}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>조합</th>
+                      <th style={{ textAlign: 'right' }}>시간</th>
+                      <th style={{ textAlign: 'right' }}>전기료</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recommendations.map((r, i) => (
+                      <tr key={i}>
+                        <td style={{ color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{i === 0 ? '⭐' : i + 1}</td>
+                        <td style={{ fontSize: 11 }}>
+                          {r.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ')}
+                          {' '}
+                          <span style={{ color: 'var(--muted)' }}>
+                            {r.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.name).join(' + ')}
+                          </span>
+                        </td>
+                        <td className={styles.tableNum}>{fmtMinutes(r.minutes)}</td>
+                        <td className={styles.tableNum} style={{ color: r.cost < 50 ? '#3EFF9B' : 'var(--text)' }}>{fmtKrw(r.cost)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className={styles.note} style={{ marginTop: 10 }}>
+                💡 가장 저렴한 옵션을 원하면 우선순위를 [💰 전기료 최저]로 변경. 같은 카테고리(예: 선풍기 + 서큘레이터)는 효과가 큰 쪽만 적용됩니다.
+              </p>
+            </div>
+          )}
+
+          {bathroomMode && (
+            <div className={styles.card} style={{ background: 'rgba(255,140,62,0.06)', borderColor: 'rgba(255,140,62,0.3)' }}>
+              <p style={{ fontSize: 12, color: '#FF8C3E', fontWeight: 600, marginBottom: 6 }}>🚿 욕실 건조 시 주의</p>
+              <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.8 }}>
+                <li>욕실 사전 환기 필수 (사용 후 24시간+ 환풍기 가동)</li>
+                <li>1~2명분 빨래만 권장 (이불·다수 X)</li>
+                <li>곰팡이 발생 위험 ↑ — 사용 후 욕실 청소</li>
+              </ul>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className={styles.empty}>보유 장비를 1개 이상 선택하세요</div>
+      )}
+    </div>
+  )
+}
+
+/* ──────────────────────── 목표 시간 역산 탭 ──────────────────────── */
+function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | null }) {
+  const [targetTime, setTargetTime] = useState('18:00')
+  const [owned, setOwned] = useState<Set<string>>(() => new Set(['fan', 'dehumidifier', 'circulator', 'extra-spin']))
+
+  const toggleEq = (id: string) => {
+    setOwned(prev => {
+      const n = new Set(prev)
+      if (n.has(id)) n.delete(id); else n.add(id)
+      return n
+    })
+  }
+
+  const baseMin = Math.max(30, baselineHours * 60)
+
+  const target = useMemo(() => {
+    if (!now || !targetTime) return null
+    const [hh, mm] = targetTime.split(':').map(n => parseInt(n))
+    if (isNaN(hh) || isNaN(mm)) return null
+    const t = new Date(now)
+    t.setHours(hh, mm, 0, 0)
+    if (t.getTime() <= now.getTime()) t.setDate(t.getDate() + 1)
+    return t
+  }, [targetTime, now])
+
+  const minutesAvailable = target && now ? Math.round((target.getTime() - now.getTime()) / 60000) : null
+
+  const scenarios = useMemo(() => {
+    if (!minutesAvailable || owned.size === 0) return null
+    const ownedArr = Array.from(owned)
+    const fastest = recommendCombos(ownedArr, baseMin, 'speed')[0]
+    const balanced = recommendCombos(ownedArr, baseMin, 'balanced')[0]
+    const cheapest = recommendCombos(ownedArr, baseMin, 'cost').filter(c => c.minutes <= minutesAvailable)[0]
+      ?? recommendCombos(ownedArr, baseMin, 'cost')[0]
+    const natural = evaluateCombo([], baseMin)
+    return { fastest, balanced, cheapest, natural }
+  }, [owned, baseMin, minutesAvailable])
+
+  const noEq = useMemo(() => evaluateCombo([], baseMin), [baseMin])
+
+  return (
+    <div className={styles.tabContent}>
+      <div className={styles.card}>
+        <div className={styles.cardLabel}>① 목표 완료 시각</div>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <input type="time"
+            value={targetTime}
+            onChange={e => setTargetTime(e.target.value)}
+            style={{
+              background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
+              borderRadius: 10, padding: '10px 14px', fontSize: 16,
+              fontFamily: 'Syne, sans-serif', fontWeight: 700,
+            }}
+          />
+          {minutesAvailable !== null && (
+            <span style={{ fontSize: 13, color: 'var(--muted)' }}>
+              지금부터 <strong style={{ color: 'var(--accent)' }}>{fmtMinutes(minutesAvailable)}</strong> 남음
+            </span>
+          )}
+        </div>
+        <p className={styles.note}>현재 시각이 지난 시간을 입력하면 내일로 자동 처리됩니다.</p>
+      </div>
+
+      <div className={styles.card}>
+        <div className={styles.cardLabel}>② 보유 장비</div>
+        <div className={styles.eqGrid}>
+          {LAUNDRY_EQUIPMENT.map(eq => (
+            <button key={eq.id}
+              className={`${styles.eqCard} ${owned.has(eq.id) ? styles.eqCardActive : ''}`}
+              onClick={() => toggleEq(eq.id)}>
+              <span className={styles.eqIcon}>{eq.icon}</span>
+              <span className={styles.eqName}>{eq.name}</span>
+              <span className={styles.eqMeta}>{eq.powerW > 0 ? `${eq.powerW}W` : '전력 0'}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {scenarios && minutesAvailable !== null && scenarios.fastest ? (
+        <>
+          <div className={styles.hero}>
+            <div className={styles.heroLabel}>🎯 목표 시간까지</div>
+            <div className={styles.heroNumMain}>
+              {scenarios.fastest.minutes <= minutesAvailable
+                ? '✅ 가능'
+                : '⚠️ 시간 부족'}
+            </div>
+            <p className={styles.heroRange} style={{ marginTop: 4 }}>
+              가장 빠른 조합: <strong style={{ color: 'var(--accent)' }}>{fmtMinutes(scenarios.fastest.minutes)}</strong>
+              {scenarios.fastest.minutes <= minutesAvailable
+                ? ` · 여유 ${fmtMinutes(minutesAvailable - scenarios.fastest.minutes)}`
+                : ` · 부족 ${fmtMinutes(scenarios.fastest.minutes - minutesAvailable)}`}
+            </p>
+          </div>
+
+          <div className={styles.card}>
+            <div className={styles.cardLabel}>3가지 시나리오 비교</div>
+            <div style={{ overflowX: 'auto' }}>
+              <table className={styles.compareTable}>
+                <thead>
+                  <tr>
+                    <th>시나리오</th>
+                    <th>장비</th>
+                    <th style={{ textAlign: 'right' }}>시간</th>
+                    <th style={{ textAlign: 'right' }}>전기료</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ color: '#3EFF9B', fontWeight: 700 }}>⚡ 가장 빠른</td>
+                    <td style={{ fontSize: 11, color: 'var(--muted)' }}>
+                      {scenarios.fastest.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ')}
+                    </td>
+                    <td className={styles.tableNum}>{fmtMinutes(scenarios.fastest.minutes)}</td>
+                    <td className={styles.tableNum}>{fmtKrw(scenarios.fastest.cost)}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: 'var(--accent)', fontWeight: 700 }}>⚖️ 균형</td>
+                    <td style={{ fontSize: 11, color: 'var(--muted)' }}>
+                      {scenarios.balanced.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ')}
+                    </td>
+                    <td className={styles.tableNum}>{fmtMinutes(scenarios.balanced.minutes)}</td>
+                    <td className={styles.tableNum}>{fmtKrw(scenarios.balanced.cost)}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: '#3EC8FF', fontWeight: 700 }}>💰 최저 비용</td>
+                    <td style={{ fontSize: 11, color: 'var(--muted)' }}>
+                      {scenarios.cheapest?.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ') ?? '—'}
+                    </td>
+                    <td className={styles.tableNum}>{scenarios.cheapest ? fmtMinutes(scenarios.cheapest.minutes) : '—'}</td>
+                    <td className={styles.tableNum}>{scenarios.cheapest ? fmtKrw(scenarios.cheapest.cost) : '—'}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: 'var(--muted)' }}>🌬️ 자연 건조</td>
+                    <td style={{ fontSize: 11, color: 'var(--muted)' }}>—</td>
+                    <td className={styles.tableNum}>{fmtMinutes(scenarios.natural.minutes)}</td>
+                    <td className={styles.tableNum} style={{ color: '#3EFF9B' }}>0원</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {scenarios.fastest.minutes > minutesAvailable && (
+              <p className={styles.note} style={{ marginTop: 10, color: '#FF8C3E' }}>
+                ⚠️ 가장 빠른 조합도 목표 시간 안에 어렵습니다. 권장: ① 보유 장비 추가 ② 목표 시간 {fmtMinutes(scenarios.fastest.minutes - minutesAvailable)} 늦추기 ③ 욕실 건조 모드 (-25%)
+              </p>
+            )}
+            <p className={styles.note} style={{ marginTop: 8 }}>
+              기본 (장비 없음): {fmtMinutes(noEq.minutes)} · 환경 데이터는 [건조 시간 계산] 탭에서 조정 — 현재 환경 그대로 반영됩니다.
+            </p>
+          </div>
+        </>
+      ) : (
+        <div className={styles.empty}>목표 시각과 보유 장비를 입력하세요</div>
+      )}
+    </div>
+  )
+}
+
 
 /* ──────────────────────── 보조 ──────────────────────── */
 function tempColorClass(t: number, styles: { [k: string]: string }): string {

@@ -298,6 +298,37 @@
    TAB 2 — Simulation
    ══════════════════════════════════ */
 
+/* ── 변형 규칙 카드 ── */
+.variantGrid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+  margin-top: 8px;
+}
+.variantCard {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; cursor: pointer; text-align: left; transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.variantCard:hover:not(:disabled) { border-color: var(--accent); }
+.variantCard:disabled { opacity: 0.5; cursor: not-allowed; }
+.variantCardActive {
+  background: rgba(200,255,62,0.1) !important;
+  border-color: var(--accent) !important;
+}
+.variantHead {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+}
+.variantTheory {
+  font-family: 'Syne', sans-serif; font-size: 11px; color: var(--accent);
+  background: rgba(200,255,62,0.08); padding: 2px 6px; border-radius: 4px;
+  white-space: nowrap;
+}
+.variantDesc { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+@media (max-width: 500px) {
+  .variantGrid { grid-template-columns: 1fr; }
+}
+
 .field { display: flex; flex-direction: column; }
 .fieldLabel {
   font-size: 13px;

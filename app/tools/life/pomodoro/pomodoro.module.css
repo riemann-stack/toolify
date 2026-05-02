@@ -1,35 +1,59 @@
-.wrap { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.wrap { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
 
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
-/* 페이즈 선택 */
+/* ── 탭 ── */
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
+.tabBtn { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
+.tabBtn:hover { color: var(--text); }
+.tabBtnActive { background: var(--bg3); color: var(--text); border-color: var(--border); }
+
+/* ── 작업 입력 ── */
+.taskInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 14px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; box-sizing: border-box; }
+.taskInput:focus { outline: none; border-color: var(--accent); }
+.taskInput::placeholder { color: var(--muted); }
+
+/* ── 페이즈 선택 ── */
 .phaseRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
 .phaseBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .phaseBtnActive { background: var(--bg2); font-weight: 600; }
 
-/* 원형 타이머 */
-.timerWrap { position: relative; width: 200px; margin: 8px auto; }
-.timerCenter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+/* ── 원형 타이머 ── */
+.timerWrap { position: relative; width: 240px; height: 240px; margin: 12px auto; }
+.timerCenter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
 .timerPhase { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
-.timerTime { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
+.timerTime { font-family: 'Syne', sans-serif; font-size: 50px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
 .timerCycle { font-size: 12px; color: var(--muted); }
+.timerTask { font-size: 12px; color: var(--muted); max-width: 180px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
 
-/* 컨트롤 */
+/* ── 컨트롤 ── */
 .controls { display: flex; align-items: center; justify-content: center; gap: 16px; }
 .ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }
 .ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #0D0D0D; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
 .mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
 
-/* 통계 */
+/* ── 통계 ── */
 .statsRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .statItem { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
 .statNum { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); }
 .statLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
-/* 설정 */
+/* ── 일일 목표 진행바 ── */
+.goalRow { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.goalLabel { font-size: 12px; color: var(--muted); }
+.goalDots { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+.goalDot { width: 16px; height: 16px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); }
+.goalDotDone { background: var(--accent); border-color: var(--accent); }
+
+/* ── 키보드 단축키 ── */
+.kbdRow { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.kbd { font-family: 'Syne', sans-serif; font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; color: var(--muted); }
+.kbd strong { color: var(--text); margin-right: 4px; }
+
+/* ── 설정 ── */
 .settingsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .settingItem { display: flex; flex-direction: column; gap: 8px; }
 .settingLabel { font-size: 12px; color: var(--muted); }
@@ -38,4 +62,70 @@
 .settingBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .settingValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 28px; text-align: center; }
 
-@media (max-width: 480px) { .settingsGrid { grid-template-columns: 1fr 1fr; } }
+/* ── 프리셋 그리드 ── */
+.presetGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.presetCard { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; text-align: left; transition: all 0.15s; position: relative; }
+.presetCard:hover { border-color: var(--border-hover); }
+.presetCardActive { border-color: var(--accent); background: var(--bg2); }
+.presetTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.presetTime { font-family: 'Syne', sans-serif; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+.presetDesc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.presetBadge { position: absolute; top: 8px; right: 8px; font-size: 10px; background: var(--accent); color: #0D0D0D; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+
+/* ── 알림음 ── */
+.soundList { display: flex; flex-direction: column; gap: 6px; }
+.soundRow { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+.soundRow:hover { border-color: var(--border-hover); }
+.soundRowActive { border-color: var(--accent); background: var(--bg2); }
+.soundName { font-size: 13px; color: var(--text); font-weight: 500; flex: 1; }
+.soundDesc { font-size: 11px; color: var(--muted); }
+.soundTest { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.soundTest:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* ── 토글 옵션 ── */
+.optionRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; }
+.optionRow + .optionRow { border-top: 1px solid var(--border); }
+.optionLabel { font-size: 13px; color: var(--text); }
+.optionDesc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.toggle { width: 40px; height: 22px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; position: relative; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+.toggleOn { background: var(--accent); border-color: var(--accent); }
+.toggleDot { width: 16px; height: 16px; background: var(--bg2); border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.15s; }
+.toggleOn .toggleDot { left: 20px; background: #0D0D0D; }
+
+/* ── 통계 탭 ── */
+.bigStat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+.bigStatLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.bigStatValue { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text); }
+.bigStatHint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.barChart { display: flex; align-items: flex-end; gap: 4px; height: 100px; padding: 8px 0 4px; }
+.barCol { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar { width: 100%; background: var(--bg3); border-radius: 4px 4px 0 0; min-height: 4px; transition: all 0.3s; }
+.barLabel { font-size: 10px; color: var(--muted); }
+
+.insightCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.insightIcon { font-size: 22px; flex-shrink: 0; }
+.insightTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.insightDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+.historyList { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
+.historyRow { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; }
+.historyTime { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 60px; }
+.historyTask { font-size: 12px; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.historyDur { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--accent); flex-shrink: 0; }
+
+/* ── 가이드 ── */
+.guideCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.guideEmoji { font-size: 22px; flex-shrink: 0; }
+.guideTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.guideDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+.emptyState { text-align: center; padding: 30px 20px; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 480px) {
+  .settingsGrid { grid-template-columns: 1fr 1fr; }
+  .presetGrid { grid-template-columns: 1fr; }
+  .timerWrap { width: 220px; height: 220px; }
+  .timerTime { font-size: 44px; }
+  .tabBtn { font-size: 11px; }
+}

@@ -606,3 +606,162 @@
   align-items: center;
   flex-wrap: wrap;
 }
+
+/* ════════════════════════════════════════════════════════════
+   v2 추가 — 4탭 / RPE / 성·연령 / 워밍업 / 기록 탭
+   ════════════════════════════════════════════════════════════ */
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 480px) {
+  .tabs4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* RPE */
+.rpeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.rpeHint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* 성별·연령 */
+.ageGenderRow {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  min-height: 44px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+  min-width: 110px;
+}
+.select:focus { border-color: var(--accent); }
+
+/* 워밍업 */
+.warmupHint {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.warmupHint strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+
+/* 기록 안내 (CalcTab) */
+.recordsHint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  text-align: center;
+}
+.recordsHint strong { color: var(--accent); }
+
+/* 기록 탭 — 빈 상태 */
+.recordsEmpty {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+/* 기록 탭 — 통계 그리드 */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.statCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.statLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.statValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.statUp { color: #3EFF9B; }
+.statDown { color: #FF8C8C; }
+
+/* 기록 탭 — 전체 삭제 */
+.clearBtn {
+  margin-top: 12px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.clearBtn:hover {
+  border-color: #FF8C8C;
+  color: #FF8C8C;
+}
+
+/* 부상 예방 카드 */
+.injuryCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+}
+.injuryCard strong {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-family: 'Syne', sans-serif;
+}
+.injuryList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* iOS zoom prevention */
+@media (max-width: 640px) {
+  .input, .select, .sliderValInput {
+    font-size: 16px;
+  }
+  .input { min-height: 48px; }
+  .tab { padding: 14px 6px; min-height: 48px; }
+}

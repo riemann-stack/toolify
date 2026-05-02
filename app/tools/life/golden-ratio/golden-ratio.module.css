@@ -166,6 +166,27 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── 미니 황금 직사각형 (결과 카드 내) ── */
+.miniRectWrap { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 10px; display: flex; justify-content: center; }
+.miniRectSvg { max-width: 100%; height: auto; display: block; }
+
+/* ── 비율 비교 시각화 ── */
+.compareCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+.compareLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.compareDesc { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+.compareList { display: flex; flex-direction: column; gap: 10px; }
+.compareRow { display: grid; grid-template-columns: 90px 1fr auto; gap: 12px; align-items: center; }
+.compareName { font-size: 12px; color: var(--text); font-weight: 600; }
+.compareNameSub { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+.compareBar { height: 32px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; transition: width 0.3s; }
+.compareValue { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); min-width: 56px; text-align: right; }
+
+@media (max-width: 500px) {
+  .compareRow { grid-template-columns: 80px 1fr auto; gap: 8px; }
+  .compareName { font-size: 11px; }
+  .compareValue { font-size: 12px; min-width: 48px; }
+}
+
 @media (max-width: 500px) {
   .tab { font-size: 12px; padding: 10px 4px; }
   .heroRow { gap: 10px; }

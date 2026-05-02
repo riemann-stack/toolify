@@ -1,5 +1,111 @@
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
+/* ── 탭 ── */
+.tabs3 {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px;
+}
+.tabBtn {
+  padding: 10px 4px; border-radius: 8px; border: none;
+  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  color: var(--muted); background: transparent; cursor: pointer;
+  transition: all 0.15s; min-height: 44px;
+}
+.tabBtn:hover { color: var(--text); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+
+/* ── 더치페이/저장 연결 카드 ── */
+.crossLinkCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.crossLinkBtn {
+  display: flex; gap: 14px; align-items: center;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  text-decoration: none; color: var(--text); transition: all 0.15s;
+}
+.crossLinkBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
+.crossLinkIcon { font-size: 22px; flex-shrink: 0; }
+.crossLinkBtn strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+.crossLinkSub { display: block; font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ── 골프장 저장 입력 ── */
+.courseSaveRow { display: flex; gap: 8px; align-items: center; }
+.courseSaveInput {
+  flex: 1; min-height: 44px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; font-size: 14px; color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  box-sizing: border-box;
+}
+.courseSaveInput:focus { border-color: rgba(200,255,62,0.5); }
+.courseSaveBtn {
+  background: var(--accent); color: #0D0D0D; border: none;
+  padding: 10px 16px; border-radius: 10px;
+  font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: opacity 0.15s; min-height: 44px;
+  white-space: nowrap;
+}
+.courseSaveBtn:hover { opacity: 0.88; }
+.courseSaveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.courseSaveBtn.copied { background: #3EFF9B; }
+
+/* ── 골프장 목록 ── */
+.courseList { display: flex; flex-direction: column; gap: 8px; }
+.courseItem {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.courseInfo { flex: 1; min-width: 0; }
+.courseName { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.courseMeta { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.courseActions { display: flex; gap: 6px; flex-shrink: 0; }
+.courseApplyBtn {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; font-size: 12px; color: var(--accent); font-weight: 600;
+  cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+}
+.courseApplyBtn:hover { border-color: var(--accent); }
+.courseDelBtn {
+  background: transparent; border: 1px solid var(--border); border-radius: 8px;
+  width: 32px; height: 32px; font-size: 16px; color: var(--muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.courseDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+
+/* ── 빈 상태 ── */
+.empty {
+  padding: 20px; text-align: center; font-size: 13px; color: var(--muted);
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  line-height: 1.7;
+}
+.empty strong { display: block; color: var(--text); margin-bottom: 6px; font-size: 14px; }
+
+/* ── 경고 카드 (회원권 체크리스트) ── */
+.warnCard {
+  background: rgba(255,140,62,0.06); border: 1px solid rgba(255,140,62,0.3);
+  border-radius: 12px; padding: 14px 18px;
+}
+.warnTitle { font-size: 13px; font-weight: 700; color: #FF8C3E; margin: 0 0 8px; }
+.warnList {
+  margin: 0; padding-left: 18px;
+  font-size: 12.5px; color: var(--text); line-height: 1.85;
+}
+.warnList li { margin-bottom: 2px; }
+
+@media (max-width: 480px) {
+  .tabBtn { font-size: 11px; padding: 9px 2px; }
+  .courseSaveRow { flex-direction: column; align-items: stretch; }
+  .courseSaveBtn { width: 100%; }
+  .courseActions { flex-direction: column; }
+}
+
+
+
 /* ── 카드 ── */
 .card {
   background: var(--bg2);

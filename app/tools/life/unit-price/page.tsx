@@ -4,9 +4,13 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/life/unit-price',
-  title: '단가 비교 계산기 — 마트 용량·덤·1+1 가성비 비교',
-  description: '용량이 다른 상품의 10ml당·100g당 단가를 비교합니다. 덤·1+1·2+1 행사, 쿠폰 할인, 배송비 포함 반영. 마트·쿠팡·코스트코 가성비 계산.',
-  keywords: ['단가계산기', '가성비계산기', '마트단가비교', '코스트코단가', '100ml당단가', '1+1가성비', '쿠팡단가비교', '용량비교계산기'],
+  title: '단가 비교 계산기 — 마트·편의점·코스트코 1+1·2+1 가성비 즉시 비교',
+  description: '가격·용량·개수·단위 입력 즉시 단가 비교. 1+1·2+1은 개수에 2·3 입력, 100ml/100g/1개당 자동 추천, 소비 가능량 반영 실질 단가, 모바일 마트 현장 최적화.',
+  keywords: [
+    '단가계산기', '가성비계산기', '마트단가비교', '코스트코단가', '100ml당단가', '1+1가성비', '쿠팡단가비교', '용량비교계산기',
+    '단가 비교 계산기', '마트 가성비', '1+1 단가', '2+1 단가', '코스트코 단가', '100ml당 가격', '100g당 가격',
+    '실질 단가', '대용량 함정', '가성비 비교',
+  ],
 })
 
 export default function UnitPricePage() {
@@ -17,81 +21,161 @@ export default function UnitPricePage() {
         🏷️ 단가 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        용량·덤·1+1·쿠폰·배송비까지 모두 반영해 정확한 100ml(100g)당 단가를 비교해드려요. 진짜 가성비 승자를 찾아보세요.
+        가격·용량·개수·단위만 입력하면 <strong style={{ color: 'var(--text)' }}>즉시 단가 비교</strong>. 1+1·2+1은 개수에 2·3 입력. 마트·편의점·코스트코 현장 모바일 최적화.
       </p>
 
       <UnitPriceClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* 1. 기본 공식 */}
-        <div>
+        {/* ── 1. 기본 공식 (단순화) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px 22px' }}>
-            <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-              진짜 단가는 <strong style={{ color: 'var(--text)' }}>「내가 실제로 낸 돈 ÷ 실제로 받은 양」</strong>입니다. 정가나 용량만 보면 속기 쉽습니다.
-            </p>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 18px', fontFamily: 'Syne, monospace', fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
-              <p><span style={{ color: 'var(--accent)' }}>단가</span> = (가격 − 즉시할인) × (1 − 쿠폰%) + 배송비 <span style={{ color: 'var(--muted)' }}>÷</span> (용량 × 개수 × 덤 배율) × 기준단위</p>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 18px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontSize: '17px', lineHeight: 1.8, color: 'var(--text)', marginBottom: '14px' }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 800 }}>단가</span> = 가격 ÷ (용량 × 개수) × 기준 단위
             </div>
-            <ul style={{ margin: '14px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {[
-                '1+1 이벤트 → 가격은 1개분, 용량은 2개분으로 계산',
-                '2+1 이벤트 → 가격은 2개분, 용량은 3개분',
-                '+100ml 덤 → 가격 그대로, 용량만 +100ml',
-                '쿠폰·즉시할인·배송비는 최종 지불가에 반영',
-              ].map((t, i) => (
-                <li key={i} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>• {t}</li>
-              ))}
-            </ul>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, margin: '0 0 8px' }}>
+              예: 8,900원 ÷ (500ml × 1개) × 100 = <strong style={{ color: 'var(--accent)' }}>100ml당 1,780원</strong>
+            </p>
+            <details style={{ marginTop: '12px', padding: '12px 14px', background: 'var(--bg3)', borderRadius: '10px', border: '1px solid var(--border)' }}>
+              <summary style={{ fontSize: '13px', color: 'var(--muted)', cursor: 'pointer', fontWeight: 600 }}>
+                ⚙️ 고급 공식 (행사·쿠폰·배송비 반영)
+              </summary>
+              <div style={{ marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
+                <p style={{ margin: '0 0 6px' }}>실결제 = 가격 − 즉시할인 − 쿠폰할인 + 배송비</p>
+                <p style={{ margin: '0 0 6px' }}>실수령량 = 용량 × 개수</p>
+                <p style={{ margin: 0 }}>단가 = 실결제 ÷ 실수령량 × 기준 단위</p>
+              </div>
+            </details>
           </div>
-        </div>
+        </section>
 
-        {/* 2. 실제 비교 예시 */}
-        <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실제 마트 비교 예시 3가지</h2>
+        {/* ── 2. 1+1·2+1 입력 가이드 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            🎁 1+1·2+1 행사 — 개수만 입력하면 끝
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구는 행사 옵션을 따로 두지 않습니다. <strong style={{ color: 'var(--text)' }}>개수에 받는 갯수를 그대로 입력</strong>하면 단가가 정확히 계산됩니다 (가격은 실제 결제 금액).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>행사</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>개수 입력</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>예시 (샴푸 8,900원·500ml)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { d: '1+1', c: '2', e: '가격 8,900 / 용량 500ml / 개수 2 → 100ml당 890원' },
+                  { d: '2+1', c: '3', e: '가격 17,800 / 용량 500ml / 개수 3 → 100ml당 1,187원' },
+                  { d: '3+1', c: '4', e: '가격 26,700 / 용량 500ml / 개수 4 → 100ml당 1,335원' },
+                  { d: '5+1', c: '6', e: '가격 44,500 / 용량 500ml / 개수 6 → 100ml당 1,483원' },
+                  { d: '단품', c: '1', e: '가격 8,900 / 용량 500ml / 개수 1 → 100ml당 1,780원' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 16 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.e}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* ── 3. 실제 마트 비교 예시 (코스트코 함정 포함) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실제 마트·편의점·코스트코 비교 예시</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                title: '샴푸 — 같은 브랜드, 다른 용량',
-                a: 'A: 500ml × 1병 · 8,900원 → 100ml당 1,780원',
-                b: 'B: 750ml 1+1 · 15,900원 → 100ml당 1,060원 (A 대비 40.4% 저렴)',
-                tip: '1+1은 실제 받는 양이 2배라 단가가 급락합니다.',
+                title: '🛒 샴푸 — 1+1 vs 단품',
+                a: 'A: 500ml 1+1 · 8,900원 (개수 2) → 100ml당 890원 ⭐',
+                b: 'B: 750ml 단품 · 11,000원 (개수 1) → 100ml당 1,467원',
+                tip: '1+1 행사가 단품 대비 약 39% 저렴. 개수에 2 입력만으로 정확 비교.',
               },
               {
-                title: '과일주스 — 덤 vs 대용량',
-                a: 'A: 1.5L + 500ml 덤 · 4,200원 → 100ml당 210원',
-                b: 'B: 2L 단품 · 4,800원 → 100ml당 240원 (A가 12.5% 저렴)',
-                tip: '덤 용량이 붙은 쪽이 결국 100ml당 더 쌉니다.',
+                title: '🥤 음료 — 편의점 vs 마트',
+                a: 'A: 편의점 비타500 100ml × 1병 · 1,200원 → 100ml당 1,200원',
+                b: 'B: 마트 비타500 10병 박스 · 8,900원 (개수 10) → 100ml당 890원 ⭐',
+                tip: '같은 제품 마트 박스가 약 26% 저렴. 음료는 박스 단위 ↑',
               },
               {
-                title: '참치캔 — 쿠팡 정기배송 vs 대형마트',
-                a: 'A: 150g × 6캔 · 12,900원 · 배송비 0원 → 100g당 1,433원',
-                b: 'B: 100g × 4캔 · 6,900원 · 배송비 3,000원 → 100g당 2,475원 (A가 42.1% 저렴)',
-                tip: '배송비를 빼먹으면 단가가 크게 틀어집니다.',
+                title: '🥫 참치캔 — 쿠팡 정기 vs 마트',
+                a: 'A: 150g × 6캔 묶음 · 12,900원 (배송 0) → 100g당 1,433원 ⭐',
+                b: 'B: 100g × 4캔 · 6,900원 + 배송 3,000원 (쿠폰 5%) → 100g당 2,376원',
+                tip: '배송비·쿠폰 반영하면 차이가 더 커짐. [고급 옵션]에서 입력.',
+              },
+              {
+                title: '⚠️ 코스트코 대용량 함정 (소비 가능량 반영)',
+                a: 'A: 일반 마트 샴푸 500ml 1+1 · 12,000원 (개수 2, 100% 사용) → 100ml당 1,200원',
+                b: 'B: 코스트코 샴푸 1.5L · 18,000원 (개수 1, <strong style="color:#FF8C3E">50% 사용</strong>) → 100ml당 1,200원, <strong style="color:#FF8C3E">실질 2,400원</strong>',
+                tip: '단가는 같지만 1.5L를 6개월 안에 다 못 쓰면 실질 단가가 2배. 본 도구의 [소비 가능량] 옵션 활용.',
               },
             ].map((ex, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>{ex.title}</p>
-                <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>{ex.a}</p>
-                <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>{ex.b}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: ex.a }} />
+                <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }} dangerouslySetInnerHTML={{ __html: ex.b }} />
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, paddingTop: '8px', borderTop: '1px dashed var(--border)' }}>💡 {ex.tip}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* 3. 함정 주의 */}
-        <div>
+        {/* ── 4. 소비 가능량 반영 가이드 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            💡 소비 가능량 반영 — 실질 단가
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            대용량 = 무조건 싸다 X. <strong style={{ color: 'var(--text)' }}>다 쓰지 못하면 실질 단가는 ↑</strong>. 본 도구의 [고급 옵션] → 소비 가능량에서 100/75/50/25% 선택.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>소비 가능량</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 상품</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>실질 단가 배율</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { p: '100% (다 씀)',     s: '매일 사용 — 생수·우유·티슈·계란', m: '×1.0', c: '#3EFF9B' },
+                  { p: '75% (자주 씀)',    s: '자주 사용 — 샴푸·세제·화장품',     m: '×1.33', c: '#C8FF3E' },
+                  { p: '50% (가끔 씀)',    s: '가끔 사용 — 소스·조미료·향신료',   m: '×2.00', c: '#FF8C3E' },
+                  { p: '25% (별로 안 씀)', s: '시즌·이벤트용 — 거의 안 씀',        m: '×4.00', c: '#FF6B6B' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.m}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            가구 규모 가이드 — <strong style={{ color: 'var(--text)' }}>1인 가구</strong> 50% / <strong style={{ color: 'var(--text)' }}>2인</strong> 75% / <strong style={{ color: 'var(--text)' }}>4인</strong> 100% (대략). 유통기한·보관 공간도 함께 고려.
+          </p>
+        </section>
+
+        {/* ── 5. 단가 함정 6가지 ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이런 단가 함정 조심하세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { title: '대용량 = 무조건 싸다?', desc: '코스트코·대용량 상품이 단가가 더 비쌀 때가 있습니다. 꼭 100g·100ml당으로 비교해야 속지 않아요.' },
-              { title: '1+1 vs 50% 할인', desc: '1+1은 정확히 50% 할인과 같습니다. 2+1은 33% 할인 수준. 숫자에 속지 마세요.' },
-              { title: '덤 용량 광고', desc: '"+500ml 증량!"이 크게 적혀있어도 원래 용량이 소형이면 단가는 그대로일 수 있어요.' },
-              { title: '배송비 무시', desc: '쿠팡 무료배송 / 마켓컬리 4,000원 배송비는 단가에 그대로 반영됩니다. 필수 체크 항목.' },
-              { title: '유통기한', desc: '단가만 싸도 다 못 쓰고 버리면 실질 단가는 2배. 샴푸·로션은 개봉 후 1년 이내 사용 기준으로 계산.' },
-              { title: '낱개 가격 ≠ 묶음 가격', desc: '묶음상품의 낱개 단가 표시를 그대로 믿지 말고 총가격 ÷ 총용량으로 직접 확인하세요.' },
+              { title: '대용량 = 무조건 싸다?',     desc: '코스트코·대용량이 단가가 더 비싸거나 비슷할 때 多. 100g·100ml당으로 비교 + 소비 가능량 반영.' },
+              { title: '1+1 vs 50% 할인',          desc: '수학적으로 동일. 단, 2개를 다 써야 실제 이득.' },
+              { title: '"+500ml 증량!" 광고',      desc: '원래 용량이 작으면 단가는 그대로일 수 있음. 가격·용량 그대로 입력해 확인.' },
+              { title: '배송비 무시',               desc: '쿠팡 무료 / 마켓컬리 4,000원 등 배송비는 단가에 그대로 반영. [고급 옵션]에서 입력.' },
+              { title: '유통기한·개봉 후 사용',    desc: '샴푸·로션은 개봉 후 1년 이내 사용 기준. 다 못 쓰면 실질 단가 2배.' },
+              { title: '낱개 가격 ≠ 묶음 가격',     desc: '묶음 표시 단가는 그대로 믿지 말고 총가격 ÷ 총용량으로 직접 확인.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '4px' }}>⚠️ {item.title}</p>
@@ -99,10 +183,74 @@ export default function UnitPricePage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* 4. 상품별 추천 단위 */}
-        <div>
+        {/* ── 6. 단위 비교 가이드 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            단위 비교 가이드 — 자동 추천 기준
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구는 입력한 단위에 따라 비교 기준을 자동 추천합니다([자동 추천] 토글). 직접 변경도 가능.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>단위 계열</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>자동 추천</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>대표 상품</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: '🥤 액체 (ml·L)',     r: '1L 미만 → 100ml당 / 1L 이상 → 1L당', e: '음료·생수·세제·샴푸·화장품' },
+                  { k: '⚖️ 무게 (g·kg)',     r: '1kg 미만 → 100g당 / 1kg 이상 → 1kg당', e: '쌀·과자·고기·과일·채소' },
+                  { k: '🧾 개수 (개·매·장)', r: '1개당 / 1매당 / 1장당',                e: '라면·티슈·물티슈·과자봉지' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.e}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            ⚠️ <strong style={{ color: 'var(--text)' }}>액체(ml) ↔ 무게(g) 직접 비교 X</strong> — 밀도가 다릅니다 (우유 1L ≈ 1,030g, 꿀 1L ≈ 1,420g).
+          </p>
+        </section>
+
+        {/* ── 7. 모바일 사용 가이드 (NEW) ── */}
+        <section>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            📱 모바일 마트 현장 사용 가이드
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구는 마트 현장 모바일 사용에 최적화되어 있습니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {[
+              { e: '⚡', t: '실시간 결과', d: '입력 즉시 단가 비교 — 결과 카드가 화면 상단에 고정' },
+              { e: '🔢', t: '숫자 키패드 자동', d: '모바일에서 숫자 입력 시 자동 숫자 키패드 (가격은 천 단위 콤마 자동)' },
+              { e: '👆', t: '큰 버튼', d: '모든 버튼 48×48px+ (엄지 친화) · 입력 16px (iOS 줌 방지)' },
+              { e: '⚙️', t: '고급 옵션 숨김', d: '행사·쿠폰·배송비·소비 가능량은 펼침으로 — 기본은 단순' },
+              { e: '📋', t: '결과 복사', d: '카카오톡·문자로 가족 공유 가능' },
+            ].map((it, i) => (
+              <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+                <span style={{ fontSize: '22px', flexShrink: 0 }}>{it.e}</span>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{it.t}</p>
+                  <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{it.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── 8. 추천 단위 표 (기존 유지) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 비교하는 상품별 추천 단위</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -115,53 +263,72 @@ export default function UnitPricePage() {
               </thead>
               <tbody>
                 {[
-                  { cat: '세제·샴푸·화장품', unit: '100ml당',    ex: '샴푸 500ml / 리필 1L / 바디워시 750ml' },
-                  { cat: '음료·주스·우유',    unit: '100ml당',    ex: '생수 2L / 우유 900ml / 주스 1.5L' },
-                  { cat: '쌀·밀가루·설탕',   unit: '1kg당',      ex: '쌀 10kg / 밀가루 3kg / 설탕 1kg' },
-                  { cat: '과자·시리얼',      unit: '100g당',     ex: '과자 250g / 시리얼 500g / 초콜릿 80g' },
-                  { cat: '라면·파스타',      unit: '1개당',      ex: '라면 5입 / 파스타 500g 박스' },
-                  { cat: '휴지·물티슈',      unit: '1매당',      ex: '화장지 30롤 × 200매 / 물티슈 70매' },
-                  { cat: '커피·차',          unit: '100g당',     ex: '원두 200g / 티백 1박스' },
-                  { cat: '과일·채소',        unit: '1kg당',      ex: '사과 2kg / 바나나 1송이' },
+                  { cat: '세제·샴푸·화장품', unit: '100ml당', ex: '샴푸 500ml / 리필 1L / 바디워시 750ml' },
+                  { cat: '음료·주스·우유',   unit: '100ml당', ex: '생수 2L / 우유 900ml / 주스 1.5L' },
+                  { cat: '쌀·밀가루·설탕',  unit: '1kg당',   ex: '쌀 10kg / 밀가루 3kg / 설탕 1kg' },
+                  { cat: '과자·시리얼',     unit: '100g당',  ex: '과자 250g / 시리얼 500g / 초콜릿 80g' },
+                  { cat: '라면·파스타',     unit: '1개당',   ex: '라면 5입 / 파스타 500g 박스' },
+                  { cat: '휴지·물티슈',     unit: '1매당',   ex: '화장지 30롤 × 200매 / 물티슈 70매' },
+                  { cat: '커피·차',         unit: '100g당',  ex: '원두 200g / 티백 1박스' },
+                  { cat: '과일·채소',       unit: '1kg당',   ex: '사과 2kg / 바나나 1송이' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: i < 7 ? '1px solid var(--border)' : 'none' }}>
                     <td style={{ padding: '10px 14px', color: 'var(--text)' }}>{row.cat}</td>
-                    <td style={{ padding: '10px 14px', color: 'var(--accent)', fontFamily: 'Syne, monospace', fontWeight: 700 }}>{row.unit}</td>
+                    <td style={{ padding: '10px 14px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row.unit}</td>
                     <td style={{ padding: '10px 14px', color: 'var(--muted)' }}>{row.ex}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
 
-        {/* 5. FAQ */}
-        <div>
+        {/* ── 9. FAQ (accordion) ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { q: '1+1이 진짜 50% 할인과 같은가요?', a: '네, 수학적으로 정확히 같습니다. 1개 가격으로 2개를 받는 것이므로 개당 가격은 정확히 절반. 다만 2개를 모두 사용할 수 있어야 실질적 이득이 됩니다. 유통기한이 짧거나 혼자 사는 경우 오히려 손해일 수 있어요.' },
-              { q: '100ml당과 1L당 중 어떤 걸로 비교해야 하나요?', a: '상품 용량대에 맞춰 선택하세요. 샴푸·화장품처럼 수백 ml 단위면 100ml당, 생수·주스처럼 리터 단위면 1L당이 직관적입니다. 어느 쪽으로 해도 비율은 똑같으니 본인이 보기 편한 단위를 고르면 됩니다.' },
-              { q: '배송비는 각 상품에 어떻게 나눠야 하나요?', a: '장바구니에 여러 상품을 함께 담는 경우 배송비를 상품별로 배분하는 건 애매합니다. 본 계산기는 "이 상품만 따로 주문할 때의 실질 단가"를 기준으로 배송비를 더합니다. 함께 주문한다면 배송비는 0으로 설정하세요.' },
-              { q: '코스트코 대용량이 항상 더 싼가요?', a: '아닙니다. 100g·100ml당 단가를 계산해보면 일반 마트 1+1이 더 저렴한 경우가 꽤 많습니다. 특히 소비 속도가 느린 상품(소스·조미료)은 대용량이 유통기한 안에 못 쓰면 실질 손해입니다. 꼭 단가 + 소비 가능성을 함께 보세요.' },
+              { q: '1+1이 진짜 50% 할인과 같은가요?',
+                a: '네, 수학적으로 정확히 같습니다. 1개 가격으로 2개를 받는 것이므로 개당 가격은 정확히 절반. 다만 2개를 모두 사용할 수 있어야 실질적 이득. 유통기한이 짧거나 혼자 사는 경우 [소비 가능량] 옵션으로 실질 단가 확인 권장.' },
+              { q: '100ml당과 1L당 중 어떤 걸로 비교해야 하나요?',
+                a: '본 도구는 자동 추천합니다 — 1L 미만이면 100ml당, 1L 이상이면 1L당. [자동 추천] 토글을 끄고 직접 변경도 가능합니다. 어느 쪽으로 해도 비율은 똑같으니 본인이 보기 편한 단위를 고르면 됩니다.' },
+              { q: '배송비는 각 상품에 어떻게 나눠야 하나요?',
+                a: '장바구니에 여러 상품을 함께 담는 경우 배송비를 상품별로 배분하기 애매합니다. 본 도구는 &ldquo;이 상품만 따로 주문할 때의 실질 단가&rdquo;를 기준으로 [고급 옵션 → 배송비]에 더합니다. 함께 주문한다면 배송비는 0으로 설정하세요.' },
+              { q: '코스트코 대용량이 항상 더 싼가요?',
+                a: '아닙니다. 100g·100ml당 단가를 계산해보면 일반 마트 1+1이 더 저렴한 경우가 꽤 많습니다. 특히 소비 속도가 느린 상품(소스·조미료)은 대용량이 유통기한 안에 못 쓰면 실질 손해. 본 도구의 [소비 가능량] 옵션 활용 — 1.5L를 50%만 쓰면 실질 단가 2배.' },
+              { q: '1+1 행사 상품은 어떻게 입력하나요?',
+                a: '<strong>개수에 2</strong>, 가격은 표시된 가격 그대로. 2+1은 개수 3, 3+1은 개수 4. 본 도구는 행사 옵션을 따로 두지 않고 개수 입력만으로 단가를 정확히 계산합니다. 예: 샴푸 8,900원 1+1 → 가격 8,900 / 용량 500ml / 개수 2 = 100ml당 890원.' },
+              { q: 'ml 상품과 g 상품을 비교할 수 있나요?',
+                a: '직접 비교 어려움. ml = 부피(액체), g = 무게(고체)이며 밀도가 다릅니다. 예: 우유 1L ≈ 1,030g, 꿀 1L ≈ 1,420g. 본 도구는 다른 계열 입력 시 경고 메시지를 표시합니다. 같은 계열(ml↔L 또는 g↔kg)로 통일해 비교하세요.' },
+              { q: '모바일에서 마트 현장에서 쓰기 좋게 만들었나요?',
+                a: '네, 모바일 마트 현장 최적화: ① 가격·용량·개수만 입력(단순) ② 실시간 결과(입력 즉시) ③ 빠른 입력 칩(흔한 용량·가격) ④ 천 단위 콤마 자동 ⑤ 숫자 키패드 자동 ⑥ 큰 버튼(엄지 친화 48px+) ⑦ 결과 화면 상단 고정. 행사·쿠폰·배송비·소비 가능량은 [고급 옵션]으로 숨김 — 기본은 단순.' },
+              { q: '같은 1L 우유라도 가격이 다른데 어떻게 비교하나요?',
+                a: '본 도구에 둘 다 입력 — A: 일반 우유 1L · 2,500원 → 100ml당 250원 / B: 유기농 우유 1L · 4,500원 → 100ml당 450원. B가 80% 비쌈. 가격 차이 + 본인 가치(유기농·브랜드)를 종합 판단. 본 도구는 단가만 보여주며, 가치 판단은 사용자 영역.' },
+              { q: '소비 가능량(실질 단가)는 어떻게 활용하나요?',
+                a: '[고급 옵션] → 소비 가능량에서 100/75/50/25% 선택. 가이드: 매일 사용(생수·우유) 100% / 자주(샴푸·세제) 75% / 가끔(소스·조미료) 50% / 시즌·이벤트용 25%. 가구 규모 — 1인 50%·2인 75%·4인 100% 권장. 50%만 쓰면 실질 단가는 표시 단가의 2배가 됩니다.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--accent)', marginBottom: '8px' }}>Q. {item.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{item.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {item.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: item.a }}
+                />
+              </details>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* 6. 관련 도구 */}
-        <div>
+        {/* ── 10. 함께 쓰면 좋은 도구 ── */}
+        <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
-              { href: '/tools/life/dutch',      emoji: '🍻', name: '더치페이 계산기',   desc: '공동구매 정산' },
-              { href: '/tools/cooking/unit',    emoji: '🥄', name: '요리 단위 변환기',   desc: 'oz·컵·근 등 환산' },
-              { href: '/tools/unit/weight',     emoji: '⚖️', name: '무게 변환기',         desc: 'kg·lb·근·돈 변환' },
-              { href: '/tools/finance/vat',     emoji: '🧾', name: '부가세 계산기',       desc: '공급가액 분리 계산' },
+              { href: '/tools/life/dutch',         emoji: '🍻', name: '더치페이 계산기',   desc: '공동구매 정산' },
+              { href: '/tools/cooking/substitute', emoji: '🔁', name: '식재료 대체 비율',   desc: '대체 음식·양 변환' },
+              { href: '/tools/unit/weight',        emoji: '⚖️', name: '무게 변환기',         desc: 'kg·lb·근·돈 변환' },
+              { href: '/tools/finance/vat',        emoji: '🧾', name: '부가세 계산기',       desc: '공급가액 분리 계산' },
             ].map((t) => (
               <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
@@ -172,7 +339,7 @@ export default function UnitPricePage() {
               </Link>
             ))}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   )

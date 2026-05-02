@@ -1,7 +1,15 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import s from './golf-cost.module.css'
+import {
+  calcMembership, MEMBERSHIP_PRICE_PRESETS, ANNUAL_ROUNDS_PRESETS,
+  loadCourses, saveCourses, newId, todayStr, fmtKrw, COURSE_TYPE_LABEL,
+  type SavedGolfCourse,
+} from './golfCostUtils'
+
+type TabId = 'main' | 'membership' | 'courses'
 
 // ───────────────────────── 타입·상수 ─────────────────────────
 
@@ -53,6 +61,7 @@ function parseAmount(input: string): number {
 // ───────────────────────── 메인 ─────────────────────────
 
 export default function GolfCostClient() {
+  const [tab, setTab] = useState<TabId>('main')
   const [courseType, setCourseType] = useState<CourseType>('publicWeekend')
   const [players, setPlayers] = useState<PlayerCount>(4)
 
@@ -200,6 +209,42 @@ export default function GolfCostClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 탭 네비 */}
+      <div className={s.tabs3}>
+        {([
+          { id: 'main',       label: '🧮 오늘 정산' },
+          { id: 'membership', label: '🏆 회원권 손익' },
+          { id: 'courses',    label: '⛳ 내 골프장' },
+        ] as { id: TabId; label: string }[]).map(t => (
+          <button key={t.id}
+            className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
+            onClick={() => setTab(t.id)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'membership' && (
+        <MembershipTab defaultNonMemberCost={Math.round(perPerson)} />
+      )}
+      {tab === 'courses' && (
+        <CoursesTab
+          onApply={(c) => {
+            setTab('main')
+            setCourseType('custom' as CourseType)
+            setGreenFee(c.greenFee)
+            setCartFee(c.cartFee)
+            setCaddieFee(c.caddieFee)
+            if (c.defaultMeal) setMealAmount(c.defaultMeal)
+          }}
+          currentSnapshot={{
+            greenFee, cartFee, caddieFee,
+            mealAmount, courseType,
+          }}
+        />
+      )}
+
+      {tab === 'main' && (<>
       {/* 코스 프리셋 */}
       <div className={s.card}>
         <span className={s.cardLabel}>① 골프장 타입</span>
@@ -641,10 +686,364 @@ export default function GolfCostClient() {
         </button>
       </div>
 
+      {/* 더치페이 도구 자동 연결 + 골프장 저장 */}
+      {teamTotal > 0 && (
+        <div className={s.crossLinkCard}>
+          <a
+            href={`/tools/life/dutch?total=${Math.round(teamTotal)}&people=${players}&context=골프`}
+            className={s.crossLinkBtn}>
+            <span className={s.crossLinkIcon}>🍻</span>
+            <span>
+              <strong>카톡방에서 N빵 정산 →</strong>
+              <span className={s.crossLinkSub}>더치페이 도구로 자동 입력 (총 {fmtKrw(teamTotal)} / {players}명)</span>
+            </span>
+          </a>
+          <CourseSaveButton
+            data={{
+              name: '', type: courseType, greenFee, cartFee, caddieFee,
+              defaultMeal: mealAmount,
+            }}
+          />
+        </div>
+      )}
+
       {/* 면책 */}
       <div className={s.disclaimer}>
         ⛳ 입력값 기반 예상 비용입니다. 실제 비용은 골프장·시즌·요일·코스 컨디션·식음료 메뉴에 따라 크게 달라질 수 있습니다.
       </div>
+      </>)}
     </div>
+  )
+}
+
+/* ──────────────────────── 골프장 저장 버튼 ──────────────────────── */
+function CourseSaveButton({ data }: {
+  data: { name: string; type: string; greenFee: number; cartFee: number; caddieFee: number; defaultMeal?: number }
+}) {
+  const [name, setName] = useState('')
+  const [saved, setSaved] = useState(false)
+  const handleSave = () => {
+    if (!name.trim()) return
+    const courses = loadCourses()
+    const newCourse: SavedGolfCourse = {
+      id: newId(),
+      name: name.trim(),
+      type: data.type,
+      greenFee: data.greenFee,
+      cartFee: data.cartFee,
+      caddieFee: data.caddieFee,
+      defaultMeal: data.defaultMeal,
+      lastUsed: todayStr(),
+    }
+    saveCourses([newCourse, ...courses])
+    setSaved(true); setTimeout(() => setSaved(false), 1500)
+    setName('')
+  }
+  return (
+    <div className={s.courseSaveRow}>
+      <input
+        type="text"
+        className={s.courseSaveInput}
+        placeholder="골프장 이름 (예: 스카이힐 청주)"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        maxLength={40}
+      />
+      <button type="button"
+        className={`${s.courseSaveBtn} ${saved ? s.copied : ''}`}
+        onClick={handleSave} disabled={!name.trim()}>
+        {saved ? '✓ 저장됨' : '💾 저장'}
+      </button>
+    </div>
+  )
+}
+
+/* ──────────────────────── 회원권 손익 탭 ──────────────────────── */
+function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number }) {
+  const [membershipPrice, setMembershipPrice] = useState(500_000_000)
+  const [annualFee, setAnnualFee] = useState(2_000_000)
+  const [holdingYears, setHoldingYears] = useState(10)
+  const [nonMemberCost, setNonMemberCost] = useState(defaultNonMemberCost > 0 ? defaultNonMemberCost : 220_000)
+  const [memberRoundCost, setMemberRoundCost] = useState(80_000)
+  const [annualRounds, setAnnualRounds] = useState(24)
+  const [resaleValue, setResaleValue] = useState(300_000_000)
+
+  const result = useMemo(() => calcMembership({
+    membershipPrice, annualFee, holdingYears,
+    nonMemberCost, memberRoundCost, annualRounds, resaleValue,
+  }), [membershipPrice, annualFee, holdingYears, nonMemberCost, memberRoundCost, annualRounds, resaleValue])
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>① 회원권 정보</span>
+        <div className={s.subLabel}>회원권 가격</div>
+        <div className={s.inputRow}>
+          <input className={s.numInput} type="number"
+            value={membershipPrice || ''}
+            onChange={e => setMembershipPrice(parseAmount(e.target.value))} />
+          <span className={s.unit}>원</span>
+        </div>
+        <div className={s.pills} style={{ marginTop: 6 }}>
+          {MEMBERSHIP_PRICE_PRESETS.map(p => (
+            <button key={p.value}
+              className={`${s.pill} ${membershipPrice === p.value ? s.pillActive : ''}`}
+              onClick={() => setMembershipPrice(p.value)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+        <div className={s.twoCol} style={{ marginTop: 14 }}>
+          <div>
+            <div className={s.subLabel}>연회비</div>
+            <div className={s.inputRow}>
+              <input className={s.numInput} type="number"
+                value={annualFee || ''}
+                onChange={e => setAnnualFee(parseAmount(e.target.value))} />
+              <span className={s.unit}>원</span>
+            </div>
+          </div>
+          <div>
+            <div className={s.subLabel}>보유 기간</div>
+            <div className={s.inputRow}>
+              <input className={s.numInput} type="number"
+                value={holdingYears || ''}
+                onChange={e => setHoldingYears(parseAmount(e.target.value))} />
+              <span className={s.unit}>년</span>
+            </div>
+          </div>
+        </div>
+        <div className={s.subLabel} style={{ marginTop: 14 }}>매각 시 잔존가치 (예상)</div>
+        <div className={s.inputRow}>
+          <input className={s.numInput} type="number"
+            value={resaleValue || ''}
+            onChange={e => setResaleValue(parseAmount(e.target.value))} />
+          <span className={s.unit}>원</span>
+        </div>
+        <p className={s.helperText}>회원권 가격의 50~60% 일반 (시세 변동 ±30%)</p>
+      </div>
+
+      <div className={s.card}>
+        <span className={s.cardLabel}>② 라운딩 비용</span>
+        <div className={s.twoCol}>
+          <div>
+            <div className={s.subLabel}>비회원 1인당 비용</div>
+            <div className={s.inputRow}>
+              <input className={s.numInput} type="number"
+                value={nonMemberCost || ''}
+                onChange={e => setNonMemberCost(parseAmount(e.target.value))} />
+              <span className={s.unit}>원</span>
+            </div>
+            {defaultNonMemberCost > 0 && (
+              <p className={s.helperText}>오늘 정산 결과 자동 불러옴</p>
+            )}
+          </div>
+          <div>
+            <div className={s.subLabel}>회원 1인당 비용</div>
+            <div className={s.inputRow}>
+              <input className={s.numInput} type="number"
+                value={memberRoundCost || ''}
+                onChange={e => setMemberRoundCost(parseAmount(e.target.value))} />
+              <span className={s.unit}>원</span>
+            </div>
+            <p className={s.helperText}>회원 그린피 + 카트·캐디·식사</p>
+          </div>
+        </div>
+        <div className={s.subLabel} style={{ marginTop: 14 }}>연 라운딩 횟수</div>
+        <div className={s.pills}>
+          {ANNUAL_ROUNDS_PRESETS.map(p => (
+            <button key={p.value}
+              className={`${s.pill} ${annualRounds === p.value ? s.pillActive : ''}`}
+              onClick={() => setAnnualRounds(p.value)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 결과 */}
+      <div className={s.hero} style={{ borderColor: result.recoColor + 'aa' }}>
+        <div className={s.heroLead}>
+          <span style={{ color: result.recoColor, fontWeight: 700 }}>{result.recoLabel}</span>
+        </div>
+        <div className={s.heroNum} style={{ fontSize: 'clamp(28px, 7vw, 44px)' }}>
+          {result.netSaving < 0 ? `회원 ${fmtKrw(Math.abs(result.netSaving))} 절약` : `비회원 ${fmtKrw(Math.abs(result.netSaving))} 절약`}
+        </div>
+        <div className={s.heroSub}>
+          {holdingYears}년 기준 · 연 {annualRounds}회 라운딩
+        </div>
+      </div>
+
+      <div className={s.card}>
+        <span className={s.cardLabel}>📊 회원 vs 비회원 비교 ({holdingYears}년 총)</span>
+        <table className={s.breakdownTable}>
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th style={{ textAlign: 'right' }}>회원</th>
+              <th style={{ textAlign: 'right' }}>비회원</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>회원권 가격</td>
+              <td className={s.numCell}>{fmtKrw(membershipPrice)}</td>
+              <td className={s.numCell}>—</td>
+            </tr>
+            <tr>
+              <td>연회비 ({holdingYears}년)</td>
+              <td className={s.numCell}>{fmtKrw(annualFee * holdingYears)}</td>
+              <td className={s.numCell}>—</td>
+            </tr>
+            <tr>
+              <td>라운딩 ({annualRounds * holdingYears}회)</td>
+              <td className={s.numCell}>{fmtKrw(memberRoundCost * annualRounds * holdingYears)}</td>
+              <td className={s.numCell}>{fmtKrw(nonMemberCost * annualRounds * holdingYears)}</td>
+            </tr>
+            <tr>
+              <td>매각 잔존가치</td>
+              <td className={s.numCell} style={{ color: '#3EFF9B' }}>−{fmtKrw(resaleValue)}</td>
+              <td className={s.numCell}>—</td>
+            </tr>
+            <tr className={s.totalRow}>
+              <td>합계</td>
+              <td className={s.numCell}>{fmtKrw(result.totalMemberCost)}</td>
+              <td className={s.numCell}>{fmtKrw(result.totalNonMemberCost)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className={s.infoCard} style={{ marginTop: 12 }}>
+          💡 연 절약: <strong>{fmtKrw(result.annualSaving)}/년</strong>
+          {isFinite(result.breakevenYears) && result.breakevenYears > 0 && (
+            <> · 손익분기: 약 <strong>{result.breakevenYears.toFixed(1)}년</strong> ({Math.round(result.breakevenRounds)}회 라운딩)</>
+          )}
+        </div>
+      </div>
+
+      <div className={s.warnCard}>
+        <p className={s.warnTitle}>⚠️ 회원권 구매 전 체크리스트</p>
+        <ul className={s.warnList}>
+          <li>골프장 재무 안정성 확인 (공시·뉴스)</li>
+          <li>회원권 시세 (한국증권업협회·증권사)</li>
+          <li>부도 시 보호 X (대부분) — 매각 어려움 ↑</li>
+          <li>본인 라운딩 빈도 변화 가능 (이직·건강·은퇴)</li>
+          <li>변호사·회계사 상담 권장</li>
+        </ul>
+      </div>
+    </>
+  )
+}
+
+/* ──────────────────────── 내 골프장 탭 ──────────────────────── */
+function CoursesTab({
+  onApply, currentSnapshot,
+}: {
+  onApply: (c: SavedGolfCourse) => void
+  currentSnapshot: { greenFee: number; cartFee: number; caddieFee: number; mealAmount: number; courseType: string }
+}) {
+  const [courses, setCourses] = useState<SavedGolfCourse[]>([])
+  const [hydrated, setHydrated] = useState(false)
+  const [name, setName] = useState('')
+
+  useEffect(() => {
+    setCourses(loadCourses())
+    setHydrated(true)
+  }, [])
+
+  const handleSave = () => {
+    if (!name.trim()) return
+    const newCourse: SavedGolfCourse = {
+      id: newId(),
+      name: name.trim(),
+      type: currentSnapshot.courseType,
+      greenFee: currentSnapshot.greenFee,
+      cartFee: currentSnapshot.cartFee,
+      caddieFee: currentSnapshot.caddieFee,
+      defaultMeal: currentSnapshot.mealAmount,
+      lastUsed: todayStr(),
+    }
+    const updated = [newCourse, ...courses]
+    setCourses(updated); saveCourses(updated)
+    setName('')
+  }
+
+  const handleDelete = (id: string) => {
+    const updated = courses.filter(c => c.id !== id)
+    setCourses(updated); saveCourses(updated)
+  }
+
+  const handleApply = (c: SavedGolfCourse) => {
+    // 마지막 사용일 갱신
+    const updated = courses.map(x =>
+      x.id === c.id ? { ...x, lastUsed: todayStr() } : x
+    )
+    setCourses(updated); saveCourses(updated)
+    onApply(c)
+  }
+
+  if (!hydrated) return null
+
+  return (
+    <>
+      <div className={s.card}>
+        <span className={s.cardLabel}>💾 자주 가는 골프장 저장</span>
+        <p className={s.helperText} style={{ marginBottom: 12 }}>
+          [오늘 정산] 탭에서 입력한 그린피·카트·캐디 값을 골프장 이름과 함께 저장. 다음 방문 시 한 번의 클릭으로 자동 입력됩니다.
+        </p>
+        <div className={s.courseSaveRow}>
+          <input
+            type="text"
+            className={s.courseSaveInput}
+            placeholder="골프장 이름 (예: 스카이힐 청주)"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            maxLength={40}
+          />
+          <button type="button"
+            className={s.courseSaveBtn}
+            onClick={handleSave} disabled={!name.trim()}>
+            💾 현재 값 저장
+          </button>
+        </div>
+        <p className={s.helperText} style={{ marginTop: 8 }}>
+          현재 값: 그린피 {fmtKrw(currentSnapshot.greenFee)} · 카트 {fmtKrw(currentSnapshot.cartFee)} · 캐디 {fmtKrw(currentSnapshot.caddieFee)}
+        </p>
+      </div>
+
+      {courses.length > 0 ? (
+        <div className={s.card}>
+          <span className={s.cardLabel}>📋 저장된 골프장 ({courses.length}개)</span>
+          <div className={s.courseList}>
+            {courses.map(c => (
+              <div key={c.id} className={s.courseItem}>
+                <div className={s.courseInfo}>
+                  <div className={s.courseName}>{c.name}</div>
+                  <div className={s.courseMeta}>
+                    {COURSE_TYPE_LABEL[c.type] ?? c.type} · 그린피 {fmtKrw(c.greenFee)} · 마지막 {c.lastUsed}
+                  </div>
+                </div>
+                <div className={s.courseActions}>
+                  <button type="button" className={s.courseApplyBtn}
+                    onClick={() => handleApply(c)}>
+                    📥 불러오기
+                  </button>
+                  <button type="button" className={s.courseDelBtn}
+                    onClick={() => handleDelete(c.id)} aria-label="삭제">×</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className={s.empty}>
+          <strong>아직 저장된 골프장이 없습니다</strong>
+          위에서 골프장 이름을 입력하고 저장해 보세요. 모든 데이터는 본인의 브라우저에만 저장됩니다 (서버 전송 X).
+        </div>
+      )}
+
+      <div className={s.disclaimer}>
+        🔒 모든 데이터는 본인의 브라우저(localStorage)에만 저장. 서버 전송 X · 다른 사이트 접근 X. 브라우저 데이터 삭제 시 사라집니다.
+      </div>
+    </>
   )
 }

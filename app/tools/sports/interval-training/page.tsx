@@ -5,9 +5,9 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
-  title: '인터벌 훈련 계산기 — 400m·800m·야소 800 풀코스 예측',
-  description: '5km·10km·하프·풀코스 목표별 인터벌 페이스를 계산합니다. 400m·800m·1km 랩타임, 야소 800 풀코스 예측, 8주 단계별 훈련 스케줄 자동 생성.',
-  keywords: ['인터벌훈련계산기', '인터벌페이스', '야소800계산기', '400m페이스', '800m페이스', '마라톤풀코스예측', '러닝인터벌', '인터벌스케줄'],
+  title: '인터벌 훈련 계산기 — VDOT·야소 800·400/800/1km 풀 스케줄',
+  description: '5km·10km·하프 기록만 입력하면 VDOT 기반 인터벌 페이스, 1바퀴(400m)·랩타임, 다거리 추천(400m~1.6km), 4~16주 풀 페이스·회복 거리 포함 훈련 스케줄, 한국 인기 대회까지.',
+  keywords: ['인터벌훈련계산기', '인터벌페이스', '야소800계산기', '400m페이스', '800m페이스', '마라톤풀코스예측', '러닝인터벌', '인터벌스케줄', 'VDOT 계산기', 'I 페이스', 'R 페이스', 'Jack Daniels VDOT', '한국 마라톤 훈련', '풀코스 예측'],
 })
 
 export default function IntervalTrainingPage() {
@@ -20,8 +20,7 @@ export default function IntervalTrainingPage() {
         🏃‍♂️ 인터벌 훈련 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        최근 5km·10km·하프 기록만 입력하면 <strong style={{ color: 'var(--text)' }}>VDOT 기반 인터벌 페이스</strong>,
-        400m·800m·1km 랩타임, 야소 800 풀코스 예측, 4~16주 단계별 훈련 스케줄을 한 화면에서 계산합니다.
+        5km·10km·하프 기록 → <strong style={{ color: 'var(--text)' }}>VDOT 기반 인터벌 페이스 + 1바퀴(400m)·랩타임 + 다거리 추천(400m~1.6km) + 4~16주 풀 스케줄(페이스·회복·총거리) + 한국 인기 대회</strong>까지.
       </p>
 
       <IntervalTrainingClient />
@@ -246,10 +245,140 @@ export default function IntervalTrainingPage() {
           </div>
         </div>
 
+        {/* ── 8. 16주 풀 스케줄 가이드 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            📅 16주 풀 인터벌 스케줄 구조
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구의 [훈련 스케줄] 탭은 4~16주 자동 생성. 점진적 강도 증가 + 회복주 + 피크 + 테이퍼 4단계 구조 — 매주 같은 강도는 정체·부상 위험.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+            {[
+              { p: '1~4주', n: '🟢 적응', d: '기초 체력 + 인터벌 폼 익히기. 낮은 강도 자주.' },
+              { p: '5~8주', n: '🟡 발전', d: '페이스 ↑ + 거리 ↑. 야소 800 등 메뉴 다양화.' },
+              { p: '9~12주', n: '🔴 피크', d: '최고 강도 + 대회 시뮬. 주 2회 가능.' },
+              { p: '13~16주', n: '🟠 테이퍼', d: '강도 ↓ + 회복. 대회 직전 1~2주 집중 회복.' },
+            ].map((m, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.p}</p>
+                <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>{m.n}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{m.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+            💡 4주마다 회복주 자동 삽입 (강도 ↓·회복). 매 주차 페이스·회복·총 거리는 [훈련 스케줄] 탭의 6컬럼 표 자동 생성.
+          </p>
+        </div>
+
+        {/* ── 9. 1바퀴(400m) 페이스 가이드 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            🏟️ 1바퀴(400m) 페이스 일정성 — 인터벌 효과의 핵심
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구의 거리별 랩타임 표에 <strong style={{ color: 'var(--text)' }}>1바퀴(400m) 환산 컬럼</strong>이 추가되었습니다. 인터벌 효과는 페이스 일정성에 좌우됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>거리</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>총 랩타임</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>1바퀴(400m)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>트랙</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { d: '400m',   t: '1:45', l: '1:45',    track: '1바퀴' },
+                  { d: '800m',   t: '3:29', l: '1:44.5',  track: '2바퀴' },
+                  { d: '1km',    t: '4:21', l: '1:44.4',  track: '2.5바퀴' },
+                  { d: '1.2km',  t: '5:13', l: '1:44.3',  track: '3바퀴' },
+                  { d: '1.6km',  t: '6:57', l: '1:44.3',  track: '4바퀴 (1마일)' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.track}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            💡 첫 바퀴 너무 빠르면 후반 무너짐 / 마지막 바퀴 빨라지면 초반 너무 느렸음. 일정 페이스 = V̇O2 max 자극 정확. GPS 시계 또는 트랙 통과 기록 활용.
+          </p>
+        </div>
+
+        {/* ── 10. 다거리 추천 가이드 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            🎯 목적별 다거리 인터벌 추천
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구의 [추천 인터벌] 영역에 <strong style={{ color: 'var(--text)' }}>다거리 추천 표</strong>와 <strong style={{ color: 'var(--text)' }}>직접 선택 모드</strong>가 추가되었습니다. 한 가지 거리만 고집하지 말고 주기별로 다양화.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>거리</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>주된 효과</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 시기</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { d: '200~400m', e: '🔴 R 스피드 (최대 속도·러닝 이코노미)', t: '시즌 초반·스피드 강화 주기' },
+                  { d: '600~800m', e: '🟡 I·R 혼합 (5km·야소 800)',           t: '5km 대회·풀코스 야소 800' },
+                  { d: '1km',      e: '🟡 I 페이스 (V̇O2 max)',                 t: '5km·10km 기록 향상' },
+                  { d: '1.2~1.6km', e: '🟡 I·T 혼합 (V̇O2 + 역치)',            t: '10km·하프 준비' },
+                  { d: '2~3km',    e: '🔵 T 페이스 (역치)',                    t: '하프·풀코스 지구력' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ── 11. 한국 인기 대회 시즌 (NEW) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            🏃 한국 인기 마라톤 대회 시즌
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            본 도구의 [훈련 스케줄] 탭에서 <strong style={{ color: 'var(--text)' }}>대회 빠른 선택</strong>으로 D-day 자동 입력. 봄(3~5월)·가을(9~11월)이 한국 마라톤 시즌입니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { s: '🌸 봄 시즌 (3~5월)', races: '서울국제(3월)·동아(3월)·대구(4월)·서울하프(5월)', plan: '12월부터 16주 시작' },
+              { s: '🍁 가을 시즌 (10~11월)', races: '춘천(10월)·JTBC(11월)', plan: '6~7월부터 16주 시작' },
+              { s: '🏃 단기 (10km·하프)', races: '연중 자주 개최', plan: '8~12주 단축 스케줄 가능' },
+            ].map((m, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>{m.s}</p>
+                <p style={{ fontSize: '12.5px', color: 'var(--text)', marginBottom: '6px', lineHeight: 1.6 }}>{m.races}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>📅 준비: {m.plan}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+            💡 본 도구의 풀 스케줄 + 대회 직전 테이퍼(13~16주차) 활용. 봄 대회 → 12월부터 / 가을 대회 → 6~7월부터 시작 권장.
+          </p>
+        </div>
+
         {/* FAQ 직후 광고 슬롯 */}
         <AdSlot position="between-tools" minHeight={250} />
 
-        {/* ── 8. FAQ ── */}
+        {/* ── 12. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -274,7 +403,27 @@ export default function IntervalTrainingPage() {
               },
               {
                 q: '트랙이 없으면 인터벌 훈련이 불가능한가요?',
-                a: '<strong>가능합니다.</strong> ① GPS 시계로 거리 기반 인터벌(400m·800m·1km 자동 측정), ② 시간 기반 인터벌("3분 빠르게 + 2분 느리게 × 8회"), ③ 한적한 도로·공원 직선 구간 활용, ④ 운동장·공원 둘레 활용(둘레 길이 측정 후 반복) 등 다양한 방법이 있습니다. 트랙이 없어도 충분히 효과적이며, 도로·언덕에서의 변화가 실제 대회 코스 적응에 도움이 됩니다.',
+                a: '<strong>가능합니다.</strong> ① GPS 시계로 거리 기반 인터벌(400m·800m·1km 자동 측정), ② 시간 기반 인터벌(&ldquo;3분 빠르게 + 2분 느리게 × 8회&rdquo;), ③ 한적한 도로·공원 직선 구간 활용, ④ 운동장·공원 둘레 활용(둘레 길이 측정 후 반복) 등 다양한 방법이 있습니다. 트랙이 없어도 충분히 효과적이며, 도로·언덕에서의 변화가 실제 대회 코스 적응에 도움이 됩니다.',
+              },
+              {
+                q: '16주 훈련 스케줄에서 매주 페이스가 다른 이유는?',
+                a: '점진적 강도 증가 + 회복주 + 피크 + 테이퍼 구조입니다.<br/>• <strong>1~4주</strong>: 적응 (낮은 강도, 자주)<br/>• <strong>5~8주</strong>: 발전 (페이스 ↑)<br/>• <strong>9~12주</strong>: 피크 (최고 강도)<br/>• <strong>13~16주</strong>: 테이퍼 (회복·대회 준비)<br/>본 도구의 [훈련 스케줄] 표는 각 주 정확한 페이스·회복·총 거리를 표시합니다. 매주 같은 강도는 정체·부상 위험.',
+              },
+              {
+                q: '1바퀴(400m) 페이스가 왜 중요한가요?',
+                a: '인터벌 효과는 <strong>페이스 일정성</strong>에 좌우됩니다. 첫 바퀴 너무 빠르면 후반 무너지고, 마지막 바퀴 빨라지면 초반 너무 느렸다는 의미. 일정 페이스 = V̇O2 max 자극 정확. 본 도구는 800m·1km·1.6km 인터벌의 1바퀴(400m) 환산을 자동 표시합니다 (예: 800m 3:29 = 1바퀴 1:44.5). GPS 시계 또는 트랙 통과 기록 활용 권장.',
+              },
+              {
+                q: 'VDOT 43.4가 무슨 의미인가요?',
+                a: 'Jack Daniels의 V̇O2 max 추정 지표입니다.<br/>• VDOT 30: 5km 35분 수준<br/>• VDOT 40: 5km 24분<br/>• VDOT 50: 5km 19분<br/>• VDOT 60: 5km 16분<br/>• VDOT 70: 엘리트 수준<br/>본인 5km·10km·하프 기록으로 VDOT 자동 계산 (숫자 ↑ = 능력 ↑). 본 도구는 VDOT 기반으로 5가지 강도(E·M·T·I·R) 페이스를 정확 산출합니다.',
+              },
+              {
+                q: '인터벌 훈련 중 부상이 의심되면 어떻게 해야 하나요?',
+                a: '<strong>즉시 중단</strong> + 다음 단계 진행:<br/>1. 운동 즉시 중단<br/>2. RICE (Rest·Ice·Compression·Elevation)<br/>3. 24시간 관찰<br/>4. 통증 지속 → 정형외과·재활의학과<br/><strong>응급 신호 (즉시 119)</strong>: 가슴 통증·심한 호흡곤란 / 어지러움·실신 / 다리 마비.<br/>⚠️ &ldquo;통증을 무시하고 계속 훈련&rdquo; 절대 X. 부상 회복 후 점진적 복귀. 본 도구의 [부상 이력] 체크 시 강도가 자동으로 -10% 보정됩니다.',
+              },
+              {
+                q: '한국 인기 대회 시즌에 맞춰 훈련하려면?',
+                a: '본 도구의 [훈련 스케줄] 탭 상단에 <strong>한국 인기 대회 빠른 선택</strong>이 있습니다. 대회 클릭 시 D-day와 종목이 자동 입력됩니다.<br/>• <strong>봄 대회</strong> (3~5월): 서울국제·동아(3월) / 대구(4월) / 서울하프(5월) → 12월부터 16주 시작<br/>• <strong>가을 대회</strong> (10~11월): 춘천(10월) / JTBC(11월) → 6~7월부터 16주 시작<br/>본 도구의 풀 스케줄 + 대회 직전 테이퍼(13~16주차)로 시즌 준비.',
               },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

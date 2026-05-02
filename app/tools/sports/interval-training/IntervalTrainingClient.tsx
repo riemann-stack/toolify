@@ -1,7 +1,29 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
+
+// localStorage 키 (VDOT 자동 저장)
+const STORAGE_KEY = 'youtil-interval-record-v1'
+
+// 한국 인기 마라톤·러닝 대회
+const KOREA_RACES: { name: string; month: number; distances: string }[] = [
+  { name: '서울국제마라톤',  month: 3,  distances: '풀·하프·10km' },
+  { name: '동아일보마라톤',  month: 3,  distances: '풀·하프' },
+  { name: '대구국제마라톤',  month: 4,  distances: '풀·하프' },
+  { name: '서울하프마라톤',  month: 5,  distances: '하프·10km' },
+  { name: '춘천마라톤',      month: 10, distances: '풀·하프' },
+  { name: 'JTBC서울마라톤',  month: 11, distances: '풀·하프·10km' },
+]
+
+function weeksUntilMonth(targetMonth: number): number {
+  const now = new Date()
+  const year = now.getMonth() + 1 < targetMonth ? now.getFullYear() : now.getFullYear() + 1
+  const target = new Date(year, targetMonth - 1, 15)  // 대회 평균 중순
+  const diffMs = target.getTime() - now.getTime()
+  return Math.max(4, Math.min(16, Math.round(diffMs / (7 * 86400000))))
+}
 
 // ─────────────────────────────────────────────
 // 유틸
@@ -142,6 +164,45 @@ export default function IntervalTrainingClient() {
   const [copiedKey, setCopiedKey] = useState<string>('')
   const [resultCopied, setResultCopied] = useState<boolean>(false)
 
+  // ── 추천 인터벌 사용자 직접 모드 ──
+  const [recoMode, setRecoMode] = useState<'auto' | 'custom'>('auto')
+  const [customDist, setCustomDist] = useState<number>(800)
+  const [customReps, setCustomReps] = useState<number>(6)
+
+  // ── localStorage 자동 저장 ──
+  const [hydrated, setHydrated] = useState(false)
+  const [lastSavedAt, setLastSavedAt] = useState<string | null>(null)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const data = JSON.parse(raw)
+        if (data.r5min) setR5min(data.r5min)
+        if (data.r5sec) setR5sec(data.r5sec)
+        if (data.r10min) setR10min(data.r10min)
+        if (data.r10sec) setR10sec(data.r10sec)
+        if (data.rHh)   setRHh(data.rHh)
+        if (data.rHmin) setRHmin(data.rHmin)
+        if (data.rHsec) setRHsec(data.rHsec)
+        if (data.recordType) setRecordType(data.recordType)
+        if (data.weeklyKm) setWeeklyKm(data.weeklyKm)
+        if (data.lastSavedAt) setLastSavedAt(data.lastSavedAt)
+      }
+    } catch {}
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
+    try {
+      const data = {
+        r5min, r5sec, r10min, r10sec, rHh, rHmin, rHsec, recordType, weeklyKm,
+        lastSavedAt: new Date().toISOString().slice(0, 10),
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    } catch {}
+  }, [hydrated, r5min, r5sec, r10min, r10sec, rHh, rHmin, rHsec, recordType, weeklyKm])
+
   // ─────────────────────────────────────────────
   // VDOT 계산
   // ─────────────────────────────────────────────
@@ -192,31 +253,6 @@ export default function IntervalTrainingClient() {
       laps: d / 400,
     }))
   }, [intervalPaceSec, selectedDistances])
-
-  // ─────────────────────────────────────────────
-  // 추천 인터벌 (목적별)
-  // ─────────────────────────────────────────────
-  const recommendation = useMemo(() => {
-    if (intervalPaceSec <= 0) return null
-    const presets = {
-      speed:    { dist: 400, reps: 8,  recovery: '200m 조깅 (1:00~1:30)' },
-      '5k':     { dist: 800, reps: 5,  recovery: '400m 조깅 (2:00~2:30)' },
-      '10k':    { dist: 1000, reps: 5, recovery: '400m 조깅 (2:30~3:00)' },
-      half:     { dist: 1600, reps: 4, recovery: '600m 조깅 (3:00~3:30)' },
-      marathon: { dist: 800, reps: 8,  recovery: '400m 조깅 (3:00) — 야소 800' },
-    }
-    const p = presets[goal]
-    const lapSec = (intervalPaceSec * p.dist) / 1000
-    const fastTotal = (p.dist * p.reps) / 1000
-    const totalKm = fastTotal + 3 // 워밍업·쿨다운
-    return {
-      menu: `${p.dist}m × ${p.reps}회`,
-      pace: fmtMS(lapSec) + `/${p.dist}m`,
-      recovery: p.recovery,
-      fastTotal,
-      totalKm,
-    }
-  }, [goal, intervalPaceSec])
 
   // ─────────────────────────────────────────────
   // 야소 800
@@ -381,7 +417,7 @@ export default function IntervalTrainingClient() {
       weeks.push({ week: w, label, menu1, menu2: secondMenu, phase })
     }
     return { weeks, vdot, finalPace }
-  }, [weeklyKm, schedRaceType, schedRecord, weeksLeft, experience, intervalsPerWeek, injuryHistory])
+  }, [schedRaceType, schedRecord, weeksLeft, experience, intervalsPerWeek, injuryHistory])
 
   // ─────────────────────────────────────────────
   // 헬퍼
@@ -497,12 +533,13 @@ export default function IntervalTrainingClient() {
               <span className={s.cardLabelHint}>VDOT 자동 계산</span>
             </div>
             <div className={s.modeToggle}>
-              <button className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>최근 기록 기반</button>
-              <button className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>직접 입력</button>
+              <button className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>📊 최근 기록</button>
+              <button className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>🎯 목표 기록</button>
             </div>
 
             {inputMode === 'record' && (
               <>
+                <p className={s.modeSubLabel}>현재 본인의 5km·10km·하프 기록을 입력하세요</p>
                 <div className={s.recordTabs}>
                   <button className={`${s.recordTabBtn} ${recordType === '5k'   ? s.recordTabActive : ''}`} onClick={() => setRecordType('5k')}>5km</button>
                   <button className={`${s.recordTabBtn} ${recordType === '10k'  ? s.recordTabActive : ''}`} onClick={() => setRecordType('10k')}>10km</button>
@@ -532,13 +569,21 @@ export default function IntervalTrainingClient() {
                   </div>
                 )}
                 {vdotInfo.vdot > 0 && (
-                  <p className={s.vdotShow}>VDOT ≈ {vdotInfo.vdot.toFixed(1)}</p>
+                  <p className={s.vdotShow}>
+                    VDOT ≈ {vdotInfo.vdot.toFixed(1)}
+                    {lastSavedAt && (
+                      <span style={{ color: 'var(--muted)', fontWeight: 400, fontSize: 11, marginLeft: 8 }}>
+                        💾 마지막 저장: {lastSavedAt}
+                      </span>
+                    )}
+                  </p>
                 )}
               </>
             )}
 
             {inputMode === 'target' && (
               <>
+                <p className={s.modeSubLabel}>달성하고 싶은 목표 1km 페이스를 입력하세요 (대회 목표 등)</p>
                 <span className={s.subLabel}>목표 1km 페이스 (분 : 초)</span>
                 <div className={s.timeInputRow}>
                   <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={targetMin} onChange={e => setTargetMin(e.target.value)} />
@@ -564,6 +609,7 @@ export default function IntervalTrainingClient() {
                     onClick={() => setGoal(g.key)}
                     type="button"
                   >
+                    {goal === g.key && <span className={s.goalCheck}>✓</span>}
                     <span className={s.goalIcon}>{g.icon}</span>
                     <span className={s.goalLabel}>{g.label}</span>
                     <span className={s.goalIntensity}>{g.intensity} 페이스</span>
@@ -624,6 +670,7 @@ export default function IntervalTrainingClient() {
                   <tr>
                     <th>거리</th>
                     <th>랩타임</th>
+                    <th>1바퀴(400m)</th>
                     <th>트랙</th>
                     <th></th>
                   </tr>
@@ -632,10 +679,16 @@ export default function IntervalTrainingClient() {
                   {lapRows.map(r => {
                     const label = `${r.distance}m`
                     const time = fmtMS(r.lapSec)
+                    // 1바퀴(400m) 페이스
+                    const lapTime400 = (r.lapSec * 400) / r.distance
+                    const min400 = Math.floor(lapTime400 / 60)
+                    const sec400 = lapTime400 - min400 * 60
+                    const lap400Str = `${min400}:${sec400.toFixed(1).padStart(4, '0')}`
                     return (
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
                         <td>{r.distance >= 1000 ? `${r.distance / 1000}km` : `${r.distance}m`}</td>
                         <td>{time}</td>
+                        <td style={{ color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
                         <td>{r.laps}바퀴</td>
                         <td>
                           <button
@@ -651,18 +704,152 @@ export default function IntervalTrainingClient() {
                   })}
                 </tbody>
               </table>
+              <p className={s.lapHint}>
+                💡 <strong>1바퀴(400m) 페이스 일정성</strong>이 인터벌 효과 ★. 첫 바퀴 너무 빠르면 후반 무너짐. GPS 시계로 200m·400m별 페이스 확인 권장.
+              </p>
             </div>
           )}
 
-          {/* 추천 훈련 */}
-          {recommendation && (
+          {/* 추천 훈련 — 다거리 표 + 사용자 직접 모드 */}
+          {intervalPaceSec > 0 && (
             <div className={s.recoCard}>
-              <p className={s.recoTitle}>🎯 오늘의 추천 인터벌</p>
-              <div className={s.recoRow}><span>거리·횟수</span><strong>{recommendation.menu}</strong></div>
-              <div className={s.recoRow}><span>페이스</span><strong>{recommendation.pace}</strong></div>
-              <div className={s.recoRow}><span>회복</span><strong style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600 }}>{recommendation.recovery}</strong></div>
-              <div className={s.recoRow}><span>총 빠른 구간</span><strong>{recommendation.fastTotal.toFixed(1)}km</strong></div>
-              <div className={s.recoRow}><span>워밍업·쿨다운 포함</span><strong>약 {recommendation.totalKm.toFixed(0)}km</strong></div>
+              <div className={s.recoModeRow}>
+                <p className={s.recoTitle}>🎯 추천 인터벌</p>
+                <div className={s.recoModeToggle}>
+                  <button className={`${s.recoModeBtn} ${recoMode === 'auto' ? s.recoModeBtnActive : ''}`}
+                    onClick={() => setRecoMode('auto')}>다거리 추천</button>
+                  <button className={`${s.recoModeBtn} ${recoMode === 'custom' ? s.recoModeBtnActive : ''}`}
+                    onClick={() => setRecoMode('custom')}>직접 선택</button>
+                </div>
+              </div>
+
+              {recoMode === 'auto' ? (
+                <>
+                  <p className={s.recoSubLabel}>본인 VDOT·{GOALS.find(g => g.key === goal)?.label} 목적별 메뉴</p>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table className={s.recoTable}>
+                      <thead>
+                        <tr>
+                          <th>거리</th>
+                          <th>횟수</th>
+                          <th style={{ textAlign: 'right' }}>페이스</th>
+                          <th>회복</th>
+                          <th style={{ textAlign: 'right' }}>총 빠른 거리</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(() => {
+                          // 목적별 다거리 추천
+                          const presetMatrix: Record<string, Array<{ dist: number; minReps: number; maxReps: number; recovery: string }>> = {
+                            speed: [
+                              { dist: 200, minReps: 8,  maxReps: 12, recovery: '200m 조깅' },
+                              { dist: 400, minReps: 6,  maxReps: 10, recovery: '200m 조깅' },
+                              { dist: 600, minReps: 5,  maxReps: 8,  recovery: '300m 조깅' },
+                            ],
+                            '5k': [
+                              { dist: 400, minReps: 8,  maxReps: 10, recovery: '200m 조깅' },
+                              { dist: 600, minReps: 5,  maxReps: 7,  recovery: '300m 조깅' },
+                              { dist: 800, minReps: 5,  maxReps: 6,  recovery: '400m 조깅' },
+                              { dist: 1000, minReps: 4, maxReps: 5,  recovery: '400m 조깅' },
+                              { dist: 1200, minReps: 3, maxReps: 4,  recovery: '400m 조깅' },
+                            ],
+                            '10k': [
+                              { dist: 400, minReps: 8,  maxReps: 10, recovery: '200m 조깅' },
+                              { dist: 800, minReps: 5,  maxReps: 6,  recovery: '400m 조깅' },
+                              { dist: 1000, minReps: 4, maxReps: 6,  recovery: '400m 조깅' },
+                              { dist: 1200, minReps: 3, maxReps: 4,  recovery: '400m 조깅' },
+                              { dist: 1600, minReps: 3, maxReps: 4,  recovery: '600m 조깅' },
+                            ],
+                            half: [
+                              { dist: 1000, minReps: 5, maxReps: 6, recovery: '400m 조깅' },
+                              { dist: 1600, minReps: 4, maxReps: 5, recovery: '600m 조깅' },
+                              { dist: 2000, minReps: 3, maxReps: 4, recovery: '600m 조깅' },
+                              { dist: 3000, minReps: 2, maxReps: 3, recovery: '800m 조깅' },
+                            ],
+                            marathon: [
+                              { dist: 800,  minReps: 6, maxReps: 10, recovery: '400m 조깅 (야소 800)' },
+                              { dist: 1000, minReps: 5, maxReps: 6,  recovery: '400m 조깅' },
+                              { dist: 1600, minReps: 3, maxReps: 4,  recovery: '600m 조깅' },
+                              { dist: 2000, minReps: 3, maxReps: 4,  recovery: '600m 조깅 (M 페이스)' },
+                            ],
+                          }
+                          const presets = presetMatrix[goal] ?? presetMatrix['5k']
+                          return presets.map((p, i) => {
+                            const lapSec = (intervalPaceSec * p.dist) / 1000
+                            const distLabel = p.dist >= 1000 ? `${p.dist / 1000}km` : `${p.dist}m`
+                            const fastMin = (p.dist * p.minReps) / 1000
+                            const fastMax = (p.dist * p.maxReps) / 1000
+                            return (
+                              <tr key={i}>
+                                <td style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#FFD93E' }}>{distLabel}</td>
+                                <td style={{ color: 'var(--text)', fontWeight: 600 }}>{p.minReps}~{p.maxReps}회</td>
+                                <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{fmtMS(lapSec)}</td>
+                                <td style={{ color: 'var(--muted)', fontSize: 12 }}>{p.recovery}</td>
+                                <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fastMin.toFixed(1)}~{fastMax.toFixed(1)}km</td>
+                              </tr>
+                            )
+                          })
+                        })()}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className={s.recoHint}>
+                    💡 초보 → 권장 횟수의 50~70% / 중급 → 권장 / 고급 → 권장 +1~2회. 컨디션 우선.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className={s.recoSubLabel}>거리·횟수를 직접 선택하면 즉시 계산</p>
+                  <div className={s.customGrid}>
+                    <div>
+                      <span className={s.subLabel}>거리</span>
+                      <div className={s.customDistGrid}>
+                        {[200, 400, 600, 800, 1000, 1200, 1600, 2000].map(d => (
+                          <button key={d} type="button"
+                            className={`${s.customDistBtn} ${customDist === d ? s.customDistBtnActive : ''}`}
+                            onClick={() => setCustomDist(d)}>
+                            {d >= 1000 ? `${d / 1000}km` : `${d}m`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className={s.subLabel}>횟수: {customReps}회</span>
+                      <div className={s.sliderRow}>
+                        <input type="range" min={1} max={12} value={customReps}
+                          onChange={e => setCustomReps(Number(e.target.value))} />
+                        <span className={s.sliderValue}>{customReps}회</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {(() => {
+                    const lapSec = (intervalPaceSec * customDist) / 1000
+                    const distLabel = customDist >= 1000 ? `${customDist / 1000}km` : `${customDist}m`
+                    const fastKm = (customDist * customReps) / 1000
+                    const recovery = customDist <= 400 ? '200m 조깅 (1:00~1:30)'
+                      : customDist <= 800 ? '400m 조깅 (2:00~2:30)'
+                      : customDist <= 1200 ? '400m 조깅 (2:30~3:00)'
+                      : '600m 조깅 (3:00~3:30)'
+                    const intensityLabel = customDist <= 400 ? '🔴 R 페이스 (스피드)'
+                      : customDist <= 1200 ? '🟡 I 페이스 (V̇O2 max)'
+                      : '🔵 T 페이스 (역치)'
+                    const totalKm = fastKm + 3
+                    const totalMin = (lapSec * customReps + (recovery.includes('1:00') ? 75 : 150) * (customReps - 1)) / 60 + 12
+                    return (
+                      <div className={s.customResultCard}>
+                        <p className={s.customResultTitle}>📐 {distLabel} × {customReps}회 인터벌</p>
+                        <div className={s.recoRow}><span>페이스</span><strong>{fmtMS(lapSec)}/{distLabel}</strong></div>
+                        <div className={s.recoRow}><span>회복</span><strong style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600 }}>{recovery}</strong></div>
+                        <div className={s.recoRow}><span>총 빠른 구간</span><strong>{fastKm.toFixed(1)}km</strong></div>
+                        <div className={s.recoRow}><span>워밍업·쿨다운 포함</span><strong>약 {totalKm.toFixed(0)}km</strong></div>
+                        <div className={s.recoRow}><span>예상 소요 시간</span><strong>약 {Math.round(totalMin)}분</strong></div>
+                        <div className={s.recoRow}><span>강도</span><strong style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{intensityLabel}</strong></div>
+                      </div>
+                    )
+                  })()}
+                </>
+              )}
             </div>
           )}
 
@@ -916,6 +1103,34 @@ export default function IntervalTrainingClient() {
       {/* ──────────── TAB 3: 훈련 스케줄 ──────────── */}
       {tab === 'schedule' && (
         <>
+          {/* 한국 인기 대회 빠른 입력 */}
+          <div className={s.card}>
+            <div className={s.cardLabel}>
+              <span>📌 한국 인기 대회 빠른 선택</span>
+              <span className={s.cardLabelHint}>대회까지 남은 주 자동 계산</span>
+            </div>
+            <div className={s.raceGrid}>
+              {KOREA_RACES.map(race => {
+                const w = weeksUntilMonth(race.month)
+                return (
+                  <button key={race.name} type="button"
+                    className={s.raceBtn}
+                    onClick={() => {
+                      setWeeksLeft(w)
+                      // 자동으로 풀 또는 하프 선택
+                      if (race.distances.includes('풀')) setSchedRaceType('marathon')
+                      else if (race.distances.includes('하프')) setSchedRaceType('half')
+                      else setSchedRaceType('10k')
+                    }}>
+                    <span className={s.raceMonth}>{race.month}월</span>
+                    <span className={s.raceName}>{race.name}</span>
+                    <span className={s.raceMeta}>{race.distances} · D-{w * 7}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>현재 상태 입력</span>
@@ -978,69 +1193,125 @@ export default function IntervalTrainingClient() {
             </div>
           </div>
 
-          {/* 스케줄 표 */}
-          {schedule.weeks.length > 0 && (
-            <div className={s.card}>
-              <div className={s.cardLabel}>
-                <span>{weeksLeft}주 인터벌 스케줄</span>
-                <span className={s.cardLabelHint}>점진적 증가 + 회복주 + 테이퍼</span>
-              </div>
-              <table className={s.scheduleTable}>
-                <thead>
-                  <tr><th>주차</th><th>인터벌 메뉴</th><th>강도</th></tr>
-                </thead>
-                <tbody>
-                  {schedule.weeks.map(w => (
-                    <tr
-                      key={w.week}
-                      className={
-                        w.phase === 'adapt'   ? s.phaseAdapt :
-                        w.phase === 'develop' ? s.phaseDevel :
-                        w.phase === 'recover' ? s.phaseRecov :
-                        w.phase === 'peak'    ? s.phasePeak  :
-                        s.phaseTaper
-                      }
-                    >
-                      <td>{w.week}주차</td>
-                      <td>
-                        {w.menu1.name}
-                        {w.menu2 && <><br /><span style={{ fontSize: 11.5, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
-                      </td>
-                      <td>{w.label}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* 첫 주 상세 (예시) */}
+          {/* 스케줄 표 (확장: 6컬럼) */}
           {schedule.weeks.length > 0 && schedule.finalPace > 0 && (
             <div className={s.card}>
               <div className={s.cardLabel}>
-                <span>1주차 상세 가이드</span>
+                <span>{weeksLeft}주 인터벌 스케줄</span>
                 <span className={s.cardLabelHint}>VDOT {schedule.vdot.toFixed(1)} 기준</span>
               </div>
-              <div className={s.scheduleDetailCard}>
-                {(() => {
-                  const w = schedule.weeks[0]
-                  const lapSec = (schedule.finalPace * w.menu1.dist) / 1000
-                  const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
-                  return (
-                    <>
-                      <div>인터벌 메뉴: <strong>{w.menu1.name}</strong></div>
-                      <div>목표 페이스: <strong>{fmtMS(lapSec)}/{w.menu1.dist >= 1000 ? `${w.menu1.dist / 1000}km` : `${w.menu1.dist}m`}</strong></div>
-                      <div>회복: <strong>{w.menu1.recovery}</strong></div>
-                      <div>총 빠른 구간: <strong>{fastKm.toFixed(1)}km</strong></div>
-                      <div>워밍업: <strong>1.5km</strong></div>
-                      <div>쿨다운: <strong>1.5km</strong></div>
-                      <div>총 훈련 거리: <strong>약 {(fastKm + 3).toFixed(1)}km</strong></div>
-                      <div>권장 컨디션: <strong>전날 휴식 또는 가벼운 조깅</strong></div>
-                      {!trackOk && <div style={{ color: '#FF8C3E', marginTop: 6 }}>※ 트랙 없음: GPS 시계 거리 기반 또는 시간 기반 인터벌로 대체</div>}
-                    </>
-                  )
-                })()}
+              <div style={{ overflowX: 'auto' }}>
+                <table className={s.scheduleTable}>
+                  <thead>
+                    <tr>
+                      <th>주차</th>
+                      <th>메뉴</th>
+                      <th style={{ textAlign: 'right' }}>페이스</th>
+                      <th>회복</th>
+                      <th style={{ textAlign: 'right' }}>총거리</th>
+                      <th style={{ textAlign: 'center' }}>강도</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schedule.weeks.map(w => {
+                      const lapSec = (schedule.finalPace * w.menu1.dist) / 1000
+                      const distLabel = w.menu1.dist >= 1000 ? `${w.menu1.dist / 1000}km` : `${w.menu1.dist}m`
+                      const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
+                      const totalKm = fastKm + 3 // 워밍업·쿨다운
+                      const phaseColor =
+                        w.phase === 'adapt'   ? '#3EFF9B' :
+                        w.phase === 'develop' ? '#FFD700' :
+                        w.phase === 'recover' ? '#3EC8FF' :
+                        w.phase === 'peak'    ? '#FF6B6B' :
+                        '#FF8C3E'
+                      const phaseEmoji =
+                        w.phase === 'adapt'   ? '🟢' :
+                        w.phase === 'develop' ? '🟡' :
+                        w.phase === 'recover' ? '🔵' :
+                        w.phase === 'peak'    ? '🔴' :
+                        '🟠'
+                      return (
+                        <tr key={w.week}>
+                          <td style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
+                          <td style={{ color: 'var(--text)', fontSize: 13, fontWeight: 500 }}>
+                            {w.menu1.name}
+                            {w.menu2 && <><br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
+                          </td>
+                          <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
+                            {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
+                          </td>
+                          <td style={{ color: 'var(--muted)', fontSize: 12 }}>{w.menu1.recovery}</td>
+                          <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
+                            {totalKm.toFixed(1)}km
+                          </td>
+                          <td style={{ textAlign: 'center' }}>
+                            <span className={s.phaseBadge} style={{ background: phaseColor + '22', color: phaseColor, borderColor: phaseColor + '55' }}>
+                              {phaseEmoji} {w.label}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
+            </div>
+          )}
+
+          {/* 모바일 카드 뷰 (xs 화면 전용) */}
+          {schedule.weeks.length > 0 && schedule.finalPace > 0 && (
+            <div className={s.scheduleCardsMobile}>
+              {schedule.weeks.map(w => {
+                const lapSec = (schedule.finalPace * w.menu1.dist) / 1000
+                const distLabel = w.menu1.dist >= 1000 ? `${w.menu1.dist / 1000}km` : `${w.menu1.dist}m`
+                const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
+                const totalKm = fastKm + 3
+                const phaseColor =
+                  w.phase === 'adapt'   ? '#3EFF9B' :
+                  w.phase === 'develop' ? '#FFD700' :
+                  w.phase === 'recover' ? '#3EC8FF' :
+                  w.phase === 'peak'    ? '#FF6B6B' :
+                  '#FF8C3E'
+                const phaseEmoji =
+                  w.phase === 'adapt'   ? '🟢' :
+                  w.phase === 'develop' ? '🟡' :
+                  w.phase === 'recover' ? '🔵' :
+                  w.phase === 'peak'    ? '🔴' :
+                  '🟠'
+                return (
+                  <div key={w.week} className={s.weekCard} style={{ borderLeftColor: phaseColor }}>
+                    <div className={s.weekCardHead}>
+                      <span className={s.weekCardNum}>{w.week}주차</span>
+                      <span className={s.phaseBadge} style={{ background: phaseColor + '22', color: phaseColor, borderColor: phaseColor + '55' }}>
+                        {phaseEmoji} {w.label}
+                      </span>
+                    </div>
+                    <div className={s.weekCardBody}>
+                      <div><strong>{w.menu1.name}</strong>{w.menu2 && <span style={{ color: 'var(--muted)', fontSize: 11 }}> · + {w.menu2.name}</span>}</div>
+                      <div className={s.weekCardMeta}>
+                        <span>페이스: <strong style={{ color: 'var(--accent)' }}>{fmtMS(lapSec)}/{distLabel}</strong></span>
+                        <span>회복: {w.menu1.recovery}</span>
+                        <span>총: <strong>{totalKm.toFixed(1)}km</strong></span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* 워밍업·쿨다운 공통 안내 (별도 카드) */}
+          {schedule.weeks.length > 0 && (
+            <div className={s.warmupCard}>
+              <p className={s.warmupTitle}>💡 모든 주차 공통</p>
+              <ul className={s.warmupList}>
+                <li><strong>워밍업</strong>: 1.5km 가벼운 조깅 + 동적 스트레칭 5~10분</li>
+                <li><strong>쿨다운</strong>: 1.5km 가벼운 조깅 + 정적 스트레칭</li>
+                <li>인터벌 전날: 휴식 또는 30분 이내 가벼운 조깅</li>
+                <li>주 {intervalsPerWeek}회 인터벌 (선택값 기준)</li>
+                <li>컨디션 ↓ 또는 통증 시 즉시 중단·휴식</li>
+                {!trackOk && <li style={{ color: '#FF8C3E' }}>⚠️ 트랙 없음: GPS 시계 거리 기반 또는 시간 기반 인터벌로 대체</li>}
+              </ul>
             </div>
           )}
 

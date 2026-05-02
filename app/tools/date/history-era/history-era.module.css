@@ -1,5 +1,49 @@
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
+/* ── 오늘은 무슨 해? 자동 카드 ── */
+.todayHero {
+  background: linear-gradient(135deg, rgba(255,62,140,0.10), rgba(200,255,62,0.06));
+  border: 1px solid rgba(255,62,140,0.3);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 4px;
+}
+.todayHead {
+  display: flex; justify-content: space-between; align-items: baseline;
+  flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
+}
+.todayLabel {
+  font-size: 12px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;
+}
+.todayYear {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); letter-spacing: -0.5px;
+}
+.todayGrid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+@media (max-width: 480px) {
+  .todayGrid { grid-template-columns: repeat(2, 1fr); }
+}
+.todayItem {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.todayItemLabel { font-size: 11px; color: var(--muted); }
+.todayItemValue {
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800;
+  color: var(--text); letter-spacing: -0.2px;
+}
+.todayGanjji {
+  margin: 12px 0 0; font-size: 13px; color: var(--text);
+  text-align: center; font-weight: 600;
+  padding: 8px; background: var(--bg3); border-radius: 8px;
+}
+
+
+
 /* ── 탭 ── */
 .tabs {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;

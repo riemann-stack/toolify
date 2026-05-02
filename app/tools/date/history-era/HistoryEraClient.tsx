@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import styles from './history-era.module.css'
 
 // ─── 상수 ───────────────────────────────────────────────────────────────────
@@ -96,42 +97,82 @@ const JOSEON_KINGS: King[] = [
 // 역사 이벤트: 천문학적 연도 사용 (기원전 N년 = -(N-1))
 const EVENTS: [number, string][] = [
   [-2332,'고조선 건국 (단군왕검)'],
+  [-194, '위만조선 건국'],
   [-107, '고조선 멸망·한사군 설치'],
   [-56,  '신라 건국 (박혁거세)'],
   [-36,  '고구려 건국 (주몽)'],
   [-17,  '백제 건국 (온조)'],
+  [42,   '가야 건국 (김수로왕)'],
+  [313,  '낙랑군 멸망 (고구려)'],
   [372,  '고구려 불교 전래·태학 설립'],
+  [384,  '백제 불교 전래'],
   [392,  '광개토대왕 즉위'],
   [427,  '고구려 평양 천도'],
+  [475,  '백제 한성 함락 (장수왕)'],
   [527,  '신라 불교 공인'],
+  [562,  '대가야 멸망'],
   [612,  '살수대첩 (을지문덕)'],
+  [645,  '안시성 전투 (고구려·당)'],
   [660,  '백제 멸망'],
   [668,  '고구려 멸망'],
   [676,  '신라 삼국통일'],
   [698,  '발해 건국 (대조영)'],
+  [892,  '후백제 건국 (견훤)'],
+  [901,  '후고구려 건국 (궁예)'],
   [918,  '고려 건국 (왕건)'],
+  [926,  '발해 멸망'],
+  [935,  '신라 멸망 (경순왕 항복)'],
   [936,  '후삼국 통일'],
+  [958,  '과거제 도입 (광종)'],
+  [993,  '거란 1차 침입·서희 담판'],
   [1019, '귀주대첩 (강감찬)'],
+  [1126, '이자겸의 난'],
   [1170, '무신정변'],
   [1231, '몽골 1차 침략'],
+  [1270, '개경 환도·삼별초 항쟁'],
+  [1377, '직지심체요절 인쇄'],
+  [1388, '위화도 회군 (이성계)'],
   [1392, '조선 건국 (태조)'],
+  [1394, '한양 천도'],
+  [1418, '세종 즉위'],
   [1446, '훈민정음 반포'],
+  [1453, '계유정난 (수양대군)'],
+  [1485, '경국대전 완성'],
+  [1504, '갑자사화'],
   [1592, '임진왜란 발발'],
+  [1597, '정유재란'],
   [1636, '병자호란'],
   [1776, '정조 즉위·규장각 설립'],
+  [1796, '수원 화성 완공'],
+  [1801, '신유박해'],
+  [1811, '홍경래의 난'],
+  [1860, '동학 창시 (최제우)'],
+  [1866, '병인양요'],
+  [1871, '신미양요'],
   [1876, '강화도 조약'],
-  [1894, '갑오개혁·동학농민운동'],
+  [1882, '임오군란'],
+  [1884, '갑신정변'],
+  [1894, '갑오개혁·동학농민운동·청일전쟁'],
+  [1895, '을미사변·단발령'],
   [1897, '대한제국 선포'],
+  [1905, '을사늑약'],
   [1910, '국권 피탈 (경술국치)'],
   [1919, '3·1 운동·임시정부 수립'],
+  [1932, '윤봉길 의거'],
   [1945, '광복 (8·15)'],
   [1948, '대한민국 정부 수립'],
   [1950, '6·25 전쟁 발발'],
   [1953, '6·25 전쟁 휴전'],
   [1960, '4·19 혁명'],
+  [1961, '5·16 군사정변'],
+  [1972, '7·4 남북공동성명'],
+  [1980, '5·18 광주민주화운동'],
   [1987, '6·10 민주항쟁'],
   [1988, '서울 올림픽'],
+  [1997, 'IMF 외환위기'],
+  [2000, '6·15 남북공동선언'],
   [2002, '한일 FIFA 월드컵'],
+  [2018, '평창 동계올림픽'],
 ]
 
 const GROUP_LABELS: Record<string, string> = {
@@ -149,6 +190,9 @@ export default function HistoryEraClient() {
   const [tab, setTab] = useState<TabId>('era2ad')
   return (
     <div className={styles.wrap}>
+      {/* 오늘은 무슨 해? 자동 카드 */}
+      <TodayHero />
+
       <nav className={styles.tabs}>
         {TAB_LABELS.map(([t, label]) => (
           <button key={t} className={`${styles.tab}${tab === t ? ' ' + styles.tabActive : ''}`} onClick={() => setTab(t)}>
@@ -160,6 +204,61 @@ export default function HistoryEraClient() {
       {tab === 'ad2era'   && <ADToEraTab />}
       {tab === 'ganjji'   && <GanjjiTab />}
       {tab === 'timeline' && <TimelineTab />}
+    </div>
+  )
+}
+
+/* ──────────────────────── 오늘은 무슨 해? 자동 카드 ──────────────────────── */
+function TodayHero() {
+  // SSR/CSR 일치를 위해 build 시점 연도 fallback, 클라이언트 마운트 시 실제 연도
+  const [year, setYear] = useState<number>(2026)
+  useEffect(() => {
+    setYear(new Date().getFullYear())
+  }, [])
+  return <TodayHeroDisplay year={year} />
+}
+
+function TodayHeroDisplay({ year }: { year: number }) {
+  const dangi = year + 2333
+  const bulgi = year + 544
+  const hwanggi = year + 660
+  const minguo = year - 1911
+  const reiwa = year - 2018  // 레이와 1년 = 2019
+  const ganjji = ganjjiLabel(year)
+
+  return (
+    <div className={styles.todayHero}>
+      <div className={styles.todayHead}>
+        <span className={styles.todayLabel}>📅 오늘은 무슨 해?</span>
+        <span className={styles.todayYear}>{year}년 {ganjji.split(' · ')[0]}</span>
+      </div>
+      <div className={styles.todayGrid}>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>🌐 서기 (AD)</span>
+          <span className={styles.todayItemValue}>{year}년</span>
+        </div>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>🇰🇷 단기</span>
+          <span className={styles.todayItemValue}>{dangi}년</span>
+        </div>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>☸️ 불기</span>
+          <span className={styles.todayItemValue}>{bulgi}년</span>
+        </div>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>🇯🇵 황기</span>
+          <span className={styles.todayItemValue}>{hwanggi}년</span>
+        </div>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>🇯🇵 레이와</span>
+          <span className={styles.todayItemValue}>{reiwa > 0 ? `${reiwa}년` : '—'}</span>
+        </div>
+        <div className={styles.todayItem}>
+          <span className={styles.todayItemLabel}>🇨🇳 민국 (대만)</span>
+          <span className={styles.todayItemValue}>{minguo > 0 ? `${minguo}년` : '—'}</span>
+        </div>
+      </div>
+      <p className={styles.todayGanjji}>🐎 {ganjji}</p>
     </div>
   )
 }

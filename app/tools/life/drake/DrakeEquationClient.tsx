@@ -24,6 +24,103 @@ const PRESETS: Record<Exclude<PresetId, null>, DrakeParams> = {
 
 const MILKY_WAY_STARS = 300_000_000_000 // 3000억
 
+/* 거리 계산 — 우리 은하를 디스크로 가정 */
+const GALAXY_RADIUS_LY = 50_000          // 광년 (반경)
+const GALAXY_THICKNESS_LY = 1_000        // 광년 (디스크 두께)
+const GALAXY_VOLUME_LY3 = Math.PI * GALAXY_RADIUS_LY * GALAXY_RADIUS_LY * GALAXY_THICKNESS_LY
+const STARS_IN_RADIO_RANGE = 14_000      // 100광년 내 별 약 14,000개 (참고)
+
+type DistanceEstimate = {
+  averageDistance: number
+  nearestDistance: number
+  roundTripCommYears: number
+  potentialContactsInRange: number
+  rangeLabel: 'low' | 'medium' | 'high'
+}
+
+function calcDistance(N: number): DistanceEstimate | null {
+  if (!isFinite(N) || N <= 0) return null
+  const averageDistance = Math.pow(GALAXY_VOLUME_LY3 / N, 1 / 3)
+  const nearestDistance = averageDistance * 0.55  // Poisson 통계 근사
+  const roundTripCommYears = nearestDistance * 2
+  const potentialContactsInRange = N * (STARS_IN_RADIO_RANGE / MILKY_WAY_STARS)
+  const rangeLabel: DistanceEstimate['rangeLabel'] =
+    potentialContactsInRange > 1 ? 'high'
+      : potentialContactsInRange > 0.1 ? 'medium' : 'low'
+  return { averageDistance, nearestDistance, roundTripCommYears, potentialContactsInRange, rangeLabel }
+}
+
+function fmtLy(ly: number): string {
+  if (!isFinite(ly)) return '—'
+  if (ly < 1) return ly.toFixed(2) + ' 광년'
+  if (ly < 10_000) return Math.round(ly).toLocaleString('ko-KR') + ' 광년'
+  if (ly < 1_000_000) return (ly / 1000).toFixed(1) + '천 광년'
+  return ly.toExponential(2) + ' 광년'
+}
+
+function fmtYears(y: number): string {
+  if (!isFinite(y)) return '—'
+  if (y < 10_000) return Math.round(y).toLocaleString('ko-KR') + '년'
+  if (y < 1_000_000) return (y / 1000).toFixed(1) + '천년'
+  return (y / 1_000_000).toFixed(2) + '백만년'
+}
+
+/* 페르미 역설 가설 추천 */
+type FermiHypothesis = {
+  id: string
+  emoji: string
+  title: string
+  desc: string
+  weight: (n: number) => number  // 0~1, 높을수록 가능성
+}
+
+const FERMI_HYPOTHESES: FermiHypothesis[] = [
+  {
+    id: 'rare-earth', emoji: '🌍', title: '레어 어스 (희귀 지구)',
+    desc: '지구 같은 안정된 항성·달·자기장·판 구조 조합이 극히 드물다는 가설. N이 작을수록 유력.',
+    weight: n => n < 1 ? 1 : n < 10 ? 0.9 : n < 100 ? 0.4 : 0.05,
+  },
+  {
+    id: 'great-filter', emoji: '🚧', title: '대필터',
+    desc: '문명이 특정 단계에서 거의 모두 멸종한다는 가설. 인류 앞에 필터가 있다면 미래는 어둡다.',
+    weight: n => n < 10 ? 0.5 : n < 10_000 ? 0.95 : 0.7,
+  },
+  {
+    id: 'too-loud', emoji: '📡', title: '우리가 너무 시끄러움',
+    desc: '인류 전파는 약 126광년만 도달. 다른 문명은 더 멀리 있어 신호가 아직 미도달.',
+    weight: n => n < 100 ? 0.3 : n < 100_000 ? 0.85 : 0.6,
+  },
+  {
+    id: 'zoo', emoji: '🦒', title: '동물원 가설',
+    desc: '외계 문명이 인류를 의도적으로 관찰만 하고 접촉하지 않는다는 가설.',
+    weight: n => n < 1000 ? 0.2 : n < 1_000_000 ? 0.7 : 0.85,
+  },
+  {
+    id: 'post-bio', emoji: '🤖', title: '이미 지나쳐 감 (디지털 문명)',
+    desc: '초문명은 생물학을 벗어나 디지털·기계 존재로 진화해 전파 통신을 하지 않음.',
+    weight: n => n < 10_000 ? 0.1 : n < 1_000_000 ? 0.4 : 0.85,
+  },
+]
+
+function suggestFermi(N: number): FermiHypothesis[] {
+  if (!isFinite(N) || N <= 0) {
+    return [FERMI_HYPOTHESES[0]]  // 레어 어스
+  }
+  return [...FERMI_HYPOTHESES]
+    .map(h => ({ ...h, w: h.weight(N) }))
+    .sort((a, b) => b.w - a.w)
+    .slice(0, 2)
+}
+
+/* 배지 (N에 따라) */
+function getBadge(N: number): { emoji: string; label: string } {
+  if (N < 1) return { emoji: '🌑', label: '비관론자' }
+  if (N < 100) return { emoji: '🔭', label: '현실론자' }
+  if (N < 10_000) return { emoji: '🌟', label: '균형론자' }
+  if (N < 1_000_000) return { emoji: '☀️', label: '낙관론자' }
+  return { emoji: '🌌', label: '초낙관론자' }
+}
+
 /* ──────────────────────── 공식 ──────────────────────── */
 function calculateDrake(p: DrakeParams): number {
   return p.rStar * p.fp * p.ne * p.fl * p.fi * p.fc * p.L
@@ -147,6 +244,9 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
   const { msg, tone } = getMessage(N)
   const ratioPct = (N / MILKY_WAY_STARS) * 100
   const highlightCount = Math.min(50, Math.max(0, Math.floor(Math.log10(N + 1) * 15)))
+  const distance = useMemo(() => calcDistance(N), [N])
+  const fermiTop = useMemo(() => suggestFermi(N), [N])
+  const badge = getBadge(N)
 
   /* 기여도 (누적 곱) */
   const contribution = useMemo(() => {
@@ -185,8 +285,11 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
   }, [params])
 
   const handleShare = async () => {
+    const distText = distance
+      ? `\n📏 가장 가까운 문명: ${fmtLy(distance.nearestDistance)} · 왕복 통신 ${fmtYears(distance.roundTripCommYears)}`
+      : ''
     const text =
-      `나의 드레이크 방정식 결과: 은하에 약 ${formatN(N)}개의 지적 문명이 있습니다!\n` +
+      `나의 드레이크 방정식 결과: 은하에 약 ${formatN(N)}개의 지적 문명 (${badge.emoji} ${badge.label})!${distText}\n` +
       `R*=${params.rStar.toFixed(1)} / fp=${params.fp.toFixed(2)} / ne=${params.ne.toFixed(1)} / ` +
       `fl=${params.fl.toExponential(1)} / fi=${params.fi.toExponential(1)} / fc=${params.fc.toExponential(1)} / ` +
       `L=${formatL(params.L)}\n` +
@@ -288,7 +391,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
         <p className={styles.heroMsg}>{msg}</p>
       </div>
 
-      {/* 스케일 */}
+      {/* 스케일 + 배지 */}
       <div className={styles.scaleCard}>
         <p className={styles.scaleText}>
           우리 은하의 별 <strong>3,000억 개</strong> 중
@@ -298,14 +401,77 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
         <p className={styles.scaleRatio}>
           (전체 대비 <strong>{ratioPct < 0.00001 ? ratioPct.toExponential(2) : ratioPct.toFixed(8)}%</strong>)
         </p>
+        <p className={styles.badge}>
+          당신은 <strong>{badge.emoji} {badge.label}</strong>입니다
+        </p>
       </div>
 
-      {/* 은하 SVG */}
+      {/* 거리·통신 카드 */}
+      {distance && (
+        <div className={styles.distCard}>
+          <div className={styles.distLabel}>📏 거리·통신 추정 (N = {formatN(N)})</div>
+          <div className={styles.distGrid}>
+            <div className={styles.distItem}>
+              <div className={styles.distItemLabel}>평균 문명 간 거리</div>
+              <div className={styles.distItemValue}>{fmtLy(distance.averageDistance)}</div>
+            </div>
+            <div className={styles.distItem}>
+              <div className={styles.distItemLabel}>가장 가까운 문명</div>
+              <div className={styles.distItemValue} style={{ color: '#FF6B6B' }}>{fmtLy(distance.nearestDistance)}</div>
+            </div>
+            <div className={styles.distItem}>
+              <div className={styles.distItemLabel}>왕복 통신 시간</div>
+              <div className={styles.distItemValue}>{fmtYears(distance.roundTripCommYears)}</div>
+            </div>
+            <div className={styles.distItem}>
+              <div className={styles.distItemLabel}>인류 전파권 (126광년) 내</div>
+              <div className={styles.distItemValue} style={{
+                color: distance.rangeLabel === 'high' ? '#3EFF9B'
+                  : distance.rangeLabel === 'medium' ? '#FFD93E' : '#FF8C3E',
+              }}>
+                {distance.potentialContactsInRange < 0.001
+                  ? distance.potentialContactsInRange.toExponential(2)
+                  : distance.potentialContactsInRange.toFixed(3)}개
+              </div>
+            </div>
+          </div>
+          <p className={styles.distHint}>
+            {distance.rangeLabel === 'high'
+              ? '🟢 인류 전파(1900~) 도달권 안에 외계 문명이 존재할 가능성 — 신호를 기다리거나 보내볼 만한 시기.'
+              : distance.rangeLabel === 'medium'
+              ? '🟡 인류 전파권 안에 문명이 있을 확률은 낮지만 가능. 가장 가까운 문명도 광년 단위로 멀음.'
+              : '🔴 인류 전파(현재 126광년)는 가장 가까운 문명에 아직 도달하지 못함. 균등 분포 가정의 한계 — 실제는 나선팔 집중 가능성.'}
+          </p>
+        </div>
+      )}
+
+      {/* 페르미 역설 가설 추천 */}
+      {fermiTop.length > 0 && (
+        <div className={styles.fermiCard}>
+          <div className={styles.distLabel}>🤔 N = {formatN(N)}일 때 가장 유력한 페르미 역설 가설</div>
+          <div className={styles.fermiList}>
+            {fermiTop.map((h, i) => (
+              <div key={h.id} className={styles.fermiItem}>
+                <span className={styles.fermiRank}>{i === 0 ? '1순위' : '2순위'}</span>
+                <div style={{ flex: 1 }}>
+                  <div className={styles.fermiTitle}>{h.emoji} {h.title}</div>
+                  <div className={styles.fermiDesc}>{h.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className={styles.distHint}>
+            ※ 5가지 가설 전체는 아래 SEO 섹션 [페르미 역설] 참고. N값 변화에 따라 자동 추천이 달라집니다.
+          </p>
+        </div>
+      )}
+
+      {/* 은하 SVG (태양·전파권·가장 가까운 문명 강조) */}
       <div className={styles.galaxyCard}>
         <div className={styles.galaxyLabel}>우리 은하 시뮬레이션</div>
         <Galaxy highlightCount={highlightCount} />
         <p className={styles.galaxyHint}>
-          🌟 초록색 별 <strong>{highlightCount}개</strong> = 교신 가능 문명 위치
+          🌟 초록색 별 <strong>{highlightCount}개</strong> = 교신 가능 문명 · ☀ 태양(지구) · 🔵 인류 전파권 · 🔴 가장 가까운 문명
         </p>
       </div>
 
@@ -390,10 +556,10 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
   // 씨드 고정 — 별 위치가 재렌더마다 변하지 않도록
   const stars = useMemo(() => {
     const s: { x: number; y: number; r: number; o: number }[] = []
-    let seed = 42
+    const seedRef = { v: 42 }
     const rand = () => {
-      seed = (seed * 9301 + 49297) % 233280
-      return seed / 233280
+      seedRef.v = (seedRef.v * 9301 + 49297) % 233280
+      return seedRef.v / 233280
     }
     const STAR_COUNT = 260
     for (let i = 0; i < STAR_COUNT; i++) {
@@ -433,6 +599,24 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
     return picks
   }, [stars, highlightCount])
 
+  // 태양 위치 (은하 중심에서 약 26,000광년 / 50,000 = 0.52)
+  // viewBox 300 기준, 중심(150,150)에서 0.52 × 130 ≈ 67.6 떨어진 위치
+  const SUN_X = 150 + Math.cos(Math.PI * 0.7) * 67.6  // ≈ 109.3
+  const SUN_Y = 150 + Math.sin(Math.PI * 0.7) * 67.6  // ≈ 204.7
+  const RADIO_RANGE_R = 8  // 시각적 강조 (실제 100ly는 너무 작음)
+
+  // 가장 가까운 강조 별 (태양 기준)
+  const nearest = useMemo(() => {
+    if (highlights.length === 0) return null
+    let best = highlights[0]
+    let bestD = Infinity
+    for (const h of highlights) {
+      const d = (h.x - SUN_X) ** 2 + (h.y - SUN_Y) ** 2
+      if (d < bestD) { bestD = d; best = h }
+    }
+    return best
+  }, [highlights, SUN_X, SUN_Y])
+
   // 나선팔 경로
   const spiralPath = (armPhase: number) => {
     const pts: string[] = []
@@ -471,6 +655,25 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
           style={{ animationDelay: `${(i % 10) * 0.15}s` }}
         />
       ))}
+
+      {/* 인류 전파권 (태양 중심 원) */}
+      <circle cx={SUN_X} cy={SUN_Y} r={RADIO_RANGE_R}
+        fill="rgba(62,200,255,0.08)" stroke="#3EC8FF" strokeWidth={0.8}
+        strokeDasharray="2,2" />
+
+      {/* 가장 가까운 문명 라인 + 강조 */}
+      {nearest && nearest !== undefined && (
+        <>
+          <line x1={SUN_X} y1={SUN_Y} x2={nearest.x} y2={nearest.y}
+            stroke="#FF6B6B" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
+          <circle cx={nearest.x} cy={nearest.y} r={3}
+            fill="#FF6B6B" stroke="#fff" strokeWidth={0.5} />
+        </>
+      )}
+
+      {/* 태양 (지구 위치) */}
+      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#FFD700" />
+      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#FFD700" strokeWidth={0.6} opacity={0.6} />
     </svg>
   )
 }

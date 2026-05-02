@@ -1,7 +1,16 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from './golf-distance.module.css'
+import {
+  GENDER_AGE_LABEL, SENIOR_FACTOR, LIE_LABEL,
+  calcEnvCorrected,
+  loadRecords, saveRecords, newId, todayStr, analyzeRecords,
+  LOCATION_LABEL,
+  type GenderAge, type DistanceUnit, type WindDirection, type LieType,
+  type DistanceRecord, type RecordLocation,
+} from './golfDistanceUtils'
 
 /* ────────────────────────────────────────────────
  * 클럽 정의
@@ -93,9 +102,12 @@ function gapRuleFor(a: Club, b: Club) {
  * 컴포넌트
  * ──────────────────────────────────────────────── */
 export default function GolfDistanceClient() {
-  const [tab, setTab] = useState<'estimate' | 'analysis'>('estimate')
-  const [gender, setGender] = useState<'male' | 'female'>('male')
+  const [tab, setTab] = useState<'estimate' | 'analysis' | 'env' | 'records'>('estimate')
+  const [genderAge, setGenderAge] = useState<GenderAge>('male')
+  const gender: 'male' | 'female' = (genderAge === 'female' || genderAge === 'femaleSenior') ? 'female' : 'male'
+  const isSenior = genderAge === 'maleSenior' || genderAge === 'femaleSenior'
   const [style, setStyle] = useState<'power' | 'balance' | 'control'>('balance')
+  const [unit, setUnit] = useState<DistanceUnit>('m')
   const [expandAll, setExpandAll] = useState(false)
 
   // 클럽 입력값 (string으로 보관, 빈문자열 = 미입력)
@@ -141,6 +153,16 @@ export default function GolfDistanceClient() {
       return { club, distance: estimated, isActual: false }
     }).filter((r): r is { club: Club; distance: number; isActual: boolean } => r.distance !== null && r.distance > 0)
   }, [inputs, style])
+
+  // 시니어 평균 (참고용 - 평균 비교에만 적용)
+  const seniorAdjustedAvg = useMemo(() => {
+    const factor = isSenior ? SENIOR_FACTOR : 1.0
+    const adjusted: Record<Club, number> = {} as Record<Club, number>
+    for (const c of CLUB_LIST) {
+      adjusted[c] = Math.round(AVG_DISTANCE[gender][c] * factor)
+    }
+    return adjusted
+  }, [gender, isSenior])
 
   const hasInput = useMemo(() =>
     CLUB_LIST.some(c => parseFloat(inputs[c]) > 0),
@@ -250,20 +272,31 @@ export default function GolfDistanceClient() {
 
   return (
     <div className={s.wrap}>
-      {/* 탭 */}
-      <div className={s.tabs}>
-        <button
-          className={`${s.tab} ${tab === 'estimate' ? s.tabActive : ''}`}
-          onClick={() => setTab('estimate')}
-        >
-          📏 비거리 계산
-        </button>
-        <button
-          className={`${s.tab} ${tab === 'analysis' ? s.tabActive : ''}`}
-          onClick={() => setTab('analysis')}
-        >
-          🔍 클럽 분석
-        </button>
+      {/* 탭 (4개) */}
+      <div className={s.tabs4}>
+        {([
+          { id: 'estimate', label: '📏 비거리 계산' },
+          { id: 'analysis', label: '🔍 클럽 분석' },
+          { id: 'env',      label: '🌬️ 환경 보정' },
+          { id: 'records',  label: '📅 내 기록' },
+        ] as const).map(t => (
+          <button key={t.id}
+            className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
+            onClick={() => setTab(t.id)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 단위 토글 (모든 탭 공통) */}
+      <div className={s.unitToggleRow}>
+        <span className={s.unitLabel}>📏 거리 단위</span>
+        <div className={s.unitToggle}>
+          <button className={`${s.unitBtn} ${unit === 'm' ? s.unitBtnActive : ''}`}
+            onClick={() => setUnit('m')}>m (한국 표준)</button>
+          <button className={`${s.unitBtn} ${unit === 'yard' ? s.unitBtnActive : ''}`}
+            onClick={() => setUnit('yard')}>yard</button>
+        </div>
       </div>
 
       {/* ── 공통 입력 카드 ── */}
@@ -273,44 +306,35 @@ export default function GolfDistanceClient() {
           드라이버와 7번 아이언 비거리만 입력해도 전체 클럽 비거리를 추정할 수 있습니다. 더 많이 입력할수록 정확해집니다.
         </div>
 
-        {/* 성별 / 플레이 스타일 */}
-        <div className={s.grid2} style={{ marginBottom: 14 }}>
-          <div>
-            <span className={s.fieldLabel}>성별</span>
-            <div className={s.toggleRow}>
-              {([
-                { key: 'male',   label: '남성' },
-                { key: 'female', label: '여성' },
-              ] as const).map(g => (
-                <button
-                  key={g.key}
-                  className={`${s.toggleBtn} ${gender === g.key ? s.toggleBtnActive : ''}`}
-                  onClick={() => setGender(g.key)}
-                  style={{ flex: 1 }}
-                >
-                  {g.label}
-                </button>
-              ))}
-            </div>
+        {/* 성별·연령 / 플레이 스타일 */}
+        <div style={{ marginBottom: 14 }}>
+          <span className={s.fieldLabel}>성별·연령 (평균 비교 기준)</span>
+          <div className={s.gaGrid}>
+            {(Object.keys(GENDER_AGE_LABEL) as GenderAge[]).map(k => (
+              <button key={k}
+                className={`${s.toggleBtn} ${genderAge === k ? s.toggleBtnActive : ''}`}
+                onClick={() => setGenderAge(k)}
+                style={{ padding: '10px 6px', fontSize: 12 }}>
+                {GENDER_AGE_LABEL[k]}
+              </button>
+            ))}
           </div>
-          <div>
-            <span className={s.fieldLabel}>플레이 스타일</span>
-            <div className={s.toggleRow}>
-              {([
-                { key: 'power',   label: '파워형' },
-                { key: 'balance', label: '균형형' },
-                { key: 'control', label: '컨트롤형' },
-              ] as const).map(p => (
-                <button
-                  key={p.key}
-                  className={`${s.toggleBtn} ${style === p.key ? s.toggleBtnActive : ''}`}
-                  onClick={() => setStyle(p.key)}
-                  style={{ flex: 1, padding: '10px 6px' }}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <span className={s.fieldLabel}>플레이 스타일</span>
+          <div className={s.toggleRow}>
+            {([
+              { key: 'power',   label: '파워형' },
+              { key: 'balance', label: '균형형' },
+              { key: 'control', label: '컨트롤형' },
+            ] as const).map(p => (
+              <button key={p.key}
+                className={`${s.toggleBtn} ${style === p.key ? s.toggleBtnActive : ''}`}
+                onClick={() => setStyle(p.key)}
+                style={{ flex: 1, padding: '10px 6px' }}>
+                {p.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -332,11 +356,11 @@ export default function GolfDistanceClient() {
                     className={s.clubInput}
                     type="text"
                     inputMode="decimal"
-                    placeholder={club === 'DR' || club === '7I' ? '필수 (예: 210)' : '추정됩니다'}
+                    placeholder={club === 'DR' || club === '7I' ? `필수 (예: ${unit === 'm' ? '210' : '230'})` : '추정됩니다'}
                     value={inputs[club]}
                     onChange={e => setClub(club, e.target.value)}
                   />
-                  <span className={s.clubInputUnit}>m</span>
+                  <span className={s.clubInputUnit}>{unit}</span>
                 </div>
               </div>
             )
@@ -349,7 +373,19 @@ export default function GolfDistanceClient() {
       </div>
 
       {/* ── 탭 내용 ── */}
-      {!hasInput ? (
+      {tab === 'env' ? (
+        <EnvTab
+          baseI7={parseFloat(inputs['7I']) || 0}
+          baseDR={parseFloat(inputs['DR']) || 0}
+          unit={unit}
+        />
+      ) : tab === 'records' ? (
+        <RecordsTab
+          unit={unit}
+          currentDR={parseFloat(inputs['DR']) || undefined}
+          currentI7={parseFloat(inputs['7I']) || undefined}
+        />
+      ) : !hasInput ? (
         <div className={s.emptyCard}>
           <strong>드라이버 또는 7번 아이언 비거리를 입력하세요</strong>
           입력값 1개만으로도 전체 클럽 비거리가 자동 계산됩니다.
@@ -358,14 +394,18 @@ export default function GolfDistanceClient() {
         <EstimateView
           results={results}
           maxDistance={maxDistance}
+          avgRef={seniorAdjustedAvg}
           gender={gender}
+          isSenior={isSenior}
           sevenIronGrade={sevenIronGrade}
+          unit={unit}
         />
       ) : (
         <AnalysisView
           results={results}
           gapList={gapList}
           recommendations={recommendations}
+          unit={unit}
         />
       )}
     </div>
@@ -376,14 +416,18 @@ export default function GolfDistanceClient() {
  * 비거리표 + 차트 뷰
  * ──────────────────────────────────────────────── */
 function EstimateView({
-  results, maxDistance, gender, sevenIronGrade,
+  results, maxDistance, avgRef, gender, isSenior, sevenIronGrade, unit,
 }: {
   results: { club: Club; distance: number; isActual: boolean }[]
   maxDistance: number
+  avgRef: Record<Club, number>
   gender: 'male' | 'female'
+  isSenior: boolean
   sevenIronGrade: { grade: string; cls: string; note: string } | null
+  unit: DistanceUnit
 }) {
   const sorted = [...results].sort((a, b) => b.distance - a.distance)
+  const senderName = (isSenior ? '시니어 ' : '') + (gender === 'male' ? '남성' : '여성')
 
   return (
     <>
@@ -394,7 +438,7 @@ function EstimateView({
             <div>
               <div className={s.evalLabel}>7번 아이언 평가</div>
               <div className={s.evalNum}>
-                {results.find(r => r.club === '7I')?.distance ?? 0}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 6 }}>m</span>
+                {showDist(results.find(r => r.club === '7I')?.distance ?? 0, unit)}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 6 }}>{unit}</span>
               </div>
               <div className={s.evalSub}>{sevenIronGrade.note}</div>
             </div>
@@ -410,12 +454,12 @@ function EstimateView({
         <div className={s.chartLegend}>
           <div className={s.legendItem}><span className={`${s.legendDot} ${s.legendDotActual}`}></span> 직접 입력</div>
           <div className={s.legendItem}><span className={`${s.legendDot} ${s.legendDotEst}`}></span> 추정값</div>
-          <div className={s.legendItem}><span className={`${s.legendDot} ${s.legendDotAvg}`}></span> 아마추어 평균 ({gender === 'male' ? '남성' : '여성'})</div>
+          <div className={s.legendItem}><span className={`${s.legendDot} ${s.legendDotAvg}`}></span> 아마추어 평균 ({senderName})</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {sorted.map(r => {
             const widthPct = (r.distance / maxDistance) * 100
-            const avg = AVG_DISTANCE[gender][r.club]
+            const avg = avgRef[r.club]
             const avgPct = (avg / maxDistance) * 100
             return (
               <div key={r.club} className={s.barRow}>
@@ -425,13 +469,13 @@ function EstimateView({
                     className={`${s.barFill} ${r.isActual ? s.barActual : s.barEst}`}
                     style={{ width: `${widthPct}%` }}
                   >
-                    {widthPct > 22 && <span className={s.barNum}>{r.distance}m</span>}
+                    {widthPct > 22 && <span className={s.barNum}>{showDist(r.distance, unit)}{unit}</span>}
                   </div>
-                  {widthPct <= 22 && <span className={s.barNumOutside}>{r.distance}m</span>}
+                  {widthPct <= 22 && <span className={s.barNumOutside}>{showDist(r.distance, unit)}{unit}</span>}
                   <span
                     className={s.avgMarker}
                     style={{ left: `${avgPct}%` }}
-                    title={`평균 ${avg}m`}
+                    title={`평균 ${showDist(avg, unit)}${unit}`}
                   />
                 </div>
               </div>
@@ -442,7 +486,7 @@ function EstimateView({
 
       {/* 비거리 표 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>비거리 비교표</span>
+        <span className={s.cardLabel}>비거리 비교표 ({senderName} 평균 대비)</span>
         <div style={{ overflowX: 'auto' }}>
           <table className={s.distanceTable}>
             <thead>
@@ -456,16 +500,16 @@ function EstimateView({
             </thead>
             <tbody>
               {sorted.map(r => {
-                const avg = AVG_DISTANCE[gender][r.club]
+                const avg = avgRef[r.club]
                 const diff = r.distance - avg
                 const diffCls = diff > 0 ? s.diffPlus : diff < 0 ? s.diffMinus : s.diffZero
                 const diffSign = diff > 0 ? '▲ +' : diff < 0 ? '▼ ' : '±'
                 return (
                   <tr key={r.club}>
                     <td className={s.tdClub}>{r.club}</td>
-                    <td className={s.tdNum}>{r.distance}m</td>
-                    <td className={s.tdMuted}>{avg}m</td>
-                    <td className={`${s.tdDiff} ${diffCls}`}>{diffSign}{Math.abs(diff)}m</td>
+                    <td className={s.tdNum}>{showDist(r.distance, unit)}{unit}</td>
+                    <td className={s.tdMuted}>{showDist(avg, unit)}{unit}</td>
+                    <td className={`${s.tdDiff} ${diffCls}`}>{diffSign}{showDist(Math.abs(diff), unit)}{unit}</td>
                     <td className={s.tdStatus}>
                       <span className={`${s.barTag} ${r.isActual ? s.tagActual : s.tagEst}`}>
                         {r.isActual ? '직접 입력' : '추정'}
@@ -482,15 +526,22 @@ function EstimateView({
   )
 }
 
+// 단위 변환 표시 헬퍼
+function showDist(mValue: number, targetUnit: DistanceUnit): number {
+  if (targetUnit === 'm') return Math.round(mValue)
+  return Math.round(mValue * 1.0936)
+}
+
 /* ────────────────────────────────────────────────
  * 클럽 분석 뷰
  * ──────────────────────────────────────────────── */
 function AnalysisView({
-  results, gapList, recommendations,
+  results, gapList, recommendations, unit,
 }: {
   results: { club: Club; distance: number; isActual: boolean }[]
   gapList: { from: Club; to: Club; gap: number; level: 'ok' | 'tight' | 'wide'; suggestion?: string }[]
   recommendations: { title: string; text: string }[]
+  unit: DistanceUnit
 }) {
   const sorted = [...results].sort((a, b) => b.distance - a.distance)
   const longest = sorted[0]
@@ -510,12 +561,12 @@ function AnalysisView({
           </div>
           <div className={s.summaryCell}>
             <div className={s.summaryLabel}>비거리 범위</div>
-            <div className={s.summaryValue}>{shortest?.distance ?? 0} ~ {longest?.distance ?? 0}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>m</span></div>
+            <div className={s.summaryValue}>{showDist(shortest?.distance ?? 0, unit)} ~ {showDist(longest?.distance ?? 0, unit)}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>{unit}</span></div>
           </div>
           {widestGap && (
             <div className={s.summaryCell}>
               <div className={s.summaryLabel}>가장 큰 Gap</div>
-              <div className={s.summaryValue}>{widestGap.gap}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>m</span></div>
+              <div className={s.summaryValue}>{showDist(widestGap.gap, unit)}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>{unit}</span></div>
               <div className={s.summarySub}>{widestGap.from} → {widestGap.to}</div>
             </div>
           )}
@@ -545,7 +596,7 @@ function AnalysisView({
                 {gapList.map((g, i) => (
                   <tr key={i}>
                     <td className={s.tdClub}>{g.from} → {g.to}</td>
-                    <td className={s.tdNum}>{g.gap}m</td>
+                    <td className={s.tdNum}>{showDist(g.gap, unit)}{unit}</td>
                     <td className={s.tdStatus}>
                       <span className={`${s.gapBadge} ${
                         g.level === 'ok' ? s.gapOk : g.level === 'tight' ? s.gapTight : s.gapWide
@@ -585,6 +636,398 @@ function AnalysisView({
         </div>
       )}
     </>
+  )
+}
+
+/* ────────────────────────────────────────────────
+ * 환경 보정 탭 (NEW)
+ * ──────────────────────────────────────────────── */
+function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit: DistanceUnit }) {
+  // 기본 비거리 자동 채움 — 7I 우선
+  const initialBase = baseI7 > 0 ? baseI7 : (baseDR > 0 ? baseDR : 145)
+  const [baseDistance, setBaseDistance] = useState(initialBase)
+  const [baseClub, setBaseClub] = useState<'7I' | 'DR'>(baseI7 > 0 ? '7I' : 'DR')
+  const [temperature, setTemperature] = useState(20)
+  const [elevation, setElevation] = useState(0)
+  const [windDir, setWindDir] = useState<WindDirection>('none')
+  const [windSpeed, setWindSpeed] = useState(0)
+  const [slopeAngle, setSlopeAngle] = useState(0)
+  const [lieType, setLieType] = useState<LieType>('fairway')
+
+  // 7I·DR 토글 시 자동
+  const handleClubChange = (c: '7I' | 'DR') => {
+    setBaseClub(c)
+    if (c === '7I' && baseI7 > 0) setBaseDistance(baseI7)
+    else if (c === 'DR' && baseDR > 0) setBaseDistance(baseDR)
+  }
+
+  const result = useMemo(() => calcEnvCorrected({
+    baseDistance, unit: 'm',
+    temperature, elevation,
+    windDirection: windDir, windSpeed,
+    slopeAngle, lieType,
+  }), [baseDistance, temperature, elevation, windDir, windSpeed, slopeAngle, lieType])
+
+  return (
+    <div className={s.section}>
+      <div className={s.card}>
+        <span className={s.cardLabel}>① 기본 비거리</span>
+        <div className={s.toggleRow} style={{ marginBottom: 10 }}>
+          <button className={`${s.toggleBtn} ${baseClub === '7I' ? s.toggleBtnActive : ''}`}
+            onClick={() => handleClubChange('7I')}
+            style={{ flex: 1 }}>7번 아이언</button>
+          <button className={`${s.toggleBtn} ${baseClub === 'DR' ? s.toggleBtnActive : ''}`}
+            onClick={() => handleClubChange('DR')}
+            style={{ flex: 1 }}>드라이버</button>
+        </div>
+        <div className={s.envSliderRow}>
+          <input type="range" min={50} max={300} step={5}
+            value={baseDistance} onChange={e => setBaseDistance(parseInt(e.target.value))}
+            className={s.envSlider} />
+          <span className={s.envSliderValue}>{showDist(baseDistance, unit)}{unit}</span>
+        </div>
+      </div>
+
+      <div className={s.card}>
+        <span className={s.cardLabel}>② 환경 변수</span>
+
+        {/* 기온 */}
+        <div className={s.envFactorRow}>
+          <span className={s.envFactorLabel}>🌡️ 기온</span>
+          <div className={s.envSliderRow}>
+            <input type="range" min={-10} max={40} step={1}
+              value={temperature} onChange={e => setTemperature(parseInt(e.target.value))}
+              className={s.envSlider} />
+            <span className={s.envSliderValue} style={{ color: temperature < 10 ? '#3EC8FF' : temperature > 28 ? '#FF8C3E' : 'var(--accent)' }}>
+              {temperature}°C
+            </span>
+          </div>
+        </div>
+
+        {/* 고도 */}
+        <div className={s.envFactorRow}>
+          <span className={s.envFactorLabel}>🏔️ 고도</span>
+          <div className={s.envSliderRow}>
+            <input type="range" min={0} max={3000} step={50}
+              value={elevation} onChange={e => setElevation(parseInt(e.target.value))}
+              className={s.envSlider} />
+            <span className={s.envSliderValue}>{elevation}m</span>
+          </div>
+        </div>
+
+        {/* 바람 */}
+        <div className={s.envFactorRow}>
+          <span className={s.envFactorLabel}>💨 바람 방향</span>
+          <div className={s.toggleRow} style={{ flex: 1 }}>
+            {([
+              { key: 'none', label: '없음' },
+              { key: 'head', label: '정면' },
+              { key: 'tail', label: '등' },
+              { key: 'cross', label: '옆' },
+            ] as const).map(w => (
+              <button key={w.key}
+                className={`${s.toggleBtn} ${windDir === w.key ? s.toggleBtnActive : ''}`}
+                onClick={() => setWindDir(w.key)}
+                style={{ flex: 1, padding: '8px 4px', fontSize: 12 }}>
+                {w.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {windDir !== 'none' && (
+          <div className={s.envFactorRow}>
+            <span className={s.envFactorLabel}>바람 세기</span>
+            <div className={s.envSliderRow}>
+              <input type="range" min={0} max={15} step={1}
+                value={windSpeed} onChange={e => setWindSpeed(parseInt(e.target.value))}
+                className={s.envSlider} />
+              <span className={s.envSliderValue}>{windSpeed}m/s</span>
+            </div>
+          </div>
+        )}
+
+        {/* 경사 */}
+        <div className={s.envFactorRow}>
+          <span className={s.envFactorLabel}>⛰️ 경사 (양수=오르막)</span>
+          <div className={s.envSliderRow}>
+            <input type="range" min={-10} max={10} step={1}
+              value={slopeAngle} onChange={e => setSlopeAngle(parseInt(e.target.value))}
+              className={s.envSlider} />
+            <span className={s.envSliderValue}>{slopeAngle > 0 ? '+' : ''}{slopeAngle}°</span>
+          </div>
+        </div>
+
+        {/* 라이 */}
+        <div className={s.envFactorRow}>
+          <span className={s.envFactorLabel}>🌿 라이</span>
+          <div className={s.lieGrid}>
+            {(Object.keys(LIE_LABEL) as LieType[]).map(l => (
+              <button key={l}
+                className={`${s.toggleBtn} ${lieType === l ? s.toggleBtnActive : ''}`}
+                onClick={() => setLieType(l)}
+                style={{ padding: '8px 4px', fontSize: 11 }}>
+                {LIE_LABEL[l]}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 결과 */}
+      <div className={s.envResultCard}>
+        <div className={s.envResultHead}>
+          <span className={s.cardLabel}>🌬️ 환경 보정 비거리</span>
+          <span className={s.envResultBadge} style={{
+            color: result.changePercent >= 0 ? '#3EFF9B' : '#FF6B6B',
+            borderColor: (result.changePercent >= 0 ? '#3EFF9B' : '#FF6B6B') + '55',
+          }}>
+            {result.changePercent >= 0 ? '+' : ''}{result.changePercent}%
+          </span>
+        </div>
+        <div className={s.envResultRow}>
+          <div className={s.envResultBlock}>
+            <div className={s.envResultLabel}>기본</div>
+            <div className={s.envResultValue}>{showDist(baseDistance, unit)}{unit}</div>
+          </div>
+          <span className={s.envResultArrow}>→</span>
+          <div className={s.envResultBlock}>
+            <div className={s.envResultLabel}>보정 후</div>
+            <div className={s.envResultValue} style={{ color: 'var(--accent)' }}>{showDist(result.correctedDistance, unit)}{unit}</div>
+          </div>
+        </div>
+
+        {result.changes.length > 0 && (
+          <div style={{ marginTop: 14 }}>
+            <table className={s.envChangeTable}>
+              <thead>
+                <tr>
+                  <th>요인</th>
+                  <th>설명</th>
+                  <th style={{ textAlign: 'right' }}>변화</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.changes.map((c, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600, color: 'var(--text)' }}>{c.factor}</td>
+                    <td style={{ color: 'var(--muted)', fontSize: 12 }}>{c.desc}</td>
+                    <td style={{
+                      textAlign: 'right',
+                      color: c.tone === 'pos' ? '#3EFF9B' : c.tone === 'neg' ? '#FF6B6B' : 'var(--muted)',
+                      fontFamily: 'Syne, sans-serif', fontWeight: 700,
+                    }}>
+                      {c.impact > 0 ? '+' : ''}{showDist(c.impact, unit)}{unit}
+                    </td>
+                  </tr>
+                ))}
+                <tr style={{ background: 'var(--bg3)' }}>
+                  <td colSpan={2} style={{ fontWeight: 700, color: 'var(--text)' }}>합계</td>
+                  <td style={{
+                    textAlign: 'right',
+                    color: result.totalImpact >= 0 ? '#3EFF9B' : '#FF6B6B',
+                    fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 14,
+                  }}>
+                    {result.totalImpact >= 0 ? '+' : ''}{showDist(result.totalImpact, unit)}{unit}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <p className={s.envHint}>
+          💡 비거리 변화가 ±10% 이상이면 한 클럽 위/아래 사용 권장. 본 추정은 ±10% 오차 가능 — 실전에서 본인 감각도 함께 활용.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/* ────────────────────────────────────────────────
+ * 내 기록 탭 (NEW)
+ * ──────────────────────────────────────────────── */
+function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; currentDR?: number; currentI7?: number }) {
+  const [records, setRecords] = useState<DistanceRecord[]>([])
+  const [hydrated, setHydrated] = useState(false)
+  const [date, setDate] = useState(todayStr())
+  const [location, setLocation] = useState<RecordLocation>('driving-range')
+  const [drInput, setDrInput] = useState(currentDR ? String(Math.round(currentDR)) : '')
+  const [i7Input, setI7Input] = useState(currentI7 ? String(Math.round(currentI7)) : '')
+  const [tempInput, setTempInput] = useState('')
+  const [windInput, setWindInput] = useState('')
+  const [notes, setNotes] = useState('')
+
+  useEffect(() => {
+    setRecords(loadRecords())
+    setHydrated(true)
+  }, [])
+
+  const stats = useMemo(() => analyzeRecords(records), [records])
+
+  const handleSave = () => {
+    const dr = parseFloat(drInput); const i7 = parseFloat(i7Input)
+    if ((!dr || dr <= 0) && (!i7 || i7 <= 0)) return
+    const rec: DistanceRecord = {
+      id: newId(),
+      date,
+      ts: new Date(date + 'T12:00:00').getTime(),
+      location,
+      driver: dr > 0 ? dr : undefined,
+      iron7:  i7 > 0 ? i7 : undefined,
+      temperature: tempInput ? parseFloat(tempInput) : undefined,
+      windSpeed:   windInput ? parseFloat(windInput) : undefined,
+      notes: notes.trim() || undefined,
+    }
+    const updated = [rec, ...records]
+    setRecords(updated); saveRecords(updated)
+    setDrInput(''); setI7Input(''); setTempInput(''); setWindInput(''); setNotes('')
+  }
+
+  const handleDelete = (id: string) => {
+    const updated = records.filter(r => r.id !== id)
+    setRecords(updated); saveRecords(updated)
+  }
+
+  const handleClearAll = () => {
+    if (!confirm('모든 기록을 삭제하시겠습니까?')) return
+    setRecords([]); saveRecords([])
+  }
+
+  if (!hydrated) return null
+
+  return (
+    <div className={s.section}>
+      {/* 누적 통계 */}
+      {records.length > 0 && (
+        <div className={s.recordStatsCard}>
+          <span className={s.cardLabel}>📊 누적 통계 ({records.length}회 기록)</span>
+          <div className={s.recordStatsGrid}>
+            <div className={s.recordStat}>
+              <div className={s.recordStatLabel}>드라이버 평균</div>
+              <div className={s.recordStatValue}>{stats.driverAvg !== null ? `${showDist(stats.driverAvg, unit)}${unit}` : '—'}</div>
+              <div className={s.recordStatSub}>최고 {stats.bestDriver !== null ? `${showDist(stats.bestDriver, unit)}${unit}` : '—'}</div>
+            </div>
+            <div className={s.recordStat}>
+              <div className={s.recordStatLabel}>7I 평균</div>
+              <div className={s.recordStatValue}>{stats.iron7Avg !== null ? `${showDist(stats.iron7Avg, unit)}${unit}` : '—'}</div>
+              <div className={s.recordStatSub}>최고 {stats.bestIron7 !== null ? `${showDist(stats.bestIron7, unit)}${unit}` : '—'}</div>
+            </div>
+          </div>
+          {(stats.driverChange !== null || stats.iron7Change !== null) && (
+            <p className={s.envHint} style={{ marginTop: 10 }}>
+              📈 최근 30일 변화 — DR <strong style={{ color: (stats.driverChange ?? 0) >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+                {stats.driverChange !== null ? `${stats.driverChange >= 0 ? '+' : ''}${showDist(stats.driverChange, unit)}${unit}` : '—'}
+              </strong>, 7I <strong style={{ color: (stats.iron7Change ?? 0) >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+                {stats.iron7Change !== null ? `${stats.iron7Change >= 0 ? '+' : ''}${showDist(stats.iron7Change, unit)}${unit}` : '—'}
+              </strong>
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* 새 기록 입력 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>➕ 새 기록 추가</span>
+        <div className={s.recordFormGrid}>
+          <div>
+            <span className={s.fieldLabel}>날짜</span>
+            <input type="date" className={s.recordDateInput}
+              value={date} onChange={e => setDate(e.target.value)} />
+          </div>
+          <div>
+            <span className={s.fieldLabel}>장소</span>
+            <select className={s.recordSelect}
+              value={location} onChange={e => setLocation(e.target.value as RecordLocation)}>
+              {(Object.keys(LOCATION_LABEL) as RecordLocation[]).map(k => (
+                <option key={k} value={k}>{LOCATION_LABEL[k]}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className={s.recordFormGrid} style={{ marginTop: 8 }}>
+          <div>
+            <span className={s.fieldLabel}>드라이버 ({unit})</span>
+            <input type="text" inputMode="decimal" className={s.recordInput}
+              placeholder={unit === 'm' ? '예: 220' : '예: 240'}
+              value={drInput} onChange={e => setDrInput(e.target.value.replace(/[^0-9.]/g, ''))} />
+          </div>
+          <div>
+            <span className={s.fieldLabel}>7I ({unit})</span>
+            <input type="text" inputMode="decimal" className={s.recordInput}
+              placeholder={unit === 'm' ? '예: 145' : '예: 160'}
+              value={i7Input} onChange={e => setI7Input(e.target.value.replace(/[^0-9.]/g, ''))} />
+          </div>
+        </div>
+        <div className={s.recordFormGrid} style={{ marginTop: 8 }}>
+          <div>
+            <span className={s.fieldLabel}>기온 (°C, 선택)</span>
+            <input type="text" inputMode="decimal" className={s.recordInput}
+              placeholder="예: 18"
+              value={tempInput} onChange={e => setTempInput(e.target.value.replace(/[^0-9.\-]/g, ''))} />
+          </div>
+          <div>
+            <span className={s.fieldLabel}>바람 (m/s, 선택)</span>
+            <input type="text" inputMode="decimal" className={s.recordInput}
+              placeholder="예: 3"
+              value={windInput} onChange={e => setWindInput(e.target.value.replace(/[^0-9.]/g, ''))} />
+          </div>
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <span className={s.fieldLabel}>메모 (선택)</span>
+          <input type="text" className={s.recordInput}
+            placeholder="컨디션·코스명 등"
+            value={notes} onChange={e => setNotes(e.target.value)} maxLength={50} />
+        </div>
+        <button type="button" className={s.recordSaveBtn} onClick={handleSave}>
+          📅 기록 저장
+        </button>
+      </div>
+
+      {/* 기록 목록 */}
+      {records.length > 0 ? (
+        <div className={s.card}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <span className={s.cardLabel} style={{ marginBottom: 0 }}>📅 최근 기록 (최대 1년 보관)</span>
+            <button type="button" onClick={handleClearAll}
+              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
+              전체 삭제
+            </button>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className={s.distanceTable}>
+              <thead>
+                <tr>
+                  <th>날짜</th>
+                  <th>장소</th>
+                  <th style={{ textAlign: 'right' }}>DR</th>
+                  <th style={{ textAlign: 'right' }}>7I</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {records.slice(0, 30).map(r => (
+                  <tr key={r.id}>
+                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'Syne, sans-serif' }}>{r.date}</td>
+                    <td style={{ fontSize: 12, color: 'var(--muted)' }}>{LOCATION_LABEL[r.location]}</td>
+                    <td className={s.tdNum}>{r.driver ? `${showDist(r.driver, unit)}${unit}` : '—'}</td>
+                    <td className={s.tdNum}>{r.iron7 ? `${showDist(r.iron7, unit)}${unit}` : '—'}</td>
+                    <td>
+                      <button type="button" onClick={() => handleDelete(r.id)}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: 14 }}>×</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className={s.emptyCard}>
+          <strong>아직 기록이 없습니다</strong>
+          위에서 첫 비거리 기록을 추가해 보세요. 기록은 본인의 브라우저에만 저장됩니다 (서버 X).
+        </div>
+      )}
+    </div>
   )
 }
 
