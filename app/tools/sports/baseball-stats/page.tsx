@@ -233,9 +233,9 @@ export default function BaseballStatsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점 계산기',         desc: '승무패·득실차·시즌 시나리오' },
-              { href: '/tools/life/golf-handicap',     icon: '⛳', name: '골프 핸디캡 계산기',       desc: 'WHS 방식 핸디캡·코스 핸디캡' },
-              { href: '/tools/life/golf-distance',     icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·Gap 분석' },
-              { href: '/tools/life/golf-cost',         icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디 1인 정산' },
+              { href: '/tools/sports/golf-handicap',     icon: '⛳', name: '골프 핸디캡 계산기',       desc: 'WHS 방식 핸디캡·코스 핸디캡' },
+              { href: '/tools/sports/golf-distance',     icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·Gap 분석' },
+              { href: '/tools/sports/golf-cost',         icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디 1인 정산' },
               { href: '/tools/life/random',            icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
             ].map((t, i) => (
               <Link

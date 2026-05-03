@@ -365,35 +365,38 @@ export default function SoundSpeedClient() {
             </div>
           </div>
 
-          {/* 음파 시각화 SVG */}
+          {/* 음파 시각화 SVG — 모바일 친화 (400×240, 큰 폰트, 컴팩트 배치) */}
           <div className={s.waveWrap}>
-            <svg viewBox="0 0 720 200" className={s.waveSvg}>
+            <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet">
               <defs>
                 <radialGradient id="lightning" cx="50%" cy="50%" r="50%">
                   <stop offset="0%"  stopColor="#FFD700" stopOpacity="1" />
                   <stop offset="100%" stopColor="#FFD700" stopOpacity="0" />
                 </radialGradient>
               </defs>
+
               {/* 번개 */}
-              <circle cx="80" cy="100" r="30" fill="url(#lightning)" opacity="0.7" />
-              <text x="80" y="108" fontSize="36" textAnchor="middle">⚡</text>
-              <text x="80" y="160" fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">번개 (T=0)</text>
+              <circle cx="60" cy="110" r="36" fill="url(#lightning)" opacity="0.7" />
+              <text x="60" y="122" fontSize="44" textAnchor="middle">⚡</text>
+              <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>번개</text>
+              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif">T = 0</text>
 
               {/* 음파 */}
-              <circle cx="80" cy="100" r="50"  fill="none" stroke="#3EFFD0" strokeWidth="2" opacity="0.6" className={s.soundRing} />
-              <circle cx="80" cy="100" r="50"  fill="none" stroke="#3EFFD0" strokeWidth="2" opacity="0.5" className={s.soundRing2} />
-              <circle cx="80" cy="100" r="50"  fill="none" stroke="#3EFFD0" strokeWidth="2" opacity="0.4" className={s.soundRing3} />
-              <circle cx="80" cy="100" r="50"  fill="none" stroke="#3EFFD0" strokeWidth="2" opacity="0.3" className={s.soundRing4} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="#3EFFD0" strokeWidth="2.5" opacity="0.6" className={s.soundRing} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="#3EFFD0" strokeWidth="2.5" opacity="0.5" className={s.soundRing2} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="#3EFFD0" strokeWidth="2.5" opacity="0.4" className={s.soundRing3} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="#3EFFD0" strokeWidth="2.5" opacity="0.3" className={s.soundRing4} />
 
               {/* 거리 표시 */}
-              <line x1="120" y1="100" x2="600" y2="100" stroke="var(--muted)" strokeWidth="1" strokeDasharray="4 4" />
-              <text x="360" y="92" fontSize="13" fill="#3EFFD0" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={800}>
+              <line x1="100" y1="110" x2="320" y2="110" stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="5 4" />
+              <text x="210" y="95" fontSize="22" fill="#3EFFD0" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={800}>
                 {thunderResult.distM.toFixed(0)}m
               </text>
 
-              {/* 사람 */}
-              <text x="640" y="115" fontSize="40" textAnchor="middle">👤</text>
-              <text x="640" y="160" fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">관찰자 (T={thunderSec}초)</text>
+              {/* 관찰자 */}
+              <text x="350" y="128" fontSize="46" textAnchor="middle">👤</text>
+              <text x="350" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>관찰자</text>
+              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif">T = {thunderSec}초</text>
             </svg>
           </div>
 

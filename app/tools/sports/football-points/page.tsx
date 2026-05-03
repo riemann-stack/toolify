@@ -228,8 +228,8 @@ export default function FootballPointsPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { href: '/tools/life/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 방식 핸디캡·코스 핸디캡 계산' },
-              { href: '/tools/life/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },
+              { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 방식 핸디캡·코스 핸디캡 계산' },
+              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 경기까지 D-day' },
               { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
             ].map((t, i) => (

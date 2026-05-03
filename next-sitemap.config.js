@@ -26,6 +26,8 @@ module.exports = {
     await config.transform(config, '/tools/finance/cost-rate'),
     await config.transform(config, '/tools/finance/installment'),
     await config.transform(config, '/tools/finance/4-insurance'),
+    await config.transform(config, '/tools/finance/ipo-deposit'),
+    await config.transform(config, '/tools/finance/stock-decision'),
     // 건강·안전
     await config.transform(config, '/tools/health'),
     await config.transform(config, '/tools/health/bmi'),
@@ -38,6 +40,7 @@ module.exports = {
     await config.transform(config, '/tools/sports/race-predictor'),
     await config.transform(config, '/tools/health/supplement'),
     await config.transform(config, '/tools/health/uv-protection'),
+    await config.transform(config, '/tools/health/cycle'),
     await config.transform(config, '/tools/sports/one-rm'),
     // 요리·식품
     await config.transform(config, '/tools/cooking'),
@@ -53,6 +56,7 @@ module.exports = {
     await config.transform(config, '/tools/cooking/baker-percent'),
     await config.transform(config, '/tools/cooking/baking-schedule'),
     await config.transform(config, '/tools/cooking/ramen'),
+    await config.transform(config, '/tools/cooking/baking-recipe'),
     // 생활
     await config.transform(config, '/tools/life'),
     await config.transform(config, '/tools/life/lotto'),
@@ -63,14 +67,14 @@ module.exports = {
     await config.transform(config, '/tools/life/pomodoro'),
     await config.transform(config, '/tools/life/alcohol'),
     await config.transform(config, '/tools/life/golden-ratio'),
-    await config.transform(config, '/tools/life/golf-handicap'),
+    await config.transform(config, '/tools/sports/golf-handicap'),
     await config.transform(config, '/tools/life/drake'),
     await config.transform(config, '/tools/life/laundry-dry'),
     await config.transform(config, '/tools/life/monty-hall'),
     await config.transform(config, '/tools/life/fart-risk'),
     await config.transform(config, '/tools/life/unit-price'),
-    await config.transform(config, '/tools/life/golf-cost'),
-    await config.transform(config, '/tools/life/golf-distance'),
+    await config.transform(config, '/tools/sports/golf-cost'),
+    await config.transform(config, '/tools/sports/golf-distance'),
     // 인테리어
     await config.transform(config, '/tools/interior'),
     await config.transform(config, '/tools/interior/wallpaper'),
@@ -81,12 +85,14 @@ module.exports = {
     await config.transform(config, '/tools/interior/ac-capacity'),
     await config.transform(config, '/tools/interior/flooring'),
     await config.transform(config, '/tools/interior/molding'),
+    await config.transform(config, '/tools/interior/roof'),
     // 스포츠
     await config.transform(config, '/tools/sports'),
     await config.transform(config, '/tools/sports/football-points'),
     await config.transform(config, '/tools/sports/baseball-stats'),
     await config.transform(config, '/tools/sports/fight-weight'),
     await config.transform(config, '/tools/sports/interval-training'),
+    await config.transform(config, '/tools/sports/buildup'),
     // 단위
     await config.transform(config, '/tools/unit'),
     await config.transform(config, '/tools/unit/area'),

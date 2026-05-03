@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       { source: '/tools/unit/weight',           destination: '/tools/unit/converter',        permanent: true },
       { source: '/tools/unit/temperature',      destination: '/tools/unit/converter',        permanent: true },
       { source: '/tools/unit/time',             destination: '/tools/unit/converter',        permanent: true },
+      // 골프 3종을 생활 → 스포츠로 카테고리 정리 (SEO 보존)
+      { source: '/tools/life/golf-handicap',    destination: '/tools/sports/golf-handicap',  permanent: true },
+      { source: '/tools/life/golf-cost',        destination: '/tools/sports/golf-cost',      permanent: true },
+      { source: '/tools/life/golf-distance',    destination: '/tools/sports/golf-distance',  permanent: true },
     ]
   },
 };

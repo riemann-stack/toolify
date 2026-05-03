@@ -65,8 +65,8 @@
   opacity: 0.8;
 }
 
-/* ── 카테고리 호버 드롭다운 ── */
-.catDropdown {
+/* ── 메가 메뉴 (3컬럼 그리드) ── */
+.megaMenu {
   position: absolute;
   top: calc(100% + 1px);
   left: 50%;
@@ -74,46 +74,133 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 8px;
-  min-width: 220px;
+  padding: 14px;
+  width: 720px;
+  max-width: calc(100vw - 32px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   z-index: 400;
-  animation: dropIn 0.15s ease;
+  animation: megaIn 0.15s ease;
+}
+/* 위치는 JS가 viewport 클램프로 동적 보정 — opacity만 fade-in */
+@keyframes megaIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes dropIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-.catDropdownHeader {
-  padding: 6px 10px 8px;
+.megaHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 4px 8px 10px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
-.catDropdownTitle {
+.megaCatLabel {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.megaCatIcon { font-size: 16px; }
+.megaAllLink {
   font-size: 11px;
   color: var(--accent);
   text-decoration: none;
   letter-spacing: 0.05em;
-  opacity: 0.8;
+  opacity: 0.85;
   transition: opacity 0.15s;
+  font-family: 'Syne', sans-serif;
 }
-.catDropdownTitle:hover { opacity: 1; }
+.megaAllLink:hover { opacity: 1; }
 
-.catDropdownItem {
+.megaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.megaItem {
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 8px;
   text-decoration: none;
   transition: background 0.12s;
+  min-width: 0;
 }
-.catDropdownItem:hover { background: var(--bg3); }
+.megaItem:hover { background: var(--bg3); }
+.megaItemIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+.megaItemBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.megaItemName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.megaItemDesc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-.catDropdownIcon { font-size: 15px; flex-shrink: 0; }
-.catDropdownName { font-size: 13px; color: var(--text); }
+/* 즐겨찾기 별 (메가 메뉴·검색 결과 공통) */
+.megaItemFav {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  font-family: inherit;
+  line-height: 1;
+}
+.megaItem:hover .megaItemFav,
+.megaItemFavActive,
+.searchResultItem:hover .megaItemFav,
+.searchResultItemActive .megaItemFav {
+  opacity: 1;
+}
+.megaItemFav:hover { background: var(--bg2); color: var(--accent); }
+.megaItemFavActive { color: #FFD93E; opacity: 1; }
+
+/* 배지 */
+.badgeNew, .badgeHot {
+  font-size: 9px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+.badgeNew { background: rgba(62,200,255,0.15); color: #3EC8FF; }
+.badgeHot { background: rgba(255,140,62,0.15); color: #FF8C3E; }
 
 /* ── 오른쪽 액션 버튼 영역 ── */
 .actions {
@@ -209,14 +296,49 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 4px;
+  padding: 10px 8px;
   border-radius: 8px;
   text-decoration: none;
   transition: background 0.12s;
 }
-.searchResultItem:hover { background: var(--bg3); padding-left: 8px; }
-.searchResultIcon { font-size: 18px; }
-.searchResultName { font-size: 14px; color: var(--text); }
+.searchResultItem:hover,
+.searchResultItemActive {
+  background: var(--bg3);
+}
+.searchResultIcon { font-size: 18px; flex-shrink: 0; }
+.searchResultBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.searchResultName {
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.searchResultCat {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* 키보드 단축 힌트 */
+.searchKbd {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .searchKbd { display: none; }
+}
 
 .searchEmpty {
   padding: 16px 4px;
@@ -299,6 +421,7 @@
   bottom: 0;
   z-index: 250;
   overflow-y: auto;
+  overscroll-behavior: contain;
   animation: slideDown 0.2s ease;
 }
 
@@ -357,13 +480,17 @@
 .drawerToolItem:hover { background: var(--bg3); color: var(--text); }
 
 /* ── 반응형 ── */
-@media (max-width: 900px) {
-  .nav { padding: 0 24px; }
-  .searchBar { padding-left: 24px; padding-right: 24px; }
+/* 1280px↓ — 카테고리 패딩 축소로 11개 모두 표시 시도 */
+@media (max-width: 1280px) {
+  .nav { padding: 0 32px; }
+  .searchBar { padding-left: 32px; padding-right: 32px; }
   .catLink { padding: 0 10px; font-size: 12px; }
 }
 
-@media (max-width: 768px) {
+/* 1100px↓ — 햄버거 전환 (가로 오버플로우 차단) */
+@media (max-width: 1100px) {
+  .nav { padding: 0 24px; }
+  .searchBar { padding-left: 24px; padding-right: 24px; }
   .links  { display: none; }
   .burger { display: flex; }
 }

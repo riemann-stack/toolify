@@ -1,119 +1,21 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import Link from 'next/link'
 import styles from './race-predictor.module.css'
+import {
+  DISTS, TARGETS, QUICK_TIMES,
+  fmtHMS, fmtMS, fmtPace, hmsToSec,
+  vdotFromRace, timeFromVdot, paceFromVdot, predictTime,
+  envCorrection, AGE_BAND_LABEL, AGE_GENDER_FACTORS,
+  KOREA_SEASONS, vdotLevel,
+  loadRecords, saveRecords, recordsToCSV,
+  type DistKey, type TargetKey, type Gender, type AgeBand, type RaceRecord,
+} from './racePredictorUtils'
 
-// ── 기준 거리(km) ──────────────────────────
-type DistKey = '5k' | '10k' | 'half' | 'full' | 'custom'
-type TargetKey = '3k' | '5k' | '10k' | '15k' | 'half' | '30k' | 'full'
+type TabKey = 'predict' | 'reverse' | 'strategy' | 'records'
 
-const DISTS: { key: DistKey; label: string; km: number }[] = [
-  { key: '5k',   label: '5km',     km: 5 },
-  { key: '10k',  label: '10km',    km: 10 },
-  { key: 'half', label: '하프',    km: 21.0975 },
-  { key: 'full', label: '풀',      km: 42.195 },
-]
-
-const TARGETS: { key: TargetKey; label: string; km: number }[] = [
-  { key: '3k',   label: '3km',    km: 3 },
-  { key: '5k',   label: '5km',    km: 5 },
-  { key: '10k',  label: '10km',   km: 10 },
-  { key: '15k',  label: '15km',   km: 15 },
-  { key: 'half', label: '하프',   km: 21.0975 },
-  { key: '30k',  label: '30km',   km: 30 },
-  { key: 'full', label: '풀',     km: 42.195 },
-]
-
-// ── 시간 유틸 ─────────────────────────────
-const pad = (n: number) => String(n).padStart(2, '0')
-function fmtHMS(totalSec: number): string {
-  if (!isFinite(totalSec) || totalSec <= 0) return '--:--:--'
-  const s = Math.round(totalSec)
-  const h = Math.floor(s / 3600)
-  const m = Math.floor((s % 3600) / 60)
-  const sec = s % 60
-  return `${pad(h)}:${pad(m)}:${pad(sec)}`
-}
-function fmtMS(totalSec: number): string {
-  if (!isFinite(totalSec) || totalSec <= 0) return '--:--'
-  const s = Math.round(totalSec)
-  const m = Math.floor(s / 60)
-  const sec = s % 60
-  return `${pad(m)}:${pad(sec)}`
-}
-function fmtPace(secPerKm: number): string {
-  if (!isFinite(secPerKm) || secPerKm <= 0) return '--:--'
-  const s = Math.round(secPerKm)
-  const m = Math.floor(s / 60)
-  const sec = s % 60
-  return `${m}:${pad(sec)}`
-}
-
-// ── 거리·기록 기반 VDOT 계산 ───────────────
-// Jack Daniels: vo2 = -4.60 + 0.182258*v + 0.000104*v²  (v: m/min)
-// %VO2max(t) = 0.8 + 0.1894393*e^(-0.012778 t) + 0.2989558*e^(-0.1932605 t)   (t: minutes)
-// VDOT = vo2 / %VO2max
-function vo2FromV(v: number) {
-  return -4.60 + 0.182258 * v + 0.000104 * v * v
-}
-function vFromVo2(vo2: number) {
-  // quadratic a v² + b v + c = vo2  -> 0.000104 v² + 0.182258 v - (4.60 + vo2) = 0
-  const a = 0.000104, b = 0.182258, c = -(4.60 + vo2)
-  return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
-}
-function pctVO2max(tMin: number) {
-  return 0.8 + 0.1894393 * Math.exp(-0.012778 * tMin) + 0.2989558 * Math.exp(-0.1932605 * tMin)
-}
-function vdotFromRace(distKm: number, timeSec: number) {
-  const tMin = timeSec / 60
-  const v = (distKm * 1000) / tMin
-  const vo2 = vo2FromV(v)
-  return vo2 / pctVO2max(tMin)
-}
-// 주어진 VDOT·거리에 대해 예상 시간(초) — bisection
-function timeFromVdot(distKm: number, vdot: number) {
-  let lo = 1, hi = 60 * 60 * 10 // 10시간 이내
-  for (let i = 0; i < 80; i++) {
-    const mid = (lo + hi) / 2
-    const tMin = mid / 60
-    const v = (distKm * 1000) / tMin
-    const estVdot = vo2FromV(v) / pctVO2max(tMin)
-    if (estVdot > vdot) lo = mid
-    else hi = mid
-  }
-  return (lo + hi) / 2
-}
-// VDOT × 강도 → 페이스(sec/km)
-function paceFromVdot(vdot: number, intensity: number): number {
-  const vo2 = vdot * intensity
-  const v = vFromVo2(vo2)  // m/min
-  return 60000 / v         // sec/km
-}
-
-// ── Riegel / Cameron ──────────────────────
-function riegelTime(d1: number, t1: number, d2: number) {
-  return t1 * Math.pow(d2 / d1, 1.06)
-}
-function cameronA(dMi: number) {
-  return 13.49681 - 0.048865 * dMi + 2.438936 / Math.pow(dMi, 0.7905)
-}
-function cameronTime(d1km: number, t1: number, d2km: number) {
-  // Cameron은 페이스 비(比)에 대한 공식: (t2/d2) = (t1/d1) × a(d1)/a(d2)
-  const d1mi = d1km / 1.609344
-  const d2mi = d2km / 1.609344
-  return t1 * (d2km / d1km) * (cameronA(d1mi) / cameronA(d2mi))
-}
-
-// ── 훈련 페이스 강도 ───────────────────────
-const PACE_ZONES = [
-  { key: 'E', name: 'Easy',       desc: '회복·지구력 빌드업 (60~79% HRmax)',  intensity: 0.59, color: '#3EC8FF' },
-  { key: 'M', name: 'Marathon',   desc: '마라톤 레이스 페이스 (80~85% HRmax)', intensity: 0.70, color: '#C8FF3E' },
-  { key: 'T', name: 'Threshold',  desc: '젖산역치·템포 (86~90% HRmax)',        intensity: 0.78, color: '#FFD700' },
-  { key: 'I', name: 'Interval',   desc: 'VO2max 인터벌 (95~100% HRmax)',       intensity: 0.85, color: '#FF8C3E' },
-  { key: 'R', name: 'Repetition', desc: '속도·효율 리피티션 (단거리)',          intensity: 0.93, color: '#FF6B6B' },
-]
-
-// ── 서브 목표 ─────────────────────────────
 const SUB_GOALS = [
   { label: '서브5',    sec: 5 * 3600 },
   { label: '서브4:30', sec: 4.5 * 3600 },
@@ -122,79 +24,137 @@ const SUB_GOALS = [
   { label: '서브3',    sec: 3 * 3600 },
 ]
 
-// ── 시간 드롭다운 ─────────────────────────
+const PACE_ZONES = [
+  { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: 0.59, color: '#3EC8FF' },
+  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.70, color: '#C8FF3E' },
+  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.78, color: '#FFD700' },
+  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.85, color: '#FF8C3E' },
+  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 0.93, color: '#FF6B6B' },
+]
+
+// ─────────────────────────────────────────────────────────────
+// 시간 입력 — numeric 직접 입력 (모바일 친화)
+// ─────────────────────────────────────────────────────────────
 function TimeInput({
-  hours, min, sec, onChange, maxH = 8,
+  hours, min, sec, onChange, showHours = true,
 }: {
   hours: number; min: number; sec: number
   onChange: (h: number, m: number, s: number) => void
-  maxH?: number
+  showHours?: boolean
 }) {
+  const sanitize = (v: string, max: number): number => {
+    const n = parseInt(v.replace(/\D/g, '').slice(0, 2)) || 0
+    return Math.min(max, Math.max(0, n))
+  }
+  // padStart 적용하면 "5" 입력 시 "05"로 변환되며 maxLength=2 도달 → 두 번째 자리 입력 불가.
+  // raw 숫자만 표시하고 placeholder "00"로 시각적 자리 안내.
   return (
     <div className={styles.timeRow}>
-      <select className={styles.timeSelect} value={hours} onChange={e => onChange(+e.target.value, min, sec)}>
-        {Array.from({ length: maxH + 1 }, (_, i) => <option key={i} value={i}>{pad(i)}</option>)}
-      </select>
+      {showHours && (
+        <>
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="00"
+            maxLength={2}
+            className={styles.timeInputBox}
+            value={hours === 0 ? '' : String(hours)}
+            onChange={(e) => onChange(sanitize(e.target.value, 23), min, sec)}
+            onFocus={(e) => e.target.select()}
+            aria-label="시"
+          />
+          <span className={styles.timeColon}>:</span>
+        </>
+      )}
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        placeholder="00"
+        maxLength={2}
+        className={styles.timeInputBox}
+        value={min === 0 && hours === 0 ? '' : String(min)}
+        onChange={(e) => onChange(hours, sanitize(e.target.value, 59), sec)}
+        onFocus={(e) => e.target.select()}
+        aria-label="분"
+      />
       <span className={styles.timeColon}>:</span>
-      <select className={styles.timeSelect} value={min} onChange={e => onChange(hours, +e.target.value, sec)}>
-        {Array.from({ length: 60 }, (_, i) => <option key={i} value={i}>{pad(i)}</option>)}
-      </select>
-      <span className={styles.timeColon}>:</span>
-      <select className={styles.timeSelect} value={sec} onChange={e => onChange(hours, min, +e.target.value)}>
-        {Array.from({ length: 60 }, (_, i) => <option key={i} value={i}>{pad(i)}</option>)}
-      </select>
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        placeholder="00"
+        maxLength={2}
+        className={styles.timeInputBox}
+        value={sec === 0 && min === 0 && hours === 0 ? '' : String(sec)}
+        onChange={(e) => onChange(hours, min, sanitize(e.target.value, 59))}
+        onFocus={(e) => e.target.select()}
+        aria-label="초"
+      />
     </div>
   )
 }
 
-// ─────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// 메인
+// ─────────────────────────────────────────────────────────────
 export default function RacePredictorClient() {
-  const [tab, setTab] = useState<'predict' | 'vdot' | 'strategy'>('predict')
+  const [tab, setTab] = useState<TabKey>('predict')
 
-  // 공유 상태 (예측·VDOT 탭)
+  // 기록 예측 상태
   const [baseDist, setBaseDist] = useState<DistKey>('10k')
   const [customKm, setCustomKm] = useState<number>(8)
   const [bh, setBh] = useState(0)
   const [bm, setBm] = useState(50)
   const [bs, setBs] = useState(0)
-
   const [selected, setSelected] = useState<Set<TargetKey>>(new Set(['5k', 'half', 'full']))
 
-  const baseKm = baseDist === 'custom' ? Math.max(0.5, customKm) : DISTS.find(d => d.key === baseDist)!.km
-  const baseSec = bh * 3600 + bm * 60 + bs
+  // 환경 보정
+  const [envOn, setEnvOn] = useState(false)
+  const [temp, setTemp] = useState(15)
+  const [humidity, setHumidity] = useState(60)
+  const [elevation, setElevation] = useState(0)
 
-  const vdot = useMemo(() => {
-    if (baseSec < 60) return 0
-    return vdotFromRace(baseKm, baseSec)
-  }, [baseKm, baseSec])
+  // 연령·성별
+  const [demoOn, setDemoOn] = useState(false)
+  const [gender, setGender] = useState<Gender>('male')
+  const [ageBand, setAgeBand] = useState<AgeBand>('30-40')
 
-  const vdotLevel = useMemo(() => {
-    if (vdot < 30) return { tag: '초급', color: '#3EC8FF' }
-    if (vdot < 40) return { tag: '중급',  color: '#C8FF3E' }
-    if (vdot < 50) return { tag: '상급',  color: '#FFD700' }
-    if (vdot < 60) return { tag: '엘리트 준비', color: '#FF8C3E' }
-    return { tag: '엘리트', color: '#FF6B6B' }
-  }, [vdot])
+  const baseKm = baseDist === 'custom' ? Math.max(0.5, customKm) : DISTS.find((d) => d.key === baseDist)!.km
+  const baseSec = hmsToSec(bh, bm, bs)
+  const validBase = baseSec >= 60
 
-  // Tab 1 예측 결과
+  const vdot = useMemo(() => validBase ? vdotFromRace(baseKm, baseSec) : 0, [baseKm, baseSec, validBase])
+  const level = useMemo(() => vdotLevel(vdot), [vdot])
+
   const predictions = useMemo(() => {
-    if (baseSec < 60) return []
-    return TARGETS.filter(t => selected.has(t.key)).map(t => {
-      const tR = riegelTime(baseKm, baseSec, t.km)
-      const tV = timeFromVdot(t.km, vdot)
-      const tC = cameronTime(baseKm, baseSec, t.km)
-      const avg = (tR + tV + tC) / 3
-      return { ...t, riegel: tR, vdot: tV, cameron: tC, avg, pace: avg / t.km }
+    if (!validBase) return []
+    return TARGETS.filter((t) => selected.has(t.key)).map((t) => {
+      const p = predictTime(baseKm, baseSec, t.km)
+      return { ...t, ...p, pace: p.avg / t.km }
     })
-  }, [baseKm, baseSec, vdot, selected])
+  }, [baseKm, baseSec, selected, validBase])
 
-  const fullPrediction = useMemo(() => {
-    if (baseSec < 60) return null
-    const tR = riegelTime(baseKm, baseSec, 42.195)
-    const tV = timeFromVdot(42.195, vdot)
-    const tC = cameronTime(baseKm, baseSec, 42.195)
-    return { avg: (tR + tV + tC) / 3 }
-  }, [baseKm, baseSec, vdot])
+  const fullPred = useMemo(() => {
+    if (!validBase) return null
+    return predictTime(baseKm, baseSec, 42.195)
+  }, [baseKm, baseSec, validBase])
+
+  const env = useMemo(() => {
+    if (!fullPred || !envOn) return null
+    return envCorrection({ baseTime: fullPred.avg, temp, humidity, elevation })
+  }, [fullPred, envOn, temp, humidity, elevation])
+
+  // 데모 보정 — 기준선 비교용 (본인 시간이 동급 능력 20대 남성 기준 얼마인지)
+  const demoBaseline = useMemo(() => {
+    if (!fullPred || !demoOn) return null
+    const factor = AGE_GENDER_FACTORS[gender][ageBand]
+    return {
+      youngMaleEquivalent: fullPred.avg * factor,
+      factor,
+    }
+  }, [fullPred, demoOn, gender, ageBand])
 
   const toggleTarget = (k: TargetKey) => {
     const next = new Set(selected)
@@ -202,41 +162,59 @@ export default function RacePredictorClient() {
     setSelected(next)
   }
 
-  // ── Tab 3 Strategy 상태 ─────────────────
+  const applyQuick = (h: number, m: number, s: number) => { setBh(h); setBm(m); setBs(s) }
+
+  // ── 목표 역산 탭 ────────────────────
+  const [revDist, setRevDist] = useState<DistKey>('full')
+  const [rh, setRh] = useState(3)
+  const [rm, setRm] = useState(30)
+  const [rs, setRs] = useState(0)
+  const [curDist, setCurDist] = useState<DistKey>('10k')
+  const [ch, setCh] = useState(0)
+  const [cm, setCm] = useState(50)
+  const [cs, setCs] = useState(0)
+
+  const revKm = DISTS.find((d) => d.key === revDist)?.km ?? 42.195
+  const revSec = hmsToSec(rh, rm, rs)
+  const validRev = revSec >= 60
+  const requiredVdot = useMemo(() => validRev ? vdotFromRace(revKm, revSec) : 0, [revKm, revSec, validRev])
+
+  const requiredAbilities = useMemo(() => {
+    if (!validRev) return null
+    return {
+      '5k':   timeFromVdot(5, requiredVdot),
+      '10k':  timeFromVdot(10, requiredVdot),
+      'half': timeFromVdot(21.0975, requiredVdot),
+      'full': timeFromVdot(42.195, requiredVdot),
+    }
+  }, [requiredVdot, validRev])
+
+  const curKm = DISTS.find((d) => d.key === curDist)?.km ?? 10
+  const curSec = hmsToSec(ch, cm, cs)
+  const validCur = curSec >= 60
+  const currentVdot = useMemo(() => validCur ? vdotFromRace(curKm, curSec) : 0, [curKm, curSec, validCur])
+  const vdotGap = validCur && validRev ? requiredVdot - currentVdot : 0
+  const monthsEstimate = vdotGap > 0 ? Math.round(vdotGap * 8) : 0  // VDOT 1↑ ≈ 6~12주 → 8주 평균
+
+  // ── 페이스 전략 탭 ──────────────────
   const [stratDist, setStratDist] = useState<DistKey>('full')
-  const [stratCustomKm, setStratCustomKm] = useState<number>(15)
   const [gh, setGh] = useState(3)
   const [gm, setGm] = useState(30)
   const [gs, setGs] = useState(0)
   const [strategy, setStrategy] = useState<'even' | 'negative' | 'positive'>('even')
-  const [tempZone, setTempZone] = useState<'cool' | 'mild' | 'warm' | 'hot'>('mild')
-  const [humZone, setHumZone] = useState<'dry' | 'mid' | 'humid'>('dry')
-  const [altitude, setAltitude] = useState<'sea' | 'mid' | 'high'>('sea')
+  const stratKm = DISTS.find((d) => d.key === stratDist)?.km ?? 42.195
+  const goalSec = hmsToSec(gh, gm, gs)
 
-  const stratKm = stratDist === 'custom' ? Math.max(1, stratCustomKm) : DISTS.find(d => d.key === stratDist)!.km
-  const goalSec = gh * 3600 + gm * 60 + gs
-
-  // 날씨 보정: 목표 페이스 × (1 + pctSum) — Jack Daniels 근사
-  const weatherAdj = useMemo(() => {
-    const temp = tempZone === 'cool' ? 0 : tempZone === 'mild' ? 0.015 : tempZone === 'warm' ? 0.035 : 0.06
-    const hum  = humZone === 'dry' ? 0 : humZone === 'mid' ? 0.01 : 0.025
-    const alt  = altitude === 'sea' ? 0 : altitude === 'mid' ? 0.015 : 0.03
-    return temp + hum + alt
-  }, [tempZone, humZone, altitude])
-
-  // 5km 단위 스플릿 + 마지막 잔여 거리
   const splits = useMemo(() => {
     if (goalSec < 60 || stratKm <= 0) return []
     const avgPace = goalSec / stratKm
-    const segs: { from: number; to: number; seg: number; pace: number; segTime: number; cum: number }[] = []
+    const segs: { from: number; to: number; pace: number; segTime: number; cum: number; mark?: string }[] = []
     let from = 0
     const totalSegs = Math.ceil(stratKm / 5)
     for (let i = 0; i < totalSegs; i++) {
       const to = Math.min((i + 1) * 5, stratKm)
-      const seg = to - from
       let pace = avgPace
       if (strategy === 'negative') {
-        // 후반 빠르게: 초반 +1.5% ~ 후반 -1.5% 선형
         const mid = (from + to) / 2
         const t = mid / stratKm
         pace = avgPace * (1.015 - 0.03 * t)
@@ -245,10 +223,9 @@ export default function RacePredictorClient() {
         const t = mid / stratKm
         pace = avgPace * (0.985 + 0.03 * t)
       }
-      segs.push({ from, to, seg, pace, segTime: pace * seg, cum: 0 })
+      segs.push({ from, to, pace, segTime: pace * (to - from), cum: 0 })
       from = to
     }
-    // 스플릿 정규화 — 총 합이 goalSec이 되도록 스케일
     const sumTime = segs.reduce((s, x) => s + x.segTime, 0)
     const scale = goalSec / sumTime
     let cum = 0
@@ -257,23 +234,61 @@ export default function RacePredictorClient() {
       s.segTime *= scale
       cum += s.segTime
       s.cum = cum
+      if (Math.abs(s.to - 21.0975) < 0.5) s.mark = '🏁 하프'
+      else if (Math.abs(s.to - 30) < 0.5) s.mark = '🔴 마의 30km'
+      else if (Math.abs(s.to - 42.195) < 0.5) s.mark = '🏆 결승'
     }
     return segs
   }, [goalSec, stratKm, strategy])
 
-  const adjPace = goalSec > 0 && stratKm > 0 ? (goalSec / stratKm) * (1 + weatherAdj) : 0
-  const adjTotal = adjPace * stratKm
+  // ── 내 기록 탭 ─────────────────────
+  const [records, setRecords] = useState<RaceRecord[]>([])
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setRecords(loadRecords())
+    setMounted(true)
+  }, [])
+  useEffect(() => {
+    if (!mounted) return
+    saveRecords(records)
+  }, [records, mounted])
+
+  const addRecordFromCurrent = () => {
+    if (!validBase || !vdot) return
+    const today = new Date().toISOString().slice(0, 10)
+    const rec: RaceRecord = {
+      id: Math.random().toString(36).slice(2, 10),
+      date: today,
+      distance: baseDist === 'custom' ? 'custom' : baseDist,
+      customKm: baseDist === 'custom' ? customKm : undefined,
+      timeSec: baseSec,
+      vdot,
+      conditions: envOn ? { temp, humidity, elevation } : undefined,
+    }
+    setRecords((p) => [...p, rec])
+  }
+
+  const downloadCSV = () => {
+    const csv = recordsToCSV(records)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `youtil-race-records-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className={styles.wrap}>
-
       {/* ── 탭 헤더 ── */}
-      <div className={styles.tabs}>
+      <div className={`${styles.tabs} ${styles.tabs4}`}>
         {([
           { k: 'predict',  l: '🏁 기록 예측' },
-          { k: 'vdot',     l: '🎯 훈련 페이스' },
+          { k: 'reverse',  l: '🎯 목표 역산' },
           { k: 'strategy', l: '📊 페이스 전략' },
-        ] as const).map(t => (
+          { k: 'records',  l: '📈 내 기록' },
+        ] as const).map((t) => (
           <button key={t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
             {t.l}
           </button>
@@ -283,11 +298,10 @@ export default function RacePredictorClient() {
       {/* ══════════ TAB 1: 기록 예측 ══════════ */}
       {tab === 'predict' && (
         <div className={styles.panel}>
-          {/* 기준 거리 */}
           <section>
             <label className={styles.label}>기준 거리</label>
             <div className={styles.distGrid}>
-              {DISTS.map(d => (
+              {DISTS.map((d) => (
                 <button key={d.key}
                   className={`${styles.distBtn} ${baseDist === d.key ? styles.distBtnActive : ''}`}
                   onClick={() => setBaseDist(d.key)}>
@@ -295,31 +309,38 @@ export default function RacePredictorClient() {
                 </button>
               ))}
               <button className={`${styles.distBtn} ${baseDist === 'custom' ? styles.distBtnActive : ''}`}
-                onClick={() => setBaseDist('custom')}>
-                커스텀
-              </button>
+                onClick={() => setBaseDist('custom')}>커스텀</button>
             </div>
             {baseDist === 'custom' && (
               <div className={styles.customRow}>
                 <input type="number" min={0.5} step={0.1} value={customKm}
-                  onChange={e => setCustomKm(+e.target.value || 0)}
+                  onChange={(e) => setCustomKm(+e.target.value || 0)}
                   className={styles.customInput} />
                 <span className={styles.unit}>km</span>
               </div>
             )}
           </section>
 
-          {/* 기록 입력 */}
           <section>
             <label className={styles.label}>기록 (시:분:초)</label>
             <TimeInput hours={bh} min={bm} sec={bs} onChange={(h, m, s) => { setBh(h); setBm(m); setBs(s) }} />
+            {baseDist !== 'custom' && QUICK_TIMES[baseDist].length > 0 && (
+              <div className={styles.quickRow}>
+                <span className={styles.quickLabel}>빠른 입력</span>
+                <div className={styles.quickChips}>
+                  {QUICK_TIMES[baseDist].map((q) => (
+                    <button key={q.label} className={styles.quickChip}
+                      onClick={() => applyQuick(q.h, q.m, q.s)}>{q.label}</button>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
 
-          {/* 예측 거리 */}
           <section>
             <label className={styles.label}>예측할 거리 <span className={styles.labelSub}>(다중 선택)</span></label>
             <div className={styles.targetGrid}>
-              {TARGETS.map(t => (
+              {TARGETS.map((t) => (
                 <button key={t.key}
                   className={`${styles.targetBtn} ${selected.has(t.key) ? styles.targetBtnActive : ''}`}
                   onClick={() => toggleTarget(t.key)}>
@@ -329,16 +350,136 @@ export default function RacePredictorClient() {
             </div>
           </section>
 
-          {/* 메인 히어로 — 풀 마라톤 예측 */}
-          {fullPrediction && (
+          {/* 풀 마라톤 히어로 */}
+          {fullPred && (
             <section className={styles.hero}>
-              <p className={styles.heroLabel}>풀 마라톤 예상 기록</p>
-              <p className={styles.heroTime}>{fmtHMS(fullPrediction.avg)}</p>
+              <p className={styles.heroLabel}>풀 마라톤 예상 (3공식 평균 · 평시)</p>
+              <p className={styles.heroTime}>{fmtHMS(fullPred.avg)}</p>
               <p className={styles.heroPace}>
-                평균 페이스 <strong>{fmtPace(fullPrediction.avg / 42.195)}</strong>/km · 시속 <strong>{(42.195 / (fullPrediction.avg / 3600)).toFixed(2)}</strong> km/h
+                평균 페이스 <strong>{fmtPace(fullPred.avg / 42.195)}</strong>/km · 시속 <strong>{(42.195 / (fullPred.avg / 3600)).toFixed(2)}</strong> km/h
+              </p>
+              <p className={styles.heroVdot}>
+                VDOT <strong style={{ color: level.color }}>{vdot.toFixed(1)}</strong>
+                <span className={styles.heroVdotTag} style={{ background: `${level.color}22`, color: level.color }}>{level.tag}</span>
               </p>
             </section>
           )}
+
+          {/* ── 환경 보정 ── */}
+          <section className={styles.optionCard}>
+            <label className={styles.checkRow}>
+              <input type="checkbox" checked={envOn} onChange={(e) => setEnvOn(e.target.checked)} />
+              <span>🌡️ 대회 환경 보정</span>
+            </label>
+            {envOn && (
+              <div className={styles.optionBody}>
+                <div className={styles.sliderRow}>
+                  <label>기온 <strong>{temp}°C</strong></label>
+                  <input type="range" min={-10} max={35} step={1} value={temp}
+                    onChange={(e) => setTemp(+e.target.value)} className={styles.slider} />
+                </div>
+                <div className={styles.sliderRow}>
+                  <label>습도 <strong>{humidity}%</strong></label>
+                  <input type="range" min={30} max={95} step={5} value={humidity}
+                    onChange={(e) => setHumidity(+e.target.value)} className={styles.slider} />
+                </div>
+                <div className={styles.sliderRow}>
+                  <label>고도 <strong>{elevation}m</strong></label>
+                  <input type="range" min={0} max={3000} step={50} value={elevation}
+                    onChange={(e) => setElevation(+e.target.value)} className={styles.slider} />
+                </div>
+
+                {env && (
+                  <>
+                    <table className={styles.envTable}>
+                      <thead>
+                        <tr><th>요인</th><th>조건</th><th>영향</th><th>추가 시간</th></tr>
+                      </thead>
+                      <tbody>
+                        {env.factors.map((f, i) => (
+                          <tr key={i}>
+                            <td>{f.name}</td>
+                            <td className={styles.envDetail}>{f.detail}</td>
+                            <td className={styles.envPct}>{f.percent === 0 ? '—' : `+${f.percent.toFixed(1)}%`}</td>
+                            <td className={styles.envSec}>{f.addedSec === 0 ? '—' : `+${fmtMS(f.addedSec)}`}</td>
+                          </tr>
+                        ))}
+                        <tr className={styles.envTotal}>
+                          <td colSpan={2}>합계</td>
+                          <td>+{env.totalPercent.toFixed(1)}%</td>
+                          <td>+{fmtMS(env.correctedTime - (fullPred?.avg ?? 0))}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <div className={styles.envResult}>
+                      <div>
+                        <span className={styles.envResultLabel}>평시</span>
+                        <span className={styles.envResultVal}>{fmtHMS(fullPred?.avg ?? 0)}</span>
+                      </div>
+                      <span className={styles.envResultArrow}>→</span>
+                      <div>
+                        <span className={styles.envResultLabel}>대회 당일</span>
+                        <span className={`${styles.envResultVal} ${styles.envResultValAccent}`}>{fmtHMS(env.correctedTime)}</span>
+                      </div>
+                    </div>
+
+                    {env.warning === 'danger' && (
+                      <div className={styles.dangerCard}>
+                        <strong>🔴 위험 — 30°C 이상</strong>
+                        <p>열사병 위험이 매우 높습니다. 평시 페이스 -15%로 시작, 5km마다 수분·전해질, 어지러움·구토 시 즉시 중단·119. 가능하면 다른 시즌 대회 고려.</p>
+                      </div>
+                    )}
+                    {env.warning === 'caution' && (
+                      <div className={styles.cautionCard}>
+                        <strong>⚠️ 주의 — 25~29°C</strong>
+                        <p>평시 페이스 -10%로 시작, 충분한 수분(15~20분마다 물·전해질), 어지러움 시 즉시 중단·119.</p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </section>
+
+          {/* ── 연령·성별 ── */}
+          <section className={styles.optionCard}>
+            <label className={styles.checkRow}>
+              <input type="checkbox" checked={demoOn} onChange={(e) => setDemoOn(e.target.checked)} />
+              <span>👥 연령·성별 보정 (참고)</span>
+            </label>
+            {demoOn && (
+              <div className={styles.optionBody}>
+                <div className={styles.demoRow}>
+                  <div className={styles.pillRow}>
+                    <button className={`${styles.pill} ${gender === 'male' ? styles.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
+                    <button className={`${styles.pill} ${gender === 'female' ? styles.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
+                  </div>
+                  <select className={styles.select} value={ageBand}
+                    onChange={(e) => setAgeBand(e.target.value as AgeBand)}>
+                    {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((k) => (
+                      <option key={k} value={k}>{AGE_BAND_LABEL[k]}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {demoBaseline && fullPred && (
+                  <div className={styles.demoResult}>
+                    <p>
+                      현재 풀 예상 <strong>{fmtHMS(fullPred.avg)}</strong> ({AGE_BAND_LABEL[ageBand]} {gender === 'female' ? '여성' : '남성'})
+                    </p>
+                    <p className={styles.demoSub}>
+                      ↔ 같은 능력의 20대 남성 환산: <strong>{fmtHMS(demoBaseline.youngMaleEquivalent)}</strong>
+                      <span className={styles.demoFactor}>(보정 계수 {demoBaseline.factor.toFixed(2)})</span>
+                    </p>
+                    <p className={styles.demoNote}>
+                      💡 WMA(World Masters Athletics) 통계 평균 — 개인차 큼. 꾸준한 훈련 = 연령 극복 가능.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
 
           {/* 공식별 비교표 */}
           {predictions.length > 0 && (
@@ -357,7 +498,7 @@ export default function RacePredictorClient() {
                     </tr>
                   </thead>
                   <tbody>
-                    {predictions.map(p => (
+                    {predictions.map((p) => (
                       <tr key={p.key}>
                         <td className={styles.distCell}>{p.label}</td>
                         <td>{fmtHMS(p.riegel)}</td>
@@ -374,12 +515,12 @@ export default function RacePredictorClient() {
           )}
 
           {/* 서브 목표 */}
-          {fullPrediction && (
+          {fullPred && (
             <section>
               <label className={styles.label}>서브 목표 달성 여부 <span className={styles.labelSub}>(풀 기준)</span></label>
               <div className={styles.subGoals}>
-                {SUB_GOALS.map(g => {
-                  const achieved = fullPrediction.avg <= g.sec
+                {SUB_GOALS.map((g) => {
+                  const achieved = fullPred.avg <= g.sec
                   return (
                     <div key={g.label} className={`${styles.subCard} ${achieved ? styles.subCardYes : styles.subCardNo}`}>
                       <span className={styles.subLabel}>{g.label}</span>
@@ -390,19 +531,28 @@ export default function RacePredictorClient() {
               </div>
             </section>
           )}
+
+          {/* 기록 저장 안내 */}
+          {validBase && (
+            <section className={styles.optionCard}>
+              <button className={styles.saveBtn} onClick={addRecordFromCurrent}>
+                📈 이 기록 저장 (📈 내 기록 탭에서 추이 확인)
+              </button>
+            </section>
+          )}
         </div>
       )}
 
-      {/* ══════════ TAB 2: 훈련 페이스 ══════════ */}
-      {tab === 'vdot' && (
+      {/* ══════════ TAB 2: 목표 역산 (NEW) ══════════ */}
+      {tab === 'reverse' && (
         <div className={styles.panel}>
           <section>
-            <label className={styles.label}>기준 거리</label>
+            <label className={styles.label}>🎯 목표 거리</label>
             <div className={styles.distGrid}>
-              {DISTS.map(d => (
+              {DISTS.filter((d) => d.key !== 'custom').map((d) => (
                 <button key={d.key}
-                  className={`${styles.distBtn} ${baseDist === d.key ? styles.distBtnActive : ''}`}
-                  onClick={() => setBaseDist(d.key)}>
+                  className={`${styles.distBtn} ${revDist === d.key ? styles.distBtnActive : ''}`}
+                  onClick={() => setRevDist(d.key)}>
                   {d.label}
                 </button>
               ))}
@@ -410,51 +560,91 @@ export default function RacePredictorClient() {
           </section>
 
           <section>
-            <label className={styles.label}>기록 (시:분:초)</label>
-            <TimeInput hours={bh} min={bm} sec={bs} onChange={(h, m, s) => { setBh(h); setBm(m); setBs(s) }} />
-          </section>
-
-          {/* VDOT 히어로 */}
-          <section className={styles.vdotHero}>
-            <p className={styles.heroLabel}>VDOT</p>
-            <p className={styles.vdotNum} style={{ color: vdotLevel.color }}>
-              {vdot > 0 ? vdot.toFixed(1) : '--'}
-            </p>
-            <p className={styles.vdotTag} style={{ background: `${vdotLevel.color}22`, color: vdotLevel.color }}>
-              {vdotLevel.tag}
-            </p>
-          </section>
-
-          {/* 훈련 페이스 */}
-          {vdot > 0 && (
-            <section>
-              <label className={styles.label}>훈련 페이스 (Jack Daniels)</label>
-              <div className={styles.zoneList}>
-                {PACE_ZONES.map(z => {
-                  const pace = paceFromVdot(vdot, z.intensity)
-                  const pace400 = pace * 0.4  // 400m = 0.4km
-                  return (
-                    <div key={z.key} className={styles.zoneCard} style={{ borderColor: `${z.color}55` }}>
-                      <div className={styles.zoneHead}>
-                        <span className={styles.zoneKey} style={{ background: z.color, color: '#0B0B0B' }}>{z.key}</span>
-                        <span className={styles.zoneName}>{z.name}</span>
-                      </div>
-                      <div className={styles.zonePaces}>
-                        <div>
-                          <span className={styles.zonePaceLabel}>/km</span>
-                          <span className={styles.zonePaceVal} style={{ color: z.color }}>{fmtPace(pace)}</span>
-                        </div>
-                        <div>
-                          <span className={styles.zonePaceLabel}>/400m</span>
-                          <span className={styles.zonePaceVal} style={{ color: z.color }}>{fmtMS(pace400)}</span>
-                        </div>
-                      </div>
-                      <p className={styles.zoneDesc}>{z.desc}</p>
-                    </div>
-                  )
-                })}
+            <label className={styles.label}>목표 시간</label>
+            <TimeInput hours={rh} min={rm} sec={rs} onChange={(h, m, s) => { setRh(h); setRm(m); setRs(s) }} />
+            {QUICK_TIMES[revDist].length > 0 && (
+              <div className={styles.quickRow}>
+                <span className={styles.quickLabel}>빠른 입력</span>
+                <div className={styles.quickChips}>
+                  {QUICK_TIMES[revDist].map((q) => (
+                    <button key={q.label} className={styles.quickChip}
+                      onClick={() => { setRh(q.h); setRm(q.m); setRs(q.s) }}>{q.label}</button>
+                  ))}
+                </div>
               </div>
-            </section>
+            )}
+          </section>
+
+          {validRev && requiredAbilities && (
+            <>
+              <section className={styles.hero}>
+                <p className={styles.heroLabel}>목표 달성에 필요한 능력</p>
+                <p className={styles.heroTime}>VDOT {requiredVdot.toFixed(1)}</p>
+                <p className={styles.heroPace}>
+                  {DISTS.find((d) => d.key === revDist)?.label} {fmtHMS(revSec)} 달성 기준
+                </p>
+              </section>
+
+              <section>
+                <label className={styles.label}>거리별 필요 기록</label>
+                <table className={styles.predTable}>
+                  <thead><tr><th>거리</th><th>필요 기록</th><th>페이스</th></tr></thead>
+                  <tbody>
+                    {([
+                      { key: '5k',   km: 5,        label: '5km',  sec: requiredAbilities['5k'] },
+                      { key: '10k',  km: 10,       label: '10km', sec: requiredAbilities['10k'] },
+                      { key: 'half', km: 21.0975,  label: '하프', sec: requiredAbilities['half'] },
+                      { key: 'full', km: 42.195,   label: '풀',   sec: requiredAbilities['full'] },
+                    ] as const).map((r) => (
+                      <tr key={r.key} className={r.key === revDist ? styles.targetRow : ''}>
+                        <td className={styles.distCell}>{r.label}{r.key === revDist && ' ⭐'}</td>
+                        <td className={styles.avgCell}>{fmtHMS(r.sec)}</td>
+                        <td className={styles.paceCell}>{fmtPace(r.sec / r.km)}/km</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+
+              <section className={styles.optionCard}>
+                <p className={styles.gapTitle}>📊 본인 현재 기록 입력 (격차 분석 — 선택)</p>
+                <div className={styles.distGrid}>
+                  {DISTS.filter((d) => d.key !== 'custom').map((d) => (
+                    <button key={d.key}
+                      className={`${styles.distBtn} ${curDist === d.key ? styles.distBtnActive : ''}`}
+                      onClick={() => setCurDist(d.key)}>
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ marginTop: 8 }}>
+                  <TimeInput hours={ch} min={cm} sec={cs} onChange={(h, m, s) => { setCh(h); setCm(m); setCs(s) }} />
+                </div>
+
+                {validCur && (
+                  <div className={styles.gapResult}>
+                    <p>
+                      현재 VDOT <strong>{currentVdot.toFixed(1)}</strong> → 목표 VDOT <strong>{requiredVdot.toFixed(1)}</strong>
+                    </p>
+                    <p>
+                      격차: <strong className={vdotGap > 0 ? styles.gapNeg : styles.gapPos}>
+                        {vdotGap > 0 ? `+${vdotGap.toFixed(1)} VDOT 향상 필요` : `${(-vdotGap).toFixed(1)} VDOT 여유 ✓`}
+                      </strong>
+                    </p>
+                    {vdotGap > 0 && (
+                      <p className={styles.gapEstimate}>
+                        💡 일반적으로 VDOT 1↑ ≈ 6~12주 꾸준한 훈련. 약 <strong>{monthsEstimate}주</strong> ({Math.round(monthsEstimate / 4)}개월) 예상.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <p className={styles.gapHint}>
+                  📚 더 빨라지려면: 인터벌·역치 훈련 + 충분한 회복 + 30km+ 장거리 주.
+                  심화 훈련 스케줄은 <Link href="/tools/sports/interval-training" className={styles.crossLink}>인터벌 훈련 계산기</Link>에서.
+                </p>
+              </section>
+            </>
           )}
         </div>
       )}
@@ -465,41 +655,29 @@ export default function RacePredictorClient() {
           <section>
             <label className={styles.label}>목표 거리</label>
             <div className={styles.distGrid}>
-              {DISTS.map(d => (
+              {DISTS.filter((d) => d.key !== 'custom').map((d) => (
                 <button key={d.key}
                   className={`${styles.distBtn} ${stratDist === d.key ? styles.distBtnActive : ''}`}
                   onClick={() => setStratDist(d.key)}>
                   {d.label}
                 </button>
               ))}
-              <button className={`${styles.distBtn} ${stratDist === 'custom' ? styles.distBtnActive : ''}`}
-                onClick={() => setStratDist('custom')}>
-                커스텀
-              </button>
             </div>
-            {stratDist === 'custom' && (
-              <div className={styles.customRow}>
-                <input type="number" min={1} step={0.1} value={stratCustomKm}
-                  onChange={e => setStratCustomKm(+e.target.value || 0)}
-                  className={styles.customInput} />
-                <span className={styles.unit}>km</span>
-              </div>
-            )}
           </section>
 
           <section>
-            <label className={styles.label}>목표 시간 (시:분:초)</label>
-            <TimeInput hours={gh} min={gm} sec={gs} onChange={(h, m, s) => { setGh(h); setGm(m); setGs(s) }} maxH={8} />
+            <label className={styles.label}>목표 시간</label>
+            <TimeInput hours={gh} min={gm} sec={gs} onChange={(h, m, s) => { setGh(h); setGm(m); setGs(s) }} />
           </section>
 
           <section>
             <label className={styles.label}>레이스 전략</label>
             <div className={styles.stratRow}>
               {([
-                { k: 'even',     l: '균등 스플릿',      desc: '전구간 균일 페이스' },
-                { k: 'negative', l: '네거티브 스플릿',  desc: '후반에 더 빠르게' },
-                { k: 'positive', l: '포지티브 스플릿',  desc: '전반에 더 빠르게' },
-              ] as const).map(s => (
+                { k: 'even',     l: '균등 스플릿',     desc: '전구간 균일 페이스' },
+                { k: 'negative', l: '네거티브 스플릿', desc: '후반에 더 빠르게 (-3%)' },
+                { k: 'positive', l: '포지티브 스플릿', desc: '전반에 더 빠르게 (+3%)' },
+              ] as const).map((s) => (
                 <button key={s.k}
                   className={`${styles.stratBtn} ${strategy === s.k ? styles.stratBtnActive : ''}`}
                   onClick={() => setStrategy(s.k)}>
@@ -510,24 +688,21 @@ export default function RacePredictorClient() {
             </div>
           </section>
 
-          {/* 스플릿 */}
           {splits.length > 0 && (
             <section>
               <label className={styles.label}>구간별 스플릿</label>
               <div className={styles.tableWrap}>
                 <table className={styles.splitsTable}>
                   <thead>
-                    <tr>
-                      <th>구간</th>
-                      <th>페이스/km</th>
-                      <th>구간 시간</th>
-                      <th>누적</th>
-                    </tr>
+                    <tr><th>구간</th><th>페이스/km</th><th>구간 시간</th><th>누적</th></tr>
                   </thead>
                   <tbody>
                     {splits.map((s, i) => (
                       <tr key={i}>
-                        <td className={styles.segCell}>{s.from.toFixed(0)}~{s.to.toFixed(s.to % 1 ? 2 : 0)}km</td>
+                        <td className={styles.segCell}>
+                          {s.from.toFixed(0)}~{s.to.toFixed(s.to % 1 ? 2 : 0)}km
+                          {s.mark && <span className={styles.segMark}> {s.mark}</span>}
+                        </td>
                         <td className={styles.paceCell}>{fmtPace(s.pace)}</td>
                         <td>{fmtMS(s.segTime)}</td>
                         <td className={styles.avgCell}>{fmtHMS(s.cum)}</td>
@@ -539,69 +714,177 @@ export default function RacePredictorClient() {
             </section>
           )}
 
-          {/* 날씨 보정 */}
-          <section>
-            <label className={styles.label}>날씨·고도 보정</label>
-            <div className={styles.wGroup}>
-              <p className={styles.wTitle}>기온</p>
-              <div className={styles.wRow}>
-                {([
-                  { k: 'cool', l: '≤15°C', p: '+0%' },
-                  { k: 'mild', l: '15~20°C', p: '+1.5%' },
-                  { k: 'warm', l: '20~25°C', p: '+3.5%' },
-                  { k: 'hot',  l: '≥25°C',  p: '+6%' },
-                ] as const).map(o => (
-                  <button key={o.k}
-                    className={`${styles.wBtn} ${tempZone === o.k ? styles.wBtnActive : ''}`}
-                    onClick={() => setTempZone(o.k)}>
-                    <span>{o.l}</span><span className={styles.wPct}>{o.p}</span>
-                  </button>
-                ))}
+          {/* 훈련 페이스 — 간단 표시 */}
+          {validBase && vdot > 0 && (
+            <section className={styles.optionCard}>
+              <p className={styles.gapTitle}>⚡ 훈련 페이스 (E·M·T·I·R) — 간단</p>
+              <p className={styles.zoneIntro}>
+                기록 예측 탭의 입력 기준 (VDOT {vdot.toFixed(1)}) — 훈련 페이스는 <strong>결과 부산물</strong>입니다.
+              </p>
+              <div className={styles.zoneSimple}>
+                {PACE_ZONES.map((z) => {
+                  const pace = paceFromVdot(vdot, z.intensity)
+                  return (
+                    <div key={z.key} className={styles.zoneSimpleItem} style={{ borderColor: `${z.color}55` }}>
+                      <span className={styles.zoneKey} style={{ background: z.color, color: '#0B0B0B' }}>{z.key}</span>
+                      <span className={styles.zoneName}>{z.name}</span>
+                      <span className={styles.zoneSimplePace} style={{ color: z.color }}>{fmtPace(pace)}/km</span>
+                      <span className={styles.zoneSimpleDesc}>{z.desc}</span>
+                    </div>
+                  )
+                })}
               </div>
-            </div>
-            <div className={styles.wGroup}>
-              <p className={styles.wTitle}>습도</p>
-              <div className={styles.wRow}>
-                {([
-                  { k: 'dry',   l: '≤60%',   p: '+0%' },
-                  { k: 'mid',   l: '61~80%', p: '+1%' },
-                  { k: 'humid', l: '>80%',   p: '+2.5%' },
-                ] as const).map(o => (
-                  <button key={o.k}
-                    className={`${styles.wBtn} ${humZone === o.k ? styles.wBtnActive : ''}`}
-                    onClick={() => setHumZone(o.k)}>
-                    <span>{o.l}</span><span className={styles.wPct}>{o.p}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className={styles.wGroup}>
-              <p className={styles.wTitle}>고도</p>
-              <div className={styles.wRow}>
-                {([
-                  { k: 'sea', l: '해수면',      p: '+0%' },
-                  { k: 'mid', l: '500m',        p: '+1.5%' },
-                  { k: 'high', l: '≥1000m',     p: '+3%' },
-                ] as const).map(o => (
-                  <button key={o.k}
-                    className={`${styles.wBtn} ${altitude === o.k ? styles.wBtnActive : ''}`}
-                    onClick={() => setAltitude(o.k)}>
-                    <span>{o.l}</span><span className={styles.wPct}>{o.p}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+              <p className={styles.zoneXLink}>
+                📚 심화 (인터벌 페이스 정확·400m 랩·4~16주 훈련 스케줄): <Link href="/tools/sports/interval-training" className={styles.crossLink}>인터벌 훈련 계산기</Link>
+                {' · '}
+                단순 페이스↔시간 변환: <Link href="/tools/sports/pace" className={styles.crossLink}>러닝 페이스 계산기</Link>
+              </p>
+            </section>
+          )}
 
-            {goalSec > 0 && (
-              <div className={styles.adjHero}>
-                <p className={styles.adjLabel}>보정된 예상 기록 <span className={styles.adjSub}>(+{(weatherAdj * 100).toFixed(1)}%)</span></p>
-                <p className={styles.adjTime}>{fmtHMS(adjTotal)}</p>
-                <p className={styles.adjPace}>보정 페이스 <strong>{fmtPace(adjPace)}</strong>/km</p>
-              </div>
-            )}
+          <section className={styles.koreaCard}>
+            <p className={styles.gapTitle}>📅 한국 마라톤 시즌 가이드</p>
+            <table className={styles.envTable}>
+              <thead><tr><th>시즌</th><th>평균 기온</th><th>평가</th><th>주요 대회</th></tr></thead>
+              <tbody>
+                {KOREA_SEASONS.map((s) => (
+                  <tr key={s.name}>
+                    <td>{s.name}</td>
+                    <td className={styles.envDetail}>{s.temp}</td>
+                    <td>{s.rating}</td>
+                    <td className={styles.envDetail}>{s.races}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className={styles.gapHint}>
+              ⚠️ 특정 대회 추천 X · 일반 정보만. 참가 신청은 공식 홈페이지에서.
+            </p>
           </section>
         </div>
       )}
+
+      {/* ══════════ TAB 4: 내 기록 (NEW) ══════════ */}
+      {tab === 'records' && (
+        <div className={styles.panel}>
+          {!mounted ? (
+            <p className={styles.emptyMsg}>로딩 중…</p>
+          ) : records.length === 0 ? (
+            <div className={styles.optionCard}>
+              <p className={styles.emptyMsg}>
+                저장된 기록이 없습니다.<br />
+                <strong>🏁 기록 예측</strong> 탭에서 기록 입력 후 <strong>📈 이 기록 저장</strong> 버튼을 눌러주세요.<br />
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>※ 모든 기록은 본 브라우저(localStorage)에만 저장됩니다.</span>
+              </p>
+            </div>
+          ) : (
+            <>
+              <RecordsChart records={records} />
+
+              <section>
+                <label className={styles.label}>전체 기록 ({records.length})</label>
+                <div className={styles.recordList}>
+                  {records.slice().sort((a, b) => b.date.localeCompare(a.date)).map((r) => {
+                    const distLabel = r.distance === 'custom' ? `${r.customKm}km` : (DISTS.find((d) => d.key === r.distance)?.label ?? r.distance)
+                    return (
+                      <div key={r.id} className={styles.recordItem}>
+                        <span className={styles.recordDate}>{r.date}</span>
+                        <span className={styles.recordDist}>{distLabel}</span>
+                        <span className={styles.recordTime}>{fmtHMS(r.timeSec)}</span>
+                        <span className={styles.recordVdot}>VDOT {r.vdot.toFixed(1)}</span>
+                        <button className={styles.recordRemove}
+                          onClick={() => setRecords((p) => p.filter((x) => x.id !== r.id))}
+                          aria-label="삭제">✕</button>
+                      </div>
+                    )
+                  })}
+                </div>
+              </section>
+
+              <section className={styles.optionCard}>
+                <button className={styles.saveBtn} onClick={downloadCSV}>📊 CSV 다운로드</button>
+                <button className={styles.clearBtn}
+                  onClick={() => { if (confirm('모든 기록을 삭제하시겠습니까?')) setRecords([]) }}>
+                  전체 기록 삭제
+                </button>
+              </section>
+            </>
+          )}
+
+          <p className={styles.disclaimerTone}>
+            💡 통계는 본인 발전 참고용. 0인 달도 OK·쉬어가는 달도 OK. 부상 시 즉시 휴식·의료 상담.
+          </p>
+        </div>
+      )}
+
+      {/* 면책 */}
+      <div className={styles.disclaimer}>
+        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
+        <ul>
+          <li>3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장</li>
+          <li>환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능)</li>
+          <li>25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119</li>
+          <li>본 도구는 부상 진단·영양/식단 자문·신발/기어 추천·약물/도핑 정보를 제공하지 않습니다</li>
+          <li>심화 훈련 스케줄은 <Link href="/tools/sports/interval-training" className={styles.crossLink}>인터벌 훈련 계산기</Link></li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
+// VDOT 추이 그래프
+// ─────────────────────────────────────────────────────────────
+function RecordsChart({ records }: { records: RaceRecord[] }) {
+  const sorted = [...records].sort((a, b) => a.date.localeCompare(b.date))
+  if (sorted.length === 0) return null
+
+  const W = 600, H = 180, padL = 36, padR = 16, padT = 16, padB = 30
+  const minV = Math.min(...sorted.map((r) => r.vdot))
+  const maxV = Math.max(...sorted.map((r) => r.vdot))
+  const yMin = Math.floor(minV - 1)
+  const yMax = Math.ceil(maxV + 1)
+
+  if (sorted.length === 1) {
+    return (
+      <div className={styles.chartWrap}>
+        <p className={styles.chartTitle}>VDOT 추이</p>
+        <p className={styles.chartEmpty}>기록이 2개 이상 쌓이면 그래프가 표시됩니다 (현재 VDOT {sorted[0].vdot.toFixed(1)}).</p>
+      </div>
+    )
+  }
+
+  const xOf = (i: number) => padL + (i / (sorted.length - 1)) * (W - padL - padR)
+  const yOf = (v: number) => padT + (H - padT - padB) - ((v - yMin) / (yMax - yMin)) * (H - padT - padB)
+
+  const pts = sorted.map((r, i) => `${xOf(i)},${yOf(r.vdot)}`).join(' ')
+  const first = sorted[0]
+  const last = sorted[sorted.length - 1]
+  const diff = last.vdot - first.vdot
+  const days = Math.round((new Date(last.date).getTime() - new Date(first.date).getTime()) / (1000 * 60 * 60 * 24))
+
+  return (
+    <div className={styles.chartWrap}>
+      <p className={styles.chartTitle}>📈 VDOT 추이</p>
+      <svg viewBox={`0 0 ${W} ${H}`} className={styles.chartSvg} preserveAspectRatio="xMidYMid meet">
+        <line x1={padL} y1={yOf(maxV)} x2={W - padR} y2={yOf(maxV)} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />
+        <line x1={padL} y1={yOf(minV)} x2={W - padR} y2={yOf(minV)} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />
+        <polyline points={pts} stroke="var(--accent)" strokeWidth="2" fill="none" strokeLinejoin="round" strokeLinecap="round" />
+        {sorted.map((r, i) => (
+          <circle key={r.id} cx={xOf(i)} cy={yOf(r.vdot)} r={3.5} fill="var(--accent)" />
+        ))}
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{maxV.toFixed(1)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{minV.toFixed(1)}</text>
+        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Syne">{first.date.slice(2)}</text>
+        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{last.date.slice(2)}</text>
+      </svg>
+      <p className={styles.chartCaption}>
+        {days}일간 VDOT <strong style={{ color: diff >= 0 ? '#3EFF9B' : '#FF8C8C' }}>
+          {diff >= 0 ? '+' : ''}{diff.toFixed(1)}
+        </strong> {diff >= 0 ? '향상' : '변화'}
+        {' · '}
+        풀 마라톤 환산: {fmtHMS(timeFromVdot(42.195, first.vdot))} → <strong>{fmtHMS(timeFromVdot(42.195, last.vdot))}</strong>
+      </p>
     </div>
   )
 }

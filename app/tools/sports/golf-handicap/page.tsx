@@ -3,7 +3,7 @@ import GolfHandicapClient from './GolfHandicapClient'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
-  path: '/tools/life/golf-handicap',
+  path: '/tools/sports/golf-handicap',
   title: '골프 핸디캡 계산기 — WHS·코스 핸디캡·발전 추이·자동 저장',
   description: 'WHS 핸디캡 지수 자동 산출, 코스 핸디캡, 네트·스태블포드, 라운드 자동 저장(50라운드), 발전 추이 그래프, 자주 가는 골프장 저장, 9홀 입력, 티별 비교까지.',
   keywords: ['골프핸디캡계산기', '핸디캡지수계산', 'WHS핸디캡', '코스핸디캡계산기', '스코어디퍼런셜', '네트스코어계산기', '스태블포드계산기', '골프핸디캡', '슬로프 레이팅', '코스 레이팅', '한국 골프 핸디캡', '핸디캡 추이', 'KGA 핸디캡'],
@@ -408,8 +408,8 @@ export default function GolfHandicapPage() {
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/life/golf-distance', icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
-              { href: '/tools/life/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기',  desc: '그린피·캐디·1인당 정산' },
+              { href: '/tools/sports/golf-distance', icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
+              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기',  desc: '그린피·캐디·1인당 정산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 라운드까지' },
               { href: '/tools/finance/car-cost',   icon: '🚗', name: '자동차 유지비 계산기',    desc: '골프장 왕복 유류비' },
               { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이 계산기',         desc: '내기 골프 정산·N빵' },

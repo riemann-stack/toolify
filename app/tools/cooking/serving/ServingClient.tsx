@@ -1,238 +1,24 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import Link from 'next/link'
 import styles from './serving.module.css'
+import {
+  SERVING_DATA, CAT_LABEL, MEAL_LABEL, APPETITE_LABEL, AGE_LABEL,
+  APPETITE_MULT, VARIANT_CHOICES, DIETARY_LABEL,
+  AGE_BAND_LABEL, AGE_BAND_FACTOR,
+  loadFamily, saveFamily, familyToEffectivePeople,
+  type Category, type ServingData, type MealType, type Appetite,
+  type AgeGroup, type Carb, type DietaryFlag,
+  type FamilyMember, type AgeBand,
+} from './servingData'
 
-// ── Types ──────────────────────────────────────
-type Category = 'noodle' | 'meat' | 'grain' | 'vegetable' | 'soup'
+type TabKey = 'serving' | 'shopping' | 'family'
 
-interface ServingData {
-  key: string
-  name: string
-  emoji: string
-  category: Category
-  unit: string
-  basePerPerson: { main: number; side: number; snack: number; light: number }
-  withCarbReduction: number
-  withoutCarbIncrease: number
-  rawToCooked: number
-  prepNote: string
-  cookingNote: string
-  variantAdjust: Record<string, number>
-}
+function fmt(v: number): string { return Math.round(v).toLocaleString() }
+function roundTo(v: number, step: number): number { return Math.round(v / step) * step }
+function uid(): string { return Math.random().toString(36).slice(2, 10) }
 
-const CAT_LABEL: Record<Category, string> = {
-  noodle: '🍝 면류',
-  meat: '🥩 고기류',
-  grain: '🍚 밥·곡류',
-  vegetable: '🥦 채소·부재료',
-  soup: '🍲 국·찌개·전골',
-}
-
-const SERVING_DATA: ServingData[] = [
-  // 면류
-  { key: 'pasta', name: '파스타', emoji: '🍝', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 100, side: 60, snack: 70, light: 75 },
-    withCarbReduction: 0, withoutCarbIncrease: 20, rawToCooked: 2.2,
-    prepNote: '건면 기준', cookingNote: '삶으면 약 2.2배 증가. 알덴테로 삶으면 소스 흡수로 추가 증가.',
-    variantAdjust: { '볶음': 10, '국물': 0, '비빔': 5 } },
-  { key: 'somyeon', name: '소면', emoji: '🍜', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 90, side: 50, snack: 60, light: 70 },
-    withCarbReduction: 0, withoutCarbIncrease: 15, rawToCooked: 2.5,
-    prepNote: '건면 기준', cookingNote: '삶으면 약 2.5배 증가. 국수 단독 메인이면 상한(100g) 권장.',
-    variantAdjust: { '국물': 0, '비빔': 10 } },
-  { key: 'jungmyeon', name: '중면', emoji: '🍜', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 100, side: 55, snack: 65, light: 75 },
-    withCarbReduction: 0, withoutCarbIncrease: 15, rawToCooked: 2.4,
-    prepNote: '건면 기준', cookingNote: '잔치국수·비빔국수용. 삶으면 약 2.4배.',
-    variantAdjust: { '국물': 0, '비빔': 10 } },
-  { key: 'udon', name: '우동면', emoji: '🍜', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 200, side: 120, snack: 150, light: 160 },
-    withCarbReduction: 0, withoutCarbIncrease: 30, rawToCooked: 1.0,
-    prepNote: '생면/냉동 기준 (건면이면 100g)', cookingNote: '생우동/냉동 기준. 건면이면 약 100g으로 계산.',
-    variantAdjust: { '국물': 0, '볶음': 20 } },
-  { key: 'ramenSari', name: '라면사리', emoji: '🍜', category: 'noodle', unit: 'g (봉)',
-    basePerPerson: { main: 110, side: 0, snack: 110, light: 80 },
-    withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 2.3,
-    prepNote: '건면 기준 (1봉 보통 100~110g)', cookingNote: '전골·부대찌개용. 국물 양에 따라 1봉으로 2인 가능.',
-    variantAdjust: { '국물': -10, '볶음': 10 } },
-  { key: 'kalguksu', name: '칼국수면', emoji: '🍜', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 150, side: 80, snack: 110, light: 110 },
-    withCarbReduction: 0, withoutCarbIncrease: 20, rawToCooked: 1.6,
-    prepNote: '생면 기준 (건면이면 100g)', cookingNote: '생면은 그대로 사용. 건면이면 약 100g으로 계산.',
-    variantAdjust: { '국물': 0, '비빔': 10 } },
-  { key: 'riceNoodle', name: '쌀국수면', emoji: '🍜', category: 'noodle', unit: 'g',
-    basePerPerson: { main: 80, side: 50, snack: 60, light: 65 },
-    withCarbReduction: 0, withoutCarbIncrease: 15, rawToCooked: 2.3,
-    prepNote: '건면 기준 (불리기 전)', cookingNote: '뜨거운 물에 5~7분 불리면 약 2.3배. 포 보운 1인분 60~80g.',
-    variantAdjust: { '국물': 0, '볶음': 10 } },
-
-  // 고기류
-  { key: 'beefGrill', name: '소고기 구이', emoji: '🥩', category: 'meat', unit: 'g',
-    basePerPerson: { main: 200, side: 100, snack: 150, light: 130 },
-    withCarbReduction: 50, withoutCarbIncrease: 0, rawToCooked: 0.75,
-    prepNote: '생고기 기준 (익으면 약 20~25% 감소)', cookingNote: '구이는 식으면 더 먹고 싶어지므로 상한 쪽 준비 권장.',
-    variantAdjust: { '구이': 0 } },
-  { key: 'bulgogi', name: '소불고기', emoji: '🥩', category: 'meat', unit: 'g',
-    basePerPerson: { main: 180, side: 80, snack: 120, light: 120 },
-    withCarbReduction: 40, withoutCarbIncrease: 0, rawToCooked: 0.8,
-    prepNote: '생고기 기준', cookingNote: '채소와 함께 볶으면 1인당 20~30g 줄여도 충분.',
-    variantAdjust: { '볶음': 0, '전골': -20 } },
-  { key: 'shabuBeef', name: '샤브샤브 소고기', emoji: '🥩', category: 'meat', unit: 'g',
-    basePerPerson: { main: 150, side: 80, snack: 120, light: 100 },
-    withCarbReduction: 20, withoutCarbIncrease: 30, rawToCooked: 0.85,
-    prepNote: '생고기 기준 (얇게 썬 것)', cookingNote: '채소·두부와 함께 먹으므로 단독 구이보다 적게 준비해도 됨.',
-    variantAdjust: { '전골': -10 } },
-  { key: 'porkGrill', name: '돼지고기 구이', emoji: '🥩', category: 'meat', unit: 'g',
-    basePerPerson: { main: 220, side: 120, snack: 180, light: 150 },
-    withCarbReduction: 50, withoutCarbIncrease: 0, rawToCooked: 0.75,
-    prepNote: '생고기 기준', cookingNote: '삼겹살 기준. 쌈채소와 함께면 1인당 200g, 고기만이면 250g+.',
-    variantAdjust: { '구이': 0 } },
-  { key: 'jeyukMeat', name: '제육용 돼지고기', emoji: '🥩', category: 'meat', unit: 'g',
-    basePerPerson: { main: 160, side: 80, snack: 120, light: 120 },
-    withCarbReduction: 30, withoutCarbIncrease: 0, rawToCooked: 0.78,
-    prepNote: '생고기 기준 (불고기감/앞다리살)', cookingNote: '볶음 요리라 양념 줄어들어 단독 보다 양 적게 느껴짐.',
-    variantAdjust: { '볶음': 10 } },
-  { key: 'chickenBreast', name: '닭가슴살', emoji: '🍗', category: 'meat', unit: 'g',
-    basePerPerson: { main: 150, side: 80, snack: 100, light: 120 },
-    withCarbReduction: 50, withoutCarbIncrease: 0, rawToCooked: 0.75,
-    prepNote: '생닭가슴살 기준', cookingNote: '단백질 식단용은 메인에서 200g까지 늘릴 수 있음.',
-    variantAdjust: { '볶음': 10, '찜': -10 } },
-  { key: 'chickenThigh', name: '닭다리살', emoji: '🍗', category: 'meat', unit: 'g',
-    basePerPerson: { main: 180, side: 90, snack: 130, light: 140 },
-    withCarbReduction: 40, withoutCarbIncrease: 0, rawToCooked: 0.78,
-    prepNote: '생고기 기준 (뼈 없는 정육 기준)', cookingNote: '뼈째이면 약 1.3배로 구입. 기름이 많아 포만감 높음.',
-    variantAdjust: { '볶음': 10, '찜': -10 } },
-
-  // 밥·곡류
-  { key: 'rice', name: '쌀 (흰쌀)', emoji: '🍚', category: 'grain', unit: 'g',
-    basePerPerson: { main: 90, side: 50, snack: 0, light: 65 },
-    withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 2.4,
-    prepNote: '생쌀 기준 (밥이 되면 약 2.4배)', cookingNote: '1인분 생쌀 90g → 밥 약 210g. 공기밥 1그릇 기준.',
-    variantAdjust: {} },
-  { key: 'brownRice', name: '현미', emoji: '🌾', category: 'grain', unit: 'g',
-    basePerPerson: { main: 95, side: 55, snack: 0, light: 70 },
-    withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 2.2,
-    prepNote: '생현미 기준', cookingNote: '현미는 흰쌀보다 불리는 시간 길고 밥 부피는 약간 적음(2.2배).',
-    variantAdjust: {} },
-  { key: 'friedRice', name: '볶음밥용 밥', emoji: '🍚', category: 'grain', unit: 'g',
-    basePerPerson: { main: 220, side: 130, snack: 180, light: 170 },
-    withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 1.0,
-    prepNote: '지은 밥 기준 (식은 밥 권장)', cookingNote: '갓 지은 밥보다 식힌 밥이 볶음에 좋음. 공기밥 1그릇 약 200g.',
-    variantAdjust: { '볶음': 0 } },
-  { key: 'juk', name: '죽용 쌀', emoji: '🥣', category: 'grain', unit: 'g',
-    basePerPerson: { main: 45, side: 25, snack: 0, light: 35 },
-    withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 5.5,
-    prepNote: '생쌀 기준 (죽이 되면 약 5~6배)', cookingNote: '흰죽·전복죽용. 생쌀 45g → 죽 약 250g (1인분).',
-    variantAdjust: {} },
-
-  // 채소·부재료
-  { key: 'salad', name: '샐러드 채소', emoji: '🥗', category: 'vegetable', unit: 'g',
-    basePerPerson: { main: 120, side: 60, snack: 80, light: 150 },
-    withCarbReduction: 50, withoutCarbIncrease: 0, rawToCooked: 0.9,
-    prepNote: '손질 전 기준 (손질 후 약 85~90%)', cookingNote: '양상추·로메인·루꼴라 등 혼합 기준.',
-    variantAdjust: {} },
-  { key: 'ssamVeg', name: '쌈채소', emoji: '🥬', category: 'vegetable', unit: 'g',
-    basePerPerson: { main: 80, side: 40, snack: 60, light: 100 },
-    withCarbReduction: 30, withoutCarbIncrease: 10, rawToCooked: 0.95,
-    prepNote: '손질 전 기준', cookingNote: '상추·깻잎·청경채 등. 고기 메뉴와 같이면 상한 쪽 준비.',
-    variantAdjust: {} },
-  { key: 'cabbage', name: '양배추', emoji: '🥬', category: 'vegetable', unit: 'g',
-    basePerPerson: { main: 120, side: 60, snack: 80, light: 100 },
-    withCarbReduction: 30, withoutCarbIncrease: 20, rawToCooked: 0.7,
-    prepNote: '손질 전 기준 (볶거나 삶으면 30~40% 줄어듦)', cookingNote: '샤브샤브·볶음용. 찌면 부피가 크게 감소.',
-    variantAdjust: { '전골': 20, '볶음': 0 } },
-  { key: 'beansprout', name: '숙주', emoji: '🌱', category: 'vegetable', unit: 'g',
-    basePerPerson: { main: 100, side: 60, snack: 80, light: 90 },
-    withCarbReduction: 20, withoutCarbIncrease: 20, rawToCooked: 0.8,
-    prepNote: '손질 전 기준 (삶으면 약 20% 감소)', cookingNote: '샤브샤브·잡채·볶음용. 한 봉(200~300g) 기준 2~3인분.',
-    variantAdjust: { '전골': 20, '볶음': 0 } },
-  { key: 'mushroom', name: '버섯', emoji: '🍄', category: 'vegetable', unit: 'g',
-    basePerPerson: { main: 100, side: 50, snack: 80, light: 80 },
-    withCarbReduction: 30, withoutCarbIncrease: 20, rawToCooked: 0.75,
-    prepNote: '손질 전 기준 (가열 시 부피 25% 감소)', cookingNote: '느타리·새송이·양송이 등 혼합. 샤브·전골에 넉넉히.',
-    variantAdjust: { '전골': 20, '볶음': 0 } },
-  { key: 'potato', name: '감자', emoji: '🥔', category: 'vegetable', unit: 'g (개)',
-    basePerPerson: { main: 180, side: 100, snack: 130, light: 130 },
-    withCarbReduction: 0, withoutCarbIncrease: 30, rawToCooked: 0.9,
-    prepNote: '껍질 포함 기준 (중간 크기 1개 약 150g)', cookingNote: '찜·국·볶음에 공통. 1인분 1~1.5개.',
-    variantAdjust: { '국물': 10, '볶음': 0, '찜': 0 } },
-
-  // 국·찌개·전골
-  { key: 'soupMeat', name: '국거리 고기', emoji: '🍲', category: 'soup', unit: 'g',
-    basePerPerson: { main: 100, side: 60, snack: 80, light: 80 },
-    withCarbReduction: 20, withoutCarbIncrease: 30, rawToCooked: 0.85,
-    prepNote: '생고기 기준 (양지·사태·국거리)', cookingNote: '국은 국물이 포만감을 채우므로 단독 고기 요리보다 적음.',
-    variantAdjust: { '국물': 0, '전골': 20 } },
-  { key: 'hotpotMeat', name: '전골용 고기', emoji: '🍲', category: 'soup', unit: 'g',
-    basePerPerson: { main: 130, side: 70, snack: 100, light: 100 },
-    withCarbReduction: 20, withoutCarbIncrease: 30, rawToCooked: 0.8,
-    prepNote: '생고기 기준', cookingNote: '채소·두부·면사리와 함께. 메인으로 단독이면 +30g.',
-    variantAdjust: { '전골': 0, '국물': -10 } },
-  { key: 'eomuk', name: '어묵', emoji: '🍢', category: 'soup', unit: 'g',
-    basePerPerson: { main: 80, side: 50, snack: 70, light: 60 },
-    withCarbReduction: 20, withoutCarbIncrease: 10, rawToCooked: 1.0,
-    prepNote: '완제품 기준 (바로 조리 가능)', cookingNote: '국·볶음·꼬치용. 한 팩(500g) 기준 5~6인분.',
-    variantAdjust: { '국물': 10, '볶음': 0 } },
-  { key: 'dumpling', name: '만두', emoji: '🥟', category: 'soup', unit: '개',
-    basePerPerson: { main: 5, side: 3, snack: 4, light: 4 },
-    withCarbReduction: 1, withoutCarbIncrease: 2, rawToCooked: 1.0,
-    prepNote: '완제품 기준 (1개 약 20~25g)', cookingNote: '만두국·군만두·찐만두. 단독 메인이면 6~8개.',
-    variantAdjust: { '국물': 0, '찜': 0 } },
-  { key: 'tofu', name: '두부', emoji: '⬜', category: 'soup', unit: 'g (모)',
-    basePerPerson: { main: 100, side: 50, snack: 80, light: 80 },
-    withCarbReduction: 20, withoutCarbIncrease: 0, rawToCooked: 0.9,
-    prepNote: '생두부 기준 (1모 300~350g)', cookingNote: '찌개용 두부 1모는 보통 3~4인분. 단독 반찬이면 1~2인분.',
-    variantAdjust: { '국물': -10, '볶음': 10 } },
-]
-
-// ── Options ──────────────────────────────────────
-type MealType = 'main' | 'side' | 'snack' | 'light'
-type Appetite = 'small' | 'normal' | 'large'
-type AgeGroup = 'adultOnly' | 'adultChild' | 'childOnly'
-type Carb = 'yes' | 'no'
-
-const MEAL_LABEL: Record<MealType, string> = {
-  main: '🍽️ 메인 식사',
-  side: '🍶 곁들임 / 사이드',
-  snack: '🍺 안주',
-  light: '🥗 가벼운 식사',
-}
-
-const APPETITE_MULT: Record<Appetite, number> = {
-  small: 0.8,
-  normal: 1.0,
-  large: 1.25,
-}
-const APPETITE_LABEL: Record<Appetite, string> = {
-  small: '적게 먹는 편 (×0.8)',
-  normal: '보통 (×1.0)',
-  large: '많이 먹는 편 (×1.25)',
-}
-
-const AGE_LABEL: Record<AgeGroup, string> = {
-  adultOnly: '성인만',
-  adultChild: '성인 + 아이',
-  childOnly: '아이 위주',
-}
-
-// variant choices per category
-const VARIANT_CHOICES: Partial<Record<Category, string[]>> = {
-  noodle: ['국물', '비빔', '볶음'],
-  meat: ['구이', '볶음', '찜', '전골'],
-  soup: ['국물', '전골'],
-  vegetable: ['국물', '볶음', '전골'],
-}
-
-// ── Helpers ──────────────────────────────────────
-function fmt(v: number): string {
-  return Math.round(v).toLocaleString()
-}
-function roundTo(v: number, step: number): number {
-  return Math.round(v / step) * step
-}
-
-// ── Calc ──────────────────────────────────────
 interface Applied {
   meal: MealType
   appetite: Appetite
@@ -242,38 +28,30 @@ interface Applied {
 
 function calcItem(item: ServingData, peopleEff: number, a: Applied) {
   let base = item.basePerPerson[a.meal]
-
-  // variant per-item adjust (apply if variant is set and present in item.variantAdjust)
-  if (a.variant && item.variantAdjust[a.variant] !== undefined) {
-    base += item.variantAdjust[a.variant]
-  }
-
-  // carb adjustment (only for non-carb categories)
+  if (a.variant && item.variantAdjust[a.variant] !== undefined) base += item.variantAdjust[a.variant]
   const isCarbFood = item.category === 'noodle' || item.category === 'grain'
   if (!isCarbFood) {
     if (a.carb === 'yes') base -= item.withCarbReduction
     else base += item.withoutCarbIncrease
   }
-
   if (base < 0) base = 0
-
   const perPerson = base * APPETITE_MULT[a.appetite]
   const total = perPerson * peopleEff
-
   const step = item.category === 'meat' || item.category === 'noodle' ? 10 : 5
   const mid = roundTo(total, step)
   const min = roundTo(total * 0.9, step)
   const max = roundTo(total * 1.1, step)
-
-  const cookedMid = Math.round(mid * item.rawToCooked)
-  const cookedMin = Math.round(min * item.rawToCooked)
-  const cookedMax = Math.round(max * item.rawToCooked)
-
-  return { perPerson, mid, min, max, cookedMid, cookedMin, cookedMax }
+  return {
+    perPerson, mid, min, max,
+    cookedMin: Math.round(min * item.rawToCooked),
+    cookedMax: Math.round(max * item.rawToCooked),
+  }
 }
 
-// ── Component ──────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 export default function ServingClient() {
+  const [tab, setTab] = useState<TabKey>('serving')
+
   const [selected, setSelected] = useState<string[]>(['pasta'])
   const [people, setPeople] = useState(2)
   const [ageGroup, setAgeGroup] = useState<AgeGroup>('adultOnly')
@@ -282,336 +60,577 @@ export default function ServingClient() {
   const [appetite, setAppetite] = useState<Appetite>('normal')
   const [carb, setCarb] = useState<Carb>('yes')
   const [variant, setVariant] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
+
+  // 식이 제한 (NEW)
+  const [dietary, setDietary] = useState<DietaryFlag[]>([])
+
+  // 카테고리 accordion 상태 (모바일 UX)
+  const [openCats, setOpenCats] = useState<Set<Category>>(new Set(['noodle', 'meat']))
+
+  // 검색
+  const [search, setSearch] = useState('')
+
+  // 냉장고 보유 (NEW) — key → grams
+  const [fridge, setFridge] = useState<Record<string, number>>({})
+
+  // 가족 구성 (NEW)
+  const [family, setFamilyState] = useState<FamilyMember[]>([])
+  const [useFamily, setUseFamily] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // localStorage 로드
+  useEffect(() => {
+    const s = loadFamily()
+    if (s.members.length > 0) {
+      setFamilyState(s.members)
+      // 자동 적용은 사용자 동의 필요 — 안내만, 토글로 활성
+    }
+    if (s.defaultMealType) setMealType(s.defaultMealType)
+    if (s.carb) setCarb(s.carb)
+    if (s.dietary) setDietary(s.dietary)
+    setMounted(true)
+  }, [])
+  // 가족 변경 시 저장
+  useEffect(() => {
+    if (!mounted) return
+    saveFamily({ members: family, defaultMealType: mealType, carb, dietary })
+  }, [family, mealType, carb, dietary, mounted])
+
+  const toggleCat = (c: Category) => {
+    setOpenCats((prev) => {
+      const next = new Set(prev)
+      if (next.has(c)) next.delete(c); else next.add(c)
+      return next
+    })
+  }
 
   const toggle = (k: string) =>
-    setSelected(prev => prev.includes(k) ? prev.filter(x => x !== k) : [...prev, k])
+    setSelected((prev) => prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k])
+
+  // 식이 제한 필터 (인라인)
+  const isFilteredOut = useMemo(() => {
+    return (it: ServingData): boolean =>
+      !!it.notFor && it.notFor.some((flag) => dietary.includes(flag))
+  }, [dietary])
+
+  // 검색·필터링된 가시 재료
+  const visibleByCategory = useMemo(() => {
+    const cats: Category[] = ['noodle', 'meat', 'grain', 'vegetable', 'soup']
+    const q = search.trim().toLowerCase()
+    return cats.map((c) => ({
+      cat: c,
+      items: SERVING_DATA.filter((d) => d.category === c)
+        .filter((d) => !isFilteredOut(d))
+        .filter((d) => !q || d.name.toLowerCase().includes(q) || d.key.toLowerCase().includes(q)),
+    })).filter((g) => g.items.length > 0)
+  }, [search, isFilteredOut])
 
   const selectedItems = useMemo(
-    () => SERVING_DATA.filter(d => selected.includes(d.key)),
-    [selected]
+    () => SERVING_DATA.filter((d) => selected.includes(d.key) && !isFilteredOut(d)),
+    [selected, isFilteredOut]
   )
 
+  // 인분 환산 — 가족 모드 우선, 아니면 기존 방식
   const peopleEff = useMemo(() => {
+    if (useFamily && family.length > 0) {
+      return familyToEffectivePeople(family)
+    }
     const n = Math.max(1, Math.min(20, people))
     if (ageGroup === 'adultOnly') return n
     if (ageGroup === 'childOnly') return n * 0.65
-    // adultChild
     const kids = Math.max(0, Math.min(n, children))
     const adults = Math.max(0, n - kids)
     return adults + kids * 0.6
-  }, [people, ageGroup, children])
+  }, [useFamily, family, people, ageGroup, children])
 
-  // any selected category has variants?
+  const peopleLabel = useFamily && family.length > 0
+    ? `가족 ${family.length}명 (실질 ${peopleEff.toFixed(1)}인분)`
+    : `${people}인 (실질 ${peopleEff.toFixed(1)}인분)`
+
   const availableVariants = useMemo(() => {
     const set = new Set<string>()
-    selectedItems.forEach(it => {
+    selectedItems.forEach((it) => {
       const vs = VARIANT_CHOICES[it.category]
-      if (vs) vs.forEach(v => set.add(v))
+      if (vs) vs.forEach((v) => set.add(v))
     })
     return Array.from(set)
   }, [selectedItems])
 
-  const applied: Applied = { meal: mealType, appetite, carb, variant }
+  const results = useMemo(() => {
+    const applied: Applied = { meal: mealType, appetite, carb, variant }
+    return selectedItems.map((it) => ({ item: it, calc: calcItem(it, peopleEff, applied) }))
+  }, [selectedItems, peopleEff, mealType, appetite, carb, variant])
 
-  const results = useMemo(
-    () => selectedItems.map(it => ({ item: it, calc: calcItem(it, peopleEff, applied) })),
-    [selectedItems, peopleEff, applied]
-  )
+  // 냉장고 빼기 적용 — 사야 할 양 계산
+  const finalShoppingItems = useMemo(() => results.map(({ item, calc }) => {
+    const inStock = fridge[item.key] ?? 0
+    const needMin = Math.max(0, calc.min - inStock)
+    const needMax = Math.max(0, calc.max - inStock)
+    return { item, calc, inStock, needMin, needMax }
+  }), [results, fridge])
 
-  const shoppingList = useMemo(() => {
-    if (results.length === 0) return ''
-    const header = `─── ${people}인분 장보기 목록 ───`
-    const footer = `─────────────────`
-    const lines = results.map(({ item, calc }) => {
-      const prep = `(${item.prepNote.split(' ')[0]})`
-      return `${item.name} ${prep}: ${calc.min}~${calc.max}${item.unit.replace(/\s*\([^)]*\)/, '')}`
-    })
-    return [header, ...lines, footer].join('\n')
-  }, [results, people])
+  // 마크다운 장보기 카드
+  const shoppingMarkdown = useMemo(() => {
+    if (finalShoppingItems.length === 0) return ''
+    const today = new Date().toISOString().slice(0, 10)
+    const lines: string[] = []
+    lines.push(`# 🛒 ${peopleLabel} 장보기 — ${MEAL_LABEL[mealType]}`)
+    lines.push(`📅 ${today}`)
+    lines.push('')
 
-  const copy = async () => {
+    // 카테고리별 그룹
+    const cats: Category[] = ['noodle', 'meat', 'grain', 'vegetable', 'soup']
+    for (const c of cats) {
+      const items = finalShoppingItems.filter((x) => x.item.category === c)
+      if (items.length === 0) continue
+      lines.push(`## ${CAT_LABEL[c]}`)
+      for (const x of items) {
+        const u = x.item.unit.split(' ')[0]
+        if (x.needMin === 0 && x.needMax === 0) {
+          lines.push(`- ✓ ${x.item.emoji} ${x.item.name}: 보유분 충분 (${x.inStock}${u} 보유)`)
+        } else {
+          const stockNote = x.inStock > 0 ? ` (보유 ${x.inStock}${u} 빼고)` : ''
+          const pkgNote = x.item.marketPackage ? ` · 패키지: ${x.item.marketPackage}` : ''
+          lines.push(`- ${x.item.emoji} ${x.item.name}: ${x.needMin}~${x.needMax}${u}${stockNote}${pkgNote}`)
+        }
+      }
+      lines.push('')
+    }
+
+    lines.push(`---`)
+    lines.push(`💡 ${dietary.length > 0 ? '식이 제한: ' + dietary.map((d) => DIETARY_LABEL[d]).join(', ') + ' · ' : ''}알레르기 라벨 확인 권장`)
+    lines.push(`— youtil.kr/tools/cooking/serving`)
+    return lines.join('\n')
+  }, [finalShoppingItems, peopleLabel, mealType, dietary])
+
+  const [copied, setCopied] = useState(false)
+  const copyShopping = async () => {
     try {
-      await navigator.clipboard.writeText(shoppingList)
+      await navigator.clipboard.writeText(shoppingMarkdown)
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }
 
-  // group data by category for rendering
-  const byCat = useMemo(() => {
-    const cats: Category[] = ['noodle', 'meat', 'grain', 'vegetable', 'soup']
-    return cats.map(c => ({
-      cat: c,
-      items: SERVING_DATA.filter(d => d.category === c),
-    }))
-  }, [])
+  // 가족 멤버 관리
+  const addMember = () => {
+    setFamilyState((prev) => [...prev, { id: uid(), age: 'adult', appetite: 'normal' }])
+  }
+  const updateMember = (id: string, patch: Partial<FamilyMember>) => {
+    setFamilyState((prev) => prev.map((m) => m.id === id ? { ...m, ...patch } : m))
+  }
+  const removeMember = (id: string) => {
+    setFamilyState((prev) => prev.filter((m) => m.id !== id))
+  }
+
+  // 식이 제한 토글
+  const toggleDietary = (f: DietaryFlag) => {
+    setDietary((prev) => prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f])
+  }
 
   return (
     <div className={styles.wrap}>
-      {/* 1. 재료 선택 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>1. 재료 선택 (복수 선택 가능)</label>
-        {byCat.map(({ cat, items }) => (
-          <div key={cat} className={styles.catGroup}>
-            <span className={styles.catLabel}>{CAT_LABEL[cat]}</span>
-            <div className={styles.ingGrid}>
-              {items.map(it => {
-                const active = selected.includes(it.key)
-                const num = active ? selected.indexOf(it.key) + 1 : 0
-                return (
-                  <button key={it.key} type="button"
-                    className={`${styles.ingBtn} ${active ? styles.ingActive : ''}`}
-                    onClick={() => toggle(it.key)}>
-                    <span className={styles.ingEmoji}>{it.emoji}</span>
-                    <span className={styles.ingName}>{it.name}</span>
-                    {active && selected.length > 1 && (
-                      <span className={styles.ingBadge}>{num}</span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ))}
-        {selected.length > 1 && (
-          <p className={styles.cardSub}>
-            ✅ {selected.length}종 선택됨 — 선택한 재료 모두의 인분별 분량을 함께 계산하고 하단에 장보기 목록을 합산합니다.
-          </p>
-        )}
+      {/* 탭 */}
+      <div className={`${styles.tabs} ${styles.tabs3}`}>
+        <button className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>🍽️ 재료별 분량</button>
+        <button className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>🛒 장보기 목록</button>
+        <button className={`${styles.tab} ${tab === 'family' ? styles.tabActive : ''}`} onClick={() => setTab('family')}>👪 내 가족</button>
       </div>
 
-      {/* 2. 인원 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>2. 인원</label>
-        <div className={styles.peopleRow}>
-          <button type="button" className={styles.stepBtn}
-            onClick={() => setPeople(p => Math.max(1, p - 1))}
-            disabled={people <= 1}>−</button>
-          <input type="number" inputMode="numeric"
-            className={styles.peopleInput}
-            min={1} max={20}
-            value={people}
-            onChange={e => {
-              const v = parseInt(e.target.value, 10)
-              if (!isNaN(v)) setPeople(Math.max(1, Math.min(20, v)))
-            }} />
-          <span className={styles.peopleUnit}>명</span>
-          <button type="button" className={styles.stepBtn}
-            onClick={() => setPeople(p => Math.min(20, p + 1))}
-            disabled={people >= 20}>+</button>
-        </div>
-        <div className={styles.quickRow}>
-          {[1, 2, 3, 4, 6].map(n => (
-            <button key={n} type="button"
-              className={`${styles.quickBtn} ${people === n ? styles.quickActive : ''}`}
-              onClick={() => setPeople(n)}>
-              {n}인
-            </button>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>연령 구성</div>
-          <div className={styles.condRow}>
-            {(['adultOnly', 'adultChild', 'childOnly'] as AgeGroup[]).map(g => (
-              <button key={g} type="button"
-                className={`${styles.condBtn} ${ageGroup === g ? styles.condActive : ''}`}
-                onClick={() => setAgeGroup(g)}>
-                {AGE_LABEL[g]}
-              </button>
-            ))}
-          </div>
-          {ageGroup === 'adultChild' && (
-            <div className={styles.subRow}>
-              <span className={styles.subLabel}>아이 인원</span>
-              <input type="number" inputMode="numeric"
-                className={styles.kidInput}
-                min={0} max={people}
-                value={children}
-                onChange={e => {
-                  const v = parseInt(e.target.value, 10)
-                  if (!isNaN(v)) setChildren(Math.max(0, Math.min(people, v)))
-                }} />
-              <span className={styles.effPeople}>
-                실질 {peopleEff.toFixed(1)}인분
-              </span>
-            </div>
-          )}
-          {ageGroup !== 'adultOnly' && (
-            <p className={styles.cardSub}>
-              {ageGroup === 'adultChild'
-                ? '아이 1명 = 성인 0.6인분으로 계산합니다'
-                : '아이 위주 식사는 전체 분량의 65% 수준으로 계산합니다'}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* 3. 식사 조건 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>3. 식사 조건</label>
-
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사 유형</div>
-          <div className={styles.condRow}>
-            {(['main', 'side', 'snack', 'light'] as MealType[]).map(m => (
-              <button key={m} type="button"
-                className={`${styles.condBtn} ${mealType === m ? styles.condActive : ''}`}
-                onClick={() => setMealType(m)}>
-                {MEAL_LABEL[m]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사량</div>
-          <div className={styles.condRow}>
-            {(['small', 'normal', 'large'] as Appetite[]).map(a => (
-              <button key={a} type="button"
-                className={`${styles.condBtn} ${appetite === a ? styles.condActive : ''}`}
-                onClick={() => setAppetite(a)}>
-                {APPETITE_LABEL[a]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ marginBottom: availableVariants.length > 0 ? 14 : 0 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>탄수화물 (밥/빵/면) 포함 여부</div>
-          <div className={styles.condRow}>
-            <button type="button"
-              className={`${styles.condBtn} ${carb === 'yes' ? styles.condActive : ''}`}
-              onClick={() => setCarb('yes')}>🍚 포함 (고기·채소 약간 감소)</button>
-            <button type="button"
-              className={`${styles.condBtn} ${carb === 'no' ? styles.condActive : ''}`}
-              onClick={() => setCarb('no')}>🚫 없음 (고기·채소 증가)</button>
-          </div>
-        </div>
-
-        {availableVariants.length > 0 && (
-          <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>조리 방식 (선택)</div>
-            <div className={styles.condRow}>
-              <button type="button"
-                className={`${styles.condBtn} ${variant === null ? styles.condActive : ''}`}
-                onClick={() => setVariant(null)}>자동</button>
-              {availableVariants.map(v => (
-                <button key={v} type="button"
-                  className={`${styles.condBtn} ${variant === v ? styles.condActive : ''}`}
-                  onClick={() => setVariant(v)}>{v}</button>
+      {/* ══════════ TAB 1: 재료별 분량 ══════════ */}
+      {tab === 'serving' && (
+        <>
+          {/* 식이 제한 (필터) */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>🥬 식이 제한 (선택 · 자동 필터)</label>
+            <div className={styles.dietaryRow}>
+              {(Object.keys(DIETARY_LABEL) as DietaryFlag[]).map((f) => (
+                <button key={f} type="button"
+                  className={`${styles.dietaryChip} ${dietary.includes(f) ? styles.dietaryChipActive : ''}`}
+                  onClick={() => toggleDietary(f)}>
+                  {dietary.includes(f) ? '✓' : '☐'} {DIETARY_LABEL[f]}
+                </button>
               ))}
             </div>
+            {dietary.length > 0 && (
+              <p className={styles.dietaryHint}>
+                해당 식이 제한에 맞지 않는 재료는 자동으로 숨겨집니다. 알레르기 진단·정확한 영양 상담은 의사·영양사 영역.
+              </p>
+            )}
           </div>
-        )}
-      </div>
 
-      {/* RESULTS */}
-      {results.length === 0 ? (
-        <div className={styles.empty}>재료를 하나 이상 선택하세요</div>
-      ) : (
-        results.map(({ item, calc }) => {
-          const catTag = CAT_LABEL[item.category].replace(/^[^\s]+\s/, '')
-          const variantApplied = variant && item.variantAdjust[variant] !== undefined
-          const isCarbFood = item.category === 'noodle' || item.category === 'grain'
-          return (
-            <div key={item.key} className={styles.result}>
-              <div className={styles.resultHead}>
-                <span className={styles.resultEmoji}>{item.emoji}</span>
-                <div>
-                  <div className={styles.resultName}>{item.name} — {people}인분</div>
-                  <div className={styles.resultPeople}>
-                    실질 {peopleEff.toFixed(1)}인분 · 1인당 약 {fmt(calc.perPerson)}{item.unit.split(' ')[0]}
+          {/* 재료 선택 — accordion + 검색 */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>🍴 재료 선택 (복수 선택)</label>
+            <input type="text" className={styles.searchInput}
+              placeholder="🔍 재료 검색 (예: 삼겹살, 파스타)…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {visibleByCategory.map(({ cat, items }) => {
+              const isOpen = !!search || openCats.has(cat)  // 검색 시 모두 펼침
+              return (
+                <div key={cat} className={styles.catGroup}>
+                  <button type="button" className={styles.catHeader}
+                    onClick={() => toggleCat(cat)} aria-expanded={isOpen}>
+                    <span className={styles.catLabel}>{CAT_LABEL[cat]} ({items.length})</span>
+                    <span className={styles.catChevron}>{isOpen ? '▲' : '▼'}</span>
+                  </button>
+                  {isOpen && (
+                    <div className={styles.ingGrid}>
+                      {items.map((it) => {
+                        const active = selected.includes(it.key)
+                        const num = active ? selected.indexOf(it.key) + 1 : 0
+                        return (
+                          <button key={it.key} type="button"
+                            className={`${styles.ingBtn} ${active ? styles.ingActive : ''}`}
+                            onClick={() => toggle(it.key)}>
+                            <span className={styles.ingEmoji}>{it.emoji}</span>
+                            <span className={styles.ingName}>{it.name}</span>
+                            {active && selected.length > 1 && (
+                              <span className={styles.ingBadge}>{num}</span>
+                            )}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+            {selected.length > 1 && (
+              <p className={styles.cardSub}>
+                ✅ {selectedItems.length}종 선택 — 합산 장보기 목록은 <strong>🛒 장보기 목록</strong> 탭에서.
+              </p>
+            )}
+          </div>
+
+          {/* 인원 + 가족 자동 적용 */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>👥 인원</label>
+            {family.length > 0 && (
+              <label className={styles.useFamilyRow}>
+                <input type="checkbox" checked={useFamily} onChange={(e) => setUseFamily(e.target.checked)} />
+                <span>저장된 가족 구성 적용 ({family.length}명 → 실질 {familyToEffectivePeople(family).toFixed(1)}인분)</span>
+              </label>
+            )}
+            {!useFamily && (
+              <>
+                <div className={styles.peopleRow}>
+                  <button type="button" className={styles.stepBtn}
+                    onClick={() => setPeople((p) => Math.max(1, p - 1))} disabled={people <= 1}>−</button>
+                  <input type="number" inputMode="numeric"
+                    className={styles.peopleInput}
+                    min={1} max={20} value={people}
+                    onChange={(e) => {
+                      const v = parseInt(e.target.value, 10)
+                      if (!isNaN(v)) setPeople(Math.max(1, Math.min(20, v)))
+                    }} />
+                  <span className={styles.peopleUnit}>명</span>
+                  <button type="button" className={styles.stepBtn}
+                    onClick={() => setPeople((p) => Math.min(20, p + 1))} disabled={people >= 20}>+</button>
+                </div>
+                <div className={styles.quickRow}>
+                  {[1, 2, 3, 4, 6].map((n) => (
+                    <button key={n} type="button"
+                      className={`${styles.quickBtn} ${people === n ? styles.quickActive : ''}`}
+                      onClick={() => setPeople(n)}>{n}인</button>
+                  ))}
+                </div>
+
+                <div style={{ marginTop: 14 }}>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>연령 구성</div>
+                  <div className={styles.condRow}>
+                    {(['adultOnly', 'adultChild', 'childOnly'] as AgeGroup[]).map((g) => (
+                      <button key={g} type="button"
+                        className={`${styles.condBtn} ${ageGroup === g ? styles.condActive : ''}`}
+                        onClick={() => setAgeGroup(g)}>{AGE_LABEL[g]}</button>
+                    ))}
                   </div>
+                  {ageGroup === 'adultChild' && (
+                    <div className={styles.subRow}>
+                      <span className={styles.subLabel}>아이 인원</span>
+                      <input type="number" inputMode="numeric"
+                        className={styles.kidInput}
+                        min={0} max={people} value={children}
+                        onChange={(e) => {
+                          const v = parseInt(e.target.value, 10)
+                          if (!isNaN(v)) setChildren(Math.max(0, Math.min(people, v)))
+                        }} />
+                      <span className={styles.effPeople}>실질 {peopleEff.toFixed(1)}인분</span>
+                    </div>
+                  )}
                 </div>
-                <span className={styles.resultCat}>{catTag}</span>
-              </div>
+              </>
+            )}
+          </div>
 
-              <div className={styles.amountHero}>
-                <div className={styles.amountLead}>권장 준비량</div>
-                <div className={styles.amountRange}>
-                  <span className={styles.amountMin}>{fmt(calc.min)}</span>
-                  <span className={styles.amountTilde}>~</span>
-                  <span className={styles.amountMax}>{fmt(calc.max)}</span>
-                  <span className={styles.amountUnit}>{item.unit.split(' ')[0]}</span>
-                </div>
-                <div className={styles.amountSub}>
-                  1인당 기준: 약 <strong>{fmt(calc.min / Math.max(peopleEff, 0.1))}~{fmt(calc.max / Math.max(peopleEff, 0.1))}{item.unit.split(' ')[0]}</strong>
-                </div>
-              </div>
-
-              <div className={styles.infoGrid}>
-                <div className={styles.infoBox}>
-                  <div className={styles.infoLabel}>기준</div>
-                  <div className={styles.infoVal}>{item.prepNote}</div>
-                </div>
-                <div className={styles.infoBox}>
-                  <div className={styles.infoLabel}>조리 후 예상량</div>
-                  <div className={styles.infoVal}>
-                    {item.rawToCooked === 1.0
-                      ? '그대로 (완제품)'
-                      : <>약 <strong style={{ color: 'var(--accent)' }}>{item.rawToCooked.toFixed(2)}배</strong> ({fmt(calc.cookedMin)}~{fmt(calc.cookedMax)}{item.unit.split(' ')[0]})</>}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.tags}>
-                <span className={styles.tagAccent}>{MEAL_LABEL[mealType]} 기준</span>
-                <span className={styles.tagBase}>{APPETITE_LABEL[appetite]}</span>
-                {!isCarbFood && (
-                  <span className={styles.tagBase}>
-                    {carb === 'yes' ? '탄수화물 포함' : '탄수화물 없음'}
-                  </span>
-                )}
-                {variantApplied && (
-                  <span className={styles.tagBase}>
-                    조리: {variant} ({item.variantAdjust[variant!] > 0 ? '+' : ''}{item.variantAdjust[variant!]}g)
-                  </span>
-                )}
-              </div>
-
-              <div className={styles.cookTip}>
-                💡 <strong>{item.cookingNote}</strong>
+          {/* 식사 조건 */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>🍽️ 식사 조건</label>
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사 유형</div>
+              <div className={styles.condRow}>
+                {(['main', 'side', 'snack', 'light'] as MealType[]).map((m) => (
+                  <button key={m} type="button"
+                    className={`${styles.condBtn} ${mealType === m ? styles.condActive : ''}`}
+                    onClick={() => setMealType(m)}>{MEAL_LABEL[m]}</button>
+                ))}
               </div>
             </div>
-          )
-        })
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사량</div>
+              <div className={styles.condRow}>
+                {(['small', 'normal', 'large'] as Appetite[]).map((a) => (
+                  <button key={a} type="button"
+                    className={`${styles.condBtn} ${appetite === a ? styles.condActive : ''}`}
+                    onClick={() => setAppetite(a)}>{APPETITE_LABEL[a]}</button>
+                ))}
+              </div>
+            </div>
+            <div style={{ marginBottom: availableVariants.length > 0 ? 14 : 0 }}>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>탄수화물(밥/면) 포함</div>
+              <div className={styles.condRow}>
+                <button type="button"
+                  className={`${styles.condBtn} ${carb === 'yes' ? styles.condActive : ''}`}
+                  onClick={() => setCarb('yes')}>🍚 포함</button>
+                <button type="button"
+                  className={`${styles.condBtn} ${carb === 'no' ? styles.condActive : ''}`}
+                  onClick={() => setCarb('no')}>🚫 없음</button>
+              </div>
+            </div>
+            {availableVariants.length > 0 && (
+              <div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>조리 방식 (선택)</div>
+                <div className={styles.condRow}>
+                  <button type="button"
+                    className={`${styles.condBtn} ${variant === null ? styles.condActive : ''}`}
+                    onClick={() => setVariant(null)}>자동</button>
+                  {availableVariants.map((v) => (
+                    <button key={v} type="button"
+                      className={`${styles.condBtn} ${variant === v ? styles.condActive : ''}`}
+                      onClick={() => setVariant(v)}>{v}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 결과 */}
+          {results.length === 0 ? (
+            <div className={styles.empty}>재료를 하나 이상 선택하세요</div>
+          ) : (
+            results.map(({ item, calc }) => {
+              const variantApplied = variant && item.variantAdjust[variant] !== undefined
+              const isCarbFood = item.category === 'noodle' || item.category === 'grain'
+              return (
+                <div key={item.key} className={styles.result}>
+                  <div className={styles.resultHead}>
+                    <span className={styles.resultEmoji}>{item.emoji}</span>
+                    <div>
+                      <div className={styles.resultName}>{item.name}</div>
+                      <div className={styles.resultPeople}>
+                        {peopleLabel} · 1인당 약 {fmt(calc.perPerson)}{item.unit.split(' ')[0]}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.amountHero}>
+                    <div className={styles.amountLead}>권장 준비량</div>
+                    <div className={styles.amountRange}>
+                      <span className={styles.amountMin}>{fmt(calc.min)}</span>
+                      <span className={styles.amountTilde}>~</span>
+                      <span className={styles.amountMax}>{fmt(calc.max)}</span>
+                      <span className={styles.amountUnit}>{item.unit.split(' ')[0]}</span>
+                    </div>
+                    {item.marketPackage && (
+                      <div className={styles.amountPkg}>📦 {item.marketPackage}</div>
+                    )}
+                  </div>
+
+                  <div className={styles.infoGrid}>
+                    <div className={styles.infoBox}>
+                      <div className={styles.infoLabel}>기준</div>
+                      <div className={styles.infoVal}>{item.prepNote}</div>
+                    </div>
+                    <div className={styles.infoBox}>
+                      <div className={styles.infoLabel}>조리 후 예상량</div>
+                      <div className={styles.infoVal}>
+                        {item.rawToCooked === 1.0
+                          ? '그대로 (완제품)'
+                          : <>약 <strong style={{ color: 'var(--accent)' }}>{item.rawToCooked.toFixed(2)}배</strong> ({fmt(calc.cookedMin)}~{fmt(calc.cookedMax)}{item.unit.split(' ')[0]})</>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.tags}>
+                    <span className={styles.tagAccent}>{MEAL_LABEL[mealType]} 기준</span>
+                    <span className={styles.tagBase}>{APPETITE_LABEL[appetite]}</span>
+                    {!isCarbFood && (
+                      <span className={styles.tagBase}>{carb === 'yes' ? '탄수화물 포함' : '탄수화물 없음'}</span>
+                    )}
+                    {variantApplied && (
+                      <span className={styles.tagBase}>조리: {variant} ({item.variantAdjust[variant!] > 0 ? '+' : ''}{item.variantAdjust[variant!]}g)</span>
+                    )}
+                  </div>
+
+                  <div className={styles.cookTip}>💡 <strong>{item.cookingNote}</strong></div>
+                </div>
+              )
+            })
+          )}
+        </>
       )}
 
-      {/* SHOPPING LIST (multi-select only) */}
-      {results.length >= 2 && (
-        <div className={styles.shop}>
-          <div className={styles.shopHead}>
-            <span className={styles.shopTitle}>🛒 {people}인분 장보기 목록</span>
-            <button type="button"
-              className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-              onClick={copy}>
-              {copied ? '✅ 복사됨' : '📋 목록 복사'}
+      {/* ══════════ TAB 2: 장보기 목록 (NEW) ══════════ */}
+      {tab === 'shopping' && (
+        <>
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>🛒 합산 장보기 — {peopleLabel}</label>
+            {selectedItems.length === 0 ? (
+              <p className={styles.empty}>먼저 <strong>🍽️ 재료별 분량</strong> 탭에서 재료를 선택해주세요.</p>
+            ) : (
+              <p className={styles.cardSub}>
+                선택한 {selectedItems.length}종 재료의 사야 할 양을 합산. 각 재료별 <strong>📦 이미 있는 양</strong> 입력 시 자동으로 빼고 표시.
+              </p>
+            )}
+          </div>
+
+          {finalShoppingItems.length > 0 && (
+            <>
+              <div className={styles.card}>
+                <label className={styles.cardLabel}>📦 냉장고 보유 (선택 — 사야 할 양에서 자동 차감)</label>
+                <table className={styles.fridgeTable}>
+                  <thead>
+                    <tr>
+                      <th>재료</th>
+                      <th>필요량</th>
+                      <th>보유</th>
+                      <th>사야 할 양</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {finalShoppingItems.map(({ item, calc, needMin, needMax }) => {
+                      const u = item.unit.split(' ')[0]
+                      const enough = needMin === 0 && needMax === 0
+                      return (
+                        <tr key={item.key}>
+                          <td className={styles.fridgeName}>{item.emoji} {item.name}</td>
+                          <td className={styles.fridgeNeed}>{calc.min}~{calc.max}{u}</td>
+                          <td>
+                            <input type="number" inputMode="numeric" min={0} max={9999}
+                              className={styles.fridgeInput}
+                              value={fridge[item.key] ?? 0}
+                              onChange={(e) => {
+                                const v = Math.max(0, +e.target.value || 0)
+                                setFridge((prev) => ({ ...prev, [item.key]: v }))
+                              }} /> {u}
+                          </td>
+                          <td className={`${styles.fridgeFinal} ${enough ? styles.fridgeEnough : ''}`}>
+                            {enough ? '✓ 충분' : `${needMin}~${needMax}${u}`}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className={styles.shopCard}>
+                <div className={styles.shopHead}>
+                  <span className={styles.shopTitle}>📋 장보기 마크다운 카드</span>
+                  <button type="button"
+                    className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                    onClick={copyShopping}>
+                    {copied ? '✅ 복사됨' : '📋 복사'}
+                  </button>
+                </div>
+                <pre className={styles.shopList}>{shoppingMarkdown}</pre>
+              </div>
+
+              <div className={styles.crossLinks}>
+                <p className={styles.crossLinksTitle}>🔗 다음 단계</p>
+                <div className={styles.crossLinksGrid}>
+                  <Link href="/tools/life/unit-price" className={styles.crossLink}>💰 단가 비교 (가격 분석)</Link>
+                  <Link href="/tools/cooking/substitute" className={styles.crossLink}>🔄 식재료 대체 (부족 시)</Link>
+                  <Link href="/tools/cooking/thawing" className={styles.crossLink}>🧊 해동 시간 (안전 해동)</Link>
+                  <Link href="/tools/cooking/recipe" className={styles.crossLink}>📐 레시피 비율 (인분 환산)</Link>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {/* ══════════ TAB 3: 내 가족 (NEW) ══════════ */}
+      {tab === 'family' && (
+        <>
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>👪 가족 구성 (브라우저 로컬 저장)</label>
+            <p className={styles.cardSub}>
+              가족 구성을 저장하면 매번 입력 X. 연령·식사량별 인분 환산 자동.
+            </p>
+
+            {family.length === 0 ? (
+              <p className={styles.empty}>아직 등록된 가족이 없습니다.</p>
+            ) : (
+              <div className={styles.familyList}>
+                {family.map((m, i) => (
+                  <div key={m.id} className={styles.familyRow}>
+                    <span className={styles.familyIdx}>{i + 1}</span>
+                    <input type="text" className={styles.familyName}
+                      placeholder={i === 0 ? '본인' : `가족 ${i + 1}`}
+                      value={m.name ?? ''}
+                      maxLength={10}
+                      onChange={(e) => updateMember(m.id, { name: e.target.value })} />
+                    <select className={styles.familySelect}
+                      value={m.age}
+                      onChange={(e) => updateMember(m.id, { age: e.target.value as AgeBand })}>
+                      {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((k) => (
+                        <option key={k} value={k}>{AGE_BAND_LABEL[k]}</option>
+                      ))}
+                    </select>
+                    <select className={styles.familySelect}
+                      value={m.appetite}
+                      onChange={(e) => updateMember(m.id, { appetite: e.target.value as Appetite })}>
+                      <option value="small">적게</option>
+                      <option value="normal">보통</option>
+                      <option value="large">많이</option>
+                    </select>
+                    <span className={styles.familyFactor}>
+                      ×{(AGE_BAND_FACTOR[m.age] * APPETITE_MULT[m.appetite]).toFixed(2)}
+                    </span>
+                    <button className={styles.familyRemove} onClick={() => removeMember(m.id)} aria-label="삭제">✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button type="button" className={styles.addMemberBtn} onClick={addMember}>
+              + 가족 추가
             </button>
-          </div>
-          <pre className={styles.shopList}>{shoppingList}</pre>
-        </div>
-      )}
 
-      {/* 조리 전/후 기준 안내 */}
-      {results.length > 0 && (
-        <div className={styles.infoCard}>
-          <div className={styles.infoCardHead}>📏 조리 전 / 후 기준 안내</div>
-          <div className={styles.infoCardList}>
-            <div>• <strong>면류:</strong> 건면 기준 (삶으면 약 2~2.5배)</div>
-            <div>• <strong>고기류:</strong> 생고기 기준 (익으면 약 20~30% 감소)</div>
-            <div>• <strong>쌀:</strong> 생쌀 기준 (밥이 되면 약 2.2~2.5배)</div>
-            <div>• <strong>채소:</strong> 손질 전 기준 (손질 후 약 80~90% 남음, 가열 시 추가 감소)</div>
-            <div>• <strong>완제품(우동·어묵·만두·두부):</strong> 구입 중량 그대로</div>
+            {family.length > 0 && (
+              <div className={styles.familyTotal}>
+                실질 인분 합계: <strong>{familyToEffectivePeople(family).toFixed(2)}</strong>
+                <span className={styles.familyTotalNote}>
+                  (성인=1.0 / 중·고생=0.9 / 초등=0.65 / 유아=0.4 / 영아=0.25, 식사량 곱)
+                </span>
+              </div>
+            )}
           </div>
-        </div>
+        </>
       )}
 
       <div className={styles.disclaimer}>
-        <strong>참고:</strong> 본 계산기는 일반적인 한국인 성인 기준 식사량을 참고하여 제공합니다. 개인의 식사량, 체격, 요리 스타일, 반찬 구성에 따라 적정량이 달라질 수 있습니다. 처음 해보는 요리라면 결과 범위의 <strong>상한(최댓값)</strong>으로 준비하는 것을 권장합니다.
+        <strong>⚠️ 본 도구는 일반 장보기 가이드입니다.</strong>
+        <ul>
+          <li>분량은 한국 성인 평균 기준 — 개인 식사량·체격·요리 스타일에 따라 다름</li>
+          <li>첫 요리는 결과 상한값으로 준비 권장</li>
+          <li>본 도구는 정확한 영양 진단·알레르기 진단·특정 브랜드 추천을 제공하지 않음</li>
+          <li>알레르기·식이 제한·기저 질환은 의사·영양사 상담</li>
+          <li>식약처 식품안전정보: 1399 / 응급(아나필락시스): 119</li>
+        </ul>
       </div>
     </div>
   )

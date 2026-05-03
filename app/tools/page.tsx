@@ -12,7 +12,7 @@ export const metadata = buildMetadata({
 
 export default function ToolsPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px', overflowX: 'hidden' }}>
       <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         전체 도구 목록
       </h1>
@@ -22,16 +22,16 @@ export default function ToolsPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
         {categories.map((cat, idx) => (
-          <div key={cat.id}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '20px' }}>{cat.icon}</span>
+          <div key={cat.id} style={{ minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                <span style={{ fontSize: '20px', flexShrink: 0 }}>{cat.icon}</span>
                 <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: cat.color }}>
                   {cat.name}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)' }}>({cat.tools.length}개)</span>
+                <span style={{ fontSize: '12px', color: 'var(--muted)', flexShrink: 0 }}>({cat.tools.length}개)</span>
               </div>
-              <Link href={`/tools/${cat.id}`} style={{ fontSize: '12px', color: 'var(--muted)', textDecoration: 'none' }}>
+              <Link href={`/tools/${cat.id}`} style={{ fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', flexShrink: 0, whiteSpace: 'nowrap' }}>
                 카테고리 보기 →
               </Link>
             </div>

@@ -195,7 +195,7 @@ export default function GolfCostClient() {
     breakdown.forEach(b => lines.push(`${b.label}: ${fmt(b.perp)}`))
     lines.push('──────────────')
     lines.push(`팀 총액: ${fmt(teamTotal)} (${players}명 기준)`)
-    lines.push('youtil.kr/tools/life/golf-cost')
+    lines.push('youtil.kr/tools/sports/golf-cost')
     return lines.join('\n')
   }, [breakdown, perPerson, teamTotal, players])
 
