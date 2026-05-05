@@ -3,7 +3,7 @@
    9개 카테고리 통합 단위 변환기 — 한국 전통·생활 단위 포함
    ────────────────────────────────────────────────────── */
 
-export type CategoryId = 'length' | 'area' | 'weight' | 'volume' | 'temperature' | 'time' | 'speed' | 'pressure' | 'data'
+export type CategoryId = 'length' | 'area' | 'weight' | 'volume' | 'temperature' | 'time' | 'speed' | 'pressure' | 'torque' | 'energy' | 'data' | 'brix' | 'concentration' | 'angle'
 
 export interface UnitDef {
   id: string
@@ -114,13 +114,50 @@ const UNITS_SPEED: UnitDef[] = [
 
 /* ─── 압력 (base: Pa) ─── */
 const UNITS_PRESSURE: UnitDef[] = [
-  { id: 'Pa',    name: '파스칼',          shortName: 'Pa',    toBase: 1 },
-  { id: 'kPa',   name: '킬로파스칼',       shortName: 'kPa',   toBase: 1000 },
-  { id: 'MPa',   name: '메가파스칼',       shortName: 'MPa',   toBase: 1000000 },
-  { id: 'bar',   name: '바',              shortName: 'bar',   toBase: 100000 },
-  { id: 'psi',   name: 'PSI',             shortName: 'psi',   toBase: 6894.76 },
-  { id: 'atm',   name: '기압',            shortName: 'atm',   toBase: 101325 },
-  { id: 'mmHg',  name: 'mmHg (혈압·기상)', shortName: 'mmHg',  toBase: 133.322 },
+  { id: 'Pa',      name: '파스칼',           shortName: 'Pa',      toBase: 1 },
+  { id: 'hPa',     name: '헥토파스칼 (기상)', shortName: 'hPa',     toBase: 100 },
+  { id: 'kPa',     name: '킬로파스칼',        shortName: 'kPa',     toBase: 1000 },
+  { id: 'MPa',     name: '메가파스칼',        shortName: 'MPa',     toBase: 1000000 },
+  { id: 'bar',     name: '바',               shortName: 'bar',     toBase: 100000 },
+  { id: 'mbar',    name: '밀리바',            shortName: 'mbar',    toBase: 100 },
+  { id: 'psi',     name: 'PSI (타이어·미국)', shortName: 'psi',     toBase: 6894.76 },
+  { id: 'atm',     name: '기압',             shortName: 'atm',     toBase: 101325 },
+  { id: 'mmHg',    name: 'mmHg (혈압·기상)',  shortName: 'mmHg',    toBase: 133.322 },
+  { id: 'kgfcm2',  name: 'kgf/cm² (산업·공조)', shortName: 'kgf/cm²', toBase: 98066.5, note: '1 kgf/cm² ≈ 0.98 bar ≈ 14.22 psi · 한국 산업·기계 표준' },
+  { id: 'inHg',    name: 'inHg (기압·항공)',  shortName: 'inHg',    toBase: 3386.39 },
+  { id: 'torr',    name: '토르 (Torr, 진공)',  shortName: 'Torr',    toBase: 133.322 },
+]
+
+/* ─── 토크 (base: N·m) ─── */
+const UNITS_TORQUE: UnitDef[] = [
+  { id: 'Nm',     name: '뉴턴미터',          shortName: 'N·m',    toBase: 1 },
+  { id: 'kNm',    name: '킬로뉴턴미터',       shortName: 'kN·m',   toBase: 1000 },
+  { id: 'Ncm',    name: '뉴턴센티미터',       shortName: 'N·cm',   toBase: 0.01 },
+  { id: 'kgfm',   name: 'kgf·m (한국·일본)',  shortName: 'kgf·m',  toBase: 9.80665, note: '한국 정비·기계 현장 표준' },
+  { id: 'kgfcm',  name: 'kgf·cm',            shortName: 'kgf·cm', toBase: 0.0980665 },
+  { id: 'lbfft',  name: 'lbf·ft (미국)',     shortName: 'lbf·ft', toBase: 1.35582,  note: '자동차 매뉴얼 미국 표기' },
+  { id: 'lbfin',  name: 'lbf·in',           shortName: 'lbf·in', toBase: 0.112985 },
+  { id: 'ozfin',  name: 'ozf·in (소형)',    shortName: 'ozf·in', toBase: 0.00706155 },
+  { id: 'dyn_cm', name: 'dyn·cm (CGS)',     shortName: 'dyn·cm', toBase: 1e-7 },
+]
+
+/* ─── 에너지 (base: J) ─── */
+const UNITS_ENERGY: UnitDef[] = [
+  { id: 'J',       name: '줄',                  shortName: 'J',     toBase: 1 },
+  { id: 'kJ',      name: '킬로줄',               shortName: 'kJ',    toBase: 1000 },
+  { id: 'MJ',      name: '메가줄',               shortName: 'MJ',    toBase: 1000000 },
+  { id: 'cal',     name: '칼로리 (소·물리)',      shortName: 'cal',   toBase: 4.184 },
+  { id: 'kcal',    name: '킬로칼로리 (Cal·식품)', shortName: 'kcal',  toBase: 4184, note: '식품 영양 라벨의 "Cal" = kcal' },
+  { id: 'Wh',      name: '와트시',               shortName: 'Wh',    toBase: 3600 },
+  { id: 'kWh',     name: '킬로와트시 (전기요금)', shortName: 'kWh',   toBase: 3600000, note: '한전 요금 단위' },
+  { id: 'MWh',     name: '메가와트시',           shortName: 'MWh',   toBase: 3.6e9 },
+  { id: 'BTU',     name: 'BTU (에어컨·보일러)',  shortName: 'BTU',   toBase: 1055.06, note: '에어컨 냉방능력 표기 단위' },
+  { id: 'kBTU',    name: '천 BTU',              shortName: 'kBTU',  toBase: 1055060 },
+  { id: 'ftlb',    name: 'ft·lb (일·에너지)',    shortName: 'ft·lb', toBase: 1.35582 },
+  { id: 'erg',     name: '에르그 (CGS)',         shortName: 'erg',   toBase: 1e-7 },
+  { id: 'eV',      name: '전자볼트 (원자물리)',   shortName: 'eV',    toBase: 1.602176634e-19 },
+  { id: 'TNT_g',   name: 'TNT 그램 등가',        shortName: 'g TNT', toBase: 4184, note: '1g TNT = 4,184 J · 폭발력 비교' },
+  { id: 'TNT_t',   name: 'TNT 톤 등가',          shortName: 't TNT', toBase: 4.184e9 },
 ]
 
 /* ─── 데이터 (base: byte, 1024 진법) ─── */
@@ -135,6 +172,40 @@ const UNITS_DATA: UnitDef[] = [
   { id: 'MiB',  name: '메비바이트 (1024²)', shortName: 'MiB', toBase: 1048576 },
   { id: 'GiB',  name: '기비바이트 (1024³)', shortName: 'GiB', toBase: 1073741824 },
   { id: 'TiB',  name: '테비바이트 (1024⁴)', shortName: 'TiB', toBase: 1099511627776 },
+]
+
+/* ─── 당도·염도 (base: % m/m) ─── */
+const UNITS_BRIX: UnitDef[] = [
+  { id: 'brix',      name: 'Brix (당도)',          shortName: '°Bx',     toBase: 1,       note: '1°Bx = 100g 용액 중 1g 자당 (수용액 가정)' },
+  { id: 'pct_mm',    name: '% (질량 분율)',         shortName: '%',       toBase: 1,       note: '1% = 1 g / 100 g (= Brix)' },
+  { id: 'g_100g',    name: 'g/100g',               shortName: 'g/100g',  toBase: 1,       note: '질량 분율 % 와 동일' },
+  { id: 'g_L',       name: 'g/L (용액 1L 기준)',    shortName: 'g/L',     toBase: 0.1,     note: '물 가정(밀도 1 g/mL) · 1 g/L = 0.1%' },
+  { id: 'ppm_food',  name: 'ppm (백만분율)',        shortName: 'ppm',     toBase: 0.0001,  note: '1% = 10,000 ppm' },
+  { id: 'salinity',  name: '염도 % (소금 질량비)',   shortName: '염%',     toBase: 1,       note: '소금 / 용액 질량 % · 김치·장아찌 표준' },
+  { id: 'brine_gL',  name: '소금물 농도 (g/L)',     shortName: '소금 g/L', toBase: 0.1,     note: '용액 1L 당 소금 그램 · 절임 레시피용' },
+]
+
+/* ─── 농도 (base: % m/m) ─── */
+const UNITS_CONC: UnitDef[] = [
+  { id: 'pct_c',     name: '% (백분율)',           shortName: '%',     toBase: 1 },
+  { id: 'permil',    name: '‰ (천분율)',           shortName: '‰',     toBase: 0.1,       note: '해수 평균 약 35‰ (35 g/kg)' },
+  { id: 'ppm_c',     name: 'ppm (백만분율)',        shortName: 'ppm',   toBase: 0.0001,    note: '1% = 10,000 ppm' },
+  { id: 'ppb_c',     name: 'ppb (10억분율)',        shortName: 'ppb',   toBase: 1e-7,      note: '1 ppm = 1,000 ppb · 미량 분석' },
+  { id: 'mg_L',      name: 'mg/L',                 shortName: 'mg/L',  toBase: 0.0001,    note: '수용액 가정 · 1 mg/L ≈ 1 ppm' },
+  { id: 'ug_L',      name: 'µg/L (마이크로그램/L)', shortName: 'µg/L',  toBase: 1e-7,      note: '수용액 가정 · 1 µg/L ≈ 1 ppb' },
+  { id: 'g_L_c',     name: 'g/L',                  shortName: 'g/L',   toBase: 0.1,       note: '수용액 가정 · 1 g/L = 0.1%' },
+]
+
+/* ─── 각도·기울기 (base: 도 °) — 비선형 ─── */
+const UNITS_ANGLE: UnitDef[] = [
+  { id: 'deg',     name: '도 (°)',                  shortName: '°',     toBase: 1 },
+  { id: 'rad',     name: '라디안',                  shortName: 'rad',   toBase: 1,       note: '1 rad ≈ 57.2958° · 180° = π rad' },
+  { id: 'grad',    name: '그레이드 (그라디안)',      shortName: 'grad',  toBase: 1,       note: '직각 = 100 grad · 측량용' },
+  { id: 'percent_slope', name: '% 경사',            shortName: '%',     toBase: 1,       note: '100 × tan(각도) · 5% ≈ 2.86° · 도로 경사' },
+  { id: 'permil_slope',  name: '‰ 구배',           shortName: '‰',     toBase: 1,       note: '1000 × tan(각도) · 철도·하수 구배' },
+  { id: 'ratio_n1',      name: '수평:수직 비율 (N:1)', shortName: 'N:1', toBase: 1,       note: '수평 N : 수직 1 · 20:1 ≈ 2.86° · 토목 비탈면' },
+  { id: 'one_over_n',    name: '1/n 구배',          shortName: '1/n',   toBase: 1,       note: '수직 1 : 수평 N · 1/100 = 1% · 도로·배관' },
+  { id: 'mulae',         name: '한국 물매 (치/자)',  shortName: '물매',  toBase: 1,       isKorean: true, note: 'N치 물매 = 1자(10치) 수평당 N치 수직 · 한옥 지붕' },
 ]
 
 /* ─── 카테고리 모음 ─── */
@@ -152,13 +223,19 @@ export const CATEGORIES: Category[] = [
   { id: 'time',        name: '시간',   icon: '⏱️', baseUnit: 's',   units: UNITS_TIME },
   { id: 'speed',       name: '속도',   icon: '🚗', baseUnit: 'm/s', units: UNITS_SPEED },
   { id: 'pressure',    name: '압력',   icon: '💨', baseUnit: 'Pa',  units: UNITS_PRESSURE },
+  { id: 'torque',      name: '토크',   icon: '🔧', baseUnit: 'N·m', units: UNITS_TORQUE },
+  { id: 'energy',      name: '에너지', icon: '⚡', baseUnit: 'J',   units: UNITS_ENERGY },
   { id: 'data',        name: '데이터', icon: '💾', baseUnit: 'B',   units: UNITS_DATA },
+  { id: 'brix',        name: '당도·염도', icon: '🍯', baseUnit: '%',  units: UNITS_BRIX },
+  { id: 'concentration', name: '농도',   icon: '🧪', baseUnit: '%',  units: UNITS_CONC },
+  { id: 'angle',       name: '각도·기울기', icon: '📐', baseUnit: '°', units: UNITS_ANGLE },
 ]
 
 /* ─── 변환 ─── */
 export function convert(value: number, from: UnitDef, to: UnitDef, categoryId?: CategoryId): number {
   if (categoryId === 'temperature') return convertTemperature(value, from.id, to.id)
-  // 일반 변환
+  if (categoryId === 'angle')       return convertAngle(value, from.id, to.id)
+  // 일반 변환 (선형)
   const baseValue = value * from.toBase
   return baseValue / to.toBase
 }
@@ -183,6 +260,37 @@ export function convertTemperature(value: number, from: string, to: string): num
   }
 }
 
+/* ─── 각도·기울기 변환 (비선형) ─── */
+export function convertAngle(value: number, from: string, to: string): number {
+  // 1) 입력 → 도(°)로 변환
+  let deg: number
+  switch (from) {
+    case 'deg':            deg = value; break
+    case 'rad':            deg = value * 180 / Math.PI; break
+    case 'grad':           deg = value * 0.9; break  // 100 grad = 90°
+    case 'percent_slope':  deg = Math.atan(value / 100) * 180 / Math.PI; break
+    case 'permil_slope':   deg = Math.atan(value / 1000) * 180 / Math.PI; break
+    case 'ratio_n1':       deg = value === 0 ? 90 : Math.atan(1 / value) * 180 / Math.PI; break  // N:1 → tan = 1/N
+    case 'one_over_n':     deg = value === 0 ? 90 : Math.atan(1 / value) * 180 / Math.PI; break  // 1:N → tan = 1/N
+    case 'mulae':          deg = Math.atan(value / 10) * 180 / Math.PI; break  // N치/10치
+    default:               deg = value
+  }
+  // 2) 도(°) → 출력 단위로 변환
+  const rad = deg * Math.PI / 180
+  const t = Math.tan(rad)
+  switch (to) {
+    case 'deg':            return deg
+    case 'rad':            return rad
+    case 'grad':           return deg / 0.9
+    case 'percent_slope':  return t * 100
+    case 'permil_slope':   return t * 1000
+    case 'ratio_n1':       return Math.abs(t) < 1e-12 ? Infinity : 1 / t
+    case 'one_over_n':     return Math.abs(t) < 1e-12 ? Infinity : 1 / t
+    case 'mulae':          return t * 10
+    default:               return deg
+  }
+}
+
 /* ─── 빠른 변환 칩 ─── */
 export interface QuickConversion {
   from: { value: number; unitId: string; categoryId: CategoryId }
@@ -198,6 +306,18 @@ export const QUICK_CONVERSIONS: QuickConversion[] = [
   { label: '100℉ = ?℃',   from: { value: 100, unitId: 'F',      categoryId: 'temperature' } },
   { label: '60mph = ?km/h', from: { value: 60, unitId: 'mph',    categoryId: 'speed' } },
   { label: '1bar = ?psi',  from: { value: 1,   unitId: 'bar',    categoryId: 'pressure' } },
+  { label: '1kgf/cm² = ?bar', from: { value: 1, unitId: 'kgfcm2', categoryId: 'pressure' } },
+  { label: '100N·m = ?kgf·m', from: { value: 100, unitId: 'Nm', categoryId: 'torque' } },
+  { label: '1lbf·ft = ?N·m', from: { value: 1, unitId: 'lbfft', categoryId: 'torque' } },
+  { label: '1kWh = ?kcal', from: { value: 1, unitId: 'kWh',     categoryId: 'energy' } },
+  { label: '12,000BTU = ?kW', from: { value: 12000, unitId: 'BTU', categoryId: 'energy' } },
+  { label: '딸기 10°Bx = ?%',  from: { value: 10, unitId: 'brix',     categoryId: 'brix' } },
+  { label: '김치 7염% = ?g/L', from: { value: 7,  unitId: 'salinity', categoryId: 'brix' } },
+  { label: '100 ppm = ?%',     from: { value: 100, unitId: 'ppm_c',  categoryId: 'concentration' } },
+  { label: '1 ppm = ?mg/L',    from: { value: 1,   unitId: 'ppm_c',  categoryId: 'concentration' } },
+  { label: '5% 경사 = ?도',     from: { value: 5,   unitId: 'percent_slope', categoryId: 'angle' } },
+  { label: '1/100 구배 = ?도',  from: { value: 100, unitId: 'one_over_n',    categoryId: 'angle' } },
+  { label: '4치 물매 = ?도',    from: { value: 4,   unitId: 'mulae',         categoryId: 'angle' } },
 ]
 
 /* ─── 포맷 ─── */

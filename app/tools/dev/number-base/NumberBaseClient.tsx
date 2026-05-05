@@ -507,7 +507,7 @@ export default function NumberBaseClient() {
                     background: '#' + decimalValue.toString(16).padStart(6, '0').slice(-6),
                     border: '1px solid var(--border)', verticalAlign: 'middle', marginLeft: 4,
                   }} />
-                  &nbsp;&nbsp;<a href="/tools/dev/color" style={{ color: '#FF8C3E', textDecoration: 'underline', fontSize: 12 }}>색상 코드 변환기에서 보기 →</a>
+                  &nbsp;&nbsp;<a href="/tools/art/color" style={{ color: '#FF8C3E', textDecoration: 'underline', fontSize: 12 }}>색상 코드 변환기에서 보기 →</a>
                 </div>
               )}
             </>

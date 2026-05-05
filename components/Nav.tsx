@@ -276,6 +276,21 @@ export default function Nav() {
 
         {/* 오른쪽 버튼 영역 */}
         <div className={styles.actions}>
+          <Link
+            href="/tools"
+            className={`${styles.allToolsBtn} ${pathname === '/tools' ? styles.allToolsBtnActive : ''}`}
+            aria-label="전체 도구 보기"
+            title="전체 도구 보기"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span>전체 도구</span>
+          </Link>
+
           <button
             className={`${styles.searchBtn} ${searchOpen ? styles.searchBtnActive : ''}`}
             onClick={() => setSearchOpen((o) => !o)}
@@ -311,7 +326,7 @@ export default function Nav() {
               ref={searchRef}
               className={styles.searchBarInput}
               type="text"
-              placeholder="계산기 검색... (예: 연봉, BMI, 로또)"
+              placeholder="필요한 도구를 검색하세요. 연봉, BMI, 복리, 제빵, 단위 변환..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleSearchKey}

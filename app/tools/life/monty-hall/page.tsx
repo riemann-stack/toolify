@@ -299,7 +299,7 @@ export default function MontyHallPage() {
             {[
               { href: '/tools/life/lotto',        icon: '🎰', name: '로또 번호 생성기',       desc: '1/8,145,060의 확률 세계' },
               { href: '/tools/life/drake',        icon: '👽', name: '드레이크 방정식 계산기', desc: '확률 곱의 또 다른 예시' },
-              { href: '/tools/life/golden-ratio', icon: '🌀', name: '황금 비율 계산기',       desc: '수학 속 신기한 상수' },
+              { href: '/tools/art/golden-ratio', icon: '🌀', name: '황금 비율 계산기',       desc: '수학 속 신기한 상수' },
               { href: '/tools/life/ladder',       icon: '🪜', name: '사다리타기',             desc: '공정한 무작위 선택' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

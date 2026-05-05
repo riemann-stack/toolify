@@ -6,7 +6,7 @@ export const metadata = buildMetadata({
   description: 'Youtil 이용약관입니다.',
 })
 
-const LAST_UPDATED  = '2026년 4월 12일'
+const LAST_UPDATED  = '2026년 5월 5일'
 const SITE_NAME     = 'Youtil'
 const CONTACT_EMAIL = 'contact@youtil.kr'
 
@@ -98,30 +98,40 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 7 — As-Is 보강 */}
+        {/* 7 — As-Is 핵심 + /disclaimer 위임 */}
         <section>
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
             제7조 (면책조항)
           </h2>
           <p style={{ marginBottom: '10px' }}>
+            <strong style={{ color: 'var(--text)' }}>1.</strong>{' '}
             본 서비스는 <strong style={{ color: 'var(--text)' }}>「있는 그대로(As-Is)」</strong> 제공되며,
-            특정 목적에 대한 적합성이나 무오류성을 보장하지 않습니다.
+            특정 목적에 대한 적합성·정확성·완전성·최신성·무오류성을 보장하지 않습니다.
           </p>
           <p style={{ marginBottom: '10px' }}>
-            {SITE_NAME}이 제공하는 계산 결과는 참고용이며, 실제 금융·법률·의료 결정에
-            활용하기 전 반드시 전문가의 확인을 거치시기 바랍니다.
-            계산 결과의 오류나 부정확성으로 인한 직접적·간접적 손해에 대해 {SITE_NAME}은 책임을 지지 않습니다.
+            <strong style={{ color: 'var(--text)' }}>2.</strong>{' '}
+            {SITE_NAME}이 제공하는 모든 계산 결과는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공·참고 목적</strong>이며,
+            의료·세무·금융·법률·식품·건축·화학·운동 등 전문 판단이 필요한 사안에 본 서비스의 결과를 단독 근거로 사용하지 마세요.
+            반드시 해당 분야 자격 보유 전문가의 자문을 우선합니다.
+          </p>
+          <p style={{ marginBottom: '10px' }}>
+            <strong style={{ color: 'var(--text)' }}>3.</strong>{' '}
+            서비스 이용으로 발생한 직접·간접·부수·결과·징벌적 손해(데이터 손실·이익 상실·기회비용·법적 책임·신체 상해·재산 피해 등)에
+            대해 {SITE_NAME}, 운영자, 기여자는 어떠한 법적 책임도 지지 않습니다.
           </p>
           <div style={{
-            background: 'var(--bg2)',
-            border: '1px solid rgba(255,140,62,0.25)',
+            background: 'rgba(255,138,62,0.06)',
+            border: '1px solid rgba(255,140,62,0.40)',
             borderRadius: '12px',
             padding: '14px 18px',
+            marginTop: '12px',
           }}>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              ⚠️ 연봉 실수령액, 대출 이자, 4대보험 등 금융 계산 결과는 2026년 기준 공식 요율을 적용하였으나,
-              개인별 상황(비과세 항목, 부양가족 수 등)에 따라 실제 수치와 차이가 있을 수 있습니다.
-              중요한 재무 결정 시 반드시 해당 기관에 확인하시기 바랍니다.
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
+              📑 <strong style={{ color: '#FFA63E' }}>분야별 강화 면책</strong> — 의료·건강, 세무·재무, 금융·투자, 법률,
+              식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠 8개 분야의 상세 면책 조항은 별도 문서{' '}
+              「<a href="/disclaimer" style={{ color: 'var(--accent)', textDecoration: 'underline', fontWeight: 600 }}>면책조항(/disclaimer)</a>」에서 확인하실 수 있습니다.
+              <br />
+              본 약관과 면책조항 간 해석 충돌 시 <strong style={{ color: 'var(--text)' }}>면책조항이 우선 적용</strong>됩니다.
             </p>
           </div>
         </section>

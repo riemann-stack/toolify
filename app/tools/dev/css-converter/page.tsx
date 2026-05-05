@@ -250,10 +250,10 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
-              { href: '/tools/dev/color',     emoji: '🎨', name: '색상 코드 변환기',   desc: 'HEX·RGB·HSL 변환' },
+              { href: '/tools/art/color',     emoji: '🎨', name: '색상 코드 변환기',   desc: 'HEX·RGB·HSL 변환' },
               { href: '/tools/dev/base64',    emoji: '🔐', name: 'Base64 인코더',       desc: '텍스트 ↔ Base64' },
               { href: '/tools/dev/json',      emoji: '📋', name: 'JSON 포맷터',         desc: '정렬·압축·검증' },
-              { href: '/tools/dev/charcount', emoji: '🔡', name: '글자수 세기',         desc: '실시간 카운트' },
+              { href: '/tools/art/charcount', emoji: '🔡', name: '글자수 세기',         desc: '실시간 카운트' },
             ].map((t) => (
               <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>

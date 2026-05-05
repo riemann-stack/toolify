@@ -1,0 +1,460 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 탭 */
+.tabs {
+  display: grid;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 600px) { .tabs4 { grid-template-columns: repeat(2, 1fr); } }
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+.tab:hover { background: var(--bg3); color: var(--text); }
+.tabActive { background: var(--accent); color: #0D0D0D; }
+
+/* 입력 */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+/* 키 선택 (12음 그리드) */
+.keyRow {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+}
+@media (max-width: 600px) { .keyRow { grid-template-columns: repeat(6, 1fr); } }
+.keyBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  min-height: 44px;
+}
+.keyBtn:hover { border-color: var(--accent); }
+.keyBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+
+/* 스케일 그리드 */
+.scaleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.scaleBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+}
+.scaleBtn:hover { border-color: var(--accent); }
+.scaleBtnActive {
+  background: var(--bg2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.scaleEmoji { font-size: 18px; }
+.scaleLabel { font-size: 13px; font-weight: 700; color: var(--text); }
+.scaleDesc { font-size: 10.5px; color: var(--muted); font-family: 'Syne', sans-serif; }
+
+/* pill */
+.pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 36px;
+}
+.pill:hover { border-color: var(--accent); color: var(--text); }
+.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+
+/* 히어로 */
+.hero {
+  background: linear-gradient(135deg, rgba(200, 132, 224, 0.10) 0%, rgba(232, 151, 87, 0.06) 100%);
+  border: 1px solid rgba(200, 132, 224, 0.3);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.heroValue {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(20px, 4.5vw, 28px);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: 0.5px;
+  word-break: keep-all;
+}
+.heroValue strong { color: var(--accent); }
+.heroSub { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.7; }
+.heroSub strong { color: var(--text); font-family: 'Syne', sans-serif; }
+
+/* 재생 버튼 */
+.playBtn {
+  display: inline-block;
+  margin-top: 14px;
+  background: var(--accent);
+  color: #0D0D0D;
+  border: none;
+  border-radius: 99px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+}
+.playBtn:hover {
+  background: #FFB83E;
+}
+
+.playBtnSm {
+  display: inline-block;
+  background: var(--accent);
+  color: #0D0D0D;
+  border: none;
+  border-radius: 99px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  margin-top: 6px;
+}
+.playBtnSm:hover { background: #FFB83E; }
+
+/* 범례 */
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legendDot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* 정보 그리드 */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.infoGrid div {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.infoGrid div span {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.infoGrid div strong {
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* 도움말 */
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 10px 0 0;
+  line-height: 1.7;
+}
+
+/* 상세표 */
+.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--bg3);
+}
+.detailTable td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.detailTable tr:last-child td { border-bottom: none; }
+.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tableScroll table { min-width: 360px; }
+
+/* 다이어토닉 코드 그리드 */
+.chordGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.chordCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-top-width: 4px;
+  border-radius: 10px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.chordCard:hover { background: var(--bg2); }
+.chordDegree {
+  font-size: 13px;
+  font-weight: 800;
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+}
+.chordName {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+}
+.chordNotes {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+}
+.chordFn {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.chordPlay {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  margin-top: 2px;
+}
+
+/* 진행 카드 */
+.progGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.progCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.progTitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.progChords {
+  margin: 0;
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.5px;
+}
+.progDesc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.progEx {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* 모드 비교 */
+.modeList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modeRow {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.modeRowActive {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+.modeHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.modeEmoji { font-size: 18px; }
+.modeHead strong {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.modeNotes {
+  margin: 0;
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.5px;
+}
+.modeMood {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.modeEx {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* 크로스링크 */
+.crossLink {
+  display: block;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.crossLink:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 안내 */
+.warnCard {
+  background: rgba(200, 132, 224, 0.06);
+  border: 1px solid rgba(200, 132, 224, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+}
+.warnCard strong { display: block; color: #C485E0; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+/* 면책 */
+.disclaimer {
+  background: rgba(200, 132, 224, 0.05);
+  border: 1px solid rgba(200, 132, 224, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong {
+  display: block;
+  color: #C485E0;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.disclaimer ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

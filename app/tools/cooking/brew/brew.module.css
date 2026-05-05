@@ -1,0 +1,381 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 탭 */
+.tabs {
+  display: grid;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 600px) { .tabs4 { grid-template-columns: repeat(2, 1fr); } }
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+.tab:hover { background: var(--bg3); color: var(--text); }
+.tabActive { background: var(--accent); color: #0D0D0D; }
+
+/* 입력 */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  outline: none;
+}
+.input:focus { border-color: var(--accent); }
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+
+/* 슬라이더 */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 3px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg2);
+}
+.slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg2);
+}
+
+/* pill */
+.pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  min-height: 36px;
+}
+.pill:hover { border-color: var(--accent); color: var(--text); }
+.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+
+/* 추출법 그리드 */
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+.methodBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+}
+.methodBtn:hover { border-color: var(--accent); }
+.methodBtnActive {
+  background: var(--bg2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.methodEmoji { font-size: 20px; }
+.methodLabel { font-size: 13px; font-weight: 700; color: var(--text); }
+.methodDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Syne', sans-serif; }
+
+/* 히어로 */
+.hero {
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.12) 0%, rgba(123, 79, 44, 0.08) 100%);
+  border: 1px solid rgba(232, 151, 87, 0.3);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.heroValue {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+.heroValue strong { color: var(--accent); }
+.heroSub { font-size: 13px; color: var(--muted); margin: 0; }
+.heroSub strong { color: var(--text); }
+
+/* 히어로 결과 3분할 */
+.heroResult {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+.heroBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.heroBlockLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.heroBlockValue {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(20px, 4.5vw, 28px);
+  font-weight: 800;
+  color: var(--accent);
+}
+
+/* 상세표 */
+.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.detailTable td:nth-child(2) {
+  text-align: right;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+}
+.detailTable tr:last-child td { border-bottom: none; }
+.cellAccent { color: var(--accent); }
+.cellMono { font-family: 'Syne', sans-serif; }
+.cellSubtitle {
+  background: var(--bg3);
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
+
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tableScroll table {
+  min-width: 320px;
+}
+
+/* 도움말 */
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+
+.tipBox {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.tipBox strong { color: var(--text); }
+
+/* 푸어 단계 카드 */
+.stepGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.stepCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stepHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.stepEmoji { font-size: 18px; }
+.stepHead strong { flex: 1; font-weight: 700; }
+.stepTime {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.stepWater {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+}
+.stepWater strong { font-weight: 800; }
+.stepDesc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 강도 영역 리스트 */
+.zoneList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.zoneRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--border);
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.zoneEmoji { font-size: 20px; flex-shrink: 0; }
+.zoneLabel {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.zoneDesc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* 크로스링크 */
+.crossLink {
+  display: block;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.crossLink:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 안내·경고 */
+.warnCard {
+  background: rgba(255, 184, 62, 0.06);
+  border: 1px solid rgba(255, 184, 62, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+}
+.warnCard strong { display: block; color: #FFB83E; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+/* 면책 */
+.disclaimer {
+  background: rgba(232, 151, 87, 0.06);
+  border: 1px solid rgba(232, 151, 87, 0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disclaimer strong {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.disclaimer ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.disclaimer ul strong { display: inline; color: var(--text); margin: 0; }
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input { font-size: 16px; min-height: 48px; }
+}

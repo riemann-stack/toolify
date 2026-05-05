@@ -66,7 +66,7 @@ export default function ConverterClient() {
   return (
     <div className={styles.wrap}>
       <div className={styles.disclaimer}>
-        <strong>9개 카테고리</strong> 통합 단위 변환기 — 길이·면적·무게·부피·온도·시간·속도·압력·데이터 + <strong>한국 전통 단위</strong>(자·척·근·돈·홉·되·평) 포함. 모든 값은 SI 기준 환산이며 일부 한국 단위는 시대·지역별 차이가 있습니다.
+        <strong>14개 카테고리</strong> 통합 단위 변환기 — 길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 + <strong>당도·염도</strong>·<strong>농도</strong>·<strong>각도·기울기</strong> + <strong>한국 전통 단위</strong>(자·척·근·돈·홉·되·평·물매) 포함. 모든 값은 SI 기준 환산이며 일부 한국 단위는 시대·지역별 차이가 있습니다.
       </div>
 
       {/* 카테고리 탭 */}
@@ -182,6 +182,26 @@ export default function ConverterClient() {
       {categoryId === 'time' && (
         <div className={styles.infoBox}>
           ⏱️ <strong>근무시간 변환</strong> — 한국 표준 주 40시간 / 월 209시간(주휴 포함) / 연 2,508시간. 시급 환산은 <a href="/tools/finance/salary" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>연봉 실수령액 계산기</a>의 [시급] 탭 활용을 권장합니다.
+        </div>
+      )}
+      {categoryId === 'brix' && (
+        <div className={styles.infoBox}>
+          🍯 <strong>당도·염도 활용 가이드</strong> — <strong>잼/청 14~18°Bx</strong>(저당) · <strong>22~28°Bx</strong>(일반) · <strong>50~65°Bx</strong>(보존용 풀당). <strong>김치 절임 7~10염%</strong>(배추 무게 대비 소금) · <strong>장아찌 15~20염%</strong> · <strong>오이지 10~12염%</strong> · <strong>음료수 8~12°Bx</strong> · <strong>해수 약 3.5염%(35‰)</strong>. 모든 값은 수용액 가정(밀도 1 g/mL)이며, 고농도 시럽·꿀은 밀도 보정이 필요할 수 있습니다.
+        </div>
+      )}
+      {categoryId === 'concentration' && (
+        <>
+          <div className={styles.infoBox}>
+            🧪 <strong>농도 단위 한눈에</strong> — <strong>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong> (수용액 가정). <strong>해수 35‰</strong> · <strong>수돗물 잔류염소 0.1~0.5 ppm</strong> · <strong>비료 EC 1.5~3.0 mS/cm(약 1,000~2,000 ppm)</strong>. <a href="#mol" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>mol/L</a>은 분자량이 필요해 본 도구에서는 별도 계산 가이드를 제공합니다.
+          </div>
+          <div style={{ background: 'rgba(255,138,62,0.06)', border: '1px solid rgba(255,138,62,0.40)', borderRadius: 10, padding: '11px 14px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.75, fontFamily: "'Noto Sans KR', sans-serif" }}>
+            ⚠️ <strong style={{ color: '#FFA63E' }}>약품·소독액 안전 안내</strong> — 락스(차아염소산나트륨)·과산화수소·산성 세제 등은 농도가 낮아도 피부·호흡기 자극을 일으킬 수 있습니다. 환기·장갑·고글 착용 필수, 산성 + 염소계 혼합 절대 금지(유독가스 발생). 정확한 사용 농도·반응 시간은 제조사 표기 또는 식약처·질병청 가이드를 따르세요.
+          </div>
+        </>
+      )}
+      {categoryId === 'angle' && (
+        <div className={styles.infoBox}>
+          📐 <strong>각도·기울기 활용</strong> — <strong>도로 표지판 5%</strong>(완만) · <strong>10%</strong>(가파름) · <strong>15% 이상</strong>(매우 가파름). <strong>철도 구배 ≤ 25‰</strong>(고속선) · <strong>하수관 1/100~1/50</strong>(자연 흐름) · <strong>한옥 지붕 물매 4~6치</strong>(낮음) · <strong>7~9치</strong>(보통) · <strong>10치 이상</strong>(가파름·45°+). 5% 경사 ≈ 2.86°, 10% ≈ 5.71°, 1/100 ≈ 0.57°.
         </div>
       )}
     </div>

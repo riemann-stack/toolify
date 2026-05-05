@@ -1,0 +1,499 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 탭 */
+.tabs {
+  display: grid;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 600px) { .tabs4 { grid-template-columns: repeat(2, 1fr); } }
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+.tab:hover { background: var(--bg3); color: var(--text); }
+.tabActive { background: var(--accent); color: #0D0D0D; }
+
+/* 잠금 토글 */
+.lockRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 600px) { .lockRow { grid-template-columns: 1fr; } }
+.lockBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 48px;
+}
+.lockBtn:hover { border-color: var(--accent); }
+.lockBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.lockHint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+
+/* 슬라이더 */
+.sliderBlock { margin-bottom: 22px; }
+.sliderBlock:last-child { margin-bottom: 0; }
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.sliderLabel {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.sliderValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sliderValue.locked { color: var(--accent); }
+.slider {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg3);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+.slider:disabled { opacity: 0.5; cursor: not-allowed; }
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+.slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+.sliderTicks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+}
+
+/* 영웅 카드 */
+.heroCard {
+  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .heroCard { grid-template-columns: 1fr; }
+}
+.heroLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+.heroValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.heroNum {
+  color: var(--accent);
+  font-size: 44px;
+}
+.heroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.7;
+}
+.bright { color: #FFB83E; }
+.dark { color: #3EC8FF; }
+.heroRight {
+  text-align: right;
+  border-left: 1px solid var(--border);
+  padding-left: 20px;
+}
+@media (max-width: 600px) {
+  .heroRight {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 14px;
+    text-align: left;
+  }
+}
+.heroEvDesc {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* 등가 노출 리스트 */
+.equivList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.equivItem {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+}
+@media (max-width: 600px) {
+  .equivItem {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+.equivItem:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+.equivAxis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.equivLabel { font-size: 14px; }
+.equivVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+}
+.equivApply {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .equivApply { grid-column: 1 / -1; text-align: right; }
+}
+
+/* 현재 노출 행 */
+.currentRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  color: var(--text);
+}
+.evBadge {
+  background: var(--accent);
+  color: #0D0D0D;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+/* ND 그리드 */
+.ndGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 600px) { .ndGrid { grid-template-columns: repeat(2, 1fr); } }
+.ndBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  min-height: 60px;
+}
+.ndBtn:hover { border-color: var(--accent); }
+.ndBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.ndLabel {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  color: inherit;
+}
+.ndStops {
+  font-size: 11px;
+  color: var(--muted);
+}
+.ndBtnActive .ndStops { color: #0D0D0D; opacity: 0.8; }
+.ndUse {
+  font-size: 13px;
+  color: var(--text);
+  margin: 12px 0 0;
+  line-height: 1.7;
+  background: var(--bg3);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+/* 데이터 표 */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.dataTable th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.dataTable td {
+  padding: 10px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+}
+.dataTable tr:last-child td { border-bottom: none; }
+.mono { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); }
+
+/* 씬 카드 */
+.sceneGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) { .sceneGrid { grid-template-columns: 1fr; } }
+.sceneCard {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sceneCard:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+.sceneHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.sceneEmoji { font-size: 28px; }
+.sceneLabel {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+  margin: 0;
+}
+.sceneDesc {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+.tripodBadge {
+  font-size: 10px;
+  background: rgba(255, 184, 62, 0.2);
+  color: #FFB83E;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.sceneSpec {
+  display: flex;
+  gap: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  background: var(--bg2);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.sceneTip {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 별 사진 입력 */
+.starInputs {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+@media (max-width: 600px) { .starInputs { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  outline: none;
+  min-height: 44px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.input:focus { border-color: var(--accent); }
+
+.starResult {
+  background: linear-gradient(135deg, var(--bg2), var(--bg3));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.starResultLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 6px;
+}
+.starResultValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+/* 트레이드오프 카드 */
+.tradeCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.tradeHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.tradeIcon { font-size: 32px; }
+.tradeAxis {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  font-weight: 600;
+}
+.tradeLabel {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 700;
+  margin: 4px 0 0;
+}
+.tradeDesc {
+  font-size: 13px;
+  color: var(--text);
+  margin: 8px 0;
+  line-height: 1.7;
+}
+.tradeNote {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+  background: var(--bg3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 3px solid var(--border);
+}

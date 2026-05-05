@@ -1,0 +1,736 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 탭 */
+.tabs {
+  display: grid;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 600px) { .tabs4 { grid-template-columns: repeat(2, 1fr); } }
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+.tab:hover { background: var(--bg3); color: var(--text); }
+.tabActive { background: #C485E0; color: #0D0D0D; }
+
+/* 모델 토글 */
+.modelRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) { .modelRow { grid-template-columns: 1fr; } }
+.modelBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+.modelBtn:hover { border-color: #C485E0; }
+.modelBtnActive {
+  background: #C485E0;
+  color: #0D0D0D;
+  border-color: #C485E0;
+}
+
+/* 슬롯 */
+.slotHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.slotActions {
+  display: flex;
+  gap: 6px;
+}
+.smBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.smBtn:hover { border-color: #C485E0; color: #C485E0; }
+.smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.slotRow {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: var(--bg3);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+@media (max-width: 600px) {
+  .slotRow {
+    grid-template-columns: 60px 1fr auto;
+    gap: 8px;
+    padding: 10px;
+  }
+}
+.slotPreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+}
+@media (max-width: 600px) {
+  .slotPreview { width: 60px; height: 60px; }
+}
+.slotInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.colorInputRow {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 6px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .colorInputRow { grid-template-columns: 32px 1fr; }
+  .colorInputRow > select { grid-column: 1 / -1; }
+}
+.colorPicker {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg2);
+  cursor: pointer;
+}
+@media (max-width: 600px) { .colorPicker { width: 32px; height: 32px; } }
+
+.hexInput {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.hexInput:focus { border-color: #C485E0; }
+
+.presetSelect {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 8px;
+  font-size: 11.5px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  max-width: 100px;
+}
+
+.weightRow {
+  display: grid;
+  grid-template-columns: 1fr 60px 40px;
+  gap: 8px;
+  align-items: center;
+}
+.weightNum {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  text-align: right;
+  -moz-appearance: textfield;
+}
+.weightNum::-webkit-inner-spin-button,
+.weightNum::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.weightNum:focus { border-color: #C485E0; }
+
+.pctTag {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: #C485E0;
+  text-align: right;
+}
+
+.iconBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: start;
+}
+.iconBtn:hover { background: rgba(255, 62, 140, 0.1); border-color: #FF3E8C; }
+
+/* 슬라이더 */
+.slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg2);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #C485E0;
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+.slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #C485E0;
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.sliderLabel { font-size: 13px; color: var(--muted); font-weight: 600; }
+.sliderValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.sliderTicks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+}
+
+/* 히어로 카드 */
+.heroCard {
+  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 22px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .heroCard { grid-template-columns: 1fr; padding: 18px; }
+}
+.previewBox {
+  width: 120px;
+  height: 120px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .previewBox { width: 100px; height: 100px; margin: 0 auto; }
+}
+.heroContent { min-width: 0; }
+.heroLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 6px;
+}
+.heroHex {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #C485E0;
+  margin: 0 0 8px;
+  letter-spacing: -1px;
+}
+.heroBig {
+  font-size: 36px;
+}
+.heroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* 데이터 표 */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.dataTable th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.dataTable td {
+  padding: 10px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  vertical-align: middle;
+}
+.dataTable tr:last-child td { border-bottom: none; }
+.dataTable td:first-child {
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mono { font-family: 'Syne', sans-serif; font-weight: 700; }
+.totalRow td {
+  background: var(--bg3);
+  color: #C485E0 !important;
+  font-weight: 800;
+}
+
+.colorChip {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+
+/* ─── 탭 2 분량 환산 ─── */
+.volRow {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 8px;
+}
+@media (max-width: 600px) { .volRow { grid-template-columns: 1fr; } }
+.numInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--text);
+  outline: none;
+  text-align: right;
+  width: 100%;
+  box-sizing: border-box;
+  -moz-appearance: textfield;
+}
+.numInput::-webkit-inner-spin-button,
+.numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.numInput:focus { border-color: #C485E0; }
+.unitSelect {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+.quickRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.quickChip {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+}
+.quickChip:hover { color: #C485E0; border-color: #C485E0; }
+
+/* ─── 탭 3 컬러 매칭 ─── */
+.targetRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.targetInputs {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.paletteRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+@media (max-width: 600px) { .paletteRow { grid-template-columns: 1fr; } }
+.paletteBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 10px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  text-align: left;
+}
+.paletteBtn:hover { border-color: #C485E0; }
+.paletteBtnActive {
+  background: #C485E0;
+  color: #0D0D0D;
+  border-color: #C485E0;
+}
+.primaryBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #C485E0;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0D0D0D;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 100%;
+  margin-top: 12px;
+  min-height: 48px;
+}
+.primaryBtn:hover { background: #B26AC5; }
+.primaryBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.compareRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.compareCell {
+  text-align: center;
+}
+.compareCell .previewBox {
+  margin: 0 auto 8px;
+  width: 90px;
+  height: 90px;
+}
+.compareLabel {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.compareArrow {
+  font-size: 24px;
+  color: var(--muted);
+}
+.compareCell .mono {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.deltaBar {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.deltaInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.deltaLabel {
+  font-size: 13px;
+  color: var(--muted);
+}
+.deltaGrade {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+}
+.deltaBarBg {
+  width: 100%;
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.deltaBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 추천 레시피 표시 */
+.recipeView {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.recipeItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+.recipeName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}
+.recipeParts {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #C485E0;
+}
+
+.adjustBlock {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.adjustLabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.field:last-child { margin-bottom: 0; }
+.fieldLabel { font-size: 12px; color: var(--text); font-weight: 600; }
+
+/* ─── 탭 4 색환·레시피 ─── */
+.wheelInfo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+@media (max-width: 600px) { .wheelInfo { grid-template-columns: repeat(2, 1fr); } }
+.wheelInfoBlock {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 10px;
+  text-align: center;
+}
+.wheelInfoLabel {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.wheelInfoBlock .colorChip {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin: 0 0 6px;
+}
+.wheelInfoText {
+  font-size: 12px;
+  color: var(--text);
+  margin: 0;
+  font-weight: 600;
+}
+.wheelInfoTextSm {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+.chipPair {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.chipPair > div { text-align: center; }
+.chipPair .colorChip {
+  width: 24px;
+  height: 24px;
+}
+
+.recipeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 768px) { .recipeGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .recipeGrid { grid-template-columns: 1fr; } }
+.recipeCard {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.recipeCard:hover {
+  border-color: #C485E0;
+  background: var(--bg2);
+}
+.recipePreview {
+  width: 100%;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.recipeCardName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  margin: 0;
+}
+.recipeCardMix {
+  font-size: 11px;
+  color: #C485E0;
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+}
+.recipeCardDesc {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fieldCard {
+  background: var(--bg3);
+  border-left: 3px solid #C485E0;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.fieldName {
+  font-size: 14px;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+.fieldRec {
+  font-size: 12.5px;
+  color: var(--text);
+  margin: 0 0 6px;
+  line-height: 1.6;
+}
+.fieldTip {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}

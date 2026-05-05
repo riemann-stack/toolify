@@ -332,7 +332,7 @@ export default function CircuitSimulatorPage() {
               { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 시각화',     desc: '8개 행성에서 내 몸무게·나이·하루' },
               { href: '/tools/edu/cosmic-calendar',   icon: '🌌', name: '코스믹 캘린더',         desc: '138억 년 우주 역사를 1년으로' },
               { href: '/tools/dev/css-converter',     icon: '🎨', name: 'CSS 값 변환기',         desc: 'px·rem·em·clamp() 변환' },
-              { href: '/tools/music/frequency',       icon: '🎵', name: '주파수 음정 변환기',     desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/art/frequency',       icon: '🎵', name: '주파수 음정 변환기',     desc: 'Hz ↔ 음정·MIDI·파장' },
               { href: '/tools/unit/battery',          icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh·Ah 변환' },
               { href: '/tools/edu',                   icon: '🔬', name: '교육·학습 카테고리',     desc: '추가 교육 도구 더보기' },
             ].map((t, i) => (

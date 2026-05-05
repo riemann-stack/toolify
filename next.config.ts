@@ -18,6 +18,23 @@ const nextConfig: NextConfig = {
       { source: '/tools/life/golf-handicap',    destination: '/tools/sports/golf-handicap',  permanent: true },
       { source: '/tools/life/golf-cost',        destination: '/tools/sports/golf-cost',      permanent: true },
       { source: '/tools/life/golf-distance',    destination: '/tools/sports/golf-distance',  permanent: true },
+
+      // ─────────────────────────────────────────────────────────────────────────
+      // 음악 → 예술·창작 카테고리 확장 (2026-05-05) — TODO: 2026-11-05 이후 삭제
+      // music/* → art/* + 디자인·글쓰기 도구 4종을 dev/life에서 art로 이동
+      // ─────────────────────────────────────────────────────────────────────────
+      { source: '/tools/music',              destination: '/tools/art',              permanent: true },
+      { source: '/tools/music/vocal-range',  destination: '/tools/art/vocal-range',  permanent: true },
+      { source: '/tools/music/bpm',          destination: '/tools/art/bpm',          permanent: true },
+      { source: '/tools/music/frequency',    destination: '/tools/art/frequency',    permanent: true },
+      { source: '/tools/music/capo',         destination: '/tools/art/capo',         permanent: true },
+      { source: '/tools/music/tap-tempo',    destination: '/tools/art/tap-tempo',    permanent: true },
+      { source: '/tools/music/chord',        destination: '/tools/art/chord',        permanent: true },
+      { source: '/tools/music/scale',        destination: '/tools/art/scale',        permanent: true },
+      { source: '/tools/dev/color',          destination: '/tools/art/color',        permanent: true },
+      { source: '/tools/dev/lorem',          destination: '/tools/art/lorem',        permanent: true },
+      { source: '/tools/dev/charcount',      destination: '/tools/art/charcount',    permanent: true },
+      { source: '/tools/life/golden-ratio',  destination: '/tools/art/golden-ratio', permanent: true },
     ]
   },
 };

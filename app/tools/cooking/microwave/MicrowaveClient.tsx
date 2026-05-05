@@ -1,0 +1,683 @@
+'use client'
+
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import s from './microwave.module.css'
+import {
+  POWER_OPTIONS, FOODS, TEMPS, VESSELS, GOLDEN_TIPS,
+  type PowerW, type StartTemp,
+  convertTime, portionFactor, getTemp, getFood,
+  fmt, fmtSec, fmtTimer,
+} from './microwaveUtils'
+
+type Tab = 'convert' | 'food' | 'timer' | 'guide'
+type Mode = 'label2mine' | 'mine2other'
+
+const STORAGE_KEY = 'youtil_microwave_v1'
+
+export default function MicrowaveClient() {
+  const [tab, setTab] = useState<Tab>('convert')
+
+  /* 탭 1: 환산 */
+  const [mode, setMode] = useState<Mode>('label2mine')
+  const [refW, setRefW] = useState<PowerW>(700)
+  const [myW, setMyW] = useState<PowerW>(900)
+  const [refMin, setRefMin] = useState('2')
+  const [refSec, setRefSecState] = useState('30')
+
+  /* 탭 2: 식품 */
+  const [foodId, setFoodId] = useState('rice')
+  const [portions, setPortions] = useState('1')
+  const [startTemp, setStartTemp] = useState<StartTemp>('frozen')
+  const [foodMyW, setFoodMyW] = useState<PowerW>(700)
+
+  /* 탭 3: 타이머 */
+  const [timerMin, setTimerMin] = useState('2')
+  const [timerSec, setTimerSec] = useState('0')
+  const [remaining, setRemaining] = useState(0)
+  const [running, setRunning] = useState(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+  const lastTickRef = useRef<number>(0)
+
+  /* localStorage */
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return
+      const j = JSON.parse(raw)
+      if (j.refW) setRefW(j.refW)
+      if (j.myW) setMyW(j.myW)
+      if (j.refMin) setRefMin(j.refMin)
+      if (j.refSec) setRefSecState(j.refSec)
+      if (j.foodId) setFoodId(j.foodId)
+      if (j.portions) setPortions(j.portions)
+      if (j.startTemp) setStartTemp(j.startTemp)
+      if (j.foodMyW) setFoodMyW(j.foodMyW)
+    } catch {}
+  }, [])
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ refW, myW, refMin, refSec, foodId, portions, startTemp, foodMyW }))
+    } catch {}
+  }, [refW, myW, refMin, refSec, foodId, portions, startTemp, foodMyW])
+
+  /* AudioContext 초기화 */
+  const getAudio = () => {
+    if (!audioCtxRef.current) {
+      const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
+      const Ctx = W.AudioContext || W.webkitAudioContext
+      if (Ctx) audioCtxRef.current = new Ctx()
+    }
+    return audioCtxRef.current
+  }
+
+  /** 비프음 (3회 또는 1회) */
+  const beep = (count = 1, freq = 880, duration = 0.15) => {
+    const ctx = getAudio()
+    if (!ctx) return
+    if (ctx.state === 'suspended') ctx.resume()
+    for (let i = 0; i < count; i++) {
+      const start = ctx.currentTime + i * (duration + 0.1)
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.frequency.value = freq
+      osc.connect(gain).connect(ctx.destination)
+      gain.gain.setValueAtTime(0, start)
+      gain.gain.linearRampToValueAtTime(0.2, start + 0.01)
+      gain.gain.linearRampToValueAtTime(0.2, start + duration - 0.02)
+      gain.gain.linearRampToValueAtTime(0, start + duration)
+      osc.start(start)
+      osc.stop(start + duration + 0.05)
+    }
+  }
+
+  /* 타이머 동작 */
+  useEffect(() => {
+    if (!running) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+      return
+    }
+    lastTickRef.current = Date.now()
+    intervalRef.current = setInterval(() => {
+      const now = Date.now()
+      const delta = (now - lastTickRef.current) / 1000
+      lastTickRef.current = now
+      setRemaining((prev) => {
+        const next = prev - delta
+        if (next <= 0) {
+          setRunning(false)
+          beep(3, 880, 0.2)
+          return 0
+        }
+        // 마지막 3초 비프
+        const prevSec = Math.ceil(prev)
+        const nextSec = Math.ceil(next)
+        if (prevSec !== nextSec && nextSec <= 3 && nextSec > 0) {
+          beep(1, 660, 0.1)
+        }
+        return next
+      })
+    }, 100)
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running])
+
+  /* 계산 */
+  const refSecTotal = (parseInt(refMin) || 0) * 60 + (parseInt(refSec) || 0)
+  const convertedSec = convertTime(refW, refSecTotal, myW)
+  const diff = convertedSec - refSecTotal
+
+  /* W별 비교 (탭 1) */
+  const wComparison = POWER_OPTIONS.map((w) => ({
+    w, sec: convertTime(refW, refSecTotal, w),
+  }))
+
+  /* 식품 계산 (탭 2) */
+  const food = getFood(foodId)
+  const portionN = parseInt(portions) || 1
+  const tempMeta = getTemp(startTemp)
+  const foodConverted = useMemo(() => {
+    if (food.forbidden) return 0
+    const baseConverted = convertTime(food.baseW, food.baseSec, foodMyW)
+    return baseConverted * portionFactor(portionN) * tempMeta.factor
+  }, [food, foodMyW, portionN, tempMeta])
+  const foodRest = useMemo(() => {
+    if (food.forbidden || food.restSec === 0) return 0
+    const baseConverted = convertTime(food.baseW, food.restAdditionalSec, foodMyW)
+    return baseConverted * portionFactor(portionN) * tempMeta.factor
+  }, [food, foodMyW, portionN, tempMeta])
+
+  /* 타이머 시작 */
+  const startTimer = (sec: number) => {
+    setRemaining(sec)
+    setRunning(true)
+    // 사용자 인터랙션 후 AudioContext 깨우기
+    const ctx = getAudio()
+    if (ctx && ctx.state === 'suspended') ctx.resume()
+  }
+
+  const timerInputSec = (parseInt(timerMin) || 0) * 60 + (parseInt(timerSec) || 0)
+
+  return (
+    <div className={s.wrap}>
+      {/* 탭 */}
+      <div className={`${s.tabs} ${s.tabs4}`}>
+        {([
+          { id: 'convert', label: '⚡ 출력 환산' },
+          { id: 'food',    label: '🍱 식품 프리셋' },
+          { id: 'timer',   label: '⏱️ 타이머' },
+          { id: 'guide',   label: '📚 가이드' },
+        ] as { id: Tab; label: string }[]).map((t) => (
+          <button
+            key={t.id}
+            className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
+            onClick={() => setTab(t.id)}
+            type="button"
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ════════ 탭 1: 출력 환산 ════════ */}
+      {tab === 'convert' && (
+        <>
+          <div className={s.card}>
+            <span className={s.cardLabel}>입력 모드</span>
+            <div className={s.pillRow}>
+              <button
+                className={`${s.pill} ${mode === 'label2mine' ? s.pillActive : ''}`}
+                onClick={() => setMode('label2mine')}
+                type="button"
+              >
+                📋 라벨 → 내 전자레인지
+              </button>
+              <button
+                className={`${s.pill} ${mode === 'mine2other' ? s.pillActive : ''}`}
+                onClick={() => setMode('mine2other')}
+                type="button"
+              >
+                🔄 내 시간 → 다른 출력
+              </button>
+            </div>
+          </div>
+
+          <div className={s.card}>
+            <span className={s.cardLabel}>{mode === 'label2mine' ? '라벨 정보' : '내 전자레인지 시간'}</span>
+            <div className={s.field}>
+              <label className={s.fieldLabel}>{mode === 'label2mine' ? '라벨 표시 W' : '내 전자레인지 W'}</label>
+              <div className={s.pillRow}>
+                {POWER_OPTIONS.map((w) => (
+                  <button
+                    key={w}
+                    className={`${s.pill} ${refW === w ? s.pillActive : ''}`}
+                    onClick={() => setRefW(w)}
+                    type="button"
+                  >
+                    {w}W
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={s.row2}>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>분</label>
+                <input
+                  type="number"
+                  className={s.input}
+                  value={refMin}
+                  onChange={(e) => setRefMin(e.target.value)}
+                  min={0} max={60} step={1}
+                />
+              </div>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>초</label>
+                <input
+                  type="number"
+                  className={s.input}
+                  value={refSec}
+                  onChange={(e) => setRefSecState(e.target.value)}
+                  min={0} max={59} step={5}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className={s.card}>
+            <span className={s.cardLabel}>{mode === 'label2mine' ? '내 전자레인지 W' : '비교할 출력 W'}</span>
+            <div className={s.pillRow}>
+              {POWER_OPTIONS.map((w) => (
+                <button
+                  key={w}
+                  className={`${s.pill} ${myW === w ? s.pillActive : ''}`}
+                  onClick={() => setMyW(w)}
+                  type="button"
+                >
+                  {w}W
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 메인 결과 */}
+          <div className={s.hero}>
+            <p className={s.heroLabel}>{refW}W {fmtSec(refSecTotal)} → {myW}W</p>
+            <p className={s.heroValue}>
+              <strong>{fmtSec(convertedSec)}</strong>
+            </p>
+            <p className={s.heroSub}>
+              차이 <strong style={{ color: diff > 0 ? '#FF8C3E' : 'var(--accent)' }}>
+                {diff > 0 ? '+' : ''}{Math.round(diff)}초
+              </strong>
+              {' · '}{myW > refW ? '⬇️ 더 짧게' : myW < refW ? '⬆️ 더 길게' : '동일'}
+            </p>
+            <button
+              className={s.playBtn}
+              onClick={() => {
+                setTab('timer')
+                setTimerMin(String(Math.floor(convertedSec / 60)))
+                setTimerSec(String(Math.round(convertedSec % 60)))
+                startTimer(convertedSec)
+              }}
+              type="button"
+            >
+              ⏱️ 이 시간으로 타이머 시작
+            </button>
+          </div>
+
+          {/* W별 비교 막대 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>W별 시간 비교</span>
+            <div className={s.barChart}>
+              {wComparison.map((c) => {
+                const maxSec = Math.max(...wComparison.map((x) => x.sec))
+                const w = (c.sec / maxSec) * 100
+                const isMine = c.w === myW
+                const isRef = c.w === refW
+                return (
+                  <div key={c.w} className={s.barRow}>
+                    <span className={s.barLabel}>
+                      {c.w}W{isMine && ' 👤'}{isRef && !isMine && ' 📋'}
+                    </span>
+                    <div className={s.barTrack}>
+                      <div
+                        className={s.barFill}
+                        style={{
+                          width: `${Math.max(w, 4)}%`,
+                          background: isMine ? 'var(--accent)' : isRef ? '#3EC8FF' : 'rgba(232,151,87,0.5)',
+                        }}
+                      >
+                        <span className={s.barValue}>{fmtSec(c.sec)}</span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className={s.warnCard}>
+            <strong>💡 빠른 팁</strong>
+            <p>
+              • <strong>처음엔 환산 시간의 80%로 시작</strong> → 부족하면 10~15초씩 추가 (과조리 방지)<br />
+              • 600W 이하·1000W 이상은 효율 보정이 자동 적용됩니다 (저출력 +7%, 고출력 -5%)<br />
+              • 가운데까지 균일하게 가열하려면 중간에 한 번 섞기 권장<br />
+              • 정확한 출력은 내 전자레인지 라벨 (제품 뒷면)에서 확인
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* ════════ 탭 2: 식품 프리셋 ════════ */}
+      {tab === 'food' && (
+        <>
+          <div className={s.card}>
+            <span className={s.cardLabel}>식품 종류 (12가지)</span>
+            <div className={s.foodGrid}>
+              {FOODS.map((f) => (
+                <button
+                  key={f.id}
+                  className={`${s.foodBtn} ${foodId === f.id ? s.foodBtnActive : ''} ${f.forbidden ? s.foodBtnDanger : ''}`}
+                  onClick={() => setFoodId(f.id)}
+                  type="button"
+                >
+                  <span className={s.foodEmoji}>{f.emoji}</span>
+                  <span className={s.foodLabel}>{f.shortLabel}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {food.forbidden ? (
+            <div className={s.warnCardStrong}>
+              <strong>🚨 {food.label}</strong>
+              <p>{food.warning}</p>
+              <p style={{ marginTop: 8 }}>{food.tip}</p>
+            </div>
+          ) : (
+            <>
+              <div className={s.card}>
+                <span className={s.cardLabel}>전자레인지·양·온도</span>
+                <div className={s.field}>
+                  <label className={s.fieldLabel}>내 전자레인지 W</label>
+                  <div className={s.pillRow}>
+                    {POWER_OPTIONS.map((w) => (
+                      <button
+                        key={w}
+                        className={`${s.pill} ${foodMyW === w ? s.pillActive : ''}`}
+                        onClick={() => setFoodMyW(w)}
+                        type="button"
+                      >
+                        {w}W
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className={s.row2}>
+                  <div className={s.field}>
+                    <label className={s.fieldLabel}>인분 ({portionN}인분 → 시간 ×{portionFactor(portionN).toFixed(2)})</label>
+                    <input
+                      type="range"
+                      min={1}
+                      max={5}
+                      step={1}
+                      value={portions}
+                      onChange={(e) => setPortions(e.target.value)}
+                      className={s.slider}
+                    />
+                    <div className={s.pillRow} style={{ marginTop: 8 }}>
+                      {[1, 2, 3, 4, 5].map((p) => (
+                        <button key={p} className={`${s.pill} ${portionN === p ? s.pillActive : ''}`} onClick={() => setPortions(String(p))} type="button">
+                          {p}인분
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={s.field}>
+                    <label className={s.fieldLabel}>시작 온도</label>
+                    <div className={s.pillRow}>
+                      {TEMPS.map((t) => (
+                        <button
+                          key={t.id}
+                          className={`${s.pill} ${startTemp === t.id ? s.pillActive : ''}`}
+                          onClick={() => setStartTemp(t.id)}
+                          type="button"
+                        >
+                          {t.emoji} {t.label.split(' ')[0]}
+                        </button>
+                      ))}
+                    </div>
+                    <p className={s.helpText}>{tempMeta.desc}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={s.hero}>
+                <p className={s.heroLabel}>{food.emoji} {food.label} · {portionN}인분</p>
+                <p className={s.heroValue}>
+                  <strong>{fmtSec(foodConverted)}</strong>
+                </p>
+                <p className={s.heroSub}>
+                  표준 {food.baseW}W {fmtSec(food.baseSec)} → 내 {foodMyW}W ({tempMeta.label})
+                  {food.restSec > 0 && (
+                    <><br />⏸️ 휴지 {fmtSec(food.restSec)} → 추가 가열 <strong>{fmtSec(foodRest)}</strong></>
+                  )}
+                </p>
+                <button
+                  className={s.playBtn}
+                  onClick={() => {
+                    setTab('timer')
+                    setTimerMin(String(Math.floor(foodConverted / 60)))
+                    setTimerSec(String(Math.round(foodConverted % 60)))
+                    startTimer(foodConverted)
+                  }}
+                  type="button"
+                >
+                  ⏱️ 타이머 시작
+                </button>
+              </div>
+
+              <div className={s.card}>
+                <span className={s.cardLabel}>{food.label} 가이드</span>
+                <div className={s.tipBox}>
+                  <strong>💡 팁</strong> {food.tip}
+                </div>
+                {food.warning && (
+                  <div className={s.warnNote}>
+                    ⚠️ {food.warning}
+                  </div>
+                )}
+                <div className={s.tableScroll} style={{ marginTop: 12 }}>
+                  <table className={s.detailTable}>
+                    <tbody>
+                      <tr><td>표준 시간</td><td className={s.cellMono}>{food.baseW}W {fmtSec(food.baseSec)}</td></tr>
+                      {food.restSec > 0 && (
+                        <>
+                          <tr><td>휴지 시간</td><td className={s.cellMono}>{fmtSec(food.restSec)}</td></tr>
+                          <tr><td>휴지 후 추가</td><td className={s.cellMono}>{fmtSec(food.restAdditionalSec)}</td></tr>
+                        </>
+                      )}
+                      <tr><td>권장 용기</td><td>{food.vessel}</td></tr>
+                      <tr><td>용기 메모</td><td>{food.container}</td></tr>
+                      <tr><td>1인분 → {portionN}인분 보정</td><td className={s.cellMono}>×{portionFactor(portionN).toFixed(2)}</td></tr>
+                      <tr><td>{tempMeta.emoji} 온도 보정</td><td className={s.cellMono}>×{tempMeta.factor.toFixed(2)}</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {/* ════════ 탭 3: 타이머 ════════ */}
+      {tab === 'timer' && (
+        <>
+          <div className={s.card}>
+            <span className={s.cardLabel}>시간 입력</span>
+            <div className={s.row2}>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>분</label>
+                <input
+                  type="number"
+                  className={s.input}
+                  value={timerMin}
+                  onChange={(e) => setTimerMin(e.target.value)}
+                  min={0} max={60} step={1}
+                  disabled={running}
+                />
+              </div>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>초</label>
+                <input
+                  type="number"
+                  className={s.input}
+                  value={timerSec}
+                  onChange={(e) => setTimerSec(e.target.value)}
+                  min={0} max={59} step={5}
+                  disabled={running}
+                />
+              </div>
+            </div>
+            <div className={s.pillRow}>
+              {[30, 60, 90, 120, 180, 300].map((sec) => (
+                <button
+                  key={sec}
+                  className={s.pill}
+                  onClick={() => {
+                    setTimerMin(String(Math.floor(sec / 60)))
+                    setTimerSec(String(sec % 60))
+                  }}
+                  type="button"
+                  disabled={running}
+                >
+                  {fmtSec(sec)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 큰 타이머 + 도넛 */}
+          <div className={s.timerHero}>
+            {(() => {
+              const total = remaining > 0 ? remaining : timerInputSec
+              const initial = remaining > 0 || running ? Math.max(timerInputSec, remaining) : timerInputSec
+              const pct = initial > 0 ? (remaining > 0 ? remaining / initial : 1) : 0
+              const isLast10 = remaining > 0 && remaining <= 10
+              const r = 80
+              const circumference = 2 * Math.PI * r
+              const dashOffset = circumference * (1 - pct)
+              return (
+                <div className={s.timerWrap}>
+                  <svg viewBox="0 0 200 200" width="220" height="220">
+                    <circle cx={100} cy={100} r={r} stroke="var(--bg3)" strokeWidth="14" fill="none" />
+                    <circle
+                      cx={100} cy={100} r={r}
+                      stroke={isLast10 ? '#FF3E8C' : 'var(--accent)'}
+                      strokeWidth="14"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeDasharray={circumference}
+                      strokeDashoffset={dashOffset}
+                      transform="rotate(-90 100 100)"
+                      style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+                    />
+                    <text
+                      x={100} y={106}
+                      fill={isLast10 ? '#FF3E8C' : 'var(--text)'}
+                      fontSize="36"
+                      fontWeight="800"
+                      textAnchor="middle"
+                      fontFamily="Syne"
+                    >
+                      {fmtTimer(total)}
+                    </text>
+                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Syne">
+                      {running ? '실행 중' : remaining > 0 ? '일시정지' : '대기'}
+                    </text>
+                  </svg>
+                </div>
+              )
+            })()}
+            <div className={s.timerControls}>
+              {!running && remaining === 0 && (
+                <button
+                  className={s.playBtn}
+                  onClick={() => startTimer(timerInputSec)}
+                  type="button"
+                  disabled={timerInputSec <= 0}
+                >
+                  ▶ 시작
+                </button>
+              )}
+              {!running && remaining > 0 && (
+                <>
+                  <button className={s.playBtn} onClick={() => setRunning(true)} type="button">
+                    ▶ 계속
+                  </button>
+                  <button className={s.resetBtn} onClick={() => { setRemaining(0); setRunning(false) }} type="button">
+                    ⏹ 리셋
+                  </button>
+                </>
+              )}
+              {running && (
+                <>
+                  <button className={s.pauseBtn} onClick={() => setRunning(false)} type="button">
+                    ⏸ 일시정지
+                  </button>
+                  <button className={s.resetBtn} onClick={() => { setRemaining(0); setRunning(false) }} type="button">
+                    ⏹ 리셋
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className={s.warnCard}>
+            <strong>🔔 알림음</strong>
+            <p>
+              종료 시 <strong>3회 비프음</strong>이 울립니다 (마지막 3초 카운트도 비프).<br />
+              브라우저 음소거·시스템 볼륨을 확인하세요. 모바일은 최초 ▶ 시작 버튼 클릭 후 작동.
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* ════════ 탭 4: 가이드 ════════ */}
+      {tab === 'guide' && (
+        <>
+          {VESSELS.map((v) => {
+            const titles = {
+              safe: { emoji: '✅', label: '사용 가능 용기', color: '#3EFFD0' },
+              caution: { emoji: '⚠️', label: '주의 용기', color: '#FFB83E' },
+              forbidden: { emoji: '❌', label: '절대 금지', color: '#FF3E8C' },
+            }[v.category]
+            return (
+              <div key={v.category} className={s.card}>
+                <span className={s.cardLabel} style={{ color: titles.color }}>{titles.emoji} {titles.label}</span>
+                <div className={s.vesselGrid}>
+                  {v.items.map((it, i) => (
+                    <div key={i} className={s.vesselCard} style={{ borderLeftColor: titles.color }}>
+                      <p className={s.vesselHead}><span className={s.vesselEmoji}>{it.emoji}</span> <strong>{it.label}</strong></p>
+                      <p className={s.vesselDesc}>{it.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+
+          <div className={s.card}>
+            <span className={s.cardLabel}>💡 골든 팁 10가지</span>
+            <div className={s.tipsGrid}>
+              {GOLDEN_TIPS.map((t, i) => (
+                <div key={i} className={s.tipCard}>
+                  <p className={s.tipHead}>{t.emoji} <strong>{t.title}</strong></p>
+                  <p className={s.tipDesc}>{t.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={s.warnCardStrong}>
+            <strong>🚨 절대 금지 5가지</strong>
+            <p>
+              1. <strong>계란 통째 가열</strong> — 폭발 (노른자 칼집 + 흰자 풀기)<br />
+              2. <strong>알루미늄 호일·캔</strong> — 스파크 → 화재<br />
+              3. <strong>닫힌 용기·캔</strong> — 압력 폭발<br />
+              4. <strong>빈 가열</strong> — 마그네트론 손상<br />
+              5. <strong>금색·은색 테두리 그릇</strong> — 가장 흔한 사고 (중고·빈티지 주의)
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* 안내 */}
+      <div className={s.disclaimer}>
+        <strong>📌 사용 안내</strong>
+        <ul>
+          <li>전자레인지 모델·연식·실제 출력에 따라 결과가 달라질 수 있습니다.</li>
+          <li>식품 라벨의 권장 시간이 가장 정확한 시작점입니다.</li>
+          <li>처음엔 환산 시간의 <strong>80%로 시작 → 부족하면 추가 가열</strong> (과조리 방지).</li>
+          <li>❌ <strong>계란 통째 / 닫힌 용기 / 알루미늄 호일</strong> 절대 금지.</li>
+          <li>화상 주의 — 가열 후 그릇이 매우 뜨겁습니다.</li>
+          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
+        </ul>
+      </div>
+
+      {/* 크로스링크 */}
+      <Link href="/tools/cooking/thawing" className={s.crossLink}>
+        🧊 냉동·해동 시간 계산기 → 4가지 해동 방법 비교
+      </Link>
+    </div>
+  )
+}
+
+void fmt
