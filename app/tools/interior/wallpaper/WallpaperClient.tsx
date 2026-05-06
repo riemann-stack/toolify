@@ -3,6 +3,49 @@
 import { useMemo, useState } from 'react'
 import styles from './wallpaper.module.css'
 
+/* ID 카운터 (모듈 레벨 — render purity 유지) */
+let _wpIdCounter = 0
+const nextId = () => `wp-${++_wpIdCounter}`
+
+interface WallInput {
+  id: string
+  label: string
+  wallW: number
+  wallH: number
+  openings: Array<{ id: string; type: 'window' | 'door'; w: number; h: number }>
+}
+interface RoomInput {
+  id: string
+  name: string
+  walls: WallInput[]
+  pointOnly: boolean
+  pointWallId: string | null
+  includeCeiling: boolean
+  ceilingW: number
+  ceilingL: number
+}
+
+function makeWall(label: string, w = 4, h = 2.4): WallInput {
+  return { id: nextId(), label, wallW: w, wallH: h, openings: [] }
+}
+function makeRoom(name: string): RoomInput {
+  return {
+    id: nextId(),
+    name,
+    walls: [
+      makeWall('A — 정면', 5, 2.4),
+      makeWall('B — 우측', 4, 2.4),
+      makeWall('C — 후면', 5, 2.4),
+      makeWall('D — 좌측', 4, 2.4),
+    ],
+    pointOnly: false,
+    pointWallId: null,
+    includeCeiling: false,
+    ceilingW: 5,
+    ceilingL: 4,
+  }
+}
+
 /* ─────────────────────────────────────────────────────────
  * 벽지 종류 (한국 표준)
  * ───────────────────────────────────────────────────────── */
@@ -150,47 +193,7 @@ export default function WallpaperClient() {
   const [lossPct, setLossPct] = useState(10)
   const [includeCeiling, setIncludeCeiling] = useState(false)
 
-  /* 탭 2: 방별 입력 */
-  interface WallInput {
-    id: string
-    label: string
-    wallW: number
-    wallH: number
-    openings: Array<{ id: string; type: 'window' | 'door'; w: number; h: number }>
-  }
-  interface RoomInput {
-    id: string
-    name: string
-    walls: WallInput[]
-    pointOnly: boolean
-    pointWallId: string | null  // 포인트 도배 시 어느 벽인지
-    includeCeiling: boolean
-    ceilingW: number  // 천장 도배 시 가로
-    ceilingL: number  // 천장 도배 시 세로
-  }
-  function makeWall(label: string, w = 4, h = 2.4): WallInput {
-    return { id: String(Date.now() + Math.random()), label, wallW: w, wallH: h, openings: [] }
-  }
-  function makeRoom(name: string): RoomInput {
-    return {
-      id: String(Date.now() + Math.random()),
-      name,
-      walls: [
-        makeWall('A — 정면', 5, 2.4),
-        makeWall('B — 우측', 4, 2.4),
-        makeWall('C — 후면', 5, 2.4),
-        makeWall('D — 좌측', 4, 2.4),
-      ],
-      pointOnly: false,
-      pointWallId: null,
-      includeCeiling: false,
-      ceilingW: 5,
-      ceilingL: 4,
-    }
-  }
-  const [rooms, setRooms] = useState<RoomInput[]>([
-    { ...makeRoom('거실') },
-  ])
+  const [rooms, setRooms] = useState<RoomInput[]>(() => [makeRoom('거실')])
 
   /* 탭 3: 견적 */
   const [pricePerRollStr, setPricePerRollStr] = useState('25000')
@@ -324,7 +327,7 @@ export default function WallpaperClient() {
           ? {
             ...w,
             openings: [...w.openings, {
-              id: String(Date.now() + Math.random()),
+              id: nextId(),
               type,
               w: type === 'window' ? 1.5 : 0.9,
               h: type === 'window' ? 1.5 : 2.1,

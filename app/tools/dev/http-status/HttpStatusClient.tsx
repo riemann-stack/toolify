@@ -432,17 +432,24 @@ function CodeCard({ code, color, isFav, onClick, onToggleFav }: {
   code: StatusCode; color: string; isFav: boolean; onClick: () => void; onToggleFav: (e: React.MouseEvent) => void
 }) {
   return (
-    <button className={s.codeCard} onClick={onClick} style={{ borderColor: color + '40' }}>
+    <div
+      className={s.codeCard}
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
+      role="button"
+      tabIndex={0}
+      style={{ borderColor: color + '40' }}
+    >
       <div className={s.codeCardHead}>
         <span className={s.codeBig} style={{ color }}>{code.code}</span>
-        <button className={s.favBtn} onClick={onToggleFav} aria-label="즐겨찾기">
+        <button type="button" className={s.favBtn} onClick={onToggleFav} aria-label="즐겨찾기">
           {isFav ? '⭐' : '☆'}
         </button>
       </div>
       <p className={s.codeName}>{code.emoji} {code.name}</p>
       <p className={s.codeNameKr}>{code.nameKr}</p>
       <p className={s.codeShort}>{code.shortDesc}</p>
-    </button>
+    </div>
   )
 }
 

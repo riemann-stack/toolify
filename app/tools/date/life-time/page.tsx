@@ -53,7 +53,7 @@ export default function LifeTimePage() {
             <p style={{ marginTop: 10 }}>
               하루 30분의 독서가 1년이면 약 <strong>182시간</strong>, 10년이면 약 <strong>1,820시간</strong>이 됩니다.
               이는 한 분야의 전문가가 되기에 충분한 시간입니다.
-              "시간이 없다"는 말은 종종 "30분이 무력하다"고 느끼기 때문에 생깁니다 — 이 도구는 그 30분의 무게를 다시 보여줍니다.
+              &ldquo;시간이 없다&rdquo;는 말은 종종 &ldquo;30분이 무력하다&rdquo;고 느끼기 때문에 생깁니다 — 이 도구는 그 30분의 무게를 다시 보여줍니다.
             </p>
           </div>
         </div>
@@ -73,13 +73,13 @@ export default function LifeTimePage() {
             lineHeight: 1.9,
           }}>
             <p>
-              라틴어 <strong style={{ color: '#D7B6E8' }}>'Memento Mori'</strong>(메멘토 모리)는 <em>"죽음을 기억하라"</em>는 뜻으로,
+              라틴어 <strong style={{ color: '#D7B6E8' }}>&lsquo;Memento Mori&rsquo;</strong>(메멘토 모리)는 <em>&ldquo;죽음을 기억하라&rdquo;</em>는 뜻으로,
               고대 로마 시대부터 사용된 철학 개념입니다.
             </p>
             <ul style={{ paddingLeft: 20, marginTop: 10, color: 'var(--muted)' }}>
               <li><strong style={{ color: 'var(--text)' }}>스토아 철학자들</strong>은 시간의 유한성을 자각하면 현재를 더 충실히 살 수 있다고 봤습니다.</li>
               <li>로마 개선장군 행렬 뒤에서 노예가 속삭였다는 <em>“Memento mori”</em> — 영광 속에서도 인간임을 잊지 말라는 의미.</li>
-              <li>현대적으로는 <strong style={{ color: 'var(--text)' }}>"시간은 가장 비싼 자원이다"</strong>라는 인식과 연결됩니다.</li>
+              <li>현대적으로는 <strong style={{ color: 'var(--text)' }}>&ldquo;시간은 가장 비싼 자원이다&rdquo;</strong>라는 인식과 연결됩니다.</li>
               <li>본 도구는 무거운 죽음의 카운트다운이 아닌, 시간의 가치를 인식하는 도구입니다.</li>
             </ul>
           </div>

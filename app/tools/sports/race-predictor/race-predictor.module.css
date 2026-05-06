@@ -160,7 +160,119 @@
   font-weight: 700;
 }
 
-/* ── Hero (풀 마라톤 예측) ──────────── */
+/* ── 예상 기록 카드 그리드 ──────────── */
+.predHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.predHeadLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.vdotStrip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.vdotStrip strong {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+.vdotStripTag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.predCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+.predCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 14px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.predCardPrimary {
+  background: linear-gradient(135deg, rgba(200,255,62,0.10) 0%, rgba(62,200,255,0.05) 100%);
+  border-color: rgba(200,255,62,0.35);
+  grid-column: span 2;
+  padding: 22px 16px 16px;
+}
+@media (max-width: 480px) {
+  .predCardPrimary { grid-column: 1 / -1; }
+  .predCardGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .predCard { padding: 14px 10px 12px; }
+}
+.predCardLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0;
+}
+.predCardTime {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(26px, 4.5vw, 36px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+.predCardPrimary .predCardTime {
+  font-size: clamp(40px, 8vw, 56px);
+}
+.predCardPace {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+.predCardPace strong {
+  color: #3EC8FF;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+.predCardFormulas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  flex-wrap: wrap;
+}
+.predCardFormulas span { white-space: nowrap; }
+.predCardFormulaKey { color: var(--muted); opacity: 0.7; margin-right: 2px; }
+
+/* ── (Legacy) Hero — 사용 안 함, 호환성용 ──────────── */
 .hero {
   background: linear-gradient(135deg, rgba(200,255,62,0.08) 0%, rgba(62,200,255,0.05) 100%);
   border: 1px solid rgba(200,255,62,0.25);

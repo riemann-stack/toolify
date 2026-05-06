@@ -275,7 +275,7 @@ export default function CurlPage() {
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q4. 다중 라인 cURL (\) 지원하나요?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           <strong>네, 완벽히 지원</strong>합니다. Chrome/Firefox DevTools의 &quot;Copy as cURL&quot;이 생성하는 다중 라인 형식 그대로 붙여넣어도 동작합니다.<br />
           예시:
           <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
@@ -289,7 +289,7 @@ export default function CurlPage() {
           • <code style={codeStyle}>{`\\`}</code> + CRLF (Windows 친화)<br />
           • 일반 한 줄<br />
           파서는 줄 이어짐을 공백으로 변환 후 토큰화합니다.
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>
@@ -331,7 +331,7 @@ export default function CurlPage() {
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q8. GraphQL cURL 변환?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           GraphQL은 일반 HTTP POST + JSON body이므로 <strong>완벽히 변환</strong>됩니다.<br />
           예시 cURL:
           <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
@@ -344,7 +344,7 @@ export default function CurlPage() {
           </pre>
           본 도구의 <strong>탭 3 예시</strong>에서 GraphQL 카드를 적용해 보세요. <code style={codeStyle}>query</code>·<code style={codeStyle}>variables</code> 필드가 포함된 JSON이 5 언어로 변환됩니다.<br />
           더 정교한 GraphQL 클라이언트(Apollo·urql·graphql-request)는 별도 라이브러리 사용 권장.
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>

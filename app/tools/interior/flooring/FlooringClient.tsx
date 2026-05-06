@@ -3,6 +3,10 @@
 import { useMemo, useState } from 'react'
 import styles from './flooring.module.css'
 
+/* ID 카운터 (모듈 레벨) */
+let _flIdCounter = 0
+const nextFlId = () => `fl-${++_flIdCounter}`
+
 /* ─────────────────────────────────────────────────────────
  * 바닥재 종류 (한국 표준)
  * unitType:
@@ -127,7 +131,7 @@ export default function FlooringClient() {
   }
   function makeRoom(name: string, w = 5, l = 4): RoomInput {
     return {
-      id: String(Date.now() + Math.random()),
+      id: nextFlId(),
       name, width: w, length: l,
       flooringId: 'laminate',
       methodId: 'parallel',

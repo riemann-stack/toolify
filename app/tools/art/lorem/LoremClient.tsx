@@ -804,7 +804,7 @@ export default function LoremClient() {
       while (text.length < p.targetChars) text += ' ' + base
       return { key: p.key, label: p.label, text: text.slice(0, p.targetChars), len: text.slice(0, p.targetChars).length }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [tone])
 
   /* ═════════════════════════════════════════ UI ═════════════════════════════════════════ */

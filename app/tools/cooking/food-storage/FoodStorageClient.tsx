@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -376,7 +377,7 @@ export default function FoodStorageClient() {
           {itemsWithCalc.length === 0 ? (
             <div className={s.emptyState}>
               <strong>등록된 식재료가 없습니다</strong>
-              "식재료 추가하기" 버튼으로 냉장고에 있는 식재료를 등록하면 보관 기한을 자동으로 추적해드립니다.
+              &ldquo;식재료 추가하기&rdquo; 버튼으로 냉장고에 있는 식재료를 등록하면 보관 기한을 자동으로 추적해드립니다.
             </div>
           ) : (
             <div className={s.foodList}>

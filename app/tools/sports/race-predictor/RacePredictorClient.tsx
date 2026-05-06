@@ -350,20 +350,44 @@ export default function RacePredictorClient() {
             </div>
           </section>
 
-          {/* 풀 마라톤 히어로 */}
-          {fullPred && (
-            <section className={styles.hero}>
-              <p className={styles.heroLabel}>풀 마라톤 예상 (3공식 평균 · 평시)</p>
-              <p className={styles.heroTime}>{fmtHMS(fullPred.avg)}</p>
-              <p className={styles.heroPace}>
-                평균 페이스 <strong>{fmtPace(fullPred.avg / 42.195)}</strong>/km · 시속 <strong>{(42.195 / (fullPred.avg / 3600)).toFixed(2)}</strong> km/h
-              </p>
-              <p className={styles.heroVdot}>
-                VDOT <strong style={{ color: level.color }}>{vdot.toFixed(1)}</strong>
-                <span className={styles.heroVdotTag} style={{ background: `${level.color}22`, color: level.color }}>{level.tag}</span>
-              </p>
-            </section>
-          )}
+          {/* 예상 기록 카드 그리드 — 선택한 모든 거리 */}
+          {validBase && predictions.length > 0 && (() => {
+            // Primary 카드: 풀 마라톤 우선, 없으면 가장 긴 선택 거리
+            const sorted = [...predictions].sort((a, b) => b.km - a.km)
+            const primaryKey = predictions.find((p) => p.key === 'full')?.key ?? sorted[0].key
+            return (
+              <section>
+                <div className={styles.predHead}>
+                  <p className={styles.predHeadLabel}>예상 기록 <span className={styles.labelSub}>(3공식 평균 · 평시)</span></p>
+                  <span className={styles.vdotStrip}>
+                    VDOT <strong style={{ color: level.color }}>{vdot.toFixed(1)}</strong>
+                    <span className={styles.vdotStripTag} style={{ background: `${level.color}22`, color: level.color }}>{level.tag}</span>
+                  </span>
+                </div>
+                <div className={styles.predCardGrid}>
+                  {predictions.map((p) => {
+                    const isPrimary = p.key === primaryKey
+                    const speedKmh = p.km / (p.avg / 3600)
+                    return (
+                      <div key={p.key} className={`${styles.predCard} ${isPrimary ? styles.predCardPrimary : ''}`}>
+                        <p className={styles.predCardLabel}>{p.label}</p>
+                        <p className={styles.predCardTime}>{fmtHMS(p.avg)}</p>
+                        <p className={styles.predCardPace}>
+                          페이스 <strong>{fmtPace(p.pace)}</strong>/km
+                          {isPrimary && <> · {speedKmh.toFixed(2)} km/h</>}
+                        </p>
+                        <div className={styles.predCardFormulas}>
+                          <span><span className={styles.predCardFormulaKey}>R</span>{fmtHMS(p.riegel)}</span>
+                          <span><span className={styles.predCardFormulaKey}>V</span>{fmtHMS(p.vdot)}</span>
+                          <span><span className={styles.predCardFormulaKey}>C</span>{fmtHMS(p.cameron)}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </section>
+            )
+          })()}
 
           {/* ── 환경 보정 ── */}
           <section className={styles.optionCard}>

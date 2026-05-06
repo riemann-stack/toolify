@@ -395,9 +395,9 @@ export default function FourInsuranceClient() {
                 </thead>
                 <tbody>
                   <tr className={s.rowPension}><td>국민연금</td><td>{empCalc.rates.pension.employee}%</td><td>{fmtKRW(empCalc.pensionEmp)}</td></tr>
-                  <tr className={s.rowHealth}> <td>건강보험</td><td>{empCalc.rates.health.employee}%</td><td>{fmtKRW(empCalc.healthEmp)}</td></tr>
-                  <tr className={s.rowLtc}>    <td>장기요양보험</td><td>{empCalc.rates.ltc.employee}%</td><td>{fmtKRW(empCalc.ltcEmp)}</td></tr>
-                  <tr className={s.rowUnemp}>  <td>고용보험</td><td>{empCalc.rates.unemp.employee}%</td><td>{fmtKRW(empCalc.unempEmp)}</td></tr>
+                  <tr className={s.rowHealth}><td>건강보험</td><td>{empCalc.rates.health.employee}%</td><td>{fmtKRW(empCalc.healthEmp)}</td></tr>
+                  <tr className={s.rowLtc}><td>장기요양보험</td><td>{empCalc.rates.ltc.employee}%</td><td>{fmtKRW(empCalc.ltcEmp)}</td></tr>
+                  <tr className={s.rowUnemp}><td>고용보험</td><td>{empCalc.rates.unemp.employee}%</td><td>{fmtKRW(empCalc.unempEmp)}</td></tr>
                   <tr className={s.totalRow}>
                     <td>합계</td>
                     <td>{(empCalc.rates.pension.employee + empCalc.rates.health.employee + empCalc.rates.ltc.employee + empCalc.rates.unemp.employee).toFixed(3)}%</td>

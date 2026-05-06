@@ -162,7 +162,7 @@ export default function CostRatePage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>심리 가격 (예: 11,900원)</p>
               <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>12,000원과 100원 차이지만 <strong>"1만원대"</strong>로 인식</li>
+                <li>12,000원과 100원 차이지만 <strong>&ldquo;1만원대&rdquo;</strong>로 인식</li>
                 <li>매출 5~10% 차이 가능성</li>
                 <li>단, 너무 자주 사용하면 신뢰도 하락</li>
               </ul>

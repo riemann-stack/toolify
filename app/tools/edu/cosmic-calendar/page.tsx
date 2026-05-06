@@ -38,7 +38,7 @@ export default function CosmicCalendarPage() {
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             <strong style={{ color: 'var(--text)' }}>코스믹 캘린더(Cosmic Calendar)</strong>는 천문학자 <strong style={{ color: '#C485E0' }}>칼 세이건</strong>이 그의 책
-            "에덴의 용(The Dragons of Eden, 1977)"에서 제안한 개념입니다.
+            &ldquo;에덴의 용(The Dragons of Eden, 1977)&rdquo;에서 제안한 개념입니다.
             138억 년의 우주 역사를 1년(365일)으로 압축해, 인간이 직관적으로 이해하기 어려운 우주의 시간 스케일을 체감하게 합니다.
           </div>
           <div style={{
@@ -190,9 +190,9 @@ export default function CosmicCalendarPage() {
             fontSize: 14,
             lineHeight: 1.85,
           }}>
-            "우리는 별의 잔해다. 우주가 자신을 알아가기 위한 한 방법이다."
+            &ldquo;우리는 별의 잔해다. 우주가 자신을 알아가기 위한 한 방법이다.&rdquo;
             <br /><br />
-            "우리 모두는 별의 자녀다. 별의 잔해로 만들어진 존재다."
+            &ldquo;우리 모두는 별의 자녀다. 별의 잔해로 만들어진 존재다.&rdquo;
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             칼 세이건은 코스믹 캘린더를 통해 두 가지 메시지를 전했습니다:
@@ -309,8 +309,8 @@ export default function CosmicCalendarPage() {
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>칼 세이건, "에덴의 용"(The Dragons of Eden), 1977</li>
-              <li>칼 세이건, "코스모스"(Cosmos), 1980 다큐멘터리</li>
+              <li>칼 세이건, &ldquo;에덴의 용&rdquo;(The Dragons of Eden), 1977</li>
+              <li>칼 세이건, &ldquo;코스모스&rdquo;(Cosmos), 1980 다큐멘터리</li>
               <li>NASA: nasa.gov</li>
               <li>한국천문연구원(KASI): kasi.re.kr</li>
               <li>국제 천문학 연합(IAU): iau.org</li>

@@ -245,7 +245,7 @@ export default function YamlJsonPage() {
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q4. K8s 매니페스트의 ---는 무엇인가요?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           <strong>YAML 멀티 도큐먼트 구분자</strong>입니다. 한 파일에 여러 YAML 도큐먼트를 담을 때 사용해요.<br />
           K8s에서는 <strong>Deployment + Service + ConfigMap</strong>을 한 파일에 묶을 때 자주 씁니다:
           <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
@@ -261,7 +261,7 @@ metadata:
           </pre>
           본 도구는 <strong>JSON 배열로 변환</strong>: <code style={codeStyle}>[{`{...pod}`}, {`{...service}`}]</code>.
           멀티 도큐먼트 발견 시 ⚠️ 자동 안내합니다.
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>
@@ -280,7 +280,7 @@ metadata:
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q6. 앵커(&)와 별칭(*)이 무엇인가요?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           <strong>YAML의 참조 메커니즘</strong>입니다. 같은 데이터를 여러 곳에서 재사용해 중복을 줄여요.<br />
           예시:
           <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
@@ -298,7 +298,7 @@ dev:
           </pre>
           <strong>JSON 변환 시</strong>: 앵커가 펼쳐져 모든 곳에 데이터가 복사됩니다 (참조 관계 손실).
           역변환 시 자동 앵커 생성은 본 도구에서 끔(noRefs: true)으로 두어 깔끔한 YAML 출력을 보장합니다.
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>

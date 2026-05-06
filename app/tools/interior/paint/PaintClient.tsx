@@ -3,6 +3,55 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import styles from './paint.module.css'
 
+/* ID 카운터 (모듈 레벨) */
+let _paintIdCounter = 0
+const nextId = () => `pt-${++_paintIdCounter}`
+
+interface WallInput {
+  id: string
+  label: string
+  wallW: number
+  wallH: number
+  openings: Array<{ id: string; type: 'window' | 'door'; w: number; h: number }>
+}
+interface RoomInput {
+  id: string
+  name: string
+  walls: WallInput[]
+  paintWalls: boolean
+  paintCeiling: boolean
+  ceilingW: number
+  ceilingL: number
+  paintDoors: boolean
+  doorCount: number
+  extraArea: number
+  coats: number
+}
+
+function makeWall(label: string, w = 4, h = 2.4): WallInput {
+  return { id: nextId(), label, wallW: w, wallH: h, openings: [] }
+}
+function makeRoom(name: string): RoomInput {
+  return {
+    id: nextId(),
+    name,
+    walls: [
+      makeWall('A — 정면', 5, 2.4),
+      makeWall('B — 우측', 4, 2.4),
+      makeWall('C — 후면', 5, 2.4),
+      makeWall('D — 좌측', 4, 2.4),
+    ],
+    paintWalls: true,
+    paintCeiling: false,
+    ceilingW: 5,
+    ceilingL: 4,
+    paintDoors: false,
+    doorCount: 1,
+    extraArea: 0,
+    coats: 2,
+  }
+}
+
 /* ─────────────────────────────────────────────────────────
  * 페인트 종류 (한국 표준)
  * ───────────────────────────────────────────────────────── */
@@ -183,51 +232,7 @@ export default function PaintClient() {
   /* 로스율 */
   const [lossPct, setLossPct] = useState(10)
 
-  /* 탭 2: 방·벽별 */
-  interface WallInput {
-    id: string
-    label: string
-    wallW: number
-    wallH: number
-    openings: Array<{ id: string; type: 'window' | 'door'; w: number; h: number }>
-  }
-  interface RoomInput {
-    id: string
-    name: string
-    walls: WallInput[]
-    paintWalls: boolean
-    paintCeiling: boolean
-    ceilingW: number
-    ceilingL: number
-    paintDoors: boolean
-    doorCount: number
-    extraArea: number
-    coats: number
-  }
-  function makeWall(label: string, w = 4, h = 2.4): WallInput {
-    return { id: String(Date.now() + Math.random()), label, wallW: w, wallH: h, openings: [] }
-  }
-  function makeRoom(name: string): RoomInput {
-    return {
-      id: String(Date.now() + Math.random()),
-      name,
-      walls: [
-        makeWall('A — 정면', 5, 2.4),
-        makeWall('B — 우측', 4, 2.4),
-        makeWall('C — 후면', 5, 2.4),
-        makeWall('D — 좌측', 4, 2.4),
-      ],
-      paintWalls: true,
-      paintCeiling: false,
-      ceilingW: 5,
-      ceilingL: 4,
-      paintDoors: false,
-      doorCount: 1,
-      extraArea: 0,
-      coats: 2,
-    }
-  }
-  const [rooms, setRooms] = useState<RoomInput[]>([{ ...makeRoom('거실') }])
+  const [rooms, setRooms] = useState<RoomInput[]>(() => [makeRoom('거실')])
 
   /* 탭 3: 견적 */
   const [pricePerLStr, setPricePerLStr] = useState('18000')
@@ -393,7 +398,7 @@ export default function PaintClient() {
     setRooms(rooms.map(r => r.id === roomId
       ? { ...r, walls: r.walls.map(w => w.id === wallId
           ? { ...w, openings: [...w.openings, {
-              id: String(Date.now() + Math.random()), type,
+              id: nextId(), type,
               w: type === 'window' ? 1.5 : 0.9,
               h: type === 'window' ? 1.5 : 2.1,
             }] }

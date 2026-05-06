@@ -20,24 +20,40 @@ export default function ToolsPage() {
         총 <strong style={{ color: 'var(--accent)' }}>{totalTools}가지</strong> 무료 도구 · 로그인 없이 즉시 사용
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      {/* 카테고리 점프 네비게이션 — 모바일에서 sticky, 데스크톱에서도 빠른 이동 */}
+      <nav className={styles.catNav} aria-label="카테고리 바로가기">
+        {categories.map((cat) => (
+          <a
+            key={cat.id}
+            href={`#cat-${cat.id}`}
+            className={styles.catChip}
+            style={{ ['--chip-color' as string]: cat.color }}
+          >
+            <span className={styles.catChipIcon}>{cat.icon}</span>
+            <span className={styles.catChipName}>{cat.name}</span>
+            <span className={styles.catChipCount}>{cat.tools.length}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div className={styles.catList}>
         {categories.map((cat, idx) => (
-          <div key={cat.id} style={{ minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px', flexWrap: 'wrap' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                <span style={{ fontSize: '20px', flexShrink: 0 }}>{cat.icon}</span>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: cat.color }}>
+          <section key={cat.id} id={`cat-${cat.id}`} className={styles.catSection}>
+            <div className={styles.catHeader}>
+              <div className={styles.catHeaderLeft}>
+                <span className={styles.catHeaderIcon}>{cat.icon}</span>
+                <span className={styles.catHeaderName} style={{ color: cat.color }}>
                   {cat.name}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)', flexShrink: 0 }}>({cat.tools.length}개)</span>
+                <span className={styles.catHeaderCount}>({cat.tools.length}개)</span>
               </div>
-              <Link href={`/tools/${cat.id}`} style={{ fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', flexShrink: 0, whiteSpace: 'nowrap' }}>
+              <Link href={`/tools/${cat.id}`} className={styles.catHeaderMore}>
                 카테고리 보기 →
               </Link>
             </div>
 
             <div className={styles.toolGrid}>
-              {cat.tools.map(tool => (
+              {cat.tools.map((tool) => (
                 <Link key={tool.href} href={tool.href} className={styles.toolCard}>
                   <span className={styles.toolIcon}>{tool.icon}</span>
                   <div className={styles.toolInfo}>
@@ -56,7 +72,7 @@ export default function ToolsPage() {
                 <AdSlot position="between-tools" minHeight={250} />
               </div>
             )}
-          </div>
+          </section>
         ))}
       </div>
 

@@ -316,7 +316,7 @@ export default function HttpStatusPage() {
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q8. 422 Unprocessable Entity는 언제?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           400과 다른 점이 핵심:<br />
           • <strong>400 Bad Request</strong>: <strong>구문 오류</strong> (JSON 파싱 실패·콤마 누락)<br />
           • <strong>422 Unprocessable Entity</strong>: 구문은 맞지만 <strong>의미 검증 실패</strong> (이메일 형식 X·필수 필드 빈 값·비즈니스 규칙 위반)<br />
@@ -330,7 +330,7 @@ export default function HttpStatusPage() {
   { "loc": ["body", "email"], "msg": "invalid email", "type": "value_error.email" }
 ]}`}
           </pre>
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>

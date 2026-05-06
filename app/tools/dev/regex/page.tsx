@@ -303,7 +303,7 @@ $1 = "example" (도메인만 캡처)
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q4. 이름 캡처 그룹 (?&lt;name&gt;...)이란?</summary>
-        <p style={faqAnswer}>
+        <div style={faqAnswer}>
           ES2018부터 추가된 기능으로, 그룹에 <strong>이름</strong>을 붙여 가독성을 높입니다.<br />
           예시:<br />
           <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
@@ -315,7 +315,7 @@ match.groups.day    = "15"
 치환: "$<year>년 $<month>월 $<day>일"`}
           </pre>
           <code style={codeStyle}>$1·$2·$3</code>처럼 번호로 셀 필요 없이 의미 있는 이름으로 접근 — 코드 가독성 ↑.
-        </p>
+        </div>
       </details>
 
       <details style={faqDetails}>

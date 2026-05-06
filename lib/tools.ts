@@ -35,6 +35,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/savings', icon: '💰', name: '월 저축가능 금액 계산기', desc: '수입·고정비·변동비 → 저축액·저축률 + 한국 평균·권장 비교 + 6 항아리 분배 + 목표 역산 + 청년도약·ISA·연금저축 절세', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 총비용 계산기', desc: '낙찰가 + 취득세 자동 + 명도·체납·수리·법무 + 대출 LTV/DSR + 1주택/다주택/법인 시나리오 + 비용 비중 도넛', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일 + 3개월 급여 → 평균/통상임금 자동 판단 + 퇴직금 + 퇴직소득세(2023 개정) + 실수령 + 퇴사일 시뮬레이션 + DB/DC/IRP 4모드', badge: 'new' },
+      { href: '/tools/finance/freelance-tax', icon: '💼', name: '프리랜서 종합소득세 환급 계산기', desc: '업종별 단순경비율 자동(30+ 직군) + 8단계 누진세율 + 노란우산·연금저축 절세 시나리오 5종 비교 + 한계세율 시각화 + 5월 신고 D-day 가이드 (2026년)', badge: 'new' },
     ],
   },
   {
@@ -164,6 +165,7 @@ export const categories: Category[] = [
       { href: '/tools/art/scale',     icon: '🎼', name: '스케일 음계 계산기',     desc: '12키 × 12스케일(Major·Minor·Pentatonic·Blues·Dorian·Lydian 등) + 피아노 건반·기타 지판 SVG + 다이어토닉 7화음 + 7 모드 비교 + MIDI 재생', badge: 'new' },
       /* 🎨 디자인·미술 */
       { href: '/tools/art/color',     icon: '🎨', name: '색상 코드 변환·디자인 도구', desc: 'HEX·RGB·HSL·OKLCH·알파 변환부터 WCAG 대비비, 팔레트, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 추출', badge: 'hot' },
+      { href: '/tools/art/gradient-generator', icon: '🌈', name: 'CSS 그라디언트 생성기', desc: 'Linear·Radial·Conic·Mesh 5종 × OKLCH·LAB 보간 비교 + 노이즈 + Tailwind/SwiftUI/Flutter 코드 + 한국 무드 30+ 프리셋 + WCAG·색맹 분석', badge: 'new' },
       { href: '/tools/art/golden-ratio',  icon: '🌀', name: '황금 비율 계산기',    desc: 'φ = 1.618 가로·세로 계산, 황금 직사각형·나선 시각화, 비율 비교 (황금·백은·16:9·A4·인스타·유튜브)' },
       { href: '/tools/art/paint-mix', icon: '🎨', name: '물감·잉크 혼합 비율 계산기', desc: '수채·아크릴·유화·잉크·푸드컬러·레진 안료 혼합 시뮬레이터(Subtractive·Additive·RYB) + ml/g 분량 환산 + 컬러 매칭(ΔE) + 살색·황토 등 30+ 인기 레시피 + 12색 색환', badge: 'new' },
       { href: '/tools/art/knit-gauge', icon: '🧶', name: '뜨개질 게이지(코·단) 계산기', desc: '10cm² 게이지로 패턴 코·단 수 변환, 한국 여성·남성·키즈 사이즈별 코 계산, 늘림·줄임 균등 분배, 실 양·바늘 호수 추천. 대바늘·코바늘·모자·양말·스웨터·담요', badge: 'new' },

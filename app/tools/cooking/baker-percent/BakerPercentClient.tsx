@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect, react-hooks/static-components */
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -1365,11 +1366,11 @@ export default function BakerPercentClient() {
             <tr><th>수분율</th><th>특성</th><th>빵 종류 예시</th></tr>
           </thead>
           <tbody>
-            <tr className={s.hydroLow}>   <td>50~60%</td><td>단단함, 다루기 쉬움</td><td>베이글, 비스킷</td></tr>
-            <tr className={s.hydroMid}>   <td>60~65%</td><td>표준</td><td>식빵, 단과자빵</td></tr>
-            <tr className={s.hydroMid}>   <td>65~75%</td><td>촉촉</td><td>일반 식빵, 캄파뉴</td></tr>
-            <tr className={s.hydroHigh}>  <td>75~85%</td><td>고수분, 까다로움</td><td>치아바타, 사워도우</td></tr>
-            <tr className={s.hydroVHigh}> <td>85%+</td><td>매우 고수분</td><td>포카치아, 일부 사워도우</td></tr>
+            <tr className={s.hydroLow}><td>50~60%</td><td>단단함, 다루기 쉬움</td><td>베이글, 비스킷</td></tr>
+            <tr className={s.hydroMid}><td>60~65%</td><td>표준</td><td>식빵, 단과자빵</td></tr>
+            <tr className={s.hydroMid}><td>65~75%</td><td>촉촉</td><td>일반 식빵, 캄파뉴</td></tr>
+            <tr className={s.hydroHigh}><td>75~85%</td><td>고수분, 까다로움</td><td>치아바타, 사워도우</td></tr>
+            <tr className={s.hydroVHigh}><td>85%+</td><td>매우 고수분</td><td>포카치아, 일부 사워도우</td></tr>
           </tbody>
         </table>
       </div>

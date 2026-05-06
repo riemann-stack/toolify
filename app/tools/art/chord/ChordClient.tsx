@@ -418,7 +418,7 @@ export default function ChordClient() {
 
           {/* Copy */}
           <button className={s.copyBtn} onClick={handleCopy}>
-            📋 "{chordFullStr} = {chordNotes.join(', ')}" 복사
+            📋 &ldquo;{chordFullStr} = {chordNotes.join(', ')}&rdquo; 복사
           </button>
 
           {/* Next chord recommendations */}
@@ -554,7 +554,7 @@ export default function ChordClient() {
                 </table>
               </div>
               <p className={s.note}>
-                * 코드명을 클릭하면 "코드 → 구성음" 탭에서 상세하게 확인할 수 있습니다.
+                * 코드명을 클릭하면 &ldquo;코드 → 구성음&rdquo; 탭에서 상세하게 확인할 수 있습니다.
               </p>
             </div>
           )}
@@ -617,7 +617,7 @@ export default function ChordClient() {
               </table>
             </div>
             <p className={s.note}>
-              * 행을 클릭하면 "코드 → 구성음" 탭에서 해당 코드를 자세히 볼 수 있습니다.
+              * 행을 클릭하면 &ldquo;코드 → 구성음&rdquo; 탭에서 해당 코드를 자세히 볼 수 있습니다.
             </p>
           </div>
 

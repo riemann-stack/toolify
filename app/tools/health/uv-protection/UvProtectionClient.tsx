@@ -143,7 +143,8 @@ export default function UvProtectionClient() {
 
   // 재도포 카운트다운
   const [reapplyStartedAt, setReapplyStartedAt] = useState<number | null>(null)
-  const [now, setNow] = useState<number>(Date.now())
+  // eslint-disable-next-line react-hooks/purity
+  const [now, setNow] = useState<number>(() => Date.now())
   useEffect(() => {
     if (reapplyStartedAt === null) return
     const tid = setInterval(() => setNow(Date.now()), 1000)

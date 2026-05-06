@@ -184,7 +184,7 @@ export default function CognitiveTestPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🧠 <strong style={{ color: '#3EFFD0' }}>"진정한 멀티태스킹은 가능한가?"</strong>
+            🧠 <strong style={{ color: '#3EFFD0' }}>&ldquo;진정한 멀티태스킹은 가능한가?&rdquo;</strong>
             <br />인지 심리학 연구 결과: 사실상 불가능합니다.
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>뇌는 빠르게 작업 전환 (Task Switching)</li>
@@ -380,7 +380,7 @@ export default function CognitiveTestPage() {
               <li>Stroop, J.R. (1935). Studies of interference in serial verbal reactions. <em>Journal of Experimental Psychology</em>, 18(6).</li>
               <li>Pashler, H. (1994). Dual-task interference in simple tasks: Data and theory. <em>Psychological Bulletin</em>, 116(2).</li>
               <li>Sternberg, R.J. <em>Cognitive Psychology</em> — 인지 심리학 표준 교과서</li>
-              <li>Simons, D.J. et al. (2016). Do "Brain-Training" Programs Work? <em>Psychological Science</em>.</li>
+              <li>Simons, D.J. et al. (2016). Do &ldquo;Brain-Training&rdquo; Programs Work? <em>Psychological Science</em>.</li>
             </ul>
           </div>
         </div>

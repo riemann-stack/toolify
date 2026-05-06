@@ -253,7 +253,8 @@ function MetronomeTab() {
 
   const start = useCallback(() => {
     if (!audioCtxRef.current) {
-      const Ctor = (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) as typeof AudioContext | undefined
+      const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
+      const Ctor = typeof window !== 'undefined' ? (w.AudioContext || w.webkitAudioContext) : undefined
       if (!Ctor) return
       audioCtxRef.current = new Ctor()
     }
@@ -391,7 +392,8 @@ function RhythmTestTab() {
 
   const getCtx = () => {
     if (!audioCtxRef.current) {
-      const Ctor = (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) as typeof AudioContext | undefined
+      const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
+      const Ctor = typeof window !== 'undefined' ? (w.AudioContext || w.webkitAudioContext) : undefined
       if (!Ctor) return null
       audioCtxRef.current = new Ctor()
     }

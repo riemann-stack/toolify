@@ -181,6 +181,7 @@ export default function Base64Client() {
     const p = jwtData.payload as Record<string, unknown>
     const exp = typeof p.exp === 'number' ? p.exp : null
     const iat = typeof p.iat === 'number' ? p.iat : null
+    // eslint-disable-next-line react-hooks/purity
     const now = Math.floor(Date.now() / 1000)
     return {
       exp, iat,

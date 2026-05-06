@@ -289,12 +289,11 @@ export default function PlanetComparisonClient() {
     // 충돌 없는 가로 위치를 동적으로 산출 (가운데 정렬)
     const totalWidth = hExtents.reduce((sum, r) => sum + r * 2, 0) + gap * (planets.length - 1)
     const startX = Math.max(20, (W - totalWidth) / 2)
-    let cursor = startX
-    const xs = planets.map((_, i) => {
-      const cx = cursor + hExtents[i]
-      cursor += hExtents[i] * 2 + gap
-      return cx
-    })
+    const xs = planets.reduce<number[]>((acc, _, i) => {
+      const prevCursor = i === 0 ? startX : acc[i - 1] + hExtents[i - 1] + gap + hExtents[i]
+      acc.push(prevCursor)
+      return acc
+    }, [])
 
     return (
       <svg viewBox={`0 0 ${W} ${H}`} className={s.sizeCompareSvg} aria-hidden="true">

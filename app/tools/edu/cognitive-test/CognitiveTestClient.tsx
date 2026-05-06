@@ -194,6 +194,7 @@ export default function CognitiveTestClient() {
   }
   function answerStroop(chosen: string) {
     const trial = sTrials[sIdx]
+    // eslint-disable-next-line react-hooks/purity
     const rt = performance.now() - sStartRef.current
     const correct = chosen === trial.textColorName
     setSFlash(correct ? 'correct' : 'wrong')
@@ -334,7 +335,7 @@ export default function CognitiveTestClient() {
         dStartRef.current = performance.now()
       }
     }, 200)
-  }, [dIdx, dPhase, dDotPressed, records, updateRecords])  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dIdx, dPhase, dDotPressed, records, updateRecords])   
 
   // 키보드 핸들러 (이중 과제)
   useEffect(() => {

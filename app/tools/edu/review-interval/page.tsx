@@ -315,8 +315,8 @@ export default function ReviewIntervalPage() {
               <li><strong style={{ color: 'var(--text)' }}>Anki</strong> (무료 SRS): apps.ankiweb.net</li>
               <li><strong style={{ color: 'var(--text)' }}>Quizlet</strong> (단어장 SRS, 입문용)</li>
               <li><strong style={{ color: 'var(--text)' }}>SuperMemo</strong> (원조)</li>
-              <li>책 <em>"어떻게 공부할 것인가" (Make It Stick)</em> — 벤지 카퍼·헨리 뢰디거</li>
-              <li>책 <em>"메타인지 학습법"</em> — 학습 효율 향상에 관한 한국어 입문서</li>
+              <li>책 <em>&ldquo;어떻게 공부할 것인가&rdquo; (Make It Stick)</em> — 벤지 카퍼·헨리 뢰디거</li>
+              <li>책 <em>&ldquo;메타인지 학습법&rdquo;</em> — 학습 효율 향상에 관한 한국어 입문서</li>
             </ul>
           </div>
         </div>
