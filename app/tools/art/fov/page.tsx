@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -60,7 +60,7 @@ export default function FovPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 사진
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📷 카메라 화각 (35mm 환산) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -118,9 +118,9 @@ export default function FovPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -226,9 +226,9 @@ export default function FovPage() {
                 ['50m', '36.0m', '24.0m', '풍경·중경'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '6px 10px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                   <td style={{ padding: '6px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[3]}</td>
                 </tr>
               ))}

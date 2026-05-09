@@ -2,6 +2,7 @@ import Link from 'next/link'
 import UvProtectionClient from './UvProtectionClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
@@ -16,7 +17,7 @@ export default function UvProtectionPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ☀️ 자외선 노출 가이드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -30,11 +31,12 @@ export default function UvProtectionPage() {
       {/* 본문 광고 */}
       <AdSlot position="in-article" minHeight={200} />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             UV 지수와 화상 위험 시간 계산 원리
           </h2>
           <div style={{
@@ -59,7 +61,7 @@ export default function UvProtectionPage() {
 
         {/* ── 2. Fitzpatrick 피부 타입 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Fitzpatrick 피부 타입 (한국인 가이드)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.8 }}>
@@ -88,7 +90,7 @@ export default function UvProtectionPage() {
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: isCommon ? 'rgba(62,200,255,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                       <td style={{ padding: '10px 12px', color: isCommon ? '#3EC8FF' : 'var(--accent)', fontWeight: 700 }}>{r.t}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.d}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.b}</td>
                     </tr>
                   )
@@ -100,7 +102,7 @@ export default function UvProtectionPage() {
 
         {/* ── 3. UV 5단계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             UV 지수 5단계 (한국 기상청 기준)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
@@ -112,7 +114,7 @@ export default function UvProtectionPage() {
               { r: '11+',  l: '위험',     c: '#9B59B6', d: '가능한 외출 자제' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 18, color: g.c, marginBottom: 4 }}>{g.r}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: g.c, marginBottom: 4 }}>{g.r}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.l}</p>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.65 }}>{g.d}</p>
               </div>
@@ -126,7 +128,7 @@ export default function UvProtectionPage() {
 
         {/* ── 4. SPF 차단율 진실 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             SPF 차단율 진실
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -148,8 +150,8 @@ export default function UvProtectionPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.s === 'SPF 50' ? 'rgba(62,255,155,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.p}</td>
                   </tr>
                 ))}
               </tbody>
@@ -164,7 +166,7 @@ export default function UvProtectionPage() {
 
         {/* ── 5. 환경별 자외선 보정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             환경별 자외선 보정
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -178,7 +180,7 @@ export default function UvProtectionPage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 4 }}>{g.m}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 4 }}>{g.m}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.65 }}>{g.d}</p>
               </div>
             ))}
@@ -187,7 +189,7 @@ export default function UvProtectionPage() {
 
         {/* ── 6. 차단제 사용 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자외선 차단제 사용 가이드 (WHO·EPA 권장)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -209,7 +211,7 @@ export default function UvProtectionPage() {
 
         {/* ── 7. 자외선과 피부 건강 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자외선과 피부 건강
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -263,7 +265,7 @@ export default function UvProtectionPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -304,7 +306,7 @@ export default function UvProtectionPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -339,7 +341,7 @@ export default function UvProtectionPage() {
 
         {/* ── 10. 공식 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             공식 자료 출처
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 2 }}>

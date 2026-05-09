@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ChordClient from './ChordClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/chord',
@@ -13,7 +14,7 @@ export default function ChordPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎹 코드 구성음 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function ChordPage() {
 
       <ChordClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 주요 코드 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색하는 주요 코드 구성음
           </h2>
 
@@ -50,8 +52,8 @@ export default function ChordPage() {
                   ['Csus4','C, F, G',     '근음, 완전4도, 완전5도'],
                 ].map(([chord, notes, interval], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', color: 'var(--text)' }}>{notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{interval}</td>
                   </tr>
                 ))}
@@ -79,8 +81,8 @@ export default function ChordPage() {
                   ['CmM7',   'C, E♭, G, B',    '미스터리·필름누아르 분위기'],
                 ].map(([chord, notes, feature], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', color: 'var(--text)' }}>{notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{feature}</td>
                   </tr>
                 ))}
@@ -91,7 +93,7 @@ export default function ChordPage() {
 
         {/* ── 2. 코드 기호 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             코드 기호 읽는 법 완전 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -106,7 +108,7 @@ export default function ChordPage() {
               { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: '#FF6B6B' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${c.color}30`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.desc}</p>
               </div>
             ))}
@@ -115,7 +117,7 @@ export default function ChordPage() {
 
         {/* ── 3. C 메이저 다이아토닉 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             C 메이저 다이아토닉 코드 완전표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
@@ -142,9 +144,9 @@ export default function ChordPage() {
                   { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: '#FF8C3E' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{d.notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{d.notes}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: d.color, fontSize: 12, fontWeight: 600 }}>{d.func}</td>
                   </tr>
                 ))}
@@ -155,7 +157,7 @@ export default function ChordPage() {
 
         {/* ── 4. 자주 쓰이는 코드 진행 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 쓰이는 코드 진행 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -191,8 +193,8 @@ export default function ChordPage() {
             ].map((p, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}30`, borderRadius: '12px', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: p.color, marginBottom: '6px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{p.desc}</p>
               </div>
             ))}
@@ -201,7 +203,7 @@ export default function ChordPage() {
 
         {/* ── 5. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -240,7 +242,7 @@ export default function ChordPage() {
 
         {/* ── 6. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '코드를 다른 키로 즉시 이동' },

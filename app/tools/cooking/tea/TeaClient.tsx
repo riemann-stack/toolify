@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './tea.module.css'
 import {
   TEAS, VESSELS, STRENGTHS, COLD_GUIDES,
@@ -274,7 +275,7 @@ export default function TeaClient() {
               <rect x={0} y={20} width={(risk / 100) * 420} height={22} rx={5} fill="url(#tanninGrad)" />
               {/* 권장 시간 라인 */}
               <line x1={(30 / 100) * 420} y1={15} x2={(30 / 100) * 420} y2={47} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3,2" />
-              <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">권장</text>
+              <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">권장</text>
             </svg>
 
             <div className={s.hero} style={{ marginTop: 12 }}>
@@ -373,10 +374,10 @@ export default function TeaClient() {
                         rx={3}
                         opacity={st.isRinse ? 0.6 : 1}
                       />
-                      <text x={x + w / 2} y={38} fill="#0D0D0D" fontSize="10" textAnchor="middle" fontWeight="800" fontFamily="Syne">
+                      <text x={x + w / 2} y={38} fill="#0D0D0D" fontSize="10" textAnchor="middle" fontWeight="800" fontFamily="Inter, system-ui, sans-serif">
                         {st.emoji}
                       </text>
-                      <text x={x + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">
+                      <text x={x + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                         {fmtTime(st.sec)}
                       </text>
                     </g>
@@ -636,16 +637,16 @@ export default function TeaClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>권장값은 한국·일본·중국 차 협회 일반 가이드입니다.</li>
-          <li>차 등급·산지·로스팅·개인 취향에 따라 자유롭게 조정하세요.</li>
-          <li>카페인 함량은 추정치이며, 임산부·수면 민감자는 참고만 하세요.</li>
-          <li>허브티는 종류별 카페인·풍미·우림 시간 차이가 큽니다.</li>
-          <li>모든 데이터는 브라우저에 저장되며, 서버로 전송되지 않습니다.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        사용 안내 권장값은 한국·일본·중국 차 협회 일반 가이드입니다. 차 등급·산지·로스팅·개인 취향에 따라 자유롭게 조정하세요. 카페인 함량은 추정치이며, 임산부·수면 민감자는 참고만 하세요.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/brew" className={s.crossLink}>

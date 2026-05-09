@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +68,7 @@ export default function RoofPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏠 지붕 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -152,9 +152,9 @@ export default function RoofPage() {
               { m: '10물매', d: '45.0°', f: '×1.414', n: '매우 가파름' },
             ].map((r, i) => (
               <tr key={i}>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                <td style={{ ...cell, fontFamily: 'Syne, sans-serif' }}>{r.d}</td>
-                <td style={{ ...cell, fontFamily: 'Syne, sans-serif' }}>{r.f}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
+                <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</td>
+                <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.f}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.n}</td>
               </tr>
             ))}
@@ -172,7 +172,7 @@ export default function RoofPage() {
           { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#FF8C3E' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Syne, sans-serif' }}>{p.len}</p>
+            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Inter, system-ui, sans-serif' }}>{p.len}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{p.use}</p>
           </div>
         ))}

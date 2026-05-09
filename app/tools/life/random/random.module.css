@@ -101,7 +101,7 @@
   box-sizing: border-box;
 }
 .numInput {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -138,7 +138,7 @@
 }
 .rangeSep {
   text-align: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: var(--accent);
   font-weight: 800;
   font-size: 18px;
@@ -157,7 +157,7 @@
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -175,7 +175,7 @@
   margin-top: 10px;
   flex-wrap: wrap;
 }
-.metaRow strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.metaRow strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dupWarn { color: #FFD700; }
 
 /* 토글 */
@@ -340,7 +340,7 @@
   padding: 10px 14px;
 }
 .resultRank {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 14px;
@@ -372,7 +372,7 @@
 }
 .weightSlider { accent-color: #FFD700; }
 .weightPct {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #FFD700;
   text-align: right;
@@ -429,7 +429,7 @@
 }
 .probFill { height: 100%; border-radius: 999px; transition: width 0.4s; }
 .probValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -523,7 +523,7 @@
 .teamCount {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .teamMembers {
@@ -598,7 +598,7 @@
   font-size: 13px;
 }
 .orderRank {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #C485E0;
   font-size: 14px;
@@ -646,10 +646,10 @@
   .fairRow { grid-template-columns: 1fr 70px 70px 60px; gap: 5px; font-size: 11.5px; padding: 9px 10px; }
 }
 .fairName { color: var(--text); font-weight: 600; }
-.fairExpected { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.fairActual { font-family: 'Syne', sans-serif; font-weight: 800; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
+.fairExpected { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.fairActual { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
 .fairDeviation {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -742,7 +742,7 @@
   padding: 9px 6px;
   font-size: 12.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;

@@ -81,7 +81,7 @@
 }
 .amountInput:focus, .textInput:focus, .numInput:focus { border-color: var(--accent); }
 .amountInput, .numInput {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -124,7 +124,7 @@
 .peopleBtn:hover { border-color: var(--accent); color: var(--accent); }
 .peopleBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .peopleNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -141,7 +141,7 @@
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -285,7 +285,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 9vw, 60px);
   letter-spacing: -1.5px;
@@ -311,7 +311,7 @@
 }
 .heroDualLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .heroDualValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   font-variant-numeric: tabular-nums;
@@ -337,7 +337,7 @@
 }
 .detailRow span:first-child { color: var(--text); }
 .detailRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -413,7 +413,7 @@
   padding: 7px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   outline: none;
   text-align: right;
@@ -479,14 +479,14 @@
 .rtName { color: var(--text); font-weight: 600; }
 .rtName small { color: var(--muted); margin-left: 4px; font-size: 10.5px; font-weight: 400; }
 .rtVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 .rtTotal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -520,7 +520,7 @@
 }
 .balanceName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 4px; }
 .balanceVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
@@ -554,9 +554,9 @@
 }
 .transferFrom { color: #FF6B6B; font-weight: 700; }
 .transferTo   { color: #3EFF9B; font-weight: 700; }
-.transferArrow { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; text-align: center; }
+.transferArrow { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
 .transferAmount {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #FFD700;
   font-variant-numeric: tabular-nums;
@@ -630,7 +630,7 @@
 .historyName { color: var(--text); font-weight: 600; }
 .historyName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .historyAmount {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

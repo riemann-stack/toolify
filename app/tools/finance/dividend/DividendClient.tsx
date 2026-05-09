@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useCallback } from 'react'
 import styles from './dividend.module.css'
 import {
@@ -212,7 +213,7 @@ export default function DividendClient() {
                 fontSize="10" fontFamily="Noto Sans KR, sans-serif">{i + 1}</text>
               {v > max * 0.2 && (
                 <text x={x + barW / 2} y={y - 4} textAnchor="middle" fill="var(--accent)"
-                  fontSize="9" fontFamily="Syne, sans-serif" fontWeight="800">
+                  fontSize="9" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
                   {Math.round(v / 10_000)}만
                 </text>
               )}
@@ -227,11 +228,16 @@ export default function DividendClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 투자 자문·종목 권유 도구가 아닙니다.</strong> 본 계산기는 입력값에 기반한 수학적 시뮬레이션이며,
-        <strong> 과거 배당이 미래 배당을 보장하지 않습니다.</strong> 배당주는 기업 실적·정책·환율·세금 변화로 분배금이 줄거나 끊길 수 있습니다.
-        실제 투자 결정은 본인 분석·책임이며, 문의: 한국 금융감독원 e-금융민원 1332.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        투자 자문·종목 권유 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -387,7 +393,7 @@ export default function DividendClient() {
                   <label className={styles.cardLabel}>현재 {formatEok(currentV)} 투자 중이라면</label>
                   {additionalNeeded > 0 ? (
                     <>
-                      <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
+                      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
                         추가 필요 {formatKRW(additionalNeeded)}원
                       </div>
                       <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
@@ -395,7 +401,7 @@ export default function DividendClient() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 20, fontWeight: 800, color: '#3EFF9B' }}>
+                    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 20, fontWeight: 800, color: '#3EFF9B' }}>
                       🎉 이미 목표 달성!
                     </div>
                   )}
@@ -949,7 +955,7 @@ export default function DividendClient() {
                       {isBest && <div className={styles.winnerBadge}>★ 최적</div>}
                       <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'Noto Sans KR, sans-serif' }}>{acc.name}</p>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>{acc.desc}</p>
-                      <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#3EFF9B' : 'var(--muted)' }}>
+                      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#3EFF9B' : 'var(--muted)' }}>
                         {row.netBenefit > 0 ? `+${formatEok(row.netBenefit)}` : '기준'}
                       </div>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYears}년 누적 이득</p>

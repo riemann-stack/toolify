@@ -2,6 +2,7 @@ import Link from 'next/link'
 import LightingClient from './LightingClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
@@ -16,7 +17,7 @@ export default function LightingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         인테리어
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💡 조명 밝기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -29,11 +30,12 @@ export default function LightingPage() {
       {/* 본문 광고 */}
       <AdSlot position="in-article" minHeight={200} />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             조명 밝기 핵심 공식
           </h2>
           <div style={{
@@ -59,7 +61,7 @@ export default function LightingPage() {
 
         {/* ── 2. 공간별 권장 lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 공간별 권장 lux (KS A 3011)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -86,7 +88,7 @@ export default function LightingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -97,7 +99,7 @@ export default function LightingPage() {
 
         {/* ── 3. W vs lm vs lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚡ 와트(W) vs 루멘(lm) vs lux — 차이 이해
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px', marginBottom: 14 }}>
@@ -128,7 +130,7 @@ export default function LightingPage() {
 
         {/* ── 4. W ↔ lm 환산표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             W ↔ 루멘 환산 빠른 참조표
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -150,11 +152,11 @@ export default function LightingPage() {
                   { lm: 2600, inc: '150W', hal: '145W', fluo: '40W',  led: '26W' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{r.lm.toLocaleString()} lm</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.inc}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.hal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.led}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.lm.toLocaleString()} lm</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.inc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.hal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.led}</td>
                   </tr>
                 ))}
               </tbody>
@@ -167,7 +169,7 @@ export default function LightingPage() {
 
         {/* ── 5. 색온도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎨 색온도 가이드 (Kelvin)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -177,7 +179,7 @@ export default function LightingPage() {
               { k: '5000~6500K', n: '주광색 (쿨화이트)',     color: '#B0D8FF', vibe: '푸른빛 백색', use: '서재·주방·작업실·집중' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: 14, fontWeight: 800, color: s.color, marginBottom: 4 }}>{s.k}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14, fontWeight: 800, color: s.color, marginBottom: 4 }}>{s.k}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{s.n}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>{s.vibe}</p>
                 <p style={{ fontSize: 11.5, color: 'var(--accent)', fontWeight: 600 }}>{s.use}</p>
@@ -188,7 +190,7 @@ export default function LightingPage() {
 
         {/* ── 6. 한국 LED 표준 와트 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🇰🇷 한국 LED 시장 표준 와트 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -200,7 +202,7 @@ export default function LightingPage() {
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.s}</p>
-                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 800, fontFamily: 'Syne, sans-serif' }}>{s.w}</p>
+                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif' }}>{s.w}</p>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{s.lm}</p>
                 <p style={{ fontSize: 11, color: 'var(--accent)', marginTop: 4 }}>{s.u}</p>
               </div>
@@ -210,7 +212,7 @@ export default function LightingPage() {
 
         {/* ── 7. 조명 종류별 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             💡 조명 종류별 활용 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -244,7 +246,7 @@ export default function LightingPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -285,7 +287,7 @@ export default function LightingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>

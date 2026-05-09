@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './pipe.module.css'
 import {
   PIPE_SIZES, MATERIALS, FITTINGS, FLOW_GUIDES,
@@ -511,17 +512,16 @@ export default function PipeClient() {
       )}
 
       {/* 면책 (모든 탭 공통) */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용·시공 안내</strong>
-        <ul>
-          <li>표시 치수는 KS·JIS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 실제 제품은 제조사 도면·시방서 우선.</li>
-          <li><strong>가스·고압·플랜트·소방 배관은 자격자 시공 의무</strong> (도시가스법·고압가스안전관리법 등).</li>
-          <li><strong>음용수 배관</strong>은 KC·위생 인증(KS·KCs) 자재만 사용해야 합니다.</li>
-          <li><strong>오수·하수·우수 배관</strong>은 지역 조례·건축법 우선.</li>
-          <li>유량 계산은 마찰 손실·점성을 무시한 이상 유량입니다. 실 유량은 더 작을 수 있어요.</li>
-          <li>모든 데이터는 브라우저에 저장되며, 서버로 전송되지 않습니다.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 표시 치수는 KS·JIS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 실제 제품은 제조사 도면·시방서 우선. <strong>가스·고압·플랜트·소방 배관은 자격자 시공 의무</strong> (도시가스법·고압가스안전관리법 등). <strong>음용수 배관</strong>은 KC·위생 인증(KS·KCs) 자재만 사용해야 합니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/screw" className={s.crossLink}>

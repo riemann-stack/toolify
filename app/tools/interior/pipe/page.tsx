@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function PipePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔧 배관 규격 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -95,7 +95,7 @@ export default function PipePage() {
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 6px', fontFamily: 'Syne, sans-serif' }}>{g.s}</p>
+              <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 6px', fontFamily: 'Inter, system-ui, sans-serif' }}>{g.s}</p>
               <p style={{ fontSize: 12, color: 'var(--text)', margin: 0, lineHeight: 1.7 }}>{g.d}</p>
             </div>
           ))}
@@ -116,12 +116,12 @@ export default function PipePage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>15A 재질별 외경 차이</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>강관 (SGP)</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>21.7 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>PVC (VG1)</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>22.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>PB</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>XL (PE-X)</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>동관 (L)</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>15.88 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>STS (Su)</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', textAlign: 'right' }}>19.05 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>강관 (SGP)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>21.7 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>PVC (VG1)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>22.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>PB</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>XL (PE-X)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>동관 (L)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>15.88 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>STS (Su)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>19.05 mm</td></tr>
             </tbody>
           </table>
           <p style={{ fontSize: 12, color: '#FFB83E', margin: '10px 0 0', lineHeight: 1.7 }}>
@@ -169,12 +169,12 @@ export default function PipePage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>15A · 20A</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>10 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>25A · 32A</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>15 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>40A</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>20 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>50A · 65A · 80A</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>25 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>100A · 125A</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>30 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>150A 이상</td><td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>40 mm 이상</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>15A · 20A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>10 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>25A · 32A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>15 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>40A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>20 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>50A · 65A · 80A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>25 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>100A · 125A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>30 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>150A 이상</td><td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>40 mm 이상</td></tr>
             </tbody>
           </table>
         </div>

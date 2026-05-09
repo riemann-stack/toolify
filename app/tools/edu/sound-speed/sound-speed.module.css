@@ -87,7 +87,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -118,7 +118,7 @@
 }
 .sliderValue {
   min-width: 95px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: #3EFFD0;
@@ -172,7 +172,7 @@
 .distPresetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .distPresetActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 .distPresetEmoji { font-size: 18px; display: block; margin-bottom: 2px; }
-.distPresetMeta { font-size: 10px; color: var(--muted); display: block; font-family: 'Syne', sans-serif; font-weight: 700; }
+.distPresetMeta { font-size: 10px; color: var(--muted); display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
@@ -208,7 +208,7 @@
 .heroNeutral   .heroLevel { background: rgba(62,255,208,0.15);  color: #3EFFD0; }
 
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(36px, 8vw, 50px);
   font-weight: 800;
   letter-spacing: -1.5px;
@@ -222,7 +222,7 @@
 .heroExtreme  .heroNum { color: #C485E0; }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSub strong { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSub strong { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -290,7 +290,7 @@
 }
 .compareTable td:first-child { color: var(--text); font-weight: 600; }
 .compareTable td:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -302,7 +302,7 @@
 .compareTable .machSpeed td {
   background: rgba(62,255,208,0.10);
 }
-.compareTable .machSpeed td:first-child { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.compareTable .machSpeed td:first-child { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .compareTable .superSonic td { background: rgba(255,107,107,0.05); }
 .compareTable .superSonic td:first-child { color: #FF8C8C; }
 
@@ -346,7 +346,7 @@
 .vsBarLight { background: linear-gradient(90deg, #3EFFD0, #3EC8FF); }
 .vsBarSound { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
 .vsBarValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   text-align: right;
@@ -364,7 +364,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.funFactCard strong { color: #C485E0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.funFactCard strong { color: #C485E0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .funFactCard .funFactTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
@@ -390,7 +390,7 @@
 }
 .mediumCardName { font-size: 13px; font-weight: 700; color: var(--text); }
 .mediumCardSpeed {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: #3EFFD0;
@@ -445,7 +445,7 @@
 }
 .echoLevel strong {
   display: block;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 800;
   margin-bottom: 4px;
@@ -481,7 +481,7 @@
   color: var(--muted);
   padding: 4px 0;
 }
-.rt60Row strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.rt60Row strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 결과 카드 4분할 ── */
 .resultGrid {
@@ -506,7 +506,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .resultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(18px, 4.5vw, 22px);
   letter-spacing: -0.5px;

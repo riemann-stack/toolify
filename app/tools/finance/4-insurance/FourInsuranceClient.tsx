@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './four-insurance.module.css'
 
@@ -319,11 +320,16 @@ export default function FourInsuranceClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>참고용 추정값입니다.</strong> {year}년 4대보험 요율 기준이며, 실제 보험료는 사업장 상황·요율 변경·지원 제도에 따라 달라질 수 있습니다.
-        산재보험은 업종별 요율 + 출퇴근재해(0.06%) + 임금채권부담금(0.06%) 등에 따라 변동되므로,
-        정확한 보험료는 4대 사회보험 정보연계센터(<a href="https://www.4insure.or.kr" target="_blank" rel="noopener noreferrer">www.4insure.or.kr</a>)에서 확인하세요.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        참고용 추정값입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>

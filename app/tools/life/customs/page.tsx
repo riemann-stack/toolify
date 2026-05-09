@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function CustomsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📦 해외직구 관부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -142,7 +142,7 @@ export default function CustomsPage() {
                     <td key={j} style={{
                       padding: '6px 0',
                       textAlign: j === 1 ? 'right' : 'left',
-                      fontFamily: j === 1 ? 'Syne, sans-serif' : 'Noto Sans KR, sans-serif',
+                      fontFamily: j === 1 ? 'Inter, system-ui, sans-serif' : 'Noto Sans KR, sans-serif',
                       color: j === 1 ? 'var(--accent)' : 'var(--text)',
                       fontWeight: j === 0 || j === 1 ? 700 : 500,
                     }}>{cell}</td>

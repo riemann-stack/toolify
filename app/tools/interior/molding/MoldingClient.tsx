@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './molding.module.css'
 
@@ -274,7 +275,7 @@ export default function MoldingClient() {
             <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#FF8C3E" strokeWidth={4} strokeLinecap="round" />
             {/* 문 표시 */}
             <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="#3EC8FF" opacity={0.8} />
-            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#3EC8FF" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={700}>
+            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#3EC8FF" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
               문
             </text>
           </>
@@ -313,10 +314,16 @@ export default function MoldingClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>참고용 추정값입니다.</strong> 실제 시공 시 모서리·창문·문 위치, 자재 절단 단위, 절단 손실에 따라 ±10% 차이가 발생합니다.
-        구매 전 실측을 권장하며, 셀프 시공 시 1박스 여유를 더 권장합니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        참고용 추정값입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>

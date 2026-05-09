@@ -16,7 +16,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -59,7 +59,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   box-sizing: border-box;
   outline: none;
 }
@@ -113,7 +113,7 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .unitBtnActive {
@@ -177,7 +177,7 @@
   padding: 6px 10px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: center;
   outline: none;
@@ -199,7 +199,7 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .pillActive {
@@ -224,7 +224,7 @@
   margin-bottom: 6px;
 }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 48px;
   font-weight: 800;
   color: var(--accent);
@@ -235,7 +235,7 @@
   font-size: 13px;
   color: var(--muted);
   margin-top: 10px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .heroBodyweight {
   font-size: 12px;
@@ -244,7 +244,7 @@
   padding-top: 10px;
   border-top: 1px dashed var(--border);
 }
-.heroBodyweight strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.heroBodyweight strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── 결과 표 ── */
 .resultTable {
@@ -277,12 +277,12 @@
 }
 
 .formulaName {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
 }
 .formulaVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -311,13 +311,13 @@
   box-shadow: 0 0 0 1px rgba(200, 255, 62, 0.3);
 }
 .intensityPct {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 800;
   color: var(--text);
 }
 .intensityWt {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--accent);
@@ -325,7 +325,7 @@
 .intensityReps {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .intensityPurpose {
   font-size: 12px;
@@ -365,13 +365,13 @@
 }
 .levelLabel { font-size: 12px; color: var(--muted); }
 .levelValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
 }
 .levelRatio {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
@@ -398,7 +398,7 @@
   margin-top: 6px;
   font-size: 10.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   text-align: center;
 }
 
@@ -416,7 +416,7 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: center;
   user-select: none;
@@ -437,7 +437,7 @@
   margin-bottom: 4px;
 }
 .plateResultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -446,7 +446,7 @@
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .plateListCard {
@@ -454,7 +454,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   color: var(--text);
   line-height: 1.8;
@@ -500,10 +500,10 @@
   font-size: 13px;
   align-items: center;
 }
-.historyDate { color: var(--muted); font-family: 'Syne', sans-serif; font-size: 12px; }
+.historyDate { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-size: 12px; }
 .historyEx { color: var(--text); }
-.historyVal { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; text-align: right; }
-.historyDiff { font-size: 11px; font-family: 'Syne', sans-serif; text-align: right; }
+.historyVal { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
+.historyDiff { font-size: 11px; font-family: 'Inter', system-ui, sans-serif; text-align: right; }
 .historyDiffUp { color: #3EFF9B; }
 .historyDiffDown { color: #FF6B6B; }
 .historyDiffSame { color: var(--muted); }
@@ -571,7 +571,7 @@
 /* ── 구분선 ── */
 .sectionDivider { height: 1px; background: var(--border); margin: 16px 0; }
 .sectionTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -586,7 +586,7 @@
   padding: 12px 16px;
 }
 .programHead {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
@@ -597,7 +597,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.programItem strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.programItem strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── row utility ── */
 .rowInline {
@@ -665,7 +665,7 @@
   color: var(--muted);
   line-height: 1.6;
 }
-.warmupHint strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.warmupHint strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 기록 안내 (CalcTab) */
 .recordsHint {
@@ -708,7 +708,7 @@
   letter-spacing: 0.04em;
 }
 .statValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -747,7 +747,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .injuryList {
   margin: 0;

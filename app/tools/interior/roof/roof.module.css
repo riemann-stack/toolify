@@ -65,7 +65,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -149,7 +149,7 @@
   border: none;
 }
 .sliderValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--accent);
@@ -240,7 +240,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -250,7 +250,7 @@
 .heroValue strong { color: var(--accent); }
 .heroSubVal { color: var(--muted); font-size: 0.7em; font-weight: 600; margin-left: 4px; }
 .heroSub { font-size: 13px; color: var(--muted); margin: 0; }
-.heroSub strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.heroSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 상세표 */
 .detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -261,7 +261,7 @@
 }
 .detailTable td:last-child {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
@@ -307,7 +307,7 @@
 .materialPriceRange {
   font-size: 11px;
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   flex-shrink: 0;
   white-space: nowrap;
@@ -341,9 +341,9 @@
   align-items: baseline;
   gap: 8px;
 }
-.materialResultLabel { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; }
+.materialResultLabel { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 .materialResultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: var(--accent);
@@ -351,7 +351,7 @@
 .materialResultPyeong {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   margin-top: 4px;
   text-align: right;
 }

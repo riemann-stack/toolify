@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -225,10 +226,16 @@ export default function VocalRangeClient() {
   return (
     <div className={styles.wrap}>
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        🎤 <strong>참고용·재미용 도구</strong> — 마이크 입력 기반 추정으로 ±2~3반음 오차가 있습니다.
-        정확한 음역대 평가는 보컬 트레이너·전문 장비를 권장하며, 모든 음성 처리는 브라우저 내에서만 이루어지고 서버에 전송되지 않습니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        참고용·재미용 도구
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -570,7 +577,7 @@ export default function VocalRangeClient() {
                           {r.name}{isCurrent && ' ←'}
                           <small style={{ display: 'block', color: 'var(--muted)', fontSize: 11, fontWeight: 400 }}>{r.examples}</small>
                         </span>
-                        <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 11, color: r.color }}>
+                        <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: r.color }}>
                           {r.low}~{r.high}
                         </span>
                         <span style={{ fontSize: 10.5, color: 'var(--muted)' }}>{r.gender === 'male' ? '♂' : r.gender === 'female' ? '♀' : '·'}</span>

@@ -1,6 +1,7 @@
 import DutchClient from './DutchClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/dutch',
@@ -18,7 +19,7 @@ export default function DutchPage() {
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍻 더치페이·N빵 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -28,11 +29,12 @@ export default function DutchPage() {
 
       <DutchClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 5가지 정산 모드 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>5가지 정산 모드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>5가지 정산 모드</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { icon: '🍻', name: '간단 N빵', desc: '총액 ÷ 인원 = 1인당. 7가지 절삭 + 5가지 잔여 처리 (공금/결제자/첫 사람/무작위/1원 단위 균등).' },
@@ -51,7 +53,7 @@ export default function DutchPage() {
 
         {/* 2. 7가지 절삭 옵션 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>7가지 1원 단위 절삭 옵션</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>7가지 1원 단위 절삭 옵션</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             18,750원 같은 어정쩡한 금액을 자릿수에 맞춰 깔끔하게 정리합니다. 모임 성격에 따라 적합한 옵션이 다릅니다.
           </p>
@@ -66,7 +68,7 @@ export default function DutchPage() {
 
         {/* 3. 5가지 잔여 처리 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>5가지 잔여 금액 처리</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>5가지 잔여 금액 처리</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             절삭으로 생긴 차액(잔돈 또는 부족분)을 어떻게 처리할지 선택할 수 있습니다.
           </p>
@@ -88,11 +90,11 @@ export default function DutchPage() {
 
         {/* 4. 술값 분리 공식 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>술값 분리 — 공정한 회식 정산</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>술값 분리 — 공정한 회식 정산</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             회식에서 가장 자주 발생하는 형평성 문제. 본 도구는 다음 공식으로 자동 계산합니다 —
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Syne, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Inter, system-ui, sans-serif' }}>
             <strong>음식값</strong> = 총액 − 술값<br />
             <strong>비음주자 1인</strong> = 음식값 ÷ 전체 인원<br />
             <strong>음주자 1인</strong> = (음식값 ÷ 전체) + (술값 ÷ 음주자)
@@ -105,7 +107,7 @@ export default function DutchPage() {
 
         {/* 5. 선결제자 최소 송금 알고리즘 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>선결제자 — 최소 송금 횟수 알고리즘</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>선결제자 — 최소 송금 횟수 알고리즘</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             여러 명이 나눠서 결제했을 때 누가 누구에게 얼마를 보낼지 결정하는 문제. 본 도구는
             <strong style={{ color: 'var(--text)' }}> Greedy(탐욕) 알고리즘</strong>으로 송금 횟수를 최소화합니다 —
@@ -129,11 +131,11 @@ export default function DutchPage() {
 
         {/* 6. 개인별 정산 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>개인별 정산 — 본인 메뉴 + 공동 메뉴 분담률</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>개인별 정산 — 본인 메뉴 + 공동 메뉴 분담률</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             메뉴별 가격 차이가 큰 모임에 적합 (한 명은 스테이크, 한 명은 샐러드). 각자의 부담은 —
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Syne, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Inter, system-ui, sans-serif' }}>
             본인 부담 = 본인 메뉴 합계
             <br />+ 공동 메뉴 합계 × (본인 분담률 ÷ 전체 분담률 합)
             <br />+ 공동 술값 ÷ 음주자 수 (음주자만)
@@ -145,7 +147,7 @@ export default function DutchPage() {
 
         {/* 7. 시나리오 추천 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 상황별 추천 설정</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 상황별 추천 설정</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             모임 성격에 따라 적절한 1인당 예산·절삭·잔여 처리가 다릅니다. 시나리오를 클릭하면 자동 세팅됩니다.
           </p>
@@ -170,7 +172,7 @@ export default function DutchPage() {
 
         {/* 8. 카톡 공유 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>카카오톡 공유 메시지</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>카카오톡 공유 메시지</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             4가지 정산 결과를 카톡 형식 메시지로 자동 생성합니다. 모임 제목·받을 사람·계좌번호를 입력하면 그대로 복사해 채팅방에 붙여넣을 수 있습니다.
           </p>
@@ -191,7 +193,7 @@ export default function DutchPage() {
 
         {/* 9. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -232,7 +234,7 @@ export default function DutchPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨·룰렛·팀 나누기' },

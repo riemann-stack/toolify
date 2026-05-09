@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import s from './random.module.css'
 import {
@@ -21,9 +22,16 @@ export default function RandomClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        💡 <strong>본 도구는 Math.random() 기반 의사난수 알고리즘을 사용합니다.</strong> 일반적인 무작위 추첨에는 충분히 공정하며, [공정성 검증] 탭에서 실제 분포를 확인할 수 있습니다. 법적·계약적·금전적 효력이 있는 추첨에는 공증 절차를 권장합니다. 명단은 이 브라우저의 localStorage에 저장됩니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        본 도구는 Math.random() 기반 의사난수 알고리즘을 사용합니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         {([

@@ -688,7 +688,7 @@ export default function UvProtectionClient() {
               ].map((r, i) => (
                 <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
                   <p style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
-                  <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
+                  <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
                   <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{r.level}</p>
                 </div>
               ))}

@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -114,7 +114,7 @@
 }
 .countryFlag { font-size: 26px; line-height: 1; }
 .countryName { font-size: 12px; font-weight: 700; color: var(--text); }
-.countryLimit { font-size: 11px; color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.countryLimit { font-size: 11px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 품목 그리드 */
 .itemGrid {
@@ -145,7 +145,7 @@
 }
 .itemEmoji { font-size: 22px; line-height: 1; }
 .itemLabel { font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.3; }
-.itemRate { font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 700; }
+.itemRate { font-size: 11px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 히어로 */
 .hero {
@@ -158,7 +158,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -177,7 +177,7 @@
   text-align: center;
 }
 .heroValueLarge {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(32px, 7vw, 44px);
   font-weight: 800;
   color: var(--text);
@@ -225,11 +225,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -303,7 +303,7 @@
 .countryGuideLimit {
   margin: 0;
   font-size: 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -367,14 +367,14 @@
   border-radius: 6px;
   padding: 4px 8px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .scenarioResult {
   margin: 4px 0 0;
   font-size: 13px;
   font-weight: 800;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .scenarioNotes {
   display: flex;

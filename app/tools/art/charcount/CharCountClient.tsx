@@ -430,7 +430,7 @@ export default function CharCountClient() {
             <div className={s.cardTop}>
               <label className={s.cardLabel}>찾기·바꾸기</label>
               {findReplaceResult && (
-                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>
+                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>
                   {findReplaceResult.count}회 일치
                 </span>
               )}

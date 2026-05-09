@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './packing.module.css'
 import {
   CLIMATES, LAUNDRIES, ACTIVITIES, PHOTOS, CHECKLISTS, SCENARIOS,
@@ -393,7 +394,7 @@ export default function PackingClient() {
                 <p className={s.climateGuideHead}>
                   <span className={s.climateGuideEmoji}>{c.emoji}</span>
                   <strong>{c.label}</strong>
-                  <span style={{ color: c.color, fontSize: 11, fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{c.range}</span>
+                  <span style={{ color: c.color, fontSize: 11, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{c.range}</span>
                 </p>
                 <div className={s.climateGuideContent}>
                   <p><strong>👕 상의</strong>: {c.tops}</p>
@@ -448,16 +449,16 @@ export default function PackingClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>권장 개수는 일반 가이드 — 개인 취향·세탁 빈도·날씨 변화에 따라 조정.</li>
-          <li>항공사 수하물 한도는 항공사·노선·등급에 따라 다름 (확인 필수).</li>
-          <li>비상시 현지 구입 가능 (속옷·양말은 마트·편의점).</li>
-          <li>액체류 100ml 룰 — 기내 휴대 시 작은 사이즈로 분할.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 권장 개수는 일반 가이드 — 개인 취향·세탁 빈도·날씨 변화에 따라 조정. 항공사 수하물 한도는 항공사·노선·등급에 따라 다름 (확인 필수). 비상시 현지 구입 가능 (속옷·양말은 마트·편의점).
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-budget" className={s.crossLink}>

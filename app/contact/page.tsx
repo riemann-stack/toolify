@@ -51,7 +51,7 @@ export default function ContactPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
         Contact
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '14px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '14px' }}>
         문의하기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '36px' }}>
@@ -76,7 +76,7 @@ export default function ContactPage() {
         <a
           href={mailto}
           style={{
-            fontFamily: 'Syne, sans-serif',
+            fontFamily: 'Inter, system-ui, sans-serif',
             fontSize: 'clamp(20px, 4vw, 28px)',
             color: 'var(--text)',
             fontWeight: 700,
@@ -113,7 +113,7 @@ export default function ContactPage() {
       </div>
 
       {/* 카테고리 안내 */}
-      <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }}>
+      <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }}>
         문의 카테고리 안내
       </h2>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
@@ -144,13 +144,13 @@ export default function ContactPage() {
       </div>
 
       {/* 운영자 정보 */}
-      <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }}>
+      <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }}>
         운영자 정보
       </h2>
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px', marginBottom: '40px' }}>
         <dl style={{ display: 'grid', gridTemplateColumns: '90px 1fr', rowGap: '10px', columnGap: '14px', fontSize: '13px' }}>
           <dt style={{ color: 'var(--muted)' }}>사이트</dt>
-          <dd style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>youtil.kr</dd>
+          <dd style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>youtil.kr</dd>
 
           <dt style={{ color: 'var(--muted)' }}>운영 형태</dt>
           <dd style={{ color: 'var(--text)' }}>개인 운영 (비영리 무료 서비스)</dd>

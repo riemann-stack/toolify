@@ -1,6 +1,7 @@
 import LadderClient from './LadderClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/ladder',
@@ -17,7 +18,7 @@ export default function LadderPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🪜 사다리타기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -26,11 +27,12 @@ export default function LadderPage() {
 
       <LadderClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 사다리타기 원리 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 원리</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 원리</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             참가자 N명이 위에서 출발해 사다리를 따라 내려가며 가로줄을 만나면 옆으로 이동, 결국 N개 결과 중 하나에 도착하는 게임입니다.
           </p>
@@ -47,7 +49,7 @@ export default function LadderPage() {
 
         {/* 2. 결과 공개 방식 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>결과 공개 — 3가지 방법</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>결과 공개 — 3가지 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { icon: '👤', name: '한 명씩 공개', desc: '왼쪽부터 한 명씩 자동으로 경로가 그려지며 공개됩니다 (느림·빠름 속도 선택)' },
@@ -64,7 +66,7 @@ export default function LadderPage() {
 
         {/* 3. 실시간 미리보기 + 셔플 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실시간 사다리 미리보기 + 순서 셔플</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실시간 사다리 미리보기 + 순서 셔플</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             참가자·결과를 입력하는 즉시 사다리에 반영됩니다. 결과 공개 전에도 사다리 모양·가로줄을 미리 확인할 수 있고, <strong style={{ color: 'var(--text)' }}>[🔀 순서 섞기]</strong> 버튼으로 참가자·결과 입력 순서를 무작위로 섞고 새 가로줄을 생성할 수 있습니다.
           </p>
@@ -75,7 +77,7 @@ export default function LadderPage() {
 
         {/* 4. 6가지 활용 템플릿 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>6가지 빠른 시작 템플릿</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>6가지 빠른 시작 템플릿</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { icon: '🍱', name: '점심 메뉴',           desc: '못 정할 때 무작위 선택 — 김치찌개·비빔밥·돈가스·국밥' },
@@ -95,7 +97,7 @@ export default function LadderPage() {
 
         {/* 5. 캐릭터 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>캐릭터 자동 배정</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>캐릭터 자동 배정</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 참가자별로 16가지 동물 캐릭터 이모지를 자동 배정해 시각적 재미를 더합니다:
           </p>
@@ -110,7 +112,7 @@ export default function LadderPage() {
 
         {/* 6. 옵션 (속도·난이도) */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>옵션 — 애니메이션 속도·가로줄 난이도</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>옵션 — 애니메이션 속도·가로줄 난이도</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>⏱️ 애니메이션 속도</p>
@@ -134,7 +136,7 @@ export default function LadderPage() {
 
         {/* 7. 사다리타기 vs 다른 추첨 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 vs 다른 추첨</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 vs 다른 추첨</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>🪜 사다리타기</p>
@@ -164,7 +166,7 @@ export default function LadderPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -213,7 +215,7 @@ export default function LadderPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨·룰렛·팀 나누기' },

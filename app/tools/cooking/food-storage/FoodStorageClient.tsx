@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './food-storage.module.css'
 
@@ -307,9 +308,16 @@ export default function FoodStorageClient() {
       </div>
 
       {/* 면책 조항 */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 참고</strong> 본 계산기는 식약처 권고 일반 기준에 따른 참고용 정보입니다. 실제 보관 가능 기간은 냉장고 성능·포장 상태·식재료 신선도에 따라 다를 수 있습니다. 의심스러운 냄새·색·질감이 있으면 즉시 폐기하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        참고
+      </Disclaimer>
 
       {/* ── 탭 1: 등록 ── */}
       {tab === 'register' && (

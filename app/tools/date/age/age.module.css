@@ -137,7 +137,7 @@
   font-weight: 600;
 }
 .ageHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(64px, 14vw, 96px);
   letter-spacing: -2px;
@@ -194,7 +194,7 @@
   font-weight: 700;
 }
 .compareNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 28px;
   color: var(--text);
@@ -224,7 +224,7 @@
   text-align: center;
 }
 .infoNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--accent);
@@ -267,7 +267,7 @@
   font-weight: 600;
 }
 .ddayHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 12vw, 84px);
   letter-spacing: -2px;
@@ -297,7 +297,7 @@
   text-align: center;
 }
 .countdownNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: #FF6B6B;
@@ -333,7 +333,7 @@
 .upcomingName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .upcomingDate { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; text-align: right; }
 .upcomingDday {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -359,7 +359,7 @@
   text-align: center;
 }
 .statBigNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(22px, 4.5vw, 30px);
   color: #C485E0;
@@ -395,7 +395,7 @@
 .funStatLabel { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .funStatLabel small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
 .funStatValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #C485E0;
   font-variant-numeric: tabular-nums;
@@ -462,7 +462,7 @@
 .milestoneName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .milestoneDate { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-align: right; }
 .milestoneDday {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -523,7 +523,7 @@
   text-align: center;
 }
 .traditionalHanja {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 36px;
   color: #FFD700;
   font-weight: 800;

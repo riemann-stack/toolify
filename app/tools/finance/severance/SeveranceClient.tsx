@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './severance.module.css'
 import {
   PENSIONS,
@@ -29,9 +30,13 @@ function isoOffset(days: number): string {
 export default function SeveranceClient() {
   const [tab, setTab] = useState<Tab>('calc')
 
-  /* 공통 입력 */
-  const [startIso, setStartIso] = useState(isoDate(addDays(new Date(), -730)))  // 2년 전
-  const [endIso, setEndIso] = useState(isoOffset(30))                            // 30일 후
+  /* 공통 입력 — SSR/Client 일치를 위해 빈 값으로 시작 후 useEffect에서 설정 */
+  const [startIso, setStartIso] = useState('')
+  const [endIso, setEndIso] = useState('')
+  useEffect(() => {
+    setStartIso(isoDate(addDays(new Date(), -730)))  // 2년 전
+    setEndIso(isoOffset(30))                          // 30일 후
+  }, [])
   const [weekHours, setWeekHours] = useState('40')
   const [dailyHours, setDailyHours] = useState('8')
 
@@ -620,17 +625,16 @@ export default function SeveranceClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>이 계산기는 <strong>입력값 기준 모의계산</strong>이며, 실제 퇴직금은 임금 항목·해석·회사 정산에 따라 달라질 수 있습니다.</li>
-          <li>평균임금·통상임금 판단은 노무사 영역입니다.</li>
-          <li>퇴직소득세는 <strong>2023년 개정 세법</strong> 기준이며, 매년 변동될 수 있습니다.</li>
-          <li>DC형 퇴직연금은 회사 적립·운용 결과에 따라 다르므로 회사·금융사에서 정확히 확인하세요.</li>
-          <li>분쟁·정확한 산정은 <strong>고용노동부 (1350) 또는 공인노무사</strong> 상담을 권장합니다.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        사용 안내 이 계산기는 <strong>입력값 기준 모의계산</strong>이며, 실제 퇴직금은 임금 항목·해석·회사 정산에 따라 달라질 수 있습니다. 평균임금·통상임금 판단은 노무사 영역입니다. 퇴직소득세는 <strong>2023년 개정 세법</strong> 기준이며, 매년 변동될 수 있습니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/savings" className={s.crossLink}>
@@ -668,7 +672,7 @@ function SeveranceBarChart({ pre, tax, net }: { pre: number; tax: number; net: n
                 justifyContent: 'flex-end',
                 padding: '0 8px',
               }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'Syne, sans-serif' }}>{fmtMan(it.value)}</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMan(it.value)}</span>
               </div>
             </div>
           </div>
@@ -720,7 +724,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
             return (
               <g key={off}>
                 <line x1={xScale(off)} y1={H - padB - 2} x2={xScale(off)} y2={H - padB + 4} stroke="var(--muted)" strokeWidth="0.8" />
-                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">
+                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                   {off > 0 ? `+${off}` : off}일
                 </text>
               </g>
@@ -739,7 +743,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
           {highlightP && highlightP.severance > 0 && (
             <g>
               <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="#FF3E8C" stroke="#000" strokeWidth="1" />
-              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#FF3E8C" fontSize="11" textAnchor="middle" fontFamily="Syne" fontWeight="700">
+              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#FF3E8C" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
                 {fmtMan(highlightP.severance)}
               </text>
             </g>
@@ -747,7 +751,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
 
           {/* Y축 값 (3개) */}
           {sevs.length > 0 && [minSev, (minSev + maxSev) / 2, maxSev].map((v, i) => (
-            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Syne">{fmtMan(v)}</text>
+            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{fmtMan(v)}</text>
           ))}
         </svg>
       </div>
@@ -793,8 +797,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           return <path key={d.id} d={describeArc(startAngle, endAngle)} fill={d.color} opacity={0.85} />
         })}
         <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">총 입금</text>
-        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Syne" fontWeight="800">
+        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">총 입금</text>
+        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
           {fmtMan(total)}
         </text>
       </svg>
@@ -803,7 +807,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{d.label}</span>
-            <span style={{ fontFamily: 'Syne, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
+            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
           </div>
         ))}
       </div>

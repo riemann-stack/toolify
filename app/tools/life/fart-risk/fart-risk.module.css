@@ -20,7 +20,7 @@
   border: 1.5px solid; animation: fadeUp 0.3s ease;
 }
 .heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-.heroScore { font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
+.heroScore { font-family: 'Inter', system-ui, sans-serif; font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
 .heroUnit { font-size: 22px; font-weight: 700; margin-left: 4px; }
 .heroRiskBadge {
   display: inline-block; margin-top: 12px; padding: 6px 16px;
@@ -32,7 +32,7 @@
 .gaugeRow { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 .gaugeRow:last-child { margin-bottom: 0; }
 .gaugeLabel { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--text); font-weight: 600; }
-.gaugeVal { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.gaugeVal { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; }
 .gaugeBar { height: 12px; background: var(--bg3); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
 .gaugeFill { height: 100%; transition: width 0.4s; border-radius: 99px; }
 
@@ -58,7 +58,7 @@
 }
 .altHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .altEmoji { font-size: 26px; }
-.altTitle { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.altTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 .altOptionList { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px; }
 .altOption {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
@@ -74,7 +74,7 @@
 }
 .symHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .symEmoji { font-size: 26px; }
-.symName { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.symName { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 .symGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
 .symSubHead { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
 .symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: 8px; border-left: 3px solid #FF8C3E; }
@@ -132,7 +132,7 @@
 .catGroup { margin-bottom: 18px; }
 .catGroup:last-child { margin-bottom: 0; }
 .catHead {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -178,7 +178,7 @@
   right: -6px;
   background: #FF6B4A;
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 800;
   padding: 2px 6px;
@@ -232,7 +232,7 @@
 }
 .charEmoji { font-size: 64px; line-height: 1; margin-bottom: 10px; }
 .charName {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -245,7 +245,7 @@
   margin-bottom: 4px;
 }
 .charScore {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 56px;
   font-weight: 800;
   line-height: 1;
@@ -282,7 +282,7 @@
   padding: 20px 22px;
 }
 .topHead {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -309,7 +309,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 800;
   color: #0D0D0D;
@@ -325,7 +325,7 @@
   background: rgba(200,255,62,0.15);
   border: 1px solid rgba(200,255,62,0.3);
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 12px;
   padding: 3px 10px;
@@ -362,7 +362,7 @@
 .comboItem:first-of-type { border-top: none; }
 .comboBonus {
   color: #FF6B6B;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
 }
 
@@ -374,7 +374,7 @@
   padding: 18px 22px;
 }
 .reasonHead {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: var(--muted);

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './roof.module.css'
 import {
   ROOF_TYPES, ROOF_MATERIALS,
@@ -423,16 +424,16 @@ export default function RoofClient() {
       )}
 
       {/* ── 면책 ── */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
-        <ul>
-          <li>면적 계산: 표준 형태 기준. 복잡한 형태(혼합·돌출·천창)는 실측 권장. 도면 vs 실측 ±5~10% 차이 가능</li>
-          <li>자재 단가: 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적</li>
-          <li>본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong></li>
-          <li>⚠️ 지붕 작업은 고소작업 — 전문가 권장. 셀프 시공 시 안전벨트·헬멧 필수. 폭우·강풍 시 작업 금지. 응급 119</li>
-          <li>도움: 한국건설기술연구원 / 대한건축사협회 / 가까운 건축사사무소·시공사 견적</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 면적 계산: 표준 형태 기준. 복잡한 형태(혼합·돌출·천창)는 실측 권장. 도면 vs 실측 ±5~10% 차이 가능 자재 단가: 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적 본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong>
+      </Disclaimer>
     </div>
   )
 }
@@ -542,10 +543,10 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         )}
 
         {/* 치수 라벨 */}
-        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Syne">
+        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
           {input.L.toFixed(1)}m
         </text>
-        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end" fontFamily="Syne">
+        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
           {input.W.toFixed(1)}m
         </text>
         {(eaveL + eaveR + eaveT + eaveB) > 0 && (
@@ -595,7 +596,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 경사각 표기 */}
         {input.type !== 'flat' && (
           <text x={elevArea.cx} y={wallTopY - ridgeHeightScaled - 8} fontSize="11" fill="#FF8C3E"
-            textAnchor="middle" fontFamily="Syne" fontWeight={700}>
+            textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
             {input.pitchDeg.toFixed(1)}° ({fmtMoemae(degToMoemae(input.pitchDeg))})
           </text>
         )}

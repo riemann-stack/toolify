@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect, react-hooks/preserve-manual-memoization */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './review-interval.module.css'
 
@@ -139,13 +140,13 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { 
       {[0, 25, 50, 75, 100].map(p => (
         <g key={p}>
           <line x1={padL} y1={yScale(p)} x2={W - padR} y2={yScale(p)} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontFamily="Syne, sans-serif" fontWeight={700}>{p}%</text>
+          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{p}%</text>
         </g>
       ))}
       {[0, 7, 14, 21, 30].filter(d => d <= totalDays).map(d => (
         <g key={d}>
           <line x1={xScale(d)} y1={padT} x2={xScale(d)} y2={H - padB} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={700}>{d}일</text>
+          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{d}일</text>
         </g>
       ))}
 
@@ -172,7 +173,7 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { 
           {/* 100% 점프 표시 */}
           <line x1={m.x} y1={m.yBefore} x2={m.x} y2={m.yAfter} stroke="#3EFFD0" strokeWidth="1.5" strokeDasharray="3 3" />
           <circle cx={m.x} cy={m.yAfter} r="5" fill="#3EFFD0" stroke="#0a0a2e" strokeWidth="2" />
-          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="#3EFFD0" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={800}>R{m.idx}</text>
+          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="#3EFFD0" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>R{m.idx}</text>
         </g>
       ))}
 
@@ -553,11 +554,16 @@ export default function ReviewIntervalClient() {
   // ─────────────────────────────────────────────
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        <strong>참고용 학습 도구입니다.</strong> 에빙하우스 망각곡선과 SM-2 알고리즘을 단순화한 모델이며,
-        실제 기억력은 학습 내용·수면·집중도·개인차에 따라 달라집니다.
-        학습 항목 데이터는 <strong>이 브라우저에 로컬 저장</strong>되며, 캐시 삭제 시 사라질 수 있으니 정기적 백업을 권장합니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        참고용 학습 도구입니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         <button className={`${s.tabBtn} ${tab === 'simple' ? s.tabActive : ''}`} onClick={() => setTab('simple')}>간단 복습 일정</button>

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './auction.module.css'
 import {
   PROPERTIES, OWNERS, REGIONS, COST_ITEMS, AUTO_ITEMS, MANUAL_ITEMS,
@@ -658,17 +659,16 @@ export default function AuctionClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>세율·LTV·DSR은 매년 변동됩니다 — <strong>국세청·국토부·금감원 최신 공시</strong> 우선.</li>
-          <li>경매 부대비용은 <strong>물건별로 매우 다릅니다</strong> (특히 명도·수리·체납).</li>
-          <li><strong>유치권·법정지상권</strong> 같은 법적 분쟁은 변호사·법무사 상담 필수.</li>
-          <li>본 도구는 <strong>자가 견적 검토용</strong>, 실제 입찰은 현장 조사·임장이 필수.</li>
-          <li>세금·대출 자세한 사항은 <strong>세무사·은행</strong>에 직접 확인하세요.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        사용 안내 세율·LTV·DSR은 매년 변동됩니다 — <strong>국세청·국토부·금감원 최신 공시</strong> 우선. 경매 부대비용은 <strong>물건별로 매우 다릅니다</strong> (특히 명도·수리·체납). <strong>유치권·법정지상권</strong> 같은 법적 분쟁은 변호사·법무사 상담 필수.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/real-estate" className={s.crossLink}>
@@ -720,8 +720,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">총 투자</text>
-      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Syne" fontWeight="800">
+      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">총 투자</text>
+      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
         {total >= 10000 ? `${(total / 10000).toFixed(1)}억` : `${total.toFixed(0)}만`}
       </text>
     </svg>

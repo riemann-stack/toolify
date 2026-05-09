@@ -21,7 +21,7 @@
   margin-bottom: 8px;
 }
 .weekCardNum {
-  font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
 }
 .weekCardBody { font-size: 13px; color: var(--text); }
 .weekCardMeta {
@@ -63,7 +63,7 @@
 .goalCheck {
   position: absolute; top: 6px; right: 8px;
   background: var(--accent); color: #0D0D0D;
-  font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
 }
@@ -121,7 +121,7 @@
 .customDistBtn {
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 8px; padding: 8px 4px;
-  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   min-height: 38px;
 }
@@ -156,7 +156,7 @@
 }
 .raceBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 .raceMonth {
-  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800;
   color: var(--accent); letter-spacing: 0.04em;
 }
 .raceName { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -277,7 +277,7 @@
   gap: 6px;
   align-items: center;
 }
-.timeColon { color: var(--muted); font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 800; text-align: center; }
+.timeColon { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; text-align: center; }
 .timeInput {
   width: 100%;
   background: var(--bg3);
@@ -285,7 +285,7 @@
   border-radius: 10px;
   padding: 12px 10px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -346,7 +346,7 @@
   font-size: 12px;
   color: #FFD93E;
   margin-top: 6px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: center;
 }
@@ -379,7 +379,7 @@
 .goalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .goalIcon { font-size: 18px; }
 .goalLabel { font-size: 11.5px; font-weight: 600; }
-.goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: 0.04em; }
+.goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; letter-spacing: 0.04em; }
 
 .goalSpeed { border-color: rgba(255,107,107,0.40); }
 .goal5k    { border-color: var(--accent); }
@@ -408,7 +408,7 @@
   padding: 9px 6px;
   font-size: 12.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -441,7 +441,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: #FFD93E;
@@ -450,7 +450,7 @@
 }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -476,9 +476,9 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Syne', sans-serif; }
-.lapTable td:nth-child(2) { font-family: 'Syne', sans-serif; font-weight: 800; color: #FFD93E; font-size: 14px; }
-.lapTable td:nth-child(3) { font-family: 'Syne', sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
+.lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
+.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #FFD93E; font-size: 14px; }
+.lapTable td:nth-child(3) { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
 .lapTable .standardRow td { background: rgba(255,217,62,0.04); }
 .lapCopyBtn {
   background: var(--bg3);
@@ -517,7 +517,7 @@
   border-bottom: 1px dashed var(--border);
 }
 .recoRow:last-child { border-bottom: none; }
-.recoRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.recoRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 회복 가이드 표 ── */
 .recoveryTable {
@@ -539,7 +539,7 @@
 }
 .recoveryTable td:first-child {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -631,7 +631,7 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.yassoTable td:first-child { color: #FFD93E; font-family: 'Syne', sans-serif; font-weight: 700; }
+.yassoTable td:first-child { color: #FFD93E; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .yassoTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .yassoTable td:last-child { color: var(--muted); font-size: 12px; }
 
@@ -648,7 +648,7 @@
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -670,7 +670,7 @@
 }
 .sliderValue {
   min-width: 64px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: #FFD93E;
@@ -697,7 +697,7 @@
 }
 .scheduleTable td:first-child {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -705,7 +705,7 @@
 .scheduleTable td:last-child {
   text-align: right;
   font-size: 11.5px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .phaseAdapt  td:last-child { color: #3EFF9B; }
@@ -723,7 +723,7 @@
   font-size: 12px;
 }
 .scheduleDetailCard div { color: var(--muted); padding: 3px 0; }
-.scheduleDetailCard strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.scheduleDetailCard strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .marathonExtra {
   background: rgba(155,89,182,0.06);

@@ -13,7 +13,7 @@
   letter-spacing: 0.06em; text-transform: uppercase;
 }
 .cardTitle {
-  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700;
   color: var(--text); margin-bottom: 12px;
   display: flex; align-items: center; gap: 6px;
 }
@@ -37,13 +37,13 @@
 .heroLeft { flex: 1; min-width: 0; }
 .heroLead { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 4px; }
 .heroName {
-  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800;
   color: var(--text); letter-spacing: -0.3px; line-height: 1.2; margin: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .heroRight { text-align: right; flex-shrink: 0; }
 .heroPrice {
-  font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 28px; font-weight: 800;
   color: var(--accent); line-height: 1; letter-spacing: -1px;
 }
 .heroPriceUnit { font-size: 14px; font-weight: 700; margin-left: 2px; color: var(--muted); }
@@ -71,7 +71,7 @@
 
 .productBadge {
   position: absolute; top: 8px; left: 16px;
-  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 800;
   padding: 2px 10px; border-radius: 99px; color: #0D0D0D;
 }
 .cardA .productBadge { background: #3EC8FF; }
@@ -118,7 +118,7 @@
 }
 .input:focus, .select:focus { border-color: rgba(200,255,62,0.5); }
 .inputBig { font-size: 18px; font-weight: 600; }
-.inputRight { text-align: right; font-family: 'Syne', sans-serif; font-weight: 700; }
+.inputRight { text-align: right; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .select {
   appearance: none; -webkit-appearance: none; padding-right: 32px; cursor: pointer;
@@ -137,7 +137,7 @@
 .chip {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
   padding: 6px 12px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700;
+  cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   min-height: 32px; transition: all 0.15s;
 }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
@@ -149,7 +149,7 @@
 .countBtn {
   width: 48px; height: 48px; min-width: 48px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text);
   cursor: pointer; transition: all 0.15s;
   display: flex; align-items: center; justify-content: center;
 }
@@ -219,7 +219,7 @@
 .sameMoneyLabel { font-size: 13px; color: var(--text); cursor: pointer; flex: 1; }
 .sameMoneyInput {
   width: 110px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-  padding: 8px 10px; font-family: 'Syne', sans-serif; font-size: 14px;
+  padding: 8px 10px; font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
   color: var(--text); text-align: right; box-sizing: border-box; outline: none;
   min-height: 36px;
 }
@@ -239,18 +239,18 @@
   color: var(--text); font-size: 13px;
 }
 .compareTable tbody td.num {
-  text-align: right; font-family: 'Syne', sans-serif; font-weight: 600;
+  text-align: right; font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
 }
 .winnerRow { background: rgba(200,255,62,0.08); }
 .trophy { font-size: 14px; margin-left: 4px; }
 .unitPriceCell {
-  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 800;
 }
 .winnerRow .unitPriceCell { color: var(--accent); }
 
 .productLabel { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .productTag {
-  font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
   color: #0D0D0D; padding: 2px 8px; border-radius: 99px;
 }
 .tagA { background: #3EC8FF; }
@@ -260,7 +260,7 @@
 /* ── 배지 ── */
 .badgeRow { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .badge {
-  font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 700;
   padding: 2px 8px; border-radius: 99px;
 }
 .badgeCount { background: var(--bg3); color: var(--accent); border: 1px solid rgba(200,255,62,0.3); }
@@ -285,7 +285,7 @@
 .diffGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
 .diffBox { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 .diffLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-.diffValue { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
+.diffValue { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
 .diffStrong { color: #3EFF9B; }
 .diffMedium { color: var(--accent); }
 .diffWeak   { color: var(--muted); }

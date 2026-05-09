@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './rebar.module.css'
 import {
   REBAR_SIZES, REBAR_DATA, STANDARD_LENGTHS, STRENGTH_META,
@@ -591,18 +592,16 @@ export default function RebarClient() {
       )}
 
       {/* 면책 (모든 탭 공통) */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용·시공 안내</strong>
-        <ul>
-          <li>표시 단위중량은 <strong>KS D 3504 표준치</strong>이며, 제조사·롯트별 ±5% 오차 가능.</li>
-          <li>가격은 사용자 입력 또는 일반 참고치 — <strong>한국철강협회·시세 우선</strong>.</li>
-          <li>구조 설계·배근 도면은 반드시 <strong>구조기술사·건축사 책임</strong>입니다.</li>
-          <li>시공은 <strong>건설기능사·철근기능사·건설업 등록 사업자</strong>에게 의뢰.</li>
-          <li>셀프 시공은 <strong>옹벽 1m 미만·카포트·울타리 등 소형 비구조물</strong> 한정 권장.</li>
-          <li>운반비·트럭 적재 매칭은 일반 참고치, 실제는 거리·시기에 따라 변동.</li>
-          <li>모든 데이터는 브라우저에 저장되며, 서버로 전송되지 않습니다.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 표시 단위중량은 <strong>KS D 3504 표준치</strong>이며, 제조사·롯트별 ±5% 오차 가능. 가격은 사용자 입력 또는 일반 참고치 — <strong>한국철강협회·시세 우선</strong>. 구조 설계·배근 도면은 반드시 <strong>구조기술사·건축사 책임</strong>입니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/wire" className={s.crossLink}>

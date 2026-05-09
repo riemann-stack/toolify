@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -62,7 +62,7 @@ export default function PaintMixPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 디자인·미술
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎨 물감·잉크 혼합 비율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -175,7 +175,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[3]}</td>
                 </tr>
               ))}
@@ -228,7 +228,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>

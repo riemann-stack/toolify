@@ -659,7 +659,7 @@ export default function PomodoroClient() {
                 { step: '4', title: '긴 휴식', desc: '4사이클(2시간) 후 15~30분 긴 휴식. 산책·낮잠 등 뇌를 식혀주세요.' },
               ].map(s => (
                 <div key={s.step} className={styles.guideCard}>
-                  <span className={styles.guideEmoji} style={{ color: '#C8FF3E', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{s.step}</span>
+                  <span className={styles.guideEmoji} style={{ color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{s.step}</span>
                   <div>
                     <div className={styles.guideTitle}>{s.title}</div>
                     <div className={styles.guideDesc}>{s.desc}</div>

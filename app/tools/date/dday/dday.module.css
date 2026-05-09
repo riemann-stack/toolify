@@ -302,7 +302,7 @@
 }
 
 .ddayHero {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 56px;
   letter-spacing: -2px;
@@ -372,7 +372,7 @@
 .ddayProgressLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -390,7 +390,7 @@
   justify-content: space-between;
   align-items: center;
 }
-.ddayPace strong { color: #FFD700; font-family: 'Syne', sans-serif; }
+.ddayPace strong { color: #FFD700; font-family: 'Inter', system-ui, sans-serif; }
 
 .empty {
   text-align: center;
@@ -426,7 +426,7 @@
   font-weight: 600;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(64px, 14vw, 96px);
   letter-spacing: -2px;
@@ -460,7 +460,7 @@
   text-align: center;
 }
 .statNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--accent);
@@ -491,7 +491,7 @@
   text-align: center;
 }
 .countdown4 .num {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: #3EC8FF;
@@ -531,7 +531,7 @@
   text-align: center;
 }
 .paceHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 9vw, 56px);
   color: #FFD700;
@@ -561,7 +561,7 @@
 }
 .paceRow span:first-child { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .paceRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -611,7 +611,7 @@
 }
 .paceBarFill { height: 100%; border-radius: 999px; transition: width 0.4s; }
 .paceBarValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -649,7 +649,7 @@
   text-align: center;
 }
 .diffHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 12vw, 80px);
   color: #C485E0;
@@ -673,7 +673,7 @@
 }
 .diffRow span:first-child { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .diffRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

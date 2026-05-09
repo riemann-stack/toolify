@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './lorem.module.css'
 
@@ -812,9 +813,16 @@ export default function LoremClient() {
     <div className={styles.wrap}>
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        💡 <strong>참고용 더미 콘텐츠</strong> — 본 도구로 생성된 모든 텍스트와 데이터는 무작위 조합된 가상 정보입니다. 실제 인물·회사·서비스와 무관하며 자유롭게 사용하실 수 있습니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        참고용 더미 콘텐츠
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

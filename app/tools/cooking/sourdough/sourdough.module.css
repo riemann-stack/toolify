@@ -36,7 +36,7 @@
 
 /* ── 섹션 ─────────────────────────── */
 .secTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -121,7 +121,7 @@
 .customLabel {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .customInput {
   flex: 1;
@@ -132,7 +132,7 @@
   border-radius: 8px;
   color: var(--text);
   font-size: 13px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .customInput:focus { outline: none; border-color: var(--accent); }
@@ -142,7 +142,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 800;
   color: var(--accent);
@@ -219,7 +219,7 @@
   margin-top: 6px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .tempHint {
   font-size: 12px;
@@ -314,7 +314,7 @@
 }
 .statusEmoji { font-size: 28px; }
 .statusLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 17px;
   font-weight: 800;
   color: var(--text);
@@ -331,7 +331,7 @@
 }
 .statusScore {
   margin-left: auto;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 20px;
   font-weight: 800;
   color: var(--accent);
@@ -391,7 +391,7 @@
   margin: 0 0 3px;
 }
 .infoVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -414,7 +414,7 @@
   letter-spacing: 0.04em;
 }
 .bakeStatus {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   margin: 0 0 6px;
@@ -437,7 +437,7 @@
   padding: 20px 22px;
 }
 .schedTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -466,7 +466,7 @@
   border-radius: 8px;
   color: var(--text);
   font-size: 13px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   appearance: none;
@@ -492,7 +492,7 @@
   letter-spacing: 0.04em;
 }
 .schedResVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 17px;
   font-weight: 800;
   color: var(--accent);
@@ -552,7 +552,7 @@
   margin: 0 0 8px;
 }
 .peakTime {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 500;
   color: var(--text);
@@ -569,7 +569,7 @@
   font-size: 12px;
   color: var(--muted);
   margin: 0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* ── SVG 그래프 ─────────────── */
@@ -586,7 +586,7 @@
   display: block;
 }
 .graphAxis {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   fill: var(--muted);
 }
@@ -608,7 +608,7 @@
 .legendLabel { color: var(--muted); }
 .legendTime {
   margin-left: auto;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
 }
@@ -642,7 +642,7 @@
 }
 .useBadge strong {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -651,7 +651,7 @@
   margin-bottom: 16px;
 }
 .tableTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -673,7 +673,7 @@
 .compTable tbody td {
   padding: 10px 8px;
   text-align: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 500;
   color: var(--text);
   border-bottom: 1px solid var(--border);
@@ -695,7 +695,7 @@
   padding: 20px 22px;
 }
 .reverseTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -718,7 +718,7 @@
   letter-spacing: 0.04em;
 }
 .reverseResVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(18px, 4vw, 22px);
   font-weight: 800;
   color: var(--accent);

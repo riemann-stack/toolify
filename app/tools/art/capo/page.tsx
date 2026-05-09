@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import CapoClient from './CapoClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/capo',
@@ -13,7 +14,7 @@ export default function CapoPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎸 기타 카포·전조 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function CapoPage() {
 
       <CapoClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 카포란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             카포(Capo)란 무엇인가?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -37,10 +39,10 @@ export default function CapoPage() {
 
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>카포 계산 공식</p>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
               실제 울리는 키 = 연주 코드 + 카포 프렛 수(반음)
             </p>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '-0.2px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '-0.2px' }}>
               예: G 코드 + 카포 3프렛 → B♭ 키
             </p>
           </div>
@@ -62,7 +64,7 @@ export default function CapoPage() {
 
         {/* ── 2. 카포 위치별 코드 변환 예시 (C키 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             카포 위치별 코드 변환 — C키 기준
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -88,9 +90,9 @@ export default function CapoPage() {
                   { fret: '7프렛', chord: 'F',  key: 'C', diff: '어려움 (바레)',    badge: null },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: row.badge === 'rec' ? 'rgba(62,255,155,0.05)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{row.fret}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row.chord}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{row.key}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row.fret}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row.chord}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{row.key}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: row.badge === 'rec' ? '#3EFF9B' : 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
@@ -101,13 +103,13 @@ export default function CapoPage() {
 
         {/* ── 3. 오픈 코드 vs 바레 코드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             오픈 코드 vs 바레 코드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '13px', color: '#3EFF9B', fontWeight: 700, marginBottom: '8px' }}>🟢 오픈 코드 (쉬움)</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                 C · G · D · Em · Am · A · E · Dm
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -117,7 +119,7 @@ export default function CapoPage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '8px' }}>🔴 바레 코드 (어려움)</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                 F · B♭ · E♭ · A♭ · D♭ · G♭ · B
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -130,7 +132,7 @@ export default function CapoPage() {
 
         {/* ── 4. 자주 쓰는 키별 추천 카포 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 쓰는 키별 추천 카포 위치
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -154,9 +156,9 @@ export default function CapoPage() {
                   { k: 'B',  fret: '2프렛 / 4프렛', play: 'A / G',      diff: '쉬움' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px' }}>{row.k}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row.fret}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EFF9B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row.play}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: '15px' }}>{row.k}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.fret}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.play}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
@@ -170,7 +172,7 @@ export default function CapoPage() {
 
         {/* ── 5. 다이아토닉 코드 & 진행 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             다이아토닉 코드와 기본 진행
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -199,8 +201,8 @@ export default function CapoPage() {
               { key: 'A 키', chords: 'A - E - F♯m - D' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '13px', color: 'var(--accent)', minWidth: 50 }}>{row.key}</span>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>{row.chords}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: '13px', color: 'var(--accent)', minWidth: 50 }}>{row.key}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>{row.chords}</span>
               </div>
             ))}
           </div>
@@ -208,7 +210,7 @@ export default function CapoPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '카포를 쓰면 음질이 나빠지나요?',
@@ -237,7 +239,7 @@ export default function CapoPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/frequency', icon: '🎵', name: '주파수 음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },

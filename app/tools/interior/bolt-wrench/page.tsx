@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function BoltWrenchPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔧 볼트·너트 스패너 사이즈 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -96,10 +96,10 @@ export default function BoltWrenchPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>주요 차이 사이즈</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>ISO 22 mm / JIS 19 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 22 mm / JIS 19 mm</td></tr>
             </tbody>
           </table>
         </div>

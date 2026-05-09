@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import s from './stock-decision.module.css'
@@ -476,16 +477,16 @@ export default function StockDecisionClient() {
       )}
 
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 의사결정 보조입니다</strong>
-        <ul>
-          <li>본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 투자 권유 X</strong></li>
-          <li>자가진단·무작위 결과 모두 <strong>본인 판단 보조</strong> — 모든 책임은 본인에게</li>
-          <li>종목 정보 검색·DB 보유 X — 본인이 입력한 종목명은 화면에만 표시·서버 X·localStorage X</li>
-          <li>투자 판단 전 필수 확인: <a href="https://dart.fss.or.kr" target="_blank" rel="noopener" className={s.link}>DART</a>, <a href="https://kind.krx.co.kr" target="_blank" rel="noopener" className={s.link}>KIND</a>, 본인 거래 증권사 안내</li>
-          <li>도움: 금융감독원 1332</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 도구는 일반 의사결정 보조입니다 본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 투자 권유 X</strong> 자가진단·무작위 결과 모두 <strong>본인 판단 보조</strong> — 모든 책임은 본인에게 종목 정보 검색·DB 보유 X — 본인이 입력한 종목명은 화면에만 표시·서버 X·localStorage X
+      </Disclaimer>
     </div>
   )
 }

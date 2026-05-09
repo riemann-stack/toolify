@@ -97,7 +97,7 @@
   border-radius: 10px;
   color: var(--text);
   font-size: 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .customInput:focus { outline: none; border-color: var(--accent); }
@@ -121,7 +121,7 @@
   border-radius: 10px;
   color: var(--text);
   font-size: 15px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: center;
   cursor: pointer;
@@ -189,7 +189,7 @@
   letter-spacing: 0.04em;
 }
 .vdotStrip strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   font-weight: 800;
 }
@@ -235,7 +235,7 @@
   margin: 0;
 }
 .predCardTime {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 4.5vw, 36px);
   font-weight: 800;
   color: var(--accent);
@@ -253,7 +253,7 @@
 }
 .predCardPace strong {
   color: #3EC8FF;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 13px;
 }
@@ -266,7 +266,7 @@
   border-top: 1px solid var(--border);
   font-size: 10px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   flex-wrap: wrap;
 }
 .predCardFormulas span { white-space: nowrap; }
@@ -288,7 +288,7 @@
   margin: 0 0 10px;
 }
 .heroTime {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -301,7 +301,7 @@
   color: var(--muted);
   margin: 0;
 }
-.heroPace strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.heroPace strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── 비교 테이블 ─────────────────── */
 .tableWrap { overflow-x: auto; margin: 0 -4px; }
@@ -327,7 +327,7 @@
   padding: 11px 12px;
   text-align: center;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 500;
   border-bottom: 1px solid var(--border);
 }
@@ -373,7 +373,7 @@
   opacity: 0.55;
 }
 .subLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -397,7 +397,7 @@
   border-radius: 16px;
 }
 .vdotNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(56px, 12vw, 72px);
   font-weight: 800;
   line-height: 1;
@@ -437,7 +437,7 @@
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 15px;
 }
@@ -466,7 +466,7 @@
   letter-spacing: 0.04em;
 }
 .zonePaceVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -553,7 +553,7 @@
 .wPct {
   font-size: 10px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .wBtnActive .wPct { color: var(--accent); }
@@ -572,9 +572,9 @@
   margin: 0 0 8px;
   letter-spacing: 0.04em;
 }
-.adjSub { color: #FF8C3E; font-weight: 700; font-family: 'Syne', sans-serif; }
+.adjSub { color: #FF8C3E; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
 .adjTime {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(32px, 7vw, 48px);
   font-weight: 800;
   color: #3EC8FF;
@@ -587,7 +587,7 @@
   color: var(--muted);
   margin: 0;
 }
-.adjPace strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.adjPace strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ════════════════════════════════════════════════════════════
    v2 — 4탭, 환경 보정, 연령/성별, 목표 역산, 내 기록
@@ -610,7 +610,7 @@
   border-radius: 8px;
   text-align: center;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -651,7 +651,7 @@
   border-radius: 99px;
   padding: 6px 14px;
   font-size: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
@@ -672,7 +672,7 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-.heroVdot strong { font-family: 'Syne', sans-serif; font-size: 16px; }
+.heroVdot strong { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; }
 .heroVdotTag {
   font-size: 11px;
   font-weight: 700;
@@ -715,7 +715,7 @@
 }
 .sliderRow label strong {
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
 }
 .slider {
@@ -765,14 +765,14 @@
   color: var(--text);
 }
 .envTable tr:last-child td { border-bottom: none; }
-.envDetail { color: var(--muted); font-family: 'Syne', sans-serif; }
-.envPct { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
-.envSec { color: var(--muted); font-family: 'Syne', sans-serif; }
+.envDetail { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.envPct { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.envSec { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 .envTotal td {
   background: var(--bg3);
   font-weight: 700;
   color: var(--accent) !important;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .envResult {
@@ -786,7 +786,7 @@
 }
 .envResult > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .envResultLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-.envResultVal { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+.envResultVal { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
 .envResultValAccent { color: var(--accent); font-size: 22px; }
 .envResultArrow { color: var(--muted); font-size: 20px; }
 
@@ -854,9 +854,9 @@
   line-height: 1.7;
 }
 .demoResult p { margin: 0 0 4px; }
-.demoResult strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.demoResult strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 .demoSub { color: var(--muted); }
-.demoFactor { color: var(--muted); font-size: 11px; margin-left: 6px; font-family: 'Syne', sans-serif; }
+.demoFactor { color: var(--muted); font-size: 11px; margin-left: 6px; font-family: 'Inter', system-ui, sans-serif; }
 .demoNote { font-size: 11px; color: var(--muted); margin-top: 6px !important; line-height: 1.6; }
 
 /* 목표 역산 */
@@ -879,7 +879,7 @@
   line-height: 1.7;
 }
 .gapResult p { margin: 0 0 4px; }
-.gapResult strong { font-family: 'Syne', sans-serif; }
+.gapResult strong { font-family: 'Inter', system-ui, sans-serif; }
 .gapNeg { color: #FF8C8C; }
 .gapPos { color: #3EFF9B; }
 .gapEstimate {
@@ -935,12 +935,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
 }
 .zoneName { font-size: 13px; font-weight: 600; color: var(--text); }
-.zoneSimplePace { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+.zoneSimplePace { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px; }
 .zoneSimpleDesc { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
 .zoneXLink {
@@ -1009,10 +1009,10 @@
   .recordItem { grid-template-columns: 1fr 1fr 30px; grid-template-rows: auto auto; }
   .recordVdot { grid-column: 1 / 3; }
 }
-.recordDate { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; }
+.recordDate { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 .recordDist { font-size: 12px; color: var(--text); font-weight: 600; }
-.recordTime { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); font-size: 14px; }
-.recordVdot { font-size: 11px; color: var(--accent); font-family: 'Syne', sans-serif; }
+.recordTime { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); font-size: 14px; }
+.recordVdot { font-size: 11px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 .recordRemove {
   background: transparent;
   border: none;
@@ -1065,7 +1065,7 @@
   text-align: center;
   line-height: 1.6;
 }
-.chartCaption strong { font-family: 'Syne', sans-serif; }
+.chartCaption strong { font-family: 'Inter', system-ui, sans-serif; }
 .chartEmpty {
   font-size: 12px;
   color: var(--muted);

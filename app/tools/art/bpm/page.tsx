@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import BpmClient from './BpmClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/bpm',
@@ -21,7 +22,7 @@ export default async function BpmPage({
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎵 BPM 딜레이 타임 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -30,11 +31,12 @@ export default async function BpmPage({
 
       <BpmClient initialBpm={initialBpm} />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             BPM 딜레이 타임 계산 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -43,7 +45,7 @@ export default async function BpmPage({
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center', marginBottom: '12px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>4분음표 딜레이 계산식</p>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
               딜레이(ms) = 60,000 ÷ BPM
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
@@ -58,7 +60,7 @@ export default async function BpmPage({
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--accent)', marginBottom: '6px', fontWeight: 600 }}>{item.label}</p>
-                <p style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '4px', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{item.formula}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '4px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{item.formula}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{item.example}</p>
               </div>
             ))}
@@ -67,7 +69,7 @@ export default async function BpmPage({
 
         {/* ── 2. 주요 BPM별 딜레이 타임 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             장르별 BPM 및 4분음표 딜레이 타임 참고표
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -90,7 +92,7 @@ export default async function BpmPage({
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{genre}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{bpmRange}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{q}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{q}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{e}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{s}</td>
                   </tr>
@@ -102,7 +104,7 @@ export default async function BpmPage({
 
         {/* ── 3. DAW 설정 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🎛️ DAW에서 딜레이·리버브 설정하는 법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -124,7 +126,7 @@ export default async function BpmPage({
 
         {/* ── 4. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '점음표(dotted)는 왜 ×1.5인가요?',
@@ -153,7 +155,7 @@ export default async function BpmPage({
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',       desc: '앨범·프로젝트 마감일 카운트다운' },

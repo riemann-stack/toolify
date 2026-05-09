@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './curtain-blind.module.css'
 
@@ -223,10 +224,16 @@ export default function CurtainBlindClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 일반적인 한국 표준 측정법 기준 참고용</strong>입니다.
-        주문 제작 시 실제 사이즈는 0.5~1cm 차이가 날 수 있으므로 구매 전 매장 확인 또는 전문 시공자 상담을 권장합니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 일반적인 한국 표준 측정법 기준 참고용
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'size' ? styles.tabActive : ''}`}  onClick={() => setTab('size')}>사이즈 계산</button>
@@ -444,7 +451,7 @@ export default function CurtainBlindClient() {
             )}
             {result.type === 'curtain' && (
               <p className={styles.heroSub}>
-                1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
+                1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
                 {doubleLayer && ' · 이중 (시어 + 암막)'}
               </p>
             )}

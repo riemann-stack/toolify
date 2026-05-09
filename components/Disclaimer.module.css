@@ -1,0 +1,72 @@
+/* ──────────────────────────────────────────────────────
+   Disclaimer.module.css — 사이트 전체 통일 디자인
+   ────────────────────────────────────────────────────── */
+.disclaimer {
+  margin-top: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* variant별 액센트 컬러 (left border) */
+.disclaimer[data-variant="default"] { border-left-color: rgba(200, 255, 62, 0.6); }
+.disclaimer[data-variant="medical"] { border-left-color: rgba(62, 200, 255, 0.7); }
+.disclaimer[data-variant="finance"] { border-left-color: rgba(62, 255, 155, 0.7); }
+.disclaimer[data-variant="legal"]   { border-left-color: rgba(196, 133, 224, 0.7); }
+.disclaimer[data-variant="safety"]  { border-left-color: rgba(255, 184, 62, 0.7); }
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.emoji {
+  font-size: 16px;
+  line-height: 1;
+}
+.title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.disclaimer[data-variant="default"] .title { color: var(--accent); }
+.disclaimer[data-variant="medical"] .title { color: #3EC8FF; }
+.disclaimer[data-variant="finance"] .title { color: #3EFF9B; }
+.disclaimer[data-variant="legal"]   .title { color: #C485E0; }
+.disclaimer[data-variant="safety"]  .title { color: #FFB83E; }
+
+.list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.list li { margin-bottom: 2px; }
+.list li:last-child { margin-bottom: 0; }
+.custom { color: var(--text); margin-top: 4px !important; }
+.custom strong { color: var(--text); }
+
+.related {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+.relatedLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.relatedLink:hover { text-decoration: underline; }
+.dot { color: var(--muted); opacity: 0.5; }

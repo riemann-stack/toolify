@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './ac-capacity.module.css'
 
@@ -237,10 +238,16 @@ export default function AcCapacityClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 한국 표준(㎡당 130~150W 냉방 부하) 기준 참고용</strong>입니다.
-        실제 필요 평형은 단열 상태·외부 기온·가전 발열·사용 패턴에 따라 달라질 수 있으며 정확한 선택은 에어컨 매장이나 시공 전문가와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 한국 표준(㎡당 130~150W 냉방 부하) 기준 참고용
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'calc' ? styles.tabActive : ''}`}    onClick={() => setTab('calc')}>평형 계산</button>

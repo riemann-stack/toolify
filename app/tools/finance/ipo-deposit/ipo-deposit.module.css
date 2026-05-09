@@ -62,7 +62,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   box-sizing: border-box;
   outline: none;
 }
@@ -77,14 +77,14 @@
   padding: 6px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
   text-align: right;
 }
 .miniInput:focus { border-color: var(--accent); }
 .miniInput::-webkit-outer-spin-button,
 .miniInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.unitText { font-size: 13px; color: var(--muted); font-family: 'Syne', sans-serif; margin-left: 2px; }
+.unitText { font-size: 13px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; margin-left: 2px; }
 
 .row2 {
   display: grid;
@@ -112,7 +112,7 @@
   border-radius: 99px;
   padding: 6px 14px;
   font-size: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
@@ -172,7 +172,7 @@
   letter-spacing: 0.04em;
 }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(28px, 7vw, 42px);
   font-weight: 800;
   color: var(--text);
@@ -209,7 +209,7 @@
 }
 .detailTable td:last-child {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
@@ -254,7 +254,7 @@
   font-size: 13px;
   color: var(--text);
   border-bottom: 1px solid var(--border);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .scenarioTable tr:last-child td { border-bottom: none; }
 .rowDanger td { background: rgba(255, 107, 107, 0.06); }
@@ -384,7 +384,7 @@
 .memoMeta {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
 }
 .memoDates {
@@ -400,7 +400,7 @@
   border-radius: 6px;
   padding: 3px 8px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .memoDateChipAccent {
   border-color: rgba(200,255,62,0.4);
@@ -409,7 +409,7 @@
 .memoRefund {
   font-size: 12px;
   color: #3EFF9B;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .memoNotes {
   font-size: 11px;

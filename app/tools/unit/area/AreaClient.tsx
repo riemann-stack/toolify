@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import styles from './area.module.css'
 
@@ -87,10 +88,16 @@ export default function AreaClient() {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.disclaimer}>
-        🏠 <strong>1평 = 400/121 ㎡ ≈ 3.306㎡</strong> · 한국 부동산은 보통 <strong>전용 84㎡ → 분양 34평</strong>으로 표기합니다.
-        본 도구는 면적 변환·아파트 평형표·전용/공급/계약면적 차이까지 종합 안내합니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/unit/converter', label: '단위 변환기' },
+          { href: '/tools/unit/area', label: '면적 단위' },
+          { href: '/tools/unit/fuel-economy', label: '연비 변환' }
+        ]}
+      >
+        1평 = 400/121 ㎡ ≈ 3.306㎡
+      </Disclaimer>
 
       <div className={styles.tabs}>
         {TABS.map(t => (

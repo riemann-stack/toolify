@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function PackingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧳 여행 옷·짐 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -110,7 +110,7 @@ export default function PackingPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : 'right',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Syne, sans-serif',
+                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, system-ui, sans-serif',
                       color: j === 0 ? 'var(--text)' : 'var(--accent)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 12.5,
@@ -183,7 +183,7 @@ export default function PackingPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : (j === 3 ? 'left' : 'right'),
-                      fontFamily: j === 0 || j === 3 ? 'Noto Sans KR, sans-serif' : 'Syne, sans-serif',
+                      fontFamily: j === 0 || j === 3 ? 'Noto Sans KR, sans-serif' : 'Inter, system-ui, sans-serif',
                       color: j === 0 || j === 3 ? 'var(--text)' : 'var(--accent)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 12.5,

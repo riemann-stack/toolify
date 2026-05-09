@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './baking-schedule.module.css'
 import {
@@ -58,9 +59,16 @@ export default function BakingScheduleClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        💡 <strong>표시되는 시간은 표준 레시피 기준 예상 일정입니다.</strong> 발효는 시간보다 <strong>반죽 상태</strong>가 우선입니다 — 부피 50~70% 증가, 큰 기포 형성, 손가락 자국 회복 속도를 함께 확인하세요. 본 도구는 참고용 가이드입니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        표시되는 시간은 표준 레시피 기준 예상 일정입니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         {([

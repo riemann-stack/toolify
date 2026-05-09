@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function ExposurePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 사진
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📸 사진 노출 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -139,7 +139,7 @@ export default function ExposurePage() {
                 ['−6~−4', '별빛', '도심 외 별 사진'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '6px 0', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                  <td style={{ padding: '6px 0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--text)' }}>{row[1]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>{row[2]}</td>
                 </tr>
@@ -196,7 +196,7 @@ export default function ExposurePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 0', color: 'var(--text)' }}>{row[0]}</td>
-                  <td style={{ padding: '6px 0', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[1]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>{row[2]}</td>
                 </tr>
               ))}

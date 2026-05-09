@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import HistoryEraClient from './HistoryEraClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/history-era',
@@ -43,7 +44,7 @@ export default function HistoryEraPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📜 역사 연호·연대 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -52,11 +53,12 @@ export default function HistoryEraPage() {
 
       <HistoryEraClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 연호 계산 방법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연호 ↔ 서기 변환 원리</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연호 ↔ 서기 변환 원리</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             모든 연호·기년법은 <strong style={{ color: 'var(--text)' }}>기준 연도(원년) + 재위년 - 1</strong> 공식으로 서기로 변환됩니다.
             아래 기준 연도를 알면 암산으로도 쉽게 계산할 수 있습니다.
@@ -85,8 +87,8 @@ export default function HistoryEraPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', fontWeight: 600, color: 'var(--text)' }}>{row[0]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'serif' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{row[2]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--text)', fontSize: '12px' }}>{row[3]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)', fontSize: '12px' }}>{row[3]}</td>
                     <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{row[4]}</td>
                   </tr>
                 ))}
@@ -97,7 +99,7 @@ export default function HistoryEraPage() {
 
         {/* ── 2. 조선 27대 왕 연호표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>조선 27대 왕 재위 기간표</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>조선 27대 왕 재위 기간표</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             조선 왕 연호는 즉위년을 1년으로 계산합니다. 예: 세종 28년 = 서기 1419 + 28 − 1 = <strong style={{ color: 'var(--text)' }}>1446년</strong> (훈민정음 반포).
           </p>
@@ -113,10 +115,10 @@ export default function HistoryEraPage() {
               <tbody>
                 {JOSEON_TABLE.map((k, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '7px 10px', color: 'var(--muted)', fontFamily: 'Syne, sans-serif', whiteSpace: 'nowrap' }}>{k.num}대</td>
+                    <td style={{ padding: '7px 10px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{k.num}대</td>
                     <td style={{ padding: '7px 10px', fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap' }}>{k.name}</td>
-                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--text)', whiteSpace: 'nowrap' }}>{k.s}~{k.e}</td>
-                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{k.e - k.s + 1}년</td>
+                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)', whiteSpace: 'nowrap' }}>{k.s}~{k.e}</td>
+                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{k.e - k.s + 1}년</td>
                     <td style={{ padding: '7px 10px', color: 'var(--muted)' }}>{k.event}</td>
                   </tr>
                 ))}
@@ -127,7 +129,7 @@ export default function HistoryEraPage() {
 
         {/* ── 3. 60갑자 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자(六十甲子)란?</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자(六十甲子)란?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             10개의 천간(甲~癸)과 12개의 지지(子~亥)를 순서대로 짝지어 만드는 60개의 간지 조합입니다.
             최소공배수 LCM(10, 12) = 60이기 때문에 60년마다 같은 간지가 반복됩니다.
@@ -143,7 +145,7 @@ export default function HistoryEraPage() {
               { stem:'기(己)', branch:'유(酉)', year:2029, animal:'닭의 해' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 800, color: '#FF3E8C', marginBottom: '4px' }}>{item.year}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: '#FF3E8C', marginBottom: '4px' }}>{item.year}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{item.stem}{item.branch}년</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{item.animal}</p>
               </div>
@@ -151,7 +153,7 @@ export default function HistoryEraPage() {
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,62,140,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
             <p style={{ fontSize: '12px', color: '#FF3E8C', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>간지 공식</p>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.7 }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.7 }}>
               천간 = ((서기년 − 4) mod 10 + 10) mod 10<br />
               지지 = ((서기년 − 4) mod 12 + 12) mod 12
             </p>
@@ -160,7 +162,7 @@ export default function HistoryEraPage() {
 
         {/* ── 4. 한국 통합 연표 (단군~현재) (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🇰🇷 한국 통합 연표 (단군~현재)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -188,7 +190,7 @@ export default function HistoryEraPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', color: '#FF3E8C', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: '#FF3E8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.ev}</td>
                   </tr>
                 ))}
@@ -199,7 +201,7 @@ export default function HistoryEraPage() {
 
         {/* ── 5. 동아시아 연호 동시 비교 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🌏 동아시아 연호 동시 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -226,7 +228,7 @@ export default function HistoryEraPage() {
                   { ad: '2026', kr: '서기 2026년 (단기 4359)',     jp: '레이와 8년',         cn: '민국 115년 (대만)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.ad}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.ad}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.kr}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.jp}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.cn}</td>
@@ -239,7 +241,7 @@ export default function HistoryEraPage() {
 
         {/* ── 6. 한국 주요 역사 사건 30선 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📌 한국 주요 역사 사건 30선
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -278,7 +280,7 @@ export default function HistoryEraPage() {
                   { y: '2002',    ev: '한일 FIFA 월드컵',           era: '대한민국 55년' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '8px 12px', textAlign: 'right', color: '#FF3E8C', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.y}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'right', color: '#FF3E8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.y}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.ev}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.era}</td>
                   </tr>
@@ -290,7 +292,7 @@ export default function HistoryEraPage() {
 
         {/* ── 7. 한국 기년법 사용 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📚 한국에서 어떤 기년법을 쓰나?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -316,7 +318,7 @@ export default function HistoryEraPage() {
 
         {/* ── 8. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -375,7 +377,7 @@ export default function HistoryEraPage() {
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/age',     icon: '🎂', name: '만 나이 계산기',     desc: '2023 만 나이 통일법 기준' },

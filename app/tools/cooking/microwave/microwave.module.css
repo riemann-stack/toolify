@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -109,7 +109,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
 }
 .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -126,7 +126,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(28px, 6vw, 40px);
   font-weight: 800;
   color: var(--text);
@@ -184,7 +184,7 @@
   font-size: 12px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .barTrack {
   height: 28px;
@@ -203,7 +203,7 @@
   transition: width 0.3s ease;
 }
 .barValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 800;
   color: #0D0D0D;
@@ -251,7 +251,7 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 .tipBox {
   background: var(--bg3);
@@ -283,11 +283,11 @@
 }
 .detailTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tableScroll table { min-width: 320px; }

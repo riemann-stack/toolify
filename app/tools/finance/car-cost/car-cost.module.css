@@ -58,7 +58,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -211,7 +211,7 @@
 .monthlyHint {
   font-size: 12px;
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   margin-top: 6px;
 }
@@ -255,7 +255,7 @@
   border-radius: 6px;
   padding: 7px 8px;
   font-size: 13px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -270,7 +270,7 @@
 .modifiedValue { color: var(--accent); }
 
 .consumableMonthly {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-size: 13px;
@@ -314,7 +314,7 @@
   margin-bottom: 10px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(28px, 5vw, 52px);
   font-weight: 800;
   color: var(--accent);
@@ -341,7 +341,7 @@
   text-transform: uppercase;
 }
 .heroDualVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
@@ -390,7 +390,7 @@
   color: var(--text);
 }
 .breakdownTable td.numCell {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   text-align: right;
 }
@@ -408,7 +408,7 @@
   color: var(--accent);
 }
 .pctCell {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   color: var(--muted);
   text-align: right;
@@ -422,7 +422,7 @@
   gap: 12px;
 }
 .donutCenter {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   fill: var(--text);
 }
@@ -445,7 +445,7 @@
   flex-shrink: 0;
 }
 .legendLabel { color: var(--muted); flex: 1; }
-.legendVal { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; }
+.legendVal { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 
 /* 환산 카드 3개 */
 .convertGrid {
@@ -470,7 +470,7 @@
   margin-bottom: 6px;
 }
 .convertVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--accent);
@@ -496,7 +496,7 @@
   margin-bottom: 6px;
 }
 .annualVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: #FF8C3E;
@@ -521,7 +521,7 @@
   padding: 14px 16px;
 }
 .transitLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
-.transitVal { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+.transitVal { font-family: 'Inter', system-ui, sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
 .transitDiff {
   background: rgba(62,200,255,0.06);
   border: 1px solid rgba(62,200,255,0.2);
@@ -638,23 +638,89 @@
 }
 .warnBox strong { color: #FF6B6B; }
 
-/* 도움말 ?: */
-.helpTip {
+/* 도움말 ? — 모바일에서도 탭으로 동작 */
+.helpTipWrap {
+  position: relative;
   display: inline-block;
+}
+.helpTip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 6px;
-  width: 16px;
-  height: 16px;
-  line-height: 14px;
-  text-align: center;
+  width: 20px;
+  height: 20px;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
-  cursor: help;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  padding: 0;
+  vertical-align: middle;
+  line-height: 1;
 }
+.helpTip:hover, .helpTip:focus {
+  color: var(--accent);
+  border-color: var(--accent);
+  outline: none;
+}
+.helpTipPopover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: max-content;
+  max-width: min(300px, 90vw);
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 32px 12px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.6;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  white-space: normal;
+  word-break: keep-all;
+  text-align: left;
+}
+.helpTipPopover::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: var(--bg2);
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+.helpTipClose {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.helpTipClose:hover { color: var(--text); }
 
 /* 3·5·10년 비교 카드 */
 .periodGrid {
@@ -677,14 +743,14 @@
 }
 .periodCardLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .periodCardExcl {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 .periodCardIncl {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--accent);
@@ -736,14 +802,14 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .purchaseTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   font-weight: 800;
   color: var(--text);
   margin-bottom: 6px;
 }
 .purchaseMain {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(20px, 4.5vw, 28px);
   font-weight: 800;
   color: var(--accent);
@@ -780,7 +846,7 @@
 .carCompareTable tbody td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -855,7 +921,7 @@
   font-weight: 700; padding: 3px 14px;
 }
 .shareRow span:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;

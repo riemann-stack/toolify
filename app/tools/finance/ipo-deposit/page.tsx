@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +68,7 @@ export default function IpoDepositPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💰 공모주 청약 증거금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -119,11 +119,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
-            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
-            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
-            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
-            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
+            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
+            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
+            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
+            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
+            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
           </tbody>
         </table>
       </div>
@@ -146,12 +146,12 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#FF8C8C', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
-            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
-            <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
-            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>2.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>3주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#FF8C8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
+            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
+            <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
+            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>2.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>3주</td><td style={cell}>올림</td></tr>
           </tbody>
         </table>
       </div>
@@ -200,11 +200,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
-            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Syne, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
-            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#3EFF9B', fontFamily: 'Syne, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
-            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Syne, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
-            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
+            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
+            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
+            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
+            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
+            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
           </tbody>
         </table>
       </div>

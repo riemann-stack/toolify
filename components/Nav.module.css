@@ -264,6 +264,27 @@
   color: var(--accent);
 }
 
+/* 공유 버튼 — 검색 버튼과 동일 스타일 */
+.shareBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.shareBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.shareBtnCopied {
+  background: rgba(62, 255, 155, 0.12);
+  border-color: rgba(62, 255, 155, 0.4);
+  color: #3EFF9B;
+}
+
 /* ── 검색 슬라이드다운 바 ── */
 .searchBar {
   position: sticky;

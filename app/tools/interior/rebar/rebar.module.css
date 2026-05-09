@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -81,7 +81,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
 }
 .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -97,7 +97,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -127,12 +127,12 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Syne', sans-serif; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -183,7 +183,7 @@
 }
 .helpText strong {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* 트럭 카드 */
@@ -215,7 +215,7 @@
   margin: 0;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .truckCap strong, .truckLen strong, .truckTrips strong {
   color: var(--text);
@@ -225,7 +225,7 @@
   margin: 4px 0 0;
   font-size: 11px;
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .truckNote {
@@ -259,7 +259,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .planSpec {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   color: var(--accent);
   font-weight: 700;
@@ -277,7 +277,7 @@
   background: var(--bg2);
   border-radius: 6px;
   padding: 4px 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .planSpecs span b {
   color: var(--text);

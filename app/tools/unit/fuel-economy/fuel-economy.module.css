@@ -33,7 +33,7 @@
   padding: 12px 14px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700;
   color: var(--text); outline: none;
   transition: border 0.15s;
   letter-spacing: -0.5px;
@@ -81,7 +81,7 @@
   text-transform: uppercase; margin-bottom: 4px;
 }
 .resultHeaderValue {
-  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 
@@ -107,7 +107,7 @@
   opacity: 0.75; margin-top: 2px;
 }
 .resultValue {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
   color: var(--text); text-align: right;
   letter-spacing: -0.3px; word-break: break-all;
 }
@@ -161,7 +161,7 @@
   font-size: 11px; color: var(--muted); margin-bottom: 4px;
 }
 .costValue {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px;
   color: var(--accent); letter-spacing: -0.3px;
 }
 .costMeta {
@@ -181,7 +181,7 @@
 }
 .costInput {
   width: 100%; background: transparent; border: none; outline: none;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
   color: var(--text); padding: 0;
 }
 

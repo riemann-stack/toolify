@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import SourdoughClient from './SourdoughClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/sourdough',
@@ -13,7 +14,7 @@ export default function SourdoughPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍞 사워도우 스타터 &amp; 르방 피크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function SourdoughPage() {
 
       <SourdoughClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 사워도우 스타터란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             사워도우 스타터(르방)란?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -48,7 +50,7 @@ export default function SourdoughPage() {
 
         {/* ── 2. 7~14일 로드맵 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             사워도우 스타터 7~14일 로드맵
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -70,7 +72,7 @@ export default function SourdoughPage() {
                   { d: '12~14일',  s: '예측 가능한 피크',          n: '요거트+빵 냄새',    a: '베이킹 테스트!' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.a}</td>
@@ -83,11 +85,11 @@ export default function SourdoughPage() {
 
         {/* ── 3. 급이 비율 시각화 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             급이 비율 이해하기
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '18px 22px', marginBottom: '14px' }}>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', textAlign: 'center', margin: '0 0 8px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', textAlign: 'center', margin: '0 0 8px' }}>
               1 : 1 : 1
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', textAlign: 'center', margin: 0 }}>
@@ -111,9 +113,9 @@ export default function SourdoughPage() {
                   { r: '1:5:5', f: '많은 음식 → 느림',    p: '12~18시간', t: '25°C 이상' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{row.f}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 500 }}>{row.p}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 500 }}>{row.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row.t}</td>
                   </tr>
                 ))}
@@ -124,7 +126,7 @@ export default function SourdoughPage() {
 
         {/* ── 4. 온도별 발효 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             온도별 발효 속도 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -136,7 +138,7 @@ export default function SourdoughPage() {
               { t: '28°C+',   c: '#FF6B6B', title: '주의 구간', desc: '아세톤 생성 위험. 냉장 보관이나 에어컨 공간 활용을 고려하세요.' },
             ].map((z, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${z.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 800, color: z.c, marginBottom: '4px' }}>{z.t}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: z.c, marginBottom: '4px' }}>{z.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px' }}>{z.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{z.desc}</p>
               </div>
@@ -146,7 +148,7 @@ export default function SourdoughPage() {
 
         {/* ── 5. 자주 하는 실수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 하는 실수 &amp; 해결법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -167,7 +169,7 @@ export default function SourdoughPage() {
 
         {/* ── 6. 플로트 테스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             플로트 테스트(Float Test) 해석 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -190,7 +192,7 @@ export default function SourdoughPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               { q: '사워도우 스타터가 안정화됐는지 어떻게 알 수 있나요?',
@@ -214,7 +216,7 @@ export default function SourdoughPage() {
 
         {/* ── 8. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',    desc: '르방 양에 맞춰 재료 비율 자동 계산' },

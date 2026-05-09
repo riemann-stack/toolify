@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import s from './cycle.module.css'
 import {
@@ -683,16 +684,16 @@ export default function CycleClient() {
       )}
 
       {/* ── 면책 (모든 탭 공통) ── */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 참고 가이드입니다</strong>
-        <ul>
-          <li>본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X</strong></li>
-          <li>호르몬 약물·의약품 추천 X · 영양사 처방 X · 특정 브랜드 추천 X</li>
-          <li>다음 경우 <strong>산부인과 상담</strong>: 주기 변동 ±8일 이상 / 부정출혈·과다 출혈 / 6개월+ 무월경 / 심한 PMS·통증 / 임신 계획·피임</li>
-          <li>📞 도움: 보건복지부 여성·아동 상담 <strong>1577-1366</strong> · 청소년 <strong>1388</strong> · 응급 <strong>119</strong></li>
-          <li>🔒 모든 데이터는 본인 브라우저만 — 서버 전송 X · GA에 cycle 데이터 X</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        본 도구는 일반 참고 가이드입니다 본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X</strong> 호르몬 약물·의약품 추천 X · 영양사 처방 X · 특정 브랜드 추천 X 다음 경우 <strong>산부인과 상담</strong>: 주기 변동 ±8일 이상 / 부정출혈·과다 출혈 / 6개월+ 무월경 / 심한 PMS·통증 / 임신 계획·피임
+      </Disclaimer>
     </div>
   )
 }
@@ -774,7 +775,7 @@ function CircleChart({
 
         {/* 가운데 D-day + phase */}
         <text x={cx} y={cy - 4} fontSize="32" fill="var(--text)"
-          textAnchor="middle" dominantBaseline="middle" fontFamily="Syne" fontWeight={800}>
+          textAnchor="middle" dominantBaseline="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
           {result.daysToNextPeriod > 0 ? `D-${result.daysToNextPeriod}` : result.daysToNextPeriod === 0 ? 'D-DAY' : `D+${-result.daysToNextPeriod}`}
         </text>
         <text x={cx} y={cy + 24} fontSize="15" fill={PHASE_META[result.phase].color}

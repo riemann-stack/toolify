@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import s from './blood-alcohol.module.css'
 import {
@@ -191,12 +192,16 @@ export default function BloodAlcoholClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        <strong>⚠️ 참고용 도구입니다</strong>
-        개인의 신체 상태·음식 섭취량·건강 상태에 따라 실제 BAC와 크게 다를 수 있습니다 (±20~30% 오차).
-        계산 결과와 관계없이 <strong style={{ color: '#FF6B6B', display: 'inline', margin: 0 }}>음주 후에는 절대 운전하지 마시고</strong> 대리운전 또는 대중교통을 이용하세요.
-        🚕 카카오 T 대리: <strong>1577-1577</strong> · 티맵 대리: <strong>1644-3030</strong>
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        참고용 도구입니다
+      </Disclaimer>
 
       {/* 4개 탭 */}
       <div className={s.tabs}>
@@ -456,7 +461,7 @@ export default function BloodAlcoholClient() {
               {/* Y축 레이블 */}
               {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
                 <text key={i} x={padL - 6} y={padT + (1 - t) * plotH + 3}
-                  fill="var(--muted)" fontSize="10" fontFamily="Syne" textAnchor="end"
+                  fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
                 >
                   {(t * maxBAC).toFixed(2)}
                 </text>
@@ -467,7 +472,7 @@ export default function BloodAlcoholClient() {
                 if (h > maxHours) return null
                 return (
                   <text key={i} x={xFromHour(h)} y={chartH - padB + 14}
-                    fill="var(--muted)" fontSize="10" fontFamily="Syne" textAnchor="middle"
+                    fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle"
                   >
                     +{h}h
                   </text>
@@ -477,14 +482,14 @@ export default function BloodAlcoholClient() {
               <line x1={padL} x2={chartW - padR} y1={y003} y2={y003}
                 stroke="#FF8C3E" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y003 - 4}
-                fill="#FF8C3E" fontSize="10" fontFamily="Syne" textAnchor="end"
+                fill="#FF8C3E" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
               >
                 0.03 면허정지
               </text>
               <line x1={padL} x2={chartW - padR} y1={y008} y2={y008}
                 stroke="#FF6B6B" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y008 - 4}
-                fill="#FF6B6B" fontSize="10" fontFamily="Syne" textAnchor="end"
+                fill="#FF6B6B" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
               >
                 0.08 면허취소
               </text>
@@ -574,12 +579,16 @@ export default function BloodAlcoholClient() {
         </div>
       </div>
 
-      <div className={s.disclaimer}>
-        <strong>🚫 음주운전은 범죄입니다</strong>
-        BAC 0.03% 이상 면허정지, 0.08% 이상 면허취소·형사처벌 대상입니다.
-        본 계산기는 음주 예방 교육 목적이며, 법적 판단 근거로 사용할 수 없습니다.
-        본인과 타인의 생명을 지키기 위해 음주 후 운전은 절대 금지입니다.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        음주운전은 범죄입니다
+      </Disclaimer>
 
       </>}
 
@@ -916,7 +925,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
               {[0.03, 0.08].map(t => (
                 <g key={t}>
                   <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} fontSize="10" textAnchor="end" fontFamily="Syne">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
                 </g>
               ))}
               {/* 자리별 영역 */}

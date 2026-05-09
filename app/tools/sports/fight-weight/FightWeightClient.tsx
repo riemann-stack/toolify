@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './fight-weight.module.css'
 
@@ -400,9 +401,16 @@ export default function FightWeightClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 참고용 정보입니다.</strong> 실제 격투기 감량은 전문 트레이너·영양사·의사 감독 하에 진행되어야 합니다. 무리한 수분 감량은 생명을 위협할 수 있으며, 실제 사망 사례가 다수 보고되어 있습니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 계산기는 참고용 정보입니다.
+      </Disclaimer>
 
       {/* 종목 선택 */}
       <div className={styles.card}>
@@ -545,7 +553,7 @@ export default function FightWeightClient() {
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 6 }}>
               {needToLose <= 0
                 ? `이미 ${targetClass?.name} 한도 이하입니다. 계체일까지 컨디션 유지에 집중하세요.`
-                : <>주당 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{weeklyLossKg.toFixed(2)}kg</strong> 감량은 체중의 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{((weeklyLossKg / weight) * 100).toFixed(1)}%</strong> 입니다. 의학 가이드라인은 체중의 1%/주 이내를 권장합니다.</>}
+                : <>주당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{weeklyLossKg.toFixed(2)}kg</strong> 감량은 체중의 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{((weeklyLossKg / weight) * 100).toFixed(1)}%</strong> 입니다. 의학 가이드라인은 체중의 1%/주 이내를 권장합니다.</>}
             </p>
           </div>
 

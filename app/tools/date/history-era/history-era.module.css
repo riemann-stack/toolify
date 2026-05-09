@@ -17,7 +17,7 @@
   letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;
 }
 .todayYear {
-  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .todayGrid {
@@ -33,7 +33,7 @@
 }
 .todayItemLabel { font-size: 11px; color: var(--muted); }
 .todayItemValue {
-  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800;
   color: var(--text); letter-spacing: -0.2px;
 }
 .todayGanjji {
@@ -93,7 +93,7 @@
 .numInput {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 14px; font-size: 22px; font-family: 'Syne', sans-serif; font-weight: 700;
+  padding: 11px 14px; font-size: 22px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   color: var(--text); outline: none; transition: border-color 0.2s;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -115,7 +115,7 @@
   display: flex; flex-direction: column; gap: 6px;
 }
 .resultBig {
-  font-family: 'Syne', sans-serif; font-size: clamp(24px, 5vw, 36px);
+  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(24px, 5vw, 36px);
   font-weight: 800; color: var(--accent); letter-spacing: -1px; line-height: 1.1;
 }
 .resultSub { font-size: 14px; color: var(--muted); line-height: 1.6; }
@@ -125,7 +125,7 @@
 .numInputWide {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 14px; font-size: 22px; font-family: 'Syne', sans-serif; font-weight: 700;
+  padding: 11px 14px; font-size: 22px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   color: var(--text); outline: none; transition: border-color 0.2s;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -151,7 +151,7 @@
 }
 .eraTable td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
 .eraTable tr:last-child td { border-bottom: none; }
-.eraYear { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); }
+.eraYear { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); }
 .eraGroup { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
 /* ── Tab 3: 간지 피커 ── */
@@ -182,7 +182,7 @@
 }
 .yearCurrent { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); }
 .yearFuture { border-color: rgba(255,255,255,0.05); }
-.yearNum { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 50px; }
+.yearNum { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 50px; }
 .yearCurrent .yearNum { color: var(--accent); }
 .yearSub { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; }
 .yearBadge {
@@ -221,7 +221,7 @@
 .timelineRow:last-child { border-bottom: none; }
 .timelineLeft { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
 .tlYear {
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; color: var(--text);
   line-height: 1.2; text-align: right; white-space: nowrap;
 }
 .tlGanjji { font-size: 10px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }

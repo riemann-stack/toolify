@@ -467,11 +467,11 @@ function ThawTab() {
                 <label className={s.fieldLabel}>조리 예정 시각</label>
                 <div className={s.btnGroup}>
                   <select value={cookH} onChange={e => setCookH(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Syne', sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
                     {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
                   </select>
                   <select value={cookM} onChange={e => setCookM(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Syne', sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
                     {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
                   </select>
                 </div>
@@ -707,7 +707,7 @@ function ThermometerBox() {
             <text x={seg.x + seg.w / 2} y={14} fill="var(--text)" fontSize="11" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="600">
               {seg.label}
             </text>
-            <text x={seg.x + seg.w / 2} y={64} fill="var(--muted)" fontSize="10" fontFamily="Syne" textAnchor="middle">
+            <text x={seg.x + seg.w / 2} y={64} fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle">
               {seg.range}
             </text>
           </g>

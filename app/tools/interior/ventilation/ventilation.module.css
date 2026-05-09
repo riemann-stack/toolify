@@ -96,7 +96,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -139,7 +139,7 @@
 .spaceCardIcon { font-size: 22px; line-height: 1; margin-bottom: 4px; display: block; }
 .spaceCardName { font-size: 12px; color: var(--text); font-weight: 700; }
 .spaceCardActive .spaceCardName { color: #E89757; }
-.spaceCardAch { font-size: 10.5px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.spaceCardAch { font-size: 10.5px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
 /* 옵션 그리드 */
 .optionRow { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
@@ -191,7 +191,7 @@
 }
 .sliderRow { display: flex; align-items: center; gap: 10px; }
 .sliderVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #E89757;
   font-size: 18px;
@@ -217,7 +217,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 11vw, 64px);
   letter-spacing: -2px;
@@ -250,7 +250,7 @@
 }
 .detailRow span:first-child { color: var(--text); }
 .detailRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: #E89757;
   font-variant-numeric: tabular-nums;
@@ -282,7 +282,7 @@
   border-left-color: var(--accent) !important;
 }
 .co2Range {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 12.5px;

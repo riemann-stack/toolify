@@ -105,7 +105,7 @@
   position: absolute;
   bottom: 12px;
   left: 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   letter-spacing: 1.5px;
@@ -172,7 +172,7 @@
   cursor: pointer;
 }
 .alphaValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
   color: var(--accent);
@@ -198,7 +198,7 @@
 }
 .formatRow:hover { background: rgba(200,255,62,0.04); }
 .formatLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: var(--accent);
@@ -426,7 +426,7 @@
   text-align: center;
 }
 .contrastValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 56px;
   letter-spacing: -1px;
@@ -459,7 +459,7 @@
   font-size: 12.5px;
 }
 .gradeName  { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.gradeReq   { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; text-align: right; }
+.gradeReq   { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
 .gradePass  { background: rgba(62,255,155,0.12); color: #3EFF9B; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 .gradeFailChip { background: rgba(255,107,107,0.12); color: #FF6B6B; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 
@@ -583,7 +583,7 @@
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 .paletteSwatchShade {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 800;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -615,7 +615,7 @@
   align-items: flex-end;
   justify-content: center;
   padding: 4px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
@@ -676,7 +676,7 @@
   margin-top: 2px;
 }
 .tailwindMatchDist {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   font-weight: 700;
@@ -783,7 +783,7 @@
   text-transform: uppercase;
 }
 .gradStopPos {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   color: var(--accent);
   font-weight: 700;
@@ -839,7 +839,7 @@
   align-items: center;
 }
 .gradAngleSlider { width: 100%; accent-color: #3EC8FF; }
-.gradAngleValue { font-family: 'Syne', sans-serif; font-weight: 800; color: #3EC8FF; text-align: right; font-size: 14px; }
+.gradAngleValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #3EC8FF; text-align: right; font-size: 14px; }
 
 .gradStepsRow {
   display: grid;
@@ -944,7 +944,7 @@
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
 .extractedPct {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);

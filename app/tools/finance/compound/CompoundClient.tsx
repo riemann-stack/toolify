@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useCallback } from 'react'
 import styles from './compound.module.css'
 import {
@@ -166,7 +167,7 @@ export default function CompoundClient() {
         <text x="90" y="86" textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="Noto Sans KR, sans-serif">
           수익 비중
         </text>
-        <text x="90" y="106" textAnchor="middle" fill="var(--accent)" fontSize="22" fontFamily="Syne, sans-serif" fontWeight="800">
+        <text x="90" y="106" textAnchor="middle" fill="var(--accent)" fontSize="22" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
           {((1 - principalPct) * 100).toFixed(1)}%
         </text>
       </svg>
@@ -215,11 +216,16 @@ export default function CompoundClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 투자 자문 도구가 아닙니다.</strong> 본 계산기는 입력값에 기반한 수학적 시뮬레이션이며,
-        실제 투자 수익률은 시장 변동·세금·수수료에 따라 달라집니다.
-        <strong> 과거 수익률은 미래 수익을 보장하지 않습니다.</strong>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        투자 자문 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

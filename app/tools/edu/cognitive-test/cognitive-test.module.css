@@ -108,7 +108,7 @@
   color: var(--muted);
   margin-top: 8px;
   text-align: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -146,7 +146,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .stageNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(48px, 12vw, 72px);
   font-weight: 800;
   margin: 8px 0;
@@ -164,7 +164,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   letter-spacing: -2px;
@@ -212,7 +212,7 @@
 .statsTable td:first-child { color: var(--muted); }
 .statsTable td:last-child {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
 }
@@ -236,7 +236,7 @@
 .gradeRowActive { box-shadow: 0 0 0 2px currentColor; }
 .gradeEmoji { font-size: 18px; }
 .gradeLabel { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
-.gradeRange { font-family: 'Syne', sans-serif; font-weight: 700; text-align: right; }
+.gradeRange { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
 
 /* ── 비교 카드 ── */
 .compareCard {
@@ -248,7 +248,7 @@
   color: var(--muted);
   line-height: 1.85;
 }
-.compareCard strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.compareCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 스트룹 ── */
 .stroopWord {
@@ -342,7 +342,7 @@
 .barSingle { background: linear-gradient(90deg, var(--accent), #3EFFD0); }
 .barDual { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
 .barValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   text-align: right;
@@ -379,7 +379,7 @@
   to   { opacity: 1;   transform: scale(1.1); }
 }
 .dualNumber {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(72px, 16vw, 128px);
   color: #3EFFD0;
@@ -457,7 +457,7 @@
 .summaryEmoji { font-size: 26px; }
 .summaryLabel { font-size: 12px; color: var(--muted); margin: 4px 0; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .summaryValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(20px, 4.5vw, 26px);
   color: #3EFFD0;
@@ -492,7 +492,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .totalScoreValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 56px;
   color: #3EFFD0;
@@ -523,7 +523,7 @@
   color: var(--muted);
   padding: 4px 0;
 }
-.recordRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.recordRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .recordEmpty { font-size: 12px; color: var(--muted); padding: 8px 0; text-align: center; }
 
 /* 공유 카드 */
@@ -552,7 +552,7 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: #3EFFD0;
@@ -573,7 +573,7 @@
   padding: 6px 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareItem strong { color: #fff; font-family: 'Syne', sans-serif; font-weight: 800; }
+.shareItem strong { color: #fff; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .shareScore {
   margin-top: 14px;
   padding: 14px;
@@ -583,7 +583,7 @@
   border-radius: 10px;
 }
 .shareScoreNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 32px;
   color: #3EFFD0;
@@ -592,7 +592,7 @@
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
   color: rgba(62,255,208,0.6);
@@ -609,7 +609,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 700; }
+.interpretCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .deviceNote {
   background: rgba(62,200,255,0.05);

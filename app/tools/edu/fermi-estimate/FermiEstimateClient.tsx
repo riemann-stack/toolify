@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './fermi-estimate.module.css'
 
@@ -416,7 +417,7 @@ export default function FermiEstimateClient() {
           <span className={s.heroUnit}>{f.unit}{resultUnit && ` ${resultUnit}`}</span>
         </div>
         <p className={s.heroSub}>
-          정확한 값 ≈ <strong style={{ fontFamily: 'Syne, sans-serif', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
+          정확한 값 ≈ <strong style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
         </p>
         <div className={s.heroCalc}>
           {calcStr}<br />
@@ -520,10 +521,16 @@ export default function FermiEstimateClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        <strong>📐 페르미 추정은 정답을 구하는 도구가 아닙니다.</strong> 문제를 변수로 분해하고 가정을 조절해 <strong>대략의 자릿수</strong>를 추정하는 사고 훈련 도구입니다.
-        결과는 입력 가정에 따라 크게 달라지며, <strong>비즈니스 의사결정·투자·정책 결정에는 실제 시장 조사 데이터와 전문가 분석이 반드시 필요</strong>합니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        페르미 추정은 정답을 구하는 도구가 아닙니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         <button className={`${s.tabBtn} ${tab === 'templates' ? s.tabActive : ''}`} onClick={() => setTab('templates')}>템플릿 시작</button>

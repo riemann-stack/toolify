@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './real-estate.module.css'
 
@@ -257,9 +258,16 @@ export default function RealEstateClient() {
     <div className={styles.wrap}>
 
       {/* 면책 ─ 최상단 */}
-      <div className={styles.disclaimer}>
-        <strong>⚖️ 본 계산기는 단순 시뮬레이션이며 투자 권유가 아닙니다.</strong> 양도소득세·종합부동산세·재산세·임대소득세는 별도 계산이 필요하며, 실제 거래에서는 시장 상황·세제 변경에 따라 결과가 크게 달라질 수 있습니다.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 계산기는 단순 시뮬레이션이며 투자 권유가 아닙니다.
+      </Disclaimer>
 
       {/* ── 모드 토글 ── */}
       <div className={styles.modeToggle} role="tablist">
@@ -923,9 +931,16 @@ export default function RealEstateClient() {
       </button>
 
       {/* 면책 — 하단 재차 강조 */}
-      <div className={styles.disclaimer}>
-        <strong>📌 다시 한 번 안내</strong> — 본 결과는 양도소득세·종합부동산세·재산세·임대소득세를 포함하지 않습니다. 실제 세후 수익은 보유 기간·1주택 여부·장기보유특별공제·지역에 따라 크게 달라지므로 반드시 세무사·공인중개사와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        다시 한 번 안내
+      </Disclaimer>
     </div>
   )
 }

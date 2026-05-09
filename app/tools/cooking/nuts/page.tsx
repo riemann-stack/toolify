@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +68,7 @@ export default function NutsPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🥜 견과류 하루 적정 섭취량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -108,9 +108,9 @@ export default function NutsPage() {
             ].map((r, i) => (
               <tr key={i}>
                 <td style={{ ...cell, fontWeight: 500 }}>{r.n}</td>
-                <td style={{ ...cell, color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{r.s}</td>
-                <td style={{ ...cell, fontFamily: 'Syne, sans-serif' }}>{r.c}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.k}</td>
+                <td style={{ ...cell, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.s}</td>
+                <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.c}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
                 <td style={cell}>{r.v}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.note}</td>
               </tr>
@@ -297,7 +297,7 @@ export default function NutsPage() {
               <tr key={i}>
                 <td style={cell}>{r.m}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.p}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
               </tr>
             ))}
           </tbody>

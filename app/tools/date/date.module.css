@@ -50,7 +50,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -96,7 +96,7 @@
 }
 
 .resultHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 800;
   color: var(--accent);
@@ -132,7 +132,7 @@
 }
 
 .infoNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: var(--text);
@@ -194,7 +194,7 @@
 .ddayLeft { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
 
 .ddayBadge {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 20px;
   font-weight: 800;
   color: var(--accent);

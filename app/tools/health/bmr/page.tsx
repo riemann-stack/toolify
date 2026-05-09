@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import BmrClient from './BmrClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmr',
@@ -18,7 +19,7 @@ export default function BmrPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔥 기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -28,11 +29,12 @@ export default function BmrPage() {
 
       <BmrClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. BMR과 TDEE란? (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             기초대사량(BMR)과 TDEE란?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -44,14 +46,14 @@ export default function BmrPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>BMR</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 완전한 안정 상태에서 생명 유지에 필요한 최소 칼로리. 아무것도 안 해도 소모됩니다.
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: '#3EC8FF', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>TDEE</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 BMR에 활동량을 반영한 <strong style={{ color: 'var(--text)' }}>하루 실제 소비 칼로리</strong>. 다이어트·식단 설계의 기준이 됩니다.
               </p>
@@ -69,7 +71,7 @@ export default function BmrPage() {
 
         {/* ── 2. BMR 4공식 비교 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             BMR 4공식 비교 (NEW)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -100,7 +102,7 @@ export default function BmrPage() {
 
         {/* ── 3. Harris-Benedict 공식 시각화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             Harris-Benedict 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -147,7 +149,7 @@ export default function BmrPage() {
 
         {/* ── 4. 활동 수준별 TDEE 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             활동 수준별 TDEE 계산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -196,7 +198,7 @@ export default function BmrPage() {
 
         {/* ── 5. 정밀 활동 수준 분석 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             정밀 활동 수준 분석 — 5단계의 한계 (NEW)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -224,7 +226,7 @@ export default function BmrPage() {
 
         {/* ── 6. 운동일/휴식일 칼로리 사이클링 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             운동일/휴식일 칼로리 사이클링 (NEW)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -257,7 +259,7 @@ export default function BmrPage() {
 
         {/* ── 7. 안전 하한선 — 거식증 예방 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             안전 하한선 — 거식증·식이장애 예방 (NEW)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -291,7 +293,7 @@ export default function BmrPage() {
 
         {/* ── 8. 목표별 칼로리 가이드 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             목표별 칼로리 설정 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -322,7 +324,7 @@ export default function BmrPage() {
 
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             스마트워치 vs 공식 — 어느 게 정확? (NEW)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
@@ -350,7 +352,7 @@ export default function BmrPage() {
 
         {/* ── 10. FAQ (accordion 방식) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -429,7 +431,7 @@ export default function BmrPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수·키별 정상 체중·허리둘레' },

@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 export default function ToolsPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px', overflowX: 'hidden' }}>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         전체 도구 목록
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '48px' }}>

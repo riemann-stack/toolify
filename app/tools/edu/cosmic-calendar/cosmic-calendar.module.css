@@ -67,7 +67,7 @@
   margin-bottom: 6px;
 }
 .cosmicNowDate {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(18px, 4.5vw, 24px);
   color: var(--text);
@@ -156,7 +156,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -201,7 +201,7 @@
   color: var(--text);
   line-height: 2;
 }
-.unitCard strong { color: #C485E0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.unitCard strong { color: #C485E0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 가로 타임라인 (탭 1) ── */
 .yearTimelineWrap {
@@ -238,7 +238,7 @@
 .monthCard:hover { border-color: rgba(62,255,208,0.50); }
 .monthCardActive { border-color: #3EFFD0; background: rgba(62,255,208,0.06); }
 .monthCardLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
   color: #3EFFD0;
@@ -246,7 +246,7 @@
   margin-bottom: 6px;
 }
 .monthCardCount {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 22px;
   color: var(--text);
@@ -317,7 +317,7 @@
 .eventBody { flex: 1; min-width: 0; }
 .eventName { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
 .eventDate {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: #3EFFD0;
@@ -326,7 +326,7 @@
 .eventReal {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -360,7 +360,7 @@
   line-height: 1.85;
   margin-bottom: 10px;
 }
-.dec31BannerText strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.dec31BannerText strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dec31BannerBtn {
   background: rgba(62,255,208,0.12);
   border: 1px solid #3EFFD0;
@@ -434,7 +434,7 @@
 }
 .shockList strong {
   color: #FF8C8C;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
 }
 
@@ -471,7 +471,7 @@
   transition: width 0.4s ease;
 }
 .compareBarValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   text-align: right;
@@ -493,7 +493,7 @@
 }
 .saganQuote::before {
   content: '"';
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   color: #C485E0;
   font-weight: 800;
@@ -507,7 +507,7 @@
   font-size: 12px;
   color: var(--muted);
   font-style: normal;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -543,7 +543,7 @@
 }
 .myLifeLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .myLifeNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: #3EFFD0;
@@ -552,7 +552,7 @@
 }
 .myLifeUnit { font-size: 18px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .myLifeSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.myLifeSub strong { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.myLifeSub strong { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -585,7 +585,7 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: #3EFFD0;
@@ -605,7 +605,7 @@
   margin-bottom: 16px;
 }
 .shareBigNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(44px, 11vw, 64px);
   font-weight: 800;
   color: #3EFFD0;
@@ -632,12 +632,12 @@
   padding: 4px 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareListItem strong { color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; }
+.shareListItem strong { color: #fff; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .shareWatermark {
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
   color: rgba(62,255,208,0.6);
@@ -698,12 +698,12 @@
 }
 .compressionTable td:nth-child(2) {
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
 }
 .compressionTable td:last-child {
   color: #3EFFD0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   white-space: nowrap;
 }

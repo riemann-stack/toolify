@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import styles from './ramen.module.css'
 import {
@@ -85,10 +86,16 @@ export default function RamenClient() {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.disclaimer}>
-        🍜 <strong>본 도구의 권장 물양은 일반 가이드</strong>입니다. 라면 브랜드·생산 시기·냄비·화력·고도·습도·취향에 따라 다를 수 있으며,
-        봉지 권장량과 차이날 수 있습니다. <strong>본인 취향에 맞게 조정 권장</strong>.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구의 권장 물양은 일반 가이드
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

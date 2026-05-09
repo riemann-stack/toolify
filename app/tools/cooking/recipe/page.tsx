@@ -1,6 +1,7 @@
 import RecipeClient from './RecipeClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/recipe',
@@ -18,7 +19,7 @@ export default function RecipePage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📐 레시피 비율·단위 변환 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -27,11 +28,12 @@ export default function RecipePage() {
 
       <RecipeClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 비율 계산 원리 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>레시피 인분 비율 계산 원리</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>레시피 인분 비율 계산 원리</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             기본 공식: <code style={{ color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>변환량 = 기준량 × (목표 인분 ÷ 기준 인분)</code>
           </p>
@@ -45,7 +47,7 @@ export default function RecipePage() {
 
         {/* 2. 한국 단위 표준 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 단위 환산 표준</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 단위 환산 표준</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { label: '한국 1컵',     val: '200ml',  desc: '계량컵 표준' },
@@ -57,7 +59,7 @@ export default function RecipePage() {
             ].map((it, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700 }}>{it.label}</p>
-                <p style={{ fontSize: '15px', color: '#FFD700', fontFamily: 'Syne, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
+                <p style={{ fontSize: '15px', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
                 <p style={{ fontSize: '11.5px', color: 'var(--muted)' }}>{it.desc}</p>
               </div>
             ))}
@@ -66,7 +68,7 @@ export default function RecipePage() {
 
         {/* 3. 부피 ↔ 무게 환산 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>부피 ↔ 무게 환산 (재료별 밀도)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>부피 ↔ 무게 환산 (재료별 밀도)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             같은 부피라도 재료에 따라 무게가 크게 다릅니다. 본 도구는 50여 재료의 밀도 데이터로 자동 환산합니다.
           </p>
@@ -94,8 +96,8 @@ export default function RecipePage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '8px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -109,7 +111,7 @@ export default function RecipePage() {
 
         {/* 4. 양념 자동 보정 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>양념 자동 보정 — 왜 필요한가?</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>양념 자동 보정 — 왜 필요한가?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             인분이 늘어날수록 양념을 그대로 늘리면 짭니다. 본 도구는 다음 양념·향신료를 자동 인식해 보정 비율을 적용합니다:
           </p>
@@ -127,7 +129,7 @@ export default function RecipePage() {
 
         {/* 5. 베이킹 vs 일반 요리 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>베이킹 vs 일반 요리 — 비율 정확도</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>베이킹 vs 일반 요리 — 비율 정확도</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>🥘 일반 요리</p>
@@ -155,7 +157,7 @@ export default function RecipePage() {
 
         {/* 6. 인기 한식 표준 인분 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인기 한국 요리 표준 인분</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인기 한국 요리 표준 인분</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구의 14가지 프리셋 (한식·양식·일식·디저트):
           </p>
@@ -178,7 +180,7 @@ export default function RecipePage() {
 
         {/* 7. 장보기 리스트 활용 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>장보기 리스트 활용</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>장보기 리스트 활용</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             여러 레시피를 한 주 메뉴로 계획할 때 [장보기 리스트] 탭에서 합산:
           </p>
@@ -195,7 +197,7 @@ export default function RecipePage() {
 
         {/* 8. FAQ — 펼침 (accordion) */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -240,7 +242,7 @@ export default function RecipePage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/cooking/baker-percent',    icon: '🥖', name: '베이커 퍼센트 계산기',    desc: '제빵 정밀 비율·수분율' },
@@ -263,7 +265,7 @@ export default function RecipePage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>한국식품영양학회</strong> — 표준 식품 성분표</li>
             <li><strong style={{ color: 'var(--text)' }}>USDA FoodData Central</strong> — fdc.nal.usda.gov (재료 밀도)</li>

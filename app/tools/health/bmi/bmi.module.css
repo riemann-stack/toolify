@@ -92,7 +92,7 @@
   box-sizing: border-box;
 }
 .numInput {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -119,7 +119,7 @@
   padding: 5px 9px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
 }
@@ -128,7 +128,12 @@
 
 .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-@media (max-width: 480px) { .fieldRow, .fieldRow3 { grid-template-columns: 1fr; } }
+/* 모바일에서도 2열 유지 (BMI/체중 등 함께 보는 게 자연스러움) */
+@media (max-width: 480px) {
+  .fieldRow3 { grid-template-columns: 1fr; }
+  .fieldRow .card { padding: 12px 12px; }
+  .numInput { font-size: 16px; padding: 8px 10px; }
+}
 
 /* ── 옵션 버튼 ── */
 .optionRow {
@@ -154,6 +159,8 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+  word-break: keep-all;
+  white-space: normal;
 }
 .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
@@ -175,7 +182,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 14vw, 96px);
   letter-spacing: -3px;
@@ -207,8 +214,8 @@
 .gaugeBar {
   position: relative;
   display: flex;
-  height: 36px;
-  border-radius: 10px;
+  height: 28px;
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -216,32 +223,23 @@
   height: 100%;
   position: relative;
 }
-.gaugeSegLabel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(0,0,0,0.65);
-  font-family: 'Noto Sans KR', sans-serif;
-  white-space: nowrap;
-}
+.gaugeSegLabel { display: none; }  /* 라벨은 표 형식으로 별도 표시 */
 .gaugeMarker {
   position: absolute;
-  top: -8px;
+  top: -7px;
   width: 0;
   height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 9px solid var(--text);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--text);
   transform: translateX(-50%);
+  z-index: 2;
 }
 .gaugeMarkerLabel {
   position: absolute;
-  top: -28px;
+  top: -26px;
   transform: translateX(-50%);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 12px;
   color: var(--text);
@@ -251,16 +249,62 @@
   padding: 2px 8px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  z-index: 2;
 }
 .gaugeAxis {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+/* 게이지 범례 — 색상 + 이름 + 범위 한 줄 */
+.gaugeLegend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 4px;
+  margin-top: 10px;
+}
+.gaugeLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.gaugeLegendItemActive {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.gaugeLegendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.gaugeLegendName {
+  color: var(--text);
+  font-weight: 600;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gaugeLegendRange {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gaugeLegendItemActive .gaugeLegendRange { color: var(--accent); }
 
 /* ── 키별 체중 구간 표 ── */
 .rangeTable {
@@ -289,14 +333,14 @@
 }
 .rangeName { color: var(--text); }
 .rangeWeight {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 12.5px;
   color: var(--muted);
 }
 .rangeMark {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 14px;
@@ -345,7 +389,7 @@
   font-weight: 700;
 }
 .detailItem div {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   color: var(--text);
@@ -406,15 +450,19 @@
   cursor: pointer;
   border: 2px solid var(--bg);
 }
-.sliderRow { display: flex; align-items: center; gap: 10px; }
+.sliderRow { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.sliderRow .slider { flex: 1; min-width: 0; }
 .sliderVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
-  font-size: 22px;
+  font-size: 18px;
   font-variant-numeric: tabular-nums;
-  min-width: 80px;
-  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .sliderVal { font-size: 15px; }
 }
 
 /* ── 시뮬레이션 단계 ── */
@@ -437,21 +485,21 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .simStepWeeks {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--muted);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 .simStepWeight {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-size: 15px;
   font-variant-numeric: tabular-nums;
 }
 .simStepBmi {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
@@ -490,14 +538,14 @@
   font-weight: 700;
 }
 .targetBmi {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   font-size: 14px;
 }
 .targetWeight {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -505,7 +553,7 @@
   text-align: right;
 }
 .targetMark {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   min-width: 24px;
@@ -567,7 +615,7 @@
 .bfRow span:first-child { color: var(--text); font-weight: 600; }
 .bfRow span:nth-child(2),
 .bfRow span:nth-child(3) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -628,7 +676,7 @@
 .historyName { color: var(--text); font-weight: 600; }
 .historyName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .historyVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

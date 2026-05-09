@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import Disclaimer from '@/components/Disclaimer'
+import { useState, useMemo, useEffect } from 'react'
 import styles from './vat.module.css'
 import {
   SIMPLIFIED_VAT_RATES,
@@ -53,8 +54,11 @@ export default function VatClient() {
   const [platformId, setPlatformId] = useState('direct')
   const [customPlatformFee, setCustomPlatformFee] = useState('5')
 
-  /* ── 탭4 세금계산서 ── */
-  const [invoiceDate,    setInvoiceDate]    = useState(() => new Date().toISOString().slice(0, 10))
+  /* ── 탭4 세금계산서 — SSR/Client 일치 위해 빈 값으로 시작 ── */
+  const [invoiceDate,    setInvoiceDate]    = useState('')
+  useEffect(() => {
+    setInvoiceDate(new Date().toISOString().slice(0, 10))
+  }, [])
   const [invoiceClient,  setInvoiceClient]  = useState('')
   const [invoiceProvider, setInvoiceProvider] = useState('')
   const [invoiceTrunc, setInvoiceTrunc] = useState<RoundUnit>('none')
@@ -158,11 +162,16 @@ export default function VatClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>ⓘ 일반 정보 제공 도구입니다.</strong> 본 부가세 계산기는 참고용 시뮬레이션이며, 세무 자문·신고 도구가 아닙니다.
-        정확한 부가세 신고는 <strong>홈택스(hometax.go.kr)</strong> 또는 세무사 상담을 권장합니다.
-        문의: 국세청 126 / 한국세무사회 무료 상담 070-5008-1234.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        일반 정보 제공 도구입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

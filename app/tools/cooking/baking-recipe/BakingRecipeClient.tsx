@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect } from 'react'
 import s from './baking-recipe.module.css'
 import {
@@ -188,16 +189,16 @@ export default function BakingRecipeClient() {
         />
       )}
 
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
-        <ul>
-          <li>레시피 비율은 출발점·정확한 결과는 본인 테스트 필요</li>
-          <li>오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분)</li>
-          <li>재료 (특히 버터·밀가루) 브랜드별 차이 있음</li>
-          <li>알레르기 주의 — 계란·우유·밀(글루텐)·견과(아몬드 가루) 라벨 확인 필수, 의심 시 의사 상담</li>
-          <li>정확한 영양 성분·칼로리 계산은 본 도구 영역 X</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음
+      </Disclaimer>
     </div>
   )
 }

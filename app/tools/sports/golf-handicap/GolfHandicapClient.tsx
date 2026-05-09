@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useState, useMemo } from 'react'
 import s from './golf-handicap.module.css'
 import {
@@ -143,7 +144,7 @@ function HandicapIndexTab({
       <div className={s.card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span className={s.cardLabel} style={{ margin: 0 }}>라운드 기록 ({rounds.length}/20)</span>
-          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>
+          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>
             사용 {validRounds.length > 0 ? usedCount : 0}개
           </span>
         </div>
@@ -979,13 +980,13 @@ function RecordsTab() {
                   const d = diff * 113 / r.slope
                   return (
                     <tr key={r.id}>
-                      <td style={{ fontSize: 12, fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>
+                      <td style={{ fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>
                         {r.date}
                         {r.is9Holes && <span style={{ marginLeft: 4, color: '#FF8C3E', fontSize: 10 }}>9H</span>}
                       </td>
                       <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
+                      <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
                         {d.toFixed(1)}
                       </td>
                       <td>
@@ -1007,11 +1008,16 @@ function RecordsTab() {
         </div>
       )}
 
-      <div className={s.disclaimer}>
-        🔒 모든 데이터는 본인 브라우저(localStorage)에만 저장. 서버 전송 X · 다른 기기 동기화 X. 정기 CSV 백업 권장.
-        <br />
-        ⚠️ 본 도구는 <strong>비공식 산출</strong> (WHS 표준 적용). 공식 인증은 대한골프협회(KGA) 또는 소속 클럽 문의.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        비공식 산출
+      </Disclaimer>
     </div>
   )
 }

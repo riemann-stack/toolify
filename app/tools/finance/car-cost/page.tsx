@@ -31,7 +31,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -50,7 +50,7 @@ export default function CarCostPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🚗 자동차 유지비 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -176,20 +176,20 @@ export default function CarCostPage() {
             <tbody>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>3년</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>약 1,000만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 333만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,000만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 333만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 비쌈 (초기 감가 큼)</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>5년 ⭐</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>약 1,800만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 360만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,800만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 360만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>한국 평균 보유 기간</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>10년</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>약 2,300만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 230만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 2,300만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 230만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 경제적 (정비비 ↑ 주의)</td>
               </tr>
             </tbody>
@@ -218,26 +218,26 @@ export default function CarCostPage() {
           <tbody>
             <tr style={{ background: 'rgba(200,255,62,0.06)' }}>
               <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>현금 ★</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 28만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 1,680만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 28만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 1,680만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 X · 가장 저렴</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>할부 (5년·5%)</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 56만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 3,375만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 56만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,375만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 약 397만 추가</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>리스</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 75만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 4,500만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 75만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 4,500만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 비용 처리 (사업자)</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>장기렌트</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 84만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 5,040만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 84만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 5,040만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 보험·정비 포함</td>
             </tr>
           </tbody>

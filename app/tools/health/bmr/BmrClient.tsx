@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useMemo, useState } from 'react'
@@ -196,10 +197,16 @@ export default function BmrClient() {
     <div className={styles.wrap}>
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>의학적 진단·치료 도구가 아닙니다.</strong> BMR/TDEE 추정치는 ±10% 오차 가능.
-        실제 소비는 호르몬·근육·수면·약물·만성질환에 따라 달라집니다. 청소년·임산부·만성질환자는 의료 전문가 상담을 권장합니다.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        의학적 진단·치료 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

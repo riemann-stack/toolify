@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import s from './screw.module.css'
 import {
@@ -698,15 +699,16 @@ export default function ScrewClient() {
       )}
 
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
-        <ul>
-          <li>표준 사이즈 기준 (KS·DIN·ISO·JIS 일반). 실제 호환성은 ±0.1~0.5mm 차이 가능</li>
-          <li>본 도구는 <strong>특정 브랜드·공구 추천 X · 정확한 토크값 보장 X · 인장/전단강도 보장 X · 항공/자동차 정밀 산업 적용 X</strong></li>
-          <li>⚠️ 드릴 작업 시 보호 안경·장갑 필수. 절삭유 사용 (특히 스테인리스·알루미늄). 응급 119</li>
-          <li>도움: 한국공구협회 · 한국표준과학연구원 · 가까운 공구상·시공 전문가</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 표준 사이즈 기준 (KS·DIN·ISO·JIS 일반). 실제 호환성은 ±0.1~0.5mm 차이 가능 본 도구는 <strong>특정 브랜드·공구 추천 X · 정확한 토크값 보장 X · 인장/전단강도 보장 X · 항공/자동차 정밀 산업 적용 X</strong> ⚠️ 드릴 작업 시 보호 안경·장갑 필수. 절삭유 사용 (특히 스테인리스·알루미늄). 응급 119
+      </Disclaimer>
     </div>
   )
 }

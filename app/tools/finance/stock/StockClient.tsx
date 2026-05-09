@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useCallback } from 'react'
 import styles from './stock.module.css'
 import {
@@ -246,7 +247,7 @@ export default function StockClient() {
           <>
             <circle cx={xs(curIdx)} cy={ys(curPoint.newAvg)} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
             <text x={xs(curIdx)} y={ys(curPoint.newAvg) - 12} textAnchor="middle" fill="var(--accent)"
-              fontSize="11" fontFamily="Syne, sans-serif" fontWeight="800">
+              fontSize="11" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
               {formatKRW(curPoint.newAvg)}원
             </text>
           </>
@@ -343,11 +344,16 @@ export default function StockClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 투자 자문 도구가 아닙니다.</strong> 본 계산기는 입력값에 기반한 수학적 시뮬레이션이며,
-        주가 회복 가정에 따른 결과입니다. <strong>물타기는 항상 유리한 전략이 아니며, 주가는 더 떨어질 수 있습니다.</strong>
-        펀더멘털·구조적 악재 종목은 손절이 더 나을 수 있습니다. 실제 결정은 본인 분석·책임.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        투자 자문 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

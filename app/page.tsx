@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { categories, allTools, totalTools } from '@/lib/tools'
 import AdSlot from '@/components/AdSlot'
@@ -13,8 +13,22 @@ const popularTools = [
   ...allTools.filter(t => !t.badge).slice(0, 4),
 ].slice(0, 9)
 
+const RANDOM_PICK_COUNT = 5
+
 export default function HomePage() {
   const [query, setQuery] = useState('')
+  const [randomPicks, setRandomPicks] = useState<typeof allTools>([])
+
+  // hydration 안전 — useEffect 내에서 랜덤 셔플
+  useEffect(() => {
+    pickRandom()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function pickRandom() {
+    const shuffled = [...allTools].sort(() => Math.random() - 0.5)
+    setRandomPicks(shuffled.slice(0, RANDOM_PICK_COUNT))
+  }
 
   const searchResults = query.trim()
     ? allTools.filter(t =>
@@ -30,17 +44,35 @@ export default function HomePage() {
 
           {/* 텍스트 영역 */}
           <div className={styles.heroLeft}>
-            <div className={styles.heroTag}>
-              <span className={styles.dot} />
-              무료 · 로그인 없음 · 즉시 사용
-            </div>
             <h1 className={styles.h1}>
               모든 계산,<br /><em className={styles.accent}>한 곳에서.</em>
             </h1>
             <p className={styles.heroSub}>
-              연봉 계산부터 로또 번호까지 — 일상에서 자주 쓰는 도구들을<br />
-              빠르고 간편하게 사용하세요.
+              일상에서 자주 쓰는 도구들을 빠르고 간편하게 사용하세요.
             </p>
+
+            {/* 우연히 발견한 도구 */}
+            <div className={styles.randomSection}>
+              <div className={styles.randomHead}>
+                <span className={styles.randomTitle}>🎰 우연히 발견한 도구</span>
+                <button
+                  type="button"
+                  className={styles.randomReroll}
+                  onClick={pickRandom}
+                  aria-label="다시 뽑기"
+                >
+                  🔄 다시 뽑기
+                </button>
+              </div>
+              <div className={styles.randomChips}>
+                {(randomPicks.length > 0 ? randomPicks : popularTools.slice(0, RANDOM_PICK_COUNT)).map(tool => (
+                  <Link key={tool.href} href={tool.href} className={styles.randomChip}>
+                    <span className={styles.randomChipIcon}>{tool.icon}</span>
+                    <span className={styles.randomChipName}>{tool.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             {/* 검색창 */}
             <div className={styles.searchWrap}>
@@ -83,22 +115,13 @@ export default function HomePage() {
 
             {/* 통계 + 전체 도구 보기 버튼 */}
             <div className={styles.statsRow}>
-              <div className={styles.stats}>
-                <div className={styles.statItem}>
-                  <span className={styles.statNum}>{totalTools}<span className={styles.accent}>+</span></span>
-                  <span className={styles.statLabel}>무료 도구</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statNum}>{categories.length}</span>
-                  <span className={styles.statLabel}>카테고리</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statNum}>0</span>
-                  <span className={styles.statLabel}>로그인 필요</span>
-                </div>
+              <div className={styles.statsLine}>
+                <strong className={styles.statsLineNum}>{totalTools}<span className={styles.accent}>+</span></strong>
+                <span className={styles.statsLineSep}>·</span>
+                <span className={styles.statsLineLabel}>{categories.length} 카테고리</span>
               </div>
               <Link href="/tools" className={styles.ctaBtn}>
-                전체 도구 보기 →
+                전체 도구 →
               </Link>
             </div>
           </div>

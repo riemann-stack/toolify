@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './gradient-generator.module.css'
 import {
@@ -685,16 +686,16 @@ export default function GradientGeneratorClient() {
       )}
 
       {/* 면책 / 가이드 */}
-      <div className={styles.disclaimer}>
-        <strong>💡 사용 가이드</strong>
-        <ul>
-          <li><strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장</li>
-          <li><strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력</li>
-          <li><strong>Conic</strong>은 Figma 미지원 (Linear/Radial 권장)</li>
-          <li>이미지는 브라우저 메모리에서만 처리되며 서버 업로드 없음</li>
-          <li>모든 프리셋은 직접 디자인했으며 특정 브랜드 컬러를 그대로 차용하지 않습니다</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        사용 가이드 <strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장 <strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력 <strong>Conic</strong>은 Figma 미지원 (Linear/Radial 권장)
+      </Disclaimer>
     </div>
   )
 }

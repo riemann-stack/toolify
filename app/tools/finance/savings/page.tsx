@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function SavingsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💰 월 저축가능 금액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -97,7 +97,7 @@ export default function SavingsPage() {
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 18, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Syne, sans-serif' }}>{g.d}</p>
+              <p style={{ fontSize: 18, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Inter, system-ui, sans-serif' }}>{g.d}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.desc}</p>
             </div>
           ))}
@@ -150,7 +150,7 @@ export default function SavingsPage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 2 ? 'Syne, sans-serif' : 'inherit'),
+                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 2 ? 'Inter, system-ui, sans-serif' : 'inherit'),
                       color: j === 0 || j === 3 ? 'var(--text)' : 'var(--muted)',
                       fontWeight: j === 0 ? 700 : (j === 2 ? 600 : 400),
                       fontSize: 12.5,

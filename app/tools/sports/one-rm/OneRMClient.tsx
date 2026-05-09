@@ -651,10 +651,10 @@ function HistoryChart({ history }: { history: HistoryRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.oneRM)} r={3} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{fmt(maxV, 0)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{fmt(minV, 0)}</text>
-        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Syne">{sorted[0].date.slice(5)}</text>
-        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{sorted[sorted.length - 1].date.slice(5)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{fmt(maxV, 0)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{fmt(minV, 0)}</text>
+        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Inter, system-ui, sans-serif">{sorted[0].date.slice(5)}</text>
+        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{sorted[sorted.length - 1].date.slice(5)}</text>
       </svg>
     </div>
   )
@@ -1160,7 +1160,7 @@ function PlateViz({ barKg, perSide }: { barKg: number; perSide: number[] }) {
         })}
 
         {/* 라벨 */}
-        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Syne">
+        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
           바 {fmt(barKg, 0)}kg
         </text>
       </svg>

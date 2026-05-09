@@ -140,7 +140,7 @@
   background: transparent;
   border: none;
   font-size: 22px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -233,7 +233,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.recommendBody strong { color: var(--accent); font-family: 'Syne, sans-serif', 'Noto Sans KR', sans-serif; }
+.recommendBody strong { color: var(--accent); font-family: 'Inter, system-ui, sans-serif', 'Noto Sans KR', sans-serif; }
 
 /* ── HERO (감량 필요량) ── */
 .hero {
@@ -250,7 +250,7 @@
   margin-bottom: 6px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -298,7 +298,7 @@
   margin-bottom: 4px;
 }
 .kpiValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -348,7 +348,7 @@
 }
 .scheduleTable td:nth-child(1),
 .scheduleTable td:nth-child(2) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .scheduleTable td:nth-child(2) { color: var(--accent); }
@@ -441,7 +441,7 @@
 }
 .classTable td:nth-child(3),
 .classTable td:nth-child(4) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   text-align: right;

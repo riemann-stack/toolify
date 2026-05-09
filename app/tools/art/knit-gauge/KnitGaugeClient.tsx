@@ -804,7 +804,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#C485E0" fontSize={12} fontWeight={700} fontFamily="Syne, sans-serif">
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#C485E0" fontSize={12} fontWeight={700} fontFamily="Inter, system-ui, sans-serif">
         {getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · {fmt(stsPer10cm, 0)} sts × {fmt(rowsPer10cm, 0)} rows / 10cm
       </text>
     </svg>

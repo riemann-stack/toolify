@@ -55,12 +55,12 @@
   display: flex; flex-direction: column; align-items: center;
 }
 .tapBpm {
-  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: clamp(52px, 14vw, 84px); color: var(--accent);
   line-height: 1; letter-spacing: -2px;
 }
 .tapBpmLabel {
-  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   font-size: 14px; color: var(--muted);
   letter-spacing: 0.1em; margin-top: 4px;
 }
@@ -74,7 +74,7 @@
 .kbdHint kbd {
   display: inline-block; padding: 2px 7px; margin: 0 2px;
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 5px; font-family: 'Syne', sans-serif; font-size: 11px;
+  border-radius: 5px; font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
   color: var(--text);
 }
 
@@ -86,7 +86,7 @@
   animation: fadeUp 0.25s ease;
 }
 .tempoName {
-  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.3px;
 }
 .tempoKo {
@@ -127,7 +127,7 @@
   border-color: var(--accent);
 }
 .chartLabel {
-  font-family: 'Syne', sans-serif; font-size: 10px; color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: var(--muted);
 }
 
 /* ── 컨트롤 ── */
@@ -164,7 +164,7 @@
 .bpmInput {
   width: 140px; padding: 8px 12px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800;
   color: var(--accent); text-align: center; letter-spacing: -0.5px;
   -moz-appearance: textfield;
 }
@@ -173,7 +173,7 @@
 }
 .bpmInput:focus { outline: none; border-color: var(--accent); }
 .bpmUnit {
-  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700;
   color: var(--muted); letter-spacing: 0.08em;
 }
 .bpmSlider {
@@ -185,7 +185,7 @@
 .adjBtn {
   padding: 8px; border-radius: 8px;
   background: var(--bg3); border: 1px solid var(--border);
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
 }
 .adjBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -195,7 +195,7 @@
 .sigBtn {
   padding: 12px 6px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
 .sigBtn:hover { color: var(--text); }
@@ -219,7 +219,7 @@
 .pulseActive { animation: pulseBeat 1s infinite; }
 .pulseAccent { background: rgba(200,255,62,0.2); border-color: var(--accent); }
 .pulseBeat {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 28px;
   color: var(--text); letter-spacing: 0.05em;
 }
 .playBtn {
@@ -250,7 +250,7 @@
   background: rgba(200,255,62,0.12) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
-.presetBpm { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; line-height: 1; }
+.presetBpm { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 15px; line-height: 1; }
 .presetName { font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; }
 
 /* ── 박자감 테스트 ── */
@@ -281,12 +281,12 @@
   font-size: 13px; color: var(--muted); letter-spacing: 0.04em;
 }
 .testTarget {
-  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: clamp(52px, 14vw, 84px); color: var(--accent);
   line-height: 1; letter-spacing: -2px;
 }
 .testTargetSub {
-  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   font-size: 14px; color: var(--muted); letter-spacing: 0.1em;
   margin-top: -4px;
 }
@@ -305,7 +305,7 @@
   width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
   border-radius: 50%; border: 2px solid var(--accent);
   background: radial-gradient(circle at center, rgba(200,255,62,0.15), var(--bg3));
-  color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800;
+  color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: 44px; letter-spacing: 0.05em;
   cursor: pointer; transition: transform 0.08s;
   user-select: none; -webkit-tap-highlight-color: transparent;
@@ -347,12 +347,12 @@
   text-transform: uppercase;
 }
 .resultNum {
-  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: clamp(32px, 8vw, 48px); color: var(--text);
   letter-spacing: -0.5px; line-height: 1;
 }
 .resultArrow {
-  font-family: 'Syne', sans-serif; font-size: 16px; color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif; font-size: 16px; color: var(--muted);
   font-weight: 700; letter-spacing: 0.1em;
 }
 .resultErrRow {
@@ -368,7 +368,7 @@
 }
 .resultErrBarFill { height: 100%; transition: width 0.4s ease; border-radius: 999px; }
 .resultErrValue {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   color: var(--text); min-width: 48px; text-align: right;
 }
 .resultActions {

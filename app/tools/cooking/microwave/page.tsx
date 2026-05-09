@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function MicrowavePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔥 전자레인지 출력·시간 환산 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -87,7 +87,7 @@ export default function MicrowavePage() {
           전자레인지 출력(W)이 다르면 같은 음식이라도 가열 시간이 비례 반대로 달라집니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 700, lineHeight: 2 }}>
+          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, lineHeight: 2 }}>
             새 시간 = 기준 시간 × (기준 W / 새 W)
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function MicrowavePage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 1 ? 'Syne, sans-serif' : 'Noto Sans KR, sans-serif'),
+                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 1 ? 'Inter, system-ui, sans-serif' : 'Noto Sans KR, sans-serif'),
                       color: j === 1 ? 'var(--accent)' : (j === 0 ? 'var(--text)' : 'var(--muted)'),
                       fontWeight: j === 0 || j === 1 ? 700 : 400,
                       fontSize: 12.5,

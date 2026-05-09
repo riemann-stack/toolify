@@ -785,7 +785,7 @@ export default function CostRateClient() {
               </div>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, textAlign: 'center' }}>
-              연간 환산 <strong style={{ color: monthlyDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Syne, sans-serif' }}>{fmtSign(annualDelta)}원</strong>
+              연간 환산 <strong style={{ color: monthlyDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(annualDelta)}원</strong>
             </p>
           </div>
 
@@ -812,7 +812,7 @@ export default function CostRateClient() {
               <div className={styles.warnBox} style={{ marginTop: 12 }}>
                 가격 변화 <strong>{priceChangePct >= 0 ? '+' : ''}{priceChangePct.toFixed(1)}%</strong> →
                 예상 판매량 변화 <strong style={{ color: volumeChangePct < 0 ? '#FF6B6B' : '#3EFF9B' }}>{volumeChangePct >= 0 ? '+' : ''}{volumeChangePct.toFixed(1)}%</strong> ({fmt(adjustedVolume)}개) →
-                <br />보정된 월 추가 이익: <strong style={{ color: adjustedDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Syne, sans-serif' }}>{fmtSign(adjustedDelta)}원</strong>
+                <br />보정된 월 추가 이익: <strong style={{ color: adjustedDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(adjustedDelta)}원</strong>
               </div>
             </div>
           )}
@@ -880,7 +880,7 @@ export default function CostRateClient() {
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
+            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
           </div>
 
           <div className={styles.kpiGrid}>
@@ -930,7 +930,7 @@ export default function CostRateClient() {
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 {monthlyMenuStats.targetExtraItems === 0
                   ? <>✅ 이미 목표 영업이익 <strong style={{ color: 'var(--accent)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong>를 달성하고 있습니다.</>
-                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
+                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
               </p>
             ) : (
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>메뉴 데이터를 먼저 입력해주세요.</p>

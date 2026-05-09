@@ -1,5 +1,6 @@
 import LoremClient from './LoremClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 import Link from 'next/link'
 
 export const metadata = buildMetadata({
@@ -17,7 +18,7 @@ export default function LoremPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📝 더미 텍스트·UI 콘텐츠 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -26,11 +27,12 @@ export default function LoremPage() {
 
       <LoremClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 도구 개요 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>이 도구가 해결하는 문제</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>이 도구가 해결하는 문제</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             UI 디자이너와 프론트엔드 개발자는 시안 작업과 프로토타이핑 단계에서 항상 같은 고민에 부딪힙니다. <strong style={{ color: 'var(--text)' }}>실제 콘텐츠가 없으니 임시 텍스트로 채워야 하는데, 단순 Lorem Ipsum은 한국어 환경의 글자 폭과 줄바꿈을 반영하지 못합니다.</strong> 또한 카드·리뷰·회원 정보·주문 같은 구조화된 데이터도 함께 필요합니다.
           </p>
@@ -41,7 +43,7 @@ export default function LoremPage() {
 
         {/* 2. 6 tabs guide */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             {[
               { icon: '📝', title: '문단', desc: '한글·영문 Lorem Ipsum 5단계 길이(아주 짧게~매우 길게) × 9가지 톤. 1~20문단 슬라이더로 분량 조절.' },
@@ -62,7 +64,7 @@ export default function LoremPage() {
 
         {/* 3. tone guide */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             같은 &quot;시작하기&quot; 문구도 톤에 따라 분위기가 완전히 달라집니다. 디자인 시안의 무드보드를 정한 뒤, 이에 맞는 톤을 선택해 일관된 더미 콘텐츠를 채우면 시안의 설득력이 올라갑니다.
           </p>
@@ -88,7 +90,7 @@ export default function LoremPage() {
 
         {/* 4. JSON formats */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>JSON 더미 데이터 8가지 출력 형식</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>JSON 더미 데이터 8가지 출력 형식</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             &quot;회원 정보 50명&quot;을 만든다고 할 때, 어디에 붙여넣을지에 따라 필요한 형식이 다릅니다. 본 도구는 한 번 생성한 데이터를 8가지 포맷 중 어느 것으로든 즉시 변환합니다.
           </p>
@@ -108,7 +110,7 @@ export default function LoremPage() {
 
         {/* 5. when to use length test */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>길이 테스트 탭이 잡아내는 버그</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>길이 테스트 탭이 잡아내는 버그</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             카드·리스트·테이블 컴포넌트의 80%는 <strong style={{ color: 'var(--text)' }}>실제 데이터가 들어오면 깨집니다.</strong> 디자인 단계에서 적당한 길이의 더미 텍스트로 채우면 이상해 보이지 않지만, 실제로는 다양한 길이의 한국어 텍스트가 들어오기 때문입니다.
           </p>
@@ -129,7 +131,7 @@ export default function LoremPage() {
 
         {/* 6. UX writing */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>UX 라이팅: 톤이 사용자 경험을 만든다</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>UX 라이팅: 톤이 사용자 경험을 만든다</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             &quot;삭제하시겠습니까?&quot;라는 같은 질문도 — 친근체로 작성하면 부드럽지만 안전감이 약하고, 전문가 톤으로 작성하면 무겁지만 신뢰가 갑니다. 본 도구의 UX 라이팅 탭은 동일한 시나리오를 9가지 톤으로 즉시 비교할 수 있어, 제품의 분위기에 맞는 카피를 선택하는 데 도움이 됩니다.
           </p>
@@ -140,7 +142,7 @@ export default function LoremPage() {
 
         {/* 7. legal */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             본 도구가 생성하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>무작위로 조합된 가상 정보</strong>이며, 저작권이 발생하지 않습니다. 개인 프로젝트, 상업 프로젝트, 클라이언트 시안 어디에든 자유롭게 사용 가능합니다. 단, 이름·이메일·전화번호 등은 가상 데이터이므로 실제 인물을 가리키지 않습니다.
           </p>
@@ -148,7 +150,7 @@ export default function LoremPage() {
 
         {/* 8. tips */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               '디자인 시스템 검수 시 — 길이 테스트 탭의 truncate 비교를 그대로 스크린샷해 가이드 문서에 첨부',
@@ -167,7 +169,7 @@ export default function LoremPage() {
 
         {/* FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -208,7 +210,7 @@ export default function LoremPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>관련 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>관련 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/art/charcount',     icon: '🔡', name: '글자수 세기',          desc: '공백 포함·제외 실시간 카운트' },

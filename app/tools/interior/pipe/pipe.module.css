@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -86,7 +86,7 @@ select.input {
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
 }
 .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -133,7 +133,7 @@ select.input {
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -166,7 +166,7 @@ select.input {
   margin-bottom: 2px;
 }
 .aliasChip strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   color: var(--accent);
   font-weight: 800;
@@ -191,12 +191,12 @@ select.input {
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Syne', sans-serif; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -263,7 +263,7 @@ select.input {
   transition: width 0.3s ease;
 }
 .barValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 800;
   color: #0D0D0D;
@@ -297,7 +297,7 @@ select.input {
   font-size: 11px;
   color: var(--accent);
   letter-spacing: 1px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .fitDesc {
   margin: 0;

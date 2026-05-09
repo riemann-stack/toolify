@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './color.module.css'
@@ -121,9 +122,16 @@ export default function ColorClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        💡 <strong>참고용 색상 분석 도구</strong> — WCAG 대비비는 W3C 공식 기준 계산이며 실제 접근성은 다양한 환경 테스트가 필요합니다. 색맹 시뮬레이션은 표준 행렬 변환 기반의 근사치이며 실제 색각 이상자의 인식과 차이가 있을 수 있습니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        참고용 색상 분석 도구
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

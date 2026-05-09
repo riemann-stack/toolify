@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect, react-hooks/static-components */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './baker-percent.module.css'
 
@@ -756,10 +757,16 @@ export default function BakerPercentClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>참고용 추정값입니다.</strong> 일반적인 베이커 퍼센트 계산 기준이며, 실제 빵 배합은 밀가루 종류·발효 환경·기온에 따라 달라질 수 있습니다.
-        프리셋은 표준 배합 예시이며, 정확한 레시피는 신뢰할 수 있는 제빵 자료를 참조하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        참고용 추정값입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>
@@ -845,7 +852,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 

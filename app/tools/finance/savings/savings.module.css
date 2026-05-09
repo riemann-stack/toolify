@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -153,7 +153,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -173,12 +173,12 @@
 }
 .detailTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Syne', sans-serif; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -299,7 +299,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .jarRecoLabel { color: var(--muted); }
 .jarRecoMan { color: var(--text); font-weight: 700; }
@@ -313,12 +313,12 @@
   font-size: 14px;
   flex: 1;
 }
-.jarUserMan { font-family: 'Syne', sans-serif; font-size: 12px; color: var(--accent); font-weight: 700; }
+.jarUserMan { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--accent); font-weight: 700; }
 .jarDiff {
   margin: 0;
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .jarExamples {
   margin: 0;
@@ -372,7 +372,7 @@
   border-radius: 6px;
   padding: 4px 8px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .taxBenefit {

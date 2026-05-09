@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './travelTip.module.css'
 import {
   COUNTRIES, SERVICES, SATISFACTIONS, CATEGORY_META, SCENARIOS,
@@ -539,16 +540,16 @@ export default function TravelTipClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>팁 문화는 국가·지역·서비스 수준·시기에 따라 다릅니다.</li>
-          <li>본 도구는 일반적인 가이드이며, 최종 결정은 본인 판단에 맡깁니다.</li>
-          <li>환율은 사용자 입력값이며 실시간이 아닙니다 — 환율 별도 확인 권장.</li>
-          <li>카드 자동 가산은 매장별 다름 — <strong>영수증 (Service Charge·Gratuity)</strong> 확인 필수.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 팁 문화는 국가·지역·서비스 수준·시기에 따라 다릅니다. 본 도구는 일반적인 가이드이며, 최종 결정은 본인 판단에 맡깁니다. 환율은 사용자 입력값이며 실시간이 아닙니다 — 환율 별도 확인 권장.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/date/jet-lag" className={s.crossLink}>

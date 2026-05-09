@@ -190,7 +190,7 @@
 .expectancyBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .expectancyBtn small {
   display: block;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--accent);
@@ -217,7 +217,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -271,7 +271,7 @@
   letter-spacing: 0.04em;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -310,7 +310,7 @@
 .heroDualSep { color: var(--muted); font-size: 24px; opacity: 0.4; }
 .heroDualLabel { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
 .heroDualNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(32px, 6vw, 44px);
   font-weight: 800;
   color: var(--text);
@@ -343,7 +343,7 @@
   align-items: baseline;
 }
 .possibItem strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 16px;
@@ -387,7 +387,7 @@
   color: var(--muted);
 }
 .progressPct {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 16px;
@@ -414,7 +414,7 @@
 .eventEmoji { font-size: 24px; margin-bottom: 6px; }
 .eventName { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .eventCount {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -502,7 +502,7 @@
   background: transparent;
   border: none;
   font-size: 22px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -561,7 +561,7 @@
 }
 .actionResultLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .actionResultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--accent);
@@ -579,7 +579,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.actionEquivalent strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.actionEquivalent strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .proverbCard {
   background: rgba(62,200,255,0.06);

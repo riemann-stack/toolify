@@ -52,7 +52,7 @@
 }
 
 .ySymbol {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(180px, 18vw, 300px);
   font-weight: 800;
   line-height: 1;
@@ -89,7 +89,7 @@
 }
 
 .h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(48px, 7vw, 88px);
   font-weight: 800;
   line-height: 1.0;
@@ -105,8 +105,80 @@
   color: var(--muted);
   max-width: 460px;
   line-height: 1.7;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   animation: fadeUp 0.6s 0.2s ease both;
+}
+
+/* ── 우연히 발견한 도구 (랜덤 칩) ── */
+.randomSection {
+  margin-bottom: 28px;
+  max-width: 560px;
+  animation: fadeUp 0.6s 0.25s ease both;
+}
+.randomHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.randomTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.randomReroll {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.randomReroll:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.randomChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.randomChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 7px 12px;
+  font-size: 12.5px;
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.randomChip:hover {
+  border-color: rgba(200,255,62,0.5);
+  background: var(--accent-dim);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.randomChipIcon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.randomChipName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── SEARCH ── */
@@ -181,25 +253,40 @@
   color: var(--muted);
 }
 
-/* ── STATS ROW ── */
+/* ── STATS ROW (간결한 단일 라인) ── */
 .statsRow {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  margin-top: 48px;
+  gap: 16px;
+  margin-top: 18px;
   animation: fadeUp 0.6s 0.4s ease both;
   max-width: 560px;
+  flex-wrap: wrap;
 }
-
-.stats {
-  display: flex;
-  gap: 32px;
+.statsLine {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
 }
+.statsLineNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.statsLineSep { color: var(--muted); opacity: 0.5; }
+.statsLineLabel { font-size: 13px; color: var(--muted); }
 
+/* ── 기존 stat 클래스 (다른 영역에서 사용 시 호환) ── */
+.stats { display: flex; gap: 32px; }
 .statItem { display: flex; flex-direction: column; }
 .statNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 700;
   color: var(--text);
@@ -214,16 +301,15 @@
   gap: 6px;
   background: var(--accent);
   color: #0a0a0a;
-  border-radius: 10px;
-  padding: 11px 18px;
-  font-size: 13px;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12.5px;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
   text-decoration: none;
   transition: filter 0.18s, transform 0.18s, box-shadow 0.18s;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-bottom: 2px; /* 숫자 베이스라인 맞춤 */
 }
 .ctaBtn:hover {
   filter: brightness(1.08);
@@ -245,7 +331,7 @@
   margin-bottom: 20px;
 }
 .sectionTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -413,8 +499,9 @@
   .catGrid { grid-template-columns: repeat(2, 1fr); }
   .toolsGrid { grid-template-columns: 1fr; }
   .stats { gap: 20px; }
-  .statsRow { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .ctaBtn { width: 100%; justify-content: center; }
+  .statsRow { gap: 12px; }
+  .randomChips { gap: 5px; }
+  .randomChip { padding: 6px 10px; font-size: 12px; }
   .hero { padding-top: 60px; }
   .hero::after { width: min(600px, 100%); } /* 모바일 overflow 방지 */
 }

@@ -47,7 +47,7 @@
   flex: 1; accent-color: var(--accent);
 }
 .envSliderValue {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px;
   color: var(--accent); min-width: 60px; text-align: right;
 }
 .lieGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; flex: 1; }
@@ -62,14 +62,14 @@
 }
 .envResultHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .envResultBadge {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
   border: 1px solid; border-radius: 99px; padding: 4px 12px;
 }
 .envResultRow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
 .envResultBlock { text-align: center; }
 .envResultLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .envResultValue {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 28px;
   color: var(--text); letter-spacing: -1px;
 }
 .envResultArrow { font-size: 22px; color: var(--accent); }
@@ -94,7 +94,7 @@
 }
 .recordStatLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .recordStatValue {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 22px;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .recordStatSub { font-size: 11px; color: var(--muted); margin-top: 4px; }
@@ -164,7 +164,7 @@
 }
 .clubInputRowActive { border-color: rgba(200,255,62,0.4); }
 .clubInputName {
-  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700;
   color: var(--text); letter-spacing: 0.04em;
 }
 .clubInputName small { display: block; font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
@@ -173,7 +173,7 @@
 .clubInput {
   width: 100%; background: var(--bg2); border: 1px solid var(--border);
   border-radius: 8px; padding: 10px 36px 10px 12px; font-size: 16px;
-  font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
   outline: none; transition: border-color 0.15s;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -182,7 +182,7 @@
 .clubInput:focus { border-color: rgba(200,255,62,0.4); }
 .clubInputUnit {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   pointer-events: none;
 }
 
@@ -222,7 +222,7 @@
   align-items: center; padding: 4px 0;
 }
 .barLabel {
-  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
   color: var(--text); letter-spacing: 0.04em; text-align: right;
 }
 .barTrack {
@@ -240,12 +240,12 @@
   opacity: 0.7;
 }
 .barNum {
-  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; color: #000;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800; color: #000;
   white-space: nowrap;
 }
 .barNumOutside {
   position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%);
-  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700;
   color: var(--text); white-space: nowrap;
 }
 .avgMarker {
@@ -281,10 +281,10 @@
   padding: 10px 12px; border-bottom: 1px solid var(--border);
   color: var(--text); font-size: 13px;
 }
-.tdClub { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
-.tdNum  { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); text-align: right; }
-.tdMuted { color: var(--muted); font-family: 'Syne', sans-serif; text-align: right; }
-.tdDiff  { font-family: 'Syne', sans-serif; font-weight: 700; text-align: right; }
+.tdClub { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+.tdNum  { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); text-align: right; }
+.tdMuted { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; text-align: right; }
+.tdDiff  { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
 .diffPlus  { color: var(--accent); }
 .diffMinus { color: var(--muted); }
 .diffZero  { color: var(--muted); }
@@ -340,7 +340,7 @@
 }
 .summaryLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
 .summaryValue {
-  font-family: 'Syne', sans-serif; font-size: clamp(20px, 4vw, 26px); font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(20px, 4vw, 26px); font-weight: 800;
   color: var(--accent); line-height: 1.1;
 }
 .summarySub { font-size: 11px; color: var(--muted); margin-top: 4px; }
@@ -365,7 +365,7 @@
 }
 .evalTop { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 .evalLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.evalNum { font-family: 'Syne', sans-serif; font-size: clamp(36px, 9vw, 56px); font-weight: 800; color: var(--accent); line-height: 1; }
+.evalNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(36px, 9vw, 56px); font-weight: 800; color: var(--accent); line-height: 1; }
 .evalSub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
 
 /* ── 빈 상태 ── */

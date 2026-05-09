@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
+import { useMemo, useState, useEffect } from 'react'
 import styles from './weightloss.module.css'
 import {
   Gender, Severity, PlateauMode,
@@ -10,22 +11,18 @@ import {
   bmiCategoryName, todayISO, formatDateKo, addDays,
 } from './weightLossUtils'
 
-type Tab = 'plan' | 'date' | 'split' | 'plateau' | 'macro'
+type Tab = 'plan' | 'split' | 'date'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'plan',    name: '감량 계획',  icon: '🎯' },
-  { id: 'date',    name: '목표일 역산', icon: '📅' },
-  { id: 'split',   name: '식단·운동',   icon: '🍽️' },
-  { id: 'plateau', name: '정체기·유지', icon: '📊' },
-  { id: 'macro',   name: '탄단지',     icon: '🥗' },
+  { id: 'plan',    name: '식단 조절',   icon: '🥗' },
+  { id: 'split',   name: '식단+운동',   icon: '🍽️' },
+  { id: 'date',    name: '목표일 기준', icon: '📅' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
   plan:    styles.tabActive,
-  date:    styles.tabActiveDate,
   split:   styles.tabActiveSplit,
-  plateau: styles.tabActivePlateau,
-  macro:   styles.tabActiveMacro,
+  date:    styles.tabActiveDate,
 }
 
 const SEVERITY_CLASS: Record<Severity, string> = {
@@ -68,7 +65,11 @@ export default function WeightLossClient() {
   const [gender, setGender]               = useState<Gender>('male')
   const [age, setAge]                     = useState('30')
   const [tdee, setTdee]                   = useState('2200')
-  const [startDate, setStartDate]         = useState(todayISO())
+  // SSR/Client 일치를 위해 빈 문자열로 초기화 → useEffect에서 클라이언트 시각으로 설정 (hydration 안전)
+  const [startDate, setStartDate]         = useState('')
+  useEffect(() => {
+    setStartDate(todayISO())
+  }, [])
 
   const cw = parseFloat(currentWeight) || 0
   const tw = parseFloat(targetWeight) || 0
@@ -80,10 +81,10 @@ export default function WeightLossClient() {
 
   /* 탭 1: 감량 계획 */
   const [speedId, setSpeedId] = useState('slow')
-  const [plateauMode, setPlateauMode] = useState<PlateauMode>('realistic')
+  const plateauMode: PlateauMode = 'realistic'
 
   const plan = useMemo(() => {
-    if (!inputValid) return null
+    if (!inputValid || !startDate) return null
     return calcWeightLossPlan({
       currentWeight: cw, targetWeight: tw, height: h,
       gender, age: a, tdee: td, speedId, startDate,
@@ -94,7 +95,10 @@ export default function WeightLossClient() {
   const targetBMICat  = bmiCategoryName(plan?.targetBMI ?? 0)
 
   /* 탭 2: 목표일 역산 */
-  const [targetDate, setTargetDate] = useState(addDays(todayISO(), 56))
+  const [targetDate, setTargetDate] = useState('')
+  useEffect(() => {
+    setTargetDate(addDays(todayISO(), 56))
+  }, [])
   const targetDateResult = useMemo(() => {
     if (!inputValid) return null
     return calcDeficitForTargetDate({
@@ -118,16 +122,6 @@ export default function WeightLossClient() {
     return splitDietExercise(plan.dailyDeficit, dietPortionPct / 100, exerciseFreq)
   }, [plan, dietPortionPct, exerciseFreq])
 
-  /* 탭 4: 정체기/유지 */
-  const [maintInterval, setMaintInterval] = useState(6)
-
-  const planWithMaintenance = useMemo(() => {
-    if (!inputValid) return null
-    return calcWeightLossPlan({
-      currentWeight: cw, targetWeight: tw, height: h,
-      gender, age: a, tdee: td, speedId, startDate,
-    }, 'with-maintenance')
-  }, [inputValid, cw, tw, h, gender, a, td, speedId, startDate])
 
   /* 탭 5: 매크로 */
   const [proteinId, setProteinId] = useState('active')
@@ -159,9 +153,9 @@ export default function WeightLossClient() {
 
   /* SVG 그래프 좌표 계산 */
   const chartData = useMemo(() => {
-    const progression = (tab === 'plateau' && planWithMaintenance) ? planWithMaintenance.weeklyProgression : plan?.weeklyProgression
+    const progression = plan?.weeklyProgression
     if (!progression || progression.length < 2) return null
-    const W = 600, H = 220, pad = { l: 40, r: 14, t: 14, b: 28 }
+    const W = 600, H = 240, pad = { l: 50, r: 16, t: 18, b: 36 }
     const xs = progression.map(p => p.week)
     const ys = progression.map(p => p.weight)
     const maxX = Math.max(...xs)
@@ -188,17 +182,23 @@ export default function WeightLossClient() {
       cw, tw, hM,
       maintenancePoints: progression.filter(p => p.isMaintenance),
     }
-  }, [tab, plan, planWithMaintenance, h, cw, tw])
+  }, [plan, h, cw, tw])
 
   /* ──────────────────── 렌더 ──────────────────── */
   return (
     <div className={styles.wrap}>
 
       {/* 면책 (강한 톤) */}
-      <div className={styles.disclaimer}>
-        <strong>의학적 진단·치료 도구가 아닙니다.</strong> 건강한 다이어트의 핵심은 &lsquo;빠르게&rsquo;가 아닌 &lsquo;꾸준히&rsquo;.
-        주당 0.5~1% 감량이 안전 권장이며, 청소년·임산부·만성질환자·식이장애가 있다면 본 도구를 사용하지 마세요.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        의학적 진단·치료 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -394,88 +394,162 @@ export default function WeightLossClient() {
           </div>
 
           {/* 그래프 */}
-          {chartData && (
+          {chartData && (() => {
+            // y축 보조선: 체중 범위를 4등분 + 시작/끝 + 정상 BMI 경계
+            const yStep = (chartData.maxY - chartData.minY) / 4
+            const yTicks = [0, 1, 2, 3, 4].map((i) => chartData.minY + yStep * i)
+            // x축 보조선: 4등분
+            const xTicks = [0, 1, 2, 3, 4].map((i) => Math.round((chartData.maxX * i) / 4))
+            const innerW = chartData.W - chartData.pad.l - chartData.pad.r
+            const innerH = chartData.H - chartData.pad.t - chartData.pad.b
+            // 정상 BMI 경계 체중 (라벨용)
+            const normalMaxKg = 22.9 * chartData.hM * chartData.hM
+            const normalMinKg = 18.5 * chartData.hM * chartData.hM
+            return (
+              <div className={styles.card}>
+                <label className={styles.cardLabel}>체중 변화 그래프</label>
+                <div className={styles.chartWrap}>
+                  <svg viewBox={`0 0 ${chartData.W} ${chartData.H}`} className={styles.chartSvg} preserveAspectRatio="xMidYMid meet">
+                    {/* 정상 BMI 영역 */}
+                    <rect
+                      x={chartData.pad.l} y={chartData.normalTop}
+                      width={innerW}
+                      height={Math.max(0, chartData.normalBottom - chartData.normalTop)}
+                      fill="rgba(62,255,155,0.10)" />
+                    {/* 저체중 영역 */}
+                    <rect
+                      x={chartData.pad.l} y={chartData.underTop}
+                      width={innerW}
+                      height={Math.max(0, chartData.underBottom - chartData.underTop)}
+                      fill="rgba(255,107,107,0.08)" />
+
+                    {/* y축 보조선 */}
+                    {yTicks.map((y, i) => (
+                      <g key={`yt-${i}`}>
+                        <line x1={chartData.pad.l} y1={chartData.yScale(y)}
+                          x2={chartData.W - chartData.pad.r} y2={chartData.yScale(y)}
+                          stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.5} />
+                        <text x={chartData.pad.l - 6} y={chartData.yScale(y) + 4}
+                          fontSize="11" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="600">
+                          {y.toFixed(0)}kg
+                        </text>
+                      </g>
+                    ))}
+
+                    {/* x축 보조선 */}
+                    {xTicks.map((x, i) => (
+                      <g key={`xt-${i}`}>
+                        <line x1={chartData.xScale(x)} y1={chartData.pad.t}
+                          x2={chartData.xScale(x)} y2={chartData.H - chartData.pad.b}
+                          stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.4} />
+                        <text x={chartData.xScale(x)} y={chartData.H - chartData.pad.b + 16}
+                          fontSize="11" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle" fontWeight="600">
+                          {x}주
+                        </text>
+                      </g>
+                    ))}
+
+                    {/* 정상 BMI 경계 라벨 */}
+                    {normalMaxKg < chartData.maxY && normalMaxKg > chartData.minY && (
+                      <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMaxKg) - 4}
+                        fontSize="10" fill="#3EFF9B" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        BMI 23 ({normalMaxKg.toFixed(0)}kg)
+                      </text>
+                    )}
+                    {normalMinKg < chartData.maxY && normalMinKg > chartData.minY && (
+                      <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMinKg) - 4}
+                        fontSize="10" fill="#FF8C8C" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        BMI 18.5 ({normalMinKg.toFixed(0)}kg)
+                      </text>
+                    )}
+
+                    {/* 축 */}
+                    <line x1={chartData.pad.l} y1={chartData.H - chartData.pad.b}
+                      x2={chartData.W - chartData.pad.r} y2={chartData.H - chartData.pad.b}
+                      stroke="var(--border)" strokeWidth="1.5" />
+                    <line x1={chartData.pad.l} y1={chartData.pad.t}
+                      x2={chartData.pad.l} y2={chartData.H - chartData.pad.b}
+                      stroke="var(--border)" strokeWidth="1.5" />
+
+                    {/* 라인 */}
+                    <polyline points={chartData.points} fill="none"
+                      stroke="var(--accent)" strokeWidth="3" strokeLinejoin="round" />
+
+                    {/* 시작·종료 점 + 라벨 */}
+                    {chartData.progression.length > 0 && (
+                      <>
+                        <circle cx={chartData.xScale(chartData.progression[0].week)} cy={chartData.yScale(chartData.progression[0].weight)} r="5" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
+                        <circle cx={chartData.xScale(chartData.progression[chartData.progression.length-1].week)} cy={chartData.yScale(chartData.progression[chartData.progression.length-1].weight)} r="5" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
+                      </>
+                    )}
+
+                    {/* 중간 마커 */}
+                    {chartData.progression.filter((_, i) => i > 0 && i < chartData.progression.length - 1 && i % Math.max(1, Math.floor(chartData.progression.length / 6)) === 0).map((p, i) => (
+                      <circle key={i}
+                        cx={chartData.xScale(p.week)} cy={chartData.yScale(p.weight)}
+                        r="3" fill="var(--accent)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className={styles.chartLegend}>
+                  <span><i style={{ background: 'var(--accent)' }} /> 체중 변화</span>
+                  <span><i style={{ background: 'rgba(62,255,155,0.30)' }} /> 정상 BMI 범위</span>
+                  <span><i style={{ background: 'rgba(255,107,107,0.30)' }} /> 저체중</span>
+                </div>
+              </div>
+            )
+          })()}
+
+          {/* 탄단지 (매크로) — 결과로 자동 표시 */}
+          {macros && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>체중 변화 그래프</label>
-              <div className={styles.chartWrap}>
-                <svg viewBox={`0 0 ${chartData.W} ${chartData.H}`} className={styles.chartSvg} preserveAspectRatio="none">
-                  {/* 정상 BMI 영역 */}
-                  <rect
-                    x={chartData.pad.l} y={chartData.normalTop}
-                    width={chartData.W - chartData.pad.l - chartData.pad.r}
-                    height={Math.max(0, chartData.normalBottom - chartData.normalTop)}
-                    fill="rgba(62,255,155,0.10)" />
-                  {/* 저체중 영역 */}
-                  <rect
-                    x={chartData.pad.l} y={chartData.underTop}
-                    width={chartData.W - chartData.pad.l - chartData.pad.r}
-                    height={Math.max(0, chartData.underBottom - chartData.underTop)}
-                    fill="rgba(255,107,107,0.08)" />
-
-                  {/* 축 */}
-                  <line x1={chartData.pad.l} y1={chartData.H - chartData.pad.b}
-                    x2={chartData.W - chartData.pad.r} y2={chartData.H - chartData.pad.b}
-                    stroke="var(--border)" strokeWidth="1" />
-                  <line x1={chartData.pad.l} y1={chartData.pad.t}
-                    x2={chartData.pad.l} y2={chartData.H - chartData.pad.b}
-                    stroke="var(--border)" strokeWidth="1" />
-
-                  {/* y 축 라벨 (시작·종료 체중) */}
-                  <text x={6} y={chartData.yScale(chartData.maxY) + 4}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">{Math.round(chartData.maxY)}kg</text>
-                  <text x={6} y={chartData.yScale(chartData.minY) + 4}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">{Math.round(chartData.minY)}kg</text>
-
-                  {/* 라인 */}
-                  <polyline points={chartData.points} fill="none"
-                    stroke="var(--accent)" strokeWidth="2.5" strokeLinejoin="round" />
-
-                  {/* 마커 */}
-                  {chartData.progression.filter((_, i) => i % Math.max(1, Math.floor(chartData.progression.length / 8)) === 0).map((p, i) => (
-                    <circle key={i}
-                      cx={chartData.xScale(p.week)} cy={chartData.yScale(p.weight)}
-                      r="3.5" fill={p.isMaintenance ? '#3EC8FF' : 'var(--accent)'} />
-                  ))}
-
-                  {/* x 축 라벨 (0주, 종료) */}
-                  <text x={chartData.pad.l} y={chartData.H - 8}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">0주</text>
-                  <text x={chartData.W - chartData.pad.r - 30} y={chartData.H - 8}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">{chartData.maxX}주</text>
-                </svg>
+              <label className={styles.cardLabel}>🥗 탄단지(매크로) 분배 — {fmt(plan.targetDailyCalories)}kcal/일 기준</label>
+              <div className={styles.macroBar} style={{ marginBottom: 10 }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
+                  단 {macros.protein.percent}%
+                </div>
+                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#FFD700' }}>
+                  지 {macros.fat.percent}%
+                </div>
+                <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#FF8C3E' }}>
+                  탄 {macros.carb.percent}%
+                </div>
               </div>
-              <div className={styles.chartLegend}>
-                <span><i style={{ background: 'var(--accent)' }} /> 체중 변화</span>
-                <span><i style={{ background: 'rgba(62,255,155,0.30)' }} /> 정상 BMI 범위</span>
-                <span><i style={{ background: 'rgba(255,107,107,0.30)' }} /> 저체중</span>
+              <div className={styles.macroTable}>
+                <div className={`${styles.macroRow} ${styles.headerRow}`}>
+                  <span>매크로</span><span>g</span><span>kcal</span><span>%</span>
+                </div>
+                <div className={styles.macroRow} style={{ borderLeftColor: 'var(--accent)' }}>
+                  <span>🥩 단백질 ({proteinTarget.gPerKg}g/kg)</span>
+                  <span>{macros.protein.g}g</span>
+                  <span>{fmt(macros.protein.kcal)}</span>
+                  <span>{macros.protein.percent}%</span>
+                </div>
+                <div className={styles.macroRow} style={{ borderLeftColor: '#FFD700' }}>
+                  <span>🥑 지방 ({fatRatio}%)</span>
+                  <span>{macros.fat.g}g</span>
+                  <span>{fmt(macros.fat.kcal)}</span>
+                  <span>{macros.fat.percent}%</span>
+                </div>
+                <div className={styles.macroRow} style={{ borderLeftColor: '#FF8C3E' }}>
+                  <span>🍚 탄수화물</span>
+                  <span>{macros.carb.g}g</span>
+                  <span>{fmt(macros.carb.kcal)}</span>
+                  <span>{macros.carb.percent}%</span>
+                </div>
               </div>
+              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+                💡 단백질 {macros.protein.g}g ≈ 닭가슴살 {Math.round(macros.protein.g / 23)}× 100g · 계란 {Math.round(macros.protein.g / 6)}개 / 탄수 {macros.carb.g}g ≈ 밥 {(macros.carb.g / 75).toFixed(1)}공기. 감량 시 단백질 1.6g/kg 권장 (근손실 방지·포만감).
+              </p>
             </div>
           )}
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>정체기 모드</label>
-            <div className={styles.toggleRow3}>
-              {[
-                { v: 'linear',           label: '단순 선형' },
-                { v: 'realistic',        label: '현실 보정' },
-                { v: 'with-maintenance', label: '유지기 포함' },
-              ].map(o => (
-                <button key={o.v}
-                  className={`${styles.toggleBtn} ${plateauMode === o.v ? styles.toggleActive : ''}`}
-                  onClick={() => setPlateauMode(o.v as PlateauMode)}>
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          </div>
 
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`${cw}kg → ${tw}kg (${fmt1(plan.totalLossKg)}kg) / ${plan.weeksRequired}주 / 하루 적자 ${fmt(plan.dailyDeficit)}kcal / 목표 섭취 ${fmt(plan.targetDailyCalories)}kcal·일 / 종료일 ${plan.endDate}`)}>
               {copied ? '✓ 복사됨' : '📋 복사'}
             </button>
-            <button className={styles.copyBtn} onClick={() => setTab('split')}>🍽️ 식단·운동 분리</button>
-            <button className={styles.copyBtn} onClick={() => setTab('macro')}>🥗 탄단지 분배</button>
+            <button className={styles.copyBtn} onClick={() => setTab('split')}>🍽️ 식단+운동 분리 보기</button>
           </div>
         </>
       )}
@@ -671,219 +745,6 @@ export default function WeightLossClient() {
 
           <div className={styles.infoBox}>
             💡 <strong>식단 + 운동 병행이 가장 안정적</strong> — 식단만(100%): 빠르지만 근손실↑·정체기 빠름 / 운동만(100%): 너무 많은 운동 시간 필요·부상 위험↑ / <strong style={{ color: 'var(--text)' }}>균형(60/40)</strong>: 근육 유지·심혈관 건강·지속 가능.
-          </div>
-        </>
-      )}
-
-      {/* ──────── 탭 4: 정체기·유지기 ──────── */}
-      {tab === 'plateau' && plan && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>정체기·유지기</strong> — 실제 다이어트는 매주 일정하게 줄지 않습니다. 첫 2주는 수분 변동, 후반은 대사 적응. 유지기를 삽입하면 장기 지속이 쉬워집니다.
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>정체기 모드</label>
-            <div className={styles.toggleRow3}>
-              {[
-                { v: 'linear',           label: '단순 선형' },
-                { v: 'realistic',        label: '현실 보정' },
-                { v: 'with-maintenance', label: '유지기 포함' },
-              ].map(o => (
-                <button key={o.v}
-                  className={`${styles.toggleBtn} ${plateauMode === o.v ? styles.toggleActive : ''}`}
-                  onClick={() => setPlateauMode(o.v as PlateauMode)}>
-                  {o.label}
-                </button>
-              ))}
-            </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-              💡 <strong style={{ color: 'var(--text)' }}>현실 보정</strong> — 첫 2주 +30%(수분 변동), 마지막 4주 −15%(대사 적응) /
-              {' '}<strong style={{ color: 'var(--text)' }}>유지기 포함</strong> — N주마다 1주 유지(BMR 회복).
-            </p>
-          </div>
-
-          {plateauMode === 'with-maintenance' && (
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>유지기 주기</label>
-              <div className={styles.optionRow}>
-                {[4, 6, 8].map(n => (
-                  <button key={n}
-                    className={`${styles.optionBtn} ${maintInterval === n ? styles.optionActive : ''}`}
-                    onClick={() => setMaintInterval(n)}>
-                    {n}주마다 1주 유지
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 그래프 */}
-          {chartData && (
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>체중 변화 (정체기 반영)</label>
-              <div className={styles.chartWrap}>
-                <svg viewBox={`0 0 ${chartData.W} ${chartData.H}`} className={styles.chartSvg} preserveAspectRatio="none">
-                  <rect
-                    x={chartData.pad.l} y={chartData.normalTop}
-                    width={chartData.W - chartData.pad.l - chartData.pad.r}
-                    height={Math.max(0, chartData.normalBottom - chartData.normalTop)}
-                    fill="rgba(62,255,155,0.10)" />
-                  <rect
-                    x={chartData.pad.l} y={chartData.underTop}
-                    width={chartData.W - chartData.pad.l - chartData.pad.r}
-                    height={Math.max(0, chartData.underBottom - chartData.underTop)}
-                    fill="rgba(255,107,107,0.08)" />
-                  <line x1={chartData.pad.l} y1={chartData.H - chartData.pad.b}
-                    x2={chartData.W - chartData.pad.r} y2={chartData.H - chartData.pad.b}
-                    stroke="var(--border)" strokeWidth="1" />
-                  <line x1={chartData.pad.l} y1={chartData.pad.t}
-                    x2={chartData.pad.l} y2={chartData.H - chartData.pad.b}
-                    stroke="var(--border)" strokeWidth="1" />
-                  <text x={6} y={chartData.yScale(chartData.maxY) + 4}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">{Math.round(chartData.maxY)}kg</text>
-                  <text x={6} y={chartData.yScale(chartData.minY) + 4}
-                    fontSize="10" fill="var(--muted)" fontFamily="Syne">{Math.round(chartData.minY)}kg</text>
-                  <polyline points={chartData.points} fill="none"
-                    stroke="#3EC8FF" strokeWidth="2.5" strokeLinejoin="round" />
-                  {chartData.maintenancePoints.map((p, i) => (
-                    <circle key={i}
-                      cx={chartData.xScale(p.week)} cy={chartData.yScale(p.weight)}
-                      r="5" fill="#3EC8FF" stroke="var(--bg)" strokeWidth="1.5" />
-                  ))}
-                </svg>
-              </div>
-              <div className={styles.chartLegend}>
-                <span><i style={{ background: '#3EC8FF' }} /> 체중 변화</span>
-                <span><i style={{ background: 'rgba(62,255,155,0.30)' }} /> 정상 BMI</span>
-                <span><i style={{ background: 'rgba(255,107,107,0.30)' }} /> 저체중</span>
-                {plateauMode === 'with-maintenance' && (
-                  <span><i style={{ background: '#3EC8FF', borderRadius: '50%' }} /> 유지기</span>
-                )}
-              </div>
-            </div>
-          )}
-
-          <div className={styles.infoBox}>
-            💡 <strong>정체기는 자연스러운 부분</strong> — 실제 체중은 매주 일정하지 않습니다. 다음으로 1~2kg 변동 가능: 수분(식사·운동·생리주기) / 글리코겐(탄수 섭취) / 운동 후 근육 부종 / 변비·소화 상태. <strong style={{ color: 'var(--text)' }}>주간 평균 체중</strong> 사용 권장 (매일 측정 → 평균).
-          </div>
-
-          <div className={styles.infoBox} style={{ background: 'rgba(62,200,255,0.06)', borderColor: 'rgba(62,200,255,0.30)' }}>
-            💡 <strong style={{ color: '#3EC8FF' }}>유지기의 효과</strong> — 대사 적응 회복(BMR 정상화) / 폭식 위험 감소 / 호르몬 안정(특히 여성) / 정신적 휴식 / 장기 지속 가능성↑. 단기 결과는 약간 늦어지지만 요요·실패 가능성↓.
-          </div>
-
-          {gender === 'female' && (
-            <div className={styles.warnBox} style={{ background: 'rgba(255,215,0,0.06)', borderColor: 'rgba(255,215,0,0.30)' }}>
-              💛 <strong style={{ color: '#FFD700' }}>생리주기 변동 안내</strong> — 생리 1~2주 전(황체기): 체중 1~2kg 일시 증가(수분), 생리 직후: 변동 안정. 실제 체지방 감소와 무관한 일시적 변동이므로 <strong style={{ color: 'var(--text)' }}>주간 평균 체중</strong>을 기준으로 평가하세요. 본 안내는 일반 정보이며 의학적 예측이 아닙니다.
-            </div>
-          )}
-        </>
-      )}
-
-      {/* ──────── 탭 5: 탄단지 ──────── */}
-      {tab === 'macro' && plan && macros && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>탄단지(매크로) 분배</strong> — 같은 칼로리도 단백질·지방·탄수 비율에 따라 효과가 다릅니다. 감량 시 단백질 1.6g/kg(일반 1.2보다 ↑) 권장 — 근손실 방지 + 포만감.
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>단백질 목표</label>
-            <div className={styles.optionRow4}>
-              {PROTEIN_TARGETS.map(p => (
-                <button key={p.id}
-                  className={`${styles.optionBtn} ${proteinId === p.id ? styles.optionActive : ''}`}
-                  onClick={() => setProteinId(p.id)}>
-                  {p.name} {p.recommended && '★'}
-                  <br />
-                  <small style={{ fontSize: 10, opacity: 0.7 }}>{p.gPerKg}g/kg</small>
-                </button>
-              ))}
-            </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-              {proteinTarget.desc}
-            </p>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>지방 비율 — {fatRatio}% (최소 20%)</label>
-            <div className={styles.sliderRow}>
-              <input className={styles.slider} type="range"
-                min="20" max="40" step="5"
-                value={fatRatio} onChange={e => setFatRatio(parseInt(e.target.value, 10))} />
-              <span className={styles.sliderVal}>{fatRatio}%</span>
-            </div>
-          </div>
-
-          <div className={styles.hero}
-            style={{ borderColor: 'rgba(155,89,182,0.30)', background: 'rgba(155,89,182,0.06)' }}>
-            <div className={styles.heroLabel}>매크로 분배 — {fmt(plan.targetDailyCalories)}kcal/일</div>
-            <div className={styles.macroBar}>
-              <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
-                단 {macros.protein.percent}%
-              </div>
-              <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#FFD700' }}>
-                지 {macros.fat.percent}%
-              </div>
-              <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#FF8C3E' }}>
-                탄 {macros.carb.percent}%
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>매크로 상세</label>
-            <div className={styles.macroTable}>
-              <div className={`${styles.macroRow} ${styles.headerRow}`}>
-                <span>매크로</span><span>g</span><span>kcal</span><span>%</span>
-              </div>
-              <div className={styles.macroRow} style={{ borderLeftColor: 'var(--accent)' }}>
-                <span>🥩 단백질 ({proteinTarget.gPerKg}g/kg)</span>
-                <span>{macros.protein.g}g</span>
-                <span>{fmt(macros.protein.kcal)}</span>
-                <span>{macros.protein.percent}%</span>
-              </div>
-              <div className={styles.macroRow} style={{ borderLeftColor: '#FFD700' }}>
-                <span>🥑 지방 ({fatRatio}%)</span>
-                <span>{macros.fat.g}g</span>
-                <span>{fmt(macros.fat.kcal)}</span>
-                <span>{macros.fat.percent}%</span>
-              </div>
-              <div className={styles.macroRow} style={{ borderLeftColor: '#FF8C3E' }}>
-                <span>🍚 탄수화물</span>
-                <span>{macros.carb.g}g</span>
-                <span>{fmt(macros.carb.kcal)}</span>
-                <span>{macros.carb.percent}%</span>
-              </div>
-            </div>
-          </div>
-
-          {mealSplit.length > 0 && (
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>끼니별 분배 (예시)</label>
-              <div className={styles.mealTable}>
-                <div className={`${styles.mealRow} ${styles.headerRow}`}>
-                  <span>끼니</span><span>단(g)</span><span>탄(g)</span><span>지(g)</span><span>kcal</span>
-                </div>
-                {mealSplit.map(m => (
-                  <div key={m.name} className={styles.mealRow}>
-                    <span>{m.name}</span>
-                    <span>{m.protein}g</span>
-                    <span>{m.carb}g</span>
-                    <span>{m.fat}g</span>
-                    <span>{fmt(m.kcal)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className={styles.infoBox}>
-            💡 <strong>음식 환산 (예시)</strong> — 단백질 {macros.protein.g}g ≈ 닭가슴살 {Math.round(macros.protein.g / 23)}× 100g 또는 계란 {Math.round(macros.protein.g / 6)}개 / 탄수 {macros.carb.g}g ≈ 밥 {(macros.carb.g / 75).toFixed(1)}공기 (210g)
-          </div>
-
-          <div className={styles.warnBox}>
-            ⚠️ 본 매크로는 일반 권장값입니다. <strong>신장 질환·당뇨·만성질환자</strong>는 의료 전문가 상담 후 결정하세요. 극단적 매크로(키토·저탄)는 본 도구 범위 밖입니다.
           </div>
         </>
       )}

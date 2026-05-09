@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './roomMode.module.css'
 import {
   ROOM_PRESETS, TRAPS, MODE_COLORS, MODE_LABELS,
@@ -417,16 +418,16 @@ export default function RoomModeClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>룸 모드는 <strong>직사각형 방 가정</strong> — 비대칭·복도·가구 영향 큼.</li>
-          <li>표시 주파수는 <strong>이상 모델</strong> — 실제는 ±10Hz 변동.</li>
-          <li>정확한 측정은 <strong>REW (Room EQ Wizard) + 측정 마이크</strong>를 권장합니다.</li>
-          <li>스피커 배치는 음향 외에도 <strong>인테리어·동선</strong>도 고려하세요.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        사용 안내 룸 모드는 <strong>직사각형 방 가정</strong> — 비대칭·복도·가구 영향 큼. 표시 주파수는 <strong>이상 모델</strong> — 실제는 ±10Hz 변동. 정확한 측정은 <strong>REW (Room EQ Wizard) + 측정 마이크</strong>를 권장합니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/edu/sound-speed" className={s.crossLink}>
@@ -462,21 +463,21 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
         {[20, 50, 100, 150, 200, 250, 300].map((f) => (
           <g key={f}>
             <line x1={xScale(f)} y1={padT} x2={xScale(f)} y2={yBase} stroke="var(--border)" strokeWidth="0.5" />
-            <text x={xScale(f)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">{f}Hz</text>
+            <text x={xScale(f)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{f}Hz</text>
           </g>
         ))}
         {/* 강도 라벨 */}
         {[0.4, 0.7, 1.0].map((s) => (
           <g key={s}>
             <line x1={padL} y1={yScale(s)} x2={W - padR} y2={yScale(s)} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,3" />
-            <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Syne">{s}</text>
+            <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{s}</text>
           </g>
         ))}
         {/* 슈로더 라인 */}
         {schroeder >= fMin && schroeder <= fMax && (
           <g>
             <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#FFB83E" strokeWidth="1.5" strokeDasharray="3,2" />
-            <text x={xScale(schroeder)} y={padT - 2} fill="#FFB83E" fontSize="9" textAnchor="middle" fontFamily="Syne" fontWeight="700">슈로더</text>
+            <text x={xScale(schroeder)} y={padT - 2} fill="#FFB83E" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">슈로더</text>
           </g>
         )}
         {/* 모드 막대 */}
@@ -584,15 +585,15 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
         <rect x={pad} y={pad} width={w} height={h} fill="none" stroke="var(--text)" strokeWidth="2" />
         {/* 38% 라인 */}
         <line x1={pad} y1={pad + h * 0.38} x2={pad + w} y2={pad + h * 0.38} stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6,4" />
-        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent)" fontSize="10" fontFamily="Syne">38%</text>
+        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent)" fontSize="10" fontFamily="Inter, system-ui, sans-serif">38%</text>
         {/* 가로/세로 치수 */}
-        <text x={pad + w / 2} y={pad - 8} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Syne">{fmt(W, 1)}m (가로 W)</text>
-        <text x={pad - 8} y={pad + h / 2} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Syne" transform={`rotate(-90, ${pad - 8}, ${pad + h / 2})`}>
+        <text x={pad + w / 2} y={pad - 8} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{fmt(W, 1)}m (가로 W)</text>
+        <text x={pad - 8} y={pad + h / 2} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" transform={`rotate(-90, ${pad - 8}, ${pad + h / 2})`}>
           {fmt(L, 1)}m (세로 L)
         </text>
         {/* 앞 벽 라벨 */}
-        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">앞 벽 (스피커 면)</text>
-        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">뒤 벽</text>
+        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">앞 벽 (스피커 면)</text>
+        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">뒤 벽</text>
 
         {/* 청취자 (드래그) */}
         <g
@@ -664,33 +665,33 @@ function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
         {[1.0, 1.5, 2.0, 2.5].map((v) => (
           <g key={`gx-${v}`}>
             <line x1={xScale(v)} y1={padT} x2={xScale(v)} y2={svgH - padB} stroke="var(--border)" strokeWidth="0.4" />
-            <text x={xScale(v)} y={svgH - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">{v}</text>
+            <text x={xScale(v)} y={svgH - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{v}</text>
           </g>
         ))}
         {[1.0, 1.5, 2.0, 2.5].map((v) => (
           <g key={`gy-${v}`}>
             <line x1={padL} y1={yScale(v)} x2={svgW - padR} y2={yScale(v)} stroke="var(--border)" strokeWidth="0.4" />
-            <text x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{v}</text>
+            <text x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{v}</text>
           </g>
         ))}
         {/* 안전 영역 */}
         <polygon points={safePoly} fill="rgba(62, 255, 208, 0.18)" stroke="#3EFFD0" strokeWidth="1.5" />
         {/* 황금비 점 (Sepmeyer) */}
         <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="#FFB83E" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#FFB83E" fontSize="9" fontFamily="Syne">Sepmeyer ⭐</text>
+        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#FFB83E" fontSize="9" fontFamily="Inter, system-ui, sans-serif">Sepmeyer ⭐</text>
         {/* 정육면체 (위험) */}
         <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="#FF3E8C" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#FF3E8C" fontSize="9" fontFamily="Syne">정육면체 ⚠️</text>
+        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#FF3E8C" fontSize="9" fontFamily="Inter, system-ui, sans-serif">정육면체 ⚠️</text>
         {/* 본인 방 */}
         {wlRatio >= xMin && wlRatio <= xMax && llRatio >= yMin && llRatio <= yMax && (
           <g>
             <circle cx={xScale(wlRatio)} cy={yScale(llRatio)} r={9} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
-            <text x={xScale(wlRatio)} y={yScale(llRatio) - 14} fill="var(--accent)" fontSize="11" textAnchor="middle" fontFamily="Syne" fontWeight="700">내 방</text>
+            <text x={xScale(wlRatio)} y={yScale(llRatio) - 14} fill="var(--accent)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">내 방</text>
           </g>
         )}
         {/* 축 라벨 */}
-        <text x={svgW / 2} y={svgH - 1} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Syne">W / H (가로/높이)</text>
-        <text x={padL - 28} y={svgH / 2} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Syne" transform={`rotate(-90, ${padL - 28}, ${svgH / 2})`}>L / H (세로/높이)</text>
+        <text x={svgW / 2} y={svgH - 1} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">W / H (가로/높이)</text>
+        <text x={padL - 28} y={svgH / 2} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" transform={`rotate(-90, ${padL - 28}, ${svgH / 2})`}>L / H (세로/높이)</text>
       </svg>
     </div>
   )

@@ -79,7 +79,7 @@
   font-weight: 700;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
 }
 .quickChip:hover { background: var(--bg2); }
@@ -145,7 +145,7 @@
   margin-bottom: 4px;
 }
 .codeBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 32px;
   letter-spacing: -1px;
@@ -246,7 +246,7 @@
   .detailHero { grid-template-columns: 1fr; gap: 14px; text-align: center; }
 }
 .detailCode {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 900;
   font-size: 96px;
   letter-spacing: -3px;
@@ -260,7 +260,7 @@
   margin: 0;
 }
 .detailName {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 24px;
   color: var(--text);
@@ -285,7 +285,7 @@
   padding: 4px 10px;
   border-radius: 5px;
   border: 1px solid;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   letter-spacing: 0.05em;
 }
 .badgeStandard {
@@ -369,7 +369,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px 14px;
-  font-family: 'Syne', 'SF Mono', Consolas, monospace;
+  font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-size: 12.5px;
   color: var(--text);
   overflow-x: auto;
@@ -382,7 +382,7 @@
   font-size: 12px;
   color: var(--muted);
   margin: 0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   font-style: italic;
 }
@@ -394,7 +394,7 @@
   margin: 0 0 12px;
 }
 .statBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: #C8FF3E;
@@ -412,7 +412,7 @@
   font-size: 12.5px;
   font-weight: 700;
   text-decoration: none;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .jumpChip:hover { background: var(--bg2); }
 
@@ -433,7 +433,7 @@
   margin-bottom: 8px;
 }
 .catTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
   margin: 0;
@@ -442,7 +442,7 @@
 .catRange {
   font-size: 11.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .catDesc {
@@ -474,7 +474,7 @@
 }
 .miniCard:hover { background: var(--bg2); border-color: #C8FF3E40; }
 .miniNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
 }
@@ -551,7 +551,7 @@
   border-radius: 5px;
   padding: 4px 10px;
   font-size: 11.5px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
 }
@@ -582,9 +582,9 @@
   vertical-align: top;
 }
 .guideTable tr:last-child td { border-bottom: none; }
-.mono { font-family: 'Syne', 'SF Mono', Consolas, monospace; font-weight: 700; color: var(--text); }
+.mono { font-family: 'Inter', 'SF Mono', Consolas, monospace; font-weight: 700; color: var(--text); }
 .codeMono {
-  font-family: 'Syne', 'SF Mono', Consolas, monospace;
+  font-family: 'Inter', 'SF Mono', Consolas, monospace;
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 3px;
@@ -615,7 +615,7 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 28px;
   cursor: pointer;

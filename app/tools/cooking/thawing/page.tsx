@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ThawingClient from './ThawingClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/thawing',
@@ -18,7 +19,7 @@ export default function ThawingPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧊 냉동·해동 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -39,11 +40,12 @@ export default function ThawingPage() {
 
       <ThawingClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 해동 방법 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             해동 방법별 비교
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -64,8 +66,8 @@ export default function ThawingPage() {
                 ].map(([m, sp, saf, food, note, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{sp}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{saf}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{sp}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{saf}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{food}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{note}</td>
                   </tr>
@@ -77,7 +79,7 @@ export default function ThawingPage() {
 
         {/* ── 2. 냉동 보관 기간 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             식품별 냉동 보관 기간
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -102,8 +104,8 @@ export default function ThawingPage() {
                 ].map(([food, best, max, tip], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{food}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{best}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{max}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{best}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{max}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{tip}</td>
                   </tr>
                 ))}
@@ -114,7 +116,7 @@ export default function ThawingPage() {
 
         {/* ── 3. 위험 온도대 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             ⚠️ 위험 온도대와 2시간 규칙
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -131,7 +133,7 @@ export default function ThawingPage() {
               { range: '74°C 이상', label: '조리 완료', color: '#FFD700', desc: '중심부 가열 완료' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}30`, borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 800, color: item.color, marginBottom: '4px' }}>{item.range}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 800, color: item.color, marginBottom: '4px' }}>{item.range}</p>
                 <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', marginBottom: '3px' }}>{item.label}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{item.desc}</p>
               </div>
@@ -141,7 +143,7 @@ export default function ThawingPage() {
 
         {/* ── 4. 시나리오 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🍽️ 올바른 해동 시나리오
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -185,7 +187,7 @@ export default function ThawingPage() {
 
         {/* ── 6. 전자레인지 W별 해동 시간 보정 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             ⚡ 전자레인지 W별 해동 시간 보정
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -201,14 +203,14 @@ export default function ThawingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>700W (소형·구식)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 27분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 1.5배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>700W (소형·구식)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 27분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 1.5배</td></tr>
                 <tr style={{ background: 'rgba(62,200,255,0.06)' }}>
                   <td style={{ padding: '10px 12px', color: '#3EC8FF', fontWeight: 700 }}>900W (한국 표준) ⭐</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>약 18분</td>
+                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 18분</td>
                   <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>일반 가정용 평균</td>
                 </tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,100W (대형)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 15분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.85배</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,500W (인버터)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>약 13분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.75배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,100W (대형)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 15분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.85배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,500W (인버터)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 13분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.75배</td></tr>
               </tbody>
             </table>
           </div>
@@ -219,7 +221,7 @@ export default function ThawingPage() {
 
         {/* ── 7. 식품별 해동 후 조리 팁 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🍳 식품별 해동 후 조리 팁
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
@@ -244,7 +246,7 @@ export default function ThawingPage() {
 
         {/* ── 8. 위험도 평가 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 식품 안전 위험도 — 5요인 평가
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -271,7 +273,7 @@ export default function ThawingPage() {
 
         {/* ── 9. 한국 인기 냉동 식품 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🇰🇷 한국 인기 냉동 식품 해동 가이드
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -284,13 +286,13 @@ export default function ThawingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥓 삼겹살 600g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍗 닭볶음탕 1마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>1kg · 4cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 12~16시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍖 갈비 2kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>2kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 18~24시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🐟 갈치 2마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>500g · 3cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🦐 새우 500g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>500g · 1cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>찬물 30분 (밀봉)</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥟 만두 1봉지</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>해동 X (찜·튀김 직접)</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🎁 명절 갈비 5kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>5kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 24~36시간 (2~3일 전 미리)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥓 삼겹살 600g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍗 닭볶음탕 1마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>1kg · 4cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 12~16시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍖 갈비 2kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>2kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 18~24시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🐟 갈치 2마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 3cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🦐 새우 500g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 1cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>찬물 30분 (밀봉)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥟 만두 1봉지</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>해동 X (찜·튀김 직접)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🎁 명절 갈비 5kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>5kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 24~36시간 (2~3일 전 미리)</td></tr>
               </tbody>
             </table>
           </div>
@@ -301,7 +303,7 @@ export default function ThawingPage() {
 
         {/* ── 10. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '냉장 해동이 왜 가장 안전한가요?', a: '냉장 온도(0~4°C)는 세균이 증식하기 어려운 환경입니다. 식품이 위험 온도대(4~60°C)에 노출되지 않아 식중독 위험이 최소화됩니다. 해동 후 1~2일 내 조리하면 가장 안전하며, 해동 중에도 위생적 품질이 유지됩니다.' },
@@ -351,7 +353,7 @@ export default function ThawingPage() {
 
         {/* ── 8. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '인분 수에 맞게 재료 자동 계산' },

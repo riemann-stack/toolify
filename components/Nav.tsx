@@ -52,6 +52,61 @@ const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name' | 'icon'>> = [
   { name: '군 전역일',     href: '/tools/date/military',    icon: '🎖️' },
 ]
 
+/* ─── 공유 버튼 ─── */
+function ShareButton() {
+  const [state, setState] = useState<'idle' | 'copied'>('idle')
+
+  const handleShare = useCallback(async () => {
+    if (typeof window === 'undefined') return
+    const url = window.location.href
+    const title = document.title
+    const text = `${title} | Youtil`
+    // Web Share API (모바일 친화) → 폴백: 클립보드 복사
+    type NavWithShare = Navigator & { share?: (data: { title: string; text: string; url: string }) => Promise<void> }
+    const nav = navigator as NavWithShare
+    if (typeof nav.share === 'function') {
+      try {
+        await nav.share({ title, text, url })
+        return
+      } catch {
+        // 사용자 취소 시 무시 → 클립보드 폴백 안 함
+        return
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setState('copied')
+      setTimeout(() => setState('idle'), 1500)
+    } catch {
+      // 마지막 폴백: 사용자에게 URL 표시
+      window.prompt('이 페이지 링크를 복사하세요:', url)
+    }
+  }, [])
+
+  return (
+    <button
+      className={`${styles.shareBtn} ${state === 'copied' ? styles.shareBtnCopied : ''}`}
+      onClick={handleShare}
+      aria-label="이 페이지 공유"
+      title={state === 'copied' ? '링크 복사됨' : '이 페이지 공유'}
+    >
+      {state === 'copied' ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        </svg>
+      )}
+    </button>
+  )
+}
+
 export default function Nav() {
   const [mobileOpen,  setMobileOpen]  = useState(false)
   const [searchOpen,  setSearchOpen]  = useState(false)
@@ -290,6 +345,8 @@ export default function Nav() {
             </svg>
             <span>전체 도구</span>
           </Link>
+
+          <ShareButton />
 
           <button
             className={`${styles.searchBtn} ${searchOpen ? styles.searchBtnActive : ''}`}

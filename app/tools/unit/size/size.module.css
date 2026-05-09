@@ -97,7 +97,7 @@
   padding: 11px 50px 11px 14px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700;
   color: var(--text); outline: none;
   transition: border 0.15s;
 }
@@ -118,7 +118,7 @@
 }
 .recommendLabel { font-size: 11px; color: var(--accent); font-weight: 700; }
 .recommendValue {
-  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .recommendMeta {
@@ -171,7 +171,7 @@
 .td {
   padding: 10px 12px; text-align: center;
   color: var(--text); border-bottom: 1px solid var(--border);
-  white-space: nowrap; font-family: 'Syne', sans-serif; font-weight: 600;
+  white-space: nowrap; font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
 }
 .tdLabel { font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
 .tr:last-child .td { border-bottom: none; }

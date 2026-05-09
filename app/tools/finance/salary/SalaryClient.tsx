@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './salary.module.css'
 import {
@@ -169,10 +170,16 @@ export default function SalaryClient() {
     <div className={styles.wrap}>
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>2026년 4대보험 요율</strong> 기준 (국민연금 4.75% · 건강보험 3.595% · 장기요양 13.14% · 고용보험 0.9%) 자동 적용.
-        본 도구는 추정치이며 실제 급여명세서와 ±2~5% 차이가 날 수 있습니다.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        2026년 4대보험 요율
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -296,7 +303,7 @@ export default function SalaryClient() {
                   ))}
                   <circle cx="80" cy="80" r="32" fill="var(--bg2)" />
                   <text x="80" y="78" textAnchor="middle" fontSize="11" fill="var(--muted)" fontFamily="Noto Sans KR">월급</text>
-                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily="Syne">{Math.round(result.grossMonthly / 10_000)}만</text>
+                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily="Inter, system-ui, sans-serif">{Math.round(result.grossMonthly / 10_000)}만</text>
                 </svg>
                 <div className={styles.donutLegend}>
                   {donut.arcs.map((a, i) => (

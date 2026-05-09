@@ -87,7 +87,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -133,7 +133,7 @@
 }
 .sliderValue {
   min-width: 88px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: var(--accent);
@@ -197,7 +197,7 @@
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -222,7 +222,7 @@
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -281,9 +281,9 @@
 .ingredientRow input:focus { border-color: var(--accent); background: var(--bg2); }
 .ingredientRow .nameCell input { color: var(--text); font-weight: 600; font-size: 13px; }
 .ingredientRow .weightCell { display: flex; align-items: center; gap: 4px; }
-.ingredientRow .weightCell input { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); text-align: right; }
-.ingredientRow .pctCell { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; padding-right: 4px; }
-.ingredientRow .pctCell input { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; }
+.ingredientRow .weightCell input { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text); text-align: right; }
+.ingredientRow .pctCell { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; padding-right: 4px; }
+.ingredientRow .pctCell input { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; }
 
 .ingFlour    { border-left-color: var(--accent); }
 .ingLiquid   { border-left-color: #3EC8FF; }
@@ -345,7 +345,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(36px, 8vw, 50px);
   font-weight: 800;
   color: var(--accent);
@@ -354,7 +354,7 @@
 }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -379,7 +379,7 @@
 }
 .metricLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-family: 'Noto Sans KR', sans-serif; }
 .metricValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
@@ -433,7 +433,7 @@
   font-size: 10px;
   color: var(--muted);
   margin-top: 6px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -459,8 +459,8 @@
 }
 .summaryTable td:first-child { color: var(--text); font-weight: 600; }
 .summaryTable td:nth-child(2) { color: var(--muted); font-size: 11.5px; }
-.summaryTable td:nth-child(3) { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
-.summaryTable td:nth-child(4) { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.summaryTable td:nth-child(3) { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.summaryTable td:nth-child(4) { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .summaryTable tr.flourRow td { background: rgba(200,255,62,0.05); }
 .summaryTable tr.liquidRow td { background: rgba(62,200,255,0.04); }
@@ -484,7 +484,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.analysisCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.analysisCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .analysisCard ul { padding-left: 20px; margin: 6px 0 0; color: var(--muted); }
 .analysisCard li { padding: 2px 0; }
 
@@ -514,7 +514,7 @@
 }
 .pieCenterValue {
   fill: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   font-variant-numeric: tabular-nums;
@@ -552,7 +552,7 @@
 .pieLegendName  { color: var(--text); font-weight: 600; }
 .pieLegendName small { color: var(--muted); font-weight: 400; margin-left: 4px; }
 .pieLegendWeight {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-size: 12px;
@@ -634,7 +634,7 @@
 }
 .outputItem p:first-child { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
 .outputItem p:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-size: 16px;
@@ -686,9 +686,9 @@
   font-weight: 600;
 }
 .dualTable td:first-child { color: var(--text); font-weight: 600; }
-.dualTable .colMain      { background: var(--bg2);                     color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
-.dualTable .colPreferment{ background: rgba(155,89,182,0.06);          color: #C485E0;     font-family: 'Syne', sans-serif; font-weight: 700; }
-.dualTable .colTotal     { background: var(--accent-dim);              color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.dualTable .colMain      { background: var(--bg2);                     color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.dualTable .colPreferment{ background: rgba(155,89,182,0.06);          color: #C485E0;     font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.dualTable .colTotal     { background: var(--accent-dim);              color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dualTable .zero { color: var(--muted); opacity: 0.6; font-weight: 500; }
 .dualTable tr.totalRow td {
   border-top: 2px solid var(--border);
@@ -720,7 +720,7 @@
   border-bottom: 1px dashed var(--border);
 }
 .yeastConvRow:last-child { border-bottom: none; }
-.yeastConvRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.yeastConvRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 수분율 가이드 카드 ── */
 .hydroGuide {
@@ -740,7 +740,7 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.hydroGuide td:first-child { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 800; }
+.hydroGuide td:first-child { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .hydroLow    td:first-child { color: #3EFF9B !important; }
 .hydroMid    td:first-child { color: var(--accent) !important; }
 .hydroHigh   td:first-child { color: #FF8C3E !important; }
@@ -791,7 +791,7 @@
   position: relative;
 }
 .favItemName { font-size: 13px; color: var(--text); font-weight: 700; font-family: 'Noto Sans KR', sans-serif; }
-.favItemMeta { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; }
+.favItemMeta { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .favItemBtns { display: flex; gap: 4px; margin-top: 4px; }
 .favLoadBtn, .favDeleteBtn {
   flex: 1;

@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -108,7 +108,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
 }
 .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -143,7 +143,7 @@
 }
 .methodEmoji { font-size: 20px; }
 .methodLabel { font-size: 13px; font-weight: 700; color: var(--text); }
-.methodDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Syne', sans-serif; }
+.methodDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Inter', system-ui, sans-serif; }
 
 /* 히어로 */
 .hero {
@@ -155,7 +155,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -186,7 +186,7 @@
   letter-spacing: 0.04em;
 }
 .heroBlockValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(20px, 4.5vw, 28px);
   font-weight: 800;
   color: var(--accent);
@@ -201,12 +201,12 @@
 }
 .detailTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Syne', sans-serif; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -272,7 +272,7 @@
 .stepEmoji { font-size: 18px; }
 .stepHead strong { flex: 1; font-weight: 700; }
 .stepTime {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
@@ -281,7 +281,7 @@
   margin: 0;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .stepWater strong { font-weight: 800; }
 .stepDesc {

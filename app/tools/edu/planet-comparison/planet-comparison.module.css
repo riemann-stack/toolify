@@ -86,7 +86,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -133,7 +133,7 @@
 }
 .sliderValue {
   min-width: 80px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: #3EFFD0;
@@ -221,7 +221,7 @@
   text-align: center;
 }
 .sizeCompareLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 700;
   fill: var(--muted);
@@ -261,7 +261,7 @@
   color: var(--text);
 }
 .planetCardNameEn {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   font-size: 12px;
   color: var(--muted);
@@ -290,7 +290,7 @@
 }
 .planetStatItem strong {
   display: block;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -353,7 +353,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .compareTable td:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -428,7 +428,7 @@
   bottom: -22px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 10px;
   color: var(--muted);
@@ -472,7 +472,7 @@
   transition: width 0.3s ease;
 }
 .dayBarValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   text-align: right;
@@ -516,7 +516,7 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
   color: #3EFFD0;
@@ -531,7 +531,7 @@
   margin-bottom: 18px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareSubtitle strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; }
+.shareSubtitle strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .shareList {
   display: flex;
@@ -550,7 +550,7 @@
 }
 .shareListItem strong {
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -564,13 +564,13 @@
   color: rgba(255,255,255,0.85);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareRecommend strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; }
+.shareRecommend strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 15px; }
 
 .shareWatermark {
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
   color: rgba(62,255,208,0.6);

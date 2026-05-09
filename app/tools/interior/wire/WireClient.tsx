@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './wire.module.css'
 import {
   WIRE_SIZES, WIRE_KINDS, BREAKER_SIZES, AMPACITY_HIV,
@@ -484,10 +485,10 @@ export default function WireClient() {
                 fill={dropPct <= dropLimit ? '#3EFFD0' : dropPct <= 5 ? '#FFB83E' : '#FF3E8C'} />
               {/* 한도 라인 */}
               <line x1={(dropLimit / 5) * 400} y1="10" x2={(dropLimit / 5) * 400} y2="50" stroke="#FFB83E" strokeWidth="2" strokeDasharray="3,2" />
-              <text x={(dropLimit / 5) * 400} y="8" fill="#FFB83E" fontSize="10" textAnchor="middle" fontFamily="Syne">한도 {dropLimit}%</text>
+              <text x={(dropLimit / 5) * 400} y="8" fill="#FFB83E" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">한도 {dropLimit}%</text>
               {/* 0~5% 눈금 */}
               {[0, 1, 2, 3, 4, 5].map((v) => (
-                <text key={v} x={(v / 5) * 400} y="55" fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">{v}%</text>
+                <text key={v} x={(v / 5) * 400} y="55" fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{v}%</text>
               ))}
             </svg>
           </div>
@@ -608,18 +609,16 @@ export default function WireClient() {
       )}
 
       {/* 면책 (모든 탭 공통) */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용·시공 안내 (반드시 읽어주세요)</strong>
-        <ul>
-          <li>🚨 <strong>일반인의 옥내·옥외 배선 자가시공은 전기공사업법상 불가능</strong>합니다.</li>
-          <li>시공은 반드시 <strong>전기기능사·전기공사기능사·전기공사업 등록 사업자</strong>에게 의뢰하세요.</li>
-          <li>자가시공 시 <strong>감전사·화재·법적 처벌·보험 거부</strong> 위험.</li>
-          <li>이 도구는 <strong>KS·KEC 일반 참고치</strong>이며, 실 시공·검토는 전기기술자 + 한전 검사 필수.</li>
-          <li>표시 허용전류는 <strong>30°C 일반 부설 기준</strong>이며 보정계수 추가 적용.</li>
-          <li>가스·전기·소방 배선은 <strong>자격자 시공 의무</strong> (도시가스법·전기공사업법·소방시설법).</li>
-          <li>모든 데이터는 브라우저에 저장되며, 서버로 전송되지 않습니다.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 (반드시 읽어주세요) 🚨 <strong>일반인의 옥내·옥외 배선 자가시공은 전기공사업법상 불가능</strong>합니다. 시공은 반드시 <strong>전기기능사·전기공사기능사·전기공사업 등록 사업자</strong>에게 의뢰하세요. 자가시공 시 <strong>감전사·화재·법적 처벌·보험 거부</strong> 위험.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/lighting" className={s.crossLink}>

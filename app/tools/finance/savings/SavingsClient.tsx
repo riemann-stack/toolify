@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './savings.module.css'
 import {
   HOUSEHOLD_AVG_EXPENSE, AGE_GROUPS, FIXED_ITEMS, VAR_ITEMS,
@@ -276,9 +277,9 @@ export default function SavingsClient() {
               <rect x={0} y={20} width={Math.min((savingsRate / 50) * 420, 420)} height={20} rx={5} fill="url(#rateGrad)" />
               {/* 권장 라인 */}
               <line x1={(recoMid / 50) * 420} y1={12} x2={(recoMid / 50) * 420} y2={48} stroke="var(--accent)" strokeWidth="2" strokeDasharray="3,2" />
-              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily="Syne">권장 {recoMid}%</text>
+              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">권장 {recoMid}%</text>
               {[0, 10, 20, 30, 40, 50].map((v) => (
-                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">{v}%</text>
+                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{v}%</text>
               ))}
             </svg>
           </div>
@@ -540,13 +541,13 @@ export default function SavingsClient() {
                     />
                     {/* 목표 라인 */}
                     <line x1={30} y1={20} x2={420} y2={20} stroke="var(--accent)" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
-                    <text x={415} y={18} fill="var(--accent)" fontSize="9" textAnchor="end" fontFamily="Syne">목표 {fmtMan(goalMan)}</text>
+                    <text x={415} y={18} fill="var(--accent)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">목표 {fmtMan(goalMan)}</text>
                     {/* 연도 라벨 */}
                     {growth.filter((_, i) => i % Math.max(1, Math.floor(growth.length / 5)) === 0).map((g) => {
                       const idx = growth.indexOf(g)
                       const x = 30 + (idx / (growth.length - 1 || 1)) * 380
                       return (
-                        <text key={idx} x={x} y={195} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">
+                        <text key={idx} x={x} y={195} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                           {g.month / 12}년
                         </text>
                       )
@@ -677,17 +678,16 @@ export default function SavingsClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>이 도구는 <strong>자가진단·시뮬레이션 용도</strong>이며 투자·저축 권유가 아닙니다.</li>
-          <li>표시 권장 저축률은 일반 가이드이며, 본인 상황에 맞춰 조정하세요.</li>
-          <li>한국 가구 평균은 통계청 가계동향조사 일반 참고치이며, 매년 변동됩니다.</li>
-          <li>절세 상품 한도·세제 혜택은 매년 변동 — <strong>홈택스·정부24·금융사 확인</strong> 필수.</li>
-          <li>정확한 재무·세무 설계는 <strong>세무사·재무설계사 상담</strong>을 권장합니다.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        사용 안내 이 도구는 <strong>자가진단·시뮬레이션 용도</strong>이며 투자·저축 권유가 아닙니다. 표시 권장 저축률은 일반 가이드이며, 본인 상황에 맞춰 조정하세요. 한국 가구 평균은 통계청 가계동향조사 일반 참고치이며, 매년 변동됩니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/dividend" className={s.crossLink}>
@@ -746,7 +746,7 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
           <g key={d.id}>
             <path d={path} fill={d.color} opacity={0.85} />
             {d.value >= 6 && (
-              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily="Syne" fontWeight="800">
+              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
                 {Math.round(d.value)}%
               </text>
             )}
@@ -754,8 +754,8 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Syne">합계</text>
-      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontFamily="Syne" fontWeight="800">{total.toFixed(0)}%</text>
+      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">합계</text>
+      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">{total.toFixed(0)}%</text>
     </svg>
   )
 }

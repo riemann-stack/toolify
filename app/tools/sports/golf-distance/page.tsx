@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import GolfDistanceClient from './GolfDistanceClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-distance',
@@ -13,7 +14,7 @@ export default function GolfDistancePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏌️ 골프 클럽 비거리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function GolfDistancePage() {
 
       <GolfDistanceClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 아마추어 평균 비거리 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             아마추어 평균 클럽별 비거리
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
@@ -59,8 +61,8 @@ export default function GolfDistancePage() {
                 ].map(([club, avg, range], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: 'var(--text)' }}>{club}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{avg}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{range}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{avg}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{range}</td>
                   </tr>
                 ))}
               </tbody>
@@ -93,8 +95,8 @@ export default function GolfDistancePage() {
                 ].map(([club, avg, range], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: 'var(--text)' }}>{club}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{avg}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{range}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{avg}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{range}</td>
                   </tr>
                 ))}
               </tbody>
@@ -104,7 +106,7 @@ export default function GolfDistancePage() {
 
         {/* ── 2. Gap 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             클럽 간 이상적인 거리 간격(Gap) 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
@@ -116,7 +118,7 @@ export default function GolfDistancePage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}30`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '6px' }}>{g.label}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: g.color, marginBottom: '6px' }}>{g.range}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: g.color, marginBottom: '6px' }}>{g.range}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.5 }}>{g.desc}</p>
               </div>
             ))}
@@ -132,7 +134,7 @@ export default function GolfDistancePage() {
 
         {/* ── 3. AW 필요성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 갭웨지(AW)가 필요한 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '14px' }}>
@@ -142,8 +144,8 @@ export default function GolfDistancePage() {
               { name: 'SW', distance: '80~90m',   loft: '54~56°', color: '#FF8C3E' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${c.color}40`, borderRadius: '12px', padding: '16px 14px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '24px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.name}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{c.distance}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '24px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.name}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{c.distance}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{c.loft}</p>
               </div>
             ))}
@@ -160,7 +162,7 @@ export default function GolfDistancePage() {
 
         {/* ── 4. 7I 기준 클럽 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             7번 아이언이 골프 기준 클럽인 이유
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -189,7 +191,7 @@ export default function GolfDistancePage() {
 
         {/* ── 5. 환경 보정 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🌬️ 환경 보정 가이드 — 기온·바람·고도·경사
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -218,7 +220,7 @@ export default function GolfDistancePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.e}</td>
                   </tr>
                 ))}
@@ -232,7 +234,7 @@ export default function GolfDistancePage() {
 
         {/* ── 6. 한국 시즌별 비거리 변화 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🍂 한국 시즌별 비거리 변화
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -247,7 +249,7 @@ export default function GolfDistancePage() {
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>{r.s}</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '4px' }}>{r.r}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '4px' }}>{r.r}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{r.d}</p>
               </div>
             ))}
@@ -256,7 +258,7 @@ export default function GolfDistancePage() {
 
         {/* ── 7. 시니어 골퍼 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             👴 시니어 골퍼 가이드 (60대+)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -283,8 +285,8 @@ export default function GolfDistancePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.age}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.dr}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.i7}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.dr}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.i7}</td>
                   </tr>
                 ))}
               </tbody>
@@ -297,7 +299,7 @@ export default function GolfDistancePage() {
 
         {/* ── 8. 비거리 기록 활용법 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📅 내 비거리 기록 활용법
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -324,7 +326,7 @@ export default function GolfDistancePage() {
 
         {/* ── 9. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -383,7 +385,7 @@ export default function GolfDistancePage() {
 
         {/* ── 6. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',   desc: 'WHS 핸디캡 지수·코스 핸디캡' },

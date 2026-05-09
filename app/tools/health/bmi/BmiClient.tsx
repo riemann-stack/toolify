@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import styles from './bmi.module.css'
 import {
@@ -75,6 +76,8 @@ export default function BmiClient() {
         name: c.name,
         color: c.color,
         flex: span,
+        min,
+        max,
         range: i === list.length - 1 ? `${min}+` : `${min}~${max}`,
       }
     }).filter(s => s.flex > 0)
@@ -259,10 +262,16 @@ export default function BmiClient() {
     <div className={styles.wrap}>
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>의학적 진단 도구가 아닙니다.</strong> BMI는 건강 지표 중 하나일 뿐이며,
-        근육량·체지방 분포·나이·성별을 모두 반영하지 않습니다. 종합적 건강 평가는 의료 전문가와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        의학적 진단 도구가 아닙니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -369,9 +378,8 @@ export default function BmiClient() {
                     {gaugeSegs.map(s => (
                       <div key={s.id}
                         className={styles.gaugeSeg}
-                        style={{ flex: s.flex, background: s.color, opacity: 0.85 }}>
-                        <span className={styles.gaugeSegLabel}>{s.name}</span>
-                      </div>
+                        style={{ flex: s.flex, background: s.color, opacity: 0.85 }}
+                      />
                     ))}
                     {gaugePos !== null && (
                       <>
@@ -387,6 +395,23 @@ export default function BmiClient() {
                     <span>{standard === 'KOREA' ? '23' : '25'}</span>
                     <span>{standard === 'KOREA' ? '25' : '30'}</span>
                     <span>40+</span>
+                  </div>
+                  {/* 범례 — 각 구간 색상·이름·BMI 범위 */}
+                  <div className={styles.gaugeLegend}>
+                    {gaugeSegs.map(s => {
+                      const isCurrent = s.id === rich.category.id
+                      const rangeText =
+                        s.min === 0 ? `~${s.max}` :
+                        s.max >= gaugeMaxBmi ? `${s.min}+` :
+                        `${s.min}~${s.max}`
+                      return (
+                        <div key={s.id} className={`${styles.gaugeLegendItem} ${isCurrent ? styles.gaugeLegendItemActive : ''}`}>
+                          <span className={styles.gaugeLegendDot} style={{ background: s.color }} />
+                          <span className={styles.gaugeLegendName}>{s.name}</span>
+                          <span className={styles.gaugeLegendRange}>{rangeText}</span>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
@@ -421,7 +446,7 @@ export default function BmiClient() {
               <div className={styles.detailGrid3}>
                 <div className={styles.detailItem}>
                   <small>정상 범위 ({standard === 'KOREA' ? '한국' : 'WHO'})</small>
-                  <div>{rich.normalMin}<span style={{ fontSize: 11, opacity: 0.7 }}>~</span>{rich.normalMax}</div>
+                  <div>{rich.normalMin}<span style={{ fontSize: 14, opacity: 0.7, margin: '0 2px', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>~</span>{rich.normalMax}</div>
                   <p>kg</p>
                 </div>
                 <div className={styles.detailItem}>

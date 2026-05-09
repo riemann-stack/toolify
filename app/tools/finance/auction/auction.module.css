@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -127,7 +127,7 @@
   background: var(--bg2);
   border-radius: 6px;
   padding: 8px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   color: var(--accent);
   font-weight: 700;
@@ -155,7 +155,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -185,12 +185,12 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Syne', sans-serif; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -220,7 +220,7 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 시나리오 */
 .scenarioGrid {
@@ -260,7 +260,7 @@
   font-size: 12px;
 }
 .scenarioRow strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -270,7 +270,7 @@
   margin: 0;
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   text-align: right;
 }
 
@@ -314,7 +314,7 @@
   transition: width 0.3s ease;
 }
 .barValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 800;
   color: #0D0D0D;
@@ -348,7 +348,7 @@
 }
 .legendLabel { color: var(--text); font-weight: 600; }
 .legendValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: var(--muted);
   font-weight: 600;
   font-size: 11px;

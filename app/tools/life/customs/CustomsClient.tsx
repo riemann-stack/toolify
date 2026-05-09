@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './customs.module.css'
 import {
   COUNTRIES, ITEMS, LISTED_CATEGORIES, SCENARIOS,
@@ -411,18 +412,16 @@ export default function CustomsClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인.</li>
-          <li>환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준.</li>
-          <li>자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.</li>
-          <li><strong>합산 과세</strong> (2일 내 같은 발송지·수취인) 주의.</li>
-          <li>정확한 신고는 <strong>통관사·관세사</strong> 상담 권장.</li>
-          <li>개별소비세·주세 등 특별세는 별도 적용 (가방·시계 200만원+, 와인 등).</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/unit/size" className={s.crossLink}>

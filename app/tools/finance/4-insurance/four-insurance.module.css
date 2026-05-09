@@ -87,7 +87,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -134,7 +134,7 @@
 }
 .sliderValue {
   min-width: 90px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 15px;
   color: var(--accent);
@@ -155,7 +155,7 @@
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -200,7 +200,7 @@
 
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(36px, 8vw, 50px);
   font-weight: 800;
   letter-spacing: -2px;
@@ -212,7 +212,7 @@
 .heroFreelance .heroNum { color: #C485E0; }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 .heroSecondary {
   margin-top: 14px;
   padding-top: 14px;
@@ -220,7 +220,7 @@
   font-size: 13px;
   color: var(--muted);
 }
-.heroSecondary strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.heroSecondary strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -247,8 +247,8 @@
   font-weight: 600;
 }
 .itemTable td:first-child { color: var(--text); font-weight: 600; }
-.itemTable td:nth-child(2) { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; }
-.itemTable td:last-child { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; white-space: nowrap; }
+.itemTable td:nth-child(2) { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.itemTable td:last-child { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; white-space: nowrap; }
 
 /* 보험별 left-border 색상 */
 .itemTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
@@ -289,16 +289,16 @@
 .dualTable .colEmployee {
   background: rgba(200,255,62,0.04);
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .dualTable .colEmployer {
   background: rgba(255,140,62,0.04);
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
-.dualTable td.zero { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 500; opacity: 0.7; }
+.dualTable td.zero { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 500; opacity: 0.7; }
 .dualTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
 .dualTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #FF6B6B; padding-left: 14px; }
 .dualTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #FF8C3E; padding-left: 14px; }
@@ -338,7 +338,7 @@
 }
 .noticeCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 .noticeCard li { padding: 2px 0; }
-.noticeCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.noticeCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .duruCard {
   background: rgba(62,255,155,0.06);
@@ -361,7 +361,7 @@
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.duruCard strong { color: #3EFF9B; font-family: 'Syne', sans-serif; font-weight: 800; }
+.duruCard strong { color: #3EFF9B; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .duruCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 .disguisedCard {
@@ -387,7 +387,7 @@
   line-height: 1.75;
   margin-top: 8px;
 }
-.pensionCapNote strong { color: #3EC8FF; font-family: 'Syne', sans-serif; font-weight: 700; }
+.pensionCapNote strong { color: #3EC8FF; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 시나리오 비교 카드 (탭 3, 탭 4) ── */
 .scenarioGrid {
@@ -442,7 +442,7 @@
   color: var(--muted);
   padding: 4px 0;
 }
-.scenarioRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.scenarioRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .scenarioBig {
   margin-top: 10px;
   padding-top: 8px;
@@ -454,7 +454,7 @@
   color: var(--muted);
 }
 .scenarioBig strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   letter-spacing: -0.5px;
@@ -481,7 +481,7 @@
   color: var(--text);
 }
 .diffRow:last-child { border-bottom: none; }
-.diffRow strong { font-family: 'Syne', sans-serif; font-weight: 700; }
+.diffRow strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .diffPositive { color: #3EFF9B; }
 .diffWarn     { color: #FF8C3E; }
 
@@ -513,7 +513,7 @@
   line-height: 1.85;
 }
 .interpretCard a { color: var(--accent); text-decoration: underline; }
-.interpretCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.interpretCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 알바 의무 가입 배지 */
 .statusBadge {
@@ -547,7 +547,7 @@
   border-bottom: 1px dashed var(--border);
 }
 .companyCostRow:last-child { border-bottom: none; }
-.companyCostRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.companyCostRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .companyCostRow.totalRow {
   border-bottom: none;
   border-top: 2px solid rgba(255,140,62,0.3);

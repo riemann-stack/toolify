@@ -1,4 +1,5 @@
 'use client'
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './pet.module.css'
 import {
@@ -77,7 +78,7 @@ function BodyConditionCard({ body, weight }: { body: BodyEvaluation; weight: num
       </div>
       {body.range && (
         <div className={styles.bcsRange}>
-          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
+          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
         </div>
       )}
       <div className={styles.bcsBar}>
@@ -120,11 +121,17 @@ function LifeProgressCard({ life, color }: { life: LifeProgress; color: string }
   )
 }
 
-const Disclaimer = () => (
-  <div className={styles.disclaimer}>
-    ⚠️ 본 계산기는 수의영양학 기반 참고용 도구입니다. 의료 진단·약물 용량·영양제 추천 X.
-    개별 반려동물의 건강 상태와 질병 유무에 따라 실제 필요량은 다를 수 있습니다. 정확한 영양 관리는 수의사와 상담하시기 바랍니다.
-  </div>
+const PetDisclaimer = () => (
+  <Disclaimer
+    variant="medical"
+    related={[
+      { href: '/tools/health/bmi',         label: 'BMI 계산기' },
+      { href: '/tools/health/bmr',         label: '기초대사량' },
+      { href: '/tools/health/weightloss',  label: '체중감량 계산기' },
+    ]}
+  >
+    ⚠️ 본 계산기는 수의영양학 기반 참고용 도구입니다. 의료 진단·약물 용량·영양제 추천 X. 개별 반려동물의 건강 상태·질병 유무에 따라 실제 필요량은 다를 수 있으니 정확한 영양 관리는 수의사와 상담하세요.
+  </Disclaimer>
 )
 
 // ─── 메인 컴포넌트 ───────────────────────────────────────────────────────────
@@ -319,7 +326,7 @@ function DogTab() {
       <button className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
         {copied ? '✓ 복사 완료' : '📋 결과 복사'}
       </button>
-      <Disclaimer />
+      <PetDisclaimer />
     </div>
   )
 }
@@ -543,7 +550,7 @@ function CatTab() {
       <button className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
         {copied ? '✓ 복사 완료' : '📋 결과 복사'}
       </button>
-      <Disclaimer />
+      <PetDisclaimer />
     </div>
   )
 }

@@ -126,7 +126,7 @@
 }
 .climateEmoji { font-size: 22px; }
 .climateLabel { font-size: 12px; font-weight: 700; color: var(--text); }
-.climateRange { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; }
+.climateRange { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 체크박스 */
 .checkRow {
@@ -159,7 +159,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -220,7 +220,7 @@
 }
 .versionTotal {
   margin: 0 0 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -237,7 +237,7 @@
 }
 .versionTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .versionTable tr:last-child td { border-bottom: none; }
@@ -260,11 +260,11 @@
   color: var(--text);
 }
 .detailTable td:nth-child(n+2) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tableScroll table { min-width: 360px; }
@@ -406,7 +406,7 @@
   background: var(--bg3);
   border-radius: 6px;
   padding: 4px 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .scenarioNotes {

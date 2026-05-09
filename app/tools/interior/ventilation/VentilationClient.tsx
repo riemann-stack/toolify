@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './ventilation.module.css'
 import {
@@ -119,10 +120,16 @@ export default function VentilationClient() {
   /* ─────────────────── 렌더 ─────────────────── */
   return (
     <div className={styles.wrap}>
-      <div className={styles.disclaimer}>
-        <strong>참고용 가이드 도구</strong> — 본 계산기는 환기량·CADR·CO₂의 일반 추정값을 제공하며 의료·산업안전 진단 도구가 아닙니다.
-        한국 표준(국토교통부·교육부·KOSHA)과 국제 표준(ASHRAE 62.1, AHAM CADR) 기반이며, 정확한 측정은 CO₂·미세먼지 센서 사용을 권장합니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        참고용 가이드 도구
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>

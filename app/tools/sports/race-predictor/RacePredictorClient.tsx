@@ -3,6 +3,7 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './race-predictor.module.css'
 import {
   DISTS, TARGETS, QUICK_TIMES,
@@ -842,16 +843,16 @@ export default function RacePredictorClient() {
       )}
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
-        <ul>
-          <li>3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장</li>
-          <li>환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능)</li>
-          <li>25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119</li>
-          <li>본 도구는 부상 진단·영양/식단 자문·신발/기어 추천·약물/도핑 정보를 제공하지 않습니다</li>
-          <li>심화 훈련 스케줄은 <Link href="/tools/sports/interval-training" className={styles.crossLink}>인터벌 훈련 계산기</Link></li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장 환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능) 25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119
+      </Disclaimer>
     </div>
   )
 }
@@ -897,10 +898,10 @@ function RecordsChart({ records }: { records: RaceRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.vdot)} r={3.5} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{maxV.toFixed(1)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{minV.toFixed(1)}</text>
-        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Syne">{first.date.slice(2)}</text>
-        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Syne">{last.date.slice(2)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{maxV.toFixed(1)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{minV.toFixed(1)}</text>
+        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Inter, system-ui, sans-serif">{first.date.slice(2)}</text>
+        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{last.date.slice(2)}</text>
       </svg>
       <p className={styles.chartCaption}>
         {days}일간 VDOT <strong style={{ color: diff >= 0 ? '#3EFF9B' : '#FF8C8C' }}>

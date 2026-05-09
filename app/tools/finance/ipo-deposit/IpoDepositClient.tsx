@@ -3,6 +3,7 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './ipo-deposit.module.css'
 import {
   calcDepositFromTarget, calcSharesFromDeposit, calcScenarios,
@@ -603,18 +604,16 @@ export default function IpoDepositClient() {
       )}
 
       {/* ── 면책 ── */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다.</strong>
-        <ul>
-          <li>비례경쟁률은 청약 마감 직전까지 급변 — 마감 전 보수적 여유분 권장</li>
-          <li>균등배정은 추첨 — 0주 가능, 본 도구의 &ldquo;균등 기대&rdquo;는 사용자 가정값</li>
-          <li>5사6입 결과는 증권사·종목별 다를 수 있음</li>
-          <li>청약 한도·중복청약 규정 위반 시 배정 취소 + 자금 묶임</li>
-          <li>본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 따상 보장 X</strong></li>
-          <li>투자 판단 전: <Link href="https://dart.fss.or.kr" target="_blank" className={s.link}>DART</Link> 증권신고서, <Link href="https://kind.krx.co.kr" target="_blank" className={s.link}>KIND</Link> 공시, 본인 거래 증권사 청약 안내 필수 확인</li>
-          <li>도움: 금융감독원 1332 / 한국예탁결제원 / 거래 증권사 고객센터</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다. 비례경쟁률은 청약 마감 직전까지 급변 — 마감 전 보수적 여유분 권장 균등배정은 추첨 — 0주 가능, 본 도구의 &ldquo;균등 기대&rdquo;는 사용자 가정값 5사6입 결과는 증권사·종목별 다를 수 있음
+      </Disclaimer>
     </div>
   )
 }

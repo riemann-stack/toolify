@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './planet-comparison.module.css'
 
@@ -321,7 +322,7 @@ export default function PlanetComparisonClient() {
           )
         })}
         {/* 기준 라벨 */}
-        <text x={W / 2} y={20} textAnchor="middle" fill="#3EFFD0" fontFamily="Syne, sans-serif" fontWeight={700} fontSize={12} letterSpacing="0.06em">
+        <text x={W / 2} y={20} textAnchor="middle" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} fontSize={12} letterSpacing="0.06em">
           크기 비교 (지구 = 1.0×)
         </text>
       </svg>
@@ -348,10 +349,16 @@ export default function PlanetComparisonClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>교육·흥미 목적의 시각화입니다.</strong> 행성 데이터는 NASA Solar System Exploration 기준이며,
-        거리·빛 도달 시간은 평균값으로 행성 위치에 따라 변동됩니다. 표면 중력만 고려한 가상 시나리오임을 참고하세요.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        교육·흥미 목적의 시각화입니다.
+      </Disclaimer>
 
       {/* 입력 */}
       <div className={s.card}>

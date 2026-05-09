@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './loan.module.css'
 import {
@@ -234,11 +235,16 @@ export default function LoanClient() {
     <div className={styles.wrap}>
 
       {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>참고용 추정 도구</strong> — 본 계산기는 표준 공식 기반 추정이며 금융 자문·승인 도구가 아닙니다.
-        실제 대출 한도·금리·수수료는 신용·소득·LTV·DSR·은행 상품에 따라 다르므로 거래 은행 상담을 권장합니다.
-        2026년 5월 한국은행 가계대출 통계 기반 평균 금리 안내.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        참고용 추정 도구
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -389,11 +395,11 @@ export default function LoanClient() {
                   <line x1={chartData.pad.l} y1={chartData.H - chartData.pad.b}
                     x2={chartData.W - chartData.pad.r} y2={chartData.H - chartData.pad.b}
                     stroke="var(--border)" strokeWidth="1" />
-                  <text x={6} y={chartData.pad.t + 8} fontSize="10" fill="var(--muted)" fontFamily="Syne">
+                  <text x={6} y={chartData.pad.t + 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">
                     {formatEok(principalWon)}
                   </text>
-                  <text x={chartData.pad.l} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Syne">1회</text>
-                  <text x={chartData.W - chartData.pad.r - 30} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Syne">{chartData.n}회</text>
+                  <text x={chartData.pad.l} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">1회</text>
+                  <text x={chartData.W - chartData.pad.r - 30} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">{chartData.n}회</text>
                   <polyline points={chartData.balancePts} fill="none" stroke="#3EC8FF" strokeWidth="2.5" strokeLinejoin="round" />
                   <polyline points={chartData.cumIPts} fill="none" stroke="#FF8C3E" strokeWidth="2" strokeDasharray="4 3" strokeLinejoin="round" />
                 </svg>
@@ -800,7 +806,7 @@ export default function LoanClient() {
                 </div>
                 {reverseRateTable.map(r => (
                   <div key={r.rate} className={styles.scenarioRow}>
-                    <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
+                    <span style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
                     <span>{formatEok(r.result.principal)}</span>
                     <span>{formatEok(r.result.totalInterest)}</span>
                     <span>{formatEok(r.result.totalPayment)}</span>
@@ -835,7 +841,7 @@ export default function LoanClient() {
               {compareTermTable.map(r => (
                 <div key={r.months}
                   className={`${styles.scenarioRow} ${r.months === monthsNum ? styles.scenarioRowBaseline : ''}`}>
-                  <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
                   <span>{won(r.monthlyPayment)}</span>
                   <span>{formatEok(r.totalInterest)}</span>
                   <span>{formatEok(r.totalPayment)}</span>
@@ -856,7 +862,7 @@ export default function LoanClient() {
               {compareRateTable.map(r => (
                 <div key={r.rate}
                   className={`${styles.scenarioRow} ${Math.abs(r.rate - rateNum) < 0.01 ? styles.scenarioRowBaseline : ''}`}>
-                  <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
                   <span>{won(r.monthlyPayment)}</span>
                   <span>{formatEok(r.totalInterest)}</span>
                   <span></span>
@@ -906,7 +912,7 @@ export default function LoanClient() {
             </div>
             {reverseTermTable.map(r => (
               <div key={r.months} className={styles.scenarioRow}>
-                <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
+                <span style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
                 <span>{formatEok(r.result.principal)}</span>
                 <span>{formatEok(r.result.totalInterest)}</span>
                 <span>{formatEok(r.result.totalPayment)}</span>

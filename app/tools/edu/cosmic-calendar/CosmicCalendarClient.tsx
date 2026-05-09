@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './cosmic-calendar.module.css'
 
@@ -262,7 +263,7 @@ export default function CosmicCalendarClient() {
         {monthsToShow.map((m, i) => (
           <g key={i}>
             <line x1={m.x} y1={lineY - 6} x2={m.x} y2={lineY + 6} stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
-            <text x={m.x} y={lineY + 22} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.6)" fontFamily="Syne, sans-serif" fontWeight={700}>
+            <text x={m.x} y={lineY + 22} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.6)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
               {m.label}
             </text>
           </g>
@@ -292,7 +293,7 @@ export default function CosmicCalendarClient() {
 
         {/* "현재 (= 인류)" 마커 — 우측 끝 */}
         <circle cx={W - padR} cy={lineY} r="7" fill="#3EFFD0" stroke="#0a0a2e" strokeWidth="2" />
-        <text x={W - padR - 4} y={lineY - 16} textAnchor="end" fontSize="11" fill="#3EFFD0" fontFamily="Syne, sans-serif" fontWeight={800}>
+        <text x={W - padR - 4} y={lineY - 16} textAnchor="end" fontSize="11" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
           🧍 현재
         </text>
       </svg>
@@ -402,7 +403,7 @@ export default function CosmicCalendarClient() {
           return (
             <g key={i}>
               <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-              <text x={lx} y={ly + 4} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.55)" fontFamily="Syne, sans-serif" fontWeight={700}>
+              <text x={lx} y={ly + 4} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                 {t.hourLabel}
               </text>
             </g>
@@ -437,10 +438,10 @@ export default function CosmicCalendarClient() {
 
         {/* 중앙 */}
         <circle cx={cx} cy={cy} r={centerR} fill="#3EFFD0" />
-        <text x={cx} y={cy - r * 0.55} textAnchor="middle" fontSize="11" fill="rgba(255,255,255,0.55)" fontFamily="Syne, sans-serif" fontWeight={700} letterSpacing="0.06em">
+        <text x={cx} y={cy - r * 0.55} textAnchor="middle" fontSize="11" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} letterSpacing="0.06em">
           12월 31일
         </text>
-        <text x={cx} y={cy + r * 0.55} textAnchor="middle" fontSize="13" fill="#3EFFD0" fontFamily="Syne, sans-serif" fontWeight={800}>
+        <text x={cx} y={cy + r * 0.55} textAnchor="middle" fontSize="13" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
           {zoomLevel === '24h' ? '24h' : zoomLevel === 'lastHour' ? '23~24시' : '마지막 30초'}
         </text>
       </svg>
@@ -555,10 +556,16 @@ export default function CosmicCalendarClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>칼 세이건의 코스믹 캘린더 시각화</strong>입니다. 사건 시점은 현재 과학계의 추정치이며, 새로운 발견에 따라 조정될 수 있습니다.
-        주요 데이터 출처: NASA, ESA, 국제 천문학 연합(IAU), 한국천문연구원(KASI).
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        칼 세이건의 코스믹 캘린더 시각화
+      </Disclaimer>
 
       {/* 현재 우주 시간 헤더 */}
       <div className={s.cosmicNow}>

@@ -1,0 +1,99 @@
+/* ──────────────────────────────────────────────────────
+   ToolSection.module.css
+   변형 — input(점선) · result(좌측 보더 + 그라디언트) · guide(상단 구분)
+   ────────────────────────────────────────────────────── */
+.section {
+  position: relative;
+  margin: 16px 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.emoji { font-size: 14px; }
+.labelText { color: var(--text); font-weight: 700; }
+.subLabel {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-left: 4px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── input — 점선 박스 + 약간 다른 배경 ── */
+.section-input .body {
+  background: rgba(255, 255, 255, 0.012);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.section-input .label .labelText { color: var(--muted-strong, var(--text)); }
+.section-input .emoji { opacity: 0.85; }
+
+/* ── result — 좌측 컬러 보더 + accent 그라디언트 배경 ── */
+.section-result {
+  border-left: 4px solid var(--accent);
+  border-radius: 4px 14px 14px 4px;
+}
+.section-result .body {
+  background: linear-gradient(135deg, rgba(200, 255, 62, 0.045) 0%, rgba(200, 255, 62, 0.012) 60%, transparent 100%);
+  border: 1px solid rgba(200, 255, 62, 0.18);
+  border-left: none;
+  border-radius: 0 14px 14px 4px;
+  padding: 16px;
+}
+.section-result .label {
+  padding-left: 8px;
+}
+.section-result .labelText { color: var(--accent); }
+
+/* ── guide — SEO 본문 영역 ── */
+.section-guide {
+  margin-top: 32px;
+}
+
+/* ── SEO/도구 사이 명확한 구분선 (page.tsx) ── */
+.guideDivider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 72px 0 32px;
+  padding: 0 4px;
+}
+.guideDividerLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.guideDividerLabel {
+  flex-shrink: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  background: var(--bg);
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .guideDivider { margin: 56px 0 24px; }
+  .guideDividerLabel { font-size: 11px; padding: 0 10px; }
+}

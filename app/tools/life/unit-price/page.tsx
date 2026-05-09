@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import UnitPriceClient from './UnitPriceClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/unit-price',
@@ -17,7 +18,7 @@ export default function UnitPricePage() {
   return (
     <div style={{ maxWidth: '820px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏷️ 단가 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -26,13 +27,14 @@ export default function UnitPricePage() {
 
       <UnitPriceClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 기본 공식 (단순화) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px 22px' }}>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 18px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontSize: '17px', lineHeight: 1.8, color: 'var(--text)', marginBottom: '14px' }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 18px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '17px', lineHeight: 1.8, color: 'var(--text)', marginBottom: '14px' }}>
               <span style={{ color: 'var(--accent)', fontWeight: 800 }}>단가</span> = 가격 ÷ (용량 × 개수) × 기준 단위
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, margin: '0 0 8px' }}>
@@ -53,7 +55,7 @@ export default function UnitPricePage() {
 
         {/* ── 2. 1+1·2+1 입력 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🎁 1+1·2+1 행사 — 개수만 입력하면 끝
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -77,8 +79,8 @@ export default function UnitPricePage() {
                   { d: '단품', c: '1', e: '가격 8,900 / 용량 500ml / 개수 1 → 100ml당 1,780원' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{r.d}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 16 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 16 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.e}</td>
                   </tr>
                 ))}
@@ -89,7 +91,7 @@ export default function UnitPricePage() {
 
         {/* ── 3. 실제 마트 비교 예시 (코스트코 함정 포함) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실제 마트·편의점·코스트코 비교 예시</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실제 마트·편의점·코스트코 비교 예시</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
@@ -129,7 +131,7 @@ export default function UnitPricePage() {
 
         {/* ── 4. 소비 가능량 반영 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             💡 소비 가능량 반영 — 실질 단가
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -154,7 +156,7 @@ export default function UnitPricePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.m}</td>
                   </tr>
                 ))}
               </tbody>
@@ -167,7 +169,7 @@ export default function UnitPricePage() {
 
         {/* ── 5. 단가 함정 6가지 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이런 단가 함정 조심하세요</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이런 단가 함정 조심하세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { title: '대용량 = 무조건 싸다?',     desc: '코스트코·대용량이 단가가 더 비싸거나 비슷할 때 多. 100g·100ml당으로 비교 + 소비 가능량 반영.' },
@@ -187,7 +189,7 @@ export default function UnitPricePage() {
 
         {/* ── 6. 단위 비교 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             단위 비교 가이드 — 자동 추천 기준
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -210,7 +212,7 @@ export default function UnitPricePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.k}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.e}</td>
                   </tr>
                 ))}
@@ -224,7 +226,7 @@ export default function UnitPricePage() {
 
         {/* ── 7. 모바일 사용 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📱 모바일 마트 현장 사용 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -251,7 +253,7 @@ export default function UnitPricePage() {
 
         {/* ── 8. 추천 단위 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 비교하는 상품별 추천 단위</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 비교하는 상품별 추천 단위</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -274,7 +276,7 @@ export default function UnitPricePage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: i < 7 ? '1px solid var(--border)' : 'none' }}>
                     <td style={{ padding: '10px 14px', color: 'var(--text)' }}>{row.cat}</td>
-                    <td style={{ padding: '10px 14px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row.unit}</td>
+                    <td style={{ padding: '10px 14px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.unit}</td>
                     <td style={{ padding: '10px 14px', color: 'var(--muted)' }}>{row.ex}</td>
                   </tr>
                 ))}
@@ -285,7 +287,7 @@ export default function UnitPricePage() {
 
         {/* ── 9. FAQ (accordion) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '1+1이 진짜 50% 할인과 같은가요?',
@@ -322,7 +324,7 @@ export default function UnitPricePage() {
 
         {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/life/dutch',         emoji: '🍻', name: '더치페이 계산기',   desc: '공동구매 정산' },

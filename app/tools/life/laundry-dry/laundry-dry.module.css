@@ -28,7 +28,7 @@
 .eqCardActive { background: rgba(200,255,62,0.1); border-color: var(--accent); }
 .eqIcon { font-size: 22px; line-height: 1; }
 .eqName { font-size: 12px; color: var(--text); font-weight: 600; }
-.eqMeta { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--accent); }
+.eqMeta { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent); }
 .eqDesc { font-size: 10px; color: var(--muted); line-height: 1.4; min-height: 14px; }
 
 /* 장비 칩 (히어로 안) */
@@ -43,7 +43,7 @@
 .compareTable { width: 100%; border-collapse: collapse; font-size: 12px; }
 .compareTable th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border); }
 .compareTable td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
-.tableNum { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); text-align: right; }
+.tableNum { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); text-align: right; }
 
 /* ── 빈 상태 ── */
 .empty {
@@ -67,7 +67,7 @@
   margin-bottom: 10px;
 }
 .rowValue {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 22px;
   color: var(--text); letter-spacing: -0.5px;
 }
 .note      { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
@@ -148,7 +148,7 @@
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
 .pBtnLabel { font-size: 11px; font-weight: 500; line-height: 1; }
-.pBtnVal   { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
+.pBtnVal   { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
 
 /* 값 색상 */
 .valCold        { color: #3EA0FF !important; }
@@ -263,19 +263,19 @@
   text-transform: uppercase; font-weight: 600;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: clamp(22px, 5.5vw, 32px);
   color: var(--text); line-height: 1.1; letter-spacing: -0.5px;
   text-align: center; overflow-wrap: anywhere;
 }
 .heroNumMain {
-  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: clamp(28px, 7vw, 44px);
   color: var(--accent); line-height: 1.1; letter-spacing: -1px;
   text-align: center; overflow-wrap: anywhere;
 }
 .heroRange {
-  font-family: 'Syne', sans-serif; font-size: 11px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
   color: var(--muted); letter-spacing: -0.2px;
 }
 .heroTime {
@@ -341,7 +341,7 @@
 }
 .timelineLegend {
   display: flex; justify-content: space-between;
-  font-family: 'Syne', sans-serif; font-size: 11px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
   color: var(--muted); padding: 16px 0 0; letter-spacing: 0.02em;
 }
 
@@ -355,7 +355,7 @@
 }
 .impactLabel { color: var(--text); font-weight: 500; }
 .impactVal {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   letter-spacing: -0.2px;
 }
 .impactGood { border-color: rgba(62,255,155,0.3); }

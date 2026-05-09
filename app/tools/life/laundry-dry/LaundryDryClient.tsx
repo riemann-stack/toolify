@@ -753,7 +753,7 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
                   <tbody>
                     {recommendations.map((r, i) => (
                       <tr key={i}>
-                        <td style={{ color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{i === 0 ? '⭐' : i + 1}</td>
+                        <td style={{ color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{i === 0 ? '⭐' : i + 1}</td>
                         <td style={{ fontSize: 11 }}>
                           {r.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ')}
                           {' '}
@@ -843,7 +843,7 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
             style={{
               background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
               borderRadius: 10, padding: '10px 14px', fontSize: 16,
-              fontFamily: 'Syne, sans-serif', fontWeight: 700,
+              fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700,
             }}
           />
           {minutesAvailable !== null && (

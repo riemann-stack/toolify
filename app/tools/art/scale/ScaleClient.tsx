@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './scale.module.css'
 import {
   KEYS, SCALES, TUNINGS, CHURCH_MODES, MODE_NAMES, PROGRESSIONS,
@@ -443,17 +444,16 @@ export default function ScaleClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>음악 이론 표기는 학파·교재마다 약간 다를 수 있습니다.</li>
-          <li>다이어토닉 코드는 <strong>자연 7도 기준</strong>이며, 응용 화성학에서 추가 코드가 가능합니다.</li>
-          <li>기타 지판은 표준 튜닝(EADGBE) 기본 + 다른 튜닝 옵션.</li>
-          <li>MIDI 재생은 라이트 톤(사인파)이며 실제 악기와 다릅니다.</li>
-          <li>정확한 화성학 학습은 <strong>책·강의</strong>를 권장합니다.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        사용 안내 음악 이론 표기는 학파·교재마다 약간 다를 수 있습니다. 다이어토닉 코드는 <strong>자연 7도 기준</strong>이며, 응용 화성학에서 추가 코드가 가능합니다. 기타 지판은 표준 튜닝(EADGBE) 기본 + 다른 튜닝 옵션.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/art/chord" className={s.crossLink}>
@@ -532,7 +532,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
           fill={textColor}
           fontSize="11"
           textAnchor="middle"
-          fontFamily="Syne"
+          fontFamily="Inter, system-ui, sans-serif"
           fontWeight={isInScale ? 800 : 500}
         >
           {showInterval && isInScale ? intervalMap[noteIdx] : noteName(noteIdx, acc)}
@@ -577,7 +577,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
               fill={textColor}
               fontSize="9"
               textAnchor="middle"
-              fontFamily="Syne"
+              fontFamily="Inter, system-ui, sans-serif"
               fontWeight={isInScale ? 800 : 500}
             >
               {showInterval && isInScale ? intervalMap[bIdx] : noteName(bIdx, acc)}
@@ -706,7 +706,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
                   fill="#0D0D0D"
                   fontSize="10"
                   textAnchor="middle"
-                  fontFamily="Syne"
+                  fontFamily="Inter, system-ui, sans-serif"
                   fontWeight="800"
                 >
                   {showInterval ? intervalLabel[noteIdx] : noteName(noteIdx, acc)}
@@ -726,7 +726,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily="Syne"
+            fontFamily="Inter, system-ui, sans-serif"
           >
             {f}
           </text>
@@ -741,7 +741,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily="Syne"
+            fontFamily="Inter, system-ui, sans-serif"
             fontWeight="700"
           >
             {noteName(openNote, acc)}

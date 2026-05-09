@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './converter.module.css'
 import {
@@ -65,9 +66,16 @@ export default function ConverterClient() {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.disclaimer}>
-        <strong>14개 카테고리</strong> 통합 단위 변환기 — 길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 + <strong>당도·염도</strong>·<strong>농도</strong>·<strong>각도·기울기</strong> + <strong>한국 전통 단위</strong>(자·척·근·돈·홉·되·평·물매) 포함. 모든 값은 SI 기준 환산이며 일부 한국 단위는 시대·지역별 차이가 있습니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/unit/converter', label: '단위 변환기' },
+          { href: '/tools/unit/area', label: '면적 단위' },
+          { href: '/tools/unit/fuel-economy', label: '연비 변환' }
+        ]}
+      >
+        14개 카테고리
+      </Disclaimer>
 
       {/* 카테고리 탭 */}
       <div className={styles.tabs}>

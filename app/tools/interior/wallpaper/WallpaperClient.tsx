@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './wallpaper.module.css'
 
@@ -396,10 +397,16 @@ export default function WallpaperClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 한국 표준(실크 폭 106cm·합지 93cm) 기준 참고용</strong>입니다.
-        실제 시공량은 벽지 패턴 리피트, 시공 방식, 시공자 숙련도에 따라 달라질 수 있으며 정확한 견적은 도배 전문가와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 한국 표준(실크 폭 106cm·합지 93cm) 기준 참고용
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
@@ -634,9 +641,9 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>면적 vs 장수 중 큰 값 채택</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
-              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{t1.totalStripsNeeded}장</strong> 필요 →
-              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{t1.stripsRollsNeeded}롤</strong>
+              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
+              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{t1.totalStripsNeeded}장</strong> 필요 →
+              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{t1.stripsRollsNeeded}롤</strong>
             </p>
           </div>
 
@@ -853,7 +860,7 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>{tab === 'quote' ? `현재 ${usedRolls}롤 적용 (간편 계산 결과)` : ''}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              간편 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
+              간편 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
             </p>
 
             <span className={styles.subLabel}>벽지 1롤 가격</span>

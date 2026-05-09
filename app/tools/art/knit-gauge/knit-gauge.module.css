@@ -92,7 +92,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--text);
@@ -168,7 +168,7 @@
   font-size: 11.5px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   min-height: 32px;
 }
@@ -198,7 +198,7 @@
   font-weight: 600;
 }
 .heroBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -232,14 +232,14 @@
   }
 }
 .heroEst {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: #C485E0;
   margin: 0 0 6px;
 }
 .deltaPct {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -250,7 +250,7 @@
 
 /* 게이지 텍스트 (탭 2 내 게이지 표시) */
 .bigGaugeText {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   color: var(--text);
   margin: 0;
@@ -348,7 +348,7 @@
 
 /* 신축 보정 값 */
 .easeValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: #C485E0;
@@ -414,7 +414,7 @@
   padding: 10px 12px;
 }
 .glossaryAbbr {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
   color: #C485E0;
@@ -470,7 +470,7 @@
   font-weight: 600;
 }
 .yarnEstBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 800;
   color: #C485E0;
@@ -497,7 +497,7 @@
   margin: 0 0 4px;
 }
 .yarnEstBallText strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #C485E0;
   font-size: 16px;
@@ -532,7 +532,7 @@
   line-height: 1.5;
 }
 .dataTable tr:last-child td { border-bottom: none; }
-.mono { font-family: 'Syne', sans-serif; font-weight: 700; }
+.mono { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .rowHighlight { background: rgba(196, 133, 224, 0.10); }
 
 /* 스와치 가이드 */

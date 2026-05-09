@@ -27,7 +27,7 @@
   display: block;
   font-size: 10.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   margin-top: 2px;
 }
@@ -147,7 +147,7 @@
   background: transparent;
   border: none;
   font-size: 24px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -183,7 +183,7 @@
   align-items: baseline;
   gap: 6px;
 }
-.gfSign { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+.gfSign { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px; }
 .gfPositive { color: #3EFF9B; }
 .gfNegative { color: #FF6B6B; }
 .gfInput {
@@ -191,7 +191,7 @@
   background: transparent;
   border: none;
   font-size: 22px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -215,7 +215,7 @@
   margin-top: 10px;
 }
 .gdValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
 }
@@ -283,7 +283,7 @@
   margin-bottom: 10px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -325,7 +325,7 @@
   margin-bottom: 4px;
 }
 .kpiValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 26px;
   font-weight: 800;
   color: var(--text);
@@ -364,7 +364,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .scenarioPts {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 30px;
   font-weight: 800;
   color: var(--text);
@@ -397,7 +397,7 @@
 .targetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .targetBtn small {
   display: block;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--accent);
@@ -417,7 +417,7 @@
   border-radius: 10px;
   padding: 14px;
   font-size: 24px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   outline: none;
@@ -456,7 +456,7 @@
   text-align: center;
 }
 .fbValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 30px;
   font-weight: 800;
   color: var(--text);
@@ -470,7 +470,7 @@
   color: var(--muted);
   line-height: 1.7;
 }
-.fbSub strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.fbSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 시나리오 조합 표 ── */
 .scenarioTable {
@@ -492,7 +492,7 @@
   font-weight: 600;
 }
 .scenarioTable td {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -522,7 +522,7 @@
   font-weight: 500;
 }
 .simNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: var(--text);
@@ -579,7 +579,7 @@
   gap: 8px;
 }
 .simResultPts {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -622,7 +622,7 @@
   border-radius: 8px;
   padding: 10px;
   font-size: 16px;       /* iOS 줌 방지 */
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -693,7 +693,7 @@
   font-weight: 600;
 }
 .compareTable td {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -735,7 +735,7 @@
   color: var(--muted);
   line-height: 1.75;
 }
-.overtakeBody strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.overtakeBody strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 시즌 종료 예상 순위 ── */
 .rankList {
@@ -754,7 +754,7 @@
   padding: 12px 16px;
 }
 .rankBadge {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   text-align: center;
@@ -770,7 +770,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .rankPts {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);

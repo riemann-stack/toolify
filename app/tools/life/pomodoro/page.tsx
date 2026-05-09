@@ -1,6 +1,7 @@
 import PomodoroClient from './PomodoroClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/pomodoro',
@@ -18,7 +19,7 @@ export default function PomodoroPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍅 뽀모도로 타이머
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -27,11 +28,12 @@ export default function PomodoroPage() {
 
       <PomodoroClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 뽀모도로 기법이란? (기존 유지·SEO 보호) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>뽀모도로 기법이란?</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>뽀모도로 기법이란?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             뽀모도로(Pomodoro) 기법은 1980년대 프란체스코 시릴로가 개발한 시간 관리 방법론입니다. 토마토 모양 주방 타이머(이탈리아어로 &lsquo;뽀모도로&rsquo;)에서 이름을 따왔으며, 짧은 집중과 규칙적인 휴식의 반복으로 인지 피로를 최소화합니다.
           </p>
@@ -43,7 +45,7 @@ export default function PomodoroPage() {
               { step: '4', title: '15~30분 긴 휴식', desc: '4번의 뽀모도로를 완료하면 긴 휴식을 취합니다.', color: '#FF6BD9' },
             ].map(s => (
               <div key={s.step} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <span style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: '20px', color: s.color, flexShrink: 0 }}>{s.step}</span>
+                <span style={{ fontFamily: 'Inter', fontWeight: 800, fontSize: '20px', color: s.color, flexShrink: 0 }}>{s.step}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{s.title}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{s.desc}</p>
@@ -55,7 +57,7 @@ export default function PomodoroPage() {
 
         {/* ── 2. 7가지 검증된 뽀모도로 프리셋 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             상황별 뽀모도로 프리셋 7가지
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -84,9 +86,9 @@ export default function PomodoroPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#C8FF3E', fontFamily: 'Syne' }}>{r.f}분</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Syne' }}>{r.s}분</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Syne' }}>{r.l}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#C8FF3E', fontFamily: 'Inter' }}>{r.f}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter' }}>{r.s}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter' }}>{r.l}분</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
                   </tr>
                 ))}
@@ -100,7 +102,7 @@ export default function PomodoroPage() {
 
         {/* ── 3. 키보드 단축키 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             키보드 단축키 — 마우스 없이 빠르게 조작
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -117,7 +119,7 @@ export default function PomodoroPage() {
               { k: 'F',     a: '전체화면 모드' },
             ].map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px' }}>
-                <span style={{ fontFamily: 'Syne', fontSize: '13px', fontWeight: 700, background: 'var(--bg3)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: '6px', color: 'var(--text)', minWidth: '50px', textAlign: 'center' }}>{s.k}</span>
+                <span style={{ fontFamily: 'Inter', fontSize: '13px', fontWeight: 700, background: 'var(--bg3)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: '6px', color: 'var(--text)', minWidth: '50px', textAlign: 'center' }}>{s.k}</span>
                 <span style={{ fontSize: '13px', color: 'var(--muted)' }}>{s.a}</span>
               </div>
             ))}
@@ -126,7 +128,7 @@ export default function PomodoroPage() {
 
         {/* ── 4. 통계 활용법 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             통계로 집중 패턴 발견하기
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -152,7 +154,7 @@ export default function PomodoroPage() {
 
         {/* ── 5. 백색소음 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             집중을 돕는 백색소음·앰비언트 8가지
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -191,7 +193,7 @@ export default function PomodoroPage() {
 
         {/* ── 6. FAQ (accordion) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -257,7 +259,7 @@ export default function PomodoroPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',     desc: '시험·마감까지 남은 날' },

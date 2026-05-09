@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './microwave.module.css'
 import {
   POWER_OPTIONS, FOODS, TEMPS, VESSELS, GOLDEN_TIPS,
@@ -555,11 +556,11 @@ export default function MicrowaveClient() {
                       fontSize="36"
                       fontWeight="800"
                       textAnchor="middle"
-                      fontFamily="Syne"
+                      fontFamily="Inter, system-ui, sans-serif"
                     >
                       {fmtTimer(total)}
                     </text>
-                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Syne">
+                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                       {running ? '실행 중' : remaining > 0 ? '일시정지' : '대기'}
                     </text>
                   </svg>
@@ -659,23 +660,16 @@ export default function MicrowaveClient() {
         </>
       )}
 
-      {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>전자레인지 모델·연식·실제 출력에 따라 결과가 달라질 수 있습니다.</li>
-          <li>식품 라벨의 권장 시간이 가장 정확한 시작점입니다.</li>
-          <li>처음엔 환산 시간의 <strong>80%로 시작 → 부족하면 추가 가열</strong> (과조리 방지).</li>
-          <li>❌ <strong>계란 통째 / 닫힌 용기 / 알루미늄 호일</strong> 절대 금지.</li>
-          <li>화상 주의 — 가열 후 그릇이 매우 뜨겁습니다.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
-
-      {/* 크로스링크 */}
-      <Link href="/tools/cooking/thawing" className={s.crossLink}>
-        🧊 냉동·해동 시간 계산기 → 4가지 해동 방법 비교
-      </Link>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/thawing',   label: '냉동·해동 시간 계산기' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' },
+          { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
+        ]}
+      >
+        전자레인지 모델·연식·실제 출력에 따라 결과가 다를 수 있습니다. 처음엔 환산 시간의 <strong>80%로 시작 → 부족하면 추가 가열</strong>해 과조리를 방지하세요. <strong>계란 통째·닫힌 용기·알루미늄 호일·금속 테두리 그릇은 절대 금지</strong> (폭발·화재 위험). 가열 후 그릇이 매우 뜨거우니 화상 주의.
+      </Disclaimer>
     </div>
   )
 }

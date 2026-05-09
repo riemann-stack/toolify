@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import SupplementClient from './SupplementClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
@@ -35,7 +36,7 @@ export default function SupplementPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💊 영양제 성분 체크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -62,11 +63,12 @@ export default function SupplementPage() {
 
       <SupplementClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 중복 TOP 5 */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 중복되는 성분 TOP 5</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 중복되는 성분 TOP 5</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { rank: '1', name: '비타민D',   desc: '종합비타민 + 비타민D 단독 + 칼슘+D 복합제에 모두 포함' },
@@ -76,7 +78,7 @@ export default function SupplementPage() {
               { rank: '5', name: '마그네슘',  desc: '종합비타민 + 수면 보조 + 근육 이완 제품에 포함' },
             ].map((item) => (
               <div key={item.rank} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--accent)', minWidth: '26px' }}>{item.rank}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--accent)', minWidth: '26px' }}>{item.rank}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px' }}>{item.name}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
@@ -88,7 +90,7 @@ export default function SupplementPage() {
 
         {/* 2. RDA/UL 표 */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>주요 영양소 1일 권장량 & 상한 섭취량</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>주요 영양소 1일 권장량 & 상한 섭취량</h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국영양학회 · 성인 기준</p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
@@ -117,8 +119,8 @@ export default function SupplementPage() {
                 ].map((row, i, arr) => (
                   <tr key={i}>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontWeight: 600, color: 'var(--accent)' }}>{row[0]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Syne, sans-serif', color: '#FF8C3E' }}>{row[2]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif', color: '#FF8C3E' }}>{row[2]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)', fontSize: 12 }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -129,7 +131,7 @@ export default function SupplementPage() {
 
         {/* 3. 복용 타이밍 */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>복용 타이밍 완전 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>복용 타이밍 완전 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               {
@@ -168,7 +170,7 @@ export default function SupplementPage() {
 
         {/* 4. 주의 조합 5 */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주의해야 할 조합 5가지</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주의해야 할 조합 5가지</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { pair: '철분 + 칼슘',          text: '칼슘이 철분 흡수를 방해합니다. 2시간 이상 간격 두고 복용하세요.' },
@@ -187,7 +189,7 @@ export default function SupplementPage() {
 
         {/* 5. 오메가3 EPA + DHA 합산 가이드 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🐟 오메가3 EPA + DHA 합산 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🐟 오메가3 EPA + DHA 합산 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             오메가3는 EPA + DHA <strong style={{ color: 'var(--text)' }}>합산</strong>으로 평가하는 게 표준입니다.
             본 도구의 「성분 분석」 탭에서 자동 합산.
@@ -216,7 +218,7 @@ export default function SupplementPage() {
 
         {/* 6. 약물별 영양제 주의 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>💊 약물별 영양제 주의 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>💊 약물별 영양제 주의 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             처방약 복용 중에는 영양제와 상호작용으로 흡수가 방해되거나 부작용이 생길 수 있습니다.
             본 도구의 「약물·특수 상황」 탭에서 약물 선택 시 자동 매칭.
@@ -250,7 +252,7 @@ export default function SupplementPage() {
 
         {/* 7. 임산부·수유부 가이드 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🤰 임산부·수유부 영양제 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🤰 임산부·수유부 영양제 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
             <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 임신 시 권장</p>
@@ -279,7 +281,7 @@ export default function SupplementPage() {
 
         {/* 8. 고령자(65세+) 가이드 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>👴 65세 이상 고령자 영양제 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>👴 65세 이상 고령자 영양제 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
             <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 고령자 권장 추가</p>
@@ -305,7 +307,7 @@ export default function SupplementPage() {
 
         {/* 9. 시너지 조합 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🟢 영양제 시너지 조합 (상호 보완)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🟢 영양제 시너지 조합 (상호 보완)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { pair: '비타민D + 칼슘',     desc: '비타민D는 칼슘 흡수를 50%+ 향상' },
@@ -325,7 +327,7 @@ export default function SupplementPage() {
 
         {/* 10. FAQ (accordion - salary style) */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '종합비타민과 개별 비타민을 같이 먹어도 되나요?', a: '종합비타민에 이미 여러 성분이 포함되어 있어 개별 비타민을 추가하면 중복 과잉이 될 수 있습니다. 특히 비타민 A·D·E, 철분, 아연은 상한량 초과에 주의해야 합니다. 본 계산기로 각 성분의 합산량을 먼저 확인하세요.' },
@@ -397,7 +399,7 @@ export default function SupplementPage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',  emoji: '🔥', name: '기초대사량 계산기', desc: '하루 칼로리 관리' },

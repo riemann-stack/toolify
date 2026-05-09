@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './brew.module.css'
 import {
   BREW_METHODS, RATIO_PRESETS, CUP_SIZES, ROASTS, INTENSITY_ZONES,
@@ -387,10 +388,10 @@ export default function BrewClient() {
                 return (
                   <g key={i}>
                     <rect x={x1} y={20} width={w - 1} height={28} fill={step.color} rx={3} />
-                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700" fontFamily="Syne">
+                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700" fontFamily="Inter, system-ui, sans-serif">
                       {step.emoji}
                     </text>
-                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">
+                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                       {step.startSec}~{step.endSec}s
                     </text>
                   </g>
@@ -400,7 +401,7 @@ export default function BrewClient() {
               {[0, 30, 60, 90, 120, 150, 180, 210].map((t) => (
                 <g key={t}>
                   <line x1={(t / 210) * 420} y1={15} x2={(t / 210) * 420} y2={20} stroke="var(--muted)" strokeWidth="1" />
-                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle" fontFamily="Syne">{t}</text>
+                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{t}</text>
                 </g>
               ))}
             </svg>
@@ -488,7 +489,7 @@ export default function BrewClient() {
                 fill="var(--text)"
                 fontSize="10"
                 textAnchor="middle"
-                fontFamily="Syne"
+                fontFamily="Inter, system-ui, sans-serif"
                 fontWeight="800"
               >
                 ▼ 1:{ratio.toFixed(1)}
@@ -500,7 +501,7 @@ export default function BrewClient() {
                 { x: 240, label: '1:17' },
                 { x: 335, label: '1:20' },
               ].map((t, i) => (
-                <text key={i} x={t.x} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Syne">
+                <text key={i} x={t.x} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                   {t.label}
                 </text>
               ))}
@@ -532,7 +533,7 @@ export default function BrewClient() {
                   <div style={{ flex: 1 }}>
                     <p className={s.zoneLabel} style={{ color: z.color }}>
                       {z.label}{' '}
-                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'Syne, sans-serif' }}>
+                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'Inter, system-ui, sans-serif' }}>
                         1:{z.ratioMin}~{z.ratioMax >= 99 ? '∞' : z.ratioMax}
                       </span>
                     </p>
@@ -683,15 +684,16 @@ export default function BrewClient() {
       )}
 
       {/* 안내 (모든 탭 공통) */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>권장값은 SCA·일반 가이드, 취향에 따라 자유롭게 조정하세요.</li>
-          <li>원두 신선도(로스팅 일자)가 비율보다 큰 변수입니다 — 로스팅 후 7~21일이 최적.</li>
-          <li>정확한 추출에는 <strong>핸디 저울·온도계·타이머</strong>를 권장합니다.</li>
-          <li>모든 데이터는 브라우저에 저장되며, 서버로 전송되지 않습니다.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        사용 안내 권장값은 SCA·일반 가이드, 취향에 따라 자유롭게 조정하세요. 원두 신선도(로스팅 일자)가 비율보다 큰 변수입니다 — 로스팅 후 7~21일이 최적. 정확한 추출에는 <strong>핸디 저울·온도계·타이머</strong>를 권장합니다.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/recipe" className={s.crossLink}>

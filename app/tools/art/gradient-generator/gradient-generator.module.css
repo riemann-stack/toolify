@@ -87,7 +87,7 @@
   right: 12px;
   background: rgba(0,0,0,.5);
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
@@ -130,7 +130,7 @@
   background-position: center;
 }
 .spaceCardLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
   color: var(--text);
@@ -188,7 +188,7 @@
 }
 .sliderRow label strong {
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 800;
 }
@@ -260,7 +260,7 @@
   padding: 10px 12px;
 }
 .meshCornerLabel {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--muted);
   font-size: 12px;
@@ -367,7 +367,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -424,7 +424,7 @@
   text-shadow: 0 1px 3px rgba(0,0,0,.4);
 }
 .previewCard h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   margin: 0 0 8px;
   font-weight: 800;
@@ -455,14 +455,14 @@
   text-align: left;
 }
 .previewHeroEyebrow {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   margin: 0 0 8px;
   opacity: 0.85;
 }
 .previewHero h2 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(20px, 4vw, 28px);
   font-weight: 800;
   margin: 0 0 8px;
@@ -471,7 +471,7 @@
 
 .previewTextWrap { display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .previewText {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   margin: 0;
   background-size: cover;
@@ -508,7 +508,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 700;
   color: var(--muted);
@@ -691,7 +691,7 @@
   text-transform: uppercase;
 }
 .contrastRatio {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -705,7 +705,7 @@
   font-size: 11px;
   font-weight: 700;
   margin: 0 0 6px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .contrastGrade[data-grade="aaa"] { background: rgba(62, 255, 155, 0.15); color: #3EFF9B; }
 .contrastGrade[data-grade="aa"]  { background: rgba(200, 255, 62, 0.15); color: var(--accent); }

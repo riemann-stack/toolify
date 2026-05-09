@@ -2,6 +2,7 @@ import Link from 'next/link'
 import FightWeightClient from './FightWeightClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/fight-weight',
@@ -17,7 +18,7 @@ export default function FightWeightPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🥊 격투기 체급 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -29,7 +30,8 @@ export default function FightWeightPage() {
       {/* 본문 광고 */}
       <AdSlot position="in-article" minHeight={200} />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 면책 강조 ── */}
         <div style={{
@@ -52,7 +54,7 @@ export default function FightWeightPage() {
 
         {/* ── 2. 종목별 체급 비교 (체중 70kg 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             종목별 체급 비교 — 체중 70kg 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -70,7 +72,7 @@ export default function FightWeightPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.color}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 12, color: c.color, fontWeight: 700, marginBottom: 4 }}>{c.sport}</p>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 600 }}>{c.cls}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, marginTop: 4 }}>{c.limit}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginTop: 4 }}>{c.limit}</p>
               </div>
             ))}
           </div>
@@ -78,7 +80,7 @@ export default function FightWeightPage() {
 
         {/* ── 3. 격투기 감량 3단계 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             격투기 감량의 3단계 완전 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -114,7 +116,7 @@ export default function FightWeightPage() {
 
         {/* ── 4. 단체별 정책 비교표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             종목·단체별 감량·계체 정책 비교
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -136,8 +138,8 @@ export default function FightWeightPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.o}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.x}</td>
                   </tr>
                 ))}
@@ -148,7 +150,7 @@ export default function FightWeightPage() {
 
         {/* ── 5. 위험 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 위험한 감량 사례 — 경각심 환기
           </h2>
           <div style={{
@@ -176,7 +178,7 @@ export default function FightWeightPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -217,7 +219,7 @@ export default function FightWeightPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>

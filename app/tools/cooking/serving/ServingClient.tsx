@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './serving.module.css'
 import {
   SERVING_DATA, CAT_LABEL, MEAL_LABEL, APPETITE_LABEL, AGE_LABEL,
@@ -622,16 +623,16 @@ export default function ServingClient() {
         </>
       )}
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 장보기 가이드입니다.</strong>
-        <ul>
-          <li>분량은 한국 성인 평균 기준 — 개인 식사량·체격·요리 스타일에 따라 다름</li>
-          <li>첫 요리는 결과 상한값으로 준비 권장</li>
-          <li>본 도구는 정확한 영양 진단·알레르기 진단·특정 브랜드 추천을 제공하지 않음</li>
-          <li>알레르기·식이 제한·기저 질환은 의사·영양사 상담</li>
-          <li>식약처 식품안전정보: 1399 / 응급(아나필락시스): 119</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구는 일반 장보기 가이드입니다. 분량은 한국 성인 평균 기준 — 개인 식사량·체격·요리 스타일에 따라 다름 첫 요리는 결과 상한값으로 준비 권장 본 도구는 정확한 영양 진단·알레르기 진단·특정 브랜드 추천을 제공하지 않음
+      </Disclaimer>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './baseball-stats.module.css'
 
@@ -291,9 +292,16 @@ export default function BaseballStatsClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚖️ 본 계산기는 통계 참고용입니다.</strong> 실제 KBO·MLB 공식 기록과 소수점 처리 방식 차이로 미세한 차이가 있을 수 있습니다. wOBA·FIP는 간이 공식을 사용해 공식 통계와 약간 다를 수 있습니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 계산기는 통계 참고용입니다.
+      </Disclaimer>
 
       {/* 리그 프리셋 */}
       <div className={styles.card}>
@@ -619,7 +627,7 @@ export default function BaseballStatsClient() {
               <span className={styles.cardLabelHint}>{league.flag} 평균 ERA {league.avgERA.toFixed(2)} / WHIP {league.avgWHIP.toFixed(2)}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
+              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
               <strong style={{ color: pcalc.era <= league.avgERA ? '#3EFF9B' : '#FF8C3E', marginLeft: 6 }}>
                 {pcalc.era <= league.avgERA ? '−' : '+'}{Math.abs(pcalc.era - league.avgERA).toFixed(2)}
               </strong>
@@ -660,7 +668,7 @@ export default function BaseballStatsClient() {
                 <p className={styles.heroLead}>시즌 종료 예상 기록</p>
                 <p className={styles.heroNum}>{pace.projHits}<span style={{ fontSize: 18, color: 'var(--muted)', marginLeft: 6, verticalAlign: 'middle' }}>안타</span></p>
                 <p style={{ marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>
-                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{pace.ratio.toFixed(2)}</strong>
+                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{pace.ratio.toFixed(2)}</strong>
                 </p>
               </div>
 
@@ -737,9 +745,9 @@ export default function BaseballStatsClient() {
                   <span>KBO 역대 단일시즌 기록 비교</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>서건창 201개 (2014)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{pace.projHits}개</strong></div>
-                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>이승엽 56개 (2003)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{pace.projHr}개</strong></div>
-                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>이승엽 1.124 (2003)</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{calc.ops.toFixed(3)}</strong></div>
+                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>서건창 201개 (2014)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{pace.projHits}개</strong></div>
+                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>이승엽 56개 (2003)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{pace.projHr}개</strong></div>
+                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>이승엽 1.124 (2003)</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{calc.ops.toFixed(3)}</strong></div>
                 </div>
               </div>
             </>

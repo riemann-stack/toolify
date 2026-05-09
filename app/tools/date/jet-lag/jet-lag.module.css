@@ -16,7 +16,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -137,7 +137,7 @@
   margin-bottom: 8px;
 }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 64px;
   font-weight: 800;
   color: var(--accent);
@@ -205,9 +205,9 @@
   color: var(--accent);
   font-weight: 700;
 }
-.adjEarlier { color: #3EC8FF; font-family: 'Syne', sans-serif; font-weight: 700; }
-.adjLater { color: #FF8C3E; font-family: 'Syne', sans-serif; font-weight: 700; }
-.adjZero { color: var(--muted); font-family: 'Syne', sans-serif; }
+.adjEarlier { color: #3EC8FF; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.adjLater { color: #FF8C3E; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.adjZero { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── 24시간 타임라인 ── */
 .timeline {
@@ -259,7 +259,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 4px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   color: var(--muted);
 }
@@ -305,7 +305,7 @@
   margin-bottom: 4px;
 }
 .flightBoxValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -324,7 +324,7 @@
 .caffeineNo { border-color: #FF6B6B; }
 .caffeineIcon { font-size: 40px; line-height: 1; margin-bottom: 8px; }
 .caffeineVerdict {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 8px;
@@ -350,7 +350,7 @@
 .napWarn { border-color: #FF8C3E; }
 .napNo { border-color: #FF6B6B; }
 .napStatus {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 8px;
@@ -359,7 +359,7 @@
 .napWarn .napStatus { color: #FF8C3E; }
 .napNo   .napStatus { color: #FF6B6B; }
 .napBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 700;
   color: var(--accent);
@@ -434,7 +434,7 @@
   position: absolute;
   top: -22px;
   transform: translateX(-50%);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   white-space: nowrap;
@@ -442,7 +442,7 @@
 .progressMilestones {
   display: flex;
   justify-content: space-between;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   margin-top: 12px;
@@ -469,7 +469,7 @@
   margin-bottom: 4px;
 }
 .adaptStatValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -494,7 +494,7 @@
 }
 .scheduleTable td { color: var(--text); }
 .scheduleDay {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
 }

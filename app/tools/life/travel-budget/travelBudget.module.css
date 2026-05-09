@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -201,13 +201,13 @@
 }
 .cityCardStyleLabel { font-weight: 700; }
 .cityCardStyleVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: var(--text);
   font-weight: 700;
   text-align: right;
 }
 .cityCardStyleBreak {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: var(--muted);
   font-size: 10px;
 }
@@ -263,7 +263,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -302,11 +302,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -345,7 +345,7 @@
 }
 .diagHead strong { flex: 1; font-weight: 700; }
 .diagDiff {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 800;
 }
@@ -381,7 +381,7 @@
   min-width: 40px;
 }
 .diagBarFill span {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 800;
   color: #0D0D0D;
@@ -456,7 +456,7 @@
 }
 .styleCompareTotal {
   margin: 6px 0 0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
 }
@@ -465,7 +465,7 @@
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .styleComparePer strong { color: var(--text); font-weight: 700; }
 .styleSelectBtn {

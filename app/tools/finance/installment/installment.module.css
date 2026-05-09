@@ -85,7 +85,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -104,7 +104,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -137,7 +137,7 @@
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -244,7 +244,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -253,10 +253,10 @@
 }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 .heroInterest {
   margin-top: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 24px;
   color: #FF6B6B;
@@ -288,7 +288,7 @@
 .analysisTable td:first-child { color: var(--muted); }
 .analysisTable td:last-child {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -347,7 +347,7 @@
   background: linear-gradient(90deg, var(--accent) 0%, var(--accent) calc(var(--principal-pct, 50%) * 1%), #FF6B6B calc(var(--principal-pct, 50%) * 1%), #FF6B6B 100%);
 }
 .barValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--text);
@@ -366,7 +366,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.interpretCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .interpretCard ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
 .interpretCard li { padding: 2px 0; }
 
@@ -413,11 +413,11 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.scheduleTable td:first-child { color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; }
-.scheduleTable .colPay      { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
-.scheduleTable .colPrincipal{ color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
-.scheduleTable .colInterest { color: #FF6B6B; font-family: 'Syne', sans-serif; font-weight: 700; }
-.scheduleTable .colBalance  { color: var(--muted); font-family: 'Syne', sans-serif; }
+.scheduleTable td:first-child { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleTable .colPay      { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleTable .colPrincipal{ color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleTable .colInterest { color: #FF6B6B; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleTable .colBalance  { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── 비교 카드 (탭 2) — 3개 가로 ── */
 .compare3Grid {
@@ -459,7 +459,7 @@
 }
 .compareTotalLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
 .compareTotalValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
@@ -474,7 +474,7 @@
   line-height: 1.7;
   margin-top: 4px;
 }
-.compareDetail strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.compareDetail strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 차이 분석 카드 ── */
 .diffCard {
@@ -492,7 +492,7 @@
   color: var(--text);
 }
 .diffRow:last-child { border-bottom: none; }
-.diffRow strong { font-family: 'Syne', sans-serif; font-weight: 700; }
+.diffRow strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .diffPositive { color: #3EFF9B; }
 .diffNegative { color: #FF6B6B; }
 
@@ -520,7 +520,7 @@
   color: var(--muted);
   padding: 5px 0;
 }
-.opportunityRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.opportunityRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .opportunityResult {
   margin-top: 12px;
   padding: 12px 14px;
@@ -553,11 +553,11 @@
 }
 .compareTable td:first-child {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .compareTable td:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -597,7 +597,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.recoText strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.recoText strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .warnCard {
   background: rgba(255,107,107,0.06);

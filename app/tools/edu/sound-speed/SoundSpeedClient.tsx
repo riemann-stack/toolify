@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './sound-speed.module.css'
 
@@ -259,10 +260,16 @@ export default function SoundSpeedClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>교육·학습 목적 시뮬레이터</strong>입니다. 실제 음속은 공기 밀도·습도·고도·바람에 따라 달라질 수 있으며,
-        표시값은 표준 조건(건조한 공기, 1기압) 기준입니다. 번개·낙뢰 안전은 기상청 가이드를 따르세요.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        교육·학습 목적 시뮬레이터
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>
@@ -283,7 +290,7 @@ export default function SoundSpeedClient() {
           <span className={s.sliderValue}>{tempC}°C</span>
         </div>
         <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, textAlign: 'center' }}>
-          현재 음속: <strong style={{ color: '#3EFFD0', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
+          현재 음속: <strong style={{ color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
           {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h ≈ <strong style={{ color: '#3EFFD0' }}>1마하</strong>
         </p>
       </div>
@@ -379,7 +386,7 @@ export default function SoundSpeedClient() {
               <circle cx="60" cy="110" r="36" fill="url(#lightning)" opacity="0.7" />
               <text x="60" y="122" fontSize="44" textAnchor="middle">⚡</text>
               <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>번개</text>
-              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif">T = 0</text>
+              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">T = 0</text>
 
               {/* 음파 */}
               <circle cx="60" cy="110" r="14" fill="none" stroke="#3EFFD0" strokeWidth="2.5" opacity="0.6" className={s.soundRing} />
@@ -389,14 +396,14 @@ export default function SoundSpeedClient() {
 
               {/* 거리 표시 */}
               <line x1="100" y1="110" x2="320" y2="110" stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="5 4" />
-              <text x="210" y="95" fontSize="22" fill="#3EFFD0" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={800}>
+              <text x="210" y="95" fontSize="22" fill="#3EFFD0" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
                 {thunderResult.distM.toFixed(0)}m
               </text>
 
               {/* 관찰자 */}
               <text x="350" y="128" fontSize="46" textAnchor="middle">👤</text>
               <text x="350" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>관찰자</text>
-              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif">T = {thunderSec}초</text>
+              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">T = {thunderSec}초</text>
             </svg>
           </div>
 

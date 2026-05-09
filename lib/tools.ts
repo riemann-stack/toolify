@@ -36,6 +36,8 @@ export const categories: Category[] = [
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 총비용 계산기', desc: '낙찰가 + 취득세 자동 + 명도·체납·수리·법무 + 대출 LTV/DSR + 1주택/다주택/법인 시나리오 + 비용 비중 도넛', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일 + 3개월 급여 → 평균/통상임금 자동 판단 + 퇴직금 + 퇴직소득세(2023 개정) + 실수령 + 퇴사일 시뮬레이션 + DB/DC/IRP 4모드', badge: 'new' },
       { href: '/tools/finance/freelance-tax', icon: '💼', name: '프리랜서 종합소득세 환급 계산기', desc: '업종별 단순경비율 자동(30+ 직군) + 8단계 누진세율 + 노란우산·연금저축 절세 시나리오 5종 비교 + 한계세율 시각화 + 5월 신고 D-day 가이드 (2026년)', badge: 'new' },
+      { href: '/tools/finance/rent-jeonse', icon: '🏠', name: '월세 vs 전세 비교 계산기', desc: '전세·월세·반전세 3옵션 동시 비교 + 대출이자·기회비용·월세 세액공제 자동 + 손익분기점 그래프 + 전세사기 위험 점수 + HUG 보증보험료 (2026년)', badge: 'new' },
+      { href: '/tools/finance/gold-converter', icon: '🪙', name: '금 단위·시세 계산기', desc: '돈·g·트로이온스·푼·냥 9단위 동시 변환 + 14K/18K/24K 순도 환산 + 시세 기반 매수/매도 실거래가 + KRX 금현물·골드바·금통장 비교 + 코리아 프리미엄 자동 (2026년)', badge: 'new' },
     ],
   },
   {
@@ -70,6 +72,7 @@ export const categories: Category[] = [
       { href: '/tools/cooking/brew', icon: '☕', name: '커피 브루잉 비율 계산기', desc: '핸드드립·프렌치프레스·에어로프레스·콜드브루·모카포트·에스프레소 6 추출법 + 비율·온도·시간·분쇄도 매트릭스 + 푸어 스케줄·로스팅 보정·비용 비교', badge: 'new' },
       { href: '/tools/cooking/tea', icon: '🍵', name: '차 우리기 시간·온도 계산기', desc: '녹차·말차·백차·우롱·홍차·보이·허브 9종 + 차별 온도/시간/비율 + 다탕 스케줄(세차 포함) + 냉침 모드 + 카페인 비교 + 떫음 위험 게이지', badge: 'new' },
       { href: '/tools/cooking/baking-recipe', icon: '🧁', name: '베이킹 레시피 계산기', desc: '마들렌·파운드·쿠키·머핀·마카롱 등 제과 10종 비율 자동·진단·식감 보정·틀 용량 분량 변환·프리셋 17종', badge: 'new' },
+      { href: '/tools/cooking/egg-timer', icon: '🥚', name: '계란 삶는 시간 계산기', desc: '반숙·완숙·잼노른자 익힘 8단계 + 한국 계란 크기·시작 온도·조리법·고도 자동 보정 + 라면·김밥·장조림·라멘 아지타마 등 한국 요리 10종 프리셋 + 실시간 타이머·알림음·브라우저 알림', badge: 'new' },
     ],
   },
   {
@@ -101,6 +104,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점·순위 계산기',  desc: '승무패·득실차·목표 승점·라이벌 추격 시나리오' },
       { href: '/tools/sports/pace',            icon: '🏃', name: '러닝 페이스 계산기',     desc: '페이스↔완주 시간 1줄 입력, 트레드밀 시속, 5km·10km·하프·풀 구간 스플릿' },
       { href: '/tools/sports/race-predictor',  icon: '🏅', name: '마라톤 기록 예측 계산기', desc: '5km·10km·하프 → 풀 3공식 평균 + 목표 역산 + 기온·습도·고도·연령 자동 보정 + VDOT 추이 그래프', badge: 'hot' },
+      { href: '/tools/sports/hiking-time',     icon: '🥾', name: '등산 소요시간 계산기',   desc: 'Naismith·Tobler·한국 등산교실 3공식 비교 + 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋 + 체력·지형·배낭·인원·날씨 정밀 보정 + 턴어라운드(일몰 전 하산) 자동 진단', badge: 'new' },
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '12종 1RM·RPE 보정·성연령 수준·워밍업 5세트 자동·진행 그래프' },
       { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 인터벌 페이스·1바퀴 랩타임·다거리 추천·4~16주 풀 스케줄·한국 대회' },
       { href: '/tools/sports/buildup',         icon: '📈', name: '러닝 빌드업 훈련 계산기', desc: '거리·페이스·구간·프로파일 → 구간별 페이스표 + 시각화 + 안전성 체크 + 워치 포맷 + 12개 프리셋', badge: 'new' },
@@ -193,6 +197,7 @@ export const categories: Category[] = [
     id: 'dev', icon: '🖥️', name: '개발자', color: '#C8FF3E',
     tools: [
       { href: '/tools/dev/base64',    icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트 ↔ Base64 즉시 변환' },
+      { href: '/tools/dev/tech-stack', icon: '🛠️', name: '개발 기술 스택 추천 계산기', desc: '시나리오 12종 프리셋 + 8개 입력값 → Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천 + 7축 점수 레이더 차트 + 대안 비교 + 비용·기간 추정 + 한국 특화 (카카오·토스·PASS) (2026년)', badge: 'new' },
       { href: '/tools/dev/json',      icon: '📋', name: 'JSON 포맷터',          desc: 'JSON 정렬·압축·유효성 검사' },
       { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',    desc: 'px·rem·em·clamp()·aspect-ratio CSS 단위 변환 및 생성' },
       { href: '/tools/dev/number-base',   icon: '🔢', name: '진법 변환기',       desc: '2진·8진·10진·16진 변환, 비트 시각화, 2의 보수, ASCII, 비트 연산' },

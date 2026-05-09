@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './inheritance.module.css'
 import {
@@ -77,12 +78,16 @@ export default function InheritanceClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        ⚖️ <strong>본 계산기는 단순 참고용입니다.</strong>{' '}
-        실제 세금은 재산 평가·공제 적용·신고 시점·가족관계에 따라 크게 달라집니다.
-        정확한 신고는 세무사 필수 — <strong>한국세무사회 무료 상담 070-5008-1234</strong>, 국세청 126.<br />
-        <span style={{ color: 'var(--muted)' }}>참고: 2026년 상속세 및 증여세법</span>
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 계산기는 단순 참고용입니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         {TABS.map(t => (

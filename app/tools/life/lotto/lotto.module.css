@@ -136,7 +136,7 @@
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.12s;
@@ -156,7 +156,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--text);
@@ -179,7 +179,7 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.numLegend strong { font-family: 'Syne', sans-serif; }
+.numLegend strong { font-family: 'Inter', system-ui, sans-serif; }
 
 /* 모드 선택 (고정/제외 토글) */
 .fixExcludeToggle {
@@ -301,7 +301,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 14px;
@@ -328,7 +328,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
@@ -373,7 +373,7 @@
   padding: 9px;
   font-size: 16px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   outline: none;
   text-align: center;
@@ -397,7 +397,7 @@
 }
 .analysisLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .analysisValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
   color: #FFD700;
@@ -447,7 +447,7 @@
 }
 .rangeBarFill { height: 100%; border-radius: 999px; transition: width 0.4s; }
 .rangeRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #FFD700;
   font-variant-numeric: tabular-nums;
@@ -468,7 +468,7 @@
   padding: 9px 6px;
   font-size: 12.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -493,7 +493,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .simHeroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(44px, 9vw, 60px);
   letter-spacing: -1.5px;
@@ -521,11 +521,11 @@
   font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.simRowGrade { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent); }
+.simRowGrade { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: var(--accent); }
 .simRowLabel { color: var(--text); }
 .simRowLabel small { color: var(--muted); margin-left: 6px; font-size: 11px; }
 .simRowVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: #FF6B6B;
   font-variant-numeric: tabular-nums;
@@ -565,7 +565,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .jackpotYears {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 12vw, 84px);
   color: #C485E0;
@@ -590,7 +590,7 @@
   text-align: center;
 }
 .jackpotInfoVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
   color: #C485E0;
@@ -614,7 +614,7 @@
 }
 .compareRow:last-child { border-bottom: none; }
 .compareRow span:first-child { color: var(--text); }
-.compareRow span:last-child { font-family: 'Syne', sans-serif; font-weight: 700; color: #C485E0; font-variant-numeric: tabular-nums; }
+.compareRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #C485E0; font-variant-numeric: tabular-nums; }
 
 /* ── 세후 탭 ── */
 .taxHero {
@@ -634,7 +634,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .taxNet {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 8vw, 56px);
   color: #3EFF9B;
@@ -661,7 +661,7 @@
 }
 .taxRow span:first-child { color: var(--text); }
 .taxRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -686,7 +686,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .taxTable th { font-size: 10.5px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
-.taxTable td:nth-child(2) { font-family: 'Syne', sans-serif; font-weight: 700; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
+.taxTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* ── 저장된 번호 ── */
 .savedList {
@@ -717,7 +717,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
@@ -749,7 +749,7 @@
   padding: 10px 12px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   outline: none;
   width: 100%;

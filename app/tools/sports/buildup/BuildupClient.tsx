@@ -3,6 +3,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './buildup.module.css'
 import {
   PROFILE_LABEL, PROFILE_DESC, INTENSITY_LABEL,
@@ -594,17 +595,16 @@ export default function BuildupClient() {
       )}
 
       {/* ── 면책 ── */}
-      <div className={s.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다</strong>
-        <ul>
-          <li>페이스·거리 추천은 평균값 — 컨디션·날씨·지형에 따라 조정</li>
-          <li>안전성 체크는 일반 가이드 — 본인 한계 보장 X</li>
-          <li>통증·피로 시 즉시 휴식. 부상 의심 시 정형외과·재활의학과</li>
-          <li>본 도구는 <strong>부상 진단·영양 자문·신발 추천·도핑 정보</strong>를 제공하지 않음</li>
-          <li>인터벌·16주 스케줄은 <Link href="/tools/sports/interval-training" className={s.link}>인터벌 훈련 계산기</Link></li>
-          <li>도움: 한국스포츠의학회 / 정형외과·재활의학과 / 응급 119</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 페이스·거리 추천은 평균값 — 컨디션·날씨·지형에 따라 조정 안전성 체크는 일반 가이드 — 본인 한계 보장 X 통증·피로 시 즉시 휴식. 부상 의심 시 정형외과·재활의학과
+      </Disclaimer>
     </div>
   )
 }
@@ -648,10 +648,10 @@ function BuildupChart({ result }: { result: ReturnType<typeof calcBuildup> }) {
       <p className={s.chartTitle}>📊 페이스 그래프</p>
       <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
         {/* y축 라벨 (빠른 페이스 ↑·느린 페이스 ↓) */}
-        <text x={padL - 6} y={padT + 8} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Syne">
+        <text x={padL - 6} y={padT + 8} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
           {fmtPace(yMin)}
         </text>
-        <text x={padL - 6} y={padT + innerH - 2} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Syne">
+        <text x={padL - 6} y={padT + innerH - 2} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
           {fmtPace(yMax)}
         </text>
         <text x={padL - 6} y={padT + innerH + 14} fontSize="9" fill="var(--muted)" textAnchor="end" fontFamily="Noto Sans KR" opacity="0.6">
@@ -674,12 +674,12 @@ function BuildupChart({ result }: { result: ReturnType<typeof calcBuildup> }) {
                 width={widths[i]} height={Math.max(2, barH)}
                 fill={color} fillOpacity="0.7" stroke={color} strokeWidth="1" rx="2" />
               <text x={xStarts[i] + widths[i] / 2} y={y - 6}
-                fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Syne" fontWeight={700}>
+                fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                 {fmtPace(seg.paceSec)}
               </text>
               {/* x축 거리 */}
               <text x={xStarts[i] + widths[i] / 2} y={padT + innerH + 16}
-                fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Syne">
+                fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
                 {seg.km.toFixed(1)}km
               </text>
             </g>

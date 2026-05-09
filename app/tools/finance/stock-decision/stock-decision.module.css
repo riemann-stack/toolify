@@ -205,7 +205,7 @@
   gap: 4px;
 }
 .scoreLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-.scoreVal { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.scoreVal { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; }
 .biasBoxes { margin-top: 14px; }
 .biasBoxesTitle { font-size: 12px; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
 .biasChips { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -279,9 +279,9 @@
   padding: 8px 12px;
   font-size: 12px;
 }
-.histDate { font-family: 'Syne', sans-serif; color: var(--muted); }
+.histDate { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); }
 .histDir { font-size: 12px; color: var(--text); }
-.histScore { font-family: 'Syne', sans-serif; color: var(--muted); font-size: 11px; }
+.histScore { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 11px; }
 
 /* ────────────────────────────────────────────
    무작위 모드 — 공통 무대
@@ -411,7 +411,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   text-align: center;
@@ -778,7 +778,7 @@
   margin: 0 0 8px;
 }
 .pickedValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -899,7 +899,7 @@
   border-radius: 4px;
   transition: width 0.4s ease-out;
 }
-.tallyCount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; }
+.tallyCount { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 12px; }
 
 /* 다수결 박스 */
 .winnerBox {
@@ -916,7 +916,7 @@
   letter-spacing: 0.04em;
 }
 .winnerValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 26px;
   font-weight: 800;
   margin: 0 0 8px;
@@ -951,7 +951,7 @@
   margin-bottom: 6px;
 }
 .caseTitle { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.caseYear { font-size: 11px; color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+.caseYear { font-size: 11px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .caseWho { font-size: 12px; color: var(--muted); margin: 0 0 6px; line-height: 1.6; }
 .caseResult { font-size: 13px; color: var(--text); margin: 0 0 4px; line-height: 1.7; }
 .caseResult strong { color: var(--accent); }

@@ -2,7 +2,7 @@
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.cardTitle { font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 12px; }
+.cardTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 12px; }
 
 /* ── 드롭다운 ── */
 .selectRow {
@@ -56,7 +56,7 @@
 }
 .resultEmoji { font-size: 52px; line-height: 1; }
 .resultType { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.resultName { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
+.resultName { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
 .traitsRow { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
 .trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--muted); }
 .element { font-size: 12px; font-weight: 600; }
@@ -70,7 +70,7 @@
   text-align: center;
 }
 .ganjiHanja {
-  font-family: 'Syne', 'Noto Serif KR', serif;
+  font-family: 'Inter', 'Noto Serif KR', serif;
   font-size: 48px;
   font-weight: 800;
   color: var(--accent);
@@ -87,7 +87,7 @@
 .ganjiSub {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .ganjiSub strong { color: var(--accent); font-weight: 700; }
 
@@ -265,7 +265,7 @@
   border-radius: 8px;
   padding: 6px 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .yearTagActive {
@@ -371,7 +371,7 @@
   margin-bottom: 8px;
 }
 .profileBigName {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(20px, 4.5vw, 26px);
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -394,7 +394,7 @@
 }
 .profileMetaLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .profileMetaValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
@@ -462,7 +462,7 @@
 .compatScoreCardChung  { background: rgba(255,107,107,0.04); border-color: rgba(255,107,107,0.40); }
 .compatScoreLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .compatScoreNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(28px, 6vw, 40px);
   letter-spacing: -1px;
@@ -507,7 +507,7 @@
   border-bottom: 1px solid var(--border);
   color: var(--text);
 }
-.familyTable tbody td.numCol { font-family: 'Syne', sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+.familyTable tbody td.numCol { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
 
 .familyAddRow {
   display: grid;

@@ -27,7 +27,7 @@
 .notationToggle { display: inline-flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
 .notationBtn {
   background: transparent; border: none; padding: 4px 12px; border-radius: 6px;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
 .notationBtn:hover { color: var(--text); }
@@ -40,7 +40,7 @@
   min-height: 52px; padding: 6px 8px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Syne', sans-serif; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; color: var(--text);
   cursor: pointer; transition: all 0.15s;
 }
 .keyBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -68,7 +68,7 @@
 .typeRow { display: flex; gap: 6px; flex-wrap: wrap; }
 .typeBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
-  padding: 7px 14px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  padding: 7px 14px; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
   color: var(--text); cursor: pointer; transition: all 0.15s;
   letter-spacing: 0.02em;
 }
@@ -90,7 +90,7 @@
   text-transform: uppercase;
 }
 .heroChord {
-  font-family: 'Syne', sans-serif; font-size: clamp(40px, 9vw, 56px);
+  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 9vw, 56px);
   font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px;
 }
 .heroSub { font-size: 12px; color: var(--muted); margin-top: 4px; }
@@ -104,7 +104,7 @@
   background: var(--bg3); color: var(--text);
   border: 1px solid var(--border);
   padding: 10px 18px; border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700;
   letter-spacing: 0.02em; line-height: 1;
 }
 .chipRoot {
@@ -149,7 +149,7 @@
 .recChips { display: flex; gap: 8px; flex-wrap: wrap; }
 .recChip {
   background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
-  padding: 8px 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  padding: 8px 14px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
 }
 .recChip:hover { border-color: var(--accent); color: var(--accent); }
@@ -183,13 +183,13 @@
   border-left: 3px solid var(--accent);
 }
 .matchChord {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; color: var(--text);
   cursor: pointer;
 }
 .matchChord:hover { color: var(--accent); }
-.matchNotes { font-family: 'Syne', sans-serif; color: var(--muted); font-size: 12px; }
+.matchNotes { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 12px; }
 .matchPct {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   text-align: right;
 }
 .matchPctFull { color: var(--accent); }
@@ -229,14 +229,14 @@
 .diatonicRowSub   { border-left: 3px solid #3EC8FF; }
 .diatonicRowDom   { border-left: 3px solid #FF8C3E; }
 .tdRoman {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
   color: var(--accent); width: 50px;
 }
 .tdChord {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px;
   color: var(--text); width: 90px;
 }
-.tdNotes { font-family: 'Syne', sans-serif; color: var(--muted); font-size: 12px; }
+.tdNotes { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 12px; }
 .tdFunc {
   font-size: 11px; color: var(--muted); text-align: right;
   font-family: 'Noto Sans KR', sans-serif;
@@ -255,14 +255,14 @@
   gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
 }
 .progName {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--accent);
   letter-spacing: 0.04em;
 }
 .progNick { font-size: 11px; color: var(--muted); }
 .progChords { display: flex; gap: 6px; flex-wrap: wrap; }
 .progChord {
   background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
-  padding: 4px 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  padding: 4px 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   color: var(--text);
 }
 

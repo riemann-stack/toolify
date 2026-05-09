@@ -6,7 +6,7 @@ import s from './lotto.module.css'
 import {
   GENERATION_MODES, NUMBER_RANGES, ODDS_FIRST_PRIZE, PRICE_PER_GAME,
   generateGames, analyzeNumbers, simulateDraws, simulateUntilFirstPrize, calcAfterTax,
-  loadSaved, saveSaved, newId, isNoticeDismissed, dismissNotice, reopenNotice,
+  loadSaved, saveSaved, newId,
   getBallColor, getBallTextColor, interpretAnalysis,
   type LottoGame, type ModeId, type SavedNumber, type SimResult, type FirstPrizeSimResult, type GameAnalysis,
 } from './lottoUtils'
@@ -16,32 +16,10 @@ type Tab = 'generate' | 'analyze' | 'simulator' | 'jackpot' | 'tax'
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function LottoClient() {
   const [tab, setTab] = useState<Tab>('generate')
-  const [noticeOpen, setNoticeOpen] = useState(true)
-
-  // 첫 마운트에서 dismiss 여부 확인
-  useEffect(() => {
-    if (isNoticeDismissed()) setNoticeOpen(false)
-  }, [])
 
   return (
     <div className={s.wrap}>
-      {noticeOpen ? (
-        <div className={s.responsibilityBanner}>
-          <button className={s.responsibilityClose}
-            onClick={() => { dismissNotice(); setNoticeOpen(false) }}
-            aria-label="닫기">×</button>
-          ⚠️ <strong>수학적으로 모든 6개 번호 조합의 1등 확률은 1/8,145,060로 동일합니다.</strong>
-          어떤 생성 모드·분석·필터도 당첨 확률에 영향을 주지 않으며, 본 도구는 <strong>번호 조합 다양화·재미용 시뮬레이터</strong>입니다.
-          로또는 본인의 경제 능력 안에서 오락 목적으로 즐기시고, 도박 의존 우려 시 <strong>한국도박문제예방치유원 1336</strong>(24시간 무료)에 상담받으실 수 있습니다.
-        </div>
-      ) : (
-        <div className={s.responsibilityMini}>
-          <button onClick={() => { reopenNotice(); setNoticeOpen(true) }}>
-            ⚠️ 사행성 안내 다시 펼치기
-          </button>
-        </div>
-      )}
-
+      {/* 사행성 안내는 페이지 하단 통합 면책 컴포넌트로 일원화됨 */}
       <div className={s.tabs}>
         {([
           ['generate',  '번호 생성'],

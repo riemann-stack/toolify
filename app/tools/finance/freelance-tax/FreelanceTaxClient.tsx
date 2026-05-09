@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './freelance-tax.module.css'
 import {
   type CalcInputs, type CalcResult, type Scenario,
@@ -90,17 +91,17 @@ export default function FreelanceTaxClient() {
       {/* ══════════ TAB 4: 신고 가이드 ══════════ */}
       {tab === 'guide' && <GuideTab />}
 
-      {/* 면책 */}
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 추정치입니다</strong>
-        <ul>
-          <li>2026년 종합소득세율·국세청 단순경비율 기준 — 매년 세법 개정 시 차이 발생 가능</li>
-          <li>실제 신고는 <a href="https://www.hometax.go.kr" target="_blank" rel="noreferrer">홈택스</a> 모의계산 또는 세무사 확인</li>
-          <li>부동산 양도·금융소득 등 복합 종합과세 케이스는 미반영 — 세무사 상담 권장</li>
-          <li>부가가치세는 별도 세금 (분기·반기 신고) — 본 계산기 범위 외</li>
-          <li>건강보험료는 종소세 신고 후 다음 해 지역가입자 보험료에 영향 (별도 추정)</li>
-        </ul>
-      </div>
+      {/* 통합 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/4-insurance', label: '4대보험 계산기' },
+          { href: '/tools/finance/salary',      label: '연봉 실수령액' },
+          { href: '/tools/finance/severance',   label: '퇴직금 계산기' },
+        ]}
+      >
+        2026년 종합소득세율·국세청 단순경비율 기준 — 매년 세법 개정 시 차이 가능. 실제 신고는 <a href="https://www.hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 모의계산 또는 세무사 확인. 부동산 양도·금융소득 등 복합 종합과세 케이스는 미반영. 부가가치세는 별도 세금(분기·반기 신고)이며 본 계산기 범위 외.
+      </Disclaimer>
     </div>
   )
 }

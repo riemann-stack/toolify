@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './age.module.css'
 import {
@@ -62,9 +63,16 @@ export default function AgeClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        💡 <strong>참고용 인생 통계·문화 정보 도구</strong> — 법령상 나이 기준은 제도별로 다를 수 있으니 실제 신청·계약 시 관련 법령과 기관에 확인하세요. 병역법·학교 입학 등 일부 제도는 만 나이가 아닌 연 나이 또는 별도 기준을 사용합니다. 띠·별자리·탄생석은 문화·전통 정보이며 점술·운세 목적이 아닙니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/date/age', label: '나이 계산기' },
+          { href: '/tools/date/dday', label: 'D-day 계산기' },
+          { href: '/tools/date/jet-lag', label: '시차 계산기' }
+        ]}
+      >
+        참고용 인생 통계·문화 정보 도구
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>
@@ -547,7 +555,7 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.card}>
           <label className={s.cardLabel}>한국 세대 분류</label>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-            <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
               {generation.name}
             </span>
             <span style={{ fontSize: 12.5, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
@@ -650,7 +658,7 @@ function LifeTimelineSvg({ birth, now, span }: { birth: Date; now: Date; span: T
         return (
           <g key={age}>
             <line x1={x} y1={lineY - 5} x2={x} y2={lineY + 5} stroke="rgba(255,255,255,0.30)" strokeWidth="1" />
-            <text x={x} y={lineY + 22} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="Syne, sans-serif" fontWeight={700}>
+            <text x={x} y={lineY + 22} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
               {age}
             </text>
           </g>
@@ -665,7 +673,7 @@ function LifeTimelineSvg({ birth, now, span }: { birth: Date; now: Date; span: T
             <animate attributeName="r" values="14;20;14" dur="2s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite" />
           </circle>
-          <text x={currentX} y={lineY - 28} textAnchor="middle" fontSize="11" fill="#3EFFD0" fontFamily="Syne, sans-serif" fontWeight={800}>
+          <text x={currentX} y={lineY - 28} textAnchor="middle" fontSize="11" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
             현재 만 {currentAge}세
           </text>
         </>

@@ -142,7 +142,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -167,7 +167,7 @@
 .liveHint {
   font-size: 12px;
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   margin-top: 8px;
 }
@@ -308,7 +308,7 @@
   margin-bottom: 10px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(36px, 7vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -350,7 +350,7 @@
   color: var(--text);
 }
 .breakdownTable td.numCell {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   text-align: right;
 }
@@ -374,7 +374,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.infoCard strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.infoCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 슬라이더 */
 .sliderWrap {
@@ -412,7 +412,7 @@
   box-shadow: 0 0 0 4px var(--accent-dim);
 }
 .sliderValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--accent);
@@ -434,7 +434,7 @@
   padding: 14px 16px;
 }
 .forecastLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.forecastVal { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+.forecastVal { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
 .forecastSub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* 참여자별 정산 */
@@ -454,7 +454,7 @@
   border-radius: 8px;
   padding: 9px 10px;
   font-size: 13px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -478,7 +478,7 @@
   min-width: 0;
 }
 .playerFinal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--accent);
@@ -580,7 +580,7 @@
 }
 .bettingSum {
   font-size: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   margin-top: 8px;
   padding: 8px 10px;

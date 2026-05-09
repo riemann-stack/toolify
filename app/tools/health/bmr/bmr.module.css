@@ -104,7 +104,7 @@
   box-sizing: border-box;
 }
 .numInput {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -205,7 +205,7 @@
 .activityName { font-size: 13.5px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: baseline; }
 .activityActive .activityName { color: var(--accent); }
 .activityName small {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
@@ -229,7 +229,7 @@
   margin-bottom: 6px;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(48px, 12vw, 80px);
   letter-spacing: -2px;
@@ -238,7 +238,7 @@
 }
 .heroNumUnit { font-size: 0.32em; color: var(--text); margin-left: 6px; letter-spacing: 0; }
 .heroSub2 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(28px, 8vw, 44px);
   letter-spacing: -1px;
@@ -280,7 +280,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #000;
   font-size: 12px;
@@ -291,7 +291,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-size: 12px;
@@ -327,7 +327,7 @@
 .formulaName { color: var(--text); font-weight: 600; }
 .formulaName small { color: var(--muted); margin-left: 6px; font-size: 10.5px; font-weight: 400; }
 .formulaBmr {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -336,7 +336,7 @@
 }
 .formulaUnavailable .formulaBmr { color: var(--muted); }
 .formulaDiff {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -367,7 +367,7 @@
 .goalName { color: var(--text); }
 .goalName small { color: var(--muted); margin-left: 6px; font-size: 10.5px; }
 .goalKcal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -376,7 +376,7 @@
 }
 .goalRowMaintain .goalKcal { color: var(--accent); }
 .goalChange {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -436,7 +436,7 @@
 }
 .sliderRow { display: flex; align-items: center; gap: 10px; }
 .sliderVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -459,7 +459,7 @@
 }
 .detailRow span:first-child { color: var(--text); }
 .detailRow span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -489,21 +489,21 @@
 .dayRowExer    { border-left-color: #FF8C3E; }
 .dayRowLong    { border-left-color: #FF6B6B; }
 .dayName {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-size: 13px;
 }
 .dayActivity { color: var(--muted); font-size: 12px; }
 .dayTdee {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
   color: var(--accent);
 }
 .dayTarget {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 12.5px;
@@ -535,7 +535,7 @@
   padding: 3px;
 }
 .budgetSeg b {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
@@ -558,7 +558,7 @@
   padding: 8px 12px;
 }
 .budgetLegendItem b {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
@@ -588,7 +588,7 @@
 }
 .macroRow span:first-child { color: var(--text); font-weight: 600; }
 .macroRow span:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -614,7 +614,7 @@
 }
 .foodItem span:first-child { color: var(--text); }
 .foodItem span:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -649,7 +649,7 @@
 .historyName { color: var(--text); font-weight: 600; }
 .historyName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .historyVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

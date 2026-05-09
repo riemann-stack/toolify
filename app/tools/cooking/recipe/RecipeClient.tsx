@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import s from './recipe.module.css'
 import {
@@ -30,9 +31,16 @@ export default function RecipeClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        💡 <strong>레시피 비율은 참고용입니다.</strong> 같은 1컵 밀가루도 체질·다짐 정도에 따라 90~130g까지 차이날 수 있으니 정확한 베이킹은 저울 사용을 권장합니다. 양념 자동 보정은 일반적 권장값이며, 실제 간 조절은 입맛에 맞게 직접 맛보면서 조정하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        레시피 비율은 참고용입니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         {([

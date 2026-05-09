@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -123,7 +123,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(22px, 5vw, 30px);
   font-weight: 800;
   color: var(--text);
@@ -132,7 +132,7 @@
 }
 .heroValue strong { color: var(--accent); }
 .heroSub { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.7; }
-.heroSub strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.heroSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 도움말 */
 .helpText {
@@ -141,7 +141,7 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 .cellAccent { color: var(--accent); }
 
 /* 범례 */
@@ -185,7 +185,7 @@
   color: var(--text);
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tableScroll table { min-width: 360px; }
@@ -226,7 +226,7 @@
 .bonelloLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .bonelloTrack {
@@ -245,7 +245,7 @@
   min-width: 22px;
 }
 .bonelloVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 800;
   color: #0D0D0D;
@@ -282,7 +282,7 @@
   margin: 4px 0 0;
   font-size: 12px;
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .trapEffective strong { font-weight: 800; }
 .trapSpec {
@@ -303,7 +303,7 @@
   justify-content: space-between;
   font-size: 11px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   background: var(--bg2);
   padding: 6px 8px;

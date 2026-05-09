@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function SeverancePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💼 퇴직금 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -85,7 +85,7 @@ export default function SeverancePage() {
       <h2 style={sectionTitle}>📐 퇴직금 계산 공식</h2>
       <div style={card}>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 0 }}>
-          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 700, lineHeight: 2 }}>
+          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, lineHeight: 2 }}>
             법정 퇴직금 = 1일 평균임금 × 30 × (재직일수 / 365)
           </p>
         </div>
@@ -132,7 +132,7 @@ export default function SeverancePage() {
           근속연수가 길수록 공제가 커지고, 환산급여로 누진세율을 분산해 부담을 줄여요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Syne, sans-serif', lineHeight: 2 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 2 }}>
             ① 환산급여 = (퇴직금 − 근속연수공제) × 12 / 근속연수<br />
             ② 과세표준 = 환산급여 − 환산급여공제<br />
             ③ 산출세액 = 과세표준 × 누진세율 (6~45%)<br />

@@ -124,7 +124,7 @@
   margin-bottom: 10px;
 }
 .resultDate {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 800;
   color: var(--accent);
@@ -161,7 +161,7 @@
   text-transform: uppercase;
 }
 .ganjiBadgeValue {
-  font-family: 'Syne', 'Noto Serif KR', serif;
+  font-family: 'Inter', 'Noto Serif KR', serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);

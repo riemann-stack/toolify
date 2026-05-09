@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import s from './travelBudget.module.css'
 import {
   CITIES, STYLES, SEASONS, AIRLINES, REGION_LABELS,
@@ -637,17 +638,16 @@ export default function TravelBudgetClient() {
       )}
 
       {/* 안내 */}
-      <div className={s.disclaimer}>
-        <strong>📌 사용 안내</strong>
-        <ul>
-          <li>평균 데이터는 일반 참고치 — 시기·환율·개인 취향에 따라 큰 차이.</li>
-          <li>항공권은 시즌·항공사·예매 시점에 따라 변동 큼 (스카이스캐너·구글 항공권 비교 권장).</li>
-          <li>환율은 사용자 입력 (실시간 X) — 환율 별도 확인 필요.</li>
-          <li>예비비 <strong>10~20%</strong> 권장 (예상치 못한 지출 대비).</li>
-          <li>본 도구는 자가 견적이며, 실제 예약·결제 전 다시 확인.</li>
-          <li>모든 데이터는 브라우저에 저장, 서버 전송 X.</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 평균 데이터는 일반 참고치 — 시기·환율·개인 취향에 따라 큰 차이. 항공권은 시즌·항공사·예매 시점에 따라 변동 큼 (스카이스캐너·구글 항공권 비교 권장). 환율은 사용자 입력 (실시간 X) — 환율 별도 확인 필요.
+      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-tip" className={s.crossLink}>
@@ -699,8 +699,8 @@ function DonutChart({ items, total }: { items: DonutItem[]; total: number }) {
           return <path key={d.id} d={describeArc(startAngle, endAngle)} fill={d.color} opacity={0.85} />
         })}
         <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Syne">총 (예비비 X)</text>
-        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Syne" fontWeight="800">
+        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">총 (예비비 X)</text>
+        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
           {fmtMan(total)}
         </text>
       </svg>
@@ -709,7 +709,7 @@ function DonutChart({ items, total }: { items: DonutItem[]; total: number }) {
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{d.emoji} {d.label}</span>
-            <span style={{ fontFamily: 'Syne, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>
+            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>
               {fmtMan(d.total)} ({((d.total / total) * 100).toFixed(0)}%)
             </span>
           </div>

@@ -1,6 +1,7 @@
 import DdayClient from './DdayClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/dday',
@@ -19,7 +20,7 @@ export default function DdayPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📅 D-day 계산기·일정 관리
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -28,11 +29,12 @@ export default function DdayPage() {
 
       <DdayClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. D-day vs D+ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D-day와 D+의 차이</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D-day와 D+의 차이</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>D-day</strong>는 목표 날짜까지 남은 일수, <strong style={{ color: 'var(--text)' }}>D+</strong>는 지난 날짜로부터 경과한 일수입니다. 본 도구는 둘 다 자동 표시합니다.
           </p>
@@ -44,7 +46,7 @@ export default function DdayPage() {
               { label: 'D+100', desc: '입사 100일째, 결혼 100일 등 경과 기록' },
             ].map((it, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', color: 'var(--accent)', fontWeight: 800 }}>{it.label}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', color: 'var(--accent)', fontWeight: 800 }}>{it.label}</p>
                 <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '4px', lineHeight: 1.6 }}>{it.desc}</p>
               </div>
             ))}
@@ -53,7 +55,7 @@ export default function DdayPage() {
 
         {/* 2. 평일 vs 영업일 vs 달력일 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>평일·영업일·달력일 차이</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>평일·영업일·달력일 차이</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -84,7 +86,7 @@ export default function DdayPage() {
 
         {/* 3. 한국 공휴일 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 공휴일 (2026~2030 자동 반영)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 공휴일 (2026~2030 자동 반영)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 영업일 계산 시 <strong style={{ color: 'var(--text)' }}>한국 법정 공휴일</strong>을 자동 반영합니다 — 신정·설날(3일)·삼일절·어린이날·부처님오신날·현충일·광복절·추석(3일)·개천절·한글날·성탄절 + 대체 공휴일.
           </p>
@@ -95,7 +97,7 @@ export default function DdayPage() {
 
         {/* 4. 진행률 계산 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>진행률 계산</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>진행률 계산</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
             <strong style={{ color: 'var(--text)' }}>시작일 + 목표일 + 오늘</strong>로 진행률(%)을 계산합니다:
           </p>
@@ -109,7 +111,7 @@ export default function DdayPage() {
 
         {/* 5. 페이스 계산 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>페이스 계산 — 목표 달성 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>페이스 계산 — 목표 달성 도구</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>목표 + 총량 + 현재 완료량</strong>으로 일일 페이스를 자동 산출합니다.
           </p>
@@ -136,7 +138,7 @@ export default function DdayPage() {
 
         {/* 6. 반복 D-day */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반복 D-day</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반복 D-day</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             매년·매월·매주 반복되는 D-day는 자동으로 다음 발생일을 갱신합니다.
           </p>
@@ -158,7 +160,7 @@ export default function DdayPage() {
 
         {/* 7. D+ 활용 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D+ 활용 — 지난 날짜 기록</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D+ 활용 — 지난 날짜 기록</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             의미 있는 시작 시점을 기록하면 매일 D+가 늘어나며 동기 부여가 됩니다. 유튜버·블로거가 자주 활용하는 패턴입니다.
           </p>
@@ -180,7 +182,7 @@ export default function DdayPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -225,7 +227,7 @@ export default function DdayPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/date/age',             icon: '🎂', name: '만 나이·생일 통계',     desc: '생일까지 D-day, 인생 통계' },
@@ -248,7 +250,7 @@ export default function DdayPage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정</strong> — 대통령령</li>
             <li><strong style={{ color: 'var(--text)' }}>한국천문연구원 천문력</strong> — 24절기·음력 환산</li>

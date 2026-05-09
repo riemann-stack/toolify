@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import FryingClient from './FryingClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/frying',
@@ -13,7 +14,7 @@ export default function FryingPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍳 튀김 시간·온도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function FryingPage() {
 
       <FryingClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 기름 온도별 용도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             기름 온도별 용도 완전 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
@@ -38,7 +40,7 @@ export default function FryingPage() {
               { range: '190°C 이상', label: '초고온',  color: '#FF6B6B', desc: '오징어·새우 등 빠른 완성, 타기 쉬우니 주의' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${r.color}44`, borderLeft: `4px solid ${r.color}`, borderRadius: '10px', padding: '12px 16px', display: 'grid', gridTemplateColumns: '110px 80px 1fr', gap: '12px', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 800, color: r.color }}>{r.range}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: r.color }}>{r.range}</span>
                 <span style={{ fontSize: '12px', color: 'var(--text)', fontWeight: 600 }}>{r.label}</span>
                 <span style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{r.desc}</span>
               </div>
@@ -57,7 +59,7 @@ export default function FryingPage() {
 
         {/* ── 2. 재료별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             재료별 튀김 시간 빠른 참조표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
@@ -85,9 +87,9 @@ export default function FryingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{r.a}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{r.b}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.a}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.b}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r.p}</td>
                   </tr>
                 ))}
@@ -98,7 +100,7 @@ export default function FryingPage() {
 
         {/* ── 3. 2차 튀김의 과학 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2차 튀김의 과학
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -111,7 +113,7 @@ export default function FryingPage() {
               { n: '2차', c: '#C8FF3E', t: '크리스피 완성', d: '고온(180~190°C) 짧게. 표면 남은 수분 완전 제거 → 바삭함 극대화.' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, marginBottom: '4px' }}>{s.n}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, marginBottom: '4px' }}>{s.n}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px' }}>{s.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{s.d}</p>
               </div>
@@ -128,7 +130,7 @@ export default function FryingPage() {
 
         {/* ── 4. 냉동 재료 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             냉동 재료 튀김 완전 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -156,7 +158,7 @@ export default function FryingPage() {
 
         {/* ── 5. 에어프라이어 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에어프라이어 완전 변환 가이드
           </h2>
           <div style={{ background: 'rgba(62,200,255,0.05)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
@@ -187,9 +189,9 @@ export default function FryingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{r.n}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{r.m}</td>
-                    <td style={{ padding: '9px 12px', color: '#3EFF9B', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{r.f}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.m}</td>
+                    <td style={{ padding: '9px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.f}</td>
                   </tr>
                 ))}
               </tbody>
@@ -199,7 +201,7 @@ export default function FryingPage() {
 
         {/* ── 6. 겉바속촉 팁 10가지 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             겉바속촉을 위한 팁 10가지
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
@@ -216,7 +218,7 @@ export default function FryingPage() {
               '먹기 직전 고온 30초 재가열',
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0, minWidth: 24 }}>{i + 1}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0, minWidth: 24 }}>{i + 1}</span>
                 <span style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.6 }}>{t}</span>
               </div>
             ))}
@@ -225,7 +227,7 @@ export default function FryingPage() {
 
         {/* ── 7. 식품 안전 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             식품 안전 주의사항
           </h2>
           <div style={{ background: 'rgba(255,140,62,0.05)', border: '1px solid rgba(255,140,62,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
@@ -242,7 +244,7 @@ export default function FryingPage() {
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n} 안전 내부온도</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t} 이상</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t} 이상</p>
               </div>
             ))}
           </div>
@@ -250,7 +252,7 @@ export default function FryingPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               { q: '기름 온도를 모르는데 어떻게 확인하나요?',
@@ -274,7 +276,7 @@ export default function FryingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '튀김 반죽 비율 자동 계산' },

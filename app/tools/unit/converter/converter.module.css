@@ -80,7 +80,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -159,7 +159,7 @@
 .resultRowKorean .resultUnit small { color: #C485E0; }
 
 .resultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;

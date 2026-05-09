@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import WeightLossClient from './WeightLossClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/weightloss',
@@ -18,7 +19,7 @@ export default function WeightLossPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎯 체중 감량 기간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -28,11 +29,12 @@ export default function WeightLossPage() {
 
       <WeightLossClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 감량 공식 (기존 유지·보완) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             감량 소요 기간 계산 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -58,17 +60,17 @@ export default function WeightLossPage() {
           </div>
         </section>
 
-        {/* ── 2. 안전한 감량 속도 (NEW, 핵심) ── */}
+        {/* ── 2. 안전한 감량 속도 (✨ 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            안전한 감량 속도 — 주당 체중 0.5~1% (NEW)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            안전한 감량 속도 — 주당 체중 0.5~1% 
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             국제 영양학(ACSM·미국 스포츠의학회) 표준은 <strong style={{ color: 'var(--text)' }}>주당 체중의 0.5~1% 감량</strong>입니다.
             70kg 기준 주당 0.35~0.7kg, 하루 적자 385~770kcal에 해당합니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '16px', fontWeight: 700, color: '#3EFF9B', marginBottom: '6px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: '#3EFF9B', marginBottom: '6px' }}>
               주당 체중의 0.5~1% 감량이 요요 방지에 가장 효과적
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
@@ -80,10 +82,10 @@ export default function WeightLossPage() {
           </p>
         </section>
 
-        {/* ── 3. 목표 BMI 자동 체크 (NEW) ── */}
+        {/* ── 3. 목표 BMI 자동 체크  ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            목표 BMI 자동 체크 (NEW)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            목표 BMI 자동 체크 
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             본 도구는 입력한 키와 목표 체중으로 <strong style={{ color: 'var(--text)' }}>목표 BMI를 자동 검증</strong>합니다.
@@ -109,7 +111,7 @@ export default function WeightLossPage() {
 
         {/* ── 4. 칼로리 적자별 감량 속도 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 적자별 감량 속도</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 적자별 감량 속도</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             지방 1kg을 태우려면 약 7,700kcal의 칼로리 적자가 필요합니다. 하루 칼로리 적자에 따른 주당 감량 속도는 다음과 같습니다.
           </p>
@@ -145,7 +147,7 @@ export default function WeightLossPage() {
 
         {/* ── 5. 요요 없이 감량 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             요요 현상 없이 감량하는 법
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -169,10 +171,10 @@ export default function WeightLossPage() {
           </div>
         </section>
 
-        {/* ── 6. 정체기·유지기 (NEW) ── */}
+        {/* ── 6. 정체기·유지기  ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            정체기와 유지기 — 다이어트 흔한 함정 (NEW)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            정체기와 유지기 — 다이어트 흔한 함정 
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
@@ -195,14 +197,14 @@ export default function WeightLossPage() {
             </div>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>권장</strong> — 6~8주 감량 → 1~2주 유지 / 유지기에는 TDEE 동일 섭취, 운동은 유지. 본 도구의 <strong style={{ color: 'var(--text)' }}>[정체기·유지] 탭</strong>에서 자동 반영 그래프를 볼 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}>권장</strong> — 6~8주 감량 → 1~2주 유지 / 유지기에는 TDEE 동일 섭취, 운동은 유지. 본 도구의 <strong style={{ color: 'var(--text)' }}>그래프 영역</strong>에서 자동 반영 그래프를 볼 수 있습니다.
           </p>
         </section>
 
-        {/* ── 7. 식단 vs 운동 적자 (NEW) ── */}
+        {/* ── 7. 식단 vs 운동 적자  ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            식단 vs 운동 적자 비율 (NEW)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            식단 vs 운동 적자 비율 
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             추천 분배: <strong style={{ color: 'var(--text)' }}>식단 60% + 운동 40%</strong> — 근육 유지 + 심혈관 건강 + 지속 가능.
@@ -224,10 +226,10 @@ export default function WeightLossPage() {
           </div>
         </section>
 
-        {/* ── 8. 단백질 (NEW) ── */}
+        {/* ── 8. 단백질  ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            단백질 — 감량의 핵심 (NEW)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            단백질 — 감량의 핵심 
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             감량 시 단백질 <strong style={{ color: 'var(--text)' }}>1.6g/kg 권장</strong> (일반 1.2g/kg보다 ↑) — 근육 손실 방지·포만감 유지·음식의 열효과(TEF) 30% 칼로리·식단 만족감.
@@ -266,7 +268,7 @@ export default function WeightLossPage() {
 
         {/* ── 9. FAQ (accordion) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -279,7 +281,7 @@ export default function WeightLossPage() {
               },
               {
                 q: '실제 감량 속도가 계산기와 다를 수 있나요?',
-                a: '네, 이 계산기는 이론적인 수치를 제공합니다. 실제 감량 속도는 신진대사율, 근육량, 수면, 스트레스, 호르몬 등 다양한 요인에 영향을 받습니다. 처음 1~2주는 수분 변동(±1~2kg), 후반은 대사 적응으로 속도 둔화. 본 도구의 <strong>[정체기·유지] 탭</strong>에서 현실 보정 모드를 사용해보세요.',
+                a: '네, 이 계산기는 이론적인 수치를 제공합니다. 실제 감량 속도는 신진대사율, 근육량, 수면, 스트레스, 호르몬 등 다양한 요인에 영향을 받습니다. 처음 1~2주는 수분 변동(±1~2kg), 후반은 대사 적응으로 속도 둔화. 본 도구의 <strong>그래프 영역</strong>에서 현실 보정 모드를 사용해보세요.',
               },
               {
                 q: '칼로리 적자를 어떻게 만들어야 하나요?',
@@ -343,7 +345,7 @@ export default function WeightLossPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',     icon: '🔥', name: '기초대사량 계산기',     desc: 'BMR·TDEE 4공식 비교, 정밀 활동' },

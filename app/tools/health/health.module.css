@@ -42,7 +42,7 @@
   border-radius: 10px;
   padding: 10px 8px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -115,7 +115,7 @@
   animation: fadeUp 0.3s ease;
 }
 .resultHeroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-.resultHeroNum   { font-family: 'Syne', sans-serif; font-size: clamp(40px, 8vw, 64px); font-weight: 800; color: var(--accent); letter-spacing: -2px; line-height: 1; }
+.resultHeroNum   { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 8vw, 64px); font-weight: 800; color: var(--accent); letter-spacing: -2px; line-height: 1; }
 .resultHeroUnit  { font-size: 14px; color: var(--muted); margin-top: 6px; }
 .resultCategory  { font-size: 20px; font-weight: 700; margin-top: 8px; }
 .resultDesc      { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
@@ -150,7 +150,7 @@
 /* ── INFO GRID ── */
 .infoGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .infoCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 12px; text-align: center; }
-.infoNum   { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.infoNum   { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
 .infoLabel { font-size: 12px; color: var(--muted); }
 .infoSub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
@@ -167,7 +167,7 @@
 .tdeeBulk     { background: rgba(255,140,62,0.06); border-color: rgba(255,140,62,0.25); }
 
 .tdeeLabel { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
-.tdeeNum   { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
+.tdeeNum   { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
 .tdeeSub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* ── DISTANCE ── */
@@ -209,7 +209,7 @@
 }
 .splitRow:last-child { border-bottom: none; }
 .splitLabel { font-size: 13px; color: var(--muted); }
-.splitTime  { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.splitTime  { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 
 /* ── EMPTY ── */
 .empty {

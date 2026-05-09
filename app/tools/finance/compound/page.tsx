@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CompoundClient from './CompoundClient'
 import CompoundChart from './CompoundChart'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/finance/compound',
@@ -20,7 +21,7 @@ export default function CompoundPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📈 복리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -30,11 +31,12 @@ export default function CompoundPage() {
 
       <CompoundClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 복리의 마법 + 그래프 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             복리의 마법 — 눈덩이 효과(Snowball Effect)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -53,7 +55,7 @@ export default function CompoundPage() {
 
         {/* ── 2. 복리 계산 공식 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             복리 계산 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -108,7 +110,7 @@ export default function CompoundPage() {
 
         {/* ── 3. 72의 법칙 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             복리의 마법: 원금이 2배가 되는 「72의 법칙」
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -117,7 +119,7 @@ export default function CompoundPage() {
           </p>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px', textAlign: 'center', marginBottom: '16px' }}>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', marginBottom: '6px', letterSpacing: '1px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', marginBottom: '6px', letterSpacing: '1px' }}>
               2배 기간 ≈ 72 ÷ 연 수익률(%)
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
@@ -161,7 +163,7 @@ export default function CompoundPage() {
 
         {/* ── 4. 목표 역산 — "1억 만들려면 월 얼마?" ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🎯 목표 역산 — &ldquo;1억 만들려면 월 얼마?&rdquo;
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -193,7 +195,7 @@ export default function CompoundPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -206,7 +208,7 @@ export default function CompoundPage() {
 
         {/* ── 5. 한국 6대 절세 계좌 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🇰🇷 한국 6대 절세 계좌 — ISA·연금저축·IRP 한 표 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -235,8 +237,8 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 11.5, lineHeight: 1.6 }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -250,7 +252,7 @@ export default function CompoundPage() {
 
         {/* ── 6. 인플레이션과 실질 가치 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             💸 인플레이션 — 30년 후 1억의 실질 가치는?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -279,9 +281,9 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Syne, sans-serif' }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -294,7 +296,7 @@ export default function CompoundPage() {
 
         {/* ── 7. 시나리오 비교 — 4가지 수익률 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 4가지 수익률 시나리오 — 보수 4% / 기준 7% / 낙관 10% / 공격 13%
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -310,7 +312,7 @@ export default function CompoundPage() {
               { name: '공격적 13%', color: '#FF8C3E', desc: '성장주·테크주 (역사적 예외값)', warn: '⚠ 단기 -50%도 가능' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: s.color, fontWeight: 700, fontFamily: 'Syne, sans-serif', marginBottom: 6 }}>{s.name}</p>
+                <p style={{ fontSize: 13, color: s.color, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 6 }}>{s.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 4 }}>{s.desc}</p>
                 <p style={{ fontSize: 11, color: 'var(--muted)' }}>{s.warn}</p>
               </div>
@@ -323,7 +325,7 @@ export default function CompoundPage() {
 
         {/* ── 8. 매년 적립액 증액 효과 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📈 매년 적립액 증액 — 임금 인상 반영
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -349,9 +351,9 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Syne, sans-serif' }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -364,7 +366,7 @@ export default function CompoundPage() {
 
         {/* ── 9. 복리 주기 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🔁 복리 주기 — 일·월·분기·연 차이
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -388,8 +390,8 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{row[2]}원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}원</td>
                   </tr>
                 ))}
               </tbody>
@@ -402,7 +404,7 @@ export default function CompoundPage() {
 
         {/* ── 10. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -460,7 +462,7 @@ export default function CompoundPage() {
 
         {/* ── 11. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '매월 얼마를 투자할 수 있는지 확인' },

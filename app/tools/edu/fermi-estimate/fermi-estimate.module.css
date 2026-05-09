@@ -157,7 +157,7 @@
   color: var(--accent);
   padding: 3px 10px;
   border-radius: 999px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .templateSteps {
@@ -165,7 +165,7 @@
   color: var(--muted);
   padding: 3px 10px;
   border-radius: 999px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 
@@ -205,7 +205,7 @@
   margin-bottom: 8px;
 }
 .varLetter {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #3EFFD0;
   font-size: 16px;
@@ -255,7 +255,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--text);
@@ -294,7 +294,7 @@
   accent-color: #3EFFD0;
 }
 .varSliderRange {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
@@ -371,7 +371,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(36px, 8vw, 50px);
   font-weight: 800;
   color: #3EFFD0;
@@ -429,7 +429,7 @@
 
 .scenarioName { font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
 .scenarioValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(22px, 5vw, 28px);
   letter-spacing: -1px;
@@ -451,7 +451,7 @@
   color: var(--muted);
   line-height: 1.85;
 }
-.diffCard strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 800; }
+.diffCard strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 민감도 그래프 ── */
 .sensitivityList {
@@ -487,7 +487,7 @@
 .fillMid  { background: linear-gradient(90deg, #FFD700, #FFC857); }
 .fillLow  { background: linear-gradient(90deg, var(--accent), #3EFFD0); }
 .sensitivityValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   text-align: right;
@@ -534,13 +534,13 @@
   font-size: 14px;
 }
 .libItemDate {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
 }
 .libItemValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: #3EFFD0;
   font-size: 18px;
@@ -600,7 +600,7 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: #3EFFD0;
@@ -613,7 +613,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .shareBig {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(28px, 7vw, 40px);
   color: #3EFFD0;
@@ -629,12 +629,12 @@
   padding: 4px 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareScenario strong { color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; }
+.shareScenario strong { color: #fff; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .shareWatermark {
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
   color: rgba(62,255,208,0.6);
@@ -662,7 +662,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: #3EFFD0; font-family: 'Syne', sans-serif; font-weight: 700; }
+.interpretCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 액션 버튼 */
 .actionRow {

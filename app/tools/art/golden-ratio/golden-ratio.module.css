@@ -27,7 +27,7 @@
   border-radius: 14px; padding: 14px 20px; flex-wrap: wrap;
 }
 .phiBadgeLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.phiBadgeValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.phiBadgeValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; overflow-wrap: anywhere; }
 
 /* ── 입력 필드 ── */
 .inputGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -37,7 +37,7 @@
 .numInput {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 12px; font-size: 20px; font-family: 'Syne', sans-serif; font-weight: 700;
+  padding: 11px 12px; font-size: 20px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   color: var(--text); outline: none; transition: border-color 0.2s;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -52,7 +52,7 @@
 .selectBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   padding: 6px 12px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700;
+  cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   transition: all 0.15s;
 }
 .selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
@@ -85,13 +85,13 @@
 .heroRow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px; margin-bottom: 16px; }
 .heroBlock { text-align: center; min-width: 0; }
 .heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(22px, 5.5vw, 38px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; overflow-wrap: anywhere; word-break: break-word; }
+.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(22px, 5.5vw, 38px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; overflow-wrap: anywhere; word-break: break-word; }
 .heroUnit { font-size: 15px; font-weight: 400; margin-left: 3px; color: var(--muted); }
 .heroDivider { width: 1px; height: 56px; background: var(--border); }
 
 .infoGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .infoItem { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
-.infoNum { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.infoNum { font-family: 'Inter', system-ui, sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
 .infoLabel { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
 .copyBtn {
@@ -106,7 +106,7 @@
 .ratioBadge {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-  padding: 5px 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text);
+  padding: 5px 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text);
 }
 .ratioBadgeAccent { color: var(--accent); border-color: rgba(200,255,62,0.3); }
 
@@ -117,7 +117,7 @@
   border-radius: 10px; margin-top: 10px;
 }
 .diffLabel { font-size: 12px; color: var(--muted); }
-.diffValue { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--text); }
+.diffValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px; color: var(--text); }
 .diffValueGood { color: var(--accent); }
 
 .suggestList { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
@@ -127,7 +127,7 @@
   border-radius: 10px; font-size: 13px;
 }
 .suggestLabel { color: var(--muted); font-size: 12px; }
-.suggestNum { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); }
+.suggestNum { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); }
 
 /* ── SVG 나선 ── */
 .spiralCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
@@ -179,7 +179,7 @@
 .compareName { font-size: 12px; color: var(--text); font-weight: 600; }
 .compareNameSub { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
 .compareBar { height: 32px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; transition: width 0.3s; }
-.compareValue { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); min-width: 56px; text-align: right; }
+.compareValue { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); min-width: 56px; text-align: right; }
 
 @media (max-width: 500px) {
   .compareRow { grid-template-columns: 80px 1fr auto; gap: 8px; }

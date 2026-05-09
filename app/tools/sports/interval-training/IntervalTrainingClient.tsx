@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
 
@@ -505,10 +506,16 @@ export default function IntervalTrainingClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>참고용 훈련 가이드입니다.</strong> 인터벌 페이스는 컨디션·기온·코스에 따라 다를 수 있으며,
-        부상 이력이 있거나 무리가 느껴지면 즉시 중단하세요. 체계적 훈련은 자격을 갖춘 코치 상담을 권장합니다.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        참고용 훈련 가이드입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>
@@ -688,7 +695,7 @@ export default function IntervalTrainingClient() {
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
                         <td>{r.distance >= 1000 ? `${r.distance / 1000}km` : `${r.distance}m`}</td>
                         <td>{time}</td>
-                        <td style={{ color: '#3EC8FF', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
+                        <td style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
                         <td>{r.laps}바퀴</td>
                         <td>
                           <button
@@ -781,11 +788,11 @@ export default function IntervalTrainingClient() {
                             const fastMax = (p.dist * p.maxReps) / 1000
                             return (
                               <tr key={i}>
-                                <td style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#FFD93E' }}>{distLabel}</td>
+                                <td style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FFD93E' }}>{distLabel}</td>
                                 <td style={{ color: 'var(--text)', fontWeight: 600 }}>{p.minReps}~{p.maxReps}회</td>
-                                <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{fmtMS(lapSec)}</td>
+                                <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{fmtMS(lapSec)}</td>
                                 <td style={{ color: 'var(--muted)', fontSize: 12 }}>{p.recovery}</td>
-                                <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fastMin.toFixed(1)}~{fastMax.toFixed(1)}km</td>
+                                <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fastMin.toFixed(1)}~{fastMax.toFixed(1)}km</td>
                               </tr>
                             )
                           })
@@ -1089,7 +1096,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#FFD93E', fontFamily: 'Syne, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
               </p>
             </div>
           )}
@@ -1232,16 +1239,16 @@ export default function IntervalTrainingClient() {
                         '🟠'
                       return (
                         <tr key={w.week}>
-                          <td style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
+                          <td style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
                           <td style={{ color: 'var(--text)', fontSize: 13, fontWeight: 500 }}>
                             {w.menu1.name}
                             {w.menu2 && <><br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
                           </td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
+                          <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
                             {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
                           </td>
                           <td style={{ color: 'var(--muted)', fontSize: 12 }}>{w.menu1.recovery}</td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
+                          <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
                             {totalKm.toFixed(1)}km
                           </td>
                           <td style={{ textAlign: 'center' }}>

@@ -38,7 +38,7 @@
   display: block;
   font-size: 10.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   margin-top: 2px;
   opacity: 0.85;
@@ -162,7 +162,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .statLabel small {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   opacity: 0.7;
 }
@@ -171,7 +171,7 @@
   background: transparent;
   border: none;
   font-size: 19px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -236,7 +236,7 @@
   letter-spacing: 0.04em;
 }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -287,7 +287,7 @@
   letter-spacing: 0.04em;
 }
 .kpiValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 30px;
   font-weight: 800;
   color: var(--text);
@@ -319,7 +319,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .compareValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -421,7 +421,7 @@
   letter-spacing: 0;
 }
 .advValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -472,7 +472,7 @@
   border-radius: 2px;
 }
 .pieRow strong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -497,7 +497,7 @@
   text-transform: uppercase;
 }
 .legendTable td {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -540,7 +540,7 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.milestoneSub strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.milestoneSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .milestoneBadge {
   font-size: 11px;
   font-weight: 700;

@@ -16,7 +16,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -82,7 +82,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.15s;
@@ -117,7 +117,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   transition: all 0.15s;
 }
 .unitBtn:hover { color: var(--text); }
@@ -143,7 +143,7 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   transition: all 0.15s;
 }
 .presetBtn:hover { color: var(--accent); border-color: var(--accent); }
@@ -202,7 +202,7 @@
   padding: 7px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
   min-width: 0;
 }
@@ -255,13 +255,13 @@
   display: inline-block;
 }
 .unitCell {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--muted);
   font-size: 13px;
 }
 .valCell {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   font-size: 15px;
@@ -280,7 +280,7 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   transition: all 0.15s;
 }
@@ -349,7 +349,7 @@
 .summaryLine {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   margin-bottom: 12px;
   padding: 10px 14px;
   background: var(--bg3);
@@ -369,7 +369,7 @@
   padding: 3px 9px;
   border-radius: 6px;
   font-size: 11px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .badgeOk {
@@ -398,7 +398,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -437,7 +437,7 @@
   padding-bottom: 11px;
   color: var(--muted);
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 
@@ -499,7 +499,7 @@
   margin: 22px 0 20px;
 }
 .sectionTitle {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--text);

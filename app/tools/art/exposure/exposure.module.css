@@ -89,7 +89,7 @@
   font-weight: 600;
 }
 .sliderValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
@@ -130,7 +130,7 @@
   margin-top: 6px;
   font-size: 10px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* 영웅 카드 */
@@ -155,7 +155,7 @@
   margin: 0 0 8px;
 }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 800;
   margin: 0 0 8px;
@@ -234,7 +234,7 @@
 }
 .equivLabel { font-size: 14px; }
 .equivVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   color: var(--text);
   font-weight: 700;
@@ -254,7 +254,7 @@
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   color: var(--text);
 }
@@ -295,7 +295,7 @@
 .ndLabel {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: inherit;
 }
 .ndStops {
@@ -337,7 +337,7 @@
   line-height: 1.5;
 }
 .dataTable tr:last-child td { border-bottom: none; }
-.mono { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); }
+.mono { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); }
 
 /* 씬 카드 */
 .sceneGrid {
@@ -394,7 +394,7 @@
 .sceneSpec {
   display: flex;
   gap: 6px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   color: var(--accent);
   font-weight: 700;
@@ -426,7 +426,7 @@
   padding: 10px 12px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
   min-height: 44px;
   width: 100%;
@@ -448,7 +448,7 @@
   margin: 0 0 6px;
 }
 .starResultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 700;
   color: var(--text);

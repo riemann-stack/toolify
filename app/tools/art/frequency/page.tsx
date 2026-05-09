@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import FrequencyClient from './FrequencyClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/frequency',
@@ -13,7 +14,7 @@ export default function FrequencyPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎵 주파수 음정 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -22,11 +23,12 @@ export default function FrequencyPage() {
 
       <FrequencyClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 음정과 주파수의 관계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             음정과 주파수의 관계
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -45,7 +47,7 @@ export default function FrequencyPage() {
               ].map(({ label, formula }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 14px' }}>
                   <span style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600, minWidth: 70, letterSpacing: '0.03em' }}>{label}</span>
-                  <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '14px', color: 'var(--text)', fontWeight: 700 }}>{formula}</span>
+                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', color: 'var(--text)', fontWeight: 700 }}>{formula}</span>
                 </div>
               ))}
             </div>
@@ -61,7 +63,7 @@ export default function FrequencyPage() {
 
         {/* ── 2. 주요 음정 주파수 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             주요 음정 주파수 기준표 (A4 = 440 Hz)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -88,10 +90,10 @@ export default function FrequencyPage() {
                   ['A5', '880.00', '81', '39.0', '5', '#3EC8FF'],
                 ].map(([note, hz, midi, wave, oct, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{note}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{midi}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{wave}</td>
+                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{note}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{midi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{wave}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{oct}</td>
                   </tr>
                 ))}
@@ -105,7 +107,7 @@ export default function FrequencyPage() {
 
         {/* ── 3. 기준음 A4 변천사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             기준음 A4 변천사와 용도
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -141,7 +143,7 @@ export default function FrequencyPage() {
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '12px', padding: '18px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '22px', fontWeight: 800, color: item.color }}>{item.hz}</span>
+                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: item.color }}>{item.hz}</span>
                   <span style={{ fontSize: '11px', background: `${item.color}20`, color: item.color, fontWeight: 600, padding: '3px 8px', borderRadius: '6px' }}>{item.badge}</span>
                 </div>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '6px', letterSpacing: '0.03em' }}>{item.year}</p>
@@ -153,7 +155,7 @@ export default function FrequencyPage() {
 
         {/* ── 4. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: '440 Hz와 432 Hz의 차이는 무엇인가요?',
@@ -182,7 +184,7 @@ export default function FrequencyPage() {
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },

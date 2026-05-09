@@ -304,7 +304,7 @@ export default function PregnancyClient() {
               </div>
               <div className={styles.triMarker} style={{ left: `${markerPos}%` }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: 'var(--muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, marginTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginTop: 8 }}>
               <span>0주</span><span>13주</span><span>27주</span><span>40주</span>
             </div>
           </div>
@@ -564,7 +564,7 @@ export default function PregnancyClient() {
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
                   <span>{triInfo.name} ({triInfo.startWeek}~{triInfo.endWeek}주){isCurrentTri && ' · 현재'}</span>
-                  <span style={{ fontSize: 11.5, color: 'var(--muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>
+                  <span style={{ fontSize: 11.5, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>
                     {triCompleted}/{items.length}
                   </span>
                 </summary>

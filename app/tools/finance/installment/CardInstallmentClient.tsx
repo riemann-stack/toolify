@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './installment.module.css'
 
@@ -355,7 +356,7 @@ export default function CardInstallmentClient() {
         {tableRows.map((r, i) => {
           const cx = padL + (innerW / tableRows.length) * (i + 0.5)
           return (
-            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily="Syne, sans-serif" fontWeight={700}>
+            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
               {r.months}
             </text>
           )
@@ -370,11 +371,16 @@ export default function CardInstallmentClient() {
   return (
     <div className={s.wrap}>
       {/* 면책 */}
-      <div className={s.disclaimer}>
-        <strong>참고용 추정값입니다.</strong> 단순 원리금균등상환 방식 기준이며,
-        실제 카드 할부 수수료는 카드사·회원 등급·상품·결제일에 따라 달라질 수 있습니다.
-        정확한 수수료는 카드사 공식 홈페이지나 고객센터에서 확인하세요.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        참고용 추정값입니다.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>

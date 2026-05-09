@@ -35,7 +35,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-size: 28px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   outline: none;
@@ -74,7 +74,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
@@ -111,7 +111,7 @@
 }
 
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(52px, 12vw, 80px);
   font-weight: 800;
   color: var(--accent);
@@ -197,7 +197,7 @@
 }
 
 .ms {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--text);

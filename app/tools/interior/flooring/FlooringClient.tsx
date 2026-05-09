@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './flooring.module.css'
 
@@ -327,10 +328,16 @@ export default function FlooringClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 한국 표준 박스 면적·평균 단가 기준 참고용</strong>입니다.
-        실제 박스 면적은 브랜드·제품별 1.7~2.4㎡로 다양하며, 가격은 시기·매장에 따라 변동됩니다. 정확한 견적은 시공 전문가와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 한국 표준 박스 면적·평균 단가 기준 참고용
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
@@ -420,7 +427,7 @@ export default function FlooringClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>1박스 {effectiveUnitArea}㎡</strong>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>1박스 {effectiveUnitArea}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label})`}
                 </p>
               </>

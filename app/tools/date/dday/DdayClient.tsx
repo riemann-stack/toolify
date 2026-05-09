@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import s from './dday.module.css'
 import {
@@ -31,9 +32,16 @@ export default function DdayClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        💡 <strong>D-day 데이터는 이 브라우저의 localStorage에 저장됩니다.</strong> 캐시 삭제·다른 기기 사용 시 사라질 수 있으니 중요한 일정은 [백업 다운로드]로 정기 보관하세요. 한국 공휴일은 2026~2030년 기준이며 임시 공휴일·대체 공휴일 변경은 별도 확인이 필요합니다.
-      </div>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/date/age', label: '나이 계산기' },
+          { href: '/tools/date/dday', label: 'D-day 계산기' },
+          { href: '/tools/date/jet-lag', label: '시차 계산기' }
+        ]}
+      >
+        D-day 데이터는 이 브라우저의 localStorage에 저장됩니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         {([
@@ -682,7 +690,7 @@ function QuickTab({ now }: { now: Date }) {
           <div className={s.ddayProgress} style={{ height: 14 }}>
             <div className={s.ddayProgressBar} style={{ width: `${progress.percent}%` }} />
           </div>
-          <p style={{ textAlign: 'center', marginTop: 8, color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 22 }}>
+          <p style={{ textAlign: 'center', marginTop: 8, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22 }}>
             {progress.percent.toFixed(1)}%
           </p>
         </div>

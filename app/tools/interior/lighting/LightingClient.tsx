@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/static-components */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './lighting.module.css'
 
@@ -317,10 +318,16 @@ export default function LightingClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 일반 가정용 LED 조명 평균 효율(1W ≈ 100lm) 기준 참고용</strong>입니다.
-        실제 밝기는 조명 디자인, 천장 색상, 가구 배치, 자연광에 따라 달라질 수 있습니다. 정확한 시공은 조명 전문가와 상담하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 일반 가정용 LED 조명 평균 효율(1W ≈ 100lm) 기준 참고용
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'calc' ? styles.tabActive : ''}`}    onClick={() => setTab('calc')}>밝기 계산</button>
@@ -395,7 +402,7 @@ export default function LightingClient() {
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{space.range}</strong>
+              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{space.range}</strong>
             </p>
           </div>
 

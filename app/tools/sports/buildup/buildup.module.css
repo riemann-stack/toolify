@@ -64,7 +64,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -174,7 +174,7 @@
   background: var(--bg3);
   border-radius: 6px;
 }
-.optionHint strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.optionHint strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 .refRow {
   display: flex;
   gap: 8px;
@@ -204,7 +204,7 @@
 }
 .heroLabel { font-size: 12px; color: var(--muted); margin: 0 0 6px; letter-spacing: 0.04em; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(28px, 7vw, 42px);
   font-weight: 800;
   color: var(--accent);
@@ -235,9 +235,9 @@
   color: var(--text);
 }
 .paceTable tr:last-child td { border-bottom: none; }
-.cellNum { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); width: 36px; }
-.cellPace { font-family: 'Syne', sans-serif; font-weight: 700; }
-.cellCum { font-family: 'Syne', sans-serif; color: var(--muted); }
+.cellNum { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); width: 36px; }
+.cellPace { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.cellCum { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); }
 .cellSub { font-size: 12px; color: var(--muted); }
 
 .intensityChip {
@@ -439,7 +439,7 @@
 }
 .recoBtn:hover { border-color: var(--accent); background: var(--bg2); }
 .recoName { font-size: 14px; font-weight: 700; color: var(--text); }
-.recoMeta { font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; }
+.recoMeta { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 .recoApply { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 2px; }
 
 /* ── 프리셋 ── */
@@ -460,7 +460,7 @@
 }
 .presetBtn:hover { border-color: var(--accent); background: var(--bg2); }
 .presetName { font-size: 13px; font-weight: 700; color: var(--text); }
-.presetMeta { font-size: 12px; color: var(--accent); font-family: 'Syne', sans-serif; }
+.presetMeta { font-size: 12px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 .presetNote { font-size: 11px; color: var(--muted); line-height: 1.5; }
 .presetScenario { font-size: 11px; color: var(--muted); margin-top: 2px; opacity: 0.85; }
 
@@ -500,13 +500,13 @@
 .routineMeta {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
 }
 .routineDates {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   opacity: 0.7;
 }
 .routineApply {

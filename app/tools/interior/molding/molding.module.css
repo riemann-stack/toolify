@@ -110,7 +110,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -133,7 +133,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 700; text-align: center; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
 
 .bigInput {
   width: 100%;
@@ -142,7 +142,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -161,7 +161,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -292,7 +292,7 @@
 .matPrice {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   margin-top: 2px;
 }
@@ -344,7 +344,7 @@
   text-align: center;
 }
 .unitLenBtn:hover { color: var(--text); border-color: var(--border-hover); }
-.unitLenBtn small { display: block; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; color: var(--text); }
+.unitLenBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; color: var(--text); }
 .unitLenActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .unitLenActive small { color: var(--accent); }
 
@@ -370,7 +370,7 @@
   transition: all 0.15s;
   text-align: center;
 }
-.lossBtn small { display: block; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; }
+.lossBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; }
 .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .lossSafe { border-color: rgba(62,255,155,0.40); }
 .lossStd  { border-color: var(--accent); background: rgba(200,255,62,0.04); }
@@ -390,7 +390,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -399,7 +399,7 @@
 }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -426,7 +426,7 @@
   font-weight: 600;
 }
 .analysisTable td:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -468,7 +468,7 @@
 }
 .costRow strong {
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .costRow.totalCost strong { color: var(--accent); font-size: 18px; }
@@ -490,7 +490,7 @@
 .costSplitSelf p:first-child { color: var(--accent); }
 .costSplitPro  p:first-child { color: #3EC8FF; }
 .costSplit p:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: var(--text);
@@ -520,7 +520,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.cornerNote strong { color: #FF8C3E; font-family: 'Syne', sans-serif; font-weight: 800; }
+.cornerNote strong { color: #FF8C3E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 빠른 참조표 ── */
 .refTable {
@@ -544,10 +544,10 @@
 .refTable td:first-child {
   color: var(--text);
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .refTable td:not(:first-child) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -599,7 +599,7 @@
   line-height: 1.7;
 }
 .guideRowSpec {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   font-size: 12.5px;

@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function RebarPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏗️ 철근 중량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -88,7 +88,7 @@ export default function RebarPage() {
           호칭의 D 뒤 숫자는 <strong>공칭 직경(mm)</strong>을 의미하며, 단위중량은 다음 공식으로 계산됩니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Syne, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.9 }}>
             단위중량 (kg/m) = 단면적(mm²) × <strong style={{ color: 'var(--accent)' }}>7.85</strong> ÷ 1000<br />
             <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
               (강의 비중 7.85 g/cm³ 기준)
@@ -118,9 +118,9 @@ export default function RebarPage() {
             { t: 'SD600', d: '항복 600 MPa · 초고층·내진·플랜트', c: '#FF3E8C', p: '×1.20' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Syne, sans-serif' }}>{g.t}</p>
+              <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, system-ui, sans-serif' }}>{g.t}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 6px', lineHeight: 1.6 }}>{g.d}</p>
-              <p style={{ fontSize: 11, color: 'var(--accent)', margin: 0, fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>가격 보정 {g.p}</p>
+              <p style={{ fontSize: 11, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>가격 보정 {g.p}</p>
             </div>
           ))}
         </div>

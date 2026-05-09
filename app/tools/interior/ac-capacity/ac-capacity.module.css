@@ -108,7 +108,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -131,7 +131,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 700; text-align: center; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
 
 .bigInput {
   width: 100%;
@@ -140,7 +140,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -159,7 +159,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -190,7 +190,7 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   transition: all 0.15s;
 }
@@ -228,7 +228,7 @@
 .spaceBtn small {
   font-size: 9.5px;
   color: var(--muted);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   margin-top: 2px;
 }
@@ -274,7 +274,7 @@
   align-items: center;
   gap: 4px;
 }
-.dirBtn small { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
+.dirBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
 .dirBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .dirSouth     { border-color: rgba(255,215,0,0.40); }
 .dirEastWest  { border-color: rgba(255,140,62,0.40); }
@@ -310,7 +310,7 @@
   align-items: center;
   gap: 2px;
 }
-.floorBtn small { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
+.floorBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
 .floorBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .flLow      { border-color: rgba(62,255,155,0.40); }
 .flMid      { border-color: var(--accent); background: rgba(200,255,62,0.04); }
@@ -347,7 +347,7 @@
   flex-direction: column;
   gap: 2px;
 }
-.insBtn small { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
+.insBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }
 .insBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .insNew      { border-color: rgba(62,255,155,0.40); }
 .insNormal   { border-color: var(--accent); background: rgba(200,255,62,0.04); }
@@ -391,7 +391,7 @@
   border-radius: 50%; cursor: pointer; border: none;
 }
 .sliderValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: var(--accent);
@@ -419,7 +419,7 @@
   transition: all 0.15s;
   text-align: center;
 }
-.applianceBtn small { display: block; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10.5px; margin-top: 2px; opacity: 0.85; }
+.applianceBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 10.5px; margin-top: 2px; opacity: 0.85; }
 .applianceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .applianceActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -434,7 +434,7 @@
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -443,7 +443,7 @@
 }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Syne', sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -493,7 +493,7 @@
 .optRecommended .optionLabel { color: var(--accent); font-weight: 700; }
 .optBigger .optionLabel { color: #3EC8FF; }
 .optionPyeong {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 28px;
   color: var(--text);
@@ -534,7 +534,7 @@
 .loadTable td:first-child { color: var(--muted); }
 .loadTable td:last-child {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -570,7 +570,7 @@
 .btuCell { text-align: center; }
 .btuLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .btuValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--accent);
@@ -628,7 +628,7 @@
 .savingBarFillFixed { background: #FF6B6B; }
 .savingBarFillInverter { background: var(--accent); }
 .savingBarVal {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   color: var(--text);
   font-size: 13px;
@@ -682,12 +682,12 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 4px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 .convertResultValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -717,13 +717,13 @@
   font-weight: 600;
 }
 .refTable td:first-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
 }
 .refTable td:nth-child(2),
 .refTable td:nth-child(3) {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
 }
@@ -749,7 +749,7 @@
 }
 .guideTable td:first-child { color: var(--text); font-weight: 600; }
 .guideTable td:last-child {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
   text-align: right;

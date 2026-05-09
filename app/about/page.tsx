@@ -16,7 +16,7 @@ export default function AboutPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
         About Youtil
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '20px', lineHeight: 1.15 }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '20px', lineHeight: 1.15 }}>
         복잡한 계산은 Youtil에게,<br />
         <span style={{ color: 'var(--accent)' }}>당신의 시간에 집중하세요.</span>
       </h1>
@@ -29,7 +29,7 @@ export default function AboutPage() {
 
       {/* ── 2. 3가지 약속 ── */}
       <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
+        <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
           Youtil만의 3가지 약속
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -78,7 +78,7 @@ export default function AboutPage() {
 
       {/* ── 3. 제공 도구 목록 ── */}
       <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+        <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
           제공 도구 — {totalTools}가지
         </h2>
         <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '20px' }}>
@@ -127,7 +127,7 @@ export default function AboutPage() {
 
       {/* ── 4. 기술적 정체성 ── */}
       <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
+        <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
           지속적인 업데이트
         </h2>
         <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '24px' }}>
@@ -158,7 +158,7 @@ export default function AboutPage() {
 
       {/* ── 5. 사용자 소통 ── */}
       <section style={{ marginBottom: '48px' }}>
-        <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+        <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
           사용자의 목소리로 성장합니다
         </h2>
         <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>

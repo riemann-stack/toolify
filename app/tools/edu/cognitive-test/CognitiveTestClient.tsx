@@ -642,7 +642,7 @@ export default function CognitiveTestClient() {
                   <span className={s.heroUnit}>ms</span>
                 </div>
                 <p className={s.heroSub}>
-                  불일치 조건이 일치 조건보다 <strong style={{ color: '#3EFFD0', fontFamily: 'Syne, sans-serif' }}>{stroopStats.interference}ms</strong> 느림
+                  불일치 조건이 일치 조건보다 <strong style={{ color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif' }}>{stroopStats.interference}ms</strong> 느림
                   <br />일반 성인 범위: 150~400ms
                 </p>
               </div>
@@ -762,7 +762,7 @@ export default function CognitiveTestClient() {
                   <span className={s.heroUnit}>%</span>
                 </div>
                 <p className={s.heroSub}>
-                  이중 과제에서 <strong style={{ color: '#3EFFD0', fontFamily: 'Syne, sans-serif' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐
+                  이중 과제에서 <strong style={{ color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐
                   <br />일반 성인 범위: 20~40%
                 </p>
               </div>

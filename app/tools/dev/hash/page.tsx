@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -62,7 +62,7 @@ export default function HashPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔒 해시 생성기 (MD5·SHA·HMAC)
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -129,8 +129,8 @@ export default function HashPage() {
                 ['SHA-512', '512bit / 128자', '🟢 안전 (64bit 시스템 빠름)',    '금융, 정부, 고보안 서명'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[3]}</td>
                 </tr>
@@ -206,7 +206,7 @@ export default function HashPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 12.5 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 12.5 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
                 </tr>
               ))}
@@ -241,9 +241,9 @@ export default function HashPage() {
                 ['SHA-512', 'shasum -a 512 file',                      'certutil -hashfile FILE SHA512'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontSize: 12 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontSize: 12 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>

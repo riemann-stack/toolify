@@ -1,6 +1,7 @@
 import RandomClient from './RandomClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/random',
@@ -18,7 +19,7 @@ export default function RandomPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎲 랜덤 추첨기·룰렛·팀 편성
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -27,11 +28,12 @@ export default function RandomPage() {
 
       <RandomClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
         {/* 1. 6가지 모드 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>6가지 추첨 모드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>6가지 추첨 모드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { icon: '🎲', name: '간단 추첨',     desc: '숫자 범위·항목 명단 무작위 뽑기 (Fisher-Yates 셔플)' },
@@ -51,7 +53,7 @@ export default function RandomPage() {
 
         {/* 2. 가중치 추첨 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가중치 추첨 활용</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가중치 추첨 활용</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             같은 항목을 여러 개 입력하는 대신 가중치로 확률을 조절합니다. <strong style={{ color: 'var(--text)' }}>확률 = 항목 가중치 / 전체 가중치 합</strong>.
           </p>
@@ -78,7 +80,7 @@ export default function RandomPage() {
 
         {/* 3. 팀 나누기 알고리즘 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>팀 나누기 알고리즘</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>팀 나누기 알고리즘</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 다음 4단계로 팀을 자동 편성합니다:
           </p>
@@ -95,7 +97,7 @@ export default function RandomPage() {
 
         {/* 4. 룰렛 심리학 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>룰렛의 심리학 — 왜 재미있을까?</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>룰렛의 심리학 — 왜 재미있을까?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             {[
               { title: '시각적 긴장감', desc: '회전 중 결과를 예상하며 4초간 기대감 ↑' },
@@ -116,7 +118,7 @@ export default function RandomPage() {
 
         {/* 5. 발표 순서·자리 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>발표 순서·자리 배치</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>발표 순서·자리 배치</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             학교·회사에서 자주 쓰이는 추첨:
           </p>
@@ -142,7 +144,7 @@ export default function RandomPage() {
 
         {/* 6. 공정성 검증 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>공정성 검증 — 큰 수의 법칙</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>공정성 검증 — 큰 수의 법칙</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구의 추첨이 정말 공정한지 의심된다면 <strong style={{ color: 'var(--text)' }}>[공정성 검증] 탭</strong>에서 직접 시뮬레이션해 확인할 수 있습니다.
           </p>
@@ -163,7 +165,7 @@ export default function RandomPage() {
                   ['100,000회', '±0.5% 미만', '이론값에 매우 근접'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#3EFF9B', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
@@ -178,7 +180,7 @@ export default function RandomPage() {
 
         {/* 7. 가중치 vs 단순 추첨 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가중치 vs 단순 추첨 — 언제 어떤 모드를?</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가중치 vs 단순 추첨 — 언제 어떤 모드를?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>🎲 단순 추첨 (균등)</p>
@@ -206,7 +208,7 @@ export default function RandomPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -251,7 +253,7 @@ export default function RandomPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/life/ladder',     icon: '🪜', name: '사다리타기',           desc: '결과 + 역할 매칭 게임' },
@@ -274,7 +276,7 @@ export default function RandomPage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플 알고리즘</strong> — Knuth, 1969 (Art of Computer Programming Vol.2)</li>
             <li><strong style={{ color: 'var(--text)' }}>Math.random() 의사난수</strong> — MDN Web Docs (xorshift128+ 기반)</li>

@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './car-cost.module.css'
 import {
@@ -35,6 +36,35 @@ const TABS: { id: TabId; label: string; cls: string }[] = [
   { id: 'fuel',     label: '연료 타입 비교',   cls: s.tabActiveFuel },
   { id: 'share',    label: '보유 vs 카쉐어링', cls: s.tabActiveShare },
 ]
+
+/* ─── 모바일 친화 도움말 팝오버 ─── */
+function HelpTip({ children }: { children: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <span className={s.helpTipWrap}>
+      <button
+        type="button"
+        className={s.helpTip}
+        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v) }}
+        aria-label="도움말"
+        aria-expanded={open}
+      >
+        ?
+      </button>
+      {open && (
+        <span className={s.helpTipPopover} onClick={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            className={s.helpTipClose}
+            onClick={() => setOpen(false)}
+            aria-label="닫기"
+          >×</button>
+          {children}
+        </span>
+      )}
+    </span>
+  )
+}
 
 function makeInitialConsumables(): Consumable[] {
   return DEFAULT_CONSUMABLES.map(c => ({ ...c, enabled: true }))
@@ -193,10 +223,16 @@ export default function CarCostClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        ⚖️ <strong>본 계산기는 일반 정보 제공 도구</strong>입니다. 실제 비용은 운전 습관·정비 주기·보험 조건·지역별 유가/주차비·차량 상태·연식·정책 변경에 따라 다릅니다.
-        리스·장기렌트 견적은 캐피탈 회사 직접 문의, 보험·정비는 전문가 상담 권장.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 계산기는 일반 정보 제공 도구
+      </Disclaimer>
 
       <div className={s.tabs}>
         {TABS.map(t => (
@@ -366,7 +402,7 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   자동차 보험료 (연)
-                  <span className={s.helpTip} title="2026년 한국 평균: 20대 신규 ~150만 / 30대 안정 ~90만 / 40~50대 무사고 ~70만 / 60대+ ~80만">?</span>
+                  <HelpTip>2026년 한국 평균: 20대 신규 ~150만 / 30대 안정 ~90만 / 40~50대 무사고 ~70만 / 60대+ ~80만</HelpTip>
                 </div>
                 <div className={s.inputRow}>
                   <input className={s.numInput} type="number" value={insurance || ''} onChange={e => setInsurance(parseAmount(e.target.value))} />
@@ -388,7 +424,7 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   자동차세 (연)
-                  <span className={s.helpTip} title="배기량별 자동: 1000cc↓ 8만 / 1500↓ 20만 / 2000↓ 40만 / 2500↓ 50만 / 3000↓ 60만 / 전기차 13만">?</span>
+                  <HelpTip>배기량별 자동: 1000cc↓ 8만 / 1500↓ 20만 / 2000↓ 40만 / 2500↓ 50만 / 3000↓ 60만 / 전기차 13만</HelpTip>
                 </div>
                 <div className={s.inputRow}>
                   <input className={s.numInput} type="number" value={carTax || ''} onChange={e => setCarTax(parseAmount(e.target.value))} />
@@ -429,7 +465,7 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   할부금 (월)
-                  <span className={s.helpTip} title="현재 월 납입 중인 할부금. 할부 종료 후 0이 됨.">?</span>
+                  <HelpTip>현재 월 납입 중인 할부금. 할부 종료 후 0이 됨.</HelpTip>
                 </div>
                 <div className={s.inputRow}>
                   <input className={s.numInput} type="number" value={loanMonthly || ''} onChange={e => setLoanMonthly(parseAmount(e.target.value))} />
@@ -439,7 +475,7 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   남은 할부 기간
-                  <span className={s.helpTip} title="현재부터 남은 할부 개월 수. 5년·10년 총비용 계산 시 이 기간만 가산됩니다.">?</span>
+                  <HelpTip>현재부터 남은 할부 개월 수. 5년·10년 총비용 계산 시 이 기간만 가산됩니다.</HelpTip>
                 </div>
                 <div className={s.inputRow}>
                   <input className={s.numInput} type="number" value={loanRemainingMonths || ''} onChange={e => setLoanRemainingMonths(parseAmount(e.target.value))} />
@@ -465,7 +501,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>
                     엔진오일·타이어·정비비 평균 (월)
-                    <span className={s.helpTip} title="한국 평균: 엔진오일(5,000km/6개월) 월 1.5만 + 타이어(4만km/3년) 월 1.5~2만 + 정비·점검 월 1~2만 = 합계 월 약 4~6만">?</span>
+                    <HelpTip>한국 평균: 엔진오일(5,000km/6개월) 월 1.5만 + 타이어(4만km/3년) 월 1.5~2만 + 정비·점검 월 1~2만 = 합계 월 약 4~6만</HelpTip>
                   </div>
                   <div className={s.inputRow}>
                     <input className={s.numInput} type="number" value={variableCost || ''} onChange={e => setVariableCost(parseAmount(e.target.value))} />
@@ -627,9 +663,9 @@ export default function CarCostClient() {
             </div>
             <div className={s.transitDiff}>
               {(deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) > transitCost ? (
-                <>차이: 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne' }}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost)}</strong>, 연간 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne' }}>{formatKoreanCurrency(((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost) * 12)}</strong></>
+                <>차이: 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost)}</strong>, 연간 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKoreanCurrency(((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost) * 12)}</strong></>
               ) : (
-                <>차량이 대중교통보다 월 <strong style={{ color: '#3EFF9B', fontFamily: 'Syne' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
+                <>차량이 대중교통보다 월 <strong style={{ color: '#3EFF9B', fontFamily: 'Inter' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
               )}
             </div>
           </div>
@@ -973,17 +1009,17 @@ export default function CarCostClient() {
             <div className={s.threeCol}>
               <div>
                 <div className={s.subLabel}>시간당 요금</div>
-                <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
                 <div className={s.helperText}>소형 기준</div>
               </div>
               <div>
                 <div className={s.subLabel}>km당 요금</div>
-                <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
                 <div className={s.helperText}>보험·연료 포함</div>
               </div>
               <div>
                 <div className={s.subLabel}>100km당 평균 시간</div>
-                <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
                 <div className={s.helperText}>도심 운전 가정</div>
               </div>
             </div>
@@ -997,7 +1033,7 @@ export default function CarCostClient() {
               </div>
               {shareCompare.map(row => (
                 <div key={row.monthlyKm} className={s.shareRow}>
-                  <span style={{ fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>{row.monthlyKm.toLocaleString()}km</span>
+                  <span style={{ fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row.monthlyKm.toLocaleString()}km</span>
                   <span className={s.shareRowOwn}>{formatKRW(row.ownCost)}</span>
                   <span className={s.shareRowShare}>{formatKRW(row.shareCost)}</span>
                   <span className={`${s.winnerCell} ${row.winner === '쏘카' ? s.shareRowShare : row.winner === '보유' ? s.shareRowOwn : s.shareRowEqual}`}>
@@ -1032,10 +1068,16 @@ export default function CarCostClient() {
       )}
 
       {/* 면책 (모든 탭 공통) */}
-      <div className={s.disclaimer}>
-        ⚖️ 입력값 기준 예상 유지비입니다. 실제 비용은 차량 상태·운전 습관·정비 주기·보험 조건에 따라 달라질 수 있습니다.
-        리스·장기렌트 견적은 캐피탈 회사 직접 문의, 보험·정비는 전문가 상담 권장.
-      </div>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        ⚖️ 입력값 기준 예상 유지비입니다. 실제 비용은 차량 상태·운전 습관·정비 주기·보험 조건에 따라 달라질 수 있습니다. 리스·장기렌트 견적은 캐피탈 회사 직접 문의, 보험·정비는 전문가 상담 권장.
+      </Disclaimer>
     </div>
   )
 }

@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'Inter, system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -54,7 +54,7 @@ export default function WirePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚡ 전선 굵기·허용전류 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -108,7 +108,7 @@ export default function WirePage() {
         <ol style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
           <li>
             <strong style={{ color: 'var(--text)' }}>① 부하 W → 전류 I</strong>{' '}
-            <span style={{ fontFamily: 'Syne, sans-serif', color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--accent)' }}>
               I = P / (V × cosφ)
             </span>{' '}
             (삼상은 ÷ √3 추가)

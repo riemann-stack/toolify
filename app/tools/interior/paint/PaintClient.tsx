@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState, type ReactNode } from 'react'
 import styles from './paint.module.css'
 
@@ -470,10 +471,16 @@ export default function PaintClient() {
   return (
     <div className={styles.wrap}>
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 계산기는 한국 표준(수성 1L당 약 10㎡, 2회 도장) 기준 참고용</strong>입니다.
-        실제 도장 면적은 제품·표면 흡수율·시공 방식에 따라 달라질 수 있으며 정확한 견적은 제조사 권장사항을 확인하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 계산기는 한국 표준(수성 1L당 약 10㎡, 2회 도장) 기준 참고용
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
@@ -662,7 +669,7 @@ export default function PaintClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>1L당 {coverage}㎡</strong>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>1L당 {coverage}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label} 보정)`}
                 </p>
               </>
@@ -795,7 +802,7 @@ export default function PaintClient() {
               </tbody>
             </table>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{fmt(t1.requiredPaint, 2)}L</strong>
+              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(t1.requiredPaint, 2)}L</strong>
             </p>
           </div>
 
@@ -1026,7 +1033,7 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>{tab === 'quote' ? `필요 ${fmt(usedPaintL, 1)}L · 구매 ${totalCans}L` : ''}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              간편 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평) · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif' }}>{totalCans}L</strong>
+              간편 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평) · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{totalCans}L</strong>
             </p>
 
             <span className={styles.subLabel}>페인트 1L 가격</span>
@@ -1158,7 +1165,7 @@ function CanSvg({ size }: { size: number }) {
       <rect x={6} y={10} width={38} height={42} rx={2} fill="rgba(255,255,255,0.04)" stroke={color} strokeWidth={2} />
       {/* 라벨 */}
       <rect x={10} y={20} width={30} height={20} rx={1.5} fill={color} opacity={0.18} />
-      <text x={25} y={34} textAnchor="middle" fill={color} fontSize="11" fontFamily="'Syne', sans-serif" fontWeight={800}>{size}L</text>
+      <text x={25} y={34} textAnchor="middle" fill={color} fontSize="11" fontFamily="'Inter', system-ui, sans-serif" fontWeight={800}>{size}L</text>
     </svg>
   )
 }

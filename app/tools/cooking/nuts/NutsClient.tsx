@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect } from 'react'
 import styles from './nuts.module.css'
 import {
@@ -423,16 +424,16 @@ export default function NutsClient() {
         </>
       )}
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 본 도구는 일반 가이드입니다.</strong>
-        <ul>
-          <li>영양 정보는 평균값 (USDA·한국영양학회 기준 — 브랜드·지역별 차이)</li>
-          <li>알레르기 진단·치료, 영양 상담, 의약품·보충제 비교, 특정 브랜드 추천 X</li>
-          <li>영유아·임산부·신장/갑상선 환자: 의사·영양사 상담 우선</li>
-          <li>아나필락시스(호흡 곤란·의식 저하·전신 두드러기) 시 즉시 119</li>
-          <li>참고: 한국영양학회 (kns.or.kr), 식약처 식품안전정보 1399</li>
-        </ul>
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다. 영양 정보는 평균값 (USDA·한국영양학회 기준 — 브랜드·지역별 차이) 알레르기 진단·치료, 영양 상담, 의약품·보충제 비교, 특정 브랜드 추천 X 영유아·임산부·신장/갑상선 환자: 의사·영양사 상담 우선
+      </Disclaimer>
     </div>
   )
 }

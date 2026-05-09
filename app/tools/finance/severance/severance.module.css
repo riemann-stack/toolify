@@ -58,7 +58,7 @@
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -125,7 +125,7 @@
   line-height: 1.85;
 }
 .periodBox p { margin: 0; }
-.periodBox strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+.periodBox strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 
 /* 월별 카드 */
 .monthGrid {
@@ -164,7 +164,7 @@
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -182,7 +182,7 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Syne', sans-serif; }
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 .cellAccent { color: var(--accent); }
 
 .tipBox {
@@ -226,7 +226,7 @@
 }
 .compareValue {
   margin: 0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 800;
   color: var(--accent);
@@ -264,11 +264,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .cellTotal td {
   background: rgba(62, 255, 208, 0.06);
   font-weight: 700;
@@ -293,7 +293,7 @@
 }
 .milestoneYear {
   margin: 0;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -307,7 +307,7 @@
   margin: 0;
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* 크로스링크 */

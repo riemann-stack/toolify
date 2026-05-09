@@ -38,7 +38,7 @@
 .glassCardActive { border-color: var(--accent); background: var(--bg2); }
 .glassIcon { font-size: 22px; }
 .glassName { font-size: 12px; font-weight: 600; color: var(--text); }
-.glassMeta { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--accent); }
+.glassMeta { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent); }
 .glassDesc { font-size: 10px; color: var(--muted); line-height: 1.3; min-height: 13px; }
 
 /* ── 갯수 stepper ── */
@@ -47,7 +47,7 @@
 .qtyControls { display: flex; align-items: center; gap: 8px; }
 .qtyBtn { width: 30px; height: 30px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .qtyBtn:hover { color: var(--text); border-color: var(--border-hover); }
-.qtyValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 30px; text-align: center; }
+.qtyValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 30px; text-align: center; }
 
 /* ── 프리셋 카드 (기존 유지) ── */
 .presetCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; }
@@ -78,7 +78,7 @@
 .fieldGroup { display: flex; flex-direction: column; gap: 6px; }
 .fieldLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
 .inputRow { display: flex; align-items: center; gap: 6px; }
-.numInput { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 18px; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; -moz-appearance: textfield; appearance: textfield; }
+.numInput { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; -moz-appearance: textfield; appearance: textfield; }
 .numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
 .numInput:focus { border-color: rgba(200,255,62,0.5); }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
@@ -93,13 +93,13 @@
 .heroRow { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; margin-bottom: 16px; }
 .heroBlock { text-align: center; }
 .heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.heroNum { font-family: 'Syne', sans-serif; font-size: clamp(30px, 7vw, 44px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; }
+.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(30px, 7vw, 44px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; }
 .heroUnit { font-size: 18px; font-weight: 400; margin-left: 3px; }
 .heroDivider { width: 1px; height: 60px; background: var(--border); }
 .alcInfoGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
 .alcInfoGrid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .alcInfoItem { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; text-align: center; }
-.alcInfoNum { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+.alcInfoNum { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
 .alcInfoLabel { font-size: 11px; color: var(--muted); margin-top: 3px; }
 .stdNote { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; }
 
@@ -107,7 +107,7 @@
 .riskCard { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
 .riskHead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
 .riskLabel { font-size: 12px; font-weight: 600; }
-.riskPct { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+.riskPct { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; }
 .riskBar { height: 6px; background: var(--bg2); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
 .riskFill { height: 100%; transition: width 0.4s; border-radius: 99px; }
 .riskHint { font-size: 11px; color: var(--muted); line-height: 1.5; }
@@ -117,7 +117,7 @@
 .compareTable th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border); }
 .compareTable td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
 .compareTable td:first-child { color: var(--text); font-weight: 600; }
-.compareTable .num { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); text-align: right; }
+.compareTable .num { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); text-align: right; }
 
 /* ── 성별 토글 ── */
 .sexToggle { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
@@ -127,7 +127,7 @@
 /* ── 슬라이더 ── */
 .sliderRow { display: flex; align-items: center; gap: 12px; }
 .slider { flex: 1; accent-color: var(--accent); }
-.sliderValue { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); min-width: 50px; text-align: right; }
+.sliderValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); min-width: 50px; text-align: right; }
 
 /* ── 빈 상태 ── */
 .empty { padding: 28px; text-align: center; font-size: 13px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }

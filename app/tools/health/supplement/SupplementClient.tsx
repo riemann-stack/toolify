@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import s from './supplement.module.css'
 import {
@@ -273,11 +274,16 @@ export default function SupplementClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.disclaimer}>
-        ⚕️ <strong>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
-        처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담 필수.<br />
-        도움: 한국 식약처 식품안전정보 <strong>1577-1255</strong> · 의약품안전사용서비스 <strong>1577-2334</strong>
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        본 도구는 「성분 정보 정리」 참고용입니다.
+      </Disclaimer>
 
       <div className={s.tabs}>
         <button className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>
@@ -1038,10 +1044,16 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
         </div>
       </div>
 
-      <div className={s.disclaimer}>
-        ⚕️ 위 조합 정보는 일반적인 참고 자료입니다. <strong>처방약 복용 중·임신·수유·만성질환</strong> 시에는
-        반드시 의사·약사 상담 후 복용. 본 도구의 「약물·특수 상황」 탭에서 약물별 주의 사항 확인 가능.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+      >
+        처방약 복용 중·임신·수유·만성질환
+      </Disclaimer>
     </>
   )
 }

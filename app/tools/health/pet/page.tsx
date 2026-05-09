@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import PetClient from './PetClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/pet',
@@ -18,7 +19,7 @@ export default function PetPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🐾 반려동물 나이·칼로리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -28,11 +29,12 @@ export default function PetPage() {
 
       <PetClient />
 
-      <div style={{ marginTop: '64px', borderTop: '1px solid var(--border)', paddingTop: '40px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 나이 환산표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 환산표</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 환산표</h2>
           <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -51,17 +53,17 @@ export default function PetPage() {
                   ['15세', '76세', '83세',  '100세'],
                 ].map(([age, s, m, l], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{age}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: '#FFB347' }}>{s}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--text)' }}>{m}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', color: 'var(--muted)' }}>{l}</td>
+                    <td style={{ padding: '9px 10px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{age}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: '#FFB347' }}>{s}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{m}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{l}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>고양이 나이 환산표</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>고양이 나이 환산표</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -81,8 +83,8 @@ export default function PetPage() {
                   ['20세', '96세', '초고령',      '#FF4444'],
                 ].map(([age, human, stage, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{age}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#C084FC' }}>{human}</td>
+                    <td style={{ padding: '9px 10px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{age}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#C084FC' }}>{human}</td>
                     <td style={{ padding: '9px 10px', textAlign: 'center' }}><span style={{ background: color + '22', border: `1px solid ${color}66`, borderRadius: '6px', padding: '2px 10px', fontSize: '12px', color }}>{stage}</span></td>
                   </tr>
                 ))}
@@ -93,7 +95,7 @@ export default function PetPage() {
 
         {/* ── 2. ×7 공식이 틀린 이유 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 = ×7이 틀린 이유</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>강아지 나이 = ×7이 틀린 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             &quot;개 나이 × 7 = 사람 나이&quot;는 오랫동안 통용된 속설이지만 수의학적으로 부정확합니다. 강아지는 첫 1~2년 동안 <strong style={{ color: 'var(--text)' }}>사람의 청소년기까지 극도로 빠르게</strong> 성장하며, 이후 품종 크기에 따라 노화 속도가 크게 달라집니다.
           </p>
@@ -113,16 +115,16 @@ export default function PetPage() {
 
         {/* ── 3. RER/DER 공식 (기존 유지 + 표 정확화) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 계산 공식 (RER / DER)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 계산 공식 (RER / DER)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: '#FFB347', fontWeight: 600, letterSpacing: '0.04em', marginBottom: '8px' }}>RER — 기초 에너지 요구량 (Resting Energy Requirement)</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px' }}>RER = 70 × 체중(kg)⁰·⁷⁵</p>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px' }}>RER = 70 × 체중(kg)⁰·⁷⁵</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>완전한 안정 상태에서 생명 유지에 필요한 최소 칼로리입니다. 체중의 0.75 거듭제곱을 사용해 소형견과 대형견의 체표면적 차이를 반영합니다.</p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', marginBottom: '8px' }}>DER — 일일 에너지 요구량 (Daily Energy Requirement)</p>
-              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '10px' }}>DER = RER × 생활계수</p>
+              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '10px' }}>DER = RER × 생활계수</p>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
                   <thead>
@@ -144,7 +146,7 @@ export default function PetPage() {
                     ].map(([sit, fac], i) => (
                       <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg3)' }}>
                         <td style={{ padding: '7px 8px', color: 'var(--muted)' }}>{sit}</td>
-                        <td style={{ padding: '7px 8px', textAlign: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fac}</td>
+                        <td style={{ padding: '7px 8px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fac}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -159,7 +161,7 @@ export default function PetPage() {
 
         {/* ── 4. 시나리오 예시 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>계산 예시</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>계산 예시</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
             {[
               {
@@ -190,7 +192,7 @@ export default function PetPage() {
 
         {/* ── 5. 적정 체중 평가 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가 (NEW)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 입력한 체중을 품종 크기 기준 정상 범위와 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 자동 평가합니다.
           </p>
@@ -221,7 +223,7 @@ export default function PetPage() {
 
         {/* ── 6. 평균 수명 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평균 수명 가이드 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평균 수명 가이드 (NEW)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 품종 크기·생활 환경별 평균 수명과 진행률을 자동 계산합니다.
           </p>
@@ -246,8 +248,8 @@ export default function PetPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Syne, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -261,7 +263,7 @@ export default function PetPage() {
 
         {/* ── 7. 건식 vs 습식 vs 혼합 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>건식 vs 습식 사료 — 칼로리 밀도 차이 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>건식 vs 습식 사료 — 칼로리 밀도 차이 (NEW)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>같은 일일 칼로리도 사료 종류에 따라 그램 수가 크게 다릅니다.</strong> 건식은 100g당 약 350~380kcal, 습식은 약 70~120kcal로 4배 정도 차이.
           </p>
@@ -290,7 +292,7 @@ export default function PetPage() {
 
         {/* ── 8. 연령대별 건강 가이드 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
             {[
               { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#3EC8FF', items: ['기본 백신 (디스템퍼·파보·홍역) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
@@ -315,7 +317,7 @@ export default function PetPage() {
 
         {/* ── 9. FAQ (accordion) — 기존 5개 + 신규 2개 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
@@ -375,7 +377,7 @@ export default function PetPage() {
 
         {/* ── 함께 쓰면 좋은 도구 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',        icon: '⚖️', name: 'BMI 계산기',          desc: '보호자 건강도 챙기세요' },

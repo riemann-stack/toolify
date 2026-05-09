@@ -174,7 +174,7 @@
 }
 
 .statNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 700;
   color: var(--accent);
@@ -199,7 +199,7 @@
 }
 
 .limitName  { color: var(--muted); }
-.limitCount { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.limitCount { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .limitOver  { color: #FF6B6B !important; }
 
 .progressBar {
@@ -336,7 +336,7 @@
 }
 .miniStatLabel { font-size: 10.5px; color: var(--muted); }
 .miniStatValue {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -465,7 +465,7 @@
   border-bottom: 1px dashed var(--border);
 }
 .sizeRow:last-child { border-bottom: none; }
-.sizeRow strong { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; }
+.sizeRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── JSON 트리 뷰어 ── */
 .treeView {
@@ -661,7 +661,7 @@
 }
 .bitValue { font-size: 16px; line-height: 1.2; }
 .bitPosition { font-size: 9px; color: var(--muted); margin-top: 2px; }
-.bitPlaceValue { font-size: 9.5px; color: var(--muted); margin-top: 1px; font-family: 'Syne', sans-serif; font-weight: 700; }
+.bitPlaceValue { font-size: 9.5px; color: var(--muted); margin-top: 1px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 비트 폭 토글 */
 .widthToggle {
@@ -792,7 +792,7 @@
   display: inline-block;
   background: var(--accent-dim);
   color: var(--accent);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
   padding: 3px 10px;
@@ -814,7 +814,7 @@
   line-height: 1.85;
   white-space: pre-wrap;
 }
-.learnStepBody strong { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 800; }
+.learnStepBody strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* 의미 부여 카드 */
 .meaningCard {
@@ -826,7 +826,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.meaningCard strong { color: #3EC8FF; font-family: 'Syne', sans-serif; font-weight: 700; }
+.meaningCard strong { color: #3EC8FF; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* 결과 그리드 (CharCount 합계 4열) */
 .summaryGrid {
@@ -844,7 +844,7 @@
 }
 .summaryItemLabel { font-size: 10.5px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; }
 .summaryItemNum {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
   color: var(--accent);

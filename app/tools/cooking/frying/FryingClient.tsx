@@ -1,5 +1,6 @@
 'use client'
 
+import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import styles from './frying.module.css'
 
@@ -545,9 +546,16 @@ export default function FryingClient() {
         </div>
       )}
 
-      <div className={styles.disclaimer}>
-        <strong>⚠️ 식품 안전 주의:</strong> 본 가이드는 일반적인 참고용입니다. 조리 환경·재료 크기·보관 상태에 따라 실제 시간은 달라집니다. 육류(돼지 63°C / 닭 75°C)와 냉동 재료는 반드시 내부 익힘 상태를 확인하세요.
-      </div>
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        식품 안전 주의:
+      </Disclaimer>
     </div>
   )
 }
