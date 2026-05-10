@@ -347,6 +347,98 @@
   background: rgba(200,255,62,0.06);
   border-bottom: 1px solid rgba(200,255,62,0.30);
 }
+
+/* ─── 컴팩트 비교 카드 (3개 가로 한 번에) ─── */
+.compareGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.compareCardCompact {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  position: relative;
+}
+.compareCardCompact .compareTitle { font-size: 13px; margin: 0 0 6px; }
+.compareCardCompact .compareMain { font-size: clamp(15px, 3vw, 20px); margin: 0; }
+.compareCardCompact .compareLabel { font-size: 10.5px; margin: 0; }
+.compareMini {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.compareMini strong {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #FF6B6B;
+  font-weight: 700;
+}
+.savingBadgeCompact {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--accent);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 3px 6px;
+  background: var(--accent-dim);
+  border-radius: 6px;
+}
+@media (max-width: 540px) {
+  .compareGrid3 {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .compareCardCompact { padding: 12px 14px; }
+}
+
+/* ─── 모바일 스케줄 — 카드 형태 (회차 / 원금·이자 / 납입액·잔액) ─── */
+@media (max-width: 540px) {
+  .scheduleHead { display: none; }
+  .scheduleRow {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'month  month'
+      'pri    int'
+      'pay    bal';
+    gap: 4px 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .scheduleRow .scheduleMonth {
+    grid-area: month;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+  }
+  .scheduleRow span:nth-child(2) { grid-area: pri; text-align: left; }
+  .scheduleRow span:nth-child(3) { grid-area: int; text-align: right; }
+  .scheduleRow span:nth-child(4) { grid-area: pay; text-align: left; color: var(--text); font-weight: 700; }
+  .scheduleRow span:nth-child(5) { grid-area: bal; text-align: right; }
+  /* 모바일: 라벨 prefix 표시 */
+  .scheduleRow span[data-label]::before {
+    content: attr(data-label) ' ';
+    color: var(--muted);
+    font-size: 10.5px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    margin-right: 2px;
+  }
+}
 .scheduleRowMilestone span:first-child { color: var(--accent); font-weight: 800; }
 
 /* 모바일: 카드 레이아웃 */

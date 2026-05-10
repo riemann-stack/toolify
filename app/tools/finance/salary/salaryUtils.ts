@@ -26,7 +26,7 @@ export interface NonTaxableItem {
 
 export const NON_TAXABLE_ITEMS: NonTaxableItem[] = [
   { id: 'meal',      name: '식대',           monthlyMax: 200_000,
-    desc: '월 20만원까지 비과세 (2023년 1월 인상)', recommended: true },
+    desc: '월 20만원까지 비과세', recommended: true },
   { id: 'transport', name: '자가운전보조금', monthlyMax: 200_000,
     desc: '본인 차량 업무 사용 시 월 20만원',     recommended: false },
   { id: 'childcare', name: '육아수당',       monthlyMax: 200_000,

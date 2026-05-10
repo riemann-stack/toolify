@@ -304,16 +304,16 @@
 }
 .percentileMarker {
   position: absolute;
-  top: -8px;
+  bottom: 36px;
   width: 0; height: 0;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
-  border-top: 9px solid var(--text);
+  border-bottom: 9px solid var(--text);
   transform: translateX(-50%);
 }
 .percentileLabel {
   position: absolute;
-  top: -28px;
+  bottom: 0;
   transform: translateX(-50%);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;

@@ -32,14 +32,13 @@ const TAB_ACTIVE: Record<Tab, string> = {
   compare: styles.tabActiveCompare,
 }
 
-const PERIOD_PRESETS = [12, 24, 36, 60, 120, 240, 360]
+const PERIOD_PRESETS = [12, 24, 36, 60, 120, 240]   // 30년 제거
 const GRACE_PRESETS = [0, 12, 24, 36, 60]
 
 export default function LoanClient() {
   const [tab, setTab] = useState<Tab>('main')
 
   /* 공통 입력 */
-  const [presetId, setPresetId] = useState('mortgage')
   const [principal, setPrincipal] = useState('30000')  // 만원
   const [rate, setRate] = useState('4.3')
   const [months, setMonths] = useState('360')
@@ -49,16 +48,8 @@ export default function LoanClient() {
   const principalWon = parseAmount(principal) * 10_000
   const rateNum = parseFloat(rate) || 0
   const monthsNum = parseInt(months, 10) || 0
-
-  const handlePreset = (id: string) => {
-    const p = LOAN_PRESETS.find(x => x.id === id)
-    if (!p || id === 'custom') { setPresetId(id); return }
-    setPresetId(id)
-    setPrincipal(String(p.defaultAmount))
-    setRate(String(p.defaultRate))
-    setMonths(String(p.defaultMonths))
-    setGraceMonths(p.defaultGrace)
-  }
+  // 프리셋 제거됨 — 주담대 기본 금리 참조만 유지
+  const presetId = 'mortgage'
 
   const inputValid = principalWon > 0 && rateNum > 0 && monthsNum > 0
 
@@ -72,9 +63,9 @@ export default function LoanClient() {
     principal: principalWon, annualRate: rateNum, months: monthsNum, graceMonths,
   }) : null, [inputValid, principalWon, rateNum, monthsNum, graceMonths])
 
-  const intOnly = useMemo(() => inputValid && method === 'interest-only' ? calcInterestOnly({
+  const intOnly = useMemo(() => inputValid ? calcInterestOnly({
     principal: principalWon, annualRate: rateNum, months: monthsNum,
-  }) : null, [inputValid, method, principalWon, rateNum, monthsNum])
+  }) : null, [inputValid, principalWon, rateNum, monthsNum])
 
   const activeResult = method === 'equal-principal' ? epr : method === 'interest-only' ? intOnly : ep
 
@@ -91,19 +82,6 @@ export default function LoanClient() {
     if (sch.length > 0) indices.add(sch.length - 1)
     return Array.from(indices).sort((a, b) => a - b).map(i => sch[i]).filter(Boolean)
   }, [activeResult, showAll])
-
-  /* SVG 잔액 곡선 */
-  const chartData = useMemo(() => {
-    if (!ep) return null
-    const W = 600, H = 180, pad = { l: 40, r: 12, t: 12, b: 24 }
-    const n = ep.schedule.length
-    const maxBalance = principalWon
-    const xScale = (i: number) => pad.l + ((W - pad.l - pad.r) * i) / Math.max(1, n - 1)
-    const yScale = (v: number) => pad.t + ((H - pad.t - pad.b) * (maxBalance - v)) / maxBalance
-    const balancePts = ep.schedule.map((s, i) => `${xScale(i).toFixed(1)},${yScale(s.balance).toFixed(1)}`).join(' ')
-    const cumIPts = ep.schedule.map((s, i) => `${xScale(i).toFixed(1)},${yScale(s.cumulativeInterest).toFixed(1)}`).join(' ')
-    return { W, H, pad, balancePts, cumIPts, n }
-  }, [ep, principalWon])
 
   /* ─── 탭 2: 중도상환 ─── */
   const [prepaymentAmount, setPrepaymentAmount] = useState('1000')
@@ -257,22 +235,8 @@ export default function LoanClient() {
         ))}
       </div>
 
-      {/* 공통 입력 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>대출 종류 (프리셋)</label>
-        <div className={styles.presetGrid}>
-          {LOAN_PRESETS.map(p => (
-            <button key={p.id}
-              className={`${styles.presetCard} ${presetId === p.id ? styles.presetCardActive : ''}`}
-              onClick={() => handlePreset(p.id)}>
-              <p className={styles.presetCardName}>{p.name}</p>
-              <p className={styles.presetCardDesc}>{p.desc || ''}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.threeCol}>
+      {/* 공통 입력 — 2열 그리드 (모바일 1열) */}
+      <div className={styles.twoCol}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>대출 원금 (만원)</label>
           <div className={styles.inputRow}>
@@ -302,7 +266,7 @@ export default function LoanClient() {
             const ref = preset?.rateRefId ? KOREA_LOAN_RATES.find(k => k.id === preset.rateRefId) : null
             return ref ? (
               <p style={{ fontSize: 11.5, color: '#3EC8FF', marginTop: 6 }}>
-                💡 {ref.name} 평균 <strong>{ref.avg}%</strong> ({ref.min}~{ref.max}%) · {ref.source}
+                💡 {ref.name} 평균 <strong>{ref.avg}%</strong> ({ref.min}~{ref.max}%)
               </p>
             ) : null
           })()}
@@ -311,7 +275,7 @@ export default function LoanClient() {
           <label className={styles.cardLabel}>대출 기간 (개월)</label>
           <div className={styles.inputRow}>
             <input className={styles.numInput} type="number" inputMode="numeric"
-              placeholder="360" value={months} onChange={e => setMonths(e.target.value)} />
+              placeholder="240" value={months} onChange={e => setMonths(e.target.value)} />
             <span className={styles.unit}>개월</span>
           </div>
           <div className={styles.chips}>
@@ -324,30 +288,22 @@ export default function LoanClient() {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className={styles.twoCol}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>거치기간</label>
-          <div className={styles.optionRow5}>
+          <label className={styles.cardLabel}>거치기간 (개월)</label>
+          <div className={styles.inputRow}>
+            <input className={styles.numInput} type="number" inputMode="numeric"
+              placeholder="0" value={graceMonths || ''}
+              onChange={e => setGraceMonths(parseInt(e.target.value) || 0)} />
+            <span className={styles.unit}>개월</span>
+          </div>
+          <div className={styles.chips}>
             {GRACE_PRESETS.map(m => (
               <button key={m}
-                className={`${styles.optionBtn} ${graceMonths === m ? styles.optionActive : ''}`}
+                className={`${styles.chip} ${graceMonths === m ? styles.chipActive : ''}`}
                 onClick={() => setGraceMonths(m)}>
                 {m === 0 ? '없음' : `${m / 12}년`}
               </button>
             ))}
-          </div>
-        </div>
-        <div className={styles.card}>
-          <label className={styles.cardLabel}>상환 방식</label>
-          <div className={styles.optionRow3}>
-            <button className={`${styles.optionBtn} ${method === 'equal-payment' ? styles.optionActive : ''}`}
-              onClick={() => setMethod('equal-payment')}>원리금균등</button>
-            <button className={`${styles.optionBtn} ${method === 'equal-principal' ? styles.optionActive : ''}`}
-              onClick={() => setMethod('equal-principal')}>원금균등</button>
-            <button className={`${styles.optionBtn} ${method === 'interest-only' ? styles.optionActive : ''}`}
-              onClick={() => setMethod('interest-only')}>만기일시</button>
           </div>
         </div>
       </div>
@@ -355,69 +311,48 @@ export default function LoanClient() {
       {!inputValid && (
         <div className={styles.empty}>
           <div className={styles.emptyTitle}>대출 원금·금리·기간을 입력하세요</div>
-          프리셋을 선택하면 권장값이 자동 입력됩니다
         </div>
       )}
 
       {/* ─── 탭 1: 기본 계산 ─── */}
-      {tab === 'main' && ep && epr && (
+      {tab === 'main' && ep && epr && intOnly && (
         <>
-          <div className={styles.compareGrid}>
-            <div className={styles.compareCard}>
+          {/* 3가지 상환 방식 — 컴팩트 카드 */}
+          <div className={styles.compareGrid3}>
+            <div className={styles.compareCardCompact}>
               <div className={styles.compareTitle}>원리금균등</div>
-              <div className={styles.compareDesc}>매달 동일 납입 — 가장 흔함</div>
               <div className={styles.compareMain}>{won(ep.monthlyPayment)}</div>
-              <div className={styles.compareLabel}>월 납입액 (고정)</div>
-              <div className={styles.compareDivider} />
-              <div className={styles.compareRow}><span>총 상환액</span><span>{formatEok(ep.totalPayment)}</span></div>
-              <div className={`${styles.compareRow} ${styles.compareInterest}`}><span>총 이자</span><span>{formatEok(ep.totalInterest)}</span></div>
+              <div className={styles.compareLabel}>월 (고정)</div>
+              <div className={styles.compareMini}>총 이자 <strong>{formatEok(ep.totalInterest)}</strong></div>
             </div>
-            <div className={`${styles.compareCard} ${styles.compareCardAccent}`}>
+            <div className={`${styles.compareCardCompact} ${styles.compareCardAccent}`}>
               <div className={styles.compareTitle}>원금균등</div>
-              <div className={styles.compareDesc}>이자 절약 — 초기 부담 ↑</div>
               <div className={styles.compareMain}>{won(epr.firstPayment)}</div>
-              <div className={styles.compareLabel}>첫달 납입액 (점차 감소)</div>
-              <div className={styles.compareDivider} />
-              <div className={styles.compareRow}><span>총 상환액</span><span>{formatEok(epr.totalPayment)}</span></div>
-              <div className={`${styles.compareRow} ${styles.compareInterest}`}><span>총 이자</span><span>{formatEok(epr.totalInterest)}</span></div>
-              <div className={styles.savingBadge}>
-                ✨ 이자 {formatEok(ep.totalInterest - epr.totalInterest)} 절약
-              </div>
+              <div className={styles.compareLabel}>첫달 (점차↓)</div>
+              <div className={styles.compareMini}>총 이자 <strong>{formatEok(epr.totalInterest)}</strong></div>
+              <div className={styles.savingBadgeCompact}>이자 {formatEok(ep.totalInterest - epr.totalInterest)} ↓</div>
+            </div>
+            <div className={styles.compareCardCompact}>
+              <div className={styles.compareTitle}>만기일시</div>
+              <div className={styles.compareMain}>{won(intOnly.monthlyPayment)}</div>
+              <div className={styles.compareLabel}>월 이자만</div>
+              <div className={styles.compareMini}>총 이자 <strong>{formatEok(intOnly.totalInterest)}</strong></div>
             </div>
           </div>
 
-          {/* 잔액 곡선 */}
-          {chartData && (
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>잔액·누적 이자 곡선</label>
-              <div className={styles.chartWrap}>
-                <svg viewBox={`0 0 ${chartData.W} ${chartData.H}`} className={styles.chartSvg} preserveAspectRatio="none">
-                  <line x1={chartData.pad.l} y1={chartData.H - chartData.pad.b}
-                    x2={chartData.W - chartData.pad.r} y2={chartData.H - chartData.pad.b}
-                    stroke="var(--border)" strokeWidth="1" />
-                  <text x={6} y={chartData.pad.t + 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">
-                    {formatEok(principalWon)}
-                  </text>
-                  <text x={chartData.pad.l} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">1회</text>
-                  <text x={chartData.W - chartData.pad.r - 30} y={chartData.H - 8} fontSize="10" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif">{chartData.n}회</text>
-                  <polyline points={chartData.balancePts} fill="none" stroke="#3EC8FF" strokeWidth="2.5" strokeLinejoin="round" />
-                  <polyline points={chartData.cumIPts} fill="none" stroke="#FF8C3E" strokeWidth="2" strokeDasharray="4 3" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className={styles.chartLegend}>
-                <span><i style={{ background: '#3EC8FF' }} />잔액 (원금)</span>
-                <span><i style={{ background: '#FF8C3E' }} />누적 이자</span>
-              </div>
-            </div>
-          )}
-
-          {/* 월별 상환 내역 — 폰트 13px + 모바일 카드 */}
+          {/* 월별 상환 내역 */}
           {activeResult && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>
-                월별 상환 내역 ({method === 'equal-payment' ? '원리금균등' : method === 'equal-principal' ? '원금균등' : '만기일시'})
-                <span className={styles.cardLabelHint}>첫 12회 + 12·24·36·60·120·180·240·300·360개월 마일스톤</span>
-              </label>
+              <label className={styles.cardLabel}>월별 상환 내역</label>
+              {/* 상환 방식 선택 칩 */}
+              <div className={styles.chips} style={{ marginBottom: 10 }}>
+                <button className={`${styles.chip} ${method === 'equal-payment' ? styles.chipActive : ''}`}
+                  onClick={() => setMethod('equal-payment')}>원리금균등</button>
+                <button className={`${styles.chip} ${method === 'equal-principal' ? styles.chipActive : ''}`}
+                  onClick={() => setMethod('equal-principal')}>원금균등</button>
+                <button className={`${styles.chip} ${method === 'interest-only' ? styles.chipActive : ''}`}
+                  onClick={() => setMethod('interest-only')}>만기일시</button>
+              </div>
               <div className={styles.scheduleHead}>
                 <span>회차</span><span>원금</span><span>이자</span><span>납입액</span><span>잔액</span>
               </div>
@@ -427,11 +362,11 @@ export default function LoanClient() {
                   return (
                     <div key={row.month}
                       className={`${styles.scheduleRow} ${isMilestone ? styles.scheduleRowMilestone : ''}`}>
-                      <span>{row.month}회</span>
-                      <span>{row.principal.toLocaleString()}</span>
-                      <span>{row.interest.toLocaleString()}</span>
-                      <span>{row.payment.toLocaleString()}</span>
-                      <span>{row.balance.toLocaleString()}</span>
+                      <span className={styles.scheduleMonth}>{row.month}회</span>
+                      <span data-label="원금">{row.principal.toLocaleString()}</span>
+                      <span data-label="이자">{row.interest.toLocaleString()}</span>
+                      <span data-label="납입액">{row.payment.toLocaleString()}</span>
+                      <span data-label="잔액">{row.balance.toLocaleString()}</span>
                     </div>
                   )
                 })}
@@ -446,11 +381,9 @@ export default function LoanClient() {
 
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-              onClick={() => copy(`연봉 ${formatEok(principalWon)} / ${rateNum}% / ${monthsNum}개월 / 원리금균등 → 월 ${won(ep.monthlyPayment)} · 총 이자 ${formatEok(ep.totalInterest)}`)}>
+              onClick={() => copy(`대출 ${formatEok(principalWon)} / ${rateNum}% / ${monthsNum}개월 / 원리금균등 → 월 ${won(ep.monthlyPayment)} · 총 이자 ${formatEok(ep.totalInterest)}`)}>
               {copied ? '✓ 복사됨' : '📋 복사'}
             </button>
-            <button className={styles.copyBtn} onClick={() => setTab('prepay')}>💰 중도상환 시뮬</button>
-            <button className={styles.copyBtn} onClick={() => setTab('rate')}>📊 금리 변동</button>
           </div>
         </>
       )}

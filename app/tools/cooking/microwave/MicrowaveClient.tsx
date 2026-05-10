@@ -12,7 +12,6 @@ import {
 } from './microwaveUtils'
 
 type Tab = 'convert' | 'food' | 'timer' | 'guide'
-type Mode = 'label2mine' | 'mine2other'
 
 const STORAGE_KEY = 'youtil_microwave_v1'
 
@@ -20,9 +19,9 @@ export default function MicrowaveClient() {
   const [tab, setTab] = useState<Tab>('convert')
 
   /* 탭 1: 환산 */
-  const [mode, setMode] = useState<Mode>('label2mine')
-  const [refW, setRefW] = useState<PowerW>(700)
-  const [myW, setMyW] = useState<PowerW>(900)
+  /* refW·myW: PowerW 외 직접 입력도 허용하므로 number로 확장 */
+  const [refW, setRefW] = useState<number>(700)
+  const [myW, setMyW] = useState<number>(900)
   const [refMin, setRefMin] = useState('2')
   const [refSec, setRefSecState] = useState('30')
 
@@ -187,83 +186,65 @@ export default function MicrowaveClient() {
         ))}
       </div>
 
-      {/* ════════ 탭 1: 출력 환산 ════════ */}
+      {/* ════════ 탭 1: 출력 환산 (컴팩트) ════════ */}
       {tab === 'convert' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>입력 모드</span>
-            <div className={s.pillRow}>
-              <button
-                className={`${s.pill} ${mode === 'label2mine' ? s.pillActive : ''}`}
-                onClick={() => setMode('label2mine')}
-                type="button"
-              >
-                📋 라벨 → 내 전자레인지
-              </button>
-              <button
-                className={`${s.pill} ${mode === 'mine2other' ? s.pillActive : ''}`}
-                onClick={() => setMode('mine2other')}
-                type="button"
-              >
-                🔄 내 시간 → 다른 출력
-              </button>
-            </div>
-          </div>
-
-          <div className={s.card}>
-            <span className={s.cardLabel}>{mode === 'label2mine' ? '라벨 정보' : '내 전자레인지 시간'}</span>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>{mode === 'label2mine' ? '라벨 표시 W' : '내 전자레인지 W'}</label>
-              <div className={s.pillRow}>
-                {POWER_OPTIONS.map((w) => (
-                  <button
-                    key={w}
-                    className={`${s.pill} ${refW === w ? s.pillActive : ''}`}
-                    onClick={() => setRefW(w)}
-                    type="button"
+            <div className={s.compactRow}>
+              <div className={s.compactField}>
+                <label className={s.compactLabel}>기준 출력 (W)</label>
+                <div className={s.compactWInput}>
+                  <select
+                    className={s.compactSelect}
+                    value={(POWER_OPTIONS as readonly number[]).includes(refW) ? String(refW) : 'custom'}
+                    onChange={(e) => { if (e.target.value !== 'custom') setRefW(Number(e.target.value)) }}
                   >
-                    {w}W
-                  </button>
-                ))}
+                    {POWER_OPTIONS.map((w) => <option key={w} value={w}>{w}W</option>)}
+                    <option value="custom">직접 입력</option>
+                  </select>
+                  <input
+                    type="number"
+                    className={s.compactNum}
+                    value={refW}
+                    onChange={(e) => setRefW(Number(e.target.value) || 0)}
+                    min={300} max={2000} step={50}
+                    aria-label="기준 W 직접 입력"
+                  />
+                </div>
               </div>
-            </div>
-            <div className={s.row2}>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>분</label>
-                <input
-                  type="number"
-                  className={s.input}
-                  value={refMin}
-                  onChange={(e) => setRefMin(e.target.value)}
-                  min={0} max={60} step={1}
-                />
+              <div className={s.compactField}>
+                <label className={s.compactLabel}>기준 시간</label>
+                <div className={s.compactTimeRow}>
+                  <input type="number" className={s.compactNum} value={refMin}
+                    onChange={(e) => setRefMin(e.target.value)} min={0} max={60} step={1}
+                    aria-label="분" placeholder="분" />
+                  <span className={s.compactColon}>:</span>
+                  <input type="number" className={s.compactNum} value={refSec}
+                    onChange={(e) => setRefSecState(e.target.value)} min={0} max={59} step={5}
+                    aria-label="초" placeholder="초" />
+                </div>
               </div>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>초</label>
-                <input
-                  type="number"
-                  className={s.input}
-                  value={refSec}
-                  onChange={(e) => setRefSecState(e.target.value)}
-                  min={0} max={59} step={5}
-                />
+              <div className={s.compactField}>
+                <label className={s.compactLabel}>변환할 출력 (W)</label>
+                <div className={s.compactWInput}>
+                  <select
+                    className={s.compactSelect}
+                    value={(POWER_OPTIONS as readonly number[]).includes(myW) ? String(myW) : 'custom'}
+                    onChange={(e) => { if (e.target.value !== 'custom') setMyW(Number(e.target.value)) }}
+                  >
+                    {POWER_OPTIONS.map((w) => <option key={w} value={w}>{w}W</option>)}
+                    <option value="custom">직접 입력</option>
+                  </select>
+                  <input
+                    type="number"
+                    className={s.compactNum}
+                    value={myW}
+                    onChange={(e) => setMyW(Number(e.target.value) || 0)}
+                    min={300} max={2000} step={50}
+                    aria-label="변환 W 직접 입력"
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className={s.card}>
-            <span className={s.cardLabel}>{mode === 'label2mine' ? '내 전자레인지 W' : '비교할 출력 W'}</span>
-            <div className={s.pillRow}>
-              {POWER_OPTIONS.map((w) => (
-                <button
-                  key={w}
-                  className={`${s.pill} ${myW === w ? s.pillActive : ''}`}
-                  onClick={() => setMyW(w)}
-                  type="button"
-                >
-                  {w}W
-                </button>
-              ))}
             </div>
           </div>
 
@@ -326,12 +307,12 @@ export default function MicrowaveClient() {
 
           <div className={s.warnCard}>
             <strong>💡 빠른 팁</strong>
-            <p>
-              • <strong>처음엔 환산 시간의 80%로 시작</strong> → 부족하면 10~15초씩 추가 (과조리 방지)<br />
-              • 600W 이하·1000W 이상은 효율 보정이 자동 적용됩니다 (저출력 +7%, 고출력 -5%)<br />
-              • 가운데까지 균일하게 가열하려면 중간에 한 번 섞기 권장<br />
-              • 정확한 출력은 내 전자레인지 라벨 (제품 뒷면)에서 확인
-            </p>
+            <ul style={{ margin: '6px 0 0', paddingLeft: 18, lineHeight: 1.7 }}>
+              <li><strong>처음엔 환산 시간의 80%로 시작</strong> → 부족하면 10~15초씩 추가 (과조리 방지)</li>
+              <li>600W 이하·1000W 이상은 효율 보정이 자동 적용됩니다 (저출력 +7%, 고출력 -5%)</li>
+              <li>가운데까지 균일하게 가열하려면 중간에 한 번 섞기 권장</li>
+              <li>정확한 출력은 내 전자레인지 라벨 (제품 뒷면)에서 확인</li>
+            </ul>
           </div>
         </>
       )}

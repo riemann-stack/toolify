@@ -52,23 +52,6 @@ export default function ZodiacPage() {
         SNS 공유용 결과 복사 지원.
       </p>
 
-      {/* 상단 강화 면책 */}
-      <div style={{
-        background: 'rgba(255, 140, 62, 0.06)',
-        border: '1px solid rgba(255, 140, 62, 0.30)',
-        borderRadius: '12px',
-        padding: '14px 18px',
-        marginBottom: '32px',
-        fontSize: '13px',
-        color: 'var(--text)',
-        lineHeight: 1.7,
-      }}>
-        ⚠️ <strong style={{ color: '#FF8C3E' }}>본 도구는 재미용·교육용 도구입니다.</strong>{' '}
-        점성술·사주명리는 재미·문화 영역이며, 인생 결정 도구가 아닙니다 (결혼·이별·취업·이주 결정 X).
-        운세·미래 예측 X, 절대화 표현 X. 한국 사주 ≠ 서양 점성술 (혼동 주의).
-        관계 갈등 시 전문 상담 권장 (한국 결혼관계 상담 1644-2255).
-      </div>
-
       <ZodiacClient />
 
       <GuideDivider />
@@ -81,28 +64,29 @@ export default function ZodiacPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['띠', '순서', '최근 해당 연도'].map(h => (
+                  {['띠', '지지', '순서', '최근 해당 연도'].map(h => (
                     <th key={h} style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['🐭 쥐', '1번째', '1996, 2008, 2020'],
-                  ['🐮 소', '2번째', '1997, 2009, 2021'],
-                  ['🐯 호랑이', '3번째', '1998, 2010, 2022'],
-                  ['🐰 토끼', '4번째', '1999, 2011, 2023'],
-                  ['🐲 용', '5번째', '2000, 2012, 2024'],
-                  ['🐍 뱀', '6번째', '2001, 2013, 2025'],
-                  ['🐴 말', '7번째', '2002, 2014, 2026'],
-                  ['🐑 양', '8번째', '2003, 2015, 2027'],
-                  ['🐵 원숭이', '9번째', '2004, 2016, 2028'],
-                  ['🐔 닭', '10번째', '2005, 2017, 2029'],
-                  ['🐶 개', '11번째', '2006, 2018, 2030'],
-                  ['🐷 돼지', '12번째', '2007, 2019, 2031'],
-                ].map(([animal, order, years], i) => (
+                  ['🐭 쥐',     '子 (자)', '1번째',  '1996, 2008, 2020'],
+                  ['🐮 소',     '丑 (축)', '2번째',  '1997, 2009, 2021'],
+                  ['🐯 호랑이', '寅 (인)', '3번째',  '1998, 2010, 2022'],
+                  ['🐰 토끼',   '卯 (묘)', '4번째',  '1999, 2011, 2023'],
+                  ['🐲 용',     '辰 (진)', '5번째',  '2000, 2012, 2024'],
+                  ['🐍 뱀',     '巳 (사)', '6번째',  '2001, 2013, 2025'],
+                  ['🐴 말',     '午 (오)', '7번째',  '2002, 2014, 2026'],
+                  ['🐑 양',     '未 (미)', '8번째',  '2003, 2015, 2027'],
+                  ['🐵 원숭이', '申 (신)', '9번째',  '2004, 2016, 2028'],
+                  ['🐔 닭',     '酉 (유)', '10번째', '2005, 2017, 2029'],
+                  ['🐶 개',     '戌 (술)', '11번째', '2006, 2018, 2030'],
+                  ['🐷 돼지',   '亥 (해)', '12번째', '2007, 2019, 2031'],
+                ].map(([animal, jiji, order, years], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{animal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontWeight: 600 }}>{jiji}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{order}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{years}</td>
                   </tr>
@@ -153,7 +137,7 @@ export default function ZodiacPage() {
         {/* ── 섹션 A: 60갑자 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
-            60갑자 (干支) 완전 표
+            60갑자 (干支) 표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
             10천간과 12지지를 조합한 60개의 주기. 내 생년의 간지를 빠르게 확인하세요.
@@ -334,7 +318,7 @@ export default function ZodiacPage() {
               </thead>
               <tbody>
                 {[
-                  ['같은 원소 (불·불 / 지·지 / 공기·공기 / 물·물)', '🟢 5점', '자연스러운 공감과 이해', '#3EFF9B'],
+                  ['같은 원소', '🟢 5점', '자연스러운 공감과 이해', '#3EFF9B'],
                   ['🔥 불 + 💨 공기', '🟢 5점', '공기가 불을 살리는 시너지 — 활력·영감', '#3EFF9B'],
                   ['🌿 지 + 💧 물', '🟢 5점', '물과 흙의 시너지 — 안정·성장', '#3EFF9B'],
                   ['🔥 불 + 💧 물', '🔴 2점', '가치관 차이 큼, 타협 필요', '#FF6B6B'],
@@ -455,7 +439,7 @@ export default function ZodiacPage() {
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C3E', marginBottom: 10 }}>⚠️ 면책 조항 (강화)</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C3E', marginBottom: 10 }}>⚠️ 면책 조항</p>
           <p style={{ marginBottom: 8 }}>
             본 띠·별자리 계산기는 <strong style={{ color: 'var(--text)' }}>재미용·교육용 도구</strong>입니다.
           </p>

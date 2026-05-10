@@ -370,10 +370,97 @@ type Favorite = {
 
 const FAV_KEY = 'youtil-baker-percent-favs-v1'
 
+/* ─────────────────────────────────────────────
+   재료 행 (모듈 레벨 — 매 렌더마다 재정의되지 않도록)
+   레이아웃: × / 카테고리 / dot / 이름 / 입력 / 결과
+   ───────────────────────────────────────────── */
+interface IngredientRowProps {
+  items: Ingredient[]
+  mode: 'weight' | 'pct'
+  onUpdateWeight?: (id: string, w: number) => void
+  onUpdatePct?: (id: string, p: number) => void
+  onUpdateField: (id: string, patch: Partial<Ingredient>) => void
+  onRemove: (id: string) => void
+}
+
+function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpdateField, onRemove }: IngredientRowProps) {
+  return (
+    <div className={s.ingredientList}>
+      {items.map(i => {
+        const meta = catMeta(i.category)
+        return (
+          <div key={i.id} className={`${s.ingredientRow} ${meta.cls}`}>
+            {/* 1) 삭제 */}
+            <button className={s.removeBtn} onClick={() => onRemove(i.id)} type="button" aria-label="삭제">×</button>
+            {/* 2) 카테고리 선택 */}
+            <select
+              className={s.catSelect}
+              value={i.category}
+              onChange={e => onUpdateField(i.id, { category: e.target.value as Category })}
+              aria-label="카테고리"
+              title={meta.label}
+            >
+              {CATEGORIES.map(c => (
+                <option key={c.key} value={c.key}>{c.label}</option>
+              ))}
+            </select>
+            {/* 3) 색상 dot */}
+            <span className={`${s.dotIcon} ${meta.dotCls}`} />
+            {/* 4) 재료명 */}
+            <div className={s.nameCell}>
+              <input
+                type="text"
+                value={i.name}
+                placeholder="재료명"
+                onChange={e => onUpdateField(i.id, { name: e.target.value })}
+              />
+            </div>
+            {/* 5) 입력 (모드에 따라 무게 또는 %) */}
+            {mode === 'weight' ? (
+              <div className={s.weightCell}>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.1"
+                  value={i.weight === 0 ? '' : i.weight}
+                  onChange={e => onUpdateWeight?.(i.id, n(e.target.value, 0))}
+                  placeholder="g"
+                />
+                <span className={s.unit}>g</span>
+              </div>
+            ) : (
+              <div className={s.weightCell}>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.1"
+                  value={round1(i.percent) === 0 ? '' : round1(i.percent)}
+                  onChange={e => onUpdatePct?.(i.id, n(e.target.value, 0))}
+                  placeholder="%"
+                />
+                <span className={s.unit}>%</span>
+              </div>
+            )}
+            {/* 6) 결과 (입력 반대) */}
+            <div className={s.pctCell}>
+              {mode === 'weight'
+                ? `${round1(i.percent)}%`
+                : `${fmt(i.weight)}g`}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function BakerPercentClient() {
   const [tab, setTab] = useState<'toPercent' | 'toWeight' | 'fromTotal' | 'preferment'>('toWeight')
 
   // ─ TAB 1 (재료량 → 퍼센트) ─
+  const [presetKey1, setPresetKey1] = useState<string>('whitePan')
   const [ing1, setIng1] = useState<Ingredient[]>(() => DEFAULT_INGREDIENTS.map(x => ({ ...x })))
 
   // ─ TAB 2 (퍼센트 → 재료량) ─
@@ -672,86 +759,6 @@ export default function BakerPercentClient() {
   }
 
   // ─────────────────────────────────────────────
-  // 렌더 헬퍼: 재료 행
-  // ─────────────────────────────────────────────
-  function IngredientRowEditable(props: {
-    items: Ingredient[]
-    mode: 'weight' | 'pct' // weight: 무게 입력 / pct: 퍼센트 입력
-    flourWeightForPct?: number
-    onUpdateWeight?: (id: string, w: number) => void
-    onUpdatePct?: (id: string, p: number) => void
-    onUpdateField: (id: string, patch: Partial<Ingredient>) => void
-    onRemove: (id: string) => void
-  }) {
-    return (
-      <div className={s.ingredientList}>
-        {props.items.map(i => {
-          const meta = catMeta(i.category)
-          return (
-            <div key={i.id} className={`${s.ingredientRow} ${meta.cls}`}>
-              <span className={`${s.dotIcon} ${meta.dotCls}`} />
-              <div className={s.nameCell}>
-                <input
-                  type="text"
-                  value={i.name}
-                  placeholder="재료명"
-                  onChange={e => props.onUpdateField(i.id, { name: e.target.value })}
-                />
-              </div>
-              {props.mode === 'weight' ? (
-                <div className={s.weightCell}>
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="0.1"
-                    value={i.weight === 0 ? '' : i.weight}
-                    onChange={e => props.onUpdateWeight?.(i.id, n(e.target.value, 0))}
-                    placeholder="0"
-                  />
-                  <span className={s.unit}>g</span>
-                </div>
-              ) : (
-                <div className={s.weightCell}>
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="0.1"
-                    value={round1(i.percent) === 0 ? '' : round1(i.percent)}
-                    onChange={e => props.onUpdatePct?.(i.id, n(e.target.value, 0))}
-                    placeholder="0"
-                  />
-                  <span className={s.unit}>%</span>
-                </div>
-              )}
-              <div className={s.pctCell}>
-                {props.mode === 'weight'
-                  ? `${round1(i.percent)}%`
-                  : `${fmt(i.weight)}g`}
-              </div>
-              <div className={s.catCell}>
-                <select
-                  className={s.catSelect}
-                  value={i.category}
-                  onChange={e => props.onUpdateField(i.id, { category: e.target.value as Category })}
-                  aria-label="카테고리"
-                  title={meta.label}
-                >
-                  {CATEGORIES.map(c => (
-                    <option key={c.key} value={c.key}>{c.label}</option>
-                  ))}
-                </select>
-              </div>
-              <button className={s.removeBtn} onClick={() => props.onRemove(i.id)} type="button" aria-label="삭제">×</button>
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
-
-  // ─────────────────────────────────────────────
   // 렌더
   // ─────────────────────────────────────────────
   return (
@@ -779,6 +786,30 @@ export default function BakerPercentClient() {
       {/* ──────────── TAB 1: 재료량 → 퍼센트 ──────────── */}
       {tab === 'toPercent' && (
         <>
+          <div className={s.card}>
+            <div className={s.cardLabel}>
+              <span>빵 종류 빠른 시작</span>
+              <span className={s.cardLabelHint}>프리셋 선택 시 재료 자동 채움</span>
+            </div>
+            <div className={s.presetGrid}>
+              {PRESETS.map(p => (
+                <button
+                  key={p.key}
+                  type="button"
+                  className={`${s.presetCard} ${presetKey1 === p.key ? s.presetActive : ''}`}
+                  onClick={() => {
+                    setPresetKey1(p.key)
+                    setIng1(buildFromPreset(p, 500))
+                  }}
+                >
+                  <span className={s.presetIcon}>{p.icon}</span>
+                  <span className={s.presetName}>{p.name}</span>
+                  <span className={s.presetNote}>{p.note}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>재료 입력 (g)</span>
@@ -844,14 +875,24 @@ export default function BakerPercentClient() {
                   <span className={s.cardLabelHint}>저수분 → 고수분</span>
                 </div>
                 <div className={s.gaugeWrap}>
-                  <div className={s.gaugeBar}>
+                  <div className={s.gaugeBar} style={{ position: 'relative' }}>
+                    {/* 구간 라벨 — 게이지 안에 배치 */}
+                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
+                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
+                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
+                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
                     <div className={s.gaugeMarker} style={{ left: `${gaugePct(analysis1.hydration)}%` }} />
                   </div>
-                  <div className={s.gaugeLabels}>
-                    <span>0</span><span>60</span><span>75</span><span>85</span><span>100%</span>
+                  {/* 구간 경계 숫자 — 정확한 위치에 표시 */}
+                  <div className={s.gaugeLabels} style={{ position: 'relative', height: 14, marginTop: 4 }}>
+                    <span style={{ position: 'absolute', left: '0%',    transform: 'translateX(-50%)' }}>0</span>
+                    <span style={{ position: 'absolute', left: '35%',   transform: 'translateX(-50%)' }}>60%</span>
+                    <span style={{ position: 'absolute', left: '65%',   transform: 'translateX(-50%)' }}>75%</span>
+                    <span style={{ position: 'absolute', left: '85%',   transform: 'translateX(-50%)' }}>85%</span>
+                    <span style={{ position: 'absolute', left: '100%',  transform: 'translateX(-50%)' }}>100%</span>
                   </div>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
                   현재 <strong style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
@@ -923,8 +964,23 @@ export default function BakerPercentClient() {
               <span className={s.cardLabelHint}>{flourWeight}g</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={100} max={5000} step={50} value={flourWeight} onChange={e => setFlourAndRecalc(Number(e.target.value))} />
-              <span className={s.sliderValue}>{fmt(flourWeight)}g</span>
+              <input type="range" min={100} max={5000} step={5} value={flourWeight} onChange={e => setFlourAndRecalc(Number(e.target.value))} />
+              <input
+                type="number"
+                inputMode="decimal"
+                min={50}
+                max={10000}
+                step={1}
+                value={flourWeight}
+                onChange={e => setFlourAndRecalc(Math.max(0, Number(e.target.value) || 0))}
+                style={{
+                  width: 80, padding: '6px 10px', background: 'var(--bg3)',
+                  border: '1px solid var(--border)', borderRadius: 8,
+                  fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14,
+                  fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
+                }}
+              />
+              <span className={s.unit}>g</span>
             </div>
             <div className={s.flourQuickRow}>
               {FLOUR_QUICK.map(q => (
@@ -950,7 +1006,6 @@ export default function BakerPercentClient() {
             <IngredientRowEditable
               items={ing2}
               mode="pct"
-              flourWeightForPct={flourWeight}
               onUpdatePct={updatePct2}
               onUpdateField={updateField2}
               onRemove={removeRow2}
@@ -963,7 +1018,7 @@ export default function BakerPercentClient() {
           {/* HERO */}
           {analysis2.flourTotal > 0 && (
             <div className={s.hero}>
-              <p className={s.heroLead}>필요한 총 반죽량</p>
+              <p className={s.heroLead}>총 반죽량</p>
               <div>
                 <span className={s.heroNum}>{fmt(analysis2.totalWeight)}</span>
                 <span className={s.heroUnit}>g</span>
@@ -1140,7 +1195,7 @@ export default function BakerPercentClient() {
           {/* HERO */}
           {tab3Calc.totalPct > 0 && (
             <div className={s.hero}>
-              <p className={s.heroLead}>목표 반죽량 {fmt(targetTotal)}g 만들기</p>
+              <p className={s.heroLead}>총 반죽량 {fmt(targetTotal)}g 기준</p>
               <div>
                 <span className={s.heroNum}>{fmt(tab3Calc.flour)}</span>
                 <span className={s.heroUnit}>g 밀가루</span>

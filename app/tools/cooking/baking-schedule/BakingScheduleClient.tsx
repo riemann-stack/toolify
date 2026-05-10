@@ -26,6 +26,35 @@ function diffBadgeClass(d: BreadDifficulty): string {
   return s.diffExpert
 }
 
+/* 수면 시간과 겹치는 능동 단계 찾기 */
+const ACTIVE_STEP_IDS = new Set([
+  'mix', 'fold1', 'fold2', 'fold3', 'fold4',
+  'preshape', 'bench', 'shape',
+  'preheat', 'bake', 'cool',
+])
+/** 'HH:MM' → 0~1439 (분) */
+function parseHHMM(s: string): number {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(s)
+  if (!m) return 0
+  return Math.min(24 * 60 - 1, parseInt(m[1]) * 60 + parseInt(m[2]))
+}
+/** 시각이 수면 구간(자정 넘김 가능)에 포함되는가 */
+function isInSleepWindow(d: Date, sleepStartMin: number, sleepEndMin: number): boolean {
+  const t = d.getHours() * 60 + d.getMinutes()
+  if (sleepStartMin === sleepEndMin) return false
+  if (sleepStartMin < sleepEndMin) return t >= sleepStartMin && t < sleepEndMin
+  // 자정 넘김 (예: 22:00 ~ 07:00)
+  return t >= sleepStartMin || t < sleepEndMin
+}
+function findSleepConflicts(steps: { id: string; name: string; emoji: string; startTime: Date; endTime: Date }[], sleepStart: string, sleepEnd: string) {
+  const ss = parseHHMM(sleepStart)
+  const se = parseHHMM(sleepEnd)
+  return steps.filter(st => {
+    if (!ACTIVE_STEP_IDS.has(st.id)) return false
+    return isInSleepWindow(st.startTime, ss, se)
+  })
+}
+
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function BakingScheduleClient() {
   const [tab, setTab] = useState<Tab>('forward')
@@ -35,6 +64,10 @@ export default function BakingScheduleClient() {
   const [fermentationMode, setFermentationMode] = useState<FermentationMode>('cold-final')
   const [roomTempC, setRoomTempC] = useState(22)
   const [includeOptional, setIncludeOptional] = useState(true)
+
+  /* 수면 시간 (HH:MM, 디폴트 22:00 ~ 07:00) */
+  const [sleepStart, setSleepStart] = useState('22:00')
+  const [sleepEnd,   setSleepEnd]   = useState('07:00')
 
   /* DDT (반죽 최종 온도) — 고급 옵션 */
   const [ddtEnabled, setDdtEnabled] = useState(false)
@@ -94,11 +127,15 @@ export default function BakingScheduleClient() {
                                            fermentationMode={fermentationMode} setFermentationMode={setFermentationMode}
                                            roomTempC={roomTempC} setRoomTempC={setRoomTempC}
                                            includeOptional={includeOptional} setIncludeOptional={setIncludeOptional}
+                                           sleepStart={sleepStart} setSleepStart={setSleepStart}
+                                           sleepEnd={sleepEnd}     setSleepEnd={setSleepEnd}
                                            {...ddtProps} />}
       {tab === 'backward' && <BackwardTab presetId={presetId} setPresetId={setPresetId}
                                            fermentationMode={fermentationMode} setFermentationMode={setFermentationMode}
                                            roomTempC={roomTempC} setRoomTempC={setRoomTempC}
                                            includeOptional={includeOptional} setIncludeOptional={setIncludeOptional}
+                                           sleepStart={sleepStart} setSleepStart={setSleepStart}
+                                           sleepEnd={sleepEnd}     setSleepEnd={setSleepEnd}
                                            {...ddtProps} />}
       {tab === 'preset'   && <PresetTab onApply={(id) => { setPresetId(id); setTab('forward') }} />}
       {tab === 'recipe'   && <RecipeTab onApply={(r) => {
@@ -124,6 +161,11 @@ type CommonInputsProps = {
   setRoomTempC: (n: number) => void
   includeOptional: boolean
   setIncludeOptional: (b: boolean) => void
+  /* 수면 시간 */
+  sleepStart: string
+  setSleepStart: (s: string) => void
+  sleepEnd: string
+  setSleepEnd: (s: string) => void
   /* DDT */
   ddtEnabled: boolean
   setDdtEnabled: (b: boolean) => void
@@ -206,6 +248,24 @@ function CommonInputs(p: CommonInputsProps) {
             onChange={e => p.setIncludeOptional(e.target.checked)} />
           오토리즈 등 선택적 단계 포함
         </label>
+      </div>
+
+      {/* 수면 시간 — 야간에 손이 가야 하는 단계 자동 경고 */}
+      <div className={s.card}>
+        <label className={s.cardLabel}>
+          🛌 수면 시간
+          <span className={s.cardLabelHint}>이 시간대에 작업이 잡히면 경고합니다</span>
+        </label>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <input type="time" className={s.dateInput} style={{ flex: '0 0 auto', width: 120 }}
+            value={p.sleepStart} onChange={e => p.setSleepStart(e.target.value)} aria-label="취침 시각" />
+          <span style={{ color: 'var(--muted)' }}>~</span>
+          <input type="time" className={s.dateInput} style={{ flex: '0 0 auto', width: 120 }}
+            value={p.sleepEnd} onChange={e => p.setSleepEnd(e.target.value)} aria-label="기상 시각" />
+          <span style={{ fontSize: 12, color: 'var(--muted)' }}>
+            💡 야간 작업이 잡히면 시작 시간 조정 또는 <strong>냉장 발효 모드</strong> 권장
+          </span>
+        </div>
       </div>
 
       {/* 고급 옵션 — DDT 토글 */}
@@ -478,6 +538,8 @@ function ForwardTab(p: CommonInputsProps) {
             </div>
           </div>
 
+          <SleepConflictBanner result={result} sleepStart={p.sleepStart} sleepEnd={p.sleepEnd} />
+
           <div className={s.observeBox}>
             ⭐ <strong>발효는 시간보다 반죽 상태가 우선</strong>입니다.
             ① 1차 발효: <strong>부피 50~70% 증가, 큰 기포 형성</strong>
@@ -581,6 +643,8 @@ function BackwardTab(p: CommonInputsProps) {
               <strong> 비가·푸어리쉬</strong>(전날 종 만들기).
             </div>
           )}
+
+          <SleepConflictBanner result={result} sleepStart={p.sleepStart} sleepEnd={p.sleepEnd} />
 
           <div className={s.observeBox}>
             ⭐ <strong>역산 일정은 가이드일 뿐</strong>입니다. 실제 발효는 ±20% 변동 가능하니 완성 시간보다 30분~1시간 여유 있게 시작하시고, 마지막 발효 단계에서 자주 반죽 상태를 확인하세요.
@@ -879,5 +943,40 @@ function RecipeTab({
         </div>
       )}
     </>
+  )
+}
+
+/* ═════════════════════════════════════════ 수면 시간 충돌 경고 ═════════════════════════════════════════ */
+function SleepConflictBanner({ result, sleepStart, sleepEnd }: { result: ScheduleResult; sleepStart: string; sleepEnd: string }) {
+  const conflicts = useMemo(
+    () => findSleepConflicts(result.steps, sleepStart, sleepEnd),
+    [result, sleepStart, sleepEnd],
+  )
+  if (conflicts.length === 0) return null
+  return (
+    <div style={{
+      background: 'rgba(255, 184, 62, 0.08)',
+      border: '1px solid rgba(255, 184, 62, 0.40)',
+      borderRadius: 12,
+      padding: '14px 18px',
+      marginBottom: 12,
+      fontSize: 13,
+      color: 'var(--text)',
+      lineHeight: 1.7,
+    }}>
+      <strong style={{ color: '#FFB83E', display: 'block', marginBottom: 6 }}>
+        🛌 수면 시간 ({sleepStart} ~ {sleepEnd}) 중 작업 {conflicts.length}건
+      </strong>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
+        {conflicts.map((c, i) => (
+          <div key={i} style={{ fontSize: 12, color: 'var(--muted)' }}>
+            · <strong style={{ color: '#FFB83E' }}>{fmtTime(c.startTime)}</strong> {c.emoji} {c.name}
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0 }}>
+        💡 권장: <strong style={{ color: 'var(--text)' }}>시작 시간 변경</strong> 또는 <strong style={{ color: 'var(--text)' }}>냉장 발효 모드</strong>로 변환 (전날 반죽 → 다음날 굽기). 수면 중에 능동 단계(폴딩·성형·굽기 등)가 잡히면 휴식이 깨집니다.
+      </p>
+    </div>
   )
 }

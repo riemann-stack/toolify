@@ -124,23 +124,16 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
   return (
     <div className={styles.wrap}>
-      {/* 강화된 면책 */}
-      <div className={styles.disclaimerStrong}>
-        ⚠️ <strong>본 도구는 재미용·교육용 도구입니다.</strong>{' '}
-        점성술·사주명리는 재미·문화 영역이며, 인생 결정 도구가 아닙니다 (결혼·이별·취업 결정 X).
-        운세·미래 예측 X, 절대화 표현 X. 관계 갈등 시 전문 상담 권장 (한국 결혼관계 상담 1644-2255).
-      </div>
-
-      {/* 탭 */}
+      {/* 탭 — 모바일에서도 가로 배치 */}
       <div className={styles.tabs}>
         <button className={`${styles.tabBtn} ${tab === 'profile' ? styles.tabActive : ''}`} onClick={() => setTab('profile')}>
-          🐯 프로필 카드
+          🐯 본인
         </button>
         <button className={`${styles.tabBtn} ${tab === 'compat' ? styles.tabActiveCompat : ''}`} onClick={() => setTab('compat')}>
           💕 두 사람 궁합
         </button>
         <button className={`${styles.tabBtn} ${tab === 'family' ? styles.tabActiveFamily : ''}`} onClick={() => setTab('family')}>
-          👨‍👩‍👧 가족 띠
+          👨‍👩‍👧 가족 궁합
         </button>
       </div>
 
@@ -418,16 +411,6 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 {relationTip(relKind, compatResult.zodiacEval.score)}
               </div>
 
-              <div className={styles.disclaimerStrong}>
-                <strong>⚠️ 본 궁합은 재미용 해석입니다.</strong>{' '}
-                실제 관계는 두 사람의 노력·소통·이해로 결정됩니다.
-                <strong> 본 결과로 인생 결정 (결혼·이별 등)을 하지 마세요.</strong>
-                <ul>
-                  <li>한국 결혼관계 상담: 1644-2255</li>
-                  <li>청소년·가족 상담: 1388</li>
-                  <li>정신건강 위기상담: 1577-0199</li>
-                </ul>
-              </div>
             </>
           )}
         </>
@@ -437,8 +420,8 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
       {tab === 'family' && famLoaded && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>👨‍👩‍👧 가족 구성원 추가 (브라우저에 저장)</label>
-            <div className={styles.familyAddRow}>
+            <label className={styles.cardLabel}>👨‍👩‍👧 가족 구성원 추가 <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(브라우저에 저장)</span></label>
+            <div className={styles.familyAddGrid}>
               <select className={styles.personPanelSelect} value={newRel} onChange={e => setNewRel(e.target.value as FamilyMember['relation'])}>
                 <option value="본인">본인</option>
                 <option value="배우자">배우자</option>
@@ -449,17 +432,23 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               </select>
               <input className={styles.personPanelSelect} type="text" placeholder="이름" maxLength={20}
                 value={newName} onChange={e => setNewName(e.target.value)} />
-              <input className={styles.personPanelSelect} type="number" placeholder="년" min={1900} max={currentYear}
-                value={newY} onChange={e => setNewY(e.target.value)} />
-              <input className={styles.personPanelSelect} type="number" placeholder="월" min={1} max={12}
-                value={newM} onChange={e => setNewM(e.target.value)} />
-              <input className={styles.personPanelSelect} type="number" placeholder="일" min={1} max={31}
-                value={newD} onChange={e => setNewD(e.target.value)} />
-              <button className={styles.familyDelBtn} onClick={handleAddFamily} title="추가" style={{ color: '#3EC8FF' }}>+</button>
+              <select className={styles.personPanelSelect} value={newY} onChange={e => setNewY(e.target.value)}>
+                <option value="">년</option>
+                {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
+              </select>
+              <select className={styles.personPanelSelect} value={newM} onChange={e => setNewM(e.target.value)}>
+                <option value="">월</option>
+                {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
+              </select>
+              <select className={styles.personPanelSelect} value={newD} onChange={e => setNewD(e.target.value)}>
+                <option value="">일</option>
+                {Array.from({ length: newY && newM ? getDaysInMonth(parseInt(newY), parseInt(newM)) : 31 }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
+              </select>
+              <button className={styles.familyAddBtn} onClick={handleAddFamily} title="추가">+ 추가</button>
             </div>
             {family.length === 0 && (
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
-                아직 추가된 가족 없음. 위 입력 후 +를 누르세요.
+                아직 추가된 가족 없음. 위 입력 후 + 추가를 누르세요.
               </p>
             )}
           </div>

@@ -30,14 +30,7 @@ const TAB_ACTIVE: Record<Tab, string> = {
 }
 
 const PRESETS = [
-  { label: '2,400만', value: 24_000_000 },
-  { label: '3,000만', value: 30_000_000 },
-  { label: '3,600만', value: 36_000_000 },
-  { label: '4,200만', value: 42_000_000 },
   { label: '5,000만', value: 50_000_000 },
-  { label: '6,000만', value: 60_000_000 },
-  { label: '7,000만', value: 70_000_000 },
-  { label: '8,000만', value: 80_000_000 },
   { label: '1억',     value: 100_000_000 },
   { label: '1.5억',   value: 150_000_000 },
 ]
@@ -219,19 +212,25 @@ export default function SalaryClient() {
             {[1, 2, 3, 4, 5, 6].map(n => (
               <button key={n}
                 className={`${styles.optionBtn} ${dependents === n ? styles.optionActive : ''}`}
-                onClick={() => setDependents(n)}>{n}명</button>
+                onClick={() => setDependents(n)}>{n === 6 ? '6+' : `${n}명`}</button>
             ))}
           </div>
+          <p className={styles.cardLabelHint} style={{ marginTop: 4, fontSize: 11 }}>
+            ⓘ 6명 이상은 동일하게 처리됩니다 (간이세액표 한도)
+          </p>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>8~20세 자녀</label>
+          <label className={styles.cardLabel}>8세 이상 20세 이하 자녀 <span className={styles.cardLabelHint}>(만 나이)</span></label>
           <div className={styles.optionRow6}>
             {[0, 1, 2, 3, 4, 5].map(n => (
               <button key={n}
                 className={`${styles.optionBtn} ${childrenCount === n ? styles.optionActive : ''}`}
-                onClick={() => setChildrenCount(n)}>{n}명</button>
+                onClick={() => setChildrenCount(n)}>{n === 5 ? '5+' : `${n}명`}</button>
             ))}
           </div>
+          <p className={styles.cardLabelHint} style={{ marginTop: 4, fontSize: 11 }}>
+            ⓘ 5명 이상 동일 처리 · 자녀 1명당 월 12,500원 추가 공제
+          </p>
         </div>
       </div>
 
@@ -306,13 +305,17 @@ export default function SalaryClient() {
                   <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily="Inter, system-ui, sans-serif">{Math.round(result.grossMonthly / 10_000)}만</text>
                 </svg>
                 <div className={styles.donutLegend}>
-                  {donut.arcs.map((a, i) => (
-                    <div key={i} className={styles.donutLegendItem}>
-                      <i style={{ background: a.color }} />
-                      <span>{a.name}</span>
-                      <b style={{ color: a.color }}>{won(a.value)}</b>
-                    </div>
-                  ))}
+                  {donut.arcs.map((a, i) => {
+                    const total = donut.arcs.reduce((s, x) => s + x.value, 0)
+                    const pct = total > 0 ? ((a.value / total) * 100).toFixed(1) : '0.0'
+                    return (
+                      <div key={i} className={styles.donutLegendItem}>
+                        <i style={{ background: a.color }} />
+                        <span>{a.name}</span>
+                        <b style={{ color: a.color }}>{won(a.value)} <em style={{ fontSize: '11px', opacity: 0.85, fontStyle: 'normal' }}>({pct}%)</em></b>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -343,32 +346,32 @@ export default function SalaryClient() {
                 <span>{won(result.taxableMonthly * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
-                <span>국민연금 (4.75%)</span>
+                <span>국민연금</span>
                 <span>{won(result.pension)}</span>
                 <span>{won(result.pension * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
-                <span>건강보험 (3.595%)</span>
+                <span>건강보험</span>
                 <span>{won(result.health)}</span>
                 <span>{won(result.health * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
-                <span>장기요양 (13.14%)</span>
+                <span>장기요양</span>
                 <span>{won(result.longTermCare)}</span>
                 <span>{won(result.longTermCare * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
-                <span>고용보험 (0.9%)</span>
+                <span>고용보험</span>
                 <span>{won(result.employment)}</span>
                 <span>{won(result.employment * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTax}`}>
-                <span>소득세 (간이세액표)</span>
+                <span>소득세</span>
                 <span>{won(result.incomeTax)}</span>
                 <span>{won(result.incomeTax * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTax}`}>
-                <span>지방소득세 (10%)</span>
+                <span>지방소득세</span>
                 <span>{won(result.localTax)}</span>
                 <span>{won(result.localTax * 12)}</span>
               </div>
@@ -388,7 +391,7 @@ export default function SalaryClient() {
           {/* 연봉 분포 */}
           <div className={styles.card}>
             <label className={styles.cardLabel}>한국 직장인 연봉 분포 위치 (참고)</label>
-            <div style={{ position: 'relative', paddingTop: 32, marginTop: 8 }}>
+            <div style={{ position: 'relative', paddingBottom: 36, marginTop: 8 }}>
               <div className={styles.percentileBar}>
                 <div className={styles.percentileSeg} style={{ background: '#FF8C3E' }}>하위 10%</div>
                 <div className={styles.percentileSeg} style={{ background: '#FFD700' }}>25%</div>
@@ -396,13 +399,13 @@ export default function SalaryClient() {
                 <div className={styles.percentileSeg} style={{ background: '#3EFF9B' }}>75%</div>
                 <div className={styles.percentileSeg} style={{ background: 'var(--accent)' }}>상위 10%</div>
               </div>
-              <div className={styles.percentileLabel} style={{ left: `${Math.min(98, percentile.percentile)}%` }}>
+              <div className={styles.percentileMarker} style={{ left: `${Math.min(98, percentile.percentile)}%`, top: '50%' }} />
+              <div className={styles.percentileLabel} style={{ left: `${Math.min(98, percentile.percentile)}%`, top: 'auto', bottom: 0 }}>
                 {percentile.description}
               </div>
-              <div className={styles.percentileMarker} style={{ left: `${Math.min(98, percentile.percentile)}%`, top: 24 }} />
             </div>
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              ⓘ 통계청·국세청 임금근로자 평균 연봉 약 4,200만원, 중위소득 약 3,500만원 (2024년 기준).
+              ⓘ 통계청·국세청 임금근로자 평균 연봉 약 4,332만원, 중위소득 약 3,594만원 (2025년 기준).
               본 위치는 추정값이며 업종·지역·연령에 따라 다릅니다.
             </p>
           </div>
@@ -412,8 +415,6 @@ export default function SalaryClient() {
               onClick={() => copy(`연봉 ${formatEok(annualGross)} → 월 실수령 ${won(result.netMonthly)} (실수령률 ${result.takeHomeRate.toFixed(1)}%)`)}>
               {copied ? '✓ 복사됨' : '📋 복사'}
             </button>
-            <button className={styles.copyBtn} onClick={() => setTab('reverse')}>🔄 역산</button>
-            <button className={styles.copyBtn} onClick={() => setTab('raise')}>📈 인상 시뮬</button>
           </div>
         </>
       )}

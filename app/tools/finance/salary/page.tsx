@@ -53,42 +53,37 @@ export default function SalaryPage() {
         {/* ── 1. 정적 연봉 실수령액표 (기존 유지·SEO 핵심) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            2026년 연봉 실수령액 표 (연봉 2,400만 ~ 1억)
+            2026년 연봉 실수령액 표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '8px' }}>
-            아래 표는 부양가족 1인(본인만), 비과세 없는 순수 급여 기준으로 계산한 2026년 실수령액입니다.
-            국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건보료의 13.14%), 고용보험(0.9%), 근로소득세를 모두 반영했습니다.
+            부양가족 1인(본인만), 비과세 없는 순수 급여 기준 2026년 실수령액. 국민연금·건강보험·장기요양·고용보험·근로소득세를 모두 반영했습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--accent)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span>💡</span>
-            표에 없는 연봉이나 상세한 비과세 항목(식대 등)은 상단 계산기 [실수령액] 또는 [연봉표] 탭을 사용하세요.
+            표에 없는 연봉이나 상세한 비과세 항목은 상단 계산기를 사용하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>연봉</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 총급여</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF',       fontWeight: 500 }}>4대보험</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E',       fontWeight: 500 }}>소득세+지방세</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>월 실수령액</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>월 총급여</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>월 실수령액</th>
                 </tr>
               </thead>
               <tbody>
                 {SALARY_TABLE_STATIC.map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row.label}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{won(row.gross)}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF' }}>{won(row.ins)}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E' }}>{won(row.tax)}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>{won(row.net)}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.label}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{Math.round(row.gross / 10000).toLocaleString('ko-KR')}만원</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{won(row.net)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            ※ 부양가족 1인(본인) 기준, 비과세 없는 순수 급여 기준. 실제와 다소 차이가 있을 수 있습니다.
+            ※ 부양가족 1인 기준, 비과세 미적용. 4대보험·세금 상세는 상단 계산기에서.
           </p>
         </section>
 
@@ -100,36 +95,37 @@ export default function SalaryPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
             2026년에는 국민연금 보험료율이 27년 만에 인상되고 건강보험·장기요양보험 요율도 조정되었습니다.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '16px' }}>
+          <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>항목</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>근로자 부담</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>사업주 부담</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>상한 기준</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E',       fontWeight: 500 }}>변경사항</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>근로자</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>사업주</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E',       fontWeight: 500, whiteSpace: 'nowrap' }}>변경</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['국민연금',     '4.75%',             '4.75%',      '월 637만원',  '▲ 4.5% → 4.75% (27년 만 인상)'],
-                  ['건강보험',     '3.595%',            '3.595%',     '상한 없음',   '▲ 3.545% → 3.595%'],
-                  ['장기요양보험', '건보료 × 13.14%',   '동일',       '건보료 연동', '▲ 12.95% → 13.14%'],
-                  ['고용보험',     '0.9%',              '0.9%+α',     '상한 없음',   '동결'],
-                  ['산재보험',     '없음 (사업주 전액)', '업종별 상이', '−',          '근로자 부담 없음'],
-                ].map(([label, worker, employer, limit, change], i) => (
+                  ['국민연금',     '4.75%',             '4.75%',      '▲ 4.5% → 4.75%'],
+                  ['건강보험',     '3.595%',            '3.595%',     '▲ 3.545% → 3.595%'],
+                  ['장기요양보험', '건보료 × 13.14%',   '동일',       '▲ 12.95% → 13.14%'],
+                  ['고용보험',     '0.9%',              '0.9%+α',     '동결'],
+                  ['산재보험',     '없음',              '업종별',     '근로자 부담 없음'],
+                ].map(([label, worker, employer, change], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{label}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{worker}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{employer}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{limit}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontSize: '12px' }}>{change}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{worker}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{employer}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontSize: '12px', whiteSpace: 'nowrap' }}>{change}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.8 }}>
+            ※ <strong style={{ color: 'var(--text)' }}>국민연금</strong>은 월 보수 상한 <strong style={{ color: 'var(--text)' }}>637만원</strong>까지만 부과 (초과분 적용 X). <strong style={{ color: 'var(--text)' }}>장기요양보험</strong>은 건강보험료에 연동(건보료 × 13.14%)됩니다.
+          </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>💡 2026년 국민연금 인상 배경</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
@@ -149,28 +145,26 @@ export default function SalaryPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
-              { title: '식대',           limit: '월 20만원 이내',  desc: '2023년 1월 인상. 회사 별도 지급 시.' },
+              { title: '식대',           limit: '월 20만원 이내',  desc: '회사 별도 지급 시 적용' },
               { title: '자가운전보조금', limit: '월 20만원 이내',  desc: '본인 차량으로 업무 사용 시' },
-              { title: '출산·보육수당', limit: '월 20만원 이내',  desc: '6세 이하 자녀 양육 (2024년 인상)' },
+              { title: '출산·보육수당', limit: '월 20만원 이내',  desc: '6세 이하 자녀 양육' },
               { title: '연구보조비',     limit: '월 20만원 이내',  desc: '연구 전담 직원 한정' },
               { title: '생산직 야간수당', limit: '연 240만원 이내', desc: '월정액급여 210만원 이하' },
               { title: '취재수당',       limit: '월 20만원 이내',  desc: '기자 등 취재 업무 직원' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{item.title}</span>
-                  <span style={{ fontSize: '11px', color: 'var(--accent)', background: 'var(--accent-dim)', borderRadius: '99px', padding: '2px 8px' }}>{item.limit}</span>
-                </div>
-                <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{item.desc}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{item.title}</span>
+                <span style={{ fontSize: '11px', color: 'var(--accent)', background: 'var(--accent-dim)', borderRadius: '99px', padding: '2px 8px', alignSelf: 'flex-start' }}>{item.limit}</span>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ── 4. 소득세 누진 구간 (NEW) ── */}
+        {/* ── 4. 소득세 누진 구간 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            소득세 (근로소득 간이세액표) — 누진 구간 (NEW)
+            소득세 (근로소득 간이세액표) — 누진 구간
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             국세청이 매년 발표하는 간이세액표 기반 매월 원천징수 → 연말정산으로 정산.
@@ -210,10 +204,10 @@ export default function SalaryPage() {
           </p>
         </section>
 
-        {/* ── 5. 월 실수령 역산 (NEW) ── */}
+        {/* ── 5. 월 실수령 역산 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            월 실수령 역산 — 연봉 협상 활용 (NEW)
+            월 실수령 역산 — 연봉 협상 활용
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>&lsquo;월 300만원 받으려면 연봉 얼마?&rsquo;</strong> — 1인 가구·식대 미적용 기준 추정 —
@@ -251,10 +245,10 @@ export default function SalaryPage() {
           </p>
         </section>
 
-        {/* ── 6. 시급·체감 시급 (NEW) ── */}
+        {/* ── 6. 시급·체감 시급 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            시급·체감 시급 (NEW)
+            시급·체감 시급
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>세전 시급</strong> = 연봉 ÷ (12개월 × 209시간) — 한국 표준은 주 40시간 + 주휴 포함 209시간/월. 연봉 4,000만원 기준 약 16,000원.
@@ -277,10 +271,10 @@ export default function SalaryPage() {
           </p>
         </section>
 
-        {/* ── 7. 연봉별 실수령률 (NEW) ── */}
+        {/* ── 7. 연봉별 실수령률 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            연봉별 실수령률 — 누진 구조 (NEW)
+            연봉별 실수령률 — 누진 구조
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             세전 대비 실수령률은 누진 세율로 고연봉일수록 낮아집니다 (1인 가구·식대 미적용 추정).
@@ -316,10 +310,10 @@ export default function SalaryPage() {
           </div>
         </section>
 
-        {/* ── 8. 한국 직장인 연봉 분포 (NEW) ── */}
+        {/* ── 8. 한국 직장인 연봉 분포 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            한국 직장인 연봉 분포 (2024년 기준) (NEW)
+            한국 직장인 연봉 분포 (2024년 기준)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '14px' }}>
             {[

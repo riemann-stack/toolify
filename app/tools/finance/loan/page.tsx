@@ -37,7 +37,7 @@ export default function LoanPage() {
         {/* ── 1. 원리금균등 vs 원금균등 (기존 유지) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            대출 상환 방식 비교: 원리금균등 vs 원금균등 차이점
+            대출 상환 방식 비교: 원리금균등 vs 원금균등
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
             대출을 받을 때 가장 많이 고민하는 것이 상환 방식 선택입니다.
@@ -48,8 +48,8 @@ export default function LoanPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>원리금균등 월 납입액 공식</p>
-              <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                월 납입액 = 대출원금 × [r(1+r)ⁿ] ÷ [(1+r)ⁿ - 1]
+              <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, whiteSpace: 'nowrap', overflowX: 'auto' }}>
+                월 납입액 = 대출원금×[r(1+r)ⁿ]÷[(1+r)ⁿ-1]
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '6px' }}>
                 r = 월 이자율(연 금리 ÷ 12), n = 총 납입 횟수(개월 수)
@@ -57,8 +57,8 @@ export default function LoanPage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', color: '#3EC8FF', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>원금균등 월 납입액 공식</p>
-              <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                월 납입액 = (대출원금 ÷ n) + (잔여원금 × r)
+              <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, whiteSpace: 'nowrap', overflowX: 'auto' }}>
+                월 납입액 = (대출원금÷n)+(잔여원금×r)
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '6px' }}>
                 매달 원금은 동일하게 상환하고, 이자는 잔여 원금에 비례해 감소
@@ -95,10 +95,10 @@ export default function LoanPage() {
           </div>
         </section>
 
-        {/* ── 2. 한국 시중 금리 (NEW) ── */}
+        {/* ── 2. 한국 시중 금리 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            한국 시중은행 평균 금리 (2026년 5월 기준 추정) (NEW)
+            한국 시중은행 평균 금리 (2026년 5월 기준 추정)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
             한국은행 가계대출 통계 기반 시중은행 평균 금리. 본 도구의 프리셋은 이 값을 기본으로 사용합니다.
@@ -181,10 +181,10 @@ export default function LoanPage() {
           </p>
         </section>
 
-        {/* ── 4. 중도상환 가이드 (NEW) ── */}
+        {/* ── 4. 중도상환 가이드 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            중도상환 — 언제 얼마 갚아야 유리한가? (NEW)
+            중도상환 — 언제 얼마 갚아야 유리한가?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             중도상환 효과 — 잔여 원금 ↓ → 이자 ↓. 단, 중도상환수수료가 발생하므로 <strong style={{ color: 'var(--text)' }}>순절감 = 줄어든 이자 − 수수료</strong>로 계산해야 합니다.
@@ -214,10 +214,10 @@ export default function LoanPage() {
           </p>
         </section>
 
-        {/* ── 5. 갈아타기 손익분기 (NEW) ── */}
+        {/* ── 5. 갈아타기 손익분기 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            대출 갈아타기 — 손익분기 계산 (NEW)
+            대출 갈아타기 — 손익분기 계산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>손익분기 = 부대비용 ÷ 월 절감액</strong>. 이 기간 이상 새 대출을 유지해야 갈아타기가 이득입니다.
@@ -235,10 +235,10 @@ export default function LoanPage() {
           </div>
         </section>
 
-        {/* ── 6. 금리 인상 대비 (NEW) ── */}
+        {/* ── 6. 금리 인상 대비 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            금리 인상기 대비 — 변동금리 사용자 (NEW)
+            금리 인상기 대비 — 변동금리 사용자
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             한국 변동금리는 보통 6개월·1년 주기로 갱신됩니다. 본 도구의 <strong style={{ color: 'var(--text)' }}>[금리 변동] 탭</strong>으로 다음 시나리오 대비를 권장합니다 —
@@ -259,10 +259,10 @@ export default function LoanPage() {
           </div>
         </section>
 
-        {/* ── 7. DSR·LTV 가이드 (NEW) ── */}
+        {/* ── 7. DSR·LTV 가이드 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            DSR·LTV — 한국 대출 규제 (NEW, 참고용)
+            DSR·LTV — 한국 대출 규제 (참고용)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 18px' }}>

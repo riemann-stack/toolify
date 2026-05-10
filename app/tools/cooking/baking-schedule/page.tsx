@@ -147,27 +147,6 @@ export default function BakingSchedulePage() {
           </div>
         </section>
 
-        {/* 5. 완성 시간 역산 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>완성 시간 역산 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>&quot;내일 아침 9시에 빵 먹고 싶다&quot;</strong>면 [완성 시간 역산] 탭에서 거꾸로 계산합니다:
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[
-              { case: '사워도우 (냉장 발효)', detail: '전날 14:00 시작 → 다음날 09:00 완성 ⭐ 가장 인기 일정' },
-              { case: '식빵 (당일 발효)',   detail: '당일 04:30 시작 → 09:00 완성 (이르므로 비추천) — 또는 전날 18:00 1차 발효 → 다음날' },
-              { case: '바게트 (당일 발효)',  detail: '당일 03:30 시작 → 09:00 완성' },
-              { case: '피자 도우',          detail: '먹기 2일 전 반죽 → 24~48시간 냉장 → 당일 굽기' },
-            ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px' }}>
-                <p style={{ fontSize: '13.5px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>{c.case}</p>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* 6. 반죽 상태 판단 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반죽 상태 판단 — 시간보다 중요</h2>

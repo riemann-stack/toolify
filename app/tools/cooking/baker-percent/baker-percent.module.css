@@ -260,8 +260,9 @@
   gap: 6px;
 }
 .ingredientRow {
+  /* 컬럼 순서: × · 카테고리 · dot · 재료명 · 입력 · 결과 */
   display: grid;
-  grid-template-columns: 12px 1fr 90px 70px 30px;
+  grid-template-columns: 28px 96px 10px 1fr 100px 70px;
   gap: 8px;
   align-items: center;
   background: var(--bg3);
@@ -272,16 +273,20 @@
 }
 @media (max-width: 600px) {
   .ingredientRow {
-    grid-template-columns: 12px 1fr 80px 28px;
+    grid-template-columns: 26px 78px 10px 1fr 86px 60px;
     gap: 6px;
+    padding: 6px 8px;
   }
-  .ingredientRow .catCell { display: none; }
+  .ingredientRow .catSelect { font-size: 11.5px; padding: 6px 18px 6px 8px; background-position: calc(100% - 8px) center, calc(100% - 5px) center; }
 }
-.ingredientRow input { background: transparent; border: 1px dashed transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }
+.ingredientRow input { background: transparent; border: 1px solid transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }
+.ingredientRow input:hover { border-color: var(--border); }
 .ingredientRow input:focus { border-color: var(--accent); background: var(--bg2); }
 .ingredientRow .nameCell input { color: var(--text); font-weight: 600; font-size: 13px; }
-.ingredientRow .weightCell { display: flex; align-items: center; gap: 4px; }
-.ingredientRow .weightCell input { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text); text-align: right; }
+.ingredientRow .weightCell { display: flex; align-items: center; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
+.ingredientRow .weightCell input { background: transparent; border: none; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text); text-align: right; padding: 2px 0; }
+.ingredientRow .weightCell input:focus { background: transparent; }
+.ingredientRow .weightCell:focus-within { border-color: var(--accent); }
 .ingredientRow .pctCell { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; padding-right: 4px; }
 .ingredientRow .pctCell input { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; }
 
