@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 20px; }
 
 /* ── 탭 ─────────────────────────── */
@@ -20,8 +21,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: rgba(200,255,62,0.08);
   color: var(--accent);
@@ -103,8 +105,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .segBtn:hover { color: var(--text); }
 }
-.segBtn:hover { color: var(--text); }
 .segBtnActive {
   background: rgba(200,255,62,0.08);
   border-color: var(--accent);
@@ -256,8 +259,9 @@
   cursor: pointer;
   transition: all .15s;
   text-align: left;
+}@media (hover: hover) {
+  .chkItem:hover { border-color: rgba(200,255,62,0.3); }
 }
-.chkItem:hover { border-color: rgba(200,255,62,0.3); }
 .chkChecked {
   background: rgba(200,255,62,0.08);
   border-color: var(--accent);
@@ -517,8 +521,9 @@
   cursor: pointer;
   transition: all .15s;
   text-align: center;
+}@media (hover: hover) {
+  .condBtn:hover { border-color: rgba(200,255,62,0.3); }
 }
-.condBtn:hover { border-color: rgba(200,255,62,0.3); }
 .condBtnActive {
   background: rgba(200,255,62,0.08);
   border-color: var(--accent);

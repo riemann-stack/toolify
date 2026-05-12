@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 입력 */
@@ -133,10 +135,11 @@
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 32px;
   font-weight: 600;
-}
-.quickChip:hover {
+}@media (hover: hover) {
+  .quickChip:hover {
   color: var(--accent);
   border-color: var(--accent);
+}
 }
 
 /* 영웅 카드 */
@@ -330,10 +333,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-.useCaseCard:hover {
+}@media (hover: hover) {
+  .useCaseCard:hover {
   border-color: var(--accent);
   background: var(--bg2);
+}
 }
 .useHead {
   display: flex;

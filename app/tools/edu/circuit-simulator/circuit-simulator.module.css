@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -36,8 +37,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: rgba(62,255,208,0.10);
   color: #3EFFD0;
@@ -151,8 +153,9 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+}@media (hover: hover) {
+  .presetCard:hover { border-color: var(--border-hover); }
 }
-.presetCard:hover { border-color: var(--border-hover); }
 .presetIcon { font-size: 22px; }
 .presetName { font-size: 12.5px; font-weight: 700; color: var(--text); margin-top: 2px; }
 .presetGrade { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
@@ -180,8 +183,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .voltQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.voltQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .voltQuickActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 회로 타입 토글 ── */
@@ -200,8 +204,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .typeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.typeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .typeSeries { border-color: rgba(62,200,255,0.40); }
 .typeParallel { border-color: rgba(255,140,62,0.40); }
 .typeSeries.typeActive   { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
@@ -269,8 +274,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}@media (hover: hover) {
+  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 }
-.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .addResistorBtn {
@@ -285,8 +291,9 @@
   width: 100%;
   margin-top: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addResistorBtn:hover:not(:disabled) { color: #3EFFD0; border-color: #3EFFD0; }
 }
-.addResistorBtn:hover:not(:disabled) { color: #3EFFD0; border-color: #3EFFD0; }
 .addResistorBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── 회로 SVG ── */
@@ -456,8 +463,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .knownBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.knownBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .knownActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 학습 모드 단계 카드 ── */
@@ -584,8 +592,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
+}@media (hover: hover) {
+  .examChoice:hover { border-color: var(--border-hover); }
 }
-.examChoice:hover { border-color: var(--border-hover); }
 .examChoiceCorrect {
   background: rgba(62,255,155,0.08);
   border-color: #3EFF9B;
@@ -608,8 +617,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .examShowBtn:hover { background: rgba(62,255,208,0.20); }
 }
-.examShowBtn:hover { background: rgba(62,255,208,0.20); }
 .examSolution {
   background: var(--bg3);
   border-radius: 10px;
@@ -634,6 +644,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -79,8 +80,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* ── 필드 ── */
@@ -121,8 +123,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
+}@media (hover: hover) {
+  .dirBtn:hover { border-color: var(--accent); color: var(--text); }
 }
-.dirBtn:hover { border-color: var(--accent); color: var(--text); }
 .dirBtnActive {
   background: var(--accent);
   color: #0D0D0D;
@@ -141,8 +144,9 @@
   padding: 12px 14px;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
+}@media (hover: hover) {
+  .checkItem:hover { border-color: var(--accent); }
 }
-.checkItem:hover { border-color: var(--accent); }
 .checkItem input { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; margin-top: 1px; accent-color: var(--accent); }
 .checkLabel {
   flex: 1;
@@ -248,8 +252,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
 }
-.runBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-.runBtn:hover:not(:disabled) { opacity: 0.9; }
+.runBtn:disabled { opacity: 0.4; cursor: not-allowed; }@media (hover: hover) {
+  .runBtn:hover:not(:disabled) { opacity: 0.9; }
+}
 
 .resetBtn {
   appearance: none;
@@ -264,8 +269,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .resetBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.resetBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 기록 ── */
 .historyList { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
@@ -317,8 +323,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 70px;
+}@media (hover: hover) {
+  .modeBtn:hover { border-color: var(--accent); }
 }
-.modeBtn:hover { border-color: var(--accent); }
 .modeBtnActive {
   background: var(--bg2);
   border-color: var(--accent);
@@ -357,8 +364,9 @@
   font-size: 14px;
   cursor: pointer;
   padding: 4px 8px;
+}@media (hover: hover) {
+  .optRemove:hover { color: #FF8C8C; }
 }
-.optRemove:hover { color: #FF8C8C; }
 .optAddRow { display: flex; gap: 6px; }
 .optAddBtn {
   appearance: none;
@@ -835,8 +843,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .summaryReset:hover { border-color: #FF8C8C; color: #FF8C8C; }
 }
-.summaryReset:hover { border-color: #FF8C8C; color: #FF8C8C; }
 
 .modeResultList {
   display: flex;
@@ -992,8 +1001,9 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.link { color: var(--accent); text-decoration: none; }
-.link:hover { text-decoration: underline; }
+.link { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .link:hover { text-decoration: underline; }
+}
 
 /* iOS zoom 방지 */
 @media (max-width: 640px) {

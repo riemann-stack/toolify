@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* 면책 */
@@ -59,8 +60,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveReverse   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
 .tabActiveDCA       { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
@@ -134,8 +136,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* 칩 */
@@ -150,8 +153,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
+}@media (hover: hover) {
+  .chip:hover { color: var(--accent); border-color: var(--accent); }
 }
-.chip:hover { color: var(--accent); border-color: var(--accent); }
 .chipActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* 토글 */
@@ -584,8 +588,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 빈 상태 ─── */
@@ -632,8 +637,9 @@
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .trancheControls button:hover { border-color: var(--accent); color: var(--accent); }
 }
-.trancheControls button:hover { border-color: var(--accent); color: var(--accent); }
 .trancheControls button:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .trancheRow {
@@ -668,5 +674,6 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .actionBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.actionBtn:hover { border-color: var(--accent); color: var(--accent); }

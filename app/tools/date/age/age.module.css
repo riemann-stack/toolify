@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -36,8 +37,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive    { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveDday      { background: rgba(255,107,107,0.12);  color: #FF6B6B; font-weight: 700; }
 .tabActiveStats     { background: rgba(155,89,182,0.12);   color: #C485E0; font-weight: 700; }
@@ -83,6 +85,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   outline: none;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 480px) {
+  .dateSelect { padding: 9px 6px; font-size: 13px; }
 }
 .dateSelect:focus { border-color: var(--accent); }
 
@@ -116,8 +124,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .refBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.refBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .refActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 만 나이 히어로 ── */
@@ -170,13 +179,19 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 3종 나이 비교 */
+/* 3가지 나이 비교 — 모바일도 3열 유지 */
 .compareGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
-@media (max-width: 480px) { .compareGrid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .compareGrid { gap: 5px; }
+  .compareGrid .compareCard { padding: 10px 6px; }
+  .compareGrid .compareLabel { font-size: 10px; margin-bottom: 4px; letter-spacing: 0.02em; }
+  .compareGrid .compareNum { font-size: 22px; }
+  .compareGrid .compareSub { font-size: 10px; }
+}
 .compareCard {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -475,7 +490,15 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
-@media (max-width: 480px) { .cultureGrid { grid-template-columns: 1fr; } }
+/* 모바일에서도 2열 유지 — PC와 유사한 컴팩트 레이아웃 */
+@media (max-width: 480px) {
+  .cultureGrid { gap: 6px; }
+  .cultureGrid .cultureCard { padding: 12px 10px; }
+  .cultureGrid .cultureEmoji { font-size: 32px; margin-bottom: 4px; }
+  .cultureGrid .cultureName { font-size: 14px; }
+  .cultureGrid .cultureMeta { font-size: 10.5px; margin-bottom: 6px; }
+  .cultureGrid .cultureTrait { font-size: 10px; padding: 2px 8px; }
+}
 
 .cultureCard {
   background: var(--bg3);
@@ -606,8 +629,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .copyBtn {
   background: var(--bg2);
@@ -621,8 +645,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* timeline 옵션 */

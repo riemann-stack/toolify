@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -37,8 +38,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabEmployee.tabActive  { background: var(--accent-dim);     color: var(--accent); font-weight: 700; }
 .tabEmployer.tabActive  { background: rgba(255,140,62,0.12); color: #FF8C3E;       font-weight: 700; }
 .tabPartTime.tabActive  { background: rgba(62,255,155,0.12); color: #3EFF9B;       font-weight: 700; }
@@ -159,8 +161,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .yearBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.yearBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .yearActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── 사업장 규모 / 업종 / 시나리오 버튼 ── */
@@ -180,8 +183,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .choiceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.choiceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .choiceActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
 
 /* ── HERO ── */
@@ -570,6 +574,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

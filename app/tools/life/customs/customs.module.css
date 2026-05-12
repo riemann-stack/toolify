@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 입력 */
@@ -81,8 +83,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 /* 국가 그리드 */
@@ -105,8 +108,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
+}@media (hover: hover) {
+  .countryBtn:hover { border-color: var(--accent); }
 }
-.countryBtn:hover { border-color: var(--accent); }
 .countryBtnActive {
   background: var(--bg2);
   border-color: var(--accent);
@@ -136,8 +140,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
+}@media (hover: hover) {
+  .itemBtn:hover { border-color: var(--accent); }
 }
-.itemBtn:hover { border-color: var(--accent); }
 .itemBtnActive {
   background: var(--bg2);
   border-color: var(--accent);
@@ -283,8 +288,9 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}@media (hover: hover) {
+  .countryGuideCard:hover { border-color: var(--accent); }
 }
-.countryGuideCard:hover { border-color: var(--accent); }
 .countryGuideActive {
   background: var(--bg3);
   border-color: var(--accent);
@@ -398,8 +404,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 4px;
+}@media (hover: hover) {
+  .scenarioApply:hover { background: #FFB83E; }
 }
-.scenarioApply:hover { background: #FFB83E; }
 
 /* 크로스링크 */
 .crossLink {
@@ -413,10 +420,11 @@
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
-}
-.crossLink:hover {
+}@media (hover: hover) {
+  .crossLink:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 
 /* 안내 */

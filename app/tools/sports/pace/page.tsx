@@ -39,7 +39,6 @@ export default function PacePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>페이스(/km)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>시속(km/h)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>5km</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>10km</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>하프(21km)</th>
@@ -48,17 +47,19 @@ export default function PacePage() {
               </thead>
               <tbody>
                 {[
-                  ['4:00', '15.0', '20:00', '40:00', '1:24:23', '2:49:44'],
-                  ['4:30', '13.3', '22:30', '45:00', '1:34:56', '3:09:53'],
-                  ['5:00', '12.0', '25:00', '50:00', '1:45:29', '3:30:58'],
-                  ['5:30', '10.9', '27:30', '55:00', '1:56:02', '3:51:04'],
-                  ['6:00', '10.0', '30:00', '60:00', '2:06:35', '4:13:10'],
-                  ['6:30', '9.2',  '32:30', '65:00', '2:17:08', '4:33:15'],
-                  ['7:00', '8.6',  '35:00', '70:00', '2:27:41', '4:55:21'],
-                ].map(([pace, kph, k5, k10, half, full], i) => (
+                  ['3:00', '15:00', '30:00', '1:03:17', '2:06:35'],
+                  ['3:30', '17:30', '35:00', '1:13:50', '2:27:41'],
+                  ['4:00', '20:00', '40:00', '1:24:23', '2:49:44'],
+                  ['4:30', '22:30', '45:00', '1:34:56', '3:09:53'],
+                  ['5:00', '25:00', '50:00', '1:45:29', '3:30:58'],
+                  ['5:30', '27:30', '55:00', '1:56:02', '3:51:04'],
+                  ['6:00', '30:00', '60:00', '2:06:35', '4:13:10'],
+                  ['6:30', '32:30', '65:00', '2:17:08', '4:33:15'],
+                  ['7:00', '35:00', '70:00', '2:27:41', '4:55:21'],
+                  ['7:30', '37:30', '75:00', '2:38:14', '5:16:27'],
+                ].map(([pace, k5, k10, half, full], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{pace}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{kph}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{k5}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{k10}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{half}</td>
@@ -112,48 +113,85 @@ export default function PacePage() {
           </div>
         </div>
 
-        {/* ── 3. 구간별 스플릿 가이드 (NEW) ── */}
+        {/* ── 3. 거리별 레이스 페이스 전략 (전면 개편) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            📐 거리별 구간 스플릿 가이드
+            📐 거리별 레이스 페이스 전략
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구는 거리에 맞춰 자동 스플릿을 생성합니다 (일정 페이스 가정). 5km는 1km마다, 10km는 1km마다, 하프·풀은 5km마다 + 랜드마크 표시.
+            거리마다 페이스 분배가 다릅니다. 본 도구의 자동 스플릿과 함께 아래 전략을 참고하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>거리</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>스플릿 간격</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>주요 랜드마크</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { d: '5km',     sp: '1km마다 (1·2·3·4·5km)',                     lm: '🏁 5km 완주' },
-                  { d: '10km',    sp: '1km마다 (1·2·...·10km)',                    lm: '⏱️ 5km 절반 / 🏁 10km 완주' },
-                  { d: '하프',    sp: '5km마다 (5·10·15·20·21.0975km)',              lm: '⏱️ 10km 절반 부근 / 🏁 21.0975km 완주' },
-                  { d: '풀',      sp: '5km마다 (5·10·15·20·21·25·30·35·40·42.195km)', lm: '🏁 21.0975km 하프 통과 / 🔴 30km 마의 30km / 🏆 42.195km 풀 완주' },
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.sp}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.lm}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              {
+                d: '5km',
+                color: '#FF6B6B',
+                strategy: '초반 빠르게 + 끝까지 유지',
+                points: [
+                  '0~1km : 목표 페이스보다 5~10초 빠르게 (출발 흥분)',
+                  '1~4km : 목표 페이스 정확히 유지',
+                  '4~5km : 라스트 스퍼트 — 페이스 5~15초 단축',
+                  '💡 5km는 짧아서 페이스 안정보다 강도 유지가 중요',
+                ],
+              },
+              {
+                d: '10km',
+                color: '#FFD93E',
+                strategy: '일정 페이스 + 후반 스퍼트',
+                points: [
+                  '0~2km : 목표 페이스 +3~5초 (워밍업 가속)',
+                  '2~7km : 목표 페이스 정확히 유지',
+                  '7~9km : 목표 페이스 -2~5초 (가속)',
+                  '9~10km : 라스트 스퍼트',
+                  '💡 한국 인기 코스 — 한강·여의도 10km, 동마 코스',
+                ],
+              },
+              {
+                d: '하프(21.0975km)',
+                color: '#3EC8FF',
+                strategy: '네거티브 스플릿 — 후반에 페이스 ↑',
+                points: [
+                  '0~10km (전반) : 목표 페이스 +2~3초 (여유)',
+                  '10~16km : 목표 페이스 정확히',
+                  '16~21km (후반) : 목표 페이스 -2~3초 (가속)',
+                  '⚠️ 초반 오버페이스는 후반 무너짐의 주범 — 손목시계 알림 활용',
+                  '💡 강물·바람 변동을 고려해 1km마다 페이스 점검',
+                ],
+              },
+              {
+                d: '풀 마라톤(42.195km)',
+                color: '#3EFF9B',
+                strategy: '3구간 분할 — 절제→유지→집중',
+                points: [
+                  '🟢 0~15km : 목표 페이스 +3~5초 (절제 구간) — 신체 에너지 절약',
+                  '🟡 15~30km : 목표 페이스 정확히 — 마라톤 본 경기',
+                  '🔴 30~42km : 마의 30km 통과 — 페이스 유지가 곧 우승',
+                  '⚡ 35~42km : 글리코겐 고갈 — 에너지젤 보충 + 정신력 게임',
+                  '💡 30km까지 너무 빨리 가면 35km부터 페이스가 1분/km 이상 저하',
+                  '💡 에너지젤 권장 — 5km·15km·25km·35km 4회 + 물 매 급수대',
+                ],
+              },
+            ].map((r, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.color}`, borderRadius: 12, padding: '14px 18px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontSize: 15, color: r.color, fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</span>
+                  <span style={{ fontSize: 12, color: 'var(--text)', fontWeight: 600 }}>{r.strategy}</span>
+                </div>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+                  {r.points.map((p, j) => <li key={j}>{p}</li>)}
+                </ul>
+              </div>
+            ))}
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            💡 각 km별 페이스를 손목시계에 미리 입력해두면 레이스 중 페이스 체크가 쉬워집니다. 본 도구의 [📋 결과 + 스플릿 복사]로 메모장에 저장 가능.
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+            💡 본 도구의 [📋 결과 + 스플릿 복사] 버튼으로 각 km별 누적 시간을 메모장에 저장 가능. 손목시계에 미리 입력해두면 레이스 중 실시간 페이스 점검이 편합니다.
           </p>
         </div>
 
         {/* ── 4. 네거티브 스플릿 전략 (NEW) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            💡 네거티브 스플릿 전략 (마라톤 베테랑 표준)
+            💡 네거티브 스플릿 전략
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             <strong style={{ color: 'var(--text)' }}>후반을 전반보다 약간 빠르게</strong> 달리는 전략. 본 도구의 하프·풀 결과 카드에 자동 표시됩니다.
@@ -220,7 +258,7 @@ export default function PacePage() {
         {/* ── 6. 트레드밀 vs 야외 (NEW) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            🏃 트레드밀 vs 야외 — 같은 시속도 체감 다름
+            🏃 트레드밀 vs 야외
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             같은 시속이라도 트레드밀이 야외보다 약간 쉽게 느껴집니다. 야외 시뮬을 위해 경사 1~1.5% 권장.

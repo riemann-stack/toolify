@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -41,8 +42,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C485E0; color: #0D0D0D; }
 
 /* 단위 토글 */
@@ -65,8 +67,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 42px;
+}@media (hover: hover) {
+  .unitBtn:hover { border-color: #C485E0; }
 }
-.unitBtn:hover { border-color: #C485E0; }
 .unitBtnActive {
   background: #C485E0;
   color: #0D0D0D;
@@ -171,8 +174,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
   min-height: 32px;
+}@media (hover: hover) {
+  .quickChip:hover { color: #C485E0; border-color: #C485E0; }
 }
-.quickChip:hover { color: #C485E0; border-color: #C485E0; }
 
 /* 영웅 카드 */
 .heroCard {
@@ -308,8 +312,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 44px;
+}@media (hover: hover) {
+  .bodyPartBtn:hover { border-color: #C485E0; }
 }
-.bodyPartBtn:hover { border-color: #C485E0; }
 .bodyPartBtnActive {
   background: #C485E0;
   color: #0D0D0D;
@@ -343,8 +348,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 36px;
+}@media (hover: hover) {
+  .sizeChip:hover { color: #C485E0; border-color: #C485E0; }
 }
-.sizeChip:hover { color: #C485E0; border-color: #C485E0; }
 
 /* 신축 보정 값 */
 .easeValue {

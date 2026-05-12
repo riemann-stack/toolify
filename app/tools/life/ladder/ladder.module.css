@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -106,8 +107,9 @@
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .countBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.countBtn:hover { border-color: var(--accent); color: var(--accent); }
 .countBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .countNum {
   font-family: 'Inter', system-ui, sans-serif;
@@ -137,8 +139,9 @@
   cursor: pointer;
   transition: all 0.12s;
   text-align: center;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionBtn small { display: block; font-size: 16px; margin-bottom: 2px; }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -160,8 +163,9 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+}@media (hover: hover) {
+  .advancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 }
-.advancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 .advancedToggle strong { color: var(--text); margin-right: 6px; }
 
 /* ── 빠른 템플릿 ── */
@@ -179,8 +183,9 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tplCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
-.tplCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 .tplEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
 .tplName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 .tplDesc { font-size: 10.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
@@ -199,8 +204,9 @@
   width: 100%;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .bigGenerate:hover { background: #d8ff5e; }
 }
-.bigGenerate:hover { background: #d8ff5e; }
 .bigGenerate:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .actionBtn {
@@ -215,8 +221,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .miniBtn {
   background: var(--bg3);
@@ -227,10 +234,12 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+}
 
 .copyBtn {
   background: var(--bg2);
@@ -243,8 +252,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -283,8 +293,9 @@
   transition: all 0.15s;
   word-break: keep-all;
   overflow: hidden;
+}@media (hover: hover) {
+  .nameTag:hover { transform: translateY(-2px); }
 }
-.nameTag:hover { transform: translateY(-2px); }
 .nameTagOn { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 .nameEmoji { font-size: 22px; line-height: 1; }
 .nameLabel { font-size: 11.5px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -428,8 +439,9 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .anonCard:hover { transform: translateY(-2px); border-color: var(--accent); }
 }
-.anonCard:hover { transform: translateY(-2px); border-color: var(--accent); }
 .anonCardRevealed { background: var(--accent-dim); border-color: var(--accent); }
 .anonEmoji { font-size: 32px; line-height: 1; margin-bottom: 4px; }
 .anonLabel { font-size: 11.5px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
@@ -457,8 +469,9 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .reverseCard:hover { transform: translateY(-2px); border-color: #FFD700; }
 }
-.reverseCard:hover { transform: translateY(-2px); border-color: #FFD700; }
 .reverseLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
 .reverseResult { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
 .reverseRevealed { background: rgba(255,215,0,0.10); border-color: #FFD700; }
@@ -541,8 +554,9 @@
   font-weight: 800;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .startBtnSecondary:hover { background: var(--accent-dim); }
 }
-.startBtnSecondary:hover { background: var(--accent-dim); }
 .startBtnSecondary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .shuffleBtn {
@@ -555,5 +569,6 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;
+}@media (hover: hover) {
+  .shuffleBtn:hover { background: rgba(155,89,182,0.18); }
 }
-.shuffleBtn:hover { background: rgba(155,89,182,0.18); }

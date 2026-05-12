@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 /* ── HERO ── */
 .hero {
   position: relative;
@@ -139,10 +140,11 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
-}
-.randomReroll:hover {
+}@media (hover: hover) {
+  .randomReroll:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 .randomChips {
   display: flex;
@@ -164,12 +166,13 @@
   transition: all 0.15s;
   white-space: nowrap;
   max-width: 100%;
-}
-.randomChip:hover {
+}@media (hover: hover) {
+  .randomChip:hover {
   border-color: rgba(200,255,62,0.5);
   background: var(--accent-dim);
   color: var(--accent);
   transform: translateY(-1px);
+}
 }
 .randomChipIcon {
   font-size: 14px;
@@ -239,8 +242,9 @@
   border-bottom: 1px solid var(--border);
   transition: background 0.15s;
 }
-.searchItem:last-child { border-bottom: none; }
-.searchItem:hover { background: var(--bg3); }
+.searchItem:last-child { border-bottom: none; }@media (hover: hover) {
+  .searchItem:hover { background: var(--bg3); }
+}
 
 .searchItemIcon { font-size: 20px; flex-shrink: 0; }
 .searchItemName { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
@@ -310,11 +314,12 @@
   transition: filter 0.18s, transform 0.18s, box-shadow 0.18s;
   white-space: nowrap;
   flex-shrink: 0;
-}
-.ctaBtn:hover {
+}@media (hover: hover) {
+  .ctaBtn:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
   box-shadow: 0 4px 20px rgba(200,255,62,0.25);
+}
 }
 
 /* ── CONTENT ── */
@@ -338,8 +343,9 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-.sectionLink { font-size: 12px; color: var(--accent); opacity: 0.8; }
-.sectionLink:hover { opacity: 1; }
+.sectionLink { font-size: 12px; color: var(--accent); opacity: 0.8; }@media (hover: hover) {
+  .sectionLink:hover { opacity: 1; }
+}
 
 /* ── CATEGORY GRID ── */
 .catGrid {
@@ -371,49 +377,61 @@
   border-radius: 50%;
   opacity: 0.08;
   transition: opacity 0.3s, transform 0.3s;
+}@media (hover: hover) {
+  .catCard:hover { transform: translateY(-3px); border-color: var(--border-hover); }
+}@media (hover: hover) {
+  .catCard:hover::before { opacity: 0.18; transform: scale(1.2); }
 }
-.catCard:hover { transform: translateY(-3px); border-color: var(--border-hover); }
-.catCard:hover::before { opacity: 0.18; transform: scale(1.2); }
 
 .catIcon { font-size: 22px; margin-bottom: 10px; }
 .catName { font-size: 12px; font-weight: 500; margin-bottom: 5px; }
 .catCount { font-size: 11px; color: var(--muted); }
 
 .cat_finance .catName { color: var(--cat-finance); }
-.cat_finance::before  { background: var(--cat-finance); }
-.cat_finance:hover    { border-color: rgba(62,255,155,0.3); background: rgba(62,255,155,0.04); }
+.cat_finance::before  { background: var(--cat-finance); }@media (hover: hover) {
+  .cat_finance:hover    { border-color: rgba(62,255,155,0.3); background: rgba(62,255,155,0.04); }
+}
 
 .cat_health .catName { color: var(--cat-health); }
-.cat_health::before  { background: var(--cat-health); }
-.cat_health:hover    { border-color: rgba(62,200,255,0.3); background: rgba(62,200,255,0.04); }
+.cat_health::before  { background: var(--cat-health); }@media (hover: hover) {
+  .cat_health:hover    { border-color: rgba(62,200,255,0.3); background: rgba(62,200,255,0.04); }
+}
 
 .cat_life .catName { color: var(--cat-life); }
-.cat_life::before  { background: var(--cat-life); }
-.cat_life:hover    { border-color: rgba(255,140,62,0.3); background: rgba(255,140,62,0.04); }
+.cat_life::before  { background: var(--cat-life); }@media (hover: hover) {
+  .cat_life:hover    { border-color: rgba(255,140,62,0.3); background: rgba(255,140,62,0.04); }
+}
 
 .cat_unit .catName { color: var(--cat-unit); }
-.cat_unit::before  { background: var(--cat-unit); }
-.cat_unit:hover    { border-color: rgba(176,62,255,0.3); background: rgba(176,62,255,0.04); }
+.cat_unit::before  { background: var(--cat-unit); }@media (hover: hover) {
+  .cat_unit:hover    { border-color: rgba(176,62,255,0.3); background: rgba(176,62,255,0.04); }
+}
 
 .cat_date .catName { color: var(--cat-date); }
-.cat_date::before  { background: var(--cat-date); }
-.cat_date:hover    { border-color: rgba(255,62,140,0.3); background: rgba(255,62,140,0.04); }
+.cat_date::before  { background: var(--cat-date); }@media (hover: hover) {
+  .cat_date:hover    { border-color: rgba(255,62,140,0.3); background: rgba(255,62,140,0.04); }
+}
 
 .cat_dev .catName { color: var(--cat-dev); }
-.cat_dev::before  { background: var(--cat-dev); }
-.cat_dev:hover    { border-color: rgba(200,255,62,0.3); background: rgba(200,255,62,0.04); }
+.cat_dev::before  { background: var(--cat-dev); }@media (hover: hover) {
+  .cat_dev:hover    { border-color: rgba(200,255,62,0.3); background: rgba(200,255,62,0.04); }
+}
 
-.cat_music::before { background: #C83EFF; }
-.cat_music:hover   { border-color: rgba(200,62,255,0.3); background: rgba(200,62,255,0.04); }
+.cat_music::before { background: #C83EFF; }@media (hover: hover) {
+  .cat_music:hover   { border-color: rgba(200,62,255,0.3); background: rgba(200,62,255,0.04); }
+}
 
-.cat_cooking::before { background: #FFB83E; }
-.cat_cooking:hover   { border-color: rgba(255,184,62,0.3); background: rgba(255,184,62,0.04); }
+.cat_cooking::before { background: #FFB83E; }@media (hover: hover) {
+  .cat_cooking:hover   { border-color: rgba(255,184,62,0.3); background: rgba(255,184,62,0.04); }
+}
 
-.cat_sports::before { background: #FFD93E; }
-.cat_sports:hover   { border-color: rgba(255,217,62,0.3); background: rgba(255,217,62,0.04); }
+.cat_sports::before { background: #FFD93E; }@media (hover: hover) {
+  .cat_sports:hover   { border-color: rgba(255,217,62,0.3); background: rgba(255,217,62,0.04); }
+}
 
-.cat_interior::before { background: #E89757; }
-.cat_interior:hover   { border-color: rgba(232,151,87,0.3); background: rgba(232,151,87,0.04); }
+.cat_interior::before { background: #E89757; }@media (hover: hover) {
+  .cat_interior:hover   { border-color: rgba(232,151,87,0.3); background: rgba(232,151,87,0.04); }
+}
 
 /* ── TOOLS GRID ── */
 .toolsGrid {
@@ -434,10 +452,11 @@
   gap: 14px;
   position: relative;
   overflow: hidden;
-}
-.toolCard:hover {
+}@media (hover: hover) {
+  .toolCard:hover {
   transform: translateY(-2px);
   border-color: var(--border-hover);
+}
 }
 
 .toolIconWrap {

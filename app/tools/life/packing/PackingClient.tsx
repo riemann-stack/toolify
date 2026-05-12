@@ -136,31 +136,23 @@ export default function PackingClient() {
       {/* ════════ 탭 1: 옷 계산 ════════ */}
       {tab === 'calc' && (
         <>
-          {/* 입력 */}
+          {/* 입력 — 슬라이더 2개만, 프리셋 제거 */}
           <div className={s.card}>
             <span className={s.cardLabel}>여행 기본 정보</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>여행 일수 ({days}일)</label>
+                <label className={s.sliderLabel}>
+                  여행 일수
+                  <strong className={s.sliderValue}>{days}일 <span className={s.sliderValueHint}>({Math.max(0, parseInt(days) - 1)}박)</span></strong>
+                </label>
                 <input type="range" min={1} max={30} step={1} value={days} onChange={(e) => setDays(e.target.value)} className={s.slider} />
-                <div className={s.pillRow} style={{ marginTop: 8 }}>
-                  {[3, 5, 7, 10, 14, 30].map((d) => (
-                    <button key={d} className={`${s.pill} ${parseInt(days) === d ? s.pillActive : ''}`} onClick={() => setDays(String(d))} type="button">
-                      {d === 30 ? '한 달' : `${d}박`}
-                    </button>
-                  ))}
-                </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>인원 ({people}명)</label>
+                <label className={s.sliderLabel}>
+                  인원
+                  <strong className={s.sliderValue}>{people}명</strong>
+                </label>
                 <input type="range" min={1} max={6} step={1} value={people} onChange={(e) => setPeople(e.target.value)} className={s.slider} />
-                <div className={s.pillRow} style={{ marginTop: 8 }}>
-                  {[1, 2, 4].map((p) => (
-                    <button key={p} className={`${s.pill} ${parseInt(people) === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
-                      {p}명
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -184,53 +176,62 @@ export default function PackingClient() {
             </div>
           </div>
 
+          {/* 세탁·활동량·사진·옵션 — 한 카드로 통합해 모바일 공간 절약 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>세탁 · 활동량</span>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>세탁 가능 여부</label>
-              <div className={s.pillRow}>
-                {LAUNDRIES.map((l) => (
-                  <button key={l.id} className={`${s.pill} ${laundry === l.id ? s.pillActive : ''}`} onClick={() => setLaundry(l.id)} type="button" title={l.desc}>
-                    {l.emoji} {l.label}
-                  </button>
-                ))}
+            <span className={s.cardLabel}>세탁 · 활동량 · 사진</span>
+            <div className={s.compactGrid}>
+              <div className={s.compactField}>
+                <span className={s.compactLabel}>세탁</span>
+                <div className={s.pillRow}>
+                  {LAUNDRIES.map((l) => (
+                    <button key={l.id} className={`${s.pill} ${laundry === l.id ? s.pillActive : ''}`} onClick={() => setLaundry(l.id)} type="button" title={l.desc}>
+                      {l.emoji} {l.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <p className={s.helpText}>{lauMeta.desc}</p>
-            </div>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>활동량</label>
-              <div className={s.pillRow}>
-                {ACTIVITIES.map((a) => (
-                  <button key={a.id} className={`${s.pill} ${activity === a.id ? s.pillActive : ''}`} onClick={() => setActivity(a.id)} type="button" title={a.desc}>
-                    {a.emoji} {a.label}
-                  </button>
-                ))}
+              <div className={s.compactField}>
+                <span className={s.compactLabel}>활동량</span>
+                <div className={s.pillRow}>
+                  {ACTIVITIES.map((a) => (
+                    <button key={a.id} className={`${s.pill} ${activity === a.id ? s.pillActive : ''}`} onClick={() => setActivity(a.id)} type="button" title={a.desc}>
+                      {a.emoji} {a.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className={s.card}>
-            <span className={s.cardLabel}>사진 · 옵션</span>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>사진 촬영 중요도</label>
-              <div className={s.pillRow}>
-                {PHOTOS.map((p) => (
-                  <button key={p.id} className={`${s.pill} ${photo === p.id ? s.pillActive : ''}`} onClick={() => setPhoto(p.id)} type="button">
-                    {p.emoji} {p.label}
-                  </button>
-                ))}
+              <div className={s.compactField}>
+                <span className={s.compactLabel}>사진</span>
+                <div className={s.pillRow}>
+                  {PHOTOS.map((p) => (
+                    <button key={p.id} className={`${s.pill} ${photo === p.id ? s.pillActive : ''}`} onClick={() => setPhoto(p.id)} type="button">
+                      {p.emoji} {p.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className={s.checkRow}>
-              <label className={s.checkLabel}>
-                <input type="checkbox" checked={needSports} onChange={(e) => setNeedSports(e.target.checked)} />
-                <span>🏃 운동복 필요</span>
-              </label>
-              <label className={s.checkLabel}>
-                <input type="checkbox" checked={needFormal} onChange={(e) => setNeedFormal(e.target.checked)} />
-                <span>👔 격식 있는 일정</span>
-              </label>
+            <div className={s.optionToggleRow}>
+              <button
+                type="button"
+                className={`${s.optionToggle} ${needSports ? s.optionToggleActive : ''}`}
+                onClick={() => setNeedSports(!needSports)}
+                aria-pressed={needSports}
+              >
+                <span className={s.optionToggleCheck}>{needSports ? '✓' : ''}</span>
+                🏃 운동복
+              </button>
+              <button
+                type="button"
+                className={`${s.optionToggle} ${needFormal ? s.optionToggleActive : ''}`}
+                onClick={() => setNeedFormal(!needFormal)}
+                aria-pressed={needFormal}
+              >
+                <span className={s.optionToggleCheck}>{needFormal ? '✓' : ''}</span>
+                👔 격식
+              </button>
             </div>
+            <p className={s.helpText} style={{ marginTop: 6 }}>{lauMeta.desc}</p>
           </div>
 
           {/* 메인 결과 */}

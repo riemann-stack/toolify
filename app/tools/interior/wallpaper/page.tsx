@@ -286,7 +286,7 @@ export default function WallpaperPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/unit/area',       icon: '🏠', name: '평수 ↔ ㎡ 변환기',  desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/length',     icon: '📏', name: '길이 변환기',         desc: 'cm·m·inch·ft 변환' },

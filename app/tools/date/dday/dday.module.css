@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -35,8 +36,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveQuick  { background: rgba(62,200,255,0.10);  color: #3EC8FF; font-weight: 700; }
 .tabActivePace   { background: rgba(255,215,0,0.10);   color: #FFD700; font-weight: 700; }
@@ -118,8 +120,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .catBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
 .catActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -135,8 +138,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .recurBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.recurBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .recurActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 버튼 ── */
@@ -151,8 +155,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .bigCta {
   background: var(--accent);
@@ -166,8 +171,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .bigCta:hover { background: #d8ff5e; }
 }
-.bigCta:hover { background: #d8ff5e; }
 
 .btnRow { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -181,10 +187,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+}
 
 /* ─────── 시즌 프리셋 ─────── */
 .presetRow {
@@ -205,8 +213,9 @@
   cursor: pointer;
   transition: all 0.12s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .presetChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.presetChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ─────── 정렬·필터 ─────── */
 .filterRow {
@@ -226,8 +235,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .filterBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.filterBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .filterActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─────── D-day 카드 ─────── */
@@ -246,8 +256,9 @@
   padding: 16px 18px;
   position: relative;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .ddayCard:hover { transform: translateY(-2px); }
 }
-.ddayCard:hover { transform: translateY(-2px); }
 .ddayPinned {
   background: linear-gradient(140deg, rgba(200,255,62,0.05), transparent);
   box-shadow: 0 0 0 2px rgba(200,255,62,0.25);
@@ -287,8 +298,9 @@
   color: var(--muted);
   padding: 2px 4px;
   border-radius: 4px;
+}@media (hover: hover) {
+  .ddayPinBtn:hover, .ddayMenuBtn:hover { color: var(--accent); background: var(--bg3); }
 }
-.ddayPinBtn:hover, .ddayMenuBtn:hover { color: var(--accent); background: var(--bg3); }
 .ddayPinned .ddayPinBtn { color: var(--accent); }
 
 .ddayTitle {
@@ -518,8 +530,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .modeActive { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
 
 /* ─────── 페이스 ─────── */
@@ -636,8 +649,9 @@
   cursor: pointer;
   text-align: center;
 }
-.paceGoalBtn small { display: block; font-size: 16px; margin-bottom: 2px; }
-.paceGoalBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.paceGoalBtn small { display: block; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
+  .paceGoalBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
 .paceGoalActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
 
 /* ─────── 두 날짜 사이 ─────── */
@@ -725,8 +739,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .editAdvancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 }
-.editAdvancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 
 /* 백업/내보내기 */
 .backupRow {
@@ -745,7 +760,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .backupBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.backupBtn:hover { color: var(--text); border-color: var(--border-hover); }
-.backupDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
-.backupDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.backupDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
+  .backupDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+}

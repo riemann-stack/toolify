@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 24px; }
 
 /* 탭 */
@@ -20,8 +21,9 @@
   font-weight: 500;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: var(--bg3);
   color: var(--text);
@@ -83,8 +85,9 @@
   flex-direction: column;
   gap: 4px;
   transition: all .15s;
+}@media (hover: hover) {
+  .scenarioCard:hover { border-color: var(--accent); transform: translateY(-2px); }
 }
-.scenarioCard:hover { border-color: var(--accent); transform: translateY(-2px); }
 .scenarioCardActive {
   background: rgba(200, 255, 62, 0.06);
   border-color: var(--accent);
@@ -131,8 +134,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   text-align: left;
+}@media (hover: hover) {
+  .customToggle:hover { border-color: var(--accent); color: var(--accent); }
 }
-.customToggle:hover { border-color: var(--accent); color: var(--accent); }
 
 .customGrid {
   display: grid;
@@ -301,8 +305,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   flex-shrink: 0;
+}@media (hover: hover) {
+  .copyBtn:hover { color: var(--accent); }
 }
-.copyBtn:hover { color: var(--accent); }
 
 .prosCons {
   display: grid;
@@ -509,8 +514,9 @@
   border-bottom: 1px solid var(--border);
   color: var(--text);
   vertical-align: top;
+}@media (hover: hover) {
+  .guideTable tr:hover td { background: rgba(255,255,255,0.02); }
 }
-.guideTable tr:hover td { background: rgba(255,255,255,0.02); }
 .guideTable strong {
   display: block;
   font-family: 'Noto Sans KR', sans-serif;
@@ -611,6 +617,7 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.disclaimer ul a { color: var(--accent); text-decoration: none; }
-.disclaimer ul a:hover { text-decoration: underline; }
+.disclaimer ul a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .disclaimer ul a:hover { text-decoration: underline; }
+}
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

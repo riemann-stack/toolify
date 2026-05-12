@@ -298,7 +298,7 @@ export default function FourInsurancePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기',  desc: '2026년 기준 세후 월 실수령액' },
               { href: '/tools/finance/installment',icon: '💳', name: '카드 할부 계산기',      desc: '월 납부액·일시불 vs 무이자 비교' },

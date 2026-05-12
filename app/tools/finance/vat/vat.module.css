@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* 면책 */
@@ -59,8 +60,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveQuote     { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
 .tabActiveNet       { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
@@ -152,8 +154,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 모드 카드 (탭1 — 메인 — 큰 카드) ─── */
@@ -162,8 +165,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 10px; cursor: pointer; transition: all 0.15s;
   text-align: center; display: flex; flex-direction: column; gap: 4px;
+}@media (hover: hover) {
+  .modeBtn:hover { border-color: var(--border-hover); }
 }
-.modeBtn:hover { border-color: var(--border-hover); }
 .modeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); }
 .modeBtnLabel { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .modeBtnActive .modeBtnLabel { color: var(--accent); }
@@ -182,8 +186,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
+}@media (hover: hover) {
+  .chip:hover { color: var(--accent); border-color: var(--accent); }
 }
-.chip:hover { color: var(--accent); border-color: var(--accent); }
 .chipActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* 토글 */
@@ -338,8 +343,9 @@
   cursor: pointer;
   color: var(--muted);
   font-size: 16px;
+}@media (hover: hover) {
+  .quoteItemRowDelete:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.quoteItemRowDelete:hover { color: #FF6B6B; border-color: #FF6B6B; }
 .quoteItemTaxBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -351,8 +357,9 @@
   cursor: pointer;
   text-align: center;
   height: 36px;
+}@media (hover: hover) {
+  .quoteItemTaxBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quoteItemTaxBtn:hover { border-color: var(--accent); color: var(--accent); }
 .quoteItemTaxBtnTaxable { background: rgba(200,255,62,0.10); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .quoteItemTaxBtnExempt  { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: rgba(62,200,255,0.4); font-weight: 700; }
 
@@ -390,8 +397,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   margin-top: 4px;
+}@media (hover: hover) {
+  .quoteAddBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quoteAddBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ─── Excl vs Incl 비교 카드 ─── */
 .compareGrid {
@@ -663,8 +671,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 빈 상태 ─── */

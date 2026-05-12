@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .disclaimer {
@@ -57,8 +58,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive       { background: rgba(232,151,87,0.15); color: #E89757; font-weight: 700; }
 .tabActiveCadr   { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
 .tabActivePerf   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
@@ -130,8 +132,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .spaceCard:hover { border-color: var(--border-hover); transform: translateY(-1px); }
 }
-.spaceCard:hover { border-color: var(--border-hover); transform: translateY(-1px); }
 .spaceCardActive {
   background: rgba(232,151,87,0.12);
   border-color: #E89757;
@@ -160,8 +163,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: rgba(232,151,87,0.15); color: #E89757; border-color: #E89757; font-weight: 700; }
 
 /* 슬라이더 */
@@ -302,8 +306,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #E89757; color: #E89757; }
 }
-.copyBtn:hover { border-color: #E89757; color: #E89757; }
 .copied { background: rgba(232,151,87,0.15); color: #E89757; border-color: #E89757; font-weight: 700; }
 
 .resultActions {

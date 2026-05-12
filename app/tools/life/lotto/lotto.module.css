@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 사행성 예방 배너 — 매 화면 상단 ── */
@@ -22,8 +23,9 @@
   cursor: pointer;
   font-size: 14px;
   padding: 2px 6px;
+}@media (hover: hover) {
+  .responsibilityClose:hover { color: var(--text); }
 }
-.responsibilityClose:hover { color: var(--text); }
 
 .responsibilityMini {
   font-size: 11.5px;
@@ -64,8 +66,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveAnalyze{ background: rgba(255,215,0,0.10);  color: #FFD700; font-weight: 700; }
 .tabActiveSim    { background: rgba(255,107,107,0.10); color: #FF6B6B; font-weight: 700; }
@@ -111,8 +114,9 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
-.modeCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 .modeCardActive {
   background: var(--accent-dim);
   border-color: var(--accent);
@@ -140,8 +144,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .countBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.countBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .countActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── 1~45 번호 그리드 (고정·제외) ── */
@@ -166,8 +171,9 @@
   justify-content: center;
   transition: all 0.12s;
   font-variant-numeric: tabular-nums;
+}@media (hover: hover) {
+  .numCell:hover { border-color: var(--border-hover); transform: scale(1.05); }
 }
-.numCell:hover { border-color: var(--border-hover); transform: scale(1.05); }
 .numCellFixed { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 2px rgba(200,255,62,0.20); }
 .numCellExcluded { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.40); color: #FF6B6B; text-decoration: line-through; }
 .numLegend {
@@ -197,8 +203,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .fixExcludeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.fixExcludeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .fixActive    { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .exclActive   { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
 
@@ -228,8 +235,9 @@
   width: 100%;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .bigGenerate:hover { background: #d8ff5e; }
 }
-.bigGenerate:hover { background: #d8ff5e; }
 .bigGenerate:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .actionBtn {
@@ -244,8 +252,9 @@
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .miniBtn {
   background: var(--bg3);
@@ -257,10 +266,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+}
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 
 .copyBtn {
@@ -275,8 +286,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 게임 결과 카드 ── */
@@ -334,8 +346,9 @@
   font-variant-numeric: tabular-nums;
   box-shadow: inset -3px -3px 6px rgba(0,0,0,0.20), 0 2px 6px rgba(0,0,0,0.30);
   transition: transform 0.18s;
+}@media (hover: hover) {
+  .ball:hover { transform: scale(1.08); }
 }
-.ball:hover { transform: scale(1.08); }
 @media (max-width: 480px) {
   .ball { width: 40px; height: 40px; font-size: 15px; }
   .balls { gap: 4px; }
@@ -472,8 +485,9 @@
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
+}@media (hover: hover) {
+  .simBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.simBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .simActive { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
 
 .simHero {

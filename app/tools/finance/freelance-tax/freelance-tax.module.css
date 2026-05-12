@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap {
   display: flex;
   flex-direction: column;
@@ -29,8 +30,9 @@
   transition: all .15s;
   white-space: nowrap;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: var(--bg3);
   color: var(--text);
@@ -150,8 +152,9 @@
   white-space: nowrap;
   flex-shrink: 0;
   min-height: 36px;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* pill */
 .pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -169,8 +172,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
   min-height: 44px;
+}@media (hover: hover) {
+  .pill:hover { color: var(--text); }
 }
-.pill:hover { color: var(--text); }
 .pillActive {
   background: rgba(200, 255, 62, 0.08);
   border-color: var(--accent);
@@ -689,8 +693,9 @@
   color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   text-decoration: none;
+}@media (hover: hover) {
+  .stepLink:hover { text-decoration: underline; }
 }
-.stepLink:hover { text-decoration: underline; }
 
 .relatedList {
   list-style: none;
@@ -711,8 +716,9 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
+}@media (hover: hover) {
+  .relatedList a:hover { text-decoration: underline; }
 }
-.relatedList a:hover { text-decoration: underline; }
 
 /* 면책 */
 .disclaimer {
@@ -737,6 +743,7 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.disclaimer ul a { color: var(--accent); text-decoration: none; }
-.disclaimer ul a:hover { text-decoration: underline; }
+.disclaimer ul a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .disclaimer ul a:hover { text-decoration: underline; }
+}
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C485E0; color: #0D0D0D; }
 
 /* 모델 토글 */
@@ -64,8 +66,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .modelBtn:hover { border-color: #C485E0; }
 }
-.modelBtn:hover { border-color: #C485E0; }
 .modelBtnActive {
   background: #C485E0;
   color: #0D0D0D;
@@ -94,8 +97,9 @@
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .smBtn:hover { border-color: #C485E0; color: #C485E0; }
 }
-.smBtn:hover { border-color: #C485E0; color: #C485E0; }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .slotRow {
@@ -222,8 +226,9 @@
   cursor: pointer;
   font-size: 16px;
   align-self: start;
+}@media (hover: hover) {
+  .iconBtn:hover { background: rgba(255, 62, 140, 0.1); border-color: #FF3E8C; }
 }
-.iconBtn:hover { background: rgba(255, 62, 140, 0.1); border-color: #FF3E8C; }
 
 /* 슬라이더 */
 .slider {
@@ -434,8 +439,9 @@
   cursor: pointer;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .quickChip:hover { color: #C485E0; border-color: #C485E0; }
 }
-.quickChip:hover { color: #C485E0; border-color: #C485E0; }
 
 /* ─── 탭 3 컬러 매칭 ─── */
 .targetRow {
@@ -470,8 +476,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   text-align: left;
+}@media (hover: hover) {
+  .paletteBtn:hover { border-color: #C485E0; }
 }
-.paletteBtn:hover { border-color: #C485E0; }
 .paletteBtnActive {
   background: #C485E0;
   color: #0D0D0D;
@@ -492,8 +499,9 @@
   width: 100%;
   margin-top: 12px;
   min-height: 48px;
+}@media (hover: hover) {
+  .primaryBtn:hover { background: #B26AC5; }
 }
-.primaryBtn:hover { background: #B26AC5; }
 .primaryBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .compareRow {
@@ -675,10 +683,11 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-.recipeCard:hover {
+}@media (hover: hover) {
+  .recipeCard:hover {
   border-color: #C485E0;
   background: var(--bg2);
+}
 }
 .recipePreview {
   width: 100%;

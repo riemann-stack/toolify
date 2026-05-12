@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -30,8 +31,9 @@
   background: transparent; border: none; padding: 6px 12px;
   font-size: 12px; color: var(--muted); cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif; border-radius: 6px;
+}@media (hover: hover) {
+  .unitBtn:hover { color: var(--text); }
 }
-.unitBtn:hover { color: var(--text); }
 .unitBtnActive { background: var(--bg2); color: var(--accent) !important; font-weight: 700; }
 
 /* ── 성별·연령 4-grid ── */
@@ -115,15 +117,17 @@
   padding: 12px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+}@media (hover: hover) {
+  .recordSaveBtn:hover { opacity: 0.88; }
 }
-.recordSaveBtn:hover { opacity: 0.88; }
 
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
 
 /* ── 공통 카드 ── */
@@ -144,8 +148,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 13px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .toggleBtnActive {
   background: rgba(200,255,62,0.15) !important;
   border-color: rgba(200,255,62,0.4) !important;
@@ -192,8 +197,9 @@
   padding: 12px; cursor: pointer; color: var(--muted);
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   margin-top: 10px;
+}@media (hover: hover) {
+  .expandBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.expandBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 바 차트 ── */
 .chartWrap {

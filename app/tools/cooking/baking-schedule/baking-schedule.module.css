@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -34,8 +35,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveBack    { background: rgba(155,89,182,0.12); color: #C485E0; font-weight: 700; }
 .tabActivePreset  { background: rgba(255,215,0,0.10);  color: #FFD700; font-weight: 700; }
@@ -81,8 +83,9 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .breadCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
-.breadCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 .breadCardActive { background: var(--accent-dim); border-color: var(--accent); box-shadow: 0 0 0 2px rgba(200,255,62,0.18); }
 .breadCardEmoji { font-size: 36px; line-height: 1; margin-bottom: 6px; }
 .breadCardName { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 4px; }
@@ -145,8 +148,9 @@
   text-align: left;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .fermBtn:hover { border-color: var(--border-hover); }
 }
-.fermBtn:hover { border-color: var(--border-hover); }
 .fermActive { background: var(--accent-dim); border-color: var(--accent); }
 .fermBtn strong {
   display: block;
@@ -441,8 +445,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .miniBtn {
   background: var(--bg3);
@@ -454,10 +459,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+}
 
 .btnRow { display: flex; gap: 6px; flex-wrap: wrap; }
 
@@ -473,8 +480,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .empty {
@@ -591,8 +599,9 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+}@media (hover: hover) {
+  .advancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 }
-.advancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 .advancedToggle strong { color: var(--text); margin-right: 6px; }
 
 .ddtCard {
@@ -671,8 +680,9 @@
   cursor: pointer;
   text-align: left;
   line-height: 1.5;
+}@media (hover: hover) {
+  .mixBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.mixBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .mixBtn strong { display: block; color: var(--text); font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
 .mixBtn small { display: block; color: var(--muted); font-size: 10.5px; }
 .mixActive { background: rgba(255,215,0,0.10); border-color: #FFD700; }

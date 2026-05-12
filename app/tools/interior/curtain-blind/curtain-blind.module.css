@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -33,8 +34,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -98,8 +100,9 @@
   transition: all 0.15s;
   text-align: center;
   position: relative;
+}@media (hover: hover) {
+  .productBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.productBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .productBtn span.icon { display: block; font-size: 22px; margin-bottom: 6px; }
 .productBtn small {
   display: block;
@@ -185,8 +188,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
+}@media (hover: hover) {
+  .locationBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.locationBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .locationBtn small {
   display: block;
   font-size: 10.5px;
@@ -227,8 +231,9 @@
   align-items: center;
   gap: 4px;
   line-height: 1.4;
+}@media (hover: hover) {
+  .installBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.installBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .installCeilingRecessed { border-color: rgba(155,89,182,0.40); }
 .installCeilingMount    { border-color: rgba(255,215,0,0.40); }
 .installWallMount       { border-color: var(--accent); background: rgba(200,255,62,0.04); }
@@ -264,8 +269,9 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
+}@media (hover: hover) {
+  .lengthBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.lengthBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .lengthSvg { display: block; }
 .lengthActive {
   background: var(--accent-dim);
@@ -328,8 +334,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pleatPill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pleatPill:hover { color: var(--text); border-color: var(--border-hover); }
 .pleatPillStd { background: rgba(200,255,62,0.04); border-color: var(--accent); color: var(--accent); }
 .pleatPillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 800; }
 
@@ -357,8 +364,9 @@
   font-weight: 800;
   font-size: 14px;
   margin-top: 2px;
+}@media (hover: hover) {
+  .panelBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.panelBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .panelActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 토글 ── */
@@ -550,6 +558,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

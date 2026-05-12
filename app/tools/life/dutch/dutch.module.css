@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -35,8 +36,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveDrink  { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
 .tabActivePerson { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
@@ -120,8 +122,9 @@
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .peopleBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.peopleBtn:hover { border-color: var(--accent); color: var(--accent); }
 .peopleBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .peopleNum {
   font-family: 'Inter', system-ui, sans-serif;
@@ -145,8 +148,9 @@
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
+}@media (hover: hover) {
+  .quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .quickActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* 시나리오 */
@@ -164,8 +168,9 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .scenarioCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
-.scenarioCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 .scenarioCard small { display: block; font-size: 22px; line-height: 1; margin-bottom: 4px; }
 .scenarioCard div { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 .scenarioCard p { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
@@ -190,8 +195,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* 토글 */
@@ -219,8 +225,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 .bigBtn {
   background: var(--accent);
@@ -234,8 +241,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .bigBtn:hover { background: #d8ff5e; }
 }
-.bigBtn:hover { background: #d8ff5e; }
 .bigBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .miniBtn {
@@ -247,10 +255,12 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+}
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 
 .copyBtn {
@@ -264,8 +274,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 결과 히어로 ── */
@@ -429,8 +440,9 @@
   font-size: 14px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .itemDelete:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
 }
-.itemDelete:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
 
 .addItemBtn {
   background: transparent;
@@ -442,8 +454,9 @@
   cursor: pointer;
   width: 100%;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .addItemBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addItemBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 /* 결과 표 */
 .resultTable {

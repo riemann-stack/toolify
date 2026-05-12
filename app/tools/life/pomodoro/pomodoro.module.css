@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-sizing: border-box; }
@@ -5,8 +6,9 @@
 
 /* ── 탭 ── */
 .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
-.tabBtn { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
-.tabBtn:hover { color: var(--text); }
+.tabBtn { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
+}
 .tabBtnActive { background: var(--bg3); color: var(--text); border-color: var(--border); }
 
 /* ── 작업 입력 ── */
@@ -16,8 +18,9 @@
 
 /* ── 페이즈 선택 ── */
 .phaseRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
-.phaseBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }@media (hover: hover) {
+  .phaseBtn:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .phaseBtnActive { background: var(--bg2); font-weight: 600; }
 
 /* ── 원형 타이머 ── */
@@ -30,10 +33,12 @@
 
 /* ── 컨트롤 ── */
 .controls { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }
-.ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
-.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #0D0D0D; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
-.mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
+.ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }@media (hover: hover) {
+  .ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
+}
+.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #0D0D0D; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
+  .mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
+}
 
 /* ── 통계 ── */
 .statsRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -58,14 +63,16 @@
 .settingItem { display: flex; flex-direction: column; gap: 8px; }
 .settingLabel { font-size: 12px; color: var(--muted); }
 .settingRow { display: flex; align-items: center; gap: 10px; }
-.settingBtn { width: 30px; height: 30px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
-.settingBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.settingBtn { width: 30px; height: 30px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }@media (hover: hover) {
+  .settingBtn:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .settingValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 28px; text-align: center; }
 
 /* ── 프리셋 그리드 ── */
 .presetGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.presetCard { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; text-align: left; transition: all 0.15s; position: relative; }
-.presetCard:hover { border-color: var(--border-hover); }
+.presetCard { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; text-align: left; transition: all 0.15s; position: relative; }@media (hover: hover) {
+  .presetCard:hover { border-color: var(--border-hover); }
+}
 .presetCardActive { border-color: var(--accent); background: var(--bg2); }
 .presetTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
 .presetTime { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
@@ -74,13 +81,15 @@
 
 /* ── 알림음 ── */
 .soundList { display: flex; flex-direction: column; gap: 6px; }
-.soundRow { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }
-.soundRow:hover { border-color: var(--border-hover); }
+.soundRow { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }@media (hover: hover) {
+  .soundRow:hover { border-color: var(--border-hover); }
+}
 .soundRowActive { border-color: var(--accent); background: var(--bg2); }
 .soundName { font-size: 13px; color: var(--text); font-weight: 500; flex: 1; }
 .soundDesc { font-size: 11px; color: var(--muted); }
-.soundTest { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.15s; }
-.soundTest:hover { color: var(--text); border-color: var(--border-hover); }
+.soundTest { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.15s; }@media (hover: hover) {
+  .soundTest:hover { color: var(--text); border-color: var(--border-hover); }
+}
 
 /* ── 토글 옵션 ── */
 .optionRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; }

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 모드 토글 ── */
@@ -21,8 +22,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modeActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -105,8 +107,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .fuelBtn:hover { color: var(--text); }
 }
-.fuelBtn:hover { color: var(--text); }
 .fuelGas { border-color: rgba(255,140,62,0.4); }
 .fuelEv { border-color: rgba(62,255,155,0.4); }
 .fuelHybrid { border-color: rgba(62,200,255,0.4); }
@@ -127,8 +130,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pill:hover { border-color: var(--border-hover); color: var(--text); }
 .pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
 
 /* ── 토글 (체크박스 형태) ── */
@@ -189,8 +193,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .methodBtn:hover { color: var(--text); }
 }
-.methodBtn:hover { color: var(--text); }
 .methodActive {
   background: var(--bg2);
   color: var(--accent);
@@ -285,8 +290,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .miniToggle:hover { color: var(--text); }
 }
-.miniToggle:hover { color: var(--text); }
 .miniToggleOff { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
 
 @media (max-width: 580px) {
@@ -569,8 +575,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 
 /* 외부 링크 */
@@ -580,8 +587,9 @@
   text-decoration: none;
   margin-top: 6px;
   display: inline-block;
+}@media (hover: hover) {
+  .extLink:hover { text-decoration: underline; }
 }
-.extLink:hover { text-decoration: underline; }
 
 /* ─── 5탭 (NEW) ─── */
 .tabs {
@@ -605,8 +613,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActivePurchase  { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
 .tabActiveCar       { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
@@ -661,11 +670,12 @@
   padding: 0;
   vertical-align: middle;
   line-height: 1;
-}
-.helpTip:hover, .helpTip:focus {
+}@media (hover: hover) {
+  .helpTip:hover, .helpTip:focus {
   color: var(--accent);
   border-color: var(--accent);
   outline: none;
+}
 }
 .helpTipPopover {
   position: absolute;
@@ -719,8 +729,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}@media (hover: hover) {
+  .helpTipClose:hover { color: var(--text); }
 }
-.helpTipClose:hover { color: var(--text); }
 
 /* 3·5·10년 비교 카드 */
 .periodGrid {
@@ -896,8 +907,9 @@
   cursor: pointer;
   color: var(--muted);
   margin-left: 8px;
+}@media (hover: hover) {
+  .carInputDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.carInputDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
 .carInputGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 
 /* 카쉐어링 표 */
@@ -959,8 +971,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* threeCol */
@@ -979,8 +992,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   margin-top: 8px;
+}@media (hover: hover) {
+  .addCarBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addCarBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* numInput 폭 보정 */
 .numInput { width: 100%; box-sizing: border-box; }

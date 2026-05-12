@@ -4,7 +4,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import styles from './pace.module.css'
 
-type Mode = 'pace-to-time' | 'time-to-pace'
+type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill'
 
 // ── 헬퍼 ──
 function paceToSec(mm: string, ss: string) {
@@ -245,6 +245,8 @@ export default function PaceClient() {
           onClick={() => setMode('pace-to-time')}>📏 페이스 → 완주 시간</button>
         <button className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
           onClick={() => setMode('time-to-pace')}>⏱️ 완주 시간 → 페이스</button>
+        <button className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
+          onClick={() => setMode('treadmill')}>🏃 트레드밀 변환</button>
       </div>
 
       {/* ── 모드 1: 페이스 → 완주 시간 ── */}
@@ -456,45 +458,52 @@ export default function PaceClient() {
         </>
       )}
 
-      {/* ── 트레드밀 ── */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>🏃 트레드밀 페이스 ↔ 시속 변환</label>
-        <div className={styles.treadmillGrid}>
-          <div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>시속 입력 → 페이스</p>
-            <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder="9.0" value={kphInput}
-                onChange={e => setKphInput(e.target.value)} step={0.1} />
-              <span className={styles.unit}>km/h</span>
-            </div>
-            {treadmillFromKph && (
-              <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 13, color: 'var(--muted)' }}>페이스:</span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromKph.pace}/km</span>
-                <span style={{ fontSize: 13, color: 'var(--muted)', marginLeft: 8 }}>400m:</span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromKph.track400}</span>
+      {/* ── 모드 3: 트레드밀 변환 (서브탭) ── */}
+      {mode === 'treadmill' && (
+        <>
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>🏃 트레드밀 페이스 ↔ 시속 변환</label>
+            <div className={styles.treadmillGrid}>
+              <div>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>시속 입력 → 페이스</p>
+                <div className={styles.inputRow}>
+                  <input className={styles.numInput} type="number" inputMode="decimal"
+                    placeholder="9.0" value={kphInput}
+                    onChange={e => setKphInput(e.target.value)} step={0.1} />
+                  <span className={styles.unit}>km/h</span>
+                </div>
+                {treadmillFromKph && (
+                  <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 13, color: 'var(--muted)' }}>페이스:</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromKph.pace}/km</span>
+                    <span style={{ fontSize: 13, color: 'var(--muted)', marginLeft: 8 }}>400m:</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromKph.track400}</span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div style={{ width: 1, background: 'var(--border)', margin: '0 4px' }} />
-          <div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>페이스 입력 → 시속</p>
-            <div className={styles.inputRow}>
-              <input className={styles.numInput} type="text" inputMode="numeric"
-                placeholder="6:40" value={paceInput}
-                onChange={e => setPaceInput(e.target.value)} />
-              <span className={styles.unit}>/km</span>
-            </div>
-            {treadmillFromPace && (
-              <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
-                <span style={{ fontSize: 13, color: 'var(--muted)' }}>시속:</span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromPace.kph} km/h</span>
+              <div style={{ width: 1, background: 'var(--border)', margin: '0 4px' }} />
+              <div>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>페이스 입력 → 시속</p>
+                <div className={styles.inputRow}>
+                  <input className={styles.numInput} type="text" inputMode="numeric"
+                    placeholder="6:40" value={paceInput}
+                    onChange={e => setPaceInput(e.target.value)} />
+                  <span className={styles.unit}>/km</span>
+                </div>
+                {treadmillFromPace && (
+                  <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
+                    <span style={{ fontSize: 13, color: 'var(--muted)' }}>시속:</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{treadmillFromPace.kph} km/h</span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+              💡 트레드밀은 시속(km/h)으로 표시됩니다. 야외 페이스와 동일하게 설정하려면 위에서 변환 후 트레드밀에 입력하세요.
+            </p>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
       {/* 다른 러닝 도구 안내 (영역 침범 X) */}
       <div className={styles.crossToolCard}>

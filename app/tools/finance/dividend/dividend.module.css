@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* 면책 */
@@ -59,8 +60,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveReverse   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
 .tabActiveTax       { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
@@ -182,8 +184,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .optionWarn { border-color: rgba(255,107,107,0.40); color: #FF6B6B; }
 .optionWarn.optionActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; color: #FF6B6B; }
@@ -200,8 +203,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
+}@media (hover: hover) {
+  .chip:hover, .presetBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.chip:hover, .presetBtn:hover { color: var(--accent); border-color: var(--accent); }
 .chipActive, .presetActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 .presetWarn { border-color: rgba(255,107,107,0.40); color: #FF6B6B; }
 .presetWarn.presetActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; color: #FF6B6B; }
@@ -527,8 +531,9 @@
   cursor: pointer;
   color: var(--muted);
   font-size: 16px;
+}@media (hover: hover) {
+  .deleteBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.deleteBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 .deleteBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .addBtn {
@@ -542,8 +547,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   margin-top: 4px;
+}@media (hover: hover) {
+  .addBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ─── 월별 현금흐름 차트 ─── */
 .flowChartWrap {
@@ -601,8 +607,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 빈 상태 ─── */

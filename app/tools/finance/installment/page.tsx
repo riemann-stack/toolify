@@ -297,7 +297,7 @@ export default function CardInstallmentPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/loan',       icon: '💳', name: '대출이자 계산기',        desc: '원리금균등·원금균등 비교' },
               { href: '/tools/finance/compound',   icon: '📈', name: '복리 계산기',            desc: '거치식·적립식 복리 수익' },

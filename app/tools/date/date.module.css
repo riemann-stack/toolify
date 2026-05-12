@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap {
   display: flex;
   flex-direction: column;
@@ -74,8 +75,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .swapDateBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.swapDateBtn:hover { border-color: var(--border-hover); color: var(--text); }
 
 /* ── RESULT HERO ── */
 .resultHero {
@@ -232,8 +234,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}@media (hover: hover) {
+  .removeBtn:hover { border-color: rgba(255,62,62,0.4); color: #FF6B6B; }
 }
-.removeBtn:hover { border-color: rgba(255,62,62,0.4); color: #FF6B6B; }
 
 /* ── ADD FORM ── */
 .addRow {
@@ -285,8 +288,9 @@
   cursor: pointer;
   flex-shrink: 0;
   transition: opacity 0.15s;
+}@media (hover: hover) {
+  .addBtn:hover:not(:disabled) { opacity: 0.85; }
 }
-.addBtn:hover:not(:disabled) { opacity: 0.85; }
 .addBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* ── EMPTY ── */

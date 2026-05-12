@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 입력 */
@@ -93,15 +95,62 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
-/* 기온 그리드 */
+/* 기온 그리드 — 데스크탑 6열, 모바일 3열 × 2행 */
 .climateRow {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 8px;
+}
+@media (max-width: 600px) {
+  .climateRow { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+}
+
+/* 슬라이더 라벨 — 값을 명확히 노출 */
+.sliderLabel {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  font-weight: 600; margin-bottom: 8px;
+}
+.sliderValue {
+  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800;
+  color: var(--accent); text-transform: none; letter-spacing: 0;
+}
+.sliderValueHint {
+  color: var(--muted); font-size: 12px; font-weight: 500; margin-left: 4px;
+}
+
+/* 세탁·활동량·사진 통합 그리드 */
+.compactGrid { display: flex; flex-direction: column; gap: 10px; }
+.compactField { display: flex; flex-direction: column; gap: 4px; }
+.compactLabel {
+  font-size: 10.5px; color: var(--muted);
+  letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600;
+}
+
+/* 옵션 토글 — 체크박스를 버튼 형태로 컴팩트화 */
+.optionToggleRow {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px;
+}
+.optionToggle {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; font-size: 13px; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; text-align: center;
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  min-height: 36px;
+}
+.optionToggleActive {
+  background: rgba(200,255,62,0.10); color: var(--accent);
+  border-color: var(--accent); font-weight: 700;
+}
+.optionToggleCheck {
+  display: inline-block; width: 14px; text-align: center;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
 }
 .climateBtn {
   appearance: none;
@@ -118,8 +167,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
+}@media (hover: hover) {
+  .climateBtn:hover { border-color: var(--accent); }
 }
-.climateBtn:hover { border-color: var(--accent); }
 .climateBtnActive {
   background: var(--bg2);
   box-shadow: 0 0 0 1px var(--accent);
@@ -304,8 +354,9 @@
   font-weight: 700;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .copyBtn:hover { background: #FFB83E; }
 }
-.copyBtn:hover { background: #FFB83E; }
 
 /* 기온별 가이드 */
 .climateGuideGrid {
@@ -327,8 +378,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}@media (hover: hover) {
+  .climateGuideCard:hover { border-color: var(--accent); }
 }
-.climateGuideCard:hover { border-color: var(--accent); }
 .climateGuideActive {
   background: var(--bg3);
   box-shadow: 0 0 0 1px var(--accent);
@@ -431,8 +483,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 4px;
+}@media (hover: hover) {
+  .scenarioApply:hover { background: #FFB83E; }
 }
-.scenarioApply:hover { background: #FFB83E; }
 
 /* 크로스링크 */
 .crossLink {
@@ -446,10 +499,11 @@
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
-}
-.crossLink:hover {
+}@media (hover: hover) {
+  .crossLink:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 
 /* 면책 */

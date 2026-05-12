@@ -206,10 +206,13 @@ export default function SourdoughPage() {
               { q: '사워도우를 베이킹에 사용할 때 가장 좋은 타이밍은?',
                 a: '피크 직전~피크 직후 1시간 이내가 최적입니다. 스타터를 물에 넣었을 때 뜨는지 확인하는 플로트 테스트와 함께, 표면에 많은 기포가 보이고 전체가 둥글게 부풀어 있을 때 사용하세요. 피크를 완전히 지나 꺼지기 시작하면 활성이 떨어져 빵이 잘 부풀지 않을 수 있습니다.' },
             ].map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '0', overflow: 'hidden' }}>
+                <summary style={{ cursor: 'pointer', padding: '16px 20px', fontSize: '14px', fontWeight: 500, color: 'var(--text)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                  <span>Q. {faq.q}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--muted)', flexShrink: 0 }}>▼</span>
+                </summary>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, padding: '0 20px 16px', margin: 0, borderTop: '1px solid var(--border)', paddingTop: '12px' }}>A. {faq.a}</p>
+              </details>
             ))}
           </div>
         </div>

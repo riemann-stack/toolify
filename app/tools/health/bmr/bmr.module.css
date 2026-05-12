@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -59,8 +60,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveActivity { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
 .tabActiveSplit    { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
@@ -127,8 +129,20 @@
 
 .fieldRow  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.fieldRow4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
 @media (max-width: 540px) { .fieldRow3 { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 480px) { .fieldRow, .fieldRow3 { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .fieldRow, .fieldRow3 { grid-template-columns: 1fr; }
+  /* 모바일에서도 1줄 4열 유지 — 카드 패딩·폰트 축소로 공간 절약 */
+  .fieldRow4 { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4px; }
+  .fieldRow4 .card { padding: 8px 6px; }
+  .fieldRow4 .cardLabel { font-size: 10px; letter-spacing: 0.04em; margin-bottom: 6px; justify-content: center; }
+  .fieldRow4 .numInput { font-size: 14px; padding: 6px 4px; }
+  .fieldRow4 .inputRow { gap: 2px; }
+  .fieldRow4 .unit { font-size: 10px; }
+  .fieldRow4 .toggleRow { gap: 3px; }
+  .fieldRow4 .toggleBtn { padding: 6px 2px; font-size: 14px; }
+}
 
 /* ── 옵션 ── */
 .toggleRow {
@@ -146,8 +160,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .optionRow {
@@ -181,8 +196,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .optionWarning { color: #FF8C3E; }
 
@@ -199,8 +215,9 @@
   flex-direction: column;
   gap: 3px;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .activityBtn:hover { border-color: var(--border-hover); }
 }
-.activityBtn:hover { border-color: var(--border-hover); }
 .activityBtn.activityActive { background: var(--accent-dim); border-color: var(--accent); }
 .activityName { font-size: 13.5px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: baseline; }
 .activityActive .activityName { color: var(--accent); }
@@ -396,8 +413,9 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .resultActions {
@@ -663,10 +681,12 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniBtn:hover { color: var(--accent); border-color: var(--accent); }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
-.miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+}
 
 /* 토글 가능한 섹션 */
 .advanced {

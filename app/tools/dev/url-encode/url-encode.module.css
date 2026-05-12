@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; position: relative; }
 
 .card {
@@ -49,8 +50,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C8FF3E; color: #0D0D0D; }
 
 /* 토스트 */
@@ -98,8 +100,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 34px;
+}@media (hover: hover) {
+  .optBtn:hover { border-color: #C8FF3E; }
 }
-.optBtn:hover { border-color: #C8FF3E; }
 .optBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -179,8 +182,9 @@
   font-weight: 600;
   min-height: 28px;
   white-space: nowrap;
+}@media (hover: hover) {
+  .smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 }
-.smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .actionRow {
@@ -201,8 +205,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 36px;
+}@media (hover: hover) {
+  .actionBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 }
-.actionBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 
 .textarea {
   width: 100%;

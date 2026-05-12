@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap {
   display: flex;
   flex-direction: column;
@@ -25,8 +26,9 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: var(--bg3);
   color: var(--text);
@@ -74,8 +76,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .distBtn:hover { color: var(--text); border-color: rgba(200, 255, 62, 0.3); }
 }
-.distBtn:hover { color: var(--text); border-color: rgba(200, 255, 62, 0.3); }
 .distBtnActive {
   background: rgba(200, 255, 62, 0.08);
   border-color: var(--accent);
@@ -151,8 +154,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .targetBtn:hover { color: var(--text); }
 }
-.targetBtn:hover { color: var(--text); }
 .targetBtnActive {
   background: rgba(200, 255, 62, 0.08);
   border-color: var(--accent);
@@ -499,8 +503,9 @@
   cursor: pointer;
   transition: all .15s;
   text-align: left;
+}@media (hover: hover) {
+  .stratBtn:hover { border-color: rgba(200,255,62,0.3); }
 }
-.stratBtn:hover { border-color: rgba(200,255,62,0.3); }
 .stratBtnActive {
   background: rgba(200,255,62,0.08);
   border-color: var(--accent);
@@ -543,8 +548,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .wBtn:hover { border-color: rgba(200,255,62,0.3); }
 }
-.wBtn:hover { border-color: rgba(200,255,62,0.3); }
 .wBtnActive {
   background: rgba(200,255,62,0.08);
   border-color: var(--accent);
@@ -658,8 +664,9 @@
   min-height: 36px;
   scroll-snap-align: start;
   flex-shrink: 0;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* hero에 VDOT 추가 */
 .heroVdot {
@@ -828,8 +835,9 @@
   cursor: pointer;
   min-height: 38px;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
 }
-.pill:hover { border-color: var(--accent); color: var(--accent); }
 .pillActive { background: var(--accent); color: #0B0B0B; border-color: var(--accent); }
 .select {
   background: var(--bg3);
@@ -898,8 +906,9 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
+}@media (hover: hover) {
+  .crossLink:hover { text-decoration: underline; }
 }
-.crossLink:hover { text-decoration: underline; }
 
 /* 훈련 페이스 (전략 탭 안에서) */
 .zoneIntro {
@@ -978,8 +987,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .saveBtn:hover { opacity: 0.9; }
 }
-.saveBtn:hover { opacity: 0.9; }
 .clearBtn {
   margin-top: 10px;
   width: 100%;
@@ -991,8 +1001,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 }
-.clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 
 .recordList { display: flex; flex-direction: column; gap: 6px; }
 .recordItem {
@@ -1020,8 +1031,9 @@
   font-size: 13px;
   cursor: pointer;
   padding: 4px;
+}@media (hover: hover) {
+  .recordRemove:hover { color: #FF8C8C; }
 }
-.recordRemove:hover { color: #FF8C8C; }
 
 .emptyMsg {
   text-align: center;

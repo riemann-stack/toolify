@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -41,8 +42,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C8FF3E; color: #0D0D0D; }
 
 /* textarea / input */
@@ -140,8 +142,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 32px;
+}@media (hover: hover) {
+  .optBtn:hover { color: var(--text); border-color: #C8FF3E; }
 }
-.optBtn:hover { color: var(--text); border-color: #C8FF3E; }
 .optBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -162,8 +165,9 @@
   font-weight: 600;
   min-height: 30px;
   white-space: nowrap;
+}@media (hover: hover) {
+  .smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 }
-.smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* 결과 카드 (텍스트 탭) */
@@ -284,8 +288,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
   white-space: nowrap;
+}@media (hover: hover) {
+  .copyBigBtn:hover { opacity: 0.9; }
 }
-.copyBigBtn:hover { opacity: 0.9; }
 
 .primaryBtn {
   appearance: none;
@@ -302,8 +307,9 @@
   width: 100%;
   margin-top: 14px;
   min-height: 48px;
+}@media (hover: hover) {
+  .primaryBtn:hover { opacity: 0.9; }
 }
-.primaryBtn:hover { opacity: 0.9; }
 
 /* HMAC 알고리즘 행 */
 .algRow {
@@ -330,8 +336,9 @@
   align-items: flex-start;
   gap: 4px;
   text-align: left;
+}@media (hover: hover) {
+  .algBtn:hover { border-color: #C8FF3E; }
 }
-.algBtn:hover { border-color: #C8FF3E; }
 .algBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -365,8 +372,9 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+}@media (hover: hover) {
+  .presetCard:hover { border-color: #C8FF3E; background: var(--bg2); }
 }
-.presetCard:hover { border-color: #C8FF3E; background: var(--bg2); }
 .presetTitle {
   font-size: 14px;
   color: var(--text);
@@ -415,10 +423,11 @@
   background: var(--bg2);
   cursor: pointer;
   transition: all 0.2s;
-}
-.dropZone:hover, .dropZoneActive {
+}@media (hover: hover) {
+  .dropZone:hover, .dropZoneActive {
   border-color: #C8FF3E;
   background: rgba(200, 255, 62, 0.04);
+}
 }
 .dropZoneIcon {
   font-size: 48px;

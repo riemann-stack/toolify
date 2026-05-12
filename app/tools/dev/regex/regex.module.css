@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -41,8 +42,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C8FF3E; color: #0D0D0D; }
 
 /* 정규식 입력 */
@@ -105,8 +107,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   user-select: none;
   min-height: 42px;
+}@media (hover: hover) {
+  .flagChip:hover { border-color: #C8FF3E; }
 }
-.flagChip:hover { border-color: #C8FF3E; }
 .flagChip input { accent-color: #C8FF3E; cursor: pointer; }
 .flagChipActive {
   background: rgba(200, 255, 62, 0.10);
@@ -313,8 +316,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 44px;
+}@media (hover: hover) {
+  .unitBtn:hover { border-color: #C8FF3E; }
 }
-.unitBtn:hover { border-color: #C8FF3E; }
 .unitBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -398,8 +402,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 32px;
+}@media (hover: hover) {
+  .langBtn:hover { color: var(--text); border-color: #C8FF3E; }
 }
-.langBtn:hover { color: var(--text); border-color: #C8FF3E; }
 .langBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -437,8 +442,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .categoryBtn:hover { color: var(--text); border-color: #C8FF3E; }
 }
-.categoryBtn:hover { color: var(--text); border-color: #C8FF3E; }
 .categoryBtnActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -527,8 +533,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   margin-top: 4px;
+}@media (hover: hover) {
+  .applyBtn:hover { background: #C8FF3E; color: #0D0D0D; }
 }
-.applyBtn:hover { background: #C8FF3E; color: #0D0D0D; }
 
 /* 치트시트 표 */
 .cheatTable {

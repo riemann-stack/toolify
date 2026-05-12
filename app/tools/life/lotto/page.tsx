@@ -270,7 +270,7 @@ export default function LottoPage() {
         {/* 관련 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/life/random',         icon: '🎲', name: '랜덤 추첨기',           desc: '범용 무작위 뽑기' },
               { href: '/tools/life/dutch',          icon: '💸', name: '더치페이 계산기',       desc: '여러 명 비용 분배' },

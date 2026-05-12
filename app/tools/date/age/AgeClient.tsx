@@ -15,7 +15,6 @@ import {
 
 type Tab = 'age' | 'dday' | 'stats' | 'milestone' | 'culture'
 type RefPreset = 'today' | 'eoy' | 'eoyNext' | 'custom'
-type TimelineSpan = 'short' | 'long'  // 70년 / 100년
 
 const currentYear = new Date().getFullYear()
 const yearsRange = Array.from({ length: 110 }, (_, i) => currentYear - i)
@@ -132,6 +131,45 @@ export default function AgeClient() {
   )
 }
 
+/* 기준일 직접 선택 — 생년월일과 동일한 년·월·일 select UI */
+function CustomRefDateSelect({ customRef, setCustomRef }: { customRef: string; setCustomRef: (s: string) => void }) {
+  // 기준일은 과거~미래 모두 가능 (현재 기준 -30년 ~ +30년)
+  const refYears = useMemo(
+    () => Array.from({ length: 61 }, (_, i) => currentYear + 30 - i),
+    []
+  )
+  const parts = customRef.split('-')
+  const y = parts[0] ?? ''
+  const m = parts[1] ? String(Number(parts[1])) : ''
+  const d = parts[2] ? String(Number(parts[2])) : ''
+
+  const commit = (yy: string, mm: string, dd: string) => {
+    if (!yy || !mm || !dd) return
+    const isoMonth = String(mm).padStart(2, '0')
+    const isoDay = String(dd).padStart(2, '0')
+    setCustomRef(`${yy}-${isoMonth}-${isoDay}`)
+  }
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div className={s.dateRow}>
+        <select className={s.dateSelect} value={y} onChange={e => commit(e.target.value, m, d)}>
+          <option value="">년도</option>
+          {refYears.map(yy => <option key={yy} value={yy}>{yy}년</option>)}
+        </select>
+        <select className={s.dateSelect} value={m} onChange={e => commit(y, e.target.value, d)}>
+          <option value="">월</option>
+          {monthsRange.map(mm => <option key={mm} value={mm}>{mm}월</option>)}
+        </select>
+        <select className={s.dateSelect} value={d} onChange={e => commit(y, m, e.target.value)}>
+          <option value="">일</option>
+          {daysRange.map(dd => <option key={dd} value={dd}>{dd}일</option>)}
+        </select>
+      </div>
+    </div>
+  )
+}
+
 /* ═════════════════════════════════════════ 탭 1 — 만 나이 ═════════════════════════════════════════ */
 type AgeTabProps = {
   birth: Date
@@ -171,10 +209,10 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
         </div>
       </div>
 
-      {/* 3종 나이 비교 */}
+      {/* 3가지 나이 비교 */}
       <div className={s.card}>
         <label className={s.cardLabel}>
-          3종 나이 비교
+          3가지 나이 비교
           <span className={s.cardLabelHint}>한국에서 통용되는 계산법</span>
         </label>
         <div className={s.compareGrid}>
@@ -206,10 +244,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
           <button className={`${s.refBtn} ${refPreset === 'custom'   ? s.refActive : ''}`} onClick={() => setRefPreset('custom')}>📅 직접 선택</button>
         </div>
         {refPreset === 'custom' && (
-          <div style={{ marginTop: 10 }}>
-            <input className={s.dateInput} type="date" value={customRef}
-              onChange={e => setCustomRef(e.target.value)} />
-          </div>
+          <CustomRefDateSelect customRef={customRef} setCustomRef={setCustomRef} />
         )}
       </div>
 
@@ -514,8 +549,6 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
   // 60대 이상 시 강조: 현재·향후 5종 호칭 표시
   const traditionalToShow = KOREAN_AGE_NAMES.filter(n => Math.abs(n.age - currentAge) <= 20).slice(0, 6)
 
-  const [span, setSpan] = useState<TimelineSpan>('short')
-
   return (
     <>
       {/* 띠·별자리·탄생석·세대 */}
@@ -585,120 +618,6 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
         </div>
       )}
 
-      {/* 인생 타임라인 SVG */}
-      <div className={s.card}>
-        <label className={s.cardLabel}>
-          인생 타임라인
-          <span className={s.cardLabelHint}>현재 위치 ◉</span>
-        </label>
-        <div className={s.timelineOpt}>
-          <button className={`${s.timelineBtn} ${span === 'short' ? s.timelineActive : ''}`} onClick={() => setSpan('short')}>0~70세 (짧게)</button>
-          <button className={`${s.timelineBtn} ${span === 'long'  ? s.timelineActive : ''}`} onClick={() => setSpan('long')}>0~100세 (길게)</button>
-        </div>
-        <div className={s.timelineWrap}>
-          <LifeTimelineSvg birth={birth} now={now} span={span} />
-        </div>
-      </div>
     </>
-  )
-}
-
-/* ─── 인생 타임라인 SVG ─── */
-function LifeTimelineSvg({ birth, now, span }: { birth: Date; now: Date; span: TimelineSpan }) {
-  const W = 760
-  const H = 160
-  const padL = 40
-  const padR = 40
-  const innerW = W - padL - padR
-  const lineY = 90
-  const maxAge = span === 'short' ? 70 : 100
-  const currentAge = calcAge(birth, now)
-
-  // 표시할 마일스톤: 70년 모드 → 핵심 / 100년 모드 → 더 많이
-  const milestones = (span === 'short'
-    ? AGE_MILESTONES.filter(m => m.age <= 70 && [0, 1, 7, 18, 30, 40, 50, 60, 70].includes(m.age))
-    : AGE_MILESTONES.filter(m => [0, 1, 18, 30, 50, 60, 70, 80, 90, 100].includes(m.age))
-  )
-  // 0세 시작점 추가 (출생)
-  const startEvent = { age: 0, name: '출생', emoji: '👶', date: birth }
-  const points = [
-    startEvent,
-    ...milestones.map(m => ({ age: m.age, name: m.name.split(' (')[0], emoji: m.emoji, date: dateAtAge(birth, m.age) })),
-  ]
-
-  // 4-tier 라벨 배치 (캄브리아·인류 충돌 회피와 동일 패턴)
-  const tierMap = new Map<number, number>()
-  const lastUsedX: number[] = [-Infinity, -Infinity, -Infinity, -Infinity]
-  const MIN_GAP = 80
-  points.forEach(p => {
-    const x = padL + (p.age / maxAge) * innerW
-    const tier = [0, 1, 2, 3].find(t => x - lastUsedX[t] >= MIN_GAP) ?? 3
-    tierMap.set(p.age, tier)
-    lastUsedX[tier] = x
-  })
-
-  const currentX = padL + (Math.min(currentAge, maxAge) / maxAge) * innerW
-
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={s.timelineSvg} aria-hidden="true">
-      <defs>
-        <linearGradient id="lifeLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%"   stopColor="#3EC8FF" />
-          <stop offset="40%"  stopColor="#C8FF3E" />
-          <stop offset="70%"  stopColor="#FFD700" />
-          <stop offset="100%" stopColor="#9B59B6" />
-        </linearGradient>
-      </defs>
-      {/* 메인 선 */}
-      <line x1={padL} y1={lineY} x2={W - padR} y2={lineY} stroke="url(#lifeLineGrad)" strokeWidth="3" />
-
-      {/* 10년 단위 눈금 */}
-      {Array.from({ length: maxAge / 10 + 1 }, (_, i) => i * 10).map(age => {
-        const x = padL + (age / maxAge) * innerW
-        return (
-          <g key={age}>
-            <line x1={x} y1={lineY - 5} x2={x} y2={lineY + 5} stroke="rgba(255,255,255,0.30)" strokeWidth="1" />
-            <text x={x} y={lineY + 22} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
-              {age}
-            </text>
-          </g>
-        )
-      })}
-
-      {/* 현재 위치 강조 */}
-      {currentAge <= maxAge && (
-        <>
-          <circle cx={currentX} cy={lineY} r="9" fill="#3EFFD0" stroke="#0a0a2e" strokeWidth="2" />
-          <circle cx={currentX} cy={lineY} r="14" fill="none" stroke="#3EFFD0" strokeWidth="1.5" opacity="0.5">
-            <animate attributeName="r" values="14;20;14" dur="2s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <text x={currentX} y={lineY - 28} textAnchor="middle" fontSize="11" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
-            현재 만 {currentAge}세
-          </text>
-        </>
-      )}
-
-      {/* 마일스톤 노드 */}
-      {points.map(p => {
-        const x = padL + (p.age / maxAge) * innerW
-        const passed = p.age <= currentAge
-        const tier = tierMap.get(p.age) ?? 0
-        const above = tier === 0 || tier === 2
-        const far   = tier === 2 || tier === 3
-        const labelOff = far ? 50 : 36
-        const labelY = above ? lineY - labelOff : lineY + (labelOff + 12)
-        const color = passed ? '#C8FF3E' : 'rgba(255,255,255,0.6)'
-        return (
-          <g key={p.age}>
-            <circle cx={x} cy={lineY} r="5" fill={passed ? '#C8FF3E' : 'rgba(255,255,255,0.20)'} stroke="#0a0a2e" strokeWidth="1.2" />
-            <text x={x} y={labelY} textAnchor="middle" fontSize="11" fill={color}
-              fontFamily="Noto Sans KR, sans-serif" fontWeight={700} className={s.timelineLabel}>
-              {p.emoji} {p.name}
-            </text>
-          </g>
-        )
-      })}
-    </svg>
   )
 }

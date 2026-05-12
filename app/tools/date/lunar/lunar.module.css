@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .card {
@@ -37,8 +38,9 @@
   border-radius: 8px;
   transition: all 0.15s;
   font-weight: 500;
+}@media (hover: hover) {
+  .dirBtn:hover { color: var(--text); }
 }
-.dirBtn:hover { color: var(--text); }
 .dirActive {
   background: var(--accent);
   color: #0D0D0D;
@@ -189,8 +191,9 @@
   color: var(--text);
   font-size: 13px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .linkBtn:hover { border-color: var(--accent); }
 }
-.linkBtn:hover { border-color: var(--accent); }
 .linkEmoji { font-size: 18px; }
 
 .empty {

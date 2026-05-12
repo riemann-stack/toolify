@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -35,8 +36,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 
 /* ── 카드 ── */
@@ -82,8 +84,9 @@
   transition: all 0.15s;
   white-space: nowrap;
   text-align: center;
+}@media (hover: hover) {
+  .toneBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toneBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .toneActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 길이·개수 토글 ── */
@@ -103,8 +106,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .optBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 액션 버튼 ── */
@@ -119,8 +123,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -133,8 +138,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .miniCopyBtn {
@@ -147,8 +153,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .miniCopyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniCopyBtn:hover { color: var(--accent); border-color: var(--accent); }
 .miniCopied { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
 
 /* ── 출력 박스 ── */
@@ -205,8 +212,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .elementCard:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.elementCard:hover { color: var(--text); border-color: var(--border-hover); }
 .elementCard small { display: block; font-size: 18px; margin-bottom: 2px; }
 .elementActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -251,8 +259,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .dataTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.dataTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .dataTypeBtn small { display: block; font-size: 22px; margin-bottom: 4px; }
 .dataTypeActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
 
@@ -273,8 +282,9 @@
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .formatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.formatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .formatActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
 
 .checkRow {
@@ -310,8 +320,9 @@
   padding: 18px 20px;
   position: relative;
   transition: transform 0.15s;
+}@media (hover: hover) {
+  .previewCard:hover { transform: translateY(-2px); border-color: var(--accent); }
 }
-.previewCard:hover { transform: translateY(-2px); border-color: var(--accent); }
 .previewIcon { font-size: 28px; margin-bottom: 8px; }
 .previewBadge {
   position: absolute;
@@ -374,8 +385,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .scenarioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.scenarioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .scenarioBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
 .scenarioActive { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
 

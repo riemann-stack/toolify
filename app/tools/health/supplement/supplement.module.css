@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -58,10 +59,12 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
-.tabActive { background: var(--accent); color: #0D0D0D; }
-.tabActive:hover { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #0D0D0D; }@media (hover: hover) {
+  .tabActive:hover { background: var(--accent); color: #0D0D0D; }
+}
 
 /* ── 영양제 카드 ── */
 .supCard {
@@ -106,8 +109,9 @@
   color: var(--muted);
   cursor: pointer;
   line-height: 1;
+}@media (hover: hover) {
+  .supRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.supRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 .supToggle {
   background: transparent;
   border: 1px solid var(--border);
@@ -153,8 +157,9 @@
   font-size: 14px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .ingRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.ingRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 
 @media (max-width: 640px) {
   .ingRow {
@@ -172,8 +177,9 @@
   cursor: pointer;
   margin-top: 6px;
   width: 100%;
+}@media (hover: hover) {
+  .addIngBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addIngBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── 복용 시간 ── */
 .timeRow {
@@ -210,8 +216,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addSupBtn:hover { background: rgba(200, 255, 62, 0.05); }
 }
-.addSupBtn:hover { background: rgba(200, 255, 62, 0.05); }
 .addSupBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── 프리셋 ── */
@@ -228,8 +235,9 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .presetBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.presetBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── 결과표 ── */
 .resultTable {
@@ -410,8 +418,9 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .resetBtn:hover { color: var(--text); border-color: var(--text); }
 }
-.resetBtn:hover { color: var(--text); border-color: var(--text); }
 
 /* ── 구분선 ── */
 .sectionDivider {
@@ -441,10 +450,12 @@
 }
 
 /* ─── 5탭 추가 색상 ─── */
-.tabActiveDrug    { background: rgba(255,107,107,0.20); color: #FF6B6B; font-weight: 700; }
-.tabActiveDrug:hover { background: rgba(255,107,107,0.20); color: #FF6B6B; }
-.tabActiveSyn     { background: rgba(155,89,182,0.20); color: #C485E0; font-weight: 700; }
-.tabActiveSyn:hover { background: rgba(155,89,182,0.20); color: #C485E0; }
+.tabActiveDrug    { background: rgba(255,107,107,0.20); color: #FF6B6B; font-weight: 700; }@media (hover: hover) {
+  .tabActiveDrug:hover { background: rgba(255,107,107,0.20); color: #FF6B6B; }
+}
+.tabActiveSyn     { background: rgba(155,89,182,0.20); color: #C485E0; font-weight: 700; }@media (hover: hover) {
+  .tabActiveSyn:hover { background: rgba(155,89,182,0.20); color: #C485E0; }
+}
 
 /* ─── 특수 상황 토글 ─── */
 .lifeStageRow {
@@ -463,8 +474,9 @@
   text-align: center;
   font-size: 12.5px;
   color: var(--muted);
+}@media (hover: hover) {
+  .lifeStageBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.lifeStageBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .lifeStageBtnActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .lifeStageBtnEmoji { font-size: 22px; display: block; margin-bottom: 4px; }
 .lifeStageBtnLabel { font-size: 12px; }
@@ -490,8 +502,9 @@
   align-items: center;
   gap: 8px;
   position: relative;
+}@media (hover: hover) {
+  .drugCategoryBtn:hover { border-color: var(--border-hover); }
 }
-.drugCategoryBtn:hover { border-color: var(--border-hover); }
 .drugCategoryBtnActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
 .drugCategoryBtnEmoji { font-size: 20px; flex-shrink: 0; }
 .drugCategoryBtnName { font-weight: 600; }
@@ -628,8 +641,9 @@
   font-size: 12px;
   color: var(--text);
   line-height: 1.4;
+}@media (hover: hover) {
+  .koreaPresetBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.koreaPresetBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ─── 게이지 막대 (성분별 권장량 대비) ─── */
 .gaugeWrap {

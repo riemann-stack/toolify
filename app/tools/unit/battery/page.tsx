@@ -227,7 +227,7 @@ export default function BatteryPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/jet-lag',   icon: '✈️', name: '시차 적응 계산기',   desc: '여행 전·중·후 시차 적응 일정' },
               { href: '/tools/life/unit-price',icon: '🏷️', name: '단가 비교 계산기',   desc: '보조배터리 mAh당 가격 비교' },

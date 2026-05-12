@@ -322,7 +322,7 @@ export default function FartRiskPage() {
         {/* 7. 관련 도구 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/supplement',  emoji: '💊', name: '영양제 성분 체크',   desc: '단백질 보충제 안전' },
               { href: '/tools/cooking/substitute', emoji: '🔁', name: '식재료 대체 비율',   desc: '대체 음식·양 변환' },

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 조항 ── */
@@ -33,8 +34,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modeActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -197,8 +199,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pill:hover { border-color: var(--border-hover); color: var(--text); }
 .pillActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.4);
@@ -228,8 +231,9 @@
   font-weight: 700;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .ltvBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.ltvBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .ltvCash    { border-color: rgba(62,255,155,0.35); }
 .ltvNormal  { border-color: rgba(200,255,62,0.30); }
 .ltvHigh    { border-color: rgba(255,140,62,0.45); color: #FF8C3E; }
@@ -258,8 +262,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .toggleActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -287,8 +292,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .miniBtn:hover { color: var(--text); }
 }
-.miniBtn:hover { color: var(--text); }
 .miniActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -650,6 +656,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

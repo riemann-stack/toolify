@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 11px 8px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
@@ -54,8 +56,9 @@
   padding: 6px 12px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .selectBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 프리셋 ── */
@@ -64,8 +67,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
   padding: 6px 14px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.presetBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 기준 선택 (A/B/T) ── */
 .modeTabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
@@ -73,8 +77,9 @@
   padding: 9px 6px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3);
   font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeTab:hover { color: var(--text); }
 }
-.modeTab:hover { color: var(--text); }
 .modeTabActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 결과 카드 ── */
@@ -98,8 +103,9 @@
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copyBtnDone { border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 비율 뱃지 ── */
@@ -151,8 +157,9 @@
   padding: 9px 16px; font-size: 13px; color: var(--accent);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .downloadBtn:hover { background: rgba(200,255,62,0.22); }
 }
-.downloadBtn:hover { background: rgba(200,255,62,0.22); }
 
 /* ── 공통 ── */
 .empty {

@@ -312,7 +312,7 @@ export default function BakerPercentPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/sourdough',     icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화·피크 시간·급이 스케줄' },
               { href: '/tools/cooking/recipe',        icon: '📐', name: '레시피 비율 계산기',     desc: '인분 수에 맞게 재료 비율 자동' },

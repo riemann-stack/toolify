@@ -239,7 +239,7 @@ export default function LifeTimePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',    icon: '📅', name: 'D-day 계산기',     desc: '목표일까지 남은 일수' },
               { href: '/tools/date/age',     icon: '🎂', name: '만 나이 계산기',    desc: '법 개정 기준 만 나이' },

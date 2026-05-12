@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 리그 프리셋 ── */
@@ -30,8 +31,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   margin-top: 2px;
+}@media (hover: hover) {
+  .leagueBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.leagueBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .leagueActive {
   background: var(--accent);
   color: #0D0D0D;
@@ -64,8 +66,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -235,8 +238,9 @@
   text-align: left;
   transition: all 0.15s;
   margin-top: 14px;
+}@media (hover: hover) {
+  .advancedToggle:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.advancedToggle:hover { color: var(--text); border-color: var(--border-hover); }
 .advancedBox {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -259,8 +263,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .systemBtn:hover { color: var(--text); }
 }
-.systemBtn:hover { color: var(--text); }
 .systemActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -393,8 +398,9 @@
   transition: all 0.15s;
   text-align: center;
   line-height: 1.5;
+}@media (hover: hover) {
+  .targetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.targetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .targetBtn small {
   display: block;
   font-family: 'Inter', system-ui, sans-serif;
@@ -641,8 +647,9 @@
   font-size: 14px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .rivalRemoveBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.rivalRemoveBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 .addRivalBtn {
   background: var(--bg3);
@@ -656,8 +663,9 @@
   width: 100%;
   margin-top: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addRivalBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addRivalBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .rivalSubInputs {
   display: grid;
@@ -790,6 +798,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

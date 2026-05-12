@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 우주 분위기 ── */
@@ -157,8 +158,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .presetActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 행성 선택 ── */
@@ -183,8 +185,9 @@
   align-items: center;
   gap: 6px;
   justify-content: center;
+}@media (hover: hover) {
+  .planetCheckBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.planetCheckBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .planetCheckActive {
   background: rgba(62,255,208,0.08);
   border-color: rgba(62,255,208,0.50);
@@ -393,8 +396,9 @@
   cursor: pointer;
   transition: all 0.15s;
   margin-bottom: 12px;
+}@media (hover: hover) {
+  .gravityRunBtn:hover { background: rgba(62,255,208,0.18); }
 }
-.gravityRunBtn:hover { background: rgba(62,255,208,0.18); }
 .gravityRunBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .gravityLanes {
@@ -614,6 +618,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

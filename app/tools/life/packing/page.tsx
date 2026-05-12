@@ -127,7 +127,7 @@ export default function PackingPage() {
       </div>
 
       {/* 3. 기온대별 가이드 */}
-      <h2 style={sectionTitle}>🌡️ 기온대별 옷 가이드 (-10°C ~ 30°C+)</h2>
+      <h2 style={sectionTitle}>🌡️ 기온대별 옷 가이드</h2>
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[

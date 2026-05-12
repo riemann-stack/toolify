@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -33,8 +34,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -94,8 +96,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modePyung { border-color: rgba(200,255,62,0.40); }
 .modeMeter { border-color: rgba(62,200,255,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
@@ -212,8 +215,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pill:hover { color: var(--text); border-color: var(--border-hover); }
 .pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── 창문·문 프리셋 ── */
@@ -237,8 +241,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .presetActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -273,8 +278,9 @@
   text-align: left;
   font-family: 'Noto Sans KR', sans-serif;
   position: relative;
+}@media (hover: hover) {
+  .wallpaperCard:hover { border-color: var(--border-hover); }
 }
-.wallpaperCard:hover { border-color: var(--border-hover); }
 .wpSilk   { border-color: rgba(200,255,62,0.40); }
 .wpSturdy { border-color: rgba(62,255,155,0.40); }
 .wpPvc    { border-color: rgba(62,200,255,0.40); }
@@ -336,8 +342,9 @@
   transition: all 0.15s;
   text-align: center;
   position: relative;
+}@media (hover: hover) {
+  .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .lossBtn small {
   display: block;
   font-family: 'Inter', system-ui, sans-serif;
@@ -547,9 +554,11 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}@media (hover: hover) {
+  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
-.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 .addBtn {
   background: var(--bg3);
@@ -563,8 +572,9 @@
   width: 100%;
   margin-top: 8px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .removeRoomBtn {
   background: var(--bg3);
@@ -574,8 +584,9 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 /* ── 합계 표 (탭 2) ── */
 .summaryTable {
@@ -683,8 +694,9 @@
   font-size: 13px;
   color: var(--accent);
   margin-top: 2px;
+}@media (hover: hover) {
+  .priceTierBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.priceTierBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .priceTierActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 평당 비교 ── */
@@ -713,6 +725,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

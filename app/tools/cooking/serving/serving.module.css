@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -65,8 +66,9 @@
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .ingBtn:hover { border-color: rgba(200,255,62,0.4); }
 }
-.ingBtn:hover { border-color: rgba(200,255,62,0.4); }
 .ingEmoji { font-size: 22px; line-height: 1; }
 .ingName {
   font-size: 12px;
@@ -110,8 +112,9 @@
   cursor: pointer;
   transition: all 0.15s;
   display: flex; align-items: center; justify-content: center;
+}@media (hover: hover) {
+  .stepBtn:hover { border-color: var(--accent); }
 }
-.stepBtn:hover { border-color: var(--accent); }
 .stepBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 .peopleInput {
   flex: 1;
@@ -153,8 +156,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .quickActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.5);
@@ -181,8 +185,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .condActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.5);
@@ -400,8 +405,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { background: rgba(200,255,62,0.2); }
 }
-.copyBtn:hover { background: rgba(200,255,62,0.2); }
 .copyBtn.copied { background: var(--accent); color: #0D0D0D; }
 
 .shopList {
@@ -491,8 +497,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 식이 제한 칩 */
@@ -511,8 +518,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .dietaryChip:hover { border-color: var(--accent); color: var(--text); }
 }
-.dietaryChip:hover { border-color: var(--accent); color: var(--text); }
 .dietaryChipActive {
   background: rgba(62, 200, 255, 0.12);
   border-color: rgba(62, 200, 255, 0.5);
@@ -672,8 +680,9 @@
   text-decoration: none;
   font-family: 'Noto Sans KR', sans-serif;
   transition: border-color 0.15s, background 0.15s;
+}@media (hover: hover) {
+  .crossLink:hover { border-color: var(--accent); background: var(--bg2); color: var(--accent); }
 }
-.crossLink:hover { border-color: var(--accent); background: var(--bg2); color: var(--accent); }
 
 /* 가족 입력 */
 .familyList { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
@@ -742,8 +751,9 @@
   font-size: 13px;
   cursor: pointer;
   padding: 4px;
+}@media (hover: hover) {
+  .familyRemove:hover { color: #FF8C8C; }
 }
-.familyRemove:hover { color: #FF8C8C; }
 
 .addMemberBtn {
   margin-top: 12px;
@@ -758,8 +768,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .addMemberBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addMemberBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 .familyTotal {
   margin-top: 14px;

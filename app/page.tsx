@@ -97,7 +97,10 @@ export default function HomePage() {
                         key={tool.href}
                         href={tool.href}
                         className={styles.searchItem}
-                        onClick={() => setQuery('')}
+                        prefetch={false}
+                        // setQuery 즉시 호출 시 Link 가 unmount 되어 모바일/PC 모두에서
+                        // 첫 클릭이 무시되는 버그가 있어 다음 tick 으로 미룬다.
+                        onClick={() => { setTimeout(() => setQuery(''), 0) }}
                       >
                         <span className={styles.searchItemIcon}>{tool.icon}</span>
                         <div>

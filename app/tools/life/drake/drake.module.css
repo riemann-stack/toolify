@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 프리셋 ── */
@@ -15,18 +16,21 @@
 .presetName  { font-size: 13px; font-weight: 700; line-height: 1; }
 .presetSub   { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
 
-.presetOpt  { border-color: rgba(62,255,155,0.4); }
-.presetOpt:hover { background: rgba(62,255,155,0.06); }
+.presetOpt  { border-color: rgba(62,255,155,0.4); }@media (hover: hover) {
+  .presetOpt:hover { background: rgba(62,255,155,0.06); }
+}
 .presetOpt.presetActive { background: rgba(62,255,155,0.12); border-color: #3EFF9B; }
 .presetOpt.presetActive .presetName { color: #3EFF9B; }
 
-.presetReal  { border-color: rgba(200,255,62,0.4); }
-.presetReal:hover { background: rgba(200,255,62,0.06); }
+.presetReal  { border-color: rgba(200,255,62,0.4); }@media (hover: hover) {
+  .presetReal:hover { background: rgba(200,255,62,0.06); }
+}
 .presetReal.presetActive { background: rgba(200,255,62,0.14); border-color: var(--accent); }
 .presetReal.presetActive .presetName { color: var(--accent); }
 
-.presetPes  { border-color: rgba(255,140,62,0.4); }
-.presetPes:hover { background: rgba(255,140,62,0.06); }
+.presetPes  { border-color: rgba(255,140,62,0.4); }@media (hover: hover) {
+  .presetPes:hover { background: rgba(255,140,62,0.06); }
+}
 .presetPes.presetActive { background: rgba(255,140,62,0.12); border-color: #FF8C3E; }
 .presetPes.presetActive .presetName { color: #FF8C3E; }
 
@@ -70,8 +74,9 @@
   background: var(--accent); border: 2px solid #0D0D0D;
   box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgba(200,255,62,0.35);
   cursor: pointer; transition: transform 0.12s;
+}@media (hover: hover) {
+  .slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
-.slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .slider::-moz-range-thumb {
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--accent); border: 2px solid #0D0D0D;
@@ -263,8 +268,9 @@
   color: var(--text); font-size: 14px; font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 .shareBtnDone {
   background: rgba(200,255,62,0.12) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;

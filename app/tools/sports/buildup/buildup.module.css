@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -48,8 +49,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* ── 입력 ── */
@@ -98,8 +100,9 @@
   flex-shrink: 0;
   scroll-snap-align: start;
   min-height: 32px;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* pill */
 .pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -116,8 +119,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 /* ── 프로파일 ── */
@@ -141,8 +145,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
+}@media (hover: hover) {
+  .profileBtn:hover { border-color: var(--accent); }
 }
-.profileBtn:hover { border-color: var(--accent); }
 .profileBtnActive {
   background: var(--bg2);
   border-color: var(--accent);
@@ -378,8 +383,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 44px;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copyBtnDone { border-color: #3EFF9B; color: #3EFF9B; }
 
 .routineSaveRow {
@@ -404,8 +410,9 @@
   white-space: nowrap;
   min-height: 44px;
 }
-.saveBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-.saveBtn:hover:not(:disabled) { opacity: 0.9; }
+.saveBtn:disabled { opacity: 0.4; cursor: not-allowed; }@media (hover: hover) {
+  .saveBtn:hover:not(:disabled) { opacity: 0.9; }
+}
 
 .clearBtn {
   appearance: none;
@@ -418,8 +425,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 }
-.clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 
 /* ── 추천 카드 (레이스 기반) ── */
 .recoList { display: flex; flex-direction: column; gap: 8px; }
@@ -436,8 +444,9 @@
   padding: 12px 14px;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .recoBtn:hover { border-color: var(--accent); background: var(--bg2); }
 }
-.recoBtn:hover { border-color: var(--accent); background: var(--bg2); }
 .recoName { font-size: 14px; font-weight: 700; color: var(--text); }
 .recoMeta { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 .recoApply { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 2px; }
@@ -457,8 +466,9 @@
   padding: 12px 14px;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); background: var(--bg2); }
 }
-.presetBtn:hover { border-color: var(--accent); background: var(--bg2); }
 .presetName { font-size: 13px; font-weight: 700; color: var(--text); }
 .presetMeta { font-size: 12px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
 .presetNote { font-size: 11px; color: var(--muted); line-height: 1.5; }
@@ -495,8 +505,9 @@
   font-size: 14px;
   cursor: pointer;
   padding: 4px 8px;
+}@media (hover: hover) {
+  .routineRemove:hover { color: #FF8C8C; }
 }
-.routineRemove:hover { color: #FF8C8C; }
 .routineMeta {
   font-size: 12px;
   color: var(--muted);
@@ -523,8 +534,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 4px;
   align-self: flex-start;
+}@media (hover: hover) {
+  .routineApply:hover { background: var(--accent); color: #0D0D0D; }
 }
-.routineApply:hover { background: var(--accent); color: #0D0D0D; }
 .routineActions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -568,8 +580,9 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.link { color: var(--accent); text-decoration: none; }
-.link:hover { text-decoration: underline; }
+.link { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .link:hover { text-decoration: underline; }
+}
 
 /* iOS zoom 방지 */
 @media (max-width: 640px) {

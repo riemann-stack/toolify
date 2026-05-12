@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 카테고리 탭 (2단 그리드) ── */
@@ -24,8 +25,9 @@
   font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.tab:hover { color: var(--text); border-color: var(--border-hover); }
 .tabActive {
   background: var(--accent-dim) !important;
   border-color: rgba(200,255,62,0.4) !important;
@@ -66,8 +68,9 @@
   background: transparent; color: var(--muted);
   font-size: 12px; cursor: pointer; transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .genderBtn:hover { color: var(--text); }
 }
-.genderBtn:hover { color: var(--text); }
 .genderBtnActive {
   background: var(--accent) !important;
   color: #000 !important;
@@ -162,8 +165,9 @@
   background: var(--bg3); white-space: nowrap; font-size: 11px;
   letter-spacing: 0.04em;
 }
-.tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-.tr:hover { background: var(--bg3); }
+.tr:nth-child(even) { background: rgba(255,255,255,0.02); }@media (hover: hover) {
+  .tr:hover { background: var(--bg3); }
+}
 .trHighlight {
   background: rgba(200,255,62,0.1) !important;
   outline: 1px solid rgba(200,255,62,0.3);

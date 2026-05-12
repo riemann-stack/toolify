@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 입력 */
@@ -111,8 +113,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 /* 산정기간 박스 */
@@ -322,10 +325,11 @@
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
-}
-.crossLink:hover {
+}@media (hover: hover) {
+  .crossLink:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 
 /* 안내·경고 */

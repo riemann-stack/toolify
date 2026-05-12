@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 13px 8px; border-radius: 10px; border: none;
   font-size: 14px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabDogActive { background: #FFB347 !important; color: #000 !important; font-weight: 700 !important; }
 .tabCatActive { background: #C084FC !important; color: #000 !important; font-weight: 700 !important; }
 
@@ -57,8 +59,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 4px; cursor: pointer; transition: all 0.15s;
   display: flex; flex-direction: column; align-items: center; gap: 4px;
+}@media (hover: hover) {
+  .sizeBtn:hover { border-color: var(--border-hover); }
 }
-.sizeBtn:hover { border-color: var(--border-hover); }
 .sizeBtnIcon { font-size: 20px; line-height: 1; }
 .sizeBtnText { font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); }
 .sizeBtnDesc { font-size: 10px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
@@ -70,8 +73,9 @@
   flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   padding: 10px 10px; cursor: pointer; transition: all 0.15s;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; color: var(--muted); text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 
 /* ── 공통 활성 버튼 (CSS 변수 활용) ── */
 .petBtnActive {
@@ -111,8 +115,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
   padding: 6px 12px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.presetBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .presetDogActive { background: rgba(255,179,71,.15) !important; border-color: rgba(255,179,71,.4) !important; color: #FFB347 !important; }
 .presetCatActive { background: rgba(192,132,252,.15) !important; border-color: rgba(192,132,252,.4) !important; color: #C084FC !important; }
 
@@ -152,8 +157,9 @@
   width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border);
   border-radius: 10px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.copyBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .copyBtnDone { border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 면책 조항 ── */
@@ -168,8 +174,9 @@
   flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   padding: 10px 6px; cursor: pointer; font-size: 12px; color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center;
+}@media (hover: hover) {
+  .foodModeBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.foodModeBtn:hover { border-color: var(--border-hover); color: var(--text); }
 
 /* ── 고양이 밀도 2열 ── */
 .densityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

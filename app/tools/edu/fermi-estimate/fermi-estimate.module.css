@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .disclaimer {
@@ -33,8 +34,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive { background: rgba(62,255,208,0.10); color: #3EFFD0; font-weight: 700; }
 
 .card {
@@ -90,8 +92,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .catDaily       { border-color: var(--accent); }
 .catEnvironment { border-color: rgba(62,255,155,0.40); }
 .catBusiness    { border-color: rgba(255,215,0,0.40); }
@@ -119,8 +122,9 @@
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .templateCard:hover { border-color: #3EFFD0; transform: translateY(-1px); }
 }
-.templateCard:hover { border-color: #3EFFD0; transform: translateY(-1px); }
 .tplDaily       { border-left-color: var(--accent); }
 .tplEnvironment { border-left-color: #3EFF9B; }
 .tplBusiness    { border-left-color: #FFD700; }
@@ -240,8 +244,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}@media (hover: hover) {
+  .varDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 }
-.varDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 .varDeleteBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .varValueRow {
@@ -320,8 +325,9 @@
   width: 100%;
   margin-top: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addVarBtn:hover:not(:disabled) { color: #3EFFD0; border-color: #3EFFD0; }
 }
-.addVarBtn:hover:not(:disabled) { color: #3EFFD0; border-color: #3EFFD0; }
 .addVarBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── 공식 ── */
@@ -562,9 +568,11 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .libItemBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
+}@media (hover: hover) {
+  .libItemBtnDanger:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.libItemBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
-.libItemBtnDanger:hover { color: #FF6B6B; border-color: #FF6B6B; }
 .libEmpty {
   text-align: center;
   padding: 32px 16px;
@@ -683,8 +691,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
 }
-.actionBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
 .actionBtnPrimary { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; }
 
 .copyBtn {
@@ -699,6 +708,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

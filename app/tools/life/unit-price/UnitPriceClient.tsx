@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './unit-price.module.css'
 import {
   UNITS, UNIT_KIND, UNIT_FACTOR, BASE_UNIT_BY_KIND, BASES,
-  QUICK_AMOUNT_BY_UNIT, QUICK_PRICES, CONSUMPTION_OPTIONS,
+  CONSUMPTION_OPTIONS,
   num, fmt, fmt1, formatPriceInput, sanitizeDecimal,
   recommendBase,
   type Unit, type Base,
@@ -175,17 +175,19 @@ export default function UnitPriceClient() {
         <div className={s.empty}>↓ 상품 2개 이상의 가격·용량을 입력하면 즉시 비교됩니다.</div>
       )}
 
-      {/* ── 상품 입력 ── */}
-      {products.map((p, idx) => (
-        <ProductCard
-          key={idx}
-          product={p}
-          idx={idx}
-          canRemove={products.length > 2}
-          onChange={(key, value) => setField(idx, key, value)}
-          onRemove={() => removeProduct(idx)}
-        />
-      ))}
+      {/* ── 상품 입력 (모바일도 2열) ── */}
+      <div className={s.productsGrid}>
+        {products.map((p, idx) => (
+          <ProductCard
+            key={idx}
+            product={p}
+            idx={idx}
+            canRemove={products.length > 2}
+            onChange={(key, value) => setField(idx, key, value)}
+            onRemove={() => removeProduct(idx)}
+          />
+        ))}
+      </div>
 
       {products.length < 3 && (
         <button type="button" className={s.addBtn} onClick={addProduct}>
@@ -366,21 +368,19 @@ function ProductCard({
 }) {
   const decCount = () => onChange('count', String(Math.max(1, num(p.count) - 1)))
   const incCount = () => onChange('count', String(Math.min(99, num(p.count) + 1)))
-  const quickAmounts = QUICK_AMOUNT_BY_UNIT[p.unit] || []
 
   return (
     <div className={`${s.productCard} ${CARD_CLS[idx]}`}>
-      <span className={s.productBadge}>{LABELS[idx]}</span>
       {canRemove && (
         <button type="button" className={s.removeBtn} onClick={onRemove} aria-label="상품 삭제">×</button>
       )}
 
       <div className={s.fieldRow}>
-        {/* 상품명 */}
-        <div className={s.field}>
-          <label className={s.fieldLabel}>상품명 (선택)</label>
-          <input className={s.input}
-            placeholder="예: 비타500 대용량"
+        {/* 상품명 — 라벨이 input 앞쪽에 inline 으로 붙어 겹침 방지 */}
+        <div className={s.nameRow}>
+          <span className={`${s.nameBadge} ${CARD_CLS[idx]}`}>{LABELS[idx]}</span>
+          <input className={`${s.input} ${s.nameInput}`}
+            placeholder="상품명 (선택)"
             value={p.name}
             onChange={e => onChange('name', e.target.value)} />
         </div>
@@ -393,14 +393,6 @@ function ProductCard({
             placeholder="0"
             value={p.price ? formatPriceInput(p.price) : ''}
             onChange={e => onChange('price', e.target.value.replace(/[^0-9]/g, ''))} />
-          <div className={s.chipRow}>
-            {QUICK_PRICES.map(amt => (
-              <button key={amt} type="button" className={s.chip}
-                onClick={() => onChange('price', String(amt))}>
-                {fmt(amt)}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* 용량 + 단위 */}
@@ -424,20 +416,10 @@ function ProductCard({
             </div>
           </div>
         </div>
-        {quickAmounts.length > 0 && (
-          <div className={s.chipRow}>
-            {quickAmounts.map(amt => (
-              <button key={amt} type="button" className={s.chip}
-                onClick={() => onChange('amount', String(amt))}>
-                {amt}{p.unit}
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* 개수 (큰 +/-) */}
         <div className={s.field}>
-          <label className={s.fieldLabel}>개수 *</label>
+          <label className={s.fieldLabel}>개수 * <span className={s.fieldHint}>1+1 → 2 · 2+1 → 3</span></label>
           <div className={s.countRow}>
             <button type="button" className={s.countBtn} onClick={decCount} aria-label="개수 감소">−</button>
             <input className={`${s.input} ${s.inputBig} ${s.countInput}`}
@@ -446,9 +428,6 @@ function ProductCard({
               onChange={e => onChange('count', e.target.value.replace(/[^0-9]/g, ''))} />
             <button type="button" className={s.countBtn} onClick={incCount} aria-label="개수 증가">+</button>
           </div>
-          <p className={s.countHint}>
-            💡 1+1 → 개수 <strong>2</strong>개 · 2+1 → 개수 <strong>3</strong>개 · 3+1 → 개수 <strong>4</strong>개로 입력
-          </p>
         </div>
 
         {/* 고급 옵션 (아코디언) */}

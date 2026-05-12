@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -33,8 +34,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -94,8 +96,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modePyung { border-color: rgba(200,255,62,0.40); }
 .modeMeter { border-color: rgba(62,200,255,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
@@ -211,8 +214,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pill:hover { color: var(--text); border-color: var(--border-hover); }
 .pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── 칠할 부위 체크박스 (4개) ── */
@@ -234,8 +238,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}@media (hover: hover) {
+  .partCard:hover { border-color: var(--border-hover); }
 }
-.partCard:hover { border-color: var(--border-hover); }
 .partCard input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
 .partLabel {
   font-size: 13px;
@@ -280,8 +285,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .presetActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -315,8 +321,9 @@
   transition: all 0.15s;
   text-align: left;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .paintCard:hover { border-color: var(--border-hover); }
 }
-.paintCard:hover { border-color: var(--border-hover); }
 .pntWater   { border-color: rgba(200,255,62,0.40); }
 .pntOil     { border-color: rgba(255,140,62,0.40); }
 .pntEnamel  { border-color: rgba(255,215,0,0.40); }
@@ -381,8 +388,9 @@
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .brandBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.brandBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .brandSamhwa     { border-color: rgba(255,107,107,0.40); }
 .brandKcc        { border-color: rgba(62,200,255,0.40); }
 .brandNoroo      { border-color: rgba(255,215,0,0.40); }
@@ -429,8 +437,9 @@
 }
 .coatOnce  { border-color: var(--border); }
 .coatTwice { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.coatThree { border-color: rgba(255,140,62,0.45); }
-.coatBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.coatThree { border-color: rgba(255,140,62,0.45); }@media (hover: hover) {
+  .coatBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
 .coatOnce.coatActive  { background: rgba(255,255,255,0.06);   color: var(--text);   border-color: var(--text);  font-weight: 700; }
 .coatTwice.coatActive { background: var(--accent-dim);        color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .coatThree.coatActive { background: rgba(255,140,62,0.10);   color: #FF8C3E;       border-color: #FF8C3E;       font-weight: 700; }
@@ -462,8 +471,9 @@
 }
 .lossSafe { border-color: rgba(62,255,155,0.40); }
 .lossStd  { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.lossWarn { border-color: rgba(255,140,62,0.40); }
-.lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
+.lossWarn { border-color: rgba(255,140,62,0.40); }@media (hover: hover) {
+  .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
 .lossSafe.lossActive { background: rgba(62,255,155,0.12);  color: #3EFF9B;       border-color: #3EFF9B; font-weight: 700; }
 .lossStd.lossActive  { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .lossWarn.lossActive { background: rgba(255,140,62,0.12);  color: #FF8C3E;       border-color: #FF8C3E; font-weight: 700; }
@@ -656,8 +666,9 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 .wallSubBlock {
   background: var(--bg3);
@@ -713,9 +724,11 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}@media (hover: hover) {
+  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
-.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 .addBtn {
   background: var(--bg3);
@@ -729,8 +742,9 @@
   width: 100%;
   margin-top: 8px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .toggleRow {
   display: flex;
@@ -850,8 +864,9 @@
   font-size: 13px;
   color: var(--accent);
   margin-top: 2px;
+}@media (hover: hover) {
+  .priceTierBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.priceTierBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .priceTierActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .compareLine {
@@ -879,6 +894,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

@@ -235,7 +235,7 @@ export default function DutchPage() {
         {/* 관련 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨·룰렛·팀 나누기' },
               { href: '/tools/life/ladder',     icon: '🪜', name: '사다리타기',              desc: '회식 분담·점심 메뉴 정하기' },

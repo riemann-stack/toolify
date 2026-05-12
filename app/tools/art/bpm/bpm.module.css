@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap {
   display: flex;
   flex-direction: column;
@@ -79,11 +80,11 @@
   color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
-}
-
-.presetBtn:hover {
+}@media (hover: hover) {
+  .presetBtn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 
 .presetBtnActive {
@@ -135,10 +136,10 @@
   color: var(--accent);
   cursor: pointer;
   transition: all 0.15s;
-}
-
-.heroCopy:hover {
+}@media (hover: hover) {
+  .heroCopy:hover {
   background: rgba(200, 255, 62, 0.2);
+}
 }
 
 .heroCopied {
@@ -220,11 +221,11 @@
   cursor: pointer;
   transition: all 0.15s;
   vertical-align: middle;
-}
-
-.copyBtn:hover {
+}@media (hover: hover) {
+  .copyBtn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
 }
 
 .copyBtnDone {

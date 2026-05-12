@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 조항 ── */
@@ -35,8 +36,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveInherit { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
 .tabActiveHeirs   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
@@ -115,8 +117,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .relBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.relBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .relSpouse { border-color: rgba(255,215,0,0.4); }
 .relAdult { border-color: rgba(200,255,62,0.4); }
 .relMinor { border-color: rgba(62,200,255,0.4); }
@@ -149,8 +152,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); }
 }
-.toggleBtn:hover { color: var(--text); }
 .toggleActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -170,8 +174,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pill:hover { border-color: var(--border-hover); color: var(--text); }
 .pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
 
 /* ── select ── */
@@ -243,8 +248,9 @@
   text-align: left;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .detailToggle:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.detailToggle:hover { color: var(--text); border-color: var(--border-hover); }
 .detailBox {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -398,8 +404,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 .addBtn {
   background: var(--bg3);
@@ -413,8 +420,9 @@
   margin-top: 10px;
   width: 100%;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .smallSelect {
   background: var(--bg3);
@@ -695,8 +703,9 @@
   gap: 10px;
   width: 100%;
   text-align: left;
+}@media (hover: hover) {
+  .propertyToggle:hover { border-color: var(--accent); }
 }
-.propertyToggle:hover { border-color: var(--accent); }
 .propertyToggleActive { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 
 /* ─── 메트릭 그리드 ─── */
@@ -741,8 +750,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .checkRow {

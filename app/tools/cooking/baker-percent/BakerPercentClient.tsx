@@ -1158,8 +1158,23 @@ export default function BakerPercentClient() {
               <span className={s.cardLabelHint}>{targetTotal}g</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={100} max={10000} step={50} value={targetTotal} onChange={e => setTargetTotal(Number(e.target.value))} />
-              <span className={s.sliderValue}>{fmt(targetTotal)}g</span>
+              <input type="range" min={100} max={10000} step={5} value={targetTotal} onChange={e => setTargetTotal(Number(e.target.value))} />
+              <input
+                type="number"
+                inputMode="decimal"
+                min={50}
+                max={20000}
+                step={1}
+                value={targetTotal}
+                onChange={e => setTargetTotal(Math.max(0, Number(e.target.value) || 0))}
+                style={{
+                  width: 80, padding: '6px 10px', background: 'var(--bg3)',
+                  border: '1px solid var(--border)', borderRadius: 8,
+                  fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14,
+                  fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
+                }}
+              />
+              <span className={s.unit}>g</span>
             </div>
             <div className={s.flourQuickRow}>
               {[
@@ -1290,15 +1305,21 @@ export default function BakerPercentClient() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
               <div>
                 <span className={s.subLabel}>밀가루 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10" value={mainFlour} onChange={e => setMainFlour(n(e.target.value, 0))} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                  value={mainFlour === 0 ? '' : mainFlour}
+                  onChange={e => setMainFlour(n(e.target.value, 0))} />
               </div>
               <div>
                 <span className={s.subLabel}>물 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10" value={mainWater} onChange={e => setMainWater(n(e.target.value, 0))} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                  value={mainWater === 0 ? '' : mainWater}
+                  onChange={e => setMainWater(n(e.target.value, 0))} />
               </div>
               <div>
                 <span className={s.subLabel}>소금 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="0.5" value={mainSalt} onChange={e => setMainSalt(n(e.target.value, 0))} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="0.5"
+                  value={mainSalt === 0 ? '' : mainSalt}
+                  onChange={e => setMainSalt(n(e.target.value, 0))} />
               </div>
             </div>
           </div>
@@ -1310,11 +1331,15 @@ export default function BakerPercentClient() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
                 <span className={s.subLabel}>총 사용량 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10" value={pfTotal} onChange={e => setPfTotal(n(e.target.value, 0))} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                  value={pfTotal === 0 ? '' : pfTotal}
+                  onChange={e => setPfTotal(n(e.target.value, 0))} />
               </div>
               <div>
                 <span className={s.subLabel}>수분율 (%)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" max="200" step="5" value={pfHydration} onChange={e => setPfHydration(n(e.target.value, 0))} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" max="200" step="5"
+                  value={pfHydration === 0 ? '' : pfHydration}
+                  onChange={e => setPfHydration(n(e.target.value, 0))} />
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 /* ── CARD ── */
@@ -48,10 +49,11 @@
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
-}
-.ingBtn:hover {
+}@media (hover: hover) {
+  .ingBtn:hover {
   border-color: rgba(200,255,62,0.4);
   color: var(--text);
+}
 }
 .ingEmoji { font-size: 28px; line-height: 1; }
 .ingName {
@@ -95,8 +97,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .condActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.5);
@@ -196,8 +199,9 @@
   transition: all 0.15s;
   font-size: 13px;
   color: var(--text);
+}@media (hover: hover) {
+  .optItem:hover { border-color: rgba(200,255,62,0.3); }
 }
-.optItem:hover { border-color: rgba(200,255,62,0.3); }
 .optItem input { accent-color: var(--accent); width: 16px; height: 16px; }
 
 /* ── RESULT CARD ── */
@@ -412,8 +416,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .startBtn:hover { filter: brightness(1.05); }
 }
-.startBtn:hover { filter: brightness(1.05); }
 .startBtn:active { transform: scale(0.98); }
 
 /* ── TIMER ── */
@@ -483,14 +488,16 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .timerBtn:hover { border-color: rgba(200,255,62,0.4); }
 }
-.timerBtn:hover { border-color: rgba(200,255,62,0.4); }
 .timerBtnPrimary {
   background: var(--accent);
   color: #0D0D0D;
   border-color: var(--accent);
+}@media (hover: hover) {
+  .timerBtnPrimary:hover { filter: brightness(1.05); }
 }
-.timerBtnPrimary:hover { filter: brightness(1.05); }
 
 .timerDoneMsg {
   margin-top: 14px;

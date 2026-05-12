@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 박스 ── */
@@ -30,8 +31,9 @@
   padding: 12px 10px; cursor: pointer; color: var(--muted);
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .toggleActive {
   background: rgba(200,255,62,0.15) !important;
   border-color: rgba(200,255,62,0.4) !important;
@@ -84,8 +86,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   padding: 8px 10px; font-size: 12px; color: var(--muted); cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: left;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: rgba(200,255,62,0.4); color: var(--accent); }
 }
-.presetBtn:hover { border-color: rgba(200,255,62,0.4); color: var(--accent); }
 .presetBtn span { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
 
 /* ── 음주 항목 행 ── */
@@ -114,16 +117,18 @@
   background: transparent; border: none; color: var(--muted); cursor: pointer;
   font-size: 20px; line-height: 1; padding: 6px 8px; border-radius: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .drinkDelete:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
 }
-.drinkDelete:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
 
 .addBtn {
   width: 100%; background: var(--bg3); border: 1px dashed var(--border); border-radius: 10px;
   padding: 12px; cursor: pointer; color: var(--muted);
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   margin-top: 10px;
+}@media (hover: hover) {
+  .addBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── BAC 히어로 ── */
 .hero {
@@ -242,8 +247,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveTomorrow  { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
 .tabActiveCumul     { background: rgba(255,107,107,0.12); color: #FF6B6B; font-weight: 700; }
@@ -361,8 +367,9 @@
   cursor: pointer;
   color: var(--muted);
   font-size: 16px;
+}@media (hover: hover) {
+  .sessionDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.sessionDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 
 .sessionTimeRow {
   display: grid;
@@ -390,8 +397,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   margin-top: 4px;
+}@media (hover: hover) {
+  .addSessionBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addSessionBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* 누적 BAC 표 */
 .cumTable {
@@ -444,8 +452,9 @@
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
+}@media (hover: hover) {
+  .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* 약물 토글 */
@@ -466,8 +475,9 @@
   cursor: pointer;
   text-align: left;
   position: relative;
+}@media (hover: hover) {
+  .drugBtn:hover { color: var(--text); }
 }
-.drugBtn:hover { color: var(--text); }
 .drugBtnActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; color: #FF6B6B; font-weight: 700; }
 
 /* 강화 면책 */

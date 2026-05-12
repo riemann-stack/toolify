@@ -38,7 +38,7 @@
 |---|------|------|------|
 | ✅ | BMI 계산기 | `/tools/health/bmi` | 모바일 2열·시뮬·NEW 제거 |
 | ✅ | 체중 감량 기간 계산기 | `/tools/health/weightloss` | 탭 3개 단순화·그래프·2열 |
-|   | 기초대사량 계산기 | `/tools/health/bmr` |  |
+| ✅ | 기초대사량 계산기 | `/tools/health/bmr` | 탭 5→2 축소·단순/정밀 통합·모바일 4열·SEO 정리 |
 |   | 임신 주수 계산기 | `/tools/health/pregnancy` |  |
 |   | 반려동물 나이·칼로리 계산기 | `/tools/health/pet` |  |
 |   | 혈중알코올 소멸 계산기 | `/tools/health/blood-alcohol` |  |
@@ -50,12 +50,12 @@
 
 | 상태 | 도구 | 경로 | 메모 |
 |---|------|------|------|
-| ✅ | 베이커 퍼센트 계산기 | `/tools/cooking/baker-percent` | 입력 버그 수정·레이아웃·게이지·결과 통일 |
+| ✅ | 베이커 퍼센트 계산기 | `/tools/cooking/baker-percent` | 역산 직접입력·르방 leading 0 수정·레이아웃·게이지 |
 | ✅ | 제빵 타임라인 계산기 | `/tools/cooking/baking-schedule` | 수면시간 경고·SEO 정리 |
 | ✅ | 전자레인지 출력·시간 환산 | `/tools/cooking/microwave` | 입력모드 제거·컴팩트 |
 |   | 레시피 비율·단위 변환 계산기 | `/tools/cooking/recipe` |  |
 |   | 냉동·해동 시간 계산기 | `/tools/cooking/thawing` |  |
-|   | 사워도우 스타터 계산기 | `/tools/cooking/sourdough` |  |
+| ✅ | 사워도우 스타터 계산기 | `/tools/cooking/sourdough` | FAQ 아코디언 적용 |
 |   | 튀김 시간·온도 계산기 | `/tools/cooking/frying` |  |
 |   | 견과류 하루 적정 섭취량 계산기 | `/tools/cooking/nuts` |  |
 |   | 1인분 분량 계산기 | `/tools/cooking/serving` |  |
@@ -202,16 +202,19 @@
 
 ## 진행 통계
 
-- **수정 완료**: 8 / 131 (6.1%)
+- **수정 완료**: 10 / 131 (7.6%)
 - **신규 도구**: 7개 (`freelance-tax`, `rent-jeonse`, `gold-converter`, `egg-timer`, `hiking-time`, `gradient-generator`, `tech-stack`)
 
-### 오늘 (2026-05-09)
+### 오늘 (2026-05-11)
+- ✅ baker-percent (역산 직접입력·르방 leading 0 수정 — 추가 버그픽스)
+- ✅ sourdough (FAQ 아코디언 적용)
+- ✅ bmr (탭 5→2 축소·단순/정밀 통합·모바일 4열·SEO 정리)
+
+### 직전 작업 (2026-05-09)
 - ✅ baking-schedule (수면 시간 반영)
 - ✅ zodiac (탭·면책·가족 궁합)
 - ✅ loan (입력 단순화·표 재구성)
 - ✅ microwave (모드 제거·컴팩트)
-
-### 직전 작업
 - ✅ salary (10개 항목)
 - ✅ baker-percent (5개 항목 — 입력 버그 포함)
 - ✅ bmi · weightloss · car-cost (모바일 UX)

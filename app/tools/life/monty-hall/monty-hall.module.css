@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 20px; }
 
 /* ── 탭 ─────────────────────────── */
@@ -21,8 +22,9 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: rgba(200,255,62,0.08);
   color: var(--accent);
@@ -81,10 +83,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
-}
-.door:not(:disabled):hover {
+}@media (hover: hover) {
+  .door:not(:disabled):hover {
   transform: scale(1.05);
   border-color: rgba(200, 255, 62, 0.4);
+}
 }
 .door:disabled { cursor: default; }
 .doorNum {
@@ -159,8 +162,9 @@
   cursor: pointer;
   transition: all .15s;
   min-height: 48px;
+}@media (hover: hover) {
+  .decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,255,62,0.25); }
 }
-.decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,255,62,0.25); }
 .decideStay {
   padding: 14px 16px;
   background: var(--bg3);
@@ -172,8 +176,9 @@
   cursor: pointer;
   transition: all .15s;
   min-height: 48px;
+}@media (hover: hover) {
+  .decideStay:hover { border-color: var(--accent); color: var(--accent); }
 }
-.decideStay:hover { border-color: var(--accent); color: var(--accent); }
 
 /* 결과 */
 .resultCard {
@@ -208,8 +213,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .againBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.againBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* 통계 카드 */
 .statsCard {
@@ -246,8 +252,9 @@
   color: var(--muted);
   font-size: 11px;
   cursor: pointer;
+}@media (hover: hover) {
+  .statsReset:hover { color: var(--text); border-color: #FF6B6B; }
 }
-.statsReset:hover { color: var(--text); border-color: #FF6B6B; }
 .statsGrid {
   display: flex;
   flex-direction: column;
@@ -307,8 +314,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 12px; cursor: pointer; text-align: left; transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .variantCard:hover:not(:disabled) { border-color: var(--accent); }
 }
-.variantCard:hover:not(:disabled) { border-color: var(--accent); }
 .variantCard:disabled { opacity: 0.5; cursor: not-allowed; }
 .variantCardActive {
   background: rgba(200,255,62,0.1) !important;
@@ -354,8 +362,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .nBtn:not(:disabled):hover { color: var(--text); }
 }
-.nBtn:not(:disabled):hover { color: var(--text); }
 .nBtn_100   { font-size: 14px; }
 .nBtn_1000  { font-size: 15px; }
 .nBtn_10000 { font-size: 16px; }
@@ -383,8 +392,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .segBtn:not(:disabled):hover { color: var(--text); }
 }
-.segBtn:not(:disabled):hover { color: var(--text); }
 .segBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .segBtnActive {
   background: rgba(200,255,62,0.08);
@@ -404,8 +414,9 @@
   cursor: pointer;
   transition: all .15s;
   min-height: 52px;
+}@media (hover: hover) {
+  .runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(200,255,62,0.3); }
 }
-.runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(200,255,62,0.3); }
 
 .progressBar {
   height: 6px;
@@ -559,8 +570,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all .15s;
+}@media (hover: hover) {
+  .shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ══════════════════════════════════
    TAB 3 — Why

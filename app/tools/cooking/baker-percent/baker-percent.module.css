@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -36,8 +37,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -163,8 +165,9 @@
   align-items: center;
   gap: 4px;
   position: relative;
+}@media (hover: hover) {
+  .presetCard:hover { border-color: var(--border-hover); }
 }
-.presetCard:hover { border-color: var(--border-hover); }
 .presetIcon { font-size: 28px; }
 .presetName { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 4px; }
 .presetNote { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
@@ -201,8 +204,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .scaleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.scaleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .scaleHalf  { border-color: rgba(62,200,255,0.40); }
 .scaleOne   { border-color: var(--accent); }
 .scaleTwo   { border-color: rgba(255,140,62,0.40); }
@@ -226,8 +230,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .flourQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.flourQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .flourQuickActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 
 /* ── 카테고리 선택 ── */
@@ -279,8 +284,9 @@
   }
   .ingredientRow .catSelect { font-size: 11.5px; padding: 6px 18px 6px 8px; background-position: calc(100% - 8px) center, calc(100% - 5px) center; }
 }
-.ingredientRow input { background: transparent; border: 1px solid transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }
-.ingredientRow input:hover { border-color: var(--border); }
+.ingredientRow input { background: transparent; border: 1px solid transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }@media (hover: hover) {
+  .ingredientRow input:hover { border-color: var(--border); }
+}
 .ingredientRow input:focus { border-color: var(--accent); background: var(--bg2); }
 .ingredientRow .nameCell input { color: var(--text); font-weight: 600; font-size: 13px; }
 .ingredientRow .weightCell { display: flex; align-items: center; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
@@ -312,8 +318,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}@media (hover: hover) {
+  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 }
-.removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 
 .addRowBtn {
   background: var(--bg3);
@@ -327,8 +334,9 @@
   width: 100%;
   margin-top: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .addRowBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.addRowBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .dotIcon { width: 8px; height: 8px; border-radius: 50%; }
 .dotFlour    { background: var(--accent); }
@@ -663,8 +671,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .prefermentTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.prefermentTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .prefermentActive {
   background: rgba(155,89,182,0.12);
   color: #C485E0;
@@ -777,8 +786,9 @@
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .favSaveBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.favSaveBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .favList {
   display: grid;
@@ -809,9 +819,11 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .favLoadBtn:hover { color: var(--accent); border-color: var(--accent); }
+}@media (hover: hover) {
+  .favDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 }
-.favLoadBtn:hover { color: var(--accent); border-color: var(--accent); }
-.favDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
 
 /* ── 결과 복사 ── */
 .copyBtn {
@@ -826,6 +838,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

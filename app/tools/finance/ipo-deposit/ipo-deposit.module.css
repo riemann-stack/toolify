@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -46,8 +47,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* ── 필드 ── */
@@ -121,8 +123,9 @@
   min-height: 32px;
   font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── pill ── */
 .pillRow {
@@ -142,8 +145,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 .checkRow {
@@ -309,8 +313,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 44px;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copyBtnDone { border-color: #3EFF9B; color: #3EFF9B; }
 
 /* ── 메모 ── */
@@ -327,8 +332,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
   margin-top: 4px;
+}@media (hover: hover) {
+  .saveBtn:hover { opacity: 0.9; }
 }
-.saveBtn:hover { opacity: 0.9; }
 .saveBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .clearBtn {
@@ -341,8 +347,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 }
-.clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
 
 .memoActions {
   display: grid;
@@ -379,8 +386,9 @@
   font-size: 14px;
   cursor: pointer;
   padding: 4px 8px;
+}@media (hover: hover) {
+  .memoRemove:hover { color: #FF8C8C; }
 }
-.memoRemove:hover { color: #FF8C8C; }
 .memoMeta {
   font-size: 12px;
   color: var(--muted);
@@ -443,8 +451,9 @@
 .link {
   color: var(--accent);
   text-decoration: none;
+}@media (hover: hover) {
+  .link:hover { text-decoration: underline; }
 }
-.link:hover { text-decoration: underline; }
 
 /* iOS zoom 방지 */
 @media (max-width: 640px) {

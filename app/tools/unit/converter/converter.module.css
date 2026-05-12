@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .disclaimer {
@@ -38,8 +39,9 @@
   white-space: nowrap;
   flex-shrink: 0;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: rgba(176,62,255,0.15);
   color: #C485E0;
@@ -129,10 +131,11 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: transform 0.12s, border-color 0.12s;
-}
-.resultRow:hover {
+}@media (hover: hover) {
+  .resultRow:hover {
   transform: translateY(-1px);
   border-color: rgba(176,62,255,0.40);
+}
 }
 .resultRowKorean {
   background: rgba(176,62,255,0.04);
@@ -177,8 +180,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .resultCopy:hover { color: var(--accent); border-color: var(--accent); }
 }
-.resultCopy:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── 빠른 변환 칩 ── */
 .quickRow {
@@ -196,11 +200,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
-}
-.quickChip:hover {
+}@media (hover: hover) {
+  .quickChip:hover {
   color: #C485E0;
   border-color: rgba(176,62,255,0.40);
   background: rgba(176,62,255,0.06);
+}
 }
 
 /* ── 토글 ── */

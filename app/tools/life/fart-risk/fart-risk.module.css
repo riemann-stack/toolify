@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 10px 4px; border-radius: 8px; border: none;
   font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 /* ── 히어로 (3축 점수 위) ── */
@@ -163,8 +165,9 @@
   justify-content: center;
   gap: 6px;
   text-align: center;
+}@media (hover: hover) {
+  .foodBtn:hover { border-color: rgba(200,255,62,0.3); }
 }
-.foodBtn:hover { border-color: rgba(200,255,62,0.3); }
 .foodEmoji { font-size: 18px; line-height: 1; }
 .foodActive {
   background: var(--accent);
@@ -202,8 +205,9 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .condItem:hover { border-color: rgba(200,255,62,0.3); }
 }
-.condItem:hover { border-color: rgba(200,255,62,0.3); }
 .condActive {
   background: rgba(200,255,62,0.08);
   border-color: rgba(200,255,62,0.4);
@@ -450,8 +454,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .shareBtn:hover { opacity: 0.88; }
 }
-.shareBtn:hover { opacity: 0.88; }
 .shareBtn.copied { background: #3EFF9B; }
 .resetBtn {
   background: var(--bg3);
@@ -464,8 +469,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .resetBtn:hover { border-color: var(--accent); }
 }
-.resetBtn:hover { border-color: var(--accent); }
 
 .empty {
   padding: 32px;

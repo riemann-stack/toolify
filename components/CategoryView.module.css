@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 /* ── 카테고리 페이지 ── */
 .wrap {
   max-width: 1080px;
@@ -107,13 +108,15 @@
   background: var(--cat-color, var(--accent));
   opacity: 0;
   transition: opacity 0.18s ease;
-}
-.card:hover {
+}@media (hover: hover) {
+  .card:hover {
   transform: translateY(-2px);
   border-color: var(--cat-color, var(--accent));
   background: var(--bg3);
 }
-.card:hover::before { opacity: 1; }
+}@media (hover: hover) {
+  .card:hover::before { opacity: 1; }
+}
 
 .iconBox {
   display: inline-flex;
@@ -127,10 +130,11 @@
   font-size: 22px;
   flex-shrink: 0;
   transition: background 0.18s ease, border-color 0.18s ease;
-}
-.card:hover .iconBox {
+}@media (hover: hover) {
+  .card:hover .iconBox {
   background: color-mix(in srgb, var(--cat-color, var(--accent)) 14%, var(--bg3));
   border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, var(--border));
+}
 }
 
 .body {
@@ -173,11 +177,12 @@
   transform: translateX(-4px);
   transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
   align-self: center;
-}
-.card:hover .arrow {
+}@media (hover: hover) {
+  .card:hover .arrow {
   opacity: 1;
   transform: translateX(0);
   color: var(--cat-color, var(--accent));
+}
 }
 
 /* 배지 */
@@ -243,8 +248,9 @@
 .soonFooterLink {
   color: var(--cat-color, var(--accent));
   text-decoration: none;
+}@media (hover: hover) {
+  .soonFooterLink:hover { text-decoration: underline; }
 }
-.soonFooterLink:hover { text-decoration: underline; }
 
 /* 광고 슬롯 여백 */
 .adSlot { margin-top: 40px; }

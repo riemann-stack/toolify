@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ══════════════════════════════════════════════
@@ -124,8 +125,9 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   min-height: 38px;
+}@media (hover: hover) {
+  .customDistBtn:hover { color: var(--text); border-color: var(--accent); }
 }
-.customDistBtn:hover { color: var(--text); border-color: var(--accent); }
 .customDistBtnActive {
   background: var(--accent) !important; color: #0D0D0D !important;
   border-color: var(--accent) !important;
@@ -153,8 +155,9 @@
   display: flex; flex-direction: column; gap: 3px; text-align: left;
   cursor: pointer; transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .raceBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 }
-.raceBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 .raceMonth {
   font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800;
   color: var(--accent); letter-spacing: 0.04em;
@@ -196,8 +199,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -257,8 +261,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modeRecord { border-color: rgba(255,217,62,0.40); }
 .modeTarget { border-color: rgba(62,200,255,0.40); }
 .modeRecord.modeActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
@@ -338,8 +343,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .recordTabBtn:hover { color: var(--text); }
 }
-.recordTabBtn:hover { color: var(--text); }
 .recordTabActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
 
 .vdotShow {
@@ -375,8 +381,9 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+}@media (hover: hover) {
+  .goalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.goalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .goalIcon { font-size: 18px; }
 .goalLabel { font-size: 11.5px; font-weight: 600; }
 .goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; letter-spacing: 0.04em; }
@@ -414,8 +421,9 @@
   transition: all 0.15s;
   text-align: center;
   position: relative;
+}@media (hover: hover) {
+  .distBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.distBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .distActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
 .dist800 .distYassoBadge {
   position: absolute;
@@ -490,8 +498,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .lapCopyBtn:hover { color: #FFD93E; border-color: #FFD93E; }
 }
-.lapCopyBtn:hover { color: #FFD93E; border-color: #FFD93E; }
 .lapCopyBtn.copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; }
 
 /* ── 추천 훈련 카드 ── */
@@ -750,6 +759,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #FFD93E; color: #FFD93E; }
 }
-.copyBtn:hover { border-color: #FFD93E; color: #FFD93E; }
 .copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }

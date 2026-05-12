@@ -228,7 +228,7 @@ export default function FootballPointsPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 방식 핸디캡·코스 핸디캡 계산' },
               { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },

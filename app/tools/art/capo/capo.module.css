@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 11px 8px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
@@ -39,14 +41,16 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   font-family: 'Inter', system-ui, sans-serif; color: var(--text);
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .keyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.keyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .keyBtnSharp { background: color-mix(in srgb, var(--bg3) 55%, #000 45%); }
 .keyBtnActive {
   background: var(--accent) !important; color: #0D0D0D !important;
   border-color: var(--accent) !important; font-weight: 700;
+}@media (hover: hover) {
+  .keyBtnActive:hover { color: #0D0D0D !important; }
 }
-.keyBtnActive:hover { color: #0D0D0D !important; }
 .keyBtnMain { font-size: 18px; font-weight: 700; line-height: 1; }
 .keyBtnSub { font-size: 10px; opacity: 0.7; line-height: 1; }
 .keyBtnActive .keyBtnSub { opacity: 0.8; }
@@ -66,13 +70,15 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
   font-family: 'Inter', system-ui, sans-serif;
+}@media (hover: hover) {
+  .fretBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.fretBtn:hover { border-color: var(--accent); color: var(--accent); }
 .fretBtnActive {
   background: var(--accent); color: #0D0D0D;
   border-color: var(--accent);
+}@media (hover: hover) {
+  .fretBtnActive:hover { color: #0D0D0D; }
 }
-.fretBtnActive:hover { color: #0D0D0D; }
 .fretBtnRec:not(.fretBtnActive) { border-color: rgba(62,255,155,0.4); }
 .fretBtnNum { font-size: 14px; font-weight: 700; line-height: 1; }
 .fretBtnSub { font-size: 9px; opacity: 0.6; margin-top: 2px; letter-spacing: 0.03em; }
@@ -180,8 +186,9 @@
   background: var(--bg3); color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .dirBtn:hover { color: var(--text); }
 }
-.dirBtn:hover { color: var(--text); }
 .dirBtnActive { background: var(--accent-dim); color: var(--accent); border-color: rgba(200,255,62,0.4); }
 
 .semiRow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
@@ -190,8 +197,9 @@
   background: var(--bg3); color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .semiBtn:hover { color: var(--text); }
 }
-.semiBtn:hover { color: var(--text); }
 .semiBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 /* ── 피아노 ── */
@@ -242,8 +250,9 @@
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 .progList { display: flex; flex-direction: column; gap: 8px; }
 .progItem {

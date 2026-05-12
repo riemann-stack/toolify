@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── CARD ── */
@@ -75,8 +76,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .genderBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.genderBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .genderActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.4);
@@ -96,8 +98,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}@media (hover: hover) {
+  .activityBtn:hover { border-color: var(--border-hover); }
 }
-.activityBtn:hover { border-color: var(--border-hover); }
 .activityActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.4);
@@ -182,8 +185,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .distBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.distBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .distActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.4);

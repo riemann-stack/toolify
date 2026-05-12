@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 우주 배경 (탭 컨테이너에 적용) ── */
@@ -105,8 +106,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: rgba(62,255,208,0.10);
   color: #3EFFD0;
@@ -234,8 +236,9 @@
   text-align: center;
   cursor: default;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .monthCard:hover { border-color: rgba(62,255,208,0.50); }
 }
-.monthCard:hover { border-color: rgba(62,255,208,0.50); }
 .monthCardActive { border-color: #3EFFD0; background: rgba(62,255,208,0.06); }
 .monthCardLabel {
   font-family: 'Inter', system-ui, sans-serif;
@@ -372,8 +375,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .dec31BannerBtn:hover { background: rgba(62,255,208,0.20); }
 }
-.dec31BannerBtn:hover { background: rgba(62,255,208,0.20); }
 
 /* ── 24시간 시계 SVG (탭 2) ── */
 .clockWrap {
@@ -406,8 +410,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .zoomBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.zoomBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .zoomActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 충격 카드 ── */
@@ -662,8 +667,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .compressionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.compressionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .compressionBtn small {
   display: block;
   font-size: 10.5px;
@@ -721,6 +727,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

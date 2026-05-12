@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -50,9 +51,10 @@
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
-}
-.nutBtn:hover {
+}@media (hover: hover) {
+  .nutBtn:hover {
   border-color: rgba(200,255,62,0.4);
+}
 }
 .nutEmoji { font-size: 26px; line-height: 1; }
 .nutName {
@@ -103,8 +105,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.condBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .condActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.5);
@@ -455,8 +458,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
   transition: border-color 0.15s, background 0.15s;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); background: var(--bg2); }
 }
-.presetBtn:hover { border-color: var(--accent); background: var(--bg2); }
 .presetBtnBlocked {
   opacity: 0.4;
   cursor: not-allowed;
@@ -486,8 +490,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .allergyChip:hover { border-color: var(--accent); color: var(--text); }
 }
-.allergyChip:hover { border-color: var(--accent); color: var(--text); }
 .allergyChipActive {
   background: rgba(255, 107, 107, 0.12);
   border-color: rgba(255, 107, 107, 0.5);
@@ -511,8 +516,9 @@
   border-radius: 10px;
   padding: 12px 14px;
   transition: border-color 0.15s;
+}@media (hover: hover) {
+  .nutCard:hover { border-color: rgba(200, 255, 62, 0.3); }
 }
-.nutCard:hover { border-color: rgba(200, 255, 62, 0.3); }
 .nutCardActive { border-color: var(--accent); background: var(--bg2); }
 .nutCardDanger { border-color: rgba(255, 107, 107, 0.4); }
 .nutCardDanger.nutCardActive { border-color: #FF6B6B; background: rgba(255, 107, 107, 0.08); }

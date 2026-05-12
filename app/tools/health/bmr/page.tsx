@@ -23,8 +23,8 @@ export default function BmrPage() {
         🔥 기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        BMR·TDEE를 <strong style={{ color: 'var(--text)' }}>4공식 비교, 운동일/휴식일 분리, 목표별 칼로리, 스마트워치 연동</strong>까지.
-        활동 정밀화로 직업·걸음·운동(횟수·시간·강도)을 분리해 정확하게 계산합니다.
+        BMR·TDEE를 <strong style={{ color: 'var(--text)' }}>4공식 비교, 휴식일·운동일 분리, 목표별 칼로리, 매크로 분배</strong>까지.
+        활동 수준은 단순 5단계와 정밀(직업·걸음·운동) 중 선택할 수 있습니다.
       </p>
 
       <BmrClient />
@@ -69,10 +69,10 @@ export default function BmrPage() {
           </div>
         </section>
 
-        {/* ── 2. BMR 4공식 비교 (NEW) ── */}
+        {/* ── 2. BMR 4공식 비교 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            BMR 4공식 비교 (NEW)
+            BMR 4공식 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             본 도구는 4가지 BMR 공식을 모두 비교 표시합니다. 각 공식은 입력값과 정확도가 다릅니다.
@@ -161,22 +161,22 @@ export default function BmrPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>활동 수준</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>활동 계수</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>TDEE 계산법</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['거의 안 움직임 (사무직, 운동 없음)', '1.2',   'BMR × 1.2'],
-                  ['가벼운 활동 (주 1~3회 운동)',        '1.375', 'BMR × 1.375'],
-                  ['보통 활동 (주 3~5회 운동)',          '1.55',  'BMR × 1.55'],
-                  ['활동적 (주 6~7회 강도 운동)',        '1.725', 'BMR × 1.725'],
-                  ['매우 활동적 (하루 2회 운동·육체노동)', '1.9',   'BMR × 1.9'],
-                ].map(([level, factor, calc], i) => (
+                  ['거의 안 움직임 (사무직, 운동 없음)', '1.2'],
+                  ['가벼운 활동 (주 1~3회 운동)',        '1.375'],
+                  ['보통 활동 (주 3~5회 운동)',          '1.55'],
+                  ['활동적 (주 6~7회 강도 운동)',        '1.725'],
+                  ['매우 활동적 (하루 2회 운동·육체노동)', '1.9'],
+                ].map(([level, factor], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{level}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{factor}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{calc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>
+                      BMR × <strong style={{ color: 'var(--accent)', fontWeight: 700 }}>{factor}</strong>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -196,10 +196,10 @@ export default function BmrPage() {
           </div>
         </section>
 
-        {/* ── 5. 정밀 활동 수준 분석 (NEW) ── */}
+        {/* ── 5. 정밀 활동 수준 분석 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            정밀 활동 수준 분석 — 5단계의 한계 (NEW)
+            정밀 활동 수준 분석 — 5단계의 한계
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             5단계 활동 계수는 빠른 추정에는 좋지만 다음 한계가 있습니다 —
@@ -216,7 +216,7 @@ export default function BmrPage() {
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
               <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
               <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 (3차원)</strong> — 250~800kcal/h</li>
-              <li>④ <strong style={{ color: 'var(--text)' }}>활동계수 자동 계산</strong> — 6문항 퀴즈</li>
+              <li>④ <strong style={{ color: 'var(--text)' }}>휴식일·운동일 TDEE 자동 분리</strong></li>
             </ul>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 10 }}>
               결과: 5단계 활동 수준보다 <strong style={{ color: 'var(--text)' }}>±5~10% 더 정확</strong>합니다.
@@ -224,14 +224,14 @@ export default function BmrPage() {
           </div>
         </section>
 
-        {/* ── 6. 운동일/휴식일 칼로리 사이클링 (NEW) ── */}
+        {/* ── 6. 운동일/휴식일 칼로리 사이클링 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            운동일/휴식일 칼로리 사이클링 (NEW)
+            운동일/휴식일 칼로리 사이클링
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             한국에서 잘 알려지지 않은 개념이지만, 해외 다이어트 커뮤니티에서는 표준 전략입니다.
-            <strong style={{ color: 'var(--text)' }}> 운동일에 더 먹고, 휴식일에 적게 먹는 방식</strong> —
+            <strong style={{ color: 'var(--text)' }}> 운동일에 더 먹고, 휴식일에 적게 먹는 방식</strong>은 회복·근성장·식단 만족감 모두에 유리합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
@@ -252,15 +252,20 @@ export default function BmrPage() {
               </ul>
             </div>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            ⓘ 본 도구의 <strong style={{ color: 'var(--text)' }}>[운동/휴식일] 탭</strong>에서 요일별 칼로리 자동 분리 계산이 가능합니다.
-          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
+              <strong style={{ color: 'var(--text)' }}>본 도구에서 활용하는 법</strong> — [BMR·TDEE] 탭에서 활동 수준 입력 방식을 <strong style={{ color: 'var(--accent)' }}>「정밀」</strong>로 전환하면 직업·걸음·주간 운동량을 기반으로 <strong style={{ color: 'var(--text)' }}>휴식일 TDEE</strong>와 <strong style={{ color: 'var(--text)' }}>운동일 TDEE</strong>가 자동 분리 계산됩니다.
+            </p>
+            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              💡 권장 실전 적용 — 운동일은 분리된 운동일 TDEE에서 −10~15%, 휴식일은 휴식일 TDEE에서 −10~15%를 식단 칼로리로 설정합니다. 주간 평균으로만 잡으면 운동일 영양 부족이 흔히 발생합니다.
+            </p>
+          </div>
         </section>
 
-        {/* ── 7. 안전 하한선 — 거식증 예방 (NEW) ── */}
+        {/* ── 7. 안전 하한선 — 거식증 예방 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            안전 하한선 — 거식증·식이장애 예방 (NEW)
+            안전 하한선 — 거식증·식이장애 예방
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 다음 조건에서 강한 경고를 표시합니다 —
@@ -325,7 +330,7 @@ export default function BmrPage() {
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            스마트워치 vs 공식 — 어느 게 정확? (NEW)
+            스마트워치 vs 공식 — 어느 게 정확?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
@@ -369,7 +374,7 @@ export default function BmrPage() {
               },
               {
                 q: 'TDEE는 매일 같은가요?',
-                a: '아닙니다. TDEE는 그날의 활동량에 따라 달라집니다. 장거리 달리기를 한 날은 TDEE가 평소보다 수백~1,000kcal 높을 수 있고, 완전 휴식일은 BMR에 가까워집니다. 본 도구의 <strong>[운동/휴식일] 탭</strong>에서 요일별 분리 계산이 가능합니다.',
+                a: '아닙니다. TDEE는 그날의 활동량에 따라 달라집니다. 장거리 달리기를 한 날은 TDEE가 평소보다 수백~1,000kcal 높을 수 있고, 완전 휴식일은 BMR에 가까워집니다. 본 도구의 [BMR·TDEE] 탭에서 활동 수준 입력 방식을 <strong>「정밀」</strong>로 전환하면 휴식일·운동일 TDEE가 자동 분리됩니다.',
               },
               {
                 q: '어떤 공식을 사용해야 하나요?',
@@ -377,7 +382,7 @@ export default function BmrPage() {
               },
               {
                 q: '운동일과 휴식일의 칼로리를 따로 계산해야 하나요?',
-                a: '권장됩니다. 단순 주간 평균 TDEE만 사용하면 — 운동일: 영양·탄수화물 부족 → 회복↓·근손실↑ / 휴식일: 잉여 칼로리 → 체지방 증가. 따라서 <strong>운동일에 더 먹고, 휴식일에 적게 먹는 칼로리 사이클링</strong>이 장기적으로 효과적입니다. 본 도구의 [운동/휴식일] 탭에서 자동 계산할 수 있습니다.',
+                a: '권장됩니다. 단순 주간 평균 TDEE만 사용하면 — 운동일: 영양·탄수화물 부족 → 회복↓·근손실↑ / 휴식일: 잉여 칼로리 → 체지방 증가. 따라서 <strong>운동일에 더 먹고, 휴식일에 적게 먹는 칼로리 사이클링</strong>이 장기적으로 효과적입니다. 본 도구는 [BMR·TDEE] 탭의 활동 수준 입력 방식을 「정밀」로 전환하면 휴식일/운동일 TDEE를 자동 분리해 보여줍니다.',
               },
               {
                 q: '스마트워치 측정값이 공식보다 높게 나옵니다. 어느 걸 따라야 하나요?',

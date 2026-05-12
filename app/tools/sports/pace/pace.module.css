@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 1줄 통합 입력 (★ 사용자 핵심 지적) ── */
@@ -27,8 +28,9 @@
   border-radius: 10px; padding: 8px 12px; cursor: pointer;
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   transition: all 0.15s; min-width: 64px;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); }
 .quickChipActive { border-width: 2px; box-shadow: 0 0 0 2px rgba(200,255,62,0.18); }
 .quickChipSub {
   font-family: 'Noto Sans KR', sans-serif; font-size: 10px;
@@ -94,8 +96,9 @@
   padding: 14px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+}@media (hover: hover) {
+  .copyBtn:hover { opacity: 0.88; }
 }
-.copyBtn:hover { opacity: 0.88; }
 .copyBtnDone { background: #3EFF9B; }
 
 /* ── 다른 도구 안내 ── */
@@ -111,8 +114,9 @@
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px 14px;
   text-decoration: none; color: var(--text); transition: all 0.15s;
+}@media (hover: hover) {
+  .crossToolBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 }
-.crossToolBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 .crossToolIcon { font-size: 22px; flex-shrink: 0; }
 .crossToolBtn strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; }
 .crossToolSub { display: block; font-size: 11px; color: var(--muted); line-height: 1.5; }
@@ -129,8 +133,9 @@
 
 
 .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.tab { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center; }
-.tab:hover { border-color: var(--border-hover); color: var(--text); }
+.tab { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: center; }@media (hover: hover) {
+  .tab:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .tabActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
@@ -164,8 +169,9 @@
 
 /* 거리 버튼 */
 .distRow { display: flex; gap: 8px; flex-wrap: wrap; }
-.distBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
-.distBtn:hover { border-color: var(--border-hover); color: var(--text); }
+.distBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }@media (hover: hover) {
+  .distBtn:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .distBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
 
 /* 결과 히어로 */

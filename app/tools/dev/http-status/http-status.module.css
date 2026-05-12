@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -41,8 +42,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: #C8FF3E; color: #0D0D0D; }
 
 /* 검색 input */
@@ -81,8 +83,9 @@
   cursor: pointer;
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .quickChip:hover { background: var(--bg2); }
 }
-.quickChip:hover { background: var(--bg2); }
 
 /* 카테고리 필터 */
 .filterRow {
@@ -103,8 +106,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .filterChip:hover { color: var(--text); border-color: #C8FF3E; }
 }
-.filterChip:hover { color: var(--text); border-color: #C8FF3E; }
 .filterChipActive {
   background: #C8FF3E;
   color: #0D0D0D;
@@ -133,10 +137,11 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-.codeCard:hover {
+}@media (hover: hover) {
+  .codeCard:hover {
   background: var(--bg3);
   transform: translateY(-1px);
+}
 }
 .codeCardHead {
   display: flex;
@@ -159,8 +164,9 @@
   cursor: pointer;
   color: var(--muted);
   padding: 4px;
+}@media (hover: hover) {
+  .favBtn:hover { color: #FFB83E; }
 }
-.favBtn:hover { color: #FFB83E; }
 .codeName {
   font-size: 13px;
   color: var(--text);
@@ -218,8 +224,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   min-height: 32px;
+}@media (hover: hover) {
+  .smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 }
-.smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
 .favBtnLarge {
   appearance: none;
   -webkit-appearance: none;
@@ -232,8 +239,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .favBtnLarge:hover { color: #FFB83E; border-color: #FFB83E; }
 }
-.favBtnLarge:hover { color: #FFB83E; border-color: #FFB83E; }
 
 .detailHero {
   display: grid;
@@ -413,8 +421,9 @@
   font-weight: 700;
   text-decoration: none;
   font-family: 'Inter', system-ui, sans-serif;
+}@media (hover: hover) {
+  .jumpChip:hover { background: var(--bg2); }
 }
-.jumpChip:hover { background: var(--bg2); }
 
 .catSection {
   background: var(--bg2);
@@ -471,8 +480,9 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}@media (hover: hover) {
+  .miniCard:hover { background: var(--bg2); border-color: #C8FF3E40; }
 }
-.miniCard:hover { background: var(--bg2); border-color: #C8FF3E40; }
 .miniNum {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
@@ -554,8 +564,9 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
+}@media (hover: hover) {
+  .relatedChip:hover { background: var(--bg2); }
 }
-.relatedChip:hover { background: var(--bg2); }
 
 /* 가이드 */
 .guideTable {
@@ -620,8 +631,9 @@
   font-size: 28px;
   cursor: pointer;
   letter-spacing: -1px;
+}@media (hover: hover) {
+  .confusionCode:hover { text-decoration: underline; }
 }
-.confusionCode:hover { text-decoration: underline; }
 .confusionVs {
   font-size: 14px;
   color: var(--muted);
@@ -669,5 +681,6 @@
 .linkList a {
   color: #C8FF3E;
   text-decoration: none;
+}@media (hover: hover) {
+  .linkList a:hover { text-decoration: underline; }
 }
-.linkList a:hover { text-decoration: underline; }

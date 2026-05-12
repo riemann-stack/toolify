@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 12px 6px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
 
 /* ── 카드 ── */
@@ -62,8 +64,9 @@
   background: var(--bg3); color: var(--muted);
   font-size: 12px; font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .voltBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.voltBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .voltBtnActive {
   background: var(--accent-dim) !important;
   border-color: rgba(200,255,62,0.5) !important;
@@ -101,9 +104,10 @@
   color: var(--muted); font-size: 12px; cursor: pointer;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
-}
-.presetBtn:hover {
+}@media (hover: hover) {
+  .presetBtn:hover {
   color: var(--accent); border-color: rgba(200,255,62,0.4);
+}
 }
 
 /* ── 결과 표 ── */
@@ -132,8 +136,9 @@
   border-bottom: 1px solid var(--border);
   transition: background 0.15s;
 }
-.resultRow:last-child { border-bottom: none; }
-.resultRow:hover { background: var(--bg3); }
+.resultRow:last-child { border-bottom: none; }@media (hover: hover) {
+  .resultRow:hover { background: var(--bg3); }
+}
 .resultLabel {
   font-size: 12px; color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
@@ -153,8 +158,9 @@
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
   flex-shrink: 0; min-width: 50px;
+}@media (hover: hover) {
+  .copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
 }
-.copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
 .copyBtnDone {
   color: var(--accent) !important;
   border-color: rgba(200,255,62,0.4) !important;
@@ -251,8 +257,9 @@
   color: var(--text);
   border-bottom: 1px solid var(--border);
 }
-.refTable tr:last-child td { border-bottom: none; }
-.refTable tr:hover { background: var(--bg3); }
+.refTable tr:last-child td { border-bottom: none; }@media (hover: hover) {
+  .refTable tr:hover { background: var(--bg3); }
+}
 .refMah { color: var(--accent); font-weight: 800; }
 .refSafe { color: #3EFF9B; }
 .refWarn { color: #FF8C3E; }

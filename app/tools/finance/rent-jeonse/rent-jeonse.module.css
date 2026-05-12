@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 24px; }
 
 /* 탭 */
@@ -23,8 +24,9 @@
   transition: all .15s;
   white-space: nowrap;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: var(--bg3);
   color: var(--text);
@@ -186,8 +188,9 @@
   color: var(--muted);
   cursor: pointer;
   min-height: 32px;
+}@media (hover: hover) {
+  .preset:hover { color: var(--text); border-color: var(--accent); }
 }
-.preset:hover { color: var(--text); border-color: var(--accent); }
 .presetActive {
   background: var(--accent);
   color: #0B0B0B;
@@ -598,8 +601,9 @@
   border-bottom: 1px solid var(--border);
 }
 .relatedList li:last-child { border-bottom: none; }
-.relatedList a { color: var(--accent); text-decoration: none; font-weight: 600; }
-.relatedList a:hover { text-decoration: underline; }
+.relatedList a { color: var(--accent); text-decoration: none; font-weight: 600; }@media (hover: hover) {
+  .relatedList a:hover { text-decoration: underline; }
+}
 
 /* 면책 */
 .disclaimer {
@@ -624,6 +628,7 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.disclaimer ul a { color: var(--accent); text-decoration: none; }
-.disclaimer ul a:hover { text-decoration: underline; }
+.disclaimer ul a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .disclaimer ul a:hover { text-decoration: underline; }
+}
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

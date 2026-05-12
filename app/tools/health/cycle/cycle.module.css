@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -43,8 +44,9 @@
   cursor: pointer;
   font-family: inherit;
   margin-left: 4px;
+}@media (hover: hover) {
+  .wipeLink:hover { border-color: #FF8C8C; background: rgba(255,140,140,0.08); }
 }
-.wipeLink:hover { border-color: #FF8C8C; background: rgba(255,140,140,0.08); }
 
 /* ── 탭 ── */
 .tabs {
@@ -70,8 +72,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* ── 입력 ── */
@@ -128,8 +131,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pill:hover { border-color: var(--accent); color: var(--text); }
 .pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -258,8 +262,9 @@
   color: var(--text);
   cursor: pointer;
   font-family: 'Inter', system-ui, sans-serif;
+}@media (hover: hover) {
+  .calNav:hover { border-color: var(--accent); color: var(--accent); }
 }
-.calNav:hover { border-color: var(--accent); color: var(--accent); }
 .calTitle {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
@@ -519,8 +524,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .saveBtn:hover { opacity: 0.9; }
 }
-.saveBtn:hover { opacity: 0.9; }
 
 .recordList { display: flex; flex-direction: column; gap: 4px; }
 .recordItem {
@@ -560,8 +566,9 @@
   cursor: pointer;
   padding: 2px 6px;
   margin-left: auto;
+}@media (hover: hover) {
+  .recordRemove:hover { color: #FF8C8C; }
 }
-.recordRemove:hover { color: #FF8C8C; }
 
 /* 분석 카드 */
 .analysisGood {
@@ -595,8 +602,9 @@
   font-weight: 600;
   min-height: 44px;
   width: 100%;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .dangerBtn {
   appearance: none;
   -webkit-appearance: none;
@@ -611,8 +619,9 @@
   font-weight: 600;
   min-height: 44px;
   width: 100%;
+}@media (hover: hover) {
+  .dangerBtn:hover { background: rgba(255,107,107,0.08); border-color: #FF6B6B; color: #FF6B6B; }
 }
-.dangerBtn:hover { background: rgba(255,107,107,0.08); border-color: #FF6B6B; color: #FF6B6B; }
 
 /* ── 빈 상태 ── */
 .empty {

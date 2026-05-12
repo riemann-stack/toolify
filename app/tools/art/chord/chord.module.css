@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 11px 8px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
@@ -29,8 +31,9 @@
   background: transparent; border: none; padding: 4px 12px; border-radius: 6px;
   font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .notationBtn:hover { color: var(--text); }
 }
-.notationBtn:hover { color: var(--text); }
 .notationBtnActive { background: var(--accent); color: #0D0D0D; }
 
 /* ── 12개 키 그리드 ── */
@@ -42,14 +45,16 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   font-family: 'Inter', system-ui, sans-serif; color: var(--text);
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .keyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.keyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .keyBtnSharp { background: color-mix(in srgb, var(--bg3) 55%, #000 45%); }
 .keyBtnActive {
   background: var(--accent) !important; color: #0D0D0D !important;
   border-color: var(--accent) !important; font-weight: 700;
+}@media (hover: hover) {
+  .keyBtnActive:hover { color: #0D0D0D !important; }
 }
-.keyBtnActive:hover { color: #0D0D0D !important; }
 .keyBtnMain { font-size: 18px; font-weight: 700; line-height: 1; }
 .keyBtnSub { font-size: 10px; opacity: 0.7; line-height: 1; }
 .keyBtnActive .keyBtnSub { opacity: 0.8; }
@@ -71,8 +76,9 @@
   padding: 7px 14px; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
   color: var(--text); cursor: pointer; transition: all 0.15s;
   letter-spacing: 0.02em;
+}@media (hover: hover) {
+  .typeBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.typeBtn:hover { border-color: var(--accent); color: var(--accent); }
 .typeBtnActive {
   background: var(--accent) !important;
   border-color: var(--accent) !important;
@@ -133,8 +139,9 @@
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 다음 코드 추천 ── */
 .recCard {
@@ -151,8 +158,9 @@
   background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
   padding: 8px 14px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .recChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.recChip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 역방향 검색 ── */
 .searchScopeRow {
@@ -164,8 +172,9 @@
   background: var(--bg3); color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .scopeBtn:hover { color: var(--text); }
 }
-.scopeBtn:hover { color: var(--text); }
 .scopeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: rgba(200,255,62,0.4); }
 
 .matchTable { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -185,8 +194,9 @@
 .matchChord {
   font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; color: var(--text);
   cursor: pointer;
+}@media (hover: hover) {
+  .matchChord:hover { color: var(--accent); }
 }
-.matchChord:hover { color: var(--accent); }
 .matchNotes { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 12px; }
 .matchPct {
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
@@ -209,8 +219,9 @@
   background: var(--bg3); color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: rgba(200,255,62,0.4); }
 
 .diatonicTable { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
@@ -223,8 +234,9 @@
   padding: 12px; border-bottom: 1px solid var(--border);
   color: var(--text); font-size: 13px; vertical-align: middle;
 }
-.diatonicRow { cursor: pointer; transition: background 0.15s; }
-.diatonicRow:hover { background: var(--bg3); }
+.diatonicRow { cursor: pointer; transition: background 0.15s; }@media (hover: hover) {
+  .diatonicRow:hover { background: var(--bg3); }
+}
 .diatonicRowTonic { border-left: 3px solid #3EFF9B; }
 .diatonicRowSub   { border-left: 3px solid #3EC8FF; }
 .diatonicRowDom   { border-left: 3px solid #FF8C3E; }
@@ -272,8 +284,9 @@
   border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   text-decoration: none; margin-top: 12px;
+}@media (hover: hover) {
+  .linkBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.linkBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 @keyframes chordFadeUp {
   from { opacity: 0; transform: translateY(8px); }

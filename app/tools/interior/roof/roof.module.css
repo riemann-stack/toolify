@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -46,8 +47,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 입력 */
@@ -113,8 +115,9 @@
   white-space: nowrap;
   flex-shrink: 0;
   min-height: 32px;
+}@media (hover: hover) {
+  .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChip:hover { border-color: var(--accent); color: var(--accent); }
 .quickChipActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 
 /* 슬라이더 */
@@ -177,8 +180,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: left;
+}@media (hover: hover) {
+  .typeBtn:hover { border-color: var(--accent); }
 }
-.typeBtn:hover { border-color: var(--accent); }
 .typeBtnActive {
   background: var(--bg2);
   border-color: var(--accent);
@@ -211,8 +215,9 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); }
 }
-.modeBtn:hover { color: var(--text); }
 .modeBtnActive { background: var(--accent); color: #0D0D0D; }
 
 /* 시각화 */
@@ -298,8 +303,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: left;
+}@media (hover: hover) {
+  .materialHead:hover { background: var(--bg2); }
 }
-.materialHead:hover { background: var(--bg2); }
 .materialEmoji { font-size: 22px; flex-shrink: 0; }
 .materialInfo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .materialName { font-size: 13px; font-weight: 700; color: var(--text); }
@@ -385,8 +391,9 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
+}@media (hover: hover) {
+  .link:hover { text-decoration: underline; }
 }
-.link:hover { text-decoration: underline; }
 
 .warnCard {
   background: rgba(255, 184, 62, 0.06);

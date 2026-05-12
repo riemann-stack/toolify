@@ -35,10 +35,10 @@ export default function UnitPricePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px 22px' }}>
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 18px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '17px', lineHeight: 1.8, color: 'var(--text)', marginBottom: '14px' }}>
-              <span style={{ color: 'var(--accent)', fontWeight: 800 }}>단가</span> = 가격 ÷ (용량 × 개수) × 기준 단위
+              가격 ÷ (용량 × 개수) × 기준 단위
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, margin: '0 0 8px' }}>
-              예: 8,900원 ÷ (500ml × 1개) × 100 = <strong style={{ color: 'var(--accent)' }}>100ml당 1,780원</strong>
+              예: 8,900원 ÷ (500ml × 5개) × 100 = <strong style={{ color: 'var(--accent)' }}>100ml당 356원</strong>
             </p>
             <details style={{ marginTop: '12px', padding: '12px 14px', background: 'var(--bg3)', borderRadius: '10px', border: '1px solid var(--border)' }}>
               <summary style={{ fontSize: '13px', color: 'var(--muted)', cursor: 'pointer', fontWeight: 600 }}>
@@ -47,7 +47,7 @@ export default function UnitPricePage() {
               <div style={{ marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 <p style={{ margin: '0 0 6px' }}>실결제 = 가격 − 즉시할인 − 쿠폰할인 + 배송비</p>
                 <p style={{ margin: '0 0 6px' }}>실수령량 = 용량 × 개수</p>
-                <p style={{ margin: 0 }}>단가 = 실결제 ÷ 실수령량 × 기준 단위</p>
+                <p style={{ margin: 0 }}>실결제 ÷ 실수령량 × 기준 단위</p>
               </div>
             </details>
           </div>
@@ -325,7 +325,7 @@ export default function UnitPricePage() {
         {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/dutch',         emoji: '🍻', name: '더치페이 계산기',   desc: '공동구매 정산' },
               { href: '/tools/cooking/substitute', emoji: '🔁', name: '식재료 대체 비율',   desc: '대체 음식·양 변환' },

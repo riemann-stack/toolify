@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 강조 면책 ── */
@@ -35,8 +36,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive { background: rgba(62,255,208,0.10); color: #3EFFD0; font-weight: 700; }
 
 .card {
@@ -88,8 +90,9 @@
   color: #3EFFD0;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .startBtn:hover { background: rgba(62,255,208,0.20); transform: translateY(-1px); }
 }
-.startBtn:hover { background: rgba(62,255,208,0.20); transform: translateY(-1px); }
 
 .progressBar {
   margin-top: 12px;
@@ -405,8 +408,9 @@
   color: var(--text);
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .dualBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
 }
-.dualBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
 .dualBtnOdd  { color: #FFD700; border-color: rgba(255,215,0,0.40); }
 .dualBtnEven { color: #3EC8FF; border-color: rgba(62,200,255,0.40); }
 .dualBtnRed {
@@ -418,8 +422,9 @@
   padding: 14px;
   font-size: 14px;
   border-radius: 10px;
+}@media (hover: hover) {
+  .dualBtnRed:hover { background: rgba(255,68,68,0.20); }
 }
-.dualBtnRed:hover { background: rgba(255,68,68,0.20); }
 
 .dualKeyboardHint {
   font-size: 11.5px;
@@ -641,10 +646,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
 }
-.actionBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
-.actionBtnPrimary { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; }
-.actionBtnPrimary:hover { background: rgba(62,255,208,0.20); }
+.actionBtnPrimary { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; }@media (hover: hover) {
+  .actionBtnPrimary:hover { background: rgba(62,255,208,0.20); }
+}
 
 .copyBtn {
   background: var(--bg2);
@@ -658,6 +665,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

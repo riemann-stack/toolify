@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 /* ── NAV ── */
 .nav {
   position: sticky;
@@ -52,17 +53,19 @@
   letter-spacing: 0.02em;
   transition: color 0.15s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .catLink:hover { color: var(--text); }
 }
-.catLink:hover { color: var(--text); }
 .catLinkActive { color: var(--accent) !important; }
 
 .chevron {
   opacity: 0.4;
   transition: transform 0.2s;
-}
-.catItem:hover .chevron {
+}@media (hover: hover) {
+  .catItem:hover .chevron {
   transform: rotate(180deg);
   opacity: 0.8;
+}
 }
 
 /* ── 메가 메뉴 (3컬럼 그리드) ── */
@@ -113,8 +116,9 @@
   opacity: 0.85;
   transition: opacity 0.15s;
   font-family: 'Syne', sans-serif;
+}@media (hover: hover) {
+  .megaAllLink:hover { opacity: 1; }
 }
-.megaAllLink:hover { opacity: 1; }
 
 .megaGrid {
   display: grid;
@@ -131,8 +135,9 @@
   text-decoration: none;
   transition: background 0.12s;
   min-width: 0;
+}@media (hover: hover) {
+  .megaItem:hover { background: var(--bg3); }
 }
-.megaItem:hover { background: var(--bg3); }
 .megaItemIcon {
   font-size: 18px;
   flex-shrink: 0;
@@ -179,14 +184,16 @@
   transition: opacity 0.15s, color 0.15s, background 0.15s;
   font-family: inherit;
   line-height: 1;
-}
-.megaItem:hover .megaItemFav,
+}@media (hover: hover) {
+  .megaItem:hover .megaItemFav,
 .megaItemFavActive,
 .searchResultItem:hover .megaItemFav,
 .searchResultItemActive .megaItemFav {
   opacity: 1;
 }
-.megaItemFav:hover { background: var(--bg2); color: var(--accent); }
+}@media (hover: hover) {
+  .megaItemFav:hover { background: var(--bg2); color: var(--accent); }
+}
 .megaItemFavActive { color: #FFD93E; opacity: 1; }
 
 /* 배지 */
@@ -228,11 +235,12 @@
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
-}
-.allToolsBtn:hover {
+}@media (hover: hover) {
+  .allToolsBtn:hover {
   background: #FFB83E;
   border-color: #FFB83E;
   transform: translateY(-1px);
+}
 }
 .allToolsBtnActive {
   background: var(--text);
@@ -256,8 +264,9 @@
   color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .searchBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.searchBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .searchBtnActive {
   background: var(--accent-dim);
   border-color: rgba(200,255,62,0.4);
@@ -277,8 +286,9 @@
   color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .shareBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.shareBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .shareBtnCopied {
   background: rgba(62, 255, 155, 0.12);
   border-color: rgba(62, 255, 155, 0.4);
@@ -337,8 +347,9 @@
   padding: 2px;
   border-radius: 4px;
   transition: color 0.15s;
+}@media (hover: hover) {
+  .searchClear:hover { color: var(--text); }
 }
-.searchClear:hover { color: var(--text); }
 
 /* 검색 결과 */
 .searchResults {
@@ -354,10 +365,11 @@
   border-radius: 8px;
   text-decoration: none;
   transition: background 0.12s;
-}
-.searchResultItem:hover,
+}@media (hover: hover) {
+  .searchResultItem:hover,
 .searchResultItemActive {
   background: var(--bg3);
+}
 }
 .searchResultIcon { font-size: 18px; flex-shrink: 0; }
 .searchResultBody {
@@ -429,8 +441,9 @@
   text-decoration: none;
   transition: all 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .searchQuickItem:hover { border-color: var(--accent); color: var(--accent); }
 }
-.searchQuickItem:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 햄버거 ── */
 .burger {
@@ -509,8 +522,9 @@
   border-radius: 8px;
   transition: background 0.15s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .drawerCatLink:hover { background: var(--bg3); }
 }
-.drawerCatLink:hover { background: var(--bg3); }
 
 .drawerTools {
   display: grid;
@@ -530,8 +544,9 @@
   border-radius: 6px;
   transition: all 0.12s;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .drawerToolItem:hover { background: var(--bg3); color: var(--text); }
 }
-.drawerToolItem:hover { background: var(--bg3); color: var(--text); }
 
 /* ── 반응형 ── */
 /* 1280px↓ — 카테고리 패딩 축소로 11개 모두 표시 시도 */

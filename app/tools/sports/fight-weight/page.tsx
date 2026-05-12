@@ -148,6 +148,139 @@ export default function FightWeightPage() {
           </div>
         </div>
 
+        {/* ── 4-1. 체중 1kg = 며칠? 감량 기간 추정 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            감량 필요량별 권장 기간 — 한눈에 보기
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
+            안전 한도(주당 체중 1%) 기준으로 계산한 권장 감량 기간입니다. 80kg 선수 기준.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FFD700', fontWeight: 700 }}>적극 (1.5%/주)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontWeight: 700 }}>위험 (2%/주)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { l: '2kg', s: '2~3주', a: '약 2주',   d: '1주' },
+                  { l: '4kg', s: '5주',   a: '3~4주',   d: '2.5주' },
+                  { l: '6kg', s: '7~8주', a: '5주',     d: '4주' },
+                  { l: '8kg', s: '10주',  a: '7주',     d: '5주' },
+                  { l: '10kg', s: '13주', a: '8~9주',   d: '6~7주' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+            ※ 위 기간은 <strong style={{ color: 'var(--text)' }}>체지방 감량 단계</strong>만 고려한 값입니다. 시합 1주일 전 수분 감량으로 추가 2~5kg 빼는 것이 일반적입니다.
+          </p>
+        </div>
+
+        {/* ── 4-2. 감량 단계별 영양 가이드 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            감량 단계별 영양·식단 가이드
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              {
+                stage: '🍗 체지방 감량기 (D-30 ~ D-7)',
+                color: '#FF8C3E',
+                items: [
+                  '단백질 — 체중 1kg당 2.0~2.4g (근손실 방지 핵심)',
+                  '탄수화물 — 체중 1kg당 3~4g (운동량 유지)',
+                  '지방 — 총 칼로리의 20~25%',
+                  '수분 — 하루 4~5L (대사·노폐물 배출)',
+                  '식사 빈도 — 하루 4~5회 소량 분산',
+                ],
+              },
+              {
+                stage: '💧 수분 감량기 (D-7 ~ D-1)',
+                color: '#3EC8FF',
+                items: [
+                  'D-7~D-3 — 나트륨 1g/일 이하로 제한',
+                  'D-5~D-3 — 섬유질 감소 (장 잔여물 줄임)',
+                  'D-3~D-1 — 탄수화물 50g/일 이하 (글리코겐+수분 ↓)',
+                  'D-1 — 수분 500ml 이하 + 사우나·뜨거운 욕조',
+                  '⚠️ 카페인·이뇨제 사용은 신장 부담 ↑ 비권장',
+                ],
+              },
+              {
+                stage: '🔋 재수화·시합기 (계체 후 ~ 시합)',
+                color: '#3EFF9B',
+                items: [
+                  '계체 직후 30분 — 전해질 음료 500~750ml',
+                  '~6시간 — 탄수화물 (체중 1kg당 5~10g) 재충전',
+                  '~24시간 — 단백질·지방 추가, 일반식 점진 복귀',
+                  '시합 2~4시간 전 — 가벼운 탄수화물 200~400kcal',
+                  '시합 1시간 전 — 액상 탄수화물·카페인 가능',
+                ],
+              },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 18px' }}>
+                <p style={{ fontSize: 13.5, color: s.color, fontWeight: 700, marginBottom: 8 }}>{s.stage}</p>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
+                  {s.items.map((it, j) => <li key={j}>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 4-3. 체급 선택 전략 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            🎯 체급 선택 전략 — 어떤 체급이 유리할까?
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+            {[
+              {
+                head: '✅ 한 단계 아래 체급으로 내리는 게 유리한 경우',
+                color: '#3EFF9B',
+                items: [
+                  '체지방률이 평균(남 15%·여 23%) 이상 — 줄일 여지 ↑',
+                  '키·리치(팔 길이) 우위가 명확',
+                  '체급 한도가 자기 평소 체중의 −8% 이내',
+                  '시합까지 8주 이상 — 안전한 페이스 가능',
+                  '재수화 시간 충분 (UFC·복싱)',
+                ],
+              },
+              {
+                head: '⚠️ 한 단계 위 체급으로 올리는 게 나은 경우',
+                color: '#FF8C3E',
+                items: [
+                  '체지방률이 이미 낮음 (남 10%·여 18% 이하)',
+                  '체급 한도가 평소보다 −10% 초과',
+                  '시합까지 4주 미만',
+                  '계체 당일·새벽 정책 (유도·레슬링)',
+                  'ONE Championship — 수분 감량 금지',
+                  '이전 감량에서 부상·컨디션 난조 경험',
+                ],
+              },
+            ].map((c, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.color}`, borderRadius: 12, padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: c.color, fontWeight: 700, marginBottom: 6 }}>{c.head}</p>
+                <ul style={{ paddingLeft: 16, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
+                  {c.items.map((it, j) => <li key={j}>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* ── 5. 위험 사례 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
@@ -203,6 +336,30 @@ export default function FightWeightPage() {
                 q: 'ONE Championship의 체중 정책은 무엇인가요?',
                 a: 'ONE은 2015년 격투기 사망 사고들을 계기로 <strong>수분 감량을 금지</strong>했습니다. 시합 3주 전부터 매주 체중을 보고하고 시합 주에는 매일 소변 비중을 측정해 수분 상태를 검사합니다. 한도를 넘으면 시합 자격이 박탈됩니다. 선수 안전을 위한 가장 엄격한 정책으로 평가받습니다.',
               },
+              {
+                q: '체지방률이 낮은데도 무리한 감량이 가능할까요?',
+                a: '<strong>매우 위험합니다.</strong> 남성 체지방률 8% 미만, 여성 16% 미만은 호르몬·면역 기능에 영향을 주는 한계선입니다. 체지방이 더 낮은 상태에서 추가 감량은 대부분 <strong>근육과 수분</strong>에서 빠지므로 퍼포먼스 급락·골밀도 감소·테스토스테론 저하가 발생합니다. 이 경우 체급을 한 단계 위로 올리거나 평소 체중 자체를 천천히 늘리는(벌크업) 장기 전략이 필요합니다.',
+              },
+              {
+                q: '재수화는 어떻게 해야 하나요?',
+                a: '계체 직후 한 번에 물 1L 이상을 들이키면 저나트륨혈증·구토·심장 부담이 생깁니다. 권장 순서 —<br/>① <strong>0~30분</strong>: 전해질 음료(나트륨·칼륨 포함) 500~750ml를 천천히<br/>② <strong>30분~3시간</strong>: 탄수화물 + 수분 (체중 1kg당 1g 탄수화물)<br/>③ <strong>3~24시간</strong>: 일반식 점진 복귀, 단백질·지방 추가<br/>UFC 등 일부 단체는 IV 수액(정맥주사)을 금지하므로 경구 재수화로만 진행해야 합니다.',
+              },
+              {
+                q: '체중을 매일 어떻게 측정해야 정확한가요?',
+                a: '아침 기상 직후, 화장실 다녀온 후, <strong>옷을 벗고 빈 위장</strong> 상태에서 측정합니다. 같은 체중계로 같은 시각에 매일 측정해야 추세를 정확히 볼 수 있습니다. 하루 사이 체중은 수분·음식·소화 상태로 1~2kg 출렁이므로 <strong>3~5일 평균</strong>을 추세로 봐야 합니다. 시합 직전에는 호텔/대회장 체중계와 평소 체중계의 차이를 미리 점검하는 것이 중요합니다.',
+              },
+              {
+                q: '아마추어·체육관 시합에서도 본 도구를 써도 되나요?',
+                a: '체급 한계 자체는 단체별 규정을 따라야 합니다(아마추어 복싱은 AIBA, MMA는 단체별 차이). 본 도구의 <strong>감량 일정·위험도 평가</strong>는 일반 가이드라인에 기반하므로 아마추어에도 그대로 적용 가능합니다. 다만 아마추어 시합은 재수화 시간이 짧거나 당일 계체가 많으므로 <strong>수분 감량보다 체지방 감량 위주</strong>로 평소 체중을 체급 한도 +3kg 이내로 유지하는 것이 안전합니다.',
+              },
+              {
+                q: '여성 선수의 감량 시 유의점은?',
+                a: '여성은 평균 체지방률이 남성보다 8~10%p 높지만, 호르몬 영향으로 <strong>월경주기에 따라 수분 변동이 큽니다</strong>(생리 직전 1~2kg 증가). 시합·계체일이 생리 전후에 겹치면 수분 감량 부담이 커지므로 일정 점검 필수. 또 체지방률이 16% 이하로 떨어지면 <strong>무월경·골밀도 감소</strong> 위험이 있어 장기적으로 권장되지 않습니다. 여성 선수는 체중보다 컨디션·근력 유지 지표를 우선시하는 것이 안전합니다.',
+              },
+              {
+                q: '체중 감량 중 운동은 어떻게 해야 하나요?',
+                a: '단계별로 다릅니다.<br/>• <strong>체지방 감량기</strong> — 근력 운동 주 3~4회 + 유산소 주 4~5회. 근력 유지가 핵심이므로 무게는 평소의 80~85% 유지.<br/>• <strong>수분 감량기</strong> — 강도 ↓, 기술·스파링 위주. 무리한 유산소는 탈수·실신 위험.<br/>• <strong>시합 3일 전~D-1</strong> — 가벼운 쉐도우·줄넘기·스트레칭만. 부상·컨디션 망가뜨릴 강한 운동 금지.',
+              },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
@@ -222,7 +379,7 @@ export default function FightWeightPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: '비만도(BMI) 계산기',       desc: '체질량지수로 비만도 빠르게 확인' },
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기',  desc: '하루 권장 칼로리·BMR 계산' },

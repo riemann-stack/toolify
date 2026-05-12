@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 탭 ── */
@@ -11,8 +12,9 @@
   font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
   color: var(--muted); background: transparent; cursor: pointer;
   transition: all 0.15s; min-height: 44px;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 /* ── 더치페이/저장 연결 카드 ── */
@@ -26,8 +28,9 @@
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px 14px;
   text-decoration: none; color: var(--text); transition: all 0.15s;
+}@media (hover: hover) {
+  .crossLinkBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 }
-.crossLinkBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 .crossLinkIcon { font-size: 22px; flex-shrink: 0; }
 .crossLinkBtn strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; }
 .crossLinkSub { display: block; font-size: 11px; color: var(--muted); line-height: 1.5; }
@@ -48,8 +51,9 @@
   font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 44px;
   white-space: nowrap;
+}@media (hover: hover) {
+  .courseSaveBtn:hover { opacity: 0.88; }
 }
-.courseSaveBtn:hover { opacity: 0.88; }
 .courseSaveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .courseSaveBtn.copied { background: #3EFF9B; }
 
@@ -68,14 +72,16 @@
   background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
   padding: 8px 12px; font-size: 12px; color: var(--accent); font-weight: 600;
   cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .courseApplyBtn:hover { border-color: var(--accent); }
 }
-.courseApplyBtn:hover { border-color: var(--accent); }
 .courseDelBtn {
   background: transparent; border: 1px solid var(--border); border-radius: 8px;
   width: 32px; height: 32px; font-size: 16px; color: var(--muted);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
+}@media (hover: hover) {
+  .courseDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.courseDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
 
 /* ── 빈 상태 ── */
 .empty {
@@ -205,8 +211,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .courseBtn:hover { color: var(--text); }
 }
-.courseBtn:hover { color: var(--text); }
 .coursePubWeek { border-color: rgba(62,255,155,0.4); }
 .coursePubEnd { border-color: rgba(200,255,62,0.4); }
 .courseSemi { border-color: rgba(62,200,255,0.4); }
@@ -237,8 +244,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .playerBtn:hover { color: var(--text); }
 }
-.playerBtn:hover { color: var(--text); }
 .playerActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -263,8 +271,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); }
 }
-.toggleBtn:hover { color: var(--text); }
 .toggleOn {
   background: var(--accent-dim);
   color: var(--accent);
@@ -289,8 +298,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pill:hover { border-color: var(--border-hover); color: var(--text); }
 .pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
 
 /* ── HERO ── */
@@ -497,8 +507,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 
 /* 면책 */

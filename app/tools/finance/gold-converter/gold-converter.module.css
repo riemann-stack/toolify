@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 24px; }
 
 /* 탭 */
@@ -22,8 +23,9 @@
   transition: all .15s;
   white-space: nowrap;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive {
   background: var(--bg3);
   color: var(--text);
@@ -56,8 +58,9 @@
   margin: 8px 0 0;
 }
 .note strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
-.note a { color: var(--accent); text-decoration: none; }
-.note a:hover { text-decoration: underline; }
+.note a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .note a:hover { text-decoration: underline; }
+}
 
 /* 인기 시나리오 그리드 */
 .scenarioGrid {
@@ -76,8 +79,9 @@
   cursor: pointer;
   text-align: left;
   transition: all .15s;
+}@media (hover: hover) {
+  .scenarioCard:hover { border-color: #FFD700; }
 }
-.scenarioCard:hover { border-color: #FFD700; }
 .scenarioEmoji { font-size: 22px; flex-shrink: 0; }
 .scenarioLabel {
   font-size: 13px;
@@ -151,8 +155,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 38px;
   transition: all .15s;
+}@media (hover: hover) {
+  .karatPill:hover { color: var(--text); border-color: var(--karat-color); }
 }
-.karatPill:hover { color: var(--text); border-color: var(--karat-color); }
 .karatPillActive {
   background: var(--karat-color);
   color: #0B0B0B;
@@ -398,8 +403,9 @@
   color: var(--muted);
   cursor: pointer;
   min-height: 32px;
+}@media (hover: hover) {
+  .preset:hover { color: var(--text); border-color: var(--accent); }
 }
-.preset:hover { color: var(--text); border-color: var(--accent); }
 .presetActive {
   background: var(--accent);
   color: #0B0B0B;
@@ -643,8 +649,9 @@
   height: 32px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .assetRemove:hover { border-color: #FF8C8C; color: #FF8C8C; }
 }
-.assetRemove:hover { border-color: #FF8C8C; color: #FF8C8C; }
 @media (max-width: 640px) {
   .assetNickname, .assetWeight, .assetKarat { font-size: 16px; }
 }
@@ -661,8 +668,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .addBtn:hover { border-color: var(--accent); }
 }
-.addBtn:hover { border-color: var(--accent); }
 
 .assetTotal {
   margin-top: 14px;
@@ -823,8 +831,9 @@
   border-bottom: 1px solid var(--border);
 }
 .relatedList li:last-child { border-bottom: none; }
-.relatedList a { color: var(--accent); text-decoration: none; font-weight: 600; }
-.relatedList a:hover { text-decoration: underline; }
+.relatedList a { color: var(--accent); text-decoration: none; font-weight: 600; }@media (hover: hover) {
+  .relatedList a:hover { text-decoration: underline; }
+}
 
 /* 면책 */
 .disclaimer {
@@ -849,6 +858,7 @@
   color: var(--muted);
   line-height: 1.8;
 }
-.disclaimer ul a { color: var(--accent); text-decoration: none; }
-.disclaimer ul a:hover { text-decoration: underline; }
+.disclaimer ul a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
+  .disclaimer ul a:hover { text-decoration: underline; }
+}
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

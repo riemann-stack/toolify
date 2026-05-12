@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -36,8 +37,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: rgba(62,255,208,0.10);
   color: #3EFFD0;
@@ -144,8 +146,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .quickActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 거리 프리셋 ── */
@@ -168,8 +171,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .distPresetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.distPresetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .distPresetActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 .distPresetEmoji { font-size: 18px; display: block; margin-bottom: 2px; }
 .distPresetMeta { font-size: 10px; color: var(--muted); display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
@@ -420,8 +424,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .modeActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
 
 /* ── 에코 인식 등급 ── */
@@ -540,6 +545,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 }
-.copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
 .copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }

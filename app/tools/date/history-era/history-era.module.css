@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 오늘은 무슨 해? 자동 카드 ── */
@@ -55,8 +56,9 @@
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
   white-space: nowrap;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 /* ── 섹션 공통 ── */
@@ -70,8 +72,9 @@
   background: var(--bg2); border: 1px solid var(--border);
   font-size: 13px; color: var(--muted); transition: all 0.15s;
 }
-.radioLabel input { display: none; }
-.radioLabel:hover { border-color: var(--border-hover); color: var(--text); }
+.radioLabel input { display: none; }@media (hover: hover) {
+  .radioLabel:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .radioActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 폼 행 ── */
@@ -139,8 +142,9 @@
   background: var(--bg2); border: 1px solid var(--border);
   font-size: 13px; color: var(--muted); transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
 }
-.bceToggle input { display: none; }
-.bceToggle:hover { border-color: var(--border-hover); color: var(--text); }
+.bceToggle input { display: none; }@media (hover: hover) {
+  .bceToggle:hover { border-color: var(--border-hover); color: var(--text); }
+}
 .bceActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 /* ── 연호 테이블 ── */
@@ -165,8 +169,9 @@
   background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
   padding: 8px 4px; cursor: pointer; transition: all 0.15s;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
+}@media (hover: hover) {
+  .pickerBtn:hover { border-color: var(--border-hover); }
 }
-.pickerBtn:hover { border-color: var(--border-hover); }
 .pickerActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; }
 .pickerKr { font-size: 16px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); line-height: 1.2; }
 .pickerActive .pickerKr { color: var(--accent); }
@@ -200,8 +205,9 @@
   padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border);
   background: var(--bg2); font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .filterBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.filterBtn:hover { border-color: var(--border-hover); color: var(--text); }
 .filterActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
 
 .searchInput {

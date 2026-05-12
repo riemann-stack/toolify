@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 11px 8px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
@@ -41,8 +43,9 @@
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; transition: transform 0.08s, border-color 0.18s;
   user-select: none; -webkit-tap-highlight-color: transparent;
+}@media (hover: hover) {
+  .tapButton:hover { border-color: var(--accent); }
 }
-.tapButton:hover { border-color: var(--accent); }
 .tapButton:active { transform: scale(0.97); }
 .ripple {
   position: absolute; inset: 0; border-radius: 50%;
@@ -142,8 +145,9 @@
   cursor: pointer; transition: all 0.15s;
   text-decoration: none; text-align: center;
   display: inline-flex; align-items: center; justify-content: center;
+}@media (hover: hover) {
+  .ctrlBtn:hover { color: var(--text); border-color: var(--accent); }
 }
-.ctrlBtn:hover { color: var(--text); border-color: var(--accent); }
 .ctrlBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .ctrlBtnActive {
   background: var(--accent) !important; color: #0D0D0D !important;
@@ -153,8 +157,9 @@
   grid-column: 1 / -1;
   background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.3);
   color: var(--accent);
+}@media (hover: hover) {
+  .ctrlBtnLink:hover { background: rgba(200,255,62,0.15); color: var(--accent); }
 }
-.ctrlBtnLink:hover { background: rgba(200,255,62,0.15); color: var(--accent); }
 
 /* ── 메트로놈 BPM 입력 ── */
 .bpmInputRow {
@@ -187,8 +192,9 @@
   background: var(--bg3); border: 1px solid var(--border);
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .adjBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.adjBtn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── 박자 선택 ── */
 .sigRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -197,8 +203,9 @@
   background: var(--bg3); border: 1px solid var(--border);
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .sigBtn:hover { color: var(--text); }
 }
-.sigBtn:hover { color: var(--text); }
 .sigBtnActive {
   background: var(--accent) !important; color: #0D0D0D !important;
   border-color: var(--accent) !important;
@@ -227,8 +234,9 @@
   background: var(--accent); border: 1px solid var(--accent);
   color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .playBtn:hover { filter: brightness(1.1); }
 }
-.playBtn:hover { filter: brightness(1.1); }
 .playBtnStop {
   background: var(--bg3) !important; color: var(--text) !important;
   border-color: var(--border) !important;
@@ -244,8 +252,9 @@
   background: var(--bg3); border: 1px solid var(--border);
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); color: var(--text); }
 }
-.presetBtn:hover { border-color: var(--accent); color: var(--text); }
 .presetBtnActive {
   background: rgba(200,255,62,0.12) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
@@ -269,8 +278,9 @@
   background: var(--accent); border: 1px solid var(--accent);
   color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .startBtn:hover { filter: brightness(1.1); }
 }
-.startBtn:hover { filter: brightness(1.1); }
 
 .testStageCard {
   background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);

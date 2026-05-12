@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
@@ -36,8 +37,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 
 /* 탭별 색조 */
@@ -95,8 +97,9 @@
   background-position: 0 0, 0 8px, 8px -8px, -8px 0;
   box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   transition: transform 0.18s;
+}@media (hover: hover) {
+  .bigPreview:hover { transform: translateY(-2px); }
 }
-.bigPreview:hover { transform: translateY(-2px); }
 .bigPreviewInner {
   position: absolute;
   inset: 0;
@@ -195,8 +198,9 @@
   border-radius: 8px;
   padding: 8px 14px;
   transition: background 0.12s;
+}@media (hover: hover) {
+  .formatRow:hover { background: rgba(200,255,62,0.04); }
 }
-.formatRow:hover { background: rgba(200,255,62,0.04); }
 .formatLabel {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -256,8 +260,9 @@
   transition: transform 0.15s;
   border: 2px solid transparent;
   position: relative;
+}@media (hover: hover) {
+  .presetItem:hover { transform: scale(1.08); }
 }
-.presetItem:hover { transform: scale(1.08); }
 .presetActive { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(200,255,62,0.18); }
 
 /* 히스토리 */
@@ -275,8 +280,9 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: transform 0.12s;
+}@media (hover: hover) {
+  .historyChip:hover { transform: scale(1.1); border-color: var(--border-hover); }
 }
-.historyChip:hover { transform: scale(1.1); border-color: var(--border-hover); }
 
 /* ── 복사 버튼 ── */
 .copyBtn {
@@ -291,8 +297,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .miniCopyBtn {
@@ -305,8 +312,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .miniCopyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniCopyBtn:hover { color: var(--accent); border-color: var(--accent); }
 .miniCopied { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
 
 /* ── 액션 버튼 ── */
@@ -321,8 +329,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .actionBtn:hover { background: rgba(200,255,62,0.18); }
 }
-.actionBtn:hover { background: rgba(200,255,62,0.18); }
 
 /* 토글 */
 .toggleRow { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
@@ -406,8 +415,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .swapBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.swapBtn:hover { color: var(--accent); border-color: var(--accent); }
 
 .a11yPreview {
   border-radius: 14px;
@@ -546,8 +556,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .paletteTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.paletteTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .paletteTypeBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
 .paletteTypeActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
 
@@ -574,8 +585,9 @@
   padding: 8px;
   position: relative;
   transition: transform 0.12s;
+}@media (hover: hover) {
+  .paletteSwatch:hover { transform: translateY(-2px); }
 }
-.paletteSwatch:hover { transform: translateY(-2px); }
 .paletteSwatchHex {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10.5px;
@@ -620,8 +632,9 @@
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   transition: transform 0.12s;
+}@media (hover: hover) {
+  .tailwindSwatch:hover { transform: scale(1.05); }
 }
-.tailwindSwatch:hover { transform: scale(1.05); }
 
 .exportRow {
   display: grid;
@@ -638,8 +651,9 @@
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
   cursor: pointer;
+}@media (hover: hover) {
+  .exportBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.exportBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .exportActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
 
 /* ─────── CSS·Tailwind 탭 ─────── */
@@ -798,8 +812,9 @@
   font-size: 11px;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .gradStopRemove:hover { background: rgba(255,107,107,0.18); }
 }
-.gradStopRemove:hover { background: rgba(255,107,107,0.18); }
 
 .gradAddBtn {
   background: rgba(62,200,255,0.10);
@@ -811,8 +826,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   width: 100%;
+}@media (hover: hover) {
+  .gradAddBtn:hover { background: rgba(62,200,255,0.18); }
 }
-.gradAddBtn:hover { background: rgba(62,200,255,0.18); }
 
 .gradTypeRow {
   display: grid;
@@ -828,8 +844,9 @@
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .gradTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.gradTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .gradTypeActive { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
 
 .gradAngleRow {
@@ -884,8 +901,9 @@
   color: #fff;
   text-shadow: 0 1px 3px rgba(0,0,0,0.6);
   transition: transform 0.15s;
+}@media (hover: hover) {
+  .gradPresetCard:hover { transform: translateY(-2px); }
 }
-.gradPresetCard:hover { transform: translateY(-2px); }
 
 /* ─────── 색상 추출 탭 ─────── */
 .dropArea {
@@ -896,8 +914,9 @@
   cursor: pointer;
   transition: all 0.15s;
   background: var(--bg3);
+}@media (hover: hover) {
+  .dropArea:hover { border-color: #3EFF9B; color: #3EFF9B; }
 }
-.dropArea:hover { border-color: #3EFF9B; color: #3EFF9B; }
 .dropAreaActive { border-color: #3EFF9B; background: rgba(62,255,155,0.08); }
 .dropAreaIcon { font-size: 36px; margin-bottom: 8px; }
 .dropAreaText { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
@@ -935,8 +954,9 @@
   padding: 8px 10px;
   border: 1px solid var(--border);
   transition: transform 0.12s;
+}@media (hover: hover) {
+  .extractedCard:hover { transform: translateY(-2px); }
 }
-.extractedCard:hover { transform: translateY(-2px); }
 .extractedHex {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -992,6 +1012,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.12s;
+}@media (hover: hover) {
+  .brandBtn:hover { border-color: var(--accent); }
 }
-.brandBtn:hover { border-color: var(--accent); }
 .brandSwatch { width: 24px; height: 24px; border-radius: 5px; border: 1px solid var(--border); }

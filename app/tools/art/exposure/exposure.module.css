@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -40,8 +41,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
 /* 잠금 토글 */
@@ -64,8 +66,9 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
+}@media (hover: hover) {
+  .lockBtn:hover { border-color: var(--accent); }
 }
-.lockBtn:hover { border-color: var(--accent); }
 .lockBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 .lockHint {
   font-size: 12px;
@@ -222,10 +225,11 @@
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-}
-.equivItem:hover {
+}@media (hover: hover) {
+  .equivItem:hover {
   border-color: var(--accent);
   background: var(--bg2);
+}
 }
 .equivAxis {
   display: flex;
@@ -289,8 +293,9 @@
   gap: 4px;
   align-items: center;
   min-height: 60px;
+}@media (hover: hover) {
+  .ndBtn:hover { border-color: var(--accent); }
 }
-.ndBtn:hover { border-color: var(--accent); }
 .ndBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
 .ndLabel {
   font-size: 14px;
@@ -359,10 +364,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-.sceneCard:hover {
+}@media (hover: hover) {
+  .sceneCard:hover {
   border-color: var(--accent);
   background: var(--bg2);
+}
 }
 .sceneHead {
   display: flex;

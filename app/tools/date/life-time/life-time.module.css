@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 /* ── 진입 안내 ── */
@@ -33,8 +34,9 @@
   transition: all 0.2s;
   text-align: left;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .modeCard:hover { border-color: var(--border-hover); }
 }
-.modeCard:hover { border-color: var(--border-hover); }
 .modeGrowth      { border-left: 3px solid #3EFF9B; }
 .modeBalance     { border-left: 3px solid var(--accent); }
 .modeMemento     { border-left: 3px solid #9B59B6; }
@@ -89,8 +91,9 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .mementoConfirmBtn:hover { background: #B070C8; }
 }
-.mementoConfirmBtn:hover { background: #B070C8; }
 .mementoBackBtn {
   background: var(--bg3);
   color: var(--muted);
@@ -100,8 +103,9 @@
   font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+}@media (hover: hover) {
+  .mementoBackBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.mementoBackBtn:hover { color: var(--text); border-color: var(--border-hover); }
 
 /* ── 카드 ── */
 .card {
@@ -186,8 +190,9 @@
   transition: all 0.15s;
   text-align: left;
   line-height: 1.5;
+}@media (hover: hover) {
+  .expectancyBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.expectancyBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .expectancyBtn small {
   display: block;
   font-family: 'Inter', system-ui, sans-serif;
@@ -246,8 +251,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .genderBtn:hover { color: var(--text); }
 }
-.genderBtn:hover { color: var(--text); }
 .genderActive {
   background: var(--accent-dim);
   color: var(--accent);
@@ -533,8 +539,9 @@
   transition: all 0.15s;
   text-align: center;
   line-height: 1.5;
+}@media (hover: hover) {
+  .activityBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.activityBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .activityBtn span { display: block; font-size: 18px; margin-bottom: 2px; }
 .activityActive {
   background: var(--accent-dim);
@@ -636,8 +643,9 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 정신건강 안내 (하단) ── */
@@ -663,5 +671,6 @@
   color: var(--muted);
 }
 .supportBody li { margin: 3px 0; }
-.supportBody a { color: #3EC8FF; text-decoration: none; }
-.supportBody a:hover { text-decoration: underline; }
+.supportBody a { color: #3EC8FF; text-decoration: none; }@media (hover: hover) {
+  .supportBody a:hover { text-decoration: underline; }
+}

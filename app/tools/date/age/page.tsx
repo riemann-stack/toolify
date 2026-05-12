@@ -5,13 +5,13 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/age',
-  title: '만 나이·생일·인생 통계 계산기 — D-day, 1만일, 띠, 별자리, 환갑',
+  title: '나이 계산기 — 만 나이·생일 D-day·띠·별자리·인생 통계',
   description:
     '만 나이 통일법 기준 만 나이 계산부터 다음 생일 D-day, 태어난 지 며칠, 1만일·환갑·칠순 마일스톤, 띠·별자리·탄생석, 인생 시간 통계까지 한 번에.',
   keywords: [
-    '만나이계산기', '만나이', '연나이', '세는나이', '생일D-day', '태어난지며칠',
+    '나이계산기', '만나이계산기', '만나이', '연나이', '세는나이', '생일D-day', '태어난지며칠',
     '1만일', '띠계산', '별자리계산', '환갑', '칠순', '인생타임라인',
-    '만나이통일법', '나이계산기', '탄생석', '한국세대', '인생통계',
+    '만나이통일법', '탄생석', '한국세대', '인생통계',
   ],
 })
 
@@ -20,7 +20,7 @@ export default function AgePage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎂 만 나이·생일·인생 통계 계산기
+        🎂 나이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         만 나이부터 D-day, 1만일 기념, 인생 시간 통계, 띠·별자리·탄생석, 생일 카운트다운까지 한 번에. 만 나이 통일법(2023.6.28) 기준으로 정확하게 계산합니다.
@@ -51,36 +51,74 @@ export default function AgePage() {
           </div>
         </section>
 
-        {/* 2. 3종 나이 비교 */}
+        {/* 2. 3가지 나이 비교 — 카드 레이아웃 (모바일 가독성) */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>만 나이·세는 나이·연 나이 비교</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>만 나이</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>세는 나이</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>연 나이</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['계산 방법', '생일 기준 — 생일 전 1살 적음', '태어나자마자 1세, 1월 1일 +1살', '현재 연도 - 출생 연도'],
-                  ['적용 범위', '법령·행정·계약 (2023.6~)',     '일상 대화',                        '병역법·청소년 보호법 일부'],
-                  ['예시',       '2000-05생 → 2026.04 = 25세',     '2000년생 → 2026 = 27세',         '2026 - 2000 = 26세'],
-                  ['특징',       '국제 표준, 정확함',                '한국 전통 방식',                   '간단하지만 오차 있음'],
-                ].map(([label, man, se, yeon], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontWeight: 500 }}>{label}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{man}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{se}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{yeon}</td>
-                  </tr>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }} className="age-compare-grid">
+            {[
+              {
+                title: '만 나이',
+                tag: '법령·행정 표준',
+                color: '#C8FF3E',
+                rows: [
+                  { k: '계산 방법', v: '생일 기준 — 생일 전 1살 적음' },
+                  { k: '적용 범위', v: '법령·행정·계약 (2023.6~)' },
+                  { k: '예시',       v: '2000-05생 → 2026.04 = 25세' },
+                  { k: '특징',       v: '국제 표준, 정확함' },
+                ],
+                accent: true,
+              },
+              {
+                title: '세는 나이',
+                tag: '한국 전통',
+                color: '#FFD700',
+                rows: [
+                  { k: '계산 방법', v: '태어나자마자 1세, 1월 1일 +1살' },
+                  { k: '적용 범위', v: '일상 대화' },
+                  { k: '예시',       v: '2000년생 → 2026 = 27세' },
+                  { k: '특징',       v: '한국 전통 방식' },
+                ],
+              },
+              {
+                title: '연 나이',
+                tag: '병역·청보법 일부',
+                color: '#3EC8FF',
+                rows: [
+                  { k: '계산 방법', v: '현재 연도 − 출생 연도' },
+                  { k: '적용 범위', v: '병역법·청소년 보호법 일부' },
+                  { k: '예시',       v: '2026 − 2000 = 26세' },
+                  { k: '특징',       v: '간단하지만 오차 있음' },
+                ],
+              },
+            ].map((card, i) => (
+              <div key={i} style={{
+                background: card.accent ? 'rgba(200,255,62,0.05)' : 'var(--bg2)',
+                border: `1px solid ${card.accent ? card.color + '60' : 'var(--border)'}`,
+                borderTop: `3px solid ${card.color}`,
+                borderRadius: 12,
+                padding: '14px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+              }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 4, marginBottom: 8 }}>
+                  <span style={{ fontSize: 15, fontWeight: 800, color: card.color, fontFamily: 'Noto Sans KR, sans-serif' }}>{card.title}</span>
+                  <span style={{ fontSize: 10.5, color: 'var(--muted)', fontWeight: 600 }}>{card.tag}</span>
+                </div>
+                {card.rows.map((r, j) => (
+                  <div key={j} style={{ borderTop: j === 0 ? 'none' : '1px solid var(--border)', paddingTop: j === 0 ? 0 : 6, paddingBottom: 6 }}>
+                    <p style={{ fontSize: 10.5, color: 'var(--muted)', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 2, fontWeight: 600 }}>{r.k}</p>
+                    <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.55 }}>{r.v}</p>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            ))}
           </div>
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media (max-width: 720px) {
+              .age-compare-grid { grid-template-columns: 1fr !important; }
+            }
+          ` }} />
         </section>
 
         {/* 3. 인생 시간 통계 */}
@@ -274,7 +312,7 @@ export default function AgePage() {
         {/* 관련 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',     desc: '우주 138억 년을 1년으로 압축' },
               { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 시각화',  desc: '8행성 크기·중력·하루 비교' },

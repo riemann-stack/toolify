@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .disclaimer {
   border-top: 1px solid var(--border);
   background: rgba(62, 200, 255, 0.04);
@@ -18,9 +19,10 @@
 .disclaimerLink {
   color: #3EC8FF;
   text-decoration: none;
-}
-.disclaimerLink:hover {
+}@media (hover: hover) {
+  .disclaimerLink:hover {
   text-decoration: underline;
+}
 }
 
 .footer {
@@ -76,8 +78,9 @@
   color: var(--muted);
   text-decoration: none;
   transition: color 0.15s;
+}@media (hover: hover) {
+  .link:hover { color: var(--text); }
 }
-.link:hover { color: var(--text); }
 
 @media (max-width: 600px) {
   .disclaimer {

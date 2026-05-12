@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
@@ -43,10 +44,12 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tab:hover { background: var(--bg3); color: var(--text); }
-.tabActive { background: var(--accent); color: #0D0D0D; }
-.tabActive:hover { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #0D0D0D; }@media (hover: hover) {
+  .tabActive:hover { background: var(--accent); color: #0D0D0D; }
+}
 
 /* ── 필드 ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -339,8 +342,9 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .intensityCopy:hover { color: var(--accent); border-color: var(--accent); }
 }
-.intensityCopy:hover { color: var(--accent); border-color: var(--accent); }
 .intensityCopyDone { color: #3EFF9B; border-color: #3EFF9B; }
 
 @media (max-width: 640px) {
@@ -515,8 +519,9 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
+}@media (hover: hover) {
+  .historyRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 }
-.historyRemove:hover { color: #FF6B6B; border-color: #FF6B6B; }
 
 .addRecordBtn {
   background: transparent;
@@ -529,8 +534,9 @@
   width: 100%;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
+}@media (hover: hover) {
+  .addRecordBtn:hover { background: rgba(200, 255, 62, 0.05); }
 }
-.addRecordBtn:hover { background: rgba(200, 255, 62, 0.05); }
 
 .historyChart {
   background: var(--bg3);
@@ -728,10 +734,11 @@
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
-}
-.clearBtn:hover {
+}@media (hover: hover) {
+  .clearBtn:hover {
   border-color: #FF8C8C;
   color: #FF8C8C;
+}
 }
 
 /* 부상 예방 카드 */

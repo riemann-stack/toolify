@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 12px 6px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
 
 /* ── 카드 공통 ── */
@@ -110,8 +112,9 @@
   padding: 10px 6px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .radioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.radioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 .radioBtnActive {
   background: rgba(200,255,62,0.15) !important;
   border-color: rgba(200,255,62,0.4) !important;
@@ -125,8 +128,9 @@
   padding: 10px 4px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .storageBtn:hover { color: var(--text); }
 }
-.storageBtn:hover { color: var(--text); }
 .storageBtnRoom.storageBtnActive    { background: rgba(255,215,0,0.15);  border-color: rgba(255,215,0,0.4);  color: #FFD700; }
 .storageBtnFridge.storageBtnActive  { background: rgba(62,200,255,0.15); border-color: rgba(62,200,255,0.4); color: #3EC8FF; }
 .storageBtnFreezer.storageBtnActive { background: rgba(155,89,182,0.15); border-color: rgba(155,89,182,0.4); color: #BB7FE0; }
@@ -137,8 +141,9 @@
   background: var(--bg3); border: 1px dashed var(--border); border-radius: 12px;
   padding: 14px; cursor: pointer; color: var(--muted); width: 100%;
   font-size: 14px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .addBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.addBtn:hover { border-color: var(--accent); color: var(--accent); }
 .addBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .formActionRow { display: flex; gap: 8px; margin-top: 4px; }
@@ -147,15 +152,17 @@
   padding: 12px; cursor: pointer; color: #0D0D0D;
   font-size: 14px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
   transition: opacity 0.15s;
+}@media (hover: hover) {
+  .submitBtn:hover { opacity: 0.85; }
 }
-.submitBtn:hover { opacity: 0.85; }
 .cancelBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 18px; cursor: pointer; color: var(--muted);
   font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .cancelBtn:hover { color: var(--text); }
 }
-.cancelBtn:hover { color: var(--text); }
 
 /* ── 식재료 목록 ── */
 .foodList { display: flex; flex-direction: column; gap: 8px; }
@@ -205,8 +212,9 @@
   background: transparent; border: none; color: var(--muted); cursor: pointer;
   font-size: 18px; line-height: 1; padding: 4px 8px; border-radius: 6px;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .deleteBtn:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
 }
-.deleteBtn:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
 
 /* 진행 바 */
 .progressRow { display: flex; align-items: center; gap: 10px; }
@@ -250,8 +258,9 @@
   padding: 7px 14px; font-size: 12px; font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
   transition: opacity 0.15s; white-space: nowrap;
+}@media (hover: hover) {
+  .freezeBtn:hover { opacity: 0.85; }
 }
-.freezeBtn:hover { opacity: 0.85; }
 
 /* 빈 상태 */
 .emptyState {
@@ -266,8 +275,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 12px; color: var(--muted); cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; align-self: flex-start;
+}@media (hover: hover) {
+  .resetBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 }
-.resetBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
 
 /* ── 보관 가이드 표 ── */
 .guideSection {

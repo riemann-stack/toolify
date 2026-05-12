@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 강조 면책 (의료 도구) ── */
@@ -34,8 +35,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .tabBtn:hover { color: var(--text); }
 }
-.tabBtn:hover { color: var(--text); }
 .tabActive {
   background: rgba(62,200,255,0.10);
   color: #3EC8FF;
@@ -175,8 +177,9 @@
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
+}@media (hover: hover) {
+  .uvQuickBtn:hover { color: var(--text); }
 }
-.uvQuickBtn:hover { color: var(--text); }
 .uvQuickActive { font-weight: 700; }
 .uvQuickLow      { border-color: rgba(62,255,155,0.40); }
 .uvQuickMid      { border-color: rgba(255,215,0,0.40); }
@@ -220,8 +223,9 @@
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
   position: relative;
+}@media (hover: hover) {
+  .skinCard:hover { border-color: var(--border-hover); }
 }
-.skinCard:hover { border-color: var(--border-hover); }
 .skinSwatch {
   width: 44px;
   height: 44px;
@@ -285,8 +289,9 @@
   transition: all 0.15s;
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .spfCard:hover { border-color: var(--border-hover); }
 }
-.spfCard:hover { border-color: var(--border-hover); }
 .spfName {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
@@ -331,8 +336,9 @@
   transition: all 0.15s;
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .envCard:hover { border-color: var(--border-hover); }
 }
-.envCard:hover { border-color: var(--border-hover); }
 .envIcon { font-size: 22px; }
 .envName { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 4px; }
 .envMult {
@@ -582,8 +588,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
+}@media (hover: hover) {
+  .reapplyBtn:hover { background: rgba(255,215,0,0.20); }
 }
-.reapplyBtn:hover { background: rgba(255,215,0,0.20); }
 
 /* ── 활동별 가이드 (탭 2) ── */
 .activityGrid {
@@ -688,6 +695,7 @@
   transition: all 0.15s;
   width: 100%;
   text-align: center;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: #3EC8FF; color: #3EC8FF; }
 }
-.copyBtn:hover { border-color: #3EC8FF; color: #3EC8FF; }
 .copied { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }

@@ -1,3 +1,4 @@
+/* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 탭 ── */
@@ -10,8 +11,9 @@
   padding: 12px 6px; border-radius: 10px; border: none;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
+}@media (hover: hover) {
+  .tab:hover { color: var(--text); }
 }
-.tab:hover { color: var(--text); }
 .tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
 
 /* ── 카드 공통 ── */
@@ -52,8 +54,9 @@
   padding: 10px 12px; border-radius: 8px; cursor: pointer;
   display: flex; align-items: center; gap: 10px;
   font-size: 14px; color: var(--text); transition: background 0.12s;
+}@media (hover: hover) {
+  .suggestionItem:hover { background: var(--bg3); }
 }
-.suggestionItem:hover { background: var(--bg3); }
 .suggestionEmoji { font-size: 18px; }
 .suggestionMeta { font-size: 11px; color: var(--muted); margin-left: auto; }
 
@@ -95,8 +98,9 @@
   padding: 7px 12px; border-radius: 999px;
   background: var(--bg3); border: 1px solid var(--border);
   font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.15s;
+}@media (hover: hover) {
+  .purposeChip:hover { color: var(--text); }
 }
-.purposeChip:hover { color: var(--text); }
 .purposeChipActive {
   background: rgba(200,255,62,0.1) !important;
   border-color: var(--accent) !important;
@@ -235,8 +239,9 @@
   display: flex; align-items: center; gap: 12px;
   font-size: 14px; color: var(--text); font-weight: 600;
   transition: background 0.15s;
+}@media (hover: hover) {
+  .browseHeader:hover { background: var(--bg3); }
 }
-.browseHeader:hover { background: var(--bg3); }
 .browseHeaderEmoji { font-size: 20px; }
 .browseHeaderArrow {
   margin-left: auto; font-size: 12px; color: var(--muted);
@@ -264,9 +269,10 @@
   border-radius: 8px; padding: 5px 10px;
   font-size: 11px; color: var(--muted); cursor: pointer;
   transition: all 0.15s;
-}
-.browseItemDetailLink:hover {
+}@media (hover: hover) {
+  .browseItemDetailLink:hover {
   border-color: var(--accent); color: var(--accent);
+}
 }
 .browseOptions { display: flex; flex-direction: column; gap: 6px; }
 .browseOption {

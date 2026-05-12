@@ -359,7 +359,7 @@ export default function FightWeightClient() {
     })
   }
 
-  /* 체급 표 전체 — 탭 3 */
+  /* 체급 표 — 현재 선택된 종목만 (영문 컬럼 제외, 모바일 2줄 줄바꿈 방지) */
   function renderClassTable(s: Sport) {
     return (
       <div className={styles.card} key={s.id}>
@@ -371,7 +371,7 @@ export default function FightWeightClient() {
         <div style={{ overflowX: 'auto' }}>
           <table className={styles.classTable}>
             <thead>
-              <tr><th>체급</th><th>영문</th><th>kg</th><th>lbs</th></tr>
+              <tr><th>체급</th><th>kg</th><th>lbs</th></tr>
             </thead>
             <tbody>
               {s.classes.map((c, i) => (
@@ -386,7 +386,6 @@ export default function FightWeightClient() {
                   }}
                 >
                   <td>{c.name}{c.forGender === 'female' && ' (여)'}</td>
-                  <td>{c.nameEn ?? '—'}</td>
                   <td>{c.limit === Infinity ? '무제한' : c.limit.toFixed(2)}</td>
                   <td>{c.limit === Infinity ? '—' : toLbs(c.limit).toFixed(1)}</td>
                 </tr>
@@ -436,7 +435,7 @@ export default function FightWeightClient() {
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>체급 검색</button>
         <button type="button" className={`${styles.tabBtn} ${tab === 'plan' ? styles.tabActive : ''}`}   onClick={() => setTab('plan')}>감량 계획</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'tables' ? styles.tabActive : ''}`} onClick={() => setTab('tables')}>종목별 체급표</button>
+        <button type="button" className={`${styles.tabBtn} ${tab === 'tables' ? styles.tabActive : ''}`} onClick={() => setTab('tables')}>체급표</button>
       </div>
 
       {/* ─────────────────── 탭 1: 체급 검색 ─────────────────── */}
@@ -448,36 +447,35 @@ export default function FightWeightClient() {
               <span className={styles.cardLabelHint}>{sport.flag} {sport.label}</span>
             </div>
 
-            <div className={styles.inputGrid}>
+            {/* 체중·키·성별 한 줄 (모바일도 3열) */}
+            <div className={styles.inputGrid3}>
               <div className={styles.inputCell}>
-                <p className={styles.inputLabel}>현재 체중</p>
+                <p className={styles.inputLabel}>체중</p>
                 <div className={styles.inputRow}>
                   <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="0.1" value={weightStr} onChange={e => setWeightStr(e.target.value)} />
                   <span className={styles.unit}>kg</span>
                 </div>
               </div>
               <div className={styles.inputCell}>
-                <p className={styles.inputLabel}>키 (선택)</p>
+                <p className={styles.inputLabel}>키</p>
                 <div className={styles.inputRow}>
                   <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="1" value={heightStr} onChange={e => setHeightStr(e.target.value)} />
                   <span className={styles.unit}>cm</span>
                 </div>
               </div>
-            </div>
-
-            <div style={{ height: 10 }} />
-            <div className={styles.inputGrid}>
               <div className={styles.inputCell}>
                 <p className={styles.inputLabel}>성별</p>
                 <div className={styles.genderRow}>
-                  <button type="button" className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')}>남성</button>
-                  <button type="button" className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')}>여성</button>
+                  <button type="button" className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')} aria-label="남성">♂</button>
+                  <button type="button" className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')} aria-label="여성">♀</button>
                 </div>
               </div>
-              <div className={styles.inputCell}>
-                <p className={styles.inputLabel}>계체 예정일 (D-{daysToWeighIn})</p>
-                <input className={styles.dateInput} type="date" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
-              </div>
+            </div>
+
+            <div style={{ height: 10 }} />
+            <div className={styles.inputCell}>
+              <p className={styles.inputLabel}>계체 예정일 (D-{daysToWeighIn})</p>
+              <input className={styles.dateInput} type="date" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
             </div>
 
             <div style={{ height: 14 }} />
@@ -678,12 +676,8 @@ export default function FightWeightClient() {
         </>
       )}
 
-      {/* ─────────────────── 탭 3: 종목별 체급표 ─────────────────── */}
-      {tab === 'tables' && (
-        <>
-          {SPORTS.map(s => renderClassTable(s))}
-        </>
-      )}
+      {/* ─────────────────── 탭 3: 체급표 (선택 종목만) ─────────────────── */}
+      {tab === 'tables' && renderClassTable(sport)}
 
       {/* 결과 복사 */}
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
