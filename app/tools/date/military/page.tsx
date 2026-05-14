@@ -6,10 +6,10 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/military',
-  title: '군 전역일 계산기 — 복무율·D-day·마일스톤 (2026년 최신)',
+  title: '군대 전역일 계산기 — 복무율·D-day·마일스톤 (2026년 최신)',
   description:
     '입대일과 복무 형태(육군·해군·공군·해병대·사회복무요원·산업기능요원·전문연구요원·대체복무)를 입력해 전역일과 복무율, 100일·50%·말년 시작일 마일스톤을 계산합니다. 2026년 병무청 기준.',
-  keywords: ['군전역일계산기', '복무율계산기', '전역일계산', '말년시작일', '입대100일', '육군전역일', '해군전역일', '공군전역일', '사회복무요원전역일', '대체복무요원'],
+  keywords: ['군대전역일계산기', '군전역일계산기', '복무율계산기', '전역일계산', '말년시작일', '입대100일', '육군전역일', '해군전역일', '공군전역일', '사회복무요원전역일', '대체복무요원'],
 })
 
 export default function MilitaryPage() {
@@ -17,7 +17,7 @@ export default function MilitaryPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎖️ 군 전역일·복무율 계산기
+        🎖️ 군대 전역일 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         입대일과 복무 형태를 입력하면 <strong style={{ color: 'var(--text)' }}>전역일·복무율·100일·말년 시작일</strong>까지 한 번에 계산합니다.
@@ -47,44 +47,47 @@ export default function MilitaryPage() {
           <strong style={{ color: 'var(--text)' }}> 병무청 또는 소속 부대</strong>에 확인하세요. 참고: 2026년 기준 병무청 병역이행안내.
         </div>
 
-        {/* ── 2. 2026년 복무 기간 표 ── */}
+        {/* ── 2. 복무 기간·형태 통합표 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            2026년 기준 병역 의무 복무 기간
+            2026년 기준 병역 복무 형태 한눈에 보기
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            병무청 병역이행안내 기준 9가지 복무 형태입니다. <strong style={{ color: 'var(--text)' }}>2018년 단축 정책</strong> 이후 육·해·공·해병대 현역 기간이 모두 줄어 현재 수준이 되었습니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['복무 형태', '복무 기간', '복무 일수'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  {['복무 형태', '기간', '일수', '특징'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: i < 2 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { t: '육군 현역',           p: '18개월', d: '약 548일', c: '#3EFF9B' },
-                  { t: '해병대 현역',         p: '18개월', d: '약 548일', c: '#3EFF9B' },
-                  { t: '상근예비역',          p: '18개월', d: '약 548일', c: '#3EFF9B' },
-                  { t: '해군 현역',           p: '20개월', d: '약 610일', c: '#C8FF3E' },
-                  { t: '공군 현역',           p: '21개월', d: '약 640일', c: '#FFD700' },
-                  { t: '사회복무요원',        p: '21개월', d: '약 640일', c: '#FFD700' },
-                  { t: '산업기능요원 (보충역)', p: '23개월', d: '약 700일', c: '#FF8C3E' },
-                  { t: '산업기능요원 (현역)',   p: '34개월', d: '약 1,034일', c: '#FF6B6B' },
-                  { t: '전문연구요원',        p: '36개월', d: '약 1,095일', c: '#9B59B6' },
-                  { t: '대체복무요원',        p: '36개월', d: '약 1,095일', c: '#9B59B6' },
+                  { t: '육군·해병대 현역', p: '18개월', d: '약 548일', c: '#3EFF9B', note: '신병교육 5주 → 자대 배치' },
+                  { t: '상근예비역',       p: '18개월', d: '약 548일', c: '#3EFF9B', note: '거주지 인근 부대 출퇴근' },
+                  { t: '해군 현역',         p: '20개월', d: '약 610일', c: '#C8FF3E', note: '함정·해상 작전' },
+                  { t: '공군 현역',         p: '21개월', d: '약 640일', c: '#FFD700', note: '기지·방공 작전' },
+                  { t: '사회복무요원',      p: '21개월', d: '약 640일', c: '#FFD700', note: '복지·행정기관 출퇴근' },
+                  { t: '산업기능요원(보충역)', p: '23개월', d: '약 700일', c: '#FF8C3E', note: '지정업체 생산직' },
+                  { t: '산업기능요원(현역)',   p: '34개월', d: '약 1,034일', c: '#FF6B6B', note: '지정업체 생산직' },
+                  { t: '전문연구요원',      p: '36개월', d: '약 1,095일', c: '#9B59B6', note: '박사학위·연구소' },
+                  { t: '대체복무요원',      p: '36개월', d: '약 1,095일', c: '#9B59B6', note: '교정시설 합숙' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{r.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ <strong style={{ color: 'var(--text)' }}>의무경찰·의무소방·해양경찰 제도는 2023년 모두 폐지</strong>되어 신규 선발이 종료되었습니다.
+            ※ <strong style={{ color: 'var(--text)' }}>의무경찰·의무소방·해양경찰</strong> 제도는 2023년 모두 폐지되어 신규 선발이 종료되었습니다. 이전 복무자는 본 계산기의 <strong style={{ color: 'var(--text)' }}>「직접 입력」</strong>으로 복무 기간을 지정해 사용하세요.
           </p>
         </div>
 
@@ -152,46 +155,81 @@ export default function MilitaryPage() {
           </div>
         </div>
 
-        {/* ── 5. 복무 형태별 상세 안내 ── */}
+        {/* ── 5. 계급 진급 시점 (육군 18개월 기준) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            복무 형태별 상세 안내
+            🎖️ 현역병 계급 진급 시점 (육군 18개월 기준)
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                t: '🪖 현역병 (육군·해군·공군·해병대)',
-                color: '#3EFF9B',
-                items: ['입영 후 5주 신병교육 → 자대 배치', '부대 내 거주, 정기 휴가 분기별', '18~21개월 복무 (군별 다름)'],
-              },
-              {
-                t: '🏠 상근예비역',
-                color: '#3EFF9B',
-                items: ['출퇴근 형태로 복무 (자기 집에서 출퇴근)', '18개월, 육군 현역과 동일', '거주지 인근 부대 배치'],
-              },
-              {
-                t: '🏢 사회복무요원 (구 공익근무요원)',
-                color: '#FFD700',
-                items: ['사회복지·행정기관 등에서 복무', '출퇴근 형태', '21개월 복무'],
-              },
-              {
-                t: '🕊️ 대체복무요원',
-                color: '#9B59B6',
-                items: ['양심적 병역거부자 대상', '교정시설 등에서 합숙 근무', '36개월 복무'],
-              },
-              {
-                t: '🏭 산업기능요원·🔬 전문연구요원',
-                color: '#FF8C3E',
-                items: ['지정업체에서 연구·생산직 종사', '전문연구요원: 박사학위 소지자 36개월', '산업기능요원: 현역 34개월 / 보충역 23개월'],
-              },
-            ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 18px' }}>
-                <p style={{ fontSize: 14, color: s.color, fontWeight: 700, marginBottom: 8 }}>{s.t}</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                  {s.items.map((it, j) => <li key={j}>{it}</li>)}
-                </ul>
-              </div>
-            ))}
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            병역법 시행령 제25조 진급 최저복무기간에 따라 자동 진급됩니다. 해·공군은 일부 시점이 1~2개월씩 늦어집니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['계급', '진급 시점', '복무 누적', '비고'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { r: '이병',   t: '입대 직후',          d: '0~2개월',   c: '#3EC8FF',     note: '신병교육·자대 적응' },
+                  { r: '일병',   t: '입대 후 2개월',      d: '2~8개월',   c: '#C8FF3E',     note: '입대 100일 ≈ 일병 진급 무렵' },
+                  { r: '상병',   t: '일병 후 6개월',      d: '8~14개월',  c: 'var(--accent)', note: '복무 절반(반환점) 근처' },
+                  { r: '병장',   t: '상병 후 6개월',      d: '14~18개월', c: '#FF8C3E',     note: '말년 D-100 시작과 비슷한 시기' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{r.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 부대 사정·징계 등으로 진급이 지연될 수 있습니다. 정확한 진급일은 인사담당자에게 확인하세요.
+          </p>
+        </div>
+
+        {/* ── 5-1. 한국 군 복무 기간 단축 역사 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            📜 한국 군 복무 기간 단축 역사
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            육군 기준 복무 기간은 1953년 36개월에서 시작해 점진적으로 단축되어 현재 <strong style={{ color: 'var(--text)' }}>18개월</strong>까지 줄었습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['시점', '육군', '해군', '공군', '비고'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['~1959', '36개월', '36개월', '36개월', '6·25 직후'],
+                  ['1968',  '30개월', '36개월', '36개월', '1·21 사태 후 강화'],
+                  ['1993',  '26개월', '30개월', '30개월', '문민정부'],
+                  ['2003',  '24개월', '26개월', '28개월', '국방개혁 시작'],
+                  ['2011',  '21개월', '23개월', '24개월', '단계적 단축'],
+                  ['2020',  '18개월', '20개월', '21개월', '국방개혁 2.0 완료 (현재)'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r[2]}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r[3]}</td>
+                    <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{r[4]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -251,6 +289,18 @@ export default function MilitaryPage() {
               {
                 q: '특정 날짜 기준으로도 복무율을 계산할 수 있나요?',
                 a: '네. 본 계산기는 <strong>"특정 날짜 기준"</strong> 옵션을 제공합니다. 다음 휴가 복귀일, 새해, 생일 등 임의의 날짜를 기준으로 한 복무율과 D-day를 계산할 수 있어 일정 계획에 유용합니다.',
+              },
+              {
+                q: '입대 100일이 왜 의미 있는 날인가요?',
+                a: '<strong>이병 → 일병 진급</strong> 시점이기 때문입니다. 병역법 시행령상 이병은 입대 후 2개월 만에 일병으로 자동 진급하지만, 100일을 신병교육·자대 적응을 마치고 군 생활이 어느 정도 익숙해지는 첫 분기점으로 보는 문화가 있습니다. 가족이 100일 기념 면회·선물·휴가를 챙기는 풍습이 정착되어 있습니다.',
+              },
+              {
+                q: '"말년", "왕고"는 정확히 언제부터인가요?',
+                a: '관행적 정의 — <strong>말년 = 전역 D-100 이내</strong> (마지막 100일), <strong>왕고 = 전역 D-30 이내</strong> (마지막 한 달). 18개월 복무 기준 약 14~15개월 차에 말년에 진입합니다. 본 계산기의 「말년 시작 D-100」 카드와 진행바의 D-100 마커에서 시점을 자동 확인할 수 있습니다.',
+              },
+              {
+                q: '본 계산기의 결과를 진단서·확인서로 사용할 수 있나요?',
+                a: '아닙니다. 본 도구는 <strong>일반 공식에 기반한 추정 계산</strong>이므로 공식 증빙으로 사용할 수 없습니다. 정확한 전역일·복무 일수가 필요한 경우(전역증·복무 기간 확인서 등) <strong>병무청 민원24</strong>(mma.go.kr) 또는 소속 부대 인사처에서 공식 발급 받으시기 바랍니다.',
               },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

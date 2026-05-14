@@ -10,7 +10,7 @@ import {
   toGram, fromGram, pureGoldGram, convertKarat,
   calculatePrice, koreaPremium, buildPriceTable,
   nextAssetId,
-  fmtKRW, fmtKRWFull, fmtWeight,
+  fmtKRW, fmtKRWFull,
 } from './goldUtils'
 
 type TabKey = 'convert' | 'price' | 'guide'
@@ -127,21 +127,23 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
   const koreanUnits = UNITS.filter((u) => u.region === '한국')
   const intlUnits = UNITS.filter((u) => u.region === '국제')
 
-  const pureGrams = pureGoldGram(grams, karat)
+  const applyScenario = (id: string) => {
+    const sc = SCENARIOS.find((x) => x.id === id)
+    if (!sc) return
+    setWeight(sc.weightG)
+    setUnit('g')
+    setKarat(sc.karat)
+  }
 
   return (
     <div className={styles.panel}>
-      {/* 인기 시나리오 프리셋 */}
+      {/* 빠른 선택 — PC: 카드 그리드 / 모바일: 드롭다운 */}
       <section>
-        <label className={styles.label}>한국 인기 시나리오 빠른 선택</label>
+        <label className={styles.label}>빠른 선택</label>
         <div className={styles.scenarioGrid}>
           {SCENARIOS.map((s) => (
             <button key={s.id} className={styles.scenarioCard}
-              onClick={() => {
-                setWeight(s.weightG)
-                setUnit('g')
-                setKarat(s.karat)
-              }}>
+              onClick={() => applyScenario(s.id)}>
               <span className={styles.scenarioEmoji}>{s.emoji}</span>
               <div>
                 <p className={styles.scenarioLabel}>{s.label}</p>
@@ -150,6 +152,17 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
             </button>
           ))}
         </div>
+        <select
+          className={styles.scenarioSelect}
+          defaultValue=""
+          onChange={(e) => { if (e.target.value) applyScenario(e.target.value); e.target.value = '' }}
+          aria-label="빠른 선택 (모바일)"
+        >
+          <option value="">— 시나리오 선택 —</option>
+          {SCENARIOS.map((s) => (
+            <option key={s.id} value={s.id}>{s.emoji} {s.label} · {s.desc}</option>
+          ))}
+        </select>
       </section>
 
       {/* 무게 + 단위 */}
@@ -185,7 +198,7 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
         </div>
       </section>
 
-      {/* 순도 */}
+      {/* 순도 — 모바일도 1줄 6칸 */}
       <section>
         <label className={styles.label}>순도 (Karat)</label>
         <div className={styles.karatRow}>
@@ -194,7 +207,6 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
               className={`${styles.karatPill} ${karat === k.key ? styles.karatPillActive : ''}`}
               onClick={() => setKarat(k.key)}
               style={{ ['--karat-color' as string]: k.color }}>
-              <span className={styles.karatDot} style={{ background: k.color }} />
               {k.label}
             </button>
           ))}
@@ -204,11 +216,13 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
         </p>
       </section>
 
-      {/* 9 단위 동시 변환 */}
+      {/* 단위 변환 결과 — 국제·한국 섹션 분리 */}
       <section>
-        <label className={styles.label}>모든 단위 동시 변환 <span className={styles.labelSub}>({grams.toLocaleString(undefined, { maximumFractionDigits: 4 })}g 기준)</span></label>
+        <label className={styles.label}>단위 변환 결과 <span className={styles.labelSub}>({grams.toLocaleString(undefined, { maximumFractionDigits: 4 })}g 기준)</span></label>
+
+        <p className={styles.regionTitle}>🇰🇷 한국 단위</p>
         <div className={styles.unitGrid}>
-          {UNITS.map((u) => {
+          {koreanUnits.map((u) => {
             const value = fromGram(grams, u.key)
             const isInput = u.key === unit
             return (
@@ -218,16 +232,32 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
                   {value.toLocaleString(undefined, { maximumFractionDigits: 6 })}
                   <span className={styles.unitCardShort}>{u.short}</span>
                 </p>
-                <p className={styles.unitCardRegion}>{u.region}</p>
+              </div>
+            )
+          })}
+        </div>
+
+        <p className={styles.regionTitle} style={{ marginTop: 16 }}>🌐 국제 단위</p>
+        <div className={styles.unitGrid}>
+          {intlUnits.map((u) => {
+            const value = fromGram(grams, u.key)
+            const isInput = u.key === unit
+            return (
+              <div key={u.key} className={`${styles.unitCard} ${isInput ? styles.unitCardActive : ''}`}>
+                <p className={styles.unitCardLabel}>{u.label}</p>
+                <p className={styles.unitCardValue}>
+                  {value.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                  <span className={styles.unitCardShort}>{u.short}</span>
+                </p>
               </div>
             )
           })}
         </div>
       </section>
 
-      {/* 순도 환산 매트릭스 */}
+      {/* 순도 환산 */}
       <section>
-        <label className={styles.label}>순도 환산 매트릭스 <span className={styles.labelSub}>(같은 순금량 = 다른 K로 환산)</span></label>
+        <label className={styles.label}>순도 환산 <span className={styles.labelSub}>(같은 순금량 = 다른 K로 환산)</span></label>
         <div className={styles.purityMatrix}>
           {KARATS.map((k) => {
             const eqGram = convertKarat(grams, karat, k.key)
@@ -244,32 +274,6 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
               </div>
             )
           })}
-        </div>
-      </section>
-
-      {/* 시각화 */}
-      <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🪙 순금 환산 시각화</p>
-        <div className={styles.visualBlock}>
-          <div className={styles.visualLeft}>
-            <p className={styles.visualLabelTop}>입력</p>
-            <p className={styles.visualBig}>
-              {KARATS.find((k) => k.key === karat)?.label}
-            </p>
-            <p className={styles.visualSub}>
-              {weight.toLocaleString(undefined, { maximumFractionDigits: 3 })} {UNITS.find((u) => u.key === unit)?.short} = {grams.toLocaleString(undefined, { maximumFractionDigits: 3 })}g
-            </p>
-          </div>
-          <div className={styles.visualArrow}>→</div>
-          <div className={styles.visualRight}>
-            <p className={styles.visualLabelTop}>순금 환산</p>
-            <p className={styles.visualBigAccent}>
-              {pureGrams.toLocaleString(undefined, { maximumFractionDigits: 3 })}g
-            </p>
-            <p className={styles.visualSub}>
-              {fmtWeight(pureGrams, 'don')}돈 · {fmtWeight(pureGrams, 'troyOz')} oz t
-            </p>
-          </div>
         </div>
       </section>
     </div>

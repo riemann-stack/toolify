@@ -238,14 +238,14 @@ export interface GoalPreset {
 }
 
 export const GOAL_PRESETS: GoalPreset[] = [
-  { id: 'lose-fast',   name: '빠른 감량',    adjust: -0.20, desc: 'TDEE −20% / 주당 0.6~0.8kg', warning: true },
-  { id: 'lose-normal', name: '보통 감량',    adjust: -0.15, desc: 'TDEE −15% / 주당 0.4~0.5kg' },
-  { id: 'lose-slow',   name: '천천히 감량',  adjust: -0.10, desc: 'TDEE −10% / 주당 0.2~0.3kg' },
-  { id: 'maintain',    name: '체중 유지',    adjust: 0,     desc: 'TDEE 동일' },
-  { id: 'bulk-slow',   name: '근육 증가 (천천히)', adjust: 0.075, desc: 'TDEE +7.5% / 주당 약 0.2kg' },
-  { id: 'bulk-normal', name: '근육 증가 (보통)',   adjust: 0.15,  desc: 'TDEE +15% / 주당 약 0.4kg' },
-  { id: 'race-prep',   name: '대회 준비',    adjust: 0,     desc: 'TDEE 유지 + 탄수 비율 ↑' },
-  { id: 'recovery',    name: '식단 회복기',  adjust: 0.05,  desc: 'TDEE +5% / 점진적 회복' },
+  { id: 'lose-fast',   name: '빠른 감량',    adjust: -0.20, desc: '주당 0.6~0.8kg 감량', warning: true },
+  { id: 'lose-normal', name: '보통 감량',    adjust: -0.15, desc: '주당 0.4~0.5kg 감량' },
+  { id: 'lose-slow',   name: '천천히 감량',  adjust: -0.10, desc: '주당 0.2~0.3kg 감량' },
+  { id: 'maintain',    name: '체중 유지',    adjust: 0,     desc: '현재 체중 유지' },
+  { id: 'bulk-slow',   name: '근육 증가 (천천히)', adjust: 0.075, desc: '주당 약 0.2kg 증량' },
+  { id: 'bulk-normal', name: '근육 증가 (보통)',   adjust: 0.15,  desc: '주당 약 0.4kg 증량' },
+  { id: 'race-prep',   name: '대회 준비',    adjust: 0,     desc: '탄수 비율 ↑' },
+  { id: 'recovery',    name: '식단 회복기',  adjust: 0.05,  desc: '점진적 회복' },
 ]
 
 export interface GoalResult {

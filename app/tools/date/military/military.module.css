@@ -451,69 +451,52 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── 히어로: 게이지 + 핵심 ── */
+/* ── 히어로: 진행바 + 핵심 ── */
 .heroWrap {
   background: var(--bg2);
   border: 1px solid rgba(200,255,62,0.35);
   border-radius: 16px;
   padding: 24px;
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 24px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 @media (max-width: 600px) {
-  .heroWrap { grid-template-columns: 1fr; justify-items: center; padding: 20px; }
+  .heroWrap { padding: 20px; gap: 14px; }
 }
 
-.gaugeSvgWrap {
+/* 히어로 내 진행바 — 차트만 + 현재 복무율·일수 표기 */
+.heroProgressBlock {
+  width: 100%;
+}
+.heroProgressBarWrap {
   position: relative;
-  width: 220px;
-  height: 220px;
+  height: 14px;
+  background: var(--bg3);
+  border-radius: 99px;
+  margin: 6px 0 18px;
 }
-.gaugeSvg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.gaugeBg { fill: none; stroke: var(--bg3); stroke-width: 16; }
-.gaugeFg {
-  fill: none;
-  stroke: url(#gaugeGrad);
-  stroke-width: 16;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.6s ease;
-}
-.gaugeCenter {
+.heroProgressBarFill {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 72%;            /* 게이지 안쪽 직경(약 176px)에 맞춰 축소 */
-  white-space: nowrap;   /* 값이 줄바꿈되어 원 밖으로 빠지지 않게 */
+  top: 0; left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  border-radius: 99px;
+  transition: width 0.6s ease;
 }
-.gaugeLabel {
-  font-size: 11.5px;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-.gaugeValue {
+.heroProgressStatus {
   font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(32px, 6.5vw, 44px);   /* 100% 이하 6자(100.0%) 도 내부에 안전히 들어가는 크기 */
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.heroProgressStatus strong {
   color: var(--accent);
-  letter-spacing: -1.2px;
-  line-height: 1;
-}
-.gaugeUnit {
-  font-size: 0.5em;       /* 값 폰트 대비 50% — 항상 비례 축소 */
-  color: var(--muted);
-  margin-left: 2px;
-  vertical-align: 0.18em;
-  letter-spacing: 0;
-  font-weight: 700;
-}
-.gaugeStatus {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 6px;
+  font-weight: 800;
+  font-size: 18px;
+  margin-right: 4px;
 }
 
 .heroInfo {

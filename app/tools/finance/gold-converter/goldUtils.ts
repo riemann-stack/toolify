@@ -37,12 +37,12 @@ export interface KaratDef {
 }
 
 export const KARATS: KaratDef[] = [
-  { key: '24k',  label: '24K (순금)',   ratio: 0.999, desc: '999.9 / 99.9% — 골드바·돌반지·투자',  color: '#FFD700' },
-  { key: '22k',  label: '22K',          ratio: 0.917, desc: '91.7% — 동남아 결혼반지',             color: '#FFC940' },
-  { key: '21k',  label: '21K',          ratio: 0.875, desc: '87.5% — 중동 보석',                  color: '#FFB938' },
-  { key: '18k',  label: '18K',          ratio: 0.750, desc: '75.0% — 한국 결혼반지·보석 표준',     color: '#E8A838' },
-  { key: '14k',  label: '14K',          ratio: 0.583, desc: '58.3% — 일반 보석류·미국 표준',       color: '#C9913F' },
-  { key: '10k',  label: '10K',          ratio: 0.417, desc: '41.7% — 저가 보석',                  color: '#A87B45' },
+  { key: '24k',  label: '24K',  ratio: 0.999, desc: '999.9 / 99.9% — 골드바·돌반지·투자',      color: '#FFD700' },
+  { key: '22k',  label: '22K',  ratio: 0.917, desc: '91.7% — 동남아 결혼반지',                color: '#FFC940' },
+  { key: '21k',  label: '21K',  ratio: 0.875, desc: '87.5% — 중동 보석',                      color: '#FFB938' },
+  { key: '18k',  label: '18K',  ratio: 0.750, desc: '75.0% — 한국 결혼반지·보석 표준',         color: '#E8A838' },
+  { key: '14k',  label: '14K',  ratio: 0.583, desc: '58.3% — 일반 보석류·미국 표준',           color: '#C9913F' },
+  { key: '10k',  label: '10K',  ratio: 0.417, desc: '41.7% — 저가 보석',                      color: '#A87B45' },
 ]
 
 /* ─── 한국 인기 시나리오 프리셋 ─── */

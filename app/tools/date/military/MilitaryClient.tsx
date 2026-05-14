@@ -71,16 +71,6 @@ function addDays(d: Date, n: number): Date {
 function diffDays(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86400000)
 }
-function parseDirect(s: string): Date | null {
-  const cleaned = s.replace(/[.\/]/g, '-').trim()
-  const m = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
-  if (!m) return null
-  const y = +m[1], mo = +m[2], dy = +m[3]
-  if (mo < 1 || mo > 12) return null
-  if (dy < 1 || dy > daysInMonth(y, mo)) return null
-  return new Date(y, mo - 1, dy)
-}
-
 /* ─────────────────────────────────────────────────────────
  * 메인
  * ───────────────────────────────────────────────────────── */
@@ -98,21 +88,8 @@ export default function MilitaryClient() {
   const [enlistM, setEnlistM] = useState(initialEnlist.m)
   const [enlistD, setEnlistD] = useState(initialEnlist.d)
 
-  /* 입력 모드 */
-  const [inputMode, setInputMode] = useState<'dropdown' | 'direct' | 'calendar'>('dropdown')
-  const [directInput, setDirectInput] = useState('')
-  const [directInvalid, setDirectInvalid] = useState(false)
-  const [calOpen, setCalOpen] = useState(false)
-  const [calMonth, setCalMonth] = useState(() => new Date(initialEnlist.y, initialEnlist.m - 1, 1))
-
   /* 입대일 Date 객체 */
   const enlistDate = useMemo(() => new Date(enlistY, enlistM - 1, enlistD), [enlistY, enlistM, enlistD])
-
-  /* directInput과 dropdown 동기화 (mode 변경 시) */
-  useEffect(() => {
-    if (inputMode === 'direct') setDirectInput(fmtISO(enlistDate))
-    if (inputMode === 'calendar') setCalMonth(new Date(enlistY, enlistM - 1, 1))
-  }, [inputMode]) // eslint-disable-line react-hooks/exhaustive-deps
 
   /* 복무 형태 */
   const [serviceId, setServiceId] = useState('army')
@@ -153,9 +130,6 @@ export default function MilitaryClient() {
     setEnlistY(d.getFullYear())
     setEnlistM(d.getMonth() + 1)
     setEnlistD(d.getDate())
-    if (inputMode === 'direct') setDirectInput(fmtISO(d))
-    if (inputMode === 'calendar') setCalMonth(new Date(d.getFullYear(), d.getMonth(), 1))
-    setDirectInvalid(false)
   }
 
   function activePresetId(): string | null {
@@ -179,33 +153,6 @@ export default function MilitaryClient() {
     const dim = daysInMonth(y, enlistM)
     if (enlistD > dim) setEnlistD(dim)
   }
-
-  /* ─── 직접 입력 ─── */
-  function onDirectChange(s: string) {
-    setDirectInput(s)
-    const parsed = parseDirect(s)
-    if (parsed) {
-      setEnlistY(parsed.getFullYear())
-      setEnlistM(parsed.getMonth() + 1)
-      setEnlistD(parsed.getDate())
-      setDirectInvalid(false)
-    } else if (s.length >= 8) {
-      setDirectInvalid(true)
-    } else {
-      setDirectInvalid(false)
-    }
-  }
-
-  /* ─── 달력 ─── */
-  const calCells = useMemo(() => {
-    const y = calMonth.getFullYear(), m = calMonth.getMonth()
-    const firstDay = new Date(y, m, 1).getDay()
-    const total = daysInMonth(y, m + 1)
-    const cells: Array<{ d: number | null; date: Date | null }> = []
-    for (let i = 0; i < firstDay; i++) cells.push({ d: null, date: null })
-    for (let i = 1; i <= total; i++) cells.push({ d: i, date: new Date(y, m, i) })
-    return cells
-  }, [calMonth])
 
   /* ─── 기준일 ─── */
   const referenceDate = useMemo(() => {
@@ -277,15 +224,6 @@ export default function MilitaryClient() {
     }
   }, [enlistDate, serviceMonths, referenceDate, todayState])
 
-  /* 게이지 SVG */
-  const gauge = useMemo(() => {
-    if (!result) return null
-    const r = 96
-    const circ = 2 * Math.PI * r
-    const offset = circ * (1 - result.progress / 100)
-    return { r, circ, offset }
-  }, [result])
-
   /* ─── 복사 ─── */
   function handleCopy() {
     if (!result) return
@@ -337,87 +275,24 @@ export default function MilitaryClient() {
         </div>
       </div>
 
-      {/* ─── 입대일 입력 ─── */}
+      {/* ─── 입대일 입력 (드롭다운만) ─── */}
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>입대일</span>
           <span className={styles.cardLabelHint}>{fmtKR(enlistDate)}</span>
         </div>
 
-        <div className={styles.modeToggle}>
-          <button type="button" className={`${styles.modeBtn} ${inputMode === 'dropdown' ? styles.modeActive : ''}`} onClick={() => setInputMode('dropdown')}>드롭다운</button>
-          <button type="button" className={`${styles.modeBtn} ${inputMode === 'direct' ? styles.modeActive : ''}`}   onClick={() => setInputMode('direct')}>직접 입력</button>
-          <button type="button" className={`${styles.modeBtn} ${inputMode === 'calendar' ? styles.modeActive : ''}`} onClick={() => setInputMode('calendar')}>달력</button>
+        <div className={styles.dobRow}>
+          <select className={styles.dobSelect} value={enlistY} onChange={e => setYear(Number(e.target.value))}>
+            {yearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
+          </select>
+          <select className={styles.dobSelect} value={enlistM} onChange={e => setMonth(Number(e.target.value))}>
+            {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
+          </select>
+          <select className={styles.dobSelect} value={enlistD} onChange={e => setEnlistD(Number(e.target.value))}>
+            {Array.from({ length: dimOf }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
+          </select>
         </div>
-
-        {inputMode === 'dropdown' && (
-          <div className={styles.dobRow}>
-            <select className={styles.dobSelect} value={enlistY} onChange={e => setYear(Number(e.target.value))}>
-              {yearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
-            </select>
-            <select className={styles.dobSelect} value={enlistM} onChange={e => setMonth(Number(e.target.value))}>
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
-            </select>
-            <select className={styles.dobSelect} value={enlistD} onChange={e => setEnlistD(Number(e.target.value))}>
-              {Array.from({ length: dimOf }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
-            </select>
-          </div>
-        )}
-
-        {inputMode === 'direct' && (
-          <>
-            <input
-              className={`${styles.directInput} ${directInvalid ? styles.invalid : ''}`}
-              type="text"
-              inputMode="numeric"
-              placeholder="YYYY-MM-DD (예: 2026-01-15)"
-              value={directInput}
-              onChange={e => onDirectChange(e.target.value)}
-            />
-            {directInvalid && <p className={styles.validMsg}>⚠️ 날짜 형식이 올바르지 않습니다 (YYYY-MM-DD 또는 YYYY.MM.DD)</p>}
-          </>
-        )}
-
-        {inputMode === 'calendar' && (
-          <>
-            <button type="button" className={styles.calendarToggle} onClick={() => setCalOpen(true)}>
-              📅 {fmtISO(enlistDate)} (클릭하여 선택)
-            </button>
-
-            {calOpen && (
-              <div className={styles.modalBackdrop} onClick={() => setCalOpen(false)}>
-                <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                  <div className={styles.modalHeader}>
-                    <div className={styles.modalNav}>
-                      <button type="button" className={styles.modalNavBtn} onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))}>‹</button>
-                      <button type="button" className={styles.modalNavBtn} onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))}>›</button>
-                    </div>
-                    <span className={styles.modalTitle}>{calMonth.getFullYear()}.{pad(calMonth.getMonth() + 1)}</span>
-                    <button type="button" className={styles.modalClose} onClick={() => setCalOpen(false)} aria-label="닫기">✕</button>
-                  </div>
-                  <div className={styles.calGrid}>
-                    {['일','월','화','수','목','금','토'].map(d => <div key={d} className={styles.calHead}>{d}</div>)}
-                    {calCells.map((c, i) => {
-                      if (c.d === null) return <div key={i} className={`${styles.calCell} ${styles.calCellEmpty}`} />
-                      const isSelected = c.date && diffDays(startOfDay(c.date), startOfDay(enlistDate)) === 0
-                      const isToday = c.date && diffDays(startOfDay(c.date), todayState) === 0
-                      return (
-                        <button
-                          key={i}
-                          type="button"
-                          className={`${styles.calCell} ${isSelected ? styles.calCellSelected : ''} ${isToday && !isSelected ? styles.calCellToday : ''}`}
-                          onClick={() => { if (c.date) { applyEnlistDate(c.date); setCalOpen(false) } }}
-                        >
-                          {c.d}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
       </div>
 
       {/* ─── 복무 형태 ─── */}
@@ -532,40 +407,32 @@ export default function MilitaryClient() {
             </div>
           )}
 
-          {/* 히어로 — 게이지 + 핵심 */}
+          {/* 히어로 — 진행바 + 핵심 정보 */}
           <div className={styles.heroWrap}>
-            <div className={styles.gaugeSvgWrap}>
-              <svg className={styles.gaugeSvg} viewBox="0 0 220 220" aria-hidden="true">
-                <defs>
-                  <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#3EFF9B" />
-                    <stop offset="100%" stopColor="#C8FF3E" />
-                  </linearGradient>
-                </defs>
-                <circle cx="110" cy="110" r={gauge!.r} className={styles.gaugeBg} />
-                <circle
-                  cx="110"
-                  cy="110"
-                  r={gauge!.r}
-                  className={styles.gaugeFg}
-                  strokeDasharray={gauge!.circ}
-                  strokeDashoffset={gauge!.offset}
-                />
-              </svg>
-              <div className={styles.gaugeCenter}>
-                <p className={styles.gaugeLabel}>전체 복무율</p>
-                <p className={styles.gaugeValue}>
-                  {result.progress >= 99.95 ? '100' : result.progress.toFixed(1)}
-                  <span className={styles.gaugeUnit}>%</span>
-                </p>
-                <p className={styles.gaugeStatus}>
-                  {result.countdown.toDischarge < 0
-                    ? `전역 후 ${Math.abs(result.countdown.toDischarge)}일`
-                    : result.passedDays === 0
-                      ? '입대 전'
-                      : `${result.passedDays}/${result.totalDays}일`}
-                </p>
+            <div className={styles.heroProgressBlock}>
+              <div className={styles.heroProgressBarWrap}>
+                <div className={styles.heroProgressBarFill} style={{ width: `${result.progress}%` }} />
+                {(() => {
+                  const last100Pct = ((result.totalDays - 100) / result.totalDays) * 100
+                  if (last100Pct > 0 && last100Pct < 100) {
+                    return (
+                      <div className={`${styles.progressBarMarker} ${styles.markerLast100}`} style={{ left: `${last100Pct}%` }}>
+                        <span className={`${styles.progressBarMarkerLabel} ${styles.last100}`}>D-100</span>
+                      </div>
+                    )
+                  }
+                  return null
+                })()}
+                <div className={styles.progressBarCurrent} style={{ left: `${result.progress}%` }} title={`${result.progress.toFixed(1)}%`} />
               </div>
+              <p className={styles.heroProgressStatus}>
+                {result.countdown.toDischarge < 0
+                  ? `전역 완료 · 전역 후 ${Math.abs(result.countdown.toDischarge)}일`
+                  : result.passedDays === 0
+                    ? '입대 전'
+                    : <><strong>{result.progress >= 99.95 ? '100' : result.progress.toFixed(1)}%</strong> · {result.passedDays}/{result.totalDays}일</>
+                }
+              </p>
             </div>
 
             <div className={styles.heroInfo}>
@@ -632,35 +499,6 @@ export default function MilitaryClient() {
                   : `D-${result.countdown.toDay100}`}
               </p>
               <p className={styles.dDaySub}>{fmtKR(result.milestones.day100)}</p>
-            </div>
-          </div>
-
-          {/* 가로 진행 바 + 마커 */}
-          <div className={styles.card}>
-            <div className={styles.cardLabel}>
-              <span>복무 진행 바</span>
-              <span className={styles.cardLabelHint}>주요 마일스톤 표시</span>
-            </div>
-            <div className={styles.progressBarWrap}>
-              <div className={styles.progressBarFill} style={{ width: `${result.progress}%` }} />
-              {[10, 25, 50, 75, 90].map(p => (
-                <div key={p} className={styles.progressBarMarker} style={{ left: `${p}%` }}>
-                  <span className={styles.progressBarMarkerLabel}>{p}%</span>
-                </div>
-              ))}
-              {/* 말년 시작 마커 (% 위치) */}
-              {(() => {
-                const last100Pct = ((result.totalDays - 100) / result.totalDays) * 100
-                if (last100Pct > 0 && last100Pct < 100) {
-                  return (
-                    <div className={`${styles.progressBarMarker} ${styles.markerLast100}`} style={{ left: `${last100Pct}%` }}>
-                      <span className={`${styles.progressBarMarkerLabel} ${styles.last100}`}>D-100</span>
-                    </div>
-                  )
-                }
-                return null
-              })()}
-              <div className={styles.progressBarCurrent} style={{ left: `${result.progress}%` }} title={`${result.progress.toFixed(1)}%`} />
             </div>
           </div>
 

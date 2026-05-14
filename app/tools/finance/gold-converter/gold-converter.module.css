@@ -62,11 +62,29 @@
   .note a:hover { text-decoration: underline; }
 }
 
-/* 인기 시나리오 그리드 */
+/* 빠른 선택 — PC: 카드 그리드 / 모바일: 드롭다운 */
 .scenarioGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 8px;
+}
+.scenarioSelect {
+  display: none;
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+}
+.scenarioSelect:focus { border-color: var(--accent); }
+@media (max-width: 640px) {
+  .scenarioGrid { display: none; }
+  .scenarioSelect { display: block; }
 }
 .scenarioCard {
   display: flex;
@@ -115,6 +133,9 @@
   color: var(--text);
   text-align: right;
   outline: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .weightInput:focus { border-color: var(--accent); }
 .unitSelect {
@@ -128,31 +149,36 @@
   outline: none;
   cursor: pointer;
   min-width: 140px;
+  box-sizing: border-box;
 }
 .unitSelect:focus { border-color: var(--accent); }
 @media (max-width: 640px) {
   .weightInput, .unitSelect, .compactInput { font-size: 16px; }
+  .weightInputRow { grid-template-columns: 1fr 110px; gap: 6px; }
+  .unitSelect { min-width: 0; padding: 10px 8px; font-size: 13px; }
+  .weightInput { padding: 12px 14px; font-size: 16px; }
 }
 
-/* karat */
+/* karat — 모바일도 1줄 (6개) */
 .karatRow {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 6px;
 }
 .karatPill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: 8px 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 99px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 38px;
   transition: all .15s;
 }@media (hover: hover) {
@@ -163,14 +189,22 @@
   color: #0B0B0B;
   border-color: var(--karat-color);
 }
-.karatDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
+@media (max-width: 480px) {
+  .karatRow { gap: 4px; }
+  .karatPill { font-size: 12px; padding: 6px 2px; min-height: 32px; border-radius: 8px; }
 }
 
-/* 9 단위 그리드 */
+/* 한국/국제 섹션 타이틀 */
+.regionTitle {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  margin: 0 0 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 단위 변환 결과 그리드 */
 .unitGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -343,6 +377,28 @@
   font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+/* 모바일 — 라벨/입력 한 줄에서 세로로 잘리는 문제 해결: 가로로 풀어주되 label은 작은 폰트로 한 줄 유지 */
+@media (max-width: 560px) {
+  .numberRow {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .numberRow > label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .numberRow .presetRow {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .numberRow .compactInputWrap { justify-content: flex-start; }
+  .numberRow .compactInput { width: 100%; }
 }
 .compactInputWrap {
   display: flex;
