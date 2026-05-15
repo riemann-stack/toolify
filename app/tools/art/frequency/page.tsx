@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/frequency',
-  title: '주파수 음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산',
+  title: '주파수↔음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산',
   description: '주파수(Hz)를 음정 이름(A4, C#3 등)으로 변환하거나, 음정에서 정확한 주파수를 계산합니다. MIDI 번호, 파장, 센트 오차, 음정 간격 계산 지원. 작곡가·사운드 엔지니어 필수.',
   keywords: ['주파수음정변환기', 'Hz음정변환', '음정주파수계산기', 'MIDI번호계산', '음정계산기', '튜닝계산기', '음악계산기'],
 })
@@ -15,7 +15,7 @@ export default function FrequencyPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎵 주파수 음정 변환기
+        🎵 주파수↔음정 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         주파수(Hz)를 음정 이름으로 변환하거나, 음정에서 정확한 Hz·MIDI 번호·파장을 계산하세요. 센트 튜너 게이지와 피아노 건반 시각화 포함.
@@ -187,7 +187,7 @@ export default function FrequencyPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
+              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
               { href: '/tools/art/golden-ratio',icon: '🌀', name: '황금 비율 계산기',       desc: '음악 구성에 황금 비율 적용' },
               { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',            desc: 'cm·m·inch·ft 단위 변환' },
               { href: '/tools/art/color',        icon: '🎨', name: '색상 코드 변환기',       desc: 'HEX·RGB·HSL 즉시 변환' },

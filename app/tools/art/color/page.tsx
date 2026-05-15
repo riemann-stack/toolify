@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/color',
-  title: '색상 코드 변환·디자인 도구 — HEX·RGB·HSL·OKLCH·WCAG·팔레트·Tailwind',
+  title: '색상 코드 변환기 — HEX·RGB·HSL·OKLCH·WCAG·팔레트·Tailwind',
   description:
     'HEX·RGB·HSL·HSV·CMYK·OKLCH·LAB·HWB·알파 색상 변환, WCAG 대비비 계산, 색맹 시뮬레이션, 팔레트 자동 생성, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 색상 추출까지 통합 색상 도구.',
   keywords: [
@@ -21,7 +21,7 @@ export default function ColorPage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎨 색상 코드 변환·디자인 도구
+        🎨 색상 코드 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         HEX·RGB·HSL·OKLCH·알파 변환부터 WCAG 대비비, 팔레트 생성, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 색상 추출까지 — 디자이너·프론트엔드 개발자·접근성 전문가를 위한 종합 색상 도구.
@@ -285,8 +285,8 @@ export default function ColorPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>관련 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
-              { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트·UI 콘텐츠 생성기', desc: '문단·버튼·카드·JSON 더미 데이터' },
-              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',     desc: 'px·rem·clamp() 변환' },
+              { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트 생성기', desc: '문단·버튼·카드·JSON 더미 데이터' },
+              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',     desc: 'px·rem·clamp() 변환' },
               { href: '/tools/art/charcount',     icon: '🔡', name: '글자수 세기',        desc: '공백 포함·제외 실시간 카운트' },
               { href: '/tools/dev/json',          icon: '📋', name: 'JSON 포맷터',        desc: 'JSON 정렬·압축·유효성' },
               { href: '/tools/dev/base64',        icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트 ↔ Base64 변환' },

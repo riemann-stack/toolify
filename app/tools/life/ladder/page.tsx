@@ -218,7 +218,7 @@ export default function LadderPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
-              { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨·룰렛·팀 나누기' },
+              { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기', desc: '가중치 추첨·룰렛·팀 나누기' },
               { href: '/tools/life/lotto',      icon: '🎰', name: '로또 번호 생성기',         desc: '8가지 모드·확률 시뮬' },
               { href: '/tools/life/dutch',      icon: '🍻', name: '더치페이 계산기',          desc: '회식·모임 비용 분배' },
               { href: '/tools/life/unit-price', icon: '💵', name: '단가 비교 계산기',         desc: '쇼핑 가성비 비교' },

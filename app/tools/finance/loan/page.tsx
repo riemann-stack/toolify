@@ -380,7 +380,7 @@ export default function LoanPage() {
               { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '월 납입액 감당 가능한지 소득 확인' },
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',           desc: '이자 절약분 재투자 시 미래 자산' },
               { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',         desc: '사업자 대출 시 세금 계산' },
-              { href: '/tools/unit/area',        icon: '🏠', name: '평수 ↔ ㎡ 변환기',     desc: '담보 물건 면적 단위 변환' },
+              { href: '/tools/unit/area',        icon: '🏠', name: '평수 변환기',     desc: '담보 물건 면적 단위 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

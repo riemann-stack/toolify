@@ -319,7 +319,7 @@ export default async function DrakePage({
             {[
               { href: '/tools/life/lotto',        icon: '🎰', name: '로또 번호 생성기',   desc: '확률의 재미 · 당첨 확률 1/814만' },
               { href: '/tools/art/golden-ratio', icon: '🌀', name: '황금 비율 계산기',   desc: '우주와 자연을 관통하는 수학' },
-              { href: '/tools/art/frequency',   icon: '🎵', name: '주파수 음정 변환기', desc: '우주 전파·SETI 주파수 대역 이해' },
+              { href: '/tools/art/frequency',   icon: '🎵', name: '주파수↔음정 변환기', desc: '우주 전파·SETI 주파수 대역 이해' },
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',      desc: '제1회 외계인 접촉까지 D-day?' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

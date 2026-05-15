@@ -605,7 +605,7 @@ export default function RebarClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/wire" className={s.crossLink}>
-        ⚡ 전선 굵기·허용전류 계산기 → 현장 분전반·임시전기는 여기로
+        ⚡ 전선 굵기 계산기 → 현장 분전반·임시전기는 여기로
       </Link>
     </div>
   )

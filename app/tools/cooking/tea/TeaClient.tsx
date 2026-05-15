@@ -650,7 +650,7 @@ export default function TeaClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/brew" className={s.crossLink}>
-        ☕ 커피 브루잉 비율 계산기 → 6 추출법·푸어 스케줄·강도 진단
+        ☕ 커피 브루잉 계산기 → 6 추출법·푸어 스케줄·강도 진단
       </Link>
     </div>
   )

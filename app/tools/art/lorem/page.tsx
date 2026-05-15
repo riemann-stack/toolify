@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
-  title: '더미 텍스트·UI 콘텐츠 생성기 — 문단·버튼·카드·JSON 더미 데이터',
+  title: '더미 텍스트 생성기 — 문단·버튼·카드·JSON 더미 데이터',
   description: '디자이너·개발자를 위한 종합 더미 콘텐츠 생성기. 문단(한글·영문 Lorem Ipsum)·버튼·카드·리뷰·JSON 더미 데이터·UX 라이팅·길이 테스트까지 9가지 톤으로 한 번에 생성.',
   keywords: [
     '더미텍스트', '더미데이터', '로렘입숨', 'lorem ipsum', '한글더미', 'UI목업',
@@ -19,7 +19,7 @@ export default function LoremPage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📝 더미 텍스트·UI 콘텐츠 생성기
+        📝 더미 텍스트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         문단·버튼·카드·리뷰·JSON 더미 데이터까지 — UI 목업과 디자인 시안에 바로 쓸 수 있는 9가지 톤의 종합 더미 콘텐츠 생성 도구입니다.
@@ -217,7 +217,7 @@ export default function LoremPage() {
               { href: '/tools/dev/json',          icon: '📋', name: 'JSON 포맷터',           desc: 'JSON 정렬·압축·유효성 검사' },
               { href: '/tools/dev/base64',        icon: '🔐', name: 'Base64 인코더/디코더',  desc: '텍스트 ↔ Base64 즉시 변환' },
               { href: '/tools/art/color',         icon: '🎨', name: '색상 코드 변환기',      desc: 'HEX·RGB·HSL 즉시 변환' },
-              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',         desc: 'px·rem·clamp() 변환' },
+              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',         desc: 'px·rem·clamp() 변환' },
               { href: '/tools/dev/number-base',   icon: '🔢', name: '진법 변환기',           desc: '2·8·10·16진 + 비트 시각화' },
             ].map((tool, i) => (
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>

@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/dutch',
-  title: '더치페이·N빵 계산기 — 술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
+  title: '더치페이 계산기 — 술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
   description:
     '회식·모임 정산 종합 도구. 간단 N빵, 술값 분리, 개인별 메뉴, 선결제자 최소 송금 횟수, 카카오톡 공유 메시지까지 한 번에. 8가지 상황 프리셋(점심·저녁·카페·술자리·팀 회식·여행·가족·생일)과 7가지 절삭·5가지 잔여 처리.',
   keywords: [
@@ -20,7 +20,7 @@ export default function DutchPage() {
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍻 더치페이·N빵 계산기
+        🍻 더치페이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         회식·모임 정산을 한 번에 — <strong style={{ color: 'var(--text)' }}>간단 N빵, 술값 분리, 개인별 메뉴, 선결제자 최소 송금 횟수, 카카오톡 공유 메시지</strong>까지.
@@ -237,7 +237,7 @@ export default function DutchPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
-              { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기·룰렛·팀 편성', desc: '가중치 추첨·룰렛·팀 나누기' },
+              { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기', desc: '가중치 추첨·룰렛·팀 나누기' },
               { href: '/tools/life/ladder',     icon: '🪜', name: '사다리타기',              desc: '회식 분담·점심 메뉴 정하기' },
               { href: '/tools/life/lotto',      icon: '🎰', name: '로또 번호 생성기',         desc: '8가지 모드·확률 시뮬' },
               { href: '/tools/life/unit-price', icon: '💵', name: '단가 비교 계산기',         desc: '쇼핑 가성비 비교' },

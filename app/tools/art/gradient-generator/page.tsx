@@ -237,9 +237,9 @@ background-image:
         <section>
           <h2 style={sectionTitle}>관련 도구</h2>
           <ul style={{ ...faqAnswer, paddingLeft: '20px', lineHeight: 2 }}>
-            <li><Link href="/tools/art/color" style={{ color: 'var(--accent)' }}>색상 코드 변환·디자인 도구</Link> — HEX·RGB·HSL·OKLCH 단일 색상 변환과 팔레트 생성</li>
-            <li><Link href="/tools/art/paint-mix" style={{ color: 'var(--accent)' }}>물감·잉크 혼합 비율 계산기</Link> — 실제 안료 혼합 시뮬레이션 (Subtractive)</li>
-            <li><Link href="/tools/dev/css-converter" style={{ color: 'var(--accent)' }}>CSS 값 변환기</Link> — px·rem·em·clamp() 단위 변환</li>
+            <li><Link href="/tools/art/color" style={{ color: 'var(--accent)' }}>색상 코드 변환기</Link> — HEX·RGB·HSL·OKLCH 단일 색상 변환과 팔레트 생성</li>
+            <li><Link href="/tools/art/paint-mix" style={{ color: 'var(--accent)' }}>물감 혼합 계산기</Link> — 실제 안료 혼합 시뮬레이션 (Subtractive)</li>
+            <li><Link href="/tools/dev/css-converter" style={{ color: 'var(--accent)' }}>CSS 단위 변환기</Link> — px·rem·em·clamp() 단위 변환</li>
           </ul>
         </section>
 

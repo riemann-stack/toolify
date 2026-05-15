@@ -78,19 +78,10 @@ export default function FuelEconomyClient() {
 type FuelUnit = 'kml' | 'l100' | 'mpgUS' | 'mpgUK'
 
 const FUEL_UNIT_META: { id: FuelUnit; label: string; sub: string }[] = [
-  { id: 'kml',   label: 'km/L',     sub: '한국·일본' },
+  { id: 'kml',   label: 'km/L',     sub: '한국' },
   { id: 'l100',  label: 'L/100km',  sub: '유럽' },
   { id: 'mpgUS', label: 'mpg (US)', sub: '미국' },
   { id: 'mpgUK', label: 'mpg (UK)', sub: '영국' },
-]
-
-const FUEL_PRESETS: { label: string; value: number; unit: FuelUnit }[] = [
-  { label: '10 km/L',  value: 10, unit: 'kml' },
-  { label: '15 km/L',  value: 15, unit: 'kml' },
-  { label: '20 km/L',  value: 20, unit: 'kml' },
-  { label: '25 km/L',  value: 25, unit: 'kml' },
-  { label: '30 mpg (US)', value: 30, unit: 'mpgUS' },
-  { label: '40 mpg (US)', value: 40, unit: 'mpgUS' },
 ]
 
 function fuelGrade(kml: number): { className: string; title: string; desc: string } {
@@ -123,10 +114,10 @@ function FuelTab() {
       return FUEL_UNIT_META.map(m => ({ ...m, value: 0 }))
     }
     return [
-      { id: 'kml'   as FuelUnit, label: 'km/L',     sub: '한국·일본 (1L로 주행 거리)',   value: baseKml },
-      { id: 'l100'  as FuelUnit, label: 'L/100km',  sub: '유럽 (100km당 소비량, 낮을수록 효율↑)', value: kmlToL100km(baseKml) },
-      { id: 'mpgUS' as FuelUnit, label: 'mpg (US)', sub: '미국 (1 US 갤런 = 3.78541 L)', value: kmlToMpgUS(baseKml) },
-      { id: 'mpgUK' as FuelUnit, label: 'mpg (UK)', sub: '영국 (1 UK 갤런 = 4.54609 L)', value: kmlToMpgUK(baseKml) },
+      { id: 'kml'   as FuelUnit, label: 'km/L',     sub: '한국', value: baseKml },
+      { id: 'l100'  as FuelUnit, label: 'L/100km',  sub: '유럽', value: kmlToL100km(baseKml) },
+      { id: 'mpgUS' as FuelUnit, label: 'mpg (US)', sub: '미국', value: kmlToMpgUS(baseKml) },
+      { id: 'mpgUK' as FuelUnit, label: 'mpg (UK)', sub: '영국', value: kmlToMpgUK(baseKml) },
     ]
   }, [baseKml])
 
@@ -138,11 +129,6 @@ function FuelTab() {
       setCopied(u)
       setTimeout(() => setCopied(null), 1200)
     }
-  }
-
-  function applyPreset(p: typeof FUEL_PRESETS[number]) {
-    setValue(p.value.toString())
-    setUnit(p.unit)
   }
 
   const currentLabel = FUEL_UNIT_META.find(m => m.id === unit)?.label ?? ''
@@ -161,27 +147,25 @@ function FuelTab() {
             placeholder="15"
             step="any"
           />
-          <select
-            className={styles.unitSelect}
-            value={unit}
-            onChange={e => setUnit(e.target.value as FuelUnit)}
-          >
-            {FUEL_UNIT_META.map(m => (
-              <option key={m.id} value={m.id}>{m.label}</option>
-            ))}
-          </select>
+          <div className={styles.unitDisplay}>{currentLabel}</div>
         </div>
 
-        <div className={styles.presetRow}>
-          {FUEL_PRESETS.map((p, i) => (
-            <button key={i} className={styles.presetBtn} onClick={() => applyPreset(p)}>
-              {p.label}
+        {/* 단위 선택 — 프리셋 버튼 4개 */}
+        <div className={styles.unitGrid}>
+          {FUEL_UNIT_META.map(m => (
+            <button
+              key={m.id}
+              className={`${styles.unitBtn} ${unit === m.id ? styles.unitBtnActive : ''}`}
+              onClick={() => setUnit(m.id)}
+              type="button"
+            >
+              {m.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* 결과 */}
+      {/* 결과 — 2열 그리드 (모바일·PC 공통) */}
       <div className={styles.resultCard}>
         <div className={styles.resultHeader}>
           <div className={styles.resultHeaderLabel}>입력값</div>
@@ -189,26 +173,31 @@ function FuelTab() {
             {formatNumber(numValue)} {currentLabel}
           </div>
         </div>
-        {results.map(r => {
-          const isSelf = r.id === unit
-          return (
-            <div key={r.id} className={`${styles.resultRow} ${isSelf ? styles.resultRowHighlight : ''}`}>
-              <div>
-                <div className={styles.resultLabel}>{r.label}</div>
-                <div className={styles.resultLabelSub}>{r.sub}</div>
-              </div>
-              <div className={`${styles.resultValue} ${isSelf ? styles.resultValueSelf : ''}`}>
-                {formatNumber(r.value)}
-              </div>
+        <div className={styles.resultGrid}>
+          {results.map(r => {
+            const isSelf = r.id === unit
+            return (
               <button
-                className={`${styles.copyBtn} ${copied === r.id ? styles.copyBtnDone : ''}`}
+                key={r.id}
+                type="button"
+                className={`${styles.resultCell} ${isSelf ? styles.resultCellHighlight : ''}`}
                 onClick={() => handleCopy(r.id, r.value)}
+                title="클릭하여 복사"
               >
-                {copied === r.id ? '✓' : '복사'}
+                <div className={styles.resultCellTop}>
+                  <span className={styles.resultLabel}>{r.label}</span>
+                  <span className={styles.resultLabelSub}>{r.sub}</span>
+                </div>
+                <div className={`${styles.resultValue} ${isSelf ? styles.resultValueSelf : ''}`}>
+                  {formatNumber(r.value)}
+                </div>
+                <span className={`${styles.copyHint} ${copied === r.id ? styles.copyHintDone : ''}`}>
+                  {copied === r.id ? '✓ 복사됨' : '📋 복사'}
+                </span>
               </button>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* 등급 */}
@@ -229,18 +218,10 @@ function FuelTab() {
 type EvUnit = 'kmkwh' | 'whkm' | 'mileskwh' | 'mpge'
 
 const EV_UNIT_META: { id: EvUnit; label: string; sub: string }[] = [
-  { id: 'kmkwh',    label: 'km/kWh',    sub: '한국·일본' },
+  { id: 'kmkwh',    label: 'km/kWh',    sub: '한국' },
   { id: 'whkm',     label: 'Wh/km',     sub: '유럽' },
   { id: 'mileskwh', label: 'miles/kWh', sub: '미국' },
-  { id: 'mpge',     label: 'MPGe',      sub: 'EPA 환산' },
-]
-
-const EV_PRESETS: { label: string; value: number; unit: EvUnit }[] = [
-  { label: '4 km/kWh',  value: 4,   unit: 'kmkwh' },
-  { label: '5 km/kWh',  value: 5,   unit: 'kmkwh' },
-  { label: '6 km/kWh',  value: 6,   unit: 'kmkwh' },
-  { label: '150 Wh/km', value: 150, unit: 'whkm' },
-  { label: '120 MPGe',  value: 120, unit: 'mpge' },
+  { id: 'mpge',     label: 'MPGe',      sub: '미국 EPA' },
 ]
 
 function evGrade(kmkwh: number): { className: string; title: string; desc: string } {
@@ -277,10 +258,10 @@ function EvTab() {
       return EV_UNIT_META.map(m => ({ ...m, value: 0 }))
     }
     return [
-      { id: 'kmkwh'    as EvUnit, label: 'km/kWh',    sub: '한국·일본 (1kWh로 주행 거리)',     value: baseKmkwh },
-      { id: 'whkm'     as EvUnit, label: 'Wh/km',     sub: '유럽 (1km당 소비 전력, 낮을수록↑)', value: kmkwhToWhkm(baseKmkwh) },
-      { id: 'mileskwh' as EvUnit, label: 'miles/kWh', sub: '미국 (1kWh로 주행 마일)',          value: kmkwhToMilesKwh(baseKmkwh) },
-      { id: 'mpge'     as EvUnit, label: 'MPGe',      sub: 'EPA 환산 (1갤런 ≈ 33.7kWh)',       value: kmkwhToMpge(baseKmkwh) },
+      { id: 'kmkwh'    as EvUnit, label: 'km/kWh',    sub: '한국',     value: baseKmkwh },
+      { id: 'whkm'     as EvUnit, label: 'Wh/km',     sub: '유럽',     value: kmkwhToWhkm(baseKmkwh) },
+      { id: 'mileskwh' as EvUnit, label: 'miles/kWh', sub: '미국',     value: kmkwhToMilesKwh(baseKmkwh) },
+      { id: 'mpge'     as EvUnit, label: 'MPGe',      sub: '미국 EPA', value: kmkwhToMpge(baseKmkwh) },
     ]
   }, [baseKmkwh])
 
@@ -299,11 +280,6 @@ function EvTab() {
     }
   }
 
-  function applyPreset(p: typeof EV_PRESETS[number]) {
-    setValue(p.value.toString())
-    setUnit(p.unit)
-  }
-
   const currentLabel = EV_UNIT_META.find(m => m.id === unit)?.label ?? ''
 
   return (
@@ -320,27 +296,25 @@ function EvTab() {
             placeholder="5"
             step="any"
           />
-          <select
-            className={styles.unitSelect}
-            value={unit}
-            onChange={e => setUnit(e.target.value as EvUnit)}
-          >
-            {EV_UNIT_META.map(m => (
-              <option key={m.id} value={m.id}>{m.label}</option>
-            ))}
-          </select>
+          <div className={styles.unitDisplay}>{currentLabel}</div>
         </div>
 
-        <div className={styles.presetRow}>
-          {EV_PRESETS.map((p, i) => (
-            <button key={i} className={styles.presetBtn} onClick={() => applyPreset(p)}>
-              {p.label}
+        {/* 단위 선택 — 프리셋 버튼 4개 */}
+        <div className={styles.unitGrid}>
+          {EV_UNIT_META.map(m => (
+            <button
+              key={m.id}
+              className={`${styles.unitBtn} ${unit === m.id ? styles.unitBtnActive : ''}`}
+              onClick={() => setUnit(m.id)}
+              type="button"
+            >
+              {m.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* 결과 */}
+      {/* 결과 — 2열 그리드 (모바일·PC 공통) */}
       <div className={styles.resultCard}>
         <div className={styles.resultHeader}>
           <div className={styles.resultHeaderLabel}>입력값</div>
@@ -348,26 +322,31 @@ function EvTab() {
             {formatNumber(numValue)} {currentLabel}
           </div>
         </div>
-        {results.map(r => {
-          const isSelf = r.id === unit
-          return (
-            <div key={r.id} className={`${styles.resultRow} ${isSelf ? styles.resultRowHighlight : ''}`}>
-              <div>
-                <div className={styles.resultLabel}>{r.label}</div>
-                <div className={styles.resultLabelSub}>{r.sub}</div>
-              </div>
-              <div className={`${styles.resultValue} ${isSelf ? styles.resultValueSelf : ''}`}>
-                {formatNumber(r.value)}
-              </div>
+        <div className={styles.resultGrid}>
+          {results.map(r => {
+            const isSelf = r.id === unit
+            return (
               <button
-                className={`${styles.copyBtn} ${copied === r.id ? styles.copyBtnDone : ''}`}
+                key={r.id}
+                type="button"
+                className={`${styles.resultCell} ${isSelf ? styles.resultCellHighlight : ''}`}
                 onClick={() => handleCopy(r.id, r.value)}
+                title="클릭하여 복사"
               >
-                {copied === r.id ? '✓' : '복사'}
+                <div className={styles.resultCellTop}>
+                  <span className={styles.resultLabel}>{r.label}</span>
+                  <span className={styles.resultLabelSub}>{r.sub}</span>
+                </div>
+                <div className={`${styles.resultValue} ${isSelf ? styles.resultValueSelf : ''}`}>
+                  {formatNumber(r.value)}
+                </div>
+                <span className={`${styles.copyHint} ${copied === r.id ? styles.copyHintDone : ''}`}>
+                  {copied === r.id ? '✓ 복사됨' : '📋 복사'}
+                </span>
               </button>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* 등급 */}

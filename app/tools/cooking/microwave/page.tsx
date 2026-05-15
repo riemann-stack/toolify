@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/microwave',
-  title: '전자레인지 출력·시간 환산 — 700W·900W·1200W + 식품·타이머',
+  title: '전자레인지 출력 환산기 — 700W·900W·1200W + 식품·타이머',
   description: '전자레인지 라벨의 W·시간을 내 전자레인지(600~1200W) 시간으로 자동 환산. 햇반·만두·즉석국 등 한국 시장 12 식품 프리셋 + 양·온도 비선형 보정 + 카운트다운 타이머·알림음 + 안전 가이드.',
   keywords: ['전자레인지 환산', '700W 900W', '냉동밥 시간', '햇반 데우기', '냉동만두', '즉석국', '전자레인지 W', '카운트다운 타이머', '용기 안전', '계란 폭발'],
 })
@@ -55,7 +55,7 @@ export default function MicrowavePage() {
         요리·식품
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔥 전자레인지 출력·시간 환산 계산기
+        🔥 전자레인지 출력 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         라벨의 <strong style={{ color: 'var(--text)' }}>700W·900W·1200W</strong> 시간을 내 전자레인지로 자동 환산 +
@@ -310,14 +310,14 @@ export default function MicrowavePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/cooking/thawing" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🧊</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>냉동·해동 시간 계산기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해동 시간 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             식품·두께·전자레인지 W별 4 해동
           </p>
         </Link>
         <Link href="/tools/cooking/frying" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🍳</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>튀김 시간·온도 계산기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>튀김 시간 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             기름 온도·에어프라이어 변환
           </p>

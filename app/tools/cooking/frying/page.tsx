@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/frying',
-  title: '튀김 시간·온도 계산기 — 재료별 기름 온도·에어프라이어 변환',
+  title: '튀김 시간 계산기 — 재료별 기름 온도·에어프라이어 변환',
   description: '감자튀김·돈까스·치킨·새우튀김 등 재료 상태·두께·튀김옷 조건별 최적 기름 온도와 튀김 시간을 계산합니다. 2차 튀김 여부, 에어프라이어 변환 가이드 제공.',
   keywords: ['튀김시간계산기', '감자튀김온도', '돈까스튀기는시간', '치킨튀김온도', '튀김기름온도', '에어프라이어변환', '새우튀김시간', '냉동만두튀기기'],
 })
@@ -15,7 +15,7 @@ export default function FryingPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍳 튀김 시간·온도 계산기
+        🍳 튀김 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         재료·상태·두께·튀김옷·양에 맞춰 최적 기름 온도와 튀김 시간을 계산합니다. 2차 튀김 여부, 속 익힘 주의사항, 에어프라이어 변환, 카운트다운 타이머까지.

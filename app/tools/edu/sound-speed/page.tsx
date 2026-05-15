@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sound-speed',
-  title: '음속 시뮬레이터 — 천둥 번개 거리·소리 도달 시간·빛 vs 소리',
+  title: '음속 계산기 — 천둥 번개 거리·소리 도달 시간·빛 vs 소리',
   description: '번개와 천둥 사이 시간으로 거리를 계산하고, 거리별 소리 도달 시간, 빛과 소리 속도 차이, 콘서트홀 반향까지 시각화합니다. 온도별 음속 자동 보정.',
   keywords: ['음속계산기', '천둥번개거리', '소리도달시간', '음속공식', '광속', '마하', '에코지연', '잔향시간', 'RT60', '소닉붐'],
 })
@@ -18,7 +18,7 @@ export default function SoundSpeedPage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔊 음속 시뮬레이터
+        🔊 음속 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         <strong style={{ color: 'var(--text)' }}>번개·천둥 거리</strong>, 거리별 소리 도달 시간, <strong style={{ color: 'var(--text)' }}>빛 vs 소리 속도 차이</strong>,
@@ -351,9 +351,9 @@ export default function SoundSpeedPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 시각화',     desc: '8개 행성에서 내 몸무게·나이·하루' },
+              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 계산기',     desc: '8개 행성에서 내 몸무게·나이·하루' },
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',         desc: '138억 년 우주 역사를 1년으로' },
-              { href: '/tools/edu/circuit-simulator',  icon: '⚡', name: '옴의 법칙 시뮬레이터',  desc: '직렬·병렬 회로 시각화' },
+              { href: '/tools/edu/circuit-simulator',  icon: '⚡', name: '옴의 법칙 계산기',  desc: '직렬·병렬 회로 시각화' },
               { href: '/tools/unit/length',            icon: '📏', name: '길이 변환기',           desc: 'cm·m·inch·ft·mile 변환' },
               { href: '/tools/unit/time',              icon: '⏱️', name: '시간 단위 변환기',     desc: '초·분·시간·일 변환' },
               { href: '/tools/edu',                    icon: '🔬', name: '교육·학습 카테고리',     desc: '추가 교육 도구 더보기' },

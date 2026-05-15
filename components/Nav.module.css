@@ -332,7 +332,8 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 15px;
+  /* iOS Safari가 16px 미만 input에 자동 줌 인하므로 모바일은 16px 유지 */
+  font-size: 16px;
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
 }

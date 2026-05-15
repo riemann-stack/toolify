@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/edu/circuit-simulator',
-  title: '옴의 법칙 시뮬레이터 — 직렬·병렬 회로 전압·전류·저항·전력',
+  title: '옴의 법칙 계산기 — 직렬·병렬 회로 전압·전류·저항·전력',
   description: '직렬·병렬·혼합 회로의 전압·전류·저항·전력을 시각화하는 인터랙티브 시뮬레이터. 옴의 법칙·키르히호프 법칙 학습, LED 저항 계산, 한국 중3·고1 물리 빈출 회로 문제 풀이까지.',
   keywords: ['옴의법칙', '전기회로계산기', '회로시뮬레이터', '직렬병렬', '키르히호프법칙', 'LED저항계산', '전기전자', '회로분석', '중3물리', '고1물리', '전력계산'],
 })
@@ -18,7 +18,7 @@ export default function CircuitSimulatorPage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚡ 옴의 법칙 시뮬레이터
+        ⚡ 옴의 법칙 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         직렬·병렬 회로에서 <strong style={{ color: 'var(--text)' }}>전압·전류·저항·전력을 시각적으로 학습</strong>합니다.
@@ -331,10 +331,10 @@ export default function CircuitSimulatorPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 시각화',     desc: '8개 행성에서 내 몸무게·나이·하루' },
+              { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 계산기',     desc: '8개 행성에서 내 몸무게·나이·하루' },
               { href: '/tools/edu/cosmic-calendar',   icon: '🌌', name: '코스믹 캘린더',         desc: '138억 년 우주 역사를 1년으로' },
-              { href: '/tools/dev/css-converter',     icon: '🎨', name: 'CSS 값 변환기',         desc: 'px·rem·em·clamp() 변환' },
-              { href: '/tools/art/frequency',       icon: '🎵', name: '주파수 음정 변환기',     desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/dev/css-converter',     icon: '🎨', name: 'CSS 단위 변환기',         desc: 'px·rem·em·clamp() 변환' },
+              { href: '/tools/art/frequency',       icon: '🎵', name: '주파수↔음정 변환기',     desc: 'Hz ↔ 음정·MIDI·파장' },
               { href: '/tools/unit/battery',          icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh·Ah 변환' },
               { href: '/tools/edu',                   icon: '🔬', name: '교육·학습 카테고리',     desc: '추가 교육 도구 더보기' },
             ].map((t, i) => (

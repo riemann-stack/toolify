@@ -362,7 +362,7 @@ export default function AlcoholPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기', desc: 'BAC 추정·운전 가능 시각' },
+              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC 추정·운전 가능 시각' },
               { href: '/tools/life/dutch',           icon: '🍻', name: '더치페이 계산기',         desc: '술자리 비용 N빵' },
               { href: '/tools/health/bmr',           icon: '🔥', name: 'BMR 계산기',              desc: '알코올 칼로리 vs 일일 권장' },
               { href: '/tools/health/supplement',    icon: '💊', name: '영양제 성분 체크',         desc: '약물 + 알코올 주의' },

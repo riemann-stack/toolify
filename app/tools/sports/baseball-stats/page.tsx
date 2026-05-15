@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
-  title: '야구 타율·OPS 계산기 — 출루율·장타율·ERA·WHIP 계산',
+  title: '야구 타율 계산기 — 출루율·장타율·ERA·WHIP 계산',
   description:
     '야구 타격 기록(타율·출루율·장타율·OPS)과 투수 기록(ERA·WHIP·K/9) 자동 계산. KBO·MLB 리그 평균 비교, 시즌 페이스 환산, 세이버메트릭스 지표 지원.',
   keywords: ['야구타율계산기', 'OPS계산기', '출루율계산기', '장타율계산기', 'ERA계산기', 'WHIP계산기', 'KBO기록', '야구통계계산기'],
@@ -19,7 +19,7 @@ export default function BaseballStatsPage() {
         스포츠
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚾ 야구 타율·OPS 계산기
+        ⚾ 야구 타율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         타수·안타·홈런·볼넷을 입력하면 <strong style={{ color: 'var(--text)' }}>타율·출루율·장타율·OPS</strong>를 자동 계산하고, KBO·MLB·NPB 리그 평균과 비교합니다. 투수 ERA·WHIP·K/9·FIP, ISO·BABIP·wOBA 등 세이버메트릭스, 시즌 페이스 환산까지 한 번에.
@@ -236,8 +236,8 @@ export default function BaseballStatsPage() {
             {[
               { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점 계산기',         desc: '승무패·득실차·시즌 시나리오' },
               { href: '/tools/sports/golf-handicap',     icon: '⛳', name: '골프 핸디캡 계산기',       desc: 'WHS 방식 핸디캡·코스 핸디캡' },
-              { href: '/tools/sports/golf-distance',     icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·Gap 분석' },
-              { href: '/tools/sports/golf-cost',         icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디 1인 정산' },
+              { href: '/tools/sports/golf-distance',     icon: '🎯', name: '골프 비거리 계산기', desc: '클럽별 비거리·Gap 분석' },
+              { href: '/tools/sports/golf-cost',         icon: '🏌️', name: '골프 비용 계산기', desc: '그린피·카트·캐디 1인 정산' },
               { href: '/tools/life/random',            icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
             ].map((t, i) => (
               <Link

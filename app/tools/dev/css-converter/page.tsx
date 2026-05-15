@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/dev/css-converter',
-  title: 'CSS 값 변환기 — px·rem·em·clamp()·aspect-ratio 계산',
+  title: 'CSS 단위 변환기 — px·rem·em·clamp()·aspect-ratio 계산',
   description: 'px, rem, em, %, vw, vh 단위 변환부터 line-height, letter-spacing, aspect-ratio, clamp() 생성까지 CSS에서 자주 헷갈리는 값을 빠르게 변환하고 코드를 복사하세요.',
   keywords: ['CSS단위변환기', 'px rem 변환', 'clamp생성기', 'aspect-ratio계산기', 'line-height변환', 'letter-spacing변환', 'CSS계산기', 'rem변환기'],
 })
@@ -45,7 +45,7 @@ export default function CssConverterPage() {
     <div style={{ maxWidth: '820px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎨 CSS 값 변환기
+        🎨 CSS 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         px·rem·em 단위 변환부터 clamp() 생성, aspect-ratio 계산까지. CSS에서 자주 헷갈리는 값을 한곳에서 변환하고 바로 복사하세요.

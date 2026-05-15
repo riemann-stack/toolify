@@ -1,4 +1,4 @@
-/* 전선 굵기·허용전류 계산기 — KEC 2021 기반 데이터·계산 유틸 */
+/* 전선 굵기 계산기 — KEC 2021 기반 데이터·계산 유틸 */
 
 export type Voltage = 220 | 380
 export type Phase = 'single' | 'three'

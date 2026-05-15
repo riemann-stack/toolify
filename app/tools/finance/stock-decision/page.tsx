@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock-decision',
-  title: '주식 고민 해결사 — 자가진단 + 친칠라/고양이/동전 5가지 무작위 + 다수결 종합',
+  title: '주식 매수·매도 계산기 — 자가진단 + 친칠라/고양이/동전 5가지 무작위 + 다수결 종합',
   description: '주식 매수·매도·보유 고민될 때 행동경제학 자가진단으로 감정 신호 점검. 결정 못하면 친칠라(Lusha 영감)·고양이 발(Orlando)·다트(Malkiel)·동전·룰렛 5가지 무작위 모드 + 종합 다수결. DALBAR·편향 7개 학습.',
   keywords: ['주식 고민', '주식 결정', '주식 사야할까', '매수 매도 결정', 'Lusha 쥐', 'Orlando 고양이', 'Burton Malkiel 원숭이', 'DALBAR', '행동경제학 투자', 'FOMO', '손실회피', '매몰비용', '결정장애'],
 })
@@ -53,7 +53,7 @@ export default function StockDecisionPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🐭 주식 고민 해결사
+        🐭 주식 매수·매도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         매수·매도·보유 고민될 때 행동경제학 자가진단으로 감정 신호부터 점검. 그래도 결정 못하면 친칠라·고양이 발·다트·동전·룰렛 5가지 무작위 모드 + 종합 다수결. 종목 추천 X · 본인 판단 보조용.

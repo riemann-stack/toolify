@@ -102,8 +102,8 @@ export interface RecipePreset {
 
 export const RECIPES: RecipePreset[] = [
   { id: 'ramen',     label: '🍜 라면 계란',          emoji: '🍜',
-    donenessId: 'soft', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
-    tip: '라면 끓는 물에 마지막 6분 동시 조리도 가능. 흰자 다 익고 노른자 풀어 국물에 섞기' },
+    donenessId: 'jammy', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    tip: '잼 노른자 7분이 라면 토핑 황금 비율. 라면과 별도로 삶아 완성 직전 올리기 (라면 조리 3~5분이라 동시 조리는 어려움)' },
   { id: 'gimbap',    label: '🍙 김밥 계란',          emoji: '🍙',
     donenessId: 'extra', sizeId: 'teuk', tempId: 'fridge', methodId: 'cold',
     tip: '단단한 완숙으로 자르기 좋게. 식초 1Ts 첨가하면 갈라짐 방지' },

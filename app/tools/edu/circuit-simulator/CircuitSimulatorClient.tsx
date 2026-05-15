@@ -508,7 +508,7 @@ export default function CircuitSimulatorClient() {
   // ─────────────────────────────────────────────
   async function copyResult() {
     const text = [
-      `[옴의 법칙 시뮬레이터]`,
+      `[옴의 법칙 계산기]`,
       `회로: ${type === 'series' ? '직렬' : '병렬'} · 저항 ${resistors.length}개 · 전원 ${fmtV(voltage)}`,
       ``,
       `전체 저항: ${fmtR(result.totalResistance)}`,

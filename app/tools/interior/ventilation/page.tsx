@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ventilation',
-  title: '실내 환기량·CADR 계산기 — ACH·CO₂·공기청정기·창문 환기 시간',
+  title: '환기량 계산기 — ACH·CO₂·공기청정기·창문 환기 시간',
   description:
     '공간 부피·인원·목표 환기 횟수(ACH)로 필요 환기량 계산. 공기청정기 CADR 추천(한국 표시면적 환산), CO₂ 위험 체크, 창문 환기 시간 추정, 공간 용도별 권장 표(국토교통부·교육부·KOSHA 기준).',
   keywords: [
@@ -20,7 +20,7 @@ export default function VentilationPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💨 실내 환기량·CADR 계산기
+        💨 환기량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         공간 부피·인원·목표 ACH로 <strong style={{ color: 'var(--text)' }}>필요 환기량, 공기청정기 CADR(한국 표시면적 환산), CO₂ 위험 체크, 창문 환기 시간</strong>까지 한 번에.
@@ -335,11 +335,11 @@ export default function VentilationPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피 (입력값 자동 호환)' },
-              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 소요량 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
-              { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 소요량 계산기', desc: '벽·천장 페인트 양' },
+              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
+              { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 계산기', desc: '벽·천장 페인트 양' },
               { href: '/tools/health/uv-protection', icon: '☀️', name: '자외선 노출 가이드',   desc: '실내·실외 자외선' },
-              { href: '/tools/unit/converter',     icon: '📐', name: '통합 단위 변환기',     desc: '면적·부피 단위 환산' },
-              { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',     desc: '아파트 평형' },
+              { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '면적·부피 단위 환산' },
+              { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',     desc: '아파트 평형' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

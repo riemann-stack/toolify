@@ -1,4 +1,4 @@
-/* 여행 옷·짐 계산기 — 데이터·계산 유틸 */
+/* 여행 짐 계산기 — 데이터·계산 유틸 */
 
 export type Climate = 'frigid' | 'winter' | 'spring' | 'mild' | 'summer' | 'hot'
 export type Laundry = 'none' | 'daily' | 'weekly'

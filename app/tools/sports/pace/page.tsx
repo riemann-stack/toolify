@@ -298,7 +298,7 @@ export default function PacePage() {
               { q: '페이스 ↔ 시속 변환 공식은?',
                 a: '<strong>시속 = 60 ÷ 페이스(분/km)</strong><br/>• 5:00/km → 12.0 km/h<br/>• 5:30/km → 10.9 km/h<br/>• 6:00/km → 10.0 km/h<br/><strong>400m 트랙 1바퀴 = 페이스 × 0.4</strong><br/>• 5:00/km → 2:00 (400m)<br/>• 5:30/km → 2:12<br/>• 6:00/km → 2:24<br/>본 도구의 자동 변환을 활용하세요.' },
               { q: '본 도구와 인터벌 훈련 계산기·기록 예측 계산기 차이는?',
-                a: '각 도구는 다른 영역을 다룹니다.<br/>📊 <strong>본 도구 (러닝 페이스 계산기)</strong> — 단순 페이스↔시간 변환 / 트레드밀 시속 / 구간 스플릿(페이스 분배)<br/>🏃 <strong>인터벌 훈련 계산기</strong> — VDOT 기반 인터벌 페이스 / 야소 800 / 4~16주 훈련 스케줄 / I·R·T 페이스<br/>🎯 <strong>마라톤 기록 예측 계산기</strong> — VDOT·Riegel 공식 / 5km → 풀코스 기록 예측<br/>본 도구는 <strong>페이스 변환 기본 도구</strong>. 훈련은 인터벌 도구, 예측은 기록 예측 도구를 함께 활용.' },
+                a: '각 도구는 다른 영역을 다룹니다.<br/>📊 <strong>본 도구 (러닝 페이스 계산기)</strong> — 단순 페이스↔시간 변환 / 트레드밀 시속 / 구간 스플릿(페이스 분배)<br/>🏃 <strong>인터벌 훈련 계산기</strong> — VDOT 기반 인터벌 페이스 / 야소 800 / 4~16주 훈련 스케줄 / I·R·T 페이스<br/>🎯 <strong>마라톤 기록 계산기</strong> — VDOT·Riegel 공식 / 5km → 풀코스 기록 예측<br/>본 도구는 <strong>페이스 변환 기본 도구</strong>. 훈련은 인터벌 도구, 예측은 기록 예측 도구를 함께 활용.' },
               { q: '본인 페이스가 매번 다른데 어떻게 사용하나요?',
                 a: '<strong>평균 페이스</strong> 또는 <strong>목표 페이스</strong> 입력 권장. 일반 가이드:<br/>• 평소 조깅: 6:00~6:30/km<br/>• 약간 빠르게: 5:30~6:00/km<br/>• 5km 페이스: 5:00~5:30/km<br/>• 10km 페이스: 5:15~5:45/km<br/>• 하프 페이스: 5:30~6:00/km<br/>• 풀코스 목표: 본 도구의 빠른 페이스 칩 활용.<br/>본 도구는 마지막 입력을 자동 저장 — 재방문 시 빠른 사용 가능.' },
             ].map((faq, i) => (
@@ -321,7 +321,7 @@ export default function PacePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/interval-training', icon: '🏃‍♂️', name: '인터벌 훈련 계산기',     desc: 'VDOT·인터벌 페이스·훈련 스케줄' },
-              { href: '/tools/sports/race-predictor',    icon: '🎯', name: '마라톤 기록 예측 계산기',  desc: 'VDOT·Riegel 기록 예측' },
+              { href: '/tools/sports/race-predictor',    icon: '🎯', name: '마라톤 기록 계산기',  desc: 'VDOT·Riegel 기록 예측' },
               { href: '/tools/sports/one-rm',            icon: '🏋️', name: '1RM 계산기',               desc: '근력 보강 최대 중량' },
               { href: '/tools/date/dday',                icon: '📅', name: 'D-day 계산기',              desc: '다음 마라톤 대회까지 남은 날' },
               { href: '/tools/health/bmr',               icon: '🔥', name: '기초대사량(BMR) 계산기',     desc: '러너 하루 칼로리 소비' },

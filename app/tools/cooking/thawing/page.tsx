@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/thawing',
-  title: '냉동·해동 시간 계산기 — 식품별·두께별·전자레인지 W별 해동 가이드 | Youtil',
+  title: '해동 시간 계산기 — 식품별·두께별·전자레인지 W별 해동 가이드 | Youtil',
   description: '소고기·돼지·닭·생선·채소·빵·조리음식 6종 해동 시간. 4가지 방법 (냉장·찬물·실온·전자레인지) 비교, 위험도 카드, 전자레인지 출력별 보정, 식품별 조리 팁, 해동 시각 역산까지. 식약처 기준 식품 안전 가이드.',
   keywords: [
     '해동시간계산기', '고기해동시간', '냉동해동계산기', '냉장해동시간',
@@ -20,7 +20,7 @@ export default function ThawingPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧊 냉동·해동 시간 계산기
+        🧊 해동 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         식품·두께·무게·전자레인지 W별 4가지 해동 방법 비교, <strong style={{ color: 'var(--text)' }}>위험도 카드·식품별 조리 팁·해동 시작·완료 시각 자동·역산</strong>까지.
@@ -333,7 +333,7 @@ export default function ThawingPage() {
         <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '18px 20px' }}>
           <p style={{ fontSize: 14, fontWeight: 700, color: '#FF6B6B', marginBottom: 10 }}>⚖️ 면책 강화</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
-            본 냉동·해동 시간 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다. 식품 안전 진단·판정 도구가 아닙니다.
+            본 해동 시간 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다. 식품 안전 진단·판정 도구가 아닙니다.
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 10 }}>
             <li>실제 해동 시간은 냉동고 온도·식품 포장·냉장고 성능에 따라 다름</li>

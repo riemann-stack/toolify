@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/edu/planet-comparison',
-  title: '행성 비교 시각화 — 다른 행성에서 내 몸무게·나이·하루',
+  title: '행성 비교 계산기 — 다른 행성에서 내 몸무게·나이·하루',
   description: '8개 태양계 행성에서 내 몸무게, 나이, 하루 길이가 어떻게 다른지 시각적으로 비교합니다. 수성·금성·화성·목성 등 행성별 중력·공전·자전 데이터.',
   keywords: ['행성비교', '태양계행성', '화성에서몸무게', '목성중력', '행성나이', '행성크기비교', '태양계시각화', '행성과학'],
 })
@@ -18,7 +18,7 @@ export default function PlanetComparisonPage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪐 행성 비교 시각화
+        🪐 행성 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         몸무게와 나이만 입력하면 <strong style={{ color: 'var(--text)' }}>8개 태양계 행성에서의 내 몸무게·나이·하루 길이·점프 높이</strong>를
@@ -325,7 +325,7 @@ export default function PlanetComparisonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/unit/area',        icon: '🏠', name: '평수 ↔ ㎡ 변환기',  desc: '아파트 면적 단위 변환' },
+              { href: '/tools/unit/area',        icon: '🏠', name: '평수 변환기',  desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/time',        icon: '⏱️', name: '시간 단위 변환기',   desc: '초·분·시간·일·주·년 변환' },
               { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',         desc: 'cm·m·inch·ft·mile 변환' },
               { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',         desc: 'kg·g·lb·oz 변환' },

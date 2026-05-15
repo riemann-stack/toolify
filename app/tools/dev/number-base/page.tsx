@@ -357,8 +357,8 @@ export default function NumberBasePage() {
               { href: '/tools/dev/base64',        icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트·파일·JWT Base64 변환' },
               { href: '/tools/dev/json',          icon: '📋', name: 'JSON 포맷터',          desc: 'JSON 정렬·트리·TS 변환' },
               { href: '/tools/art/color',         icon: '🎨', name: '색상 코드 변환기',     desc: 'HEX·RGB·HSL 변환' },
-              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',         desc: 'px·rem·em·clamp() 변환' },
-              { href: '/tools/edu/circuit-simulator', icon: '⚡', name: '옴의 법칙 시뮬레이터', desc: '직렬·병렬 회로 시각화' },
+              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',         desc: 'px·rem·em·clamp() 변환' },
+              { href: '/tools/edu/circuit-simulator', icon: '⚡', name: '옴의 법칙 계산기', desc: '직렬·병렬 회로 시각화' },
             ].map((t, i) => (
               <Link
                 key={i}

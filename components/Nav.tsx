@@ -45,11 +45,11 @@ function useBodyScrollLock(isLocked: boolean) {
 
 const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name' | 'icon'>> = [
   { name: '연봉 실수령액', href: '/tools/finance/salary',  icon: '💴' },
-  { name: '만 나이',       href: '/tools/date/age',         icon: '🎂' },
+  { name: '나이 계산기',   href: '/tools/date/age',         icon: '🎂' },
   { name: 'BMI 계산기',    href: '/tools/health/bmi',       icon: '⚖️' },
   { name: '로또 생성기',   href: '/tools/life/lotto',       icon: '🎰' },
   { name: '더치페이',      href: '/tools/life/dutch',       icon: '🍻' },
-  { name: '군 전역일',     href: '/tools/date/military',    icon: '🎖️' },
+  { name: '군대 전역일',   href: '/tools/date/military',    icon: '🎖️' },
 ]
 
 /* ─── 공유 버튼 ─── */

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/flooring',
-  title: '바닥재 소요량 계산기 — 마루·장판·데코타일 박스 수·비용',
+  title: '바닥재 계산기 — 마루·장판·데코타일 박스 수·비용',
   description: '강화마루·강마루·원목마루·장판·데코타일 박스 수와 시공 비용을 계산합니다. 한국 표준 박스 면적, 헤링본·평행 시공별 로스율, 셀프 vs 전문 시공 비용 비교.',
   keywords: ['바닥재계산기', '마루박스수', '강화마루소요량', '강마루계산', '장판소요량', '데코타일계산', '헤링본바닥재', '바닥재비용'],
 })
@@ -18,7 +18,7 @@ export default function FlooringPage() {
         인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪵 바닥재 소요량 계산기
+        🪵 바닥재 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         평수 또는 가로·세로를 입력하면 <strong style={{ color: 'var(--text)' }}>강화마루·강마루·원목마루·장판·데코타일·도기 타일</strong>의
@@ -335,11 +335,11 @@ export default function FlooringPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피' },
-              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 소요량 계산기',         desc: '벽지 롤 수·시공 비용' },
-              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 소요량 계산기',       desc: '벽·천장 페인트 양' },
+              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 계산기',         desc: '벽지 롤 수·시공 비용' },
+              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 계산기',       desc: '벽·천장 페인트 양' },
               { href: '/tools/interior/curtain-blind', icon: '🪟', name: '커튼·블라인드 사이즈',       desc: '창문 사이즈로 추천 사이즈' },
               { href: '/tools/interior/lighting',      icon: '💡', name: '조명 밝기 계산기',           desc: '공간별 권장 루멘·조명 개수' },
-              { href: '/tools/unit/area',              icon: '🏠', name: '평수 ↔ ㎡ 변환기',          desc: '아파트 면적 단위 변환' },
+              { href: '/tools/unit/area',              icon: '🏠', name: '평수 변환기',          desc: '아파트 면적 단위 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

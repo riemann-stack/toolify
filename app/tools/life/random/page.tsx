@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/random',
-  title: '랜덤 추첨기·룰렛·팀 편성 — 가중치·공정성 검증·자리 배치',
+  title: '랜덤 추첨기 — 가중치·공정성 검증·자리 배치',
   description:
     '숫자·항목 무작위 추첨부터 가중치 추첨, 룰렛, 팀 나누기, 발표 순서, 자리 배치, 공정성 시뮬레이션까지. 메뉴·당번·경품·발표 추첨에 활용. 무료·로그인 없음.',
   keywords: [
@@ -20,7 +20,7 @@ export default function RandomPage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎲 랜덤 추첨기·룰렛·팀 편성
+        🎲 랜덤 추첨기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         숫자·항목·가중치 추첨, 룰렛, 팀 나누기, 발표 순서, 자리 배치, 공정성 검증까지 한 번에. <strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플 + Math.random() 의사난수</strong>로 충분히 균등한 분포를 보장하며, [공정성 검증] 탭에서 직접 확인할 수 있습니다.

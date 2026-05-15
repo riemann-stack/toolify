@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-distance',
-  title: '골프 클럽 비거리 계산기 — 환경 보정·Gap 분석·내 기록',
+  title: '골프 비거리 계산기 — 환경 보정·Gap 분석·내 기록',
   description: '드라이버·7번 아이언 입력만으로 전체 클럽 비거리 자동 추정. 기온·바람·고도·경사 환경 보정, Gap 자동 분석, 갭웨지 추천, m/yard 변환, 내 비거리 기록까지.',
   keywords: ['골프비거리계산기', '클럽비거리표', '7번아이언비거리', '골프클럽거리', '드라이버비거리', '웨지비거리', '골프갭분석', '갭웨지', '골프 환경 보정', '바람 비거리', '시니어 골프', '클럽 Gap 분석', '한국 아마추어 골퍼'],
 })
@@ -15,7 +15,7 @@ export default function GolfDistancePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏌️ 골프 클럽 비거리 계산기
+        🏌️ 골프 비거리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         드라이버·7번 아이언만 입력 → 전체 클럽 비거리 자동 추정 + <strong style={{ color: 'var(--text)' }}>환경 보정(바람·고도·기온) + Gap 자동 분석 + 내 비거리 기록</strong>까지.
@@ -389,7 +389,7 @@ export default function GolfDistancePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',   desc: 'WHS 핸디캡 지수·코스 핸디캡' },
-              { href: '/tools/sports/golf-cost',     icon: '⛳', name: '골프 라운딩 비용 계산기', desc: '그린피·캐디피·1인당 비용 정산' },
+              { href: '/tools/sports/golf-cost',     icon: '⛳', name: '골프 비용 계산기', desc: '그린피·캐디피·1인당 비용 정산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 라운딩까지 D-day' },
               { href: '/tools/life/pomodoro',      icon: '🍅', name: '뽀모도로 타이머',         desc: '연습장 루틴 관리' },
             ].map(t => (

@@ -644,7 +644,7 @@ export default function MicrowaveClient() {
       <Disclaimer
         variant="safety"
         related={[
-          { href: '/tools/cooking/thawing',   label: '냉동·해동 시간 계산기' },
+          { href: '/tools/cooking/thawing',   label: '해동 시간 계산기' },
           { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' },
           { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
         ]}

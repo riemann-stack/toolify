@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/vocal-range',
-  title: '보컬 음역대 측정기 — 실시간 음정 감지·최저음·최고음 자동 측정',
+  title: '음역대 측정기 — 실시간 음정 감지·최저음·최고음 자동 측정',
   description:
     '마이크로 실시간 음정 감지하고 안정적으로 낸 최저음·최고음으로 보컬 음역대 자동 측정. 베이스·바리톤·테너·소프라노 분류, 한국 노래 30+ 곡 키 매칭, 가성 포함 측정. 모든 처리는 브라우저 내에서만.',
   keywords: [
@@ -20,7 +20,7 @@ export default function VocalRangePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎤 보컬 음역대 측정기
+        🎤 음역대 측정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         마이크로 실시간 음정 감지, <strong style={{ color: 'var(--text)' }}>안정 음 자동 기록, 최저음·최고음 측정, 베이스~소프라노 8단계 분류, 한국 노래 30+ 곡 키 매칭</strong>까지.
@@ -227,7 +227,7 @@ export default function VocalRangePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수 음정 변환기',  desc: 'Hz ↔ 음정·MIDI 번호' },
+              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',  desc: 'Hz ↔ 음정·MIDI 번호' },
               { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기',     desc: '카포 위치·키 변경' },
               { href: '/tools/art/chord',     icon: '🎼', name: '코드 구성음',         desc: '코드별 음정 표시' },
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기',   desc: '딜레이·리버브 ms' },

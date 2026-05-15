@@ -15,7 +15,7 @@ export default function CapoPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎸 기타 카포·전조 계산기
+        🎸 기타 카포 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         원하는 키에서 카포 위치별 연주 코드를 즉시 확인하고, 쉬운 오픈 코드로 자동 편곡하세요.
@@ -242,7 +242,7 @@ export default function CapoPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수 음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임',   desc: '딜레이·리버브 ms 계산' },
               { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',    desc: '연습 루틴·집중 관리' },
               { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',      desc: '공연·합주 D-day 관리' },

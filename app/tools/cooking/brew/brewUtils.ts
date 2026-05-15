@@ -1,4 +1,4 @@
-/* 커피 브루잉 비율 계산기 — 데이터·계산 유틸 */
+/* 커피 브루잉 계산기 — 데이터·계산 유틸 */
 
 export type BrewMethod = 'drip' | 'french' | 'aero' | 'cold' | 'moka' | 'espresso'
 export type RoastLevel = 'light' | 'medium' | 'dark'

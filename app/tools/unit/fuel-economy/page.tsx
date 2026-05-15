@@ -16,7 +16,7 @@ export default function FuelEconomyPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⛽ 연비 단위 변환기
+        ⛽ 연비 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         <strong style={{ color: 'var(--text)' }}>km/L · L/100km · mpg(미국·영국)</strong> 연비 단위를 즉시 변환합니다. 전기차 전비(km/kWh·MPGe)와 100km 주행 비용 계산도 지원합니다.
@@ -38,23 +38,39 @@ export default function FuelEconomyPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             같은 차량이라도 나라마다 표기 단위가 다릅니다. <strong style={{ color: 'var(--text)' }}>“높을수록 좋은” 단위</strong>(km/L, mpg)와 <strong style={{ color: 'var(--text)' }}>“낮을수록 좋은” 단위</strong>(L/100km)가 섞여 있어 직관적 비교가 어렵습니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          {/* 컴팩트 행형 카드 — 모바일에서 세로 길이 축소 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {[
-              { flag: '🇰🇷', country: '한국', unit: 'km/L',     dir: '높을수록 ↑',  ex: '15 km/L (소형 가솔린)' },
-              { flag: '🇯🇵', country: '일본', unit: 'km/L',     dir: '높을수록 ↑',  ex: '20 km/L (하이브리드)' },
-              { flag: '🇪🇺', country: '유럽', unit: 'L/100km',  dir: '낮을수록 ↑',  ex: '6.7 L/100km' },
-              { flag: '🇺🇸', country: '미국', unit: 'mpg (US)', dir: '높을수록 ↑',  ex: '35 mpg' },
-              { flag: '🇬🇧', country: '영국', unit: 'mpg (UK)', dir: '높을수록 ↑',  ex: '42 mpg (US와 다름)' },
-              { flag: '🇨🇦', country: '캐나다', unit: 'L/100km', dir: '낮을수록 ↑', ex: '미국 mpg 병기' },
+              { flag: '🇰🇷', country: '한국',   unit: 'km/L',     dir: '높을수록 ↑', ex: '15 km/L (소형 가솔린)' },
+              { flag: '🇯🇵', country: '일본',   unit: 'km/L',     dir: '높을수록 ↑', ex: '20 km/L (하이브리드)' },
+              { flag: '🇪🇺', country: '유럽',   unit: 'L/100km',  dir: '낮을수록 ↑', ex: '6.7 L/100km' },
+              { flag: '🇺🇸', country: '미국',   unit: 'mpg (US)', dir: '높을수록 ↑', ex: '35 mpg' },
+              { flag: '🇬🇧', country: '영국',   unit: 'mpg (UK)', dir: '높을수록 ↑', ex: '42 mpg (US와 다름)' },
+              { flag: '🇨🇦', country: '캐나다', unit: 'L/100km',  dir: '낮을수록 ↑', ex: '미국 mpg 병기' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.flag} {c.country}</p>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginBottom: '2px' }}>{c.unit}</p>
-                <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>{c.dir}</p>
-                <p style={{ fontSize: '11px', color: 'var(--muted)', opacity: 0.85 }}>{c.ex}</p>
+              <div key={i} style={{
+                display: 'grid',
+                gridTemplateColumns: '70px 100px 1fr',
+                alignItems: 'center',
+                gap: '10px',
+                background: 'var(--bg2)',
+                border: '1px solid var(--border)',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                fontSize: '13px',
+              }}>
+                <span style={{ color: 'var(--text)', fontWeight: 700 }}>{c.flag} {c.country}</span>
+                <span style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: '12.5px' }}>{c.unit}</span>
+                <span style={{ color: 'var(--muted)', fontSize: '12px', textAlign: 'right' }}>
+                  <span style={{ color: 'var(--text)', marginRight: 6 }}>{c.dir}</span>
+                  · {c.ex}
+                </span>
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+            💡 한국·일본·미국·영국은 <strong style={{ color: 'var(--text)' }}>거리 ÷ 연료</strong> 방식이라 숫자가 클수록 효율적입니다. 유럽·캐나다는 <strong style={{ color: 'var(--text)' }}>연료 ÷ 거리</strong> 방식이라 작을수록 효율적이라 직관 비교가 어렵습니다.
+          </p>
         </div>
 
         {/* ── 2. mpg US vs UK ── */}
@@ -91,27 +107,26 @@ export default function FuelEconomyPage() {
             한국·미국식 표기는 <strong style={{ color: 'var(--text)' }}>“연료 1단위로 얼마나 가는가”</strong>(거리 ÷ 연료)인 반면, 유럽식 L/100km는 <strong style={{ color: 'var(--text)' }}>“100km 가는 데 얼마나 쓰는가”</strong>(연료 ÷ 거리)입니다. 즉 <strong style={{ color: 'var(--accent)' }}>소비량 기준</strong>이라 숫자가 작을수록 효율이 좋습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['차량', 'km/L', 'L/100km', '평가'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  {['차량', 'km/L', 'L/100km'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { c: '경차',          k: '20', l: '5.0',  e: '🌟 매우 우수' },
-                  { c: '소형 가솔린',   k: '15', l: '6.7',  e: '✅ 우수' },
-                  { c: '중형 세단',     k: '12', l: '8.3',  e: '보통' },
-                  { c: '대형 SUV',      k: '8',  l: '12.5', e: '🔶 평균 이하' },
-                  { c: '스포츠카',      k: '6',  l: '16.7', e: '❌ 낮음' },
+                  { c: '경차',        k: '20', l: '5.0' },
+                  { c: '소형 가솔린', k: '15', l: '6.7' },
+                  { c: '중형 세단',   k: '12', l: '8.3' },
+                  { c: '대형 SUV',    k: '8',  l: '12.5' },
+                  { c: '스포츠카',    k: '6',  l: '16.7' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.c}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.l}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px' }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.l}</td>
                   </tr>
                 ))}
               </tbody>
@@ -160,6 +175,75 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* ── 4-1. 연료별 100km 비용 비교 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            🇰🇷 연료별 100km 주행 비용 비교
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+            2026년 한국 평균 단가 기준 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['연료', '평균 효율', '단가', '100km 비용'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { f: '⛽ 휘발유',         e: '12 km/L',     p: '1,800원/L',  c: '약 15,000원' },
+                  { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: '1,650원/L',  c: '약 11,800원' },
+                  { f: '🔥 LPG',           e: '9 km/L',      p: '1,150원/L',  c: '약 12,800원' },
+                  { f: '🍃 하이브리드',     e: '20 km/L',     p: '1,800원/L',  c: '약 9,000원' },
+                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '200원/kWh',  c: '약 4,000원' },
+                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '400원/kWh',  c: '약 8,000원' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>3.7배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
+          </p>
+        </div>
+
+        {/* ── 4-2. 연비 향상 실전 팁 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            🚗 연비 향상 실전 팁 — 같은 차로 +15~20%
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { t: '🛞 타이어 공기압', d: '권장값 +10% 유지 시 연비 ~3% 개선. 매월 점검.', impact: '+3%' },
+              { t: '🚀 부드러운 가속', d: '급가속·급제동 1회 = 연료 0.05L 손실. 정속 우선.', impact: '+10%' },
+              { t: '❄️ 에어컨 사용',   d: '에어컨은 연비 5~15% ↓. 시속 80km↑에선 창문 열기보다 효율적.', impact: '+5%' },
+              { t: '📦 짐 무게',       d: '50kg 추가 적재 → 연비 1~2% ↓. 트렁크 정리.', impact: '+2%' },
+              { t: '⛽ 풀탱크 회피',   d: '연료 50L = 약 38kg. 항상 만탱크는 +1% 손실.', impact: '+1%' },
+              { t: '🛠️ 정기 점검',    d: '엔진오일·에어필터·점화플러그 노후 시 ~10% 손실.', impact: '+5%' },
+            ].map((r, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                  <p style={{ fontSize: '13.5px', color: 'var(--text)', fontWeight: 700, margin: 0 }}>{r.t}</p>
+                  <span style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.impact}</span>
+                </div>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{r.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+            ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 연 15,000km 운행 시 연 25~40만원 절약.
+          </p>
         </div>
 
         {/* ── 5. 자주 검색되는 변환 ── */}
@@ -236,10 +320,10 @@ export default function FuelEconomyPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', desc: '유류비·보험·소모품·감가상각 환산' },
-              { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',           desc: 'km·mile·m·ft 단위 변환' },
-              { href: '/tools/unit/battery',     icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh·Ah 변환' },
-              { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',           desc: '섭씨·화씨·켈빈 즉시 변환' },
+              { href: '/tools/finance/car-cost',     icon: '🚗', name: '자동차 유지비 계산기', desc: '유류비·보험·소모품·감가상각 환산' },
+              { href: '/tools/unit/converter',       icon: '📐', name: '단위 변환기',           desc: '길이·무게·부피 등 통합 변환' },
+              { href: '/tools/unit/battery',         icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh·Ah 변환' },
+              { href: '/tools/unit/tire-pressure',   icon: '🛞', name: '타이어 공기압 변환기',   desc: 'psi·kPa·bar 즉시 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

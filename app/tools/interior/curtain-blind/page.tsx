@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/curtain-blind',
-  title: '커튼·블라인드 사이즈 계산기 — 창문 측정·주문 사이즈',
+  title: '커튼 블라인드 계산기 — 창문 측정·주문 사이즈',
   description: '창문 가로·세로로 커튼·블라인드·롤스크린·로만쉐이드·버티칼 추천 사이즈를 계산합니다. 주름 2배, 봉 길이, 인사이드·아웃사이드 마운트, 측정법 가이드.',
   keywords: ['커튼사이즈계산', '블라인드사이즈', '커튼길이추천', '커튼주름2배', '블라인드재는법', '롤스크린사이즈', '커튼봉길이', '커튼주문사이즈'],
 })
@@ -18,7 +18,7 @@ export default function CurtainBlindPage() {
         인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪟 커튼·블라인드 사이즈 계산기
+        🪟 커튼 블라인드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         창문 가로·세로를 입력하면 <strong style={{ color: 'var(--text)' }}>커튼·블라인드·롤스크린·로만쉐이드·버티칼</strong> 5종 추천 사이즈를 계산합니다.
@@ -257,10 +257,10 @@ export default function CurtainBlindPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 소요량 계산기',   desc: '벽지 롤 수·시공 비용' },
-              { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 소요량 계산기', desc: '벽·천장 페인트 양·구매 조합' },
+              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·시공 비용' },
+              { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 계산기', desc: '벽·천장 페인트 양·구매 조합' },
               { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피' },
-              { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',    desc: '아파트 면적 단위 변환' },
+              { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',    desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/length',        icon: '📏', name: '길이 변환기',          desc: 'cm·m·inch·ft 변환' },
             ].map((t, i) => (
               <Link

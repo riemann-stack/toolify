@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
-  title: '자외선 노출 가이드 계산기 — UV 지수·피부 타입·SPF 일광화상 시간',
+  title: '자외선 지수 계산기 — UV 지수·피부 타입·SPF 일광화상 시간',
   description: 'UV 지수, Fitzpatrick 피부 타입, SPF를 기준으로 일광화상 위험 시간을 추정합니다. 러닝·골프·해변·등산 등 활동별 자외선 차단 가이드와 재도포 권장 시간 안내.',
   keywords: ['자외선계산기', 'UV지수', '일광화상시간', 'SPF계산', '선크림SPF', '피부타입', 'Fitzpatrick', '자외선차단', '러닝선크림', '해변선크림'],
 })
@@ -18,7 +18,7 @@ export default function UvProtectionPage() {
         건강·웰빙
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ☀️ 자외선 노출 가이드 계산기
+        ☀️ 자외선 지수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         UV 지수·피부 타입·SPF로 <strong style={{ color: 'var(--text)' }}>일광화상 위험 시간을 추정</strong>하고
@@ -313,7 +313,7 @@ export default function UvProtectionPage() {
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',             desc: '체질량지수로 비만도 확인' },
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기', desc: '하루 권장 칼로리' },
-              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 소멸 계산기', desc: 'BAC·운전 가능 시각' },
+              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC·운전 가능 시각' },
               { href: '/tools/sports/pace',        icon: '🏃', name: '러닝 페이스 계산기',     desc: '마라톤 목표 기록별 페이스' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '휴가·여행 카운트다운' },
               { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기',   desc: '온도·습도·소재별 건조 시간' },

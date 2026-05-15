@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
-  title: '등산 소요시간 계산기 — Naismith·Tobler·한국 표준 3공식 + 100대 명산 35+ 프리셋 + 턴어라운드 안전 시간',
+  title: '등산 시간 계산기 — Naismith·Tobler·한국 표준 3공식 + 100대 명산 35+ 프리셋 + 턴어라운드 안전 시간',
   description:
     '거리·표고차·체력·지형·배낭·인원·날씨까지 정밀 보정한 등산 시간 계산. 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋과 일몰 전 하산 가능 여부 자동 진단. Naismith·Tobler·한국 등산교실 3공식 비교, 단계별 도착 예상 시각 SVG 타임라인.',
   keywords: [
@@ -50,7 +50,7 @@ export default function HikingTimePage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🥾 등산 소요시간 계산기
+        🥾 등산 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋과 거리·표고·체력·지형·배낭·인원·날씨까지 정밀 보정. 일몰 전 하산 가능 여부 자동 진단으로 안전한 산행 계획.
@@ -296,7 +296,7 @@ export default function HikingTimePage() {
         <section>
           <h2 style={sectionTitle}>관련 도구</h2>
           <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
-            <li><Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent)' }}>마라톤 기록 예측 계산기</Link> — Riegel·VDOT·Cameron 3공식</li>
+            <li><Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent)' }}>마라톤 기록 계산기</Link> — Riegel·VDOT·Cameron 3공식</li>
             <li><Link href="/tools/sports/pace" style={{ color: 'var(--accent)' }}>러닝 페이스 계산기</Link> — 페이스↔시간 변환</li>
             <li><Link href="/tools/sports/interval-training" style={{ color: 'var(--accent)' }}>인터벌 훈련 계산기</Link> — VDOT 기반 훈련</li>
             <li><Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}>1RM 계산기</Link> — 근력 운동</li>

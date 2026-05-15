@@ -19,7 +19,7 @@ export default function FootballPointsPage() {
         스포츠
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚽ 축구 승점·순위 계산기
+        ⚽ 축구 승점 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         승·무·패와 득실차를 입력하면 <strong style={{ color: 'var(--text)' }}>현재 승점·시즌 종료 예상 승점·목표 달성 가능성</strong>을 한 번에 분석합니다. K리그·EPL·라리가·분데스리가 등 주요 리그 프리셋과 라이벌 팀 추격 시나리오, 슬라이더 시뮬레이션을 지원합니다.
@@ -231,7 +231,7 @@ export default function FootballPointsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 방식 핸디캡·코스 핸디캡 계산' },
-              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },
+              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 경기까지 D-day' },
               { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
             ].map((t, i) => (

@@ -431,7 +431,7 @@ export default function RoomModeClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/edu/sound-speed" className={s.crossLink}>
-        🔊 음속 시뮬레이터 → 천둥 거리·반향·RT60·에코까지
+        🔊 음속 계산기 → 천둥 거리·반향·RT60·에코까지
       </Link>
     </div>
   )

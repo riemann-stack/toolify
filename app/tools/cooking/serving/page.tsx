@@ -474,7 +474,7 @@ export default function ServingPage() {
               { href: '/tools/cooking/recipe',         icon: '📐', name: '레시피 비율 계산기',         desc: '인분 환산·비율 조정' },
               { href: '/tools/cooking/unit',           icon: '🥄', name: '요리 단위 변환기',           desc: 'g·컵·큰술 변환' },
               { href: '/tools/cooking/substitute',     icon: '🔄', name: '식재료 대체 비율',           desc: '부족 시 대체재' },
-              { href: '/tools/cooking/thawing',        icon: '🧊', name: '냉동·해동 시간 계산기',      desc: '고기·냉동 안전 해동' },
+              { href: '/tools/cooking/thawing',        icon: '🧊', name: '해동 시간 계산기',      desc: '고기·냉동 안전 해동' },
               { href: '/tools/life/unit-price',        icon: '🏷️', name: '단가 비교 계산기',           desc: '마트 가격 분석' },
               { href: '/tools/cooking/nuts',           icon: '🥜', name: '견과류 적정량',              desc: '간식·영양 보충' },
               { href: '/tools/cooking/baking-recipe',  icon: '🧁', name: '베이킹 레시피',              desc: '제과 비율 환산' },

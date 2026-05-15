@@ -638,7 +638,7 @@ export default function SeveranceClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/savings" className={s.crossLink}>
-        💰 월 저축가능 금액 계산기 → 퇴직금으로 자산 형성·재무 진단
+        💰 월 저축 계산기 → 퇴직금으로 자산 형성·재무 진단
       </Link>
     </div>
   )

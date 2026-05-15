@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/finance/freelance-tax',
-  title: '프리랜서 종합소득세 환급 계산기 — 단순경비율 자동 + 공제 시뮬 + 시나리오 비교 (2026년)',
+  title: '프리랜서 종합소득세 계산기 — 단순경비율 자동 + 공제 시뮬 + 시나리오 비교 (2026년)',
   description:
     '3.3% 원천징수 프리랜서·1인 사업자의 종합소득세 환급액을 30+ 업종 단순경비율 자동, 8단계 누진세율, 인적공제·노란우산·연금저축 종합 반영해 정확히 계산. 5가지 절세 시나리오 비교, 한계세율 시각화, 5월 신고 D-day 가이드까지.',
   keywords: [
@@ -51,7 +51,7 @@ export default function FreelanceTaxPage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💼 프리랜서 종합소득세 환급 계산기
+        💼 프리랜서 종합소득세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         3.3% 원천징수만 내고 있던 프리랜서·1인 사업자를 위한 종합소득세 정확 계산기. 30+ 업종별 단순경비율 자동 적용, 8단계 누진세율, 노란우산·연금저축 절세 시나리오 5종 비교, 5월 신고 가이드까지 한 번에.
@@ -298,7 +298,7 @@ export default function FreelanceTaxPage() {
             <li><Link href="/tools/finance/4-insurance" style={{ color: 'var(--accent)' }}>4대보험 계산기</Link> — 국민연금·건강보험 부담액 (전액 소득공제)</li>
             <li><Link href="/tools/finance/severance" style={{ color: 'var(--accent)' }}>퇴직금 실수령액 계산기</Link> — 퇴직 후 프리랜서 전환 시 종소세 합산</li>
             <li><Link href="/tools/finance/vat" style={{ color: 'var(--accent)' }}>부가세 계산기</Link> — 별개 세금 (분기·반기 신고)</li>
-            <li><Link href="/tools/finance/savings" style={{ color: 'var(--accent)' }}>월 저축가능 금액 계산기</Link> — 환급액으로 노란우산·연금저축 시뮬</li>
+            <li><Link href="/tools/finance/savings" style={{ color: 'var(--accent)' }}>월 저축 계산기</Link> — 환급액으로 노란우산·연금저축 시뮬</li>
           </ul>
         </section>
 

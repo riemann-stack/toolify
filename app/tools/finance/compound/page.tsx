@@ -6,8 +6,8 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/finance/compound',
-  title: '복리 계산기 — 목표 역산·세금·인플레이션·시나리오 한 번에',
-  description: '거치식·적립식 복리부터 목표 역산(1억 만들려면 월 얼마?), 한국 절세 계좌(ISA·연금저축·IRP) 비교, 인플레이션 실질 가치, 4가지 수익률 시나리오까지. 72의 법칙·복리 공식·30년 시뮬레이션 그래프 포함.',
+  title: '복리 계산기 — 목표 역산·인플레이션·수익률 시나리오 한 번에',
+  description: '거치식·적립식 복리부터 목표 금액 역산(1억 만들려면 월 얼마?), 인플레이션 실질 가치, 4가지 수익률 시나리오까지 한 화면에서. 72의 법칙·복리 공식·30년 시뮬레이션 그래프 포함.',
   keywords: [
     '복리계산기', '복리투자계산기', '복리수익계산', '목표금액역산',
     '적립식복리', '거치식복리', '월적립계산기', '1억만들기',
@@ -25,8 +25,8 @@ export default function CompoundPage() {
         📈 복리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        거치식·적립식 복리부터 <strong style={{ color: 'var(--text)' }}>목표 역산·한국 절세 계좌·인플레이션 실질 가치·4가지 수익률 시나리오</strong>까지
-        한 화면에서. 매년 적립액 증액·복리 주기·수수료까지 반영해 현실적인 자산 시뮬레이션을 제공합니다.
+        거치식·적립식 복리부터 <strong style={{ color: 'var(--text)' }}>목표 금액 역산, 인플레이션 실질 가치, 수익률 시나리오 비교</strong>까지
+        한 화면에서. 적립 주기·복리 주기·월/년 수익률을 자유롭게 조합해 현실적인 자산 시뮬레이션을 제공합니다.
       </p>
 
       <CompoundClient />
@@ -209,11 +209,11 @@ export default function CompoundPage() {
         {/* ── 5. 한국 6대 절세 계좌 비교 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            🇰🇷 한국 6대 절세 계좌 — ISA·연금저축·IRP 한 표 비교
+            🇰🇷 한국 6대 절세 계좌 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             한국에서 복리 투자 수익에 대한 일반 과세는 <strong style={{ color: '#FF6B6B' }}>15.4%</strong>(이자·배당소득세 14% + 지방소득세 1.4%)입니다.
-            절세 계좌를 활용하면 세금을 크게 줄일 수 있습니다. 본 도구의 <strong style={{ color: '#FF8C3E' }}>세금·절세</strong> 탭에서 6개 계좌의 세후 자산을 한 번에 비교합니다.
+            절세 계좌를 활용하면 세금을 크게 줄일 수 있으니 자신의 상황에 맞는 계좌를 선택해 운용하세요.
           </p>
 
           <div style={{ overflowX: 'auto', marginBottom: 12 }}>
@@ -253,7 +253,7 @@ export default function CompoundPage() {
         {/* ── 6. 인플레이션과 실질 가치 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            💸 인플레이션 — 30년 후 1억의 실질 가치는?
+            💸 인플레이션 — 30년 후 1억의 실질 가치
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             화폐 가치는 시간이 지나면 떨어집니다. 한국은행 목표 인플레이션은 2.0%, 최근 10년 평균은 약 2.5%이고,
@@ -290,14 +290,14 @@ export default function CompoundPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            ※ 실질 가치 = 명목 자산 ÷ (1 + 인플레이션)^년수. 본 도구의 「인플레이션」 탭에서 5단계 프리셋 제공.
+            ※ 실질 가치 = 명목 자산 ÷ (1 + 인플레이션)^년수. 본 계산기 상단의 「물가 상승률」 입력란에서 1.5~4.0% 프리셋으로 시뮬 가능.
           </p>
         </div>
 
         {/* ── 7. 시나리오 비교 — 4가지 수익률 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            📊 4가지 수익률 시나리오 — 보수 4% / 기준 7% / 낙관 10% / 공격 13%
+            📊 수익률 가정 시나리오
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             단일 수익률만 가정하면 미래 자산을 과대 또는 과소평가하기 쉽습니다.
@@ -323,48 +323,7 @@ export default function CompoundPage() {
           </p>
         </div>
 
-        {/* ── 8. 매년 적립액 증액 효과 ── */}
-        <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            📈 매년 적립액 증액 — 임금 인상 반영
-          </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            매년 임금 상승률(평균 3~5%)에 맞춰 적립액도 늘리면 자산은 크게 달라집니다. 본 도구는 매년 증액률을 반영해 시뮬레이션할 수 있습니다.
-          </p>
-
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>증액률</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>총 적립 원금</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>20년 후 자산 (월 30만, 7%)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>증액 0% 대비</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['0% (고정)', '7,200만원',  '약 1억 5,621만',  '—'],
-                  ['3%/년',     '약 9,667만',  '약 1억 9,732만',  '+4,111만 (+26%)'],
-                  ['5%/년',     '약 1억 1,907만','약 2억 2,892만','+7,271만 (+47%)'],
-                  ['7%/년',     '약 1억 4,768만','약 2억 6,824만','+1억 1,203만 (+72%)'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            ※ 초기 월 30만원 · 연 7% · 월복리 가정. 「고급 설정」에서 증액률을 입력하세요.
-          </p>
-        </div>
-
-        {/* ── 9. 복리 주기 차이 ── */}
+        {/* ── 8. 복리 주기 차이 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🔁 복리 주기 — 일·월·분기·연 차이
@@ -413,11 +372,11 @@ export default function CompoundPage() {
               },
               {
                 q: '실질 수익률이란 무엇인가요? (인플레이션)',
-                a: '명목 수익률에서 물가 상승률(인플레이션, 약 2~3%)을 빼야 실제 자산의 구매력을 알 수 있습니다. 예를 들어 연 5% 수익을 올렸어도 물가가 3% 올랐다면 실질 수익률은 약 2%에 불과합니다. 본 계산기의 「인플레이션」 탭에서 Fisher 공식으로 정확히 계산해드립니다.',
+                a: '명목 수익률에서 물가 상승률(인플레이션, 약 2~3%)을 빼야 실제 자산의 구매력을 알 수 있습니다. 예를 들어 연 5% 수익을 올렸어도 물가가 3% 올랐다면 실질 수익률은 약 2%에 불과합니다. 본 계산기는 「물가 상승률」 입력만 채우면 결과 영역에서 Fisher 공식으로 명목·실질 가치를 동시에 표시합니다.',
               },
               {
                 q: '월 복리와 연 복리 중 어느 것이 유리한가요?',
-                a: '복리 계산 주기가 짧을수록 유리합니다. 연 10% 기준으로 연 복리는 10%이지만, 월 복리의 실질 연수익률은 약 10.47%이고 일복리는 10.52%입니다. 30년이 누적되면 약 2~3% 차이가 납니다. 「고급 설정」에서 복리 주기를 비교해보세요.',
+                a: '복리 계산 주기가 짧을수록 유리합니다. 연 10% 기준으로 연 복리는 10%이지만, 월 복리의 실질 연수익률은 약 10.47%이고 일복리는 10.52%입니다. 30년이 누적되면 약 2~3% 차이가 납니다. 본 계산기의 「수익률」 입력 카드 안 복리 주기 선택지(일/월/분기/연)를 바꿔 비교해보세요.',
               },
               {
                 q: '적립식 투자가 거치식보다 유리한 경우는?',
@@ -425,19 +384,15 @@ export default function CompoundPage() {
               },
               {
                 q: '세금은 복리 수익에 어떤 영향을 주나요?',
-                a: '국내 금융소득(이자·배당)은 15.4%(소득세 14% + 지방소득세 1.4%)가 과세됩니다. 연간 금융소득이 2,000만 원을 초과하면 종합소득세 과세 대상이 됩니다. 「세금·절세」 탭에서 ISA(9.9% 분리과세 + 200~400만 비과세)·연금저축·IRP(5.5% + 16.5% 세액공제) 등 절세 계좌를 비교할 수 있습니다.',
+                a: '국내 금융소득(이자·배당)은 15.4%(소득세 14% + 지방소득세 1.4%)가 과세됩니다. 연간 금융소득이 2,000만 원을 초과하면 종합소득세 과세 대상이 됩니다. 절세를 원한다면 ISA(9.9% 분리과세 + 200~400만 비과세)·연금저축·IRP(5.5% + 16.5% 세액공제) 등 한국 6대 절세 계좌를 검토하세요. 본 페이지의 「한국 6대 절세 계좌 비교」 표에서 세율·한도·특징을 확인할 수 있습니다.',
               },
               {
                 q: '「1억 만들려면 월 얼마」를 계산하고 싶어요',
-                a: '「목표 역산」 탭을 사용하세요. 목표 금액·기간·수익률·초기 원금을 입력하면 이진 탐색으로 필요한 월 적립액을 계산하고, 「매우 합리적 / 합리적 / 도전적 / 비현실적」 4단계 배지로 현실성을 평가합니다. 예: 1억 / 10년 / 7% → 약 57만원, 1억 / 20년 / 7% → 약 19만원.',
+                a: '본 계산기의 「목표 금액」 입력란에 1억(10,000만원)을 넣고 기간·수익률·초기 원금을 설정하세요. 결과 영역에 이진 탐색으로 계산된 필요한 월 적립액과 「매우 합리적 / 합리적 / 도전적 / 비현실적」 4단계 현실성 배지가 자동 표시됩니다. 예: 1억 / 10년 / 7% → 약 57만원, 1억 / 20년 / 7% → 약 19만원.',
               },
               {
                 q: '연금저축과 IRP는 어떻게 다른가요?',
                 a: '둘 다 16.5%(총급여 5,500만 이하) 세액공제 + 연금 수령 시 5.5% 분리과세 혜택이 있습니다. 연금저축은 연 600만원 한도로 누구나 가입 가능하고, IRP는 연금저축과 합산 연 900만원 한도로 추가 300만원 세액공제를 받을 수 있습니다. 단, 둘 다 55세 이후 수령 가능하며 중도 해지 시 페널티가 큽니다.',
-              },
-              {
-                q: '매년 적립액을 늘리면 얼마나 차이가 날까요?',
-                a: '매년 3% 증액 시 20년 후 약 +26%, 5% 증액 시 +47%, 7% 증액 시 +72% 자산이 늘어납니다(월 30만·연 7% 기준). 임금 상승률(평균 3~5%)에 맞춰 적립액을 늘리는 것이 인플레이션 헤지에도 유리합니다. 「고급 설정」에서 증액률을 입력해보세요.',
               },
               {
                 q: '시나리오 비교에서 13% 공격적은 너무 낙관적 아닌가요?',

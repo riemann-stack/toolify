@@ -1,4 +1,4 @@
-/* 차 우리기 시간·온도 계산기 — 데이터·계산 유틸 */
+/* 차 우리기 계산기 — 데이터·계산 유틸 */
 
 export type TeaId =
   | 'green' | 'gyokuro' | 'matcha' | 'white' | 'oolong'

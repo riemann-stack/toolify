@@ -281,9 +281,9 @@ export default function ReviewIntervalPage() {
             {[
               { href: '/tools/date/dday',              icon: '📅', name: 'D-day 계산기',           desc: '시험·자격증까지 카운트다운' },
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',          desc: '138억 년 우주 역사를 1년으로' },
-              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 시각화',       desc: '8개 행성 몸무게·나이·하루' },
-              { href: '/tools/edu/sound-speed',        icon: '🔊', name: '음속 시뮬레이터',        desc: '천둥·번개 거리·에코·잔향' },
-              { href: '/tools/edu/circuit-simulator',  icon: '⚡', name: '옴의 법칙 시뮬레이터',   desc: '직렬·병렬 회로 시각화' },
+              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 계산기',       desc: '8개 행성 몸무게·나이·하루' },
+              { href: '/tools/edu/sound-speed',        icon: '🔊', name: '음속 계산기',        desc: '천둥·번개 거리·에코·잔향' },
+              { href: '/tools/edu/circuit-simulator',  icon: '⚡', name: '옴의 법칙 계산기',   desc: '직렬·병렬 회로 시각화' },
               { href: '/tools/date/age',               icon: '🎂', name: '만 나이 계산기',         desc: '법 개정 기준 만 나이' },
             ].map((t, i) => (
               <Link

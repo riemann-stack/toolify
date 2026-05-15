@@ -63,7 +63,7 @@ export default function HashPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔒 해시 생성기 (MD5·SHA·HMAC)
+        🔒 해시 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         텍스트·파일 해시 즉시 생성. <strong style={{ color: 'var(--text)' }}>MD5 · SHA-1 · SHA-256 · SHA-512</strong> 동시 출력 +{' '}

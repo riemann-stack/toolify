@@ -525,7 +525,7 @@ export default function PipeClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/screw" className={s.crossLink}>
-        🔩 나사 규격·탭드릴 계산기 → 배관 부속 나사(PT) 사이즈는 여기로
+        🔩 나사 규격 계산기 → 배관 부속 나사(PT) 사이즈는 여기로
       </Link>
     </div>
   )

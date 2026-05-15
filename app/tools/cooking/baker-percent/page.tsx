@@ -317,8 +317,8 @@ export default function BakerPercentPage() {
               { href: '/tools/cooking/sourdough',     icon: '🍞', name: '사워도우 스타터 계산기', desc: '르방 안정화·피크 시간·급이 스케줄' },
               { href: '/tools/cooking/recipe',        icon: '📐', name: '레시피 비율 계산기',     desc: '인분 수에 맞게 재료 비율 자동' },
               { href: '/tools/cooking/serving',       icon: '🍽️', name: '1인분 분량 계산기',       desc: '파스타·고기·쌀 분량 가이드' },
-              { href: '/tools/cooking/food-storage',  icon: '🧊', name: '식재료 보관 기간 계산기', desc: '냉장·냉동 보관 기간 추적' },
-              { href: '/tools/cooking/substitute',    icon: '🔄', name: '식재료 대체 비율 계산기', desc: '버터·설탕·계란 대체 비율' },
+              { href: '/tools/cooking/food-storage',  icon: '🧊', name: '식재료 보관 계산기', desc: '냉장·냉동 보관 기간 추적' },
+              { href: '/tools/cooking/substitute',    icon: '🔄', name: '식재료 대체 계산기', desc: '버터·설탕·계란 대체 비율' },
               { href: '/tools/unit/weight',           icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
             ].map((t, i) => (
               <Link

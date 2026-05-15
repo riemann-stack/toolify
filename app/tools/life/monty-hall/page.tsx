@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/monty-hall',
-  title: '몬티홀 문제 시뮬레이터 — 3·100문 N문 확장 + 변형 규칙 + 베이즈',
+  title: '몬티홀 시뮬레이터 — 3·100문 N문 확장 + 변형 규칙 + 베이즈',
   description: '직관 배반하는 확률 퍼즐. 3·5·10·100·1000문 N문 확장 시뮬, 4가지 변형 규칙(표준·무작위·몬티 폴·악마 몬티), 1,000회 수렴 그래프, 베이즈 정리 직접 체험.',
   keywords: ['몬티홀문제', '몬티홀시뮬레이터', '바꾸기유지하기', '조건부확률', '베이즈정리', '확률퍼즐', '확률실험', 'N문 확장', '몬티홀 변형', '대수의 법칙', '직관 배반 확률'],
 })
@@ -15,7 +15,7 @@ export default function MontyHallPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🚪 몬티홀 문제 시뮬레이터
+        🚪 몬티홀 시뮬레이터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         3문 표준 + <strong style={{ color: 'var(--text)' }}>N문 확장(3·10·100·1000) + 변형 규칙 시뮬 + 수렴 그래프</strong>로 직관 배반하는 확률을 직접 체험하세요.

@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/buildup',
-  title: '러닝 빌드업 훈련 계산기 — 4가지 프로파일·구간별 페이스표·VDOT 자동·워치 포맷',
+  title: '러닝 빌드업 계산기 — 4가지 프로파일·구간별 페이스표·VDOT 자동·워치 포맷',
   description: '거리·시작 페이스·끝 페이스·구간 입력 → 구간별 빌드업 페이스표·시각화·강도 라벨·안전성 체크. 균등/후반집중/마지막질주/레이스단계 4가지 프로파일, 12개 프리셋, 워치 워크아웃 포맷, 내 루틴 저장.',
   keywords: ['빌드업 러닝', '빌드업 훈련 계산기', '프로그레시브 런', '빌드업 페이스', '5km 빌드업', '10km 빌드업', '하프 빌드업', '풀 마라톤 빌드업', 'VDOT 페이스', 'progression run', '러닝 페이스 그래프'],
 })
@@ -69,7 +69,7 @@ export default function BuildupPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📈 러닝 빌드업 훈련 계산기
+        📈 러닝 빌드업 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         오늘 빌드업, 어떻게 짜지? 거리·페이스·구간·프로파일 입력 → 구간별 페이스표 + 시각화 + 안전성 체크 + 워치 워크아웃 포맷. 12개 검증된 프리셋·내 루틴 저장.

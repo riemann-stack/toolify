@@ -697,7 +697,7 @@ export default function BrewClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/recipe" className={s.crossLink}>
-        📐 레시피 비율·단위 변환 계산기 → 다른 음료·음식 비율 환산은 여기로
+        📐 레시피 비율 계산기 → 다른 음료·음식 비율 환산은 여기로
       </Link>
     </div>
   )

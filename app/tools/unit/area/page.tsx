@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/unit/area',
-  title: '평수 ↔ ㎡ 변환기 — 아파트 평형·전용·공급면적·평형별 방 가이드',
+  title: '평수 변환기 — 아파트 평형·전용·공급면적·평형별 방 가이드',
   description:
     '평수와 제곱미터(㎡) 즉시 변환. 한국 아파트 평형표(11~70평형), 전용·공급·계약면적 차이 시각화, 평형별 방 크기·가구 가이드, 84㎡ = 34평 환산 가이드까지.',
   keywords: [
@@ -20,7 +20,7 @@ export default function AreaPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏠 평수 ↔ ㎡ 변환기
+        🏠 평수 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         평수·㎡ 즉시 변환에 더해 <strong style={{ color: 'var(--text)' }}>한국 아파트 평형표·전용/공급/계약면적·평형별 방 크기 가이드</strong>까지.
@@ -121,7 +121,7 @@ export default function AreaPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/unit/converter',     icon: '📐', name: '통합 단위 변환기',     desc: '9개 카테고리 + 한국 전통 단위' },
+              { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '9개 카테고리 + 한국 전통 단위' },
               { href: '/tools/finance/loan',       icon: '💳', name: '대출이자 계산기',       desc: '주택담보·전세자금 대출' },
               { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기', desc: '월 실수령으로 평수 결정' },
               { href: '/tools/finance/compound',   icon: '📈', name: '복리 계산기',           desc: '청약·전세금 적립 계산' },

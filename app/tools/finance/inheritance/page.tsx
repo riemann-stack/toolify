@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/inheritance',
-  title: '상속·증여세 비교 계산기 2026 — 분배·배우자공제·10년 주기 절세 | Youtil',
+  title: '상속·증여세 계산기 2026 — 분배·배우자공제·10년 주기 절세 | Youtil',
   description: '관계별 증여 공제, 10년 합산, 배우자 상속공제(5억~30억) 정량 시뮬, 상속인별 법정상속분 자동 분배, 분산 증여 시뮬레이션, 부동산·부담부증여 단순 추정까지. 한국 2026년 기준 단순 참고용 도구.',
   keywords: [
     '상속세계산기', '증여세계산기', '상속증여비교', '증여세공제', '상속세공제',
@@ -51,7 +51,7 @@ export default function InheritancePage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏛️ 상속·증여세 비교 계산기
+        🏛️ 상속·증여세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         관계별 공제·10년 합산·<strong style={{ color: 'var(--text)' }}>배우자 상속공제·상속인별 분배·분산 증여 시뮬레이션</strong>까지.

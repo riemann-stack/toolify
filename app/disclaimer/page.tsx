@@ -208,7 +208,7 @@ const DOMAINS: DomainBlock[] = [
     emoji: '🖥️',
     title: '개발자·인코딩·암호',
     color: '#C8FF3E',
-    tools: 'Base64 · JSON · CSS 변환 · 진법 변환 · 해시 생성기 (MD5·SHA·HMAC) · 정규식 테스트기 · YAML ↔ JSON 변환 · URL 인코더/디코더 · cURL 변환기 · HTTP 상태 코드 검색기',
+    tools: 'Base64 · JSON · CSS 변환 · 진법 변환 · 해시 생성기 · 정규식 테스트기 · YAML ↔ JSON 변환 · URL 인코더/디코더 · cURL 변환기 · HTTP 상태 코드 검색기',
     warnings: [
       '본 도구의 해시 알고리즘 중 MD5·SHA-1은 충돌 공격이 알려져 비밀번호 해싱·디지털 서명·SSL 인증서 용도로 사용 금지. 파일 무결성 확인 용도로만 사용하세요.',
       '정규식 테스터의 매칭 패턴은 형식 검증용 어림 패턴이며, 주민번호·카드번호 등 개인정보 검증·저장은 KISA·OWASP 가이드 + 검증 알고리즘(체크섬)이 추가로 필요합니다.',

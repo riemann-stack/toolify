@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/paint',
-  title: '페인트 소요량 계산기 — 벽·천장 페인트 양·구매 조합',
+  title: '페인트 계산기 — 벽·천장 페인트 양·구매 조합',
   description: '방 크기와 칠할 부위로 필요한 페인트 양을 계산합니다. 수성·유성·에나멜·친환경 페인트별 도장 면적, 한국 브랜드 프리셋, 4L+2L 구매 조합 추천.',
   keywords: ['페인트계산기', '페인트소요량', '페인트양계산', '셀프페인트', '수성페인트', '벽페인트', '천장페인트', '페인트견적'],
 })
@@ -18,7 +18,7 @@ export default function PaintPage() {
         인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎨 페인트 소요량 계산기
+        🎨 페인트 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         방 크기·천장 높이·칠할 부위(벽/천장/문/창틀)를 입력하면 한국 표준 페인트 기준 <strong style={{ color: 'var(--text)' }}>필요 페인트 양과 시판 용량 구매 조합</strong>을 계산합니다.
@@ -280,8 +280,8 @@ export default function PaintPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 소요량 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
-              { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',    desc: '아파트 면적 단위 변환' },
+              { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
+              { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',    desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/length',        icon: '📏', name: '길이 변환기',          desc: 'cm·m·inch·ft 변환' },
               { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',     desc: '페인트 가성비 단가 비교' },
             ].map((t, i) => (
@@ -305,7 +305,7 @@ export default function PaintPage() {
             ))}
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, textAlign: 'center', fontStyle: 'italic' }}>
-            🚧 곧 출시 예정: 바닥재 소요량 계산기, 타일 소요량 계산기
+            🚧 곧 출시 예정: 바닥재 계산기, 타일 소요량 계산기
           </p>
         </div>
 

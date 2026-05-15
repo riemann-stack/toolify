@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/art/fov',
-  title: '카메라 화각 (35mm 환산) 계산기 — 크롭 팩터·AOV·시야 너비·렌즈 가이드',
+  title: '카메라 화각 계산기 — 크롭 팩터·AOV·시야 너비·렌즈 가이드',
   description: '풀프레임·APS-C·M4/3·1인치·스마트폰 7종 센서 × 4-800mm 초점거리 × 거리 기반 35mm 환산 + 수평·수직·대각 화각(AOV) 계산. 등가 조리개·500룰·인기 렌즈 8개 비교 SVG·10 용도별(풍경/인물/스트리트/스포츠/야생/매크로/이벤트/별/제품/브이로그) 추천 렌즈 가이드 4탭.',
   keywords: [
     '카메라 화각 계산기', '35mm 환산', '크롭 팩터', '풀프레임 환산',
@@ -61,7 +61,7 @@ export default function FovPage() {
         예술·창작 · 사진
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📷 카메라 화각 (35mm 환산) 계산기
+        📷 카메라 화각 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         풀프레임·APS-C(×1.5/×1.6)·M4/3·1인치·스마트폰 <strong style={{ color: 'var(--text)' }}>7종 센서</strong> × 4-800mm 초점거리.{' '}

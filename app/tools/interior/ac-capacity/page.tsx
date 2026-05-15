@@ -324,10 +324,10 @@ export default function AcCapacityPage() {
             {[
               { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피' },
               { href: '/tools/interior/lighting',      icon: '💡', name: '조명 밝기 계산기',           desc: '공간별 권장 루멘·조명 개수' },
-              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 소요량 계산기',         desc: '벽지 롤 수·시공 비용' },
-              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 소요량 계산기',       desc: '벽·천장 페인트 양' },
+              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 계산기',         desc: '벽지 롤 수·시공 비용' },
+              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 계산기',       desc: '벽·천장 페인트 양' },
               { href: '/tools/interior/curtain-blind', icon: '🪟', name: '커튼·블라인드 사이즈',       desc: '창문 사이즈로 추천 사이즈' },
-              { href: '/tools/unit/area',              icon: '🏠', name: '평수 ↔ ㎡ 변환기',          desc: '아파트 면적 단위 변환' },
+              { href: '/tools/unit/area',              icon: '🏠', name: '평수 변환기',          desc: '아파트 면적 단위 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

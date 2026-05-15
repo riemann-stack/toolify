@@ -672,7 +672,7 @@ export default function AuctionClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/real-estate" className={s.crossLink}>
-        🏘️ 부동산 투자 수익률 계산기 → 매매·임대·레버리지 자기자본 수익률
+        🏘️ 부동산 수익률 계산기 → 매매·임대·레버리지 자기자본 수익률
       </Link>
     </div>
   )

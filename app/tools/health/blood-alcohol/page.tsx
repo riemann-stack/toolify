@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
-  title: '혈중알코올 소멸 계산기 — BAC·운전 가능 시각·다음날 아침·면허정지 해소 | Youtil',
+  title: '혈중알코올 계산기 — BAC·운전 가능 시각·다음날 아침·면허정지 해소 | Youtil',
   description: '체중·음주량으로 혈중알코올농도(BAC) 추정. 면허정지·취소 해소 시각, 다음날 아침 출근 BAC 체크, 1차·2차·3차 누적 음주 시뮬, ALDH2 분해 속도 보정, 약물·알코올 위험. Widmark 공식 기반.',
   keywords: [
     '혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산',
@@ -20,7 +20,7 @@ export default function BloodAlcoholPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍺 혈중알코올 소멸 계산기
+        🍺 혈중알코올 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         BAC 추정·<strong style={{ color: 'var(--text)' }}>다음날 아침 출근 운전 체크·1차·2차·3차 누적·ALDH2 분해 속도·약물 상호작용</strong>까지.
@@ -351,7 +351,7 @@ export default function BloodAlcoholPage() {
         }}>
           <p style={{ fontSize: 14, fontWeight: 700, color: '#FF6B6B', marginBottom: 10 }}>⚖️ 법적 면책 (강화)</p>
           <p style={{ marginBottom: 8 }}>
-            본 혈중알코올 소멸 계산기는 <strong style={{ color: 'var(--text)' }}>음주 예방 교육 참고용 도구</strong>이며, 법적 면책·판단 근거가 되지 않습니다.
+            본 혈중알코올 계산기는 <strong style={{ color: 'var(--text)' }}>음주 예방 교육 참고용 도구</strong>이며, 법적 면책·판단 근거가 되지 않습니다.
           </p>
           <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
             <li>±20~30% 오차 가능 (Widmark 공식 한계)</li>

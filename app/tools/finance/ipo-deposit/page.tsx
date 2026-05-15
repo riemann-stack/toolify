@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/ipo-deposit',
-  title: '공모주 청약 증거금 계산기 — 비례 OO주 받으려면 얼마? 균등·청약단위·5사6입 자동',
+  title: '공모주 증거금 계산기 — 비례 OO주 받으려면 얼마? 균등·청약단위·5사6입 자동',
   description: '비례경쟁률·공모가·증거금률·청약단위 입력 → 필요 증거금 자동. 역산(증거금→예상 주수), 시나리오 표, 5사6입, 청약 한도 경고, 균등배정 추첨 안내, 환불금 계산, 청약 종목 메모(D-day)까지.',
   keywords: ['공모주 증거금 계산기', '비례경쟁률 계산', '공모주 1주 받으려면', '청약 증거금 역산', '5사6입', '균등배정 추첨', '청약단위', '공모주 환불금', '청약 한도', '한국 공모주', 'IPO 증거금'],
 })
@@ -69,7 +69,7 @@ export default function IpoDepositPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 공모주 청약 증거금 계산기
+        💰 공모주 증거금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         비례 1주 받으려면 얼마? 1,000만 원 넣으면 몇 주? 비례·균등·청약단위·5사6입·한도까지 한 번에. 시나리오 표·청약 종목 메모(D-day)·환불금 자동 계산.

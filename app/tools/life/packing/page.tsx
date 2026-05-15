@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/life/packing',
-  title: '여행 옷·짐 계산기 — 일수·기온·세탁 → 카테고리별 개수 + 체크리스트',
+  title: '여행 짐 계산기 — 일수·기온·세탁 → 카테고리별 개수 + 체크리스트',
   description: '여행 일수·기온·세탁 가능·활동량·사진 중요도로 옷 개수 자동 계산. 최소/넉넉 2 버전 + 옷·세면·약·전자기기·서류 통합 체크리스트 + 6 시나리오 (신혼·동남아·유럽·골프·캠핑·아기) + 캐리어 추천.',
   keywords: ['여행 옷 개수', '여행 짐 싸기', '패킹 리스트', '캐리어 사이즈', '5박 옷 몇 벌', '한 달 살기', '여행 체크리스트', '항공사 수하물', '신혼여행 패킹', '아기 동반 여행'],
 })
@@ -55,7 +55,7 @@ export default function PackingPage() {
         생활·재미
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧳 여행 옷·짐 계산기
+        🧳 여행 짐 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         일수·기온·세탁·활동량·사진 중요도 → <strong style={{ color: 'var(--text)' }}>카테고리별 옷 개수</strong> +

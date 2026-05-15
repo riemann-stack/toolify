@@ -134,6 +134,116 @@
   line-height: 1.6;
 }
 
+/* ── 익힘 단계 — 입력용 컴팩트 (이미지 X) ── */
+.donenessCompactGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.donenessCompact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .15s;
+  min-height: 56px;
+}
+@media (hover: hover) {
+  .donenessCompact:hover { border-color: var(--accent); }
+}
+.donenessCompactActive {
+  background: rgba(200, 255, 62, 0.06);
+  border-color: var(--accent);
+}
+.donenessCompactLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.donenessCompactActive .donenessCompactLabel { color: var(--accent); }
+.donenessCompactTime {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: -0.2px;
+}
+.donenessCompactActive .donenessCompactTime { color: var(--accent); }
+@media (max-width: 480px) {
+  .donenessCompactGrid { gap: 4px; }
+  .donenessCompact { padding: 8px 4px; min-height: 48px; border-radius: 8px; }
+  .donenessCompactLabel { font-size: 11px; }
+  .donenessCompactTime { font-size: 11px; }
+}
+
+/* ── 추가 옵션 — 한 줄 레이아웃 ── */
+.optionCompact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.optionRowInline {
+  display: grid;
+  grid-template-columns: 60px 1fr 70px;
+  align-items: center;
+  gap: 10px;
+}
+.optionLabel {
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.optionValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: right;
+  white-space: nowrap;
+}
+.sliderInline {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.sliderInline::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.sliderInline::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+@media (max-width: 480px) {
+  .optionRowInline { grid-template-columns: 50px 1fr 60px; gap: 8px; }
+  .optionLabel { font-size: 12px; }
+  .optionValue { font-size: 12px; }
+}
+
 /* pill 공통 */
 .pillRow {
   display: flex;

@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/savings',
-  title: '월 저축가능 금액 계산기 — 저축률 진단 + 6 항아리 + 청년도약·ISA·연금저축',
+  title: '월 저축 계산기 — 저축률 진단 + 6 항아리 + 청년도약·ISA·연금저축',
   description: '월 수입·고정비·변동비 입력 → 저축액·저축률 자동 진단. 한국 가구 평균·연령대 권장 비교, Sharon Lechter 6 항아리 분배, 목표 금액 역산(복리), 청년도약계좌·ISA·연금저축·IRP 절세 시뮬.',
   keywords: ['저축률 계산', '월 저축 가능 금액', '한국 평균 저축률', '6 항아리 모델', '청년도약계좌', 'ISA 계좌', '연금저축', 'IRP', '재무 진단', '목표 금액 역산'],
 })
@@ -55,7 +55,7 @@ export default function SavingsPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 월 저축가능 금액 계산기
+        💰 월 저축 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         월 수입·고정비·변동비 → <strong style={{ color: 'var(--text)' }}>저축액·저축률 자동 진단</strong> +

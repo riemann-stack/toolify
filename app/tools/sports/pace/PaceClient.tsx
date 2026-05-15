@@ -519,7 +519,7 @@ export default function PaceClient() {
           <a href="/tools/sports/race-predictor" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🎯</span>
             <span>
-              <strong>마라톤 기록 예측 계산기</strong>
+              <strong>마라톤 기록 계산기</strong>
               <span className={styles.crossToolSub}>VDOT·Riegel 공식 기록 예측</span>
             </span>
           </a>

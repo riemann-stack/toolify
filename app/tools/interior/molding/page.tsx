@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/interior/molding',
-  title: '몰딩 길이 계산기 — 천장 몰딩·걸레받이·띠몰딩 개수',
+  title: '몰딩 계산기 — 천장 몰딩·걸레받이·띠몰딩 개수',
   description: '방 둘레로 천장 몰딩, 걸레받이, 띠몰딩 필요 길이와 개수를 계산합니다. 한국 표준 2.4m·3.6m 몰딩, 모서리 45도 절단 여유, MDF·PVC·우드 재질별 비용.',
   keywords: ['몰딩계산기', '걸레받이길이', '천장몰딩개수', '몰딩소요량', 'MDF몰딩', 'PVC몰딩', '몰딩비용', '몰딩45도절단'],
 })
@@ -18,7 +18,7 @@ export default function MoldingPage() {
         인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📏 몰딩 길이 계산기
+        📏 몰딩 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         평수·가로세로·둘레만 입력하면 <strong style={{ color: 'var(--text)' }}>천장 몰딩·걸레받이·띠몰딩·문 프레임</strong>에 필요한
@@ -274,9 +274,9 @@ export default function MoldingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피' },
-              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 소요량 계산기',         desc: '벽지 롤 수·시공 비용' },
-              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 소요량 계산기',       desc: '벽·천장 페인트 양' },
-              { href: '/tools/interior/flooring',      icon: '🪵', name: '바닥재 소요량 계산기',       desc: '마루·장판·데코타일 박스 수' },
+              { href: '/tools/interior/wallpaper',     icon: '🧱', name: '도배 계산기',         desc: '벽지 롤 수·시공 비용' },
+              { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 계산기',       desc: '벽·천장 페인트 양' },
+              { href: '/tools/interior/flooring',      icon: '🪵', name: '바닥재 계산기',       desc: '마루·장판·데코타일 박스 수' },
               { href: '/tools/interior/curtain-blind', icon: '🪟', name: '커튼·블라인드 사이즈',       desc: '창문 사이즈로 추천 사이즈' },
               { href: '/tools/unit/length',            icon: '📏', name: '길이 변환기',                desc: 'cm·m·inch·ft 변환' },
             ].map((t, i) => (

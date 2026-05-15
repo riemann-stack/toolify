@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/art/paint-mix',
-  title: '물감·잉크 혼합 비율 계산기 — 색 섞기 시뮬레이터 + 분량 환산 + 30+ 레시피',
+  title: '물감 혼합 계산기 — 색 섞기 시뮬레이터 + 분량 환산 + 30+ 레시피',
   description: '수채·아크릴·유화·잉크·푸드컬러·레진 안료 혼합 비율 계산. Subtractive/Additive/RYB 3 모델 + ml/g 분량 환산 + 컬러 매칭(ΔE) + 살색·황토·청회색 등 30+ 인기 레시피 + 12색 색환 가이드 4탭.',
   keywords: [
     '물감 혼합', '물감 비율 계산기', '색 만들기', '잉크 섞기', '잉크 혼합 비율',
@@ -63,7 +63,7 @@ export default function PaintMixPage() {
         예술·창작 · 디자인·미술
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎨 물감·잉크 혼합 비율 계산기
+        🎨 물감 혼합 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         2~4개 색을 비율대로 섞으면 어떤 색이 나올까? <strong style={{ color: 'var(--text)' }}>Subtractive(물감)·Additive(빛)·RYB(전통)</strong> 3 모델 +{' '}
@@ -385,7 +385,7 @@ export default function PaintMixPage() {
         </Link>
         <Link href="/tools/unit/converter" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>통합 단위 변환기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>단위 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             ml·g·큰술·당도·농도 환산
           </p>

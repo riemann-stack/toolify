@@ -20,7 +20,7 @@ export default function RecipePage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📐 레시피 비율·단위 변환 계산기
+        📐 레시피 비율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         인분 수 자동 계산, 큰술↔g↔ml 단위 환산, 양념 보정, 레시피 저장, 장보기 리스트까지 한 번에. 인기 한식·양식·일식·디저트 프리셋 14종 + 50여 재료 밀도 데이터.
@@ -248,8 +248,8 @@ export default function RecipePage() {
               { href: '/tools/cooking/baker-percent',    icon: '🥖', name: '베이커 퍼센트 계산기',    desc: '제빵 정밀 비율·수분율' },
               { href: '/tools/cooking/baking-schedule',  icon: '🍞', name: '제빵 타임라인 계산기',    desc: '발효·굽기 일정 자동' },
               { href: '/tools/cooking/serving',          icon: '🍽️', name: '1인분 분량 계산기',         desc: '재료별 적정 분량' },
-              { href: '/tools/cooking/food-storage',     icon: '🧊', name: '식재료 보관 기간 계산기',   desc: '냉장·냉동 유통기한' },
-              { href: '/tools/cooking/substitute',       icon: '🔄', name: '식재료 대체 비율 계산기',   desc: '버터·설탕·계란 대체' },
+              { href: '/tools/cooking/food-storage',     icon: '🧊', name: '식재료 보관 계산기',   desc: '냉장·냉동 유통기한' },
+              { href: '/tools/cooking/substitute',       icon: '🔄', name: '식재료 대체 계산기',   desc: '버터·설탕·계란 대체' },
               { href: '/tools/unit/weight',              icon: '⚖️', name: '무게 변환기',              desc: 'g·kg·oz·lb 단위' },
             ].map((tool, i) => (
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>

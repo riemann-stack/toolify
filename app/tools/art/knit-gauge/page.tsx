@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/art/knit-gauge',
-  title: '뜨개질 게이지(코·단) 계산기 — 패턴 변환·사이즈별 코 수·늘림 줄임·실 양',
+  title: '뜨개질 게이지 계산기 — 패턴 변환·사이즈별 코 수·늘림 줄임·실 양',
   description: '10cm² 게이지 입력으로 패턴 코·단 수 변환, 한국 여성·남성·키즈 사이즈별 코 계산, 늘림·줄임 균등 분배, 실 양·바늘 호수 추천. 대바늘·코바늘·모자·양말·스웨터·담요 4탭.',
   keywords: [
     '뜨개질 게이지', '게이지 계산기', '코 수 계산', '단 수 계산', '게이지 스와치',
@@ -62,7 +62,7 @@ export default function KnitGaugePage() {
         예술·창작 · 디자인·미술
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧶 뜨개질 게이지(코·단) 계산기
+        🧶 뜨개질 게이지 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         10cm² 게이지 입력으로 <strong style={{ color: 'var(--text)' }}>패턴 코·단 수 변환</strong>,{' '}
@@ -410,7 +410,7 @@ export default function KnitGaugePage() {
         </Link>
         <Link href="/tools/unit/converter" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>통합 단위 변환기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>단위 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             cm·인치·g·온스 환산
           </p>

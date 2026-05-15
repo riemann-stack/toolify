@@ -425,7 +425,7 @@ export default function CustomsClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/unit/size" className={s.crossLink}>
-        🛍️ 해외 직구 사이즈 변환기 → US·EU·UK 한국 사이즈 환산
+        🛍️ 사이즈 변환기 → US·EU·UK 한국 사이즈 환산
       </Link>
     </div>
   )

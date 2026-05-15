@@ -245,10 +245,10 @@ export default function ChordPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '코드를 다른 키로 즉시 이동' },
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수 음정 변환기',    desc: 'Hz ↔ 음이름 변환' },
+              { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '코드를 다른 키로 즉시 이동' },
+              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',    desc: 'Hz ↔ 음이름 변환' },
               { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정' },
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임 계산기', desc: '딜레이·리버브 ms 값 계산' },
+              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '딜레이·리버브 ms 값 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

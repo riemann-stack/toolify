@@ -410,8 +410,8 @@ export default function GolfHandicapPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/sports/golf-distance', icon: '🎯', name: '골프 클럽 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
-              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 라운딩 비용 계산기',  desc: '그린피·캐디·1인당 정산' },
+              { href: '/tools/sports/golf-distance', icon: '🎯', name: '골프 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
+              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 비용 계산기',  desc: '그린피·캐디·1인당 정산' },
               { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 라운드까지' },
               { href: '/tools/finance/car-cost',   icon: '🚗', name: '자동차 유지비 계산기',    desc: '골프장 왕복 유류비' },
               { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이 계산기',         desc: '내기 골프 정산·N빵' },

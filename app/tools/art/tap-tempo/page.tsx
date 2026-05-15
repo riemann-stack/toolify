@@ -172,8 +172,8 @@ export default function TapTempoPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임',     desc: '측정한 BPM으로 딜레이·리버브 ms 계산' },
-              { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포·전조 계산기', desc: '카포 위치별 코드 변환·편곡' },
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수 음정 변환기',   desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '카포 위치별 코드 변환·편곡' },
+              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',   desc: 'Hz ↔ 음정·MIDI·파장' },
               { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',      desc: '연습 루틴·집중 관리' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

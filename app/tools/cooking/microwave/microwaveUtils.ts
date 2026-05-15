@@ -1,4 +1,4 @@
-/* 전자레인지 출력·시간 환산 계산기 — 데이터·계산 유틸 */
+/* 전자레인지 출력 환산기 계산기 — 데이터·계산 유틸 */
 
 export type StartTemp = 'frozen' | 'fridge' | 'room'
 

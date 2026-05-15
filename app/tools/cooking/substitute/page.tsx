@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/substitute',
-  title: '식재료 대체 비율 계산기 — 버터·설탕·계란·생크림·한국 식재료 50종+ | Youtil',
+  title: '식재료 대체 계산기 — 버터·설탕·계란·생크림·한국 식재료 50종+ | Youtil',
   description: '베이킹·요리 식재료 대체 비율 자동 계산. 버터·설탕·계란·생크림·한국 식재료(참기름·고추장·된장·간장·고춧가루·청양고추 등 14종+) 50종+, 비건·글루텐프리 옵션, 맛·질감 차이까지.',
   keywords: [
     '식재료대체', '버터대신오일', '설탕대신꿀', '생크림대체',
@@ -20,7 +20,7 @@ export default function SubstitutePage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔄 식재료 대체 비율 계산기
+        🔄 식재료 대체 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         버터·설탕·계란·생크림·<strong style={{ color: 'var(--text)' }}>한국 식재료(참기름·고추장·된장·간장·고춧가루 등 14종+) 50종+ 대체 비율</strong>을 즉시 계산.
@@ -364,7 +364,7 @@ export default function SubstitutePage() {
         <div style={{ background: 'rgba(255,140,62,0.04)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '16px 20px' }}>
           <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 10 }}>⚖️ 면책 조항</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
-            본 식재료 대체 비율 계산기는 <strong style={{ color: 'var(--text)' }}>일반 요리 가이드</strong>입니다. 영양 자문 도구가 아닙니다.
+            본 식재료 대체 계산기는 <strong style={{ color: 'var(--text)' }}>일반 요리 가이드</strong>입니다. 영양 자문 도구가 아닙니다.
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 10 }}>
             <li>정확한 영양 성분은 식약처 식품안전나라 권장</li>
@@ -388,7 +388,7 @@ export default function SubstitutePage() {
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',     desc: '인분 변경 시 재료 비율 조정' },
               { href: '/tools/cooking/serving', icon: '🍽️', name: '1인분 분량 계산기',       desc: '쌀·고기·파스타 분량' },
               { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',       desc: 'g·ml·컵·큰술 즉시 변환' },
-              { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',   desc: '식품 안전 가이드' },
+              { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',   desc: '식품 안전 가이드' },
               { href: '/tools/cooking/ramen',   icon: '🍜', name: '라면 물양 계산기',        desc: '한국 15종 라면 물양' },
               { href: '/tools/cooking/baker-percent', icon: '🥖', name: '베이커 퍼센트',     desc: '제빵 배합비' },
             ].map(t => (

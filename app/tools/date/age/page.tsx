@@ -315,8 +315,8 @@ export default function AgePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',     desc: '우주 138억 년을 1년으로 압축' },
-              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 시각화',  desc: '8행성 크기·중력·하루 비교' },
-              { href: '/tools/date/dday',              icon: '📅', name: 'D-day 계산기·일정 관리', desc: '여러 D-day·페이스·두 날짜 사이' },
+              { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 계산기',  desc: '8행성 크기·중력·하루 비교' },
+              { href: '/tools/date/dday',              icon: '📅', name: 'D-Day 계산기', desc: '여러 D-day·페이스·두 날짜 사이' },
               { href: '/tools/date/lunar',             icon: '🌙', name: '음양력 변환기',     desc: '띠·세시풍속 정확히 확인' },
               { href: '/tools/date/military',          icon: '🎖️', name: '군 전역일 계산기',  desc: '입대일·전역일·복무율' },
               { href: '/tools/date/life-time',         icon: '⏳', name: '인생 시간 계산기',  desc: '남은 인생을 구체적으로' },

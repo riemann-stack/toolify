@@ -5,9 +5,9 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/unit/converter',
-  title: '통합 단위 변환기 — 길이·무게·부피·온도·압력·토크·에너지·당도·농도·기울기 14종',
+  title: '단위 변환기 — 길이·무게·부피·온도·압력·토크·에너지·당도·농도·기울기 14종',
   description:
-    '14개 카테고리 통합 단위 변환기. 길이·면적·무게·부피·온도·시간·속도·압력(kgf/cm²)·토크(N·m·kgf·m·lbf·ft)·에너지(J·kcal·kWh·BTU)·데이터 + 당도·염도(Brix·g/L·ppm·염%)·농도(%·ppm·ppb·mg/L)·각도·기울기(도·%·라디안·1/n 구배·물매) + 한국 전통 단위(자·척·근·돈·평·홉·되) 한 번에 변환.',
+    '14개 카테고리 단위 변환기. 길이·면적·무게·부피·온도·시간·속도·압력(kgf/cm²)·토크(N·m·kgf·m·lbf·ft)·에너지(J·kcal·kWh·BTU)·데이터 + 당도·염도(Brix·g/L·ppm·염%)·농도(%·ppm·ppb·mg/L)·각도·기울기(도·%·라디안·1/n 구배·물매) + 한국 전통 단위(자·척·근·돈·평·홉·되) 한 번에 변환.',
   keywords: [
     '단위 변환기', '단위 변환', '길이 변환', '무게 변환', '온도 변환',
     '시간 변환', '면적 변환', 'cm to inch', 'kg to lb', '평 ㎡',
@@ -24,7 +24,7 @@ export default function ConverterPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📐 통합 단위 변환기
+        📐 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 + <strong style={{ color: 'var(--text)' }}>당도·염도(Brix)</strong>·<strong style={{ color: 'var(--text)' }}>농도(ppm·mg/L)</strong>·<strong style={{ color: 'var(--text)' }}>각도·기울기(% 경사·1/n 구배·물매)</strong> 14개 카테고리를 한 곳에서.{' '}
@@ -287,7 +287,7 @@ export default function ConverterPage() {
               },
               {
                 q: '평(坪)은 정확히 몇 제곱미터인가요?',
-                a: '<strong>1평 = 400/121 ㎡ ≈ 3.305785㎡</strong>입니다 (1평 = 6자×6자 = 36 제곱자). 일반적으로 3.3㎡로 어림하지만 정확히는 3.3057㎡로 약간 큽니다. 한국 부동산에서 자주 쓰는 환산 — 84㎡ ≈ 25.4평, 59㎡ ≈ 17.85평. 더 자세한 아파트 평형 환산은 <a href="/tools/unit/area" style="color: var(--accent); text-decoration: underline">평수 ↔ ㎡ 변환기</a>를 활용하세요.',
+                a: '<strong>1평 = 400/121 ㎡ ≈ 3.305785㎡</strong>입니다 (1평 = 6자×6자 = 36 제곱자). 일반적으로 3.3㎡로 어림하지만 정확히는 3.3057㎡로 약간 큽니다. 한국 부동산에서 자주 쓰는 환산 — 84㎡ ≈ 25.4평, 59㎡ ≈ 17.85평. 더 자세한 아파트 평형 환산은 <a href="/tools/unit/area" style="color: var(--accent); text-decoration: underline">평수 변환기</a>를 활용하세요.',
               },
               {
                 q: '한국 1리와 일본 1리가 다른가요?',
@@ -388,10 +388,10 @@ export default function ConverterPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/unit/area',          icon: '🏠', name: '평수 ↔ ㎡ 변환기',     desc: '아파트 평형·전용·공급면적' },
-              { href: '/tools/unit/size',          icon: '🛍️', name: '해외 직구 사이즈 변환기', desc: '의류·신발 US·EU → 한국' },
+              { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',     desc: '아파트 평형·전용·공급면적' },
+              { href: '/tools/unit/size',          icon: '🛍️', name: '사이즈 변환기', desc: '의류·신발 US·EU → 한국' },
               { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh + 비행기 반입' },
-              { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 단위 변환기',       desc: 'km/L·L/100km·mpg' },
+              { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 변환기',       desc: 'km/L·L/100km·mpg' },
               { href: '/tools/unit/tire-pressure', icon: '🛞', name: '타이어 공기압 변환기',   desc: 'psi·kPa·bar + 차량별' },
               { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기',   desc: '시급·근무시간 환산' },
             ].map(t => (

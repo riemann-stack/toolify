@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/finance/rent-jeonse',
-  title: '월세 vs 전세 비용 비교 계산기 — 대출이자·기회비용·세액공제·손익분기점 시뮬 (2026년)',
+  title: '월세·전세 비교 계산기 — 대출이자·기회비용·세액공제·손익분기점 시뮬 (2026년)',
   description:
     '전세 / 월세 / 반전세 3옵션을 동시에 비교하는 한국 임대 의사결정 도구. 전세대출 이자·보증금 기회비용·월세 세액공제·HUG 보증보험료까지 자동 반영. 누적 비용 그래프로 손익분기점 시각화, 전세사기 위험 점수 7항목, 16개 도시별 평균 시세, 자기자본 ROI 시뮬.',
   keywords: [
@@ -50,7 +50,7 @@ export default function RentJeonsePage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏠 월세 vs 전세 비용 비교 계산기
+        🏠 월세·전세 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         같은 매물을 전세 / 월세 / 반전세로 살 때 누적 비용을 정확하게 비교. 대출이자·보증금 기회비용·월세 세액공제·전세대출 소득공제·HUG 보증보험료까지 한국 임대 시장의 모든 변수를 반영. 손익분기점 그래프와 전세사기 위험 점수로 의사결정 자신감을 높이세요.
@@ -278,8 +278,8 @@ export default function RentJeonsePage() {
           <h2 style={sectionTitle}>관련 도구</h2>
           <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
             <li><Link href="/tools/finance/loan" style={{ color: 'var(--accent)' }}>대출이자 계산기</Link> — 전세자금대출 원리금균등 시뮬</li>
-            <li><Link href="/tools/finance/real-estate" style={{ color: 'var(--accent)' }}>부동산 투자 수익률 계산기</Link> — 매수 의사결정 시</li>
-            <li><Link href="/tools/finance/savings" style={{ color: 'var(--accent)' }}>월 저축가능 금액 계산기</Link> — 월세 절약분 저축 시뮬</li>
+            <li><Link href="/tools/finance/real-estate" style={{ color: 'var(--accent)' }}>부동산 수익률 계산기</Link> — 매수 의사결정 시</li>
+            <li><Link href="/tools/finance/savings" style={{ color: 'var(--accent)' }}>월 저축 계산기</Link> — 월세 절약분 저축 시뮬</li>
             <li><Link href="/tools/finance/compound" style={{ color: 'var(--accent)' }}>복리 계산기</Link> — 보증금 미사용 시 장기 수익</li>
             <li><Link href="/tools/finance/freelance-tax" style={{ color: 'var(--accent)' }}>프리랜서 종소세 계산기</Link> — 사업소득자 월세 세액공제</li>
           </ul>

@@ -275,7 +275,7 @@ export default function BoltWrenchClient() {
 
           {/* 크로스링크 */}
           <Link href="/tools/interior/screw" className={s.crossLink}>
-            🔩 나사 규격·탭드릴 계산기 → 탭홀·관통홀·인치↔mm 변환은 여기로
+            🔩 나사 규격 계산기 → 탭홀·관통홀·인치↔mm 변환은 여기로
           </Link>
 
           <div className={s.warnCard}>

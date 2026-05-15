@@ -323,7 +323,7 @@ export default function MilitaryPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/date/dday',      icon: '📅', name: 'D-day 계산기·일정 관리', desc: '두 날짜 사이·페이스 통합' },
+              { href: '/tools/date/dday',      icon: '📅', name: 'D-Day 계산기', desc: '두 날짜 사이·페이스 통합' },
               { href: '/tools/date/age',       icon: '🎂', name: '만 나이 계산기',    desc: '법 개정 기준 만 나이' },
               { href: '/tools/date/jet-lag',   icon: '✈️', name: '시차 적응 계산기',  desc: '여행 시차 적응 일정' },
               { href: '/tools/date/life-time', icon: '⏳', name: '생애 시간 계산기',  desc: '기대수명 기준 시간 환산' },

@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
-  title: '영양제 성분 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전 | Youtil',
+  title: '영양제 중복 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전 | Youtil',
   description: '50종 영양소 자동 합산, 권장량·상한 비교, 오메가3 EPA+DHA 합산, 약물 상호작용(항응고제·갑상선약·항생제 등) 체크, 임산부·고령자·청소년 안전 모드까지. 한국 식약처 기준.',
   keywords: [
     '영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량',
@@ -37,7 +37,7 @@ export default function SupplementPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💊 영양제 성분 체크 계산기
+        💊 영양제 중복 체크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         50종 영양소 자동 합산·권장량/상한 비교 + <strong style={{ color: 'var(--text)' }}>오메가3 EPA+DHA 합산·약물 상호작용·임산부·고령자 안전 체크</strong>까지.
@@ -365,7 +365,7 @@ export default function SupplementPage() {
         }}>
           <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C8C', marginBottom: 10 }}>⚕️ 면책 조항 (강화)</p>
           <p style={{ marginBottom: 8 }}>
-            본 영양제 성분 체크 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다.
+            본 영양제 중복 체크 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다.
             의학적 진단·처방·복용 권유 도구가 아닙니다.
           </p>
           <ul style={{ paddingLeft: 18, marginBottom: 10 }}>

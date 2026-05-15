@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/dday',
-  title: 'D-day 계산기·일정 관리 — 카운트다운, 진행률, 영업일, 페이스 계산',
+  title: 'D-Day 계산기 — 카운트다운, 진행률, 영업일, 페이스 계산',
   description:
     '여러 D-day를 저장·관리하고 남은 일수, 평일·영업일, 진행률, 일일 페이스까지 계산합니다. 시험·여행·결혼·마라톤·금연 D+까지 한 번에. 한국 공휴일 자동 반영(2026~2030).',
   keywords: [
@@ -21,7 +21,7 @@ export default function DdayPage() {
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📅 D-day 계산기·일정 관리
+        📅 D-Day 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         목표 날짜 카운트다운, 진행률, 평일·영업일, 페이스 계산, 반복 D-day까지 한 번에. 여러 D-day를 브라우저에 저장해 관리하고 한국 공휴일을 자동 반영합니다.

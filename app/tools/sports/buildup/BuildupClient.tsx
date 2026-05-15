@@ -497,7 +497,7 @@ export default function BuildupClient() {
               </div>
 
               <div className={s.warnCard}>
-                <p>📊 더 정확한 분석 → <Link href="/tools/sports/race-predictor" className={s.link}>마라톤 기록 예측 계산기</Link></p>
+                <p>📊 더 정확한 분석 → <Link href="/tools/sports/race-predictor" className={s.link}>마라톤 기록 계산기</Link></p>
                 <p>🏃 인터벌·역치 풀 가이드 → <Link href="/tools/sports/interval-training" className={s.link}>인터벌 훈련 계산기</Link></p>
               </div>
             </>

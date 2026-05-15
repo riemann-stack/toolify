@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/tea',
-  title: '차 우리기 시간·온도 계산기 — 녹차·말차·우롱·보이·홍차 9종',
+  title: '차 우리기 계산기 — 녹차·말차·우롱·보이·홍차 9종',
   description: '녹차·옥로·말차·백차·우롱·홍차·보이·허브·루이보스 9종 차별 권장 온도·시간·비율. 다탕 우림 스케줄(세차 포함), 냉침 모드, 카페인 비교, 떫음 위험 게이지까지 4탭.',
   keywords: ['차 우리기', '녹차 온도', '홍차 시간', '보이차 세차', '말차 비율', '우롱차 다탕', '냉침차 만들기', '허브티 시간', '카페인 함량', '차 종류'],
 })
@@ -55,7 +55,7 @@ export default function TeaPage() {
         요리·식품
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍵 차 우리기 시간·온도 계산기
+        🍵 차 우리기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         <strong style={{ color: 'var(--text)' }}>녹차·옥로·말차·백차·우롱·홍차·보이·허브·루이보스 9종</strong> 차별
@@ -306,7 +306,7 @@ export default function TeaPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/cooking/brew" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>☕</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>커피 브루잉 비율 계산기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>커피 브루잉 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             6 추출법 + 푸어 스케줄
           </p>

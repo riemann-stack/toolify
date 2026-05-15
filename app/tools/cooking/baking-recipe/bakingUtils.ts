@@ -575,6 +575,6 @@ export function buildRecipeMarkdown(
   lines.push('')
   lines.push(`📌 ${item.notes}`)
   lines.push('')
-  lines.push('— youtil.kr / 베이킹 레시피 계산기')
+  lines.push('— youtil.kr / 제과 레시피 계산기')
   return lines.join('\n')
 }

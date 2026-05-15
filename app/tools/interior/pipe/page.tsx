@@ -291,7 +291,7 @@ export default function PipePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/interior/screw" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔩</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>나사 규격·탭드릴 계산기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>나사 규격 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             PT 나사·관통홀·인치↔mm
           </p>
@@ -305,7 +305,7 @@ export default function PipePage() {
         </Link>
         <Link href="/tools/interior/molding" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📏</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>몰딩 길이 계산기</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>몰딩 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             천장·걸레받이·문틀 둘레
           </p>

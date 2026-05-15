@@ -4,9 +4,9 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baking-recipe',
-  title: '베이킹 레시피 계산기 — 마들렌·파운드·쿠키·머핀 비율·분량 변환',
+  title: '제과 레시피 계산기 — 마들렌·파운드·쿠키·머핀 비율·분량 변환',
   description: '마들렌·파운드케이크·쿠키·머핀·마카롱·스콘·휘낭시에·카스테라·브라우니·커스터드 10종 제과 비율 자동 환산. 비율 진단·식감 보정·틀 용량 기준 분량 변환·인기 레시피 프리셋 17종.',
-  keywords: ['베이킹 레시피 계산기', '마들렌 황금비율', '파운드케이크 1:1:1:1', '쿠키 비율', '머핀 비율', '마카롱 비율', '제과 비율', '베이킹 분량 변환', '베이킹 비율 진단', '홈베이킹 계산기'],
+  keywords: ['제과 레시피 계산기', '마들렌 황금비율', '파운드케이크 1:1:1:1', '쿠키 비율', '머핀 비율', '마카롱 비율', '제과 비율', '베이킹 분량 변환', '베이킹 비율 진단', '홈베이킹 계산기'],
 })
 
 const cell: React.CSSProperties = {
@@ -69,7 +69,7 @@ export default function BakingRecipePage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧁 베이킹 레시피 계산기
+        🧁 제과 레시피 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         마들렌·파운드·쿠키·머핀·마카롱 등 제과 레시피를 품목별 기준 재료 100%로 자동 환산. 비율 진단·식감 보정·틀 용량 기준 분량 변환까지.
@@ -238,7 +238,7 @@ export default function BakingRecipePage() {
         <div style={faqAnswer}>
           두 도구는 영역이 다릅니다.
           🍞 <strong style={{ color: 'var(--text)' }}>베이커 퍼센트 계산기</strong>(/tools/cooking/baker-percent)는 빵 전용으로, 밀가루 100% 기준에 발효 시간·반죽 온도·이스트·발효종 중심입니다.
-          🧁 <strong style={{ color: 'var(--text)' }}>베이킹 레시피 계산기</strong>(본 도구)는 제과 전용으로, 품목별 자동 기준(계란·버터·흰자 등)에 비율 진단·식감 보정·굽기 중심입니다.
+          🧁 <strong style={{ color: 'var(--text)' }}>제과 레시피 계산기</strong>(본 도구)는 제과 전용으로, 품목별 자동 기준(계란·버터·흰자 등)에 비율 진단·식감 보정·굽기 중심입니다.
           빵을 만들면 베이커 퍼센트, 디저트를 만들면 본 도구를 쓰세요.
         </div>
       </details>

@@ -275,7 +275,7 @@ export default function JsonPage() {
               { href: '/tools/dev/base64',        icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트·파일·JWT Base64 변환' },
               { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트 생성기',    desc: 'Lorem Ipsum·한글 더미' },
               { href: '/tools/art/color',         icon: '🎨', name: '색상 코드 변환기',      desc: 'HEX·RGB·HSL 변환' },
-              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 값 변환기',          desc: 'px·rem·em·clamp() 변환' },
+              { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',          desc: 'px·rem·em·clamp() 변환' },
               { href: '/tools/unit/battery',      icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh·Ah 변환' },
             ].map((t, i) => (
               <Link

@@ -1,4 +1,4 @@
-/* 카메라 화각 (35mm 환산) — 데이터·계산 유틸 */
+/* 카메라 화각 계산기 — 데이터·계산 유틸 */
 
 export type SensorId = 'ff' | 'apsc15' | 'apsc16' | 'm43' | 'inch1' | 'inch_2_3' | 'phone'
 

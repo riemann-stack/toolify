@@ -382,7 +382,7 @@ export default function RoofPage() {
         </Link>
         <Link href="/tools/interior/molding" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>📏</div>
-          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>몰딩 길이 계산기</div>
+          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>몰딩 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>천장·바닥 몰딩</div>
         </Link>
         <Link href="/tools/life/unit-price" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>

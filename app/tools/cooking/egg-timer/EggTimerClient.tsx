@@ -239,14 +239,14 @@ export default function EggTimerClient() {
       {/* ═══ 입력 영역 ═══ */}
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>🥚 익힘 단계</p>
-        <div className={styles.donenessGrid}>
+        {/* 컴팩트 — 이미지 없이 라벨 + 시간만, 4×2 그리드 */}
+        <div className={styles.donenessCompactGrid}>
           {DONENESS.map((d) => (
             <button key={d.id}
-              className={`${styles.donenessCard} ${inputs.donenessId === d.id ? styles.donenessCardActive : ''}`}
+              className={`${styles.donenessCompact} ${inputs.donenessId === d.id ? styles.donenessCompactActive : ''}`}
               onClick={() => update('donenessId', d.id)}>
-              <YolkSvg stage={d} size={48} />
-              <p className={styles.donenessLabel}>{d.label}</p>
-              <p className={styles.donenessTime}>{fmtMS(d.seconds)}</p>
+              <span className={styles.donenessCompactLabel}>{d.label}</span>
+              <span className={styles.donenessCompactTime}>{fmtMS(d.seconds)}</span>
             </button>
           ))}
         </div>
@@ -301,25 +301,23 @@ export default function EggTimerClient() {
 
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>⚙️ 추가 옵션</p>
-        <div className={styles.sliderRow}>
-          <div className={styles.sliderHead}>
-            <span>개수</span>
-            <strong>{inputs.count}개</strong>
+        {/* 컴팩트 — 라벨·값·슬라이더 한 줄 */}
+        <div className={styles.optionCompact}>
+          <div className={styles.optionRowInline}>
+            <span className={styles.optionLabel}>개수</span>
+            <input type="range" min={1} max={24} step={1} value={inputs.count}
+              onChange={(e) => update('count', +e.target.value)} className={styles.sliderInline} />
+            <strong className={styles.optionValue}>{inputs.count}개</strong>
           </div>
-          <input type="range" min={1} max={24} step={1} value={inputs.count}
-            onChange={(e) => update('count', +e.target.value)} className={styles.slider} />
-          {inputs.count >= 12 && (
-            <p className={styles.warnNote}>⚠️ 12개 이상 동시 조리 시 +1~2분 자동 보정</p>
-          )}
-        </div>
-        <div className={styles.sliderRow}>
-          <div className={styles.sliderHead}>
-            <span>고도 (해발)</span>
-            <strong>{inputs.altitudeM}m</strong>
+          <div className={styles.optionRowInline}>
+            <span className={styles.optionLabel}>고도</span>
+            <input type="range" min={0} max={3000} step={100} value={inputs.altitudeM}
+              onChange={(e) => update('altitudeM', +e.target.value)} className={styles.sliderInline} />
+            <strong className={styles.optionValue}>{inputs.altitudeM}m</strong>
           </div>
-          <input type="range" min={0} max={3000} step={100} value={inputs.altitudeM}
-            onChange={(e) => update('altitudeM', +e.target.value)} className={styles.slider} />
-          <p className={styles.note}>대부분 도시는 0~300m. 한라산·설악산 캠핑 시 보정 (100m당 +1%)</p>
+          <p className={styles.note}>
+            ※ 12개 이상 +1~2분 자동 · 고도 100m당 +1% (대부분 도시 0~300m)
+          </p>
         </div>
       </section>
 

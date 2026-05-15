@@ -306,11 +306,11 @@ export default function FermiEstimatePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 시각화',     desc: '8개 행성에서 내 몸무게·나이·하루' },
+              { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 계산기',     desc: '8개 행성에서 내 몸무게·나이·하루' },
               { href: '/tools/edu/cosmic-calendar',   icon: '🌌', name: '코스믹 캘린더',         desc: '138억 년 우주 역사를 1년으로' },
               { href: '/tools/edu/review-interval',   icon: '🧠', name: '복습 간격 계산기',       desc: '망각곡선·SM-2 학습 일정' },
               { href: '/tools/edu/cognitive-test',    icon: '🧠', name: '인지 능력 테스트',       desc: '반응속도·스트룹·이중 과제' },
-              { href: '/tools/edu/circuit-simulator', icon: '⚡', name: '옴의 법칙 시뮬레이터',  desc: '직렬·병렬 회로 시각화' },
+              { href: '/tools/edu/circuit-simulator', icon: '⚡', name: '옴의 법칙 계산기',  desc: '직렬·병렬 회로 시각화' },
               { href: '/tools/edu',                   icon: '🔬', name: '교육·학습 카테고리',     desc: '추가 교육 도구 더보기' },
             ].map((t, i) => (
               <Link

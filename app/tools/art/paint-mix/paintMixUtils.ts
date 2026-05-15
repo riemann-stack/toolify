@@ -1,4 +1,4 @@
-/* 물감·잉크 혼합 비율 계산기 — 데이터·계산 유틸 */
+/* 물감 혼합 계산기 — 데이터·계산 유틸 */
 
 export type MixModel = 'subtractive' | 'additive' | 'ryb'
 export type PaletteId = 'school12' | 'pro24' | 'ink' | 'food'

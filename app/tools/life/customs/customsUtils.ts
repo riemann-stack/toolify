@@ -1,4 +1,4 @@
-/* 해외직구 관부가세 계산기 — 데이터·계산 유틸 */
+/* 관부가세 계산기 — 데이터·계산 유틸 */
 
 export type CountryId = 'us' | 'cn' | 'eu' | 'jp' | 'uk' | 'other'
 export type UsageType = 'personal' | 'business'

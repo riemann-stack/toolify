@@ -1,4 +1,4 @@
-/* 경매 총비용 계산기 — 데이터·계산 유틸 */
+/* 경매 비용 계산기 — 데이터·계산 유틸 */
 
 export type PropertyType = 'apt' | 'villa' | 'house' | 'office' | 'shop' | 'land'
 export type OwnerType = 'live1' | 'own1' | 'multi2' | 'multi3' | 'corp'

@@ -449,7 +449,7 @@ export default function IntervalTrainingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/pace',           icon: '🏃', name: '러닝 페이스 계산기',     desc: '마라톤 목표 기록별 페이스' },
-              { href: '/tools/sports/race-predictor', icon: '🏅', name: '마라톤 기록 예측 계산기', desc: 'Riegel·VDOT 공식 기록 예측' },
+              { href: '/tools/sports/race-predictor', icon: '🏅', name: '마라톤 기록 계산기', desc: 'Riegel·VDOT 공식 기록 예측' },
               { href: '/tools/sports/one-rm',         icon: '🏋️', name: '1RM 계산기',             desc: '근력 훈련 최대 중량 추정' },
               { href: '/tools/sports/fight-weight',   icon: '🥊', name: '격투기 체급 계산기',     desc: '복싱·UFC·MMA 감량 계획' },
               { href: '/tools/date/dday',             icon: '📅', name: 'D-day 계산기',           desc: '대회까지 남은 일수' },

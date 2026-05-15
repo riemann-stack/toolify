@@ -1,4 +1,4 @@
-/* 월 저축가능 금액 계산기 — 데이터·계산 유틸 */
+/* 월 저축 계산기 — 데이터·계산 유틸 */
 
 export type Household = '1' | '2' | '3' | '4'
 export type AgeGroup = '20s' | '30s_single' | '30s_married' | '40s' | '50s'

@@ -312,6 +312,58 @@
   font-weight: 700;
   color: var(--accent);
 }
+.flightBoxSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 공통 입력 카드 하단 힌트 ── */
+.hintText {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  background: var(--bg3);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+.hintText strong {
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* ── 방향 설명 (히어로 내 펼쳐보기) ── */
+.dirDetails {
+  margin-top: 14px;
+  background: rgba(0,0,0,0.20);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: left;
+}
+.dirDetails summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 600;
+  user-select: none;
+}
+.dirDetails[open] summary {
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.dirDetailsBody {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.dirDetailsBody strong {
+  color: var(--text);
+}
 
 /* ── 카페인 판정 ── */
 .caffeineCard {
@@ -448,6 +500,57 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 12px;
+}
+
+/* ── 새 진행바 (글자 겹침 방지) — 마커는 점만, 라벨은 별도 행 ── */
+.progressBarBox {
+  margin: 14px 0 6px;
+}
+.progressBarTrack {
+  position: relative;
+  height: 14px;
+  background: var(--bg3);
+  border-radius: 99px;
+  overflow: visible;
+}
+.progressBarTrack .progressBarFill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255,140,62,0.6), rgba(200,255,62,0.8));
+  border-radius: 99px;
+}
+.progressMarkDot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--text);
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.progressMarkReturn {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: #FF6B6B;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.progressLabelLeft, .progressLabelRight {
+  font-weight: 600;
 }
 
 .adaptStats {

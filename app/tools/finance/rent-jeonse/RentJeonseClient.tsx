@@ -618,8 +618,8 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
         <p className={styles.gapTitle}>🔗 관련 도구</p>
         <ul className={styles.relatedList}>
           <li><Link href="/tools/finance/loan">대출이자 계산기</Link> — 전세자금대출 원리금균등·금리 시뮬</li>
-          <li><Link href="/tools/finance/real-estate">부동산 투자 수익률 계산기</Link> — 매수 결정 시</li>
-          <li><Link href="/tools/finance/savings">월 저축가능 금액 계산기</Link> — 월세 절약분 저축 시뮬</li>
+          <li><Link href="/tools/finance/real-estate">부동산 수익률 계산기</Link> — 매수 결정 시</li>
+          <li><Link href="/tools/finance/savings">월 저축 계산기</Link> — 월세 절약분 저축 시뮬</li>
           <li><Link href="/tools/finance/compound">복리 계산기</Link> — 자기자본 운용 시 장기 수익</li>
         </ul>
       </section>

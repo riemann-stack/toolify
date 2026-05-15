@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/dev/tech-stack',
-  title: '개발 기술 스택 추천 계산기 — 12 시나리오 + Next.js·Remix·Astro·Supabase·Vercel·토스페이먼츠 비교 + 한국 SaaS 통합 (2026)',
+  title: '기술 스택 추천기 — 12 시나리오 + Next.js·Remix·Astro·Supabase·Vercel·토스페이먼츠 비교 + 한국 SaaS 통합 (2026)',
   description:
     '프로젝트 유형·규모·예산·SEO·한국 특화 입력 시 Frontend·Backend·DB·Auth·Hosting·Payment·Analytics 풀스택 자동 추천. 7축 점수 레이더 차트, 시나리오 프리셋 12종(MVP·사이드·AI·이커머스·한국 SaaS 등), 비용·기간·시작 명령어, 트레이드오프 표.',
   keywords: [
@@ -48,7 +48,7 @@ export default function TechStackPage() {
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🛠️ 개발 기술 스택 추천 계산기
+        🛠️ 기술 스택 추천기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         프로젝트 유형·규모·예산·SEO·한국 특화 통합 입력 시 Frontend·Backend·DB·Auth·Hosting·Payment·Analytics 풀스택을 자동 추천. MVP 스타트업·AI 챗봇·한국형 SaaS 등 12 시나리오 프리셋과 7축 점수 레이더 차트로 의사결정.
@@ -256,7 +256,7 @@ export default function TechStackPage() {
           <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
             <li><Link href="/tools/dev/json" style={{ color: 'var(--accent)' }}>JSON 포맷터</Link> — API 응답 정리</li>
             <li><Link href="/tools/dev/regex" style={{ color: 'var(--accent)' }}>정규식 테스트기</Link> — 한국 패턴 30+</li>
-            <li><Link href="/tools/dev/css-converter" style={{ color: 'var(--accent)' }}>CSS 값 변환기</Link> — px·rem 변환</li>
+            <li><Link href="/tools/dev/css-converter" style={{ color: 'var(--accent)' }}>CSS 단위 변환기</Link> — px·rem 변환</li>
             <li><Link href="/tools/dev/curl" style={{ color: 'var(--accent)' }}>cURL 변환기</Link> — fetch·axios·Python 등 변환</li>
             <li><Link href="/tools/dev/yaml-json" style={{ color: 'var(--accent)' }}>YAML ↔ JSON 변환기</Link></li>
             <li><Link href="/tools/dev/http-status" style={{ color: 'var(--accent)' }}>HTTP 상태 코드 검색기</Link></li>

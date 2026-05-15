@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/pet',
-  title: '반려동물 나이·칼로리 계산기 — 강아지·고양이 사람 나이·사료량·체중 평가',
+  title: '반려동물 계산기 — 강아지·고양이 사람 나이·사료량·체중 평가',
   description:
     '품종 크기·중성화·활동량으로 강아지·고양이 사람 나이, 일일 권장 칼로리(RER/DER), 건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률까지 자동 계산.',
   keywords: [
@@ -20,7 +20,7 @@ export default function PetPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🐾 반려동물 나이·칼로리 계산기
+        🐾 반려동물 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         강아지·고양이 사람 나이 환산, RER/DER 칼로리, <strong style={{ color: 'var(--text)' }}>건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률</strong>까지.

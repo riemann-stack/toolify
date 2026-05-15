@@ -5,7 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/food-storage',
-  title: '식재료 보관 기간 계산기 — 냉장·냉동 소비 기한 D-day',
+  title: '식재료 보관 계산기 — 냉장·냉동 소비 기한 D-day',
   description: '닭고기·생선·익힌 고기·국·밥 등 식재료의 냉장·냉동 보관 기간을 계산합니다. 식약처 권고 기준 · 보관 방식·상태별 D-day 추적 · 냉동 전환 추천 · 빨리 먹어야 할 음식 알림.',
   keywords: ['식재료보관기간계산기', '닭고기냉장며칠', '익힌고기냉장며칠', '국냉장며칠', '밥냉동며칠', '다진고기냉장', '냉동보관기간', '소비기한계산기', '식재료유통기한'],
 })
@@ -15,7 +15,7 @@ export default function FoodStoragePage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧊 식재료 보관 기간 계산기
+        🧊 식재료 보관 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         닭고기·생선·익힌 고기·국·밥 등 식재료의 <strong style={{ color: 'var(--text)' }}>냉장·냉동 D-day</strong>를 추적합니다. 식약처 권고 기준 · 보관 방식·상태별 자동 계산 · 냉동 전환 추천 · 빨리 먹어야 할 음식 TOP 3.
@@ -257,7 +257,7 @@ export default function FoodStoragePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간 계산기',  desc: '고기 해동 시간·안전 가이드' },
+              { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',  desc: '고기 해동 시간·안전 가이드' },
               { href: '/tools/cooking/serving', icon: '🍽️', name: '1인분 분량 계산기',     desc: '인분별 장보기 분량 가이드' },
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',     desc: '인분 수에 맞게 재료 비율 조정' },
               { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',          desc: '소비 기한·기념일 D-day' },
