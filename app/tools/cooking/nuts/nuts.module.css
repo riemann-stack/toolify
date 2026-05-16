@@ -214,27 +214,88 @@
   border-radius: 12px;
   padding: 16px 18px;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+.amountHeroSafe {
+  background: rgba(62, 255, 155, 0.06);
+  border-color: rgba(62, 255, 155, 0.30);
+}
+.amountHeroOver {
+  background: rgba(255, 184, 62, 0.08);
+  border-color: rgba(255, 184, 62, 0.40);
+}
+.amountHeroDanger {
+  background: rgba(255, 107, 107, 0.10);
+  border-color: rgba(255, 107, 107, 0.50);
 }
 .amountLead {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin-bottom: 6px;
+  font-weight: 700;
 }
+.amountHeroSafe .amountLead { color: #3EFF9B; }
+.amountHeroOver .amountLead { color: #FFB83E; }
+.amountHeroDanger .amountLead { color: #FF6B6B; }
 .amountValue {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -0.5px;
   line-height: 1.1;
 }
+.amountHeroDanger .amountValue { color: #FF6B6B; }
+.amountHeroOver .amountValue { color: #FFB83E; }
 .amountSub {
   font-size: 13px;
   color: var(--text);
   margin-top: 6px;
+}
+
+/* 권장/위험 가이드 — 각 견과 카드 안 */
+.safetyGuide {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-radius: 8px;
+}
+.safetyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.safetyText { line-height: 1.5; }
+.safetyText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.safetyBadgeSafe {
+  flex-shrink: 0;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(62, 255, 155, 0.15);
+  color: #3EFF9B;
+  border-radius: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.safetyBadgeDanger {
+  flex-shrink: 0;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(255, 107, 107, 0.15);
+  color: #FF6B6B;
+  border-radius: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .nutriGrid {
@@ -505,7 +566,7 @@
   line-height: 1.6;
 }
 
-/* 견과류 카드 (확장) */
+/* 견과류 카드 (확장) — 세로 레이아웃으로 모바일 오버플로 방지 */
 .nutCard {
   position: relative;
   display: flex;
@@ -514,8 +575,9 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   transition: border-color 0.15s;
+  min-width: 0;
 }@media (hover: hover) {
   .nutCard:hover { border-color: rgba(200, 255, 62, 0.3); }
 }
@@ -525,8 +587,9 @@
 
 .nutToggle {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
   background: transparent;
   border: none;
   padding: 0;
@@ -534,7 +597,9 @@
   font-family: inherit;
   text-align: left;
   width: 100%;
+  min-width: 0;
 }
+.nutToggle > * { min-width: 0; }
 .nutColorDot {
   display: inline-block;
   width: 10px;
@@ -543,23 +608,63 @@
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
+.nutHeadRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
 .nutIcon { font-size: 18px; flex-shrink: 0; }
-.nutName { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
-.nutKcal { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.nutName { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nutKcal { font-size: 10.5px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+
+/* 권장량 표시 — 항상 보이게 */
+.nutDailyRec {
+  font-size: 10.5px;
+  color: #3EFF9B;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: rgba(62, 255, 155, 0.10);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+  display: inline-block;
+  align-self: flex-start;
+}
+.nutDailyRecDanger {
+  color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.10);
+}
+
+/* 권장량 초과 즉시 경고 */
+.nutOverWarn {
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: rgba(255, 184, 62, 0.12);
+  color: #FFB83E;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+}
 
 .nutAmountRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 .nutAmountInput {
-  width: 70px;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
   height: 36px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 6px;
   text-align: right;
-  font-size: 14px;
+  font-size: 16px;  /* iOS 자동줌 방지 */
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);

@@ -139,8 +139,10 @@ function RecommendTab(props: {
             <button key={s.id}
               className={`${styles.scenarioCard} ${activeScenario === s.id ? styles.scenarioCardActive : ''}`}
               onClick={() => applyScenario(s.id)}>
-              <span className={styles.scenarioEmoji}>{s.emoji}</span>
-              <p className={styles.scenarioLabel}>{s.label.replace(/^[^\s]+\s/, '')}</p>
+              <div className={styles.scenarioHeadRow}>
+                <span className={styles.scenarioEmoji}>{s.emoji}</span>
+                <span className={styles.scenarioLabel}>{s.label.replace(/^[^\s]+\s/, '')}</span>
+              </div>
               <p className={styles.scenarioDesc}>{s.desc}</p>
             </button>
           ))}
@@ -252,9 +254,27 @@ function RecommendTab(props: {
         <p className={styles.note}>가중치가 높을수록 추천 순위에 더 큰 영향. 예산 무료 선택 시 비용 가중치 ×3.</p>
       </section>
 
-      {/* 추천 결과 */}
+      {/* 추천 결과 — 요약 카드 (한눈에 보기) */}
       <section>
-        <label className={styles.label}>🏆 추천 풀스택 ({recommendations.length}개 카테고리)</label>
+        <label className={styles.label}>🏆 추천 풀스택 — 한눈에 보기</label>
+        <div className={styles.summaryStackGrid}>
+          {recommendations.map((rec) => (
+            <div key={`summary-${rec.category}`} className={styles.summaryStackCard}>
+              <div className={styles.summaryStackCategory}>
+                {categoryEmoji(rec.category)} {categoryLabel(rec.category)}
+              </div>
+              <div className={styles.summaryStackName}>
+                <span className={styles.summaryStackEmoji}>{rec.primary.emoji}</span>
+                {rec.primary.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 추천 결과 — 상세 */}
+      <section>
+        <label className={styles.label}>📋 카테고리별 상세 ({recommendations.length}개)</label>
         <div className={styles.recommendGrid}>
           {recommendations.map((rec) => (
             <RecommendCard key={rec.category} rec={rec} weights={weights} onCopy={copyCmd} copiedId={copiedId} />

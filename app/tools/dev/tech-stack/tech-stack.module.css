@@ -68,43 +68,57 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* ── 시나리오 카드 ── */
+/* ── 시나리오 카드 — 컴팩트 1줄형 (모바일도 2열) ── */
 .scenarioGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
+@media (max-width: 720px) { .scenarioGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
 .scenarioCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
   cursor: pointer;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   transition: all .15s;
 }@media (hover: hover) {
-  .scenarioCard:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .scenarioCard:hover { border-color: var(--accent); }
 }
 .scenarioCardActive {
   background: rgba(200, 255, 62, 0.06);
   border-color: var(--accent);
 }
-.scenarioEmoji { font-size: 28px; }
+/* 이모지 + 라벨 한 줄 — 줄바꿈 X */
+.scenarioHeadRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.scenarioEmoji { font-size: 16px; flex-shrink: 0; }
 .scenarioLabel {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  margin: 4px 0 0;
+  margin: 0;
   font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .scenarioDesc {
   font-size: 11px;
   color: var(--muted);
   line-height: 1.5;
-  margin: 4px 0 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .scenarioTip {
@@ -140,12 +154,60 @@
 
 .customGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
   margin-top: 12px;
-  padding: 16px;
+  padding: 14px;
   background: var(--bg3);
   border-radius: 10px;
+}
+@media (max-width: 480px) {
+  .customGrid { padding: 10px; gap: 6px; }
+}
+
+/* 추천 풀스택 요약 — 임팩트 있는 카드 6종 */
+.summaryStackGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 720px) { .summaryStackGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
+.summaryStackCard {
+  background: linear-gradient(135deg, rgba(200,255,62,0.08), rgba(62,200,255,0.04));
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+.summaryStackCategory {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.summaryStackName {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.summaryStackEmoji { font-size: 18px; flex-shrink: 0; }
+@media (max-width: 480px) {
+  .summaryStackCard { padding: 10px 12px; }
+  .summaryStackName { font-size: 14px; }
 }
 .selectField {
   display: flex;

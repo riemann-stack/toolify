@@ -17,19 +17,16 @@ type Product = {
   amount: string
   unit: Unit
   count: string
-  // 고급 옵션
-  instantDiscount: string
-  couponPercent: string
-  shippingFee: string
-  consumption: number  // 100|75|50|25
+  // 고급 옵션 — 소비 가능량만 유지
+  consumption: number   // 100|75|50 + 직접입력
+  consumptionCustom: string  // 직접입력 시 사용
   // UI
   advancedOpen: boolean
 }
 
 const emptyProduct = (id: string): Product => ({
   id, name: '', price: '', amount: '', unit: 'ml', count: '1',
-  instantDiscount: '', couponPercent: '', shippingFee: '',
-  consumption: 100, advancedOpen: false,
+  consumption: 100, consumptionCustom: '', advancedOpen: false,
 })
 
 const LABELS = ['A', 'B', 'C']
@@ -43,12 +40,8 @@ function calcTotalAmount(p: Product): number {
 }
 
 function calcFinalPrice(p: Product): number {
-  let v = num(p.price)
-  v -= num(p.instantDiscount)
-  const cp = num(p.couponPercent)
-  if (cp > 0) v *= 1 - cp / 100
-  v += num(p.shippingFee)
-  return Math.max(0, v)
+  // 가격 = 그대로 (할인·쿠폰·배송비 제거)
+  return Math.max(0, num(p.price))
 }
 
 export default function UnitPriceClient() {
@@ -430,53 +423,43 @@ function ProductCard({
           </div>
         </div>
 
-        {/* 고급 옵션 (아코디언) */}
+        {/* 고급 옵션 — 소비 가능량만 (아코디언) */}
         <details className={s.advancedDetails} open={p.advancedOpen}
           onToggle={e => onChange('advancedOpen', (e.target as HTMLDetailsElement).open)}>
           <summary className={s.advancedSummary}>
-            ⚙️ 고급 옵션 — 행사·쿠폰·배송비·소비 가능량
+            ⚙️ 실제 소비 가능량
           </summary>
           <div className={s.advancedBody}>
-            <div className={s.row3}>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>즉시할인 (원)</label>
-                <input className={`${s.input} ${s.inputRight}`}
-                  type="text" inputMode="numeric" placeholder="0"
-                  value={p.instantDiscount ? formatPriceInput(p.instantDiscount) : ''}
-                  onChange={e => onChange('instantDiscount', e.target.value.replace(/[^0-9]/g, ''))} />
-              </div>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>쿠폰 (%)</label>
-                <input className={`${s.input} ${s.inputRight}`}
-                  type="text" inputMode="decimal" placeholder="0"
-                  value={p.couponPercent}
-                  onChange={e => onChange('couponPercent', sanitizeDecimal(e.target.value))} />
-              </div>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>배송비 (원)</label>
-                <input className={`${s.input} ${s.inputRight}`}
-                  type="text" inputMode="numeric" placeholder="0"
-                  value={p.shippingFee ? formatPriceInput(p.shippingFee) : ''}
-                  onChange={e => onChange('shippingFee', e.target.value.replace(/[^0-9]/g, ''))} />
+            <div className={s.consumptionPills}>
+              {CONSUMPTION_OPTIONS.map(opt => (
+                <button key={opt.value} type="button"
+                  className={`${s.consumptionPill} ${p.consumption === opt.value && !p.consumptionCustom ? s.consumptionPillActive : ''}`}
+                  onClick={() => { onChange('consumption', opt.value); onChange('consumptionCustom', '') }}>
+                  {opt.label}
+                </button>
+              ))}
+              <div className={`${s.consumptionCustomWrap} ${p.consumptionCustom ? s.consumptionPillActive : ''}`}>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  className={s.consumptionCustomInput}
+                  placeholder="직접입력"
+                  value={p.consumptionCustom}
+                  onChange={e => {
+                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 3)
+                    onChange('consumptionCustom', v)
+                    const n = parseInt(v, 10)
+                    if (Number.isFinite(n) && n > 0 && n <= 100) {
+                      onChange('consumption', n)
+                    }
+                  }}
+                />
+                <span className={s.consumptionCustomUnit}>%</span>
               </div>
             </div>
-
-            <div className={s.field} style={{ marginTop: 14 }}>
-              <label className={s.fieldLabel}>실제 소비 가능량 (대용량 함정 방지)</label>
-              <div className={s.consumptionPills}>
-                {CONSUMPTION_OPTIONS.map(opt => (
-                  <button key={opt.value} type="button"
-                    className={`${s.consumptionPill} ${p.consumption === opt.value ? s.consumptionPillActive : ''}`}
-                    onClick={() => onChange('consumption', opt.value)}
-                    title={opt.desc}>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-              <p className={s.countHint}>
-                💡 매일 사용(생수·우유) <strong>100%</strong> · 자주(샴푸·세제) <strong>75%</strong> · 가끔(소스·조미료) <strong>50%</strong> · 이벤트용 <strong>25%</strong>
-              </p>
-            </div>
+            <p className={s.countHint}>
+              💡 매일 사용(생수·우유) 100% · 자주(샴푸·세제) 75% · 가끔(소스·조미료) 50%
+            </p>
           </div>
         </details>
       </div>

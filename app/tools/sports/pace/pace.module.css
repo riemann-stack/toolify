@@ -174,6 +174,42 @@
 }
 .distBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); font-weight: 500; }
 
+/* 직접 입력 — 거리 km 단위 input */
+.distCustom {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 8px 0 4px;
+  min-height: 38px;
+}
+.distCustomActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.4);
+}
+.distCustomInput {
+  width: 56px;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  padding: 6px 0;
+}
+.distCustomInput::placeholder { font-family: 'Noto Sans KR', sans-serif; font-weight: 400; color: var(--muted); font-size: 12px; }
+.distCustomActive .distCustomInput { color: var(--accent); }
+.distCustomUnit { font-size: 12px; color: var(--muted); }
+.distCustomActive .distCustomUnit { color: var(--accent); }
+@media (max-width: 480px) {
+  /* iOS 자동줌 방지 */
+  .distCustomInput { font-size: 16px; width: 50px; }
+}
+
 /* 결과 히어로 */
 .heroCard { background: var(--bg2); border: 1px solid rgba(200,255,62,0.3); border-radius: 14px; padding: 24px; text-align: center; }
 .heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }

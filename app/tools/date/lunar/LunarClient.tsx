@@ -285,14 +285,6 @@ export default function LunarClient() {
             {result.zodiac.emoji} <strong>{result.zodiac.name}띠</strong> · {result.ganji.hanja}({result.ganji.hangul})년
           </p>
 
-          <div className={s.ganjiRow}>
-            <div className={s.ganjiBadge}>
-              <span className={s.ganjiBadgeLabel}>년 간지</span>
-              <span className={s.ganjiBadgeValue}>{result.ganji.hanja}</span>
-              <span className={s.ganjiBadgeHangul}>{result.ganji.hangul}</span>
-            </div>
-          </div>
-
           <div className={s.linkRow}>
             <Link href="/tools/life/zodiac" className={s.linkBtn}>
               <span className={s.linkEmoji}>🐲</span>

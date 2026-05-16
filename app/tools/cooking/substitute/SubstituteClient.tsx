@@ -638,44 +638,44 @@ function SearchTab(props: {
 
   return (
     <>
-      {/* 검색 박스 */}
+      {/* 검색 박스 — 컴팩트 */}
       <div className={styles.searchBox}>
-        <span className={styles.cardLabel}>대체할 재료 검색</span>
-        <div className={styles.searchInputWrap} onClick={e => e.stopPropagation()}>
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="어떤 재료를 대체하시나요? (예: 버터, 설탕, 계란)"
-            value={searchTerm}
-            onChange={e => { setSearchTerm(e.target.value); setShowSuggestions(true) }}
-            onFocus={() => setShowSuggestions(true)}
-          />
-          {showSuggestions && searchTerm.trim() && (
-            <div className={styles.suggestions}>
-              {suggestions.length === 0 ? (
-                <div className={styles.searchEmpty}>일치하는 재료가 없습니다. 카테고리에서 직접 선택해 보세요.</div>
-              ) : (
-                suggestions.map(s => (
-                  <div key={s.key} className={styles.suggestionItem} onClick={() => handleSelect(s.key)}>
-                    <span className={styles.suggestionEmoji}>{s.emoji}</span>
-                    <span>{s.original}</span>
-                    <span className={styles.suggestionMeta}>{s.category}</span>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
+        <span className={styles.cardLabel}>재료 검색 또는 선택</span>
 
-        {/* 또는 드롭다운 */}
-        <div style={{ marginTop: 14 }}>
-          <span className={styles.fieldLabel}>또는 카테고리에서 선택</span>
+        {/* 검색 + 카테고리 드롭다운 한 줄 */}
+        <div className={styles.searchRow}>
+          <div className={styles.searchInputWrap} onClick={e => e.stopPropagation()}>
+            <span className={styles.searchIcon}>🔍</span>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="예: 버터, 설탕, 계란"
+              value={searchTerm}
+              onChange={e => { setSearchTerm(e.target.value); setShowSuggestions(true) }}
+              onFocus={() => setShowSuggestions(true)}
+            />
+            {showSuggestions && searchTerm.trim() && (
+              <div className={styles.suggestions}>
+                {suggestions.length === 0 ? (
+                  <div className={styles.searchEmpty}>일치하는 재료가 없습니다. 카테고리에서 선택해 보세요.</div>
+                ) : (
+                  suggestions.map(s => (
+                    <div key={s.key} className={styles.suggestionItem} onClick={() => handleSelect(s.key)}>
+                      <span className={styles.suggestionEmoji}>{s.emoji}</span>
+                      <span>{s.original}</span>
+                      <span className={styles.suggestionMeta}>{s.category}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
           <div className={styles.selectWrap}>
             <select
               className={styles.select}
               value={selectedKey}
               onChange={e => handleSelect(e.target.value)}
+              aria-label="카테고리에서 선택"
             >
               {GROUPS.map(g => {
                 const items = Object.entries(SUBSTITUTE_DATA).filter(([, d]) => d.group === g.id)
@@ -693,8 +693,8 @@ function SearchTab(props: {
           </div>
         </div>
 
-        {/* 양 + 단위 */}
-        <div className={styles.fieldRow}>
+        {/* 양 + 단위 — 2열 그리드 */}
+        <div className={styles.amountRow}>
           <div>
             <span className={styles.fieldLabel}>원재료 양</span>
             <input
@@ -838,8 +838,9 @@ function OptionCard({ opt, amount, unit }: { opt: SubstituteOption; amount: numb
 // 탭 2 — 카테고리 둘러보기
 // ──────────────────────────────────────
 function BrowseTab({ onDetail }: { onDetail: (key: string) => void }) {
+  // 모든 카테고리 접힘 상태로 시작 — 사용자가 클릭해서 펼쳐서 확인
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => ({
-    fat: true, dairy: false, sweet: false, protein: false, flour: false,
+    fat: false, dairy: false, sweet: false, protein: false, flour: false,
     acid: false, season: false, herb: false, plant: false,
   }))
 

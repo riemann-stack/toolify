@@ -78,7 +78,7 @@ export const categories: Category[] = [
   {
     id: 'life', icon: '🎲', name: '생활·재미', color: '#FF8C3E',
     tools: [
-      { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기·확률 시뮬레이터', desc: '8가지 생성 모드, 번호 분석, 가상 추첨, 1등 체감 시뮬, 당첨금 세후 계산', badge: 'hot' },
+      { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기', desc: '8가지 생성 모드, 번호 분석, 가상 추첨, 1등 체감 시뮬, 당첨금 세후 계산', badge: 'hot' },
       { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기', desc: '가중치 추첨, 룰렛, 팀 나누기, 발표 순서, 자리 배치, 공정성 검증까지' },
       { href: '/tools/life/ladder',        icon: '🪜', name: '사다리타기',          desc: '캐릭터 16종, 6가지 공개 모드(한 명씩·전체·익명·역추적), 자동 채우기, 6 템플릿' },
       { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이 계산기', desc: '술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유, 8가지 상황 프리셋' },
@@ -151,7 +151,7 @@ export const categories: Category[] = [
       { href: '/tools/date/dday',        icon: '📅', name: 'D-Day 계산기', desc: '여러 D-day 저장, 진행률·평일·영업일·페이스 계산, 반복 D-day, 두 날짜 사이까지' },
       { href: '/tools/date/military',    icon: '🎖️', name: '군대 전역일 계산기', desc: '전역일·복무율 계산' },
       { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·불기·조선왕·간지·일본·중국 연호 변환 + 단군~현재 통합 연표 + 한·중·일 동시' },
-      { href: '/tools/date/lunar',       icon: '🌙', name: '양음력 변환기',           desc: '음력 ↔ 양력 날짜 변환 · 간지 확인' },
+      { href: '/tools/date/lunar',       icon: '🌙', name: '양력 음력 변환기',         desc: '음력 ↔ 양력 날짜 변환 · 60갑자 간지·띠 확인' },
       { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정·수면 타이밍 계산' },
       { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간·행동 가치 환산', badge: 'hot' },
     ],

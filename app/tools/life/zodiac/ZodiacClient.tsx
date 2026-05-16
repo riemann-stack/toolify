@@ -168,7 +168,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--text)' }}>음력 생년월일</strong>이라면{' '}
-              <Link href="/tools/date/lunar" style={{ color: '#3EC8FF', textDecoration: 'underline' }}>양음력 변환기</Link>로
+              <Link href="/tools/date/lunar" style={{ color: '#3EC8FF', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
               먼저 양력 변환 후 입력하세요. 음력 설날 전후 출생자는 띠가 1년 차이날 수 있습니다.
             </div>
           </div>

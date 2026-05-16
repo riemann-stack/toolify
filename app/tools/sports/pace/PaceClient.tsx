@@ -278,6 +278,21 @@ export default function PaceClient() {
                     className={`${styles.distBtn} ${dist === d.km ? styles.distBtnActive : ''}`}
                     onClick={() => setDist(d.km)}>{d.label}</button>
                 ))}
+                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist) ? styles.distCustomActive : ''}`}>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    className={styles.distCustomInput}
+                    placeholder="직접"
+                    min={0.1} max={500} step={0.1}
+                    value={DISTANCES.some(d => d.km === dist) ? '' : dist}
+                    onChange={e => {
+                      const v = parseFloat(e.target.value)
+                      if (Number.isFinite(v) && v > 0) setDist(v)
+                    }}
+                  />
+                  <span className={styles.distCustomUnit}>km</span>
+                </div>
               </div>
             </div>
 
@@ -427,6 +442,21 @@ export default function PaceClient() {
                     className={`${styles.distBtn} ${dist2 === d.km ? styles.distBtnActive : ''}`}
                     onClick={() => setDist2(d.km)}>{d.label}</button>
                 ))}
+                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist2) ? styles.distCustomActive : ''}`}>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    className={styles.distCustomInput}
+                    placeholder="직접"
+                    min={0.1} max={500} step={0.1}
+                    value={DISTANCES.some(d => d.km === dist2) ? '' : dist2}
+                    onChange={e => {
+                      const v = parseFloat(e.target.value)
+                      if (Number.isFinite(v) && v > 0) setDist2(v)
+                    }}
+                  />
+                  <span className={styles.distCustomUnit}>km</span>
+                </div>
               </div>
             </div>
           </div>

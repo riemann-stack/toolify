@@ -61,17 +61,14 @@ export default function NutsClient() {
     })
   }
 
+  // 양 변경 — 0/빈값이라도 key 유지 (input unmount → 키보드 닫힘 버그 방지)
   const setAmount = (key: string, grams: number) => {
-    setAmounts((prev) => {
-      const next = { ...prev }
-      if (grams <= 0) delete next[key]
-      else next[key] = grams
-      return next
-    })
+    setAmounts((prev) => ({ ...prev, [key]: Math.max(0, grams) }))
   }
+  // 칩 클릭 — 선택 토글 (실제 제거)
   const toggleNut = (key: string, defaultGrams: number) => {
     setAmounts((prev) => {
-      if (prev[key]) {
+      if (prev[key] !== undefined) {
         const next = { ...prev }
         delete next[key]
         return next
@@ -96,16 +93,25 @@ export default function NutsClient() {
   }, [weight, goal])
   const targetKcal = parseInt(dailyKcal, 10) || autoKcal
 
-  // 선택 견과 + 양 계산
+  // 선택 견과 + 양 계산 + 권장 비율
   const selectedNuts = useMemo(() => {
-    return NUTS_DATA.filter((n) => amounts[n.key] && amounts[n.key] > 0)
+    return NUTS_DATA.filter((n) => amounts[n.key] !== undefined && amounts[n.key] > 0)
       .map((n) => {
         const grams = amounts[n.key]
         const ratio = grams / n.servingGrams
+        const dailyRatio = grams / n.maxDaily   // 1.0 = 권장 한도
+        const dangerThreshold = n.danger ? n.maxDaily * 1.5 : n.maxDaily * 3
+        let level: 'safe' | 'over' | 'danger' = 'safe'
+        if (grams >= dangerThreshold) level = 'danger'
+        else if (grams > n.maxDaily) level = 'over'
         return {
           ...n,
           grams,
           count: n.servingCount !== null ? Math.round(n.servingCount * ratio) : null,
+          recommendedCount: n.servingCount,
+          dangerThreshold,
+          dailyRatio,
+          level,
           kcal: n.caloriePerServing * ratio * procData.calFactor,
           protein: n.protein * ratio,
           fat: n.fat * ratio,
@@ -192,35 +198,46 @@ export default function NutsClient() {
       {/* ── 2. 견과류 선택 + 양 입력 (강화) ── */}
       <div className={styles.card}>
         <label className={styles.cardLabel}>🥜 견과류 선택 + 양 입력 (g)</label>
-        <p className={styles.cardSub}>각 견과류별 양을 g 단위로 직접 입력. 칩 클릭 시 기본값(28g, 브라질너트 10g) 자동 채움.</p>
+        <p className={styles.cardSub}>칩 클릭 → 권장량 기본값 자동 채움. 직접 g 단위로 조정 가능. 권장량 초과 시 자동 경고 표시.</p>
         <div className={styles.nutGrid}>
           {visibleNuts.map((n) => {
-            const isSelected = !!amounts[n.key]
+            const isSelected = amounts[n.key] !== undefined
             const defaultGrams = n.servingGrams
+            const recCount = n.servingCount !== null ? Math.round(n.servingCount * (n.maxDaily / n.servingGrams)) : null
             return (
               <div key={n.key}
                 className={`${styles.nutCard} ${isSelected ? styles.nutCardActive : ''} ${n.danger ? styles.nutCardDanger : ''}`}>
                 <button type="button" className={styles.nutToggle}
                   onClick={() => toggleNut(n.key, defaultGrams)}
                   aria-label={isSelected ? '제거' : '추가'}>
-                  <span className={styles.nutColorDot} style={{ background: n.color }} />
-                  <span className={styles.nutIcon}>{n.icon}</span>
-                  <span className={styles.nutName}>{n.name}</span>
+                  <div className={styles.nutHeadRow}>
+                    <span className={styles.nutIcon}>{n.icon}</span>
+                    <span className={styles.nutName}>{n.name}</span>
+                  </div>
                   <span className={styles.nutKcal}>{n.caloriePerServing}kcal/{n.servingGrams}g</span>
+                  <span className={`${styles.nutDailyRec} ${n.danger ? styles.nutDailyRecDanger : ''}`}>
+                    {n.danger ? '⚠️ 최대' : '권장'} {n.maxDaily}g{recCount !== null && ` · ${recCount}알`}
+                  </span>
                 </button>
                 {isSelected && (
                   <div className={styles.nutAmountRow}>
-                    <input type="number" inputMode="numeric" min={0} max={500}
+                    <input type="number" inputMode="numeric" min={0} max={9999}
                       className={styles.nutAmountInput}
                       value={amounts[n.key]}
-                      onChange={(e) => setAmount(n.key, Math.max(0, +e.target.value || 0))}
+                      onChange={(e) => setAmount(n.key, +e.target.value || 0)}
                     />
                     <span className={styles.nutUnit}>g</span>
-                    {n.servingCount !== null && (
+                    {n.servingCount !== null && amounts[n.key] > 0 && (
                       <span className={styles.nutCount}>
                         ≈ {Math.round((amounts[n.key] / n.servingGrams) * n.servingCount)}알
                       </span>
                     )}
+                  </div>
+                )}
+                {/* 즉시 경고 — 권장량 초과 시 */}
+                {isSelected && amounts[n.key] > n.maxDaily && (
+                  <div className={styles.nutOverWarn}>
+                    {amounts[n.key] >= (n.danger ? n.maxDaily * 1.5 : n.maxDaily * 3) ? '🚨 위험' : '⚠️ 권장량 초과'}
                   </div>
                 )}
               </div>
@@ -378,49 +395,79 @@ export default function NutsClient() {
             )}
           </div>
 
-          {/* 견과류별 카드 */}
+          {/* 견과류별 카드 — 권장량/입력량 비교 + 위험 표시 */}
           <div className={styles.cardLabelStandalone}>견과류별 상세</div>
-          {selectedNuts.map((n) => (
-            <div key={n.key} className={styles.result}>
-              <div className={styles.resultHead}>
-                <span className={styles.resultColorDot} style={{ background: n.color }} />
-                <span className={styles.resultEmoji}>{n.icon}</span>
-                <div>
-                  <div className={styles.resultName}>{n.name}</div>
-                  <div className={styles.resultAllergyTag}>알레르기 그룹: {ALLERGY_GROUP_LABEL[n.allergyGroup]}</div>
+          {selectedNuts.map((n) => {
+            const levelClass = n.level === 'danger' ? styles.amountHeroDanger
+              : n.level === 'over' ? styles.amountHeroOver
+              : styles.amountHeroSafe
+            return (
+              <div key={n.key} className={styles.result}>
+                <div className={styles.resultHead}>
+                  <span className={styles.resultColorDot} style={{ background: n.color }} />
+                  <span className={styles.resultEmoji}>{n.icon}</span>
+                  <div>
+                    <div className={styles.resultName}>{n.name}</div>
+                    <div className={styles.resultAllergyTag}>알레르기 그룹: {ALLERGY_GROUP_LABEL[n.allergyGroup]}</div>
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.amountHero}>
-                <div className={styles.amountLead}>현재 입력</div>
-                <div className={styles.amountValue}>
-                  {n.count !== null ? `약 ${n.count}알 (${n.grams}g)` : `${n.grams}g`}
+                {/* 권장 vs 입력량 비교 — 핵심 정보 */}
+                <div className={`${styles.amountHero} ${levelClass}`}>
+                  <div className={styles.amountLead}>
+                    {n.level === 'danger' ? '🚨 위험 초과' : n.level === 'over' ? '⚠️ 권장량 초과' : '✅ 안전 범위'}
+                  </div>
+                  <div className={styles.amountValue}>
+                    {n.count !== null ? `약 ${n.count}알 (${n.grams}g)` : `${n.grams}g`}
+                  </div>
+                  <div className={styles.amountSub}>
+                    약 <strong>{Math.round(n.kcal)}kcal</strong> · 권장 한도의 <strong>{Math.round(n.dailyRatio * 100)}%</strong>
+                  </div>
                 </div>
-                <div className={styles.amountSub}>약 <strong>{Math.round(n.kcal)}kcal</strong></div>
-              </div>
 
-              <div className={styles.nutriGrid}>
-                <div className={styles.nutriBox}><div className={styles.nutriLabel}>단백질</div><div className={styles.nutriVal}>{n.protein.toFixed(1)}g</div></div>
-                <div className={styles.nutriBox}><div className={styles.nutriLabel}>지방</div><div className={styles.nutriVal}>{n.fat.toFixed(1)}g</div></div>
-                <div className={styles.nutriBox}><div className={styles.nutriLabel}>탄수화물</div><div className={styles.nutriVal}>{n.carbs.toFixed(1)}g</div></div>
-                <div className={styles.nutriBox}><div className={styles.nutriLabel}>식이섬유</div><div className={styles.nutriVal}>{n.fiber.toFixed(1)}g</div></div>
-              </div>
+                {/* 권장/주의/위험 가이드 — 항상 표시 */}
+                <div className={styles.safetyGuide}>
+                  <div className={styles.safetyRow}>
+                    <span className={styles.safetyBadgeSafe}>✅ 권장</span>
+                    <span className={styles.safetyText}>
+                      하루 <strong>{n.maxDaily}g</strong>
+                      {n.servingCount !== null && <> 이내 (약 <strong>{Math.round(n.servingCount * (n.maxDaily / n.servingGrams))}알</strong>)</>}
+                    </span>
+                  </div>
+                  <div className={styles.safetyRow}>
+                    <span className={styles.safetyBadgeDanger}>🚨 위험</span>
+                    <span className={styles.safetyText}>
+                      <strong>{Math.round(n.dangerThreshold)}g</strong> 이상
+                      {n.servingCount !== null && <> (약 <strong>{Math.round(n.servingCount * (n.dangerThreshold / n.servingGrams))}알</strong>)</>}
+                      {n.danger && ' — 셀레늄 독성·간 부담 누적 위험'}
+                      {!n.danger && ' — 칼로리 과잉·소화 부담'}
+                    </span>
+                  </div>
+                </div>
 
-              <div className={styles.badges}>
-                <span className={styles.keyBadge}>★ {n.keyNutrient} · {n.keyNutrientAmount}</span>
-                {n.benefit.map((b, i) => (
-                  <span key={i} className={styles.benefitBadge}>{b}</span>
-                ))}
-              </div>
+                <div className={styles.nutriGrid}>
+                  <div className={styles.nutriBox}><div className={styles.nutriLabel}>단백질</div><div className={styles.nutriVal}>{n.protein.toFixed(1)}g</div></div>
+                  <div className={styles.nutriBox}><div className={styles.nutriLabel}>지방</div><div className={styles.nutriVal}>{n.fat.toFixed(1)}g</div></div>
+                  <div className={styles.nutriBox}><div className={styles.nutriLabel}>탄수화물</div><div className={styles.nutriVal}>{n.carbs.toFixed(1)}g</div></div>
+                  <div className={styles.nutriBox}><div className={styles.nutriLabel}>식이섬유</div><div className={styles.nutriVal}>{n.fiber.toFixed(1)}g</div></div>
+                </div>
 
-              {n.danger && (
-                <div className={styles.dangerBox}>🚨 <strong>{n.warning}</strong></div>
-              )}
-              {!n.danger && n.warning && (
-                <div className={styles.warnBox}>⚠️ {n.warning}</div>
-              )}
-            </div>
-          ))}
+                <div className={styles.badges}>
+                  <span className={styles.keyBadge}>★ {n.keyNutrient} · {n.keyNutrientAmount}</span>
+                  {n.benefit.map((b, i) => (
+                    <span key={i} className={styles.benefitBadge}>{b}</span>
+                  ))}
+                </div>
+
+                {n.danger && (
+                  <div className={styles.dangerBox}>🚨 <strong>{n.warning}</strong></div>
+                )}
+                {!n.danger && n.warning && (
+                  <div className={styles.warnBox}>⚠️ {n.warning}</div>
+                )}
+              </div>
+            )
+          })}
         </>
       )}
 

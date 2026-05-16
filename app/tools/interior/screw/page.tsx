@@ -174,6 +174,36 @@ export default function ScrewPage() {
         ))}
       </div>
 
+      {/* 4-1. 한국 DIY 시나리오별 권장 나사 — 신규 */}
+      <h2 style={sectionTitle}>🏠 한국 DIY 시나리오별 권장 나사</h2>
+      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+        한국 가정에서 자주 쓰이는 셀프 설치 시나리오와 추천 규격입니다. 벽재(석고/콘크리트/목재)에 따라 칼블록·앵커 필요 여부가 다릅니다.
+      </p>
+      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th style={headCell}>시나리오</th>
+              <th style={headCell}>벽재</th>
+              <th style={headCell}>권장 나사</th>
+              <th style={headCell}>추가 필요</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style={cell}>📺 TV 벽걸이 (50인치~)</td><td style={cell}>콘크리트</td><td style={cell}>M8 × 60~80mm 콘크리트 앵커</td><td style={cell}>칼블록 8~10mm + 함마드릴</td></tr>
+            <tr><td style={cell}>🖼️ 액자 / 거울</td><td style={cell}>석고보드</td><td style={cell}>3.5 × 25~30mm 석고피스 또는 토글 앵커</td><td style={cell}>5kg 이상이면 토글 앵커 필수</td></tr>
+            <tr><td style={cell}>📚 벽선반 / 책장 고정</td><td style={cell}>석고+스터드</td><td style={cell}>4.0 × 50mm 목재피스 (스터드 위치)</td><td style={cell}>스터드 디텍터로 위치 확인</td></tr>
+            <tr><td style={cell}>🪑 IKEA 가구 조립</td><td style={cell}>—</td><td style={cell}>대부분 M4~M6 동봉. 분실 시 표준 규격</td><td style={cell}>육각키 동봉, 별도 구매 X</td></tr>
+            <tr><td style={cell}>🚪 도어록 / 손잡이 교체</td><td style={cell}>목재 문</td><td style={cell}>3.5 × 25mm 목재피스 (제품 동봉)</td><td style={cell}>파일럿홀 2.5mm 권장</td></tr>
+            <tr><td style={cell}>🪟 커튼봉 / 블라인드</td><td style={cell}>콘크리트/석고</td><td style={cell}>콘크리트 6mm 앵커 또는 석고 토글</td><td style={cell}>커튼 무게 +10% 안전 계수</td></tr>
+            <tr><td style={cell}>🔧 일반 기계·DIY</td><td style={cell}>금속</td><td style={cell}>M5~M8 표준 미터 (KS 8.8 등급)</td><td style={cell}>M6 가장 흔함 (탭드릴 5.0mm)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+        💡 한국 아파트 벽은 대부분 <strong style={{ color: 'var(--text)' }}>콘크리트(외벽) + 석고보드(내벽 마감)</strong> 조합. 무거운 물건은 반드시 스터드 또는 콘크리트에 고정. 석고만으로는 5kg 이내가 안전선입니다.
+      </p>
+
       {/* 5. 안전 + 일반 토크 */}
       <h2 style={sectionTitle}>⚠️ 일반 토크 안내 + 안전 강조</h2>
       <div style={card}>

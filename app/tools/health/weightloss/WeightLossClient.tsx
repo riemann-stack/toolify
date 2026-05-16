@@ -211,8 +211,8 @@ export default function WeightLossClient() {
         ))}
       </div>
 
-      {/* 공통 입력 */}
-      <div className={styles.fieldRow}>
+      {/* 공통 입력 — Row 1: 4열 (현재·목표·키·나이) */}
+      <div className={styles.fieldRow4}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>현재 체중</label>
           <div className={styles.inputRow}>
@@ -229,9 +229,6 @@ export default function WeightLossClient() {
             <span className={styles.unit}>kg</span>
           </div>
         </div>
-      </div>
-
-      <div className={styles.fieldRow3}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>키</label>
           <div className={styles.inputRow}>
@@ -248,6 +245,10 @@ export default function WeightLossClient() {
             <span className={styles.unit}>세</span>
           </div>
         </div>
+      </div>
+
+      {/* Row 2: 3열 (성별·TDEE·시작일) */}
+      <div className={styles.fieldRow3}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>성별</label>
           <div className={styles.toggleRow}>
@@ -257,13 +258,10 @@ export default function WeightLossClient() {
               onClick={() => setGender('female')}>♀</button>
           </div>
         </div>
-      </div>
-
-      <div className={styles.fieldRow}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>
-            TDEE
-            <a href="/tools/health/bmr" style={{ fontSize: 10.5, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400 }}>
+            <span>TDEE</span>
+            <a href="/tools/health/bmr" style={{ fontSize: 10.5, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400, display: 'block', marginTop: 2 }}>
               BMR 계산기에서 가져오기 →
             </a>
           </label>

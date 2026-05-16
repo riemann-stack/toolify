@@ -71,7 +71,7 @@ export default function WeightLossPage() {
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px', textAlign: 'center' }}>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: '#3EFF9B', marginBottom: '6px' }}>
-              주당 체중의 0.5~1% 감량이 요요 방지에 가장 효과적
+              주당 체중의 0.5~1% 감량이 요요 방지에 효과적
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
               현재 체중 70kg이라면 주당 0.35~0.7kg 감량이 안전한 범위입니다.

@@ -475,56 +475,58 @@ export default function ScrewClient() {
         </>
       )}
 
-      {/* ══════════ TAB 2: 인치 ↔ mm ══════════ */}
+      {/* ══════════ TAB 2: 인치 ↔ mm — 2분할 (모바일도 좌·우) ══════════ */}
       {tab === 'convert' && (
         <>
-          <div className={s.card}>
-            <span className={s.cardLabel}>📏 인치 → mm</span>
-            <input type="text" className={s.input}
-              placeholder='예: 5/8 또는 0.625'
-              value={inchInput}
-              onChange={(e) => setInchInput(e.target.value)} />
-            <div className={s.pillRow} style={{ marginTop: 8 }}>
-              {STD_INCH_FRACTIONS.map((f) => (
-                <button key={f.label}
-                  className={s.pill}
-                  onClick={() => setInchInput(f.label)}>{f.label}&quot;</button>
-              ))}
-            </div>
-            {inchValue !== null && inchToMmResult !== null && (
-              <div className={s.convertResult}>
-                <p className={s.convertLabel}>{inchValue}&quot; (= {inchValue.toFixed(4)}&quot;)</p>
-                <p className={s.convertValue}>{inchToMmResult.toFixed(3)}mm</p>
+          <div className={s.convertSplit}>
+            <div className={s.card}>
+              <span className={s.cardLabel}>📏 인치 → mm</span>
+              <input type="text" className={s.input}
+                placeholder='예: 5/8 또는 0.625'
+                value={inchInput}
+                onChange={(e) => setInchInput(e.target.value)} />
+              <div className={s.pillRow} style={{ marginTop: 8 }}>
+                {STD_INCH_FRACTIONS.map((f) => (
+                  <button key={f.label}
+                    className={s.pill}
+                    onClick={() => setInchInput(f.label)}>{f.label}&quot;</button>
+                ))}
               </div>
-            )}
-          </div>
+              {inchValue !== null && inchToMmResult !== null && (
+                <div className={s.convertResult}>
+                  <p className={s.convertLabel}>{inchValue}&quot;</p>
+                  <p className={s.convertValue}>{inchToMmResult.toFixed(3)}mm</p>
+                </div>
+              )}
+            </div>
 
-          <div className={s.card}>
-            <span className={s.cardLabel}>📏 mm → 인치</span>
-            <input type="number" inputMode="decimal" min={0} step={0.1}
-              className={s.input}
-              placeholder="예: 25.4"
-              value={mmInput}
-              onChange={(e) => setMmInput(e.target.value)} />
-            <div className={s.pillRow} style={{ marginTop: 8 }}>
-              {STD_MM_SIZES.map((m) => (
-                <button key={m}
-                  className={s.pill}
-                  onClick={() => setMmInput(String(m))}>{m}mm</button>
-              ))}
-            </div>
-            {mmValue > 0 && mmToInchResult !== null && mmToFraction && mmToFraction32 && (
-              <div className={s.convertResult}>
-                <p className={s.convertLabel}>{mmValue}mm</p>
-                <p className={s.convertValue}>{mmToInchResult.toFixed(4)}&quot;</p>
-                <p className={s.convertSub}>
-                  ≈ {fmtFraction(mmToFraction)} (1/64 정밀){mmToFraction.exact ? ' ✓' : ''}
-                </p>
-                <p className={s.convertSub}>
-                  ≈ {fmtFraction(mmToFraction32)} (1/32 일반){mmToFraction32.exact ? ' ✓' : ''}
-                </p>
+            <div className={s.card}>
+              <span className={s.cardLabel}>📏 mm → 인치</span>
+              <input type="number" inputMode="decimal" min={0} step={0.1}
+                className={s.input}
+                placeholder="예: 25.4"
+                value={mmInput}
+                onChange={(e) => setMmInput(e.target.value)} />
+              <div className={s.pillRow} style={{ marginTop: 8 }}>
+                {STD_MM_SIZES.map((m) => (
+                  <button key={m}
+                    className={s.pill}
+                    onClick={() => setMmInput(String(m))}>{m}mm</button>
+                ))}
               </div>
-            )}
+              {mmValue > 0 && mmToInchResult !== null && mmToFraction && mmToFraction32 && (
+                <div className={s.convertResult}>
+                  <p className={s.convertLabel}>{mmValue}mm</p>
+                  <p className={s.convertValue}>{mmToInchResult.toFixed(4)}&quot;</p>
+                  <p className={s.convertSub}>
+                    ≈ {fmtFraction(mmToFraction)} (1/64){mmToFraction.exact ? ' ✓' : ''}
+                  </p>
+                  <p className={s.convertSub}>
+                    ≈ {fmtFraction(mmToFraction32)} (1/32){mmToFraction32.exact ? ' ✓' : ''}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 변환 표 */}

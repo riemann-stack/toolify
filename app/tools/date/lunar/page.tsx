@@ -5,9 +5,9 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
-  title: '양음력 변환기 2026 — 음력 ↔ 양력 · 간지 확인',
-  description: '음력 생일을 양력으로, 양력을 음력으로 즉시 변환합니다. 윤달 지원, 60갑자 간지와 띠까지 한눈에 확인.',
-  keywords: ['양음력변환', '음력양력변환', '음력달력', '양력음력', '음력생일', '윤달계산', '60갑자', '간지계산'],
+  title: '양력 음력 변환기 — 음력 생일·설날·추석 · 60갑자 간지',
+  description: '음력 생일을 양력으로, 양력을 음력으로 즉시 변환합니다. 윤달 지원, 60갑자 간지와 띠, 설날·추석 등 명절 음력 → 양력 자동 안내. 1900~2100년 한국천문연구원 데이터 기반.',
+  keywords: ['양력음력변환기', '양음력변환', '음력양력변환', '음력달력', '음력생일', '윤달계산', '60갑자', '간지계산', '설날 양력', '추석 양력', '음력 생일 양력'],
 })
 
 export default function LunarPage() {
@@ -15,7 +15,7 @@ export default function LunarPage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🌙 양음력 변환기
+        🌙 양력 음력 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         양력과 음력을 서로 변환하고 해당 연도의 60갑자 간지까지 확인합니다. 1900~2100년 지원.
@@ -25,18 +25,143 @@ export default function LunarPage() {
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
+        {/* 1. 양력 vs 음력 차이 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>양력과 음력, 무엇이 다를까?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 지구가 태양을 한 바퀴 도는 365.25일을 기준으로 하며 현재 세계 표준 달력입니다.
-            <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼기 때문에 1년이 약 354일로 양력보다 11일가량 짧습니다.
-            이 차이를 보정하기 위해 <strong style={{ color: 'var(--accent)' }}>19년에 7번</strong> 윤달을 끼워 넣어 계절과 달력을 맞춥니다.
+            <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼아 1년이 약 354일로 양력보다 11일가량 짧습니다.
+            이 차이를 보정하기 위해 <strong style={{ color: 'var(--accent)' }}>19년에 7번</strong> 윤달을 끼워 넣어 계절과 달력을 맞춥니다(메톤 주기).
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            한국의 공식 달력은 1896년부터 양력이지만 설날·추석·제사·음력 생일 등 전통 절기는 여전히 음력 기준으로 챙깁니다.
+            한국의 공식 달력은 1896년 갑오개혁 이후 양력이지만 <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
+          </p>
+          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--accent)', fontWeight: 700 }}>양력 (태양력)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EC8FF', fontWeight: 700 }}>음력 (태음력)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['기준', '지구의 태양 공전', '달의 차오름·이지러짐'],
+                  ['1년 길이', '365일 (윤년 366일)', '약 354일 (윤년 384일)'],
+                  ['1개월 길이', '28~31일 고정', '29일 또는 30일'],
+                  ['윤 보정', '4년마다 윤일(2/29) 추가', '19년에 7번 윤달 추가'],
+                  ['시작', '갑오개혁 (1896)', '신라·고려·조선~현재'],
+                  ['주 용도', '일상·법정·국제', '설·추석·제사·음력 생일'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontWeight: 500 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* 2. 한국 명절 음력 → 양력 (2024~2028) */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2024~2028)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            매년 양력 날짜가 바뀝니다. 설·추석은 한국에서 가장 큰 명절(3일 연휴).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>명절 (음력)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2024</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2025</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>2026</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2027</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2028</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['🌅 설날 (1.1)',         '2/10', '1/29', '2/17', '2/6',  '1/26'],
+                  ['🌕 정월 대보름 (1.15)', '2/24', '2/12', '3/3',  '2/20', '2/9'],
+                  ['🌸 부처님오신날 (4.8)', '5/15', '5/5',  '5/24', '5/13', '5/2'],
+                  ['🌿 단오 (5.5)',         '6/10', '5/31', '6/19', '6/9',  '5/28'],
+                  ['🌾 추석 (8.15)',        '9/17', '10/6', '9/25', '9/15', '10/3'],
+                  ['🎋 중양절 (9.9)',       '10/11','10/29','10/19','10/8', '10/26'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[4]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[5]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+            ※ 한국천문연구원 공식 데이터 기반. 본 계산기로 임의 연도·임의 음력 날짜 변환 가능.
           </p>
         </div>
 
+        {/* 3. 60갑자 — 천간 · 지지 */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자 — 천간(10) × 지지(12)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            동아시아 전통 연도 표기. 천간 10개와 지지 12개를 순차로 조합해 60년마다 한 번 순환합니다 — 그래서 만 60세 환갑(還甲)은 「자기 출생 간지로 돌아오는」 의미.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>천간 (10)</p>
+              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
+                甲(갑) · 乙(을) · 丙(병) · 丁(정) · 戊(무)<br/>
+                己(기) · 庚(경) · 辛(신) · 壬(임) · 癸(계)
+              </p>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
+              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
+                子(자·쥐) · 丑(축·소) · 寅(인·범) · 卯(묘·토끼)<br/>
+                辰(진·용) · 巳(사·뱀) · 午(오·말) · 未(미·양)<br/>
+                申(신·원숭이) · 酉(유·닭) · 戌(술·개) · 亥(해·돼지)
+              </p>
+            </div>
+          </div>
+          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>최근 연도</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>간지</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>띠</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['2024', '甲辰 (갑진)', '🐲 청룡띠'],
+                  ['2025', '乙巳 (을사)', '🐍 푸른 뱀띠'],
+                  ['2026', '丙午 (병오)', '🐴 붉은 말띠'],
+                  ['2027', '丁未 (정미)', '🐑 붉은 양띠'],
+                  ['2028', '戊申 (무신)', '🐒 누런 원숭이띠'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* 4. 사용 방법 (기존 유지) */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사용 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -57,42 +182,84 @@ export default function LunarPage() {
           </div>
         </div>
 
+        {/* 5. FAQ (아코디언) */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { q: '윤달이란 무엇인가요?', a: '음력은 1년이 약 354일이라 양력과 11일 차이가 납니다. 3년마다 약 33일의 오차가 생기므로 19년에 7번 한 달을 덧붙여 계절과 맞추는데, 이 달이 윤달입니다. 제사·결혼 등 중요한 일은 윤달을 피하는 전통이 있습니다.' },
-              { q: '음력 생일은 매년 양력으로 바뀌나요?', a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 음력 1월 1일(설날)은 2026년에는 2월 17일, 2027년에는 2월 6일입니다. 이 계산기에서 매년 확인할 수 있습니다.' },
-              { q: '60갑자는 어떻게 계산되나요?', a: '천간(갑을병정무기경신임계 10개)과 지지(자축인묘진사오미신유술해 12개)를 조합해 60년 주기로 순환합니다. 2024년은 갑진(甲辰), 2026년은 병오(丙午)년입니다.' },
-              { q: '이 계산기는 얼마나 정확한가요?', a: '한국천문연구원의 공식 음력 데이터를 기반으로 1900~2100년 범위에서 날짜·윤달·간지 모두 정확하게 제공합니다.' },
+              {
+                q: '윤달이란 무엇인가요?',
+                a: '음력은 1년이 약 354일이라 양력과 11일 차이가 납니다. 3년마다 약 33일의 오차가 생기므로 <strong>19년에 7번</strong> 한 달을 덧붙여 계절과 맞추는데, 이 달이 윤달입니다. 예를 들어 윤4월은 「4월 다음에 다시 4월」이 한 번 더 오는 셈입니다.<br/><br/><strong>전통적으로 윤달은 「공달」</strong>이라 하여 손이 없는 달로 여겨 이장·수의 제작 등 평소 미루던 일을 처리하는 시기로 쓰입니다. 반대로 결혼·이사·개업은 윤달을 피하는 가정도 많습니다.',
+              },
+              {
+                q: '음력 생일은 매년 양력으로 바뀌나요?',
+                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 6일</strong>입니다.<br/><br/>편차는 보통 ±11일 이내지만, 윤달이 끼면 그해는 같은 음력 날짜라도 양력 30일 이상 뒤로 밀릴 수 있습니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
+              },
+              {
+                q: '60갑자는 어떻게 계산되나요?',
+                a: '천간 10개와 지지 12개를 순서대로 조합해 60년 주기로 순환합니다.<br/>· 2024년 = <strong>갑진(甲辰)</strong> · 청룡띠<br/>· 2025년 = <strong>을사(乙巳)</strong> · 푸른 뱀띠<br/>· 2026년 = <strong>병오(丙午)</strong> · 붉은 말띠<br/><br/>천간과 지지의 색·오행 의미가 결합되어 「청룡」, 「붉은 말」 등의 별칭으로 불리기도 합니다. 만 60세 생일을 「환갑(還甲)」이라 부르는 이유는 자기 출생 연도의 간지로 돌아오기 때문입니다.',
+              },
+              {
+                q: '음력 생일을 양력으로 옮기면 띠가 달라질 수도 있나요?',
+                a: '있습니다. <strong>띠는 음력 1월 1일(설날)을 기준</strong>으로 바뀌므로, 양력 1월~2월 초 출생자는 양력으로는 올해지만 음력으로는 전년도에 속할 수 있습니다.<br/><br/>예) 2024년 2월 5일 양력 출생 → 음력으로는 2023년(계묘·토끼띠) 12월. 본 계산기로 음력 변환 후 띠를 확인하는 것이 정확합니다.',
+              },
+              {
+                q: '설날·추석 양력 날짜는 매년 어떻게 정해지나요?',
+                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 매년 공식 발표합니다.<br/><br/>· 설날 양력 범위 — 매년 <strong>1월 21일~2월 21일</strong> 사이<br/>· 추석 양력 범위 — 매년 <strong>9월 7일~10월 8일</strong> 사이',
+              },
+              {
+                q: '이 계산기는 얼마나 정확한가요?',
+                a: '한국천문연구원의 공식 음력 데이터를 기반으로 <strong>1900~2100년 범위</strong>에서 날짜·윤달·간지 모두 정확하게 제공합니다. 한국 표준시(KST, UTC+9) 기준이며, 해외 음력(중국·베트남)과는 시차로 인해 일부 날짜가 ±1일 차이날 수 있습니다.',
+              },
+              {
+                q: '한국·중국·일본 음력이 모두 같은가요?',
+                a: '대부분 같지만 가끔 다를 수 있습니다. 음력은 「합삭(달과 태양이 일직선)」 시각을 기준으로 한 달이 시작되는데, 각국 표준시(시차) 때문에 그 시각이 자정을 넘기면 시작일이 ±1일 달라집니다.<br/>· <strong>한국·중국</strong> — 시차가 1시간이라 거의 항상 같음<br/>· <strong>일본</strong> — 메이지 유신 후 음력을 공식 폐지, 다만 일부 전통 행사는 음력 사용<br/>· <strong>베트남</strong> — 한국 음력과 거의 같으나 윤달이 다른 해가 있음(예: 2023 윤2월 vs 한국 윤2월 동일)',
+              },
+              {
+                q: '음력 생일과 양력 생일 중 어느 쪽을 챙겨야 하나요?',
+                a: '<strong>가족마다 다릅니다.</strong> 일반적인 패턴 —<br/>· 부모·조부모 세대 — 음력 생일을 본 생일로 인식<br/>· 1980년대 이후 출생자 — 대부분 양력 생일이 본 생일<br/>· 일부 가정 — 두 날을 모두 챙김 (양력은 친구·회사, 음력은 가족)<br/><br/>본인 음력 생일이 양력으로 매년 며칠인지 모르겠다면 본 계산기로 미리 5~10년치를 확인해 캘린더에 등록해두면 편합니다.',
+              },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--accent)', marginBottom: '8px' }}>Q. {item.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{item.a}</p>
-              </div>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {item.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: item.a }}
+                />
+              </details>
             ))}
           </div>
         </div>
 
+        {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>관련 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/life/zodiac', emoji: '🐲', name: '띠·별자리 계산기', desc: '60갑자·궁합까지' },
-              { href: '/tools/date/age', emoji: '🎂', name: '만 나이 계산기', desc: '통일법 기준' },
-              { href: '/tools/date/dday', emoji: '📅', name: 'D-Day 계산기', desc: '두 날짜 사이·페이스 통합' },
-              { href: '/tools/date/military', emoji: '🎖️', name: '군 전역일 계산기', desc: '전역일·복무율' },
-            ].map((t) => (
-              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '22px' }}>{t.emoji}</span>
+              { href: '/tools/life/zodiac',     icon: '🐲', name: '띠·별자리 계산기',   desc: '60갑자·궁합·삼합' },
+              { href: '/tools/date/age',        icon: '🎂', name: '나이 계산기',         desc: '만 나이 통일법 기준' },
+              { href: '/tools/date/dday',       icon: '📅', name: 'D-Day 계산기',        desc: '두 날짜 사이·페이스' },
+              { href: '/tools/date/military',   icon: '🎖️', name: '군대 전역일 계산기',  desc: '전역일·복무율' },
+              { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·조선왕·간지·한·중·일' },
+              { href: '/tools/date/life-time',  icon: '⏳', name: '생애 시간 계산기',    desc: '살아온 시간·앞으로의 시간' },
+            ].map(t => (
+              <Link key={t.href} href={t.href} style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                background: 'var(--bg2)', border: '1px solid var(--border)',
+                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+              }}>
+                <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '2px' }}>{t.name}</p>
-                  <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{t.desc}</p>
+                  <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', marginBottom: '3px' }}>{t.name}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
               </Link>
             ))}
           </div>
         </div>
+
       </div>
     </div>
   )

@@ -53,18 +53,20 @@
 .severityWarning { background: rgba(255,140,62,0.15);  color: #FF8C3E; border: 1px solid rgba(255,140,62,0.40); }
 .severityDanger  { background: rgba(255,107,107,0.20); color: #FF6B6B; border: 2px solid #FF6B6B; }
 
-/* ── 탭 ── */
+/* ── 탭 — 3개 1줄 (모바일도 1줄 유지) ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) {
+  .tabs { gap: 2px; }
+  .tabBtn { font-size: 11px; padding: 9px 2px; }
+}
 .tabBtn {
   background: transparent;
   border: none;
@@ -98,6 +100,8 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  row-gap: 2px;
   font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.06em;
@@ -148,10 +152,31 @@
 
 .fieldRow  { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-/* 모바일에서도 2열 유지 — 입력 항목이 많아 세로 스크롤 부담 ↓ */
+.fieldRow4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
+
+/* 모바일 — 4열·3열 유지 + 카드 padding/font 축소로 공간 절약 */
 @media (max-width: 540px) {
-  .fieldRow3 { grid-template-columns: 1fr 1fr; }
+  .fieldRow4 { gap: 4px; }
+  .fieldRow3 { gap: 4px; }
+  .fieldRow4 .card, .fieldRow3 .card { padding: 8px 6px; }
+  .fieldRow4 .cardLabel, .fieldRow3 .cardLabel {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .fieldRow4 .numInput, .fieldRow3 .numInput { font-size: 14px; padding: 6px 4px; text-align: center; }
+  .fieldRow4 .unit, .fieldRow3 .unit { font-size: 10px; }
+  .fieldRow4 .toggleBtn, .fieldRow3 .toggleBtn { padding: 6px 2px; font-size: 14px; }
+  /* 시작일·목표일 date input — 오버플로 방지 */
+  .fieldRow3 .dateInput { font-size: 12px; padding: 6px 4px; min-width: 0; }
 }
+
+/* date input은 항상 컨테이너에 맞도록 */
+.dateInput { min-width: 0; max-width: 100%; }
 @media (max-width: 480px) {
   .fieldRow .card, .fieldRow3 .card { padding: 12px 12px; }
   .numInput { font-size: 16px; padding: 8px 10px; }

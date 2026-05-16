@@ -90,6 +90,20 @@
 
 .amountRow {
   display: grid; grid-template-columns: 1fr 110px; gap: 8px;
+  margin-top: 14px;
+}
+
+/* 검색 + 카테고리 드롭다운 한 줄 (모바일도 1줄 유지) */
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr 130px;
+  gap: 8px;
+  align-items: stretch;
+}
+@media (max-width: 480px) {
+  .searchRow { grid-template-columns: 1fr 110px; gap: 6px; }
+  .searchRow .searchInput { padding: 10px 10px 10px 32px; font-size: 14px; }
+  .searchRow .select { padding: 10px 24px 10px 10px; font-size: 12.5px; }
 }
 
 /* 목적 칩 */

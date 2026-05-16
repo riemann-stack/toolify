@@ -230,9 +230,9 @@ export default function DdayPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
-              { href: '/tools/date/age',             icon: '🎂', name: '만 나이·생일 통계',     desc: '생일까지 D-day, 인생 통계' },
+              { href: '/tools/date/age',             icon: '🎂', name: '나이 계산기',           desc: '생일까지 D-day, 인생 통계' },
               { href: '/tools/edu/review-interval',  icon: '📚', name: '복습 간격 계산기',      desc: '시험 D-day와 복습 시너지' },
-              { href: '/tools/date/military',        icon: '🎖️', name: '군 전역일 계산기',      desc: '입대일·전역일·복무율' },
+              { href: '/tools/date/military',        icon: '🎖️', name: '군대 전역일 계산기',   desc: '입대일·전역일·복무율' },
               { href: '/tools/date/lunar',           icon: '🌙', name: '음양력 변환기',         desc: '띠·세시풍속' },
               { href: '/tools/date/jet-lag',         icon: '✈️', name: '시차 계산기',           desc: '도시 간 시차·도착 시간' },
               { href: '/tools/date/life-time',       icon: '⏳', name: '인생 시간 계산기',      desc: '남은 인생을 구체적으로' },
