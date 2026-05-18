@@ -46,35 +46,72 @@
 }
 .tabActive { background: var(--accent); color: #0D0D0D; }
 
-/* 잠금 토글 */
+/* 잠금 토글 — 가로 3개 (모바일에서도 한 줄 유지) */
 .lockRow {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 }
-@media (max-width: 600px) { .lockRow { grid-template-columns: 1fr; } }
 .lockBtn {
   appearance: none;
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 14px 8px;
+  padding: 10px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
-  min-height: 48px;
-}@media (hover: hover) {
-  .lockBtn:hover { border-color: var(--accent); }
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  transition: all 0.15s;
 }
-.lockBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+@media (hover: hover) {
+  .lockBtn:hover:not(:disabled) { border-color: var(--accent); }
+}
+.lockBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.lockBtnActive {
+  background: var(--accent);
+  color: #0D0D0D;
+  border-color: var(--accent);
+}
+.lockEmoji { font-size: 15px; line-height: 1; }
+.lockText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lockCounter {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--bg3);
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: 'Inter', system-ui, sans-serif;
+}
 .lockHint {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
+}
+.lockHint strong { color: var(--text); }
+@media (max-width: 380px) {
+  .lockBtn { padding: 9px 4px; font-size: 12px; min-height: 40px; }
+  .lockEmoji { font-size: 13px; }
 }
 
 /* 슬라이더 */

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/life/fart-risk',
   title: '방귀 위험도 계산기 — 3축 점수·원인 분류·저FODMAP 대체',
-  description: '오늘 먹은 음식 → 가스량·냄새·복부팽만 3축 점수, 원인 유형 분류(발효·유당·탄산·소화지연·냄새강화), 저FODMAP 대체 음식, 8가지 증상별 대처 가이드. 재미·교육용.',
+  description: '가스량·냄새·복부팽만 3축 점수로 원인 진단 + 저FODMAP 식재료 대체와 8가지 증상별 대처 가이드.',
   keywords: ['방귀유발음식', '가스유발음식', '방귀계산기', '고구마방귀', '콩방귀', '탄산방귀', '방귀원인음식', 'FODMAP', '저FODMAP 대체', '복부팽만 음식', '유당불내증', '단백질 보충제 가스', '계란 방귀 냄새', '양파 가스', 'WPC WPI 차이'],
 })
 
@@ -18,7 +18,7 @@ export default function FartRiskPage() {
         💨 방귀 위험도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        음식·조건 체크 → <strong style={{ color: 'var(--text)' }}>가스량·냄새·복부팽만 3축 점수 + 원인 유형 분류 + 저FODMAP 대체 + 증상별 대처 가이드</strong>까지.
+        가스량·냄새·복부팽만 3축 점수로 원인 진단 + <strong style={{ color: 'var(--text)' }}>저FODMAP 대체</strong>와 증상별 대처.
       </p>
 
       <FartRiskClient />

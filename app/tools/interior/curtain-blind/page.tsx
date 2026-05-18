@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/curtain-blind',
   title: '커튼 블라인드 계산기 — 창문 측정·주문 사이즈',
-  description: '창문 가로·세로로 커튼·블라인드·롤스크린·로만쉐이드·버티칼 추천 사이즈를 계산합니다. 주름 2배, 봉 길이, 인사이드·아웃사이드 마운트, 측정법 가이드.',
+  description: '창문 사이즈로 커튼·블라인드·롤스크린 추천 사이즈 자동. 주름배수·길이·고정 위치까지.',
   keywords: ['커튼사이즈계산', '블라인드사이즈', '커튼길이추천', '커튼주름2배', '블라인드재는법', '롤스크린사이즈', '커튼봉길이', '커튼주문사이즈'],
 })
 
@@ -21,8 +21,7 @@ export default function CurtainBlindPage() {
         🪟 커튼 블라인드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        창문 가로·세로를 입력하면 <strong style={{ color: 'var(--text)' }}>커튼·블라인드·롤스크린·로만쉐이드·버티칼</strong> 5종 추천 사이즈를 계산합니다.
-        주름 2배·봉 길이·인사이드/아웃사이드 마운트 자동 반영, 측정법 가이드 포함.
+        창문 사이즈로 커튼·블라인드·롤스크린 <strong style={{ color: 'var(--text)' }}>추천 사이즈</strong>를 자동으로.
       </p>
 
       <CurtainBlindClient />

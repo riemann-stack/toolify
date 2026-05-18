@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/art/gradient-generator',
   title: 'CSS 그라디언트 생성기 — Linear·Radial·Conic·Mesh + OKLCH 보간 + Tailwind·SwiftUI·Flutter 코드',
   description:
-    'Linear·Radial·Conic·Mesh·Repeating 5종 그라디언트, RGB·HSL·OKLCH·LAB 4 색공간 보간 비교, 노이즈 효과, WCAG 대비비·색맹 시뮬, 6포맷 코드 (CSS·Tailwind·SVG·React·SwiftUI·Flutter), 한국 무드 30+ 글로벌 30+ 프리셋, 이미지 색상 추출까지 — 디자이너·개발자 종합 그라디언트 도구.',
+    'Linear·Radial·Conic·Mesh 5종 × OKLCH·LAB 보간 비교 + 노이즈 + Tailwind/SwiftUI/Flutter 코드와 한국 무드 30+ 프리셋.',
   keywords: [
     'CSS 그라디언트', '그라디언트 생성기', 'gradient generator',
     'linear-gradient', 'radial-gradient', 'conic-gradient', 'mesh gradient',
@@ -67,8 +67,7 @@ export default function GradientGeneratorPage() {
         🌈 CSS 그라디언트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        Linear · Radial · Conic · Mesh · Repeating 5종 그라디언트와 RGB · HSL · OKLCH · LAB 4 색공간 보간을 한 번에 비교.
-        WCAG 대비비·색맹 시뮬, 노이즈, 한국 무드 프리셋 30+, CSS · Tailwind · SVG · React · SwiftUI · Flutter 6포맷 코드 자동 생성.
+        Linear·Radial·Conic·Mesh 5종 × OKLCH·LAB 보간 + <strong style={{ color: 'var(--text)' }}>Tailwind/SwiftUI/Flutter 코드</strong>.
       </p>
 
       <GradientGeneratorClient />

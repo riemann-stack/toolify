@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/date/jet-lag',
   title: '시차 적응 계산기 — 여행 전·기내·도착 후 수면 타이밍',
-  description: '시차 적응 예상 기간, 출국 전 수면 조정 스케줄, 기내 수면 타이밍, 도착 후 낮잠·햇빛 노출 계산. 서울-뉴욕·런던·파리 시차 극복 가이드.',
+  description: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드. 출장·여행 컨디션 관리에.',
   keywords: ['시차적응계산기', '시차극복방법', '해외여행시차', '기내수면타이밍', '시차적응기간', '제트래그', '유럽시차적응', '미국시차적응'],
 })
 
@@ -18,7 +18,7 @@ export default function JetLagPage() {
         ✈️ 시차 적응 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        출발지·도착지·이륙 시각·비행 시간만 입력하면 출국 전 수면 조정 스케줄, 기내 수면 권장 구간, 카페인 컷오프, 도착 첫날 전략, 7일 적응 스케줄까지 자동 계산합니다.
+        여행 전·중·후 <strong style={{ color: 'var(--text)' }}>시차 적응 일정과 수면 타이밍</strong> 자동 가이드.
       </p>
 
       <JetLagClient />

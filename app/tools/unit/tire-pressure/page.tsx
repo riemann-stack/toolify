@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/unit/tire-pressure',
   title: '타이어 공기압 변환기 psi ↔ kPa ↔ bar — 권장 공기압 체크',
-  description: 'psi, kPa, bar, kgf/cm² 타이어 공기압 단위를 즉시 변환합니다. 차량별 권장 공기압 비교, 부족·과다 진단, 자전거·오토바이 지원.',
+  description: 'psi·kPa·bar 변환 + 차량별 권장 공기압과 계절별 관리 가이드. 안전 운행과 연비 향상에.',
   keywords: ['타이어공기압변환', 'psi kPa 변환', '타이어공기압', '자전거공기압', '권장공기압', 'bar psi 변환'],
 })
 
@@ -19,7 +19,7 @@ export default function TirePressurePage() {
         🛞 타이어 공기압 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>psi · kPa · bar · kgf/cm²</strong> 타이어 공기압 단위를 즉시 변환하고, 차량별 권장 공기압과 비교해 부족·과다 여부를 진단합니다. 자전거·오토바이도 지원합니다.
+        psi·kPa·bar 변환 + 차량별 <strong style={{ color: 'var(--text)' }}>권장 공기압</strong>과 계절별 관리.
       </p>
 
       <TirePressureClient />

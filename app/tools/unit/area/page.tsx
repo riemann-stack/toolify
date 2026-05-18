@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/unit/area',
   title: '평수 변환기 — 아파트 평형·전용·공급면적·평형별 방 가이드',
   description:
-    '평수와 제곱미터(㎡) 즉시 변환. 한국 아파트 평형표(11~70평형), 전용·공급·계약면적 차이 시각화, 평형별 방 크기·가구 가이드, 84㎡ = 34평 환산 가이드까지.',
+    '아파트 평형·전용·공급·계약면적 환산 + 평형별 방 크기 가이드로 부동산·인테리어 면적 감 잡기.',
   keywords: [
     '평수계산기', '평수변환', '제곱미터변환', '㎡평수', '아파트평수',
     '평수㎡변환', '전용면적', '공급면적', '계약면적',
@@ -23,8 +23,7 @@ export default function AreaPage() {
         🏠 평수 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        평수·㎡ 즉시 변환에 더해 <strong style={{ color: 'var(--text)' }}>한국 아파트 평형표·전용/공급/계약면적·평형별 방 크기 가이드</strong>까지.
-        부동산 광고에서 자주 보는 &lsquo;34평 (전용 84㎡)&rsquo; 표기를 정확히 이해할 수 있습니다.
+        아파트 평형·전용·공급·계약면적 환산 + <strong style={{ color: 'var(--text)' }}>평형별 방 크기</strong> 가이드.
       </p>
 
       <AreaClient />

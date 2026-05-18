@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/interior/ventilation',
   title: '환기량 계산기 — ACH·CO₂·공기청정기·창문 환기 시간',
   description:
-    '공간 부피·인원·목표 환기 횟수(ACH)로 필요 환기량 계산. 공기청정기 CADR 추천(한국 표시면적 환산), CO₂ 위험 체크, 창문 환기 시간 추정, 공간 용도별 권장 표(국토교통부·교육부·KOSHA 기준).',
+    '공간 부피·인원·ACH로 필요 환기량 + 공기청정기 CADR 매칭·CO₂ 위험·창문 환기 권장 시간.',
   keywords: [
     '환기량 계산', 'ACH 계산', '공기청정기 CADR', 'CO2 농도',
     '창문 환기 시간', '회의실 환기', '교실 환기',
@@ -23,8 +23,7 @@ export default function VentilationPage() {
         💨 환기량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        공간 부피·인원·목표 ACH로 <strong style={{ color: 'var(--text)' }}>필요 환기량, 공기청정기 CADR(한국 표시면적 환산), CO₂ 위험 체크, 창문 환기 시간</strong>까지 한 번에.
-        한국 표준(국토교통부·교육부·KOSHA) + 국제 표준(ASHRAE·AHAM) 기반.
+        공간 부피·인원으로 필요 환기량 + <strong style={{ color: 'var(--text)' }}>공기청정기 CADR 매칭</strong>과 창문 환기 시간.
       </p>
 
       <VentilationClient />

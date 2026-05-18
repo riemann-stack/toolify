@@ -14,7 +14,7 @@ export default function SportsCategoryPage() {
   return (
     <CategoryView
       catId="sports"
-      description="러닝·골프·격투기·야구·축구·웨이트까지 — 종목별 수치 분석과 훈련 계획을 한 곳에서. 한국 대회 일정·VDOT·1RM·핸디캡 자동 계산."
+      description="러닝·골프·축구·웨이트 — VDOT·1RM·WHS 핸디캡까지 한국 대회 기준으로 정확하게."
     />
   )
 }

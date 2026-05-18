@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/military',
   title: '군대 전역일 계산기 — 복무율·D-day·마일스톤 (2026년 최신)',
   description:
-    '입대일과 복무 형태(육군·해군·공군·해병대·사회복무요원·산업기능요원·전문연구요원·대체복무)를 입력해 전역일과 복무율, 100일·50%·말년 시작일 마일스톤을 계산합니다. 2026년 병무청 기준.',
+    '입대일 기준 전역일과 복무율을 시각화하는 군대 D-day 도구.',
   keywords: ['군대전역일계산기', '군전역일계산기', '복무율계산기', '전역일계산', '말년시작일', '입대100일', '육군전역일', '해군전역일', '공군전역일', '사회복무요원전역일', '대체복무요원'],
 })
 
@@ -20,8 +20,7 @@ export default function MilitaryPage() {
         🎖️ 군대 전역일 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        입대일과 복무 형태를 입력하면 <strong style={{ color: 'var(--text)' }}>전역일·복무율·100일·말년 시작일</strong>까지 한 번에 계산합니다.
-        2026년 병무청 기준 9가지 복무 형태 + 직접 입력 옵션, 특정 날짜 기준 미리보기, 마일스톤 타임라인 시각화.
+        입대일 기준 <strong style={{ color: 'var(--text)' }}>전역일과 복무율</strong>을 시각화.
       </p>
 
       <MilitaryClient />

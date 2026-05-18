@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/pregnancy',
   title: '임신 주수 계산기 — 출산 예정일·산전 검사·태아 크기·체크리스트',
   description:
-    '마지막 생리일·수정일·출산 예정일로 현재 임신 주수 계산. 산전 검사 일정 자동 생성, 태아 크기 비교, 삼분기별 출산 준비 체크리스트, 생리주기 보정까지. 보건복지부·대한산부인과학회 가이드라인 참고.',
+    '지금 임신 몇 주차 + 산전 검사 일정·태아 크기 비교·출산 준비 체크리스트를 자동 타임라인으로. 생리주기 보정 포함.',
   keywords: [
     '임신주수계산기', '출산예정일계산기', '임신주수', '임신계산기',
     '출산예정일', '산전검사일정', '태아크기', '네겔레공식',
@@ -23,8 +23,7 @@ export default function PregnancyPage() {
         🤰 임신 주수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        출산 예정일·임신 타임라인·산전 검사 일정·태아 크기 비교·출산 준비 체크리스트까지.
-        <strong style={{ color: 'var(--text)' }}> 생리주기 보정과 5탭 종합 도구</strong>로 임신 기간을 체계적으로 관리하세요.
+        지금 임신 몇 주차인지 + 산전 검사·태아 크기·출산 준비를 <strong style={{ color: 'var(--text)' }}>자동 타임라인</strong>으로.
       </p>
 
       {/* 면책 — 상단 강조 */}

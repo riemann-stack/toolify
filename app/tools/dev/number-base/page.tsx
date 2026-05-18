@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/dev/number-base',
   title: '진법 변환기 — 2진수·8진수·10진수·16진수·비트·ASCII',
-  description: '2진수·8진수·10진수·16진수 상호 변환, 비트 시각화, 2의 보수, ASCII 문자 변환, 비트 연산(AND·OR·XOR·SHIFT)을 한 도구에. 단계별 학습 모드 포함.',
+  description: '2·8·10·16진 변환 + 비트 시각화 + 2의 보수·ASCII·비트 연산. 임베디드·암호학 학습에.',
   keywords: ['진법변환기', '2진수', '8진수', '10진수', '16진수', '진법변환', '비트연산', 'ASCII', '2의보수', 'binary', 'hex', '진법계산', '비트마스크'],
 })
 
@@ -21,8 +21,7 @@ export default function NumberBasePage() {
         🔢 진법 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        2진수·8진수·10진수·16진수를 <strong style={{ color: 'var(--text)' }}>실시간으로 상호 변환</strong>합니다.
-        <strong style={{ color: 'var(--text)' }}> 비트 토글 시각화·2의 보수·ASCII·비트 연산(AND/OR/XOR/SHIFT)</strong> + 자리값 분해와 나누기 방식 단계별 학습까지 한 도구에서.
+        2·8·10·16진 변환 + 비트 시각화 + <strong style={{ color: 'var(--text)' }}>2의 보수·ASCII·비트 연산</strong>.
       </p>
 
       <NumberBaseClient />

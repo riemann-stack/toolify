@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/cooking/microwave',
   title: '전자레인지 출력 환산기 — 700W·900W·1200W + 식품·타이머',
-  description: '전자레인지 라벨의 W·시간을 내 전자레인지(600~1200W) 시간으로 자동 환산. 햇반·만두·즉석국 등 한국 시장 12 식품 프리셋 + 양·온도 비선형 보정 + 카운트다운 타이머·알림음 + 안전 가이드.',
+  description: '600W 레시피를 우리집 800W에선 몇 분? 햇반·만두·즉석국 등 한국 식품 12종 프리셋 + 카운트다운 타이머와 안전 가이드.',
   keywords: ['전자레인지 환산', '700W 900W', '냉동밥 시간', '햇반 데우기', '냉동만두', '즉석국', '전자레인지 W', '카운트다운 타이머', '용기 안전', '계란 폭발'],
 })
 
@@ -58,9 +58,7 @@ export default function MicrowavePage() {
         🔥 전자레인지 출력 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        라벨의 <strong style={{ color: 'var(--text)' }}>700W·900W·1200W</strong> 시간을 내 전자레인지로 자동 환산 +
-        한국 시장 <strong style={{ color: 'var(--text)' }}>12 식품 프리셋</strong>(햇반·만두·즉석국) +
-        양·온도 비선형 보정 + <strong style={{ color: 'var(--text)' }}>카운트다운 타이머·알림음</strong> + 안전 가이드 4탭.
+        600W 레시피를 <strong style={{ color: 'var(--text)' }}>우리집 800W에선 몇 분?</strong> 한국 식품 12종 프리셋 + 카운트다운 타이머.
       </p>
 
       <MicrowaveClient />

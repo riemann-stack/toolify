@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/art/color',
   title: '색상 코드 변환기 — HEX·RGB·HSL·OKLCH·WCAG·팔레트·Tailwind',
   description:
-    'HEX·RGB·HSL·HSV·CMYK·OKLCH·LAB·HWB·알파 색상 변환, WCAG 대비비 계산, 색맹 시뮬레이션, 팔레트 자동 생성, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 색상 추출까지 통합 색상 도구.',
+    'HEX·RGB·HSL·OKLCH·알파 변환부터 WCAG 대비비, 팔레트, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 추출까지.',
   keywords: [
     '색상코드변환', 'HEX RGB HSL', '색상변환기', 'OKLCH', 'WCAG 대비비',
     '접근성 색상', '팔레트 생성', 'Tailwind 색상', 'CSS 변수', '색맹 시뮬레이션',
@@ -24,7 +24,7 @@ export default function ColorPage() {
         🎨 색상 코드 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        HEX·RGB·HSL·OKLCH·알파 변환부터 WCAG 대비비, 팔레트 생성, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 색상 추출까지 — 디자이너·프론트엔드 개발자·접근성 전문가를 위한 종합 색상 도구.
+        HEX·RGB·HSL·OKLCH 변환 + WCAG 대비비 + 팔레트·Tailwind 매칭·<strong style={{ color: 'var(--text)' }}>이미지 색 추출</strong>.
       </p>
 
       <ColorClient />

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/wire',
   title: '전선 굵기 계산기 — KEC 2021 + 차단기·전압강하 + EV 충전기',
-  description: 'KEC 2021 한국전기설비규정 기반. 부하 W → 전류 A → 전선 sq → 차단기 자동 계산. 단상/삼상, 6종 전선(HIV·IV·VCT·F-CV), 전압강하, 한국 가전 12프리셋(에어컨·EV 충전기·인덕션).',
+  description: '사용 가전 W에 맞는 전선 굵기와 차단기 + 전압강하 자동. KEC 2021 기준 + 에어컨·EV충전기·인덕션 등 한국 가전 12프리셋.',
   keywords: ['전선 굵기 계산기', '허용전류 sq', '차단기 용량', 'KEC 2021', '전압강하 계산', '에어컨 전선', 'EV 충전기 전선', '인덕션 차단기', 'HIV IV VCT', '단상 삼상'],
 })
 
@@ -58,8 +58,7 @@ export default function WirePage() {
         ⚡ 전선 굵기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        <strong style={{ color: 'var(--text)' }}>KEC 2021 한국전기설비규정</strong> 기반.
-        부하 W → 전류 A → 전선 sq → 차단기 자동 계산 + 전압강하 + 한국 가전 12프리셋.
+        사용 가전 W에 맞는 <strong style={{ color: 'var(--text)' }}>전선 굵기와 차단기</strong> + 전압강하 자동. KEC 2021 기준.
       </p>
 
       {/* 매우 강조된 안전 안내 */}

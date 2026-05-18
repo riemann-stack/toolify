@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/bolt-wrench',
   title: '볼트 스패너 계산기 — M3~M24 + ISO/DIN/KS vs JIS + 알렌·와셔·토크',
-  description: 'M3~M24 볼트·너트의 스패너·소켓·알렌렌치 사이즈를 한 번에. ISO·DIN·KS 현행과 옛 JIS 차이 비교(M8 13mm vs 12mm), 평와셔·스프링와셔, 강도등급(4.8/8.8/10.9/12.9) 토크, 자전거·자동차·DIY 공구 세트 추천.',
+  description: 'M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + 알렌렌치·와셔·너트·토크 등급과 공구 세트 추천 4프리셋.',
   keywords: ['볼트 스패너 사이즈', 'M8 스패너', '알렌렌치 사이즈', '소켓 사이즈', 'ISO JIS 차이', '와셔 사이즈', '너트 높이', '체결 토크', '강도등급', '공구 세트'],
 })
 
@@ -58,9 +58,7 @@ export default function BoltWrenchPage() {
         🔧 볼트 스패너 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        M3~M24 볼트의 <strong style={{ color: 'var(--text)' }}>스패너·소켓·알렌렌치</strong> 사이즈,
-        <strong style={{ color: 'var(--text)' }}> ISO/DIN/KS 현행 vs 옛 JIS</strong> 차이 비교,
-        와셔·너트·강도등급 토크까지. 역검색·인치 호환·공구 세트 추천 4탭.
+        M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + <strong style={{ color: 'var(--text)' }}>알렌렌치·와셔·너트·토크 등급</strong>.
       </p>
 
       <BoltWrenchClient />

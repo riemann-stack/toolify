@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/dday',
   title: 'D-Day 계산기 — 카운트다운, 진행률, 영업일, 페이스 계산',
   description:
-    '여러 D-day를 저장·관리하고 남은 일수, 평일·영업일, 진행률, 일일 페이스까지 계산합니다. 시험·여행·결혼·마라톤·금연 D+까지 한 번에. 한국 공휴일 자동 반영(2026~2030).',
+    '여러 D-day 저장 + 진행률·평일·영업일 페이스 계산 + 반복 D-day와 두 날짜 사이 일수까지.',
   keywords: [
     'D-day 계산기', '디데이 계산기', '날짜 카운트다운', '평일 계산', '영업일 계산',
     '두 날짜 사이', 'D+ 계산', '시험 D-day', '여행 카운트다운', '진행률 계산',
@@ -24,7 +24,7 @@ export default function DdayPage() {
         📅 D-Day 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        목표 날짜 카운트다운, 진행률, 평일·영업일, 페이스 계산, 반복 D-day까지 한 번에. 여러 D-day를 브라우저에 저장해 관리하고 한국 공휴일을 자동 반영합니다.
+        여러 D-day 저장 + <strong style={{ color: 'var(--text)' }}>진행률·평일·영업일</strong> 페이스 + 반복 D-day.
       </p>
 
       <DdayClient />

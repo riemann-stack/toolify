@@ -14,7 +14,7 @@ export default function CookingCategoryPage() {
   return (
     <CategoryView
       catId="cooking"
-      description="레시피 비율 환산·요리 단위·해동 시간·제빵·베이킹 비율 진단까지 — 가정 요리와 홈베이킹 실전 도구 모음."
+      description="인분 환산부터 김장·해동·제빵 타임라인까지 — 주방의 모든 계산을 한 곳에서."
     />
   )
 }

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/serving',
   title: '1인분 분량 계산기 — 파스타·고기·쌀 인분별 장보기 + 합산 목록 + 가족 저장',
-  description: '파스타·소면·고기·쌀 등 30+ 재료 인분별 장보기 분량. 건면·생고기·생쌀 기준, 복수 재료 합산 장보기 마크다운 카드, 냉장고 재료 빼기, 가족 구성 저장, 채식·비건·글루텐프리 필터.',
+  description: 'n인분 식단의 재료별 정확한 분량과 합산 장보기 마크다운. 냉장고 재료 빼기·가족 구성 저장·채식·비건·글루텐프리 필터.',
   keywords: ['1인분 분량 계산기', '파스타 1인분', '삼겹살 1인분', '쌀 1인분', '장보기 목록', '인분 환산', '4인분 장보기', '아이 포함 인분', '한국 가정 장보기', '냉장고 정리', '채식 장보기', '글루텐프리'],
 })
 
@@ -42,7 +42,7 @@ export default function ServingPage() {
         🍽️ 1인분 분량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        파스타·소면·고기·쌀 등 30+ 재료 <strong style={{ color: 'var(--text)' }}>인분별 장보기 분량</strong>. 건면·생고기 기준 + 복수 재료 합산 장보기 목록 + 냉장고 재료 빼기 + 가족 구성 저장 + 채식·비건·글루텐프리 필터.
+        n인분 식단의 재료별 정확한 분량과 <strong style={{ color: 'var(--text)' }}>합산 장보기</strong>. 채식·비건·글루텐프리 필터.
       </p>
 
       <ServingClient />

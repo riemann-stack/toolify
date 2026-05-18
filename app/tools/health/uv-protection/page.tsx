@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
   title: '자외선 지수 계산기 — UV 지수·피부 타입·SPF 일광화상 시간',
-  description: 'UV 지수, Fitzpatrick 피부 타입, SPF를 기준으로 일광화상 위험 시간을 추정합니다. 러닝·골프·해변·등산 등 활동별 자외선 차단 가이드와 재도포 권장 시간 안내.',
+  description: '오늘 UV 지수와 내 피부 타입 기준 일광화상 위험 시간 + SPF 차단제 권장과 자외선 차단 가이드.',
   keywords: ['자외선계산기', 'UV지수', '일광화상시간', 'SPF계산', '선크림SPF', '피부타입', 'Fitzpatrick', '자외선차단', '러닝선크림', '해변선크림'],
 })
 
@@ -21,9 +21,7 @@ export default function UvProtectionPage() {
         ☀️ 자외선 지수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        UV 지수·피부 타입·SPF로 <strong style={{ color: 'var(--text)' }}>일광화상 위험 시간을 추정</strong>하고
-        러닝·골프·해변·등산 등 활동별 자외선 차단 가이드를 확인합니다.
-        <strong style={{ color: '#FF8C3E' }}> 참고용 추정 도구</strong>이며 의학적 진단을 대체하지 않습니다.
+        오늘 UV 지수와 내 피부 타입 기준 <strong style={{ color: 'var(--text)' }}>일광화상 위험 시간</strong> + SPF 차단제 권장.
       </p>
 
       <UvProtectionClient />

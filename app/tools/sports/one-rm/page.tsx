@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/sports/one-rm',
   title: '1RM 계산기 — 벤치·스쿼트·데드 최대 중량 + 워밍업 자동 + 성·연령 보정',
-  description: '12개 운동 1RM 추정(Epley·Brzycki·Lombardi·O\'Conner) + RPE 보정 + 성별·연령 수준 비교 + 워밍업 5세트 자동 + 강도별 훈련 중량 + 원판 조합 + 진행 기록 그래프.',
+  description: '12종 1RM 공식(Epley·Brzycki·Lombardi·O\'Conner)으로 진짜 최대 무게 추정 + RPE 보정·성·연령 수준·워밍업 5세트 자동·진행 그래프.',
   keywords: ['1RM계산기', '벤치프레스1RM', '스쿼트1RM', '데드리프트1RM', '워밍업계산기', 'RPE계산기', '훈련중량계산기', '헬스1RM', '1RM공식', '체중대비1RM'],
 })
 
@@ -72,7 +72,7 @@ export default function OneRMPage() {
         🏋️ 1RM &amp; 훈련 중량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        12종 운동의 1RM 추정 + RPE 보정 + 성별·연령 수준 비교 + 워밍업 자동 설계 + 강도별 훈련 중량 + 원판 조합 + 진행 기록 그래프까지 한 도구에서.
+        5RM·8RM 기록으로 <strong style={{ color: 'var(--text)' }}>진짜 최대 무게</strong> 추정 + RPE 보정과 워밍업 5세트 자동.
       </p>
 
       <OneRMClient />

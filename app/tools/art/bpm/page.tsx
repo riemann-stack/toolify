@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/bpm',
   title: 'BPM 딜레이 계산기 — DAW 없이 딜레이/리버브 설정',
-  description: 'BPM(템포)을 입력하면 4분음표·8분음표·16분음표 딜레이 타임(ms)을 즉시 계산합니다. 점음표·셋잇단음표 변형, 클립보드 복사, DAW 딜레이·리버브 설정에 바로 활용.',
+  description: 'BPM만 입력하면 딜레이·리버브 ms 값 자동. 음악 프로듀서·홈레코딩·DJ 필수 도구.',
   keywords: ['BPM딜레이계산기', '딜레이타임계산', '음악제작계산기', 'BPM딜레이', '딜레이ms계산', 'DAW딜레이설정', '음악템포계산기'],
 })
 
@@ -26,7 +26,7 @@ export default async function BpmPage({
         🎵 BPM 딜레이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        BPM을 입력하면 딜레이·리버브 프리딜레이 설정에 필요한 ms 값을 즉시 계산합니다.
+        BPM만 입력하면 <strong style={{ color: 'var(--text)' }}>딜레이·리버브 ms 값</strong> 자동. 음악 프로듀서·홈레코딩 필수.
       </p>
 
       <BpmClient initialBpm={initialBpm} />

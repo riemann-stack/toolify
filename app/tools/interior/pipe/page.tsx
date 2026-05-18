@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/pipe',
   title: '배관 규격 변환기 — A호칭·인치·DN 통합 + 6재질 외경/내경 비교',
-  description: '15A·1/2"·DN15 같은 호칭이지만 강관·PVC·PB·XL·동관·스테인리스 6재질 실제 외경 비교. KS·JIS·ASME·ISO 표준치 + 부속·연결법 + 유량 계산 + 두께 등급(Sch/VG/K·L·M).',
+  description: 'A호칭·인치·DN 통합 + 강관·PVC·PB·XL·동관·스테인리스 6재질 실제 OD/ID 비교 + 부속·연결법과 유량 계산.',
   keywords: ['배관 규격', '15A 몇 mm', 'A호칭 인치 변환', 'DN 호칭', '강관 외경', 'PVC VG1 VG2', 'PB XL 차이', '동관 K L M', '스테인리스 배관', '배관 유량 계산'],
 })
 
@@ -58,9 +58,7 @@ export default function PipePage() {
         🔧 배관 규격 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        <strong style={{ color: 'var(--text)' }}>A호칭(KS)·인치(ASME)·DN(ISO)</strong> 3대 호칭 통합 변환 +{' '}
-        강관·PVC·PB·XL·동관·스테인리스 <strong style={{ color: 'var(--text)' }}>6재질 실제 외경/내경</strong> 비교 +
-        부속·연결법·유량·두께 등급까지 4탭.
+        A호칭·인치·DN 통합 + <strong style={{ color: 'var(--text)' }}>강관·PVC·PB·XL·동관·STS</strong> 6재질 실제 OD/ID와 유량.
       </p>
 
       <PipeClient />

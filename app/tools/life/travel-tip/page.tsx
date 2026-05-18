@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/life/travel-tip',
   title: '해외여행 팁 계산기 — 18개국 × 9 서비스 + 만족도 + 원화 환산',
-  description: '미국·일본·유럽·동남아 18+ 국가별 팁 문화 + 식당·택시·호텔·골프·마사지 9 서비스 + 만족도 보정 + 봉사료 자동 포함 안내 + 인원 분할 + 원화 환산. 한국인 자주 가는 6 시나리오 (신혼여행·골프투어·크루즈·발리).',
+  description: '18+ 국가 × 9 서비스(식당·택시·호텔·골프·마사지) 적정 팁 + 만족도 보정 + 봉사료 자동 안내 + 인원 분할·원화 환산.',
   keywords: ['해외여행 팁', '미국 팁', '일본 팁 문화', '유럽 식당 팁', '호텔 벨보이', '골프 캐디 팁', '마사지 팁', '크루즈 팁', '봉사료 Service Charge', '여행 매너'],
 })
 
@@ -58,9 +58,7 @@ export default function TravelTipPage() {
         💵 해외여행 팁 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        🇺🇸 미국·🇯🇵 일본·🇪🇺 유럽·🇹🇭 동남아 등 <strong style={{ color: 'var(--text)' }}>18+ 국가</strong> ×{' '}
-        <strong style={{ color: 'var(--text)' }}>9 서비스</strong>(식당·택시·호텔·골프·마사지) + 만족도 보정 +
-        봉사료 자동 포함 안내 + 인원 분할 + <strong style={{ color: 'var(--text)' }}>원화 환산</strong> + 한국인 자주 가는 6 시나리오.
+        18+ 국가별 식당·택시·호텔·골프·마사지 <strong style={{ color: 'var(--text)' }}>적정 팁</strong>. 만족도 보정과 인원 분할.
       </p>
 
       <TravelTipClient />

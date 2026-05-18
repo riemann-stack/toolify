@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/ac-capacity',
   title: '에어컨 평형 계산기 — 거실·방 평수·BTU·W 환산',
-  description: '거실·침실·주방의 면적과 향·층수·단열 상태로 추천 에어컨 평형을 계산합니다. 한국 표준 평형 매칭(6·9·13·15·18평형), BTU·W 환산, 인버터 전기료 비교.',
+  description: '면적·향·층수·단열을 반영한 추천 평형 + BTU·W 환산. 인버터·정속형 에너지 효율 비교까지.',
   keywords: ['에어컨평형계산기', '거실에어컨몇평형', '에어컨용량계산', '13평형에어컨', '에어컨BTU환산', 'BTU평형변환', '에어컨W환산', '인버터에어컨'],
 })
 
@@ -21,8 +21,7 @@ export default function AcCapacityPage() {
         ❄️ 에어컨 평형 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        면적·공간 용도·향·층수·단열 상태를 입력하면 한국 시판 표준 기준 <strong style={{ color: 'var(--text)' }}>추천 평형(6~36평형)</strong>을 계산합니다.
-        BTU·W·kW 자동 환산, 인버터 vs 정속형 전기료 비교까지 한 화면에서.
+        면적·향·층수·단열을 반영한 <strong style={{ color: 'var(--text)' }}>추천 평형</strong> + BTU·W 환산.
       </p>
 
       <AcCapacityClient />

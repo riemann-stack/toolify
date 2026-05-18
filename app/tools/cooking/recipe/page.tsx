@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/cooking/recipe',
   title: '레시피 비율 계산기 — 인분 자동 계산·큰술↔g↔ml 단위 환산',
   description:
-    '레시피의 재료를 원하는 인분 수에 맞게 자동 계산하고, 큰술·컵·g·ml 단위 환산, 양념 자동 보정, 레시피 저장, 장보기 리스트까지 한 번에.',
+    '인분만 바꾸면 모든 재료가 비례 자동 + 큰술↔g↔ml 환산. 양념 보정, 레시피 저장, 장보기 리스트와 한식·양식·일식 프리셋 14종.',
   keywords: [
     '레시피 비율 계산기', '인분 계산', '재료 비율', '큰술 g 환산', '컵 ml 변환',
     '양념 비율', '레시피 저장', '장보기 리스트', '요리 단위 변환', '베이킹 비율',
@@ -23,7 +23,7 @@ export default function RecipePage() {
         📐 레시피 비율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        인분 수 자동 계산, 큰술↔g↔ml 단위 환산, 양념 보정, 레시피 저장, 장보기 리스트까지 한 번에. 인기 한식·양식·일식·디저트 프리셋 14종 + 50여 재료 밀도 데이터.
+        인분만 바꾸면 모든 재료가 <strong style={{ color: 'var(--text)' }}>비례 자동</strong>. 큰술↔g↔ml 환산과 장보기 리스트까지.
       </p>
 
       <RecipeClient />

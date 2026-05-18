@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
   title: '주식 물타기 계산기 — 평단·역산·분할매수·회복·손절 비교 | Youtil',
-  description: '단일·분할 매수 물타기 후 새 평단가, 본전 상승률, 목표 평단 역산, 회복 시나리오, 손절 vs 물타기 비교까지 한 화면. 한국 증권사 8곳 수수료·거래세·미국 주식 환율·양도세 반영. 종목 비중 위험 점검 포함.',
+  description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율·양도세 시뮬.',
   keywords: [
     '주식물타기계산기', '평단가계산기', '평단가역산', '분할매수계산기',
     '본전상승률', '주식손절', '코스트에버리지', '미국주식환율계산',
@@ -23,8 +23,7 @@ export default function StockPage() {
         📉 주식 물타기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        단일·분할 매수, <strong style={{ color: 'var(--text)' }}>목표 평단 역산, 금액 슬라이더, 회복 시나리오, 손절 vs 물타기 비교, 미국 주식 환율</strong>까지 한 화면에서.
-        한국 증권사 8곳 수수료·거래세·양도세 반영, 종목 비중 위험 점검 포함.
+        추가 매수 시 평단가가 어디까지 내려갈지 + <strong style={{ color: 'var(--text)' }}>회복까지 필요한 상승률</strong>을 즉시.
       </p>
 
       <StockClient />

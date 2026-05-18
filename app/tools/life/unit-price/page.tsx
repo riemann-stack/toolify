@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/life/unit-price',
   title: '단가 비교 계산기 — 마트·편의점·코스트코 1+1·2+1 가성비 즉시 비교',
-  description: '가격·용량·개수·단위 입력 즉시 단가 비교. 1+1·2+1은 개수에 2·3 입력, 100ml/100g/1개당 자동 추천, 소비 가능량 반영 실질 단가, 모바일 마트 현장 최적화.',
+  description: '마트·편의점·코스트코 가격을 1ml·1g·1개당 실질 단가로 즉시. 1+1·2+1까지 정확히 + 소비 가능량 반영한 진짜 가성비.',
   keywords: [
     '단가계산기', '가성비계산기', '마트단가비교', '코스트코단가', '100ml당단가', '1+1가성비', '쿠팡단가비교', '용량비교계산기',
     '단가 비교 계산기', '마트 가성비', '1+1 단가', '2+1 단가', '코스트코 단가', '100ml당 가격', '100g당 가격',
@@ -22,7 +22,7 @@ export default function UnitPricePage() {
         🏷️ 단가 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        가격·용량·개수·단위만 입력하면 <strong style={{ color: 'var(--text)' }}>즉시 단가 비교</strong>. 1+1·2+1은 개수에 2·3 입력. 마트·편의점·코스트코 현장 모바일 최적화.
+        마트·편의점·코스트코 가격을 <strong style={{ color: 'var(--text)' }}>1ml·1g·1개당 실질 단가</strong>로 즉시. 1+1·2+1도 정확히.
       </p>
 
       <UnitPriceClient />

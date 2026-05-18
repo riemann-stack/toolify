@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/frying',
   title: '튀김 시간 계산기 — 재료별 기름 온도·에어프라이어 변환',
-  description: '감자튀김·돈까스·치킨·새우튀김 등 재료 상태·두께·튀김옷 조건별 최적 기름 온도와 튀김 시간을 계산합니다. 2차 튀김 여부, 에어프라이어 변환 가이드 제공.',
+  description: '재료별 최적 기름 온도와 튀김 시간 + 에어프라이어 변환 가이드. 새우·치킨·돈가스·고구마·오징어 등 한국 메뉴 다수.',
   keywords: ['튀김시간계산기', '감자튀김온도', '돈까스튀기는시간', '치킨튀김온도', '튀김기름온도', '에어프라이어변환', '새우튀김시간', '냉동만두튀기기'],
 })
 
@@ -18,7 +18,7 @@ export default function FryingPage() {
         🍳 튀김 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        재료·상태·두께·튀김옷·양에 맞춰 최적 기름 온도와 튀김 시간을 계산합니다. 2차 튀김 여부, 속 익힘 주의사항, 에어프라이어 변환, 카운트다운 타이머까지.
+        재료별 <strong style={{ color: 'var(--text)' }}>최적 기름 온도와 시간</strong> + 에어프라이어 변환. 바삭함은 디테일에서.
       </p>
 
       <FryingClient />

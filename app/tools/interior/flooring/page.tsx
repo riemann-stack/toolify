@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/flooring',
   title: '바닥재 계산기 — 마루·장판·데코타일 박스 수·비용',
-  description: '강화마루·강마루·원목마루·장판·데코타일 박스 수와 시공 비용을 계산합니다. 한국 표준 박스 면적, 헤링본·평행 시공별 로스율, 셀프 vs 전문 시공 비용 비교.',
+  description: '장판·강화마루·강마루·원목·데코타일 박스 수와 비용 견적. 셀프 시공 가능 여부도 안내.',
   keywords: ['바닥재계산기', '마루박스수', '강화마루소요량', '강마루계산', '장판소요량', '데코타일계산', '헤링본바닥재', '바닥재비용'],
 })
 
@@ -21,8 +21,7 @@ export default function FlooringPage() {
         🪵 바닥재 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        평수 또는 가로·세로를 입력하면 <strong style={{ color: 'var(--text)' }}>강화마루·강마루·원목마루·장판·데코타일·도기 타일</strong>의
-        박스 수, 로스율 반영 구매량, 셀프 vs 전문 시공 비용까지 계산합니다. 평행·대각선·헤링본·쉐브론 패턴별 로스율 자동 반영.
+        장판·강화마루·강마루·원목·데코타일 <strong style={{ color: 'var(--text)' }}>박스 수와 비용</strong> 견적.
       </p>
 
       <FlooringClient />

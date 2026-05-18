@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/unit/battery',
   title: '배터리 용량 변환기 mAh ↔ Wh — 비행기 반입 가능 체크',
-  description: '보조배터리 mAh를 Wh로 변환합니다. 비행기 휴대 반입 가능 여부(100Wh 기준) 자동 체크. 5V·3.7V 등 전압별 변환 지원.',
+  description: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정과 보조배터리·노트북 배터리 가이드.',
   keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입'],
 })
 
@@ -19,7 +19,7 @@ export default function BatteryPage() {
         🔋 배터리 용량 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        보조배터리 <strong style={{ color: 'var(--text)' }}>mAh를 Wh로 변환</strong>하고, 비행기 휴대 반입 가능 여부(100Wh 기준)를 자동으로 체크합니다. 3.7V·5V 등 전압별 환산을 지원합니다.
+        mAh·Wh·Ah 변환 + <strong style={{ color: 'var(--text)' }}>비행기 반입 가능 여부</strong> 자동 판정.
       </p>
 
       <BatteryClient />

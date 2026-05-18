@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/lotto',
   title: '로또 번호 생성기 — 8가지 모드·번호 분석·당첨금 세후 계산',
   description:
-    '로또 6/45 번호 8가지 모드(랜덤·균형·생일제외·연속포함·끝수분산 등) 생성, 번호 분석, 가상 추첨 시뮬레이션, 1등 체감, 당첨금 세후 계산까지. 무료·로그인 없음.',
+    '8가지 생성 모드 + 번호 분석 + 가상 추첨 시뮬로 1등 체감 + 당첨금 세후 계산까지. 로또 6/45 모든 조합 1/8,145,060.',
   keywords: [
     '로또 번호 생성기', '로또 6/45', '로또 번호 분석', '로또 확률 시뮬레이션',
     '1등 당첨 확률', '로또 당첨금 세금', '균형형 번호', '생일 번호 제외', '로또 통계',
@@ -24,7 +24,7 @@ export default function LottoPage() {
         🎰 로또 번호 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        8가지 생성 모드, 번호 분석, 가상 추첨 시뮬레이션, 1등 체감, 당첨금 세후 계산까지. <strong style={{ color: 'var(--text)' }}>모든 6개 번호 조합의 1등 확률은 1/8,145,060로 동일</strong>하며, 본 도구는 재미·교육용 시뮬레이터입니다.
+        8가지 생성 모드 + 번호 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>. 당첨금 세후까지.
       </p>
 
       <LottoClient />

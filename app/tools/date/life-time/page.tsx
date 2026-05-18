@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/life-time',
   title: '생애 시간 계산기 — 기대수명 기준 시간 환산',
   description:
-    '기대수명 기준 살아온 날·앞으로의 날을 계산하고, 매일 30분의 행동이 누적되어 만드는 시간 가치를 환산합니다. 메멘토 모리 철학 기반 동기부여 도구.',
+    '기대수명 기준 살아온 시간·앞으로의 시간을 행동 가치(독서·운동·여행)로 환산해 시간의 무게를 시각화.',
   keywords: ['생애시간계산기', '메멘토모리', '인생진행률', '기대수명계산', '시간가치환산', '인생시계', '하루의가치'],
 })
 
@@ -22,8 +22,7 @@ export default function LifeTimePage() {
         ⏳ 생애 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        기대수명을 기준으로 시간을 가늠하고, <strong style={{ color: 'var(--text)' }}>오늘을 더 의미 있게 쓰는</strong> 도구입니다.
-        성장·균형·메멘토 모리 3가지 톤을 선택할 수 있고, 매일 30분의 작은 습관이 1년·5년 뒤 어떻게 누적되는지 확인할 수 있습니다.
+        기대수명 기준 살아온 시간·앞으로의 시간을 <strong style={{ color: 'var(--text)' }}>행동 가치로 환산</strong>해 보여줍니다.
       </p>
 
       <LifeTimeClient />

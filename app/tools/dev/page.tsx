@@ -14,7 +14,7 @@ export default function DevCategoryPage() {
   return (
     <CategoryView
       catId="dev"
-      description="JSON 포맷·Base64·색상·CSS·진법·글자수까지 — 개발자가 매일 찾는 텍스트·디자인 변환 유틸 모음."
+      description="JSON·정규식·해시·cURL부터 회선 진단까지 — 개발자가 매일 찾는 유틸리티 모음."
     />
   )
 }

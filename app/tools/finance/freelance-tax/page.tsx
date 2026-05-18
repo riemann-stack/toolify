@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/freelance-tax',
   title: '프리랜서 종합소득세 계산기 — 단순경비율 자동 + 공제 시뮬 + 시나리오 비교 (2026년)',
   description:
-    '3.3% 원천징수 프리랜서·1인 사업자의 종합소득세 환급액을 30+ 업종 단순경비율 자동, 8단계 누진세율, 인적공제·노란우산·연금저축 종합 반영해 정확히 계산. 5가지 절세 시나리오 비교, 한계세율 시각화, 5월 신고 D-day 가이드까지.',
+    '업종별 단순경비율 자동(30+ 직군) + 8단계 누진세율과 노란우산·연금저축 절세 시나리오 5종 비교. 2026년 5월 신고 D-day.',
   keywords: [
     '프리랜서 종합소득세', '종소세 계산기', '종합소득세 환급',
     '3.3 원천징수', '프리랜서 세금', '프리랜서 환급',
@@ -54,7 +54,7 @@ export default function FreelanceTaxPage() {
         💼 프리랜서 종합소득세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        3.3% 원천징수만 내고 있던 프리랜서·1인 사업자를 위한 종합소득세 정확 계산기. 30+ 업종별 단순경비율 자동 적용, 8단계 누진세율, 노란우산·연금저축 절세 시나리오 5종 비교, 5월 신고 가이드까지 한 번에.
+        업종별 단순경비율·8단계 누진세 자동 + <strong style={{ color: 'var(--text)' }}>노란우산·연금 절세 시나리오</strong> 5종 비교.
       </p>
 
       <FreelanceTaxClient />

@@ -5,11 +5,13 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './exposure.module.css'
 import {
   APERTURES, SHUTTERS, ISOS, ND_FILTERS, CROPS, SCENES, VIDEO_FPS,
-  type LockAxis, type CropFactor,
+  type CropFactor,
   calcEV, generateEquivalents, dofRating, blurRating, noiseRating,
   rule500, calcNDStackedShutter, fmtShutter, fmt, fmtStop, getCrop,
   nearestApertureIdx, nearestShutterIdx, nearestIsoIdx,
 } from './exposureUtils'
+
+type AxisId = 'aperture' | 'shutter' | 'iso'
 
 type Tab = 'expo' | 'nd' | 'scene' | 'tradeoff'
 
@@ -22,7 +24,12 @@ export default function ExposureClient() {
   const [aptIdx, setAptIdx] = useState<number>(11)   // f/4
   const [shIdx, setShIdx] = useState<number>(13)     // 1/250
   const [isoIdx, setIsoIdx] = useState<number>(2)    // ISO 200
-  const [lock, setLock] = useState<LockAxis>('aperture')
+
+  /* 독립 잠금 — 각 축 토글 (최대 2개) */
+  const [aptLocked, setAptLocked] = useState(false)
+  const [shLocked,  setShLocked]  = useState(false)
+  const [isoLocked, setIsoLocked] = useState(false)
+  const lockCount = (aptLocked ? 1 : 0) + (shLocked ? 1 : 0) + (isoLocked ? 1 : 0)
 
   /* ND 필터 */
   const [ndId, setNdId] = useState<string>('nd8')
@@ -41,16 +48,22 @@ export default function ExposureClient() {
       if (typeof j.aptIdx === 'number') setAptIdx(j.aptIdx)
       if (typeof j.shIdx === 'number') setShIdx(j.shIdx)
       if (typeof j.isoIdx === 'number') setIsoIdx(j.isoIdx)
-      if (j.lock) setLock(j.lock)
+      if (typeof j.aptLocked === 'boolean') setAptLocked(j.aptLocked)
+      if (typeof j.shLocked === 'boolean') setShLocked(j.shLocked)
+      if (typeof j.isoLocked === 'boolean') setIsoLocked(j.isoLocked)
       if (j.crop) setCrop(j.crop)
       if (j.ndId) setNdId(j.ndId)
     } catch {}
   }, [])
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ aptIdx, shIdx, isoIdx, lock, crop, ndId }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        aptIdx, shIdx, isoIdx,
+        aptLocked, shLocked, isoLocked,
+        crop, ndId,
+      }))
     } catch {}
-  }, [aptIdx, shIdx, isoIdx, lock, crop, ndId])
+  }, [aptIdx, shIdx, isoIdx, aptLocked, shLocked, isoLocked, crop, ndId])
 
   /* 현재 값 */
   const apt = APERTURES[aptIdx]
@@ -68,55 +81,69 @@ export default function ExposureClient() {
     [aptIdx, shIdx, isoIdx]
   )
 
-  /** 슬라이더 변경 시 다른 축 자동 보정 */
+  /**
+   * 슬라이더 변경:
+   * - 자신이 잠겨있으면 무시
+   * - 다른 두 축 중 정확히 1개가 잠겨있으면 → 나머지 1개로 보정 (등가 노출 유지)
+   * - 그 외 (0개 또는 2개 잠금) → 그대로 EV 변화
+   *
+   * stop diff 부호:
+   *  - aperture 인덱스 +1 = 1/3 stop 어두워짐
+   *  - shutter  인덱스 +1 = 1 stop 어두워짐 (빠른 셔터)
+   *  - iso      인덱스 +1 = 1 stop 밝아짐
+   */
   const onApertureChange = (newIdx: number) => {
-    if (lock === 'aperture') return
-    const oldIdx = aptIdx
-    if (newIdx === oldIdx) return
-    /* aperture 인덱스 1당 1/3 stop, 빛 차이는 +가 닫힘(어두움) */
-    const stopDiff = (newIdx - oldIdx) / 3
-    if (lock === 'shutter') {
-      /* iso로 보정: 어두워지면 ISO ↑ */
-      const newIsoIdx = clampIdx(isoIdx + stopDiff, ISOS.length)
-      setAptIdx(newIdx); setIsoIdx(Math.round(newIsoIdx))
-    } else {
-      /* iso 잠금 → 셔터로 보정: 어두워지면 셔터 ↑ (느리게 = 셔터 인덱스 ↓) */
-      const newShIdx = clampIdx(shIdx - stopDiff, SHUTTERS.length)
-      setAptIdx(newIdx); setShIdx(Math.round(newShIdx))
+    if (aptLocked) return
+    if (newIdx === aptIdx) return
+    const stopDarker = (newIdx - aptIdx) / 3  // + = 어두워짐
+    setAptIdx(newIdx)
+    if (shLocked && !isoLocked) {
+      // ISO 보정: 어두워지면 ISO ↑ (인덱스 ↑)
+      setIsoIdx(Math.round(clampIdx(isoIdx + stopDarker, ISOS.length)))
+    } else if (isoLocked && !shLocked) {
+      // 셔터 보정: 어두워지면 셔터 느리게 (인덱스 ↓)
+      setShIdx(Math.round(clampIdx(shIdx - stopDarker, SHUTTERS.length)))
     }
+    // 0개 또는 2개 잠금: 보정 없음 → EV 변화
   }
 
   const onShutterChange = (newIdx: number) => {
-    if (lock === 'shutter') return
-    const oldIdx = shIdx
-    if (newIdx === oldIdx) return
-    /* shutter 인덱스 1당 1 stop, 인덱스 증가 = 빠름 = 어두워짐 */
-    const stopDiff = newIdx - oldIdx
-    if (lock === 'aperture') {
-      const newIsoIdx = clampIdx(isoIdx + stopDiff, ISOS.length)
-      setShIdx(newIdx); setIsoIdx(Math.round(newIsoIdx))
-    } else {
-      /* aperture 보정: 어두워지면 조리개 열기(인덱스 ↓), 1 stop = 인덱스 3 */
-      const newAptIdx = clampIdx(aptIdx - stopDiff * 3, APERTURES.length)
-      setShIdx(newIdx); setAptIdx(Math.round(newAptIdx))
+    if (shLocked) return
+    if (newIdx === shIdx) return
+    const stopDarker = newIdx - shIdx  // 인덱스 ↑ = 빠름 = 어두워짐
+    setShIdx(newIdx)
+    if (aptLocked && !isoLocked) {
+      setIsoIdx(Math.round(clampIdx(isoIdx + stopDarker, ISOS.length)))
+    } else if (isoLocked && !aptLocked) {
+      // 조리개 보정: 어두워지면 조리개 열기 (인덱스 ↓, 1stop = 3인덱스)
+      setAptIdx(Math.round(clampIdx(aptIdx - stopDarker * 3, APERTURES.length)))
     }
   }
 
   const onIsoChange = (newIdx: number) => {
-    if (lock === 'iso') return
-    const oldIdx = isoIdx
-    if (newIdx === oldIdx) return
-    /* iso 인덱스 1당 1 stop, 인덱스 증가 = 빛 ↑ (밝아짐) */
-    const stopDiff = newIdx - oldIdx
-    if (lock === 'aperture') {
-      /* 셔터로 보정: 밝아지면 셔터 빠르게 (인덱스 ↑) */
-      const newShIdx = clampIdx(shIdx + stopDiff, SHUTTERS.length)
-      setIsoIdx(newIdx); setShIdx(Math.round(newShIdx))
-    } else {
-      /* 조리개로 보정: 밝아지면 조리개 닫기 (인덱스 ↑), 1 stop = 인덱스 3 */
-      const newAptIdx = clampIdx(aptIdx + stopDiff * 3, APERTURES.length)
-      setIsoIdx(newIdx); setAptIdx(Math.round(newAptIdx))
+    if (isoLocked) return
+    if (newIdx === isoIdx) return
+    const stopBrighter = newIdx - isoIdx  // 인덱스 ↑ = ISO ↑ = 밝아짐
+    setIsoIdx(newIdx)
+    if (aptLocked && !shLocked) {
+      // 셔터 보정: 밝아지면 셔터 빠르게 (인덱스 ↑)
+      setShIdx(Math.round(clampIdx(shIdx + stopBrighter, SHUTTERS.length)))
+    } else if (shLocked && !aptLocked) {
+      // 조리개 보정: 밝아지면 조리개 닫기 (인덱스 ↑)
+      setAptIdx(Math.round(clampIdx(aptIdx + stopBrighter * 3, APERTURES.length)))
     }
+  }
+
+  /** 잠금 토글 — 이미 잠겨있으면 해제, 아니면 잠금. 단 잠금 갯수 ≥ 2일 때 새로 잠그는 건 거부. */
+  const toggleLock = (axis: AxisId) => {
+    const isLocked =
+      axis === 'aperture' ? aptLocked :
+      axis === 'shutter'  ? shLocked :
+      isoLocked
+    if (!isLocked && lockCount >= 2) return
+    if (axis === 'aperture') setAptLocked(!aptLocked)
+    else if (axis === 'shutter') setShLocked(!shLocked)
+    else setIsoLocked(!isoLocked)
   }
 
   const dof = dofRating(apt.value)
@@ -152,28 +179,7 @@ export default function ExposureClient() {
       {/* ───── 탭 1: 노출 환산 ───── */}
       {tab === 'expo' && (
         <>
-          {/* 잠금 토글 */}
-          <div className={s.card}>
-            <span className={s.cardLabel}>🔒 잠금 축 (변경 시 다른 두 축 보정)</span>
-            <div className={s.lockRow}>
-              {(['aperture', 'shutter', 'iso'] as LockAxis[]).map((ax) => (
-                <button
-                  key={ax}
-                  className={`${s.lockBtn} ${lock === ax ? s.lockBtnActive : ''}`}
-                  onClick={() => setLock(ax)}
-                >
-                  {ax === 'aperture' && '🌀 조리개 잠금'}
-                  {ax === 'shutter' && '⏱️ 셔터 잠금'}
-                  {ax === 'iso' && '📊 ISO 잠금'}
-                </button>
-              ))}
-            </div>
-            <p className={s.lockHint}>
-              💡 잠긴 축은 슬라이더로 변경되지 않고, 다른 축이 보정되어 등가 노출이 유지됩니다.
-            </p>
-          </div>
-
-          {/* 슬라이더 3축 */}
+          {/* 슬라이더 3축 — 먼저 자유롭게 움직여 보기 */}
           <div className={s.card}>
             <span className={s.cardLabel}>🎛️ 3축 슬라이더</span>
 
@@ -181,8 +187,8 @@ export default function ExposureClient() {
             <div className={s.sliderBlock}>
               <div className={s.sliderHead}>
                 <span className={s.sliderLabel}>🌀 조리개 (Aperture)</span>
-                <span className={`${s.sliderValue} ${lock === 'aperture' ? s.locked : ''}`}>
-                  {apt.label} {lock === 'aperture' && '🔒'}
+                <span className={`${s.sliderValue} ${aptLocked ? s.locked : ''}`}>
+                  {apt.label} {aptLocked && '🔒'}
                 </span>
               </div>
               <input
@@ -192,7 +198,7 @@ export default function ExposureClient() {
                 step={1}
                 value={aptIdx}
                 onChange={(e) => onApertureChange(Number(e.target.value))}
-                disabled={lock === 'aperture'}
+                disabled={aptLocked}
                 className={s.slider}
               />
               <div className={s.sliderTicks}>
@@ -206,8 +212,8 @@ export default function ExposureClient() {
             <div className={s.sliderBlock}>
               <div className={s.sliderHead}>
                 <span className={s.sliderLabel}>⏱️ 셔터스피드 (Shutter)</span>
-                <span className={`${s.sliderValue} ${lock === 'shutter' ? s.locked : ''}`}>
-                  {sh.label} {lock === 'shutter' && '🔒'}
+                <span className={`${s.sliderValue} ${shLocked ? s.locked : ''}`}>
+                  {sh.label} {shLocked && '🔒'}
                 </span>
               </div>
               <input
@@ -217,7 +223,7 @@ export default function ExposureClient() {
                 step={1}
                 value={shIdx}
                 onChange={(e) => onShutterChange(Number(e.target.value))}
-                disabled={lock === 'shutter'}
+                disabled={shLocked}
                 className={s.slider}
               />
               <div className={s.sliderTicks}>
@@ -233,8 +239,8 @@ export default function ExposureClient() {
             <div className={s.sliderBlock}>
               <div className={s.sliderHead}>
                 <span className={s.sliderLabel}>📊 ISO 감도</span>
-                <span className={`${s.sliderValue} ${lock === 'iso' ? s.locked : ''}`}>
-                  {iso.label} {lock === 'iso' && '🔒'}
+                <span className={`${s.sliderValue} ${isoLocked ? s.locked : ''}`}>
+                  {iso.label} {isoLocked && '🔒'}
                 </span>
               </div>
               <input
@@ -244,7 +250,7 @@ export default function ExposureClient() {
                 step={1}
                 value={isoIdx}
                 onChange={(e) => onIsoChange(Number(e.target.value))}
-                disabled={lock === 'iso'}
+                disabled={isoLocked}
                 className={s.slider}
               />
               <div className={s.sliderTicks}>
@@ -255,6 +261,46 @@ export default function ExposureClient() {
                 <span>51200</span>
               </div>
             </div>
+          </div>
+
+          {/* 잠금 토글 (옵션) — 각 축 독립, 최대 2개 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>
+              🔒 축 잠금 (옵션)
+              <span className={s.lockCounter}>{lockCount}/2</span>
+            </span>
+            <div className={s.lockRow}>
+              {([
+                { id: 'aperture' as const, icon: '🌀', short: '조리개', locked: aptLocked },
+                { id: 'shutter'  as const, icon: '⏱️', short: '셔터',   locked: shLocked },
+                { id: 'iso'      as const, icon: '📊', short: 'ISO',    locked: isoLocked },
+              ]).map((ax) => {
+                const disabled = !ax.locked && lockCount >= 2
+                return (
+                  <button
+                    key={ax.id}
+                    className={`${s.lockBtn} ${ax.locked ? s.lockBtnActive : ''}`}
+                    onClick={() => toggleLock(ax.id)}
+                    disabled={disabled}
+                    aria-pressed={ax.locked}
+                  >
+                    <span className={s.lockEmoji}>{ax.locked ? '🔒' : ax.icon}</span>
+                    <span className={s.lockText}>{ax.short}</span>
+                  </button>
+                )
+              })}
+            </div>
+            <p className={s.lockHint}>
+              {lockCount === 0 && (
+                <>💡 <strong>자유 모드</strong> — 각 슬라이더가 EV를 그대로 바꿉니다. 한 축을 잠그면 다른 축이 자동 보정되어 같은 노출을 유지합니다.</>
+              )}
+              {lockCount === 1 && (
+                <>🔁 <strong>등가 노출 모드</strong> — 잠긴 축은 고정. 나머지 두 축 중 하나를 움직이면 다른 하나가 자동 보정되어 같은 EV가 유지됩니다.</>
+              )}
+              {lockCount === 2 && (
+                <>🎯 <strong>1축 자유 모드</strong> — 두 축이 고정됐으므로 남은 한 축을 움직이면 EV가 바뀝니다(노출이 달라짐).</>
+              )}
+            </p>
           </div>
 
           {/* EV 결과 */}

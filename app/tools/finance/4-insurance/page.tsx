@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/4-insurance',
   title: '4대보험 계산기 — 국민연금·건강보험·고용보험·산재보험 (2026년)',
-  description: '2026년 기준 4대보험료를 근로자/사업주 부담으로 분리해 계산합니다. 국민연금 9.5%, 건강보험 7.19%, 장기요양 0.9448%, 고용보험 1.8%. 직장인·알바·자영업자·프리랜서 모두 활용.',
+  description: '국민연금·건강보험·고용·산재 — 근로자/사업주 부담을 정확히. 알바·프리랜서 비교와 2026년 최신 요율 자동 반영.',
   keywords: ['4대보험계산기', '4대보험요율', '국민연금계산', '건강보험계산', '고용보험', '산재보험', '4대보험 사업주부담', '알바 4대보험', '프리랜서 3.3%', '두루누리'],
 })
 
@@ -21,8 +21,7 @@ export default function FourInsurancePage() {
         🏥 4대보험 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        2026년 기준 <strong style={{ color: 'var(--text)' }}>국민연금·건강보험·장기요양·고용보험·산재보험</strong>을
-        근로자/사업주 부담으로 분리해 계산합니다. 직장인 공제액, 사업주 채용 비용, 알바 4대보험 가입 비교, 프리랜서 3.3%와의 차이까지.
+        국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. <strong style={{ color: 'var(--text)' }}>알바·프리랜서 비교</strong>까지.
       </p>
 
       <FourInsuranceClient />

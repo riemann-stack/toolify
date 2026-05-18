@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-handicap',
   title: '골프 핸디캡 계산기 — WHS·코스 핸디캡·발전 추이·자동 저장',
-  description: 'WHS 핸디캡 지수 자동 산출, 코스 핸디캡, 네트·스태블포드, 라운드 자동 저장(50라운드), 발전 추이 그래프, 자주 가는 골프장 저장, 9홀 입력, 티별 비교까지.',
+  description: 'WHS 핸디캡 지수·코스 핸디캡·네트·스태블포드 + 라운드 자동 저장·발전 추이·자주 가는 골프장 관리.',
   keywords: ['골프핸디캡계산기', '핸디캡지수계산', 'WHS핸디캡', '코스핸디캡계산기', '스코어디퍼런셜', '네트스코어계산기', '스태블포드계산기', '골프핸디캡', '슬로프 레이팅', '코스 레이팅', '한국 골프 핸디캡', '핸디캡 추이', 'KGA 핸디캡'],
 })
 
@@ -18,7 +18,7 @@ export default function GolfHandicapPage() {
         ⛳ 골프 핸디캡 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        WHS 핸디캡 지수 + 코스 핸디캡 + 네트·스태블포드 + <strong style={{ color: 'var(--text)' }}>라운드 자동 저장 + 발전 추이 그래프 + 자주 가는 골프장</strong>까지.
+        WHS 핸디캡·코스 핸디캡·스태블포드 + 라운드 자동 저장으로 <strong style={{ color: 'var(--text)' }}>발전 추이</strong>까지.
       </p>
 
       <GolfHandicapClient />

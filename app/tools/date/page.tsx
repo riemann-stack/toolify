@@ -14,7 +14,7 @@ export default function DateCategoryPage() {
   return (
     <CategoryView
       catId="date"
-      description="만 나이·D-day·군 전역일·양음력·시차·역사 연호까지 — 일상과 여행, 학습에 자주 쓰는 날짜·시간 도구 모음."
+      description="만 나이·D-day부터 음력·시차·연호까지 — 시간과 날짜에 관한 모든 계산."
     />
   )
 }

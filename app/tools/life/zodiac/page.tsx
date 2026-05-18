@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/life/zodiac',
   title: '띠·별자리 계산기 — 60갑자·궁합·탄생석·가족 비교 | Youtil',
-  description: '생년월일로 띠·별자리·60갑자·오행·탄생석·탄생화 통합 프로필 카드. 두 사람 궁합 시뮬(삼합·육합·충), 가족 띠 비교, SNS 공유. 재미용 도구.',
+  description: '내 띠·별자리·60갑자·오행·탄생석 통합 카드 + 두 사람 궁합 시뮬(삼합·육합·충)과 가족 띠 비교까지.',
   keywords: [
     '띠계산기', '별자리계산기', '12간지', '60갑자', '띠궁합', '생년월일띠',
     '간지계산기', '나의별자리', '띠별자리', '두 사람 궁합', '탄생석',
@@ -48,8 +48,7 @@ export default function ZodiacPage() {
         🐯 띠·별자리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        생년월일로 <strong style={{ color: 'var(--text)' }}>띠·별자리·60갑자·오행·탄생석 통합 프로필 카드 + 두 사람 궁합 시뮬(삼합·육합·충) + 가족 띠 비교</strong>까지.
-        SNS 공유용 결과 복사 지원.
+        내 띠·별자리·60갑자·오행을 한 카드로 + <strong style={{ color: 'var(--text)' }}>두 사람 궁합</strong>과 가족 띠 비교까지.
       </p>
 
       <ZodiacClient />

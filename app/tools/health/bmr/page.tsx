@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/bmr',
   title: '기초대사량 계산기 2026 — BMR·TDEE·4공식 비교·운동일/휴식일',
   description:
-    'BMR과 TDEE를 4가지 공식(Mifflin·Harris·Katch·Cunningham)으로 비교 계산. 직업+운동 분리 정밀 활동 분석, 운동일/휴식일 칼로리, 목표별 식단, 스마트워치 연동, 안전 하한선 가이드까지.',
+    '기초대사량과 하루 총 소비 칼로리(TDEE) + 4공식 비교·운동일/휴식일·목표별 권장 칼로리·스마트워치 연동까지.',
   keywords: [
     '기초대사량 계산기', 'BMR 계산기', 'TDEE 계산기', '하루 칼로리',
     'Mifflin-St Jeor', 'Katch-McArdle', '운동일 칼로리', '활동량 계산',
@@ -23,8 +23,7 @@ export default function BmrPage() {
         🔥 기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        BMR·TDEE를 <strong style={{ color: 'var(--text)' }}>4공식 비교, 휴식일·운동일 분리, 목표별 칼로리, 매크로 분배</strong>까지.
-        활동 수준은 단순 5단계와 정밀(직업·걸음·운동) 중 선택할 수 있습니다.
+        기초대사량과 하루 총 소비 칼로리 + <strong style={{ color: 'var(--text)' }}>운동일/휴식일별 목표 칼로리</strong> 자동.
       </p>
 
       <BmrClient />

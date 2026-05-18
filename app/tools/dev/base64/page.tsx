@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/dev/base64',
   title: 'Base64 인코더/디코더 — 텍스트·파일·JWT·이미지 Data URI',
-  description: '텍스트·파일·이미지를 Base64로 변환하고 JWT 토큰을 디코딩합니다. URL-safe Base64, Hex/Binary/URL/HTML 다중 변환, 이미지 미리보기·Data URI 생성, JWT 만료 검증까지 무료 온라인 도구.',
+  description: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드. 한글·바이너리 모두 지원.',
   keywords: ['base64인코더', 'base64디코더', 'base64변환기', 'JWT디코더', '이미지base64', 'datauri생성', 'URL-safe base64', '파일base64변환', 'JWT만료확인', 'hex변환'],
 })
 
@@ -21,8 +21,7 @@ export default function Base64Page() {
         🔐 Base64 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        텍스트·<strong style={{ color: 'var(--text)' }}>파일·이미지</strong>를 Base64로 변환하고 <strong style={{ color: 'var(--text)' }}>JWT 토큰</strong>을 디코딩합니다.
-        URL-safe Base64, Hex·Binary·URL·HTML <strong style={{ color: 'var(--text)' }}>6가지 인코딩 동시 변환</strong>, 이미지 Data URI 생성, JWT 만료 시간 검증까지.
+        텍스트 ↔ Base64 <strong style={{ color: 'var(--text)' }}>즉시 변환</strong> + URL 안전 모드.
       </p>
 
       <Base64Client />

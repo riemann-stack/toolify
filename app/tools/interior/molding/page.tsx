@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/molding',
   title: '몰딩 계산기 — 천장 몰딩·걸레받이·띠몰딩 개수',
-  description: '방 둘레로 천장 몰딩, 걸레받이, 띠몰딩 필요 길이와 개수를 계산합니다. 한국 표준 2.4m·3.6m 몰딩, 모서리 45도 절단 여유, MDF·PVC·우드 재질별 비용.',
+  description: '천장 몰딩·걸레받이·띠몰딩의 길이·개수·비용 자동 + 코너·이음새 처리 가이드.',
   keywords: ['몰딩계산기', '걸레받이길이', '천장몰딩개수', '몰딩소요량', 'MDF몰딩', 'PVC몰딩', '몰딩비용', '몰딩45도절단'],
 })
 
@@ -21,8 +21,7 @@ export default function MoldingPage() {
         📏 몰딩 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        평수·가로세로·둘레만 입력하면 <strong style={{ color: 'var(--text)' }}>천장 몰딩·걸레받이·띠몰딩·문 프레임</strong>에 필요한
-        길이와 개수, 모서리 45도 절단 여유, MDF·PVC·우드 재질별 자재비·시공비를 한 번에 계산합니다.
+        천장 몰딩·걸레받이·띠몰딩의 <strong style={{ color: 'var(--text)' }}>길이·개수·비용</strong>.
       </p>
 
       <MoldingClient />

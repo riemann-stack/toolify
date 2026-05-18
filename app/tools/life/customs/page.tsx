@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/life/customs',
   title: '관부가세 계산기 — 미국 $200 · 30+ 품목 · 목록통관 자동',
-  description: '미국·중국·유럽·일본 면세 한도 자동 + 30+ 품목 관세율 (의류 13%·가방 8%·노트북 0%) + 목록통관/일반통관 자동 판단 + 부가세·개별소비세 + 한국 백화점 비교 + 6 시나리오 (아마존·알리·매치스).',
+  description: '미국·중국·유럽·일본 직구 면세 한도 자동 + 30+ 품목 관세율 + 부가세·개소세 자동 계산과 한국 백화점 가격 비교.',
   keywords: ['해외직구 관세', '관부가세 계산기', '미국 200달러 면세', '목록통관', '일반통관', '아마존 직구', '알리익스프레스 관세', '명품 직구', '노트북 무관세', '합산 과세'],
 })
 
@@ -58,9 +58,7 @@ export default function CustomsPage() {
         📦 관부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        🇺🇸 미국 <strong style={{ color: 'var(--text)' }}>$200</strong>·기타 <strong style={{ color: 'var(--text)' }}>$150</strong> 면세 한도 자동 +
-        <strong style={{ color: 'var(--text)' }}> 30+ 품목 관세율</strong> + 목록통관/일반통관 자동 판단 + 부가세·개별소비세 +
-        한국 백화점 비교 + <strong style={{ color: 'var(--text)' }}>6 시나리오</strong> (아마존·알리·매치스). 4탭.
+        미국·중국·유럽·일본 직구 면세 한도 + 30+ 품목 관세율. <strong style={{ color: 'var(--text)' }}>백화점 가격과 직접 비교</strong>.
       </p>
 
       <CustomsClient />

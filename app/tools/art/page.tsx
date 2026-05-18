@@ -14,7 +14,7 @@ export default function ArtCategoryPage() {
   return (
     <CategoryView
       catId="art"
-      description="음악(BPM·코드·스케일)·디자인(색상·황금비율)·글쓰기(글자수·더미 텍스트)까지 — 음악인·디자이너·크리에이터·글쓴이를 위한 예술·창작 도구 모음."
+      description="음악·디자인·사진·글쓰기 — 크리에이터의 일상 작업을 가볍게 만드는 창작 도구 모음."
     />
   )
 }

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/art/scale',
   title: '스케일 음계 계산기 — 12키 × 12스케일 + 피아노·기타 지판 + 다이어토닉',
-  description: 'C·D·E·F 등 12키 × Major·Minor·Pentatonic·Blues·Dorian·Lydian·Mixolydian 등 12 스케일 자동 계산. 피아노 건반·기타 지판 SVG 시각화 + 다이어토닉 7화음 + 7 교회 모드 비교 + Web Audio MIDI 재생.',
+  description: '12키 × 12스케일(Major·Minor·Pentatonic·Blues·Dorian·Lydian 등) + 피아노·기타 지판 SVG·7 모드 비교·MIDI 재생.',
   keywords: ['스케일 계산기', '음계', 'C major 스케일', '블루스 스케일', '도리안 모드', '리디안', '믹솔리디안', '다이어토닉 코드', '기타 지판', '피아노 건반', '음악 이론'],
 })
 
@@ -58,9 +58,7 @@ export default function ScalePage() {
         🎼 스케일 음계 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        12키 × <strong style={{ color: 'var(--text)' }}>12 스케일</strong> (Major·Minor·Pentatonic·Blues·Dorian·Lydian·Mixolydian 등) +{' '}
-        피아노 건반·기타 지판 <strong style={{ color: 'var(--text)' }}>SVG 시각화</strong> + 다이어토닉 7화음 + 7 교회 모드 비교 +{' '}
-        <strong style={{ color: 'var(--text)' }}>Web Audio MIDI 재생</strong> 4탭.
+        12키 × 12스케일 + 피아노·기타 지판 시각화 + <strong style={{ color: 'var(--text)' }}>7 모드 비교와 MIDI 재생</strong>.
       </p>
 
       <ScaleClient />

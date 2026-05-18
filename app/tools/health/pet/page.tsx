@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/pet',
   title: '반려동물 계산기 — 강아지·고양이 사람 나이·사료량·체중 평가',
   description:
-    '품종 크기·중성화·활동량으로 강아지·고양이 사람 나이, 일일 권장 칼로리(RER/DER), 건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률까지 자동 계산.',
+    '강아지·고양이 사람 나이 + RER/DER 칼로리, 사료량(건식·습식), 체중 평가, 수명 진행률을 반려동물 한 카드로.',
   keywords: [
     '강아지나이계산기', '고양이나이계산기', '반려동물나이환산',
     '강아지사료량계산기', '고양이칼로리계산', '개나이사람나이', '강아지하루사료량',
@@ -23,8 +23,7 @@ export default function PetPage() {
         🐾 반려동물 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        강아지·고양이 사람 나이 환산, RER/DER 칼로리, <strong style={{ color: 'var(--text)' }}>건식·습식 사료량, 체중 적정성 평가, 평균 수명 진행률</strong>까지.
-        품종 크기·중성화·활동량을 명시적 매핑 테이블로 정확히 반영합니다.
+        강아지·고양이 사람 나이와 사료량·체중 평가·<strong style={{ color: 'var(--text)' }}>수명 진행률</strong>을 한눈에.
       </p>
 
       <PetClient />

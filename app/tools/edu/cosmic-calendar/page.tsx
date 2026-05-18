@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/cosmic-calendar',
   title: '코스믹 캘린더 — 138억 년 우주 역사를 1년으로 압축',
-  description: '빅뱅부터 인류까지 138억 년의 우주 역사를 1년 달력으로 압축한 인터랙티브 타임라인. 지구·생명·공룡·인류 등장 시점, 12월 31일 인류의 시간, 칼 세이건 코스믹 캘린더 시각화.',
+  description: '138억 년 우주 역사를 1년 달력으로 압축한 인터랙티브 타임라인. 빅뱅부터 인류까지 시간의 스케일을 직관적으로.',
   keywords: ['코스믹캘린더', '우주달력', '우주역사', '빅뱅', '칼세이건', '우주시간', '인류역사', '우주시각화', '138억년', '우주1년'],
 })
 
@@ -21,8 +21,7 @@ export default function CosmicCalendarPage() {
         🌌 코스믹 캘린더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        칼 세이건이 만든 <strong style={{ color: 'var(--text)' }}>138억 년 우주 역사를 1년으로 압축</strong>한 인터랙티브 타임라인.
-        빅뱅·은하·태양계·생명·공룡·인류 등장을 우주 달력 위에서 시각화하고, <strong style={{ color: 'var(--text)' }}>내 인생이 우주 1년에서 몇 초인지</strong>도 계산합니다.
+        138억 년 우주 역사를 <strong style={{ color: 'var(--text)' }}>1년 달력으로 압축</strong>한 인터랙티브 타임라인.
       </p>
 
       <CosmicCalendarClient />

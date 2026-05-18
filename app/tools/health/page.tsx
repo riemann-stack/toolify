@@ -14,7 +14,7 @@ export default function HealthCategoryPage() {
   return (
     <CategoryView
       catId="health"
-      description="BMI·기초대사량·체중 감량·임신 주수·반려동물 칼로리·자외선까지 — 일상 건강 관리에 자주 쓰는 무료 계산기 모음."
+      description="BMI부터 카페인·수면 부채까지 — 매일 챙기는 건강 지표를 정확한 숫자로 시각화."
     />
   )
 }

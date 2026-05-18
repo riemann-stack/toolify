@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/art/paint-mix',
   title: '물감 혼합 계산기 — 색 섞기 시뮬레이터 + 분량 환산 + 30+ 레시피',
-  description: '수채·아크릴·유화·잉크·푸드컬러·레진 안료 혼합 비율 계산. Subtractive/Additive/RYB 3 모델 + ml/g 분량 환산 + 컬러 매칭(ΔE) + 살색·황토·청회색 등 30+ 인기 레시피 + 12색 색환 가이드 4탭.',
+  description: '수채·아크릴·유화·잉크·푸드컬러·레진 안료 혼합 시뮬(Subtractive·Additive·RYB) + ml/g 환산·ΔE 매칭·30+ 인기 레시피.',
   keywords: [
     '물감 혼합', '물감 비율 계산기', '색 만들기', '잉크 섞기', '잉크 혼합 비율',
     '수채화 색 비율', '아크릴 색조 비율', '유화 색 만들기',
@@ -66,9 +66,7 @@ export default function PaintMixPage() {
         🎨 물감 혼합 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        2~4개 색을 비율대로 섞으면 어떤 색이 나올까? <strong style={{ color: 'var(--text)' }}>Subtractive(물감)·Additive(빛)·RYB(전통)</strong> 3 모델 +{' '}
-        <strong style={{ color: 'var(--text)' }}>ml/g/큰술/방울</strong> 분량 환산 +{' '}
-        <strong style={{ color: 'var(--text)' }}>컬러 매칭(ΔE)</strong> + 살색·황토·청회색 등 30+ 레시피 + 12색 색환 4탭.
+        수채·아크릴·유화·잉크 안료 혼합 시뮬 + ml/g 환산 + <strong style={{ color: 'var(--text)' }}>ΔE 매칭과 30+ 인기 레시피</strong>.
       </p>
 
       {/* 면책 박스 */}

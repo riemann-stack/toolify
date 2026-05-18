@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/url-encode',
   title: 'URL 인코더/디코더 — encodeURIComponent + 쿼리 편집기 + UTM·네이버·카카오 추적 정리',
-  description: 'URL 양방향 인코드/디코드 (encodeURIComponent·encodeURI), URL 자동 분해, 쿼리 파라미터 표 편집·재생성, UTM·fbclid·네이버·카카오·쿠팡 추적 파라미터 일괄 정리. 한글 UTF-8 bytes 분석. 모든 처리 브라우저 측.',
+  description: 'URL 인코드/디코드(encodeURIComponent·encodeURI) + URL 분해와 쿼리 파라미터 표 편집. UTM·fbclid·네이버·카카오·쿠팡 추적 정리.',
   keywords: [
     'URL 인코드', 'URL 디코드', 'URL encoder', 'URL decoder',
     'encodeURIComponent', 'encodeURI', 'decodeURIComponent',
@@ -75,10 +75,7 @@ export default function UrlEncodePage() {
         🔗 URL 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        URL 양방향 인코드/디코드 (<strong style={{ color: 'var(--text)' }}>encodeURIComponent · encodeURI</strong>),
-        URL 자동 분해, <strong style={{ color: 'var(--text)' }}>쿼리 파라미터 표 편집·재생성</strong>,
-        <strong style={{ color: 'var(--text)' }}> UTM · fbclid · 네이버 · 카카오 · 쿠팡 추적 파라미터 일괄 정리</strong>,
-        한글 UTF-8 bytes 분석. 모든 처리가 브라우저에서 수행됩니다.
+        URL 인코드/디코드 + URL 분해와 쿼리 파라미터 표 편집. <strong style={{ color: 'var(--text)' }}>UTM·추적 파라미터 일괄 정리</strong>.
       </p>
 
       {/* 면책 박스 */}

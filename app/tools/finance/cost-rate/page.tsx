@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/cost-rate',
   title: '음식점 원가율 계산기 — 배달 수수료·포장재·실질 원가율',
   description:
-    '재료비, 배달앱 수수료, 포장재, 결제 수수료까지 반영한 실제 메뉴 원가율과 마진을 계산합니다. 배민·쿠팡이츠·요기요 비교, 목표 원가율 판매가 역산, 손익분기 분석.',
+    '재료비·배달 수수료·포장재 반영한 실질 원가율과 마진. 음식점·카페 메뉴 가격 결정에 바로 쓰는 원가 분석.',
   keywords: ['원가율계산기', '메뉴원가계산', '배달수수료계산', '식당원가율', '배민수수료', '쿠팡이츠수수료', '요기요수수료', '판매가계산', '음식점마진계산'],
 })
 
@@ -22,8 +22,7 @@ export default function CostRatePage() {
         🍽️ 음식점 원가율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        재료비·포장재·배달앱 수수료·결제 수수료를 모두 반영한 <strong style={{ color: 'var(--text)' }}>실질 원가율</strong>과 1개당 남는 금액을 계산합니다.
-        배민·쿠팡이츠·요기요 채널 비교, 목표 원가율로 판매가 역산, 가격 인상 시뮬레이션, 월 손익분기까지 한 번에.
+        재료비·배달 수수료·포장재까지 반영한 <strong style={{ color: 'var(--text)' }}>실질 원가율과 마진</strong>. 메뉴 가격 결정에 바로.
       </p>
 
       <CostRateClient />

@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/installment',
   title: '카드 할부 계산기 — 월 납부액·총 이자·일시불 vs 무이자 비교',
-  description: '카드 할부 시 월 납부액과 총 이자를 계산합니다. 무이자 vs 유이자 vs 일시불 할인 비교, 카드사별 수수료율, 개월수별 비용 비교, 기회비용 분석.',
+  description: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로 — 월 납부액·총 이자·실효 수수료율까지.',
   keywords: ['카드할부계산기', '할부이자계산', '12개월할부', '무이자할부', '일시불할인', '카드수수료', '할부vs일시불', '신용카드할부'],
 })
 
@@ -21,8 +21,7 @@ export default function CardInstallmentPage() {
         💳 카드 할부 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        구매금액과 개월수만 입력하면 <strong style={{ color: 'var(--text)' }}>월 납부액·총 이자·월별 상환 스케줄</strong>을 즉시 계산합니다.
-        무이자 vs 유이자 vs 일시불 할인 3가지 시나리오 비교, 한국 카드사별 수수료율, 파킹통장 기회비용까지 한 화면에서.
+        할부 개월수별 진짜 이자와 <strong style={{ color: 'var(--text)' }}>일시불·무이자 비교</strong>. 카드 선택의 기준을 숫자로.
       </p>
 
       <CardInstallmentClient />

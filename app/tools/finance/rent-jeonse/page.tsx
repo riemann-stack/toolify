@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/rent-jeonse',
   title: '월세·전세 비교 계산기 — 대출이자·기회비용·세액공제·손익분기점 시뮬 (2026년)',
   description:
-    '전세 / 월세 / 반전세 3옵션을 동시에 비교하는 한국 임대 의사결정 도구. 전세대출 이자·보증금 기회비용·월세 세액공제·HUG 보증보험료까지 자동 반영. 누적 비용 그래프로 손익분기점 시각화, 전세사기 위험 점수 7항목, 16개 도시별 평균 시세, 자기자본 ROI 시뮬.',
+    '전세·월세·반전세 3옵션 동시 비교. 대출이자·기회비용·세액공제 반영한 손익분기 + 전세사기 위험 점수와 HUG 보증보험료.',
   keywords: [
     '월세 전세 비교', '전세 월세 비교', '월세 vs 전세',
     '전월세 전환율', '반전세 계산', '반전세 시뮬',
@@ -53,7 +53,7 @@ export default function RentJeonsePage() {
         🏠 월세·전세 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        같은 매물을 전세 / 월세 / 반전세로 살 때 누적 비용을 정확하게 비교. 대출이자·보증금 기회비용·월세 세액공제·전세대출 소득공제·HUG 보증보험료까지 한국 임대 시장의 모든 변수를 반영. 손익분기점 그래프와 전세사기 위험 점수로 의사결정 자신감을 높이세요.
+        전세·월세·반전세 3옵션 동시 비교. <strong style={{ color: 'var(--text)' }}>대출이자·기회비용·세액공제</strong> 반영한 손익분기.
       </p>
 
       <RentJeonseClient />

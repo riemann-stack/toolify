@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
   title: '혈중알코올 계산기 — BAC·운전 가능 시각·다음날 아침·면허정지 해소 | Youtil',
-  description: '체중·음주량으로 혈중알코올농도(BAC) 추정. 면허정지·취소 해소 시각, 다음날 아침 출근 BAC 체크, 1차·2차·3차 누적 음주 시뮬, ALDH2 분해 속도 보정, 약물·알코올 위험. Widmark 공식 기반.',
+  description: '지금 운전 가능 시각과 다음날 아침 출근 BAC 추정. 1·2·3차 누적, ALDH2 분해 속도, 약물 상호작용까지 Widmark 기반.',
   keywords: [
     '혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산',
     '음주운전기준', '알코올소멸시간', '음주측정계산기',
@@ -23,8 +23,7 @@ export default function BloodAlcoholPage() {
         🍺 혈중알코올 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        BAC 추정·<strong style={{ color: 'var(--text)' }}>다음날 아침 출근 운전 체크·1차·2차·3차 누적·ALDH2 분해 속도·약물 상호작용</strong>까지.
-        Widmark 공식 기반 음주 예방 교육 도구.
+        지금 운전 가능 시각과 <strong style={{ color: 'var(--text)' }}>다음날 아침 출근 BAC</strong>. 1·2·3차 누적과 ALDH2 분해 속도까지.
       </p>
 
       {/* 상단 법적 면책 */}

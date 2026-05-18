@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/finance/severance',
   title: '퇴직금 실수령액 계산기 — 평균/통상 자동 + 퇴직소득세(2023 개정) + 시뮬',
-  description: '입사일·퇴사일·3개월 급여로 퇴직금·세금·실수령 자동 계산. 평균임금 vs 통상임금 자동 판단(근로기준법 §2), 퇴직소득세 2023 개정 세법 정확 적용, 퇴사일 시뮬레이터, 퇴사월 총 입금액(월급+연차+공제), DB/DC/IRP 4모드.',
+  description: '입사·퇴사일과 3개월 급여로 퇴직금·퇴직소득세·실수령 자동. 2023 개정 반영 + DB/DC/IRP 4모드와 퇴사일 시뮬레이션.',
   keywords: ['퇴직금 계산기', '퇴직금 실수령액', '평균임금 통상임금', '퇴직소득세', '근속연수공제', '환산급여공제', '퇴사일 시뮬', 'DB DC IRP', '퇴직연금', '근로기준법'],
 })
 
@@ -58,9 +58,7 @@ export default function SeverancePage() {
         💼 퇴직금 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        입사일·퇴사일 + 3개월 급여 → <strong style={{ color: 'var(--text)' }}>평균/통상임금 자동 판단</strong> +
-        퇴직금 + <strong style={{ color: 'var(--text)' }}>퇴직소득세 (2023 개정 세법)</strong> + 실수령 +
-        퇴사일 시뮬레이션 + DB/DC/IRP 4모드. 퇴사월 총 입금액까지 한 번에.
+        입사·퇴사일과 3개월 급여로 <strong style={{ color: 'var(--text)' }}>퇴직금·퇴직소득세·실수령</strong> 자동. DB/DC/IRP 4모드.
       </p>
 
       <SeveranceClient />

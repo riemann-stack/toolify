@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/dev/json',
   title: 'JSON 포맷터 — 정렬·압축·트리 뷰·TypeScript 인터페이스 생성',
-  description: 'JSON 정렬(Beautify)·압축(Minify)·검증·트리 뷰어, JSON → TypeScript 인터페이스 자동 생성, JSON ↔ YAML·CSV 변환, 키 알파벳 정렬, 이스케이프·해제, 에러 위치 표시까지.',
+  description: 'JSON 정렬·압축·검증·트리 뷰 + TypeScript 인터페이스 자동 생성 + YAML·CSV 변환과 키 정렬·이스케이프·에러 위치.',
   keywords: ['JSON포맷터', 'JSON정렬', 'JSON압축', 'JSON트리뷰어', 'JSON유효성검사', 'JSON to TypeScript', 'JSON to YAML', 'JSON to CSV', 'JSON정렬키', 'JSON에러위치'],
 })
 
@@ -21,8 +21,7 @@ export default function JsonPage() {
         📋 JSON 포맷터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        JSON <strong style={{ color: 'var(--text)' }}>정렬·압축·검증·트리 뷰어</strong>, <strong style={{ color: 'var(--text)' }}>TypeScript 인터페이스</strong> 자동 생성,
-        <strong style={{ color: 'var(--text)' }}> YAML·CSV 변환</strong>, 키 알파벳 정렬, 이스케이프·해제, 에러 위치 표시까지 한 도구에서.
+        JSON 정렬·압축·검증·트리 뷰 + <strong style={{ color: 'var(--text)' }}>TypeScript 인터페이스 자동</strong> + YAML/CSV 변환.
       </p>
 
       <JsonClient />

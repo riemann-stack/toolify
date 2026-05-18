@@ -1,0 +1,487 @@
+/* ──────────────────────────────────────────────────────
+   서버 시간 계산기 — 큰 디지털 시계 + 카운트다운
+   ────────────────────────────────────────────────────── */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── 메인 시계 카드 ── */
+.clockCard {
+  background: linear-gradient(140deg, rgba(200,255,62,0.08), rgba(62,200,255,0.05));
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 16px;
+  padding: 22px 24px;
+  text-align: center;
+}
+.clockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+.clockBadge {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: var(--bg3);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.syncBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .syncBtn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+}
+.syncBtn:disabled { opacity: 0.5; cursor: wait; }
+
+.clockTime {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(200,255,62,0.25);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.clockTimeHMS { font-size: clamp(56px, 13vw, 96px); }
+.clockTimeMs {
+  font-size: clamp(28px, 6vw, 44px);
+  color: var(--muted);
+  letter-spacing: -1px;
+  font-weight: 700;
+}
+
+.clockDate {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.clockMeta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+@media (max-width: 540px) {
+  .clockMeta { grid-template-columns: 1fr; gap: 6px; }
+}
+.metaItem {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: left;
+}
+.metaLabel {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.metaValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.offsetSafe { color: #3EFF9B; }
+.offsetOk { color: var(--accent); }
+.offsetWarn { color: #FFB83E; }
+.offsetDanger { color: #FF6B6B; }
+
+/* ── 카운트다운 카드 ── */
+.countdownCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.cardLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.targetRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.targetInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  width: 130px;
+  text-align: center;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+.targetInput:focus { border-color: var(--accent); }
+.soundLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.soundLabel input { accent-color: var(--accent); }
+
+.targetDisplay {
+  font-size: 13px;
+  color: var(--text);
+  margin: 8px 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.targetError {
+  font-size: 12px;
+  color: #FF8C3E;
+  margin: 6px 0;
+}
+
+.cdGrid {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin: 14px 0;
+  padding: 14px;
+  background: var(--bg3);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+.cdUrgent {
+  background: rgba(255,140,62,0.10);
+  border: 1px solid rgba(255,140,62,0.40);
+}
+.cdNegative {
+  background: rgba(62,255,155,0.08);
+  border: 1px solid rgba(62,255,155,0.40);
+}
+.cdBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cdNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(36px, 9vw, 56px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  min-width: 1.4em;
+  text-align: center;
+}
+.cdUrgent .cdNum { color: #FF8C3E; }
+.cdNegative .cdNum { color: #3EFF9B; }
+.cdLabel {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.cdSep {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 800;
+  color: var(--muted);
+  align-self: flex-start;
+  margin-top: 6px;
+  line-height: 1;
+}
+.cdMs {
+  display: flex;
+  align-self: flex-start;
+  margin-top: 18px;
+  margin-left: 2px;
+}
+.cdMsNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+.cdUrgent .cdMsNum { color: #FF8C3E; }
+.cdNegative .cdMsNum { color: #3EFF9B; }
+
+.cdStatus {
+  font-size: 12.5px;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+/* ── 프리셋 ── */
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+}
+@media (max-width: 540px) { .presetGrid { grid-template-columns: repeat(2, 1fr); } }
+.presetBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: inherit;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); }
+}
+.presetIcon { font-size: 18px; flex-shrink: 0; }
+.presetText { min-width: 0; flex: 1; }
+.presetName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.presetDesc {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 외부 사이트 트래킹 카드 ── */
+.externalCard {
+  background: linear-gradient(140deg, rgba(62,200,255,0.06), rgba(155,62,255,0.04));
+  border: 1px solid rgba(62,200,255,0.25);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.extNote {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.extNote code {
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  color: var(--accent);
+}
+.extNote strong { color: var(--text); }
+
+.extInputRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.urlInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+}
+.urlInput:focus { border-color: var(--accent); }
+.extMeasureBtn {
+  background: var(--accent);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.extMeasureBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+@media (hover: hover) {
+  .extMeasureBtn:hover:not(:disabled) { opacity: 0.85; }
+}
+
+.sitePresetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+@media (max-width: 540px) { .sitePresetGrid { grid-template-columns: repeat(2, 1fr); } }
+.sitePresetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sitePresetBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (hover: hover) {
+  .sitePresetBtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+}
+
+.extResultCard {
+  margin-top: 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.extLiveTime {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(40px, 10vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.extLiveDate {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 6px 0 14px;
+  font-variant-numeric: tabular-nums;
+}
+.extMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+@media (max-width: 540px) {
+  .extMetaGrid { grid-template-columns: 1fr; }
+}
+.extFinalUrl {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 8px 0 6px;
+  word-break: break-all;
+  text-align: left;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.extWarn {
+  font-size: 11.5px;
+  color: var(--muted);
+  background: rgba(255,184,62,0.08);
+  border-left: 2px solid rgba(255,184,62,0.5);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin: 8px 0 0;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.extErrorBox {
+  margin-top: 14px;
+  background: rgba(255,107,107,0.08);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.extErrorBox strong {
+  display: block;
+  color: #FF6B6B;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.extErrorBox p {
+  font-size: 12.5px;
+  color: var(--text);
+  margin: 4px 0 0;
+  line-height: 1.6;
+}
+.extErrorHint {
+  color: var(--muted) !important;
+  font-size: 11.5px !important;
+}
+
+/* ── 팁 카드 ── */
+.tipCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.tipList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tipList li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding-left: 18px;
+  position: relative;
+}
+.tipList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+.tipList li strong { color: var(--text); }

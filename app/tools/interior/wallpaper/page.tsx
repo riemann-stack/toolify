@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/wallpaper',
   title: '도배 계산기 — 벽지 롤 수·면적·셀프 시공 비용',
-  description: '방 크기와 천장 높이로 필요한 벽지 롤 수를 계산합니다. 실크·합지·PVC 벽지 표준, 창문·문 차감, 로스율 반영, 셀프·전문 시공 비용 견적.',
+  description: '벽 면적으로 필요한 벽지 롤 수와 셀프 시공 비용 견적. 풀·도구·인건비까지 포함한 총 예산.',
   keywords: ['도배계산기', '벽지소요량계산', '벽지롤수계산', '셀프도배', '실크벽지', '합지벽지', '도배비용계산', '벽지견적'],
 })
 
@@ -21,8 +21,7 @@ export default function WallpaperPage() {
         🧱 도배 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        방 크기·천장 높이·창문·문을 입력하면 한국 표준 벽지(실크·합지·PVC) 기준 <strong style={{ color: 'var(--text)' }}>필요 롤 수와 시공 면적</strong>을 계산합니다.
-        간편 모드 · 방·벽별 상세 모드 · 셀프 vs 전문 비용 견적까지 한 번에.
+        벽 면적으로 필요한 <strong style={{ color: 'var(--text)' }}>벽지 롤 수</strong>와 셀프 시공 비용 견적.
       </p>
 
       <WallpaperClient />

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/date/history-era',
   title: '연호·연대 변환기 — 단기·조선왕·간지·한·중·일 동시',
-  description: '단기·불기·황기·조선 왕·일본·중국 연호 양방향 변환. 단군부터 현재까지 통합 연표, 60갑자, 한국·중국·일본 동시 표시, 사건명·연도 검색, 오늘은 무슨 해 자동.',
+  description: '단기·불기·조선왕·간지·일본·중국 연호 동시 변환 + 단군~현재 통합 연표와 한·중·일 동시 비교.',
   keywords: ['역사연호변환기','단기변환','조선왕연호','간지변환기','60갑자','불기변환','연호계산기','한국사연표','임진왜란연도','훈민정음연도','메이지 다이쇼 쇼와','한국 통합 연표','동아시아 연호','오늘 단기'],
 })
 
@@ -48,7 +48,7 @@ export default function HistoryEraPage() {
         📜 연호·연대 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        단기·불기·황기·조선 왕·일본·중국 연호 <strong style={{ color: 'var(--text)' }}>양방향 변환</strong> + 단군부터 현재까지 통합 연표 + 60갑자 + 한국·중국·일본 동시 비교.
+        단기·불기·조선왕·간지·일본·중국 연호 동시 변환 + <strong style={{ color: 'var(--text)' }}>단군~현재 통합 연표</strong>.
       </p>
 
       <HistoryEraClient />

@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/dutch',
   title: '더치페이 계산기 — 술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
   description:
-    '회식·모임 정산 종합 도구. 간단 N빵, 술값 분리, 개인별 메뉴, 선결제자 최소 송금 횟수, 카카오톡 공유 메시지까지 한 번에. 8가지 상황 프리셋(점심·저녁·카페·술자리·팀 회식·여행·가족·생일)과 7가지 절삭·5가지 잔여 처리.',
+    '한 명이 선결제했을 때 가장 적은 송금 횟수로 정산. 술값 분리, 개인별 메뉴, 카톡 공유 + 8가지 상황 프리셋.',
   keywords: [
     '더치페이 계산기', 'N빵 계산기', '회식비 계산기', '1인당 금액 계산',
     '술값 분리', '회식 정산', '모임비 정산', '선결제자 정산',
@@ -23,8 +23,7 @@ export default function DutchPage() {
         🍻 더치페이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        회식·모임 정산을 한 번에 — <strong style={{ color: 'var(--text)' }}>간단 N빵, 술값 분리, 개인별 메뉴, 선결제자 최소 송금 횟수, 카카오톡 공유 메시지</strong>까지.
-        8가지 상황 프리셋과 7가지 절삭·5가지 잔여 처리 옵션으로 어떤 모임이든 공정하게.
+        한 명이 선결제했을 때 <strong style={{ color: 'var(--text)' }}>가장 적은 송금 횟수</strong>로 정산. 8가지 상황 프리셋 포함.
       </p>
 
       <DutchClient />

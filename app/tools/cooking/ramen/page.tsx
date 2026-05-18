@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/ramen',
   title: '라면 물양 계산기 — 1~4개·국물 농도·토핑·시간 한 번에 | Youtil',
-  description: '라면 1~4개 권장 물양 자동 계산. 신라면·진라면·짜파게티·불닭볶음면·비빔면 등 한국 인기 15종 프리셋. 국물 농도, 16종 토핑, 조리 시간, 냄비 추천, 영양 정보까지.',
+  description: '라면 개수·국물 농도·토핑별 권장 물양과 조리 시간. 신라면·짜파게티·불닭·비빔면 등 한국 라면 전부.',
   keywords: [
     '라면 물양', '라면 물 ml', '라면 2개 물양', '라면 3개 물양', '라면 4개 물양',
     '신라면 물양', '진라면 물양', '안성탕면 물양', '너구리 물양',
@@ -23,8 +23,7 @@ export default function RamenPage() {
         🍜 라면 물양 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        1~4개·국물 농도·토핑·라면별 권장 물양과 조리 시간을 한 번에. <strong style={{ color: 'var(--text)' }}>신라면·짜파게티·불닭볶음면·비빔면 등 한국 인기 15종</strong> 프리셋과
-        16종 토핑, 영양 정보까지.
+        라면 개수·국물 농도·토핑별 권장 물양과 시간. <strong style={{ color: 'var(--text)' }}>신라면·짜파게티·불닭·비빔면</strong> 전부.
       </p>
 
       <RamenClient />

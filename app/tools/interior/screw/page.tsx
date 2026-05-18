@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/screw',
   title: '나사 규격 계산기 — M·UNC·UNF·PT 7종 + 탭드릴/관통홀/파일럿홀 + 인치↔mm',
-  description: '미터 나사·유니파이 나사·파이프 나사·목재/석고피스 7종 → 탭드릴 직경·관통홀·파일럿홀·육각렌치·스패너 사이즈 자동. 소재별 보정·결합률 옵션·인치 ↔ mm 양방향 변환·자주 쓰는 사이즈 표.',
+  description: 'M·UNC·UNF·PT·목재·석고 7종 + 탭드릴·관통홀·파일럿홀·육각/스패너 사이즈와 인치↔mm 변환표.',
   keywords: ['탭드릴 계산기', '나사 규격표', 'M6 탭드릴', 'M8 탭드릴', '미터 나사', '유니파이 나사', 'UNC UNF', 'PT 나사', '파이프 나사', '인치 mm 변환', '관통홀 직경', '목재피스 파일럿홀'],
 })
 
@@ -72,7 +72,7 @@ export default function ScrewPage() {
         🔩 나사 규격 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        M·UNC·UNF·PT·NPT·목재·석고 7종 나사 → 탭드릴·관통홀·파일럿홀 직경 자동 + 소재 보정 + 육각/스패너 사이즈 + 인치↔mm.
+        M·UNC·UNF·PT·목재·석고 <strong style={{ color: 'var(--text)' }}>7종 + 탭드릴·관통홀·렌치 사이즈</strong>.
       </p>
 
       <ScrewClient />

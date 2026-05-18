@@ -4,9 +4,9 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/art/exposure',
-  title: '사진 노출 계산기 — 조리개·셔터·ISO 3축 등가 노출 + ND 필터 + Sunny 16',
-  description: '조리개·셔터·ISO 3축 잠금 슬라이더로 등가 노출 자동 계산. EV 표시, ND 필터(ND2~ND1000) 셔터 환산, Sunny 16 등 8 상황별 가이드, 별 사진 500 룰, 영상 180° 셔터, 트레이드오프(심도·흔들림·노이즈) 시각화 4탭.',
-  keywords: ['사진 노출 계산기', '조리개 셔터 ISO', 'EV 계산', 'ND 필터 환산', 'Sunny 16', '500 룰', '별 사진', '180도 셔터 룰', '등가 노출', '심도 계산', '장노출', 'Stop 계산'],
+  title: '사진 노출 계산기 — 조리개·셔터·ISO 3축 자유 시뮬레이터 + ND·Sunny 16',
+  description: '조리개·셔터·ISO 3축을 자유롭게 + 옵션 잠금으로 등가 노출 시뮬. ND 필터·Sunny 16·별 사진 500 룰·180° 셔터까지.',
+  keywords: ['사진 노출 계산기', '조리개 셔터 ISO', 'EV 계산', '노출 시뮬레이터', '등가 노출 계산기', 'ND 필터 환산', 'Sunny 16', '500 룰', '별 사진', '180도 셔터 룰', '심도 계산', '장노출', 'Stop 계산', '카메라 수동 모드'],
 })
 
 const sectionTitle: React.CSSProperties = {
@@ -58,9 +58,7 @@ export default function ExposurePage() {
         📸 사진 노출 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        조리개·셔터·ISO <strong style={{ color: 'var(--text)' }}>3축 잠금 슬라이더</strong>로 등가 노출 자동 계산.{' '}
-        <strong style={{ color: 'var(--text)' }}>ND 필터</strong> 셔터 환산 + Sunny 16 등 8 상황 가이드 +{' '}
-        <strong style={{ color: 'var(--text)' }}>별 사진 500 룰</strong> + 영상 180° 셔터 + 트레이드오프 시각화 4탭.
+        조리개·셔터·ISO 3축을 자유롭게 + <strong style={{ color: 'var(--text)' }}>옵션 잠금으로 등가 노출</strong> 시뮬. ND·Sunny 16 포함.
       </p>
 
       <ExposureClient />
@@ -69,15 +67,38 @@ export default function ExposurePage() {
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
       <div style={card}>
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>잠금 축 선택</strong> — 유지하고 싶은 효과(예: 심도 → 조리개 잠금)</li>
-          <li><strong>슬라이더 조작</strong> — 다른 두 축 중 하나를 움직이면 세 번째가 자동 보정</li>
-          <li><strong>EV 확인</strong> — 현재 광량 환산 값 + 기본값 대비 stop 변화</li>
+          <li><strong>먼저 자유롭게 움직여 보기</strong> — 잠금 0개 상태가 기본. 각 슬라이더가 EV를 그대로 바꿉니다 (수동 모드와 동일)</li>
+          <li><strong>축 잠금 (옵션·최대 2개)</strong> — 1개 잠그면 등가 노출 모드 / 2개 잠그면 나머지 한 축만 EV 변경 가능</li>
+          <li><strong>EV 확인</strong> — 현재 광량 환산 값 + 기본값(f/4·1/250·ISO 200) 대비 stop 변화</li>
           <li><strong>등가 노출 5종 클릭</strong> — 같은 EV·다른 효과 조합 즉시 적용</li>
           <li><strong>ND·가이드·트레이드오프 탭</strong>에서 상황별 추천 받기</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 입력값(조리개·셔터·ISO·잠금)은 자동 저장되어 새로고침해도 유지됩니다.
+          💡 입력값(조리개·셔터·ISO·잠금 상태)은 자동 저장되어 새로고침해도 유지됩니다.
         </p>
+      </div>
+
+      {/* 1.5 잠금 모델 — 신규 섹션 */}
+      <h2 style={sectionTitle}>🔒 잠금 모드 3가지 — 학습 → 응용 → 제약 시뮬</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: 14 }}>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #3EFFD0', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, margin: '0 0 6px' }}>🆓 0개 잠금 — 자유 모드</p>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+            각 슬라이더가 EV를 직접 변경. 노출 3요소를 처음 배울 때, 또는 효과(심도·흔들림·노이즈)를 한 변수씩 비교해볼 때.
+          </p>
+        </div>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #FFB83E', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#FFB83E', fontWeight: 700, margin: '0 0 6px' }}>🔁 1개 잠금 — 등가 노출 모드</p>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+            잠근 축 고정 + 나머지 두 축이 서로 보정. 「심도 유지하면서 셔터·ISO만 바꿔보고 싶을 때」 가장 유용. Av/Tv 모드 시뮬에 가까움.
+          </p>
+        </div>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #FF3E8C', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 6px' }}>🎯 2개 잠금 — 1축 자유</p>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+            두 축 고정 + 남은 한 축만 움직임 → EV가 변함. 「조리개 f/8 + ISO 100 고정인 풍경 촬영에서 셔터만 조정」처럼 실전 제약 시뮬.
+          </p>
+        </div>
       </div>
 
       {/* 2. 노출 3요소 — 핵심 개념 */}
@@ -221,12 +242,13 @@ export default function ExposurePage() {
       </details>
 
       <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. 잠금(Lock) 축은 어떻게 동작하나요?</summary>
+        <summary style={faqSummary}>Q2. 잠금(Lock) 토글은 어떻게 동작하나요?</summary>
         <p style={faqAnswer}>
-          잠근 축은 슬라이더로 변하지 않습니다. 다른 축을 변경하면 <strong>세 번째 축이 자동 보정</strong>되어 EV(밝기)가 유지돼요.<br />
-          • <strong>조리개 잠금</strong>: 심도 유지 → 셔터·ISO만 변동 (인물·풍경)<br />
-          • <strong>셔터 잠금</strong>: 모션 표현 유지 → 조리개·ISO만 변동 (스포츠·장노출)<br />
-          • <strong>ISO 잠금</strong>: 노이즈 유지 → 조리개·셔터만 변동 (저감도 화질 우선)
+          조리개·셔터·ISO 각각 <strong>독립 토글</strong>이며 <strong>최대 2개</strong>까지 동시에 잠글 수 있습니다.<br />
+          • <strong>0개 (기본)</strong>: 자유 모드 — 각 슬라이더가 EV를 그대로 바꿈. 수동(M)모드로 한 변수씩 효과 학습.<br />
+          • <strong>1개</strong>: 등가 노출 모드 — 잠근 축은 고정, 나머지 두 축이 서로 보정해 EV 유지.<br />
+          → 조리개 잠금: 심도 유지 (Av 모드) / 셔터 잠금: 모션 유지 (Tv 모드) / ISO 잠금: 노이즈·화질 우선.<br />
+          • <strong>2개</strong>: 1축 자유 — 두 축 고정, 남은 한 축만 움직임 → EV가 변함 (제약 시뮬).
         </p>
       </details>
 

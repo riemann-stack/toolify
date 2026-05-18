@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/thawing',
   title: '해동 시간 계산기 — 식품별·두께별·전자레인지 W별 해동 가이드 | Youtil',
-  description: '소고기·돼지·닭·생선·채소·빵·조리음식 6종 해동 시간. 4가지 방법 (냉장·찬물·실온·전자레인지) 비교, 위험도 카드, 전자레인지 출력별 보정, 식품별 조리 팁, 해동 시각 역산까지. 식약처 기준 식품 안전 가이드.',
+  description: '냉장·전자레인지·찬물·실온 4가지 해동법 비교 + 식품별 위험도, 시작·완료 시각 자동, 두께·무게별 정확한 시간.',
   keywords: [
     '해동시간계산기', '고기해동시간', '냉동해동계산기', '냉장해동시간',
     '생선해동시간', '식품해동방법', '냉동보관기간', '전자레인지 해동',
@@ -23,8 +23,7 @@ export default function ThawingPage() {
         🧊 해동 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        식품·두께·무게·전자레인지 W별 4가지 해동 방법 비교, <strong style={{ color: 'var(--text)' }}>위험도 카드·식품별 조리 팁·해동 시작·완료 시각 자동·역산</strong>까지.
-        식약처 기준 식품 안전 가이드.
+        냉장·전자레인지·찬물·실온 <strong style={{ color: 'var(--text)' }}>4가지 해동법 비교</strong> + 식품별 위험도와 시작·완료 시각.
       </p>
 
       {/* 상단 면책 */}

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/health/cycle',
   title: '생리주기·배란일 계산기 — 다음 생리·가임기·PMS 시각화·컨디션 가이드',
-  description: '마지막 생리일과 평균 주기 입력 → 다음 생리·배란일·가임기·PMS 예상 구간을 원형·월간 캘린더로 시각화. 4단계 phase별(생리기·난포기·배란기·황체기) 운동·수면·식이 일반 가이드. 본인 브라우저에만 저장.',
+  description: '마지막 생리일·평균 주기 → 다음 생리·배란·가임기·PMS를 원형·월간 캘린더로 시각화 + 4단계 phase별 컨디션 가이드.',
   keywords: ['생리주기 계산기', '배란일 계산기', '가임기 계산기', 'PMS 계산기', '생리예정일 계산기', '월경주기 계산기', '난포기 황체기', '생리주기 캘린더', '여성 주기 트래킹', 'menstrual cycle calculator'],
 })
 
@@ -72,7 +72,7 @@ export default function CyclePage() {
         🌙 생리주기·배란일 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        마지막 생리일·평균 주기 입력 → 다음 생리·배란일·가임기·PMS를 원형·월간 캘린더로 시각화. 4단계 phase별 컨디션 가이드. <strong style={{ color: '#B885DA' }}>본인 브라우저에만 저장 · 서버 전송 X</strong>.
+        마지막 생리일과 평균 주기로 다음 생리·배란·가임기를 <strong style={{ color: 'var(--text)' }}>원형 시각화</strong> + phase별 컨디션.
       </p>
 
       <CycleClient />

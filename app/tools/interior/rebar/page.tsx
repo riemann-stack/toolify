@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/rebar',
   title: '철근 중량 계산기 — KS D 3504 D10~D51 + 트럭 적재 + 배근 가이드',
-  description: 'KS D 3504 이형 철근 12규격(D10~D51) 단위중량 정확. 본수→중량·중량→본수 양방향, 절단 로스·결속선·강도등급(SD300~600) 단가, 1톤~11톤 트럭 적재 매칭, 옹벽·기초·계단·카포트 셀프 시공 배근 가이드.',
+  description: 'KS D 3504 12규격(D10~D51) + 표준 길이별 본수·중량·톤·단가 + 트럭 적재 매칭과 옹벽·기초·계단 배근 가이드.',
   keywords: ['철근 중량', 'D10 무게', 'D13 1m', 'D16 6m', '철근 1톤', 'KS D 3504', 'SD400 SD500', '철근 단가', '트럭 적재', '옹벽 배근'],
 })
 
@@ -58,9 +58,7 @@ export default function RebarPage() {
         🏗️ 철근 중량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        <strong style={{ color: 'var(--text)' }}>KS D 3504</strong> 이형 철근 12규격(D10~D51) 단위중량 정확 +
-        본수↔중량 양방향 + 절단 로스·결속선·강도등급 단가 + 1~11톤 트럭 적재 매칭 + 옹벽·기초·계단·카포트
-        셀프 시공 배근 가이드.
+        KS D 3504 12규격 + 길이별 본수·중량·톤·단가 + <strong style={{ color: 'var(--text)' }}>트럭 적재 매칭</strong>.
       </p>
 
       <RebarClient />

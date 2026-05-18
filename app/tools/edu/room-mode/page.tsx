@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/edu/room-mode',
   title: '룸 모드 계산기 — 홈오디오·홈스튜디오 평면도·베이스 트랩 가이드',
-  description: '방 가로·세로·높이로 축방향·접선·사선 룸 모드 30+ 자동. 슈로더 주파수, 평면도 음압 시각화, 38% 룰, Bolt Area + Bonello 비율 진단, 베이스 트랩 권장까지 4탭. 홈오디오·홈스튜디오 음향 셋업 필수.',
+  description: '방 가로·세로·높이 → 축방향·접선·사선 모드 30+ + 슈로더 주파수·평면도 시각화·38% 룰·베이스 트랩 가이드.',
   keywords: ['룸 모드', '룸 모드 계산기', '베이스 트랩', '슈로더 주파수', '38% 룰', 'Bolt Area', 'Sepmeyer 황금비', '홈오디오', '홈스튜디오', '음향 측정'],
 })
 
@@ -58,9 +58,7 @@ export default function RoomModePage() {
         🔊 룸 모드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        방 가로·세로·높이 → <strong style={{ color: 'var(--text)' }}>축방향·접선·사선 룸 모드 30+</strong> 자동 +
-        슈로더 주파수 + <strong style={{ color: 'var(--text)' }}>평면도 음압 시각화</strong> + 38% 룰 +
-        Bolt Area·Bonello 비율 진단 + 베이스 트랩 가이드 4탭. 홈오디오·홈스튜디오 음향 셋업 필수 도구.
+        방 가로·세로·높이로 축방향·접선·사선 모드 + <strong style={{ color: 'var(--text)' }}>슈로더 주파수와 베이스 트랩</strong> 가이드.
       </p>
 
       <RoomModeClient />

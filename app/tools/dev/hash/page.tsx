@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/hash',
   title: '해시 생성기 — MD5·SHA-1·SHA-256·SHA-512·HMAC + 파일 무결성',
-  description: '텍스트·파일 해시 즉시 생성. MD5·SHA-1·SHA-256·SHA-512 동시 출력 + HMAC 서명(GitHub/Slack/AWS/JWT) + 파일 무결성 검증 + SRI 해시. 안전성 등급 표시 + 보안 경고 4탭. 모든 계산 브라우저 측.',
+  description: 'MD5·SHA-1·SHA-256·SHA-512 동시 + HMAC 서명(GitHub/Slack/AWS/JWT)·파일 무결성·SRI 해시. 안전성 등급. 전부 브라우저 처리.',
   keywords: [
     '해시 생성기', 'MD5 변환', 'SHA256 생성', 'SHA-256', 'SHA-512',
     'HMAC', 'HMAC-SHA256', 'HMAC 서명',
@@ -66,9 +66,7 @@ export default function HashPage() {
         🔒 해시 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        텍스트·파일 해시 즉시 생성. <strong style={{ color: 'var(--text)' }}>MD5 · SHA-1 · SHA-256 · SHA-512</strong> 동시 출력 +{' '}
-        <strong style={{ color: 'var(--text)' }}>HMAC 서명</strong>(GitHub/Slack/AWS/JWT) + 파일 무결성 검증 + SRI 해시.
-        모든 계산이 브라우저에서 수행되어 데이터가 외부로 전송되지 않습니다.
+        MD5·SHA-1·SHA-256·SHA-512 동시 + HMAC 서명·파일 무결성·SRI 해시. <strong style={{ color: 'var(--text)' }}>전부 브라우저 처리</strong>.
       </p>
 
       {/* 강한 면책 */}

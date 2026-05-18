@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
   title: '인터벌 훈련 계산기 — VDOT·야소 800·400/800/1km 풀 스케줄',
-  description: '5km·10km·하프 기록만 입력하면 VDOT 기반 인터벌 페이스, 1바퀴(400m)·랩타임, 다거리 추천(400m~1.6km), 4~16주 풀 페이스·회복 거리 포함 훈련 스케줄, 한국 인기 대회까지.',
+  description: 'VDOT 기반 정확한 인터벌 페이스 + 1바퀴 랩타임·다거리 추천·4~16주 풀 트레이닝 스케줄과 한국 대회.',
   keywords: ['인터벌훈련계산기', '인터벌페이스', '야소800계산기', '400m페이스', '800m페이스', '마라톤풀코스예측', '러닝인터벌', '인터벌스케줄', 'VDOT 계산기', 'I 페이스', 'R 페이스', 'Jack Daniels VDOT', '한국 마라톤 훈련', '풀코스 예측'],
 })
 
@@ -21,7 +21,7 @@ export default function IntervalTrainingPage() {
         🏃‍♂️ 인터벌 훈련 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        5km·10km·하프 기록 → <strong style={{ color: 'var(--text)' }}>VDOT 기반 인터벌 페이스 + 1바퀴(400m)·랩타임 + 다거리 추천(400m~1.6km) + 4~16주 풀 스케줄(페이스·회복·총거리) + 한국 인기 대회</strong>까지.
+        VDOT 기반 정확한 인터벌 페이스 + <strong style={{ color: 'var(--text)' }}>4~16주 풀 트레이닝 스케줄</strong>.
       </p>
 
       <IntervalTrainingClient />

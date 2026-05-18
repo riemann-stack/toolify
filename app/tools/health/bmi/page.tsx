@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/bmi',
   title: 'BMI 계산기 2026 — 체질량지수·키별 정상 체중·허리둘레·체중 시뮬',
   description:
-    '키와 체중으로 BMI 즉시 계산. 키별 정상 체중 범위, 목표 BMI 체중, 허리둘레로 복부비만 판정, 체중 시뮬레이터, 체지방률 추정까지. WHO·대한비만학회 기준 토글, 러너 체중 관리 팁 포함.',
+    '키·몸무게로 비만도와 정상 체중 범위를 한눈에. 허리둘레·허리-신장비, 체중 시뮬, 체지방률 추정과 WHO·대한비만학회 기준 토글.',
   keywords: [
     'BMI 계산기', '체질량지수', '비만도 계산기', 'BMI 비만',
     '체중 계산기', 'BMI 정상 범위', '러닝 체중 관리',
@@ -24,8 +24,7 @@ export default function BmiPage() {
         ⚖️ BMI 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        체질량지수, <strong style={{ color: 'var(--text)' }}>키별 정상 체중 범위, 목표 BMI, 허리둘레·허리-신장비, 체중 시뮬레이터, 체지방률 추정</strong>까지.
-        WHO·대한비만학회 기준 토글, 러너 체중 관리 팁 포함.
+        키·몸무게로 비만도와 정상 체중 범위. <strong style={{ color: 'var(--text)' }}>허리둘레·체지방률 추정</strong>까지 한 화면에.
       </p>
 
       <BmiClient />

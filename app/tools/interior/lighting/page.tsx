@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
   title: '조명 밝기 계산기 — 방 면적 루멘·조명 개수·W↔lm 환산',
-  description: '거실·침실·서재 등 공간별 권장 루멘과 필요한 조명 개수를 계산합니다. 백열전구·형광등·LED 와트↔루멘 환산, 색온도 가이드, 한국 LED 제품 프리셋.',
+  description: '공간별 권장 루멘과 조명 개수 + W↔lm 환산·색온도 가이드로 침실·거실·주방 조명 설계 완성.',
   keywords: ['조명밝기계산기', '방조명루멘', '거실조명개수', 'W루멘환산', '조명개수계산', 'LED루멘', '색온도가이드', '루멘계산'],
 })
 
@@ -21,8 +21,7 @@ export default function LightingPage() {
         💡 조명 밝기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        방 면적과 공간 용도를 입력하면 한국 KS 기준 <strong style={{ color: 'var(--text)' }}>권장 루멘과 필요한 조명 개수</strong>를 계산합니다.
-        12개 공간별 권장 lux·색온도, W↔루멘 환산, LED 제품 추천, 연간 전기료 절감액까지 한 화면에서.
+        공간별 <strong style={{ color: 'var(--text)' }}>권장 루멘과 조명 개수</strong> + W↔lm 환산과 색온도 가이드.
       </p>
 
       <LightingClient />

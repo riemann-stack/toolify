@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/finance/auction',
   title: '경매 비용 계산기 — 낙찰가 + 취득세 자동 + 명도·체납·LTV/DSR',
-  description: '경매 낙찰가 + 취득세(1주택 1.1%~다주택 12% 자동) + 법무·인지·국민주택채권 + 명도·체납·수리 + LTV/DSR 대출 한도 + 1주택/다주택/법인 시나리오 비교 + 비용 비중 도넛 4탭.',
+  description: '낙찰가 + 취득세·명도·체납·수리·법무·대출까지 진짜 들어가는 비용. 1주택·다주택·법인 시나리오와 LTV/DSR 자동 반영.',
   keywords: ['경매 총비용', '낙찰가 부대비용', '경매 취득세', '명도비', '체납 관리비', 'LTV DSR', '경매 대출', '다주택 취득세', '법인 명의', '경매 계산기'],
 })
 
@@ -58,9 +58,7 @@ export default function AuctionPage() {
         🏛️ 경매 비용 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        낙찰가 + <strong style={{ color: 'var(--text)' }}>취득세 자동</strong>(1주택 1.1%~다주택 12%) + 법무·인지·국민주택채권 +
-        명도·체납·수리 + <strong style={{ color: 'var(--text)' }}>LTV/DSR 대출 한도</strong> + 1주택/다주택/법인 시나리오 비교 +
-        비용 비중 도넛 4탭.
+        낙찰가 + 취득세·명도·체납·수리·대출까지 <strong style={{ color: 'var(--text)' }}>진짜 들어가는 비용</strong>을 시나리오별로.
       </p>
 
       <AuctionClient />

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/food-storage',
   title: '식재료 보관 계산기 — 냉장·냉동 소비 기한 D-day',
-  description: '닭고기·생선·익힌 고기·국·밥 등 식재료의 냉장·냉동 보관 기간을 계산합니다. 식약처 권고 기준 · 보관 방식·상태별 D-day 추적 · 냉동 전환 추천 · 빨리 먹어야 할 음식 알림.',
+  description: '냉장·냉동 식재료가 언제까지 안전한지 + 소비 기한 알림으로 음식물 쓰레기 줄이기. 식품별 정확한 보관 기간.',
   keywords: ['식재료보관기간계산기', '닭고기냉장며칠', '익힌고기냉장며칠', '국냉장며칠', '밥냉동며칠', '다진고기냉장', '냉동보관기간', '소비기한계산기', '식재료유통기한'],
 })
 
@@ -18,7 +18,7 @@ export default function FoodStoragePage() {
         🧊 식재료 보관 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        닭고기·생선·익힌 고기·국·밥 등 식재료의 <strong style={{ color: 'var(--text)' }}>냉장·냉동 D-day</strong>를 추적합니다. 식약처 권고 기준 · 보관 방식·상태별 자동 계산 · 냉동 전환 추천 · 빨리 먹어야 할 음식 TOP 3.
+        냉장·냉동 식재료가 <strong style={{ color: 'var(--text)' }}>언제까지 안전한지</strong> + 소비 기한 알림으로 음식물 쓰레기 줄이기.
       </p>
 
       {/* ── 면책 조항 (상단) ── */}

@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
   title: '양력 음력 변환기 — 음력 생일·설날·추석 · 60갑자 간지',
-  description: '음력 생일을 양력으로, 양력을 음력으로 즉시 변환합니다. 윤달 지원, 60갑자 간지와 띠, 설날·추석 등 명절 음력 → 양력 자동 안내. 1900~2100년 한국천문연구원 데이터 기반.',
+  description: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동 표시. 제사·생일·기념일 음력 확인.',
   keywords: ['양력음력변환기', '양음력변환', '음력양력변환', '음력달력', '음력생일', '윤달계산', '60갑자', '간지계산', '설날 양력', '추석 양력', '음력 생일 양력'],
 })
 
@@ -18,7 +18,7 @@ export default function LunarPage() {
         🌙 양력 음력 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        양력과 음력을 서로 변환하고 해당 연도의 60갑자 간지까지 확인합니다. 1900~2100년 지원.
+        양력 ↔ 음력 자유 변환 + <strong style={{ color: 'var(--text)' }}>60갑자 간지·띠</strong> 자동.
       </p>
 
       <LunarClient />

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/curl',
   title: 'cURL 변환기 — fetch · axios · Python requests · Node.js · Go + 카카오·네이버·토스 API 예시',
-  description: 'cURL 명령어를 fetch·axios·Python requests·Node.js http·Go 코드로 즉시 변환. HTTP 요청 구조 분석(headers·body·query). 카카오·네이버·토스·GitHub·OpenAI API 12개 예시 라이브러리. 모든 처리 브라우저 측.',
+  description: 'cURL 명령어 → fetch·axios·Python requests·Node.js·Go 5 언어 즉시 변환 + 카카오·네이버·토스·GitHub·OpenAI API 12개 예시.',
   keywords: [
     'cURL 변환', 'curl to fetch', 'curl to axios', 'curl to python',
     'cURL 변환기', 'cURL 컨버터', 'curl converter',
@@ -74,9 +74,7 @@ export default function CurlPage() {
         🌀 cURL 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        cURL 명령어를 <strong style={{ color: 'var(--text)' }}>fetch · axios · Python requests · Node.js http · Go</strong> 5 언어 코드로 즉시 변환.
-        HTTP 요청 구조 분석(headers·body·query) + <strong style={{ color: 'var(--text)' }}>카카오·네이버·토스·GitHub·OpenAI API 12개 예시</strong> 라이브러리.
-        모든 처리가 브라우저에서 수행됩니다.
+        cURL 명령어를 <strong style={{ color: 'var(--text)' }}>fetch·axios·Python·Node·Go</strong> 5 언어로 즉시 변환. 한국 API 12개 예시.
       </p>
 
       {/* 면책 박스 */}

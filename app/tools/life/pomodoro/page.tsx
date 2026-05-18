@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/pomodoro',
   title: '뽀모도로 타이머 — 25분 집중·통계·프리셋·키보드 단축키',
   description:
-    '25분 집중·5분 휴식 뽀모도로 타이머. 7가지 프리셋(클래식·학생·프로·울트라·DeskTime·수능·리버스), 일일·주간·월간 통계, 작업명 입력, 알림음 5종, 브라우저 알림, 키보드 단축키, 백색소음 가이드까지.',
+    '25/5분 클래식부터 딥워크·수능·DeskTime까지 7가지 프리셋 + 일일·주간 통계·연속일수·알림음·브라우저 알림·단축키.',
   keywords: [
     '뽀모도로타이머', '포모도로타이머', '공부타이머', '집중타이머', '뽀모도로기법',
     '50분 타이머', '90분 타이머', '딥워크', '집중력향상',
@@ -23,7 +23,7 @@ export default function PomodoroPage() {
         🍅 뽀모도로 타이머
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        25분 집중, 5분 휴식의 뽀모도로 기법을 일상 도구로. <strong style={{ color: 'var(--text)' }}>7가지 프리셋, 통계 누적, 키보드 단축키, 브라우저 알림</strong>까지 — 매일 돌아오는 집중 파트너.
+        25/5분부터 딥워크·수능까지 <strong style={{ color: 'var(--text)' }}>7가지 프리셋</strong>. 일일·주간 통계와 연속일수 추적.
       </p>
 
       <PomodoroClient />

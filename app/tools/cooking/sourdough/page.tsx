@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/sourdough',
   title: '사워도우 스타터 계산기 — 르방 안정화 진단·피크 시간 예측',
-  description: '사워도우 스타터(르방) 상태를 진단하고 안정화까지 남은 기간을 예측합니다. 온도·급이 비율별 피크 시간 계산, 급이 스케줄러, 베이킹 적정 타이밍 안내.',
+  description: '스타터 안정화 진단 + 피크 시간 예측 + 급이 일정 자동 스케줄러로 사워도우 르방 관리를 체계적으로.',
   keywords: ['사워도우스타터계산기', '르방피크시간', '사워도우안정화', '르방계산기', '사워도우급이', '르방스타터', '천연발효빵계산기'],
 })
 
@@ -18,7 +18,7 @@ export default function SourdoughPage() {
         🍞 사워도우 스타터 &amp; 르방 피크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        르방(사워도우 스타터) 상태를 진단하고, 온도·급이 비율·밀가루 종류에 따른 피크 도달 시간을 계산합니다. 베이킹 적정 타이밍과 역산 급이 스케줄러까지.
+        스타터 안정화 진단 + 피크 시간 예측 + <strong style={{ color: 'var(--text)' }}>급이 일정 자동 스케줄러</strong>.
       </p>
 
       <SourdoughClient />

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/cooking/nuts',
   title: '견과류 섭취량 계산기 — 12종 알 수·혼합·셀레늄 경고',
-  description: '아몬드·호두·브라질너트 등 12종 견과류 적정량 자동. 혼합 직접 입력, 알레르기 필터, 셀레늄 자동 경고, 인기 믹스 프리셋(다이어트·근육·뇌 건강·심혈관·균형·트레일).',
+  description: '12종 견과류 일일 권장 알 수·칼로리·영양소 + 혼합 직접 입력. 알레르기 필터와 셀레늄 자동 경고, 인기 믹스 6종.',
   keywords: ['견과류 적정량', '아몬드 하루', '호두 하루', '브라질너트 셀레늄', '견과류 혼합 계산', '견과류 알레르기', '다이어트 견과류', '견과류 칼로리', '셀레늄 과다', '하루 한 줌'],
 })
 
@@ -72,7 +72,7 @@ export default function NutsPage() {
         🥜 견과류 섭취량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        12종 견과류 알 수·g·칼로리·영양소 자동 계산 + 혼합 직접 입력 + 알레르기 필터 + 셀레늄 자동 경고 + 인기 믹스 6종 프리셋.
+        12종 견과류 일일 권장 알 수·칼로리·영양소. 알레르기 필터와 <strong style={{ color: 'var(--text)' }}>셀레늄 자동 경고</strong>.
       </p>
 
       <NutsClient />

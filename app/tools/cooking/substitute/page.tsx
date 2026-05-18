@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/substitute',
   title: '식재료 대체 계산기 — 버터·설탕·계란·생크림·한국 식재료 50종+ | Youtil',
-  description: '베이킹·요리 식재료 대체 비율 자동 계산. 버터·설탕·계란·생크림·한국 식재료(참기름·고추장·된장·간장·고춧가루·청양고추 등 14종+) 50종+, 비건·글루텐프리 옵션, 맛·질감 차이까지.',
+  description: '버터·설탕·계란·생크림·참기름·고추장·된장 등 50+ 식재료 대체 비율. 비건·글루텐프리 옵션과 한국 식재료 14종+.',
   keywords: [
     '식재료대체', '버터대신오일', '설탕대신꿀', '생크림대체',
     '베이킹소다베이킹파우더', '계란대체', '비건베이킹', '레몬즙대체',
@@ -23,8 +23,7 @@ export default function SubstitutePage() {
         🔄 식재료 대체 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        버터·설탕·계란·생크림·<strong style={{ color: 'var(--text)' }}>한국 식재료(참기름·고추장·된장·간장·고춧가루 등 14종+) 50종+ 대체 비율</strong>을 즉시 계산.
-        맛·질감 차이, 주의사항, 비건·글루텐프리 옵션까지.
+        버터가 없을 때, 고추장이 떨어졌을 때 — <strong style={{ color: 'var(--text)' }}>50+ 식재료 대체 비율</strong>과 비건·GF 옵션.
       </p>
 
       <SubstituteClient />

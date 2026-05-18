@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/circuit-simulator',
   title: '옴의 법칙 계산기 — 직렬·병렬 회로 전압·전류·저항·전력',
-  description: '직렬·병렬·혼합 회로의 전압·전류·저항·전력을 시각화하는 인터랙티브 시뮬레이터. 옴의 법칙·키르히호프 법칙 학습, LED 저항 계산, 한국 중3·고1 물리 빈출 회로 문제 풀이까지.',
+  description: '직렬·병렬 회로 전압·전류·저항·전력 시각화 + 단계별 풀이와 시험 빈출 7문제로 옴의 법칙 완전 정복.',
   keywords: ['옴의법칙', '전기회로계산기', '회로시뮬레이터', '직렬병렬', '키르히호프법칙', 'LED저항계산', '전기전자', '회로분석', '중3물리', '고1물리', '전력계산'],
 })
 
@@ -21,8 +21,7 @@ export default function CircuitSimulatorPage() {
         ⚡ 옴의 법칙 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        직렬·병렬 회로에서 <strong style={{ color: 'var(--text)' }}>전압·전류·저항·전력을 시각적으로 학습</strong>합니다.
-        7가지 빈출 회로 프리셋, 회로 SVG와 전류 흐름 애니메이션, 옴의 법칙 빠른 계산, <strong style={{ color: 'var(--text)' }}>단계별 풀이</strong>, 한국 중3·고1 물리 빈출 7문제까지.
+        직렬·병렬 회로 전압·전류·저항·전력 시각화 + <strong style={{ color: 'var(--text)' }}>단계별 풀이와 빈출 7문제</strong>.
       </p>
 
       <CircuitSimulatorClient />

@@ -1,0 +1,631 @@
+/* ─────────────────────────────────────
+   수면 부채 트래커
+   ───────────────────────────────────── */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* 공통 카드 */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.subLabel {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 메인 히어로 ── */
+.heroCard {
+  background: linear-gradient(140deg, rgba(184,133,218,0.10), rgba(62,200,255,0.04));
+  border: 1px solid rgba(184,133,218,0.30);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.heroNumRow {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 8px;
+}
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(56px, 14vw, 96px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 30px rgba(184,133,218,0.20);
+}
+.heroUnit {
+  font-size: clamp(20px, 5vw, 32px);
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: -0.5px;
+}
+.heroStatus {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border: 1px solid;
+  border-radius: 999px;
+  margin-top: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroDesc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.heroMeta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 16px;
+}
+@media (max-width: 540px) {
+  .heroMeta { grid-template-columns: repeat(2, 1fr); }
+}
+.heroMetaItem {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.heroMetaLabel {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.heroMetaVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 슬라이더 ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.sliderVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.sliderHint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ── 기간 선택 ── */
+.periodRow {
+  display: flex;
+  gap: 6px;
+}
+.periodBtn {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .periodBtn:hover { border-color: var(--accent); }
+}
+.periodActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 날짜 입력 ── */
+.dateRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.dateInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  color-scheme: dark;
+}
+.dateInput:focus { border-color: var(--accent); }
+.dateQuickBtns { display: flex; gap: 4px; }
+.quickBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) {
+  .quickBtn:hover { color: var(--accent); border-color: var(--accent); }
+}
+
+/* ── 입력 모드 ── */
+.modeRow {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.modeBtn {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .modeBtn:hover { border-color: var(--accent); }
+}
+.modeActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 시각 페어 ── */
+.timePairRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 540px) {
+  .timePairRow { grid-template-columns: 1fr; }
+}
+.timeField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.timeField label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.timeInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  color-scheme: dark;
+}
+.timeInput:focus { border-color: var(--accent); }
+.autoCalc {
+  background: rgba(200,255,62,0.08);
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 직접 입력 ── */
+.directRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.directInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 18px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  width: 90px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.directInput:focus { border-color: var(--accent); }
+.directUnit { font-size: 13px; color: var(--muted); }
+.directQuick { display: flex; gap: 4px; flex-wrap: wrap; }
+
+/* ── 수면 질 ── */
+.qualityRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+@media (max-width: 540px) {
+  .qualityRow { grid-template-columns: repeat(3, 1fr); }
+}
+.qualityBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (hover: hover) {
+  .qualityBtn:hover { border-color: var(--accent); }
+}
+.qualityActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 추가 버튼 ── */
+.addBtn {
+  width: 100%;
+  background: var(--accent);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 14px;
+}
+@media (hover: hover) {
+  .addBtn:hover { opacity: 0.88; }
+}
+
+/* ── 차트 ── */
+.chartCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.chartSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--bg3);
+  border-radius: 10px;
+}
+.chartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  justify-content: center;
+}
+.chartLegend span { display: inline-flex; align-items: center; gap: 4px; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── 일관성 ── */
+.consGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 540px) {
+  .consGrid { grid-template-columns: 1fr; }
+}
+.consBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.consLabel {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.consVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+.consNote {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.consNote strong { color: var(--text); }
+
+/* ── 회복 카드 ── */
+.recoveryCard {
+  background: linear-gradient(140deg, rgba(62,255,155,0.06), rgba(62,200,255,0.04));
+  border: 1px solid rgba(62,255,155,0.25);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.recoveryRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.recoveryField label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.recoverySliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.recoveryResult {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.6;
+}
+.recoveryResult strong {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #3EFF9B;
+  font-size: 28px;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.recoverySub {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.recoveryWarn {
+  background: rgba(255,184,62,0.06);
+  border-left: 2px solid rgba(255,184,62,0.5);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.bedtimeAdvice {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.miniTime {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  color-scheme: dark;
+  width: 110px;
+}
+.miniTime:focus { border-color: var(--accent); }
+.bedtimeNote {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.recoveryWarnBox {
+  background: rgba(255,140,62,0.06);
+  border: 1px solid rgba(255,140,62,0.30);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 14px;
+}
+.recoveryWarnBox strong { color: var(--text); }
+
+/* ── 기록 리스트 ── */
+.clearBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+@media (hover: hover) {
+  .clearBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+}
+.emptyMsg {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 16px 10px;
+  margin: 0;
+  background: var(--bg3);
+  border-radius: 8px;
+}
+.entryList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.entryItem {
+  display: grid;
+  grid-template-columns: 80px 1fr 28px;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.entryDate {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.entryMid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  min-width: 0;
+}
+.entryHours {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.entryTimes {
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+}
+.entryQual { font-size: 11px; }
+.entryDel {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+@media (hover: hover) {
+  .entryDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
+}
+
+/* ── 팁 카드 ── */
+.tipCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.tipList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tipList li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding-left: 18px;
+  position: relative;
+}
+.tipList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+.tipList li strong { color: var(--text); }

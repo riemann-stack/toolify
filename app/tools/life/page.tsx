@@ -14,7 +14,7 @@ export default function LifeCategoryPage() {
   return (
     <CategoryView
       catId="life"
-      description="로또·랜덤·사다리타기·더치페이부터 페르미·드레이크 추정까지 — 일상 의사결정과 재미를 위한 실용 도구 모음."
+      description="추첨·더치페이·여행 예산·외계 문명까지 — 일상의 선택과 호기심을 위한 실용 도구."
     />
   )
 }

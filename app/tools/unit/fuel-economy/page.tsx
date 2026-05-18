@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/unit/fuel-economy',
   title: '연비 변환기 km/L ↔ mpg ↔ L/100km — 전기차 전비 포함',
-  description: 'km/L, L/100km, mpg(미국·영국) 연비 단위를 즉시 변환합니다. 전기차 전비(km/kWh·MPGe), 100km 주행 비용 계산 지원.',
+  description: 'km/L·L/100km·mpg 변환 + 전기차 전비와 연료별 100km 비용 비교로 진짜 가성비 확인.',
   keywords: ['연비변환기', 'km/L mpg', 'L/100km 변환', '미국연비', '전기차전비', 'MPGe', 'mpg km 변환'],
 })
 
@@ -19,7 +19,7 @@ export default function FuelEconomyPage() {
         ⛽ 연비 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>km/L · L/100km · mpg(미국·영국)</strong> 연비 단위를 즉시 변환합니다. 전기차 전비(km/kWh·MPGe)와 100km 주행 비용 계산도 지원합니다.
+        km/L·L/100km·mpg 변환 + 전기차 전비와 <strong style={{ color: 'var(--text)' }}>연료별 100km 비용</strong> 비교.
       </p>
 
       <FuelEconomyClient />

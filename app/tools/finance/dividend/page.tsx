@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/dividend',
   title: '월배당 목표 자산 계산기 2026 — 배당 FIRE·역산·포트폴리오·종합과세 | Youtil',
-  description: '월배당 목표 → 필요 원금, 월 적립 역산 (10년 100만 만들려면?), 배당 포트폴리오 구성, 월별 현금흐름, 금융소득 종합과세 경계, ISA·연금저축 절세 비교까지. 배당소득세·안전계수·배당 성장률·환율 영향 반영.',
+  description: '매달 받고 싶은 배당액에서 필요한 원금·월 적립액 자동 역산. 포트폴리오, 종합과세 경계, ISA·연금저축 절세 시나리오 비교.',
   keywords: [
     '월배당계산기', '배당투자계산기', '월배당목표자산', 'FIRE계산기', '배당FIRE',
     '월100만원배당', '필요투자원금계산', '배당소득세계산기', '월적립역산',
@@ -23,8 +23,7 @@ export default function DividendPage() {
         💰 월배당 목표 자산 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        목표 월배당 → 필요 원금, <strong style={{ color: 'var(--text)' }}>월 적립 역산·배당 포트폴리오·월별 현금흐름·종합과세 경계·ISA/연금 절세 비교</strong>까지.
-        세후 수익률·배당 성장률·환율 영향까지 반영한 현실적인 배당 FIRE 시뮬레이션.
+        매달 받고 싶은 배당액에서 거꾸로 — <strong style={{ color: 'var(--text)' }}>필요한 원금과 월 적립액</strong>, ISA·연금 절세까지.
       </p>
 
       <DividendClient />

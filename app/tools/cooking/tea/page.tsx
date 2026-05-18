@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/cooking/tea',
   title: '차 우리기 계산기 — 녹차·말차·우롱·보이·홍차 9종',
-  description: '녹차·옥로·말차·백차·우롱·홍차·보이·허브·루이보스 9종 차별 권장 온도·시간·비율. 다탕 우림 스케줄(세차 포함), 냉침 모드, 카페인 비교, 떫음 위험 게이지까지 4탭.',
+  description: '녹차·말차·백차·우롱·홍차·보이·허브 9종 + 차별 온도/시간/비율 + 다탕 스케줄·냉침 모드·카페인 비교·떫음 게이지.',
   keywords: ['차 우리기', '녹차 온도', '홍차 시간', '보이차 세차', '말차 비율', '우롱차 다탕', '냉침차 만들기', '허브티 시간', '카페인 함량', '차 종류'],
 })
 
@@ -58,8 +58,7 @@ export default function TeaPage() {
         🍵 차 우리기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        <strong style={{ color: 'var(--text)' }}>녹차·옥로·말차·백차·우롱·홍차·보이·허브·루이보스 9종</strong> 차별
-        권장 온도·시간·비율 + 다탕 스케줄(세차 포함) + 냉침 모드 + 카페인 비교 + 떫음 위험 게이지 4탭.
+        녹차·말차·우롱·홍차·보이·허브 9종 + 온도/시간/비율 + <strong style={{ color: 'var(--text)' }}>냉침 모드와 떫음 게이지</strong>.
       </p>
 
       <TeaClient />

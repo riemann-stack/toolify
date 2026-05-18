@@ -1,32 +1,31 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import s from './random.module.css'
 import {
-  pickItems, pickWithWeights, pickWeightedIndex,
+  pickWithWeights, pickWeightedIndex,
   divideIntoTeams, arrangeOrder, arrangeSeats,
   simulateFairness, calcRouletteAngle, describePieSlice,
   parseNamesText, detectDuplicates, genColors,
-  loadLists, saveLists, newId,
-  type WeightedItem, type SavedList, type FairnessRow,
+  newId,
+  type WeightedItem, type FairnessRow,
 } from './randomUtils'
 import { TEMPLATES, TEMPLATE_CATEGORIES, getTemplate } from './templates'
 
-type Tab = 'simple' | 'weighted' | 'roulette' | 'team' | 'order' | 'fair'
+type Tab = 'roulette' | 'weighted' | 'team' | 'order' | 'fair'
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function RandomClient() {
-  const [tab, setTab] = useState<Tab>('simple')
+  const [tab, setTab] = useState<Tab>('roulette')
 
   return (
     <div className={s.wrap}>
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/life/travel-budget', label: '여행 예산' },
           { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/ladder', label: '사다리타기' },
           { href: '/tools/life/dutch', label: '더치페이 계산기' }
         ]}
       >
@@ -35,21 +34,19 @@ export default function RandomClient() {
 
       <div className={s.tabs}>
         {([
-          ['simple',   '간단 추첨'],
-          ['weighted', '가중치 추첨'],
-          ['roulette', '룰렛'],
-          ['team',     '팀 나누기'],
-          ['order',    '순서·자리'],
-          ['fair',     '공정성 검증'],
+          ['roulette', '🎰 룰렛'],
+          ['weighted', '⚖️ 가중치'],
+          ['team',     '👥 팀'],
+          ['order',    '📋 순서·자리'],
+          ['fair',     '📊 공정성'],
         ] as [Tab, string][]).map(([key, label]) => {
           const cls =
             tab !== key ? '' :
-            key === 'weighted' ? s.tabActiveWeight :
             key === 'roulette' ? s.tabActiveRoul :
+            key === 'weighted' ? s.tabActiveWeight :
             key === 'team'     ? s.tabActiveTeam :
             key === 'order'    ? s.tabActiveOrder :
-            key === 'fair'     ? s.tabActiveFair :
-            s.tabActive
+            s.tabActiveFair
           return (
             <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
               {label}
@@ -58,213 +55,320 @@ export default function RandomClient() {
         })}
       </div>
 
-      {tab === 'simple'   && <SimpleTab />}
-      {tab === 'weighted' && <WeightedTab />}
       {tab === 'roulette' && <RouletteTab />}
+      {tab === 'weighted' && <WeightedTab />}
       {tab === 'team'     && <TeamTab />}
       {tab === 'order'    && <OrderTab />}
       {tab === 'fair'     && <FairnessTab />}
-
-      <SavedListsSection />
     </div>
   )
 }
 
-/* ═════════════════════════════════════════ 탭 1 — 간단 추첨 ═════════════════════════════════════════ */
-function SimpleTab() {
-  type Mode = 'number' | 'item'
-  const [mode, setMode] = useState<Mode>('number')
-  const [minNum, setMinNum] = useState('1')
-  const [maxNum, setMaxNum] = useState('100')
-  const [pickCount, setPickCount] = useState('1')
-  const [noRepeat, setNoRepeat] = useState(true)
-  const [sorted, setSorted] = useState(false)
-  const [itemText, setItemText] = useState('')
+/* ═════════════════════════════════════════ 공용 — 이름 칩 입력 ═════════════════════════════════════════ */
+interface NamesChipsProps {
+  names: string[]
+  onChange: (names: string[]) => void
+  placeholder?: string
+  max?: number
+  /** 템플릿 카테고리 표시 여부 */
+  showTemplates?: boolean
+  /** 중복 표시 */
+  showDupes?: boolean
+}
+
+function NamesChips({ names, onChange, placeholder = '이름 입력 후 Enter', max, showTemplates, showDupes }: NamesChipsProps) {
+  const [draft, setDraft] = useState('')
   const [activeCat, setActiveCat] = useState('food')
-  const [results, setResults] = useState<string[]>([])
-  const [copied, setCopied] = useState(false)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const items = parseNamesText(itemText)
-  const dupes = detectDuplicates(items)
-  const cnt = Math.max(1, parseInt(pickCount) || 1)
+  const dupes = useMemo(() => showDupes ? detectDuplicates(names) : [], [names, showDupes])
 
-  const handleDraw = () => {
-    if (mode === 'number') {
-      const min = parseInt(minNum) || 0
-      const max = parseInt(maxNum) || 100
-      if (min > max) { alert('시작 번호가 끝 번호보다 큽니다'); return }
-      const range = Array.from({ length: max - min + 1 }, (_, i) => i + min)
-      const picked = pickItems(range, cnt, !noRepeat).map(String)
-      if (sorted) picked.sort((a, b) => Number(a) - Number(b))
-      setResults(picked)
-    } else {
-      if (items.length === 0) return
-      const picked = pickItems(items, cnt, !noRepeat)
-      if (sorted) picked.sort((a, b) => a.localeCompare(b))
-      setResults(picked)
+  const addParts = (text: string) => {
+    const parts = text.split(/[\n,\t]+/).map(s => s.trim()).filter(Boolean)
+    if (parts.length === 0) return
+    const next = [...names, ...parts]
+    onChange(max ? next.slice(0, max) : next)
+  }
+
+  const commitDraft = () => {
+    if (!draft.trim()) return
+    addParts(draft)
+    setDraft('')
+  }
+
+  const removeAt = (i: number) => onChange(names.filter((_, idx) => idx !== i))
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault()
+      commitDraft()
+    } else if (e.key === 'Backspace' && draft === '' && names.length > 0) {
+      onChange(names.slice(0, -1))
     }
-    setCopied(false)
   }
 
-  const handleCopy = () => {
-    if (results.length === 0) return
-    navigator.clipboard.writeText(results.join(', ')).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    })
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const t = e.clipboardData.getData('text')
+    if (/[\n,\t]/.test(t)) {
+      e.preventDefault()
+      addParts(t)
+      setDraft('')
+    }
   }
 
-  const applyTemplate = (id: string) => {
-    const t = getTemplate(id)
-    if (!t || t.items.length === 0) return
-    setMode('item')
-    setItemText(t.items.join('\n'))
+  const handleBlur = () => {
+    if (draft.trim()) commitDraft()
   }
+
+  const dedupe = () => onChange([...new Set(names)])
 
   const filteredTpls = useMemo(() => {
     const cat = TEMPLATE_CATEGORIES.find(c => c.id === activeCat)
     return TEMPLATES.filter(t => cat?.templates.includes(t.id) && t.items.length > 0)
   }, [activeCat])
 
+  const applyTemplate = (id: string) => {
+    const t = getTemplate(id)
+    if (!t || t.items.length === 0) return
+    onChange(max ? t.items.slice(0, max) : t.items)
+    setDraft('')
+    inputRef.current?.focus()
+  }
+
+  return (
+    <>
+      <div className={s.chipBox} onClick={() => inputRef.current?.focus()}>
+        {names.map((n, i) => (
+          <span key={`${n}-${i}`} className={s.chip}>
+            <span className={s.chipName}>{n}</span>
+            <button
+              type="button"
+              className={s.chipDel}
+              onClick={(e) => { e.stopPropagation(); removeAt(i) }}
+              aria-label={`${n} 제거`}
+            >×</button>
+          </span>
+        ))}
+        <input
+          ref={inputRef}
+          type="text"
+          className={s.chipInput}
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onBlur={handleBlur}
+          placeholder={names.length === 0 ? placeholder : ''}
+        />
+      </div>
+
+      <div className={s.chipMeta}>
+        <span>
+          <strong>{names.length}</strong>명{max && ` / ${max}`}
+          {dupes.length > 0 && (
+            <span className={s.dupWarn}>
+              {' '}· ⚠️ 중복 {dupes.length}건
+              <button type="button" className={s.miniInline} onClick={dedupe}>중복 제거</button>
+            </span>
+          )}
+        </span>
+        {names.length > 0 && (
+          <button type="button" className={s.miniInline} onClick={() => onChange([])}>
+            전체 지우기
+          </button>
+        )}
+      </div>
+
+      {showTemplates && (
+        <div className={s.tplBlock}>
+          <div className={s.catRow}>
+            {TEMPLATE_CATEGORIES.map(c => (
+              <button key={c.id}
+                type="button"
+                className={`${s.catChip} ${activeCat === c.id ? s.catActive : ''}`}
+                onClick={() => setActiveCat(c.id)}>
+                {c.emoji} {c.name}
+              </button>
+            ))}
+          </div>
+          <div className={s.tplGrid}>
+            {filteredTpls.map(t => (
+              <button key={t.id} type="button" className={s.tplCard} onClick={() => applyTemplate(t.id)}>
+                <div className={s.tplEmoji}>{t.icon}</div>
+                <div className={s.tplName}>{t.name}</div>
+                <div className={s.tplCount}>{t.items.length}개</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+/* ═════════════════════════════════════════ 탭 1 — 룰렛 (메인) ═════════════════════════════════════════ */
+function RouletteTab() {
+  const [items, setItems] = useState<{ id: string; name: string; weight: number }[]>([
+    { id: newId(), name: '김치찌개', weight: 1 },
+    { id: newId(), name: '파스타',   weight: 1 },
+    { id: newId(), name: '비빔밥',   weight: 1 },
+    { id: newId(), name: '초밥',     weight: 1 },
+    { id: newId(), name: '치킨',     weight: 1 },
+    { id: newId(), name: '피자',     weight: 1 },
+  ])
+  const [rotation, setRotation] = useState(0)
+  const [spinning, setSpinning] = useState(false)
+  const [winner, setWinner] = useState<string | null>(null)
+  const [showWeights, setShowWeights] = useState(false)
+
+  const valid = items.filter(it => it.name.trim() && it.weight > 0)
+  const total = valid.reduce((s, it) => s + it.weight, 0)
+  const colors = useMemo(() => genColors(valid.length, 75, 58), [valid.length])
+
+  const updateItem = (id: string, patch: Partial<{ name: string; weight: number }>) => {
+    setItems(prev => prev.map(it => it.id === id ? { ...it, ...patch } : it))
+  }
+  const removeItem = (id: string) => setItems(prev => prev.filter(it => it.id !== id))
+  const addItem = () => {
+    if (items.length >= 16) return
+    setItems(prev => [...prev, { id: newId(), name: '', weight: 1 }])
+  }
+
+  /* 칩 입력에서 받은 이름 목록을 items로 매핑 (이름만 갱신, weight 유지) */
+  const namesOnly = items.map(it => it.name).filter(Boolean)
+  const onNamesChange = (next: string[]) => {
+    const capped = next.slice(0, 16)
+    const newItems = capped.map((name, i) => {
+      const existing = items[i]
+      return existing
+        ? { ...existing, name }
+        : { id: newId(), name, weight: 1 }
+    })
+    setItems(newItems.length > 0 ? newItems : [{ id: newId(), name: '', weight: 1 }])
+  }
+
+  const handleSpin = () => {
+    if (valid.length < 2 || spinning) return
+    setWinner(null)
+    const wItems: WeightedItem[] = valid.map(it => ({ name: it.name, weight: it.weight }))
+    const idx = pickWeightedIndex(wItems)
+    const targetAngle = calcRouletteAngle(wItems, idx, 5)
+    setRotation(prev => prev + targetAngle)
+    setSpinning(true)
+    setTimeout(() => {
+      setWinner(wItems[idx].name)
+      setSpinning(false)
+    }, 4000)
+  }
+
+  /* SVG slices 계산 */
+  const slices = useMemo(() => {
+    if (total === 0 || valid.length === 0) return []
+    const r = 140
+    let cum = 0
+    return valid.map((it, i) => {
+      const sweep = (it.weight / total) * 360
+      const start = cum
+      const end = cum + sweep
+      cum = end
+      const path = describePieSlice(150, 150, r, start, end)
+      const midAngle = start + sweep / 2
+      const labelX = 150 + (r * 0.6) * Math.cos(((midAngle - 90) * Math.PI) / 180)
+      const labelY = 150 + (r * 0.6) * Math.sin(((midAngle - 90) * Math.PI) / 180)
+      return { ...it, path, color: colors[i], labelX, labelY, midAngle }
+    })
+  }, [valid, total, colors])
+
   return (
     <>
       <div className={s.card}>
-        <label className={s.cardLabel}>모드</label>
-        <div className={s.modeRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-          <button className={`${s.modeBtn} ${mode === 'number' ? s.modeBtnActive : ''}`}
-            onClick={() => setMode('number')}>🔢 숫자 추첨</button>
-          <button className={`${s.modeBtn} ${mode === 'item' ? s.modeBtnActive : ''}`}
-            onClick={() => setMode('item')}>📝 항목 추첨</button>
-        </div>
-      </div>
-
-      {mode === 'number' && (
-        <div className={s.card}>
-          <label className={s.cardLabel}>숫자 범위</label>
-          <div className={s.rangeRow}>
-            <input className={s.numInput} type="number" value={minNum}
-              onChange={e => setMinNum(e.target.value)} />
-            <span className={s.rangeSep}>~</span>
-            <input className={s.numInput} type="number" value={maxNum}
-              onChange={e => setMaxNum(e.target.value)} />
-          </div>
-          <div className={s.miniRow} style={{ marginTop: 10 }}>
-            <button className={s.miniBtn} onClick={() => { setMinNum('1'); setMaxNum('45') }}>1~45 (로또)</button>
-            <button className={s.miniBtn} onClick={() => { setMinNum('1'); setMaxNum('10') }}>1~10</button>
-            <button className={s.miniBtn} onClick={() => { setMinNum('1'); setMaxNum('100') }}>1~100</button>
-            <button className={s.miniBtn} onClick={() => { setMinNum('0'); setMaxNum('9') }}>0~9</button>
-          </div>
-        </div>
-      )}
-
-      {mode === 'item' && (
-        <>
-          <div className={s.card}>
-            <label className={s.cardLabel}>
-              항목 입력
-              <span className={s.cardLabelHint}>줄바꿈·쉼표·번호(&quot;1. 김민수&quot;) 자동 인식</span>
-            </label>
-            <textarea className={s.textarea}
-              placeholder={'김민수\n이지은\n박서준\n최수아\n\n또는: 김민수, 이지은, 박서준'}
-              value={itemText} onChange={e => setItemText(e.target.value)} />
-            <div className={s.metaRow}>
-              <span><strong>{items.length}</strong>개 항목</span>
-              {dupes.length > 0 && (
-                <span className={s.dupWarn}>
-                  ⚠️ 중복: {dupes.join(', ')}
-                  <button className={s.miniBtn} style={{ marginLeft: 6 }}
-                    onClick={() => setItemText([...new Set(items)].join('\n'))}>
-                    중복 제거
-                  </button>
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className={s.card}>
-            <label className={s.cardLabel}>
-              빠른 시작 — 템플릿
-              <span className={s.cardLabelHint}>한 번 클릭으로 명단 채우기</span>
-            </label>
-            <div className={s.catRow}>
-              {TEMPLATE_CATEGORIES.map(c => (
-                <button key={c.id}
-                  className={`${s.catChip} ${activeCat === c.id ? s.catActive : ''}`}
-                  onClick={() => setActiveCat(c.id)}>
-                  {c.emoji} {c.name}
-                </button>
-              ))}
-            </div>
-            <div className={s.tplGrid}>
-              {filteredTpls.map(t => (
-                <button key={t.id} className={s.tplCard} onClick={() => applyTemplate(t.id)}>
-                  <div className={s.tplEmoji}>{t.icon}</div>
-                  <div className={s.tplName}>{t.name}</div>
-                  <div className={s.tplCount}>{t.items.length}개</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      <div className={s.card}>
-        <label className={s.cardLabel}>옵션</label>
-        <div className={s.miniRow} style={{ marginBottom: 10 }}>
-          <span className={s.subLabel} style={{ alignSelf: 'center', margin: 0, marginRight: 8 }}>추첨 개수</span>
-          <div className={s.countRow}>
-            {[1, 2, 3, 5, 10].map(n => (
-              <button key={n}
-                className={`${s.countBtn} ${pickCount === String(n) ? s.countActive : ''}`}
-                onClick={() => setPickCount(String(n))}>{n}개</button>
-            ))}
-            <input className={s.numInput} type="number" min={1} max={100}
-              style={{ width: 70 }}
-              value={pickCount} onChange={e => setPickCount(e.target.value)} />
-          </div>
-        </div>
-        <label className={s.toggleLabel}>
-          <input type="checkbox" checked={noRepeat} onChange={e => setNoRepeat(e.target.checked)} />
-          중복 제외 (한 번 뽑힌 항목 다시 안 뽑힘)
+        <label className={s.cardLabel}>
+          항목
+          <span className={s.cardLabelHint}>{namesOnly.length}/16 · 가중치는 토글로 조정</span>
         </label>
-        <label className={s.toggleLabel}>
-          <input type="checkbox" checked={sorted} onChange={e => setSorted(e.target.checked)} />
-          결과 정렬 (가나다·번호순)
+        <NamesChips
+          names={namesOnly}
+          onChange={onNamesChange}
+          placeholder="음식·이름·옵션 입력 (Enter / 쉼표 / 줄바꿈 paste)"
+          max={16}
+          showTemplates
+        />
+
+        <label className={s.toggleLabel} style={{ marginTop: 10 }}>
+          <input type="checkbox" checked={showWeights} onChange={e => setShowWeights(e.target.checked)} />
+          ⚖️ 항목별 가중치 조정 (확률 다르게)
         </label>
-      </div>
 
-      <button className={s.bigDraw} onClick={handleDraw}
-        disabled={mode === 'item' && items.length === 0}>
-        🎲 추첨하기
-      </button>
-
-      {results.length > 0 && (
-        <>
-          <div className={s.resultCard}>
-            <div className={s.resultLabel}>🎉 추첨 결과 ({results.length}개)</div>
-            {results.length === 1 ? (
-              <div className={s.resultBig}>{results[0]}</div>
-            ) : (
-              <div className={s.resultList}>
-                {results.map((r, i) => (
-                  <div key={i} className={s.resultRow}>
-                    <span className={s.resultRank}>{i + 1}.</span>
-                    <span className={s.resultName}>{r}</span>
-                  </div>
-                ))}
+        {showWeights && (
+          <div className={s.weightList} style={{ marginTop: 8 }}>
+            {items.filter(it => it.name.trim()).map((it) => (
+              <div key={it.id} className={s.weightRowCompact}>
+                <span className={s.wrName}>{it.name}</span>
+                <input type="range" className={s.weightSlider} min={1} max={10} step={1}
+                  value={Math.min(10, Math.max(1, it.weight))}
+                  onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
+                <span className={s.weightPct} style={{ color: '#FF6B6B' }}>×{it.weight}</span>
               </div>
-            )}
+            ))}
           </div>
-          <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
-            </button>
-            <button className={s.copyBtn} onClick={handleDraw}>🔄 다시 추첨</button>
-            <button className={s.copyBtn} onClick={() => alert('💡 [룰렛] 탭에서 시각적 효과로 추첨할 수 있어요.')}>
-              🎰 룰렛으로
-            </button>
+        )}
+
+        {showWeights && items.length < 16 && (
+          <button type="button" className={s.addItemBtn} onClick={addItem}>
+            + 항목 추가
+          </button>
+        )}
+        {showWeights && items.filter(it => !it.name.trim()).length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
+            {items.filter(it => !it.name.trim()).map(it => (
+              <div key={it.id} className={s.weightRowCompact}>
+                <input className={s.textInput} type="text" placeholder="빈 항목"
+                  value={it.name} onChange={e => updateItem(it.id, { name: e.target.value })} />
+                <input type="range" className={s.weightSlider} min={1} max={10} step={1}
+                  value={Math.min(10, Math.max(1, it.weight))}
+                  onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
+                <span className={s.weightPct} style={{ color: '#FF6B6B' }}>×{it.weight}</span>
+                <button className={s.removeBtn} onClick={() => removeItem(it.id)}
+                  disabled={items.length <= 2}>×</button>
+              </div>
+            ))}
           </div>
-        </>
+        )}
+      </div>
+
+      <div className={s.rouletteWrap}>
+        <div className={s.rouletteArrow} />
+        <svg viewBox="0 0 300 300" className={s.rouletteSvg}
+          style={{ transform: `rotate(${rotation}deg)` }} aria-hidden="true">
+          {slices.map((sl, i) => (
+            <g key={i}>
+              <path d={sl.path} fill={sl.color} stroke="#0a0a2e" strokeWidth={2} />
+              {sl.name && (
+                <text x={sl.labelX} y={sl.labelY} textAnchor="middle" dominantBaseline="middle"
+                  className={s.sliceText}
+                  transform={`rotate(${sl.midAngle - 90} ${sl.labelX} ${sl.labelY})`}>
+                  {sl.name.length > 6 ? sl.name.slice(0, 6) + '…' : sl.name}
+                </text>
+              )}
+            </g>
+          ))}
+          <circle cx={150} cy={150} r={14} className={s.rouletteHub} />
+        </svg>
+        <button className={s.bigDraw} onClick={handleSpin} disabled={spinning || valid.length < 2}>
+          {spinning ? '🌀 회전 중...' : '🎰 룰렛 돌리기'}
+        </button>
+      </div>
+
+      {winner && !spinning && (
+        <div className={s.rouletteResult}>
+          <div className={s.rouletteResultLabel}>🎉 결과 발표</div>
+          <div className={s.rouletteResultName}>{winner}</div>
+          <button className={s.copyBtn}
+            onClick={() => navigator.clipboard.writeText(winner)}
+            style={{ marginTop: 14, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
+            📋 결과 복사
+          </button>
+        </div>
       )}
     </>
   )
@@ -296,9 +400,7 @@ function WeightedTab() {
   const updateItem = (id: string, patch: Partial<{ name: string; weight: number }>) => {
     setItems(prev => prev.map(it => it.id === id ? { ...it, ...patch } : it))
   }
-  const removeItem = (id: string) => {
-    setItems(prev => prev.filter(it => it.id !== id))
-  }
+  const removeItem = (id: string) => setItems(prev => prev.filter(it => it.id !== id))
   const addItem = () => {
     if (items.length >= 30) return
     setItems(prev => [...prev, { id: newId(), name: '', weight: 1 }])
@@ -383,190 +485,53 @@ function WeightedTab() {
       </button>
 
       {results.length > 0 && (
-        <>
-          <div className={s.resultCard}>
-            <div className={s.resultLabel}>🎉 가중치 추첨 결과</div>
-            {results.length === 1 ? (
-              <div className={s.resultBig}>{results[0]}</div>
-            ) : (
-              <div className={s.resultList}>
-                {results.map((r, i) => (
-                  <div key={i} className={s.resultRow}>
-                    <span className={s.resultRank}>{i + 1}.</span>
-                    <span className={s.resultName}>{r}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
-            </button>
-            <button className={s.copyBtn} onClick={handleDraw}>🔄 다시 추첨</button>
-            <button className={s.copyBtn} onClick={() => alert('💡 [공정성 검증] 탭에서 1,000~100,000회 시뮬레이션으로 분포를 확인할 수 있습니다.')}>
-              📊 공정성 검증
-            </button>
-          </div>
-        </>
-      )}
-    </>
-  )
-}
-
-/* ═════════════════════════════════════════ 탭 3 — 룰렛 ═════════════════════════════════════════ */
-function RouletteTab() {
-  const [items, setItems] = useState<{ id: string; name: string; weight: number }[]>([
-    { id: newId(), name: '김치찌개', weight: 1 },
-    { id: newId(), name: '파스타',   weight: 1 },
-    { id: newId(), name: '비빔밥',   weight: 1 },
-    { id: newId(), name: '초밥',     weight: 1 },
-    { id: newId(), name: '치킨',     weight: 1 },
-    { id: newId(), name: '피자',     weight: 1 },
-  ])
-  const [rotation, setRotation] = useState(0)
-  const [spinning, setSpinning] = useState(false)
-  const [winner, setWinner] = useState<string | null>(null)
-
-  const valid = items.filter(it => it.name.trim() && it.weight > 0)
-  const total = valid.reduce((s, it) => s + it.weight, 0)
-  const colors = useMemo(() => genColors(valid.length, 75, 58), [valid.length])
-
-  const updateItem = (id: string, patch: Partial<{ name: string; weight: number }>) => {
-    setItems(prev => prev.map(it => it.id === id ? { ...it, ...patch } : it))
-  }
-  const removeItem = (id: string) => setItems(prev => prev.filter(it => it.id !== id))
-  const addItem = () => {
-    if (items.length >= 16) return
-    setItems(prev => [...prev, { id: newId(), name: '', weight: 1 }])
-  }
-
-  const handleSpin = () => {
-    if (valid.length < 2 || spinning) return
-    const wItems: WeightedItem[] = valid.map(it => ({ name: it.name, weight: it.weight }))
-    const idx = pickWeightedIndex(wItems)
-    const targetAngle = calcRouletteAngle(wItems, idx, 5)
-    // 누적 회전 (이전 + 새 회전)
-    setRotation(prev => prev + targetAngle)
-    setWinner(null)
-    setSpinning(true)
-    setTimeout(() => {
-      setWinner(wItems[idx].name)
-      setSpinning(false)
-    }, 4000)
-  }
-
-  /* SVG slices 계산 */
-  const slices = useMemo(() => {
-    if (total === 0 || valid.length === 0) return []
-    const r = 140
-    let cum = 0
-    return valid.map((it, i) => {
-      const sweep = (it.weight / total) * 360
-      const start = cum
-      const end = cum + sweep
-      cum = end
-      const path = describePieSlice(150, 150, r, start, end)
-      const midAngle = start + sweep / 2
-      const labelX = 150 + (r * 0.6) * Math.cos(((midAngle - 90) * Math.PI) / 180)
-      const labelY = 150 + (r * 0.6) * Math.sin(((midAngle - 90) * Math.PI) / 180)
-      const labelRotation = midAngle > 180 ? midAngle - 180 : midAngle
-      return { ...it, path, color: colors[i], labelX, labelY, labelRotation, midAngle }
-    })
-  }, [valid, total, colors])
-
-  return (
-    <>
-      <div className={s.card}>
-        <label className={s.cardLabel}>
-          항목 (최대 16개)
-          <span className={s.cardLabelHint}>{items.length}/16 · 가중치 큰 칸이 더 큼</span>
-        </label>
-        <div className={s.weightList}>
-          {items.map((it, idx) => (
-            <div key={it.id} className={s.weightRow}>
-              <input className={s.textInput} type="text" placeholder={`항목 ${idx + 1}`}
-                value={it.name} onChange={e => updateItem(it.id, { name: e.target.value })} />
-              <input type="range" className={s.weightSlider} min={1} max={10} step={1}
-                value={Math.min(10, Math.max(1, it.weight))}
-                onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-              <span className={s.weightPct} style={{ color: '#FF6B6B' }}>×{it.weight}</span>
-              <button className={s.removeBtn} onClick={() => removeItem(it.id)}
-                disabled={items.length <= 2}>×</button>
+        <div className={s.resultCard}>
+          <div className={s.resultLabel}>🎉 가중치 추첨 결과</div>
+          {results.length === 1 ? (
+            <div className={s.resultBig}>{results[0]}</div>
+          ) : (
+            <div className={s.resultList}>
+              {results.map((r, i) => (
+                <div key={i} className={s.resultRow}>
+                  <span className={s.resultRank}>{i + 1}.</span>
+                  <span className={s.resultName}>{r}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <button className={s.addItemBtn} onClick={addItem} disabled={items.length >= 16}>
-          + 항목 추가
-        </button>
-      </div>
-
-      <div className={s.rouletteWrap}>
-        <div className={s.rouletteArrow} />
-        <svg viewBox="0 0 300 300" className={s.rouletteSvg}
-          style={{ transform: `rotate(${rotation}deg)` }} aria-hidden="true">
-          {slices.map((sl, i) => (
-            <g key={i}>
-              <path d={sl.path} fill={sl.color} stroke="#0a0a2e" strokeWidth={2} />
-              {sl.name && (
-                <text x={sl.labelX} y={sl.labelY} textAnchor="middle" dominantBaseline="middle"
-                  className={s.sliceText}
-                  transform={`rotate(${sl.midAngle - 90} ${sl.labelX} ${sl.labelY})`}>
-                  {sl.name.length > 6 ? sl.name.slice(0, 6) + '…' : sl.name}
-                </text>
-              )}
-            </g>
-          ))}
-          <circle cx={150} cy={150} r={14} className={s.rouletteHub} />
-        </svg>
-        <button className={s.bigDraw} onClick={handleSpin} disabled={spinning || valid.length < 2}>
-          {spinning ? '🌀 회전 중...' : '🎰 룰렛 돌리기'}
-        </button>
-      </div>
-
-      {winner && (
-        <div className={s.rouletteResult}>
-          <div className={s.rouletteResultLabel}>🎉 결과 발표</div>
-          <div className={s.rouletteResultName}>{winner}</div>
-          <div className={s.resultActions} style={{ marginTop: 16 }}>
-            <button className={s.copyBtn}
-              onClick={() => navigator.clipboard.writeText(winner)}>📋 복사</button>
-            <button className={s.copyBtn} onClick={handleSpin}>🔄 다시 돌리기</button>
-            <button className={s.copyBtn} onClick={() => setWinner(null)}>✕ 닫기</button>
-          </div>
+          )}
+          <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
+            style={{ marginTop: 14, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
+            {copied ? '✓ 복사됨' : '📋 복사'}
+          </button>
         </div>
       )}
     </>
   )
 }
 
-/* ═════════════════════════════════════════ 탭 4 — 팀 나누기 ═════════════════════════════════════════ */
+/* ═════════════════════════════════════════ 탭 3 — 팀 나누기 ═════════════════════════════════════════ */
 function TeamTab() {
-  const [namesText, setNamesText] = useState('김민수\n이지은\n박서준\n최수아\n정현우\n강하늘\n조민지\n윤도현')
+  const [names, setNames] = useState<string[]>(['김민수', '이지은', '박서준', '최수아', '정현우', '강하늘', '조민지', '윤도현'])
   const [splitMode, setSplitMode] = useState<'count' | 'size'>('count')
   const [teamCount, setTeamCount] = useState(2)
   const [teamSize, setTeamSize] = useState(4)
-  const [keepTogetherText, setKeepTogetherText] = useState('')
-  const [keepApartText, setKeepApartText] = useState('')
-  const [leadersText, setLeadersText] = useState('')
+  const [keepTogether, setKeepTogether] = useState<string[][]>([])
+  const [keepApart, setKeepApart] = useState<string[][]>([])
+  const [leaders, setLeaders] = useState<string[]>([])
+  const [showAdvanced, setShowAdvanced] = useState(false)
   const [teams, setTeams] = useState<string[][]>([])
   const [copied, setCopied] = useState(false)
 
-  const names = parseNamesText(namesText)
-  const dupes = detectDuplicates(names)
   const colors = useMemo(() => genColors(Math.max(2, teams.length || teamCount), 70, 60), [teams.length, teamCount])
-
-  const parseGroupLines = (txt: string): string[][] =>
-    txt.split('\n').map(line => parseNamesText(line)).filter(g => g.length > 0)
 
   const handleDraw = () => {
     if (names.length === 0) return
     const opts = {
       teamCount: splitMode === 'count' ? teamCount : undefined,
       teamSize: splitMode === 'size' ? teamSize : undefined,
-      keepTogether: keepTogetherText ? parseGroupLines(keepTogetherText) : undefined,
-      keepApart: keepApartText ? parseGroupLines(keepApartText) : undefined,
-      leaders: leadersText ? parseNamesText(leadersText) : undefined,
+      keepTogether: keepTogether.length > 0 ? keepTogether : undefined,
+      keepApart: keepApart.length > 0 ? keepApart : undefined,
+      leaders: leaders.length > 0 ? leaders : undefined,
     }
     setTeams(divideIntoTeams(names, opts))
     setCopied(false)
@@ -574,9 +539,10 @@ function TeamTab() {
 
   const handleCopy = () => {
     if (teams.length === 0) return
+    const leaderSet = new Set(leaders)
     const text = teams.map((team, i) =>
-      `${String.fromCharCode(65 + i)}팀 (${team.length}명)\n${team.map((m, j) =>
-        leadersText.split(',').map(s => s.trim()).includes(m) || j === 0 && leadersText.includes(m) ? `⭐ ${m}` : `· ${m}`
+      `${String.fromCharCode(65 + i)}팀 (${team.length}명)\n${team.map(m =>
+        leaderSet.has(m) ? `⭐ ${m}` : `· ${m}`
       ).join('\n')}`
     ).join('\n\n')
     navigator.clipboard.writeText(text).then(() => {
@@ -584,16 +550,19 @@ function TeamTab() {
     })
   }
 
-  const leaderSet = new Set(parseNamesText(leadersText))
+  const leaderSet = new Set(leaders)
 
   return (
     <>
       <div className={s.card}>
-        <label className={s.cardLabel}>
-          참가자 명단
-          <span className={s.cardLabelHint}>{names.length}명{dupes.length > 0 && ' · ⚠️ 중복'}</span>
-        </label>
-        <textarea className={s.textarea} value={namesText} onChange={e => setNamesText(e.target.value)} />
+        <label className={s.cardLabel}>참가자 명단</label>
+        <NamesChips
+          names={names}
+          onChange={setNames}
+          placeholder="이름 입력 후 Enter (붙여넣기·쉼표 OK)"
+          showTemplates
+          showDupes
+        />
       </div>
 
       <div className={s.card}>
@@ -602,12 +571,11 @@ function TeamTab() {
           <button className={`${s.modeBtn} ${splitMode === 'count' ? s.modeBtnActive : ''}`}
             onClick={() => setSplitMode('count')}>팀 수 지정</button>
           <button className={`${s.modeBtn} ${splitMode === 'size' ? s.modeBtnActive : ''}`}
-            onClick={() => setSplitMode('size')}>팀당 인원 지정</button>
+            onClick={() => setSplitMode('size')}>팀당 인원</button>
         </div>
         <div style={{ marginTop: 10 }}>
           {splitMode === 'count' ? (
             <div className={s.countRow}>
-              <span className={s.subLabel} style={{ alignSelf: 'center', margin: 0, marginRight: 8 }}>팀 수</span>
               {[2, 3, 4, 5, 6].map(n => (
                 <button key={n}
                   className={`${s.countBtn} ${teamCount === n ? s.countActive : ''}`}
@@ -616,7 +584,6 @@ function TeamTab() {
             </div>
           ) : (
             <div className={s.countRow}>
-              <span className={s.subLabel} style={{ alignSelf: 'center', margin: 0, marginRight: 8 }}>팀당</span>
               {[2, 3, 4, 5, 6].map(n => (
                 <button key={n}
                   className={`${s.countBtn} ${teamSize === n ? s.countActive : ''}`}
@@ -628,19 +595,26 @@ function TeamTab() {
       </div>
 
       <div className={s.card}>
-        <label className={s.cardLabel}>고급 옵션 (선택)</label>
-        <span className={s.subLabel}>같이 묶을 사람 (한 줄에 한 그룹, 쉼표 구분)</span>
-        <textarea className={s.textarea} style={{ minHeight: 60 }}
-          placeholder={'김민수, 이지은\n박서준, 최수아'}
-          value={keepTogetherText} onChange={e => setKeepTogetherText(e.target.value)} />
-        <span className={s.subLabel} style={{ marginTop: 10 }}>떨어뜨릴 사람 (한 줄에 한 그룹)</span>
-        <textarea className={s.textarea} style={{ minHeight: 60 }}
-          placeholder={'정현우, 강하늘'}
-          value={keepApartText} onChange={e => setKeepApartText(e.target.value)} />
-        <span className={s.subLabel} style={{ marginTop: 10 }}>각 팀 리더 (1팀 1명, 쉼표 구분)</span>
-        <input className={s.textInput} type="text"
-          placeholder="김민수, 이지은, 박서준"
-          value={leadersText} onChange={e => setLeadersText(e.target.value)} />
+        <button type="button" className={s.advToggle}
+          onClick={() => setShowAdvanced(!showAdvanced)}>
+          {showAdvanced ? '▾' : '▸'} 고급 옵션 (리더·묶기·떨어뜨리기)
+        </button>
+        {showAdvanced && (
+          <div style={{ marginTop: 10 }}>
+            <span className={s.subLabel}>각 팀 리더 (1팀 1명)</span>
+            <NamesChips
+              names={leaders}
+              onChange={setLeaders}
+              placeholder="리더 이름 입력"
+            />
+            <span className={s.subLabel} style={{ marginTop: 12 }}>같이 묶을 그룹 (Enter로 그룹 구분)</span>
+            <GroupChips groups={keepTogether} onChange={setKeepTogether}
+              placeholder="같은 팀 멤버 입력 → 쉼표로 그룹 / 빈 줄로 다음 그룹" />
+            <span className={s.subLabel} style={{ marginTop: 12 }}>떨어뜨릴 그룹</span>
+            <GroupChips groups={keepApart} onChange={setKeepApart}
+              placeholder="다른 팀으로 나눌 멤버 입력" />
+          </div>
+        )}
       </div>
 
       <button className={s.bigDraw} onClick={handleDraw} disabled={names.length === 0}>
@@ -666,52 +640,91 @@ function TeamTab() {
               </div>
             ))}
           </div>
-          <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
-            </button>
-            <button className={s.copyBtn} onClick={handleDraw}>🔄 다시 섞기</button>
-            <button className={s.copyBtn} onClick={() => setTeams([])}>✕ 닫기</button>
-          </div>
+          <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
+            style={{ marginTop: 4, maxWidth: 240, marginLeft: 'auto', marginRight: 'auto' }}>
+            {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
+          </button>
         </>
       )}
     </>
   )
 }
 
-/* ═════════════════════════════════════════ 탭 5 — 순서·자리 ═════════════════════════════════════════ */
+/* ─── 그룹 칩 (떨어뜨릴/같이 묶을용) ─── */
+function GroupChips({ groups, onChange, placeholder }: {
+  groups: string[][]
+  onChange: (g: string[][]) => void
+  placeholder?: string
+}) {
+  const [draft, setDraft] = useState('')
+
+  const commitGroup = () => {
+    const parts = draft.split(/[\n,\t]+/).map(s => s.trim()).filter(Boolean)
+    if (parts.length === 0) return
+    onChange([...groups, parts])
+    setDraft('')
+  }
+
+  const removeGroup = (i: number) => onChange(groups.filter((_, idx) => idx !== i))
+
+  return (
+    <div>
+      {groups.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 6 }}>
+          {groups.map((g, i) => (
+            <div key={i} className={s.groupChip}>
+              <span>{g.join(', ')}</span>
+              <button type="button" className={s.chipDel} onClick={() => removeGroup(i)} aria-label="그룹 제거">×</button>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className={s.miniRow}>
+        <input
+          type="text"
+          className={s.textInput}
+          style={{ flex: 1 }}
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); commitGroup() } }}
+          placeholder={placeholder}
+        />
+        <button type="button" className={s.miniBtn} onClick={commitGroup} disabled={!draft.trim()}>
+          + 그룹
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ═════════════════════════════════════════ 탭 4 — 순서·자리 ═════════════════════════════════════════ */
 function OrderTab() {
   const [mode, setMode] = useState<'order' | 'seat'>('order')
-  const [namesText, setNamesText] = useState('김민수\n이지은\n박서준\n최수아\n정현우\n강하늘')
+  const [names, setNames] = useState<string[]>(['김민수', '이지은', '박서준', '최수아', '정현우', '강하늘'])
   // order
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [excludedText, setExcludedText] = useState('')
+  const [excluded, setExcluded] = useState<string[]>([])
   // seat
   const [rows, setRows] = useState(4)
   const [cols, setCols] = useState(6)
-  const [keepApartText, setKeepApartText] = useState('')
+  const [keepApart, setKeepApart] = useState<string[][]>([])
   // results
   const [order, setOrder] = useState<string[] | null>(null)
   const [seats, setSeats] = useState<(string | null)[][] | null>(null)
   const [copied, setCopied] = useState(false)
-
-  const names = parseNamesText(namesText)
+  const [showAdvanced, setShowAdvanced] = useState(false)
 
   const handleOrder = () => {
     const fixed: { name: string; position: number | 'last' }[] = []
     if (firstName.trim()) fixed.push({ name: firstName.trim(), position: 1 })
     if (lastName.trim())  fixed.push({ name: lastName.trim(), position: 'last' })
-    const excluded = parseNamesText(excludedText)
     setOrder(arrangeOrder(names, { fixed, excluded }))
     setSeats(null)
     setCopied(false)
   }
   const handleSeat = () => {
-    const apart = keepApartText
-      ? keepApartText.split('\n').map(l => parseNamesText(l)).filter(g => g.length > 0)
-      : undefined
-    setSeats(arrangeSeats(names, { rows, cols, keepApart: apart }))
+    setSeats(arrangeSeats(names, { rows, cols, keepApart: keepApart.length ? keepApart : undefined }))
     setOrder(null)
     setCopied(false)
   }
@@ -732,6 +745,10 @@ function OrderTab() {
 
   const fixedSet = new Set([firstName.trim(), lastName.trim()].filter(Boolean))
 
+  // 자리 폰트·패딩 동적 계산 — cols가 많을수록 작게
+  const seatFontSize = Math.max(8, Math.min(15, 22 - cols * 2))
+  const seatPadding = Math.max(4, Math.min(12, 18 - cols * 2))
+
   return (
     <>
       <div className={s.card}>
@@ -745,53 +762,67 @@ function OrderTab() {
       </div>
 
       <div className={s.card}>
-        <label className={s.cardLabel}>
-          참가자 명단
-          <span className={s.cardLabelHint}>{names.length}명</span>
-        </label>
-        <textarea className={s.textarea} value={namesText} onChange={e => setNamesText(e.target.value)} />
+        <label className={s.cardLabel}>참가자 명단</label>
+        <NamesChips
+          names={names}
+          onChange={setNames}
+          placeholder="이름 입력 후 Enter"
+          showTemplates
+        />
       </div>
 
       {mode === 'order' && (
         <div className={s.card}>
-          <label className={s.cardLabel}>고정 순서 (선택)</label>
-          <div className={s.fieldRow}>
-            <div>
-              <span className={s.subLabel}>1번 (맨 처음)</span>
-              <input className={s.textInput} type="text" placeholder="(선택)"
-                value={firstName} onChange={e => setFirstName(e.target.value)} />
+          <button type="button" className={s.advToggle}
+            onClick={() => setShowAdvanced(!showAdvanced)}>
+            {showAdvanced ? '▾' : '▸'} 고급 옵션 (고정·제외)
+          </button>
+          {showAdvanced && (
+            <div style={{ marginTop: 10 }}>
+              <div className={s.fieldRow}>
+                <div>
+                  <span className={s.subLabel}>1번 (맨 처음)</span>
+                  <input className={s.textInput} type="text" placeholder="(선택)"
+                    value={firstName} onChange={e => setFirstName(e.target.value)} />
+                </div>
+                <div>
+                  <span className={s.subLabel}>마지막</span>
+                  <input className={s.textInput} type="text" placeholder="(선택)"
+                    value={lastName} onChange={e => setLastName(e.target.value)} />
+                </div>
+              </div>
+              <span className={s.subLabel} style={{ marginTop: 10 }}>제외할 사람</span>
+              <NamesChips names={excluded} onChange={setExcluded} placeholder="제외할 이름" />
             </div>
-            <div>
-              <span className={s.subLabel}>마지막</span>
-              <input className={s.textInput} type="text" placeholder="(선택)"
-                value={lastName} onChange={e => setLastName(e.target.value)} />
-            </div>
-          </div>
-          <span className={s.subLabel} style={{ marginTop: 10 }}>제외할 사람 (선택)</span>
-          <input className={s.textInput} type="text" placeholder="이름들 (쉼표 구분)"
-            value={excludedText} onChange={e => setExcludedText(e.target.value)} />
+          )}
         </div>
       )}
 
       {mode === 'seat' && (
         <div className={s.card}>
-          <label className={s.cardLabel}>자리 크기 ({rows} × {cols} = {rows * cols}자리)</label>
+          <label className={s.cardLabel}>자리 크기 — {rows} × {cols} = {rows * cols}자리</label>
           <div className={s.fieldRow}>
             <div>
               <span className={s.subLabel}>행</span>
-              <input className={s.numInput} type="number" min={1} max={20}
-                value={rows} onChange={e => setRows(Math.max(1, parseInt(e.target.value) || 1))} />
+              <input className={s.numInput} type="number" min={1} max={20} inputMode="numeric"
+                value={rows} onChange={e => setRows(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))} />
             </div>
             <div>
               <span className={s.subLabel}>열</span>
-              <input className={s.numInput} type="number" min={1} max={20}
-                value={cols} onChange={e => setCols(Math.max(1, parseInt(e.target.value) || 1))} />
+              <input className={s.numInput} type="number" min={1} max={20} inputMode="numeric"
+                value={cols} onChange={e => setCols(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))} />
             </div>
           </div>
-          <span className={s.subLabel} style={{ marginTop: 10 }}>떨어뜨릴 사람 (인접 X · 한 줄에 한 그룹)</span>
-          <textarea className={s.textarea} style={{ minHeight: 60 }}
-            placeholder={'철수, 영희\n민수, 지은'}
-            value={keepApartText} onChange={e => setKeepApartText(e.target.value)} />
+          <button type="button" className={s.advToggle} style={{ marginTop: 10 }}
+            onClick={() => setShowAdvanced(!showAdvanced)}>
+            {showAdvanced ? '▾' : '▸'} 떨어뜨릴 그룹 (인접 회피)
+          </button>
+          {showAdvanced && (
+            <div style={{ marginTop: 8 }}>
+              <GroupChips groups={keepApart} onChange={setKeepApart}
+                placeholder="떨어뜨릴 멤버 (쉼표로 그룹)" />
+            </div>
+          )}
         </div>
       )}
 
@@ -820,13 +851,10 @@ function OrderTab() {
               })}
             </div>
           </div>
-          <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
-            </button>
-            <button className={s.copyBtn} onClick={handleOrder}>🔄 다시 섞기</button>
-            <button className={s.copyBtn} onClick={() => setOrder(null)}>✕ 닫기</button>
-          </div>
+          <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
+            style={{ marginTop: 4, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
+            {copied ? '✓ 복사됨' : '📋 복사'}
+          </button>
         </>
       )}
 
@@ -838,26 +866,24 @@ function OrderTab() {
               {seats.map((row, r) => row.map((cell, c) => (
                 <div key={`${r}-${c}`}
                   className={`${s.seatCell} ${!cell ? s.seatCellEmpty : ''}`}
+                  style={{ fontSize: `${seatFontSize}px`, padding: `${seatPadding}px 2px` }}
                   title={cell ?? `${r + 1}행 ${c + 1}열 (비어있음)`}>
                   {cell ?? '—'}
                 </div>
               )))}
             </div>
           </div>
-          <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
-            </button>
-            <button className={s.copyBtn} onClick={handleSeat}>🔄 다시 섞기</button>
-            <button className={s.copyBtn} onClick={() => setSeats(null)}>✕ 닫기</button>
-          </div>
+          <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
+            style={{ marginTop: 4, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
+            {copied ? '✓ 복사됨' : '📋 복사'}
+          </button>
         </>
       )}
     </>
   )
 }
 
-/* ═════════════════════════════════════════ 탭 6 — 공정성 검증 ═════════════════════════════════════════ */
+/* ═════════════════════════════════════════ 탭 5 — 공정성 검증 ═════════════════════════════════════════ */
 function FairnessTab() {
   const [items, setItems] = useState<{ id: string; name: string; weight: number }[]>([
     { id: newId(), name: 'A', weight: 1 },
@@ -1010,7 +1036,6 @@ function FairnessTab() {
               <li><strong>10,000회</strong>: 편차 ±1% 미만</li>
               <li><strong>100,000회</strong>: 편차 ±0.5% 미만 (거의 이론값)</li>
             </ul>
-            본 도구의 <strong>Math.random() 의사난수</strong>는 1,000회 이상에서 매우 균등한 분포를 보입니다.
           </div>
         </>
       )}
@@ -1018,91 +1043,5 @@ function FairnessTab() {
   )
 }
 
-/* ═════════════════════════════════════════ 저장된 명단 ═════════════════════════════════════════ */
-function SavedListsSection() {
-  const [lists, setLists] = useState<SavedList[]>([])
-  const [loaded, setLoaded] = useState(false)
-  const [name, setName] = useState('')
-  const [text, setText] = useState('')
-  const [showForm, setShowForm] = useState(false)
-  const fileRef = useRef<HTMLInputElement | null>(null)
-
-  useEffect(() => { setLists(loadLists()); setLoaded(true) }, [])
-
-  const handleSave = () => {
-    if (!name.trim()) { alert('명단 이름을 입력해 주세요'); return }
-    const items = parseNamesText(text)
-    if (items.length === 0) { alert('명단을 1개 이상 입력해 주세요'); return }
-    const now = new Date().toISOString()
-    const next = [...lists, {
-      id: newId(),
-      name: name.trim(),
-      items,
-      createdAt: now,
-      updatedAt: now,
-    }]
-    setLists(next)
-    saveLists(next)
-    setShowForm(false)
-    setName(''); setText('')
-  }
-  const handleDelete = (id: string) => {
-    if (!confirm('이 명단을 삭제하시겠습니까?')) return
-    const next = lists.filter(l => l.id !== id)
-    setLists(next)
-    saveLists(next)
-  }
-  const handleCopy = (l: SavedList) => {
-    navigator.clipboard.writeText(l.items.join('\n'))
-  }
-
-  if (!loaded) return null
-
-  return (
-    <div className={s.card}>
-      <label className={s.cardLabel}>
-        💾 저장된 명단
-        <span className={s.cardLabelHint}>{lists.length}/30 · 클립보드 복사 후 다른 탭에 붙여넣기</span>
-      </label>
-
-      {!showForm && (
-        <button className={s.actionBtn} onClick={() => setShowForm(true)}>
-          + 새 명단 저장
-        </button>
-      )}
-
-      {showForm && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
-          <input className={s.textInput} type="text" placeholder="명단 이름 (예: 우리 동아리)"
-            value={name} onChange={e => setName(e.target.value)} />
-          <textarea className={s.textarea} style={{ minHeight: 100 }}
-            placeholder={'김민수\n이지은\n박서준'}
-            value={text} onChange={e => setText(e.target.value)} />
-          <div className={s.miniRow}>
-            <button className={s.actionBtn} style={{ width: 'auto', flex: 1 }} onClick={handleSave}>저장</button>
-            <button className={s.miniBtn} onClick={() => setShowForm(false)}>취소</button>
-          </div>
-        </div>
-      )}
-
-      {lists.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 10 }}>
-          {lists.map(l => (
-            <div key={l.id} className={s.savedRow}>
-              <div className={s.savedName}>
-                {l.name}
-                <small>{l.items.length}명 · {new Date(l.updatedAt).toLocaleDateString('ko-KR')}</small>
-              </div>
-              <div className={s.miniRow}>
-                <button className={s.miniBtn} onClick={() => handleCopy(l)}>📋 복사</button>
-                <button className={`${s.miniBtn} ${s.miniDanger}`} onClick={() => handleDelete(l.id)}>×</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <input ref={fileRef} type="file" accept=".json" hidden />
-    </div>
-  )
-}
+// suppress unused import warning — used internally by NamesChips for paste detection
+void parseNamesText

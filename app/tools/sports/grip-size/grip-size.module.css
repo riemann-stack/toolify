@@ -1,0 +1,434 @@
+/* ─────────────────────────────────────
+   그립 사이즈 계산기
+   ───────────────────────────────────── */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.subLabel {
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.hint {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── 측정 방법 토글 ── */
+.methodRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.methodBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .methodBtn:hover { border-color: var(--accent); }
+}
+.methodActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+}
+.methodIcon { font-size: 20px; line-height: 1; }
+.methodName {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.methodActive .methodName { color: var(--accent); }
+.methodDesc { font-size: 11px; color: var(--muted); }
+
+/* ── SVG ── */
+.handSvg {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: block;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* ── 슬라이더 ── */
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.sliderVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 70px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tickRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+  padding: 0 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── 프리셋 ── */
+.presetRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+}
+.presetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); }
+}
+.presetBtn span {
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 600;
+}
+.presetBtn small {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── 펜슬 테스트 ── */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  counter-reset: step;
+}
+.steps li {
+  position: relative;
+  padding: 6px 0 6px 32px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  counter-increment: step;
+}
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 6px;
+  width: 22px; height: 22px;
+  background: var(--accent);
+  color: #0a0a0a;
+  border-radius: 50%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.steps strong { color: var(--text); }
+
+.pencilResultRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+.pencilBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: all 0.15s;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .pencilBtn:hover { border-color: var(--accent); }
+}
+.pencilEmoji { font-size: 16px; line-height: 1; }
+.pencilBtn strong {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+}
+.pencilBtn small {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.pencilActiveS { background: rgba(255,107,107,0.08); border-color: #FF6B6B; }
+.pencilActiveF { background: rgba(62,255,155,0.08); border-color: #3EFF9B; }
+.pencilActiveG { background: rgba(255,140,62,0.08); border-color: #FF8C3E; }
+.pencilNote {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* ── 옵션 ── */
+.optBlock { margin-bottom: 16px; }
+.optBlock:last-child { margin-bottom: 0; }
+.optTitle {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 6px;
+}
+.overgripRow {
+  display: flex;
+  gap: 6px;
+}
+.overgripBtn {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .overgripBtn:hover { border-color: var(--accent); }
+}
+.overgripActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+.optHint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  line-height: 1.6;
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.toggleLabel input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+/* ── 결과 카드 그리드 ── */
+.resultGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.resultCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.resultSport {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.resultBadge {
+  background: var(--accent);
+  color: #0a0a0a;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.resultBig {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.resultSub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.resultDesc {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.6;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.resultNote {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  background: var(--bg3);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 사이즈 차트 표 ── */
+.tableWrap { overflow-x: auto; }
+.gripTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-width: 460px;
+}
+.gripTable th {
+  text-align: left;
+  padding: 9px 12px;
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+.gripTable td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.rowHi {
+  background: rgba(200,255,62,0.08);
+}
+.rowHi td { color: var(--accent); font-weight: 700; }
+
+/* ── 부상 카드 ── */
+.injuryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+.injuryCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.injuryHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.injurySport {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.injuryList {
+  list-style: disc;
+  padding-left: 18px;
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── 팁 ── */
+.tipCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.tipList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tipList li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding-left: 18px;
+  position: relative;
+}
+.tipList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+.tipList li strong { color: var(--text); }

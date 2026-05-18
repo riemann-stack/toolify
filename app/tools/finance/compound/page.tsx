@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/compound',
   title: '복리 계산기 — 목표 역산·인플레이션·수익률 시나리오 한 번에',
-  description: '거치식·적립식 복리부터 목표 금액 역산(1억 만들려면 월 얼마?), 인플레이션 실질 가치, 4가지 수익률 시나리오까지 한 화면에서. 72의 법칙·복리 공식·30년 시뮬레이션 그래프 포함.',
+  description: '거치·적립·증액·인플레이션 반영해 시간이 만드는 자산을 시나리오별로 비교. 목표 역산·ISA·연금저축·복리 주기·수수료까지 정밀 계산.',
   keywords: [
     '복리계산기', '복리투자계산기', '복리수익계산', '목표금액역산',
     '적립식복리', '거치식복리', '월적립계산기', '1억만들기',
@@ -25,8 +25,7 @@ export default function CompoundPage() {
         📈 복리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        거치식·적립식 복리부터 <strong style={{ color: 'var(--text)' }}>목표 금액 역산, 인플레이션 실질 가치, 수익률 시나리오 비교</strong>까지
-        한 화면에서. 적립 주기·복리 주기·월/년 수익률을 자유롭게 조합해 현실적인 자산 시뮬레이션을 제공합니다.
+        거치·적립·증액·인플레이션까지 반영해, <strong style={{ color: 'var(--text)' }}>시간이 만드는 자산</strong>을 시나리오별로 비교.
       </p>
 
       <CompoundClient />

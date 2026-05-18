@@ -21,7 +21,7 @@ export default function EduCategoryPage() {
   return (
     <CategoryView
       catId="edu"
-      description="과학·수학·언어 학습을 돕는 시각화 도구와 계산기 모음. 학생 과제·교사 수업·일반 호기심을 위한 무료 도구."
+      description="우주·물리·인지·기억·페르미 추정까지 — 학습을 시각으로 이해하는 인터랙티브 도구."
       comingSoon={COMING_SOON}
     />
   )

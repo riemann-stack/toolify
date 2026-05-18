@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/ladder',
   title: '사다리타기 — 무료 온라인 사다리 게임 (캐릭터·실시간 미리보기)',
   description:
-    '참가자와 결과를 매칭하는 공정한 사다리타기. 16종 캐릭터, 한 명씩·전체 공개, 클릭으로 개별 경로 공개, 순서 셔플, 빠른 시작 템플릿(점심·당번·벌칙·선물 교환·발표·회식).',
+    '캐릭터 16종 + 6가지 공개 모드(한 명씩·전체·익명·역추적) + 자동 채우기와 카톡 결과 공유로 진짜 한 번에 끝나는 사다리.',
   keywords: [
     '사다리타기', '온라인 사다리', '사다리 게임', '청소 당번', '벌칙 뽑기',
     '선물 교환', '점심 메뉴', '발표 순서', '사다리 무료', '회식 분담', '제비뽑기',
@@ -22,7 +22,7 @@ export default function LadderPage() {
         🪜 사다리타기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        참가자와 결과를 매칭하는 공정한 사다리 게임. <strong style={{ color: 'var(--text)' }}>입력하면 즉시 사다리에 반영, 한 명씩·한 번에 공개, 이름·결과 클릭으로 개별 경로 공개, 16종 캐릭터, 순서 셔플, 6개 빠른 템플릿</strong> — 점심 메뉴부터 선물 교환·청소 당번까지.
+        캐릭터 16종 + 6가지 공개 모드 + <strong style={{ color: 'var(--text)' }}>카톡 공유</strong>. 진짜 한 번에 끝나는 사다리.
       </p>
 
       <LadderClient />

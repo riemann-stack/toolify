@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/football-points',
   title: '축구 승점 계산기 — K리그·EPL 순위 시나리오·우승 가능성',
   description:
-    '축구 승점, 득실차, 목표 승점 도달 가능성을 계산합니다. K리그·EPL·라리가 등 주요 리그 프리셋, 라이벌 팀 추격 시나리오, 남은 경기 시뮬레이션.',
+    '남은 경기 시나리오로 목표 승점 달성 가능성 + 라이벌 추격 자동 계산. 득실차·승무패 조합까지.',
   keywords: ['축구승점계산기', 'K리그승점', 'EPL승점', '승점계산', '리그순위계산기', '우승가능성계산', '축구시뮬레이션'],
 })
 
@@ -22,7 +22,7 @@ export default function FootballPointsPage() {
         ⚽ 축구 승점 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        승·무·패와 득실차를 입력하면 <strong style={{ color: 'var(--text)' }}>현재 승점·시즌 종료 예상 승점·목표 달성 가능성</strong>을 한 번에 분석합니다. K리그·EPL·라리가·분데스리가 등 주요 리그 프리셋과 라이벌 팀 추격 시나리오, 슬라이더 시뮬레이션을 지원합니다.
+        남은 경기 시나리오로 목표 승점 달성 가능성 + <strong style={{ color: 'var(--text)' }}>라이벌 추격</strong> 자동 계산.
       </p>
 
       <FootballPointsClient />

@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
   title: '야구 타율 계산기 — 출루율·장타율·ERA·WHIP 계산',
   description:
-    '야구 타격 기록(타율·출루율·장타율·OPS)과 투수 기록(ERA·WHIP·K/9) 자동 계산. KBO·MLB 리그 평균 비교, 시즌 페이스 환산, 세이버메트릭스 지표 지원.',
+    '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교로 내 기록이 어느 수준인지 한눈에.',
   keywords: ['야구타율계산기', 'OPS계산기', '출루율계산기', '장타율계산기', 'ERA계산기', 'WHIP계산기', 'KBO기록', '야구통계계산기'],
 })
 
@@ -22,7 +22,7 @@ export default function BaseballStatsPage() {
         ⚾ 야구 타율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        타수·안타·홈런·볼넷을 입력하면 <strong style={{ color: 'var(--text)' }}>타율·출루율·장타율·OPS</strong>를 자동 계산하고, KBO·MLB·NPB 리그 평균과 비교합니다. 투수 ERA·WHIP·K/9·FIP, ISO·BABIP·wOBA 등 세이버메트릭스, 시즌 페이스 환산까지 한 번에.
+        타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + <strong style={{ color: 'var(--text)' }}>KBO 평균 비교</strong>.
       </p>
 
       <BaseballStatsClient />

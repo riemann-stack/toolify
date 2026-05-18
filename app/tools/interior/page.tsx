@@ -19,7 +19,7 @@ export default function InteriorCategoryPage() {
   return (
     <CategoryView
       catId="interior"
-      description="도배·페인트·바닥재·커튼·조명·에어컨까지 — 셀프 인테리어와 시공 견적을 위한 정확한 소요량·비용 계산기 모음."
+      description="도배·페인트·전선·철근까지 — 셀프 시공 견적과 자재 소요량을 정확한 단위로."
       comingSoon={COMING_SOON}
     />
   )

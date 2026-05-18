@@ -14,7 +14,7 @@ export default function FinanceCategoryPage() {
   return (
     <CategoryView
       catId="finance"
-      description="연봉·세금·대출·복리·주식·부동산까지 — 일상 재테크 의사결정에 필요한 모든 계산을 한곳에서. 한국 세제와 시중 금리 기준 자동 적용."
+      description="월급·대출·세금·투자 — 한국 세제와 2026년 시중 금리를 그대로 반영한 재테크 도구 모음."
     />
   )
 }

@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/art/vocal-range',
   title: '음역대 측정기 — 실시간 음정 감지·최저음·최고음 자동 측정',
   description:
-    '마이크로 실시간 음정 감지하고 안정적으로 낸 최저음·최고음으로 보컬 음역대 자동 측정. 베이스·바리톤·테너·소프라노 분류, 한국 노래 30+ 곡 키 매칭, 가성 포함 측정. 모든 처리는 브라우저 내에서만.',
+    '마이크로 실시간 음정 감지로 내 최저·최고음 자동 측정 + 한국 노래 30+곡 키 매칭으로 노래방 선곡까지.',
   keywords: [
     '음역대 측정', '보컬 음역', '음정 테스트', '최고음 측정',
     '베이스 바리톤 테너', '소프라노 알토', '보컬 트레이닝',
@@ -23,8 +23,7 @@ export default function VocalRangePage() {
         🎤 음역대 측정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        마이크로 실시간 음정 감지, <strong style={{ color: 'var(--text)' }}>안정 음 자동 기록, 최저음·최고음 측정, 베이스~소프라노 8단계 분류, 한국 노래 30+ 곡 키 매칭</strong>까지.
-        모든 음성 처리는 브라우저 내에서만 수행되며 서버에 전송되지 않습니다.
+        마이크로 실시간 음정 감지로 내 <strong style={{ color: 'var(--text)' }}>최저·최고음 측정</strong> + 한국 노래 30+곡 키 매칭.
       </p>
 
       <VocalRangeClient />

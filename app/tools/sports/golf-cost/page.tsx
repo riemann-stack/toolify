@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-cost',
   title: '골프 비용 계산기 — 그린피·캐디피·1인당·회원권 손익',
-  description: '그린피·카트비·캐디피·식사·교통 1인당 정산. 회원권 vs 비회원 손익분기 시뮬, 자주 가는 골프장 자동 저장, 더치페이 도구 연결, 모바일 라운딩 후 즉시 정산.',
+  description: '그린피·카트·캐디·식사·교통 1인당 정산 + 회원권 손익 분기점과 자주 가는 골프장 저장.',
   keywords: ['골프라운딩비용계산기', '그린피계산기', '캐디피정산', '골프비용계산기', '라운딩비용1인당', '골프장비용', '골프카트비', '캐디피N빵', '골프 회원권 손익', '회원권 시뮬레이션', '주말 그린피', '퍼블릭 골프장 비용'],
 })
 
@@ -18,7 +18,7 @@ export default function GolfCostPage() {
         ⛳ 골프 비용 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        그린피·카트비·캐디피·식사·교통 <strong style={{ color: 'var(--text)' }}>1인당 정산 + 회원권 손익분기 + 자주 가는 골프장 자동 저장</strong> + 모바일 라운딩 후 즉시 정산.
+        그린피·카트·캐디·식사·교통 <strong style={{ color: 'var(--text)' }}>1인당 정산</strong> + 회원권 손익 분기점.
       </p>
 
       <GolfCostClient />

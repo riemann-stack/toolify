@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/yaml-json',
   title: 'YAML ↔ JSON 변환기 — 양방향 변환 + 유효성 검사 + K8s·Spring·OpenAPI 예시',
-  description: 'YAML과 JSON 양방향 변환·유효성 검사·들여쓰기 조정·다운로드. Kubernetes·Docker Compose·GitHub Actions·Spring·OpenAPI 등 12개 한국 개발자 자주 쓰는 예시 라이브러리. 모든 처리 브라우저 측.',
+  description: 'YAML ↔ JSON 양방향 변환·유효성 검사 + Kubernetes·Docker Compose·GitHub Actions·Spring·OpenAPI 12개 예시 라이브러리.',
   keywords: [
     'YAML JSON 변환', 'yaml to json', 'json to yaml',
     'YAML 변환기', 'JSON 변환기', 'YAML 검증', 'JSON 검증',
@@ -76,9 +76,7 @@ export default function YamlJsonPage() {
         📄 YAML ↔ JSON 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        YAML과 JSON <strong style={{ color: 'var(--text)' }}>양방향 변환·유효성 검사·들여쓰기 조정·다운로드</strong>.{' '}
-        <strong style={{ color: 'var(--text)' }}>Kubernetes·Docker Compose·GitHub Actions·Spring·OpenAPI</strong> 등 12개 한국 개발자 자주 쓰는 예시 라이브러리.
-        모든 처리가 브라우저에서 수행됩니다.
+        양방향 변환·유효성 + <strong style={{ color: 'var(--text)' }}>Kubernetes·Docker Compose·GitHub Actions</strong> 12개 예시.
       </p>
 
       {/* 면책 박스 */}

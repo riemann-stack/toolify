@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/fight-weight',
   title: '격투기 체급 계산기 — 복싱·UFC·MMA 감량 계획 D-day',
   description:
-    '복싱, UFC, ONE Championship, 킥복싱, 유도, 태권도 체급별 감량 필요량과 D-day별 안전한 감량 일정을 계산합니다. 종목별 감량 정책·재수화 가이드 포함.',
+    '복싱·UFC·MMA 체급별 감량 계획과 D-day 일정 + 위험도 자동 경고. 안전 감량 페이스와 수분·근육량 손실 시뮬.',
   keywords: ['격투기체급계산기', 'UFC체급', '복싱체급', 'MMA감량', '계체감량', '격투기감량계획', '체급별감량', 'UFC라이트급', '복싱웰터급'],
 })
 
@@ -22,7 +22,7 @@ export default function FightWeightPage() {
         🥊 격투기 체급 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        복싱·UFC·ONE·킥복싱·유도·태권도·무에타이·레슬링 8종목 체급을 한 번에. 키·체중·계체일을 입력하면 <strong style={{ color: 'var(--text)' }}>적정 체급 추천 · 감량 필요량 · 위험도 평가 · 단계별(체지방·수분·재수화) 일정표</strong>를 자동 생성합니다.
+        복싱·UFC·MMA 체급별 <strong style={{ color: 'var(--text)' }}>감량 계획과 D-day 일정</strong> + 위험도 자동 경고.
       </p>
 
       <FightWeightClient />

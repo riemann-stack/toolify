@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/sports/pace',
   title: '러닝 페이스 계산기 — 마라톤 완주 시간·트레드밀·구간 스플릿',
-  description: '페이스↔완주 시간 1줄 입력. 5km·10km·하프·풀 구간별 스플릿 자동, 트레드밀 시속 변환, 400m 트랙 바퀴 시간, 1마일 페이스, 본인 페이스 자동 저장.',
+  description: '페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 5km·10km·하프·풀 구간 스플릿 자동.',
   keywords: ['러닝페이스계산기', '마라톤페이스계산기', '트레드밀시속변환', '달리기페이스', '마라톤완주시간', '400m트랙페이스', '러닝스플릿', '서브3 페이스', '서브4 페이스', '구간 스플릿', '네거티브 스플릿'],
 })
 
@@ -18,7 +18,7 @@ export default function PacePage() {
         🏃 러닝 페이스 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        페이스↔완주 시간 <strong style={{ color: 'var(--text)' }}>1줄 입력</strong>, 트레드밀 시속 변환, 5km·10km·하프·풀 구간별 스플릿, 본인 페이스 자동 저장.
+        페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 <strong style={{ color: 'var(--text)' }}>5km·10km·하프·풀 스플릿</strong>.
       </p>
 
       <PaceClient />

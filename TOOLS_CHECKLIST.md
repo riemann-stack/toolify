@@ -3,7 +3,7 @@
 > 모바일·기능·SEO·디자인 일관성 전수 점검용. 수정 완료 시 ✅, 다음 점검 우선 ⚠️.
 > 마지막 업데이트: 2026-05-15 — 도구 이름 67개 일괄 정리
 
-총 **131개 도구** · 11 카테고리.
+총 **132개 도구** · 11 카테고리.
 
 ---
 
@@ -136,15 +136,16 @@
 |   | 연비 변환기 | `/tools/unit/fuel-economy` |  |
 |   | 타이어 공기압 변환기 | `/tools/unit/tire-pressure` |  |
 
-## 📅 날짜·시간 (7)
+## 📅 날짜·시간 (8)
 
 | 상태 | 도구 | 경로 | 메모 |
 |---|------|------|------|
+| ✅ | 실시간 서버 시간 | `/tools/date/server-time` | 신규 도구 — NTP 동기화·KST 밀리초·카운트다운·알림음 |
 |   | 나이 계산기 | `/tools/date/age` |  |
 |   | D-Day 계산기 | `/tools/date/dday` |  |
 |   | 군대 전역일 계산기 | `/tools/date/military` |  |
 |   | 연호·연대 변환기 | `/tools/date/history-era` |  |
-|   | 양음력 변환기 | `/tools/date/lunar` |  |
+|   | 양력 음력 변환기 | `/tools/date/lunar` |  |
 |   | 시차 적응 계산기 | `/tools/date/jet-lag` |  |
 |   | 생애 시간 계산기 | `/tools/date/life-time` |  |
 

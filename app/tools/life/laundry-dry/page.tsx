@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/life/laundry-dry',
   title: '빨래 건조 시간 계산기 — 최단 조합 추천·전기료 비교·욕실 건조',
-  description: '온도·습도·소재별 건조 시간 + 사용자 보유 장비(선풍기·제습기·서큘·욕실 환풍기)별 최단 조합 추천. 목표 시간 역산, 한국 전기료 비교, 장마·겨울 가이드까지.',
+  description: '온도·습도·소재 + 보유 장비별 가장 빠른 건조 조합 추천. 전기료 비교·목표 시간 역산·욕실 건조까지.',
   keywords: ['빨래건조시간계산기', '빨래건조시간', '세탁건조시간', '실내빨래건조', '청바지건조시간', '빨래빨리말리는법', '빨래건조팁', '장마철 빨래', '욕실 빨래 건조', '제습기 효과', '서큘레이터 빨래', '빨래 전기료', '한국 가정 빨래'],
 })
 
@@ -18,7 +18,7 @@ export default function LaundryDryPage() {
         🧺 빨래 건조 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        온도·습도·소재 + <strong style={{ color: 'var(--text)' }}>보유 장비별 최단 건조 조합 추천</strong> + 목표 시간 역산 + 한국 장비 전기료 비교까지 한 화면에.
+        온도·습도·소재별 <strong style={{ color: 'var(--text)' }}>가장 빠른 건조 조합</strong> + 전기료 비교까지.
       </p>
 
       <LaundryDryClient />

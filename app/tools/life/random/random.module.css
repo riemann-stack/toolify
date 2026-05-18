@@ -16,15 +16,17 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) {
+  .tabs { grid-template-columns: repeat(5, 1fr); padding: 4px; gap: 2px; }
+  .tabBtn { padding: 8px 2px; font-size: 11px; }
+}
 .tabBtn {
   background: transparent;
   border: none;
@@ -510,31 +512,33 @@
 /* ─── 팀 나누기 ─── */
 .teamGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
 }
-@media (max-width: 540px) { .teamGrid { grid-template-columns: 1fr; } }
+.teamGrid > * { min-width: 0; }
 .teamCard {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 4px solid #3EC8FF;
-  border-radius: 12px;
-  padding: 12px 14px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 0;
 }
 .teamHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+  align-items: baseline;
+  margin-bottom: 6px;
+  gap: 4px;
 }
 .teamName {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
 }
 .teamCount {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -542,13 +546,16 @@
 .teamMembers {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 .teamMember {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
-  padding: 2px 0;
+  padding: 1px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .teamLeader { font-weight: 700; color: #FFD700; }
 .teamLeader::before { content: '⭐ '; }
@@ -579,9 +586,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 12px 6px;
   text-align: center;
-  font-size: 12.5px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
@@ -589,6 +594,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  line-height: 1.2;
 }
 .seatCellEmpty { color: var(--muted); opacity: 0.5; }
 .seatCellFixed { background: rgba(155,89,182,0.10); border-color: rgba(155,89,182,0.40); color: #C485E0; }
@@ -764,3 +774,160 @@
   .simBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .simActive { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+
+/* ─── 칩 입력 ─── */
+.chipBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  min-height: 44px;
+  cursor: text;
+  transition: border-color 0.15s;
+}
+.chipBox:focus-within { border-color: var(--accent); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 4px 4px 10px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  max-width: 100%;
+  line-height: 1.2;
+}
+.chipName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+.chipDel {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 4px;
+  margin-left: 2px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (hover: hover) {
+  .chipDel:hover { background: rgba(255,107,107,0.18); color: #FF6B6B; }
+}
+.chipInput {
+  flex: 1;
+  min-width: 100px;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 4px 4px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.chipInput::placeholder { color: var(--muted); font-size: 13px; }
+
+.chipMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 6px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chipMeta strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.miniInline {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 11.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-decoration: underline;
+}
+@media (hover: hover) {
+  .miniInline:hover { background: var(--accent-dim); }
+}
+
+/* 템플릿 블록 (칩 아래) */
+.tplBlock {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+/* 그룹 칩 (떨어뜨릴/같이 묶을용) */
+.groupChip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.groupChip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* 고급 토글 */
+.advToggle {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 4px 0;
+  text-align: left;
+  width: 100%;
+  font-weight: 600;
+}
+@media (hover: hover) {
+  .advToggle:hover { color: var(--accent); }
+}
+
+/* 룰렛 컴팩트 가중치 행 */
+.weightRowCompact {
+  display: grid;
+  grid-template-columns: 1fr 100px 50px;
+  gap: 6px;
+  align-items: center;
+}
+@media (max-width: 540px) {
+  .weightRowCompact { grid-template-columns: 1fr 70px 44px; }
+}
+.wrName {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

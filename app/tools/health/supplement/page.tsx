@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
   title: '영양제 중복 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전 | Youtil',
-  description: '50종 영양소 자동 합산, 권장량·상한 비교, 오메가3 EPA+DHA 합산, 약물 상호작용(항응고제·갑상선약·항생제 등) 체크, 임산부·고령자·청소년 안전 모드까지. 한국 식약처 기준.',
+  description: '복용 중인 영양제 50종 자동 합산 → 상한 초과·약물 상호작용 경고. 오메가3 EPA+DHA, 임산부·고령자 안전 체크.',
   keywords: [
     '영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량',
     '영양제복용조합', '영양제계산기', '오메가3합산', 'EPA DHA',
@@ -40,8 +40,7 @@ export default function SupplementPage() {
         💊 영양제 중복 체크 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        50종 영양소 자동 합산·권장량/상한 비교 + <strong style={{ color: 'var(--text)' }}>오메가3 EPA+DHA 합산·약물 상호작용·임산부·고령자 안전 체크</strong>까지.
-        시너지·주의 조합, 복용 타이밍 가이드도 한 번에.
+        복용 중인 영양제 50종 자동 합산 → <strong style={{ color: 'var(--text)' }}>상한 초과·약물 상호작용</strong> 경고.
       </p>
 
       {/* 상단 면책 */}

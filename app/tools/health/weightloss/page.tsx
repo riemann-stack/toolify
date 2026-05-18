@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/weightloss',
   title: '체중 감량 기간 계산기 — 안전 감량 속도·BMI·목표일·정체기·탄단지',
   description:
-    '현재 체중과 목표 체중으로 안전한 감량 기간 자동 계산. BMI 자동 체크, 주당 0.5~1% 안전 속도, 목표일 역산, 정체기·유지기 반영, 식단·운동 분리, 운동 시간 계산, 탄단지 자동 분배까지.',
+    '목표 체중까지 며칠 + 정체기를 반영한 안전 페이스. BMI 자동 체크와 식단·운동 칼로리 분리, 탄단지 자동 계산.',
   keywords: [
     '체중감량계산기', '다이어트기간계산기', '칼로리적자계산기', '감량기간계산',
     '목표체중달성일', '요요방지다이어트', '안전 감량 속도', '체중 변화 그래프',
@@ -23,8 +23,7 @@ export default function WeightLossPage() {
         🎯 체중 감량 기간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>안전 감량 속도, BMI 자동 체크, 목표일 역산, 정체기·유지기 반영, 식단·운동 분리, 탄단지 자동까지.</strong>
-        주당 0.5~1% 안전 권장과 강한 안전 경고 시스템으로 건강한 다이어트를 도와드립니다.
+        목표 체중까지 며칠 + 정체기를 반영한 <strong style={{ color: 'var(--text)' }}>안전 페이스</strong>. 식단·운동 칼로리 자동 분리.
       </p>
 
       <WeightLossClient />

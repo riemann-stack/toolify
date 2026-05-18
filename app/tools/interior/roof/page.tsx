@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/interior/roof',
   title: '지붕 면적 계산기 — 박공·모임·외쪽·평지붕·맞배 5가지 + 물매·처마·로스율',
-  description: '건물 가로·세로·지붕 형태·경사(물매/각도)·처마·로스율 입력 → 평면·표면 면적, 자재 구매량, 평수 환산, 슁글·기와·금속 패널·방수재 일반 단가 가이드.',
+  description: '박공·모임·외쪽·평지붕·맞배 5가지 + 물매·경사각·처마·로스율 → 평면·표면·자재 면적과 자재별 일반 단가.',
   keywords: ['지붕 면적 계산기', '박공지붕 면적', '모임지붕', '외쪽지붕', '평지붕 방수 면적', '슁글 면적', '기와 면적', '물매 계산', '지붕 경사각', '처마 길이', '옥상 방수'],
 })
 
@@ -72,7 +72,7 @@ export default function RoofPage() {
         🏠 지붕 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        박공·모임·외쪽·평지붕·맞배 5가지 형태 + 물매/경사각 동시 지원 + 자재 종류별 면적·평수·일반 가이드 단가. 시각화·로스율 포함 자재 구매량 자동.
+        박공·모임·외쪽·평지붕·맞배 5가지 + 물매·처마·로스율 → <strong style={{ color: 'var(--text)' }}>자재 면적과 단가</strong>.
       </p>
 
       <RoofClient />

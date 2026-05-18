@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/golden-ratio',
   title: '황금 비율 계산기 — 피보나치 나선·비율 비교·디자인 계산',
-  description: 'φ = 1.618 가로·세로 자동 계산, 황금 직사각형·피보나치 나선 시각화, 비율 비교 (황금·백은·16:9·A4·인스타·유튜브). 명함·A4·유튜브 썸네일 프리셋 제공. 디자이너·건축가 참고 도구.',
+  description: 'φ = 1.618 가로·세로 계산 + 황금 직사각형·나선 시각화와 16:9·A4·인스타·유튜브 비율 비교.',
   keywords: ['황금비율계산기', '황금비계산기', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선', '비율비교', '백은비율', '16:9 비율'],
 })
 
@@ -18,7 +18,7 @@ export default function GoldenRatioPage() {
         🌀 황금 비율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        φ = 1.618 기반 가로·세로 자동 계산, 황금 직사각형 시각화, <strong style={{ color: 'var(--text)' }}>비율 비교</strong>(황금·백은·16:9·A4·인스타·유튜브)까지.
+        φ = 1.618 가로·세로 + 황금 직사각형·나선 시각화 + <strong style={{ color: 'var(--text)' }}>16:9·A4·인스타·유튜브 비교</strong>.
       </p>
 
       <GoldenRatioClient />

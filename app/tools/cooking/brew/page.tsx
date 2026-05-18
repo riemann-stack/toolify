@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/cooking/brew',
   title: '커피 브루잉 계산기 — 핸드드립·프렌치프레스·콜드브루 6 추출법',
-  description: '핸드드립·프렌치프레스·에어로프레스·콜드브루·모카포트·에스프레소 6 추출법별 황금 비율(SCA 1:15~17) + 푸어 스케줄(블루밍/1차/2차) + 강도 진단 + 로스팅 보정 + 홈브루 vs 카페 비용 비교.',
+  description: '핸드드립·프렌치프레스·에어로프레스·콜드브루·모카포트·에스프레소 6가지 추출법 + 비율·온도·시간·분쇄도 매트릭스.',
   keywords: ['커피 비율', '핸드드립 비율', '1:15 비율', 'SCA 골든컵', '콜드브루 비율', '에스프레소 추출', '푸어 스케줄', '블루밍', '홈카페 계산', '원두 g 물 ml'],
 })
 
@@ -58,8 +58,7 @@ export default function BrewPage() {
         ☕ 커피 브루잉 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        <strong style={{ color: 'var(--text)' }}>핸드드립·프렌치프레스·에어로프레스·콜드브루·모카포트·에스프레소</strong> 6 추출법별
-        황금 비율(SCA 1:15~17) + 푸어 스케줄 + 강도 진단 + 로스팅 보정 + 비용 비교 4탭.
+        핸드드립·콜드브루·에어로프레스 <strong style={{ color: 'var(--text)' }}>6가지 추출법</strong> + 비율·온도·시간·분쇄도 매트릭스.
       </p>
 
       <BrewClient />

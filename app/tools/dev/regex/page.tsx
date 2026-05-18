@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/regex',
   title: '정규식 테스트기 — 매칭·캡처 그룹·치환·한국 데이터 패턴 30+',
-  description: 'JavaScript 정규식 실시간 테스트. 매칭 하이라이트·캡처 그룹·치환 미리보기·6 flags(g/i/m/s/u/y) + 한국 휴대폰·주민번호·사업자번호·우편번호 등 패턴 30+ 라이브러리 + 치트시트 4탭. 모든 계산 브라우저 측.',
+  description: 'JavaScript 정규식 실시간 매칭·하이라이트 + 캡처 그룹·치환·분할 + 6 flags + 한국 데이터 패턴 30+(휴대폰·주민번호·사업자번호).',
   keywords: [
     '정규식 테스트', '정규식 테스터', 'regex 테스터', 'regex tester',
     '정규식 매칭', '정규식 캡처 그룹', '정규식 치환', '정규식 분할',
@@ -73,10 +73,7 @@ export default function RegexPage() {
         🔍 정규식 테스트기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        JavaScript 정규식 실시간 매칭·하이라이트 + <strong style={{ color: 'var(--text)' }}>캡처 그룹</strong> 표시 +{' '}
-        <strong style={{ color: 'var(--text)' }}>치환·분할 미리보기</strong> + 6 flags(g/i/m/s/u/y) +{' '}
-        <strong style={{ color: 'var(--text)' }}>한국 데이터 패턴 30+</strong>(휴대폰·주민번호·사업자번호·우편번호) + 치트시트 4탭.
-        모든 계산이 브라우저에서 수행됩니다.
+        JavaScript 정규식 실시간 매칭·하이라이트 + 캡처·치환·분할 + <strong style={{ color: 'var(--text)' }}>한국 데이터 패턴 30+</strong>.
       </p>
 
       {/* 면책 박스 */}

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/life/travel-budget',
   title: '해외여행 예산 계산기 — 18+ 도시 × 3 스타일 + 9 항목 자동',
-  description: '일본·동남아·유럽·미국 18+ 도시 × 배낭/중간/럭셔리 3 스타일 평균. 항공권·숙박·식비·교통·쇼핑 9 항목 자동 추천 + 본인 vs 평균 진단 + 도시별 비교 + 도넛 차트. 한국인 인기 여행지 평균 데이터.',
+  description: '18+ 도시(일본·유럽·동남아·미국) × 3스타일(배낭·중간·럭셔리) 평균 + 9 항목 자동 추천과 도시 평균 비교를 도넛 차트로.',
   keywords: ['해외여행 예산', '일본 여행 비용', '유럽 자유여행', '동남아 1주일', '여행 견적', '항공권 평균', '숙박비', '여행 스타일', '배낭여행', '럭셔리 여행'],
 })
 
@@ -58,9 +58,7 @@ export default function TravelBudgetPage() {
         ✈️ 해외여행 예산 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        🇯🇵 일본·🇪🇺 유럽·🇹🇭 동남아·🇺🇸 미국 등 <strong style={{ color: 'var(--text)' }}>18+ 도시</strong> ×{' '}
-        <strong style={{ color: 'var(--text)' }}>3 스타일</strong>(배낭·중간·럭셔리) 평균 + 9 항목 자동 추천 +{' '}
-        <strong style={{ color: 'var(--text)' }}>본인 vs 평균 진단</strong> + 도시 비교 + 도넛 차트 4탭.
+        18+ 도시 × 배낭·중간·럭셔리 3스타일 평균 + <strong style={{ color: 'var(--text)' }}>9개 항목 자동 추천</strong>을 도넛 차트로.
       </p>
 
       <TravelBudgetClient />

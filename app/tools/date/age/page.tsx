@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/age',
   title: '나이 계산기 — 만 나이·생일 D-day·띠·별자리·인생 통계',
   description:
-    '만 나이 통일법 기준 만 나이 계산부터 다음 생일 D-day, 태어난 지 며칠, 1만일·환갑·칠순 마일스톤, 띠·별자리·탄생석, 인생 시간 통계까지 한 번에.',
+    '만 나이·D-day·1만일 기념·생일 카운트다운 + 인생 시간 통계·띠·별자리를 한 화면에 모두.',
   keywords: [
     '나이계산기', '만나이계산기', '만나이', '연나이', '세는나이', '생일D-day', '태어난지며칠',
     '1만일', '띠계산', '별자리계산', '환갑', '칠순', '인생타임라인',
@@ -23,7 +23,7 @@ export default function AgePage() {
         🎂 나이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        만 나이부터 D-day, 1만일 기념, 인생 시간 통계, 띠·별자리·탄생석, 생일 카운트다운까지 한 번에. 만 나이 통일법(2023.6.28) 기준으로 정확하게 계산합니다.
+        만 나이·D-day·1만일 기념·생일 카운트다운 + <strong style={{ color: 'var(--text)' }}>인생 시간 통계</strong>까지 한 화면에.
       </p>
 
       <AgeClient />

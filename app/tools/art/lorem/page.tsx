@@ -6,7 +6,7 @@ import Link from 'next/link'
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
   title: '더미 텍스트 생성기 — 문단·버튼·카드·JSON 더미 데이터',
-  description: '디자이너·개발자를 위한 종합 더미 콘텐츠 생성기. 문단(한글·영문 Lorem Ipsum)·버튼·카드·리뷰·JSON 더미 데이터·UX 라이팅·길이 테스트까지 9가지 톤으로 한 번에 생성.',
+  description: '문단·버튼·카드·리뷰·JSON 더미 데이터를 UI 목업에 바로 붙여 쓸 수 있는 종합 더미 콘텐츠 생성기.',
   keywords: [
     '더미텍스트', '더미데이터', '로렘입숨', 'lorem ipsum', '한글더미', 'UI목업',
     'JSON 더미', 'mock data', 'placeholder text', '카드 목업', 'UX 라이팅',
@@ -22,7 +22,7 @@ export default function LoremPage() {
         📝 더미 텍스트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        문단·버튼·카드·리뷰·JSON 더미 데이터까지 — UI 목업과 디자인 시안에 바로 쓸 수 있는 9가지 톤의 종합 더미 콘텐츠 생성 도구입니다.
+        문단·버튼·카드·리뷰·JSON 더미를 <strong style={{ color: 'var(--text)' }}>UI 목업에 바로</strong> 붙여 쓸 수 있게.
       </p>
 
       <LoremClient />

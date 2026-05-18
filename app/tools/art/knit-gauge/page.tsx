@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/art/knit-gauge',
   title: '뜨개질 게이지 계산기 — 패턴 변환·사이즈별 코 수·늘림 줄임·실 양',
-  description: '10cm² 게이지 입력으로 패턴 코·단 수 변환, 한국 여성·남성·키즈 사이즈별 코 계산, 늘림·줄임 균등 분배, 실 양·바늘 호수 추천. 대바늘·코바늘·모자·양말·스웨터·담요 4탭.',
+  description: '10cm² 게이지로 패턴 코·단 수 변환 + 한국 사이즈별 코 계산·늘림·줄임 균등 분배와 실 양·바늘 호수 추천.',
   keywords: [
     '뜨개질 게이지', '게이지 계산기', '코 수 계산', '단 수 계산', '게이지 스와치',
     '뜨개질 패턴 변환', '스웨터 코 수', '모자 코 수', '양말 게이지',
@@ -65,10 +65,7 @@ export default function KnitGaugePage() {
         🧶 뜨개질 게이지 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        10cm² 게이지 입력으로 <strong style={{ color: 'var(--text)' }}>패턴 코·단 수 변환</strong>,{' '}
-        한국 여성·남성·키즈 <strong style={{ color: 'var(--text)' }}>사이즈별 코 계산</strong>,{' '}
-        <strong style={{ color: 'var(--text)' }}>늘림·줄임 균등 분배</strong>, 실 양·바늘 호수 추천.{' '}
-        대바늘·코바늘·모자·양말·스웨터·담요 4탭.
+        10cm² 게이지로 패턴 코·단수 변환 + 한국 사이즈별 코 계산·<strong style={{ color: 'var(--text)' }}>늘림 균등 분배</strong>.
       </p>
 
       {/* 면책 박스 */}

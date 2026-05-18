@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/cooking/baker-percent',
   title: '베이커 퍼센트 계산기 — 제빵 배합비·수분율·르방 자동 계산',
-  description: '밀가루를 100% 기준으로 물·소금·이스트·설탕·버터의 베이커 퍼센트와 수분율을 자동 계산합니다. 식빵·바게트·치아바타·사워도우·피자 등 8가지 빵 프리셋 제공.',
+  description: '밀가루 100% 기준 모든 재료 비율 자동 + 수분율·르방. 빵 종류별 프리셋 8종으로 제빵 배합비를 정확하게.',
   keywords: ['베이커퍼센트', '제빵배합비', '제빵계산기', '수분율계산', '하이드레이션', '사워도우배합', '바게트레시피', '르방계산', '제빵퍼센트'],
 })
 
@@ -21,8 +21,7 @@ export default function BakerPercentPage() {
         🥖 베이커 퍼센트 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        밀가루를 100% 기준으로 <strong style={{ color: 'var(--text)' }}>물·소금·이스트·설탕·버터의 베이커 퍼센트</strong>와 수분율을 자동 계산합니다.
-        식빵·바게트·치아바타·사워도우·피자 등 <strong style={{ color: 'var(--text)' }}>8가지 빵 프리셋</strong>, 르방 분리 계산, 즐겨찾기 저장 지원.
+        밀가루 100% 기준 모든 재료 비율 자동 + <strong style={{ color: 'var(--text)' }}>수분율·르방</strong>. 빵 종류별 프리셋 8종.
       </p>
 
       <BakerPercentClient />

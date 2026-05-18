@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/tap-tempo',
   title: '탭 템포 계산기 — BPM 측정·메트로놈·박자감 테스트',
-  description: '노래나 연주의 BPM을 탭으로 즉시 측정하고, 메트로놈으로 박자를 연습하며, 박자감 테스트로 리듬감을 확인하세요. 장르별 BPM 프리셋, 템포 용어 가이드 포함.',
+  description: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈과 박자감 테스트.',
   keywords: ['탭템포', 'BPM측정', '메트로놈', '박자감테스트', '템포계산기', 'BPM계산기', 'tap tempo'],
 })
 
@@ -18,7 +18,7 @@ export default function TapTempoPage() {
         👆 탭 템포 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        탭으로 BPM을 측정하고, 메트로놈으로 박자를 익히고, 박자감 테스트로 리듬감을 점검하세요.
+        박자에 맞춰 탭하면 <strong style={{ color: 'var(--text)' }}>BPM 자동 측정</strong> + 메트로놈.
       </p>
 
       <TapTempoClient />

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/cooking/baking-recipe',
   title: '제과 레시피 계산기 — 마들렌·파운드·쿠키·머핀 비율·분량 변환',
-  description: '마들렌·파운드케이크·쿠키·머핀·마카롱·스콘·휘낭시에·카스테라·브라우니·커스터드 10종 제과 비율 자동 환산. 비율 진단·식감 보정·틀 용량 기준 분량 변환·인기 레시피 프리셋 17종.',
+  description: '마들렌·파운드·쿠키·머핀·마카롱 등 제과 10종 비율 자동 + 식감 보정·틀 용량 분량 변환·프리셋 17종.',
   keywords: ['제과 레시피 계산기', '마들렌 황금비율', '파운드케이크 1:1:1:1', '쿠키 비율', '머핀 비율', '마카롱 비율', '제과 비율', '베이킹 분량 변환', '베이킹 비율 진단', '홈베이킹 계산기'],
 })
 
@@ -72,7 +72,7 @@ export default function BakingRecipePage() {
         🧁 제과 레시피 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        마들렌·파운드·쿠키·머핀·마카롱 등 제과 레시피를 품목별 기준 재료 100%로 자동 환산. 비율 진단·식감 보정·틀 용량 기준 분량 변환까지.
+        마들렌·파운드·쿠키·머핀·마카롱 등 <strong style={{ color: 'var(--text)' }}>10종 비율 자동</strong> + 식감 보정·틀 용량 환산.
       </p>
 
       <BakingRecipeClient />

@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/dev/http-status',
   title: 'HTTP 상태 코드 검색기 — 200·301·401·403·404·500 등 한국어 설명 + 디버깅 가이드',
-  description: 'HTTP 상태 코드 65+ 한국어 설명·발생 시기·해결 힌트·실제 한국 사이트 사례. 200·301·401·403·404·429·500·502·504 등 표준 + Cloudflare(521·524)·nginx(499) 비표준 코드. CORS·JWT·Lambda 디버깅 시나리오 12개.',
+  description: 'HTTP 상태 코드 65+ 한국어 설명·발생 시기·해결 힌트 + Cloudflare(521·524)·nginx(499) 비표준과 CORS·JWT·Lambda 시나리오.',
   keywords: [
     'HTTP 상태 코드', 'HTTP status code',
     '404 의미', '500 에러', '401 unauthorized', '403 forbidden',
@@ -74,9 +74,7 @@ export default function HttpStatusPage() {
         🌐 HTTP 상태 코드 검색기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        HTTP 상태 코드 <strong style={{ color: 'var(--text)' }}>65+ 한국어 설명·발생 시기·해결 힌트·실제 한국 사이트 사례</strong>.
-        200·301·401·403·404·429·500·502·504 등 표준 + <strong style={{ color: 'var(--text)' }}>Cloudflare(521·524)·nginx(499) 비표준</strong>.
-        CORS·JWT·Lambda 디버깅 시나리오 12개.
+        HTTP 65+ 상태 코드 한국어 설명·발생 시기·해결 힌트. <strong style={{ color: 'var(--text)' }}>CORS·JWT·Lambda 시나리오</strong>.
       </p>
 
       {/* 면책 박스 */}

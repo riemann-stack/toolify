@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/loan',
   title: '대출이자 계산기 2026 — 원리금균등·원금균등·중도상환·갈아타기·금리변동',
   description:
-    '2026년 한국 시중 금리 기준 대출이자 계산기. 원리금균등·원금균등·만기일시 비교, 중도상환 시뮬, 갈아타기 손익분기, 금리 인상·인하 영향, 감당 가능 대출금 역산까지. 6탭 종합 계산기.',
+    '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확히 + 총 이자·DSR·LTV·실효금리 비교. 2026년 한국 시중 금리 기준.',
   keywords: [
     '대출이자계산기', '원리금균등', '원금균등', '주택담보대출계산기',
     '대출상환계산기', '대출이자계산', 'DSR계산기',
@@ -25,8 +25,7 @@ export default function LoanPage() {
         💳 대출이자 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        원리금균등·원금균등 비교에 더해 <strong style={{ color: 'var(--text)' }}>중도상환·갈아타기·금리 변동·감당 가능액 역산·DSR 점검</strong>까지.
-        2026년 한국은행 가계대출 통계 기반 시중 평균 금리 자동 안내.
+        원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지 — <strong style={{ color: 'var(--text)' }}>매달 얼마 나갈지</strong> 정확하게.
       </p>
 
       <LoanClient />

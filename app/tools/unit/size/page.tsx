@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/unit/size',
   title: '사이즈 변환기 — 신발·옷·반지·모자 한국 사이즈 변환',
-  description: '미국·유럽·영국·일본 사이즈를 한국 사이즈로 즉시 변환합니다. 신발·상의·하의·속옷·반지·모자·장갑·벨트 8가지 카테고리 지원. 측정법·브랜드별 차이·반품 정책 안내.',
+  description: 'US·EU·UK 의류·신발·속옷·반지 사이즈를 한국 사이즈로 + 브랜드별 차이 가이드와 해외 직구 사이즈 정확하게.',
   keywords: ['해외직구사이즈변환기', '신발사이즈변환', '의류사이즈US', '반지사이즈변환', '모자사이즈', '장갑사이즈', '벨트사이즈', '브라사이즈US', '아마존사이즈'],
 })
 
@@ -18,7 +18,7 @@ export default function SizePage() {
         👟 사이즈 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        미국·유럽·영국·일본 사이즈를 한국 사이즈로 즉시 변환합니다. <strong style={{ color: 'var(--text)' }}>신발·상의·하의·속옷·반지·모자·장갑·벨트</strong> 8가지 카테고리, 측정값 기반 자동 사이즈 추천.
+        US·EU·UK 의류·신발·속옷·반지를 <strong style={{ color: 'var(--text)' }}>한국 사이즈로</strong> + 브랜드별 차이 가이드.
       </p>
 
       {/* ── 국가별 사이즈 표기 차이 (상단 박스) ── */}

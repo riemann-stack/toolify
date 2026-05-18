@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/capo',
   title: '기타 카포 계산기 — 카포 위치별 코드 변환·쉬운 코드 추천',
-  description: '원하는 키에서 카포 위치별 코드 변환을 계산합니다. 쉬운 오픈 코드 추천, 전조 계산, 다이아토닉 코드 표. 기타 입문자도 쉽게 코드 편곡 가능.',
+  description: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천. 어쿠스틱 기타 연주 필수.',
   keywords: ['기타카포계산기', '카포위치계산', '기타전조계산기', '코드변환계산기', '카포코드표', '기타코드이동', '전조계산기'],
 })
 
@@ -18,7 +18,7 @@ export default function CapoPage() {
         🎸 기타 카포 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        원하는 키에서 카포 위치별 연주 코드를 즉시 확인하고, 쉬운 오픈 코드로 자동 편곡하세요.
+        원곡 키와 카포 위치로 <strong style={{ color: 'var(--text)' }}>변환된 코드</strong> + 쉬운 코드 추천.
       </p>
 
       <CapoClient />

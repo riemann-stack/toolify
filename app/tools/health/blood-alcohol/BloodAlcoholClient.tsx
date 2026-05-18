@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import s from './blood-alcohol.module.css'
 import {
   DECAY_RATES,
@@ -81,6 +81,13 @@ export default function BloodAlcoholClient() {
   const [nowMode, setNowMode] = useState<'end' | 'custom'>('end')
   const [nowH, setNowH] = useState(23)
   const [nowM, setNowM] = useState(0)
+
+  /* 실시간 카운트다운 — 매초 갱신 */
+  const [realNowMs, setRealNowMs] = useState<number>(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setRealNowMs(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
 
   const addDrink = () => {
     if (drinks.length >= 5) return
@@ -185,6 +192,35 @@ export default function BloodAlcoholClient() {
   // 시각 옵션
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)
   const minOptions  = [0, 10, 20, 30, 40, 50]
+
+  // ── 실시간 KST 시각·운전 가능까지 카운트다운 ──
+  const KST_OFFSET_MS = 9 * 3600 * 1000
+  const kstNowDate = new Date(realNowMs + KST_OFFSET_MS)
+  const realHH = kstNowDate.getUTCHours()
+  const realMM = kstNowDate.getUTCMinutes()
+  const realSS = kstNowDate.getUTCSeconds()
+  // 오늘의 음주 종료 시각 (KST) → epoch ms
+  const todayEndKst = new Date(realNowMs + KST_OFFSET_MS)
+  todayEndKst.setUTCHours(endH, endM, 0, 0)
+  let endEpochMs = todayEndKst.getTime() - KST_OFFSET_MS
+  // 음주 종료가 미래 (오늘 저녁 마실 예정) — 그대로 사용
+  // 음주 종료가 과거 24h 이내 — 그대로 사용 (오늘)
+  // 음주 종료가 미래 + 12시간 초과 — 어제 음주라고 가정
+  if (endEpochMs - realNowMs > 12 * 3600 * 1000) endEpochMs -= 24 * 3600 * 1000
+  const suspendEpochMs = endEpochMs + suspendHoursFromEnd * 3600 * 1000
+  const revokeEpochMs  = endEpochMs + revokeHoursFromEnd * 3600 * 1000
+  const zeroEpochMs    = endEpochMs + zeroHoursFromEnd * 3600 * 1000
+  const remainSuspendMs = Math.max(0, suspendEpochMs - realNowMs)
+  const remainRevokeMs  = Math.max(0, revokeEpochMs - realNowMs)
+  const remainZeroMs    = Math.max(0, zeroEpochMs - realNowMs)
+  const fmtRemain = (ms: number) => {
+    const totalSec = Math.floor(ms / 1000)
+    const h = Math.floor(totalSec / 3600)
+    const m = Math.floor((totalSec % 3600) / 60)
+    const s = totalSec % 60
+    return `${pad2(h)}:${pad2(m)}:${pad2(s)}`
+  }
+  const endInFuture = endEpochMs > realNowMs
 
   // 분해 속도·식사 상태
   const decayRate = DECAY_RATES.find(d => d.id === decayRateId)?.rate ?? 0.015
@@ -445,6 +481,101 @@ export default function BloodAlcoholClient() {
               </div>
             </div>
           </div>
+
+          {/* ── 실시간 카운트다운 ── */}
+          <div className={s.liveCard}>
+            <div className={s.liveHeader}>
+              <span className={s.liveBadge}>🕐 실시간 카운트다운 (KST)</span>
+              <span className={s.liveClock}>{pad2(realHH)}:{pad2(realMM)}:{pad2(realSS)}</span>
+            </div>
+            {endInFuture ? (
+              <p className={s.liveNote}>
+                ⏳ 음주 종료 시각이 아직 미래입니다 ({pad2(endH)}:{pad2(endM)}).
+                음주 종료 후 다시 확인하세요.
+              </p>
+            ) : (
+              <div className={s.liveGrid}>
+                {peakBAC > 0.03 && (
+                  <div className={`${s.liveBox} ${remainSuspendMs === 0 ? s.liveBoxDone : s.liveBoxWarn}`}>
+                    <div className={s.liveLabel}>🚫 면허정지 해소까지</div>
+                    <div className={s.liveTime}>
+                      {remainSuspendMs === 0 ? '✓ 통과' : fmtRemain(remainSuspendMs)}
+                    </div>
+                  </div>
+                )}
+                {peakBAC > 0.08 && (
+                  <div className={`${s.liveBox} ${remainRevokeMs === 0 ? s.liveBoxDone : s.liveBoxDanger}`}>
+                    <div className={s.liveLabel}>❌ 면허취소 해소까지</div>
+                    <div className={s.liveTime}>
+                      {remainRevokeMs === 0 ? '✓ 통과' : fmtRemain(remainRevokeMs)}
+                    </div>
+                  </div>
+                )}
+                <div className={`${s.liveBox} ${remainZeroMs === 0 ? s.liveBoxDone : s.liveBoxSafe}`}>
+                  <div className={s.liveLabel}>✅ 완전 분해까지 (0.000)</div>
+                  <div className={s.liveTime}>
+                    {remainZeroMs === 0 ? '✓ 통과' : fmtRemain(remainZeroMs)}
+                  </div>
+                </div>
+              </div>
+            )}
+            <p className={s.liveCaveat}>
+              ⚠️ 위 카운트다운은 종료 시각 <strong>{pad2(endH)}:{pad2(endM)}</strong> 기준이며,
+              ALDH2 결손·수면 부족·식사량 등으로 ±20~30% 오차 가능 — <strong>최소 1~2시간 안전 여유</strong> 두기.
+            </p>
+          </div>
+
+          {/* ── 숙취(아세트알데히드) 회복 타임라인 ── */}
+          {peakBAC > 0.05 && (
+            <div className={s.hangoverCard}>
+              <div className={s.cardLabel}>💧 숙취 회복 단계 (BAC 0 ≠ 완전 회복)</div>
+              <p className={s.hangoverIntro}>
+                알코올이 분해돼 BAC가 0이 돼도 <strong>아세트알데히드(독성 대사물)·탈수·수면 부채</strong>로
+                인지·운동 능력은 6~24시간 추가로 영향 받습니다.
+              </p>
+              <div className={s.hangoverList}>
+                <div className={s.hangoverItem}>
+                  <span className={s.hangoverPhase}>0~2h</span>
+                  <div>
+                    <strong>아세트알데히드 피크</strong> — 얼굴 빨개짐·심박 ↑·구역질.
+                    물 500ml + 비타민 B군 (헛개·미숫가루 효과 부족, 핵심은 수분)
+                  </div>
+                </div>
+                <div className={s.hangoverItem}>
+                  <span className={s.hangoverPhase}>2~6h</span>
+                  <div>
+                    <strong>탈수 진행</strong> — 알코올의 이뇨 작용으로 평소보다 1.5~2배 수분 손실.
+                    이온음료·꿀물·따뜻한 국물 권장
+                  </div>
+                </div>
+                <div className={s.hangoverItem}>
+                  <span className={s.hangoverPhase}>6~12h</span>
+                  <div>
+                    <strong>BAC 0 도달·간 회복 시작</strong> — 운전은 가능하지만 집중력 70~80%.
+                    중요 회의·면접·시험은 피하기
+                  </div>
+                </div>
+                <div className={s.hangoverItem}>
+                  <span className={s.hangoverPhase}>12~24h</span>
+                  <div>
+                    <strong>수면 질 회복</strong> — 알코올은 REM 수면 차단 → 다음날 피로감 ↑.
+                    카페인보다 30분 낮잠이 효과적
+                  </div>
+                </div>
+                <div className={s.hangoverItem}>
+                  <span className={s.hangoverPhase}>24~48h</span>
+                  <div>
+                    <strong>완전 회복</strong> — 간 효소·근육 글리코겐 정상화.
+                    이때까지 추가 음주는 간 부담 누적
+                  </div>
+                </div>
+              </div>
+              <div className={s.infoBox} style={{ marginTop: 10 }}>
+                💊 <strong>「숙취 해소제」 객관적 효능</strong>: 헛개·콘디션·여명 등은 임상 효과 미미 (위약 대비 차이 작음).
+                실증된 것은 <strong>수분 + 전해질 + 수면 + 시간</strong>뿐.
+              </div>
+            </div>
+          )}
 
           {/* ── 그래프 ── */}
           <div className={s.graphBox}>

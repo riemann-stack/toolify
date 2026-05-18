@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/life/drake',
   title: '드레이크 방정식 계산기 — 외계 문명 수·거리·페르미 역설',
-  description: '7개 변수로 우리 은하 외계 문명 수(N) 추정. 가장 가까운 문명까지 거리, 왕복 통신 시간, 인류 전파권(126광년), 페르미 역설 가설 자동 추천, 우리 은하 시뮬레이션까지.',
+  description: '외계 문명은 몇 개나 존재할까. 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신·인류 전파권·페르미 역설 가설까지.',
   keywords: ['드레이크방정식계산기', '외계인존재확률', '드레이크방정식', '우주문명계산기', '외계생명체확률', '페르미역설', '지적생명체계산기', '대필터', '레어 어스 가설', '인류 전파권', '가장 가까운 외계'],
 })
 
@@ -41,7 +41,7 @@ export default async function DrakePage({
         👽 드레이크 방정식 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        7개 변수 시뮬레이터 + <strong style={{ color: 'var(--text)' }}>가장 가까운 문명까지 거리·왕복 통신 시간·인류 전파권·페르미 역설 가설 추천</strong>까지 한 화면에.
+        외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 <strong style={{ color: 'var(--text)' }}>페르미 역설</strong>까지.
       </p>
 
       <DrakeEquationClient initial={initial} />

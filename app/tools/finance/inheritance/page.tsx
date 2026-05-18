@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/finance/inheritance',
   title: '상속·증여세 계산기 2026 — 분배·배우자공제·10년 주기 절세 | Youtil',
-  description: '관계별 증여 공제, 10년 합산, 배우자 상속공제(5억~30억) 정량 시뮬, 상속인별 법정상속분 자동 분배, 분산 증여 시뮬레이션, 부동산·부담부증여 단순 추정까지. 한국 2026년 기준 단순 참고용 도구.',
+  description: '관계별 공제·10년 합산·배우자 공제 반영한 정확한 상속·증여세. 상속인별 분배와 분산 증여 시뮬레이션으로 절세 전략까지.',
   keywords: [
     '상속세계산기', '증여세계산기', '상속증여비교', '증여세공제', '상속세공제',
     '분할증여계산기', '자녀증여세', '배우자상속공제', '법정상속분',
@@ -54,8 +54,7 @@ export default function InheritancePage() {
         🏛️ 상속·증여세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        관계별 공제·10년 합산·<strong style={{ color: 'var(--text)' }}>배우자 상속공제·상속인별 분배·분산 증여 시뮬레이션</strong>까지.
-        지금 증여할지 나중에 상속할지 — 같은 재산을 옮길 때 세금 부담이 어떻게 달라지는지 한 번에 비교하세요.
+        관계별 공제·10년 합산·배우자 공제 반영한 정확한 세액 + <strong style={{ color: 'var(--text)' }}>분산 증여 시뮬레이션</strong>.
       </p>
 
       <div style={{

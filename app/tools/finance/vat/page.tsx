@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/finance/vat',
   title: '부가세 계산기 2026 — 역산·견적서·실입금·세금계산서·일반 간이 비교 | Youtil',
-  description: '부가세 추가·역산, 견적서 여러 품목 합산, 실입금 역산 (프리랜서·사업자), 세금계산서 분리표, 일반과세 vs 간이과세 비교까지. 한국 2026년 기준 — 부가세 별도 vs 포함, 크몽·네이버페이 수수료, 3.3% 원천세 vs 10% 부가세 차이.',
+  description: '공급가·세액·합계 자유 역산으로 견적서·세금계산서 그대로. 프리랜서·사업자용 부가세 + 일반 vs 간이과세·실입금 역산까지.',
   keywords: [
     '부가세계산기', 'vat계산기', '부가가치세계산기', '공급가액역산',
     '간이과세계산기', '부가세역산', '프리랜서부가세', '실입금역산',
@@ -33,8 +33,7 @@ export default function VatPage() {
         🧾 부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        역산·<strong style={{ color: 'var(--text)' }}>견적서·실입금 역산·세금계산서 분리표·일반 vs 간이 비교</strong>까지.
-        프리랜서·사업자 모두 — 부가세 별도/포함, 크몽·네이버페이 수수료, 3.3% 원천세 반영.
+        공급가·세액·합계 자유 역산. 견적서·세금계산서 그대로 쓰는 <strong style={{ color: 'var(--text)' }}>사업자·프리랜서 도구</strong>.
       </p>
 
       <VatClient />

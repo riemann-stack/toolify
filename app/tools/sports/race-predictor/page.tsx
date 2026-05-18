@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/sports/race-predictor',
   title: '마라톤 기록 계산기 — VDOT·Riegel·Cameron·환경/연령 보정·목표 역산',
-  description: '5km·10km·하프 → 풀 마라톤 3공식 평균 예측. 기온·습도·고도 자동 보정, 목표 ↔ 필요 능력 역산, 연령·성별 보정, VDOT 추이 그래프, 한국 시즌 가이드까지.',
+  description: '5km·10km·하프 기록으로 풀코스 예상 시간 + 3공식 평균과 기온·습도·고도·연령 자동 보정·VDOT 추이.',
   keywords: ['마라톤 기록 예측', 'VDOT 계산기', 'Riegel 공식', 'Cameron 공식', '서브3 페이스', '서브4 페이스', '5km 풀 환산', '하프 풀 예측', '마라톤 환경 보정', '한국 마라톤 시즌', 'Jack Daniels 페이스'],
 })
 
@@ -72,7 +72,7 @@ export default function RacePredictorPage() {
         🏅 마라톤 기록 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        5km·10km·하프 → 풀 마라톤 예측 (Riegel·VDOT·Cameron 3공식 평균) + 목표 ↔ 필요 능력 역산 + 기온·습도·고도·연령 자동 보정 + 기록 추이 그래프.
+        5km·10km·하프 기록으로 <strong style={{ color: 'var(--text)' }}>풀코스 예상 시간</strong> + 기온·고도·연령 자동 보정.
       </p>
 
       <RacePredictorClient />

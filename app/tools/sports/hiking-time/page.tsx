@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
   title: '등산 시간 계산기 — Naismith·Tobler·한국 표준 3공식 + 100대 명산 35+ 프리셋 + 턴어라운드 안전 시간',
   description:
-    '거리·표고차·체력·지형·배낭·인원·날씨까지 정밀 보정한 등산 시간 계산. 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋과 일몰 전 하산 가능 여부 자동 진단. Naismith·Tobler·한국 등산교실 3공식 비교, 단계별 도착 예상 시각 SVG 타임라인.',
+    'Naismith·Tobler·한국 등산교실 3공식 + 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋. 일몰 전 하산 진단.',
   keywords: [
     '등산 시간 계산', '등산 소요시간', '산행 시간 계산',
     '북한산 시간', '북한산 백운대 시간', '설악산 시간', '설악산 대청봉 시간',
@@ -53,7 +53,7 @@ export default function HikingTimePage() {
         🥾 등산 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋과 거리·표고·체력·지형·배낭·인원·날씨까지 정밀 보정. 일몰 전 하산 가능 여부 자동 진단으로 안전한 산행 계획.
+        한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. <strong style={{ color: 'var(--text)' }}>일몰 전 하산</strong> 자동 진단.
       </p>
 
       <HikingTimeClient />

@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/sound-speed',
   title: '음속 계산기 — 천둥 번개 거리·소리 도달 시간·빛 vs 소리',
-  description: '번개와 천둥 사이 시간으로 거리를 계산하고, 거리별 소리 도달 시간, 빛과 소리 속도 차이, 콘서트홀 반향까지 시각화합니다. 온도별 음속 자동 보정.',
+  description: '천둥·번개 거리 + 소리 도달 시간과 빛 vs 소리 비교, 반향·에코·RT60까지 음향 물리 한눈에.',
   keywords: ['음속계산기', '천둥번개거리', '소리도달시간', '음속공식', '광속', '마하', '에코지연', '잔향시간', 'RT60', '소닉붐'],
 })
 
@@ -21,8 +21,7 @@ export default function SoundSpeedPage() {
         🔊 음속 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>번개·천둥 거리</strong>, 거리별 소리 도달 시간, <strong style={{ color: 'var(--text)' }}>빛 vs 소리 속도 차이</strong>,
-        콘서트홀 잔향 시간(RT60)까지 시각적으로 학습합니다. 온도별 음속 자동 보정, 매질별·마하별 비교, 어린이부터 음향 전문가까지.
+        천둥·번개 거리·소리 도달 시간·반향·RT60. <strong style={{ color: 'var(--text)' }}>빛 vs 소리</strong>를 직관적으로.
       </p>
 
       <SoundSpeedClient />

@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/interior/room-area',
   title: '공간 면적 계산기 — 벽·바닥·천장·평수·부피 한 번에',
-  description: '방 크기로 벽 면적, 바닥 면적, 천장 면적, 평수, 공간 부피를 한 번에 계산합니다. 도배·페인트·에어컨·조명 시공 면적의 기본 도구.',
+  description: '벽·바닥·천장·평수·부피 한 번에 — 도배·페인트·에어컨 평형 계산의 기본. 평수↔㎡ 환산과 실측 가이드.',
   keywords: ['공간면적계산기', '방면적계산', '벽면적계산기', '평수계산기', '바닥면적', '천장면적', '방크기계산', '인테리어면적'],
 })
 
@@ -21,8 +21,7 @@ export default function RoomAreaPage() {
         📐 공간 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        방 크기·천장 높이·창문·문을 입력하면 <strong style={{ color: 'var(--text)' }}>벽·바닥·천장·평수·부피·총 표면적</strong> 6가지를 한 번에 계산합니다.
-        도배·페인트·에어컨·조명 시공의 모든 기초 면적을 한 화면에서.
+        벽·바닥·천장·평수·부피 한 번에 — <strong style={{ color: 'var(--text)' }}>도배·페인트·에어컨 평형</strong> 계산의 기본.
       </p>
 
       <RoomAreaClient />

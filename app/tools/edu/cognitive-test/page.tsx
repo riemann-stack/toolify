@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/cognitive-test',
   title: '인지 능력 테스트 — 반응속도·스트룹·이중 과제 게임',
-  description: '반응속도, 스트룹 효과, 이중 과제 간섭을 측정하는 인지 심리학 게임. 집중력과 인지 처리 속도를 시각화하고 친구와 비교해 보세요. 게임형 참고 도구입니다.',
+  description: '반응속도·스트룹 효과·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정하는 인지 능력 자가 진단.',
   keywords: ['인지능력테스트', '반응속도테스트', '스트룹효과', '이중과제', '집중력테스트', '인지심리학', '두뇌게임', 'reaction time test', 'stroop test'],
 })
 
@@ -21,8 +21,7 @@ export default function CognitiveTestPage() {
         🧠 인지 능력 테스트
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>반응속도·스트룹 효과·이중 과제</strong>로 집중력과 인지 처리 속도를 측정하는 인지 심리학 게임입니다.
-        <strong style={{ color: '#FF8C3E' }}> 게임형 참고 도구</strong>이며 의학적 진단이 아닙니다. 친구와 점수를 공유하며 즐겨보세요.
+        반응속도·스트룹·이중 과제로 <strong style={{ color: 'var(--text)' }}>집중력과 인지 처리 속도</strong>를 게임처럼 측정.
       </p>
 
       <CognitiveTestClient />

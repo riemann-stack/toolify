@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/dev/tech-stack',
   title: '기술 스택 추천기 — 12 시나리오 + Next.js·Remix·Astro·Supabase·Vercel·토스페이먼츠 비교 + 한국 SaaS 통합 (2026)',
   description:
-    '프로젝트 유형·규모·예산·SEO·한국 특화 입력 시 Frontend·Backend·DB·Auth·Hosting·Payment·Analytics 풀스택 자동 추천. 7축 점수 레이더 차트, 시나리오 프리셋 12종(MVP·사이드·AI·이커머스·한국 SaaS 등), 비용·기간·시작 명령어, 트레이드오프 표.',
+    '시나리오 12종 프리셋 + 8개 입력값 → Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천과 7축 점수 레이더.',
   keywords: [
     '기술 스택 추천', '풀스택 추천', '스타트업 기술 스택', 'MVP 스택',
     'Next.js vs Remix', 'Astro vs Next', 'React Native vs Flutter',
@@ -51,7 +51,7 @@ export default function TechStackPage() {
         🛠️ 기술 스택 추천기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        프로젝트 유형·규모·예산·SEO·한국 특화 통합 입력 시 Frontend·Backend·DB·Auth·Hosting·Payment·Analytics 풀스택을 자동 추천. MVP 스타트업·AI 챗봇·한국형 SaaS 등 12 시나리오 프리셋과 7축 점수 레이더 차트로 의사결정.
+        프로젝트 시나리오로 <strong style={{ color: 'var(--text)' }}>Frontend·Backend·DB·Auth·Hosting·Payment</strong> 풀스택 자동 추천.
       </p>
 
       <TechStackClient />

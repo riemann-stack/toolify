@@ -1,0 +1,504 @@
+/* ─────────────────────────────────────
+   김장 양 계산기
+   ───────────────────────────────────── */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.cardLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+}
+.subLabel {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 메인 히어로 ── */
+.heroCard {
+  background: linear-gradient(140deg, rgba(255,107,107,0.08), rgba(255,184,62,0.05));
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 16px;
+  padding: 22px 24px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.heroBigRow {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+@media (max-width: 540px) {
+  .heroBigRow { grid-template-columns: 1fr; }
+  .heroDivider { display: none; }
+}
+.heroDivider {
+  width: 1px;
+  height: 60%;
+  background: var(--border);
+  justify-self: center;
+}
+.heroBigItem { text-align: center; }
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(48px, 12vw, 80px);
+  font-weight: 800;
+  color: #FF6B6B;
+  letter-spacing: -2px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px rgba(255,107,107,0.20);
+}
+.heroUnit {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: -0.5px;
+  margin-top: 2px;
+}
+.heroSub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.heroFootRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.priceSource {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.refreshBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.refreshBtn:disabled { opacity: 0.5; cursor: wait; }
+@media (hover: hover) {
+  .refreshBtn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+}
+
+/* ── 인원 컨트롤 ── */
+.numRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.numField label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.numCtrl {
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.numCtrl button {
+  flex: 0 0 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 800;
+}
+@media (hover: hover) {
+  .numCtrl button:hover { background: rgba(200,255,62,0.08); }
+}
+.numCtrl span {
+  flex: 1;
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 소비 패턴 ── */
+.profileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+.profileBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .profileBtn:hover { border-color: var(--accent); }
+}
+.profileActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+}
+.profileTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.profileActive .profileTitle { color: var(--accent); }
+.profileDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.profileMeta {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── 기간 ── */
+.monthRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+@media (max-width: 540px) {
+  .monthRow { grid-template-columns: repeat(3, 1fr); }
+}
+.monthBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) {
+  .monthBtn:hover { border-color: var(--accent); }
+}
+
+/* ── 부가 김치 ── */
+.variantGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+.variantBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .variantBtn:hover { border-color: var(--accent); }
+}
+.variantActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+}
+.variantCheck {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 800;
+}
+.variantActive .variantCheck {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a0a0a;
+}
+.variantText { min-width: 0; flex: 1; }
+.variantName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.variantDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.toggleReduce {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.toggleReduce input { accent-color: var(--accent); }
+
+/* ── 재료 리스트 ── */
+.catBlock { margin-bottom: 14px; }
+.catHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.catName {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.catTotal {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.ingList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.ingItem {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+@media (max-width: 540px) {
+  .ingItem { grid-template-columns: 1fr; gap: 4px; }
+}
+.ingMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+}
+.ingName {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ingAmt {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ingPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ingPriceInput {
+  width: 70px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.ingPriceInput:focus { border-color: var(--accent); }
+.ingPriceUnit {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ingLive {
+  font-size: 9.5px;
+  color: #3EFF9B;
+  background: rgba(62,255,155,0.10);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.ingTotal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  min-width: 80px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 14px;
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.30);
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.totalNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #FF6B6B;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+.copyBtn {
+  width: 100%;
+  background: var(--accent);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 10px;
+  transition: opacity 0.15s;
+}
+@media (hover: hover) {
+  .copyBtn:hover { opacity: 0.88; }
+}
+
+/* ── 타임라인 ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.timelineItem {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 12px;
+  align-items: start;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.timelinePre { border-left: 3px solid #3EC8FF; }
+.timelinePost { border-left: 3px solid var(--accent); }
+.timelineDay {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  background: var(--bg2);
+  border-radius: 6px;
+  padding: 6px 4px;
+  letter-spacing: -0.5px;
+}
+.timelinePre .timelineDay { color: #3EC8FF; }
+.timelinePost .timelineDay { color: var(--accent); }
+.timelineBody { font-size: 12.5px; line-height: 1.6; }
+.timelineLabel {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 2px;
+}
+.timelineDesc {
+  color: var(--muted);
+}
+
+/* ── 팁 ── */
+.tipCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.tipList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tipList li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding-left: 18px;
+  position: relative;
+}
+.tipList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+.tipList li strong { color: var(--text); }

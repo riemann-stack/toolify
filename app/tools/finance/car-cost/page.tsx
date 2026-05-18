@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/tools/finance/car-cost',
   title: '자동차 유지비 계산기 — 5년·10년 비용·구매 방식 비교·전기차 vs 가솔린 | Youtil',
-  description: '유류비·보험·자동차세·소모품·감가상각 자동 계산. 현금·할부·리스·장기렌트 비교, 차종 비교 (경차·중형·SUV·전기), 전기 vs 하이브리드 vs 가솔린, 보유 vs 카쉐어링 손익분기까지. 한국 2026년 기준.',
+  description: '유류·보험·세금·소모품·감가까지 합한 연간 진짜 비용. 차종 비교, 전기 vs 가솔린, 카쉐어링 손익분기점 자동 계산.',
   keywords: [
     '자동차 유지비 계산기', '자동차 1km당 비용', '전기차 vs 가솔린', '자동차 할부 vs 리스',
     '장기렌트 비교', '차 살 때 비용', '카쉐어링 vs 보유', '자동차 감가상각',
@@ -54,8 +54,7 @@ export default function CarCostPage() {
         🚗 자동차 유지비 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        유류비·보험·자동차세·소모품·감가상각 + <strong style={{ color: 'var(--text)' }}>구매 방식 비교 (현금·할부·리스·장기렌트) + 차종 비교 + 전기 vs 가솔린 + 보유 vs 카쉐어링</strong>까지.
-        3년·5년·10년 총비용 한 번에.
+        유류·보험·세금·소모품·감가까지 합한 <strong style={{ color: 'var(--text)' }}>연간 진짜 비용</strong>. 차종·전기차 손익분기 비교.
       </p>
 
       <CarCostClient />

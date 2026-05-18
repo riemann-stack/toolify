@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/planet-comparison',
   title: '행성 비교 계산기 — 다른 행성에서 내 몸무게·나이·하루',
-  description: '8개 태양계 행성에서 내 몸무게, 나이, 하루 길이가 어떻게 다른지 시각적으로 비교합니다. 수성·금성·화성·목성 등 행성별 중력·공전·자전 데이터.',
+  description: '수성·금성·화성·목성 등 8개 행성에서 내 몸무게·나이·하루 길이가 어떻게 달라지는지 시각화한 교육용 시뮬레이터.',
   keywords: ['행성비교', '태양계행성', '화성에서몸무게', '목성중력', '행성나이', '행성크기비교', '태양계시각화', '행성과학'],
 })
 
@@ -21,8 +21,7 @@ export default function PlanetComparisonPage() {
         🪐 행성 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        몸무게와 나이만 입력하면 <strong style={{ color: 'var(--text)' }}>8개 태양계 행성에서의 내 몸무게·나이·하루 길이·점프 높이</strong>를
-        한 화면에서 비교합니다. 행성 크기 시각화, 중력 낙하 시뮬레이션, 빛 도달 시간, SNS 공유 카드까지.
+        8개 행성에서 <strong style={{ color: 'var(--text)' }}>내 몸무게·나이·하루 길이</strong>가 어떻게 달라지는지 시각화.
       </p>
 
       <PlanetComparisonClient />

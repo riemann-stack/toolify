@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/unit/converter',
   title: '단위 변환기 — 길이·무게·부피·온도·압력·토크·에너지·당도·농도·기울기 14종',
   description:
-    '14개 카테고리 단위 변환기. 길이·면적·무게·부피·온도·시간·속도·압력(kgf/cm²)·토크(N·m·kgf·m·lbf·ft)·에너지(J·kcal·kWh·BTU)·데이터 + 당도·염도(Brix·g/L·ppm·염%)·농도(%·ppm·ppb·mg/L)·각도·기울기(도·%·라디안·1/n 구배·물매) + 한국 전통 단위(자·척·근·돈·평·홉·되) 한 번에 변환.',
+    '길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 11종 + kgf/cm²·N·m·BTU와 한국 전통 단위(자·근·돈·평·홉·되).',
   keywords: [
     '단위 변환기', '단위 변환', '길이 변환', '무게 변환', '온도 변환',
     '시간 변환', '면적 변환', 'cm to inch', 'kg to lb', '평 ㎡',
@@ -27,8 +27,7 @@ export default function ConverterPage() {
         📐 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 + <strong style={{ color: 'var(--text)' }}>당도·염도(Brix)</strong>·<strong style={{ color: 'var(--text)' }}>농도(ppm·mg/L)</strong>·<strong style={{ color: 'var(--text)' }}>각도·기울기(% 경사·1/n 구배·물매)</strong> 14개 카테고리를 한 곳에서.{' '}
-        <strong style={{ color: 'var(--text)' }}>한국 전통·생활 단위(자·척·근·돈·평·홉·되·소주잔·종이컵·물매)</strong>까지 즉시 변환.
+        길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 <strong style={{ color: 'var(--text)' }}>11종 + 자·근·돈·평·홉</strong>.
       </p>
 
       <ConverterClient />

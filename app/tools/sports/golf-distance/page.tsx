@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-distance',
   title: '골프 비거리 계산기 — 환경 보정·Gap 분석·내 기록',
-  description: '드라이버·7번 아이언 입력만으로 전체 클럽 비거리 자동 추정. 기온·바람·고도·경사 환경 보정, Gap 자동 분석, 갭웨지 추천, m/yard 변환, 내 비거리 기록까지.',
+  description: '드라이버·7번 기록으로 전체 클럽 비거리 자동 추정 + 바람·고도·기온 환경 보정과 Gap 자동 분석.',
   keywords: ['골프비거리계산기', '클럽비거리표', '7번아이언비거리', '골프클럽거리', '드라이버비거리', '웨지비거리', '골프갭분석', '갭웨지', '골프 환경 보정', '바람 비거리', '시니어 골프', '클럽 Gap 분석', '한국 아마추어 골퍼'],
 })
 
@@ -18,7 +18,7 @@ export default function GolfDistancePage() {
         🏌️ 골프 비거리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        드라이버·7번 아이언만 입력 → 전체 클럽 비거리 자동 추정 + <strong style={{ color: 'var(--text)' }}>환경 보정(바람·고도·기온) + Gap 자동 분석 + 내 비거리 기록</strong>까지.
+        드라이버·7번 기록으로 <strong style={{ color: 'var(--text)' }}>전체 클럽 비거리 추정</strong> + 바람·고도·기온 보정.
       </p>
 
       <GolfDistanceClient />

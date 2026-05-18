@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/review-interval',
   title: '복습 간격 계산기 — 에빙하우스 망각곡선·SM-2 알고리즘 학습 일정',
-  description: '학습일과 기억 점수로 다음 복습일을 계산합니다. 에빙하우스 망각곡선 시각화, SM-2 알고리즘, 시험일 역산, 학습 항목 자동 관리(localStorage 저장).',
+  description: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일 자동 계산 + 학습 항목 관리로 효율 학습법 완성.',
   keywords: ['복습간격계산기', '망각곡선', '에빙하우스', 'SM-2알고리즘', '복습주기', '학습일정', '간격반복학습', '시험공부계획', 'Spaced Repetition', 'Anki'],
 })
 
@@ -21,8 +21,7 @@ export default function ReviewIntervalPage() {
         🧠 복습 간격 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>에빙하우스 망각곡선</strong>과 <strong style={{ color: 'var(--text)' }}>SM-2 알고리즘</strong>으로 다음 복습일을 계산하고,
-        학습 항목을 브라우저에 저장해 자동 관리합니다. 시험일 역산 학습 계획, 망각곡선 SVG 시각화, Anki 같은 간격 반복 학습(SRS)을 무료로.
+        에빙하우스 망각곡선·SM-2 알고리즘으로 <strong style={{ color: 'var(--text)' }}>다음 복습일 자동</strong> + 학습 항목 관리.
       </p>
 
       <ReviewIntervalClient />

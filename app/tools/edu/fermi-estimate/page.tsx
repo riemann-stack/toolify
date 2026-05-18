@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/edu/fermi-estimate',
   title: '페르미 추정 계산기 — 변수 분해·시나리오 비교 사고력 훈련',
-  description: '정확한 데이터가 없어도 변수로 쪼개고 낮음·기준·높음 시나리오로 대략적인 답을 추정합니다. 서울 커피 판매량·시장 규모(TAM)·전국 일회용 컵 등 15개 템플릿 + 자유 추정 + 민감도 분석.',
+  description: '막막한 문제를 변수로 쪼개고 시나리오로 비교해 대략 답을 추정하는 사고력 훈련 도구.',
   keywords: ['페르미추정', '페르미문제', '어림값계산', '논리적사고', '시장규모추정', 'TAM SAM SOM', '면접대비', '컨설팅사고법', '비즈니스분석', 'fermi estimation'],
 })
 
@@ -21,9 +21,7 @@ export default function FermiEstimatePage() {
         🧮 페르미 추정 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        정확한 데이터가 없어도 <strong style={{ color: 'var(--text)' }}>변수로 쪼개고 시나리오를 비교해 대략의 자릿수</strong>를 추정합니다.
-        15개 템플릿(서울 커피 판매량, 피아노 조율사, 시장 규모 TAM 등) + 자유 추정 + 민감도 분석 + localStorage 라이브러리.
-        <strong style={{ color: '#3EC8FF' }}> 정답이 아닌 사고 과정</strong>을 가치 있게 만드는 도구입니다.
+        막막한 문제를 변수로 쪼개고 시나리오로 비교해 <strong style={{ color: 'var(--text)' }}>대략 답을 추정</strong>하는 사고력 훈련.
       </p>
 
       <FermiEstimateClient />

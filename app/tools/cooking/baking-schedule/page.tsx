@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/cooking/baking-schedule',
   title: '제빵 타임라인 계산기 — 사워도우·바게트·식빵 발효·굽기 일정 자동 생성',
   description:
-    '빵 종류·시작 시간·발효 방식·실내 온도로 오토리즈, 폴딩, 발효, 성형, 굽기 전체 일정을 자동 생성합니다. 완성 시간 역산, 냉장 발효, 8가지 빵 프리셋 지원.',
+    '완성 시각만 알려주면 오토리즈·폴딩·발효·굽기 일정을 시간 단위로 역산. 빵 종류별 자동 스케줄러.',
   keywords: [
     '제빵 타임라인', '빵 굽기 스케줄', '사워도우 일정', '바게트 발효 시간',
     '냉장 발효 계산', '홈베이킹', '제빵 시간 계산', '발효 시간', '오토리즈', '폴딩 간격',
@@ -24,7 +24,7 @@ export default function BakingSchedulePage() {
         🍞 제빵 타임라인 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        빵 종류·시작 시간·발효 방식에 맞춰 오토리즈, 폴딩, 발효, 성형, 굽기 일정을 자동 생성합니다. 완성 시간 역산도 가능. <strong style={{ color: 'var(--text)' }}>발효는 시간보다 반죽 상태가 우선</strong>이라는 원칙 아래 가이드를 함께 제공합니다.
+        완성 시각만 알려주세요. <strong style={{ color: 'var(--text)' }}>오토리즈·폴딩·발효·굽기 일정을 시간 단위로 역산</strong>.
       </p>
 
       <BakingScheduleClient />

@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/real-estate',
   title: '부동산 수익률 계산기 — 자기자본 수익률·레버리지 효과',
   description:
-    '매입가, 대출, 취득세, 이자, 매도가를 반영해 부동산 투자 세전 수익과 자기자본 수익률(ROE)을 계산합니다. 대출 레버리지 효과, 매도 시나리오 비교, 손익분기 분석.',
+    '매매가·임대·대출 레버리지 반영한 자기자본 수익률. 진짜 남는 돈을 정확히 파악하는 부동산 투자 분석 도구.',
   keywords: ['부동산수익률계산기', '아파트투자수익률', 'ROE계산기', '부동산레버리지', '갭투자수익률', '취득세계산기', '부동산시뮬레이션'],
 })
 
@@ -22,7 +22,7 @@ export default function RealEstatePage() {
         🏘️ 부동산 수익률 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        매입가·대출·취득세·중개수수료·매도가를 한 화면에서 시뮬레이션해 <strong style={{ color: 'var(--text)' }}>자기자본 수익률(ROE)</strong>과 <strong style={{ color: 'var(--text)' }}>레버리지 효과</strong>를 확인하세요. 보수·기준·낙관 매도 시나리오와 손익분기 매도가까지 자동 계산합니다.
+        매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
 
       <RealEstateClient />

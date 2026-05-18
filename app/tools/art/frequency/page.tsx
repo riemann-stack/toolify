@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/frequency',
   title: '주파수↔음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산',
-  description: '주파수(Hz)를 음정 이름(A4, C#3 등)으로 변환하거나, 음정에서 정확한 주파수를 계산합니다. MIDI 번호, 파장, 센트 오차, 음정 간격 계산 지원. 작곡가·사운드 엔지니어 필수.',
+  description: 'Hz ↔ 음정 변환 + MIDI 번호·파장 계산. 튜닝과 사운드 디자인·악기 조율에.',
   keywords: ['주파수음정변환기', 'Hz음정변환', '음정주파수계산기', 'MIDI번호계산', '음정계산기', '튜닝계산기', '음악계산기'],
 })
 
@@ -18,7 +18,7 @@ export default function FrequencyPage() {
         🎵 주파수↔음정 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        주파수(Hz)를 음정 이름으로 변환하거나, 음정에서 정확한 Hz·MIDI 번호·파장을 계산하세요. 센트 튜너 게이지와 피아노 건반 시각화 포함.
+        Hz ↔ 음정 변환 + <strong style={{ color: 'var(--text)' }}>MIDI 번호와 파장</strong> 계산. 튜닝과 사운드 디자인용.
       </p>
 
       <FrequencyClient />

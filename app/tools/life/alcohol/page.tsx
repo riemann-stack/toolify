@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/alcohol',
   title: '알코올 도수 계산기 — 잔 단위·소맥·하이볼·1인당 분배·기준 도수 변환',
   description:
-    '소주잔·맥주잔·양주샷 단위 입력. 혼합 도수, 목표 도수 희석(물·맥주·탄산수·토닉), 같은 알코올량 비교(소주↔맥주↔와인), 술자리 1인당 분배, 본인 기준 도수로 환산까지. 한국 표준 잔·병 데이터 + 보건복지부 저위험 음주 가이드.',
+    '소맥·하이볼 황금비율 + 목표 도수 희석(맥주·탄산수) + 같은 알코올량 비교·1인당 분배·기준 도수 변환.',
   keywords: [
     '알코올도수계산기', '소맥도수계산기', '소맥 황금 비율', '하이볼 도수', '진토닉 도수',
     '술자리 1인당 알코올', '소주 맥주 환산', '와인 알코올량', '표준잔', '술자리 1인당 분배',
@@ -23,7 +23,7 @@ export default function AlcoholPage() {
         🍺 알코올 도수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        혼합 도수·소맥 황금 비율·하이볼·목표 도수 희석(맥주·탄산수)·같은 알코올량 비교·술자리 1인당 알코올 분배·기준 도수 변환까지. <strong style={{ color: 'var(--text)' }}>한국 표준 잔 단위</strong>로 정확하게.
+        <strong style={{ color: 'var(--text)' }}>소맥·하이볼 황금비율</strong> + 목표 도수 희석과 같은 알코올량 비교.
       </p>
 
       <AlcoholClient />

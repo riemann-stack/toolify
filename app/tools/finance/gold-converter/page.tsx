@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/gold-converter',
   title: '금 단위·가격 계산기 — 돈·g·트로이온스 변환 + 순도 환산 + 시세',
   description:
-    '한국 금 거래 종합 도구 — 돈·g·트로이온스·푼·냥 9단위 동시 변환, 14K/18K/22K/24K 순도 환산, 24K 시세 입력 시 매수·매도 실거래가 자동(부가세·스프레드·수수료·세공비), KRX 금현물 vs 골드바 vs 금통장 비교, 자산 가치 합산기, 코리아 프리미엄 계산.',
+    '돈·g·트로이온스·푼·냥 9단위 + 14K/18K/24K 환산. 시세 기반 매수/매도 실거래가와 KRX 금현물·골드바·금통장 비교.',
   keywords: [
     '금 단위 변환', '돈 g 변환', '한돈 g', '한냥 g', '1돈 그램',
     '트로이온스 변환', '트로이온스 g', 'oz t 변환',
@@ -52,7 +52,7 @@ export default function GoldConverterPage() {
         🪙 금 단위·가격 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        한국 금 거래의 모든 변수 — 돈·g·트로이온스·푼·냥 9단위 동시 변환, 14K~24K 순도 환산, 24K 시세 입력 시 부가세·스프레드·수수료를 반영한 매수/매도 실거래가, KRX 금현물·골드바·금통장 부가세·양도세 비교, 자산 합산까지 한 번에.
+        돈·g·트로이온스·푼·냥 9단위 + 14K/18K/24K 환산. <strong style={{ color: 'var(--text)' }}>시세 기반 실거래가</strong>까지.
       </p>
 
       <GoldConverterClient />

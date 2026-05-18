@@ -7,7 +7,7 @@ import { GuideDivider } from "@/components/ToolSection"
 export const metadata = buildMetadata({
   path: '/tools/art/charcount',
   title: '글자수 세기 — 공백 포함·제외·바이트·SNS 글자수 제한 비교',
-  description: '한글·영문·이모지 실시간 글자수, 단어수, 줄수, 문장수, UTF-8/EUC-KR/UTF-16 바이트, SMS·트위터 가중치, 30+ 플랫폼 글자수 제한, 묵독·발화 시간, 케이스 변환, 찾기·바꾸기, 빈도 분석까지.',
+  description: '공백 포함·제외 실시간 카운트. SNS·자소서·논문 글자 수 체크와 바이트 분석.',
   keywords: ['글자수세기', '글자수계산기', '자수세기', '단어수세기', 'UTF-8바이트', 'SMS바이트계산', '트위터가중치', '자기소개서글자수', '플랫폼글자수제한', 'meta description 길이'],
 })
 
@@ -21,8 +21,7 @@ export default function CharCountPage() {
         🔡 글자수 세기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        텍스트를 입력하면 <strong style={{ color: 'var(--text)' }}>한글·영문·이모지 글자수, 단어/줄/문장수, UTF-8·EUC-KR·UTF-16 바이트, 트위터 가중치</strong>까지 실시간 계산.
-        <strong style={{ color: 'var(--text)' }}>30+ 플랫폼 글자수 제한</strong>(SNS·블로그·자기소개서·앱스토어·SEO 메타) 비교, 케이스 변환, 찾기·바꾸기, 글자 빈도 분석을 한 번에.
+        공백 포함·제외 <strong style={{ color: 'var(--text)' }}>실시간 카운트</strong>. SNS·자소서·논문 글자 수 체크.
       </p>
 
       <CharCountClient />
