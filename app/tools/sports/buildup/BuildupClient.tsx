@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 import s from './buildup.module.css'
 import {
   PROFILE_LABEL, PROFILE_DESC, INTENSITY_LABEL,
-  SPLIT_LABEL, PACE_QUICK, DIST_PRESETS_KM, PRESETS,
+  SPLIT_LABEL, DIST_PRESETS_KM, PRESETS,
   parsePace, fmtPace, fmtHMS,
   segmentsFromMode, calcBuildup, safetyCheck,
   vdotFromRace, paceFromVdot,
@@ -19,6 +19,96 @@ import {
 type TabKey = 'design' | 'race' | 'preset' | 'routines'
 
 function uid(): string { return Math.random().toString(36).slice(2, 10) }
+function pad2(n: number) { return String(n).padStart(2, '0') }
+
+/* ─── 페이스 입력 — 분·초 드롭다운 ─── */
+const PACE_MIN_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10]
+const PACE_SEC_OPTIONS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+
+function PaceField({ label, value, onChange }: {
+  label: string
+  value: string  // "mm:ss"
+  onChange: (next: string) => void
+}) {
+  const sec = parsePace(value)
+  const mm = sec > 0 ? Math.floor(sec / 60) : 5
+  const ss = sec > 0 ? sec % 60 : 0
+  const setMm = (m: number) => onChange(`${m}:${pad2(ss)}`)
+  const setSs = (s2: number) => onChange(`${mm}:${pad2(s2)}`)
+  // 가까운 5초 단위로 표시값 보정
+  const ssRounded = PACE_SEC_OPTIONS.reduce((best, v) =>
+    Math.abs(v - ss) < Math.abs(best - ss) ? v : best, PACE_SEC_OPTIONS[0]
+  )
+
+  return (
+    <div className={s.field}>
+      <label className={s.fieldLabel}>{label}</label>
+      <div className={s.timeRow}>
+        <select className={s.timeSelect} value={PACE_MIN_OPTIONS.includes(mm) ? mm : 5}
+          onChange={e => setMm(parseInt(e.target.value))}>
+          {PACE_MIN_OPTIONS.map(m => <option key={m} value={m}>{m}</option>)}
+        </select>
+        <span className={s.timeColon}>:</span>
+        <select className={s.timeSelect} value={ssRounded}
+          onChange={e => setSs(parseInt(e.target.value))}>
+          {PACE_SEC_OPTIONS.map(v => <option key={v} value={v}>{pad2(v)}</option>)}
+        </select>
+        <span className={s.timeUnit}>/km</span>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 시간 입력 — 시·분·초 드롭다운 (VDOT용) ─── */
+function HMSField({ label, value, onChange, withHours }: {
+  label: string
+  value: string   // "mm:ss" or "h:mm:ss"
+  onChange: (next: string) => void
+  withHours: boolean
+}) {
+  // value 파싱
+  const m1 = value.match(/^(\d+)\s*[:.]\s*(\d{1,2})(?:\s*[:.]\s*(\d{1,2}))?$/)
+  let h = 0, mm = 0, ss = 0
+  if (m1) {
+    if (m1[3]) { h = parseInt(m1[1]); mm = parseInt(m1[2]); ss = parseInt(m1[3]) }
+    else       { mm = parseInt(m1[1]); ss = parseInt(m1[2]) }
+  }
+  const buildStr = (h2: number, m2: number, s2: number) =>
+    withHours ? `${h2}:${pad2(m2)}:${pad2(s2)}` : `${m2}:${pad2(s2)}`
+
+  const hourOptions = [0, 1, 2, 3]
+  const minOptions = Array.from({ length: 60 }, (_, i) => i)
+  const secOptions = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+  const ssRounded = secOptions.reduce((best, v) =>
+    Math.abs(v - ss) < Math.abs(best - ss) ? v : best, secOptions[0]
+  )
+
+  return (
+    <div className={s.field}>
+      <label className={s.fieldLabel}>{label}</label>
+      <div className={s.timeRow}>
+        {withHours && (
+          <>
+            <select className={s.timeSelect} value={h}
+              onChange={e => onChange(buildStr(parseInt(e.target.value), mm, ss))}>
+              {hourOptions.map(v => <option key={v} value={v}>{v}h</option>)}
+            </select>
+            <span className={s.timeColon}>:</span>
+          </>
+        )}
+        <select className={s.timeSelect} value={mm}
+          onChange={e => onChange(buildStr(h, parseInt(e.target.value), ss))}>
+          {minOptions.map(v => <option key={v} value={v}>{pad2(v)}{!withHours ? '분' : ''}</option>)}
+        </select>
+        <span className={s.timeColon}>:</span>
+        <select className={s.timeSelect} value={ssRounded}
+          onChange={e => onChange(buildStr(h, mm, parseInt(e.target.value)))}>
+          {secOptions.map(v => <option key={v} value={v}>{pad2(v)}{!withHours ? '초' : ''}</option>)}
+        </select>
+      </div>
+    </div>
+  )
+}
 
 export default function BuildupClient() {
   const [tab, setTab] = useState<TabKey>('design')
@@ -27,12 +117,14 @@ export default function BuildupClient() {
   const [totalKm, setTotalKm] = useState<string>('10')
   const [startPace, setStartPace] = useState<string>('6:00')
   const [endPace, setEndPace] = useState<string>('5:00')
+  const [warmupKm, setWarmupKm] = useState<string>('1')
+  const [cooldownKm, setCooldownKm] = useState<string>('1')
   const [splitMode, setSplitMode] = useState<SplitMode>('equal-5')
   const [profile, setProfile] = useState<Profile>('linear')
 
   // VDOT (선택) — 5K/10K/하프 기록으로 추정
   const [refDist, setRefDist] = useState<'5k' | '10k' | 'half'>('10k')
-  const [refTime, setRefTime] = useState<string>('')   // hh:mm:ss or mm:ss
+  const [refTime, setRefTime] = useState<string>('50:00')   // hh:mm:ss or mm:ss
 
   // 자가체크
   const [hardYesterday, setHardYesterday] = useState(false)
@@ -40,6 +132,8 @@ export default function BuildupClient() {
 
   // ── 파싱 ───────────────────────────────
   const numKm = Math.max(0, parseFloat(totalKm) || 0)
+  const warmupNumKm = Math.max(0, parseFloat(warmupKm) || 0)
+  const cooldownNumKm = Math.max(0, parseFloat(cooldownKm) || 0)
   const startSec = parsePace(startPace)
   const endSec = parsePace(endPace)
   const valid = numKm > 0 && startSec > 0 && endSec > 0
@@ -84,26 +178,40 @@ export default function BuildupClient() {
   const buildMarkdown = (): string => {
     if (!result) return ''
     const today = new Date().toISOString().slice(0, 10)
+    const sessionKm = warmupNumKm + result.totalKm + cooldownNumKm
+    const warmSec = warmupNumKm * startSec
+    const coolSec = cooldownNumKm * startSec
+    const sessionSec = warmSec + result.totalSec + coolSec
     const lines: string[] = []
-    lines.push(`# 📈 ${result.totalKm.toFixed(1)}km 빌드업 (${today})`)
+    lines.push(`# 📈 ${sessionKm.toFixed(1)}km 빌드업 (${today})`)
     lines.push(`프로파일: ${PROFILE_LABEL[profile]}`)
     lines.push('')
     lines.push('| 구간 | 거리 | 페이스 | 누적 | 강도 |')
     lines.push('|---|---|---|---|---|')
+    if (warmupNumKm > 0) {
+      lines.push(`| 웜업 | ${warmupNumKm.toFixed(1)}km | ${fmtPace(startSec)}/km | ${fmtHMS(warmSec)} | E |`)
+    }
     for (const seg of result.segments) {
       const tag = seg.intensity ? `${INTENSITY_LABEL[seg.intensity].label}` : '—'
-      lines.push(`| ${seg.index} | ${seg.km.toFixed(1)}km | ${fmtPace(seg.paceSec)}/km | ${fmtHMS(seg.cumTime)} | ${tag} |`)
+      lines.push(`| ${seg.index} | ${seg.km.toFixed(1)}km | ${fmtPace(seg.paceSec)}/km | ${fmtHMS(warmSec + seg.cumTime)} | ${tag} |`)
+    }
+    if (cooldownNumKm > 0) {
+      lines.push(`| 쿨다운 | ${cooldownNumKm.toFixed(1)}km | ${fmtPace(startSec)}/km | ${fmtHMS(sessionSec)} | E |`)
     }
     lines.push('')
-    lines.push(`총 ${fmtHMS(result.totalSec)} / 평균 ${fmtPace(result.avgPaceSec)}/km`)
+    lines.push(`총 ${fmtHMS(sessionSec)} / 평균 ${fmtPace(sessionSec / sessionKm)}/km`)
     lines.push(`youtil.kr/tools/sports/buildup`)
     return lines.join('\n')
   }
   const buildWatchFormat = (): string => {
     if (!result) return ''
-    return result.segments
-      .map((seg) => `${seg.km.toFixed(1)}km @ ${fmtPace(seg.paceSec)}/km`)
-      .join('\n')
+    const parts: string[] = []
+    if (warmupNumKm > 0) parts.push(`웜업 ${warmupNumKm.toFixed(1)}km @ ${fmtPace(startSec)}/km`)
+    result.segments.forEach((seg) => {
+      parts.push(`${seg.km.toFixed(1)}km @ ${fmtPace(seg.paceSec)}/km`)
+    })
+    if (cooldownNumKm > 0) parts.push(`쿨다운 ${cooldownNumKm.toFixed(1)}km @ ${fmtPace(startSec)}/km`)
+    return parts.join('\n')
   }
   const copy = async (kind: 'md' | 'watch') => {
     try {
@@ -147,6 +255,8 @@ export default function BuildupClient() {
       name: routineNameDraft.trim(),
       totalKm: numKm,
       startPace, endPace, profile, splitMode,
+      warmupKm: warmupNumKm,
+      cooldownKm: cooldownNumKm,
       createdAt: new Date().toISOString().slice(0, 10),
     }
     setRoutines((p) => [r, ...p])
@@ -158,6 +268,8 @@ export default function BuildupClient() {
     setEndPace(r.endPace)
     setProfile(r.profile)
     setSplitMode(r.splitMode)
+    if (typeof r.warmupKm === 'number') setWarmupKm(String(r.warmupKm))
+    if (typeof r.cooldownKm === 'number') setCooldownKm(String(r.cooldownKm))
     setRoutines((p) => p.map((x) => x.id === r.id
       ? { ...x, lastUsed: new Date().toISOString().slice(0, 10) }
       : x,
@@ -188,39 +300,43 @@ export default function BuildupClient() {
       {/* ══════════ TAB 1: 설계 ══════════ */}
       {tab === 'design' && (
         <>
+          {/* 통합 입력 카드: 거리 + 시작 페이스 + 끝 페이스 (3-col / 모바일 2-col) */}
           <div className={s.card}>
-            <span className={s.cardLabel}>총 거리 (km)</span>
-            <input type="number" inputMode="decimal" min={0.5} step={0.5} className={s.input}
-              value={totalKm} onChange={(e) => setTotalKm(e.target.value)} />
-            <div className={s.quickRow}>
+            <span className={s.cardLabel}>📐 빌드업 본체</span>
+            <div className={s.coreInputGrid}>
+              <div className={`${s.field} ${s.distanceField}`}>
+                <label className={s.fieldLabel}>총 거리 (km)</label>
+                <input type="number" inputMode="decimal" min={0.5} step={0.5} className={s.input}
+                  value={totalKm} onChange={(e) => setTotalKm(e.target.value)} />
+              </div>
+              <PaceField label="시작 페이스" value={startPace} onChange={setStartPace} />
+              <PaceField label="끝 페이스" value={endPace} onChange={setEndPace} />
+            </div>
+            <div className={s.quickRow} style={{ marginTop: 8 }}>
               {DIST_PRESETS_KM.map((d) => (
                 <button key={d} className={s.quickChip} onClick={() => setTotalKm(String(d))}>{d}km</button>
               ))}
             </div>
           </div>
 
+          {/* 웜업·쿨다운 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>시작 페이스 (mm:ss/km)</span>
-            <input type="text" inputMode="text" className={s.input}
-              placeholder="6:00"
-              value={startPace} onChange={(e) => setStartPace(e.target.value)} />
-            <div className={s.quickRow}>
-              {PACE_QUICK.map((p) => (
-                <button key={p} className={s.quickChip} onClick={() => setStartPace(p)}>{p}</button>
-              ))}
+            <span className={s.cardLabel}>🌱 웜업·쿨다운 (선택)</span>
+            <div className={s.warmCoolGrid}>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>웜업 (km)</label>
+                <input type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
+                  value={warmupKm} onChange={(e) => setWarmupKm(e.target.value)} />
+              </div>
+              <div className={s.field}>
+                <label className={s.fieldLabel}>쿨다운 (km)</label>
+                <input type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
+                  value={cooldownKm} onChange={(e) => setCooldownKm(e.target.value)} />
+              </div>
             </div>
-          </div>
-
-          <div className={s.card}>
-            <span className={s.cardLabel}>끝 페이스 (mm:ss/km)</span>
-            <input type="text" inputMode="text" className={s.input}
-              placeholder="5:00"
-              value={endPace} onChange={(e) => setEndPace(e.target.value)} />
-            <div className={s.quickRow}>
-              {PACE_QUICK.map((p) => (
-                <button key={p} className={s.quickChip} onClick={() => setEndPace(p)}>{p}</button>
-              ))}
-            </div>
+            <p className={s.helperText}>
+              💡 시작 페이스(가장 느린 페이스)로 웜업·쿨다운 자동 계산. 0으로 두면 본 빌드업만 표시.
+            </p>
           </div>
 
           <div className={s.card}>
@@ -251,8 +367,8 @@ export default function BuildupClient() {
           {/* VDOT 입력 (선택) */}
           <div className={s.optionCard}>
             <p className={s.optionTitle}>🏅 VDOT 추정 (선택 — 강도 라벨·정확한 안전성 체크)</p>
-            <div className={s.refRow}>
-              <div className={s.pillRow} style={{ flex: 1 }}>
+            <div className={s.vdotRow}>
+              <div className={s.pillRow}>
                 {(['5k', '10k', 'half'] as const).map((d) => (
                   <button key={d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
                     onClick={() => setRefDist(d)}>
@@ -260,9 +376,11 @@ export default function BuildupClient() {
                   </button>
                 ))}
               </div>
-              <input type="text" inputMode="text" className={s.input}
-                placeholder={refDist === 'half' ? '1:45:00' : '50:00'}
-                value={refTime} onChange={(e) => setRefTime(e.target.value)} />
+              <HMSField label="기록"
+                value={refTime}
+                onChange={setRefTime}
+                withHours={refDist === 'half'}
+              />
             </div>
             {vdot && (
               <p className={s.optionHint}>
@@ -307,55 +425,83 @@ export default function BuildupClient() {
             <div className={s.empty}>총 거리·시작·끝 페이스를 입력하세요.</div>
           )}
 
-          {result && (
-            <>
-              {/* 히어로 */}
-              <div className={s.hero}>
-                <p className={s.heroLabel}>{result.totalKm.toFixed(1)}km {PROFILE_LABEL[profile]}</p>
-                <p className={s.heroValue}>약 {fmtHMS(result.totalSec)}</p>
-                <p className={s.heroSub}>평균 페이스 {fmtPace(result.avgPaceSec)}/km · {result.segments.length}구간</p>
-              </div>
+          {result && (() => {
+            const warmSec = warmupNumKm * startSec   // 웜업: 시작 페이스
+            const coolSec = cooldownNumKm * startSec // 쿨다운: 시작 페이스
+            const sessionKm = warmupNumKm + result.totalKm + cooldownNumKm
+            const sessionSec = warmSec + result.totalSec + coolSec
+            const sessionAvg = sessionKm > 0 ? sessionSec / sessionKm : 0
+            return (
+              <>
+                {/* 히어로 */}
+                <div className={s.hero}>
+                  <p className={s.heroLabel}>{sessionKm.toFixed(1)}km {PROFILE_LABEL[profile]}</p>
+                  <p className={s.heroValue}>약 {fmtHMS(sessionSec)}</p>
+                  <p className={s.heroSub}>
+                    평균 {fmtPace(sessionAvg)}/km · {result.segments.length}구간
+                    {(warmupNumKm > 0 || cooldownNumKm > 0) &&
+                      ` · 웜 ${warmupNumKm}km + 본 ${result.totalKm.toFixed(1)}km + 쿨 ${cooldownNumKm}km`}
+                  </p>
+                </div>
 
-              {/* 시각화 (SVG 막대) */}
-              <BuildupChart result={result} />
+                {/* 시각화 (SVG 막대) */}
+                <BuildupChart result={result} />
 
-              {/* 페이스표 */}
-              <div className={s.card}>
-                <span className={s.cardLabel}>구간별 페이스표</span>
-                <table className={s.paceTable}>
-                  <thead>
-                    <tr>
-                      <th>구간</th>
-                      <th>거리</th>
-                      <th>페이스</th>
-                      <th>누적</th>
-                      <th>강도</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.segments.map((seg) => {
-                      const meta = seg.intensity ? INTENSITY_LABEL[seg.intensity] : null
-                      return (
-                        <tr key={seg.index}>
-                          <td className={s.cellNum}>{seg.index}</td>
-                          <td>{seg.km.toFixed(1)}km</td>
-                          <td className={s.cellPace}>{fmtPace(seg.paceSec)}/km</td>
-                          <td className={s.cellCum}>{fmtHMS(seg.cumTime)}</td>
-                          <td>
-                            {meta ? (
-                              <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: meta.color, borderColor: `${meta.color}66` }}>
-                                {seg.intensity} · {meta.label}
-                              </span>
-                            ) : (
-                              <span className={s.intensityChip} style={{ color: 'var(--muted)' }}>—</span>
-                            )}
-                          </td>
+                {/* 페이스표 */}
+                <div className={s.card}>
+                  <span className={s.cardLabel}>구간별 페이스표</span>
+                  <table className={s.paceTable}>
+                    <thead>
+                      <tr>
+                        <th>구간</th>
+                        <th>거리</th>
+                        <th>페이스</th>
+                        <th>누적</th>
+                        <th>강도</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {warmupNumKm > 0 && (
+                        <tr className={s.warmRow}>
+                          <td className={s.cellNum}>웜</td>
+                          <td>{warmupNumKm.toFixed(1)}km</td>
+                          <td className={s.cellPace}>{fmtPace(startSec)}/km</td>
+                          <td className={s.cellCum}>{fmtHMS(warmSec)}</td>
+                          <td><span className={s.intensityChip} style={{ background: '#3EFF9B22', color: '#3EFF9B', borderColor: '#3EFF9B66' }}>웜업 · E</span></td>
                         </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                      )}
+                      {result.segments.map((seg) => {
+                        const meta = seg.intensity ? INTENSITY_LABEL[seg.intensity] : null
+                        return (
+                          <tr key={seg.index}>
+                            <td className={s.cellNum}>{seg.index}</td>
+                            <td>{seg.km.toFixed(1)}km</td>
+                            <td className={s.cellPace}>{fmtPace(seg.paceSec)}/km</td>
+                            <td className={s.cellCum}>{fmtHMS(warmSec + seg.cumTime)}</td>
+                            <td>
+                              {meta ? (
+                                <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: meta.color, borderColor: `${meta.color}66` }}>
+                                  {seg.intensity} · {meta.label}
+                                </span>
+                              ) : (
+                                <span className={s.intensityChip} style={{ color: 'var(--muted)' }}>—</span>
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                      {cooldownNumKm > 0 && (
+                        <tr className={s.warmRow}>
+                          <td className={s.cellNum}>쿨</td>
+                          <td>{cooldownNumKm.toFixed(1)}km</td>
+                          <td className={s.cellPace}>{fmtPace(startSec)}/km</td>
+                          <td className={s.cellCum}>{fmtHMS(sessionSec)}</td>
+                          <td><span className={s.intensityChip} style={{ background: '#3EFF9B22', color: '#3EFF9B', borderColor: '#3EFF9B66' }}>쿨다운 · E</span></td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
               {/* 안전성 체크 */}
               <div className={s.card}>
@@ -394,7 +540,8 @@ export default function BuildupClient() {
                 </div>
               </div>
             </>
-          )}
+          )
+        })()}
         </>
       )}
 
@@ -404,8 +551,8 @@ export default function BuildupClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>🏅 최근 레이스 기록 입력</span>
             <p className={s.cardSub}>VDOT 기반으로 E·M·T·I·R 페이스 자동 산출 + 빌드업 추천</p>
-            <div className={s.refRow}>
-              <div className={s.pillRow} style={{ flex: 1 }}>
+            <div className={s.vdotRow}>
+              <div className={s.pillRow}>
                 {(['5k', '10k', 'half'] as const).map((d) => (
                   <button key={d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
                     onClick={() => setRefDist(d)}>
@@ -413,9 +560,11 @@ export default function BuildupClient() {
                   </button>
                 ))}
               </div>
-              <input type="text" inputMode="text" className={s.input}
-                placeholder={refDist === 'half' ? '1:45:00' : '50:00'}
-                value={refTime} onChange={(e) => setRefTime(e.target.value)} />
+              <HMSField label="기록"
+                value={refTime}
+                onChange={setRefTime}
+                withHours={refDist === 'half'}
+              />
             </div>
           </div>
 

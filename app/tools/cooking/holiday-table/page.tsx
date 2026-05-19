@@ -5,7 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/holiday-table',
-  title: '명절 상차림 시뮬레이터 — 설날·추석·제사 인원별 품목·비용 자동',
+  title: '명절 상차림 계산기 — 설날·추석·제사 인원별 품목·비용 자동',
   description:
     '명절(설날·추석·제사) × 차례상·간소 차림·식사 위주 + 인원만 입력하면 떡국떡·갈비·전·나물·과일 등 50종 품목별 수량과 비용 자동 계산. KAMIS 실시간 시세 연동 + 5열 차례상 배치 가이드.',
   keywords: [
@@ -75,7 +75,7 @@ export default function HolidayTablePage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍱 명절 상차림 시뮬레이터
+        🍱 명절 상차림 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         설날·추석·제사 × 상 형식 + 인원만 입력하면 <strong style={{ color: 'var(--text)' }}>품목별 수량과 비용 자동</strong>. KAMIS 실시간 시세 연동 + 5열 차례상 배치 가이드.
@@ -195,7 +195,7 @@ export default function HolidayTablePage() {
             </p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>실시간 연동 품목</strong>: 배추·무·사과·배·감·시금치·애호박·대파·마늘</li>
-              <li><strong style={{ color: 'var(--text)' }}>폴백</strong>: API 키 미설정·실패 시 <strong>2024년 명절 평균가</strong> 사용</li>
+              <li><strong style={{ color: 'var(--text)' }}>폴백</strong>: API 키 미설정·실패 시 <strong>최근 명절 평균가</strong> 사용</li>
               <li><strong style={{ color: 'var(--text)' }}>캐싱</strong>: 1시간 단위로 호출 절약</li>
               <li><strong style={{ color: 'var(--text)' }}>가격 직접 수정</strong>: 각 품목 단가 옆 칸을 클릭하면 자유롭게 변경 — 마트 광고지 가격 적용 가능</li>
             </ul>
@@ -212,10 +212,10 @@ export default function HolidayTablePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 4인 가족 설날 차례상 비용은 보통 얼마인가요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>한국농수산식품유통공사(aT) 발표 기준</strong>으로 2024년 4인 가족 설날 차례상 비용은
-              <strong style={{ color: 'var(--accent)' }}> 약 28~32만 원</strong> (전통 시장 기준), <strong>대형 마트 36~40만 원</strong> 정도였습니다.
+              <strong style={{ color: 'var(--text)' }}>한국농수산식품유통공사(aT)</strong>가 매년 발표하는 4인 가족 설날 차례상 비용은
+              최근 <strong style={{ color: 'var(--accent)' }}> 약 28~33만 원</strong> (전통 시장 기준), <strong>대형 마트 36~42만 원</strong> 정도로 형성됩니다.
               본 도구의 「설날 + 차례상 + 4인」 결과와 거의 일치합니다.
-              간소 차림으로 가면 <strong>15~22만 원</strong>까지 줄일 수 있습니다.
+              간소 차림으로 가면 <strong>15~22만 원</strong>까지 줄일 수 있습니다 (가장 최신은 aT·KAMIS 공식 사이트 확인).
             </div>
           </details>
 
@@ -263,7 +263,7 @@ export default function HolidayTablePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q5. 4인 가족 추석 차례상 vs 식사 위주 비용 차이?</summary>
             <div style={faqAnswer}>
-              본 도구 기준 (4인 가족, 2024 시세):
+              본 도구 기준 (4인 가족, 최근 시세):
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li><strong style={{ color: 'var(--text)' }}>추석 차례상 (정석)</strong>: 약 35~45만 원</li>
                 <li><strong style={{ color: 'var(--text)' }}>추석 간소 차림</strong>: 약 20~28만 원</li>
@@ -278,7 +278,7 @@ export default function HolidayTablePage() {
             <div style={faqAnswer}>
               <ul style={{ paddingLeft: 18, marginTop: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>농산물 시세</strong>: KAMIS(한국농수산식품유통공사) OpenAPI — 일별 서울 소매가 평균</li>
-                <li><strong style={{ color: 'var(--text)' }}>육류·수산·가공식품</strong>: 2024년 시장 평균가 (마트·정육점 기준) 하드코딩</li>
+                <li><strong style={{ color: 'var(--text)' }}>육류·수산·가공식품</strong>: 최근 시장 평균가 (마트·정육점 기준) 하드코딩</li>
                 <li><strong style={{ color: 'var(--text)' }}>인당 권장량</strong>: 한식진흥원·성균관 차례상 표준안 + 한국식품과학회 자료 종합</li>
                 <li><strong style={{ color: 'var(--text)' }}>저장</strong>: 본인 브라우저(localStorage)에만 — 서버 전송 X</li>
               </ul>

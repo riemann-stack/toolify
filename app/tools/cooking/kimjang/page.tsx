@@ -143,7 +143,7 @@ export default function KimjangPage() {
             </p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>실시간 데이터</strong>: 서울 소매가 일별 평균 (배추·무·고춧가루·마늘·생강·쪽파)</li>
-              <li><strong style={{ color: 'var(--text)' }}>폴백</strong>: API 키 미설정·실패 시 <strong>2024년 11월 KAMIS 평균</strong> 사용</li>
+              <li><strong style={{ color: 'var(--text)' }}>폴백</strong>: API 키 미설정·실패 시 <strong>최근 KAMIS 평균</strong> 사용</li>
               <li><strong style={{ color: 'var(--text)' }}>캐싱</strong>: 1시간 단위 캐시로 호출 최소화</li>
               <li><strong style={{ color: 'var(--text)' }}>가격 직접 수정</strong>: 각 재료 단가를 사용자가 자유롭게 변경 (마트 광고지 가격으로 교체 가능)</li>
             </ul>

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './Nav.module.css'
 import { categories, allTools, type Tool } from '@/lib/tools'
+import { searchTools } from '@/lib/search'
 import {
   loadUserNav, saveUserNav, recordVisit, toggleFavorite, isToolPath,
   type UserNav,
@@ -194,14 +195,9 @@ export default function Nav() {
     return () => window.removeEventListener('keydown', onKey)
   }, [searchOpen, mobileOpen])
 
-  const searchResults = (() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return []
-    return allTools.filter((t) =>
-      t.name.toLowerCase().includes(q) ||
-      t.desc.toLowerCase().includes(q) ||
-      t.href.toLowerCase().includes(q)
-    ).slice(0, 8)
+  const searchResults: Tool[] = (() => {
+    if (!query.trim()) return []
+    return searchTools(query, 8).map(h => h.tool)
   })()
 
   useEffect(() => {

@@ -160,7 +160,7 @@ export default function HolidayTableClient() {
           { href: '/tools/cooking/recipe',   label: '레시피 비율 계산기' },
         ]}
       >
-        2024년 시장 평균가 + KAMIS 실시간 시세. 지역·구매처·작황별 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
+        최근 시장 평균가 + KAMIS 실시간 시세. 지역·구매처·작황별 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
       </Disclaimer>
 
       {/* ── 명절 선택 ── */}
@@ -252,7 +252,7 @@ export default function HolidayTableClient() {
         </div>
         <div className={s.heroFootRow}>
           <span className={s.priceSource}>
-            {hasLive ? '✓ KAMIS 실시간 시세 적용' : '※ 2024년 시장 평균가 (KAMIS API 키 미설정 폴백)'}
+            {hasLive ? '✓ KAMIS 실시간 시세 적용' : '※ 최근 시장 평균가 (KAMIS API 키 미설정 폴백)'}
           </span>
           <button
             type="button"

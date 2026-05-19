@@ -130,79 +130,7 @@
 }
 .customInput:focus { border-color: var(--accent); }
 
-/* ── 칩 입력 ── */
-.chipBox {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 10px;
-  min-height: 44px;
-  cursor: text;
-  transition: border-color 0.15s;
-}
-.chipBox:focus-within { border-color: var(--accent); }
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 4px 4px 4px 10px;
-  font-size: 12.5px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  line-height: 1.2;
-}
-.chipName {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100px;
-}
-.chipDel {
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  padding: 0 4px;
-  margin-left: 2px;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-@media (hover: hover) {
-  .chipDel:hover { background: rgba(255,107,107,0.18); color: #FF6B6B; }
-}
-.chipInput {
-  flex: 1;
-  min-width: 100px;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 4px;
-  font-size: 14px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.chipInput::placeholder { color: var(--muted); font-size: 13px; }
-.chipMeta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11.5px;
-  color: var(--muted);
-  margin-top: 6px;
-}
-.chipMeta strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+/* (chip CSS removed — feature replaced by per-player modal editing) */
 
 /* 미니 버튼 */
 .miniBtn {
@@ -231,59 +159,95 @@
   padding: 2px 6px;
 }
 
-/* ── 옵션 ── */
-.optRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+/* ── 옵션 (컴팩트 한 줄) ── */
+.optCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
 }
-@media (max-width: 540px) { .optRow { grid-template-columns: 1fr; } }
-.optRow + .optRow { margin-top: 12px; }
-.optField { display: flex; flex-direction: column; }
+.optGrid {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 380px) {
+  .optGrid { grid-template-columns: 1fr auto; gap: 6px; }
+  .labelToggleBtn { grid-column: 1 / -1; justify-content: center; }
+}
+.optTeamRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
 .textInput {
+  flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: 7px 10px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
+  min-width: 0;
+  height: 36px;
+  box-sizing: border-box;
 }
 .textInput:focus { border-color: var(--accent); }
 .colorInput {
-  width: 100%;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg3);
   cursor: pointer;
   padding: 2px;
+  flex-shrink: 0;
 }
-.dirRow { display: flex; gap: 6px; }
+.dirRow {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 36px;
+}
 .dirBtn {
-  flex: 1;
+  width: 32px;
+  background: var(--bg3);
+  border: none;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dirActive { background: rgba(200,255,62,0.15); color: var(--accent); }
+.labelToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 36px;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 8px;
-  font-size: 13px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  cursor: pointer;
+  white-space: nowrap;
 }
-.dirActive { background: rgba(200,255,62,0.10); border-color: var(--accent); color: var(--accent); font-weight: 700; }
-.toggleLabel {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  cursor: pointer;
-  padding: 9px 0;
+.labelToggleBtn input { accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer; }
+.labelToggleBtn:has(input:checked) {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  color: var(--accent);
 }
-.toggleLabel input { accent-color: var(--accent); width: 16px; height: 16px; }
 
 /* ── 피치 ── */
 .pitchCard {
@@ -350,7 +314,7 @@
 .copyBtn:disabled { opacity: 0.5; cursor: wait; }
 .copied { background: rgba(200,255,62,0.10); border-color: var(--accent); color: var(--accent); font-weight: 700; }
 
-/* ── 모달 (선수 편집) ── */
+/* ── 모달 (선수 편집) — 모바일 컴팩트 ── */
 .modalBackdrop {
   position: fixed;
   inset: 0;
@@ -359,18 +323,21 @@
   align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 20px;
+  padding: 16px;
 }
 .modal {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 18px 20px;
+  padding: 14px 16px;
   width: 100%;
-  max-width: 360px;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+@media (max-width: 380px) {
+  .modal { padding: 12px 14px; max-width: 280px; }
 }
 .modalHeader {
   display: flex;

@@ -4,7 +4,7 @@
 /* 탭 */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
   padding: 4px;
   background: var(--bg2);
@@ -38,6 +38,10 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 16px;
+  min-width: 0;
+}
+@media (max-width: 540px) {
+  .panel { padding: 14px; gap: 20px; border-radius: 12px; }
 }
 
 .label {
@@ -71,10 +75,10 @@
 /* ── 시나리오 카드 — 컴팩트 1줄형 (모바일도 2열) ── */
 .scenarioGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
-@media (max-width: 720px) { .scenarioGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
+@media (max-width: 720px) { .scenarioGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } }
 .scenarioCard {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -86,6 +90,10 @@
   flex-direction: column;
   gap: 2px;
   transition: all .15s;
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .scenarioCard { padding: 8px 10px; }
 }@media (hover: hover) {
   .scenarioCard:hover { border-color: var(--accent); }
 }
@@ -110,15 +118,22 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 .scenarioDesc {
   font-size: 11px;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.45;
   margin: 0;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: keep-all;
+}
+@media (max-width: 480px) {
+  .scenarioLabel { font-size: 12px; }
+  .scenarioDesc { font-size: 10.5px; -webkit-line-clamp: 2; }
 }
 
 .scenarioTip {
@@ -154,7 +169,7 @@
 
 .customGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-top: 12px;
   padding: 14px;
@@ -164,14 +179,15 @@
 @media (max-width: 480px) {
   .customGrid { padding: 10px; gap: 6px; }
 }
+.customGrid > * { min-width: 0; }
 
 /* 추천 풀스택 요약 — 임팩트 있는 카드 6종 */
 .summaryStackGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
-@media (max-width: 720px) { .summaryStackGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
+@media (max-width: 720px) { .summaryStackGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } }
 .summaryStackCard {
   background: linear-gradient(135deg, rgba(200,255,62,0.08), rgba(62,200,255,0.04));
   border: 1px solid rgba(200,255,62,0.30);
@@ -181,6 +197,7 @@
   flex-direction: column;
   gap: 6px;
   text-align: left;
+  min-width: 0;
 }
 .summaryStackCategory {
   font-size: 11px;
@@ -195,19 +212,20 @@
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -0.3px;
-  line-height: 1.2;
+  line-height: 1.3;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
-.summaryStackEmoji { font-size: 18px; flex-shrink: 0; }
+.summaryStackEmoji { font-size: 18px; flex-shrink: 0; align-self: center; }
 @media (max-width: 480px) {
   .summaryStackCard { padding: 10px 12px; }
-  .summaryStackName { font-size: 14px; }
+  .summaryStackName { font-size: 13.5px; }
+  .summaryStackCategory { font-size: 10px; }
 }
 .selectField {
   display: flex;
@@ -278,8 +296,11 @@
 /* ── 추천 카드 ── */
 .recommendGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 12px;
+}
+@media (max-width: 540px) {
+  .recommendGrid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
 }
 .recommendCard {
   background: var(--bg3);
@@ -289,6 +310,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
+}
+@media (max-width: 540px) {
+  .recommendCard { padding: 12px; gap: 10px; }
 }
 .recommendHead {
   display: flex;
@@ -310,6 +335,7 @@
   background: rgba(200, 255, 62, 0.04);
   border: 1px solid rgba(200, 255, 62, 0.2);
   border-radius: 10px;
+  min-width: 0;
 }
 .primaryEmoji { font-size: 32px; line-height: 1; flex-shrink: 0; }
 .primaryBody { flex: 1; min-width: 0; }
@@ -319,6 +345,8 @@
   color: var(--accent);
   margin: 0 0 4px;
   font-family: 'Noto Sans KR', sans-serif;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 .primaryDesc {
   font-size: 12px;
@@ -355,6 +383,8 @@
   font-size: 11px;
   color: #C8FF9E;
   overflow-x: auto;
+  min-width: 0;
+  max-width: 100%;
 }
 .cmdBox code { flex: 1; white-space: nowrap; }
 .copyBtn {
@@ -373,7 +403,7 @@
 
 .prosCons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
   font-size: 11px;
   color: var(--muted);
@@ -435,11 +465,11 @@
 /* ── 요약 ── */
 .summaryGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 @media (max-width: 600px) {
-  .summaryGrid { grid-template-columns: 1fr; }
+  .summaryGrid { grid-template-columns: minmax(0, 1fr); }
 }
 .summaryCard {
   background: linear-gradient(135deg, rgba(62, 200, 255, 0.06) 0%, rgba(200, 255, 62, 0.03) 100%);
@@ -621,9 +651,13 @@
 /* 한국 가이드 */
 .koreaGuideGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 10px;
 }
+@media (max-width: 540px) {
+  .koreaGuideGrid { grid-template-columns: minmax(0, 1fr); }
+}
+.koreaGuideGrid > * { min-width: 0; }
 .koreaGuideCard {
   background: var(--bg3);
   border: 1px solid var(--border);

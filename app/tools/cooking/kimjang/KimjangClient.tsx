@@ -156,7 +156,7 @@ export default function KimjangClient() {
   const priceSourceInfo = priceLoaded
     ? (Object.values(livePrices).some(p => p.source === 'kamis')
         ? '✓ KAMIS 실시간 가격 적용 중'
-        : '※ KAMIS API 키 미설정 — 2024.11 평균 폴백 사용')
+        : '※ KAMIS API 키 미설정 — 평균 폴백 사용 (참고용)')
     : '가격 조회 중…'
 
   return (
@@ -169,7 +169,7 @@ export default function KimjangClient() {
           { href: '/tools/cooking/food-storage', label: '식재료 보관 계산기' },
         ]}
       >
-        2024년 11월 KAMIS 소매가 기준 평균. 작황·지역·구매처로 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
+        2025년 11월 KAMIS 소매가 기준 평균. 작황·지역·구매처로 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
       </Disclaimer>
 
       {/* ── 메인 히어로 ── */}

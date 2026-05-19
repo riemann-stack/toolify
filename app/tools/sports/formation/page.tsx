@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/formation',
   title: '축구 포메이션 생성기 — 4-3-3·4-4-2·5인제 풋살까지 라인업 시각화',
   description:
-    '5·7·9·11인제 22+ 포메이션 + 커스텀(4-2-3-1 등) + 명단 칩 입력으로 그라운드 위에 시각화. PNG 다운로드와 마크다운 공유.',
+    '5·7·9·11인제 22+ 포메이션 + 커스텀(4-2-3-1 등) 라인업을 그라운드 위에 시각화. 선수 카드 클릭으로 이름·번호 편집 + PNG 다운로드와 마크다운 공유.',
   keywords: [
     '축구 포메이션', '포메이션 만들기', '라인업 생성기', '풋살 포메이션',
     '4-3-3', '4-4-2', '4-2-3-1', '3-5-2', '3-4-3',
@@ -78,7 +78,7 @@ export default function FormationPage() {
         ⚽ 축구 포메이션 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        5·7·9·11인제 22+ 포메이션 + 명단 칩 입력으로 <strong style={{ color: 'var(--text)' }}>그라운드 위에 시각화</strong>. PNG 다운로드.
+        5·7·9·11인제 22+ 포메이션을 <strong style={{ color: 'var(--text)' }}>그라운드 위에 시각화</strong>. 선수 카드 클릭으로 이름·번호 편집, PNG 다운로드로 단톡·블로그 공유.
       </p>
 
       <FormationClient />
@@ -88,17 +88,36 @@ export default function FormationPage() {
 
         {/* 1. 사용법 */}
         <section>
-          <h2 style={sectionTitle}>🛠️ 사용법 4단계</h2>
+          <h2 style={sectionTitle}>🛠️ 사용법 3단계</h2>
           <div style={card}>
             <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-              <li><strong>인원 수 선택</strong> — 11(정규)·9(청소년)·7(7인제)·5(풋살)</li>
-              <li><strong>포메이션 선택</strong> — 프리셋 클릭 또는 「4-2-3-1」 식으로 커스텀 입력</li>
-              <li><strong>명단 일괄 입력</strong> — 이름 칩으로 한 번에. 「등번호 자동」으로 1·2·3… 자동 채움</li>
-              <li><strong>선수 카드 클릭</strong>으로 개별 편집, <strong>PNG 다운로드</strong>로 단톡·블로그 공유</li>
+              <li><strong>인원 + 포메이션 선택</strong> — 11/9/7/5인 + 프리셋 또는 커스텀(4-2-3-1 등)</li>
+              <li><strong>선수 카드 클릭</strong>으로 등번호·이름 개별 편집 — 비워두면 자동 1~11 번호</li>
+              <li><strong>PNG 다운로드</strong>로 단톡·블로그 공유, 또는 마크다운으로 텍스트 복사</li>
             </ol>
             <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               💡 모든 입력은 자동 저장 — 새로고침해도 명단·포메이션·등번호·팀 색상이 유지됩니다.
             </p>
+          </div>
+        </section>
+
+        {/* 1.5 활용 시나리오 */}
+        <section>
+          <h2 style={sectionTitle}>📌 활용 시나리오</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+            {[
+              { icon: '🏆', name: '회사·동호회 축구',  desc: '주말 모임 라인업을 단톡방에 PNG로 공유. 포지션 명확히 전달' },
+              { icon: '🎓', name: '학교·청소년 클럽',  desc: 'U-12 9인제·U-15 11인제 코치진의 보드 자료' },
+              { icon: '🏟️', name: '풋살장 예약 팀',    desc: '5인제 다이아·박스 포메이션 사전 정리 + 멤버 확정' },
+              { icon: '📺', name: '경기 분석·블로그',  desc: '관전평·전술 분석 시 시각 자료. 두 팀 라인업 동시 게재' },
+              { icon: '🎮', name: 'FIFA·이풋볼 전술',  desc: '게임 전술 스쿼드 시뮬레이션' },
+              { icon: '🏫', name: '체육 수업·합반',    desc: '팀 나누기 + 포지션 일괄 안내' },
+            ].map((b, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.name}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -136,7 +155,9 @@ export default function FormationPage() {
               { name: '4-2-3-1', color: '#FFD93E', tag: '현대 표준', desc: '더블 볼란치 + 톱2.5. 22 카타르 월드컵에서 가장 흔한 포메이션' },
               { name: '3-5-2',   color: '#FF8C3E', tag: '스리백', desc: '윙백 공격 가담 + 투톱. 안토니오 콘테 인터' },
               { name: '3-4-3',   color: '#B885DA', tag: '공격적 3백', desc: '윙백 + 스리톱. 콘테 첼시·과르디올라 시티 변형' },
-              { name: '4-2-3-1', color: '#FF6B6B', tag: '5백 카운터', desc: '강팀 상대 잠그기 + 빠른 전환' },
+              { name: '5-4-1',   color: '#FF6B6B', tag: '5백 카운터', desc: '강팀 상대 잠그기 + 빠른 역습. 약체팀이 즐겨 쓰는 잠금 전술' },
+              { name: '4-1-4-1', color: '#3EFFD0', tag: '수비 안정', desc: '단일 수비형 미드 + 박스 4. 점유와 안정 동시. 만치니 시티 시기' },
+              { name: '3-6-1',   color: '#FF3E8C', tag: '점유 압도', desc: '미드 6인으로 중원 압도. 빌드업·점유 위주' },
             ].map((f, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
@@ -177,27 +198,101 @@ export default function FormationPage() {
           </div>
         </section>
 
-        {/* 5. 활용 시나리오 */}
+        {/* 5. 한국 축구 포메이션 트렌드 */}
         <section>
-          <h2 style={sectionTitle}>📌 활용 시나리오</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <h2 style={sectionTitle}>🇰🇷 한국 축구의 포메이션 흐름</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            대한민국 대표팀과 K리그에서 자주 쓰이는 포메이션은 시대별로 변화해 왔습니다.
+            현재 한국 축구의 주류는 <strong style={{ color: 'var(--text)' }}>4-2-3-1·4-1-4-1</strong>이며,
+            클린스만 사임 후 황선홍·홍명보 체제에서 4-2-3-1을 표준으로 정착시켰습니다.
+          </p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={headCell}>시대</th>
+                  <th style={headCell}>주류 포메이션</th>
+                  <th style={headCell}>특징</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={cell}>2002 한일 월드컵</td><td style={cell}><strong>3-4-3</strong></td><td style={cell}>거스 히딩크 — 공격적 스리백, 박지성 황의조 시대 시작</td></tr>
+                <tr><td style={cell}>2010 남아공 월드컵</td><td style={cell}><strong>4-4-2 다이아</strong></td><td style={cell}>허정무 — 박지성 톱2.5, 박주영 원톱</td></tr>
+                <tr><td style={cell}>2018 러시아 월드컵</td><td style={cell}><strong>4-4-2 / 4-2-3-1</strong></td><td style={cell}>신태용 — 손흥민 윙·박주호 풀백</td></tr>
+                <tr><td style={cell}>2022 카타르 월드컵</td><td style={cell}><strong>4-2-3-1 / 4-4-2</strong></td><td style={cell}>벤투 — 빌드업 강화, 황희찬·이강인·조규성</td></tr>
+                <tr><td style={cell}>2024~현재</td><td style={cell}><strong>4-2-3-1 / 4-1-4-1</strong></td><td style={cell}>대표팀 표준. 김민재·이강인·손흥민·황희찬</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 6. 포메이션 선택 가이드 */}
+        <section>
+          <h2 style={sectionTitle}>🎯 우리 팀 포메이션 선택 가이드</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            동호회·청소년 팀이 포메이션을 고를 때 고려할 핵심 3가지:
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { icon: '🏆', name: '회사·동호회 축구', desc: '주말 모임 라인업 → 단톡 공유 (PNG 다운로드)' },
-              { icon: '🎓', name: '학교·청소년 클럽', desc: '9인제·7인제 코치진 보드. KFA 표준 포메이션' },
-              { icon: '🏟️', name: '풋살장 예약 팀', desc: '5인제 다이아·박스 포지션 사전 정리' },
-              { icon: '📺', name: '경기 분석·블로그', desc: '관전평 작성 시 시각 자료로 활용' },
-              { icon: '🎮', name: 'FIFA·이풋볼 전술', desc: '게임 전술 짤 때 시각화로 정리' },
-              { icon: '🏫', name: '체육 수업·합반', desc: '팀 나누기 + 포지션 일괄 안내' },
+              { title: '1. 선수 풀 강점 분석', desc: '빠른 윙어가 많다 → 4-3-3 / 강한 중앙 미드 → 4-2-3-1 / 단단한 수비 + 카운터 → 5-3-2' },
+              { title: '2. 경기장 크기', desc: '7인제·풋살은 공간 좁아 1-2-1 다이아·2-3-1이 유리. 11인제 정규 규격은 4-3-3·4-2-3-1' },
+              { title: '3. 상대 강도', desc: '약체 상대 → 공격적(4-3-3·3-4-3) / 강팀 상대 → 수비적(5-4-1·4-5-1)' },
+              { title: '4. 체력 수준', desc: '풀백 공격 가담은 체력 소모 큼. 동호회는 4-4-2·4-2-3-1 권장 / 청소년은 3-3-2(KFA U-12 표준)' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
-                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.name}</p>
+                <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* 6. FAQ */}
+        {/* 7. 등번호 규칙 */}
+        <section>
+          <h2 style={sectionTitle}>🔢 축구 등번호의 전통적 의미</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            등번호는 단순한 식별 번호를 넘어 <strong style={{ color: 'var(--text)' }}>포지션의 상징</strong>으로 자리잡았습니다.
+            본 도구는 등번호를 자유 입력으로 두지만, 전통 의미를 참고하면 팀 분위기가 살아납니다.
+          </p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={headCell}>번호</th>
+                  <th style={headCell}>전통 포지션</th>
+                  <th style={headCell}>대표 선수</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={cell}><strong>1</strong></td><td style={cell}>골키퍼 (필수)</td><td style={cell}>김승규·노이어·부폰</td></tr>
+                <tr><td style={cell}><strong>2~5</strong></td><td style={cell}>수비수 (2 RB, 3 LB, 4·5 CB)</td><td style={cell}>4번 = 캡틴·리베로 상징</td></tr>
+                <tr><td style={cell}><strong>6</strong></td><td style={cell}>수비형 미드 / 리베로</td><td style={cell}>로드리·페르난도 토레스</td></tr>
+                <tr><td style={cell}><strong>7</strong></td><td style={cell}>우측 윙 / 에이스</td><td style={cell}>호날두·베컴·박지성</td></tr>
+                <tr><td style={cell}><strong>8</strong></td><td style={cell}>중앙 미드 (박투박)</td><td style={cell}>제라드·이니에스타·손흥민(토트넘)</td></tr>
+                <tr><td style={cell}><strong>9</strong></td><td style={cell}>중앙 공격수 (스트라이커)</td><td style={cell}>홀란드·음바페·황의조</td></tr>
+                <tr><td style={cell}><strong>10</strong></td><td style={cell}>플레이메이커·팀 에이스</td><td style={cell}>메시·펠레·마라도나·이강인</td></tr>
+                <tr><td style={cell}><strong>11</strong></td><td style={cell}>좌측 윙·세컨드 스트라이커</td><td style={cell}>살라·비니시우스·손흥민(대표팀)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 8. 라인업 작성 팁 */}
+        <section>
+          <h2 style={sectionTitle}>💡 라인업 작성 실전 팁</h2>
+          <div style={card}>
+            <ul style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.95, paddingLeft: 20, margin: 0 }}>
+              <li><strong style={{ color: 'var(--text)' }}>주전 11명 + 후보 5~7명</strong>: 동호회 출전 인원이 들쭉날쭉할 때 옵션 확보 필수</li>
+              <li><strong style={{ color: 'var(--text)' }}>측면 좌우 균형</strong>: 왼발잡이/오른발잡이를 좌우에 맞게 배치. 잘못 배치하면 크로스·드리블 효율 ↓</li>
+              <li><strong style={{ color: 'var(--text)' }}>골키퍼는 가장 일찍 확정</strong>: GK 자원이 적어 교체 어려움. 첫 멤버 모집부터 우선</li>
+              <li><strong style={{ color: 'var(--text)' }}>친선전·연습은 다양한 포메이션</strong>: 같은 포메이션만 고집 X. 4-3-3 ↔ 3-5-2 등 시험해보면 강·약점 파악</li>
+              <li><strong style={{ color: 'var(--text)' }}>중요 경기는 익숙한 포메이션</strong>: 토너먼트·결승 등은 평소 가장 손에 익은 시스템으로</li>
+              <li><strong style={{ color: 'var(--text)' }}>전반·후반 분리 라인업</strong>: 체력 안배 위해 전반·후반 다른 포메이션 운영 가능 (PNG 두 장 다운로드)</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 9. FAQ */}
         <section>
           <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
 
@@ -229,11 +324,15 @@ export default function FormationPage() {
           </details>
 
           <details style={faqDetails}>
-            <summary style={faqSummary}>Q3. 명단 11명을 빨리 입력하는 법은?</summary>
+            <summary style={faqSummary}>Q3. 등번호·이름은 어떻게 입력하나요?</summary>
             <div style={faqAnswer}>
-              칩 입력창에 <strong style={{ color: 'var(--text)' }}>「김민재, 손흥민, 이강인, ...」</strong>처럼 쉼표나 줄바꿈으로 구분해서 한 번에 붙여넣으면 자동 분리됩니다.
-              그 다음 <strong>「등번호 자동」</strong>을 누르면 1번(GK)부터 차례로 채워집니다.
-              포지션 무작위 배치를 원하면 <strong>「무작위 배치」</strong> 버튼.
+              그라운드 위 <strong style={{ color: 'var(--text)' }}>선수 원 카드를 클릭</strong>하면 등번호·이름 편집 모달이 뜹니다.
+              하단의 「📋 선수 명단」 행을 클릭해도 같은 편집창이 열립니다.
+              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
+                <li>등번호 미입력 시 자동으로 <strong>1(GK)·2·3·…·11</strong> 번호로 표시</li>
+                <li>이름은 6자 초과 시 자동 ellipsis (… 표시)</li>
+                <li>모든 변경은 자동 저장 — 새로고침해도 유지</li>
+              </ul>
             </div>
           </details>
 

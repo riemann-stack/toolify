@@ -52,15 +52,23 @@ function HelpTip({ children }: { children: string }) {
         ?
       </button>
       {open && (
-        <span className={s.helpTipPopover} onClick={(e) => e.stopPropagation()}>
-          <button
-            type="button"
-            className={s.helpTipClose}
-            onClick={() => setOpen(false)}
-            aria-label="닫기"
-          >×</button>
-          {children}
-        </span>
+        <>
+          {/* 모바일: 백드롭 클릭 시 닫힘 */}
+          <span
+            className={s.helpTipBackdrop}
+            onClick={(e) => { e.stopPropagation(); setOpen(false) }}
+            aria-hidden="true"
+          />
+          <span className={s.helpTipPopover} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className={s.helpTipClose}
+              onClick={() => setOpen(false)}
+              aria-label="닫기"
+            >×</button>
+            {children}
+          </span>
+        </>
       )}
     </span>
   )
@@ -485,34 +493,48 @@ export default function CarCostClient() {
             </div>
           </div>
 
-          {/* ── 변동비 (★ 라벨·도움말 명확화) ── */}
+          {/* ── 변동비 (라벨·도움말·플레이스홀더 명확화) ── */}
           <div className={s.card}>
             <span className={s.cardLabel}>④ 변동비 · 소모품</span>
+            <p className={s.cardIntro}>
+              매달 평균적으로 들어가는 <strong>세차 + 정비·소모품</strong> 비용을 입력하세요.
+              잘 모르겠으면 아래 예시 평균값으로 채워두세요.
+            </p>
 
             {mode === 'simple' ? (
               <div className={s.twoCol}>
                 <div>
-                  <div className={`${s.subLabel} ${s.firstSub}`}>세차비 (월)</div>
+                  <div className={`${s.subLabel} ${s.firstSub}`}>
+                    🚿 세차비 (월 평균)
+                    <HelpTip>셀프 세차 1만 / 자동 세차 2~3만 / 손세차 5~8만. 평균 1~3만 원/월.</HelpTip>
+                  </div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" value={washSimple || ''} onChange={e => setWashSimple(parseAmount(e.target.value))} />
+                    <input className={s.numInput} type="number" placeholder="예: 20000"
+                      value={washSimple || ''} onChange={e => setWashSimple(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/월</span>
                   </div>
+                  <div className={s.exampleHint}>일반 평균 1~3만 원</div>
                 </div>
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>
-                    엔진오일·타이어·정비비 평균 (월)
-                    <HelpTip>한국 평균: 엔진오일(5,000km/6개월) 월 1.5만 + 타이어(4만km/3년) 월 1.5~2만 + 정비·점검 월 1~2만 = 합계 월 약 4~6만</HelpTip>
+                    🔧 정비·소모품 (월 평균)
+                    <HelpTip>엔진오일(5천km/6개월) 약 월 1.5만 + 타이어(4만km/3년) 월 1.5~2만 + 와이퍼·에어컨 필터·정비점검 월 1~2만 = 합계 약 4~6만 원/월. 고연식·고주행 차량은 7~10만 원.</HelpTip>
                   </div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" value={variableCost || ''} onChange={e => setVariableCost(parseAmount(e.target.value))} />
+                    <input className={s.numInput} type="number" placeholder="예: 50000"
+                      value={variableCost || ''} onChange={e => setVariableCost(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/월</span>
                   </div>
+                  <div className={s.exampleHint}>엔진오일·타이어·정비비 합산 평균 4~6만 원</div>
                 </div>
               </div>
             ) : (
               <>
+                <p className={s.helperText} style={{ marginTop: 0, marginBottom: 10 }}>
+                  각 소모품의 <strong>1회 교체 비용</strong>과 <strong>교체 주기(km 또는 개월)</strong>를 입력하세요. 월 비용은 자동 계산됩니다.
+                </p>
                 <div className={s.consumableHeader}>
-                  <div>항목</div><div>비용(원)</div><div>주기(km)</div><div>주기(월)</div><div>월비용</div>
+                  <div>항목</div><div>1회 비용(원)</div><div>주기(km)</div><div>주기(개월)</div><div>월 비용</div>
                 </div>
                 <div className={s.consumablesList} style={{ marginTop: 6 }}>
                   {consumables.map((c, i) => {
@@ -523,16 +545,22 @@ export default function CarCostClient() {
                     return (
                       <div key={c.key} className={`${s.consumableRow} ${!c.enabled ? s.disabled : ''}`}>
                         <div className={s.consumableName}>{c.icon} {c.name}</div>
-                        <input className={s.smallNum} type="number" value={c.cost || ''} onChange={e => upd({ cost: parseAmount(e.target.value) })} disabled={!c.enabled} />
-                        <input className={s.smallNum} type="number" value={c.cycleKm ?? ''} placeholder="-" onChange={e => upd({ cycleKm: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled} />
-                        <input className={s.smallNum} type="number" value={c.cycleMon ?? ''} placeholder="-" onChange={e => upd({ cycleMon: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled} />
+                        <input className={s.smallNum} type="number" placeholder="비용"
+                          value={c.cost || ''} onChange={e => upd({ cost: parseAmount(e.target.value) })} disabled={!c.enabled}
+                          data-label="1회 비용(원)" />
+                        <input className={s.smallNum} type="number" placeholder="km 주기"
+                          value={c.cycleKm ?? ''} onChange={e => upd({ cycleKm: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled}
+                          data-label="주기(km)" />
+                        <input className={s.smallNum} type="number" placeholder="개월"
+                          value={c.cycleMon ?? ''} onChange={e => upd({ cycleMon: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled}
+                          data-label="주기(개월)" />
                         <div className={s.consumableMonthly}>{c.enabled ? formatKRW(monthly) : '제외'}</div>
                         <button className={`${s.miniToggle} ${!c.enabled ? s.miniToggleOff : ''}`} onClick={() => upd({ enabled: !c.enabled })}>{c.enabled ? '제외' : '포함'}</button>
                       </div>
                     )
                   })}
                 </div>
-                <div className={s.helperText}>💡 km/월 둘 다 입력 시 먼저 도달하는 기준이 적용됩니다.</div>
+                <div className={s.helperText}>💡 km·개월 둘 다 입력 시 먼저 도달하는 기준이 적용됩니다.</div>
               </>
             )}
 

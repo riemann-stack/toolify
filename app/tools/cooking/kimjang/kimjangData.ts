@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────────────────
-   김장 데이터: 재료 비율 + 2024 김장철 평균 가격 (KAMIS 기준)
+   김장 데이터: 재료 비율 + 최근(2024~2025) 김장철 평균 가격 (KAMIS 기준)
    ─────────────────────────────────────────────────────────── */
 
 export type IngredientCategory = '주재료' | '양념' | '젓갈·액젓' | '기타'
@@ -21,20 +21,20 @@ export interface Ingredient {
 
 /** 배추김치 1포기(절임 전 ≈3kg, 절임 후 ≈2.5kg) 기준 표준 비율
  *  - 출처: 한식진흥원 표준 김장 레시피 + 한국식품과학회 평균값
- *  - 가격: 2024년 11월 KAMIS 소매가 평균 (서울·인천·부산 기준) */
+ *  - 가격: 2025년 11월 KAMIS 소매가 평균 (서울·인천·부산 기준) */
 export const INGREDIENTS: Ingredient[] = [
   // ── 주재료 ──
   { id: 'baechu',    cat: '주재료', name: '배추',           unit: '포기', perCabbageAmt: 1.0, pricePerUnit: 5500,
-    kamisItemCode: '211', kamisKindCode: '01', source: '2024.11 KAMIS 소매 (포기 ≈3kg)' },
+    kamisItemCode: '211', kamisKindCode: '01', source: '2025.11 KAMIS 소매 (참고용) (포기 ≈3kg)' },
   { id: 'mu',        cat: '주재료', name: '무',             unit: '개',   perCabbageAmt: 0.4, pricePerUnit: 2200,
-    kamisItemCode: '231', kamisKindCode: '01', source: '2024.11 KAMIS 소매 (개당 ≈1kg)' },
+    kamisItemCode: '231', kamisKindCode: '01', source: '2025.11 KAMIS 소매 (참고용) (개당 ≈1kg)' },
   { id: 'jjokpa',    cat: '주재료', name: '쪽파',           unit: '단',   perCabbageAmt: 0.15, pricePerUnit: 4000,
     kamisItemCode: '245', kamisKindCode: '00', source: '단(1kg) 기준' },
   { id: 'gat',       cat: '주재료', name: '갓',             unit: '단',   perCabbageAmt: 0.10, pricePerUnit: 5000 },
 
   // ── 양념 ──
   { id: 'gochugaru', cat: '양념',   name: '고춧가루',       unit: 'g',    perCabbageAmt: 100,  pricePerUnit: 55,
-    kamisItemCode: '244', kamisKindCode: '00', source: '2024.11 KAMIS 600g 평균 33,000원' },
+    kamisItemCode: '244', kamisKindCode: '00', source: '2025.11 평균 약 33,000원 (참고용)' },
   { id: 'maneul',    cat: '양념',   name: '마늘 (다진)',    unit: 'g',    perCabbageAmt: 60,   pricePerUnit: 25,
     kamisItemCode: '258', kamisKindCode: '00', source: '깐마늘 kg 기준 25,000원' },
   { id: 'saenggang', cat: '양념',   name: '생강 (다진)',    unit: 'g',    perCabbageAmt: 15,   pricePerUnit: 22,

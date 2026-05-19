@@ -437,6 +437,8 @@ export interface BuildupRoutine {
   endPace: string
   profile: Profile
   splitMode: SplitMode
+  warmupKm?: number
+  cooldownKm?: number
   notes?: string
   createdAt: string
   lastUsed?: string

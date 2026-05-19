@@ -17,70 +17,6 @@ interface PlayerData {
   number: string
 }
 
-/* ─── 칩 입력 (한 번에 명단 넣기) ─── */
-function NameChips({ names, onChange, max, placeholder }: {
-  names: string[]
-  onChange: (n: string[]) => void
-  max: number
-  placeholder: string
-}) {
-  const [draft, setDraft] = useState('')
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const addParts = (text: string) => {
-    const parts = text.split(/[\n,\t]+/).map(s => s.trim()).filter(Boolean)
-    if (parts.length === 0) return
-    onChange([...names, ...parts].slice(0, max))
-  }
-  const commit = () => {
-    if (!draft.trim()) return
-    addParts(draft)
-    setDraft('')
-  }
-  const removeAt = (i: number) => onChange(names.filter((_, idx) => idx !== i))
-
-  return (
-    <>
-      <div className={s.chipBox} onClick={() => inputRef.current?.focus()}>
-        {names.map((n, i) => (
-          <span key={`${n}-${i}`} className={s.chip}>
-            <span className={s.chipName}>{n}</span>
-            <button type="button" className={s.chipDel}
-              onClick={(e) => { e.stopPropagation(); removeAt(i) }}>×</button>
-          </span>
-        ))}
-        <input
-          ref={inputRef}
-          type="text"
-          className={s.chipInput}
-          value={draft}
-          onChange={e => setDraft(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); commit() }
-            else if (e.key === 'Backspace' && draft === '' && names.length > 0) {
-              onChange(names.slice(0, -1))
-            }
-          }}
-          onPaste={e => {
-            const t = e.clipboardData.getData('text')
-            if (/[\n,\t]/.test(t)) { e.preventDefault(); addParts(t); setDraft('') }
-          }}
-          onBlur={commit}
-          placeholder={names.length === 0 ? placeholder : ''}
-        />
-      </div>
-      <div className={s.chipMeta}>
-        <span><strong>{names.length}</strong> / {max}</span>
-        {names.length > 0 && (
-          <button type="button" className={s.miniInline} onClick={() => onChange([])}>
-            전체 지우기
-          </button>
-        )}
-      </div>
-    </>
-  )
-}
-
 /* ─── 메인 ─── */
 export default function FormationClient() {
   const [total, setTotal] = useState<5 | 7 | 9 | 11>(11)
@@ -153,38 +89,6 @@ export default function FormationClient() {
       })
     }
   }, [total, players.length])
-
-  /* 칩 입력 → 선수 배열로 매핑 */
-  const nameList = players.map(p => p.name).filter(Boolean)
-  const onNamesChange = (next: string[]) => {
-    setPlayers(prev => prev.map((p, i) => ({
-      ...p,
-      name: next[i] ?? '',
-    })))
-  }
-
-  /* 등번호 자동 채우기 */
-  const autoFillNumbers = () => {
-    setPlayers(prev => prev.map((p, i) => ({
-      ...p,
-      number: p.number || String(i === 0 ? 1 : i + 1),
-    })))
-  }
-
-  /* 등번호 모두 비우기 */
-  const clearNumbers = () => setPlayers(prev => prev.map(p => ({ ...p, number: '' })))
-
-  /* 명단 셔플 (포지션 무작위 배치) */
-  const shufflePositions = () => {
-    setPlayers(prev => {
-      const named = prev.filter(p => p.name.trim() !== '')
-      const empty = prev.filter(p => p.name.trim() === '')
-      const shuffled = [...named].sort(() => Math.random() - 0.5)
-      const result = [...shuffled, ...empty]
-      while (result.length < total) result.push({ name: '', number: '' })
-      return result.slice(0, total)
-    })
-  }
 
   /* 커스텀 포메이션 적용 */
   const applyCustom = () => {
@@ -376,63 +280,36 @@ export default function FormationClient() {
         </div>
       </div>
 
-      {/* ── 명단 입력 ── */}
-      <div className={s.card}>
-        <div className={s.cardLabel}>📝 명단 일괄 입력</div>
-        <NameChips
-          names={nameList}
-          onChange={onNamesChange}
-          max={total}
-          placeholder={`이름 ${total}명 입력 (Enter / 쉼표 / 줄바꿈 paste)`}
-        />
-        <div className={s.miniRow} style={{ marginTop: 8 }}>
-          <button type="button" className={s.miniBtn} onClick={autoFillNumbers}>
-            🔢 등번호 자동 (1, 2, 3...)
-          </button>
-          <button type="button" className={s.miniBtn} onClick={clearNumbers}>등번호 비우기</button>
-          <button type="button" className={s.miniBtn} onClick={shufflePositions}
-            disabled={nameList.length < 2}>
-            🎲 무작위 배치
-          </button>
-        </div>
-      </div>
-
-      {/* ── 옵션 ── */}
-      <div className={s.card}>
-        <div className={s.cardLabel}>⚙️ 옵션</div>
-        <div className={s.optRow}>
-          <div className={s.optField}>
-            <span className={s.subLabel}>팀 이름</span>
+      {/* ── 옵션 (컴팩트) ── */}
+      <div className={s.optCard}>
+        <div className={s.optGrid}>
+          {/* 팀 이름 + 컬러 */}
+          <div className={s.optTeamRow}>
             <input type="text" className={s.textInput}
               value={teamName} onChange={e => setTeamName(e.target.value)}
+              placeholder="팀 이름"
               maxLength={30} />
-          </div>
-          <div className={s.optField}>
-            <span className={s.subLabel}>팀 컬러</span>
             <input type="color" className={s.colorInput}
-              value={teamColor} onChange={e => setTeamColor(e.target.value)} />
+              value={teamColor} onChange={e => setTeamColor(e.target.value)}
+              title="팀 컬러" />
           </div>
-        </div>
-        <div className={s.optRow}>
-          <div className={s.optField}>
-            <span className={s.subLabel}>공격 방향</span>
-            <div className={s.dirRow}>
-              <button type="button"
-                className={`${s.dirBtn} ${direction === 'up' ? s.dirActive : ''}`}
-                onClick={() => setDirection('up')}>↑ 위로</button>
-              <button type="button"
-                className={`${s.dirBtn} ${direction === 'down' ? s.dirActive : ''}`}
-                onClick={() => setDirection('down')}>↓ 아래로</button>
-            </div>
+
+          {/* 공격 방향 토글 */}
+          <div className={s.dirRow}>
+            <button type="button"
+              className={`${s.dirBtn} ${direction === 'up' ? s.dirActive : ''}`}
+              onClick={() => setDirection('up')} title="공격 방향: 위">↑</button>
+            <button type="button"
+              className={`${s.dirBtn} ${direction === 'down' ? s.dirActive : ''}`}
+              onClick={() => setDirection('down')} title="공격 방향: 아래">↓</button>
           </div>
-          <div className={s.optField}>
-            <span className={s.subLabel}>포지션 라벨</span>
-            <label className={s.toggleLabel}>
-              <input type="checkbox" checked={showLabels}
-                onChange={e => setShowLabels(e.target.checked)} />
-              <span>표시 (GK·CB·LM 등)</span>
-            </label>
-          </div>
+
+          {/* 포지션 라벨 토글 */}
+          <label className={s.labelToggleBtn}>
+            <input type="checkbox" checked={showLabels}
+              onChange={e => setShowLabels(e.target.checked)} />
+            <span>📍 라벨</span>
+          </label>
         </div>
       </div>
 
@@ -502,7 +379,7 @@ export default function FormationClient() {
             )
           })}
 
-          {/* 선수 카드 */}
+          {/* 선수 카드 — 큰 폰트로 가독성 ↑ */}
           {positions.map((pos) => {
             const p = players[pos.idx]
             if (!p) return null
@@ -511,36 +388,36 @@ export default function FormationClient() {
                 onClick={() => setEditingIdx(pos.idx)}
                 style={{ cursor: 'pointer' }}
               >
-                <circle cx={pos.x} cy={pos.y} r={36}
-                  fill={teamColor} stroke="#fff" strokeWidth="3"
+                <circle cx={pos.x} cy={pos.y} r={42}
+                  fill={teamColor} stroke="#fff" strokeWidth="4"
                   opacity="0.95" />
-                <text x={pos.x} y={pos.y + 8} textAnchor="middle"
+                <text x={pos.x} y={pos.y + 11} textAnchor="middle"
                   fill="#fff" fontFamily="Inter, system-ui, sans-serif"
-                  fontSize="22" fontWeight="800"
+                  fontSize="32" fontWeight="800"
                   style={{ pointerEvents: 'none' }}>
                   {p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}
                 </text>
-                {/* 이름 카드 */}
+                {/* 이름 카드 — 큰 폰트 */}
                 {p.name && (
                   <g style={{ pointerEvents: 'none' }}>
                     <rect
-                      x={pos.x - 60} y={pos.y + 40}
-                      width="120" height="28" rx="6"
-                      fill="rgba(0,0,0,0.65)"
+                      x={pos.x - 70} y={pos.y + 48}
+                      width="140" height="34" rx="8"
+                      fill="rgba(0,0,0,0.72)"
                     />
-                    <text x={pos.x} y={pos.y + 58} textAnchor="middle"
+                    <text x={pos.x} y={pos.y + 70} textAnchor="middle"
                       fill="#fff" fontFamily="Noto Sans KR, sans-serif"
-                      fontSize="16" fontWeight="700">
+                      fontSize="20" fontWeight="700">
                       {p.name.length > 6 ? p.name.slice(0, 6) + '…' : p.name}
                     </text>
                   </g>
                 )}
                 {/* 포지션 라벨 */}
                 {showLabels && (
-                  <text x={pos.x} y={pos.y - 44} textAnchor="middle"
+                  <text x={pos.x} y={pos.y - 52} textAnchor="middle"
                     fill="#fff" fontFamily="Inter, system-ui, sans-serif"
-                    fontSize="13" fontWeight="700"
-                    opacity="0.85"
+                    fontSize="16" fontWeight="800"
+                    opacity="0.9"
                     style={{ pointerEvents: 'none' }}>
                     {pos.label}
                   </text>
@@ -549,24 +426,39 @@ export default function FormationClient() {
             )
           })}
 
-          {/* 공격 방향 표시 */}
-          <g opacity="0.55">
-            {direction === 'up' ? (
-              <>
-                <path d="M 60 880 L 60 60 M 60 60 L 50 75 M 60 60 L 70 75"
-                  stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" />
-                <text x="60" y="920" fill="#fff" fontSize="12"
-                  textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">공격</text>
-              </>
-            ) : (
-              <>
-                <path d="M 60 120 L 60 940 M 60 940 L 50 925 M 60 940 L 70 925"
-                  stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" />
-                <text x="60" y="80" fill="#fff" fontSize="12"
-                  textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">공격</text>
-              </>
-            )}
-          </g>
+          {/* 공격 방향 표시 — 골키퍼 우측 빈공간, 굵은 화살표 + 큰 글자 */}
+          {(() => {
+            // GK는 항상 정중앙 (x=400). 그 우측 빈공간 = x ≈ 660, y는 direction별로 GK 근처
+            const arrowX = 670
+            const isUp = direction === 'up'
+            // direction 'up' → GK 아래쪽(y=930), 화살표는 위쪽 향함 (감독 시점에서 본진→상대)
+            // direction 'down' → GK 위쪽(y=70), 화살표는 아래쪽 향함
+            const gkY = isUp ? 930 : 70
+            const arrowTop = isUp ? gkY - 110 : gkY + 110
+            const arrowBottom = isUp ? gkY - 20 : gkY + 20
+            const tipY = isUp ? arrowTop : arrowBottom
+            const tailY = isUp ? arrowBottom : arrowTop
+            const labelY = isUp ? arrowBottom + 30 : arrowTop - 14
+            // 화살표 머리 좌우 좌표
+            const tipDx = 14
+            const tipDy = isUp ? 24 : -24
+            return (
+              <g>
+                {/* 본체 (굵은 라인) */}
+                <line x1={arrowX} y1={tailY} x2={arrowX} y2={tipY}
+                  stroke="#fff" strokeWidth="8" strokeLinecap="round" opacity="0.85" />
+                {/* 화살촉 */}
+                <path d={`M ${arrowX} ${tipY} L ${arrowX - tipDx} ${tipY + tipDy} M ${arrowX} ${tipY} L ${arrowX + tipDx} ${tipY + tipDy}`}
+                  stroke="#fff" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85" />
+                {/* 텍스트 */}
+                <text x={arrowX} y={labelY} fill="#fff" fontSize="22" fontWeight="800"
+                  textAnchor="middle" fontFamily="Noto Sans KR, sans-serif"
+                  style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 3 } as React.CSSProperties}>
+                  공격
+                </text>
+              </g>
+            )
+          })()}
         </svg>
 
         <div className={s.pitchActions}>

@@ -1,0 +1,439 @@
+/* ─────────────────────────────────────
+   VO2 Max 계산기
+   ───────────────────────────────────── */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.cardLabel {
+  display: block;
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 800;
+  margin-bottom: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.subLabel {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 신체 정보 ── */
+.bioGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 540px) {
+  .bioGrid { grid-template-columns: 1fr; }
+}
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label, .field > span:first-child {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.sexRow { display: flex; gap: 4px; }
+.sexBtn {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.sexActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 숫자 입력 ── */
+.numInputWrap {
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  gap: 6px;
+  min-height: 40px;
+}
+.numInputWrap:focus-within { border-color: var(--accent); }
+.numInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  min-width: 0;
+}
+.numInput::-webkit-outer-spin-button,
+.numInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.numInput[type=number] { -moz-appearance: textfield; }
+.numUnit {
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── 측정 방법 카드 ── */
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.methodBtn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .methodBtn:hover { border-color: var(--accent); }
+}
+.methodActive {
+  background: rgba(200,255,62,0.08);
+  border-color: var(--accent);
+}
+.methodEmoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.methodBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.methodName {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.methodActive .methodName { color: var(--accent); }
+.methodDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.methodMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.methodDiff {
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.diff_easy { background: rgba(62,255,155,0.10); color: #3EFF9B; }
+.diff_medium { background: rgba(255,184,62,0.10); color: #FFB83E; }
+.diff_hard { background: rgba(255,107,107,0.10); color: #FF6B6B; }
+.methodAccuracy {
+  background: var(--bg2);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* ── 입력 폼 ── */
+.singleField { display: flex; flex-direction: column; gap: 4px; }
+.singleField > label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.timeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.fieldHint {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+  background: rgba(200,255,62,0.04);
+  border-left: 2px solid rgba(200,255,62,0.4);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+.fieldHint strong { color: var(--text); }
+
+.norwayGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 540px) {
+  .norwayGrid { grid-template-columns: 1fr; }
+}
+
+/* PA Field */
+.paField { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.paLabel {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.paOptions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+@media (max-width: 540px) {
+  .paOptions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.paOpt {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 6px;
+  font-size: 11.5px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.paOptActive {
+  background: rgba(200,255,62,0.10);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 히어로 ── */
+.heroCard {
+  background: linear-gradient(140deg, rgba(200,255,62,0.10), rgba(62,200,255,0.05));
+  border: 1px solid rgba(200,255,62,0.30);
+  border-radius: 16px;
+  padding: 22px 24px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.heroRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(56px, 14vw, 88px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 28px rgba(200,255,62,0.20);
+}
+.heroUnit {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.heroGrade {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border: 1px solid;
+  border-radius: 999px;
+  margin-top: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroMethod {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 5단계 컷오프 ── */
+.normGrid { display: flex; flex-direction: column; gap: 4px; }
+.normRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.normMe {
+  background: rgba(200,255,62,0.06);
+  border-color: var(--accent);
+}
+.normLeft { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.normLabel {
+  font-size: 13px;
+  font-weight: 700;
+}
+.normMeBadge {
+  font-size: 10.5px;
+  color: var(--accent);
+  background: var(--bg2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.normVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.bandSource {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 10px 0 0;
+}
+
+/* ── 마라톤 예측 ── */
+.raceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (max-width: 540px) {
+  .raceGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.raceCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+.raceDist {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+.raceTime {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.racePace {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 강도별 페이스 ── */
+.paceGrid { display: flex; flex-direction: column; gap: 4px; }
+.paceRow {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+}
+@media (max-width: 540px) {
+  .paceRow { grid-template-columns: auto 1fr; }
+  .paceDesc { grid-column: 1 / -1; font-size: 11.5px; }
+}
+.paceLeft { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.paceCode {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+}
+.paceName {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.paceVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.paceDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 개선 방법 ── */
+.improveGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.improveCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.improveTitle {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 4px;
+}
+.improveDesc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 6px;
+}
+.improveWeeks {
+  font-size: 11px;
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+}

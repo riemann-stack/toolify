@@ -130,6 +130,62 @@
   letter-spacing: -0.01em;
   font-family: 'Noto Sans KR', sans-serif;
 }
+
+/* ── 발견 탭 (최근/즐겨찾기/랜덤) ── */
+.discoverTabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.discoverTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 5px 11px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+@media (hover: hover) {
+  .discoverTab:hover { color: var(--text); border-color: var(--border-hover); }
+}
+.discoverTabActive {
+  background: var(--accent-dim);
+  border-color: rgba(200,255,62,0.5);
+  color: var(--accent);
+}
+.discoverTabCount {
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: rgba(255,255,255,0.06);
+  padding: 1px 6px;
+  border-radius: 99px;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.discoverTabActive .discoverTabCount {
+  background: rgba(200,255,62,0.18);
+}
+.discoverEmpty {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
 .randomReroll {
   background: transparent;
   border: 1px solid var(--border);
@@ -140,6 +196,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+  margin-left: auto;
 }@media (hover: hover) {
   .randomReroll:hover {
   border-color: var(--accent);
@@ -196,7 +253,7 @@
   background: var(--bg3);
   border: 1px solid var(--border-hover);
   border-radius: 12px;
-  padding: 16px 56px 16px 20px;
+  padding: 16px 88px 16px 20px;
   /* iOS Safari가 16px 미만 input에 자동 줌 인하므로 모바일은 16px 유지 */
   font-size: 16px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -217,6 +274,23 @@
   color: var(--muted);
   pointer-events: none;
 }
+.searchKbd {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 6px;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 540px) { .searchKbd { display: none; } }
 
 /* ── SEARCH DROPDOWN ── */
 .searchDropdown {
@@ -248,8 +322,37 @@
 }
 
 .searchItemIcon { font-size: 20px; flex-shrink: 0; }
-.searchItemName { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-.searchItemDesc { font-size: 12px; color: var(--muted); }
+.searchItemBody { flex: 1; min-width: 0; }
+.searchItemNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+.searchItemName { font-size: 14px; font-weight: 600; color: var(--text); }
+.searchItemCat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  border: 1px solid;
+  border-radius: 99px;
+  padding: 1px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.searchItemDesc {
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
 
 .searchEmpty {
   padding: 16px;

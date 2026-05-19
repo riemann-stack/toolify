@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { categories, allTools, totalTools } from '@/lib/tools'
+import { loadUserNav } from '@/lib/userNav'
+import { searchTools } from '@/lib/search'
 import AdSlot from '@/components/AdSlot'
 import styles from './page.module.css'
 
@@ -15,14 +17,25 @@ const popularTools = [
 
 const RANDOM_PICK_COUNT = 5
 
+type DiscoverTab = 'recent' | 'favorite' | 'random'
+
 export default function HomePage() {
   const [query, setQuery] = useState('')
   const [randomPicks, setRandomPicks] = useState<typeof allTools>([])
+  const [recentHrefs, setRecentHrefs] = useState<string[]>([])
+  const [favoriteHrefs, setFavoriteHrefs] = useState<string[]>([])
+  const [tab, setTab] = useState<DiscoverTab>('random')
+  const [mounted, setMounted] = useState(false)
 
-  // hydration 안전 — useEffect 내에서 랜덤 셔플
+  // hydration 안전 — useEffect 내에서 랜덤 셔플 + localStorage 로드
   useEffect(() => {
     pickRandom()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const nav = loadUserNav()
+    setRecentHrefs(nav.recents.map(r => r.href))
+    setFavoriteHrefs(nav.favorites)
+    // 재방문자(최근 사용 있음) → 최근 사용 탭, 처음 온 사람 → 랜덤 추천
+    setTab(nav.recents.length > 0 ? 'recent' : 'random')
+    setMounted(true)
   }, [])
 
   function pickRandom() {
@@ -30,11 +43,49 @@ export default function HomePage() {
     setRandomPicks(shuffled.slice(0, RANDOM_PICK_COUNT))
   }
 
-  const searchResults = query.trim()
-    ? allTools.filter(t =>
-        t.name.includes(query) || t.desc.includes(query)
-      )
-    : []
+  const toolByHref = useMemo(() => {
+    const map = new Map(allTools.map(t => [t.href, t]))
+    return (href: string) => map.get(href)
+  }, [])
+
+  const recentTools = recentHrefs
+    .map(toolByHref)
+    .filter((t): t is (typeof allTools)[number] => !!t)
+    .slice(0, RANDOM_PICK_COUNT)
+
+  const favoriteTools = favoriteHrefs
+    .map(toolByHref)
+    .filter((t): t is (typeof allTools)[number] => !!t)
+    .slice(0, RANDOM_PICK_COUNT)
+
+  const activeChips =
+    tab === 'recent' ? recentTools
+    : tab === 'favorite' ? favoriteTools
+    : (randomPicks.length > 0 ? randomPicks : popularTools.slice(0, RANDOM_PICK_COUNT))
+
+  const searchHits = useMemo(
+    () => (query.trim() ? searchTools(query, 8) : []),
+    [query],
+  )
+
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  // `/` 또는 Cmd/Ctrl+K 로 검색창 포커스
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null
+      const isTyping = target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+        searchInputRef.current?.select()
+      } else if (e.key === '/' && !isTyping) {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <>
@@ -51,35 +102,79 @@ export default function HomePage() {
               일상에서 자주 쓰는 도구들을 빠르고 간편하게 사용하세요.
             </p>
 
-            {/* 우연히 발견한 도구 */}
+            {/* 발견한 도구 — 탭 (최근 사용 / 즐겨찾기 / 랜덤 추천) */}
             <div className={styles.randomSection}>
-              <div className={styles.randomHead}>
-                <span className={styles.randomTitle}>🎰 우연히 발견한 도구</span>
+              <div className={styles.discoverTabs} role="tablist">
                 <button
                   type="button"
-                  className={styles.randomReroll}
-                  onClick={pickRandom}
-                  aria-label="다시 뽑기"
+                  role="tab"
+                  aria-selected={tab === 'recent'}
+                  className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
+                  onClick={() => setTab('recent')}
                 >
-                  🔄 다시 뽑기
+                  🕒 최근 사용
+                  {mounted && recentTools.length > 0 && (
+                    <span className={styles.discoverTabCount}>{recentTools.length}</span>
+                  )}
                 </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === 'favorite'}
+                  className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
+                  onClick={() => setTab('favorite')}
+                >
+                  ⭐ 즐겨찾기
+                  {mounted && favoriteTools.length > 0 && (
+                    <span className={styles.discoverTabCount}>{favoriteTools.length}</span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === 'random'}
+                  className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
+                  onClick={() => setTab('random')}
+                >
+                  🎰 랜덤 추천
+                </button>
+                {tab === 'random' && (
+                  <button
+                    type="button"
+                    className={styles.randomReroll}
+                    onClick={pickRandom}
+                    aria-label="다시 뽑기"
+                  >
+                    🔄 다시 뽑기
+                  </button>
+                )}
               </div>
-              <div className={styles.randomChips}>
-                {(randomPicks.length > 0 ? randomPicks : popularTools.slice(0, RANDOM_PICK_COUNT)).map(tool => (
-                  <Link key={tool.href} href={tool.href} className={styles.randomChip}>
-                    <span className={styles.randomChipIcon}>{tool.icon}</span>
-                    <span className={styles.randomChipName}>{tool.name}</span>
-                  </Link>
-                ))}
-              </div>
+
+              {activeChips.length > 0 ? (
+                <div className={styles.randomChips}>
+                  {activeChips.map(tool => (
+                    <Link key={tool.href} href={tool.href} className={styles.randomChip}>
+                      <span className={styles.randomChipIcon}>{tool.icon}</span>
+                      <span className={styles.randomChipName}>{tool.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className={styles.discoverEmpty}>
+                  {tab === 'recent'
+                    ? '아직 사용한 도구가 없어요. 마음에 드는 도구를 한 번 써보면 여기에 모여요.'
+                    : '⭐를 눌러 즐겨찾기에 담아두면 다음에 한 번에 찾을 수 있어요.'}
+                </div>
+              )}
             </div>
 
             {/* 검색창 */}
             <div className={styles.searchWrap}>
               <input
+                ref={searchInputRef}
                 className={styles.searchInput}
                 type="text"
-                placeholder="도구 검색... (예: 연봉 계산기, BMI, 부가세)"
+                placeholder="도구 검색... (이름·초성ㅂㅅ·별칭 모두 가능)"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 autoComplete="off"
@@ -87,12 +182,13 @@ export default function HomePage() {
               <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
+              <kbd className={styles.searchKbd} aria-hidden="true">⌘K</kbd>
 
               {/* 검색 결과 드롭다운 */}
               {query.trim() && (
                 <div className={styles.searchDropdown}>
-                  {searchResults.length > 0 ? (
-                    searchResults.map(tool => (
+                  {searchHits.length > 0 ? (
+                    searchHits.map(({ tool, category }) => (
                       <Link
                         key={tool.href}
                         href={tool.href}
@@ -103,8 +199,18 @@ export default function HomePage() {
                         onClick={() => { setTimeout(() => setQuery(''), 0) }}
                       >
                         <span className={styles.searchItemIcon}>{tool.icon}</span>
-                        <div>
-                          <div className={styles.searchItemName}>{tool.name}</div>
+                        <div className={styles.searchItemBody}>
+                          <div className={styles.searchItemNameRow}>
+                            <span className={styles.searchItemName}>{tool.name}</span>
+                            {category && (
+                              <span
+                                className={styles.searchItemCat}
+                                style={{ color: category.color, borderColor: category.color + '55' }}
+                              >
+                                {category.icon} {category.name}
+                              </span>
+                            )}
+                          </div>
                           <div className={styles.searchItemDesc}>{tool.desc}</div>
                         </div>
                       </Link>
