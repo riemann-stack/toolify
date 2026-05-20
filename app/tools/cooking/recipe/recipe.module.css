@@ -66,16 +66,16 @@
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
 .subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
-/* ── 인분 입력 ── */
+/* ── 인분 입력 (모바일에서도 좌우 1줄 유지) ── */
 .servingsGrid {
   display: grid;
-  grid-template-columns: 1fr 24px 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+  gap: 10px;
   align-items: start;
 }
 @media (max-width: 480px) {
-  .servingsGrid { grid-template-columns: 1fr; gap: 6px; }
-  .arrow { display: none; }
+  .servingsGrid { gap: 6px; grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr); }
+  .arrow { padding-top: 26px; font-size: 18px; }
 }
 .arrow {
   text-align: center;
@@ -171,11 +171,11 @@
 
 .presetGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 6px;
 }
-@media (max-width: 720px) { .presetGrid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .presetGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px) { .presetGrid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 480px) { .presetGrid { grid-template-columns: repeat(3, 1fr); } }
 .presetCard {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -324,6 +324,48 @@
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
+
+/* ── 양념 강도 토글 ── */
+.seasonLevelRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+  padding-left: 24px;
+}
+@media (max-width: 480px) { .seasonLevelRow { padding-left: 0; } }
+.seasonLevelBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 6px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.12s;
+}
+@media (hover: hover) {
+  .seasonLevelBtn:hover { border-color: var(--border-hover); }
+}
+.seasonLevelLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.seasonLevelHint {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.seasonLevelActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.seasonLevelActive .seasonLevelLabel { color: var(--accent); }
+.seasonLevelActive .seasonLevelHint  { color: var(--accent); opacity: 0.85; }
 
 /* ── 결과 카드 ── */
 .resultCard {

@@ -6,13 +6,13 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/lotto',
-  title: '로또 번호 생성기 — 8가지 모드·번호 분석·당첨금 세후 계산',
+  title: '로또 번호 생성기 — 8가지 모드·번호 분석·확률 시뮬',
   description:
-    '8가지 생성 모드 + 번호 분석 + 가상 추첨 시뮬로 1등 체감 + 당첨금 세후 계산까지. 로또 6/45 모든 조합 1/8,145,060.',
+    '8가지 생성 모드 + 번호 통계 분석 + 가상 추첨 시뮬로 1등 체감까지. 로또 6/45 모든 조합 1/8,145,060.',
   keywords: [
     '로또 번호 생성기', '로또 6/45', '로또 번호 분석', '로또 확률 시뮬레이션',
-    '1등 당첨 확률', '로또 당첨금 세금', '균형형 번호', '생일 번호 제외', '로또 통계',
-    '로또 번호 추첨', '디지털 로또', '로또 시뮬레이터', '로또 1등 확률', '로또 당첨금 세후', '로또 번호 추천',
+    '1등 당첨 확률', '균형형 번호', '생일 번호 제외', '로또 통계',
+    '로또 번호 추첨', '디지털 로또', '로또 시뮬레이터', '로또 1등 확률', '로또 번호 추천',
   ],
 })
 
@@ -24,7 +24,7 @@ export default function LottoPage() {
         🎰 로또 번호 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        8가지 생성 모드 + 번호 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>. 당첨금 세후까지.
+        8가지 생성 모드 + 번호 통계 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>까지.
       </p>
 
       <LottoClient />
@@ -42,31 +42,30 @@ export default function LottoPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['등수', '조건', '확률', '평균 당첨금'].map(h => (
+                  {['등수', '조건', '확률'].map(h => (
                     <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['1등', '6개 일치',         '1 / 8,145,060', '약 20~30억'],
-                  ['2등', '5개 + 보너스',     '1 / 1,357,510', '약 5~7천만'],
-                  ['3등', '5개 일치',         '1 / 35,724',    '약 150~200만'],
-                  ['4등', '4개 일치',         '1 / 733',       '50,000원 (고정)'],
-                  ['5등', '3개 일치',         '1 / 45',        '5,000원 (고정)'],
+                  ['1등', '6개 일치',         '1 / 8,145,060'],
+                  ['2등', '5개 + 보너스',     '1 / 1,357,510'],
+                  ['3등', '5개 일치',         '1 / 35,724'],
+                  ['4등', '4개 일치',         '1 / 733'],
+                  ['5등', '3개 일치',         '1 / 45'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '8px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--text)' }}>{row[1]}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>{row[2]}</td>
-                    <td style={{ padding: '8px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ⚠️ 1·2·3등 당첨금은 회차별 판매액과 당첨자 수에 따라 변동되며, 4·5등은 고정 금액입니다.
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+            <strong style={{ color: 'var(--text)' }}>평균 당첨금</strong> — 1등 약 20~30억 / 2등 약 5~7천만 / 3등 약 150~200만 / 4등 50,000원 (고정) / 5등 5,000원 (고정). 1·2·3등은 회차별 판매액과 당첨자 수에 따라 변동되며, 4·5등은 고정 금액입니다.
           </p>
         </section>
 
@@ -78,14 +77,14 @@ export default function LottoPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
-              { icon: '🎲', name: '완전 랜덤',    desc: '아무 제약 없이 1~45 무작위 6개 — 가장 단순' },
-              { icon: '⚖️', name: '균형형',       desc: '5구간(1~10/11~20/.../41~45)에 골고루 분포' },
-              { icon: '🚫', name: '생일 제외형',  desc: '1~31 비중 줄이고 32~45 강조 — 흔한 조합 회피' },
-              { icon: '🔗', name: '연속 포함형',  desc: '12·13 같은 연속 쌍 1개 포함 (3연속은 방지)' },
-              { icon: '✂️', name: '연속 제외형',  desc: '인접 번호가 없도록 — 거리 있는 조합' },
-              { icon: '🎯', name: '끝수 분산형',  desc: '같은 끝자리 숫자 겹침 최소화 (각 끝자리 ≤2개)' },
-              { icon: '📊', name: '고른 분포',    desc: '번호 간 간격을 7~9로 균등하게 분산' },
-              { icon: '⚡', name: '빠른픽',       desc: '설정 없이 5게임 즉시 무작위 생성' },
+              { icon: '🎲', name: '완전 랜덤',  desc: '아무 제약 없이 1~45 무작위 6개 — 가장 단순' },
+              { icon: '⚖️', name: '균형형',     desc: '5구간(1~10/11~20/.../41~45)에 골고루 분포' },
+              { icon: '🚫', name: '생일 제외',  desc: '1~31 비중 줄이고 32~45 강조 — 흔한 조합 회피' },
+              { icon: '🔗', name: '연속 포함',  desc: '12·13 같은 연속 쌍 1개 포함 (3연속은 방지)' },
+              { icon: '✂️', name: '연속 제외',  desc: '인접 번호가 없도록 — 거리 있는 조합' },
+              { icon: '🎯', name: '끝수 분산',  desc: '같은 끝자리 숫자 겹침 최소화 (각 끝자리 ≤2개)' },
+              { icon: '📊', name: '균등 간격',  desc: '번호 간 간격을 7~9로 균등하게 분산' },
+              { icon: '🧮', name: '합 균형형',  desc: '총합이 100~170 사이가 되도록 (역대 평균 138)' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{m.icon} {m.name}</p>

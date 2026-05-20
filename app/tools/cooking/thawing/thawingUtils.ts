@@ -196,16 +196,15 @@ export interface FrozenPreset {
 }
 
 export const KOREA_FROZEN_PRESETS: FrozenPreset[] = [
-  { id: 'samgyeop',    emoji: '🥓', name: '삼겹살 600g',         foodKey: 'beef_pork', weightG:  600, thicknessCm: 2 },
-  { id: 'chickenwhole', emoji: '🍗', name: '닭볶음탕 1마리 (1kg)', foodKey: 'chicken',  weightG: 1000, thicknessCm: 4 },
-  { id: 'galbi-2kg',   emoji: '🍖', name: '갈비 2kg',             foodKey: 'beef_pork', weightG: 2000, thicknessCm: 5 },
-  { id: 'galchi',      emoji: '🐟', name: '갈치 2마리 (500g)',    foodKey: 'fish',      weightG:  500, thicknessCm: 3 },
-  { id: 'shrimp',      emoji: '🦐', name: '새우 500g',            foodKey: 'fish',      weightG:  500, thicknessCm: 1 },
-  { id: 'squid',       emoji: '🦑', name: '오징어 1마리 (400g)',  foodKey: 'fish',      weightG:  400, thicknessCm: 1 },
-  { id: 'mandu',       emoji: '🥟', name: '만두 1봉지 (600g)',    foodKey: 'cooked',    weightG:  600, thicknessCm: 2 },
-  { id: 'bread',       emoji: '🍞', name: '식빵 1봉지 (400g)',    foodKey: 'bread',     weightG:  400, thicknessCm: 1 },
-  { id: 'rice',        emoji: '🍚', name: '얼린 밥 1공기 (200g)', foodKey: 'cooked',    weightG:  200, thicknessCm: 3 },
-  { id: 'galbi-5kg',   emoji: '🎁', name: '명절 갈비 5kg',        foodKey: 'beef_pork', weightG: 5000, thicknessCm: 5 },
+  { id: 'samgyeop',     emoji: '🥓', name: '삼겹살',     foodKey: 'beef_pork', weightG:  600, thicknessCm: 2 },
+  { id: 'chickenwhole', emoji: '🍗', name: '닭볶음탕',   foodKey: 'chicken',   weightG: 1000, thicknessCm: 4 },
+  { id: 'galbi-2kg',    emoji: '🍖', name: '갈비',       foodKey: 'beef_pork', weightG: 2000, thicknessCm: 5 },
+  { id: 'galchi',       emoji: '🐟', name: '갈치',       foodKey: 'fish',      weightG:  500, thicknessCm: 3 },
+  { id: 'shrimp',       emoji: '🦐', name: '새우',       foodKey: 'fish',      weightG:  500, thicknessCm: 1 },
+  { id: 'squid',        emoji: '🦑', name: '오징어',     foodKey: 'fish',      weightG:  400, thicknessCm: 1 },
+  { id: 'bread',        emoji: '🍞', name: '식빵',       foodKey: 'bread',     weightG:  400, thicknessCm: 1 },
+  { id: 'rice',         emoji: '🍚', name: '얼린 밥',    foodKey: 'cooked',    weightG:  200, thicknessCm: 3 },
+  { id: 'galbi-5kg',    emoji: '🎁', name: '명절 갈비',  foodKey: 'beef_pork', weightG: 5000, thicknessCm: 5 },
 ]
 
 /* ─── 위험 식품 빠른 경고 ─── */

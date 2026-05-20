@@ -21,9 +21,16 @@ import {
 
 type Tab = 'scale' | 'convert' | 'saved' | 'shopping'
 
-const BASE_PRESETS = [1, 2, 3, 4, 6, 8, 10]
-const TARGET_PRESETS = [1, 2, 3, 4, 6, 8, 10, 15, 20]
+const BASE_PRESETS = [1, 2, 3, 4]
+const TARGET_PRESETS = [1, 2, 3, 4]
 const UNIT_OPTIONS: UnitKey[] = ['g', 'kg', 'ml', 'l', 'tsp', 'tbsp', 'cup', 'cupUS', 'pinch', 'handful', 'bit', 'piece', 'half', 'slice', 'bunch']
+
+// 양념 강도 — 인분 늘릴 때 양념 비율 (낮을수록 짠맛 덜함)
+const SEASONING_LEVELS: { id: 'mild' | 'standard' | 'strong'; label: string; ratio: number; hint: string }[] = [
+  { id: 'mild',     label: '간 약하게', ratio: 75,  hint: '양념 25% 줄임' },
+  { id: 'standard', label: '표준',      ratio: 85,  hint: '양념 15% 줄임 · 권장' },
+  { id: 'strong',   label: '간 진하게', ratio: 100, hint: '그대로 배율 적용' },
+]
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function RecipeClient() {
@@ -168,7 +175,7 @@ function ScaleTab() {
       <div className={s.card}>
         <div className={s.servingsGrid}>
           <div>
-            <span className={s.subLabel}>기준 인분</span>
+            <span className={s.subLabel}>레시피 기준</span>
             <div className={s.inputRow}>
               <input className={s.servingInput} type="number" inputMode="numeric" min={0.5} max={50}
                 value={basePeople} onChange={e => setBasePeople(e.target.value)} />
@@ -305,10 +312,18 @@ function ScaleTab() {
           양념 자동 보정 (인분 늘릴 때만 — 짠맛 방지)
         </label>
         {reduceSeasoning && (
-          <div className={s.sliderRow}>
-            <input type="range" className={s.slider} min={70} max={100} step={5}
-              value={seasoningRatio} onChange={e => setSeasoningRatio(parseInt(e.target.value))} />
-            <span className={s.sliderValue}>{seasoningRatio}%</span>
+          <div className={s.seasonLevelRow}>
+            {SEASONING_LEVELS.map(lv => (
+              <button
+                key={lv.id}
+                type="button"
+                className={`${s.seasonLevelBtn} ${seasoningRatio === lv.ratio ? s.seasonLevelActive : ''}`}
+                onClick={() => setSeasoningRatio(lv.ratio)}
+              >
+                <span className={s.seasonLevelLabel}>{lv.label}</span>
+                <span className={s.seasonLevelHint}>{lv.hint}</span>
+              </button>
+            ))}
           </div>
         )}
       </div>
@@ -368,9 +383,9 @@ function ScaleTab() {
             </div>
           </div>
 
-          {seasoningCount > 0 && reduceSeasoning && (
+          {seasoningCount > 0 && reduceSeasoning && seasoningRatio < 100 && (
             <div className={s.seasoningInterp}>
-              🌶️ <strong>양념 자동 보정 {seasoningRatio}% 적용</strong> — {seasoningCount}개 양념(소금·간장·고추장 등)을 단순 배율 대신 줄여 계산했습니다. 첫 사용 시 80%부터 시작해 간을 보면서 조절하는 것을 권장합니다.
+              <strong>양념 자동 보정 적용</strong> — {seasoningCount}개 양념(소금·간장·고추장 등)을 단순 배율 대신 줄여 계산했습니다. 간을 보면서 입맛에 맞게 조절하세요.
             </div>
           )}
         </>

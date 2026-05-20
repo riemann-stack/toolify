@@ -379,7 +379,7 @@ export default function Nav() {
               ref={searchRef}
               className={styles.searchBarInput}
               type="text"
-              placeholder="필요한 도구를 검색하세요. 연봉, BMI, 복리, 제빵, 단위 변환..."
+              placeholder="필요한 도구를 검색하세요."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleSearchKey}

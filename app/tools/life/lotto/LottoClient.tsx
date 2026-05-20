@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import s from './lotto.module.css'
 import {
   GENERATION_MODES, NUMBER_RANGES, ODDS_FIRST_PRIZE, PRICE_PER_GAME,
-  generateGames, analyzeNumbers, simulateDraws, simulateUntilFirstPrize, calcAfterTax,
+  generateGames, analyzeNumbers, simulateDraws, simulateUntilFirstPrize,
   loadSaved, saveSaved, newId,
   getBallColor, getBallTextColor, interpretAnalysis,
   type LottoGame, type ModeId, type SavedNumber, type SimResult, type FirstPrizeSimResult, type GameAnalysis,
 } from './lottoUtils'
 
-type Tab = 'generate' | 'analyze' | 'simulator' | 'jackpot' | 'tax'
+type Tab = 'generate' | 'analyze' | 'simulator' | 'jackpot'
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function LottoClient() {
@@ -26,14 +26,12 @@ export default function LottoClient() {
           ['analyze',   '번호 분석'],
           ['simulator', '확률 시뮬'],
           ['jackpot',   '1등 체감'],
-          ['tax',       '당첨금 세후'],
         ] as [Tab, string][]).map(([key, label]) => {
           const cls =
             tab !== key ? '' :
             key === 'analyze'   ? s.tabActiveAnalyze :
             key === 'simulator' ? s.tabActiveSim :
-            key === 'jackpot'   ? s.tabActiveJackpot :
-            key === 'tax'       ? s.tabActiveTax : s.tabActive
+            key === 'jackpot'   ? s.tabActiveJackpot : s.tabActive
           return (
             <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
               {label}
@@ -46,7 +44,6 @@ export default function LottoClient() {
       {tab === 'analyze'   && <AnalyzeTab />}
       {tab === 'simulator' && <SimulatorTab />}
       {tab === 'jackpot'   && <JackpotTab />}
-      {tab === 'tax'       && <TaxTab />}
     </div>
   )
 }
@@ -71,7 +68,6 @@ function GenerateTab() {
   const [avoidOverlap, setAvoidOverlap] = useState(false)
   const [showAnalysis, setShowAnalysis] = useState(true)
   const [games, setGames] = useState<LottoGame[]>([])
-  const [copied, setCopied] = useState(false)
   const [saveConfirm, setSaveConfirm] = useState(false)
 
   const toggleNumber = (n: number) => {
@@ -93,25 +89,12 @@ function GenerateTab() {
   const handleGenerate = () => {
     const opts = {
       mode,
-      gameCount: mode === 'quick-pick' ? 5 : gameCount,
+      gameCount,
       fixed: fixed.length > 0 ? fixed : undefined,
       excluded: excluded.length > 0 ? excluded : undefined,
       avoidGameOverlap: avoidOverlap,
     }
     setGames(generateGames(opts))
-    setCopied(false)
-  }
-
-  const handleCopyAll = () => {
-    if (games.length === 0) return
-    const lines = games.map((g, i) =>
-      `${String.fromCharCode(65 + i)}. ${g.numbers.join(', ')}`
-    )
-    const text = `🎰 ${GENERATION_MODES.find(m => m.id === mode)?.name} (${games.length}게임)\n──────────────\n${lines.join('\n')}\n\n— youtil.kr 로또 번호 생성기\n※ 모든 번호 조합의 1등 확률은 1/8,145,060로 동일합니다.`
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    })
   }
 
   const handleSaveOne = (g: LottoGame) => {
@@ -140,40 +123,38 @@ function GenerateTab() {
 
   return (
     <>
-      {/* 모드 선택 */}
+      {/* 모드 선택 — 4열 컴팩트 (이름만) */}
       <div className={s.card}>
         <label className={s.cardLabel}>
           생성 모드
           <span className={s.cardLabelHint}>8가지 — 모두 동일 확률</span>
         </label>
-        <div className={s.modeGrid}>
+        <div className={s.modeGridCompact}>
           {GENERATION_MODES.map(m => (
             <button key={m.id}
-              className={`${s.modeCard} ${mode === m.id ? s.modeCardActive : ''}`}
-              onClick={() => setMode(m.id)}>
-              <div className={s.modeCardEmoji}>{m.icon}</div>
-              <div className={s.modeCardName}>{m.name}</div>
-              <div className={s.modeCardDesc}>{m.desc}</div>
+              className={`${s.modeChip} ${mode === m.id ? s.modeChipActive : ''}`}
+              onClick={() => setMode(m.id)}
+              title={m.desc}>
+              <span className={s.modeChipEmoji}>{m.icon}</span>
+              <span className={s.modeChipName}>{m.name}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* 게임 수 */}
-      {mode !== 'quick-pick' && (
-        <div className={s.card}>
-          <label className={s.cardLabel}>게임 수</label>
-          <div className={s.countRow}>
-            {[1, 2, 3, 4, 5].map(n => (
-              <button key={n}
-                className={`${s.countBtn} ${gameCount === n ? s.countActive : ''}`}
-                onClick={() => setGameCount(n)}>
-                {n}게임
-              </button>
-            ))}
-          </div>
+      <div className={s.card}>
+        <label className={s.cardLabel}>게임 수</label>
+        <div className={s.countRow}>
+          {[1, 2, 3, 4, 5].map(n => (
+            <button key={n}
+              className={`${s.countBtn} ${gameCount === n ? s.countActive : ''}`}
+              onClick={() => setGameCount(n)}>
+              {n}게임
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* 고정·제외 번호 */}
       <div className={s.card}>
@@ -222,16 +203,16 @@ function GenerateTab() {
         <label className={s.cardLabel}>옵션</label>
         <label className={s.toggleLabel} style={{ marginBottom: 6 }}>
           <input type="checkbox" checked={avoidOverlap} onChange={e => setAvoidOverlap(e.target.checked)} />
-          5게임 간 중복 최소화 (4개 이상 겹침 방지)
+          중복 최소화 (4개 이상 겹침 방지)
         </label>
         <label className={s.toggleLabel}>
           <input type="checkbox" checked={showAnalysis} onChange={e => setShowAnalysis(e.target.checked)} />
-          각 게임의 번호 분석 함께 표시
+          번호 분석 표시
         </label>
       </div>
 
       <button className={s.bigGenerate} onClick={handleGenerate}>
-        🎰 {mode === 'quick-pick' ? '빠른픽 5게임 생성' : `${GENERATION_MODES.find(m => m.id === mode)?.name} ${gameCount}게임 생성`}
+        🎰 {GENERATION_MODES.find(m => m.id === mode)?.name} {gameCount}게임 생성
       </button>
 
       {/* 결과 */}
@@ -269,13 +250,9 @@ function GenerateTab() {
           </div>
 
           <div className={s.resultActions}>
-            <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopyAll}>
-              {copied ? '✓ 복사됨' : '📋 전체 텍스트 복사'}
-            </button>
             <button className={`${s.copyBtn} ${saveConfirm ? s.copied : ''}`} onClick={handleSaveAll}>
-              {saveConfirm ? '✓ 저장됨' : '💾 모두 저장'}
+              {saveConfirm ? '✓ 저장됨' : '💾 저장'}
             </button>
-            <button className={s.copyBtn} onClick={handleGenerate}>🔄 다시 생성</button>
           </div>
         </>
       )}
@@ -334,22 +311,59 @@ function SavedList() {
   )
 }
 
+/* ─── 1~45 번호 선택기 (최대 6개) ─── */
+function NumberPicker({ selected, onChange }: { selected: number[]; onChange: (next: number[]) => void }) {
+  const toggle = (n: number) => {
+    if (selected.includes(n)) onChange(selected.filter(x => x !== n))
+    else if (selected.length < 6) onChange([...selected, n])
+  }
+  const clear = () => onChange([])
+  const random = () => {
+    const pool: number[] = []
+    while (pool.length < 6) {
+      const n = Math.floor(Math.random() * 45) + 1
+      if (!pool.includes(n)) pool.push(n)
+    }
+    onChange(pool.sort((a, b) => a - b))
+  }
+  return (
+    <>
+      <div className={s.pickerHead}>
+        <span className={s.pickerCount}>선택 <strong style={{ color: 'var(--accent)' }}>{selected.length}</strong> / 6</span>
+        <div className={s.miniRow}>
+          <button className={s.miniBtn} onClick={random}>🎲 무작위 6개</button>
+          <button className={s.miniBtn} onClick={clear} disabled={selected.length === 0}>전체 해제</button>
+        </div>
+      </div>
+      <div className={s.numGrid}>
+        {Array.from({ length: 45 }, (_, i) => i + 1).map(n => {
+          const on = selected.includes(n)
+          return (
+            <button key={n}
+              className={`${s.numCell} ${on ? s.numCellFixed : ''}`}
+              onClick={() => toggle(n)}
+              disabled={!on && selected.length >= 6}>
+              {n}
+            </button>
+          )
+        })}
+      </div>
+      {selected.length > 0 && (
+        <div className={s.pickerSelected}>
+          {[...selected].sort((a, b) => a - b).map(n => (
+            <span key={n} className={s.ball} style={{ background: getBallColor(n), color: getBallTextColor(n) }}>{n}</span>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
+
 /* ═════════════════════════════════════════ 탭 2 — 번호 분석 ═════════════════════════════════════════ */
 function AnalyzeTab() {
-  const [nums, setNums] = useState<(number | '')[]>(['', '', '', '', '', ''])
+  const [selected, setSelected] = useState<number[]>([])
 
-  const updateNum = (i: number, v: string) => {
-    if (v === '') {
-      setNums(prev => prev.map((p, j) => j === i ? '' : p))
-      return
-    }
-    const n = parseInt(v)
-    if (!Number.isFinite(n) || n < 1 || n > 45) return
-    setNums(prev => prev.map((p, j) => j === i ? n : p))
-  }
-
-  const valid = nums.filter((n): n is number => typeof n === 'number') as number[]
-  const dedup = [...new Set(valid)]
+  const dedup = [...new Set(selected)]
   const ready = dedup.length === 6
 
   const analysis: GameAnalysis | null = ready ? analyzeNumbers(dedup) : null
@@ -358,40 +372,21 @@ function AnalyzeTab() {
     <>
       <div className={s.card}>
         <label className={s.cardLabel}>
-          분석할 번호 6개 입력
-          <span className={s.cardLabelHint}>1~45</span>
+          분석할 번호 6개 선택
+          <span className={s.cardLabelHint}>1~45 중에서</span>
         </label>
-        <div className={s.numInputRow}>
-          {nums.map((n, i) => (
-            <input key={i} className={s.numInput} type="number" min={1} max={45}
-              value={n === '' ? '' : n}
-              onChange={e => updateNum(i, e.target.value)}
-              placeholder="?" />
-          ))}
-        </div>
-        {valid.length !== dedup.length && (
-          <p style={{ fontSize: 11.5, color: '#FF6B6B', marginTop: 8 }}>
-            중복된 번호가 있습니다. 6개 모두 다른 번호여야 합니다.
-          </p>
-        )}
+        <NumberPicker selected={selected} onChange={setSelected} />
       </div>
 
       {!ready && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>🔢 6개 번호를 모두 입력해 주세요</div>
+          <div className={s.emptyTitle}>🔢 6개 번호를 모두 선택해 주세요</div>
           <p>홀짝·저고·구간·소수·연속·간격 등 통계 패턴을 분석합니다.</p>
         </div>
       )}
 
       {ready && analysis && (
         <>
-          <div className={s.card}>
-            <label className={s.cardLabel}>입력한 번호</label>
-            <div className={s.balls}>
-              {[...dedup].sort((a, b) => a - b).map(n => <Ball key={n} n={n} />)}
-            </div>
-          </div>
-
           <div className={s.card}>
             <label className={s.cardLabel}>기본 통계</label>
             <div className={s.analysisGrid}>
@@ -479,23 +474,12 @@ function AnalyzeTab() {
 
 /* ═════════════════════════════════════════ 탭 3 — 확률 시뮬레이터 ═════════════════════════════════════════ */
 function SimulatorTab() {
-  const [nums, setNums] = useState<(number | '')[]>(['', '', '', '', '', ''])
+  const [selected, setSelected] = useState<number[]>([])
   const [drawCount, setDrawCount] = useState(10000)
   const [result, setResult] = useState<SimResult | null>(null)
   const [running, setRunning] = useState(false)
 
-  const updateNum = (i: number, v: string) => {
-    if (v === '') {
-      setNums(prev => prev.map((p, j) => j === i ? '' : p))
-      return
-    }
-    const n = parseInt(v)
-    if (!Number.isFinite(n) || n < 1 || n > 45) return
-    setNums(prev => prev.map((p, j) => j === i ? n : p))
-  }
-
-  const valid = nums.filter((n): n is number => typeof n === 'number') as number[]
-  const dedup = [...new Set(valid)]
+  const dedup = [...new Set(selected)]
   const ready = dedup.length === 6
 
   const handleSim = () => {
@@ -517,14 +501,7 @@ function SimulatorTab() {
           내 번호 6개
           <span className={s.cardLabelHint}>이 번호로 가상 추첨 반복</span>
         </label>
-        <div className={s.numInputRow}>
-          {nums.map((n, i) => (
-            <input key={i} className={s.numInput} type="number" min={1} max={45}
-              value={n === '' ? '' : n}
-              onChange={e => updateNum(i, e.target.value)}
-              placeholder="?" />
-          ))}
-        </div>
+        <NumberPicker selected={selected} onChange={setSelected} />
       </div>
 
       <div className={s.card}>
@@ -736,107 +713,3 @@ function JackpotTab() {
   )
 }
 
-/* ═════════════════════════════════════════ 탭 5 — 당첨금 세후 ═════════════════════════════════════════ */
-function TaxTab() {
-  const [grade, setGrade] = useState(1)
-  const [gross, setGross] = useState(2_500_000_000)
-
-  const result = useMemo(() => calcAfterTax(gross), [gross])
-  const fmt = (n: number) => n.toLocaleString('ko-KR') + '원'
-
-  const presets = [
-    { grade: 1, prize: 2_500_000_000, label: '1등 평균 25억' },
-    { grade: 1, prize: 3_000_000_000, label: '1등 30억' },
-    { grade: 2, prize: 60_000_000,    label: '2등 평균 6,000만' },
-    { grade: 3, prize: 1_700_000,     label: '3등 평균 170만' },
-    { grade: 4, prize: 50_000,        label: '4등 5만원 (고정)' },
-    { grade: 5, prize: 5_000,         label: '5등 5천원 (고정)' },
-  ]
-
-  return (
-    <>
-      <div className={s.card}>
-        <label className={s.cardLabel}>당첨 등수 빠른 선택</label>
-        <div className={s.modeGrid}>
-          {presets.map((p, i) => (
-            <button key={i}
-              className={`${s.modeCard} ${grade === p.grade && gross === p.prize ? s.modeCardActive : ''}`}
-              onClick={() => { setGrade(p.grade); setGross(p.prize) }}>
-              <div className={s.modeCardEmoji}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][p.grade - 1]}</div>
-              <div className={s.modeCardName}>{p.label}</div>
-              <div className={s.modeCardDesc}>{fmt(p.prize)}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={s.card}>
-        <label className={s.cardLabel}>
-          당첨금 (세전)
-          <span className={s.cardLabelHint}>{fmt(gross)}</span>
-        </label>
-        <input className={s.numberField} type="number" min={0} step={1000}
-          value={gross} onChange={e => setGross(Math.max(0, parseInt(e.target.value) || 0))} />
-      </div>
-
-      <div className={s.taxHero}>
-        <div className={s.taxLabel}>세후 실수령액</div>
-        <div className={s.taxNet}>
-          {fmt(result.net).replace(/원$/, '')}<span className={s.taxNetUnit}>원</span>
-        </div>
-        <div className={s.taxRate}>
-          실효세율 <strong style={{ color: '#FF6B6B' }}>{result.effectiveRate.toFixed(1)}%</strong>
-          {' / '}세금 합계 <strong style={{ color: '#FF6B6B' }}>{fmt(result.totalTax)}</strong>
-        </div>
-      </div>
-
-      <div className={s.card}>
-        <label className={s.cardLabel}>상세 계산</label>
-        <div className={s.taxBreakdown}>
-          <div className={s.taxRow}>
-            <span>세전 당첨금</span>
-            <span>{fmt(result.gross)}</span>
-          </div>
-          <div className={s.taxRow}>
-            <span>비과세 구간 (200만원 이하)</span>
-            <span>{fmt(result.exempt)}</span>
-          </div>
-          <div className={s.taxRow}>
-            <span>22% 과세 (200만~3억 부분)</span>
-            <span>{fmt(result.taxed22)}</span>
-          </div>
-          <div className={s.taxRow}>
-            <span>33% 과세 (3억 초과 부분)</span>
-            <span>{fmt(result.taxed33)}</span>
-          </div>
-          <div className={`${s.taxRow} ${s.taxRowTax}`}>
-            <span>세금 합계</span>
-            <span>− {fmt(result.totalTax)}</span>
-          </div>
-          <div className={`${s.taxRow} ${s.taxRowTotal}`}>
-            <span>세후 실수령</span>
-            <span>{fmt(result.net)}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={s.card}>
-        <label className={s.cardLabel}>세금 적용 구간</label>
-        <table className={s.taxTable}>
-          <thead>
-            <tr><th>구간</th><th>세율</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>200만원 이하</td><td>0% (비과세)</td></tr>
-            <tr><td>200만원 ~ 3억원</td><td>22% (소득세 20% + 지방세 2%)</td></tr>
-            <tr><td>3억원 초과 부분</td><td>33% (소득세 30% + 지방세 3%)</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className={s.warningBox}>
-        <strong>⚠️ 본 계산은 일반 기준 추정치입니다.</strong> 실제 세금은 다른 소득과의 합산 신고 방식·기타 공제에 따라 달라질 수 있으며, 1등 당첨 시 <strong>세무사·회계사 상담을 강력히 권장</strong>합니다. 또한 5등 5천원·4등 5만원은 실제로는 분리과세 면제 대상이지만, 본 도구는 200만원 기준으로 단순 계산합니다.
-      </div>
-    </>
-  )
-}

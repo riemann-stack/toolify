@@ -43,30 +43,31 @@
   padding: 0 2px;
 }
 
-/* ── 탭 ── */
+/* ── 탭 (모바일에서도 4열 1줄 유지) ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
-}@media (hover: hover) {
+  white-space: nowrap;
+}
+@media (max-width: 540px) { .tabBtn { font-size: 11.5px; padding: 9px 2px; } }
+@media (max-width: 380px) { .tabBtn { font-size: 11px; } }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
@@ -126,6 +127,74 @@
 .modeCardName { font-size: 12.5px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 3px; }
 .modeCardActive .modeCardName { color: var(--accent); }
 .modeCardDesc { font-size: 10.5px; color: var(--muted); line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── 컴팩트 모드 그리드 (입력 영역 — 이름만 4열) ── */
+.modeGridCompact {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+.modeChip {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) { .modeChip:hover { border-color: var(--border-hover); } }
+.modeChipEmoji { font-size: 15px; line-height: 1; flex-shrink: 0; }
+.modeChipName {
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.modeChipActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.modeChipActive .modeChipName { color: var(--accent); font-weight: 700; }
+@media (max-width: 540px) {
+  .modeChipName { font-size: 11.5px; }
+}
+
+/* ── 번호 선택기 (NumberPicker) ── */
+.pickerHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.pickerCount {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.pickerCount strong {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+}
+.pickerSelected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
 
 /* ── 게임 수 ── */
 .countRow {

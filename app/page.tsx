@@ -174,7 +174,7 @@ export default function HomePage() {
                 ref={searchInputRef}
                 className={styles.searchInput}
                 type="text"
-                placeholder="도구 검색... (이름·초성ㅂㅅ·별칭 모두 가능)"
+                placeholder="필요한 도구를 검색하세요."
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 autoComplete="off"

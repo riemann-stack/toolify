@@ -115,15 +115,15 @@ export default function RecipePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             인분이 늘어날수록 양념을 그대로 늘리면 짭니다. 본 도구는 다음 양념·향신료를 자동 인식해 보정 비율을 적용합니다:
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', marginBottom: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', marginBottom: '12px' }}>
             {['소금', '간장', '고추장', '된장', '쌈장', '고춧가루', '식초', '맛술', '꿀', '물엿', '올리고당', '다진마늘', '다진생강', '후추', '미원', '머스타드', '케첩'].map(name => (
-              <div key={name} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '7px 11px', fontSize: 12, color: 'var(--text)' }}>
-                🌶️ {name}
+              <div key={name} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, color: 'var(--text)', textAlign: 'center', fontFamily: 'Noto Sans KR, sans-serif' }}>
+                {name}
               </div>
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>적용 조건</strong>: 인분이 늘어날 때만 (줄어들 때는 X). 기본 85%이며 70~100% 슬라이더로 조정 가능. 첫 사용 시 80%부터 시작해 간을 보면서 조정하는 것을 권장합니다.
+            <strong style={{ color: 'var(--text)' }}>적용 조건</strong>: 인분이 늘어날 때만 (줄어들 때는 X). 기본값은 <strong style={{ color: 'var(--text)' }}>표준(양념 15% 줄임)</strong>이며 입맛에 따라 <strong style={{ color: 'var(--text)' }}>간 약하게 / 표준 / 간 진하게</strong> 중 선택할 수 있습니다.
           </p>
         </section>
 

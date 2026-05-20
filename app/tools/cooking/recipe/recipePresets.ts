@@ -108,6 +108,61 @@ export const RECIPE_PRESETS: RecipePreset[] = [
       { name: '깨',           amount: 0.5, unit: 'tsp' },
     ],
   },
+  {
+    id: 'jeyuk-bokkeum', name: '제육볶음', emoji: '🐷', category: 'korean', basePeople: 2,
+    ingredients: [
+      { name: '돼지고기',     amount: 400, unit: 'g',    note: '앞다리살 또는 목살' },
+      { name: '양파',         amount: 1,   unit: 'piece' },
+      { name: '대파',         amount: 1,   unit: 'piece' },
+      { name: '고추장',       amount: 2,   unit: 'tbsp' },
+      { name: '고춧가루',     amount: 1,   unit: 'tbsp' },
+      { name: '간장',         amount: 1,   unit: 'tbsp' },
+      { name: '설탕',         amount: 1,   unit: 'tbsp' },
+      { name: '다진마늘',     amount: 1,   unit: 'tbsp' },
+      { name: '참기름',       amount: 1,   unit: 'tsp' },
+    ],
+    notes: '고기는 양념에 20분 이상 재워두면 깊은 맛. 센 불에 빠르게 볶아 육즙 유지.',
+  },
+  {
+    id: 'miyeok-guk', name: '미역국', emoji: '🥣', category: 'soup', basePeople: 2,
+    ingredients: [
+      { name: '마른미역',     amount: 20,  unit: 'g',    note: '불리면 약 4배' },
+      { name: '소고기',       amount: 100, unit: 'g',    note: '국거리·양지' },
+      { name: '국간장',       amount: 1,   unit: 'tbsp' },
+      { name: '다진마늘',     amount: 1,   unit: 'tsp' },
+      { name: '참기름',       amount: 1,   unit: 'tbsp' },
+      { name: '물',           amount: 800, unit: 'ml' },
+    ],
+    notes: '미역은 찬물에 10분 불려 깨끗이 씻기. 소고기와 미역을 참기름에 충분히 볶은 뒤 물을 부으면 진한 국물.',
+  },
+  {
+    id: 'gyeran-mari', name: '계란말이', emoji: '🥚', category: 'side', basePeople: 2,
+    ingredients: [
+      { name: '계란',         amount: 4,   unit: 'piece' },
+      { name: '대파',         amount: 0.5, unit: 'piece', note: '잘게 다짐' },
+      { name: '당근',         amount: 30,  unit: 'g',     note: '잘게 다짐' },
+      { name: '소금',         amount: 1,   unit: 'pinch' },
+      { name: '맛술',         amount: 1,   unit: 'tsp' },
+      { name: '식용유',       amount: 1,   unit: 'tbsp' },
+    ],
+    notes: '약불에서 천천히 말아야 갈라지지 않음. 김 한 장 깔고 말면 단면이 예뻐짐.',
+  },
+  {
+    id: 'kimbap', name: '김밥', emoji: '🍙', category: 'korean', basePeople: 2,
+    ingredients: [
+      { name: '밥',           amount: 2,   unit: 'piece', note: '공기 단위, 약간 식힘' },
+      { name: '김',           amount: 4,   unit: 'slice', note: '김밥용' },
+      { name: '단무지',       amount: 4,   unit: 'slice' },
+      { name: '시금치 나물',  amount: 80,  unit: 'g' },
+      { name: '당근',         amount: 1,   unit: 'piece', note: '채썰어 볶음' },
+      { name: '계란',         amount: 3,   unit: 'piece', note: '지단' },
+      { name: '맛살',         amount: 4,   unit: 'piece' },
+      { name: '참기름',       amount: 1,   unit: 'tbsp' },
+      { name: '소금',         amount: 1,   unit: 'pinch' },
+      { name: '깨',           amount: 1,   unit: 'tsp' },
+    ],
+    notes: '밥에 참기름·소금·깨를 살짝 비벼두면 김밥이 부드럽고 풍미 좋음.',
+  },
 
   /* ─── 양식 ─── */
   {

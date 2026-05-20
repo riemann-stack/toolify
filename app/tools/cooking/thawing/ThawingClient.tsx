@@ -28,15 +28,6 @@ const FOODS: { key: FoodKey; icon: string; label: string; thawFactor: number; mi
   { key: 'cooked',    icon: '🍱', label: '조리된 음식',   thawFactor: 1.2, microFactor: 2.2, storageMin: 1, storageMax: 3,  tip: '식힌 후 냉동. 해동 후 재가열 시 중심부 74°C 이상 확인.' },
 ]
 
-const THICKNESS_GUIDES = [
-  { value: 1,  label: '얇음 (1cm)',    desc: '생선 필레·삼겹살 1장' },
-  { value: 3,  label: '보통 (3cm)',    desc: '스테이크·닭가슴살' },
-  { value: 5,  label: '두꺼움 (5cm)',  desc: '통삼겹·닭다리' },
-  { value: 10, label: '덩어리 (10cm)', desc: '통닭·로스용 덩어리고기' },
-]
-
-const WEIGHT_PRESETS = [200, 500, 1000, 2000]
-
 function formatHours(h: number): { value: string; sub: string } {
   if (h < 1) {
     const min = Math.round(h * 60)
@@ -255,60 +246,38 @@ function ThawTab() {
         </div>
       </div>
 
-      {/* 두께 */}
+      {/* 두께 / 무게 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>2. 두께</span>
-        <div className={s.guideRow}>
-          {THICKNESS_GUIDES.map(g => (
-            <button
-              key={g.value}
-              className={`${s.guideBtn} ${parseFloat(thickness) === g.value ? s.guideActive : ''}`}
-              onClick={() => setThickness(String(g.value))}
-              title={g.desc}
-            >{g.label}</button>
-          ))}
-        </div>
-        <div className={s.valueRow}>
-          <input
-            type="number" inputMode="decimal" step="0.5" min={0.5} max={20}
-            className={s.valueInput}
-            value={thickness} onChange={e => setThickness(e.target.value)}
-          />
-          <span className={s.valueUnit}>cm</span>
-        </div>
-        <input
-          type="range" min={0.5} max={20} step={0.5}
-          className={s.slider}
-          value={thickness} onChange={e => setThickness(e.target.value)}
-        />
-        <div className={s.sliderLabels}><span>0.5</span><span>10</span><span>20</span></div>
-      </div>
-
-      {/* 무게 */}
-      <div className={s.card}>
-        <span className={s.cardLabel}>3. 무게</span>
-        <div className={s.valueRow}>
-          <input
-            type="number" inputMode="decimal" step="50" min={50} max={5000}
-            className={s.valueInput}
-            value={weight} onChange={e => setWeight(e.target.value)}
-          />
-          <span className={s.valueUnit}>g</span>
-        </div>
-        <div className={s.presetRow}>
-          {WEIGHT_PRESETS.map(p => (
-            <button
-              key={p}
-              className={`${s.presetBtn} ${parseFloat(weight) === p ? s.presetActive : ''}`}
-              onClick={() => setWeight(String(p))}
-            >{p >= 1000 ? `${p / 1000}kg` : `${p}g`}</button>
-          ))}
+        <span className={s.cardLabel}>2. 두께 / 무게</span>
+        <div className={s.row2}>
+          <div>
+            <label className={s.fieldLabel}>두께 (cm)</label>
+            <div className={s.valueRow}>
+              <input
+                type="number" inputMode="decimal" step="0.5" min={0.5} max={20}
+                className={s.valueInput}
+                value={thickness} onChange={e => setThickness(e.target.value)}
+              />
+              <span className={s.valueUnit}>cm</span>
+            </div>
+          </div>
+          <div>
+            <label className={s.fieldLabel}>무게 (g)</label>
+            <div className={s.valueRow}>
+              <input
+                type="number" inputMode="decimal" step="50" min={50} max={5000}
+                className={s.valueInput}
+                value={weight} onChange={e => setWeight(e.target.value)}
+              />
+              <span className={s.valueUnit}>g</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* 냉동 상태 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>4. 냉동 상태</span>
+        <span className={s.cardLabel}>3. 냉동 상태</span>
         <div className={s.btnGroup}>
           <button
             className={`${s.toggleBtn} ${frozen === 'full' ? s.toggleActive : ''}`}
@@ -324,7 +293,7 @@ function ThawTab() {
       {/* ★ 전자레인지 출력 (NEW) */}
       {method === 'micro' && (
         <div className={s.card}>
-          <span className={s.cardLabel}>5. 전자레인지 출력 (W)</span>
+          <span className={s.cardLabel}>4. 전자레인지 출력 (W)</span>
           <div className={s.microPowerRow}>
             {MICROWAVE_POWERS.map(p => (
               <button key={p.id}
@@ -550,6 +519,26 @@ function FreezeTab() {
 
   return (
     <div className={s.wrap}>
+      {/* 한국 인기 프리셋 — 해동과 동일 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>🇰🇷 한국 인기 냉동 식품 (빠른 입력)</span>
+        <div className={s.presetGrid2}>
+          {KOREA_FROZEN_PRESETS.map(p => (
+            <button key={p.id} className={s.presetBtn2} onClick={() => {
+              setFood(p.foodKey === 'beef_pork' || p.foodKey === 'chicken' || p.foodKey === 'fish' ||
+                p.foodKey === 'vegetable' || p.foodKey === 'bread' || p.foodKey === 'cooked'
+                ? (p.foodKey as FoodKey) : 'beef_pork')
+              setWeight(String(p.weightG))
+              setThickness(String(p.thicknessCm))
+            }}>
+              <span className={s.presetBtnEmoji}>{p.emoji}</span>
+              <div className={s.presetBtnName}>{p.name}</div>
+              <div className={s.presetBtnSpec}>{p.weightG}g · {p.thicknessCm}cm</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* 식품 */}
       <div className={s.card}>
         <span className={s.cardLabel}>1. 식품 종류</span>
@@ -596,37 +585,39 @@ function FreezeTab() {
         </div>
       </div>
 
-      {/* 온도 설정 */}
+      {/* 온도 설정 — 좌우 1줄, 라벨 미니멀 */}
       <div className={s.card}>
         <span className={s.cardLabel}>3. 초기 온도 · 냉동고 온도</span>
-        <div style={{ marginBottom: '12px' }}>
-          <label className={s.fieldLabel}>초기 온도</label>
-          <div className={s.btnGroup}>
-            <button
-              className={`${s.toggleBtn} ${initialTemp === 'fridge' ? s.toggleActive : ''}`}
-              onClick={() => setInitialTemp('fridge')}
-            >냉장 (4°C)</button>
-            <button
-              className={`${s.toggleBtn} ${initialTemp === 'room' ? s.toggleActive : ''}`}
-              onClick={() => setInitialTemp('room')}
-            >실온 (20°C)</button>
-            <button
-              className={`${s.toggleBtn} ${initialTemp === 'hot' ? s.toggleActive : ''}`}
-              onClick={() => setInitialTemp('hot')}
-            >조리 직후 (70°C)</button>
+        <div className={s.row2}>
+          <div>
+            <label className={s.fieldLabel}>초기 온도</label>
+            <div className={s.btnGroup}>
+              <button
+                className={`${s.toggleBtnMini} ${initialTemp === 'fridge' ? s.toggleActive : ''}`}
+                onClick={() => setInitialTemp('fridge')}
+              >냉장<small>4°C</small></button>
+              <button
+                className={`${s.toggleBtnMini} ${initialTemp === 'room' ? s.toggleActive : ''}`}
+                onClick={() => setInitialTemp('room')}
+              >실온<small>20°C</small></button>
+              <button
+                className={`${s.toggleBtnMini} ${initialTemp === 'hot' ? s.toggleActive : ''}`}
+                onClick={() => setInitialTemp('hot')}
+              >조리 직후<small>70°C</small></button>
+            </div>
           </div>
-        </div>
-        <div>
-          <label className={s.fieldLabel}>냉동고 온도</label>
-          <div className={s.btnGroup}>
-            <button
-              className={`${s.toggleBtn} ${freezerTemp === 'normal' ? s.toggleActive : ''}`}
-              onClick={() => setFreezerTemp('normal')}
-            >일반 냉동 (−18°C)</button>
-            <button
-              className={`${s.toggleBtn} ${freezerTemp === 'fast' ? s.toggleActive : ''}`}
-              onClick={() => setFreezerTemp('fast')}
-            >급속 냉동 (−24°C)</button>
+          <div>
+            <label className={s.fieldLabel}>냉동고 온도</label>
+            <div className={s.btnGroup}>
+              <button
+                className={`${s.toggleBtnMini} ${freezerTemp === 'normal' ? s.toggleActive : ''}`}
+                onClick={() => setFreezerTemp('normal')}
+              >일반<small>−18°C</small></button>
+              <button
+                className={`${s.toggleBtnMini} ${freezerTemp === 'fast' ? s.toggleActive : ''}`}
+                onClick={() => setFreezerTemp('fast')}
+              >급속<small>−24°C</small></button>
+            </div>
           </div>
         </div>
       </div>
@@ -692,8 +683,11 @@ function FreezeTab() {
 function ThermometerBox() {
   return (
     <div className={s.thermBox}>
-      <div className={s.cardTitle} style={{ marginBottom: '12px' }}>🌡️ 식품 안전 온도 구간</div>
-      <svg className={s.thermSvg} viewBox="0 0 560 90" preserveAspectRatio="xMidYMid meet">
+      <div className={s.thermHeader}>
+        <div className={s.cardTitle} style={{ marginBottom: 0 }}>🌡️ 식품 안전 온도 구간</div>
+        <span className={s.thermRule}>⚠ 2시간 규칙 · 위험 온도대 2시간 초과 노출 시 폐기 권장</span>
+      </div>
+      <svg className={s.thermSvg} viewBox="0 0 560 80" preserveAspectRatio="xMidYMid meet">
         {/* 4구간 바 */}
         {[
           { x: 0,   w: 140, color: '#7DC4FF', label: '냉동', range: '−24~−18°C' },
@@ -702,24 +696,20 @@ function ThermometerBox() {
           { x: 420, w: 140, color: '#FF8C3E', label: '조리 안전', range: '60°C 이상' },
         ].map((seg, i) => (
           <g key={i}>
-            <rect x={seg.x} y={20} width={seg.w} height={28} fill={seg.color} opacity="0.85"
+            <rect x={seg.x} y={22} width={seg.w} height={34} fill={seg.color} opacity="0.85"
                   rx={i === 0 ? 6 : 0} ry={i === 0 ? 6 : 0} />
-            <text x={seg.x + seg.w / 2} y={14} fill="var(--text)" fontSize="11" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="600">
+            <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="700">
               {seg.label}
             </text>
-            <text x={seg.x + seg.w / 2} y={64} fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle">
+            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle" fontWeight="600">
               {seg.range}
             </text>
           </g>
         ))}
         {/* 구분선 */}
         {[140, 260, 420].map((x, i) => (
-          <line key={i} x1={x} x2={x} y1={20} y2={48} stroke="var(--bg)" strokeWidth="1.5" />
+          <line key={i} x1={x} x2={x} y1={22} y2={56} stroke="var(--bg)" strokeWidth="1.5" />
         ))}
-        {/* 2시간 규칙 */}
-        <text x={340} y={82} fill="#FF6B6B" fontSize="10" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="600">
-          ⚠ 2시간 규칙 · 위험 온도대 2시간 초과 노출 시 폐기 권장
-        </text>
       </svg>
     </div>
   )
@@ -781,11 +771,11 @@ export default function ThawingClient() {
         <button
           className={`${s.tab} ${tab === 'thaw' ? s.tabThawActive : ''}`}
           onClick={() => setTab('thaw')}
-        >🔥 해동 시간</button>
+        >🔥 해동</button>
         <button
           className={`${s.tab} ${tab === 'freeze' ? s.tabFreezeActive : ''}`}
           onClick={() => setTab('freeze')}
-        >🧊 냉동 시간</button>
+        >🧊 냉동</button>
         <button
           className={`${s.tab} ${tab === 'guide' ? s.tabGuideActive : ''}`}
           onClick={() => setTab('guide')}

@@ -24,17 +24,17 @@ export const NUMBER_RANGES = [
 
 export type ModeId =
   | 'random' | 'balanced' | 'no-birthday' | 'consecutive'
-  | 'no-consecutive' | 'spread-tail' | 'even-spread' | 'quick-pick'
+  | 'no-consecutive' | 'spread-tail' | 'even-spread' | 'sum-balanced'
 
 export const GENERATION_MODES: { id: ModeId; name: string; icon: string; desc: string }[] = [
-  { id: 'random',         name: '완전 랜덤',     icon: '🎲', desc: '아무 제약 없이 1~45 무작위 6개' },
-  { id: 'balanced',       name: '균형형',         icon: '⚖️', desc: '5구간에 골고루 분포되도록 생성' },
-  { id: 'no-birthday',    name: '생일 제외형',    icon: '🚫', desc: '1~31 비중 줄이고 32~45 강조' },
-  { id: 'consecutive',    name: '연속 포함형',    icon: '🔗', desc: '12·13 같은 연속 쌍 1개 포함' },
-  { id: 'no-consecutive', name: '연속 제외형',    icon: '✂️', desc: '인접한 번호가 없도록 생성' },
-  { id: 'spread-tail',    name: '끝수 분산형',    icon: '🎯', desc: '같은 끝자리 숫자 겹침 최소화' },
-  { id: 'even-spread',    name: '고른 분포',      icon: '📊', desc: '번호 간 간격을 균등하게' },
-  { id: 'quick-pick',     name: '빠른픽 (5게임)', icon: '⚡', desc: '설정 없이 5게임 즉시 무작위' },
+  { id: 'random',         name: '완전 랜덤',  icon: '🎲', desc: '아무 제약 없이 1~45 무작위 6개' },
+  { id: 'balanced',       name: '균형형',     icon: '⚖️', desc: '5구간에 골고루 분포되도록 생성' },
+  { id: 'no-birthday',    name: '생일 제외',  icon: '🚫', desc: '1~31 비중 줄이고 32~45 강조' },
+  { id: 'consecutive',    name: '연속 포함',  icon: '🔗', desc: '12·13 같은 연속 쌍 1개 포함' },
+  { id: 'no-consecutive', name: '연속 제외',  icon: '✂️', desc: '인접한 번호가 없도록 생성' },
+  { id: 'spread-tail',    name: '끝수 분산',  icon: '🎯', desc: '같은 끝자리 숫자 겹침 최소화' },
+  { id: 'even-spread',    name: '균등 간격',  icon: '📊', desc: '번호 간 간격을 균등하게' },
+  { id: 'sum-balanced',   name: '합 균형형',  icon: '🧮', desc: '총합이 100~170 사이가 되도록 (역대 평균 138)' },
 ]
 
 /* ─── 생성 옵션 ─── */
@@ -206,6 +206,17 @@ function generateEvenSpread(opts: GenerationOptions): number[] {
   return [...set].sort((a, b) => a - b).slice(0, PICK_COUNT)
 }
 
+function generateSumBalanced(opts: GenerationOptions): number[] {
+  // 총합 100~170 범위의 6개 (역대 평균 ≈ 138)
+  let nums: number[] = []
+  for (let attempt = 0; attempt < 60; attempt++) {
+    nums = generateRandom(opts)
+    const sum = nums.reduce((a, b) => a + b, 0)
+    if (sum >= 100 && sum <= 170) return nums
+  }
+  return nums
+}
+
 export function generateOne(opts: GenerationOptions): number[] {
   let nums: number[]
   switch (opts.mode) {
@@ -215,7 +226,7 @@ export function generateOne(opts: GenerationOptions): number[] {
     case 'no-consecutive': nums = generateWithoutConsecutive(opts); break
     case 'spread-tail':    nums = generateSpreadTail(opts); break
     case 'even-spread':    nums = generateEvenSpread(opts); break
-    case 'quick-pick':
+    case 'sum-balanced':   nums = generateSumBalanced(opts); break
     case 'random':
     default:               nums = generateRandom(opts); break
   }
