@@ -305,36 +305,33 @@ export default function VO2MaxClient() {
         </div>
       </div>
 
-      {/* ── 5. 동년배 5단계 컷오프 ── */}
+      {/* ── 5. 비슷한 연령대 비교 — 가로 5분할 차트 ── */}
       {vo2 > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>📊 동년배 5단계 컷오프 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
-          <div className={s.normGrid}>
+          <div className={s.cardLabel}>📊 비슷한 연령대 비교 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
+          <div className={s.segChart}>
             {[
-              { id: 'excellent', label: '매우 우수', threshold: band.excellent, op: '≥' },
-              { id: 'good',      label: '우수',      threshold: band.good,      op: '≥' },
-              { id: 'average',   label: '평균',      threshold: band.average,   op: '≥' },
-              { id: 'below',     label: '미흡',      threshold: band.below,     op: '≥' },
-              { id: 'poor',      label: '매우 미흡', threshold: 0,              op: '<' },
+              { id: 'poor',      label: '매우 미흡', range: `~${band.below}` },
+              { id: 'below',     label: '미흡',      range: `${band.below}~${band.average}` },
+              { id: 'average',   label: '평균',      range: `${band.average}~${band.good}` },
+              { id: 'good',      label: '우수',      range: `${band.good}~${band.excellent}` },
+              { id: 'excellent', label: '매우 우수', range: `${band.excellent}+` },
             ].map(b => {
               const meta = LEVEL_META[b.id as keyof typeof LEVEL_META]
               const isMe = level === b.id
               return (
                 <div key={b.id}
-                  className={`${s.normRow} ${isMe ? s.normMe : ''}`}
-                  style={{ borderLeftColor: meta.color }}>
-                  <div className={s.normLeft}>
-                    <span className={s.normLabel} style={{ color: meta.color }}>{b.label}</span>
-                    {isMe && <span className={s.normMeBadge}>← 나의 위치</span>}
-                  </div>
-                  <span className={s.normVal}>
-                    {b.op === '<' ? `< ${band.below}` : `${b.op} ${b.threshold}`}
-                  </span>
+                  className={`${s.seg} ${isMe ? s.segActive : ''}`}
+                  style={isMe ? { borderColor: meta.color } : undefined}>
+                  {isMe && <span className={s.segMe}>나 {vo2.toFixed(1)}</span>}
+                  <span className={s.segBar} style={{ background: meta.color }} />
+                  <span className={s.segLabel} style={{ color: meta.color }}>{b.label}</span>
+                  <span className={s.segRange}>{b.range}</span>
                 </div>
               )
             })}
           </div>
-          <p className={s.bandSource}>출처: ACSM · Cooper Institute Fitness Norms</p>
+          <p className={s.bandSource}>단위 mL/kg/min · 출처: ACSM · Cooper Institute Fitness Norms</p>
         </div>
       )}
 
@@ -378,7 +375,7 @@ export default function VO2MaxClient() {
             {[
               { id: 'E', name: 'Easy (회복)', desc: '대화 가능. 70~75% HRmax', sec: paces.E, color: '#059669' },
               { id: 'M', name: '마라톤',       desc: '풀코스 race pace',         sec: paces.M, color: '#0891B2' },
-              { id: 'T', name: 'Threshold (역치)', desc: '1시간 race pace · 20~40분', sec: paces.T, color: '#FFD93E' },
+              { id: 'T', name: 'Threshold (역치)', desc: '1시간 race pace · 20~40분', sec: paces.T, color: '#CA8A04' },
               { id: 'I', name: 'Interval',     desc: 'VO₂max 자극 · 3~5분 반복',  sec: paces.I, color: '#EA580C' },
               { id: 'R', name: 'Repetition',   desc: '스피드 · 200~600m 반복',    sec: paces.R, color: '#DC2626' },
             ].map(p => (

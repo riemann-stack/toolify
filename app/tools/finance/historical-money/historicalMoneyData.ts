@@ -141,6 +141,23 @@ export function fmtRaw(n: number, maxFrac = 0): string {
   return Math.round(n).toLocaleString('ko-KR', { maximumFractionDigits: maxFrac })
 }
 
+/** 결과·시계열용 — 1억 미만은 전체 숫자(267,045), 1억 이상은 억/조 소수점 1자리(1.1억) */
+export function fmtMoney(n: number): string {
+  if (!isFinite(n)) return '0'
+  const v = Math.round(n)
+  if (v >= 1_000_000_000_000) return (v / 1_000_000_000_000).toFixed(1) + '조'
+  if (v >= 100_000_000) return (v / 100_000_000).toFixed(1) + '억'
+  return v.toLocaleString('ko-KR')
+}
+
+/** 프리셋 라벨용 — 1만/10만/100만/1000만 (불필요한 소수점 없음) */
+export function fmtCompact(n: number): string {
+  if (!isFinite(n)) return '0'
+  if (n >= 100_000_000) { const v = n / 100_000_000; return (Number.isInteger(v) ? v : v.toFixed(1)) + '억' }
+  if (n >= 10_000) { const v = n / 10_000; return (Number.isInteger(v) ? v : v.toFixed(1)) + '만' }
+  return n.toLocaleString('ko-KR')
+}
+
 // ─── 시대별 가격 큐레이션 (재미 비교) ────────────────────────
 export interface PriceItem {
   emoji: string

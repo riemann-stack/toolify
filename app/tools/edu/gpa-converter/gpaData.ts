@@ -128,6 +128,16 @@ export function reverseFromUs(usGpa: number, scaleId: ScaleId): number {
   return clamp((usGpa / 4.0) * max, 0, max)
 }
 
+/** 한국 만점 상호 환산 — 4.3 ↔ 4.5 ↔ 5.0 (백분율 경유 단순 비례) */
+export const KR_SCALES: ScaleId[] = ['4.5', '4.3', '5.0']
+
+export function crossConvert(gpa: number, fromScale: ScaleId, toScale: ScaleId): number {
+  const pct = toPercent(gpa, fromScale)
+  if (toScale === '100') return round(clamp(pct, 0, 100), 1)
+  const max = parseFloat(toScale)
+  return round(clamp((pct / 100) * max, 0, max), 2)
+}
+
 function round(n: number, p: number): number {
   const f = Math.pow(10, p)
   return Math.round(n * f) / f

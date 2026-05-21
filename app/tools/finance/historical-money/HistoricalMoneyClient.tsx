@@ -6,8 +6,7 @@ import s from './historicalMoney.module.css'
 import {
   ERAS, REFORMS, PRICE_ITEMS,
   YEAR_MIN, YEAR_MAX,
-  eraFromYear, convert, fmt, fmtRaw,
-  type CurrencyEra,
+  eraFromYear, convert, fmtRaw, fmtMoney, fmtCompact,
 } from './historicalMoneyData'
 
 const CURRENT_YEAR = YEAR_MAX
@@ -15,12 +14,8 @@ const STORAGE_KEY = 'youtil_hist_money_v1'
 
 type Direction = 'past_to_now' | 'now_to_past'
 
-const PRESET_YEARS = [1960, 1970, 1980, 1990, 2000, 2010, 2020]
-const PRESET_AMOUNTS: Record<CurrencyEra, number[]> = {
-  won_old: [100, 1000, 10000],
-  hwan:    [50, 100, 500, 1000],
-  won:     [1000, 10000, 100000, 1000000],
-}
+const PRESET_YEARS = [1950, 1960, 1970, 1980, 1990]
+const PRESET_AMOUNTS = [1000, 10000, 100000, 1000000, 10000000]
 
 export default function HistoricalMoneyClient() {
   const [direction, setDirection] = useState<Direction>('past_to_now')
@@ -96,12 +91,12 @@ export default function HistoricalMoneyClient() {
             type="button"
             className={`${s.dirBtn} ${direction === 'past_to_now' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('past_to_now')}
-          >📅 과거 → 현재 가치</button>
+          >📅 과거 → 현재</button>
           <button
             type="button"
             className={`${s.dirBtn} ${direction === 'now_to_past' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('now_to_past')}
-          >🕰️ 현재 → 과거 가치 (역산)</button>
+          >🕰️ 현재 → 과거</button>
         </div>
       </div>
 
@@ -169,11 +164,11 @@ export default function HistoricalMoneyClient() {
               </span>
             </div>
             <div className={s.presetRow}>
-              {(direction === 'past_to_now' ? PRESET_AMOUNTS[pastEra.id] : PRESET_AMOUNTS.won).map((v) => (
+              {PRESET_AMOUNTS.map((v) => (
                 <button key={v} type="button"
                   className={`${s.presetBtn} ${amt === v ? s.presetBtnActive : ''}`}
                   onClick={() => setAmount(String(v))}>
-                  {fmt(v)}
+                  {fmtCompact(v)}
                 </button>
               ))}
             </div>
@@ -195,15 +190,14 @@ export default function HistoricalMoneyClient() {
           <div className={s.heroOut}>
             <div className={s.heroLabel}>{direction === 'past_to_now' ? `${CURRENT_YEAR}년 현재 가치` : `${pastYear}년 당시 가치`}</div>
             <div className={s.heroBig}>
-              {fmt(result.outputAmount, 0)}
+              {fmtMoney(result.outputAmount)}
               <span className={s.heroUnit}>{result.outputEra.symbol}</span>
             </div>
-            <div className={s.heroNote}>
-              ≈ {fmtRaw(result.outputAmount)} {result.outputEra.symbol}
-              {direction === 'past_to_now' && result.inflationFactor > 1 && (
-                <> · 누적 인플레 <strong className={s.factorAccent}>×{result.inflationFactor.toFixed(0)}</strong></>
-              )}
-            </div>
+            {direction === 'past_to_now' && result.inflationFactor > 1 && (
+              <div className={s.heroNote}>
+                누적 인플레 <strong className={s.factorAccent}>×{result.inflationFactor.toFixed(0)}</strong>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -225,7 +219,7 @@ export default function HistoricalMoneyClient() {
                   <span className={s.tlBarTrack}>
                     <span className={s.tlBarFill} style={{ width: `${Math.max(2, pct)}%` }} />
                   </span>
-                  <span className={s.tlVal}>{fmt(p.value)}<small>{p.era}</small></span>
+                  <span className={s.tlVal}>{fmtMoney(p.value)}<small>{p.era}</small></span>
                 </div>
               )
             })}
@@ -260,7 +254,7 @@ export default function HistoricalMoneyClient() {
                   <div>
                     <div className={s.priceYear}>{firstYear}년</div>
                     <div className={s.priceVal}>{fmtRaw(firstPrice)}<small>{firstEra.symbol}</small></div>
-                    <div className={s.priceConv}>≈ 현재 {fmt(firstNowValue)}원</div>
+                    <div className={s.priceConv}>≈ 현재 {fmtMoney(firstNowValue)}원</div>
                   </div>
                   <span className={s.priceArrow}>→</span>
                   <div>

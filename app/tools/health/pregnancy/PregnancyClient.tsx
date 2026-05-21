@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './pregnancy.module.css'
 import {
   InputMode, CYCLE_LENGTHS, FETAL_SIZE_COMPARISON,
@@ -152,20 +153,19 @@ export default function PregnancyClient() {
   return (
     <div className={styles.wrap}>
 
-      {/* 면책 — 매 화면 상단 */}
-      <div className={styles.emergencyBox}>
-        <strong>⚕️ 의료 면책 — 본 도구는 참고용이며 의학적 진단·치료 도구가 아닙니다.</strong>
-        <br />정확한 임신 주수는 초음파 검사로만 확인 가능합니다. 검사 시기·항목은 병원·산모 상태에 따라 달라지며, 모든 결정은 산부인과 전문의와 상담하세요.
-        <br /><br />
-        <strong>⚠️ 다음 증상 시 즉시 산부인과·응급실</strong>
-        <ul>
-          <li>질 출혈 (소량이라도) / 심한 복통</li>
-          <li>발열(38℃ 이상) / 심한 두통·시야 변화</li>
-          <li>부종 급증 / 태동 감소(2삼분기 이후)</li>
-          <li>양수 누출 의심</li>
-        </ul>
-        응급 시 119 또는 응급의료정보센터 1339.
-      </div>
+      {/* 면책 — 사이트 표준 (기본 접힘) */}
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/date/dday', label: 'D-day 계산기' },
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량 계산기' },
+        ]}
+      >
+        정확한 임신 주수는 초음파 검사로만 확인 가능하며, 산전 검사 일정·태아 크기는 일반 가이드라인입니다.
+        질 출혈·심한 복통·발열(38℃↑)·심한 두통·태동 감소(2삼분기 이후)·양수 누출 등 응급 신호 시 즉시 산부인과·응급실로,
+        응급 상황은 <strong>119</strong> 또는 응급의료정보센터 <strong>1339</strong>로 연락하세요.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs}>
@@ -356,8 +356,8 @@ export default function PregnancyClient() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
                 <span style={{ fontSize: 36 }}>{fetal.emoji}</span>
                 <div>
-                  <div style={{ fontSize: 14, color: '#FFD0E1', fontWeight: 700, fontFamily: 'Noto Sans KR' }}>
-                    {result.currentWeek}주차 — {fetal.size} 크기 ({fetal.length})
+                  <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, fontFamily: 'Noto Sans KR' }}>
+                    {result.currentWeek}주차 — <span style={{ color: '#DB2777' }}>{fetal.size} 크기 ({fetal.length})</span>
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{fetal.development}</div>
                 </div>
@@ -366,16 +366,6 @@ export default function PregnancyClient() {
                 onClick={() => setTab('fetal')}>🌱 자세히 보기</button>
             </div>
           )}
-
-          <div className={styles.resultActions}>
-            <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-              onClick={() => copy(`${babyName ? babyName + ' · ' : ''}${result.currentWeek}주 ${result.currentDay}일 · 출산예정일 ${fmtDateKo(result.dueDate)} · D-${result.daysToDue}`)}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
-            </button>
-            <button className={styles.copyBtn} onClick={() => setTab('tests')}>📅 산전 검사</button>
-            <button className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
-              onClick={handleSave}>{saved ? '✓ 저장됨' : '💾 저장'}</button>
-          </div>
 
           {loadedFromStorage && (
             <button className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={handleClear} style={{ alignSelf: 'flex-end' }}>
@@ -663,12 +653,6 @@ export default function PregnancyClient() {
         </>
       )}
 
-      {/* 면책 강화 (모든 탭 공통 하단) */}
-      <div className={styles.warnBox}>
-        ⚕️ <strong>본 도구의 모든 정보는 보건복지부·대한산부인과학회·WHO 공식 자료를 기반으로 일반화한 추정치입니다.</strong>
-        의학적 진단·치료 도구가 아니며, 개별 산모·태아에 적용 시 반드시 의료진 상담이 필요합니다.
-        <br />응급 상황 — 119 또는 한국 응급의료정보센터 <strong>1339</strong>.
-      </div>
     </div>
   )
 }

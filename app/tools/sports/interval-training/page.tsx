@@ -6,8 +6,8 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
-  title: '인터벌 훈련 계산기 — VDOT·야소 800·400/800/1km 풀 스케줄',
-  description: 'VDOT 기반 정확한 인터벌 페이스 + 1바퀴 랩타임·다거리 추천·4~16주 풀 트레이닝 스케줄과 한국 대회.',
+  title: '인터벌 훈련 계산기 — VDOT 페이스·야소 800·E/M/T/I/R 강도',
+  description: 'VDOT 기반 정확한 인터벌 페이스 + 거리별 1바퀴 랩타임·워밍업~쿨다운 세션 자동 정리 + 4~16주 트레이닝 스케줄. E·M·T·I·R 5가지 강도 완벽 설명.',
   keywords: ['인터벌훈련계산기', '인터벌페이스', '야소800계산기', '400m페이스', '800m페이스', '마라톤풀코스예측', '러닝인터벌', '인터벌스케줄', 'VDOT 계산기', 'I 페이스', 'R 페이스', 'Jack Daniels VDOT', '한국 마라톤 훈련', '풀코스 예측'],
 })
 
@@ -32,26 +32,71 @@ export default function IntervalTrainingPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* ── 1. Jack Daniels 5가지 강도 ── */}
+        {/* ── 1. Jack Daniels 5가지 강도 (E·M·T·I·R) 자세히 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            인터벌 훈련의 5가지 강도 (Jack Daniels VDOT)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>
+            러닝 훈련의 5가지 강도 — E · M · T · I · R 완벽 정리
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '18px' }}>
+            미국 러닝 코치 <strong style={{ color: 'var(--text)' }}>잭 다니엘스(Jack Daniels)</strong>는 모든 러닝 훈련을 <strong style={{ color: 'var(--text)' }}>딱 5가지 강도</strong>로 나눴습니다.
+            느린 것부터 빠른 순서로 <strong style={{ color: 'var(--text)' }}>E → M → T → I → R</strong>이며, 강도마다 키워지는 능력이 다릅니다.
+            아래 표의 페이스는 <strong style={{ color: 'var(--text)' }}>마라톤 5시간 / 5km 30분 수준</strong>의 러너를 예시로 든 것으로, 본인 기록을 입력하면 위 계산기가 정확한 페이스를 계산해 줍니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { i: 'E', n: 'Easy',       c: '#059669',     d: '회복·기초 체력 (마라톤 페이스 +1~2분/km)' },
-              { i: 'M', n: 'Marathon',   c: '#9B59B6',     d: '마라톤 페이스 (풀코스 목표 페이스)' },
-              { i: 'T', n: 'Threshold',  c: '#0891B2',     d: '젖산 역치 (하프 페이스 부근)' },
-              { i: 'I', n: 'Interval',   c: 'var(--accent)', d: 'V̇O2 최대 (5km 페이스)' },
-              { i: 'R', n: 'Repetition', c: '#DC2626',     d: '스피드 (1마일 페이스)' },
+              {
+                i: 'E', n: 'Easy · 편하게', c: '#059669',
+                what: '심폐 기초·모세혈관·미토콘드리아 발달 (러닝의 토대)',
+                feel: '옆 사람과 대화가 편하게 되는 속도. 코로 숨쉬기 가능',
+                pace: '대회 마라톤 페이스보다 1~1.5분/km 느리게',
+                use: '회복주, 워밍업·쿨다운, 장거리주(LSD)의 기본 페이스',
+              },
+              {
+                i: 'M', n: 'Marathon · 마라톤', c: '#9333EA',
+                what: '목표 풀코스 페이스에 몸을 적응시키기 (페이스 감각·연료 효율)',
+                feel: '대화는 짧게 가능. "조금 힘들지만 오래 갈 수 있는" 정도',
+                pace: '본인 풀코스 목표 페이스 그대로',
+                use: '풀코스 준비기의 페이스 지속주(10~20km), 대회 리허설',
+              },
+              {
+                i: 'T', n: 'Threshold · 역치(템포)', c: '#0891B2',
+                what: '젖산 역치 끌어올리기 → 더 빠른 속도를 더 오래 유지',
+                feel: '"편하게 힘든(comfortably hard)" 강도. 한두 단어만 겨우 말함',
+                pace: '약 1시간 전력으로 달릴 수 있는 속도(하프 페이스 부근)',
+                use: '20~40분 템포런, 1~2km 반복(크루즈 인터벌)',
+              },
+              {
+                i: 'I', n: 'Interval · 인터벌', c: '#0EA5E9',
+                what: '최대산소섭취량(V̇O₂max) 자극 → 심폐 능력의 천장을 올림',
+                feel: '말하기 거의 불가능. 3~5분 이상 버티기 힘든 강도',
+                pace: '약 5km 레이스 페이스',
+                use: '400m~1.2km 반복 + 동일 시간 회복 (이 도구의 핵심 메뉴)',
+              },
+              {
+                i: 'R', n: 'Repetition · 반복주', c: '#DC2626',
+                what: '스피드·러닝 이코노미(달리기 효율)·무산소 파워',
+                feel: '거의 전력 질주. 폼이 무너지지 않는 선까지만',
+                pace: '약 1마일(1.5km) 레이스 페이스 — 가장 빠름',
+                use: '200~400m 짧은 반복 + 충분한 완전 회복(2~3배)',
+              },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 14, color: g.c, fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 4 }}>
-                  {g.i} <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginLeft: 6 }}>{g.n}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `4px solid ${g.c}`, borderRadius: 12, padding: '14px 18px' }}>
+                <p style={{ marginBottom: 8 }}>
+                  <span style={{ fontSize: 18, color: g.c, fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif' }}>{g.i}</span>
+                  <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginLeft: 8 }}>{g.n}</span>
                 </p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
+                <div style={{ display: 'grid', gridTemplateColumns: '74px 1fr', gap: '4px 10px', fontSize: 12.5, lineHeight: 1.65 }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: 600 }}>키우는 것</span><span style={{ color: 'var(--text)' }}>{g.what}</span>
+                  <span style={{ color: 'var(--muted)', fontWeight: 600 }}>체감</span><span style={{ color: 'var(--text)' }}>{g.feel}</span>
+                  <span style={{ color: 'var(--muted)', fontWeight: 600 }}>페이스</span><span style={{ color: 'var(--text)' }}>{g.pace}</span>
+                  <span style={{ color: 'var(--muted)', fontWeight: 600 }}>대표 훈련</span><span style={{ color: 'var(--text)' }}>{g.use}</span>
+                </div>
               </div>
             ))}
+          </div>
+          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: 12, padding: '13px 16px', fontSize: 13, color: 'var(--text)', marginTop: 14, lineHeight: 1.85 }}>
+            💡 <strong style={{ color: 'var(--accent)' }}>한 줄 요약:</strong> 느릴수록(E·M) 오래 달리는 <strong>지구력</strong>을, 빠를수록(I·R) 짧고 강하게 <strong>심폐·스피드</strong>를 키웁니다.
+            인터벌 훈련에서 가장 많이 쓰는 강도는 <strong style={{ color: '#0EA5E9' }}>I(인터벌)</strong>와 <strong style={{ color: '#DC2626' }}>R(반복주)</strong>이며, 둘 다 반드시 충분한 회복 조깅과 함께 해야 효과가 납니다.
           </div>
         </div>
 
@@ -78,7 +123,7 @@ export default function IntervalTrainingPage() {
                   { d: '2km',          u: '역치·하프',       r: '3~4회',  c: '600m 조깅' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.u}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.c}</td>
@@ -104,14 +149,14 @@ export default function IntervalTrainingPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>800m × 10회 평균</span> = <strong style={{ color: '#FFD93E' }}>X분 Y초</strong></div>
-            <div><span style={{ color: 'var(--muted)' }}>예상 풀코스</span>     = <strong style={{ color: '#FFD93E' }}>X시간 Y분</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>800m × 10회 평균</span> = <strong style={{ color: '#CA8A04' }}>X분 Y초</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>예상 풀코스</span>     = <strong style={{ color: '#CA8A04' }}>X시간 Y분</strong></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 미국 러닝 코치 Bart Yasso가 제시한 풀코스 예측 훈련법</div>
           </div>
           <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
             {[
               { i: '3:00/800m', m: '3:00:00 풀코스', c: '#059669' },
-              { i: '3:30/800m', m: '3:30:00 풀코스', c: '#FFD93E' },
+              { i: '3:30/800m', m: '3:30:00 풀코스', c: '#CA8A04' },
               { i: '4:00/800m', m: '4:00:00 풀코스', c: '#EA580C' },
               { i: '4:30/800m', m: '4:30:00 풀코스', c: '#DC2626' },
             ].map((r, i) => (
@@ -161,7 +206,7 @@ export default function IntervalTrainingPage() {
                   { t: '16:00', v: 60, i: '3:14', r: '1:18' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.i}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
@@ -200,7 +245,7 @@ export default function IntervalTrainingPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            💡 회복 중에는 <strong style={{ color: '#FFD93E' }}>완전 정지보다 가벼운 조깅이 효과적</strong>입니다 (젖산 제거 가속화).
+            💡 회복 중에는 <strong style={{ color: '#CA8A04' }}>완전 정지보다 가벼운 조깅이 효과적</strong>입니다 (젖산 제거 가속화).
           </div>
         </div>
 
@@ -219,7 +264,7 @@ export default function IntervalTrainingPage() {
               { d: '1600m', l: '4바퀴 (1마일)' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
-                <p style={{ fontSize: 16, color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
+                <p style={{ fontSize: 16, color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{r.l}</p>
               </div>
             ))}
@@ -233,7 +278,7 @@ export default function IntervalTrainingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '📅 훈련 빈도', c: '#FFD93E', items: ['초보: 주 1회', '중급: 주 1~2회', '고급: 주 2~3회'] },
+              { t: '📅 훈련 빈도', c: '#CA8A04', items: ['초보: 주 1회', '중급: 주 1~2회', '고급: 주 2~3회'] },
               { t: '🚫 금기 사항',  c: '#DC2626', items: ['주간 거리 15% 이상 고강도 X', '전날 장거리주·고강도 후 X', '통증·이상 시 즉시 중단', '부상 회복 직후 점진적 ↑'] },
               { t: '✅ 준비 운동',  c: '#059669', items: ['워밍업 1.5~3km 가벼운 조깅', '동적 스트레칭 5~10분', '인터벌 후 쿨다운 1.5~3km'] },
             ].map((g, i) => (
@@ -301,7 +346,7 @@ export default function IntervalTrainingPage() {
                   { d: '1.6km',  t: '6:57', l: '1:44.3',  track: '4바퀴 (1마일)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.track}</td>
@@ -315,13 +360,13 @@ export default function IntervalTrainingPage() {
           </p>
         </div>
 
-        {/* ── 10. 다거리 추천 가이드 (NEW) ── */}
+        {/* ── 10. 목적별 거리 선택 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            🎯 목적별 다거리 인터벌 추천
+            🎯 목적별 인터벌 거리 선택
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구의 [추천 인터벌] 영역에 <strong style={{ color: 'var(--text)' }}>다거리 추천 표</strong>와 <strong style={{ color: 'var(--text)' }}>직접 선택 모드</strong>가 추가되었습니다. 한 가지 거리만 고집하지 말고 주기별로 다양화.
+            위 [추천 인터벌 세션]에서 거리와 횟수를 고르면 워밍업~쿨다운까지 한 세션이 정리됩니다. 어떤 거리를 고를지는 <strong style={{ color: 'var(--text)' }}>훈련 목적</strong>에 따라 달라지며, 한 가지 거리만 고집하지 말고 주기별로 다양화하는 것이 좋습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -341,7 +386,7 @@ export default function IntervalTrainingPage() {
                   { d: '2~3km',    e: '🔵 T 페이스 (역치)',                    t: '하프·풀코스 지구력' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.e}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
                   </tr>

@@ -62,30 +62,31 @@ export default function CardInstallmentPage() {
           </div>
         </div>
 
-        {/* ── 2. 카드사 수수료율 ── */}
+        {/* ── 2. 할부 수수료율 구조 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국 주요 카드사 할부 수수료율 (2024년)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            할부 수수료율은 어떻게 정해지나
           </h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+            카드 할부 수수료율은 카드사별로 고정된 하나의 값이 아니라 <strong style={{ color: 'var(--text)' }}>① 할부 기간(개월)</strong>과 <strong style={{ color: 'var(--text)' }}>② 회원 신용·이용 등급</strong>에 따라 차등 적용됩니다.
+            보통 <strong style={{ color: 'var(--text)' }}>기간이 길수록 수수료율이 높아지는</strong> 구조이며, 8개 전업 카드사 모두 비슷한 구간을 사용합니다. 아래는 업계 일반적인 구간 범위입니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['카드사', '일반 등급', '우수 등급'].map((h, i) => (
+                  {['할부 기간', '일반 등급', '우수 등급'].map((h, i) => (
                     <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { c: '신한카드',   g: '19.9%', p: '15.0%' },
-                  { c: '삼성카드',   g: '19.9%', p: '15.0%' },
-                  { c: 'KB국민카드', g: '19.9%', p: '15.0%' },
-                  { c: '현대카드',   g: '18.9%', p: '14.0%' },
-                  { c: '롯데카드',   g: '19.9%', p: '15.0%' },
-                  { c: '우리카드',   g: '19.5%', p: '14.5%' },
-                  { c: 'NH농협카드', g: '19.5%', p: '15.0%' },
-                  { c: '하나카드',   g: '19.5%', p: '14.5%' },
+                  { c: '2~3개월',     g: '약 10~13%', p: '약 8~11%' },
+                  { c: '4~5개월',     g: '약 13~16%', p: '약 11~14%' },
+                  { c: '6~9개월',     g: '약 15~18%', p: '약 13~16%' },
+                  { c: '10~12개월',   g: '약 18~19.9%', p: '약 15~18%' },
+                  { c: '13개월 이상', g: '약 19~19.9%', p: '약 17~19%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.c}</td>
@@ -96,8 +97,9 @@ export default function CardInstallmentPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 카드사 정책·회원 등급에 따라 변동되므로 정확한 수수료는 공식 홈페이지에서 확인하세요.
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+            ※ 위 수치는 업계 일반 범위를 정리한 <strong style={{ color: 'var(--text)' }}>참고용 추정치</strong>이며, 카드사·시기·회원 등급에 따라 달라집니다.
+            정확한 본인 적용 수수료율은 <strong style={{ color: 'var(--text)' }}>여신금융협회 공시실(cardrate.crefia.or.kr)</strong>, 각 카드사 앱·홈페이지, 또는 결제 화면에서 직접 확인하세요.
           </p>
         </div>
 
@@ -275,7 +277,23 @@ export default function CardInstallmentPage() {
               },
               {
                 q: '할부 개월이 길수록 좋은가요?',
-                a: '월 부담은 줄지만 <strong>총 이자는 급증</strong>합니다. 100만원 기준: 12개월 이자 약 8.3만원, 24개월 이자 약 22만원(12개월의 2.7배), 36개월 이자 약 33만원(12개월의 4배). 가능한 짧은 개월(6~12개월)을 선택하고, 24개월 이상 할부는 신중히 결정하세요.',
+                a: '월 부담은 줄지만 <strong>총 이자는 급증</strong>합니다. 100만원 기준: 12개월 이자 약 8.3만원, 24개월 이자 약 22만원(12개월의 2.7배), 36개월 이자 약 33만원(12개월의 4배). 가능한 짧은 개월(6~12개월)을 선택하고, 24개월 이상 할부는 신중히 결정하세요. 게다가 유이자 할부는 기간이 길수록 적용 수수료율 자체도 높아지는 경우가 많아 이자가 이중으로 늘어납니다.',
+              },
+              {
+                q: '내게 적용되는 정확한 할부 수수료율은 어디서 확인하나요?',
+                a: '세 곳에서 확인할 수 있습니다. ① <strong>여신금융협회 수수료 공시실(cardrate.crefia.or.kr)</strong> — 카드사별 기간 구간별 수수료율을 공시합니다. ② <strong>카드사 앱·홈페이지</strong> — 로그인하면 본인 회원 등급 기준 실제 수수료율이 표시됩니다. ③ <strong>결제 화면</strong> — 온라인 결제 시 할부 개월을 선택하면 적용 수수료율이 안내됩니다. 같은 카드라도 회원 등급·기간에 따라 달라지므로 결제 직전 값이 가장 정확합니다.',
+              },
+              {
+                q: '할부금을 중간에 미리 갚으면(선결제) 이자를 아낄 수 있나요?',
+                a: '네. 유이자 할부는 <strong>남은 원금에 대해서만 수수료가 부과</strong>되므로, 일부 선결제(중도 상환)하거나 전액 선결제하면 그만큼 남은 회차의 수수료를 줄일 수 있습니다. 카드사 앱의 「할부 선결제/일부결제」 메뉴에서 신청 가능하며, 카드론과 달리 <strong>할부 선결제에는 보통 중도상환수수료가 없습니다</strong>. 무이자 할부는 어차피 수수료가 0원이라 선결제 실익이 없습니다.',
+              },
+              {
+                q: '할부로 결제하면 신용점수에 영향을 주나요?',
+                a: '할부 자체가 곧바로 신용점수를 떨어뜨리지는 않습니다. 다만 할부 잔액은 <strong>카드론·현금서비스와 함께 「카드 채무」로 집계</strong>되어 부채 비중이 커지면 평가에 불리할 수 있고, 무엇보다 <strong>결제일에 연체가 발생하면 신용점수가 크게 하락</strong>합니다. 본인 상환 능력 범위 안에서 할부 기간을 정하고 연체를 피하는 것이 핵심입니다.',
+              },
+              {
+                q: '할부 수수료율 상한은 얼마인가요?',
+                a: '카드 할부 수수료는 여신전문금융업법상 <strong>법정 최고금리(연 20%) 이내</strong>에서 정해지며, 실무적으로 대부분 카드사가 <strong>연 19.9%를 상한</strong>으로 운용합니다. 즉 아무리 긴 할부라도 연 20%를 넘을 수 없습니다. 반대로 시중 신용대출 금리(연 5~10%대)보다는 높은 편이라, 금액이 크고 기간이 길다면 할부보다 신용대출이 유리할 수 있습니다.',
               },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

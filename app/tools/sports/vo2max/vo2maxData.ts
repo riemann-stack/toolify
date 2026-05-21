@@ -135,7 +135,7 @@ export function classifyLevel(vo2: number, age: number, sex: Sex): FitnessLevel 
 export const LEVEL_META: Record<FitnessLevel, { label: string; color: string; desc: string }> = {
   excellent: { label: '매우 우수',   color: '#059669', desc: '동년배 상위 10% — 엘리트 러너 수준' },
   good:      { label: '우수',        color: '#0891B2', desc: '동년배 상위 30% — 규칙적 유산소 운동 중' },
-  average:   { label: '평균',        color: '#FFD93E', desc: '동년배 중간 — 일반 활동 수준' },
+  average:   { label: '평균',        color: '#CA8A04', desc: '동년배 중간 — 일반 활동 수준' },
   below:     { label: '미흡',        color: '#EA580C', desc: '동년배 하위 30% — 운동량 ↑ 권장' },
   poor:      { label: '매우 미흡',   color: '#DC2626', desc: '심혈관 위험 ↑ — 의사 상담 후 점진 운동 시작' },
 }

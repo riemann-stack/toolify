@@ -22,27 +22,9 @@ export default function PregnancyPage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🤰 임신 주수 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         지금 임신 몇 주차인지 + 산전 검사·태아 크기·출산 준비를 <strong style={{ color: 'var(--text)' }}>자동 타임라인</strong>으로.
       </p>
-
-      {/* 면책 — 상단 강조 */}
-      <div style={{
-        display: 'flex', alignItems: 'flex-start', gap: '10px',
-        background: 'rgba(220,38,38,0.06)',
-        border: '1px solid rgba(220,38,38,0.3)',
-        borderRadius: '12px', padding: '14px 18px',
-        marginBottom: '40px',
-        fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7,
-      }}>
-        <span style={{ fontSize: '18px', flexShrink: 0 }}>⚕️</span>
-        <p>
-          <strong style={{ color: 'var(--text)' }}>의료 면책 조항:</strong>{' '}
-          본 계산기는 참고용이며, 정확한 진단은 반드시 <strong style={{ color: 'var(--text)' }}>산부인과 전문의와 상담</strong>하십시오.
-          계산 결과는 마지막 생리일을 기준으로 한 이론적 수치이며, 실제 주수는 초음파 검사 결과에 따라 다를 수 있습니다.
-          출혈·복통·발열·태동 감소 등 응급 신호가 있다면 <strong style={{ color: '#DC2626' }}>즉시 산부인과·119·1339</strong>로 연락하세요.
-        </p>
-      </div>
 
       <PregnancyClient />
 
@@ -59,8 +41,8 @@ export default function PregnancyPage() {
             현재 전 세계 산부인과에서 가장 널리 사용되는 표준 방법입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,217,0.25)', borderRadius: '14px', padding: '20px 22px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '12px', color: '#FF6BD9', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: '14px', padding: '20px 22px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '12px', color: '#DB2777', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '14px' }}>
               네겔레 공식 (Naegele&apos;s Rule)
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
@@ -78,18 +60,18 @@ export default function PregnancyPage() {
                 item.isSym
                   ? <span key={i} style={{ fontSize: '20px', color: 'var(--muted)', fontWeight: 700, flexShrink: 0 }}>{item.label}</span>
                   : <div key={i} style={{
-                    background: item.isResult ? 'rgba(255,107,217,0.15)' : item.isInput ? 'var(--bg3)' : 'rgba(14,165,233,0.1)',
-                    border: `1px solid ${item.isResult ? 'rgba(255,107,217,0.4)' : item.isInput ? 'var(--border)' : 'rgba(14,165,233,0.3)'}`,
+                    background: item.isResult ? 'rgba(219,39,119,0.15)' : item.isInput ? 'var(--bg3)' : 'rgba(14,165,233,0.1)',
+                    border: `1px solid ${item.isResult ? 'rgba(219,39,119,0.4)' : item.isInput ? 'var(--border)' : 'rgba(14,165,233,0.3)'}`,
                     borderRadius: '8px', padding: '8px 12px', textAlign: 'center',
                     fontSize: '12px', fontWeight: 600, whiteSpace: 'pre-line', lineHeight: 1.4,
-                    color: item.isResult ? '#FF6BD9' : item.isInput ? 'var(--text)' : 'var(--accent)',
+                    color: item.isResult ? '#DB2777' : item.isInput ? 'var(--text)' : 'var(--accent)',
                   }}>{item.label}</div>
               ))}
             </div>
             <div style={{ background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px' }}>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 마지막 생리 시작일이 <strong style={{ color: 'var(--text)' }}>2025년 10월 1일</strong>이라면<br />
-                → 10월 1일 + 7일 = 10월 8일 → 10월 − 3개월 = 7월 8일 → + 1년 = <strong style={{ color: '#FF6BD9' }}>2026년 7월 8일</strong>이 출산 예정일
+                → 10월 1일 + 7일 = 10월 8일 → 10월 − 3개월 = 7월 8일 → + 1년 = <strong style={{ color: '#DB2777' }}>2026년 7월 8일</strong>이 출산 예정일
               </p>
             </div>
           </div>
@@ -124,7 +106,7 @@ export default function PregnancyPage() {
         {/* ── 3. 산전 검사 가이드 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            산전 검사 가이드 (NEW)
+            산전 검사 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구의 검사 일정은 다음 표준 기반 — <strong style={{ color: 'var(--text)' }}>보건복지부 임신·출산 가이드라인 / 대한산부인과학회(KSOG) 산전 진료 지침 / WHO 임산부 산전 진료 권고안</strong>.
@@ -166,7 +148,7 @@ export default function PregnancyPage() {
         {/* ── 4. 태아 크기 비유 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            태아 크기 비유 가이드 (NEW)
+            태아 크기 비유 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             주차별 태아 크기 일반 비유 (참고용 · 의학적 진단 X) —
@@ -184,8 +166,8 @@ export default function PregnancyPage() {
               ['36주', '🍈 파파야 (~47cm)'],
               ['40주', '🍉 큰 수박 (~51cm)'],
             ].map(([w, label], i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(255,208,225,0.30)', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontSize: 13, color: '#FFD0E1', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
                 <span style={{ fontSize: 12.5, color: 'var(--text)' }}>{label}</span>
               </div>
             ))}
@@ -198,7 +180,7 @@ export default function PregnancyPage() {
         {/* ── 5. 출산 준비 체크리스트 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            삼분기별 출산 준비 체크리스트 (NEW)
+            삼분기별 출산 준비 체크리스트
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
@@ -233,7 +215,7 @@ export default function PregnancyPage() {
         {/* ── 6. 생리주기 보정 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            생리주기 보정의 중요성 (NEW)
+            생리주기 보정의 중요성
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             네겔레 공식은 28일 주기 가정. 본인 주기가 다르면 실제 예정일과 차이가 발생합니다 —

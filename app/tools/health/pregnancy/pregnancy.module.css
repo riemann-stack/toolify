@@ -160,7 +160,7 @@
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveTests    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
-.tabActiveFetal    { background: rgba(255,208,225,0.15); color: #FFD0E1; font-weight: 700; }
+.tabActiveFetal    { background: rgba(219,39,119,0.12); color: #DB2777; font-weight: 700; }
 .tabActiveChecklist{ background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
 .tabActiveReverse  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
@@ -344,7 +344,7 @@
   font-weight: 800;
   font-size: clamp(28px, 6vw, 40px);
   letter-spacing: -1px;
-  color: #FFD0E1;
+  color: #DB2777;
   margin-bottom: 4px;
 }
 .fetalLength {
@@ -383,9 +383,9 @@
   .fetalCell:hover { transform: translateY(-2px); }
 }
 .fetalCellActive {
-  background: rgba(255,208,225,0.12);
-  border-color: #FFD0E1;
-  box-shadow: 0 0 0 2px rgba(255,208,225,0.25);
+  background: rgba(219,39,119,0.10);
+  border-color: #DB2777;
+  box-shadow: 0 0 0 2px rgba(219,39,119,0.25);
 }
 .fetalCellWeek {
   font-family: 'Inter', system-ui, sans-serif;
@@ -503,17 +503,22 @@
 .dateInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 14px;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
   color: var(--text);
   outline: none;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
 }
-.dateInput:focus { border-color: var(--accent); }
+.dateInput::-webkit-date-and-time-value { text-align: left; }
+.dateInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
 
 .advanced {
   background: var(--bg2);

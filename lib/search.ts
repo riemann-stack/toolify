@@ -31,6 +31,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   // 금융
   '/tools/finance/salary':       ['월급', '실수령', '세후', '세전', '연봉', '근로소득', '월급계산', '실수령액'],
   '/tools/finance/loan':         ['주담대', '신용대출', '대출', '이자', '원리금', '갈아타기', '중도상환', '대환'],
+  '/tools/finance/dsr':          ['DSR', 'LTV', '스트레스DSR', '스트레스 DSR', '대출한도', '총부채원리금상환비율', '담보인정비율', '주담대한도', 'DTI'],
   '/tools/finance/compound':     ['복리', '적금', '적립', '예금', '재테크', '이자수익', '투자수익'],
   '/tools/finance/stock':        ['물타기', '평단', '평균단가', '주식', '추가매수', '손절', '익절'],
   '/tools/finance/vat':          ['vat', '부가세', '매입세', '매출세', '세금계산서', '사업자', '간이과세'],

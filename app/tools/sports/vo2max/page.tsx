@@ -168,10 +168,13 @@ export default function VO2MaxPage() {
 
         {/* 3. ACSM 등급 표 */}
         <section>
-          <h2 style={sectionTitle}>ACSM 동년배 등급표 (mL/kg/min)</h2>
+          <h2 style={sectionTitle}>ACSM 등급표 (mL/kg/min)</h2>
+
+          {/* 남성 */}
+          <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>♂ 남성</p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '520px', fontSize: '12.5px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '12.5px' }}>
                 <thead>
                   <tr>
                     <th style={headCell}>연령</th>
@@ -183,20 +186,42 @@ export default function VO2MaxPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td style={cell}><strong>♂ 20대</strong></td><td style={cell}>&lt; 38</td><td style={cell}>38~43</td><td style={cell}>44~51</td><td style={cell}>52~56</td><td style={cell}><strong style={{ color: '#059669' }}>57+</strong></td></tr>
-                  <tr><td style={cell}><strong>♂ 30대</strong></td><td style={cell}>&lt; 34</td><td style={cell}>34~39</td><td style={cell}>40~47</td><td style={cell}>48~51</td><td style={cell}><strong style={{ color: '#059669' }}>52+</strong></td></tr>
-                  <tr><td style={cell}><strong>♂ 40대</strong></td><td style={cell}>&lt; 30</td><td style={cell}>30~35</td><td style={cell}>36~43</td><td style={cell}>44~47</td><td style={cell}><strong style={{ color: '#059669' }}>48+</strong></td></tr>
-                  <tr><td style={cell}><strong>♂ 50대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~31</td><td style={cell}>32~39</td><td style={cell}>40~43</td><td style={cell}><strong style={{ color: '#059669' }}>44+</strong></td></tr>
-                  <tr><td style={cell}><strong>♂ 60대+</strong></td><td style={cell}>&lt; 21</td><td style={cell}>21~26</td><td style={cell}>27~35</td><td style={cell}>36~39</td><td style={cell}><strong style={{ color: '#059669' }}>40+</strong></td></tr>
-                  <tr><td style={cell}><strong>♀ 20대</strong></td><td style={cell}>&lt; 28</td><td style={cell}>28~33</td><td style={cell}>34~41</td><td style={cell}>42~46</td><td style={cell}><strong style={{ color: '#059669' }}>47+</strong></td></tr>
-                  <tr><td style={cell}><strong>♀ 30대</strong></td><td style={cell}>&lt; 27</td><td style={cell}>27~32</td><td style={cell}>33~40</td><td style={cell}>41~45</td><td style={cell}><strong style={{ color: '#059669' }}>46+</strong></td></tr>
-                  <tr><td style={cell}><strong>♀ 40대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~30</td><td style={cell}>31~38</td><td style={cell}>39~42</td><td style={cell}><strong style={{ color: '#059669' }}>43+</strong></td></tr>
-                  <tr><td style={cell}><strong>♀ 50대</strong></td><td style={cell}>&lt; 22</td><td style={cell}>22~28</td><td style={cell}>29~36</td><td style={cell}>37~40</td><td style={cell}><strong style={{ color: '#059669' }}>41+</strong></td></tr>
-                  <tr><td style={cell}><strong>♀ 60대+</strong></td><td style={cell}>&lt; 20</td><td style={cell}>20~25</td><td style={cell}>26~32</td><td style={cell}>33~36</td><td style={cell}><strong style={{ color: '#059669' }}>37+</strong></td></tr>
+                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 38</td><td style={cell}>38~43</td><td style={cell}>44~51</td><td style={cell}>52~56</td><td style={cell}><strong style={{ color: '#059669' }}>57+</strong></td></tr>
+                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 34</td><td style={cell}>34~39</td><td style={cell}>40~47</td><td style={cell}>48~51</td><td style={cell}><strong style={{ color: '#059669' }}>52+</strong></td></tr>
+                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 30</td><td style={cell}>30~35</td><td style={cell}>36~43</td><td style={cell}>44~47</td><td style={cell}><strong style={{ color: '#059669' }}>48+</strong></td></tr>
+                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~31</td><td style={cell}>32~39</td><td style={cell}>40~43</td><td style={cell}><strong style={{ color: '#059669' }}>44+</strong></td></tr>
+                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 21</td><td style={cell}>21~26</td><td style={cell}>27~35</td><td style={cell}>36~39</td><td style={cell}><strong style={{ color: '#059669' }}>40+</strong></td></tr>
                 </tbody>
               </table>
             </div>
           </div>
+
+          {/* 여성 */}
+          <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '20px 0 8px' }}>♀ 여성</p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '12.5px' }}>
+                <thead>
+                  <tr>
+                    <th style={headCell}>연령</th>
+                    <th style={headCell}>매우 미흡</th>
+                    <th style={headCell}>미흡</th>
+                    <th style={headCell}>평균</th>
+                    <th style={headCell}>우수</th>
+                    <th style={headCell}>매우 우수</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 28</td><td style={cell}>28~33</td><td style={cell}>34~41</td><td style={cell}>42~46</td><td style={cell}><strong style={{ color: '#059669' }}>47+</strong></td></tr>
+                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 27</td><td style={cell}>27~32</td><td style={cell}>33~40</td><td style={cell}>41~45</td><td style={cell}><strong style={{ color: '#059669' }}>46+</strong></td></tr>
+                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~30</td><td style={cell}>31~38</td><td style={cell}>39~42</td><td style={cell}><strong style={{ color: '#059669' }}>43+</strong></td></tr>
+                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 22</td><td style={cell}>22~28</td><td style={cell}>29~36</td><td style={cell}>37~40</td><td style={cell}><strong style={{ color: '#059669' }}>41+</strong></td></tr>
+                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 20</td><td style={cell}>20~25</td><td style={cell}>26~32</td><td style={cell}>33~36</td><td style={cell}><strong style={{ color: '#059669' }}>37+</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ ACSM Guidelines for Exercise Testing and Prescription (11판) · Cooper Institute Fitness Norms 기준
           </p>

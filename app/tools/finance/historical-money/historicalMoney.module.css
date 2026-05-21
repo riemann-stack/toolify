@@ -34,7 +34,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 6px;
 }
-@media (max-width: 540px) { .dirRow { grid-template-columns: 1fr; } }
 .dirBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -46,7 +45,9 @@
   color: var(--muted);
   cursor: pointer;
   transition: all 0.12s;
+  white-space: nowrap;
 }
+@media (max-width: 380px) { .dirBtn { font-size: 12px; padding: 11px 6px; } }
 @media (hover: hover) { .dirBtn:hover { color: var(--text); border-color: var(--border-hover); } }
 .dirBtnActive {
   background: var(--accent-dim);

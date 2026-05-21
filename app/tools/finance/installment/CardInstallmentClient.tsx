@@ -20,22 +20,6 @@ const fmtComma = (v: string): string => {
   return parseInt(num, 10).toLocaleString('ko-KR')
 }
 
-// ─────────────────────────────────────────────
-// 카드사 프리셋
-// ─────────────────────────────────────────────
-type CardBrandKey = 'shinhan' | 'samsung' | 'kbk' | 'hyundai' | 'lotte' | 'woori' | 'nh' | 'hana' | 'custom'
-const CARD_BRANDS: { key: CardBrandKey; name: string; rate: number; range: string; cls: string }[] = [
-  { key: 'shinhan', name: '신한카드',   rate: 19.9, range: '15.0~19.9%', cls: s.cbShinhan },
-  { key: 'samsung', name: '삼성카드',   rate: 19.9, range: '15.0~19.9%', cls: s.cbSamsung },
-  { key: 'kbk',     name: 'KB국민카드', rate: 19.9, range: '15.0~19.9%', cls: s.cbKbk },
-  { key: 'hyundai', name: '현대카드',   rate: 18.9, range: '14.0~18.9%', cls: s.cbHyundai },
-  { key: 'lotte',   name: '롯데카드',   rate: 19.9, range: '15.0~19.9%', cls: s.cbLotte },
-  { key: 'woori',   name: '우리카드',   rate: 19.5, range: '14.5~19.5%', cls: s.cbWoori },
-  { key: 'nh',      name: 'NH농협카드', rate: 19.5, range: '15.0~19.5%', cls: s.cbNh },
-  { key: 'hana',    name: '하나카드',   rate: 19.5, range: '14.5~19.5%', cls: s.cbHana },
-  { key: 'custom',  name: '직접 입력',  rate: 18.0, range: '',           cls: s.cbCustom },
-]
-
 const MONTH_OPTIONS = [2, 3, 4, 5, 6, 9, 10, 12, 18, 24, 36]
 
 // ─────────────────────────────────────────────
@@ -107,7 +91,6 @@ export default function CardInstallmentClient() {
   const [months, setMonths] = useState<number>(12)
   const [customMonth, setCustomMonth] = useState<string>('')
   const [installType, setInstallType] = useState<InstallType>('paid')
-  const [brand, setBrand] = useState<CardBrandKey>('shinhan')
   const [rate, setRate] = useState<string>('19.9')
   const [freeMonths, setFreeMonths] = useState<string>('4')
   const [cashDiscount, setCashDiscount] = useState<string>('0')
@@ -131,13 +114,6 @@ export default function CardInstallmentClient() {
   const [copied, setCopied] = useState<boolean>(false)
 
   const effMonths = months === 0 ? Math.max(1, parseComma(customMonth) || 1) : months
-
-  // 카드사 변경 시 자동 rate
-  function selectBrand(k: CardBrandKey) {
-    setBrand(k)
-    const b = CARD_BRANDS.find(x => x.key === k)
-    if (b && k !== 'custom') setRate(b.rate.toString())
-  }
 
   // ─────────────────────────────────────────────
   // TAB 1 계산
@@ -487,36 +463,25 @@ export default function CardInstallmentClient() {
             </div>
 
             {installType !== 'free' && (
-              <>
-                <div className={s.cardBrandRow}>
-                  {CARD_BRANDS.map(b => (
-                    <button
-                      key={b.key}
-                      className={`${s.cardBrandBtn} ${b.cls} ${brand === b.key ? s.cbActive : ''}`}
-                      onClick={() => selectBrand(b.key)}
-                      type="button"
-                    >
-                      {b.name}
-                    </button>
-                  ))}
+              <div className={s.rateRow}>
+                <span className={s.subLabel}>연 수수료율 (%)</span>
+                <div className={s.inputRow}>
+                  <input
+                    className={s.smallInput}
+                    type="number"
+                    inputMode="decimal"
+                    min="0"
+                    max="50"
+                    step="0.1"
+                    value={rate}
+                    onChange={e => setRate(e.target.value)}
+                  />
+                  <span className={s.unit}>% / 년</span>
                 </div>
-                <div className={s.rateRow}>
-                  <span className={s.subLabel}>연 수수료율 (%)</span>
-                  <div className={s.inputRow}>
-                    <input
-                      className={s.smallInput}
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      max="50"
-                      step="0.1"
-                      value={rate}
-                      onChange={e => setRate(e.target.value)}
-                    />
-                    <span className={s.unit}>% / 년</span>
-                  </div>
-                </div>
-              </>
+                <p className={s.rateHint}>
+                  카드사·할부 기간·이용자에 따라 수수료율이 다릅니다. 정확한 값은 카드사 앱·고객센터 또는 결제 화면에서 확인 후 입력하세요.
+                </p>
+              </div>
             )}
 
             {installType === 'partial' && (

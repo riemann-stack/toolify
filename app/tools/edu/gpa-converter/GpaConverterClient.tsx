@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './gpaConverter.module.css'
 import {
-  SCALES, METHODS, KOREAN_UNIS, LETTER_TABLE,
-  convertGpa, toPercent, reverseFromUs,
+  SCALES, METHODS, KOREAN_UNIS, LETTER_TABLE, KR_SCALES,
+  convertGpa, toPercent, reverseFromUs, crossConvert,
   type ScaleId, type MethodId,
 } from './gpaData'
 
@@ -108,6 +108,33 @@ export default function GpaConverterClient() {
           <p className={s.warn}>학점은 0 초과 {scaleObj.max} 이하 값이어야 합니다.</p>
         )}
       </div>
+
+      {/* 한국 만점 상호 환산 — 4.3 ↔ 4.5 ↔ 5.0 */}
+      {valid && (
+        <div className={s.card}>
+          <span className={s.cardLabel}>
+            한국 만점 상호 환산
+            <span className={s.cardHint}>4.3 ↔ 4.5 ↔ 5.0 (백분율 비례)</span>
+          </span>
+          <div className={s.crossGrid}>
+            {KR_SCALES.map((target) => {
+              const isSource = target === scale
+              const val = isSource ? gpa : crossConvert(gpa, scale, target)
+              return (
+                <div key={target} className={`${s.crossCell} ${isSource ? s.crossCellSource : ''}`}>
+                  <span className={s.crossScale}>{target} 만점</span>
+                  <span className={s.crossValue}>{val.toFixed(2)}</span>
+                  <span className={s.crossMax}>/ {target}</span>
+                  {isSource && <span className={s.crossSourceTag}>입력값</span>}
+                </div>
+              )
+            })}
+          </div>
+          <p className={s.note}>
+            백분율을 경유한 단순 비례 환산입니다. 평어(A+/B0 등) 분포가 만점별로 달라 실제 성적표 환산과 차이가 날 수 있으니 참고용으로만 사용하세요.
+          </p>
+        </div>
+      )}
 
       {/* 환산 방식 토글 */}
       <div className={s.card}>

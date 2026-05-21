@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ConverterClient from './ConverterClient'
+import ConversionTableTabs from './ConversionTableTabs'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 
@@ -7,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/unit/converter',
   title: '단위 변환기 — 길이·무게·부피·온도·압력·토크·에너지·당도·농도·기울기 14종',
   description:
-    '길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 11종 + kgf/cm²·N·m·BTU와 한국 전통 단위(자·근·돈·평·홉·되).',
+    '길이·면적·무게·부피·온도부터 압력·토크·에너지·당도·농도·기울기까지 14종을 한 곳에서. 척·치·푼·자·평·정보·근·돈·홉·되 등 한국 전통 도량형도 함께 변환합니다.',
   keywords: [
     '단위 변환기', '단위 변환', '길이 변환', '무게 변환', '온도 변환',
     '시간 변환', '면적 변환', 'cm to inch', 'kg to lb', '평 ㎡',
@@ -27,7 +28,8 @@ export default function ConverterPage() {
         📐 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 <strong style={{ color: 'var(--text)' }}>11종 + 자·근·돈·평·홉</strong>.
+        길이·면적·무게·부피·온도부터 압력·토크·당도·농도·기울기까지 <strong style={{ color: 'var(--text)' }}>14가지 분야</strong>를 한 곳에서.
+        <strong style={{ color: 'var(--text)' }}> 척·치·푼·평·정보·근·돈·홉·되</strong> 같은 한국 전통 도량형도 함께 변환할 수 있어요.
       </p>
 
       <ConverterClient />
@@ -35,60 +37,10 @@ export default function ConverterPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* 자주 쓰는 변환 표 */}
+        {/* 자주 쓰는 변환 표 — 분야별 서브탭 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 쓰는 변환</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>입력</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#9333EA', fontWeight: 700 }}>결과</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['📏 길이', '1 마일',     '1.609 km'],
-                  ['📏 길이', '1 피트',     '30.48 cm'],
-                  ['📏 길이', '1 야드',     '0.914 m'],
-                  ['📏 길이', '1 인치',     '2.54 cm'],
-                  ['🏠 면적', '1 평',       '3.306 ㎡'],
-                  ['🏠 면적', '84 ㎡',      '25.4 평'],
-                  ['🏠 면적', '1 에이커',   '4,047 ㎡ (약 1,224평)'],
-                  ['⚖️ 무게', '1 근 (한국)', '600 g'],
-                  ['⚖️ 무게', '1 돈',       '3.75 g'],
-                  ['⚖️ 무게', '1 파운드',   '453.59 g'],
-                  ['⚖️ 무게', '1 온스',     '28.35 g'],
-                  ['🧴 부피', '1 컵 (한국)', '200 ml'],
-                  ['🧴 부피', '1 갤런 (US)', '3,785 ml'],
-                  ['🧴 부피', '1 큰술',     '15 ml'],
-                  ['🧴 부피', '1 되',       '1.8 L'],
-                  ['🌡️ 온도', '0 ℃',       '32 ℉'],
-                  ['🌡️ 온도', '100 ℃',     '212 ℉'],
-                  ['🌡️ 온도', '37 ℃',      '98.6 ℉ (체온)'],
-                  ['🚗 속도', '60 mph',    '96.56 km/h'],
-                  ['💨 압력', '1 bar',     '14.5 psi'],
-                  ['🍯 당도', '딸기 10°Bx', '10% (= 100 g/L)'],
-                  ['🍯 염도', '김치 7염%',  '70 g/L (= 70,000 ppm)'],
-                  ['🍯 염도', '해수 35‰',   '3.5% (염도)'],
-                  ['🧪 농도', '100 ppm',    '0.01% (= 100 mg/L)'],
-                  ['🧪 농도', '1 ppm',      '1,000 ppb'],
-                  ['📐 기울기', '5% 경사',  '약 2.86°'],
-                  ['📐 기울기', '30°',       '57.7% 경사'],
-                  ['📐 기울기', '1/100 구배', '약 0.57°'],
-                  ['📐 기울기', '4치 물매',  '약 21.8° (= 40% 경사)'],
-                  ['📐 기울기', '10치 물매', '45° (= 100% 경사)'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ConversionTableTabs />
         </section>
 
         {/* 한국 전통 단위 가이드 */}
@@ -99,8 +51,8 @@ export default function ConverterPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {[
-              { name: '📏 길이', items: ['치(寸) ≈ 3.03cm', '자(尺) ≈ 30.3cm', '보(步) ≈ 1.82m', '리(里) ≈ 393m (한국)'] },
-              { name: '🏠 면적', items: ['평(坪) = 400/121 ㎡ ≈ 3.306㎡', '단보(段) ≈ 991㎡ (300평)', '마지기 ≈ 661㎡ (200평·지역차 큼)'] },
+              { name: '📏 길이', items: ['푼(分) ≈ 3.03mm', '치/촌(寸) ≈ 3.03cm', '자/척(尺) ≈ 30.3cm', '보(步)·간(間) ≈ 1.82m', '정(町) ≈ 109m', '리(里) ≈ 393m (한국)'] },
+              { name: '🏠 면적', items: ['평(坪) = 400/121 ㎡ ≈ 3.306㎡', '단보(段步) ≈ 991㎡ (300평)', '정보(町步) ≈ 9,917㎡ (3,000평)', '마지기 ≈ 661㎡ (200평·지역차 큼)'] },
               { name: '⚖️ 무게', items: ['돈(錢) = 3.75g (귀금속)', '냥(兩) = 37.5g', '근(斤) = 600g (한국 시장 관행)', '관(貫) = 3.75kg'] },
               { name: '🧴 부피', items: ['홉(合) = 180ml', '되(升) = 1.8L', '말(斗) = 18L', '컵 = 200ml (한국 표준)', '소주잔 ≈ 50ml · 종이컵 ≈ 180ml'] },
             ].map((c, i) => (
@@ -122,8 +74,8 @@ export default function ConverterPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>14개 카테고리 가이드</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
-              { icon: '📏', name: '길이', desc: 'mm·cm·m·km / inch·ft·yard·mile / 치·자·보·간·정·리(한국)' },
-              { icon: '🏠', name: '면적', desc: '㎡·a·ha·km² / ft²·yd²·acre / 평·단보·마지기(한국)' },
+              { icon: '📏', name: '길이', desc: 'mm·cm·m·km / inch·ft·yard·mile / 푼·치·자(척)·보·간·정·리(한국)' },
+              { icon: '🏠', name: '면적', desc: '㎡·a·ha·km² / ft²·yd²·acre / 평·단보·정보·마지기(한국)' },
               { icon: '⚖️', name: '무게', desc: 'mg·g·kg·ton / oz·lb / 돈·냥·근·관(한국)' },
               { icon: '🧴', name: '부피', desc: 'ml·L / fl oz·gallon(US) / 큰술·작은술·컵 / 홉·되·말·섬(전통) / 소주잔·종이컵·밥숟가락(생활)' },
               { icon: '🌡️', name: '온도', desc: '섭씨(℃)·화씨(℉)·켈빈(K)·랭킨(°R) — 비선형 변환 별도 처리' },

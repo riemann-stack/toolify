@@ -20,6 +20,7 @@ export const categories: Category[] = [
     tools: [
       { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '세금·4대보험 떼고 통장에 진짜 꽂히는 그 월급. 2026년 최신 기준 자동 + 인상률·시급 환산.', badge: 'hot' },
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확하게.' },
+      { href: '/tools/finance/dsr',      icon: '🏦', name: 'DSR·LTV·스트레스DSR 계산기', desc: '연소득·집값·금리 한 번 입력으로 DSR·LTV·스트레스DSR 동시 계산. 변동/혼합/고정 금리별 최대 대출 한도까지.', badge: 'new' },
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치·적립·증액·인플레이션 반영. 시간이 만드는 자산을 시나리오별로 비교.' },
       { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률을 즉시.' },
       { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',        desc: '공급가·세액·합계 자유 역산. 견적서·세금계산서 그대로 쓰는 사업자·프리랜서 도구.' },
@@ -146,7 +147,7 @@ export const categories: Category[] = [
   {
     id: 'unit', icon: '📐', name: '단위·변환', color: '#7C3AED',
     tools: [
-      { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',         desc: '길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 11종 + 자·근·돈·평·홉.', badge: 'hot' },
+      { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',         desc: '길이·무게·온도·압력·당도 등 14가지 분야를 한 번에. 척·치·푼·평·정보·근·돈·홉 같은 한국 전통 도량형도 변환.', badge: 'hot' },
       { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',          desc: '아파트 평형·전용·공급·계약면적 환산 + 평형별 방 크기 가이드.' },
       { href: '/tools/unit/size',          icon: '🛍️', name: '사이즈 변환기',    desc: 'US·EU·UK 의류·신발·속옷·반지를 한국 사이즈로 + 브랜드별 차이 가이드.', badge: 'hot' },
       { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',         desc: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정.' },

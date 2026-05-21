@@ -481,7 +481,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: catFloat 5s ease-in-out infinite;
+  animation: catFloat 3.3s ease-in-out infinite;
   transform-origin: center center;
   transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
   will-change: transform;
@@ -499,21 +499,21 @@
 }
 
 /* 11개 카드에 서로 다른 딜레이·기간을 줘서 둥둥 떠다니는 인상 */
-.catGrid .catCard:nth-child(1)  { animation-delay: -0.0s;  animation-duration: 5.2s; }
-.catGrid .catCard:nth-child(2)  { animation-delay: -0.9s;  animation-duration: 4.6s; }
-.catGrid .catCard:nth-child(3)  { animation-delay: -1.6s;  animation-duration: 5.8s; }
-.catGrid .catCard:nth-child(4)  { animation-delay: -2.3s;  animation-duration: 4.9s; }
-.catGrid .catCard:nth-child(5)  { animation-delay: -0.4s;  animation-duration: 5.5s; }
-.catGrid .catCard:nth-child(6)  { animation-delay: -1.2s;  animation-duration: 4.7s; }
-.catGrid .catCard:nth-child(7)  { animation-delay: -2.0s;  animation-duration: 5.3s; }
-.catGrid .catCard:nth-child(8)  { animation-delay: -0.6s;  animation-duration: 5.0s; }
-.catGrid .catCard:nth-child(9)  { animation-delay: -1.8s;  animation-duration: 4.8s; }
-.catGrid .catCard:nth-child(10) { animation-delay: -2.6s;  animation-duration: 5.6s; }
-.catGrid .catCard:nth-child(11) { animation-delay: -1.4s;  animation-duration: 5.1s; }
+.catGrid .catCard:nth-child(1)  { animation-delay: -0.0s;  animation-duration: 3.47s; }
+.catGrid .catCard:nth-child(2)  { animation-delay: -0.6s;  animation-duration: 3.07s; }
+.catGrid .catCard:nth-child(3)  { animation-delay: -1.07s; animation-duration: 3.87s; }
+.catGrid .catCard:nth-child(4)  { animation-delay: -1.53s; animation-duration: 3.27s; }
+.catGrid .catCard:nth-child(5)  { animation-delay: -0.27s; animation-duration: 3.67s; }
+.catGrid .catCard:nth-child(6)  { animation-delay: -0.8s;  animation-duration: 3.13s; }
+.catGrid .catCard:nth-child(7)  { animation-delay: -1.33s; animation-duration: 3.53s; }
+.catGrid .catCard:nth-child(8)  { animation-delay: -0.4s;  animation-duration: 3.33s; }
+.catGrid .catCard:nth-child(9)  { animation-delay: -1.2s;  animation-duration: 3.2s; }
+.catGrid .catCard:nth-child(10) { animation-delay: -1.73s; animation-duration: 3.73s; }
+.catGrid .catCard:nth-child(11) { animation-delay: -0.93s; animation-duration: 3.4s; }
 
 @keyframes catFloat {
-  0%, 100% { transform: translateY(0) rotate(-0.4deg); }
-  50%      { transform: translateY(-4px) rotate(0.4deg); }
+  0%, 100% { transform: translateY(0) rotate(-0.6deg); }
+  50%      { transform: translateY(-6px) rotate(0.6deg); }
 }
 
 @media (hover: hover) {

@@ -89,30 +89,10 @@
 /* ══════════════════════════════════════════════
    사용자 #5: 추천 인터벌 다거리 + 직접 선택
    ══════════════════════════════════════════════ */
-.recoModeRow { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
-.recoModeToggle { display: flex; gap: 4px; background: var(--bg3); border-radius: 8px; padding: 3px; }
-.recoModeBtn {
-  background: transparent; border: none; padding: 6px 12px;
-  font-size: 11.5px; color: var(--muted); cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; border-radius: 6px;
-  font-weight: 600;
-}
-.recoModeBtnActive { background: var(--bg2); color: var(--accent); }
 .recoSubLabel { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; line-height: 1.5; }
-.recoTable {
-  width: 100%; border-collapse: collapse; font-size: 12.5px;
-}
-.recoTable th {
-  padding: 8px 10px; text-align: left; color: var(--muted);
-  font-weight: 500; font-size: 11px;
-  border-bottom: 1px solid var(--border);
-}
-.recoTable td {
-  padding: 8px 10px; border-bottom: 1px solid var(--border);
-}
 .recoHint {
   font-size: 11.5px; color: var(--muted); line-height: 1.7;
-  margin: 10px 0 0;
+  margin: 12px 0 0;
 }
 
 .customGrid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
@@ -136,13 +116,65 @@
   .customDistGrid { grid-template-columns: repeat(3, 1fr); }
 }
 
-.customResultCard {
-  background: var(--bg3); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 10px; padding: 14px 16px;
+/* 세션 플랜 (워밍업~쿨다운 정리) */
+.sessionPlan {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
 }
-.customResultTitle {
-  font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 700;
-  color: var(--accent); margin: 0 0 10px;
+.sessionRow {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.sessionRow:last-child { border-bottom: none; }
+.sessionRowMain {
+  background: var(--accent-dim);
+}
+.sessionStage {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.sessionRowMain .sessionStage { color: var(--accent); }
+.sessionDetail {
+  font-size: 13px;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sessionDetail strong {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  color: var(--text);
+}
+.sessionRowMain .sessionDetail strong { color: var(--accent); }
+.sessionSep { color: var(--muted); font-size: 12px; }
+.sessionPace {
+  margin-left: auto;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.sessionPaceMuted {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sessionDivider { height: 1px; background: var(--border); }
+@media (max-width: 480px) {
+  .sessionRow { grid-template-columns: 78px 1fr; gap: 8px; padding: 10px 12px; }
+  .sessionStage { font-size: 11px; }
 }
 
 /* 한국 대회 빠른 선택 */

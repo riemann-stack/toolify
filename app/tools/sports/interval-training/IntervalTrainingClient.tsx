@@ -165,10 +165,9 @@ export default function IntervalTrainingClient() {
   const [copiedKey, setCopiedKey] = useState<string>('')
   const [resultCopied, setResultCopied] = useState<boolean>(false)
 
-  // ── 추천 인터벌 사용자 직접 모드 ──
-  const [recoMode, setRecoMode] = useState<'auto' | 'custom'>('auto')
+  // ── 추천 인터벌 세션 (거리·횟수 직접 선택) ──
   const [customDist, setCustomDist] = useState<number>(800)
-  const [customReps, setCustomReps] = useState<number>(6)
+  const [customReps, setCustomReps] = useState<number>(8)
 
   // ── localStorage 자동 저장 ──
   const [hydrated, setHydrated] = useState(false)
@@ -717,146 +716,98 @@ export default function IntervalTrainingClient() {
             </div>
           )}
 
-          {/* 추천 훈련 — 다거리 표 + 사용자 직접 모드 */}
+          {/* 추천 인터벌 세션 — 거리·횟수 직접 선택 */}
           {intervalPaceSec > 0 && (
             <div className={s.recoCard}>
-              <div className={s.recoModeRow}>
-                <p className={s.recoTitle}>🎯 추천 인터벌</p>
-                <div className={s.recoModeToggle}>
-                  <button className={`${s.recoModeBtn} ${recoMode === 'auto' ? s.recoModeBtnActive : ''}`}
-                    onClick={() => setRecoMode('auto')}>다거리 추천</button>
-                  <button className={`${s.recoModeBtn} ${recoMode === 'custom' ? s.recoModeBtnActive : ''}`}
-                    onClick={() => setRecoMode('custom')}>직접 선택</button>
+              <p className={s.recoTitle}>🎯 추천 인터벌 세션</p>
+              <p className={s.recoSubLabel}>인터벌 거리와 반복 횟수를 고르면 워밍업~쿨다운 전체 세션을 정리해 드려요</p>
+
+              <div className={s.customGrid}>
+                <div>
+                  <span className={s.subLabel}>인터벌 거리</span>
+                  <div className={s.customDistGrid}>
+                    {[200, 400, 600, 800, 1000, 1200, 1600, 2000].map(d => (
+                      <button key={d} type="button"
+                        className={`${s.customDistBtn} ${customDist === d ? s.customDistBtnActive : ''}`}
+                        onClick={() => setCustomDist(d)}>
+                        {d >= 1000 ? `${d / 1000}km` : `${d}m`}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <span className={s.subLabel}>반복 횟수: {customReps}회</span>
+                  <div className={s.sliderRow}>
+                    <input type="range" min={1} max={12} value={customReps}
+                      onChange={e => setCustomReps(Number(e.target.value))} />
+                    <span className={s.sliderValue}>{customReps}회</span>
+                  </div>
                 </div>
               </div>
 
-              {recoMode === 'auto' ? (
-                <>
-                  <p className={s.recoSubLabel}>본인 VDOT·{GOALS.find(g => g.key === goal)?.label} 목적별 메뉴</p>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table className={s.recoTable}>
-                      <thead>
-                        <tr>
-                          <th>거리</th>
-                          <th>횟수</th>
-                          <th style={{ textAlign: 'right' }}>페이스</th>
-                          <th>회복</th>
-                          <th style={{ textAlign: 'right' }}>총 빠른 거리</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(() => {
-                          // 목적별 다거리 추천
-                          const presetMatrix: Record<string, Array<{ dist: number; minReps: number; maxReps: number; recovery: string }>> = {
-                            speed: [
-                              { dist: 200, minReps: 8,  maxReps: 12, recovery: '200m 조깅' },
-                              { dist: 400, minReps: 6,  maxReps: 10, recovery: '200m 조깅' },
-                              { dist: 600, minReps: 5,  maxReps: 8,  recovery: '300m 조깅' },
-                            ],
-                            '5k': [
-                              { dist: 400, minReps: 8,  maxReps: 10, recovery: '200m 조깅' },
-                              { dist: 600, minReps: 5,  maxReps: 7,  recovery: '300m 조깅' },
-                              { dist: 800, minReps: 5,  maxReps: 6,  recovery: '400m 조깅' },
-                              { dist: 1000, minReps: 4, maxReps: 5,  recovery: '400m 조깅' },
-                              { dist: 1200, minReps: 3, maxReps: 4,  recovery: '400m 조깅' },
-                            ],
-                            '10k': [
-                              { dist: 400, minReps: 8,  maxReps: 10, recovery: '200m 조깅' },
-                              { dist: 800, minReps: 5,  maxReps: 6,  recovery: '400m 조깅' },
-                              { dist: 1000, minReps: 4, maxReps: 6,  recovery: '400m 조깅' },
-                              { dist: 1200, minReps: 3, maxReps: 4,  recovery: '400m 조깅' },
-                              { dist: 1600, minReps: 3, maxReps: 4,  recovery: '600m 조깅' },
-                            ],
-                            half: [
-                              { dist: 1000, minReps: 5, maxReps: 6, recovery: '400m 조깅' },
-                              { dist: 1600, minReps: 4, maxReps: 5, recovery: '600m 조깅' },
-                              { dist: 2000, minReps: 3, maxReps: 4, recovery: '600m 조깅' },
-                              { dist: 3000, minReps: 2, maxReps: 3, recovery: '800m 조깅' },
-                            ],
-                            marathon: [
-                              { dist: 800,  minReps: 6, maxReps: 10, recovery: '400m 조깅 (야소 800)' },
-                              { dist: 1000, minReps: 5, maxReps: 6,  recovery: '400m 조깅' },
-                              { dist: 1600, minReps: 3, maxReps: 4,  recovery: '600m 조깅' },
-                              { dist: 2000, minReps: 3, maxReps: 4,  recovery: '600m 조깅 (M 페이스)' },
-                            ],
-                          }
-                          const presets = presetMatrix[goal] ?? presetMatrix['5k']
-                          return presets.map((p, i) => {
-                            const lapSec = (intervalPaceSec * p.dist) / 1000
-                            const distLabel = p.dist >= 1000 ? `${p.dist / 1000}km` : `${p.dist}m`
-                            const fastMin = (p.dist * p.minReps) / 1000
-                            const fastMax = (p.dist * p.maxReps) / 1000
-                            return (
-                              <tr key={i}>
-                                <td style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FFD93E' }}>{distLabel}</td>
-                                <td style={{ color: 'var(--text)', fontWeight: 600 }}>{p.minReps}~{p.maxReps}회</td>
-                                <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{fmtMS(lapSec)}</td>
-                                <td style={{ color: 'var(--muted)', fontSize: 12 }}>{p.recovery}</td>
-                                <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{fastMin.toFixed(1)}~{fastMax.toFixed(1)}km</td>
-                              </tr>
-                            )
-                          })
-                        })()}
-                      </tbody>
-                    </table>
-                  </div>
-                  <p className={s.recoHint}>
-                    💡 초보 → 권장 횟수의 50~70% / 중급 → 권장 / 고급 → 권장 +1~2회. 컨디션 우선.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className={s.recoSubLabel}>거리·횟수를 직접 선택하면 즉시 계산</p>
-                  <div className={s.customGrid}>
-                    <div>
-                      <span className={s.subLabel}>거리</span>
-                      <div className={s.customDistGrid}>
-                        {[200, 400, 600, 800, 1000, 1200, 1600, 2000].map(d => (
-                          <button key={d} type="button"
-                            className={`${s.customDistBtn} ${customDist === d ? s.customDistBtnActive : ''}`}
-                            onClick={() => setCustomDist(d)}>
-                            {d >= 1000 ? `${d / 1000}km` : `${d}m`}
-                          </button>
-                        ))}
-                      </div>
+              {(() => {
+                const lapSec = (intervalPaceSec * customDist) / 1000
+                const distLabel = customDist >= 1000 ? `${customDist / 1000}km` : `${customDist}m`
+                const paceKm = fmtMS(intervalPaceSec)
+                const recoveryDist = customDist <= 400 ? 200 : customDist <= 1200 ? 400 : 600
+                const recoverySec = customDist <= 400 ? 75 : customDist <= 1200 ? 150 : 200
+                const recoveryReps = Math.max(0, customReps - 1)
+                const intensityLabel = customDist <= 400 ? '🔴 R · 스피드 (반복주)'
+                  : customDist <= 1200 ? '🟡 I · V̇O₂max (인터벌)'
+                  : '🔵 T · 역치 (템포)'
+                const warmupSec = 9 * 60   // 1.5km 가벼운 조깅
+                const cooldownSec = 9 * 60
+                const totalSec = lapSec * customReps + recoverySec * recoveryReps + warmupSec + cooldownSec
+                const fastKm = (customDist * customReps) / 1000
+                return (
+                  <div className={s.sessionPlan}>
+                    <div className={s.sessionRow}>
+                      <span className={s.sessionStage}>워밍업</span>
+                      <span className={s.sessionDetail}>1.5km 가벼운 조깅 + 동적 스트레칭</span>
                     </div>
-                    <div>
-                      <span className={s.subLabel}>횟수: {customReps}회</span>
-                      <div className={s.sliderRow}>
-                        <input type="range" min={1} max={12} value={customReps}
-                          onChange={e => setCustomReps(Number(e.target.value))} />
-                        <span className={s.sliderValue}>{customReps}회</span>
+                    <div className={`${s.sessionRow} ${s.sessionRowMain}`}>
+                      <span className={s.sessionStage}>러닝 (빠르게)</span>
+                      <span className={s.sessionDetail}>
+                        <strong>{distLabel}</strong>
+                        <span className={s.sessionSep}>×</span>
+                        <strong>{customReps}회</strong>
+                        <span className={s.sessionPace}>{paceKm}/km</span>
+                      </span>
+                    </div>
+                    {recoveryReps > 0 && (
+                      <div className={s.sessionRow}>
+                        <span className={s.sessionStage}>회복 (조깅)</span>
+                        <span className={s.sessionDetail}>
+                          <strong>{recoveryDist}m</strong>
+                          <span className={s.sessionSep}>×</span>
+                          <strong>{recoveryReps}회</strong>
+                          <span className={s.sessionPaceMuted}>천천히 ({fmtMS(recoverySec)})</span>
+                        </span>
                       </div>
+                    )}
+                    <div className={s.sessionRow}>
+                      <span className={s.sessionStage}>쿨다운</span>
+                      <span className={s.sessionDetail}>1.5km 가벼운 조깅 + 정적 스트레칭</span>
+                    </div>
+                    <div className={s.sessionDivider} />
+                    <div className={s.sessionRow}>
+                      <span className={s.sessionStage}>총 빠른 거리</span>
+                      <span className={s.sessionDetail}><strong>{fastKm.toFixed(1)}km</strong></span>
+                    </div>
+                    <div className={s.sessionRow}>
+                      <span className={s.sessionStage}>예상 소요 시간</span>
+                      <span className={s.sessionDetail}><strong>약 {Math.round(totalSec / 60)}분</strong></span>
+                    </div>
+                    <div className={s.sessionRow}>
+                      <span className={s.sessionStage}>강도</span>
+                      <span className={s.sessionDetail}>{intensityLabel}</span>
                     </div>
                   </div>
-
-                  {(() => {
-                    const lapSec = (intervalPaceSec * customDist) / 1000
-                    const distLabel = customDist >= 1000 ? `${customDist / 1000}km` : `${customDist}m`
-                    const fastKm = (customDist * customReps) / 1000
-                    const recovery = customDist <= 400 ? '200m 조깅 (1:00~1:30)'
-                      : customDist <= 800 ? '400m 조깅 (2:00~2:30)'
-                      : customDist <= 1200 ? '400m 조깅 (2:30~3:00)'
-                      : '600m 조깅 (3:00~3:30)'
-                    const intensityLabel = customDist <= 400 ? '🔴 R 페이스 (스피드)'
-                      : customDist <= 1200 ? '🟡 I 페이스 (V̇O2 max)'
-                      : '🔵 T 페이스 (역치)'
-                    const totalKm = fastKm + 3
-                    const totalMin = (lapSec * customReps + (recovery.includes('1:00') ? 75 : 150) * (customReps - 1)) / 60 + 12
-                    return (
-                      <div className={s.customResultCard}>
-                        <p className={s.customResultTitle}>📐 {distLabel} × {customReps}회 인터벌</p>
-                        <div className={s.recoRow}><span>페이스</span><strong>{fmtMS(lapSec)}/{distLabel}</strong></div>
-                        <div className={s.recoRow}><span>회복</span><strong style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 600 }}>{recovery}</strong></div>
-                        <div className={s.recoRow}><span>총 빠른 구간</span><strong>{fastKm.toFixed(1)}km</strong></div>
-                        <div className={s.recoRow}><span>워밍업·쿨다운 포함</span><strong>약 {totalKm.toFixed(0)}km</strong></div>
-                        <div className={s.recoRow}><span>예상 소요 시간</span><strong>약 {Math.round(totalMin)}분</strong></div>
-                        <div className={s.recoRow}><span>강도</span><strong style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>{intensityLabel}</strong></div>
-                      </div>
-                    )
-                  })()}
-                </>
-              )}
+                )
+              })()}
+              <p className={s.recoHint}>
+                💡 초보는 위 횟수의 50~70%부터, 컨디션이 좋으면 1~2회 추가. 회복 조깅을 너무 빠르게 하면 다음 구간이 무너집니다.
+              </p>
             </div>
           )}
 
@@ -1036,7 +987,7 @@ export default function IntervalTrainingClient() {
                   <tr>
                     <td>후반</td>
                     <td>{fmtMS(yassoCalc.secondHalfAvg)}</td>
-                    <td style={{ color: yassoCalc.decline < 5 ? '#059669' : yassoCalc.decline < 10 ? '#FFD93E' : '#DC2626' }}>
+                    <td style={{ color: yassoCalc.decline < 5 ? '#059669' : yassoCalc.decline < 10 ? '#CA8A04' : '#DC2626' }}>
                       {yassoCalc.decline > 0 ? '+' : ''}{yassoCalc.decline.toFixed(1)}초
                     </td>
                   </tr>
@@ -1096,7 +1047,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
               </p>
             </div>
           )}

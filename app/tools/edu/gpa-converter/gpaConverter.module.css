@@ -432,3 +432,48 @@
 .table td:first-child { text-align: left; }
 .table tr:last-child td { border-bottom: none; }
 .letterCell { color: var(--accent) !important; font-weight: 700; }
+
+/* ── 한국 만점 상호 환산 ── */
+.crossGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.crossCell {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+.crossCellSource {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.crossScale {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.crossCellSource .crossScale { color: var(--accent); }
+.crossValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.crossCellSource .crossValue { color: var(--accent); }
+@media (max-width: 600px) { .crossValue { font-size: 20px; } }
+.crossMax { font-size: 11px; color: var(--muted); font-weight: 600; }
+.crossSourceTag {
+  font-size: 9.5px;
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}

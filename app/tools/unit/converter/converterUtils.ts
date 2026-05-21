@@ -32,8 +32,9 @@ const UNITS_LENGTH: UnitDef[] = [
   { id: 'ft',    name: '피트',      shortName: 'ft',    toBase: 0.3048 },
   { id: 'yard',  name: '야드',      shortName: 'yd',    toBase: 0.9144 },
   { id: 'mile',  name: '마일',      shortName: 'mi',    toBase: 1609.344 },
-  { id: 'chi',   name: '치 (寸)',    shortName: '치',    toBase: 0.0303,    isKorean: true, note: '약 3.03cm · 1/10 자' },
-  { id: 'ja',    name: '자 (尺)',    shortName: '자',    toBase: 0.303,     isKorean: true, note: '약 30.3cm · 10치' },
+  { id: 'pun',   name: '푼 (分)',    shortName: '푼',    toBase: 0.00303,   isKorean: true, note: '약 3.03mm · 1/10 치 · 1/100 자' },
+  { id: 'chi',   name: '치/촌 (寸)', shortName: '치',    toBase: 0.0303,    isKorean: true, note: '약 3.03cm · 10푼 · 1/10 자' },
+  { id: 'ja',    name: '자/척 (尺)', shortName: '자',    toBase: 0.303,     isKorean: true, note: '약 30.3cm · 10치 (척과 같음)' },
   { id: 'bo',    name: '보 (步)',    shortName: '보',    toBase: 1.818,     isKorean: true, note: '약 1.818m · 6자' },
   { id: 'gan',   name: '간 (間)',    shortName: '간',    toBase: 1.818,     isKorean: true, note: '건축 단위 · 보와 동일' },
   { id: 'jeong', name: '정 (町)',    shortName: '정',    toBase: 109,       isKorean: true, note: '약 109m' },
@@ -50,7 +51,8 @@ const UNITS_AREA: UnitDef[] = [
   { id: 'sqyd',    name: '제곱야드',     shortName: 'yd²',      toBase: 0.836127 },
   { id: 'acre',    name: '에이커',       shortName: 'acre',     toBase: 4046.86 },
   { id: 'pyeong',  name: '평 (坪)',       shortName: '평',       toBase: 3.305785, isKorean: true, note: '정확히 400/121 ㎡ · 1평 ≈ 3.3057㎡' },
-  { id: 'danbo',   name: '단보 (段步)',   shortName: '단',       toBase: 991.74,   isKorean: true, note: '약 300평' },
+  { id: 'danbo',   name: '단보 (段步)',   shortName: '단',       toBase: 991.74,   isKorean: true, note: '약 300평 · 1/10 정보' },
+  { id: 'jeongbo', name: '정보 (町步)',   shortName: '정보',      toBase: 9917.36,  isKorean: true, note: '약 3,000평 · 10단보' },
   { id: 'majigi',  name: '마지기',        shortName: '마지기',    toBase: 661.16,   isKorean: true, note: '약 200평 (지역별 차이 큼)' },
 ]
 
@@ -290,35 +292,6 @@ export function convertAngle(value: number, from: string, to: string): number {
     default:               return deg
   }
 }
-
-/* ─── 빠른 변환 칩 ─── */
-export interface QuickConversion {
-  from: { value: number; unitId: string; categoryId: CategoryId }
-  label: string
-}
-
-export const QUICK_CONVERSIONS: QuickConversion[] = [
-  { label: '1마일 = ?km',  from: { value: 1,   unitId: 'mile',   categoryId: 'length' } },
-  { label: '1피트 = ?cm',  from: { value: 1,   unitId: 'ft',     categoryId: 'length' } },
-  { label: '1근 = ?g',     from: { value: 1,   unitId: 'geun',   categoryId: 'weight' } },
-  { label: '1돈 = ?g',     from: { value: 1,   unitId: 'don',    categoryId: 'weight' } },
-  { label: '1평 = ?㎡',    from: { value: 1,   unitId: 'pyeong', categoryId: 'area' } },
-  { label: '100℉ = ?℃',   from: { value: 100, unitId: 'F',      categoryId: 'temperature' } },
-  { label: '60mph = ?km/h', from: { value: 60, unitId: 'mph',    categoryId: 'speed' } },
-  { label: '1bar = ?psi',  from: { value: 1,   unitId: 'bar',    categoryId: 'pressure' } },
-  { label: '1kgf/cm² = ?bar', from: { value: 1, unitId: 'kgfcm2', categoryId: 'pressure' } },
-  { label: '100N·m = ?kgf·m', from: { value: 100, unitId: 'Nm', categoryId: 'torque' } },
-  { label: '1lbf·ft = ?N·m', from: { value: 1, unitId: 'lbfft', categoryId: 'torque' } },
-  { label: '1kWh = ?kcal', from: { value: 1, unitId: 'kWh',     categoryId: 'energy' } },
-  { label: '12,000BTU = ?kW', from: { value: 12000, unitId: 'BTU', categoryId: 'energy' } },
-  { label: '딸기 10°Bx = ?%',  from: { value: 10, unitId: 'brix',     categoryId: 'brix' } },
-  { label: '김치 7염% = ?g/L', from: { value: 7,  unitId: 'salinity', categoryId: 'brix' } },
-  { label: '100 ppm = ?%',     from: { value: 100, unitId: 'ppm_c',  categoryId: 'concentration' } },
-  { label: '1 ppm = ?mg/L',    from: { value: 1,   unitId: 'ppm_c',  categoryId: 'concentration' } },
-  { label: '5% 경사 = ?도',     from: { value: 5,   unitId: 'percent_slope', categoryId: 'angle' } },
-  { label: '1/100 구배 = ?도',  from: { value: 100, unitId: 'one_over_n',    categoryId: 'angle' } },
-  { label: '4치 물매 = ?도',    from: { value: 4,   unitId: 'mulae',         categoryId: 'angle' } },
-]
 
 /* ─── 포맷 ─── */
 export function formatNumber(n: number): string {

@@ -4,7 +4,7 @@ import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './converter.module.css'
 import {
-  CategoryId, CATEGORIES, QUICK_CONVERSIONS,
+  CategoryId, CATEGORIES,
   convert, formatNumber,
 } from './converterUtils'
 
@@ -50,12 +50,6 @@ export default function ConverterClient() {
     setFromUnitId(newCat.units[0].id)
   }
 
-  const handleQuickClick = (q: typeof QUICK_CONVERSIONS[number]) => {
-    setCategoryId(q.from.categoryId)
-    setFromUnitId(q.from.unitId)
-    setInputValue(String(q.from.value))
-  }
-
   const copyResult = async (id: string, value: number, unit: string) => {
     try {
       await navigator.clipboard.writeText(`${formatNumber(value)} ${unit}`)
@@ -69,12 +63,12 @@ export default function ConverterClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/unit/converter', label: '단위 변환기' },
-          { href: '/tools/unit/area', label: '면적 단위' },
+          { href: '/tools/unit/area', label: '평수 변환기' },
+          { href: '/tools/unit/size', label: '사이즈 변환기' },
           { href: '/tools/unit/fuel-economy', label: '연비 변환' }
         ]}
       >
-        14개 카테고리
+        한국 전통 단위(근·평·자 등)는 시대·지역·용도에 따라 기준이 달라 일반 관행값을 적용한 추정치입니다.
       </Disclaimer>
 
       {/* 카테고리 탭 */}
@@ -86,21 +80,6 @@ export default function ConverterClient() {
             <span style={{ marginRight: 4 }}>{c.icon}</span>{c.name}
           </button>
         ))}
-      </div>
-
-      {/* 빠른 변환 칩 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>
-          빠른 변환
-          <span className={styles.cardLabelHint}>자주 쓰는 변환 한 번에</span>
-        </label>
-        <div className={styles.quickRow}>
-          {QUICK_CONVERSIONS.map((q, i) => (
-            <button key={i} className={styles.quickChip} onClick={() => handleQuickClick(q)}>
-              {q.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* 입력 */}
