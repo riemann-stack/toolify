@@ -573,32 +573,6 @@ export default function Nav() {
                 })()
               ) : (
                 <>
-                  {/* 2) 가로 스크롤 카테고리 탭 */}
-                  <div className={styles.drawerCatTabs} role="tablist" aria-label="카테고리 바로가기">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        className={styles.drawerCatTab}
-                        style={{ ['--chip-color' as string]: cat.color }}
-                        onClick={() => {
-                          const el = document.getElementById(`drawer-cat-${cat.id}`) as HTMLDetailsElement | null
-                          if (el) {
-                            el.open = true
-                            // 스크롤은 다음 frame에서 (open 트랜지션 후)
-                            requestAnimationFrame(() => {
-                              el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                            })
-                          }
-                        }}
-                      >
-                        <span>{cat.icon}</span>
-                        <span>{cat.name}</span>
-                        <span className={styles.drawerCatTabCount}>{cat.tools.length}</span>
-                      </button>
-                    ))}
-                  </div>
-
                   {/* 즐겨찾기·최근 사용 (있을 때만, 축약 노출) */}
                   {favoriteTools.length > 0 && (
                     <details className={styles.drawerAccItem} open>
