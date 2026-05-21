@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 리그 프리셋 ── */
 .leagueGrid {
@@ -46,18 +46,18 @@
 }@media (hover: hover) {
   .leagueBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.leagueKBO    { border-color: rgba(200,255,62,0.45); }
-.leagueMLB    { border-color: rgba(62,200,255,0.45); }
-.leagueNPB    { border-color: rgba(255,107,107,0.40); }
+.leagueKBO    { border-color: rgba(14,165,233,0.45); }
+.leagueMLB    { border-color: rgba(8,145,178,0.45); }
+.leagueNPB    { border-color: rgba(220,38,38,0.40); }
 .leagueAmateur { border-color: var(--border); }
 .leagueCustom { border-color: var(--border); }
 .leagueActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
 }
-.leagueActive small { color: #0D0D0D; opacity: 0.75; }
+.leagueActive small { color: #ffffff; opacity: 0.75; }
 
 /* ── 탭 ── */
 .tabs {
@@ -187,12 +187,12 @@
 
 /* 색상 강조 (안타·홈런 등) */
 .cellH       { border-left: 3px solid var(--accent); }
-.cellHR      { border-left: 3px solid #FFD700; }
-.cellWalk    { border-left: 3px solid #3EC8FF; }
-.cellOut     { border-left: 3px solid #FF8C3E; }
-.cellRun     { border-left: 3px solid #3EFF9B; }
-.cellWin     { border-left: 3px solid #3EFF9B; }
-.cellLoss    { border-left: 3px solid #FF6B6B; }
+.cellHR      { border-left: 3px solid #CA8A04; }
+.cellWalk    { border-left: 3px solid #0891B2; }
+.cellOut     { border-left: 3px solid #EA580C; }
+.cellRun     { border-left: 3px solid #059669; }
+.cellWin     { border-left: 3px solid #059669; }
+.cellLoss    { border-left: 3px solid #DC2626; }
 
 /* ── 고급 토글 ── */
 .advancedToggle {
@@ -215,11 +215,11 @@
 /* ── 검증 메시지 ── */
 .validMsg {
   font-size: 12px;
-  color: #FF8C3E;
+  color: #EA580C;
   margin-top: 10px;
   padding: 8px 12px;
-  background: rgba(255,140,62,0.08);
-  border: 1px solid rgba(255,140,62,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 8px;
   line-height: 1.6;
 }
@@ -227,7 +227,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -256,12 +256,12 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.lvMVP    { background: rgba(255,215,0,0.15);   color: #FFD700; }
+.lvMVP    { background: rgba(202,138,4,0.15);   color: #CA8A04; }
 .lvAllStar{ background: var(--accent-dim);       color: var(--accent); }
-.lvRegular{ background: rgba(62,255,155,0.15);  color: #3EFF9B; }
-.lvAvg    { background: rgba(255,255,255,0.06); color: var(--muted); }
-.lvBelow  { background: rgba(255,140,62,0.15);  color: #FF8C3E; }
-.lvBackup { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.lvRegular{ background: rgba(16,185,129,0.15);  color: #059669; }
+.lvAvg    { background: rgba(15,23,42,0.04); color: var(--muted); }
+.lvBelow  { background: rgba(234,88,12,0.15);  color: #EA580C; }
+.lvBackup { background: rgba(220,38,38,0.15); color: #DC2626; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -331,7 +331,7 @@
 .compareBar {
   position: relative;
   height: 8px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(15,23,42,0.04);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -555,9 +555,9 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-.msReach    { background: rgba(62,255,155,0.15); color: #3EFF9B; }
-.msHard     { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.msImpossible { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.msReach    { background: rgba(16,185,129,0.15); color: #059669; }
+.msHard     { background: rgba(234,88,12,0.15); color: #EA580C; }
+.msImpossible { background: rgba(220,38,38,0.15); color: #DC2626; }
 
 /* 결과 복사 */
 .copyBtn {

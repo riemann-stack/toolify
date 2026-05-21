@@ -506,7 +506,7 @@ function EquivTab() {
           </p>
         </div>
         {risk.level === 'high' || risk.level === 'very-high' ? (
-          <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#FF8C3E', lineHeight: 1.7 }}>
+          <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#EA580C', lineHeight: 1.7 }}>
             ⚠️ 이 정도 마셨다면: 절대 운전 금지 · 충분한 수분 · 다음날 운전도 자제(혈중알코올 도구 확인) · 카카오 T 대리 1577-1577 / 티맵 대리 1644-3030
           </p>
         ) : null}
@@ -679,7 +679,7 @@ function PartyTab() {
               </p>
             </div>
             {(risk.level === 'high' || risk.level === 'very-high') && (
-              <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#FF6B6B', lineHeight: 1.7 }}>
+              <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#DC2626', lineHeight: 1.7 }}>
                 🔴 위험 수준 음주: 절대 운전 X · 다음날 출근 운전도 단속 가능(BAC 잔류) · 일주일 이상 간격 권장 · 카카오 T 대리 1577-1577 / 알코올중독상담 1899-0975
               </p>
             )}
@@ -800,8 +800,8 @@ export default function AlcoholClient() {
       </div>
 
       {/* 면책 */}
-      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '12px 16px', background: 'var(--bg2)', border: '1px solid rgba(255,107,107,0.2)', borderRadius: 10, lineHeight: 1.7 }}>
-        ⚠️ 본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 한국알코올중독상담센터 <strong style={{ color: '#FF8C3E' }}>1899-0975</strong>, 정신건강 위기상담 <strong style={{ color: '#FF8C3E' }}>1577-0199</strong>, 카카오 T 대리 <strong style={{ color: '#FF8C3E' }}>1577-1577</strong>.
+      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '12px 16px', background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 10, lineHeight: 1.7 }}>
+        ⚠️ 본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 한국알코올중독상담센터 <strong style={{ color: '#EA580C' }}>1899-0975</strong>, 정신건강 위기상담 <strong style={{ color: '#EA580C' }}>1577-0199</strong>, 카카오 T 대리 <strong style={{ color: '#EA580C' }}>1577-1577</strong>.
       </p>
     </div>
   )

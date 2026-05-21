@@ -42,22 +42,22 @@ export default function StockPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>새 평균단가 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, letterSpacing: '0.3px' }}>
                 새 평단가 = (기존 평단가 × 보유 수량 + 추가 매수가 × 추가 수량)<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;÷ (보유 수량 + 추가 수량)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#3EC8FF', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>본전 탈출 필요 상승률 (수수료·거래세 포함)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>본전 탈출 필요 상승률 (수수료·거래세 포함)</p>
               <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, letterSpacing: '0.3px' }}>
                 본전 가격 = 새 평단가 ÷ (1 − 매수수수료 − 매도수수료 − 거래세 0.18%)<br />
                 필요 상승률 = (본전 가격 ÷ 현재가 − 1) × 100%
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,215,0,0.20)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#FFD700', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>목표 평단 역산 공식</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.20)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '12px', color: '#CA8A04', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>목표 평단 역산 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, letterSpacing: '0.3px' }}>
                 필요 추가 수량 = 보유 수량 × (기존 평단 − 목표 평단) ÷ (목표 평단 − 현재가)
               </p>
@@ -115,7 +115,7 @@ export default function StockPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시나리오</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>가정</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontWeight: 700 }}>1년 후 손익</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>1년 후 손익</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +128,7 @@ export default function StockPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -136,8 +136,8 @@ export default function StockPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 물타기 신호</p>
+            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 물타기 신호</p>
               <ul style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>회사 펀더멘털 안정·성장</li>
                 <li>일시적 시장 조정·분기 일회성 악재</li>
@@ -145,8 +145,8 @@ export default function StockPage() {
                 <li>충분한 현금 비중·장기 보유 의지</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>❌ 손절 신호</p>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>❌ 손절 신호</p>
               <ul style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>실적 악화·재무 위기</li>
                 <li>산업 구조적 위기·사업 모델 붕괴</li>
@@ -175,7 +175,7 @@ export default function StockPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>현재 손실률</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700 }}>추천 차수</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>추천 차수</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
@@ -189,7 +189,7 @@ export default function StockPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -257,10 +257,10 @@ export default function StockPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
-              { range: '0~10%',  level: '🟢 안전',       color: '#3EFF9B', desc: '한 종목 10% 이내 — 분산 적정' },
-              { range: '10~20%', level: '🟡 주의',       color: '#FFD700', desc: '약간 집중 — 추가 매수 신중히' },
-              { range: '20~30%', level: '🟠 집중 위험',  color: '#FF8C3E', desc: '집중 위험 — 비중 관리 필요' },
-              { range: '30%+',   level: '🔴 매우 위험',  color: '#FF6B6B', desc: '분산 권장 / 추가 매수 비권장' },
+              { range: '0~10%',  level: '🟢 안전',       color: '#059669', desc: '한 종목 10% 이내 — 분산 적정' },
+              { range: '10~20%', level: '🟡 주의',       color: '#CA8A04', desc: '약간 집중 — 추가 매수 신중히' },
+              { range: '20~30%', level: '🟠 집중 위험',  color: '#EA580C', desc: '집중 위험 — 비중 관리 필요' },
+              { range: '30%+',   level: '🔴 매우 위험',  color: '#DC2626', desc: '분산 권장 / 추가 매수 비권장' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, fontFamily: 'Noto Sans KR, sans-serif', marginBottom: 4 }}>
@@ -286,22 +286,22 @@ export default function StockPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 6 }}>💱 환율 변동 영향</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>💱 환율 변동 영향</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 매수 환율 1,300원, $100 매수 → 13만원 / 현재 환율 1,400원, $90 → 12.6만원 (원화 -3% 손실).
                 달러로는 -10%지만 원화로는 -3% — 환율이 평가손익을 크게 좌우합니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 6 }}>🧾 양도소득세 22% (연 250만 공제)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>🧾 양도소득세 22% (연 250만 공제)</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 해외주식 차익은 연 250만원 초과분에 대해 22% (지방세 포함) 양도소득세 부과.
                 예: 1,000만 원 차익 → (1,000 − 250) × 22% = 165만원 세금.
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, marginBottom: 6 }}>💸 배당세 15% (미국 원천징수)</p>
+              <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>💸 배당세 15% (미국 원천징수)</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 미국 주식 배당금은 미국에서 15% 원천징수 후 한국으로 송금됩니다 (한미 조세조약). 배당 재투자 시 세후 금액 기준.
               </p>
@@ -376,8 +376,8 @@ export default function StockPage() {
         </div>
 
         {/* ── 8. 면책 ── */}
-        <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-          <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 10 }}>⚠️ 면책 조항</p>
+        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+          <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 10 }}>⚠️ 면책 조항</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 주식 물타기 계산기는 <strong style={{ color: 'var(--text)' }}>수학적 시뮬레이션 도구</strong>이며, 투자 자문·매수 권유 도구가 아닙니다.
           </p>
@@ -393,9 +393,9 @@ export default function StockPage() {
           </p>
           <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18 }}>
             <li>거래 증권사 고객센터 상담</li>
-            <li>한국 금융감독원 e-금융민원: <strong style={{ color: '#FF6B6B' }}>1332</strong></li>
+            <li>한국 금융감독원 e-금융민원: <strong style={{ color: '#DC2626' }}>1332</strong></li>
             <li>가족·신뢰할 수 있는 사람과 상의</li>
-            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong style={{ color: '#FF6B6B' }}>1577-0199</strong></li>
+            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong style={{ color: '#DC2626' }}>1577-0199</strong></li>
           </ul>
         </div>
 

@@ -106,7 +106,7 @@ export default function RandomPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
               예: A=3, B=1, C=2 → 총합 6
-              <br />→ A: <strong style={{ color: '#FFD700' }}>3/6 = 50%</strong>, B: <strong style={{ color: '#FFD700' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: '#FFD700' }}>2/6 ≈ 33%</strong>
+              <br />→ A: <strong style={{ color: '#CA8A04' }}>3/6 = 50%</strong>, B: <strong style={{ color: '#CA8A04' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: '#CA8A04' }}>2/6 ≈ 33%</strong>
             </p>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -177,7 +177,7 @@ export default function RandomPage() {
                   ['100,000회', '±0.5% 미만', '이론값에 매우 근접'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>

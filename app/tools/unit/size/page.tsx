@@ -23,13 +23,13 @@ export default function SizePage() {
 
       {/* ── 국가별 사이즈 표기 차이 (상단 박스) ── */}
       <div style={{
-        background: 'rgba(62,200,255,0.05)',
-        border: '1px solid rgba(62,200,255,0.2)',
+        background: 'rgba(8,145,178,0.05)',
+        border: '1px solid rgba(8,145,178,0.2)',
         borderRadius: '12px',
         padding: '14px 18px',
         marginBottom: '40px',
       }}>
-        <p style={{ fontSize: '13px', color: '#3EC8FF', fontWeight: 700, marginBottom: '8px' }}>🌍 국가별 사이즈 표기 차이</p>
+        <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>🌍 국가별 사이즈 표기 차이</p>
         <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
           <li><strong style={{ color: 'var(--text)' }}>미국 (US)</strong>: 신발 숫자 작음(6~12), 옷 알파벳(XS·S·M·L·XL)</li>
           <li><strong style={{ color: 'var(--text)' }}>유럽 (EU)</strong>: 신발 숫자 큼(36~46), 옷 숫자(36·38·40)</li>
@@ -116,11 +116,11 @@ export default function SizePage() {
               <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>👟 신발 브랜드</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
                 {[
-                  { n: '나이키',    c: '#FFB83E', d: 'US 표준보다 살짝 큰 편 — 0.5 작게 권장' },
-                  { n: '아디다스',  c: '#3EC8FF', d: 'US 표준 (정사이즈)' },
-                  { n: '컨버스',    c: '#FF8C3E', d: '약 0.5 큰 편 — 0.5 작게 권장' },
-                  { n: '닥터마틴',  c: '#FF6B6B', d: '영국 사이즈 — 한국보다 1 작게' },
-                  { n: '뉴발란스',  c: '#3EFF9B', d: 'US 표준, 와이드(EE) 모델 별도' },
+                  { n: '나이키',    c: '#D97706', d: 'US 표준보다 살짝 큰 편 — 0.5 작게 권장' },
+                  { n: '아디다스',  c: '#0891B2', d: 'US 표준 (정사이즈)' },
+                  { n: '컨버스',    c: '#EA580C', d: '약 0.5 큰 편 — 0.5 작게 권장' },
+                  { n: '닥터마틴',  c: '#DC2626', d: '영국 사이즈 — 한국보다 1 작게' },
+                  { n: '뉴발란스',  c: '#059669', d: 'US 표준, 와이드(EE) 모델 별도' },
                   { n: '비르케슈톡', c: '#B885DA', d: 'EU 사이즈 — 한국보다 1~2 작게 권장' },
                 ].map((b, i) => (
                   <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 8, padding: '10px 12px' }}>
@@ -134,11 +134,11 @@ export default function SizePage() {
               <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>👕 의류 브랜드</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
                 {[
-                  { n: '유니클로',  c: '#3EC8FF', d: '한국 사이즈와 동일 (정사이즈)' },
-                  { n: '아디다스',  c: '#3EC8FF', d: '한국과 비슷' },
-                  { n: 'H&M',      c: '#FF8C3E', d: '작게 나옴 — 한 사이즈 크게' },
-                  { n: '자라',      c: '#FF8C3E', d: '작게 나옴 — 한 사이즈 크게' },
-                  { n: 'GAP',      c: '#FFB83E', d: '약간 큰 편 — 정사이즈 또는 0.5 작게' },
+                  { n: '유니클로',  c: '#0891B2', d: '한국 사이즈와 동일 (정사이즈)' },
+                  { n: '아디다스',  c: '#0891B2', d: '한국과 비슷' },
+                  { n: 'H&M',      c: '#EA580C', d: '작게 나옴 — 한 사이즈 크게' },
+                  { n: '자라',      c: '#EA580C', d: '작게 나옴 — 한 사이즈 크게' },
+                  { n: 'GAP',      c: '#D97706', d: '약간 큰 편 — 정사이즈 또는 0.5 작게' },
                   { n: 'ASOS',     c: '#B885DA', d: '브랜드별 편차 큼 — 측정값 확인 필수' },
                 ].map((b, i) => (
                   <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 8, padding: '10px 12px' }}>

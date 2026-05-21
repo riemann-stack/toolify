@@ -81,7 +81,7 @@
 }
 .genderActive {
   background: var(--accent-dim);
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
   color: var(--accent);
 }
 
@@ -103,7 +103,7 @@
 }
 .activityActive {
   background: var(--accent-dim);
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
 }
 .activityLabel { font-size: 13px; font-weight: 500; color: var(--text); }
 .activityDesc  { font-size: 12px; color: var(--muted); }
@@ -111,7 +111,7 @@
 /* ── RESULT HERO ── */
 .resultHero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.25);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px;
   padding: 28px 24px;
   text-align: center;
@@ -166,8 +166,8 @@
   border: 1px solid var(--border);
 }
 .tdeeMaintain { background: var(--bg2); }
-.tdeeDiet     { background: rgba(62,200,255,0.06); border-color: rgba(62,200,255,0.25); }
-.tdeeBulk     { background: rgba(255,140,62,0.06); border-color: rgba(255,140,62,0.25); }
+.tdeeDiet     { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.25); }
+.tdeeBulk     { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.25); }
 
 .tdeeLabel { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
 .tdeeNum   { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
@@ -190,7 +190,7 @@
 }
 .distActive {
   background: var(--accent-dim);
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
   color: var(--accent);
 }
 

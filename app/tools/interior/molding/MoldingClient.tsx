@@ -23,9 +23,9 @@ const MOLDING_TYPES: {
   color: string
 }[] = [
   { key: 'ceiling',   name: '천장 몰딩',     desc: '천장-벽 경계',     cls: s.tCeiling,    color: 'var(--accent)' },
-  { key: 'baseboard', name: '걸레받이',      desc: '벽-바닥 경계',     cls: s.tBaseboard,  color: '#FF8C3E' },
+  { key: 'baseboard', name: '걸레받이',      desc: '벽-바닥 경계',     cls: s.tBaseboard,  color: '#EA580C' },
   { key: 'belt',      name: '띠몰딩',        desc: '벽 중간 장식',     cls: s.tBelt,       color: '#9B59B6' },
-  { key: 'door',      name: '출입문 프레임', desc: '문틀 둘레 마감',   cls: s.tDoor,       color: '#3EC8FF' },
+  { key: 'door',      name: '출입문 프레임', desc: '문틀 둘레 마감',   cls: s.tDoor,       color: '#0891B2' },
 ]
 
 type MaterialKey = 'pvc' | 'mdf' | 'wood' | 'gypsum' | 'styrene' | 'custom'
@@ -267,15 +267,15 @@ export default function MoldingClient() {
         )}
         {/* 걸레받이 (아래쪽) - 문 위치 끊김 */}
         {showBaseboard && !doorPos && (
-          <line x1={x - 2} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#FF8C3E" strokeWidth={4} strokeLinecap="round" />
+          <line x1={x - 2} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
         )}
         {showBaseboard && doorPos && (
           <>
-            <line x1={x - 2} y1={y + rectH} x2={doorStartX} y2={y + rectH} stroke="#FF8C3E" strokeWidth={4} strokeLinecap="round" />
-            <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#FF8C3E" strokeWidth={4} strokeLinecap="round" />
+            <line x1={x - 2} y1={y + rectH} x2={doorStartX} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
+            <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
             {/* 문 표시 */}
-            <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="#3EC8FF" opacity={0.8} />
-            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#3EC8FF" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+            <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="#0891B2" opacity={0.8} />
+            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#0891B2" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
               문
             </text>
           </>
@@ -289,8 +289,8 @@ export default function MoldingClient() {
         )}
         {showBaseboard && (
           <>
-            <line x1={x} y1={y + rectH * 0.5} x2={x} y2={y + rectH} stroke="#FF8C3E" strokeWidth={2} opacity={0.6} />
-            <line x1={x + rectW} y1={y + rectH * 0.5} x2={x + rectW} y2={y + rectH} stroke="#FF8C3E" strokeWidth={2} opacity={0.6} />
+            <line x1={x} y1={y + rectH * 0.5} x2={x} y2={y + rectH} stroke="#EA580C" strokeWidth={2} opacity={0.6} />
+            <line x1={x + rectW} y1={y + rectH * 0.5} x2={x + rectW} y2={y + rectH} stroke="#EA580C" strokeWidth={2} opacity={0.6} />
           </>
         )}
         {/* 띠몰딩 (중앙) */}
@@ -301,7 +301,7 @@ export default function MoldingClient() {
         {[
           [x, y], [x + rectW, y], [x, y + rectH], [x + rectW, y + rectH],
         ].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r={3.5} fill="#FF6B6B" />
+          <circle key={i} cx={cx} cy={cy} r={3.5} fill="#DC2626" />
         ))}
         {/* 라벨 */}
         <text x={W / 2} y={y - 10} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">
@@ -608,9 +608,9 @@ export default function MoldingClient() {
               <div className={s.floorPlanWrap}>{planSvg}</div>
               <div style={{ display: 'flex', gap: 12, marginTop: 12, fontSize: 11.5, color: 'var(--muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {selectedTypes.has('ceiling')   && <span><span style={{ color: 'var(--accent)', fontWeight: 700 }}>━━</span> 천장 몰딩</span>}
-                {selectedTypes.has('baseboard') && <span><span style={{ color: '#FF8C3E', fontWeight: 700 }}>━━</span> 걸레받이</span>}
+                {selectedTypes.has('baseboard') && <span><span style={{ color: '#EA580C', fontWeight: 700 }}>━━</span> 걸레받이</span>}
                 {selectedTypes.has('belt')      && <span><span style={{ color: '#9B59B6', fontWeight: 700 }}>┄┄</span> 띠몰딩</span>}
-                <span><span style={{ color: '#FF6B6B', fontWeight: 700 }}>●</span> 45° 절단 위치</span>
+                <span><span style={{ color: '#DC2626', fontWeight: 700 }}>●</span> 45° 절단 위치</span>
               </div>
             </div>
           )}

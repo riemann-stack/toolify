@@ -134,9 +134,8 @@ function GenerateTab() {
             <button key={m.id}
               className={`${s.modeChip} ${mode === m.id ? s.modeChipActive : ''}`}
               onClick={() => setMode(m.id)}
-              title={m.desc}>
-              <span className={s.modeChipEmoji}>{m.icon}</span>
-              <span className={s.modeChipName}>{m.name}</span>
+              title={`${m.name} — ${m.desc}`}>
+              <span className={s.modeChipName}>{m.shortName}</span>
             </button>
           ))}
         </div>
@@ -539,7 +538,7 @@ function SimulatorTab() {
               {' / '}
               총 회수금 <strong style={{ color: 'var(--text)' }}>{fmtMoney(result.totalPrize)}</strong>
               <br />
-              회수율 <strong style={{ color: result.returnRate >= 100 ? '#3EFF9B' : '#FF6B6B' }}>
+              회수율 <strong style={{ color: result.returnRate >= 100 ? '#059669' : '#DC2626' }}>
                 {result.returnRate.toFixed(1)}%
               </strong>
             </div>

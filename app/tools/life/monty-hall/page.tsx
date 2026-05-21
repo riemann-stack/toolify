@@ -206,7 +206,7 @@ export default function MontyHallPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.stay}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.stay}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.sw}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.diff}</td>
                   </tr>
@@ -229,16 +229,16 @@ export default function MontyHallPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { color: '#3EFF9B', emoji: '🟢', name: '표준 몬티홀',
+              { color: '#059669', emoji: '🟢', name: '표준 몬티홀',
                 rule: '진행자가 자동차 위치를 알고 의도적으로 염소 문 공개',
                 result: '바꾸기 67% / 유지 33%', insight: '진행자 정보 → 남은 문에 확률 농축.' },
               { color: '#FFD93E', emoji: '🟡', name: '무작위 진행자',
                 rule: '진행자가 아무 문이나 무작위로 염 (자동차 노출 시 게임 무효)',
                 result: '바꾸기 50% / 유지 50%', insight: '진행자 정보 X → 베이지안 갱신 없음.' },
-              { color: '#FF8C3E', emoji: '🟠', name: '몬티 폴',
+              { color: '#EA580C', emoji: '🟠', name: '몬티 폴',
                 rule: '진행자가 무작위 1개 열었는데 우연히 염소였을 때만',
                 result: '바꾸기 50% / 유지 50%', insight: '의도 X → 정보 가치 없음.' },
-              { color: '#FF6B6B', emoji: '🔴', name: '악마 몬티',
+              { color: '#DC2626', emoji: '🔴', name: '악마 몬티',
                 rule: '진행자가 참가자가 자동차 골랐을 때만 염소 공개 (함정)',
                 result: '바꾸기 0% / 유지 100%', insight: '진행자 의도 = 참가자 패배 유도.' },
             ].map((v, i) => (

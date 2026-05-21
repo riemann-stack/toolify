@@ -54,7 +54,7 @@ export default async function DrakePage({
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             드레이크 방정식 공식
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '24px 22px', textAlign: 'center', marginBottom: '20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '24px 22px', textAlign: 'center', marginBottom: '20px' }}>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(18px, 4vw, 24px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.3px', margin: 0 }}>
               <span style={{ color: 'var(--accent)' }}>N</span> = R<sub>*</sub> × f<sub>p</sub> × n<sub>e</sub> × f<sub>l</sub> × f<sub>i</sub> × f<sub>c</sub> × L
             </p>
@@ -127,11 +127,11 @@ export default async function DrakePage({
               </thead>
               <tbody>
                 {[
-                  { who: '칼 세이건 (낙관)',       n: '~100만 개',     color: '#3EFF9B', note: '생명 발생·진화 확률 높음' },
+                  { who: '칼 세이건 (낙관)',       n: '~100만 개',     color: '#059669', note: '생명 발생·진화 확률 높음' },
                   { who: '드레이크 본인',          n: '~10,000 개',    color: 'var(--accent)', note: '중간 추정값' },
                   { who: '현재 과학계 중앙값',     n: '수십~수백 개',   color: 'var(--accent)', note: '거주 가능 행성 발견 기반' },
-                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: '#FF8C3E', note: '지구 조건이 매우 특별함' },
-                  { who: '페르미 역설 관점',       n: '수백만~수억',   color: '#3EC8FF', note: '계산상 많지만 신호 없음' },
+                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: '#EA580C', note: '지구 조건이 매우 특별함' },
+                  { who: '페르미 역설 관점',       n: '수백만~수억',   color: '#0891B2', note: '계산상 많지만 신호 없음' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.who}</td>
@@ -156,11 +156,11 @@ export default async function DrakePage({
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { n: '①', title: '대필터 가설',         desc: '문명이 특정 단계(지능 출현, 행성 이탈, 초장기 존속 등)에서 거의 모두 멸종한다는 가설. 우리 앞에 필터가 있다면 인류 미래는 어둡다.', color: '#FF8C3E' },
-              { n: '②', title: '동물원 가설',         desc: '외계 문명이 우리를 일부러 관찰만 하고 접촉하지 않는다는 가설. 성숙한 문명 전에는 간섭하지 않기로 합의했을 수 있음.',            color: '#3EC8FF' },
+              { n: '①', title: '대필터 가설',         desc: '문명이 특정 단계(지능 출현, 행성 이탈, 초장기 존속 등)에서 거의 모두 멸종한다는 가설. 우리 앞에 필터가 있다면 인류 미래는 어둡다.', color: '#EA580C' },
+              { n: '②', title: '동물원 가설',         desc: '외계 문명이 우리를 일부러 관찰만 하고 접촉하지 않는다는 가설. 성숙한 문명 전에는 간섭하지 않기로 합의했을 수 있음.',            color: '#0891B2' },
               { n: '③', title: '우리가 너무 시끄러움', desc: '인류의 전파는 100년에 불과해 수천~수만 광년 거리의 문명에 아직 도달하지 못함. 반대로 그들 신호도 아직 도착 안 함.',         color: 'var(--accent)' },
-              { n: '④', title: '이미 지나쳐 감',      desc: '초문명은 생물학적 형태를 벗어난 디지털·기계 존재로, 이미 전파 통신을 벗어나 우리가 알아채지 못함.',                      color: '#B03EFF' },
-              { n: '⑤', title: '우리가 유일함',       desc: '레어 어스 가설 — 지구와 같은 안정된 항성, 거대 위성(달), 자기장, 판 구조 등의 조합은 극도로 드물다.',                  color: '#FF3E8C' },
+              { n: '④', title: '이미 지나쳐 감',      desc: '초문명은 생물학적 형태를 벗어난 디지털·기계 존재로, 이미 전파 통신을 벗어나 우리가 알아채지 못함.',                      color: '#9333EA' },
+              { n: '⑤', title: '우리가 유일함',       desc: '레어 어스 가설 — 지구와 같은 안정된 항성, 거대 위성(달), 자기장, 판 구조 등의 조합은 극도로 드물다.',                  color: '#DB2777' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: item.color, fontWeight: 700, marginBottom: '6px' }}>{item.n} {item.title}</p>
@@ -221,7 +221,7 @@ export default async function DrakePage({
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>N = {r.n}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.avg}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.near}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.near}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.rt}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.note}</td>
                   </tr>

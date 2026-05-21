@@ -40,9 +40,9 @@ export default function MoldingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { t: '천장 몰딩 (Crown)',   c: 'var(--accent)', d: '천장과 벽 경계 마감. 한국에서 가장 흔한 PVC·MDF.', s: '폭 5~10cm · 1,500~5,000원/m' },
-              { t: '걸레받이 (Baseboard)', c: '#FF8C3E',       d: '벽-바닥 경계. 청소 흔적·의자 상처 가림.',           s: '높이 6~10cm · 1,000~3,000원/m' },
+              { t: '걸레받이 (Baseboard)', c: '#EA580C',       d: '벽-바닥 경계. 청소 흔적·의자 상처 가림.',           s: '높이 6~10cm · 1,000~3,000원/m' },
               { t: '띠몰딩 (Chair Rail)',  c: '#9B59B6',       d: '벽 중간 장식 (보통 바닥 90cm). 데코 목적.',         s: '폭 3~6cm · 2,000~5,000원/m' },
-              { t: '출입문 프레임',         c: '#3EC8FF',       d: '문틀 둘레 마감. 폭 4~7cm 표준.',                    s: '문 1개 ≈ 5.4m · 2,000~6,000원/m' },
+              { t: '출입문 프레임',         c: '#0891B2',       d: '문틀 둘레 마감. 폭 4~7cm 표준.',                    s: '문 1개 ≈ 5.4m · 2,000~6,000원/m' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -123,8 +123,8 @@ export default function MoldingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { t: '🔪 마이터 박스', c: 'var(--accent)', d: '저렴(만원대), 손톱+가이드. 셀프 시공 권장.' },
-              { t: '⚙️ 마이터 톱', c: '#3EC8FF', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
-              { t: '📐 외각 vs 내각', c: '#FF8C3E', d: '외각(밖으로 튀어나온 모서리) +0.5cm, 내각(안쪽) -0.5cm 보정.' },
+              { t: '⚙️ 마이터 톱', c: '#0891B2', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
+              { t: '📐 외각 vs 내각', c: '#EA580C', d: '외각(밖으로 튀어나온 모서리) +0.5cm, 내각(안쪽) -0.5cm 보정.' },
               { t: '🧪 시운전', c: '#9B59B6', d: '본 자재 자르기 전 자투리 자재로 각도·맞물림 시험.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>
@@ -134,8 +134,8 @@ export default function MoldingPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -143,7 +143,7 @@ export default function MoldingPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ⚠️ 모서리 1개당 <strong style={{ color: '#FF8C3E' }}>5~10cm 여유분</strong> 권장.
+            ⚠️ 모서리 1개당 <strong style={{ color: '#EA580C' }}>5~10cm 여유분</strong> 권장.
             직사각형 방은 모서리 4개 = 20~40cm. 자투리 1개를 보수용으로 남겨두세요.
           </div>
         </div>

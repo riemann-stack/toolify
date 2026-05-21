@@ -69,28 +69,34 @@ export default function Disclaimer({ variant = 'default', children, related }: P
   const emoji = VARIANT_EMOJI[variant]
 
   return (
-    <aside className={styles.disclaimer} data-variant={variant} aria-label="이용 안내">
-      <div className={styles.head}>
+    <details className={styles.disclaimer} data-variant={variant} aria-label="이용 안내">
+      <summary className={styles.head}>
         <span className={styles.emoji} aria-hidden>{emoji}</span>
         <strong className={styles.title}>{cfg.title}</strong>
-      </div>
-      <ul className={styles.list}>
-        {cfg.baseLines.map((line, i) => (
-          <li key={`base-${i}`}>{line}</li>
-        ))}
-        {children && <li className={styles.custom}>{children}</li>}
-      </ul>
-      {related && related.length > 0 && (
-        <div className={styles.related}>
-          관련 도구:{' '}
-          {related.map((r, i) => (
-            <span key={r.href}>
-              <Link href={r.href} className={styles.relatedLink}>{r.label}</Link>
-              {i < related.length - 1 && <span className={styles.dot}> · </span>}
-            </span>
+        <span className={styles.toggle} aria-hidden>자세히</span>
+        <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+          <path d="M3 4.5 L6 7.5 L9 4.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </summary>
+      <div className={styles.body}>
+        <ul className={styles.list}>
+          {cfg.baseLines.map((line, i) => (
+            <li key={`base-${i}`}>{line}</li>
           ))}
-        </div>
-      )}
-    </aside>
+          {children && <li className={styles.custom}>{children}</li>}
+        </ul>
+        {related && related.length > 0 && (
+          <div className={styles.related}>
+            관련 도구:{' '}
+            {related.map((r, i) => (
+              <span key={r.href}>
+                <Link href={r.href} className={styles.relatedLink}>{r.label}</Link>
+                {i < related.length - 1 && <span className={styles.dot}> · </span>}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </details>
   )
 }

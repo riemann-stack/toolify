@@ -47,21 +47,21 @@
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #C485E0; }
+.disclaimer strong { color: #9333EA; }
 
 /* ── 현재 우주 시간 헤더 ── */
 .cosmicNow {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(62,255,208,0.12), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.18), transparent 60%),
     var(--bg2);
-  border: 1px solid #3EFFD0;
+  border: 1px solid #0D9488;
   border-radius: 14px;
   padding: 16px 22px;
   text-align: center;
 }
 .cosmicNowLabel {
   font-size: 11px;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
@@ -110,8 +110,8 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(62,255,208,0.10);
-  color: #3EFFD0;
+  background: rgba(13,148,136,0.18);
+  color: #0D9488;
   font-weight: 700;
 }
 
@@ -167,7 +167,7 @@
 }
 .bigInput { font-size: 18px; padding: 12px 14px; }
 .smallInput { font-size: 15px; }
-.bigInput:focus, .smallInput:focus { border-color: #3EFFD0; }
+.bigInput:focus, .smallInput:focus { border-color: #0D9488; }
 .bigInput::-webkit-outer-spin-button,
 .bigInput::-webkit-inner-spin-button,
 .smallInput::-webkit-outer-spin-button,
@@ -187,7 +187,7 @@
   outline: none;
   box-sizing: border-box;
 }
-.textInput:focus { border-color: #3EFFD0; }
+.textInput:focus { border-color: #0D9488; }
 
 .gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
@@ -203,7 +203,7 @@
   color: var(--text);
   line-height: 2;
 }
-.unitCard strong { color: #C485E0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.unitCard strong { color: #9333EA; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 가로 타임라인 (탭 1) ── */
 .yearTimelineWrap {
@@ -237,14 +237,14 @@
   cursor: default;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .monthCard:hover { border-color: rgba(62,255,208,0.50); }
+  .monthCard:hover { border-color: rgba(13,148,136,0.50); }
 }
-.monthCardActive { border-color: #3EFFD0; background: rgba(62,255,208,0.06); }
+.monthCardActive { border-color: #0D9488; background: rgba(13,148,136,0.14); }
 .monthCardLabel {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -0.5px;
   margin-bottom: 6px;
 }
@@ -288,13 +288,13 @@
 .monthEventItem span:first-child { font-size: 14px; flex-shrink: 0; }
 
 /* 카테고리 색상 텍스트 */
-.catCosmic       { color: #C485E0; }
-.catSolar        { color: #FFD700; }
-.catEarth        { color: #3EC8FF; }
-.catLife         { color: #3EFF9B; }
-.catHuman        { color: #FF8C3E; }
-.catCivilization { color: #FF6B6B; }
-.catNow          { color: #3EFFD0; }
+.catCosmic       { color: #9333EA; }
+.catSolar        { color: #CA8A04; }
+.catEarth        { color: #0891B2; }
+.catLife         { color: #059669; }
+.catHuman        { color: #EA580C; }
+.catCivilization { color: #DC2626; }
+.catNow          { color: #0D9488; }
 
 /* 이벤트 카드 (상세) */
 .eventCard {
@@ -309,12 +309,12 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .eventCard.borderCosmic       { border-left-color: #9B59B6; }
-.eventCard.borderSolar        { border-left-color: #FFD700; }
-.eventCard.borderEarth        { border-left-color: #3EC8FF; }
-.eventCard.borderLife         { border-left-color: #3EFF9B; }
-.eventCard.borderHuman        { border-left-color: #FF8C3E; }
-.eventCard.borderCivilization { border-left-color: #FF6B6B; }
-.eventCard.borderNow          { border-left-color: #3EFFD0; }
+.eventCard.borderSolar        { border-left-color: #CA8A04; }
+.eventCard.borderEarth        { border-left-color: #0891B2; }
+.eventCard.borderLife         { border-left-color: #059669; }
+.eventCard.borderHuman        { border-left-color: #EA580C; }
+.eventCard.borderCivilization { border-left-color: #DC2626; }
+.eventCard.borderNow          { border-left-color: #0D9488; }
 
 .eventIcon { font-size: 28px; flex-shrink: 0; }
 .eventBody { flex: 1; min-width: 0; }
@@ -323,7 +323,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 12px;
-  color: #3EFFD0;
+  color: #0D9488;
   margin-bottom: 4px;
 }
 .eventReal {
@@ -344,16 +344,16 @@
 /* ── 12월 31일 강조 카드 (탭 1 → 탭 2 안내) ── */
 .dec31Banner {
   background:
-    radial-gradient(ellipse at 80% 50%, rgba(62,255,208,0.10), transparent 60%),
-    rgba(62,255,208,0.04);
-  border: 1px solid #3EFFD0;
+    radial-gradient(ellipse at 80% 50%, rgba(13,148,136,0.18), transparent 60%),
+    rgba(13,148,136,0.14);
+  border: 1px solid #0D9488;
   border-radius: 14px;
   padding: 18px 22px;
 }
 .dec31BannerTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 800;
-  color: #3EFFD0;
+  color: #0D9488;
   font-size: 15px;
   margin-bottom: 6px;
 }
@@ -363,20 +363,20 @@
   line-height: 1.85;
   margin-bottom: 10px;
 }
-.dec31BannerText strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.dec31BannerText strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dec31BannerBtn {
-  background: rgba(62,255,208,0.12);
-  border: 1px solid #3EFFD0;
+  background: rgba(13,148,136,0.18);
+  border: 1px solid #0D9488;
   border-radius: 10px;
   padding: 9px 16px;
   font-size: 13px;
-  color: #3EFFD0;
+  color: #0D9488;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .dec31BannerBtn:hover { background: rgba(62,255,208,0.20); }
+  .dec31BannerBtn:hover { background: rgba(13,148,136,0.20); }
 }
 
 /* ── 24시간 시계 SVG (탭 2) ── */
@@ -413,19 +413,19 @@
 }@media (hover: hover) {
   .zoomBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.zoomActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+.zoomActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
 
 /* ── 충격 카드 ── */
 .shockCard {
-  background: rgba(255,107,107,0.05);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 14px;
   padding: 16px 20px;
 }
 .shockTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 800;
-  color: #FF8C8C;
+  color: #DC2626;
   font-size: 14px;
   margin-bottom: 10px;
 }
@@ -438,7 +438,7 @@
   line-height: 1.85;
 }
 .shockList strong {
-  color: #FF8C8C;
+  color: #DC2626;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
 }
@@ -500,7 +500,7 @@
   content: '"';
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
-  color: #C485E0;
+  color: #9333EA;
   font-weight: 800;
   margin-right: 4px;
   vertical-align: -8px;
@@ -538,9 +538,9 @@
 /* ── 내 인생 결과 (탭 3) ── */
 .myLifeHero {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(62,255,208,0.18), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.18), transparent 60%),
     var(--bg2);
-  border: 1px solid #3EFFD0;
+  border: 1px solid #0D9488;
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -551,7 +551,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -567,10 +567,10 @@
 /* ── 공유 카드 ── */
 .shareCard {
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(62,255,208,0.18), transparent 55%),
+    radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.18), transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(155,89,182,0.18), transparent 60%),
     #0a0e1a;
-  border: 1px solid #3EFFD0;
+  border: 1px solid #0D9488;
   border-radius: 18px;
   padding: 24px 22px;
   position: relative;
@@ -593,7 +593,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
-  color: #3EFFD0;
+  color: #0D9488;
   text-align: center;
   margin-bottom: 6px;
   letter-spacing: -0.5px;
@@ -613,7 +613,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(44px, 11vw, 64px);
   font-weight: 800;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -645,7 +645,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
-  color: rgba(62,255,208,0.6);
+  color: rgba(13,148,136,0.6);
   letter-spacing: 0.04em;
 }
 
@@ -676,7 +676,7 @@
   margin-top: 3px;
   opacity: 0.8;
 }
-.compressionActive { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+.compressionActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
 
 /* 탭 4 사건 표 */
 .compressionTable {
@@ -708,7 +708,7 @@
   font-size: 12px;
 }
 .compressionTable td:last-child {
-  color: #3EFFD0;
+  color: #0D9488;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   white-space: nowrap;
@@ -728,6 +728,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
+  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
 }
-.copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }

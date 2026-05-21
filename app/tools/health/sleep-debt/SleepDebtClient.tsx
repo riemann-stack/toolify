@@ -172,11 +172,11 @@ function consistency(entries: SleepEntry[], period: Period, todayDate: string): 
   const worst = Math.max(bedStd, wakeStd)
 
   let rating: { label: string; color: string }
-  if (worst < 20) rating = { label: '🟢 매우 일관적', color: '#3EFF9B' }
-  else if (worst < 40) rating = { label: '🟢 일관적', color: '#3EC8FF' }
-  else if (worst < 75) rating = { label: '🟡 보통', color: '#FFB83E' }
-  else if (worst < 120) rating = { label: '🟠 불규칙', color: '#FF8C3E' }
-  else rating = { label: '🔴 매우 불규칙', color: '#FF6B6B' }
+  if (worst < 20) rating = { label: '🟢 매우 일관적', color: '#059669' }
+  else if (worst < 40) rating = { label: '🟢 일관적', color: '#0891B2' }
+  else if (worst < 75) rating = { label: '🟡 보통', color: '#D97706' }
+  else if (worst < 120) rating = { label: '🟠 불규칙', color: '#EA580C' }
+  else rating = { label: '🔴 매우 불규칙', color: '#DC2626' }
 
   return { bedtimeStdMin: bedStd, wakeStdMin: wakeStd, rating }
 }
@@ -230,11 +230,11 @@ export default function SleepDebtClient() {
   const debtStatus = (() => {
     const d = analysis.totalDebt
     if (analysis.daysWithData === 0) return { label: '기록 없음', color: '#888', desc: '아래에서 수면 기록을 추가하세요' }
-    if (d < 1) return { label: '✅ 정상', color: '#3EFF9B', desc: '현재 부채 거의 없음 — 잘 유지 중' }
-    if (d < 5) return { label: '🟢 양호', color: '#3EC8FF', desc: '경미한 부채 — 1~2일 충분히 자면 회복' }
-    if (d < 10) return { label: '🟡 경미한 부채', color: '#FFB83E', desc: '집중력·기분 영향 시작 — 회복 권장' }
-    if (d < 20) return { label: '🟠 누적 부채', color: '#FF8C3E', desc: '명확한 인지·면역 영향 — 회복 우선' }
-    return { label: '🔴 만성 부채', color: '#FF6B6B', desc: '심각 — 1~2주 집중 회복 + 생활 점검' }
+    if (d < 1) return { label: '✅ 정상', color: '#059669', desc: '현재 부채 거의 없음 — 잘 유지 중' }
+    if (d < 5) return { label: '🟢 양호', color: '#0891B2', desc: '경미한 부채 — 1~2일 충분히 자면 회복' }
+    if (d < 10) return { label: '🟡 경미한 부채', color: '#D97706', desc: '집중력·기분 영향 시작 — 회복 권장' }
+    if (d < 20) return { label: '🟠 누적 부채', color: '#EA580C', desc: '명확한 인지·면역 영향 — 회복 우선' }
+    return { label: '🔴 만성 부채', color: '#DC2626', desc: '심각 — 1~2주 집중 회복 + 생활 점검' }
   })()
 
   /* ─── 회복 계획 ─── */
@@ -534,7 +534,7 @@ export default function SleepDebtClient() {
                 )
               }
               const diff = d.hours - targetHours
-              const color = diff >= -0.5 ? '#3EFF9B' : diff >= -2 ? '#FFB83E' : '#FF6B6B'
+              const color = diff >= -0.5 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
               const y = yFromH(d.hours)
               return (
                 <g key={i}>
@@ -561,9 +561,9 @@ export default function SleepDebtClient() {
             })}
           </svg>
           <div className={s.chartLegend}>
-            <span><span className={s.dot} style={{ background: '#3EFF9B' }} />목표 이상</span>
-            <span><span className={s.dot} style={{ background: '#FFB83E' }} />약간 부족</span>
-            <span><span className={s.dot} style={{ background: '#FF6B6B' }} />심각 부족</span>
+            <span><span className={s.dot} style={{ background: '#059669' }} />목표 이상</span>
+            <span><span className={s.dot} style={{ background: '#D97706' }} />약간 부족</span>
+            <span><span className={s.dot} style={{ background: '#DC2626' }} />심각 부족</span>
             <span><span className={s.dot} style={{ background: 'rgba(255,255,255,0.15)' }} />기록 없음</span>
           </div>
         </div>
@@ -661,7 +661,7 @@ export default function SleepDebtClient() {
           <ul className={s.entryList}>
             {sortedEntries.slice(0, 30).map(e => {
               const diff = e.hours - targetHours
-              const color = diff >= -0.5 ? '#3EFF9B' : diff >= -2 ? '#FFB83E' : '#FF6B6B'
+              const color = diff >= -0.5 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
               return (
                 <li key={e.id} className={s.entryItem}>
                   <div className={s.entryDate}>{fmtKoreanDate(e.date)}</div>

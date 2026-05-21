@@ -751,7 +751,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
         x={padding} y={padding}
         width={gridSize} height={gridSize}
         fill="var(--bg2)"
-        stroke="#C485E0"
+        stroke="#9333EA"
         strokeWidth={2}
       />
 
@@ -765,7 +765,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
             key={`v-${i}`}
             x1={x} y1={padding}
             x2={x} y2={padding + gridSize}
-            stroke={isFifth ? '#FF3E8C' : 'var(--border)'}
+            stroke={isFifth ? '#DB2777' : 'var(--border)'}
             strokeWidth={isFifth ? 0.8 : 0.4}
             strokeDasharray={isFifth ? '2 2' : ''}
             opacity={isFifth ? 0.7 : 0.5}
@@ -783,7 +783,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
             key={`h-${i}`}
             x1={padding} y1={y}
             x2={padding + gridSize} y2={y}
-            stroke={isFifth ? '#FF3E8C' : 'var(--border)'}
+            stroke={isFifth ? '#DB2777' : 'var(--border)'}
             strokeWidth={isFifth ? 0.8 : 0.4}
             strokeDasharray={isFifth ? '2 2' : ''}
             opacity={isFifth ? 0.7 : 0.5}
@@ -804,7 +804,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#C485E0" fontSize={12} fontWeight={700} fontFamily="Inter, system-ui, sans-serif">
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#9333EA" fontSize={12} fontWeight={700} fontFamily="Inter, system-ui, sans-serif">
         {getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · {fmt(stsPer10cm, 0)} sts × {fmt(rowsPer10cm, 0)} rows / 10cm
       </text>
     </svg>

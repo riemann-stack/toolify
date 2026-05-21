@@ -15,28 +15,28 @@ const CATEGORIES = [
     title: '버그 제보',
     desc: '계산 결과 오류, 화면 깨짐, 동작 이상 등을 알려주세요.',
     hint: '재현 단계와 사용 중인 기기·브라우저를 함께 적어주시면 더 빠르게 해결됩니다.',
-    color: '#FF6B6B',
+    color: '#DC2626',
   },
   {
     icon: '💡',
     title: '도구 추천',
     desc: '새로 만들어지면 좋을 도구나 기능을 제안해주세요.',
     hint: '어떤 상황에서 어떻게 쓰고 싶은지 한두 줄 시나리오를 함께 적어주시면 큰 도움이 됩니다.',
-    color: '#3EC8FF',
+    color: '#0891B2',
   },
   {
     icon: '✏️',
     title: '데이터·내용 정정',
     desc: '잘못된 수치, 오래된 법령, 부정확한 표현이 있다면 알려주세요.',
     hint: '근거 출처(법령·논문·공식 자료)를 함께 보내주시면 검토가 빠릅니다.',
-    color: '#3EFF9B',
+    color: '#059669',
   },
   {
     icon: '📣',
     title: '광고·제휴 문의',
     desc: '협업, 광고, 콘텐츠 제휴 등 비즈니스 문의는 이 카테고리로 보내주세요.',
     hint: '회사명·담당자·제안 내용을 메일 본문에 정리해주시면 빠르게 답변드립니다.',
-    color: '#FFB83E',
+    color: '#D97706',
   },
 ]
 
@@ -61,8 +61,8 @@ export default function ContactPage() {
 
       {/* 메일 CTA */}
       <div style={{
-        background: 'rgba(200,255,62,0.05)',
-        border: '1px solid rgba(200,255,62,0.3)',
+        background: 'rgba(14,165,233,0.05)',
+        border: '1px solid rgba(14,165,233,0.3)',
         borderRadius: '14px',
         padding: '20px 22px',
         display: 'flex',
@@ -170,8 +170,8 @@ export default function ContactPage() {
 
       {/* 안내 박스 */}
       <div style={{
-        background: 'rgba(62,200,255,0.06)',
-        border: '1px solid rgba(62,200,255,0.25)',
+        background: 'rgba(8,145,178,0.06)',
+        border: '1px solid rgba(8,145,178,0.25)',
         borderRadius: '12px',
         padding: '14px 16px',
         fontSize: '12px',
@@ -179,7 +179,7 @@ export default function ContactPage() {
         lineHeight: 1.8,
         marginBottom: '40px',
       }}>
-        <strong style={{ color: '#3EC8FF' }}>ℹ️ 안내</strong> · Youtil의 모든 도구는 일반적인 정보 제공을 목적으로 합니다.
+        <strong style={{ color: '#0891B2' }}>ℹ️ 안내</strong> · Youtil의 모든 도구는 일반적인 정보 제공을 목적으로 합니다.
         의료·법률·세무·금융 등 전문적 판단이 필요한 분야는 반드시 해당 전문가의 상담을 받아주세요.
         도구 결과로 인한 직접·간접적 손실에 대해 운영자는 법적 책임을 지지 않습니다.
         자세한 내용은 <Link href="/terms" style={{ color: 'var(--accent)' }}>이용약관</Link>을 참고하세요.

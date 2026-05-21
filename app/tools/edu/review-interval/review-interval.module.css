@@ -10,7 +10,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #C485E0; }
+.disclaimer strong { color: #9333EA; }
 
 /* ── 탭 ── */
 .tabs {
@@ -38,8 +38,8 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(62,255,208,0.10);
-  color: #3EFFD0;
+  background: rgba(13,148,136,0.18);
+  color: #0D9488;
   font-weight: 700;
 }
 
@@ -95,7 +95,7 @@
   font-size: 16px;
 }
 .bigInput { font-size: 18px; padding: 12px 14px; }
-.bigInput:focus, .smallInput:focus { border-color: #3EFFD0; }
+.bigInput:focus, .smallInput:focus { border-color: #0D9488; }
 .bigInput::-webkit-outer-spin-button,
 .bigInput::-webkit-inner-spin-button,
 .smallInput::-webkit-outer-spin-button,
@@ -116,7 +116,7 @@
   box-sizing: border-box;
   color-scheme: dark;
 }
-.dateInput:focus { border-color: #3EFFD0; }
+.dateInput:focus { border-color: #0D9488; }
 
 .textInput {
   width: 100%;
@@ -131,7 +131,7 @@
   outline: none;
   box-sizing: border-box;
 }
-.textInput:focus { border-color: #3EFFD0; }
+.textInput:focus { border-color: #0D9488; }
 
 .gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .gridThree { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
@@ -145,14 +145,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #3EFFD0;
+  accent-color: #0D9488;
 }
 .sliderValue {
   min-width: 90px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #3EFFD0;
+  color: #0D9488;
   text-align: right;
 }
 
@@ -176,16 +176,16 @@
 }@media (hover: hover) {
   .choiceBtn:hover { color: var(--text); }
 }
-.choiceEasy   { border-color: rgba(62,255,155,0.40); }
+.choiceEasy   { border-color: rgba(16,185,129,0.40); }
 .choiceNormal { border-color: var(--accent); }
-.choiceHard   { border-color: rgba(255,107,107,0.40); }
-.choiceFast    { border-color: rgba(255,140,62,0.40); }
-.choiceRelaxed { border-color: rgba(62,200,255,0.40); }
-.choiceEasy.choiceActive   { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.choiceHard   { border-color: rgba(220,38,38,0.40); }
+.choiceFast    { border-color: rgba(234,88,12,0.40); }
+.choiceRelaxed { border-color: rgba(8,145,178,0.40); }
+.choiceEasy.choiceActive   { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 .choiceNormal.choiceActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.choiceHard.choiceActive   { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.choiceFast.choiceActive   { background: rgba(255,140,62,0.10); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.choiceRelaxed.choiceActive{ background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.choiceHard.choiceActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.choiceFast.choiceActive   { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.choiceRelaxed.choiceActive{ background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 /* ── 기억 점수 6단계 ── */
 .scoreRow {
@@ -208,23 +208,23 @@
   .scoreBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .scoreBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px; margin-bottom: 2px; }
-.score0 { border-color: rgba(255,107,107,0.50); }
-.score1 { border-color: rgba(255,107,107,0.40); }
-.score2 { border-color: rgba(255,140,62,0.40); }
-.score3 { border-color: rgba(255,215,0,0.40); }
-.score4 { border-color: rgba(62,255,155,0.40); }
+.score0 { border-color: rgba(220,38,38,0.50); }
+.score1 { border-color: rgba(220,38,38,0.40); }
+.score2 { border-color: rgba(234,88,12,0.40); }
+.score3 { border-color: rgba(202,138,4,0.40); }
+.score4 { border-color: rgba(16,185,129,0.40); }
 .score5 { border-color: var(--accent); }
-.score0.scoreActive { background: rgba(255,107,107,0.12); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.score1.scoreActive { background: rgba(255,107,107,0.10); color: #FF8C8C; border-color: #FF8C8C; font-weight: 700; }
-.score2.scoreActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.score3.scoreActive { background: rgba(255,215,0,0.12);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.score4.scoreActive { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.score0.scoreActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.score1.scoreActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.score2.scoreActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.score3.scoreActive { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.score4.scoreActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 .score5.scoreActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
-  background: rgba(62,255,208,0.05);
-  border: 1px solid #3EFFD0;
+  background: rgba(13,148,136,0.14);
+  border: 1px solid #0D9488;
   border-radius: 16px;
   padding: 26px 24px;
   text-align: center;
@@ -235,7 +235,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(28px, 6vw, 36px);
   font-weight: 800;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -1px;
   line-height: 1.2;
 }
@@ -266,7 +266,7 @@
   font-weight: 600;
 }
 .scheduleTable td:first-child {
-  color: #3EFFD0;
+  color: #0D9488;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   white-space: nowrap;
@@ -275,15 +275,15 @@
 .scheduleTable td:nth-child(3) { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .scheduleTable td:nth-child(4) { color: var(--muted); font-size: 12px; }
 .scheduleTable .rowToday td {
-  background: rgba(62,255,208,0.08);
+  background: rgba(13,148,136,0.14);
 }
-.scheduleTable .rowToday td:nth-child(2) { color: #3EFFD0; }
+.scheduleTable .rowToday td:nth-child(2) { color: #0D9488; }
 .scheduleTable .rowMissed td {
-  background: rgba(255,107,107,0.05);
+  background: rgba(220,38,38,0.14);
 }
-.scheduleTable .rowMissed td:nth-child(2) { color: #FF8C8C; }
+.scheduleTable .rowMissed td:nth-child(2) { color: #DC2626; }
 .scheduleTable .rowFinal td {
-  background: rgba(255,215,0,0.06);
+  background: rgba(202,138,4,0.14);
 }
 
 .tableScroll { overflow-x: auto; }
@@ -333,17 +333,17 @@
   color: var(--text);
 }
 .analysisTable .totalRow td {
-  background: rgba(62,255,208,0.08);
-  border-top: 2px solid rgba(62,255,208,0.30);
+  background: rgba(13,148,136,0.14);
+  border-top: 2px solid rgba(13,148,136,0.30);
   border-bottom: none;
 }
-.analysisTable .totalRow td:first-child { color: #3EFFD0; }
-.analysisTable .totalRow td:last-child { color: #3EFFD0; font-size: 16px; }
+.analysisTable .totalRow td:first-child { color: #0D9488; }
+.analysisTable .totalRow td:last-child { color: #0D9488; font-size: 16px; }
 
 /* ── 학습 항목 ── */
 .itemAddCard {
-  background: rgba(62,255,208,0.04);
-  border: 1px dashed #3EFFD0;
+  background: rgba(13,148,136,0.14);
+  border: 1px dashed #0D9488;
   border-radius: 12px;
   padding: 16px 18px;
 }
@@ -351,7 +351,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 13px;
-  color: #3EFFD0;
+  color: #0D9488;
   margin-bottom: 10px;
   letter-spacing: -0.3px;
 }
@@ -371,13 +371,13 @@
   position: relative;
 }
 .itemCardToday {
-  border-left-color: #3EFFD0;
-  background: rgba(62,255,208,0.04);
-  box-shadow: 0 0 0 1px rgba(62,255,208,0.15);
+  border-left-color: #0D9488;
+  background: rgba(13,148,136,0.14);
+  box-shadow: 0 0 0 1px rgba(13,148,136,0.15);
 }
 .itemCardMissed {
-  border-left-color: #FF6B6B;
-  background: rgba(255,107,107,0.04);
+  border-left-color: #DC2626;
+  background: rgba(220,38,38,0.14);
 }
 .itemCardFuture { border-left-color: var(--muted); }
 
@@ -398,11 +398,11 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
-  color: #3EFFD0;
+  color: #0D9488;
   white-space: nowrap;
 }
-.itemDdayToday  { color: #3EFFD0; }
-.itemDdayMissed { color: #FF8C8C; }
+.itemDdayToday  { color: #0D9488; }
+.itemDdayMissed { color: #DC2626; }
 .itemDdayFuture { color: var(--muted); }
 
 .itemMeta {
@@ -437,14 +437,14 @@
   .itemActionBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
 .itemActionPrimary {
-  background: rgba(62,255,208,0.12);
-  border-color: #3EFFD0;
-  color: #3EFFD0;
+  background: rgba(13,148,136,0.18);
+  border-color: #0D9488;
+  color: #0D9488;
   font-weight: 700;
 }@media (hover: hover) {
-  .itemActionPrimary:hover { background: rgba(62,255,208,0.20); }
+  .itemActionPrimary:hover { background: rgba(13,148,136,0.20); }
 }@media (hover: hover) {
-  .itemActionDanger:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .itemActionDanger:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 .itemEmpty {
@@ -481,7 +481,7 @@
 .statCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-top: 3px solid #3EFFD0;
+  border-top: 3px solid #0D9488;
   border-radius: 12px;
   padding: 14px 12px;
   text-align: center;
@@ -490,7 +490,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(22px, 5vw, 28px);
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -0.5px;
   line-height: 1;
 }
@@ -506,16 +506,16 @@
 /* 오늘 복습 강조 헤더 */
 .todayBanner {
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(62,255,208,0.12), transparent 70%),
-    rgba(62,255,208,0.04);
-  border: 1px solid #3EFFD0;
+    radial-gradient(ellipse at 50% 50%, rgba(13,148,136,0.18), transparent 70%),
+    rgba(13,148,136,0.14);
+  border: 1px solid #0D9488;
   border-radius: 12px;
   padding: 14px 18px;
 }
 .todayBannerTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
-  color: #3EFFD0;
+  color: #0D9488;
   font-size: 14px;
   margin-bottom: 6px;
 }
@@ -523,25 +523,25 @@
 /* 해석 카드 */
 .interpretCard {
   background: var(--bg3);
-  border-left: 4px solid #3EFFD0;
+  border-left: 4px solid #0D9488;
   border-radius: 8px;
   padding: 14px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.interpretCard strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .warnCard {
-  background: rgba(255,107,107,0.05);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnCard strong { color: #FF8C8C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warnCard strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* 복사 버튼 */
 .copyBtn {
@@ -557,6 +557,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
+  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
 }
-.copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }

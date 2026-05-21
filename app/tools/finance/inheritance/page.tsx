@@ -58,8 +58,8 @@ export default function InheritancePage() {
       </p>
 
       <div style={{
-        background: 'rgba(255, 107, 107, 0.06)',
-        border: '1px solid rgba(255, 107, 107, 0.25)',
+        background: 'rgba(220, 38, 38, 0.06)',
+        border: '1px solid rgba(220, 38, 38, 0.25)',
         borderRadius: '12px',
         padding: '14px 18px',
         marginBottom: '32px',
@@ -67,10 +67,10 @@ export default function InheritancePage() {
         color: 'var(--text)',
         lineHeight: 1.7,
       }}>
-        ⚖️ <strong style={{ color: '#FF8C8C' }}>본 계산기는 단순 참고용 정보 도구입니다.</strong><br />
+        ⚖️ <strong style={{ color: '#DC2626' }}>본 계산기는 단순 참고용 정보 도구입니다.</strong><br />
         실제 상속·증여세는 재산 종류별 평가, 공제 적용 여부, 신고 시점, 사전 증여 이력, 채무 등 복합적 요소에 따라 실제 납부액과 크게 다를 수 있습니다.
         부동산·부담부증여는 매우 단순한 추정만 제공되며, 정확한 신고는 반드시 세무사와 상담하세요.<br />
-        세무 도움: <strong style={{ color: '#FF8C8C' }}>한국세무사회 무료 상담 070-5008-1234</strong> · 국세청 126 · 홈택스 hometax.go.kr<br />
+        세무 도움: <strong style={{ color: '#DC2626' }}>한국세무사회 무료 상담 070-5008-1234</strong> · 국세청 126 · 홈택스 hometax.go.kr<br />
         <span style={{ color: 'var(--muted)' }}>참고: 2026년 기준 상속세 및 증여세법</span>
       </div>
 
@@ -127,11 +127,11 @@ export default function InheritancePage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>1억원 이하</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>10%</strong></td><td style={cell}>-</td></tr>
-            <tr><td style={cell}>1억 초과 ~ 5억 이하</td><td style={cell}><strong style={{ color: '#C8FF3E' }}>20%</strong></td><td style={cell}>1천만원</td></tr>
-            <tr><td style={cell}>5억 초과 ~ 10억 이하</td><td style={cell}><strong style={{ color: '#FFB83E' }}>30%</strong></td><td style={cell}>6천만원</td></tr>
-            <tr><td style={cell}>10억 초과 ~ 30억 이하</td><td style={cell}><strong style={{ color: '#FF8C3E' }}>40%</strong></td><td style={cell}>1억 6천만원</td></tr>
-            <tr><td style={cell}>30억 초과</td><td style={cell}><strong style={{ color: '#FF6B6B' }}>50%</strong></td><td style={cell}>4억 6천만원</td></tr>
+            <tr><td style={cell}>1억원 이하</td><td style={cell}><strong style={{ color: '#059669' }}>10%</strong></td><td style={cell}>-</td></tr>
+            <tr><td style={cell}>1억 초과 ~ 5억 이하</td><td style={cell}><strong style={{ color: '#0EA5E9' }}>20%</strong></td><td style={cell}>1천만원</td></tr>
+            <tr><td style={cell}>5억 초과 ~ 10억 이하</td><td style={cell}><strong style={{ color: '#D97706' }}>30%</strong></td><td style={cell}>6천만원</td></tr>
+            <tr><td style={cell}>10억 초과 ~ 30억 이하</td><td style={cell}><strong style={{ color: '#EA580C' }}>40%</strong></td><td style={cell}>1억 6천만원</td></tr>
+            <tr><td style={cell}>30억 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>50%</strong></td><td style={cell}>4억 6천만원</td></tr>
           </tbody>
         </table>
       </div>
@@ -177,7 +177,7 @@ export default function InheritancePage() {
         </table>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        ※ 협의 분할 시 법정 비율과 다르게 나눌 수 있습니다. 다만 <strong style={{ color: '#FF8C3E' }}>유류분 (법정상속분 × 1/2)</strong> 침해 시 분쟁 가능.
+        ※ 협의 분할 시 법정 비율과 다르게 나눌 수 있습니다. 다만 <strong style={{ color: '#EA580C' }}>유류분 (법정상속분 × 1/2)</strong> 침해 시 분쟁 가능.
       </p>
 
       {/* 5. 배우자 상속공제 정량 가이드 (NEW) */}
@@ -238,20 +238,20 @@ export default function InheritancePage() {
 
       {/* 7. 사전증여 합산 주의 (NEW) */}
       <h2 style={sectionTitle}>⚠️ 사전증여 합산 — 사망 직전 증여는 효과 X</h2>
-      <div style={{ ...card, borderTop: '3px solid #FF6B6B' }}>
+      <div style={{ ...card, borderTop: '3px solid #DC2626' }}>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li><strong>사망 10년 이내 상속인 증여</strong>는 상속세에 자동 합산</li>
           <li><strong>사망 5년 이내 비상속인 증여</strong>도 합산 (예: 손자녀, 며느리)</li>
           <li>사망 11년 전 증여는 상속세 미합산 → 절세 효과</li>
-          <li>증여세 절세는 <strong style={{ color: '#FF6B6B' }}>건강한 시기에 미리 시작</strong>해야 효과</li>
+          <li>증여세 절세는 <strong style={{ color: '#DC2626' }}>건강한 시기에 미리 시작</strong>해야 효과</li>
         </ul>
       </div>
 
       {/* 8. 신고 기한 (NEW) */}
       <h2 style={sectionTitle}>📆 상속·증여세 신고 기한</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-        <div style={{ ...card, borderTop: '3px solid #FF8C3E', marginBottom: 0 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C3E', marginBottom: 8 }}>🏛️ 상속세</p>
+        <div style={{ ...card, borderTop: '3px solid #EA580C', marginBottom: 0 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>🏛️ 상속세</p>
           <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, lineHeight: 1.85, color: 'var(--text)' }}>
             <li>사망일 후 <strong>6개월 이내</strong> 신고·납부</li>
             <li>재외동포는 9개월</li>
@@ -270,7 +270,7 @@ export default function InheritancePage() {
 
       {/* 9. 부동산 증여 주의 (NEW, 단순) */}
       <h2 style={sectionTitle}>🏠 부동산 증여 주의 (간단)</h2>
-      <div style={{ ...card, borderTop: '3px solid #FF8C3E' }}>
+      <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginBottom: 10 }}>
           부동산 증여는 <strong>증여세 외에 다음이 모두 별도 발생</strong>합니다:
         </p>
@@ -282,7 +282,7 @@ export default function InheritancePage() {
           <li><strong>시가 vs 공시가격</strong> — 원칙은 시가, 시가 산정 어려우면 공시가</li>
         </ul>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
-          본 도구는 <strong style={{ color: '#FF8C3E' }}>증여세·취득세만 단순 추정</strong>합니다.
+          본 도구는 <strong style={{ color: '#EA580C' }}>증여세·취득세만 단순 추정</strong>합니다.
           부동산 증여 1건 자문료 50~100만원이지만, 잘못된 신고 시 가산세·과태료가 훨씬 큽니다.
           부담부증여는 양도세까지 얽혀 가장 복잡한 세무 영역 — 반드시 세무사·변호사 상담 후 진행 권장.
         </p>
@@ -290,16 +290,16 @@ export default function InheritancePage() {
 
       {/* 10. 상속 vs 증여 선택 기준 (기존 SEO 보존) */}
       <h2 style={sectionTitle}>⚖️ 상속세 vs 증여세 선택 기준 (참고용)</h2>
-      <div style={{ ...card, borderTop: '3px solid #FF8C3E' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#FF8C3E' }}>📌 상속이 유리할 수 있는 경우</h3>
+      <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#EA580C' }}>📌 상속이 유리할 수 있는 경우</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li>배우자가 있어 대규모 배우자 공제(최대 30억) 적용이 가능한 경우</li>
           <li>총 재산이 5억 이하 (일괄공제 범위 내)인 경우</li>
           <li>사전 증여 없이 상속인이 많아 인적공제·일괄공제 효과가 큰 경우</li>
         </ul>
       </div>
-      <div style={{ ...card, borderTop: '3px solid #3EC8FF' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#3EC8FF' }}>📌 증여가 유리할 수 있는 경우</h3>
+      <div style={{ ...card, borderTop: '3px solid #0891B2' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#0891B2' }}>📌 증여가 유리할 수 있는 경우</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li>재산이 향후 크게 증가할 것으로 예상될 때 미리 이전</li>
           <li>자녀가 여럿이어서 분산 효과가 큰 경우</li>
@@ -401,8 +401,8 @@ export default function InheritancePage() {
 
       {/* 13. 면책 강화 */}
       <div style={{
-        background: 'rgba(255, 107, 107, 0.06)',
-        border: '1px solid rgba(255, 107, 107, 0.25)',
+        background: 'rgba(220, 38, 38, 0.06)',
+        border: '1px solid rgba(220, 38, 38, 0.25)',
         borderRadius: '12px',
         padding: '18px 20px',
         marginTop: '32px',
@@ -410,7 +410,7 @@ export default function InheritancePage() {
         color: 'var(--muted)',
         lineHeight: 1.85,
       }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C8C', marginBottom: 10 }}>⚖️ 면책 조항 (강화)</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 면책 조항 (강화)</p>
         <p style={{ marginBottom: 8 }}>본 상속·증여세 계산기는 일반 정보 제공 목적의 단순 참고용 도구입니다. 세무 자문·신고 도구가 아닙니다.</p>
         <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
           <li>정확한 신고는 세무사·홈택스 권장</li>
@@ -431,9 +431,9 @@ export default function InheritancePage() {
         </ul>
         <p style={{ marginBottom: 4, color: 'var(--text)', fontWeight: 600 }}>세무 도움 연락처:</p>
         <ul style={{ paddingLeft: 18 }}>
-          <li>한국 국세청: <strong style={{ color: '#FF8C8C' }}>126</strong></li>
-          <li>한국세무사회 무료 상담: <strong style={{ color: '#FF8C8C' }}>070-5008-1234</strong></li>
-          <li>홈택스: <strong style={{ color: '#FF8C8C' }}>hometax.go.kr</strong></li>
+          <li>한국 국세청: <strong style={{ color: '#DC2626' }}>126</strong></li>
+          <li>한국세무사회 무료 상담: <strong style={{ color: '#DC2626' }}>070-5008-1234</strong></li>
+          <li>홈택스: <strong style={{ color: '#DC2626' }}>hometax.go.kr</strong></li>
           <li>거주 지역 세무서 직접 문의</li>
         </ul>
       </div>

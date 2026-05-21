@@ -401,7 +401,7 @@ export default function DividendClient() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 20, fontWeight: 800, color: '#3EFF9B' }}>
+                    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 20, fontWeight: 800, color: '#059669' }}>
                       🎉 이미 목표 달성!
                     </div>
                   )}
@@ -555,7 +555,7 @@ export default function DividendClient() {
                           <tr key={yr} className={String(yr) === revYears ? styles.bestRow : ''}>
                             <td>{yr}년{String(yr) === revYears && ' ⭐'}</td>
                             {row.map((c, i) => (
-                              <td key={i} style={{ color: c.m === null ? 'var(--muted)' : (c.m < 800_000 ? '#3EFF9B' : c.m < 2_000_000 ? '#FFD700' : '#FF6B6B') }}>
+                              <td key={i} style={{ color: c.m === null ? 'var(--muted)' : (c.m < 800_000 ? '#059669' : c.m < 2_000_000 ? '#CA8A04' : '#DC2626') }}>
                                 {c.m === null ? '—' : `${Math.round(c.m / 10_000)}만`}
                               </td>
                             ))}
@@ -647,7 +647,7 @@ export default function DividendClient() {
           <div className={styles.compTaxLabels}>
             <span>0원</span>
             <span>{formatEok(COMPREHENSIVE_TAX_THRESHOLD / 2)} (50%)</span>
-            <span style={{ color: '#FF6B6B' }}>한도 {formatEok(COMPREHENSIVE_TAX_THRESHOLD)}</span>
+            <span style={{ color: '#DC2626' }}>한도 {formatEok(COMPREHENSIVE_TAX_THRESHOLD)}</span>
           </div>
 
           {/* 시뮬레이션 표 — 원금별 종합과세 진입 여부 */}
@@ -687,7 +687,7 @@ export default function DividendClient() {
                     return (
                       <tr key={i} className={isActive ? styles.bestRow : ''}>
                         <td>{b.label.split('(')[0].trim()}{isActive && ' ⭐'}</td>
-                        <td style={{ color: b.rate > 0.3 ? '#FF6B6B' : b.rate > 0.2 ? '#FF8C3E' : 'var(--text)' }}>
+                        <td style={{ color: b.rate > 0.3 ? '#DC2626' : b.rate > 0.2 ? '#EA580C' : 'var(--text)' }}>
                           {(b.rate * 100).toFixed(1)}%
                         </td>
                       </tr>
@@ -700,9 +700,9 @@ export default function DividendClient() {
 
           <div className={styles.infoBox}>
             <strong>💡 종합과세 회피 전략:</strong><br />
-            <strong style={{ color: '#3EC8FF' }}>① ISA 계좌</strong> — 200~400만 비과세 + 9.9% 분리과세, <strong>종합과세 비포함</strong> · 연 2,000만 한도 / 총 1억<br />
-            <strong style={{ color: '#3EC8FF' }}>② 연금저축·IRP</strong> — 5.5% 분리과세 (55세 이후) + 16.5% 세액공제<br />
-            <strong style={{ color: '#3EC8FF' }}>③ 자산 분산</strong> — 부부 명의 분산, 자녀 명의(증여세 별도), 시점 분산<br />
+            <strong style={{ color: '#0891B2' }}>① ISA 계좌</strong> — 200~400만 비과세 + 9.9% 분리과세, <strong>종합과세 비포함</strong> · 연 2,000만 한도 / 총 1억<br />
+            <strong style={{ color: '#0891B2' }}>② 연금저축·IRP</strong> — 5.5% 분리과세 (55세 이후) + 16.5% 세액공제<br />
+            <strong style={{ color: '#0891B2' }}>③ 자산 분산</strong> — 부부 명의 분산, 자녀 명의(증여세 별도), 시점 분산<br />
             본 도구의 「절세 계좌」 탭에서 정량 비교 가능합니다.
           </div>
         </>
@@ -753,8 +753,8 @@ export default function DividendClient() {
               </div>
             )}
             {assets.some(a => a.yieldPct >= 7 && a.yieldPct < 10) && (
-              <div className={styles.warnBox} style={{ marginTop: 12, background: 'rgba(255,140,62,0.06)', borderColor: 'rgba(255,140,62,0.30)' }}>
-                <strong style={{ color: '#FF8C3E' }}>⚠️ 7%+ 자산 (JEPI/QYLD 등 커버드콜 가능성)</strong> — 변동성 손실 위험 있음. 단순 배당주 대비 자본 손실 위험 있음.
+              <div className={styles.warnBox} style={{ marginTop: 12, background: 'rgba(234,88,12,0.06)', borderColor: 'rgba(234,88,12,0.30)' }}>
+                <strong style={{ color: '#EA580C' }}>⚠️ 7%+ 자산 (JEPI/QYLD 등 커버드콜 가능성)</strong> — 변동성 손실 위험 있음. 단순 배당주 대비 자본 손실 위험 있음.
               </div>
             )}
           </div>
@@ -821,7 +821,7 @@ export default function DividendClient() {
                     <tr key={a.id}>
                       <td>{a.name || '(이름 없음)'}</td>
                       <td>{formatEok(a.amount)}</td>
-                      <td style={{ color: a.yieldPct >= 10 ? '#FF6B6B' : a.yieldPct >= 7 ? '#FF8C3E' : 'var(--text)' }}>
+                      <td style={{ color: a.yieldPct >= 10 ? '#DC2626' : a.yieldPct >= 7 ? '#EA580C' : 'var(--text)' }}>
                         {a.yieldPct}%{a.yieldPct >= 7 && ' ⚠️'}
                       </td>
                       <td>{FREQUENCY_INFO.find(f => f.id === a.frequency)?.name}</td>
@@ -930,11 +930,11 @@ export default function DividendClient() {
                         <tr key={r.account.id} className={isBest ? styles.bestRow : ''}>
                           <td>{r.account.name}{isBest && ' ★'}</td>
                           <td>{formatEok(r.annualTax)}</td>
-                          <td style={{ color: '#FF6B6B' }}>{formatEok(r.totalTax)}</td>
-                          <td style={{ color: r.taxCreditTotal > 0 ? '#3EFF9B' : 'var(--muted)' }}>
+                          <td style={{ color: '#DC2626' }}>{formatEok(r.totalTax)}</td>
+                          <td style={{ color: r.taxCreditTotal > 0 ? '#059669' : 'var(--muted)' }}>
                             {r.taxCreditTotal > 0 ? `+${formatEok(r.taxCreditTotal)}` : '—'}
                           </td>
-                          <td style={{ color: r.netBenefit > 0 ? '#3EFF9B' : r.netBenefit < 0 ? '#FF6B6B' : 'var(--muted)' }}>
+                          <td style={{ color: r.netBenefit > 0 ? '#059669' : r.netBenefit < 0 ? '#DC2626' : 'var(--muted)' }}>
                             {r.netBenefit > 0 ? `+${formatEok(r.netBenefit)}` : r.netBenefit < 0 ? formatEok(r.netBenefit) : '기준'}
                           </td>
                         </tr>
@@ -955,7 +955,7 @@ export default function DividendClient() {
                       {isBest && <div className={styles.winnerBadge}>★ 최적</div>}
                       <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'Noto Sans KR, sans-serif' }}>{acc.name}</p>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>{acc.desc}</p>
-                      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#3EFF9B' : 'var(--muted)' }}>
+                      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
                         {row.netBenefit > 0 ? `+${formatEok(row.netBenefit)}` : '기준'}
                       </div>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYears}년 누적 이득</p>

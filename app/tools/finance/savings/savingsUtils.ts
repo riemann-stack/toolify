@@ -78,11 +78,11 @@ export interface SavingsGrade {
 }
 
 export const GRADES: SavingsGrade[] = [
-  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: '#3EFFD0', desc: '상위 1% 저축률. 자산 형성 가속 단계' },
-  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: '#3EFF9B', desc: '한국 상위 10% 수준. 목표 달성 빠름' },
-  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: '#3EC8FF', desc: '평균 이상. 일반 가계 권장 수준' },
-  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: '#FFB83E', desc: '한국 평균. 변동비 점검 필요' },
-  { grade: 'D', rateMin: 0,  label: '점검 필요',  emoji: '⚠️', color: '#FF3E8C', desc: '저축액 부족. 고정비·변동비 재구성 필요' },
+  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: '#0D9488', desc: '상위 1% 저축률. 자산 형성 가속 단계' },
+  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: '#059669', desc: '한국 상위 10% 수준. 목표 달성 빠름' },
+  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: '#0891B2', desc: '평균 이상. 일반 가계 권장 수준' },
+  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: '#D97706', desc: '한국 평균. 변동비 점검 필요' },
+  { grade: 'D', rateMin: 0,  label: '점검 필요',  emoji: '⚠️', color: '#DB2777', desc: '저축액 부족. 고정비·변동비 재구성 필요' },
 ]
 
 export function getGrade(savingsRate: number): SavingsGrade {
@@ -105,11 +105,11 @@ export interface JarMeta {
 }
 
 export const JARS: JarMeta[] = [
-  { id: 'nec',  emoji: '🍽️', label: '생활비 (NEC)',         shortLabel: '생활비',  pct: 55, desc: 'Necessities — 의식주·교통·통신 등 기본 생활', color: '#3EC8FF', examples: '월세·식비·교통·통신·공과금' },
-  { id: 'edu',  emoji: '📚', label: '교육·자기개발 (EDU)',  shortLabel: '교육',    pct: 10, desc: 'Education — 책·강의·세미나·자격증',           color: '#FFB83E', examples: '책·인강·세미나·자격증·코칭' },
-  { id: 'play', emoji: '🎮', label: '놀이·취미 (PLAY)',      shortLabel: '놀이',    pct: 10, desc: 'Play — 즐거움·여행·취미·외식',                color: '#FF8C3E', examples: '여행·외식·취미·문화·여가' },
-  { id: 'ffa',  emoji: '💰', label: '저축·재정자유 (FFA)',   shortLabel: '저축',    pct: 10, desc: 'Financial Freedom — 비상금·단기 저축',         color: '#3EFFD0', examples: '예적금·CMA·비상자금' },
-  { id: 'ltss', emoji: '📈', label: '장기 투자 (LTSS)',      shortLabel: '투자',    pct: 10, desc: 'Long-Term Savings — 주식·연금·부동산',        color: '#FF3E8C', examples: 'ETF·연금저축·IRP·주택청약' },
+  { id: 'nec',  emoji: '🍽️', label: '생활비 (NEC)',         shortLabel: '생활비',  pct: 55, desc: 'Necessities — 의식주·교통·통신 등 기본 생활', color: '#0891B2', examples: '월세·식비·교통·통신·공과금' },
+  { id: 'edu',  emoji: '📚', label: '교육·자기개발 (EDU)',  shortLabel: '교육',    pct: 10, desc: 'Education — 책·강의·세미나·자격증',           color: '#D97706', examples: '책·인강·세미나·자격증·코칭' },
+  { id: 'play', emoji: '🎮', label: '놀이·취미 (PLAY)',      shortLabel: '놀이',    pct: 10, desc: 'Play — 즐거움·여행·취미·외식',                color: '#EA580C', examples: '여행·외식·취미·문화·여가' },
+  { id: 'ffa',  emoji: '💰', label: '저축·재정자유 (FFA)',   shortLabel: '저축',    pct: 10, desc: 'Financial Freedom — 비상금·단기 저축',         color: '#0D9488', examples: '예적금·CMA·비상자금' },
+  { id: 'ltss', emoji: '📈', label: '장기 투자 (LTSS)',      shortLabel: '투자',    pct: 10, desc: 'Long-Term Savings — 주식·연금·부동산',        color: '#DB2777', examples: 'ETF·연금저축·IRP·주택청약' },
   { id: 'give', emoji: '🎁', label: '기부·나눔 (GIVE)',      shortLabel: '기부',    pct: 5,  desc: 'Give — 기부·후원·선물',                       color: '#9B59B6', examples: '정기 후원·선물·경조사' },
 ]
 
@@ -192,7 +192,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['정부 매칭 (월 최대 7만원)', '5년 만기 비과세', '청년 전용 우대금리'],
     cons: ['소득 제한 있음', '5년 의무 가입', '중도해지 시 정부지원금 환수'],
     recommendFor: '20~30대 초반 사회초년생',
-    color: '#3EFFD0',
+    color: '#0D9488',
   },
   {
     id: 'isa',
@@ -207,7 +207,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['주식·ETF·예금·펀드 통합 운용', '비과세 한도 큼', '3년 후 자유 인출'],
     cons: ['중도 인출 시 비과세 혜택 일부 소멸', '연간 한도 제한'],
     recommendFor: '주식·ETF 투자 + 절세 동시',
-    color: '#FFB83E',
+    color: '#D97706',
   },
   {
     id: 'pension_save',
@@ -222,7 +222,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['세액공제 즉시 환급 (연 최대 99만원)', '운용 자유도 높음', '평생 가입'],
     cons: ['만 55세 이후 연금 수령', '중도해지 시 기타소득세 16.5%'],
     recommendFor: '직장인·세액공제 받고 싶은 모든 소득자',
-    color: '#3EC8FF',
+    color: '#0891B2',
   },
   {
     id: 'irp',
@@ -237,7 +237,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['연금저축과 합산 한도 확장', '퇴직금 통합 운용 가능', '안전·위험 자산 분산'],
     cons: ['만 55세 이후 연금 수령', '중도해지 어려움', '위험자산 70% 한도'],
     recommendFor: '연금저축 600 채운 후 추가 절세',
-    color: '#FF8C3E',
+    color: '#EA580C',
   },
   {
     id: 'house',
@@ -252,7 +252,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['청약가점 누적', '소득공제 (자격 요건)', '저금리 시대 대안'],
     cons: ['금리 낮음', '청약 사용 시 해지', '소득공제 자격 까다로움'],
     recommendFor: '무주택 청년·세대주',
-    color: '#FF3E8C',
+    color: '#DB2777',
   },
 ]
 

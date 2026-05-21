@@ -288,7 +288,7 @@ function ScaleTab() {
 
         {/* 양념 자동 인식 안내 */}
         {ingredients.some(i => isSeasoning(i.name)) && (
-          <p style={{ fontSize: 11.5, color: '#FF8C3E', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <p style={{ fontSize: 11.5, color: '#EA580C', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
             🌶️ 양념·향신료가 자동 감지되었습니다. &quot;양념 자동 보정&quot;이 활성화된 경우 인분 늘릴 때 보정값이 적용됩니다.
           </p>
         )}

@@ -466,10 +466,10 @@ export default function BrewClient() {
             <svg viewBox="0 0 420 70" width="100%" style={{ marginTop: 12, maxWidth: 600 }}>
               <defs>
                 <linearGradient id="intensityGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#FF3E8C" />
-                  <stop offset="30%" stopColor="#FFB83E" />
-                  <stop offset="50%" stopColor="#3EFFD0" />
-                  <stop offset="70%" stopColor="#3EC8FF" />
+                  <stop offset="0%" stopColor="#DB2777" />
+                  <stop offset="30%" stopColor="#D97706" />
+                  <stop offset="50%" stopColor="#0D9488" />
+                  <stop offset="70%" stopColor="#0891B2" />
                   <stop offset="100%" stopColor="#9B9B9B" />
                 </linearGradient>
               </defs>

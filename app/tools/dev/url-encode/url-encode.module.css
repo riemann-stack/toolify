@@ -53,7 +53,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #C8FF3E; color: #0D0D0D; }
+.tabActive { background: #0EA5E9; color: #ffffff; }
 
 /* 토스트 */
 .toast {
@@ -101,12 +101,12 @@
   font-weight: 600;
   min-height: 34px;
 }@media (hover: hover) {
-  .optBtn:hover { border-color: #C8FF3E; }
+  .optBtn:hover { border-color: #0EA5E9; }
 }
 .optBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 
 .checkLabel {
@@ -119,7 +119,7 @@
   user-select: none;
   margin-top: 10px;
 }
-.checkLabel input { accent-color: #C8FF3E; cursor: pointer; }
+.checkLabel input { accent-color: #0EA5E9; cursor: pointer; }
 .checkLabelInline {
   display: flex;
   align-items: center;
@@ -127,7 +127,7 @@
   cursor: pointer;
   user-select: none;
 }
-.checkLabelInline input { accent-color: #C8FF3E; cursor: pointer; }
+.checkLabelInline input { accent-color: #0EA5E9; cursor: pointer; }
 
 /* 좌우 분할 */
 .splitGrid {
@@ -183,7 +183,7 @@
   min-height: 28px;
   white-space: nowrap;
 }@media (hover: hover) {
-  .smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
+  .smBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
 }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -206,7 +206,7 @@
   font-weight: 600;
   min-height: 36px;
 }@media (hover: hover) {
-  .actionBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
+  .actionBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
 }
 
 .textarea {
@@ -226,7 +226,7 @@
   flex: 1;
   word-break: break-all;
 }
-.textarea:focus { border-color: #C8FF3E; }
+.textarea:focus { border-color: #0EA5E9; }
 
 .detectInfo {
   font-size: 11.5px;
@@ -244,15 +244,15 @@
 }
 
 .errorBox {
-  background: rgba(255, 62, 140, 0.08);
-  border: 1px solid #FF3E8C;
+  background: rgba(219, 39, 119, 0.08);
+  border: 1px solid #DB2777;
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.errorBox strong { color: #FF3E8C; }
+.errorBox strong { color: #DB2777; }
 
 .warnBoxSolid {
   background: rgba(255, 138, 62, 0.06);
@@ -332,7 +332,7 @@
 .monoAccent {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-weight: 700;
-  color: #C8FF3E;
+  color: #0EA5E9;
   font-size: 12.5px;
 }
 
@@ -364,7 +364,7 @@
 }
 .partLabel {
   font-size: 10.5px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 700;
@@ -420,7 +420,7 @@
   width: 100%;
   box-sizing: border-box;
 }
-.paramInput:focus { border-color: #C8FF3E; }
+.paramInput:focus { border-color: #0EA5E9; }
 .paramEq {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -480,7 +480,7 @@
 .rawValue {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-size: 11.5px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   word-break: break-all;
   background: var(--bg2);
   padding: 3px 6px;
@@ -527,7 +527,7 @@
   cursor: pointer;
   user-select: none;
 }
-.trackingItem input { accent-color: #C8FF3E; }
+.trackingItem input { accent-color: #0EA5E9; }
 .trackingItemChecked {
   background: rgba(255, 138, 62, 0.06);
   text-decoration: line-through;
@@ -565,8 +565,8 @@
 }
 
 .emptyState {
-  background: rgba(62, 255, 208, 0.06);
-  border: 1px solid rgba(62, 255, 208, 0.40);
+  background: rgba(13, 148, 136, 0.06);
+  border: 1px solid rgba(13, 148, 136, 0.40);
   border-radius: 12px;
   padding: 16px 20px;
   text-align: center;
@@ -616,7 +616,7 @@
 }
 .dictKey {
   background: var(--bg2);
-  color: #C8FF3E;
+  color: #0EA5E9;
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 10.5px;
@@ -658,7 +658,7 @@
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 11.5px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   font-weight: 700;
 }
 .codeMonoSm {

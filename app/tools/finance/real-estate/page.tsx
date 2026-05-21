@@ -35,20 +35,20 @@ export default function RealEstatePage() {
 
         {/* ── 1. 면책 조항 (강조) ── */}
         <div style={{
-          background: 'rgba(255,107,107,0.06)',
-          border: '1px solid rgba(255,107,107,0.3)',
+          background: 'rgba(220,38,38,0.06)',
+          border: '1px solid rgba(220,38,38,0.3)',
           borderRadius: '14px',
           padding: '18px 22px',
           fontSize: '14px',
           color: 'var(--text)',
           lineHeight: 1.85,
         }}>
-          <strong style={{ color: '#FF8C8C', fontSize: '14px' }}>⚖️ 투자 결정 전 반드시 읽어주세요</strong>
+          <strong style={{ color: '#DC2626', fontSize: '14px' }}>⚖️ 투자 결정 전 반드시 읽어주세요</strong>
           <p style={{ marginTop: '10px' }}>
             본 계산기는 부동산 투자 의사결정을 위한 <strong style={{ color: 'var(--text)' }}>참고용 시뮬레이션 도구</strong>입니다.
             실제 거래에서는 양도소득세, 종합부동산세, 재산세, 임대소득세 등 추가 세금이 발생하며 시장 상황에 따라 결과가 크게 달라질 수 있습니다.
             투자 결정 전 반드시 <strong style={{ color: 'var(--text)' }}>세무사·공인중개사와 상담</strong>하시기 바랍니다.
-            <strong style={{ color: '#FF8C8C' }}> 본 계산기는 투자 권유가 아닙니다.</strong>
+            <strong style={{ color: '#DC2626' }}> 본 계산기는 투자 권유가 아닙니다.</strong>
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default function RealEstatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#3EFF9B', fontWeight: 700, marginBottom: '8px' }}>1주택자</p>
+              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1주택자</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
                 6억 이하 → <strong style={{ color: 'var(--accent)' }}>1.0%</strong><br/>
                 6~9억 → <strong style={{ color: 'var(--accent)' }}>2.0%</strong><br/>
@@ -93,16 +93,16 @@ export default function RealEstatePage() {
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#FF8C3E', fontWeight: 700, marginBottom: '8px' }}>다주택자 (조정대상지역)</p>
+              <p style={{ fontSize: '12px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>다주택자 (조정대상지역)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                2주택 → <strong style={{ color: '#FF8C3E' }}>8.0%</strong><br/>
-                3주택 이상 → <strong style={{ color: '#FF6B6B' }}>12.0%</strong>
+                2주택 → <strong style={{ color: '#EA580C' }}>8.0%</strong><br/>
+                3주택 이상 → <strong style={{ color: '#DC2626' }}>12.0%</strong>
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#3EC8FF', fontWeight: 700, marginBottom: '8px' }}>비주거 부동산</p>
+              <p style={{ fontSize: '12px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>비주거 부동산</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                토지·상가·오피스 → <strong style={{ color: '#3EC8FF' }}>4.0%</strong>
+                토지·상가·오피스 → <strong style={{ color: '#0891B2' }}>4.0%</strong>
               </p>
             </div>
           </div>
@@ -152,8 +152,8 @@ export default function RealEstatePage() {
             🔑 대출 레버리지 효과 완전 가이드
           </h2>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.25)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.25)',
             borderRadius: '12px',
             padding: '16px 18px',
             marginBottom: '14px',
@@ -169,13 +169,13 @@ export default function RealEstatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#3EFF9B', fontWeight: 700, marginBottom: '8px' }}>현금 100% (5억 자기자본)</p>
+              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>현금 100% (5억 자기자본)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용 약 1,000만원 = <strong>1억 9,000만원</strong><br/>
                 <span style={{ color: 'var(--muted)' }}>ROE = 1억 9,000 ÷ 5억 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>38%</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.3)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '14px 16px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>대출 70% (자기자본 1억 5,000)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용·이자 약 2,800만원 = <strong>1억 7,200만원</strong><br/>
@@ -185,12 +185,12 @@ export default function RealEstatePage() {
           </div>
 
           <div style={{
-            background: 'rgba(255,107,107,0.06)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.06)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: '12px',
             padding: '14px 18px',
           }}>
-            <p style={{ fontSize: '13px', color: '#FF8C8C', fontWeight: 700, marginBottom: '8px' }}>⚠️ 위험 측면</p>
+            <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>⚠️ 위험 측면</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '20px', margin: 0 }}>
               <li>가격 하락 시 손실도 동일한 비율로 확대됩니다.</li>
               <li>매입가 10% 하락 시 자기자본 50% 손실이 가능합니다 (LTV 80% 기준).</li>
@@ -209,8 +209,8 @@ export default function RealEstatePage() {
             갭투자 vs 일반 매수 + 임대 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', color: '#3EC8FF', fontWeight: 700, marginBottom: '10px' }}>갭투자 (전세 끼고 매수)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '10px' }}>갭투자 (전세 끼고 매수)</p>
               <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '18px', margin: 0 }}>
                 <li>자기자본 = <strong>매입가 − 전세보증금</strong></li>
                 <li>보유 기간 동안 임대수익 0</li>
@@ -219,8 +219,8 @@ export default function RealEstatePage() {
                 <li>전세가 하락 시 역전세 위험</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '10px' }}>일반 매수 + 임대</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '10px' }}>일반 매수 + 임대</p>
               <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '18px', margin: 0 }}>
                 <li>자기자본 = <strong>매입가 − 대출</strong> (또는 전액 현금)</li>
                 <li>월세 수익 발생</li>

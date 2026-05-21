@@ -176,9 +176,9 @@ export default function TravelBudgetPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '🎒 배낭여행', d: '호스텔 도미토리·로컬 식당·대중교통·박물관 무료. 자유로움·대화·문화 체험.', range: '하루 5~12만원', c: '#3EFFD0' },
-            { t: '🧳 중간 (Mid-range)', d: '3~4성 호텔·일반 식당·기본 투어·시티패스. 가성비 최고.', range: '하루 10~25만원', c: '#FFB83E' },
-            { t: '🥂 럭셔리', d: '5성 호텔·미슐랭·프라이빗 투어·비즈니스 항공. 휴식·기념일.', range: '하루 25~60만원', c: '#FF3E8C' },
+            { t: '🎒 배낭여행', d: '호스텔 도미토리·로컬 식당·대중교통·박물관 무료. 자유로움·대화·문화 체험.', range: '하루 5~12만원', c: '#0D9488' },
+            { t: '🧳 중간 (Mid-range)', d: '3~4성 호텔·일반 식당·기본 투어·시티패스. 가성비 최고.', range: '하루 10~25만원', c: '#D97706' },
+            { t: '🥂 럭셔리', d: '5성 호텔·미슐랭·프라이빗 투어·비즈니스 항공. 휴식·기념일.', range: '하루 25~60만원', c: '#DB2777' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>

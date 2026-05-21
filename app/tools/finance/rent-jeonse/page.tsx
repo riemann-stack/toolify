@@ -26,17 +26,9 @@ export const metadata = buildMetadata({
 
 const sectionTitle: React.CSSProperties = {
   fontFamily: 'Inter, system-ui, sans-serif',
-  fontSize: '22px',
+  fontSize: '20px',
   fontWeight: 700,
-  marginBottom: '14px',
-  letterSpacing: '-0.01em',
-}
-const faqQuestion: React.CSSProperties = {
-  fontFamily: 'Noto Sans KR, sans-serif',
-  fontSize: '15px',
-  fontWeight: 700,
-  color: 'var(--text)',
-  marginBottom: '8px',
+  marginBottom: '16px',
 }
 const faqAnswer: React.CSSProperties = {
   fontSize: '14px',
@@ -169,120 +161,105 @@ export default function RentJeonsePage() {
           </p>
         </section>
 
-        {/* 5. FAQ */}
+        {/* 5. 손익분기점 해석 가이드 (SEO 보완) */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-
-            <div>
-              <p style={faqQuestion}>Q1. 월세가 항상 비싼가요?</p>
-              <div style={faqAnswer}>
-                아닙니다. 다음 조건이 맞으면 월세가 더 유리할 수 있습니다:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: 'var(--text)' }}>월세 세액공제 자격</strong>: 무주택 + 총급여 7천 이하 → 연 127.5만 절세</li>
-                  <li><strong style={{ color: 'var(--text)' }}>단기 거주</strong> (1~2년): 전세대출 수수료·이사비 회수 어려움</li>
-                  <li><strong style={{ color: 'var(--text)' }}>자기자본 운용 기회</strong>: 보증금 묶지 않고 7%+ 수익 가능 시</li>
-                  <li><strong style={{ color: 'var(--text)' }}>전세대출 금리 &gt; 전월세 전환율</strong>: 월세가 수학적으로 유리</li>
-                </ul>
+          <h2 style={sectionTitle}>손익분기점 해석 가이드 — 전세 ↔ 월세 ↔ 반전세</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            본 도구의 <strong style={{ color: 'var(--text)' }}>시뮬레이션 탭</strong>은 누적 비용 곡선이 교차하는 시점을 자동으로 찾아 손익분기점으로 표시합니다.
+            거주 예정 기간과 손익분기점을 비교하면 합리적인 선택이 가능합니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+            {[
+              { t: '단기 거주 (1~2년)', d: '월세 유리 가능', desc: '전세대출 수수료·이사비 회수 어려움 + 보증금 운용 기회 ↑', c: '#DC2626' },
+              { t: '중기 거주 (3~5년)', d: '손익분기점 ≈ 24~36개월', desc: '대출금리·전환율·세액공제 자격에 따라 결정', c: '#D97706' },
+              { t: '장기 거주 (5년+)', d: '전세 유리 경향', desc: '월세 누적이 보증금 이자 + 기회비용을 초과', c: '#0891B2' },
+              { t: '반전세 우위 구간', d: '전세 한도 부족 또는 보증금 분산', desc: '전환율 &lt; 대출금리일 때 월세 분할이 합리적', c: '#0EA5E9' },
+            ].map((g, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 12.5, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
+                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 6px' }}>{g.d}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: g.desc }} />
               </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q2. 전세대출 vs 신용대출, 어느 쪽이 좋나요?</p>
-              <div style={faqAnswer}>
-                전세대출이 압도적으로 유리합니다. 시중은행 전세대출 금리는 3.5~4.5% / 신용대출은 5~7%. 전세대출은 보증금 자체가 담보가 되어 신용대출보다 훨씬 낮은 금리. 또한 <strong style={{ color: 'var(--text)' }}>이자 소득공제</strong>도 가능 (한도 400만).
-                <br /><br />
-                정부 지원 상품(버팀목·HUG)은 1.5~2.7%로 더 저렴 — 청년·신혼·무주택자라면 우선 검토 필수.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q3. 월세 세액공제 받는 조건은?</p>
-              <div style={faqAnswer}>
-                4가지 모두 충족 필요:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: 'var(--text)' }}>무주택 세대주</strong> (또는 세대원)</li>
-                  <li><strong style={{ color: 'var(--text)' }}>총급여 7천만 이하</strong> 또는 종합소득금액 6천만 이하</li>
-                  <li><strong style={{ color: 'var(--text)' }}>국민주택규모(85㎡) 이하</strong> 또는 기준시가 4억 이하</li>
-                  <li><strong style={{ color: 'var(--text)' }}>본인 또는 배우자 명의 계약</strong></li>
-                </ul>
-                연 750만 한도 × 17% (총급여 7천 이하) / 15% (이상) = 최대 약 127.5만 환급. 5월 종합소득세 신고 또는 연말정산 시 적용.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q4. 전세사기 안 당하는 5가지 핵심 체크</p>
-              <div style={faqAnswer}>
-                <ol style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: 'var(--text)' }}>등기부등본 확인</strong> — 근저당·신탁·압류 여부 (대법원 인터넷등기소 700원)</li>
-                  <li><strong style={{ color: 'var(--text)' }}>전세가율 80% 이하</strong> — 국토부 실거래가 vs 보증금</li>
-                  <li><strong style={{ color: 'var(--text)' }}>HUG 전세보증보험 가입</strong> — 보증료 0.128%, 사고 시 100% 보장</li>
-                  <li><strong style={{ color: 'var(--text)' }}>잔금일 당일 등기부 재확인 + 확정일자 + 전입신고</strong></li>
-                  <li><strong style={{ color: 'var(--text)' }}>임대인 신원 확인</strong> — 신분증 vs 등기부 명의 일치, 대리계약 시 위임장·인감증명서</li>
-                </ol>
-                의심 시 <strong style={{ color: 'var(--text)' }}>국토부 안심전세 앱</strong>에서 임대인 사고이력 조회 (2023년부터 운영).
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q5. 반전세는 언제 유리한가요?</p>
-              <div style={faqAnswer}>
-                다음 상황에서 반전세가 합리적:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: 'var(--text)' }}>전세대출 한도 부족</strong> — 시세는 비싼데 대출 한도가 부족할 때</li>
-                  <li><strong style={{ color: 'var(--text)' }}>전월세 전환율 &lt; 전세대출 금리</strong> — 5% 전환율 vs 4.5% 대출 금리면 월세 유리</li>
-                  <li><strong style={{ color: 'var(--text)' }}>임대인이 대출 부담 회피</strong> — 보증금 일부를 월세로 받기 원할 때</li>
-                  <li><strong style={{ color: 'var(--text)' }}>전세보다 보증금 위험 줄이고 싶을 때</strong> — 보증금 작아짐 → 사고 시 손실 작음</li>
-                </ul>
-                본 도구는 입력값 기준 반전세 시나리오를 자동 계산하므로, 3옵션 카드의 누적 비용을 비교해보시면 본인 상황에 어느 게 유리한지 즉시 판단 가능.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q6. 전월세 전환율이 뭔가요?</p>
-              <div style={faqAnswer}>
-                같은 집의 전세 보증금 일부를 월세로 환산할 때 적용되는 비율. 예: 전세 1억을 월세 전환 시 5% 적용 → 월세 (1억 × 5% ÷ 12) = 41.7만원.
-                <br /><br />
-                <strong style={{ color: 'var(--text)' }}>법정 한도</strong>: 한국은행 기준금리 + 2% (현재 3.5% + 2% = 5.5%) — 이를 초과하는 인상은 무효. 시장 평균은 보통 4~6%. <strong style={{ color: 'var(--text)' }}>본인의 전세대출 금리보다 전환율이 낮으면 월세가 수학적으로 유리</strong> (예: 대출금리 4.5% vs 전환율 4% → 월세).
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q7. 보증금 기회비용을 어떻게 계산하나요?</p>
-              <div style={faqAnswer}>
-                보증금에 묶인 자기자본을 다른 곳에 운용했을 때의 수익을 포기한 것이 기회비용. 본 도구는 입력한 기대수익률(예금 3% / 채권 4% / 주식 7%)을 자기자본에 곱해 월별 기회비용으로 자동 반영합니다.
-                <br /><br />
-                예: 자기자본 3억, 기대수익률 5% → 연 1,500만 / 월 125만의 기회비용. 즉, 전세로 자기자본을 묶으면 매월 125만의 잠재 수익을 포기. 이를 월세 옵션과 비교해야 진짜 비용이 나옵니다.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q8. 갱신청구권으로 5% 이상 인상 가능한가요?</p>
-              <div style={faqAnswer}>
-                <strong style={{ color: '#FF8C8C' }}>갱신청구권 행사 시에만 5% 상한이 적용됩니다.</strong> 임대차보호법:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: 'var(--text)' }}>갱신청구권 행사 (2+2년)</strong>: 5% 상한 적용</li>
-                  <li><strong style={{ color: 'var(--text)' }}>합의에 의한 갱신</strong>: 5% 상한 미적용 가능 (합의로 시세 반영)</li>
-                  <li><strong style={{ color: 'var(--text)' }}>4년 후 신규 계약</strong>: 시세대로 자유롭게</li>
-                  <li><strong style={{ color: 'var(--text)' }}>임대인 본인 거주 시</strong>: 갱신 거절 가능 → 시세 신규 계약</li>
-                </ul>
-                실무: 임대인이 5% 초과 인상 요구 시 임차인은 5% 상한으로 갱신청구 가능, 합의 시 더 인상 가능. 분쟁 시 <strong style={{ color: 'var(--text)' }}>주택임대차분쟁조정위원회</strong> 활용.
-              </div>
-            </div>
-
+            ))}
           </div>
         </section>
 
-        {/* 6. 관련 도구 */}
+        {/* 6. FAQ — 최신 도구들과 동일 포맷 */}
         <section>
-          <h2 style={sectionTitle}>관련 도구</h2>
-          <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
-            <li><Link href="/tools/finance/loan" style={{ color: 'var(--accent)' }}>대출이자 계산기</Link> — 전세자금대출 원리금균등 시뮬</li>
-            <li><Link href="/tools/finance/real-estate" style={{ color: 'var(--accent)' }}>부동산 수익률 계산기</Link> — 매수 의사결정 시</li>
-            <li><Link href="/tools/finance/savings" style={{ color: 'var(--accent)' }}>월 저축 계산기</Link> — 월세 절약분 저축 시뮬</li>
-            <li><Link href="/tools/finance/compound" style={{ color: 'var(--accent)' }}>복리 계산기</Link> — 보증금 미사용 시 장기 수익</li>
-            <li><Link href="/tools/finance/freelance-tax" style={{ color: 'var(--accent)' }}>프리랜서 종소세 계산기</Link> — 사업소득자 월세 세액공제</li>
-          </ul>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              {
+                q: '월세가 항상 비싼가요?',
+                a: '아닙니다. 다음 조건이 맞으면 월세가 더 유리할 수 있습니다. <strong>월세 세액공제 자격</strong>(무주택 + 총급여 7천 이하 → 연 약 127만 절세), <strong>단기 거주</strong>(1~2년, 전세대출 수수료·이사비 회수 어려움), <strong>자기자본 운용 기회</strong>(보증금 묶지 않고 7%+ 수익 가능), <strong>전세대출 금리 &gt; 전월세 전환율</strong>일 때 — 본 도구의 누적 비용 차트로 즉시 판단 가능합니다.',
+              },
+              {
+                q: '전세대출 vs 신용대출, 어느 쪽이 좋나요?',
+                a: '전세대출이 압도적으로 유리합니다. <strong>시중은행 전세대출 금리 3.5~4.5%</strong> vs 신용대출 5~7%. 전세대출은 보증금 자체가 담보가 되어 금리가 낮고, 원리금의 40%(한도 400만)까지 소득공제도 가능. 정부 지원 상품(버팀목·HUG)은 1.5~2.7%로 더 저렴하므로 청년·신혼·무주택자라면 우선 검토.',
+              },
+              {
+                q: '월세 세액공제 받는 조건은?',
+                a: '4가지 모두 충족해야 합니다. <strong>무주택 세대주(또는 세대원)</strong>, <strong>총급여 7천만 이하</strong>(또는 종합소득금액 6천만 이하), <strong>국민주택규모 85㎡ 이하</strong>(또는 기준시가 4억 이하), <strong>본인 또는 배우자 명의 계약</strong>. 연 750만 한도 × 17%(7천 이하) / 15%(이상) = 최대 약 127.5만 환급. 5월 종합소득세 신고 또는 연말정산 시 적용.',
+              },
+              {
+                q: '전세사기 안 당하는 5가지 핵심 체크는?',
+                a: '① <strong>등기부등본 확인</strong> — 근저당·신탁·압류 여부(대법원 인터넷등기소 700원). ② <strong>전세가율 80% 이하</strong> — 국토부 실거래가 대비. ③ <strong>HUG 전세보증보험 가입</strong>(보증료 약 0.128%, 사고 시 100% 보장). ④ <strong>잔금일 당일 등기부 재확인 + 확정일자 + 전입신고</strong>. ⑤ <strong>임대인 신원 확인</strong> — 신분증 vs 등기부 명의 일치, 대리계약 시 위임장·인감증명서. 의심 시 국토부 안심전세 앱에서 임대인 사고이력 조회.',
+              },
+              {
+                q: '반전세는 언제 유리한가요?',
+                a: '<strong>전세대출 한도가 부족</strong>한데 보증금이 큰 매물, <strong>전월세 전환율 &lt; 전세대출 금리</strong>(예: 전환율 4% vs 대출 4.5%), <strong>임대인이 대출 부담 회피</strong>를 원할 때, <strong>보증금 위험을 줄이고 싶을 때</strong>(보증금 작아짐 → 사고 시 손실 ↓) 합리적입니다. 본 도구는 입력값 기준 반전세 시나리오를 자동 계산하므로 3옵션 누적 비용을 비교해 판단할 수 있습니다.',
+              },
+              {
+                q: '전월세 전환율이 뭔가요?',
+                a: '같은 집의 전세 보증금 일부를 월세로 환산할 때 적용되는 비율. 예: 전세 1억을 월세 전환 시 5% 적용 → 월 (1억 × 5% ÷ 12) = 41.7만원. <strong>법정 한도</strong>는 한국은행 기준금리 + 2%(현재 약 5.5%) — 초과 인상은 무효. 시장 평균 4~6%. <strong>본인의 전세대출 금리보다 전환율이 낮으면 월세가 수학적으로 유리</strong>합니다.',
+              },
+              {
+                q: '보증금 기회비용은 어떻게 계산하나요?',
+                a: '보증금에 묶인 자기자본을 다른 곳에 운용했을 때의 잠재 수익이 기회비용입니다. 본 도구는 입력한 기대수익률(예금 3% / 채권 4% / 주식 7% 등)을 자기자본에 곱해 월별 기회비용으로 자동 반영합니다. 예: 자기자본 3억 × 기대수익률 5% → 연 1,500만 / 월 125만의 잠재 수익을 포기하는 셈. 이를 반영해야 월세와의 진짜 비용 차이가 보입니다.',
+              },
+              {
+                q: '갱신청구권으로 5% 이상 인상 가능한가요?',
+                a: '<strong>갱신청구권 행사 시에만 5% 상한이 적용</strong>됩니다. <strong>갱신청구권 행사(2+2년)</strong>는 5% 상한, <strong>합의에 의한 갱신</strong>은 5% 상한 미적용(합의로 시세 반영 가능), <strong>4년 후 신규 계약</strong>은 시세대로 자유롭게, <strong>임대인 본인 거주 시</strong>는 갱신 거절 가능 → 시세 신규 계약. 분쟁 시 주택임대차분쟁조정위원회를 활용하세요.',
+              },
+              {
+                q: 'HUG 전세보증보험은 꼭 들어야 하나요?',
+                a: '필수는 아니지만 <strong>강력히 권장</strong>됩니다. 보증료는 약 0.128%(보증금 1억당 연 12.8만 수준)이며 사고 시 보증금 100% 회수 보장. 가입 조건은 전세가율 90% 이하, 시세 7억 이하 등 — 시세 대비 전세금이 높은 매물은 가입 자체가 불가하므로 매물 선택 단계부터 확인 필요. 잔금일 기준 60일 이내 가입 권장.',
+              },
+            ].map((f, i) => (
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                  Q{i + 1}. {f.q}
+                </summary>
+                <p
+                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                  dangerouslySetInnerHTML={{ __html: f.a }}
+                />
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* 7. 함께 보면 좋은 도구 — 최신 포맷 */}
+        <section>
+          <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+            {[
+              { href: '/tools/finance/loan',          icon: '💳', name: '대출이자 계산기',         desc: '전세자금대출 원리금균등·금리 시뮬' },
+              { href: '/tools/finance/real-estate',   icon: '🏘️', name: '부동산 수익률 계산기',    desc: '매매 vs 임대 ROI 비교' },
+              { href: '/tools/finance/savings',       icon: '💰', name: '저축액 계산기',           desc: '월세 절약분으로 자산 만들기' },
+              { href: '/tools/finance/compound',      icon: '📈', name: '복리 계산기',             desc: '보증금 운용 시 장기 수익' },
+              { href: '/tools/finance/freelance-tax', icon: '🧾', name: '프리랜서 종합소득세',     desc: '사업소득자 월세 세액공제' },
+              { href: '/tools/finance/salary',        icon: '💴', name: '연봉 실수령액 계산기',    desc: '월급·세후로 임대료 부담 판단' },
+            ].map((tool, i) => (
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
+                <span style={{ fontSize: '22px' }}>{tool.icon}</span>
+                <div>
+                  <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                  <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
       </div>

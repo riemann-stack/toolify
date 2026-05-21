@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* 잠금 토글 — 가로 3개 (모바일에서도 한 줄 유지) */
 .lockRow {
@@ -81,7 +81,7 @@
 }
 .lockBtnActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
 }
 .lockEmoji { font-size: 15px; line-height: 1; }
@@ -212,8 +212,8 @@
   margin: 0;
   line-height: 1.7;
 }
-.bright { color: #FFB83E; }
-.dark { color: #3EC8FF; }
+.bright { color: #D97706; }
+.dark { color: #0891B2; }
 .heroRight {
   text-align: right;
   border-left: 1px solid var(--border);
@@ -301,7 +301,7 @@
 }
 .evBadge {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 13px;
@@ -333,7 +333,7 @@
 }@media (hover: hover) {
   .ndBtn:hover { border-color: var(--accent); }
 }
-.ndBtnActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.ndBtnActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 .ndLabel {
   font-size: 14px;
   font-weight: 700;
@@ -344,7 +344,7 @@
   font-size: 11px;
   color: var(--muted);
 }
-.ndBtnActive .ndStops { color: #0D0D0D; opacity: 0.8; }
+.ndBtnActive .ndStops { color: #ffffff; opacity: 0.8; }
 .ndUse {
   font-size: 13px;
   color: var(--text);
@@ -427,8 +427,8 @@
 }
 .tripodBadge {
   font-size: 10px;
-  background: rgba(255, 184, 62, 0.2);
-  color: #FFB83E;
+  background: rgba(217, 119, 6, 0.2);
+  color: #D97706;
   padding: 3px 6px;
   border-radius: 4px;
   margin-left: auto;

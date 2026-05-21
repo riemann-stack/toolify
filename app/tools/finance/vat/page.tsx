@@ -50,7 +50,7 @@ export default function VatPage() {
             계산기 상단의 <strong style={{ color: 'var(--accent)' }}>「부가세 역산」</strong> 모드를 선택하면 자동으로 계산됩니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>역산 공식 (부가세율 10% 기준)</p>
               <div style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2.2 }}>
                 <p>공급가액 = 공급대가(합계) ÷ <strong style={{ color: 'var(--accent)' }}>1.1</strong></p>
@@ -61,7 +61,7 @@ export default function VatPage() {
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
                 📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 영수증 합계 110,000원 →
                 공급가액 = 110,000 ÷ 1.1 = <strong style={{ color: 'var(--accent)' }}>100,000원</strong>,
-                부가세 = 110,000 − 100,000 = <strong style={{ color: '#FF8C3E' }}>10,000원</strong>
+                부가세 = 110,000 − 100,000 = <strong style={{ color: '#EA580C' }}>10,000원</strong>
               </p>
             </div>
           </div>
@@ -104,8 +104,8 @@ export default function VatPage() {
           </div>
 
           {/* 간이과세 업종별 부가율 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: '#3EC8FF', marginBottom: '10px' }}>간이과세자 업종별 부가가치율 (2026년 기준)</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>간이과세자 업종별 부가가치율 (2026년 기준)</p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
@@ -125,7 +125,7 @@ export default function VatPage() {
                   ].map(([biz, rate, eff], i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={{ padding: '6px 10px', color: 'var(--muted)' }}>{biz}</td>
-                      <td style={{ padding: '6px 10px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700 }}>{rate}</td>
+                      <td style={{ padding: '6px 10px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>{rate}</td>
                       <td style={{ padding: '6px 10px', textAlign: 'center', color: 'var(--text)' }}>{eff}</td>
                     </tr>
                   ))}
@@ -151,13 +151,13 @@ export default function VatPage() {
               },
               {
                 tag: '부가세 역산',
-                tagColor: '#3EC8FF',
+                tagColor: '#0891B2',
                 title: '자영업자 B씨 — 영수증 합계에서 공급가액 파악',
                 content: '매입 세금계산서 합계가 330,000원일 때 역산하면: 공급가액 = 330,000 ÷ 1.1 = 300,000원, 부가세 = 30,000원. 이 매입 부가세 30,000원은 매입세액으로 공제받을 수 있습니다.',
               },
               {
                 tag: '천 원 절사',
-                tagColor: '#FF8C3E',
+                tagColor: '#EA580C',
                 title: '세금계산서 발행 시 부가세 절사',
                 content: '공급가액 1,543,000원의 부가세는 154,300원이지만, 세금계산서 관행상 천 원 단위로 절사해 154,000원으로 발행하는 경우가 많습니다. 절사 옵션을 활용해 정확한 발행 금액을 미리 확인하세요.',
               },
@@ -186,7 +186,7 @@ export default function VatPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>실입금 100만원 받으려면</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontWeight: 700 }}>청구액</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>청구액</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
@@ -201,7 +201,7 @@ export default function VatPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -210,8 +210,8 @@ export default function VatPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'rgba(62,200,255,0.04)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 6 }}>3.3% 원천세</p>
+            <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>3.3% 원천세</p>
               <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>프리랜서 (사업자 등록 X) 적용</li>
                 <li>발주처가 차감 후 입금</li>
@@ -219,8 +219,8 @@ export default function VatPage() {
                 <li>종합소득세 신고 시 정산</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,140,62,0.04)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 6 }}>10% 부가세</p>
+            <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>10% 부가세</p>
               <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>사업자 등록자 적용</li>
                 <li><strong>본인 돈이 아닙니다</strong> — 신고·납부 의무</li>
@@ -243,7 +243,7 @@ export default function VatPage() {
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.40)', borderRadius: 12, padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.40)', borderRadius: 12, padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>✅ 부가세 별도 (권장)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 6 }}>
                 &ldquo;100만원 부가세 별도&rdquo; → 110만원 청구
@@ -253,14 +253,14 @@ export default function VatPage() {
                 <strong style={{ color: 'var(--accent)' }}>본인 실수입: 1,000,000원</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '16px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 부가세 포함</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 부가세 포함</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 6 }}>
                 &ldquo;100만원 부가세 포함&rdquo; → 100만원 청구
               </p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                 공급가액 <strong>909,091원</strong> + 부가세 90,909원 = 청구 1,000,000원<br />
-                <strong style={{ color: '#FF6B6B' }}>본인 실수입: 909,091원 (-9만원)</strong>
+                <strong style={{ color: '#DC2626' }}>본인 실수입: 909,091원 (-9만원)</strong>
               </p>
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function VatPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#C485E0', fontWeight: 700 }}>추천</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#9333EA', fontWeight: 700 }}>추천</th>
                 </tr>
               </thead>
               <tbody>
@@ -291,7 +291,7 @@ export default function VatPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', color: '#C485E0', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: '#9333EA', fontWeight: 700 }}>{row[1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -315,7 +315,7 @@ export default function VatPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>사업자 유형</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>발급 의무</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#FF8C3E', fontWeight: 700 }}>발급 방법</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#EA580C', fontWeight: 700 }}>발급 방법</th>
                 </tr>
               </thead>
               <tbody>
@@ -329,7 +329,7 @@ export default function VatPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', color: '#FF8C3E' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: '#EA580C' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -344,7 +344,7 @@ export default function VatPage() {
         <Section>
           <H2>📅 부가세 신고·납부 시기</H2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.20)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.20)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>일반과세자 (연 2회)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>1월 1~25일</strong>: 전년 7~12월분 신고</li>
@@ -354,7 +354,7 @@ export default function VatPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, marginBottom: 8 }}>간이과세자 (연 1회)</p>
+              <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>간이과세자 (연 1회)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>1월 1~25일</strong>: 전년 1~12월분 신고</li>
                 <li>납부 기한 = 1월 25일</li>
@@ -433,8 +433,8 @@ export default function VatPage() {
 
         {/* ── 10. 면책 ── */}
         <Section>
-          <div style={{ background: 'rgba(62,200,255,0.04)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-            <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 10 }}>ⓘ 면책 조항</p>
+          <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 10 }}>ⓘ 면책 조항</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
               본 부가세 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 목적의 참고용 도구</strong>이며, 세무 자문·신고 도구가 아닙니다.
             </p>
@@ -448,9 +448,9 @@ export default function VatPage() {
               세무 도움 필요 시:
             </p>
             <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18 }}>
-              <li>한국 국세청: <strong style={{ color: '#3EC8FF' }}>126</strong></li>
-              <li>한국세무사회 무료 상담: <strong style={{ color: '#3EC8FF' }}>070-5008-1234</strong></li>
-              <li>홈택스: <strong style={{ color: '#3EC8FF' }}>hometax.go.kr</strong></li>
+              <li>한국 국세청: <strong style={{ color: '#0891B2' }}>126</strong></li>
+              <li>한국세무사회 무료 상담: <strong style={{ color: '#0891B2' }}>070-5008-1234</strong></li>
+              <li>홈택스: <strong style={{ color: '#0891B2' }}>hometax.go.kr</strong></li>
               <li>본인 거주 지역 세무서 직접 문의</li>
             </ul>
           </div>

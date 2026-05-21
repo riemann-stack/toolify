@@ -15,7 +15,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
 
 /* ── 더치페이/저장 연결 카드 ── */
 .crossLinkCard {
@@ -44,9 +44,9 @@
   font-family: 'Noto Sans KR', sans-serif; outline: none;
   box-sizing: border-box;
 }
-.courseSaveInput:focus { border-color: rgba(200,255,62,0.5); }
+.courseSaveInput:focus { border-color: rgba(14,165,233,0.5); }
 .courseSaveBtn {
-  background: var(--accent); color: #0D0D0D; border: none;
+  background: var(--accent); color: #ffffff; border: none;
   padding: 10px 16px; border-radius: 10px;
   font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 44px;
@@ -55,7 +55,7 @@
   .courseSaveBtn:hover { opacity: 0.88; }
 }
 .courseSaveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-.courseSaveBtn.copied { background: #3EFF9B; }
+.courseSaveBtn.copied { background: #059669; }
 
 /* ── 골프장 목록 ── */
 .courseList { display: flex; flex-direction: column; gap: 8px; }
@@ -80,7 +80,7 @@
   width: 32px; height: 32px; font-size: 16px; color: var(--muted);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }@media (hover: hover) {
-  .courseDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .courseDelBtn:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 /* ── 빈 상태 ── */
@@ -93,10 +93,10 @@
 
 /* ── 경고 카드 (회원권 체크리스트) ── */
 .warnCard {
-  background: rgba(255,140,62,0.06); border: 1px solid rgba(255,140,62,0.3);
+  background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px; padding: 14px 18px;
 }
-.warnTitle { font-size: 13px; font-weight: 700; color: #FF8C3E; margin: 0 0 8px; }
+.warnTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
 .warnList {
   margin: 0; padding-left: 18px;
   font-size: 12.5px; color: var(--text); line-height: 1.85;
@@ -156,8 +156,8 @@
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
 .numInput:focus {
-  border-color: rgba(200,255,62,0.5);
-  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+  border-color: rgba(14,165,233,0.5);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
 }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -214,16 +214,16 @@
 }@media (hover: hover) {
   .courseBtn:hover { color: var(--text); }
 }
-.coursePubWeek { border-color: rgba(62,255,155,0.4); }
-.coursePubEnd { border-color: rgba(200,255,62,0.4); }
-.courseSemi { border-color: rgba(62,200,255,0.4); }
-.coursePriv { border-color: rgba(255,215,0,0.4); }
+.coursePubWeek { border-color: rgba(16,185,129,0.4); }
+.coursePubEnd { border-color: rgba(14,165,233,0.4); }
+.courseSemi { border-color: rgba(8,145,178,0.4); }
+.coursePriv { border-color: rgba(202,138,4,0.4); }
 .courseCustom { border-color: var(--border); border-style: dashed; }
 
-.coursePubWeek.courseActive { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.coursePubWeek.courseActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 .coursePubEnd.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.courseSemi.courseActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.coursePriv.courseActive { background: rgba(255,215,0,0.12); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.courseSemi.courseActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.coursePriv.courseActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 .courseCustom.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); border-style: solid; font-weight: 700; }
 
 /* ── 인원 pill ── */
@@ -301,12 +301,12 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); color: var(--accent); }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -376,8 +376,8 @@
 
 /* 안내 카드 */
 .infoCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -514,8 +514,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12px;
@@ -599,5 +599,5 @@
   border-radius: 8px;
   text-align: right;
 }
-.bettingSumOk { color: #3EFF9B; }
-.bettingSumWarn { color: #FF8C8C; }
+.bettingSumOk { color: #059669; }
+.bettingSumWarn { color: #DC2626; }

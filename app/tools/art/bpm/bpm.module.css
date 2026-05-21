@@ -88,7 +88,7 @@
 }
 
 .presetBtnActive {
-  background: rgba(200, 255, 62, 0.1);
+  background: rgba(14, 165, 233, 0.1);
   border-color: var(--accent) !important;
   color: var(--accent) !important;
 }
@@ -96,7 +96,7 @@
 /* ── 히어로 카드 ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200, 255, 62, 0.3);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 14px;
   padding: 32px 24px 24px;
   text-align: center;
@@ -128,8 +128,8 @@
 }
 
 .heroCopy {
-  background: rgba(200, 255, 62, 0.1);
-  border: 1px solid rgba(200, 255, 62, 0.3);
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 8px;
   padding: 9px 24px;
   font-size: 13px;
@@ -138,12 +138,12 @@
   transition: all 0.15s;
 }@media (hover: hover) {
   .heroCopy:hover {
-  background: rgba(200, 255, 62, 0.2);
+  background: rgba(14, 165, 233, 0.2);
 }
 }
 
 .heroCopied {
-  background: rgba(200, 255, 62, 0.2);
+  background: rgba(14, 165, 233, 0.2);
 }
 
 /* ── 테이블 ── */

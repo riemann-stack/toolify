@@ -437,7 +437,7 @@ function RadarChart({ rec }: { rec: Recommendation }) {
     { key: 'koreaJobs',   label: '한국 채용' },
   ]
   const W = 360, H = 360, cx = W / 2, cy = H / 2, R = 130
-  const colors = ['#C8FF3E', '#3EC8FF', '#FFB938']
+  const colors = ['#0EA5E9', '#0891B2', '#FFB938']
 
   const point = (axisIdx: number, value: number) => {
     const angle = (axisIdx / axes.length) * Math.PI * 2 - Math.PI / 2
@@ -616,7 +616,7 @@ function GuideTab() {
 }
 
 function ScoreCell({ value }: { value: number }) {
-  const color = value >= 8 ? '#3EFF9B' : value >= 6 ? '#C8FF3E' : value >= 4 ? '#FFB938' : '#FF8C8C'
+  const color = value >= 8 ? '#059669' : value >= 6 ? '#0EA5E9' : value >= 4 ? '#FFB938' : '#DC2626'
   return (
     <span className={styles.scoreCellWrap}>
       <span className={styles.scoreCellBar} style={{ width: `${value * 10}%`, background: color }} />

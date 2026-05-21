@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -40,10 +40,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveQuick  { background: rgba(62,200,255,0.10);  color: #3EC8FF; font-weight: 700; }
-.tabActivePace   { background: rgba(255,215,0,0.10);   color: #FFD700; font-weight: 700; }
-.tabActiveDiff   { background: rgba(155,89,182,0.10);  color: #C485E0; font-weight: 700; }
-.tabActiveBiz    { background: rgba(62,255,155,0.10);  color: #3EFF9B; font-weight: 700; }
+.tabActiveQuick  { background: rgba(8,145,178,0.18);  color: #0891B2; font-weight: 700; }
+.tabActivePace   { background: rgba(202,138,4,0.18);   color: #CA8A04; font-weight: 700; }
+.tabActiveDiff   { background: rgba(155,89,182,0.10);  color: #9333EA; font-weight: 700; }
+.tabActiveBiz    { background: rgba(16,185,129,0.18);  color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -156,7 +156,7 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .bigCta {
@@ -190,8 +190,8 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
 }
 
 /* ─────── 시즌 프리셋 ─────── */
@@ -260,14 +260,14 @@
   .ddayCard:hover { transform: translateY(-2px); }
 }
 .ddayPinned {
-  background: linear-gradient(140deg, rgba(200,255,62,0.05), transparent);
-  box-shadow: 0 0 0 2px rgba(200,255,62,0.25);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), transparent);
+  box-shadow: 0 0 0 2px rgba(14,165,233,0.25);
 }
 .ddayUrgent {
-  border-left-color: #FF6B6B;
-  box-shadow: 0 0 0 2px rgba(255,107,107,0.20);
+  border-left-color: #DC2626;
+  box-shadow: 0 0 0 2px rgba(220,38,38,0.20);
 }
-.ddaySoon { border-left-color: #FFD700; }
+.ddaySoon { border-left-color: #CA8A04; }
 .ddayPast { opacity: 0.55; }
 
 .ddayHeader {
@@ -324,8 +324,8 @@
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.ddayHeroUrgent { color: #FF6B6B; animation: pulseHero 1.6s ease-in-out infinite; }
-.ddayHeroSoon { color: #FFD700; }
+.ddayHeroUrgent { color: #DC2626; animation: pulseHero 1.6s ease-in-out infinite; }
+.ddayHeroSoon { color: #CA8A04; }
 .ddayHeroPast { color: var(--muted); }
 
 @keyframes pulseHero {
@@ -351,9 +351,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 6px;
 }
-.badgeUrgent  { background: rgba(255,107,107,0.15); color: #FF6B6B; }
-.badgeSoon    { background: rgba(255,215,0,0.15);   color: #FFD700; }
-.badgeOk      { background: rgba(62,255,155,0.15);  color: #3EFF9B; }
+.badgeUrgent  { background: rgba(220,38,38,0.15); color: #DC2626; }
+.badgeSoon    { background: rgba(202,138,4,0.15);   color: #CA8A04; }
+.badgeOk      { background: rgba(16,185,129,0.15);  color: #059669; }
 .badgePast    { background: rgba(176,176,176,0.10); color: var(--muted); }
 
 .ddayMeta {
@@ -377,7 +377,7 @@
 }
 .ddayProgressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #3EC8FF);
+  background: linear-gradient(90deg, var(--accent), #0891B2);
   border-radius: 999px;
   transition: width 0.4s;
 }
@@ -390,8 +390,8 @@
 }
 
 .ddayPace {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.25);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.25);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 11.5px;
@@ -402,7 +402,7 @@
   justify-content: space-between;
   align-items: center;
 }
-.ddayPace strong { color: #FFD700; font-family: 'Inter', system-ui, sans-serif; }
+.ddayPace strong { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; }
 
 .empty {
   text-align: center;
@@ -423,8 +423,8 @@
 
 /* ─────── 빠른 계산기 히어로 ─────── */
 .heroBig {
-  background: linear-gradient(140deg, rgba(62,200,255,0.08), rgba(155,89,182,0.05));
-  border: 1px solid rgba(62,200,255,0.30);
+  background: linear-gradient(140deg, rgba(8,145,178,0.14), rgba(155,89,182,0.05));
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -444,11 +444,11 @@
   letter-spacing: -2px;
   line-height: 1;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(200,255,62,0.25);
+  text-shadow: 0 0 30px rgba(14,165,233,0.25);
   font-variant-numeric: tabular-nums;
 }
-.heroNumUrgent { color: #FF6B6B; text-shadow: 0 0 30px rgba(255,107,107,0.30); }
-.heroNumSoon { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.30); }
+.heroNumUrgent { color: #DC2626; text-shadow: 0 0 30px rgba(220,38,38,0.30); }
+.heroNumSoon { color: #CA8A04; text-shadow: 0 0 30px rgba(202,138,4,0.30); }
 .heroSub {
   font-size: 13px;
   color: var(--muted);
@@ -496,8 +496,8 @@
   margin-top: 12px;
 }
 .countdown4 .box {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 10px 6px;
   text-align: center;
@@ -506,7 +506,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
-  color: #3EC8FF;
+  color: #0891B2;
   line-height: 1;
   margin-bottom: 3px;
   font-variant-numeric: tabular-nums;
@@ -533,12 +533,12 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.modeActive { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.modeActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 
 /* ─────── 페이스 ─────── */
 .paceHero {
-  background: linear-gradient(140deg, rgba(255,215,0,0.08), rgba(255,140,62,0.04));
-  border: 1px solid rgba(255,215,0,0.30);
+  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(234,88,12,0.14));
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -547,7 +547,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 9vw, 56px);
-  color: #FFD700;
+  color: #CA8A04;
   line-height: 1;
   margin-bottom: 6px;
   font-variant-numeric: tabular-nums;
@@ -579,12 +579,12 @@
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.paceWarn { color: #FF6B6B !important; }
-.paceOk   { color: #3EFF9B !important; }
+.paceWarn { color: #DC2626 !important; }
+.paceOk   { color: #059669 !important; }
 
 .paceVerdict {
-  background: rgba(62,255,155,0.06);
-  border: 1px solid rgba(62,255,155,0.30);
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -592,12 +592,12 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.paceVerdict strong { color: #3EFF9B; }
+.paceVerdict strong { color: #059669; }
 .paceVerdictWarn {
-  background: rgba(255,107,107,0.06);
-  border-color: rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border-color: rgba(220,38,38,0.30);
 }
-.paceVerdictWarn strong { color: #FF6B6B; }
+.paceVerdictWarn strong { color: #DC2626; }
 
 .paceBars {
   display: flex;
@@ -652,11 +652,11 @@
 .paceGoalBtn small { display: block; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
   .paceGoalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.paceGoalActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.paceGoalActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 
 /* ─────── 두 날짜 사이 ─────── */
 .diffHero {
-  background: linear-gradient(140deg, rgba(155,89,182,0.08), rgba(62,200,255,0.04));
+  background: linear-gradient(140deg, rgba(155,89,182,0.08), rgba(8,145,178,0.14));
   border: 1px solid rgba(155,89,182,0.30);
   border-radius: 16px;
   padding: 26px 22px;
@@ -666,7 +666,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 12vw, 80px);
-  color: #C485E0;
+  color: #9333EA;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -763,6 +763,6 @@
 }@media (hover: hover) {
   .backupBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.backupDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
-  .backupDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.backupDanger { color: #DC2626; border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
+  .backupDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
 }

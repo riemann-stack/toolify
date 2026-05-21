@@ -51,12 +51,12 @@ export default function RoomAreaPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '벽 면적 (전체)',   c: '둘레 × 천장 높이',         u: '단열·방음 계획',          color: '#3EC8FF' },
+                  { t: '벽 면적 (전체)',   c: '둘레 × 천장 높이',         u: '단열·방음 계획',          color: '#0891B2' },
                   { t: '벽 면적 (실제)',   c: '전체 - 창문·문',           u: '도배·페인트',              color: 'var(--accent)' },
-                  { t: '바닥 면적',        c: '가로 × 세로',               u: '장판·타일·바닥재',        color: '#C8FF3E' },
+                  { t: '바닥 면적',        c: '가로 × 세로',               u: '장판·타일·바닥재',        color: '#0EA5E9' },
                   { t: '천장 면적',        c: '가로 × 세로 (바닥 동일)',  u: '천장 도배·조명 위치',     color: '#9B59B6' },
-                  { t: '공간 부피',        c: '가로 × 세로 × 높이',        u: '에어컨 평형·환기',        color: '#FFD700' },
-                  { t: '총 표면적',        c: '벽 + 바닥 + 천장',          u: '전체 시공 견적',           color: '#FF8C3E' },
+                  { t: '공간 부피',        c: '가로 × 세로 × 높이',        u: '에어컨 평형·환기',        color: '#CA8A04' },
+                  { t: '총 표면적',        c: '벽 + 바닥 + 천장',          u: '전체 시공 견적',           color: '#EA580C' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.color, fontWeight: 700 }}>{r.t}</td>
@@ -124,10 +124,10 @@ export default function RoomAreaPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { i: '🏢', t: '일반 아파트',         h: '2.3~2.4m', color: '#3EC8FF' },
+              { i: '🏢', t: '일반 아파트',         h: '2.3~2.4m', color: '#0891B2' },
               { i: '🏬', t: '신축 아파트',         h: '2.4~2.5m', color: 'var(--accent)' },
-              { i: '🏛️', t: '고급 아파트·단독',    h: '2.5~3.0m', color: '#3EFF9B' },
-              { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: '#FFD700' },
+              { i: '🏛️', t: '고급 아파트·단독',    h: '2.5~3.0m', color: '#059669' },
+              { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: '#CA8A04' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
@@ -137,8 +137,8 @@ export default function RoomAreaPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(232,151,87,0.06)',
-            border: '1px solid rgba(232,151,87,0.25)',
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -157,12 +157,12 @@ export default function RoomAreaPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { i: '🧱', t: '도배 시공',     d: '"실제 벽 면적"으로 벽지 롤 수 계산. 문·창문은 도배 X 차감.', color: '#C8FF3E' },
-              { i: '🎨', t: '페인트 시공',   d: '"실제 벽 면적" + 천장 도장 시 천장 추가. 칠할 횟수 × 1L당 도장 면적.', color: '#FF8C3E' },
-              { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: '#3EFF9B' },
-              { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: '#3EC8FF' },
+              { i: '🧱', t: '도배 시공',     d: '"실제 벽 면적"으로 벽지 롤 수 계산. 문·창문은 도배 X 차감.', color: '#0EA5E9' },
+              { i: '🎨', t: '페인트 시공',   d: '"실제 벽 면적" + 천장 도장 시 천장 추가. 칠할 횟수 × 1L당 도장 면적.', color: '#EA580C' },
+              { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: '#059669' },
+              { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: '#0891B2' },
               { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 또는 "공간 부피". 1평당 약 100~150W 냉방 능력 권장.', color: '#9B59B6' },
-              { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#FFD700' },
+              { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#CA8A04' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>

@@ -3,11 +3,11 @@
 
 /* ── 면책 박스 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.35);
+  background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.35);
   border-radius: 12px; padding: 14px 18px;
   font-size: 13px; color: var(--muted); line-height: 1.7;
 }
-.disclaimer strong { color: #FF6B6B; display: block; margin-bottom: 6px; font-size: 13px; }
+.disclaimer strong { color: #DC2626; display: block; margin-bottom: 6px; font-size: 13px; }
 
 /* ── 공통 카드 ── */
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
@@ -35,19 +35,19 @@
   .toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .toggleActive {
-  background: rgba(200,255,62,0.15) !important;
-  border-color: rgba(200,255,62,0.4) !important;
+  background: rgba(14,165,233,0.15) !important;
+  border-color: rgba(14,165,233,0.4) !important;
   color: var(--accent) !important;
 }
 .toggleMale {
-  background: rgba(62,200,255,0.15) !important;
-  border-color: rgba(62,200,255,0.4) !important;
-  color: #3EC8FF !important;
+  background: rgba(8,145,178,0.15) !important;
+  border-color: rgba(8,145,178,0.4) !important;
+  color: #0891B2 !important;
 }
 .toggleFemale {
-  background: rgba(255,62,140,0.15) !important;
-  border-color: rgba(255,62,140,0.4) !important;
-  color: #FF3E8C !important;
+  background: rgba(219,39,119,0.15) !important;
+  border-color: rgba(219,39,119,0.4) !important;
+  color: #DB2777 !important;
 }
 
 /* ── 체중 입력 ── */
@@ -59,7 +59,7 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .weightInput::-webkit-inner-spin-button, .weightInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.weightInput:focus { border-color: rgba(200,255,62,0.4); }
+.weightInput:focus { border-color: rgba(14,165,233,0.4); }
 .weightUnit { font-size: 16px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; flex-shrink: 0; }
 .slider { width: 100%; accent-color: var(--accent); cursor: pointer; height: 6px; display: block; margin-bottom: 6px; }
 .sliderLabels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
@@ -87,7 +87,7 @@
   padding: 8px 10px; font-size: 12px; color: var(--muted); cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; text-align: left;
 }@media (hover: hover) {
-  .presetBtn:hover { border-color: rgba(200,255,62,0.4); color: var(--accent); }
+  .presetBtn:hover { border-color: rgba(14,165,233,0.4); color: var(--accent); }
 }
 .presetBtn span { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
 
@@ -106,7 +106,7 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .drinkInput::-webkit-inner-spin-button, .drinkInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.drinkInput:focus { border-color: rgba(200,255,62,0.4); }
+.drinkInput:focus { border-color: rgba(14,165,233,0.4); }
 .drinkInputText {
   width: 100%; background: var(--bg2); border: 1px solid var(--border);
   border-radius: 8px; padding: 8px 10px; font-size: 13px;
@@ -118,7 +118,7 @@
   font-size: 20px; line-height: 1; padding: 6px 8px; border-radius: 6px;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .drinkDelete:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
+  .drinkDelete:hover { color: #DC2626; background: rgba(220,38,38,0.1); }
 }
 
 .addBtn {
@@ -133,20 +133,20 @@
 /* ── BAC 히어로 ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(62,255,155,0.3);
+  border: 1px solid rgba(16,185,129,0.3);
   border-radius: 14px; padding: 24px 26px;
   display: flex; justify-content: space-between; align-items: center; gap: 12px;
   animation: bacFadeUp 0.25s ease;
   transition: border-color 0.3s;
 }
-.heroWarn { border-color: rgba(255,140,62,0.35) !important; }
-.heroDanger { border-color: rgba(255,107,107,0.5) !important; }
+.heroWarn { border-color: rgba(234,88,12,0.35) !important; }
+.heroDanger { border-color: rgba(220,38,38,0.5) !important; }
 
 .heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
 .heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 10vw, 60px); font-weight: 800; line-height: 1; color: var(--accent); }
-.heroNumWarn { color: #FF8C3E !important; }
-.heroNumDanger { color: #FF6B6B !important; }
-.heroNumSafe { color: #3EFF9B !important; }
+.heroNumWarn { color: #EA580C !important; }
+.heroNumDanger { color: #DC2626 !important; }
+.heroNumSafe { color: #059669 !important; }
 .heroUnit { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; color: var(--muted); margin-left: 6px; font-weight: 700; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 8px; }
 
@@ -155,11 +155,11 @@
   font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.04em;
 }
-.statusSafe { background: rgba(62,255,155,0.15); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.4); }
-.statusCaution { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid rgba(255,215,0,0.4); }
-.statusWarn { background: rgba(255,140,62,0.15); color: #FF8C3E; border: 1px solid rgba(255,140,62,0.4); }
-.statusDanger { background: rgba(255,107,107,0.15); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.4); }
-.statusCrit { background: rgba(255,62,62,0.2); color: #FF3E3E; border: 1px solid rgba(255,62,62,0.5); }
+.statusSafe { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
+.statusCaution { background: rgba(202,138,4,0.15); color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.statusWarn { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
+.statusDanger { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
+.statusCrit { background: rgba(220,38,38,0.2); color: #FF3E3E; border: 1px solid rgba(220,38,38,0.5); }
 
 /* ── 기준별 소멸 카드 ── */
 .thresholdList { display: flex; flex-direction: column; gap: 8px; animation: bacFadeUp 0.25s ease; }
@@ -167,20 +167,20 @@
   background: var(--bg2); border-radius: 12px; padding: 14px 18px;
   display: flex; justify-content: space-between; align-items: center; gap: 12px;
 }
-.thresholdSuspend { border: 1px solid rgba(255,140,62,0.4); }
-.thresholdRevoke  { border: 1px solid rgba(255,107,107,0.4); }
-.thresholdZero    { border: 1px solid rgba(62,255,155,0.4); }
+.thresholdSuspend { border: 1px solid rgba(234,88,12,0.4); }
+.thresholdRevoke  { border: 1px solid rgba(220,38,38,0.4); }
+.thresholdZero    { border: 1px solid rgba(16,185,129,0.4); }
 
 .thresholdLeft {}
 .thresholdLabel { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
 .thresholdName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.thresholdNameSuspend { color: #FF8C3E !important; }
-.thresholdNameRevoke  { color: #FF6B6B !important; }
-.thresholdNameZero    { color: #3EFF9B !important; }
+.thresholdNameSuspend { color: #EA580C !important; }
+.thresholdNameRevoke  { color: #DC2626 !important; }
+.thresholdNameZero    { color: #059669 !important; }
 .thresholdRight { text-align: right; }
 .thresholdTime { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--text); }
 .thresholdDelta { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'Inter', system-ui, sans-serif; }
-.thresholdMet { color: #3EFF9B; font-weight: 700; }
+.thresholdMet { color: #059669; font-weight: 700; }
 
 /* ── 그래프 ── */
 .graphBox { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 16px 14px; }
@@ -204,10 +204,10 @@
 
 /* ── 안전 귀가 ── */
 .safeBox {
-  background: rgba(62,200,255,0.07); border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14); border: 1px solid rgba(8,145,178,0.25);
   border-radius: 14px; padding: 18px 20px;
 }
-.safeTitle { font-size: 14px; font-weight: 700; color: #3EC8FF; margin-bottom: 10px; }
+.safeTitle { font-size: 14px; font-weight: 700; color: #0891B2; margin-bottom: 10px; }
 .safeList { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); line-height: 1.7; }
 .safeList strong { color: var(--text); }
 
@@ -251,14 +251,14 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveTomorrow  { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveCumul     { background: rgba(255,107,107,0.12); color: #FF6B6B; font-weight: 700; }
-.tabActiveGuide     { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveTomorrow  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveCumul     { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
+.tabActiveGuide     { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 정보 박스 */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -266,11 +266,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -278,12 +278,12 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 /* 다음날 아침 히어로 */
 .tomorrowHero {
-  background: rgba(255,140,62,0.04);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 16px;
   padding: 22px 22px;
   text-align: center;
@@ -296,7 +296,7 @@
   letter-spacing: -1.5px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: #FF8C3E;
+  color: #EA580C;
 }
 .tomorrowHeroSub { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .tomorrowStatusBadge {
@@ -334,10 +334,10 @@
   font-variant-numeric: tabular-nums;
 }
 .timelineLabel { color: var(--text); }
-.timelineRowSafe   { background: rgba(62,255,155,0.06); border-color: rgba(62,255,155,0.30); }
-.timelineRowSafe   .timelineTime { color: #3EFF9B; }
-.timelineRowDanger { background: rgba(255,107,107,0.06); border-color: rgba(255,107,107,0.30); }
-.timelineRowDanger .timelineTime { color: #FF6B6B; }
+.timelineRowSafe   { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.30); }
+.timelineRowSafe   .timelineTime { color: #059669; }
+.timelineRowDanger { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.30); }
+.timelineRowDanger .timelineTime { color: #DC2626; }
 
 /* 자리 (세션) 입력 */
 .sessionCard {
@@ -368,7 +368,7 @@
   color: var(--muted);
   font-size: 16px;
 }@media (hover: hover) {
-  .sessionDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .sessionDelBtn:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 .sessionTimeRow {
@@ -478,12 +478,12 @@
 }@media (hover: hover) {
   .drugBtn:hover { color: var(--text); }
 }
-.drugBtnActive { background: rgba(255,107,107,0.10); border-color: #FF6B6B; color: #FF6B6B; font-weight: 700; }
+.drugBtnActive { background: rgba(220,38,38,0.18); border-color: #DC2626; color: #DC2626; font-weight: 700; }
 
 /* 강화 면책 */
 .disclaimerStrong {
-  background: rgba(255,107,107,0.04);
-  border: 2px solid rgba(255,107,107,0.40);
+  background: rgba(220,38,38,0.14);
+  border: 2px solid rgba(220,38,38,0.40);
   border-radius: 12px;
   padding: 16px 18px;
   font-size: 12.5px;
@@ -491,7 +491,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.disclaimerStrong strong { color: #FF6B6B; }
+.disclaimerStrong strong { color: #DC2626; }
 .disclaimerStrong ul { margin: 6px 0 8px; padding-left: 18px; }
 .disclaimerStrong li { margin-bottom: 3px; color: var(--muted); }
 
@@ -501,8 +501,8 @@
 
 /* ─ 실시간 카운트다운 카드 ─ */
 .liveCard {
-  background: linear-gradient(140deg, rgba(200,255,62,0.08), rgba(62,200,255,0.04));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 14px;
   padding: 18px 20px;
 }
@@ -544,10 +544,10 @@
   border: 1px solid var(--border);
   text-align: center;
 }
-.liveBoxWarn   { border-color: rgba(255,140,62,0.40); background: rgba(255,140,62,0.06); }
-.liveBoxDanger { border-color: rgba(255,107,107,0.40); background: rgba(255,107,107,0.06); }
-.liveBoxSafe   { border-color: rgba(62,255,155,0.30); background: rgba(62,255,155,0.04); }
-.liveBoxDone   { border-color: rgba(62,255,155,0.45); background: rgba(62,255,155,0.10); }
+.liveBoxWarn   { border-color: rgba(234,88,12,0.40); background: rgba(234,88,12,0.14); }
+.liveBoxDanger { border-color: rgba(220,38,38,0.40); background: rgba(220,38,38,0.14); }
+.liveBoxSafe   { border-color: rgba(16,185,129,0.30); background: rgba(16,185,129,0.14); }
+.liveBoxDone   { border-color: rgba(16,185,129,0.45); background: rgba(16,185,129,0.18); }
 .liveLabel {
   font-size: 11.5px;
   color: var(--muted);
@@ -562,10 +562,10 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -1px;
 }
-.liveBoxWarn .liveTime   { color: #FF8C3E; }
-.liveBoxDanger .liveTime { color: #FF6B6B; }
-.liveBoxSafe .liveTime   { color: #3EFF9B; }
-.liveBoxDone .liveTime   { color: #3EFF9B; }
+.liveBoxWarn .liveTime   { color: #EA580C; }
+.liveBoxDanger .liveTime { color: #DC2626; }
+.liveBoxSafe .liveTime   { color: #059669; }
+.liveBoxDone .liveTime   { color: #059669; }
 .liveNote {
   background: var(--bg3);
   border-radius: 8px;
@@ -624,7 +624,7 @@
   color: var(--accent);
   letter-spacing: -0.5px;
   text-align: center;
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-radius: 6px;
   padding: 4px 0;
   align-self: center;

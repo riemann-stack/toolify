@@ -108,11 +108,11 @@ function bumpWind(w: WindId): WindId {
 }
 
 function getDrySpeed(totalFactor: number): { label: string; color: string } {
-  if (totalFactor < 0.7) return { label: '매우 빠른 편',  color: '#3EFF9B' }
-  if (totalFactor < 0.9) return { label: '빠른 편',       color: '#C8FF3E' }
-  if (totalFactor < 1.1) return { label: '보통',         color: '#C8FF3E' }
-  if (totalFactor < 1.4) return { label: '느린 편',       color: '#FF8C3E' }
-  return                         { label: '매우 느린 편', color: '#FF6B6B' }
+  if (totalFactor < 0.7) return { label: '매우 빠른 편',  color: '#059669' }
+  if (totalFactor < 0.9) return { label: '빠른 편',       color: '#0EA5E9' }
+  if (totalFactor < 1.1) return { label: '보통',         color: '#0EA5E9' }
+  if (totalFactor < 1.4) return { label: '느린 편',       color: '#EA580C' }
+  return                         { label: '매우 느린 편', color: '#DC2626' }
 }
 
 function formatHours(h: number): string {
@@ -308,7 +308,7 @@ export default function LaundryDryClient() {
           )}
           {/* 면책 */}
           <p style={{ fontSize: 11, color: 'var(--muted)', padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, lineHeight: 1.7, marginTop: 4 }}>
-            ⚠️ 본 추천은 일반 가이드입니다. 실제 건조 시간은 의류 두께·소재·빨래량·통풍·날씨에 따라 ±20% 차이 가능. 전기료는 한국 평균 200원/kWh 기준 (누진제 단계에 따라 ±50% 차이 가능). 정확한 정보는 한국전력 고객센터 <strong style={{ color: '#FF8C3E' }}>123</strong> 또는 기상청 빨래건조지수(weather.go.kr).
+            ⚠️ 본 추천은 일반 가이드입니다. 실제 건조 시간은 의류 두께·소재·빨래량·통풍·날씨에 따라 ±20% 차이 가능. 전기료는 한국 평균 200원/kWh 기준 (누진제 단계에 따라 ±50% 차이 가능). 정확한 정보는 한국전력 고객센터 <strong style={{ color: '#EA580C' }}>123</strong> 또는 기상청 빨래건조지수(weather.go.kr).
           </p>
         </>
       )}
@@ -730,7 +730,7 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
               <div className={styles.heroDivider} aria-hidden />
               <div className={styles.heroBlock}>
                 <div className={styles.heroSubAccent}>예상 전기료</div>
-                <div className={styles.heroNumMain} style={{ color: best.cost < 50 ? '#3EFF9B' : best.cost < 300 ? 'var(--accent)' : '#FF8C3E' }}>{fmtKrw(best.cost)}</div>
+                <div className={styles.heroNumMain} style={{ color: best.cost < 50 ? '#059669' : best.cost < 300 ? 'var(--accent)' : '#EA580C' }}>{fmtKrw(best.cost)}</div>
                 <div className={styles.heroRange}>{best.kwh} kWh · 200원/kWh 기준</div>
               </div>
             </div>
@@ -762,7 +762,7 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
                           </span>
                         </td>
                         <td className={styles.tableNum}>{fmtMinutes(r.minutes)}</td>
-                        <td className={styles.tableNum} style={{ color: r.cost < 50 ? '#3EFF9B' : 'var(--text)' }}>{fmtKrw(r.cost)}</td>
+                        <td className={styles.tableNum} style={{ color: r.cost < 50 ? '#059669' : 'var(--text)' }}>{fmtKrw(r.cost)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -775,8 +775,8 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
           )}
 
           {bathroomMode && (
-            <div className={styles.card} style={{ background: 'rgba(255,140,62,0.06)', borderColor: 'rgba(255,140,62,0.3)' }}>
-              <p style={{ fontSize: 12, color: '#FF8C3E', fontWeight: 600, marginBottom: 6 }}>🚿 욕실 건조 시 주의</p>
+            <div className={styles.card} style={{ background: 'rgba(234,88,12,0.06)', borderColor: 'rgba(234,88,12,0.3)' }}>
+              <p style={{ fontSize: 12, color: '#EA580C', fontWeight: 600, marginBottom: 6 }}>🚿 욕실 건조 시 주의</p>
               <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.8 }}>
                 <li>욕실 사전 환기 필수 (사용 후 24시간+ 환풍기 가동)</li>
                 <li>1~2명분 빨래만 권장 (이불·다수 X)</li>
@@ -901,7 +901,7 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ color: '#3EFF9B', fontWeight: 700 }}>⚡ 가장 빠른</td>
+                    <td style={{ color: '#059669', fontWeight: 700 }}>⚡ 가장 빠른</td>
                     <td style={{ fontSize: 11, color: 'var(--muted)' }}>
                       {scenarios.fastest.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ')}
                     </td>
@@ -917,7 +917,7 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
                     <td className={styles.tableNum}>{fmtKrw(scenarios.balanced.cost)}</td>
                   </tr>
                   <tr>
-                    <td style={{ color: '#3EC8FF', fontWeight: 700 }}>💰 최저 비용</td>
+                    <td style={{ color: '#0891B2', fontWeight: 700 }}>💰 최저 비용</td>
                     <td style={{ fontSize: 11, color: 'var(--muted)' }}>
                       {scenarios.cheapest?.combo.map(id => LAUNDRY_EQUIPMENT.find(e => e.id === id)?.icon).join(' ') ?? '—'}
                     </td>
@@ -928,13 +928,13 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
                     <td style={{ color: 'var(--muted)' }}>🌬️ 자연 건조</td>
                     <td style={{ fontSize: 11, color: 'var(--muted)' }}>—</td>
                     <td className={styles.tableNum}>{fmtMinutes(scenarios.natural.minutes)}</td>
-                    <td className={styles.tableNum} style={{ color: '#3EFF9B' }}>0원</td>
+                    <td className={styles.tableNum} style={{ color: '#059669' }}>0원</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             {scenarios.fastest.minutes > minutesAvailable && (
-              <p className={styles.note} style={{ marginTop: 10, color: '#FF8C3E' }}>
+              <p className={styles.note} style={{ marginTop: 10, color: '#EA580C' }}>
                 ⚠️ 가장 빠른 조합도 목표 시간 안에 어렵습니다. 권장: ① 보유 장비 추가 ② 목표 시간 {fmtMinutes(scenarios.fastest.minutes - minutesAvailable)} 늦추기 ③ 욕실 건조 모드 (-25%)
               </p>
             )}

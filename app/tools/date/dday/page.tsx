@@ -90,8 +90,8 @@ export default function DdayPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 영업일 계산 시 <strong style={{ color: 'var(--text)' }}>한국 법정 공휴일</strong>을 자동 반영합니다 — 신정·설날(3일)·삼일절·어린이날·부처님오신날·현충일·광복절·추석(3일)·개천절·한글날·성탄절 + 대체 공휴일.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(255,107,107,0.06)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 10, padding: '12px 14px' }}>
-            ⚠️ <strong style={{ color: '#FF6B6B' }}>임시 공휴일</strong>(정부 발표)·근로자의 날(5/1)·회사별 공휴일은 자동 반영되지 않습니다. 정부 발표 시 별도 확인이 필요합니다.
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 10, padding: '12px 14px' }}>
+            ⚠️ <strong style={{ color: '#DC2626' }}>임시 공휴일</strong>(정부 발표)·근로자의 날(5/1)·회사별 공휴일은 자동 반영되지 않습니다. 정부 발표 시 별도 확인이 필요합니다.
           </p>
         </section>
 

@@ -106,7 +106,7 @@ export default function CarTaxPage() {
                 <tr>
                   <td style={cell}><strong>🛒 구매 시</strong></td>
                   <td style={cell}>취득세 + 지방교육세 + 공채 매입 + 번호판비</td>
-                  <td style={cell}>일반 승용 <strong style={{ color: '#FFB83E' }}>7%</strong> · 경차 4% · 영업용 4%</td>
+                  <td style={cell}>일반 승용 <strong style={{ color: '#D97706' }}>7%</strong> · 경차 4% · 영업용 4%</td>
                 </tr>
                 <tr>
                   <td style={cell}><strong>🗓️ 매년 보유</strong></td>
@@ -120,7 +120,7 @@ export default function CarTaxPage() {
                 </tr>
                 <tr>
                   <td style={cell}><strong>💰 양도 시</strong></td>
-                  <td style={cell}>개인 차량은 <strong style={{ color: '#3EFF9B' }}>비과세</strong></td>
+                  <td style={cell}>개인 차량은 <strong style={{ color: '#059669' }}>비과세</strong></td>
                   <td style={cell}>사업자·영업용은 사업소득 별도</td>
                 </tr>
               </tbody>
@@ -142,8 +142,8 @@ export default function CarTaxPage() {
               </thead>
               <tbody>
                 <tr><td style={cell}><strong>일반 승용차</strong></td><td style={cell}>7%</td><td style={cell}>가장 흔한 기준</td></tr>
-                <tr><td style={cell}>경차 (1000cc 이하)</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>4%</strong></td><td style={cell}>모닝·레이·스파크</td></tr>
-                <tr><td style={cell}>영업용 (택시·버스·화물)</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>4%</strong></td><td style={cell}>사업자 등록 필수</td></tr>
+                <tr><td style={cell}>경차 (1000cc 이하)</td><td style={cell}><strong style={{ color: '#059669' }}>4%</strong></td><td style={cell}>모닝·레이·스파크</td></tr>
+                <tr><td style={cell}>영업용 (택시·버스·화물)</td><td style={cell}><strong style={{ color: '#059669' }}>4%</strong></td><td style={cell}>사업자 등록 필수</td></tr>
                 <tr><td style={cell}>⚡ 전기·수소차</td><td style={cell}>7% (단, 140만원 한도 면제)</td><td style={cell}>실제: max(0, 7%·가격 − 140만)</td></tr>
                 <tr><td style={cell}>🔋 하이브리드</td><td style={cell}>7%</td><td style={cell}>감면 2024년 종료</td></tr>
               </tbody>
@@ -175,7 +175,7 @@ export default function CarTaxPage() {
                 <tr><td style={cell}><strong>1000cc 이하</strong></td><td style={cell}>80원</td><td style={cell}>모닝 998cc → 약 8만 원/년</td></tr>
                 <tr><td style={cell}><strong>1600cc 이하</strong></td><td style={cell}>140원</td><td style={cell}>아반떼 1.6 → 약 22만 원/년</td></tr>
                 <tr><td style={cell}><strong>1600cc 초과</strong></td><td style={cell}>200원</td><td style={cell}>쏘나타 2.0 → 약 40만 원/년</td></tr>
-                <tr><td style={cell}>⚡ 전기·수소차</td><td style={cell}>—</td><td style={cell}>정액 <strong style={{ color: '#3EFF9B' }}>13만 원/년</strong></td></tr>
+                <tr><td style={cell}>⚡ 전기·수소차</td><td style={cell}>—</td><td style={cell}>정액 <strong style={{ color: '#059669' }}>13만 원/년</strong></td></tr>
               </tbody>
             </table>
           </div>
@@ -189,7 +189,7 @@ export default function CarTaxPage() {
           <h2 style={sectionTitle}>🎫 공채 매입 — 잊기 쉬운 숨은 비용</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             차량 등록 시 의무적으로 매입하는 <strong style={{ color: 'var(--text)' }}>도시철도채권 / 지역개발채권</strong>입니다.
-            보유 시 만기에 원금 + 이자를 받지만, 대부분 <strong style={{ color: '#FFB83E' }}>즉시 매도(10~15% 할인)</strong>해서 실비용으로 처리합니다.
+            보유 시 만기에 원금 + 이자를 받지만, 대부분 <strong style={{ color: '#D97706' }}>즉시 매도(10~15% 할인)</strong>해서 실비용으로 처리합니다.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -230,10 +230,10 @@ export default function CarTaxPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>⛽ 휘발유</td><td style={cell}>약 <strong style={{ color: '#FFB83E' }}>745원</strong></td><td style={cell}>1,500km × 12 ÷ 12km/L × 745 = 약 112만 원</td></tr>
+                <tr><td style={cell}>⛽ 휘발유</td><td style={cell}>약 <strong style={{ color: '#D97706' }}>745원</strong></td><td style={cell}>1,500km × 12 ÷ 12km/L × 745 = 약 112만 원</td></tr>
                 <tr><td style={cell}>🛢️ 경유</td><td style={cell}>약 <strong>528원</strong></td><td style={cell}>1,500km × 12 ÷ 14km/L × 528 = 약 68만 원</td></tr>
                 <tr><td style={cell}>🟢 LPG</td><td style={cell}>약 230원</td><td style={cell}>대부분 영업용·택시</td></tr>
-                <tr><td style={cell}>🔌 전기</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>0원</strong></td><td style={cell}>유류세 면제 — 전기차 최대 장점</td></tr>
+                <tr><td style={cell}>🔌 전기</td><td style={cell}><strong style={{ color: '#059669' }}>0원</strong></td><td style={cell}>유류세 면제 — 전기차 최대 장점</td></tr>
               </tbody>
             </table>
           </div>
@@ -244,12 +244,12 @@ export default function CarTaxPage() {
           <h2 style={sectionTitle}>🎁 감면 제도 정리</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { name: '⚡ 전기·수소차', desc: '취득세 140만원 한도 면제 + 자동차세 정액 13만원 + 유류세 0원', color: '#3EFF9B' },
+              { name: '⚡ 전기·수소차', desc: '취득세 140만원 한도 면제 + 자동차세 정액 13만원 + 유류세 0원', color: '#059669' },
               { name: '👨‍👩‍👧‍👦 다자녀 가구', desc: '18세 미만 자녀 3명+ + 7~10인승 차량 → 취득세 140만원 한도 면제', color: '#FFD93E' },
-              { name: '♿ 장애인 1~3급', desc: '본인 명의 1대 → 취득세·자동차세 전액 면제 (배기량 2000cc 이하)', color: '#3EC8FF' },
+              { name: '♿ 장애인 1~3급', desc: '본인 명의 1대 → 취득세·자동차세 전액 면제 (배기량 2000cc 이하)', color: '#0891B2' },
               { name: '🎖️ 국가유공자', desc: '본인 명의 1대 → 취득세·자동차세 전액 면제', color: '#B885DA' },
-              { name: '🚙 경차 (1000cc↓)', desc: '취득세 4% (일반의 57% 수준) + 자동차세 cc당 80원 + 유류 면세 25만원', color: '#FF8C3E' },
-              { name: '⏳ 12년 이상 보유', desc: '자동차세 최대 50% 감면 — 장기 보유 가성비 ↑', color: '#FF6B6B' },
+              { name: '🚙 경차 (1000cc↓)', desc: '취득세 4% (일반의 57% 수준) + 자동차세 cc당 80원 + 유류 면세 25만원', color: '#EA580C' },
+              { name: '⏳ 12년 이상 보유', desc: '자동차세 최대 50% 감면 — 장기 보유 가성비 ↑', color: '#DC2626' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ fontSize: 14, color: b.color, fontWeight: 700, marginBottom: 6 }}>{b.name}</p>
@@ -264,7 +264,7 @@ export default function CarTaxPage() {
           <h2 style={sectionTitle}>💰 자동차 양도 — 양도소득세는 비과세</h2>
           <div style={card}>
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8, margin: '0 0 12px' }}>
-              개인이 사업 외 목적으로 사용한 자동차의 양도는 <strong style={{ color: '#3EFF9B' }}>양도소득세 비과세</strong>입니다 (소득세법 시행령 제162조).
+              개인이 사업 외 목적으로 사용한 자동차의 양도는 <strong style={{ color: '#059669' }}>양도소득세 비과세</strong>입니다 (소득세법 시행령 제162조).
               즉, 중고차 매도 시 차익이 있더라도 세금 신고·납부 없음.
             </p>
             <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
@@ -303,14 +303,14 @@ export default function CarTaxPage() {
                 <li>9월: 2.5%</li>
               </ul>
               위택스(wetax.go.kr) 또는 카드사 앱(삼성·신한 등)에서 자동이체 가능.
-              <strong style={{ color: '#FFB83E' }}>주의</strong>: 연납 정책은 매년 일부 변경 — 최신은 위택스에서 확인.
+              <strong style={{ color: '#D97706' }}>주의</strong>: 연납 정책은 매년 일부 변경 — 최신은 위택스에서 확인.
             </div>
           </details>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q3. 전기차 세금이 정말 일반차보다 많이 절약되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>네, 5년 보유 시 약 200~400만 원 절감</strong>됩니다.
+              <strong style={{ color: '#059669' }}>네, 5년 보유 시 약 200~400만 원 절감</strong>됩니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li><strong>취득세</strong>: 140만원 한도 면제 (4,000만 원 차량 기준 280만→140만)</li>
                 <li><strong>자동차세</strong>: 2000cc 가솔린 약 40만/년 vs 전기차 13만/년 — 연 27만 차이</li>
@@ -338,7 +338,7 @@ export default function CarTaxPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q5. 차량 명의를 부모님으로 하면 절세되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#FF8C3E' }}>제한적</strong>입니다.
+              <strong style={{ color: '#EA580C' }}>제한적</strong>입니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>부모님이 65세 이상 + 본인 명의 자동차 없음 → 자동차세 50% 감면 (지방세법)</li>
                 <li>부모님이 장애인·국가유공자 → 본인 명의 1대 전액 면제</li>

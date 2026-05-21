@@ -5,8 +5,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import styles from './dutch.module.css'
 import {
-  ROUNDING_OPTIONS, REMAINDER_OPTIONS, SCENARIO_PRESETS,
-  RoundingId, RemainderId, ScenarioId,
+  ROUNDING_OPTIONS, REMAINDER_OPTIONS,
+  RoundingId, RemainderId,
   calcSimpleSplit, calcDrinkSplit, calcPerPersonSplit,
   calcPrepaidSplit, generateShareMessage,
   PerPersonParticipant, PrepaidParticipant, PersonItem,
@@ -37,9 +37,6 @@ const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR')
 export default function DutchClient() {
   const [tab, setTab] = useState<Tab>('simple')
 
-  /* ─────── 공통 시나리오 ─────── */
-  const [scenario, setScenario] = useState<ScenarioId | null>(null)
-
   /* ─────── 1. 간단 N빵 ─────── */
   const [sTotal,    setSTotal]    = useState('')
   const [sPeople,   setSPeople]   = useState(4)
@@ -51,17 +48,6 @@ export default function DutchClient() {
     if (total <= 0 || sPeople <= 0) return null
     return calcSimpleSplit({ totalAmount: total, peopleCount: sPeople, rounding: sRounding, remainder: sRemain })
   }, [sTotal, sPeople, sRounding, sRemain])
-
-  const applyScenario = (id: ScenarioId) => {
-    const sp = SCENARIO_PRESETS.find(s => s.id === id)
-    if (!sp) return
-    setScenario(id)
-    setSRounding(sp.rounding)
-    setSRemain(sp.remainder)
-    if (sp.avgPerPerson > 0) {
-      setSTotal(fmtAmount(sp.avgPerPerson * sPeople))
-    }
-  }
 
   /* ─────── 2. 술값 분리 ─────── */
   const [dTotal,    setDTotal]    = useState('')
@@ -254,11 +240,10 @@ export default function DutchClient() {
       if (tab === 'simple' && simpleResult) {
         return {
           id: newId(),
-          title: scenario ? SCENARIO_PRESETS.find(s => s.id === scenario)?.name ?? '간단 N빵' : '간단 N빵',
+          title: '간단 N빵',
           total: parseAmount(sTotal),
           people: sPeople,
           perPerson: simpleResult.perPerson,
-          scenario: scenario ?? undefined,
           type: 'simple',
           createdAt: new Date().toISOString(),
         }
@@ -314,23 +299,6 @@ export default function DutchClient() {
       {tab === 'simple' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>
-              상황 선택 <span className={styles.cardLabelHint}>입력값·옵션을 자동 세팅</span>
-            </label>
-            <div className={styles.scenarioRow}>
-              {SCENARIO_PRESETS.map(s => (
-                <button key={s.id}
-                  className={`${styles.scenarioCard} ${scenario === s.id ? styles.scenarioActive : ''}`}
-                  onClick={() => applyScenario(s.id)}>
-                  <small>{s.icon}</small>
-                  <div>{s.name}</div>
-                  {s.avgPerPerson > 0 && <p>{fmt(s.avgPerPerson)}원/인</p>}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.card}>
             <label className={styles.cardLabel}>총 금액</label>
             <div className={styles.inputRow}>
               <input className={styles.amountInput} type="text" inputMode="numeric"
@@ -353,7 +321,7 @@ export default function DutchClient() {
                 disabled={sPeople >= 50}>+</button>
             </div>
             <div className={styles.quickRow}>
-              {[2, 3, 4, 5, 6, 8, 10, 15, 20].map(n => (
+              {[2, 3, 4, 5, 6, 7].map(n => (
                 <button key={n}
                   className={`${styles.quickBtn} ${sPeople === n ? styles.quickActive : ''}`}
                   onClick={() => setSPeople(n)}>{n}명</button>
@@ -440,29 +408,30 @@ export default function DutchClient() {
       {/* ───────── 2. 술값 분리 ───────── */}
       {tab === 'drink' && (
         <>
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>총 금액 <span className={styles.cardLabelHint}>음식 + 술 합계</span></label>
-            <div className={styles.inputRow}>
-              <input className={styles.amountInput} type="text" inputMode="numeric"
-                placeholder="200,000"
-                value={dTotal}
-                onChange={e => setDTotal(fmtAmount(parseAmount(e.target.value)))} />
-              <span className={styles.unit}>원</span>
+          {/* 4 입력 2×2 그리드 (모바일도 동일) */}
+          <div className={styles.drinkGrid}>
+            <div className={styles.card}>
+              <label className={styles.cardLabel}>총 금액 <span className={styles.cardLabelHint}>음식+술</span></label>
+              <div className={styles.inputRow}>
+                <input className={styles.amountInput} type="text" inputMode="numeric"
+                  placeholder="200,000"
+                  value={dTotal}
+                  onChange={e => setDTotal(fmtAmount(parseAmount(e.target.value)))} />
+                <span className={styles.unit}>원</span>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>술값만 <span className={styles.cardLabelHint}>전체 중 주류 비용</span></label>
-            <div className={styles.inputRow}>
-              <input className={styles.amountInput} type="text" inputMode="numeric"
-                placeholder="80,000"
-                value={dDrink}
-                onChange={e => setDDrink(fmtAmount(parseAmount(e.target.value)))} />
-              <span className={styles.unit}>원</span>
+            <div className={styles.card}>
+              <label className={styles.cardLabel}>술값만 <span className={styles.cardLabelHint}>주류 비용</span></label>
+              <div className={styles.inputRow}>
+                <input className={styles.amountInput} type="text" inputMode="numeric"
+                  placeholder="80,000"
+                  value={dDrink}
+                  onChange={e => setDDrink(fmtAmount(parseAmount(e.target.value)))} />
+                <span className={styles.unit}>원</span>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.fieldRow}>
             <div className={styles.card}>
               <label className={styles.cardLabel}>전체 인원</label>
               <div className={styles.peopleRow}>
@@ -471,11 +440,12 @@ export default function DutchClient() {
                 <button className={styles.peopleBtn} onClick={() => setDPeople(Math.min(50, dPeople + 1))}>+</button>
               </div>
             </div>
+
             <div className={styles.card}>
               <label className={styles.cardLabel}>음주자</label>
               <div className={styles.peopleRow}>
                 <button className={styles.peopleBtn} onClick={() => setDDrinkers(Math.max(0, dDrinkers - 1))}>−</button>
-                <div className={styles.peopleNum} style={{ color: '#FF8C3E' }}>{dDrinkers}명</div>
+                <div className={styles.peopleNum} style={{ color: '#EA580C' }}>{dDrinkers}명</div>
                 <button className={styles.peopleBtn} onClick={() => setDDrinkers(Math.min(dPeople, dDrinkers + 1))}>+</button>
               </div>
             </div>
@@ -511,7 +481,7 @@ export default function DutchClient() {
                   </div>
                 </div>
                 <div className={styles.heroSub}>
-                  음주자가 1인당 <strong style={{ color: '#FF8C3E' }}>{fmt(drinkResult.drinkerAmount - drinkResult.nonDrinkerAmount)}원</strong> 더 부담
+                  음주자가 1인당 <strong style={{ color: '#EA580C' }}>{fmt(drinkResult.drinkerAmount - drinkResult.nonDrinkerAmount)}원</strong> 더 부담
                 </div>
               </div>
 
@@ -550,10 +520,42 @@ export default function DutchClient() {
       {tab === 'person' && (
         <>
           <div className={styles.disclaimer}>
-            <strong>개인별 정산</strong> — 각자 본인 메뉴를 직접 부담, 공동 메뉴는 분담률(0=안 먹음·1=먹음)로 나눔.
+            <strong>개인별 정산</strong> — 각자 본인 메뉴를 직접 부담, 공동 메뉴는 전원이 균등 분담.
             공동 술값은 음주자만 균등 분배합니다.
           </div>
 
+          {/* 공동 메뉴 — 위로 올림 */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>공동 메뉴 (전원 분담)</label>
+            {sharedItems.length === 0 && (
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>없음. 필요시 추가하세요.</div>
+            )}
+            {sharedItems.map(it => (
+              <div key={it.id} className={styles.itemRow}>
+                <input className={styles.textInput} value={it.name}
+                  onChange={e => updateSharedItem(it.id, { name: e.target.value })} />
+                <input className={styles.itemPrice} type="text" inputMode="numeric"
+                  placeholder="0"
+                  value={it.price ? fmtAmount(it.price) : ''}
+                  onChange={e => updateSharedItem(it.id, { price: parseAmount(e.target.value) })} />
+                <button className={styles.itemDelete} onClick={() => removeSharedItem(it.id)}>×</button>
+              </div>
+            ))}
+            <button className={styles.addItemBtn} onClick={addSharedItem}>+ 공동 메뉴 추가</button>
+          </div>
+
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>공동 술값 <span className={styles.cardLabelHint}>음주자만 균등 분배</span></label>
+            <div className={styles.inputRow}>
+              <input className={styles.amountInput} type="text" inputMode="numeric"
+                placeholder="0"
+                value={sharedDrinks}
+                onChange={e => setSharedDrinks(fmtAmount(parseAmount(e.target.value)))} />
+              <span className={styles.unit}>원</span>
+            </div>
+          </div>
+
+          {/* 참가자 — 본인 메뉴만, 분담 chip 제거 */}
           <div className={styles.card}>
             <label className={styles.cardLabel}>참가자 ({participants.length}/20)</label>
             {participants.map(p => (
@@ -583,54 +585,11 @@ export default function DutchClient() {
                   </div>
                 ))}
                 <button className={styles.addItemBtn} onClick={() => addItem(p.id)}>+ 메뉴 추가</button>
-
-                <div style={{ marginTop: 8 }}>
-                  <label className={styles.subLabel}>공동 메뉴 분담</label>
-                  <div className={styles.miniRow}>
-                    {[0, 0.5, 1, 1.5, 2].map(v => (
-                      <button key={v}
-                        className={`${styles.miniBtn} ${p.sharedShare === v ? styles.optionActive : ''}`}
-                        onClick={() => updateParticipant(p.id, { sharedShare: v })}>
-                        {v === 0 ? '0 (안 먹음)' : v === 1 ? '1 (보통)' : `×${v}`}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             ))}
             <button className={styles.actionBtn} onClick={addParticipant} disabled={participants.length >= 20}>
               + 참가자 추가
             </button>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>공동 메뉴 (전원 분담)</label>
-            {sharedItems.length === 0 && (
-              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>없음. 필요시 추가하세요.</div>
-            )}
-            {sharedItems.map(it => (
-              <div key={it.id} className={styles.itemRow}>
-                <input className={styles.textInput} value={it.name}
-                  onChange={e => updateSharedItem(it.id, { name: e.target.value })} />
-                <input className={styles.itemPrice} type="text" inputMode="numeric"
-                  placeholder="0"
-                  value={it.price ? fmtAmount(it.price) : ''}
-                  onChange={e => updateSharedItem(it.id, { price: parseAmount(e.target.value) })} />
-                <button className={styles.itemDelete} onClick={() => removeSharedItem(it.id)}>×</button>
-              </div>
-            ))}
-            <button className={styles.addItemBtn} onClick={addSharedItem}>+ 공동 메뉴 추가</button>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>공동 술값 <span className={styles.cardLabelHint}>음주자만 균등 분배</span></label>
-            <div className={styles.inputRow}>
-              <input className={styles.amountInput} type="text" inputMode="numeric"
-                placeholder="0"
-                value={sharedDrinks}
-                onChange={e => setSharedDrinks(fmtAmount(parseAmount(e.target.value)))} />
-              <span className={styles.unit}>원</span>
-            </div>
           </div>
 
           <div className={styles.card}>
@@ -757,7 +716,7 @@ export default function DutchClient() {
             <>
               <div className={styles.hero}>
                 <div className={styles.heroLabel}>최소 송금 횟수</div>
-                <div className={styles.heroNum} style={{ color: '#FFD700' }}>
+                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
                   {prepaidResult.transferCount}<span className={styles.heroNumUnit}>건</span>
                 </div>
                 <div className={styles.heroSub}>

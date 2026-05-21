@@ -652,7 +652,7 @@ export default function FermiEstimateClient() {
             <div className={s.card} style={{ textAlign: 'center', padding: 30 }}>
               <p style={{ fontSize: 32, marginBottom: 8 }}>📊</p>
               <p style={{ color: 'var(--muted)', fontSize: 13.5, lineHeight: 1.85 }}>
-                먼저 <strong style={{ color: '#3EFFD0' }}>템플릿 시작</strong> 또는 <strong style={{ color: '#3EFFD0' }}>자유 추정</strong> 탭에서 추정을 입력해주세요.
+                먼저 <strong style={{ color: '#0D9488' }}>템플릿 시작</strong> 또는 <strong style={{ color: '#0D9488' }}>자유 추정</strong> 탭에서 추정을 입력해주세요.
               </p>
             </div>
           ) : (

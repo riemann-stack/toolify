@@ -615,7 +615,7 @@ export const KOREAN_PRESETS: Preset[] = [
   P('k-trend_6',  '복고 라떼',     '트렌드', [['#E8D5B5', 0], ['#A88E70', 50], ['#5C4A35', 100]]),
   P('k-trend-7',  '청량 민트',     '트렌드', [['#A8F5D5', 0], ['#5FBFA8', 100]]),
   P('k-trend-8',  '보랏빛 새벽',   '트렌드', [['#7B82A8', 0], ['#A88AC8', 50], ['#FFB7DC', 100]]),
-  P('k-trend-9',  '레트로 게임',   '트렌드', [['#FF6B6B', 0], ['#FFB938', 50], ['#5BC85B', 100]]),
+  P('k-trend-9',  '레트로 게임',   '트렌드', [['#DC2626', 0], ['#FFB938', 50], ['#5BC85B', 100]]),
   P('k-trend-10', '인디 무드',     '트렌드', [['#5C2C7B', 0], ['#C73838', 50], ['#FFAB7B', 100]]),
 ]
 
@@ -630,7 +630,7 @@ export const GLOBAL_PRESETS: Preset[] = [
   // Vapor / Retro (8)
   P('g-vapor-1', 'Vaporwave',       'Retro',   [['#FF71CE', 0], ['#01CDFE', 100]]),
   P('g-vapor-2', 'Sunset 80s',      'Retro',   [['#FF6E7F', 0], ['#BFE9FF', 100]]),
-  P('g-vapor-3', 'Synthwave',       'Retro',   [['#5F4B8B', 0], ['#FF6B9D', 50], ['#FFB938', 100]]),
+  P('g-vapor-3', 'Synthwave',       'Retro',   [['#5F4B8B', 0], ['#E11D48', 50], ['#FFB938', 100]]),
   P('g-vapor-4', 'Outrun',          'Retro',   [['#FF4D8D', 0], ['#5E2A84', 50], ['#1B1464', 100]]),
   P('g-vapor-5', 'Miami',           'Retro',   [['#FF6F91', 0], ['#FFC75F', 100]]),
   // Modern UI (10)

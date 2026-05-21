@@ -400,7 +400,7 @@ function DrowsyWindow({ fromName, toName, timeDiff, bedH, wakeH }: { fromName: s
       </p>
       <Timeline segments={segs} />
       <div className={s.legendRow}>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(255,140,62,0.55)' }} />졸음 강함 (현지 {formatHours(drowsyStart)}~{formatHours(drowsyEnd)})</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(234,88,12,0.55)' }} />졸음 강함 (현지 {formatHours(drowsyStart)}~{formatHours(drowsyEnd)})</div>
         <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(255,213,62,0.45)' }} />잠 안 옴 (현지 {formatHours(insomniaStart)}~{formatHours(insomniaEnd)})</div>
       </div>
     </div>
@@ -483,7 +483,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
             </div>
             <div className={s.flightBox}>
               <div className={s.flightBoxLabel}>총 수면 가능</div>
-              <div className={s.flightBoxValue} style={{ color: '#3EC8FF' }}>{(biggestSleep.end - biggestSleep.start).toFixed(1)}시간</div>
+              <div className={s.flightBoxValue} style={{ color: '#0891B2' }}>{(biggestSleep.end - biggestSleep.start).toFixed(1)}시간</div>
             </div>
           </div>
         ) : (
@@ -528,7 +528,7 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
     <div>
       <div className={s.timeline}>
         {/* 비행 중 깨어있기(기본 색) */}
-        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'rgba(200,255,62,0.18)' }} />
+        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'rgba(14,165,233,0.18)' }} />
         {/* 수면 권장 구간 */}
         {sleepWindows.map((w, i) => {
           const left = (w.start / flightHours) * 100
@@ -544,8 +544,8 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
         <span>도착<br/><small>{formatHours((takeoffLocalH + flightHours) % 24)}</small></span>
       </div>
       <div className={s.legendRow}>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(62,200,255,0.6)' }} />수면 권장 (현지 22~06시)</div>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(200,255,62,0.45)' }} />깨어있기</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(8,145,178,0.6)' }} />수면 권장 (현지 22~06시)</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(14,165,233,0.45)' }} />깨어있기</div>
       </div>
     </div>
   )
@@ -664,7 +664,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
           <div className={s.flightBox}>
             <div className={s.flightBoxLabel}>피로도 추정</div>
             <div className={s.flightBoxValue} style={{
-              color: fatigue === 'low' ? '#3EFF9B' : fatigue === 'mid' ? '#FFD93E' : fatigue === 'high' ? '#FF8C3E' : '#FF6B6B',
+              color: fatigue === 'low' ? '#059669' : fatigue === 'mid' ? '#FFD93E' : fatigue === 'high' ? '#EA580C' : '#DC2626',
             }}>
               {fatigue === 'low' ? '낮음' : fatigue === 'mid' ? '보통' : fatigue === 'high' ? '높음' : '매우 높음'}
             </div>
@@ -705,7 +705,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
           </div>
           <div className={s.flightBox}>
             <div className={s.flightBoxLabel}>피해야 할 시간</div>
-            <div className={s.flightBoxValue} style={{ fontSize: 14, color: '#FF8C3E' }}>{sun.avoid}</div>
+            <div className={s.flightBoxValue} style={{ fontSize: 14, color: '#EA580C' }}>{sun.avoid}</div>
           </div>
         </div>
       </div>

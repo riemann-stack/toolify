@@ -277,14 +277,14 @@ export interface Percentile {
 }
 
 export function getSalaryPercentile(yearly: number): Percentile {
-  if (yearly >= 100_000_000) return { percentile: 95, description: '상위 5%',     color: '#FFD700' }
-  if (yearly >= 80_000_000)  return { percentile: 90, description: '상위 10%',    color: '#FFD700' }
-  if (yearly >= 70_000_000)  return { percentile: 80, description: '상위 20%',    color: '#3EFF9B' }
-  if (yearly >= 55_000_000)  return { percentile: 65, description: '상위 35%',    color: '#3EFF9B' }
-  if (yearly >= 45_000_000)  return { percentile: 50, description: '중위 (50%)',  color: '#3EC8FF' }
-  if (yearly >= 35_000_000)  return { percentile: 35, description: '하위 35%',    color: '#3EC8FF' }
-  if (yearly >= 25_000_000)  return { percentile: 20, description: '하위 20%',    color: '#FF8C3E' }
-  return                     { percentile: 10, description: '하위 10%',    color: '#FF8C3E' }
+  if (yearly >= 100_000_000) return { percentile: 95, description: '상위 5%',     color: '#CA8A04' }
+  if (yearly >= 80_000_000)  return { percentile: 90, description: '상위 10%',    color: '#CA8A04' }
+  if (yearly >= 70_000_000)  return { percentile: 80, description: '상위 20%',    color: '#059669' }
+  if (yearly >= 55_000_000)  return { percentile: 65, description: '상위 35%',    color: '#059669' }
+  if (yearly >= 45_000_000)  return { percentile: 50, description: '중위 (50%)',  color: '#0891B2' }
+  if (yearly >= 35_000_000)  return { percentile: 35, description: '하위 35%',    color: '#0891B2' }
+  if (yearly >= 25_000_000)  return { percentile: 20, description: '하위 20%',    color: '#EA580C' }
+  return                     { percentile: 10, description: '하위 10%',    color: '#EA580C' }
 }
 
 /* ─── 연봉표 생성 ─── */

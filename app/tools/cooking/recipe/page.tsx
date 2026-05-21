@@ -40,7 +40,7 @@ export default function RecipePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             예: 2인분 100g → 4인분 200g, 2인분 1큰술 → 6인분 3큰술. 본 도구는 자동으로 모든 재료에 배율을 적용하고, <strong style={{ color: 'var(--text)' }}>양념(소금·간장·고추장·고춧가루·마늘 등)에는 자동 보정 80~90%</strong>를 적용해 짠맛 과다를 방지합니다.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(255,140,62,0.06)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 10, padding: '11px 14px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '11px 14px' }}>
             ⚠️ 양념을 단순 배율로 늘리면 너무 짤 수 있습니다. 4인분 이상 늘릴 때는 계산값의 80%부터 시작해 간을 보면서 조절하는 것이 안전합니다.
           </p>
         </section>
@@ -59,7 +59,7 @@ export default function RecipePage() {
             ].map((it, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700 }}>{it.label}</p>
-                <p style={{ fontSize: '15px', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
+                <p style={{ fontSize: '15px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
                 <p style={{ fontSize: '11.5px', color: 'var(--muted)' }}>{it.desc}</p>
               </div>
             ))}
@@ -132,7 +132,7 @@ export default function RecipePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>베이킹 vs 일반 요리 — 비율 정확도</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>🥘 일반 요리</p>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🥘 일반 요리</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· ±10% 오차 허용</li>
                 <li>· 간 조절 가능</li>
@@ -141,7 +141,7 @@ export default function RecipePage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#FFD700', marginBottom: '6px' }}>🍞 베이킹</p>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>🍞 베이킹</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 비율 매우 중요 (±5%)</li>
                 <li>· 정확한 값 그대로 사용</li>
@@ -190,8 +190,8 @@ export default function RecipePage() {
             <li>· 카카오톡 공유 가능 텍스트로 복사</li>
             <li>· 체크리스트 모드 — 구매한 재료 클릭으로 표시</li>
           </ul>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', background: 'rgba(62,255,155,0.06)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 10, padding: '10px 13px' }}>
-            <strong style={{ color: '#3EFF9B' }}>장점</strong>: 중복 구매 방지 · 정확한 양 파악 · 시간 절약 · 마트 동선 효율화.
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 10, padding: '10px 13px' }}>
+            <strong style={{ color: '#059669' }}>장점</strong>: 중복 구매 방지 · 정확한 양 파악 · 시간 절약 · 마트 동선 효율화.
           </p>
         </section>
 

@@ -4,18 +4,17 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/savings',
-  title: '월 저축 계산기 — 저축률 진단 + 6 항아리 + 청년도약·ISA·연금저축',
+  title: '저축액 계산기 — 저축률 진단 + 6 항아리 + 청년도약·ISA·연금저축',
   description: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA·연금저축 절세 시나리오와 목표 역산까지.',
   keywords: ['저축률 계산', '월 저축 가능 금액', '한국 평균 저축률', '6 항아리 모델', '청년도약계좌', 'ISA 계좌', '연금저축', 'IRP', '재무 진단', '목표 금액 역산'],
 })
 
 const sectionTitle: React.CSSProperties = {
   fontFamily: 'Inter, system-ui, sans-serif',
-  fontSize: '22px',
+  fontSize: '20px',
   fontWeight: 700,
-  marginBottom: '14px',
-  marginTop: '48px',
-  letterSpacing: '-0.5px',
+  marginBottom: '16px',
+  marginTop: '40px',
 }
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
@@ -23,29 +22,6 @@ const card: React.CSSProperties = {
   borderRadius: '14px',
   padding: '20px 22px',
   marginBottom: '14px',
-}
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  listStyle: 'none',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
 }
 
 export default function SavingsPage() {
@@ -55,7 +31,7 @@ export default function SavingsPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 월 저축 계산기
+        💰 저축액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         수입·지출 → 저축률과 한국 평균 비교 + <strong style={{ color: 'var(--text)' }}>6 항아리 분배</strong>. 청년도약·ISA 절세 시뮬.
@@ -74,7 +50,7 @@ export default function SavingsPage() {
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
           💡 <strong style={{ color: 'var(--accent)' }}>목표 역산 탭</strong>에서 1억·5억·내 집 마련 등 인기 목표를 선택하면
-          월 필요 저축액과 복리 성장 곡선을 즉시 확인할 수 있어요.
+          월 필요 저축액과 연도별 누적표를 즉시 확인할 수 있어요.
         </p>
       </div>
 
@@ -87,11 +63,11 @@ export default function SavingsPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '20대 사회초년생', d: '30~40%', desc: '복리 효과 시작 시기. 결혼·내 집 자금 준비.', c: '#3EFFD0' },
-            { t: '30대 미혼', d: '40~50%', desc: '소득 증가 + 부양 부담 적음. 황금 저축기.', c: '#3EFF9B' },
-            { t: '30대 기혼', d: '30~40%', desc: '내 집 마련·결혼·양가 부양 시기.', c: '#3EC8FF' },
-            { t: '40대 가족', d: '20~30%', desc: '교육비·주거비 정점. 일시 하락 OK.', c: '#FFB83E' },
-            { t: '50대 은퇴 준비', d: '30~40%', desc: '자녀 독립 + 마지막 저축 골든타임.', c: '#FF8C3E' },
+            { t: '20대 사회초년생', d: '30~40%', desc: '복리 효과 시작 시기. 결혼·내 집 자금 준비.', c: '#0D9488' },
+            { t: '30대 미혼', d: '40~50%', desc: '소득 증가 + 부양 부담 적음. 황금 저축기.', c: '#059669' },
+            { t: '30대 기혼', d: '30~40%', desc: '내 집 마련·결혼·양가 부양 시기.', c: '#0891B2' },
+            { t: '40대 가족', d: '20~30%', desc: '교육비·주거비 정점. 일시 하락 OK.', c: '#D97706' },
+            { t: '50대 은퇴 준비', d: '30~40%', desc: '자녀 독립 + 마지막 저축 골든타임.', c: '#EA580C' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -178,145 +154,83 @@ export default function SavingsPage() {
         </ol>
       </div>
 
-      {/* FAQ */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      {/* FAQ — 최근 도구들과 동일 포맷 */}
+      <section>
+        <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {[
+            {
+              q: '한국인 평균 저축률은 얼마인가요?',
+              a: '통계청 가계동향조사 기준 <strong>가구 평균 저축률은 약 15~20%</strong>입니다. 단, 이 수치는 부채 상환·연금 납입을 제외한 순저축률이며, 청년·고령층은 더 낮고 30~40대 가구주는 25% 정도까지 올라갑니다. 본인이 평균 이상이면 일단 양호하지만, 재정 자유·내 집 마련 목표라면 30%+ 권장입니다.',
+            },
+            {
+              q: '사회 초년생은 월급의 몇 %를 저축해야 하나요?',
+              a: '<strong>30~40%</strong> 권장입니다. 월급 250만원이면 75~100만원 저축이 목표. 왜냐하면 ① 부양 부담이 가장 적은 시기, ② 복리 효과가 가장 큰 시기 (1년 빠른 저축 = 30년 후 큰 차이), ③ 결혼·내 집 마련·차량 구입 등 큰 지출 대비. 청년도약계좌는 정부 매칭까지 받을 수 있어 사회 초년생에게 1순위입니다.',
+            },
+            {
+              q: '고정비와 변동비 구분 기준은?',
+              a: '<strong>고정비</strong>는 매월 일정 금액이 자동으로 빠져나가며 단기간 줄이기 어려운 비용 — 월세·관리비·대출 원리금·통신비·교통비 정기권·보험료. <strong>변동비</strong>는 본인 의사로 조절 가능한 비용 — 식비·외식·쇼핑·문화·여행. 저축률 개선의 핵심은 <strong>변동비 30% 절감 + 고정비 1년에 한 번 재점검</strong>입니다.',
+            },
+            {
+              q: '청년도약계좌 가입 자격이 어떻게 되나요?',
+              a: '<strong>만 19~34세 + 개인소득 7,500만원 이하 + 가구소득 중위 250% 이하</strong>가 기본 조건입니다. 5년 만기, 월 최대 70만원 납입, 정부가 소득에 따라 월 최대 7만원 매칭해 주고 만기 시 비과세. 5년 만기 시 약 5,000만원 자산 형성 가능. 단 중도해지 시 정부 지원금은 환수되니 5년 유지 가능한 금액으로 시작하세요.',
+            },
+            {
+              q: 'ISA와 연금저축 어느 게 더 좋은가요?',
+              a: '<strong>둘 다 가입하는 게 가장 효율적</strong>입니다. <strong>ISA</strong>는 3년 후 중도 인출 가능, 연 200만원 비과세(서민형 400). 단기·중기 자금 운용 + 절세. <strong>연금저축</strong>은 만 55세 이후 연금 수령, 즉시 세액공제 환급(연 99만원). 우선순위는 직장인이라면 연금저축 600 채우기 → 추가 자금은 ISA로 운용 → 여유 있으면 IRP로 추가 300.',
+            },
+            {
+              q: '비상금은 얼마나 모아야 하나요?',
+              a: '<strong>월 생활비의 6개월치</strong>가 표준입니다. 월 200만원 쓰면 1,200만원 비상금. 갑작스런 실직·질병·사고 시 6개월 안에 새 직장·회복이 가능하다는 가정. <strong>보관 장소</strong>는 즉시 인출 가능한 CMA·자유입출금 통장(적금·펀드 X). 이자율은 낮지만 유동성이 우선. 자영업자·프리랜서는 12개월치까지 권장.',
+            },
+            {
+              q: '6 항아리 모델은 한국 상황에 맞나요?',
+              a: '기본 비율은 미국 기준이라 <strong>한국 현실에 맞춰 조정이 필요</strong>합니다. 한국은 월세·통신비·교육비가 비싸 <strong>NEC를 60~65%로 늘리고, GIVE를 0~3%로 줄이는 것</strong>이 일반적입니다. 핵심 원칙은 <strong>저축+투자 합 20%+ 유지</strong>입니다.',
+            },
+            {
+              q: '1억 모으려면 월 얼마 저축?',
+              a: '기간·수익률에 따라 다릅니다(복리 적용). <strong>5년·연 3%</strong>: 월 약 155만원 / <strong>5년·연 6%</strong>: 월 약 143만원 / <strong>7년·연 6%</strong>: 월 약 95만원 / <strong>10년·연 6%</strong>: 월 약 61만원 / <strong>15년·연 7%</strong>: 월 약 31만원. 시간이 길수록 복리 효과로 필요 월 저축액이 급감합니다 — <strong>일찍 시작이 가장 효율적</strong>입니다. 목표 역산 탭에서 본인 조건으로 즉시 확인하세요.',
+            },
+            {
+              q: '부채가 많을 때 저축이 우선인가 상환이 우선인가?',
+              a: '<strong>금리 비교가 핵심</strong>입니다. <strong>부채 금리 &gt; 저축 금리 + 4%p</strong>면 상환 우선(예: 신용대출 6%, 적금 3% → 상환 우선). 비슷하거나 부채 금리가 낮으면 비상금 6개월치 + 청년도약·세제혜택 한도까지는 저축 + 잉여로 상환. 고금리 부채(현금서비스·카드론 15%+)는 무조건 1순위 상환. 단, 최소 비상금 1~3개월치는 항상 확보하세요.',
+            },
+          ].map((f, i) => (
+            <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
+                Q{i + 1}. {f.q}
+              </summary>
+              <p
+                style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
+                dangerouslySetInnerHTML={{ __html: f.a }}
+              />
+            </details>
+          ))}
+        </div>
+      </section>
 
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q1. 한국인 평균 저축률은 얼마인가요?</summary>
-        <p style={faqAnswer}>
-          통계청 가계동향조사 기준 <strong>가구 평균 저축률은 약 15~20%</strong>입니다.
-          단, 이 수치는 부채 상환·연금 납입을 제외한 순저축률이며, 청년·고령층은 더 낮고
-          30~40대 가구주는 25% 정도까지 올라갑니다. 본인이 평균 이상이면 일단 양호하지만,
-          재정 자유·내 집 마련 목표라면 30%+ 권장입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. 사회 초년생은 월급의 몇 %를 저축해야 하나요?</summary>
-        <p style={faqAnswer}>
-          <strong>30~40%</strong> 권장입니다. 월급 250만원이면 75~100만원 저축이 목표.
-          왜냐하면 ① 부양 부담이 가장 적은 시기, ② 복리 효과가 가장 큰 시기 (1년 빠른 저축 = 30년 후 큰 차이),
-          ③ 결혼·내 집 마련·차량 구입 등 큰 지출 대비. 청년도약계좌는 정부 매칭까지 받을 수 있어
-          사회 초년생에게 1순위입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q3. 고정비와 변동비 구분 기준은?</summary>
-        <p style={faqAnswer}>
-          <strong>고정비</strong>는 매월 일정 금액이 자동으로 빠져나가며 단기간 줄이기 어려운 비용 — 월세·관리비·대출
-          원리금·통신비·교통비 정기권·보험료. <strong>변동비</strong>는 본인 의사로 조절 가능한 비용 —
-          식비·외식·쇼핑·문화·여행. 저축률 개선의 핵심은 <strong>변동비 30% 절감 + 고정비 1년에 한 번 재점검</strong>입니다.
-          특히 통신·보험·OTT 구독은 1년 단위로 비교하면 큰 절감이 가능해요.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. 청년도약계좌 가입 자격이 어떻게 되나요?</summary>
-        <p style={faqAnswer}>
-          <strong>만 19~34세 + 개인소득 7,500만원 이하 + 가구소득 중위 250% 이하</strong>가 기본 조건입니다.
-          5년 만기, 월 최대 70만원 납입, 정부가 소득에 따라 월 최대 7만원 매칭해 주고 만기 시 비과세.
-          5년 만기 시 약 5,000만원 자산 형성 가능 (정부 매칭 + 이자 + 비과세 합산).
-          단 중도해지 시 정부 지원금은 환수되니 5년 유지 가능한 금액으로 시작하세요.
-          정확한 조건·신청은 <strong>서민금융진흥원 또는 가입 은행</strong>에서 확인.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q5. ISA와 연금저축 어느 게 더 좋은가요?</summary>
-        <p style={faqAnswer}>
-          <strong>둘 다 가입하는 게 가장 효율적</strong>입니다.<br />
-          • <strong>ISA</strong>: 3년 후 중도 인출 가능, 연 200만원 비과세 (서민형 400). 단기·중기 자금 운용 + 절세<br />
-          • <strong>연금저축</strong>: 만 55세 이후 연금 수령, 즉시 세액공제 환급 (연 99만원). 노후 + 즉시 세금 환급<br />
-          우선순위: ① 직장인이라면 <strong>연금저축 600 채우기</strong> (즉시 환급), ② 추가 자금은 <strong>ISA로 운용</strong>,
-          ③ 더 여유 있으면 <strong>IRP로 추가 300</strong>.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q6. 비상금은 얼마나 모아야 하나요?</summary>
-        <p style={faqAnswer}>
-          <strong>월 생활비의 6개월치</strong>가 표준입니다. 월 200만원 쓰면 1,200만원 비상금.
-          이유: 갑작스런 실직·질병·사고 시 6개월 안에 새 직장·회복이 가능하다는 가정.
-          <strong> 보관 장소</strong>: 즉시 인출 가능한 CMA·자유입출금 통장 (적금·펀드 X). 이자율은
-          낮지만 유동성이 우선입니다. 자영업자·프리랜서는 12개월치까지 권장.
-          비상금이 모이기 전까지는 다른 투자보다 비상금 만들기가 1순위입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 6 항아리 모델은 한국 상황에 맞나요?</summary>
-        <p style={faqAnswer}>
-          기본 비율은 미국 기준이라 <strong>한국 현실에 맞춰 조정이 필요</strong>합니다.
-          한국은 월세·통신비·교육비가 비싸 <strong>NEC를 60~65%로 늘리고, GIVE를 0~3%로 줄이는 것</strong>이 일반적이에요.
-          또한 한국에서 EDU(교육)는 자녀 학원비·자기계발에 모두 쓰이며, FFA(저축)와 LTSS(장기투자)는
-          청년도약·ISA·연금저축으로 자연스럽게 분리됩니다. 핵심 원칙은 <strong>저축+투자 합 20%+ 유지</strong>입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q8. 1억 모으려면 월 얼마 저축?</summary>
-        <p style={faqAnswer}>
-          기간·수익률에 따라 다릅니다 (복리 적용):<br />
-          • <strong>5년·연 3% (예금)</strong>: 월 약 155만원<br />
-          • <strong>5년·연 6% (적립식)</strong>: 월 약 143만원<br />
-          • <strong>7년·연 6%</strong>: 월 약 95만원<br />
-          • <strong>10년·연 6%</strong>: 월 약 61만원<br />
-          • <strong>15년·연 7%</strong>: 월 약 31만원<br />
-          시간이 길수록 복리 효과로 필요 월 저축액이 급감합니다 — <strong>일찍 시작하는 것이 가장 효율적</strong>이에요.
-          목표 역산 탭에서 본인 조건으로 즉시 계산해 보세요.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q9. 적금 vs 적립식 펀드 어느 게 유리?</summary>
-        <p style={faqAnswer}>
-          <strong>기간·위험 감수 성향에 따라</strong> 다릅니다.<br />
-          • <strong>1년 이내 단기·확실한 자금</strong> (결혼·전세·여행): 적금·CMA — 원금 보장, 약 3~4%<br />
-          • <strong>3~5년 중기</strong>: ISA + 적립식 ETF (S&amp;P500·국내 KOSPI200 인덱스) — 평균 연 6~8%<br />
-          • <strong>10년+ 장기·은퇴</strong>: 연금저축·IRP + 적립식 펀드 — 절세 + 복리, 연 7~10%<br />
-          중요한 건 <strong>분산</strong>: 단기는 안전 자산, 중장기는 위험 자산으로 시기별 배분.
-          한 번에 큰돈 X, 매월 일정액 자동이체(달러 코스트 애버리징)가 핵심입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q10. 부채가 많을 때 저축이 우선인가 상환이 우선인가?</summary>
-        <p style={faqAnswer}>
-          <strong>금리 비교가 핵심</strong>입니다.<br />
-          • <strong>부채 금리 &gt; 저축 금리 + 4%p</strong>: 상환 우선 (예: 신용대출 6%, 적금 3% → 상환 우선)<br />
-          • <strong>비슷하거나 부채 금리가 낮음</strong>: 비상금 6개월치 + 청년도약·세제혜택 한도까지는 저축 + 잉여로 상환<br />
-          • <strong>고금리 부채(현금서비스·카드론 15%+)</strong>는 무조건 1순위 상환<br />
-          단, <strong>최소 비상금 1~3개월치</strong>는 항상 확보. 비상금 없이 모든 돈을 상환에 넣으면
-          예상치 못한 지출 시 다시 부채로 돌아가는 악순환이 발생합니다.
-        </p>
-      </details>
-
-      {/* finance 도구 크로스링크 */}
-      <h2 style={sectionTitle}>🔗 함께 보면 좋은 금융 도구</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/finance/salary" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>💴</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>연봉 실수령액 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            4대보험·세금 + 월 실수령
-          </p>
-        </Link>
-        <Link href="/tools/finance/compound" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📈</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>복리 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            거치·적립·목표역산·시나리오
-          </p>
-        </Link>
-        <Link href="/tools/finance/dividend" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>월배당 목표 자산</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            은퇴 자산 + 배당 ETF 시뮬
-          </p>
-        </Link>
-      </div>
+      {/* 관련 도구 — 최신 도구들과 동일 포맷 */}
+      <section style={{ marginTop: '40px' }}>
+        <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+          {[
+            { href: '/tools/finance/salary',      icon: '💴', name: '연봉 실수령액 계산기',  desc: '4대보험·세금 + 월 실수령' },
+            { href: '/tools/finance/compound',    icon: '📈', name: '복리 계산기',           desc: '거치·적립·목표역산·시나리오' },
+            { href: '/tools/finance/dividend',    icon: '💰', name: '월배당 목표 자산',      desc: '은퇴 자산 + 배당 ETF 시뮬' },
+            { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 계산기',     desc: '관계별 공제·10년 합산' },
+            { href: '/tools/finance/loan',        icon: '💳', name: '대출이자 계산기',       desc: '원리금균등·갈아타기·중도상환' },
+            { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기',    desc: '84점 만점 자동 + 특공 자가진단' },
+          ].map((tool, i) => (
+            <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
+              <span style={{ fontSize: '22px' }}>{tool.icon}</span>
+              <div>
+                <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

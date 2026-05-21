@@ -698,7 +698,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
             <input type="range" min={-10} max={40} step={1}
               value={temperature} onChange={e => setTemperature(parseInt(e.target.value))}
               className={s.envSlider} />
-            <span className={s.envSliderValue} style={{ color: temperature < 10 ? '#3EC8FF' : temperature > 28 ? '#FF8C3E' : 'var(--accent)' }}>
+            <span className={s.envSliderValue} style={{ color: temperature < 10 ? '#0891B2' : temperature > 28 ? '#EA580C' : 'var(--accent)' }}>
               {temperature}°C
             </span>
           </div>
@@ -778,8 +778,8 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
         <div className={s.envResultHead}>
           <span className={s.cardLabel}>🌬️ 환경 보정 비거리</span>
           <span className={s.envResultBadge} style={{
-            color: result.changePercent >= 0 ? '#3EFF9B' : '#FF6B6B',
-            borderColor: (result.changePercent >= 0 ? '#3EFF9B' : '#FF6B6B') + '55',
+            color: result.changePercent >= 0 ? '#059669' : '#DC2626',
+            borderColor: (result.changePercent >= 0 ? '#059669' : '#DC2626') + '55',
           }}>
             {result.changePercent >= 0 ? '+' : ''}{result.changePercent}%
           </span>
@@ -813,7 +813,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                     <td style={{ color: 'var(--muted)', fontSize: 12 }}>{c.desc}</td>
                     <td style={{
                       textAlign: 'right',
-                      color: c.tone === 'pos' ? '#3EFF9B' : c.tone === 'neg' ? '#FF6B6B' : 'var(--muted)',
+                      color: c.tone === 'pos' ? '#059669' : c.tone === 'neg' ? '#DC2626' : 'var(--muted)',
                       fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700,
                     }}>
                       {c.impact > 0 ? '+' : ''}{showDist(c.impact, unit)}{unit}
@@ -824,7 +824,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                   <td colSpan={2} style={{ fontWeight: 700, color: 'var(--text)' }}>합계</td>
                   <td style={{
                     textAlign: 'right',
-                    color: result.totalImpact >= 0 ? '#3EFF9B' : '#FF6B6B',
+                    color: result.totalImpact >= 0 ? '#059669' : '#DC2626',
                     fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 14,
                   }}>
                     {result.totalImpact >= 0 ? '+' : ''}{showDist(result.totalImpact, unit)}{unit}
@@ -915,9 +915,9 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
           </div>
           {(stats.driverChange !== null || stats.iron7Change !== null) && (
             <p className={s.envHint} style={{ marginTop: 10 }}>
-              📈 최근 30일 변화 — DR <strong style={{ color: (stats.driverChange ?? 0) >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+              📈 최근 30일 변화 — DR <strong style={{ color: (stats.driverChange ?? 0) >= 0 ? '#059669' : '#DC2626' }}>
                 {stats.driverChange !== null ? `${stats.driverChange >= 0 ? '+' : ''}${showDist(stats.driverChange, unit)}${unit}` : '—'}
-              </strong>, 7I <strong style={{ color: (stats.iron7Change ?? 0) >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+              </strong>, 7I <strong style={{ color: (stats.iron7Change ?? 0) >= 0 ? '#059669' : '#DC2626' }}>
                 {stats.iron7Change !== null ? `${stats.iron7Change >= 0 ? '+' : ''}${showDist(stats.iron7Change, unit)}${unit}` : '—'}
               </strong>
             </p>

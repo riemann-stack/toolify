@@ -53,7 +53,7 @@ export default function JsonPage() {
             overflowX: 'auto',
           }}>
             <div><span style={{ color: 'var(--muted)' }}># JSON 기본 데이터 타입</span></div>
-            <div><span style={{ color: '#3EC8FF' }}>&quot;string&quot;</span> · <span style={{ color: '#FFD700' }}>123</span> · <span style={{ color: '#C485E0' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
+            <div><span style={{ color: '#0891B2' }}>&quot;string&quot;</span> · <span style={{ color: '#CA8A04' }}>123</span> · <span style={{ color: '#9333EA' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
             <div><span style={{ color: 'var(--muted)' }}>{'{ object }'}</span> · <span style={{ color: 'var(--muted)' }}>{'[ array ]'}</span></div>
           </div>
         </div>
@@ -65,13 +65,13 @@ export default function JsonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             {[
-              { e: 'Trailing comma',  c: '#FF6B6B', d: '마지막 요소 뒤 쉼표 — JSON 표준 비허용. JSON5/JSONC는 허용.' },
-              { e: 'Single quotes',   c: '#FF6B6B', d: '문자열에 작은따옴표(\') 사용 — JSON은 큰따옴표(") 전용.' },
-              { e: 'Unquoted keys',   c: '#FF6B6B', d: '키에 따옴표 없음 — { name: "John" } ❌ → { "name": "John" } ✓.' },
-              { e: 'undefined / NaN', c: '#FF6B6B', d: 'JS 값 undefined·NaN·Infinity는 JSON에 사용 불가. null로 대체.' },
-              { e: '주석 포함',         c: '#FF6B6B', d: 'JSON은 // 또는 /* */ 주석 미지원. JSON5·JSONC는 지원.' },
-              { e: 'Escape 누락',      c: '#FF6B6B', d: '문자열 안의 ", \\, 줄바꿈은 \\", \\\\, \\n으로 이스케이프 필수.' },
-              { e: '인코딩 BOM',       c: '#FF6B6B', d: 'UTF-8 BOM(\\uFEFF)은 JSON 표준 미허용. 파일 저장 시 주의.' },
+              { e: 'Trailing comma',  c: '#DC2626', d: '마지막 요소 뒤 쉼표 — JSON 표준 비허용. JSON5/JSONC는 허용.' },
+              { e: 'Single quotes',   c: '#DC2626', d: '문자열에 작은따옴표(\') 사용 — JSON은 큰따옴표(") 전용.' },
+              { e: 'Unquoted keys',   c: '#DC2626', d: '키에 따옴표 없음 — { name: "John" } ❌ → { "name": "John" } ✓.' },
+              { e: 'undefined / NaN', c: '#DC2626', d: 'JS 값 undefined·NaN·Infinity는 JSON에 사용 불가. null로 대체.' },
+              { e: '주석 포함',         c: '#DC2626', d: 'JSON은 // 또는 /* */ 주석 미지원. JSON5·JSONC는 지원.' },
+              { e: 'Escape 누락',      c: '#DC2626', d: '문자열 안의 ", \\, 줄바꿈은 \\", \\\\, \\n으로 이스케이프 필수.' },
+              { e: '인코딩 BOM',       c: '#DC2626', d: 'UTF-8 BOM(\\uFEFF)은 JSON 표준 미허용. 파일 저장 시 주의.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 12.5, color: g.c, fontWeight: 700, marginBottom: 4, fontFamily: 'var(--font-mono)' }}>{g.e}</p>
@@ -130,8 +130,8 @@ export default function JsonPage() {
                 <li>API 응답 분석·로그 분석</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFF9B', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>⊟ 압축 (Minify)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>⊟ 압축 (Minify)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>공백·줄바꿈 제거</li>
                 <li>네트워크 전송 절약</li>
@@ -166,14 +166,14 @@ export default function JsonPage() {
             <div>{'{ "name": "Alice", "age": 30, "address": { "city": "Seoul" } }'}</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 자동 생성 TypeScript</span></div>
-            <div><span style={{ color: '#C485E0' }}>interface</span> <span style={{ color: '#3EC8FF' }}>Address</span> {'{'}</div>
-            <div>  <span style={{ color: '#3EC8FF' }}>city</span>: <span style={{ color: '#3EFF9B' }}>string</span></div>
+            <div><span style={{ color: '#9333EA' }}>interface</span> <span style={{ color: '#0891B2' }}>Address</span> {'{'}</div>
+            <div>  <span style={{ color: '#0891B2' }}>city</span>: <span style={{ color: '#059669' }}>string</span></div>
             <div>{'}'}</div>
             <div></div>
-            <div><span style={{ color: '#C485E0' }}>interface</span> <span style={{ color: '#3EC8FF' }}>Root</span> {'{'}</div>
-            <div>  <span style={{ color: '#3EC8FF' }}>address</span>: <span style={{ color: '#3EC8FF' }}>Address</span></div>
-            <div>  <span style={{ color: '#3EC8FF' }}>age</span>: <span style={{ color: '#3EFF9B' }}>number</span></div>
-            <div>  <span style={{ color: '#3EC8FF' }}>name</span>: <span style={{ color: '#3EFF9B' }}>string</span></div>
+            <div><span style={{ color: '#9333EA' }}>interface</span> <span style={{ color: '#0891B2' }}>Root</span> {'{'}</div>
+            <div>  <span style={{ color: '#0891B2' }}>address</span>: <span style={{ color: '#0891B2' }}>Address</span></div>
+            <div>  <span style={{ color: '#0891B2' }}>age</span>: <span style={{ color: '#059669' }}>number</span></div>
+            <div>  <span style={{ color: '#0891B2' }}>name</span>: <span style={{ color: '#059669' }}>string</span></div>
             <div>{'}'}</div>
           </div>
         </div>
@@ -185,10 +185,10 @@ export default function JsonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'YAML',    c: '#3EC8FF', d: 'Kubernetes·Docker Compose·GitHub Actions·Ansible 설정 파일 표준' },
-              { t: 'CSV',     c: '#3EFF9B', d: '엑셀·Google Sheets·DB import에 사용. 객체 배열 → 평탄화된 표' },
+              { t: 'YAML',    c: '#0891B2', d: 'Kubernetes·Docker Compose·GitHub Actions·Ansible 설정 파일 표준' },
+              { t: 'CSV',     c: '#059669', d: '엑셀·Google Sheets·DB import에 사용. 객체 배열 → 평탄화된 표' },
               { t: '키 정렬',  c: 'var(--accent)', d: '두 JSON 비교(diff) 시 키 순서 차이를 제거하고 의미 차이만 비교' },
-              { t: '이스케이프', c: '#FFD700', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
+              { t: '이스케이프', c: '#CA8A04', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>

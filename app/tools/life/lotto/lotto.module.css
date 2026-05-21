@@ -3,8 +3,8 @@
 
 /* ── 사행성 예방 배너 — 매 화면 상단 ── */
 .responsibilityBanner {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
@@ -12,7 +12,7 @@
   line-height: 1.85;
   position: relative;
 }
-.responsibilityBanner strong { color: #FF6B6B; }
+.responsibilityBanner strong { color: #DC2626; }
 .responsibilityClose {
   position: absolute;
   top: 8px;
@@ -36,7 +36,7 @@
 .responsibilityMini button {
   background: transparent;
   border: none;
-  color: #FF6B6B;
+  color: #DC2626;
   cursor: pointer;
   text-decoration: underline;
   font-size: 11.5px;
@@ -71,10 +71,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveAnalyze{ background: rgba(255,215,0,0.10);  color: #FFD700; font-weight: 700; }
-.tabActiveSim    { background: rgba(255,107,107,0.10); color: #FF6B6B; font-weight: 700; }
-.tabActiveJackpot{ background: rgba(155,89,182,0.10);  color: #C485E0; font-weight: 700; }
-.tabActiveTax    { background: rgba(62,255,155,0.10);  color: #3EFF9B; font-weight: 700; }
+.tabActiveAnalyze{ background: rgba(202,138,4,0.18);  color: #CA8A04; font-weight: 700; }
+.tabActiveSim    { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
+.tabActiveJackpot{ background: rgba(155,89,182,0.10);  color: #9333EA; font-weight: 700; }
+.tabActiveTax    { background: rgba(16,185,129,0.18);  color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -121,7 +121,7 @@
 .modeCardActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(200,255,62,0.18);
+  box-shadow: 0 0 0 2px rgba(14,165,233,0.18);
 }
 .modeCardEmoji { font-size: 28px; line-height: 1; margin-bottom: 6px; }
 .modeCardName { font-size: 12.5px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 3px; }
@@ -138,35 +138,30 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 9px 6px;
+  padding: 9px 4px;
   cursor: pointer;
   transition: all 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
   min-width: 0;
   font-family: 'Noto Sans KR', sans-serif;
 }
 @media (hover: hover) { .modeChip:hover { border-color: var(--border-hover); } }
-.modeChipEmoji { font-size: 15px; line-height: 1; flex-shrink: 0; }
 .modeChipName {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   font-weight: 600;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
+  text-align: center;
 }
 .modeChipActive {
   background: var(--accent-dim);
   border-color: var(--accent);
 }
 .modeChipActive .modeChipName { color: var(--accent); font-weight: 700; }
-@media (max-width: 540px) {
-  .modeChipName { font-size: 11.5px; }
-}
+@media (max-width: 540px) { .modeChipName { font-size: 12px; } }
+@media (max-width: 380px) { .modeChipName { font-size: 11.5px; } }
 
 /* ── 번호 선택기 (NumberPicker) ── */
 .pickerHead {
@@ -243,8 +238,8 @@
 }@media (hover: hover) {
   .numCell:hover { border-color: var(--border-hover); transform: scale(1.05); }
 }
-.numCellFixed { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 2px rgba(200,255,62,0.20); }
-.numCellExcluded { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.40); color: #FF6B6B; text-decoration: line-through; }
+.numCellFixed { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 2px rgba(14,165,233,0.20); }
+.numCellExcluded { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.40); color: #DC2626; text-decoration: line-through; }
 .numLegend {
   font-size: 11px;
   color: var(--muted);
@@ -276,7 +271,7 @@
   .fixExcludeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .fixActive    { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.exclActive   { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.exclActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 
 /* 토글 옵션 */
 .toggleLabel {
@@ -322,7 +317,7 @@
   transition: all 0.15s;
   width: 100%;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .miniBtn {
@@ -338,8 +333,8 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 
@@ -461,7 +456,7 @@
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.numInput:focus { border-color: #FFD700; }
+.numInput:focus { border-color: #CA8A04; }
 .numInput::-webkit-outer-spin-button, .numInput::-webkit-inner-spin-button { -webkit-appearance: none; }
 
 .analysisGrid {
@@ -482,7 +477,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
-  color: #FFD700;
+  color: #CA8A04;
   font-variant-numeric: tabular-nums;
 }
 .analysisHint { font-size: 10.5px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
@@ -494,9 +489,9 @@
   margin-top: 12px;
 }
 .tag {
-  background: rgba(255,215,0,0.10);
-  border: 1px solid rgba(255,215,0,0.30);
-  color: #FFD700;
+  background: rgba(202,138,4,0.18);
+  border: 1px solid rgba(202,138,4,0.30);
+  color: #CA8A04;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 11.5px;
@@ -531,7 +526,7 @@
 .rangeRow span:last-child {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #FFD700;
+  color: #CA8A04;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -557,11 +552,11 @@
 }@media (hover: hover) {
   .simBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.simActive { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.simActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 
 .simHero {
-  background: linear-gradient(140deg, rgba(255,107,107,0.08), rgba(155,89,182,0.04));
-  border: 1px solid rgba(255,107,107,0.30);
+  background: linear-gradient(140deg, rgba(220,38,38,0.14), rgba(155,89,182,0.04));
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -583,8 +578,8 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.simHeroLoss { color: #FF6B6B; }
-.simHeroProfit { color: #3EFF9B; }
+.simHeroLoss { color: #DC2626; }
+.simHeroProfit { color: #059669; }
 .simHeroBreakdown { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
 
 .simTable {
@@ -610,15 +605,15 @@
 .simRowVal {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  color: #FF6B6B;
+  color: #DC2626;
   font-variant-numeric: tabular-nums;
 }
-.simRowValProfit { color: #3EFF9B; }
+.simRowValProfit { color: #059669; }
 .simRowEmpty { color: var(--muted); }
 
 .warningBox {
-  background: rgba(255,107,107,0.05);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
@@ -626,12 +621,12 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warningBox strong { color: #FF6B6B; }
-.warningBox a { color: #FF6B6B; text-decoration: underline; font-weight: 600; }
+.warningBox strong { color: #DC2626; }
+.warningBox a { color: #DC2626; text-decoration: underline; font-weight: 600; }
 
 /* ── 1등 체감 탭 ── */
 .jackpotHero {
-  background: linear-gradient(140deg, rgba(155,89,182,0.10), rgba(255,107,107,0.05));
+  background: linear-gradient(140deg, rgba(155,89,182,0.10), rgba(220,38,38,0.14));
   border: 1px solid rgba(155,89,182,0.30);
   border-radius: 16px;
   padding: 24px 22px;
@@ -651,13 +646,13 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(56px, 12vw, 84px);
-  color: #C485E0;
+  color: #9333EA;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .jackpotYearsUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }
 .jackpotMeta { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
-.jackpotAge { color: #FFD700; font-weight: 700; }
+.jackpotAge { color: #CA8A04; font-weight: 700; }
 
 .jackpotInfoGrid {
   display: grid;
@@ -676,7 +671,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
-  color: #C485E0;
+  color: #9333EA;
   font-variant-numeric: tabular-nums;
 }
 .jackpotInfoLbl { font-size: 11.5px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
@@ -697,12 +692,12 @@
 }
 .compareRow:last-child { border-bottom: none; }
 .compareRow span:first-child { color: var(--text); }
-.compareRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #C485E0; font-variant-numeric: tabular-nums; }
+.compareRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #9333EA; font-variant-numeric: tabular-nums; }
 
 /* ── 세후 탭 ── */
 .taxHero {
-  background: linear-gradient(140deg, rgba(62,255,155,0.08), rgba(62,200,255,0.04));
-  border: 1px solid rgba(62,255,155,0.30);
+  background: linear-gradient(140deg, rgba(16,185,129,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(16,185,129,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -720,7 +715,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 8vw, 56px);
-  color: #3EFF9B;
+  color: #059669;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -749,12 +744,12 @@
   font-variant-numeric: tabular-nums;
 }
 .taxRowTotal {
-  background: rgba(62,255,155,0.06);
-  border-color: rgba(62,255,155,0.30);
+  background: rgba(16,185,129,0.14);
+  border-color: rgba(16,185,129,0.30);
   font-weight: 700;
 }
-.taxRowTotal span:last-child { color: #3EFF9B; }
-.taxRowTax span:last-child { color: #FF6B6B; }
+.taxRowTotal span:last-child { color: #059669; }
+.taxRowTax span:last-child { color: #DC2626; }
 
 .taxTable {
   width: 100%;
@@ -769,7 +764,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .taxTable th { font-size: 10.5px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
-.taxTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
+.taxTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #059669; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* ── 저장된 번호 ── */
 .savedList {

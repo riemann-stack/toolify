@@ -145,7 +145,7 @@ export default function BrewPage() {
             { t: '🌑 다크 (프렌치·이탈리안)', d: '쓴맛·캐러멜·초콜릿. 1:16~18로 약하게 빼면 쓴맛 완화.',           c: '#3A1E10' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: g.c === '#3A1E10' ? '#FFB83E' : g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
+              <p style={{ fontSize: 13, color: g.c === '#3A1E10' ? '#D97706' : g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{g.d}</p>
             </div>
           ))}
@@ -161,9 +161,9 @@ export default function BrewPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
           {[
-            { t: '🌱 블루밍 (Bloom)', d: '원두 무게 × 2g의 물로 적셔 30초 휴지. CO₂ 가스가 빠지며 부풀어 오릅니다. 신선한 원두는 거품이 잘 일어나요.', c: '#3EFFD0' },
-            { t: '💧 1차 푸어',        d: '0:30~1:30, 누적 60%까지. 가운데서 원형으로 천천히 따릅니다. 가장 진한 추출이 일어나는 단계.',         c: '#3EC8FF' },
-            { t: '💧 2차 푸어',        d: '1:30~2:30, 누적 100%까지. 안쪽 원만 따라 균형을 맞춥니다. 산미·향이 추출되는 단계.',                  c: '#FF8C3E' },
+            { t: '🌱 블루밍 (Bloom)', d: '원두 무게 × 2g의 물로 적셔 30초 휴지. CO₂ 가스가 빠지며 부풀어 오릅니다. 신선한 원두는 거품이 잘 일어나요.', c: '#0D9488' },
+            { t: '💧 1차 푸어',        d: '0:30~1:30, 누적 60%까지. 가운데서 원형으로 천천히 따릅니다. 가장 진한 추출이 일어나는 단계.',         c: '#0891B2' },
+            { t: '💧 2차 푸어',        d: '1:30~2:30, 누적 100%까지. 안쪽 원만 따라 균형을 맞춥니다. 산미·향이 추출되는 단계.',                  c: '#EA580C' },
             { t: '⏳ 추출 마무리',     d: '2:30~3:30, 드리퍼의 물이 모두 빠질 때까지 대기. 너무 빠르면 굵은 분쇄, 너무 느리면 가는 분쇄.',         c: '#9B59B6' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>

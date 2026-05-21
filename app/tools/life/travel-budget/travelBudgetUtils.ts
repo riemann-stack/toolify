@@ -186,9 +186,9 @@ export const FLIGHT_PRICES: Record<string, Record<Airline, Record<Season, number
 
 /* 스타일·시즌·항공사 메타 */
 export const STYLES: { id: Style; emoji: string; label: string; desc: string; color: string }[] = [
-  { id: 'backpack', emoji: '🎒', label: '배낭여행',  desc: '호스텔·로컬 식당·대중교통',         color: '#3EFFD0' },
-  { id: 'middle',   emoji: '🧳', label: '중간',      desc: '3~4성 호텔·일반 식당·기본 투어',    color: '#FFB83E' },
-  { id: 'luxury',   emoji: '🥂', label: '럭셔리',    desc: '5성 호텔·고급 식당·프라이빗 투어',  color: '#FF3E8C' },
+  { id: 'backpack', emoji: '🎒', label: '배낭여행',  desc: '호스텔·로컬 식당·대중교통',         color: '#0D9488' },
+  { id: 'middle',   emoji: '🧳', label: '중간',      desc: '3~4성 호텔·일반 식당·기본 투어',    color: '#D97706' },
+  { id: 'luxury',   emoji: '🥂', label: '럭셔리',    desc: '5성 호텔·고급 식당·프라이빗 투어',  color: '#DB2777' },
 ]
 
 export const SEASONS: { id: Season; emoji: string; label: string }[] = [
@@ -245,14 +245,14 @@ export function calcBudget(inp: BudgetInputs): { items: ItemBreakdown[]; subTota
   const people = Math.max(1, inp.people)
 
   const items: ItemBreakdown[] = [
-    { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: '#3EC8FF' },
-    { id: 'hotel',     emoji: '🏨', label: '숙박',       perPerson: inp.hotel * days,           total: inp.hotel * days * people,             isPerson: true,  color: '#FF8C3E' },
-    { id: 'food',      emoji: '🍽️', label: '식비',       perPerson: inp.food * days,            total: inp.food * days * people,              isPerson: true,  color: '#FFB83E' },
-    { id: 'transport', emoji: '🚕', label: '교통',       perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: '#3EFFD0' },
-    { id: 'shopping',  emoji: '🛍️', label: '쇼핑',       perPerson: inp.shopping / people,      total: inp.shopping,                          isPerson: false, color: '#FF3E8C' },
+    { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: '#0891B2' },
+    { id: 'hotel',     emoji: '🏨', label: '숙박',       perPerson: inp.hotel * days,           total: inp.hotel * days * people,             isPerson: true,  color: '#EA580C' },
+    { id: 'food',      emoji: '🍽️', label: '식비',       perPerson: inp.food * days,            total: inp.food * days * people,              isPerson: true,  color: '#D97706' },
+    { id: 'transport', emoji: '🚕', label: '교통',       perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: '#0D9488' },
+    { id: 'shopping',  emoji: '🛍️', label: '쇼핑',       perPerson: inp.shopping / people,      total: inp.shopping,                          isPerson: false, color: '#DB2777' },
     { id: 'ticket',    emoji: '🎟️', label: '입장권·투어', perPerson: inp.ticket / people,        total: inp.ticket,                            isPerson: false, color: '#9B59B6' },
-    { id: 'comm',      emoji: '📱', label: '통신·로밍',   perPerson: inp.comm / people,          total: inp.comm,                              isPerson: false, color: '#3EFF9B' },
-    { id: 'insurance', emoji: '🛡️', label: '여행자보험',  perPerson: inp.insurance,              total: inp.insurance * people,                isPerson: true,  color: '#C485E0' },
+    { id: 'comm',      emoji: '📱', label: '통신·로밍',   perPerson: inp.comm / people,          total: inp.comm,                              isPerson: false, color: '#059669' },
+    { id: 'insurance', emoji: '🛡️', label: '여행자보험',  perPerson: inp.insurance,              total: inp.insurance * people,                isPerson: true,  color: '#9333EA' },
     { id: 'etc',       emoji: '💵', label: '기타',       perPerson: inp.etc / people,           total: inp.etc,                               isPerson: false, color: '#9B9B9B' },
   ]
 

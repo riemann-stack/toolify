@@ -116,7 +116,7 @@
   .purposeChip:hover { color: var(--text); }
 }
 .purposeChipActive {
-  background: rgba(200,255,62,0.1) !important;
+  background: rgba(14,165,233,0.1) !important;
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   font-weight: 600;
@@ -149,10 +149,10 @@
   border-left-width: 4px;
   animation: subFadeUp 0.25s ease;
 }
-.optionCardPerfect { border-left-color: #3EFF9B; }
+.optionCardPerfect { border-left-color: #059669; }
 .optionCardGood    { border-left-color: var(--accent); }
-.optionCardOkay    { border-left-color: #FF8C3E; }
-.optionCardCaution { border-left-color: #FF6B6B; }
+.optionCardOkay    { border-left-color: #EA580C; }
+.optionCardCaution { border-left-color: #DC2626; }
 
 .optionHeader {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -169,10 +169,10 @@
   font-size: 11px; font-weight: 700;
   flex-shrink: 0;
 }
-.gradePerfect { background: rgba(62,255,155,0.12); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.3); }
-.gradeGood    { background: rgba(200,255,62,0.1);  color: var(--accent); border: 1px solid rgba(200,255,62,0.3); }
-.gradeOkay    { background: rgba(255,140,62,0.1);  color: #FF8C3E; border: 1px solid rgba(255,140,62,0.3); }
-.gradeCaution { background: rgba(255,107,107,0.1); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.3); }
+.gradePerfect { background: rgba(16,185,129,0.18); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
+.gradeGood    { background: rgba(14,165,233,0.1);  color: var(--accent); border: 1px solid rgba(14,165,233,0.3); }
+.gradeOkay    { background: rgba(234,88,12,0.1);  color: #EA580C; border: 1px solid rgba(234,88,12,0.3); }
+.gradeCaution { background: rgba(220,38,38,0.1); color: #DC2626; border: 1px solid rgba(220,38,38,0.3); }
 
 /* 양 환산 */
 .conversion {
@@ -213,19 +213,19 @@
 
 /* 주의 박스 */
 .warningBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.2);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.2);
   border-radius: 8px; padding: 8px 12px;
   display: flex; gap: 8px;
   font-size: 12px; color: var(--muted); line-height: 1.6;
   margin-top: 8px;
 }
-.warningBox strong { color: #FF6B6B; }
+.warningBox strong { color: #DC2626; }
 
 /* 추가 재료 박스 */
 .combinedBox {
-  background: rgba(200,255,62,0.06);
-  border: 1px solid rgba(200,255,62,0.25);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 8px; padding: 8px 12px;
   display: flex; gap: 8px;
   font-size: 12px; color: var(--muted); line-height: 1.6;
@@ -295,10 +295,10 @@
   font-size: 12px; flex-wrap: wrap;
 }
 .browseOptionDot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.browseOptionDotPerfect { background: #3EFF9B; }
+.browseOptionDotPerfect { background: #059669; }
 .browseOptionDotGood { background: var(--accent); }
-.browseOptionDotOkay { background: #FF8C3E; }
-.browseOptionDotCaution { background: #FF6B6B; }
+.browseOptionDotOkay { background: #EA580C; }
+.browseOptionDotCaution { background: #DC2626; }
 .browseOptionName { color: var(--text); }
 .browseOptionRatio {
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700;

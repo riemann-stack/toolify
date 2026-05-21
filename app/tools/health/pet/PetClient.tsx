@@ -16,7 +16,7 @@ type FoodMode = 'dry' | 'wet' | 'mix'
 
 const DOG_STAGES = ['퍼피', '청년견', '중년견', '노령견']
 const CAT_STAGES = ['키튼', '성묘', '시니어', '슈퍼시니어']
-const STAGE_COLORS = ['#3EC8FF', '#3EFF9B', '#C8FF3E', '#FF8C3E']
+const STAGE_COLORS = ['#0891B2', '#059669', '#0EA5E9', '#EA580C']
 
 function LifeStageBar({ stages, current }: { stages: string[]; current: string }) {
   const idx = stages.indexOf(current)

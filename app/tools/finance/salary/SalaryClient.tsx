@@ -133,11 +133,11 @@ export default function SalaryClient() {
     if (total <= 0) return null
     const segments = [
       { name: '실수령',   value: result.netMonthly,                                  color: 'var(--accent)' },
-      { name: '4대보험', value: result.totalInsurance,                              color: '#3EC8FF' },
-      { name: '세금',    value: result.totalTax,                                    color: '#FF8C3E' },
+      { name: '4대보험', value: result.totalInsurance,                              color: '#0891B2' },
+      { name: '세금',    value: result.totalTax,                                    color: '#EA580C' },
     ]
     if (result.nonTaxableMonthly > 0) {
-      segments.push({ name: '비과세', value: result.nonTaxableMonthly, color: '#3EFF9B' })
+      segments.push({ name: '비과세', value: result.nonTaxableMonthly, color: '#059669' })
     }
     // 도넛: 비과세는 별도(과세에서 제외된 부분 표시) — 우리는 grossMonthly 기준
     const sumForDonut = segments.reduce((s, x) => s + x.value, 0)
@@ -278,7 +278,7 @@ export default function SalaryClient() {
       {tab === 'main' && result && (
         <>
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(200,255,62,0.30)', background: 'rgba(200,255,62,0.06)' }}>
+            style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
             <div className={styles.heroLabel}>월 실수령액</div>
             <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
               {won(result.netMonthly)}
@@ -334,10 +334,10 @@ export default function SalaryClient() {
                 <span>{won(result.grossMonthly * 12)}</span>
               </div>
               {result.nonTaxableMonthly > 0 && (
-                <div className={styles.deductionRow} style={{ background: 'rgba(62,255,155,0.06)', borderColor: 'rgba(62,255,155,0.30)' }}>
+                <div className={styles.deductionRow} style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.30)' }}>
                   <span>비과세</span>
-                  <span style={{ color: '#3EFF9B' }}>−{won(result.nonTaxableMonthly)}</span>
-                  <span style={{ color: '#3EFF9B' }}>−{won(result.nonTaxableMonthly * 12)}</span>
+                  <span style={{ color: '#059669' }}>−{won(result.nonTaxableMonthly)}</span>
+                  <span style={{ color: '#059669' }}>−{won(result.nonTaxableMonthly * 12)}</span>
                 </div>
               )}
               <div className={styles.deductionRow}>
@@ -393,10 +393,10 @@ export default function SalaryClient() {
             <label className={styles.cardLabel}>한국 직장인 연봉 분포 위치 (참고)</label>
             <div style={{ position: 'relative', paddingBottom: 36, marginTop: 8 }}>
               <div className={styles.percentileBar}>
-                <div className={styles.percentileSeg} style={{ background: '#FF8C3E' }}>하위 10%</div>
-                <div className={styles.percentileSeg} style={{ background: '#FFD700' }}>25%</div>
-                <div className={styles.percentileSeg} style={{ background: '#3EC8FF' }}>50%</div>
-                <div className={styles.percentileSeg} style={{ background: '#3EFF9B' }}>75%</div>
+                <div className={styles.percentileSeg} style={{ background: '#EA580C' }}>하위 10%</div>
+                <div className={styles.percentileSeg} style={{ background: '#CA8A04' }}>25%</div>
+                <div className={styles.percentileSeg} style={{ background: '#0891B2' }}>50%</div>
+                <div className={styles.percentileSeg} style={{ background: '#059669' }}>75%</div>
                 <div className={styles.percentileSeg} style={{ background: 'var(--accent)' }}>상위 10%</div>
               </div>
               <div className={styles.percentileMarker} style={{ left: `${Math.min(98, percentile.percentile)}%`, top: '50%' }} />
@@ -447,9 +447,9 @@ export default function SalaryClient() {
           {reverseResult && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(255,215,0,0.30)', background: 'rgba(255,215,0,0.06)' }}>
+                style={{ borderColor: 'rgba(202,138,4,0.30)', background: 'rgba(202,138,4,0.06)' }}>
                 <div className={styles.heroLabel}>필요 세전 연봉</div>
-                <div className={styles.heroNum} style={{ color: '#FFD700' }}>
+                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
                   {formatEok(reverseResult.grossYearly)}
                 </div>
                 <div className={styles.heroSub}>
@@ -512,9 +512,9 @@ export default function SalaryClient() {
           </div>
 
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(62,200,255,0.30)', background: 'rgba(62,200,255,0.06)' }}>
+            style={{ borderColor: 'rgba(8,145,178,0.30)', background: 'rgba(8,145,178,0.06)' }}>
             <div className={styles.heroLabel}>현재 연봉 — 월 실수령 기준</div>
-            <div className={styles.heroNum} style={{ color: '#3EC8FF' }}>
+            <div className={styles.heroNum} style={{ color: '#0891B2' }}>
               {won(result.netMonthly)}
             </div>
             <div className={styles.heroSub}>
@@ -554,7 +554,7 @@ export default function SalaryClient() {
                 <div key={r.percent} className={styles.deductionRow}>
                   <span>+{r.percent}% 인상 시</span>
                   <span style={{ color: 'var(--accent)' }}>월 +{won(r.monthlyIncreaseNet)}</span>
-                  <span style={{ color: '#FF8C3E' }}>실수령 +{r.netRaisePercent}%</span>
+                  <span style={{ color: '#EA580C' }}>실수령 +{r.netRaisePercent}%</span>
                 </div>
               ))}
             </div>
@@ -617,9 +617,9 @@ export default function SalaryClient() {
           </div>
 
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(255,140,62,0.30)', background: 'rgba(255,140,62,0.06)' }}>
+            style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
             <div className={styles.heroLabel}>체감 시급 (출퇴근 포함)</div>
-            <div className={styles.heroNum} style={{ color: '#FF8C3E' }}>
+            <div className={styles.heroNum} style={{ color: '#EA580C' }}>
               {won(hourly.perceivedHourlyNet)}
             </div>
             <div className={styles.heroSub}>
@@ -636,8 +636,8 @@ export default function SalaryClient() {
               {[
                 { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
                 { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
-                { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#FFD700',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
-                { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#FF8C3E',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
+                { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#CA8A04',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
+                { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
               ].map((row, i) => (
                 <div key={i} className={styles.hourlyRow}>
                   <div>

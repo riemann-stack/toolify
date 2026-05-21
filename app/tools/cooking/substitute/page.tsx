@@ -130,8 +130,8 @@ export default function SubstitutePage() {
             베이킹소다 vs 베이킹파우더 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px', marginBottom: '14px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #FF8C3E', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '14px', color: '#FF8C3E', fontWeight: 700, marginBottom: '8px' }}>🥄 베이킹소다 (NaHCO₃)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #EA580C', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '14px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>🥄 베이킹소다 (NaHCO₃)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
                 <li>단독으로는 작용 X</li>
                 <li>산성 재료(식초·레몬즙·요거트·코코아)와 만나야 부풂</li>
@@ -149,7 +149,7 @@ export default function SubstitutePage() {
               </ul>
             </div>
           </div>
-          <div style={{ background: 'rgba(200,255,62,0.06)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>🔁 대체 공식</p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
               <li>베이킹파우더 1작은술 = <strong style={{ color: 'var(--text)' }}>베이킹소다 1/4작은술 + 산성재료 1/2작은술</strong></li>
@@ -174,8 +174,8 @@ export default function SubstitutePage() {
                 <li><strong style={{ color: 'var(--text)' }}>아쿠아파바 3큰술</strong>: 흰자 대체, 머랭 가능</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #3EC8FF', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '14px', color: '#3EC8FF', fontWeight: 700, marginBottom: '8px' }}>🥛 유제품 대체</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0891B2', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '14px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>🥛 유제품 대체</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>우유 → 두유·아몬드밀크·귀리밀크</strong> (1:1 비율)</li>
                 <li><strong style={{ color: 'var(--text)' }}>버터 → 코코넛 오일</strong> (1:1, 고체 상태)</li>
@@ -193,10 +193,10 @@ export default function SubstitutePage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { n: '쌀가루 + 잔탄검',     r: '쌀가루 1컵 + 잔탄검 1/4작은술', c: '#3EFF9B', d: '글루텐 효과를 잔탄검으로 보완. 가장 무난한 선택.' },
-              { n: '아몬드 가루',         r: '동량 (액체 약간 줄이기)',         c: '#FFB83E', d: '쿠키·케이크에 적합. 너트향, 진한 색.' },
-              { n: '오트밀 가루 + 잔탄검', r: '동량 + 잔탄검 1/4작은술',         c: '#C8FF3E', d: '머핀·쿠키. 진한 식감.' },
-              { n: '시판 글루텐프리 믹스', r: '동량',                            c: '#3EC8FF', d: '가장 안전. 이미 잔탄검·여러 가루 블렌딩됨.' },
+              { n: '쌀가루 + 잔탄검',     r: '쌀가루 1컵 + 잔탄검 1/4작은술', c: '#059669', d: '글루텐 효과를 잔탄검으로 보완. 가장 무난한 선택.' },
+              { n: '아몬드 가루',         r: '동량 (액체 약간 줄이기)',         c: '#D97706', d: '쿠키·케이크에 적합. 너트향, 진한 색.' },
+              { n: '오트밀 가루 + 잔탄검', r: '동량 + 잔탄검 1/4작은술',         c: '#0EA5E9', d: '머핀·쿠키. 진한 식감.' },
+              { n: '시판 글루텐프리 믹스', r: '동량',                            c: '#0891B2', d: '가장 안전. 이미 잔탄검·여러 가루 블렌딩됨.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.c}33`, borderLeft: `3px solid ${g.c}`, borderRadius: '10px', padding: '12px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6, marginBottom: 4 }}>
@@ -304,8 +304,8 @@ export default function SubstitutePage() {
             🚨 알레르기·식이 제한 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 알레르기 환자 주의</p>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 알레르기 환자 주의</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>견과류 알레르기 → 아몬드·헤이즐넛·코코넛 대체재 X</li>
                 <li>글루텐 알레르기 (셀리악) → 시판 글루텐프리 믹스도 교차오염 가능</li>
@@ -314,8 +314,8 @@ export default function SubstitutePage() {
                 <li>콩 알레르기 → 두유·미소·간장 X</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(62,200,255,0.04)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>✅ 식이 제한 대체 가이드</p>
+            <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>✅ 식이 제한 대체 가이드</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>견과류 X: 해바라기씨·호박씨로 대체</li>
                 <li>글루텐프리: 쌀가루·아몬드 가루·시판 GF 믹스</li>
@@ -360,8 +360,8 @@ export default function SubstitutePage() {
         </div>
 
         {/* ── 9. 면책 (NEW) ── */}
-        <div style={{ background: 'rgba(255,140,62,0.04)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 10 }}>⚖️ 면책 조항</p>
+        <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '16px 20px' }}>
+          <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>⚖️ 면책 조항</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 식재료 대체 계산기는 <strong style={{ color: 'var(--text)' }}>일반 요리 가이드</strong>입니다. 영양 자문 도구가 아닙니다.
           </p>
@@ -373,9 +373,9 @@ export default function SubstitutePage() {
           </ul>
           <p style={{ fontSize: 12.5, color: 'var(--text)', fontWeight: 600, marginBottom: 6 }}>도움 받기:</p>
           <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
-            <li>식약처 식품안전정보: <strong style={{ color: '#FF8C3E' }}>1399</strong></li>
+            <li>식약처 식품안전정보: <strong style={{ color: '#EA580C' }}>1399</strong></li>
             <li>식품안전나라: foodsafetykorea.go.kr</li>
-            <li>알레르기 응급: <strong style={{ color: '#FF8C3E' }}>119</strong></li>
+            <li>알레르기 응급: <strong style={{ color: '#EA580C' }}>119</strong></li>
           </ul>
         </div>
 

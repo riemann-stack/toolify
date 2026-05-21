@@ -37,7 +37,7 @@ export default function CapoPage() {
             쉬운 코드 모양을 유지하면서 다른 키로 이조할 수 있어 기타 편곡의 핵심 도구입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>카포 계산 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
               실제 울리는 키 = 연주 코드 + 카포 프렛 수(반음)
@@ -89,11 +89,11 @@ export default function CapoPage() {
                   { fret: '5프렛', chord: 'G',  key: 'C', diff: '✨ 쉬움',          badge: 'rec' },
                   { fret: '7프렛', chord: 'F',  key: 'C', diff: '어려움 (바레)',    badge: null },
                 ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: row.badge === 'rec' ? 'rgba(62,255,155,0.05)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: row.badge === 'rec' ? 'rgba(16,185,129,0.05)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row.fret}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row.chord}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{row.key}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.badge === 'rec' ? '#3EFF9B' : 'var(--muted)' }}>{row.diff}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.badge === 'rec' ? '#059669' : 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
               </tbody>
@@ -107,8 +107,8 @@ export default function CapoPage() {
             오픈 코드 vs 바레 코드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#3EFF9B', fontWeight: 700, marginBottom: '8px' }}>🟢 오픈 코드 (쉬움)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>🟢 오픈 코드 (쉬움)</p>
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                 C · G · D · Em · Am · A · E · Dm
               </p>
@@ -117,8 +117,8 @@ export default function CapoPage() {
                 입문자가 가장 먼저 배우는 코드이며 풍부한 울림이 특징입니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '8px' }}>🔴 바레 코드 (어려움)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>🔴 바레 코드 (어려움)</p>
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                 F · B♭ · E♭ · A♭ · D♭ · G♭ · B
               </p>
@@ -158,7 +158,7 @@ export default function CapoPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: '15px' }}>{row.k}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.fret}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.play}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.play}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
@@ -181,9 +181,9 @@ export default function CapoPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { role: 'I (토닉, T)',       color: '#C8FF3E', desc: '곡의 중심. 시작·끝·안정감을 담당' },
-              { role: 'IV (서브도미넌트, SD)', color: '#3EC8FF', desc: '긴장을 만들며 V로 이어짐' },
-              { role: 'V (도미넌트, D)',   color: '#FF8C3E', desc: '가장 강한 긴장. I로 해결' },
+              { role: 'I (토닉, T)',       color: '#0EA5E9', desc: '곡의 중심. 시작·끝·안정감을 담당' },
+              { role: 'IV (서브도미넌트, SD)', color: '#0891B2', desc: '긴장을 만들며 V로 이어짐' },
+              { role: 'V (도미넌트, D)',   color: '#EA580C', desc: '가장 강한 긴장. I로 해결' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: item.color, fontWeight: 700, marginBottom: '4px' }}>{item.role}</p>

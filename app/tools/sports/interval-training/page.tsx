@@ -39,11 +39,11 @@ export default function IntervalTrainingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { i: 'E', n: 'Easy',       c: '#3EFF9B',     d: '회복·기초 체력 (마라톤 페이스 +1~2분/km)' },
+              { i: 'E', n: 'Easy',       c: '#059669',     d: '회복·기초 체력 (마라톤 페이스 +1~2분/km)' },
               { i: 'M', n: 'Marathon',   c: '#9B59B6',     d: '마라톤 페이스 (풀코스 목표 페이스)' },
-              { i: 'T', n: 'Threshold',  c: '#3EC8FF',     d: '젖산 역치 (하프 페이스 부근)' },
+              { i: 'T', n: 'Threshold',  c: '#0891B2',     d: '젖산 역치 (하프 페이스 부근)' },
               { i: 'I', n: 'Interval',   c: 'var(--accent)', d: 'V̇O2 최대 (5km 페이스)' },
-              { i: 'R', n: 'Repetition', c: '#FF6B6B',     d: '스피드 (1마일 페이스)' },
+              { i: 'R', n: 'Repetition', c: '#DC2626',     d: '스피드 (1마일 페이스)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 4 }}>
@@ -110,10 +110,10 @@ export default function IntervalTrainingPage() {
           </div>
           <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
             {[
-              { i: '3:00/800m', m: '3:00:00 풀코스', c: '#3EFF9B' },
+              { i: '3:00/800m', m: '3:00:00 풀코스', c: '#059669' },
               { i: '3:30/800m', m: '3:30:00 풀코스', c: '#FFD93E' },
-              { i: '4:00/800m', m: '4:00:00 풀코스', c: '#FF8C3E' },
-              { i: '4:30/800m', m: '4:30:00 풀코스', c: '#FF6B6B' },
+              { i: '4:00/800m', m: '4:00:00 풀코스', c: '#EA580C' },
+              { i: '4:30/800m', m: '4:30:00 풀코스', c: '#DC2626' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: r.c, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.i}</p>
@@ -122,8 +122,8 @@ export default function IntervalTrainingPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,140,62,0.06)',
-            border: '2px solid rgba(255,140,62,0.3)',
+            background: 'rgba(234,88,12,0.06)',
+            border: '2px solid rgba(234,88,12,0.3)',
             borderRadius: 12,
             padding: '14px 18px',
             fontSize: 12.5,
@@ -131,7 +131,7 @@ export default function IntervalTrainingPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#FF8C3E' }}>주의:</strong> 정확한 공식이 아닌 참고 지표입니다.
+            ⚠️ <strong style={{ color: '#EA580C' }}>주의:</strong> 정확한 공식이 아닌 참고 지표입니다.
             야소 800은 <strong>스피드만 측정</strong>하므로 지구력 평가는 별도 필요합니다.
             실제 풀코스는 장거리주·페이스 유지력에 따라 상당한 차이가 발생합니다.
           </div>
@@ -179,9 +179,9 @@ export default function IntervalTrainingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'R 페이스 (스피드)', c: '#FF6B6B', time: '운동 시간의 1.5~2배', dist: '운동 거리의 1배' },
+              { t: 'R 페이스 (스피드)', c: '#DC2626', time: '운동 시간의 1.5~2배', dist: '운동 거리의 1배' },
               { t: 'I 페이스 (5km)',    c: 'var(--accent)', time: '운동 시간과 동일', dist: '운동 거리의 50%' },
-              { t: 'T 페이스 (역치)',   c: '#3EC8FF', time: '운동 시간의 25~50%', dist: '운동 거리의 25%' },
+              { t: 'T 페이스 (역치)',   c: '#0891B2', time: '운동 시간의 25~50%', dist: '운동 거리의 25%' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -234,8 +234,8 @@ export default function IntervalTrainingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '📅 훈련 빈도', c: '#FFD93E', items: ['초보: 주 1회', '중급: 주 1~2회', '고급: 주 2~3회'] },
-              { t: '🚫 금기 사항',  c: '#FF6B6B', items: ['주간 거리 15% 이상 고강도 X', '전날 장거리주·고강도 후 X', '통증·이상 시 즉시 중단', '부상 회복 직후 점진적 ↑'] },
-              { t: '✅ 준비 운동',  c: '#3EFF9B', items: ['워밍업 1.5~3km 가벼운 조깅', '동적 스트레칭 5~10분', '인터벌 후 쿨다운 1.5~3km'] },
+              { t: '🚫 금기 사항',  c: '#DC2626', items: ['주간 거리 15% 이상 고강도 X', '전날 장거리주·고강도 후 X', '통증·이상 시 즉시 중단', '부상 회복 직후 점진적 ↑'] },
+              { t: '✅ 준비 운동',  c: '#059669', items: ['워밍업 1.5~3km 가벼운 조깅', '동적 스트레칭 5~10분', '인터벌 후 쿨다운 1.5~3km'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -303,7 +303,7 @@ export default function IntervalTrainingPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: '#FFD93E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.track}</td>
                   </tr>
                 ))}

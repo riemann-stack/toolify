@@ -137,10 +137,10 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
   → 그 사이:     부드럽게 변화`}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
-            <span style={{ background: 'rgba(62,255,155,0.15)', color: '#3EFF9B', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Chrome 79+</span>
-            <span style={{ background: 'rgba(62,255,155,0.15)', color: '#3EFF9B', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Firefox 75+</span>
-            <span style={{ background: 'rgba(62,255,155,0.15)', color: '#3EFF9B', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
-            <span style={{ background: 'rgba(255,107,107,0.15)', color: '#FF6B6B', border: '1px solid rgba(255,107,107,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Chrome 79+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Firefox 75+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
+            <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
           </div>
         </div>
 
@@ -152,8 +152,8 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>✨ 최신 방법 (aspect-ratio)</p>
               <div style={codeBox}>{`.box { aspect-ratio: 16 / 9; }`}</div>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-                <strong style={{ color: '#3EFF9B' }}>장점</strong>: 직관적, 코드 단순, 자식 배치 자유<br />
-                <strong style={{ color: '#FF6B6B' }}>단점</strong>: IE 미지원
+                <strong style={{ color: '#059669' }}>장점</strong>: 직관적, 코드 단순, 자식 배치 자유<br />
+                <strong style={{ color: '#DC2626' }}>단점</strong>: IE 미지원
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
@@ -167,8 +167,8 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
   inset: 0;
 }`}</div>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-                <strong style={{ color: '#3EFF9B' }}>장점</strong>: 모든 브라우저 지원<br />
-                <strong style={{ color: '#FF6B6B' }}>단점</strong>: 코드 복잡, absolute 포지셔닝 필요
+                <strong style={{ color: '#059669' }}>장점</strong>: 모든 브라우저 지원<br />
+                <strong style={{ color: '#DC2626' }}>단점</strong>: 코드 복잡, absolute 포지셔닝 필요
               </p>
             </div>
           </div>

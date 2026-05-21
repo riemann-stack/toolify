@@ -9,7 +9,7 @@
   position: sticky;
   top: 60px;
   z-index: 10;
-  background: rgba(11, 11, 11, 0.92);
+  background: rgba(240, 247, 255, 0.92);
   backdrop-filter: saturate(150%) blur(8px);
   -webkit-backdrop-filter: saturate(150%) blur(8px);
   border-bottom: 1px solid var(--border);
@@ -184,8 +184,8 @@
   line-height: 1.4;
   border: 1px solid;
 }
-.badgeHot { background: rgba(255, 107, 107, 0.15); color: #FF6B6B; border-color: rgba(255, 107, 107, 0.3); }
-.badgeNew { background: rgba(200, 255, 62, 0.12); color: var(--accent); border-color: rgba(200, 255, 62, 0.3); }
+.badgeHot { background: rgba(220, 38, 38, 0.15); color: #DC2626; border-color: rgba(220, 38, 38, 0.3); }
+.badgeNew { background: rgba(14, 165, 233, 0.12); color: var(--accent); border-color: rgba(14, 165, 233, 0.3); }
 
 /* 반응형 — 더 넉넉한 breakpoint */
 @media (max-width: 900px) {

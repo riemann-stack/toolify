@@ -50,15 +50,15 @@ export default function CircuitSimulatorPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: '#3EFFD0' }}>V</span> = <span style={{ color: '#FFD700' }}>I</span> × <span style={{ color: '#FF8C3E' }}>R</span></div>
+            <div><span style={{ color: '#0D9488' }}>V</span> = <span style={{ color: '#CA8A04' }}>I</span> × <span style={{ color: '#EA580C' }}>R</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>전압(V) = 전류(A) × 저항(Ω)</div>
             <div></div>
-            <div><span style={{ color: '#FFD700' }}>I</span> = V / R   <span style={{ color: 'var(--muted)' }}>(전류 = 전압 ÷ 저항)</span></div>
-            <div><span style={{ color: '#FF8C3E' }}>R</span> = V / I   <span style={{ color: 'var(--muted)' }}>(저항 = 전압 ÷ 전류)</span></div>
+            <div><span style={{ color: '#CA8A04' }}>I</span> = V / R   <span style={{ color: 'var(--muted)' }}>(전류 = 전압 ÷ 저항)</span></div>
+            <div><span style={{ color: '#EA580C' }}>R</span> = V / I   <span style={{ color: 'var(--muted)' }}>(저항 = 전압 ÷ 전류)</span></div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 9V 건전지 + 100Ω 저항 →
-            전류 = <strong style={{ color: '#FFD700' }}>9 / 100 = 0.09A = 90mA</strong>
+            전류 = <strong style={{ color: '#CA8A04' }}>9 / 100 = 0.09A = 90mA</strong>
           </div>
         </div>
 
@@ -68,22 +68,22 @@ export default function CircuitSimulatorPage() {
             직렬·병렬 회로 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>━ 직렬 (Series)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>━ 직렬 (Series)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>저항이 한 줄로 연결</li>
-                <li>모든 저항에 <strong style={{ color: '#FFD700' }}>같은 전류</strong></li>
+                <li>모든 저항에 <strong style={{ color: '#CA8A04' }}>같은 전류</strong></li>
                 <li>전압이 각 저항에 분배 (V = V₁ + V₂ + ...)</li>
                 <li>합성 저항 = R₁ + R₂ + ... (커짐)</li>
                 <li>한 곳 끊어지면 전체 작동 X</li>
                 <li>활용: 분압 회로·LED 전류 제한</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FF8C3E', fontWeight: 700, marginBottom: 8 }}>▥ 병렬 (Parallel)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>▥ 병렬 (Parallel)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>저항이 나란히 연결</li>
-                <li>모든 저항에 <strong style={{ color: '#3EFFD0' }}>같은 전압</strong></li>
+                <li>모든 저항에 <strong style={{ color: '#0D9488' }}>같은 전압</strong></li>
                 <li>전류가 각 저항으로 분배 (I = I₁ + I₂ + ...)</li>
                 <li>합성 저항 = 1/(1/R₁ + 1/R₂ + ...) (작아짐)</li>
                 <li>한 곳 끊어져도 다른 회로 작동</li>
@@ -99,15 +99,15 @@ export default function CircuitSimulatorPage() {
             키르히호프 법칙 (Kirchhoff&apos;s Laws)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(62,255,155,0.05)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>KVL — 전압 법칙</p>
+            <div style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>KVL — 전압 법칙</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 &quot;닫힌 회로에서 모든 전압의 합 = 0&quot;<br />
                 직렬 회로: <strong style={{ color: 'var(--text)' }}>V_전원 = V_R₁ + V_R₂ + ...</strong>
               </p>
             </div>
-            <div style={{ background: 'rgba(62,255,155,0.05)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>KCL — 전류 법칙</p>
+            <div style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>KCL — 전류 법칙</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 &quot;노드에 들어가는 전류 = 나오는 전류&quot;<br />
                 병렬 회로: <strong style={{ color: 'var(--text)' }}>I_전체 = I_R₁ + I_R₂ + ...</strong>
@@ -115,8 +115,8 @@ export default function CircuitSimulatorPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(62,200,255,0.05)',
-            border: '1px solid rgba(62,200,255,0.30)',
+            background: 'rgba(8,145,178,0.05)',
+            border: '1px solid rgba(8,145,178,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -124,7 +124,7 @@ export default function CircuitSimulatorPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#3EC8FF' }}>핵심:</strong> 옴의 법칙(V=IR)과 키르히호프 법칙을 결합하면 <strong>모든 회로 풀이가 가능</strong>합니다.
+            💡 <strong style={{ color: '#0891B2' }}>핵심:</strong> 옴의 법칙(V=IR)과 키르히호프 법칙을 결합하면 <strong>모든 회로 풀이가 가능</strong>합니다.
             본 시뮬레이터의 학습 모드 탭에서 단계별 적용 과정을 확인하세요.
           </div>
         </div>
@@ -151,9 +151,9 @@ export default function CircuitSimulatorPage() {
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>검증 (12V, 300Ω 회로):</strong>
-            <br />· P = V × I = 12 × 0.04 = <strong style={{ color: '#FF6B6B' }}>0.48W</strong>
-            <br />· P = I²R = 0.04² × 300 = <strong style={{ color: '#FF6B6B' }}>0.48W</strong>
-            <br />· P = V²/R = 144 / 300 = <strong style={{ color: '#FF6B6B' }}>0.48W</strong>
+            <br />· P = V × I = 12 × 0.04 = <strong style={{ color: '#DC2626' }}>0.48W</strong>
+            <br />· P = I²R = 0.04² × 300 = <strong style={{ color: '#DC2626' }}>0.48W</strong>
+            <br />· P = V²/R = 144 / 300 = <strong style={{ color: '#DC2626' }}>0.48W</strong>
           </div>
         </div>
 
@@ -179,7 +179,7 @@ export default function CircuitSimulatorPage() {
                   { s: '병렬 (같은 값 N개)', f: 'R = R / N',                                  ex: '100Ω 4개 = 25Ω' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FF8C3E', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: '#EA580C', fontWeight: 700 }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{r.f}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{r.ex}</td>
                   </tr>
@@ -195,8 +195,8 @@ export default function CircuitSimulatorPage() {
             LED 전류 제한 저항 — DIY 응용
           </h2>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.30)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.30)',
             borderRadius: 12,
             padding: '14px 18px',
             fontSize: 13,
@@ -204,7 +204,7 @@ export default function CircuitSimulatorPage() {
             lineHeight: 1.85,
             marginBottom: 12,
           }}>
-            ⚠️ <strong style={{ color: '#FF8C8C' }}>경고:</strong> LED를 전원에 직접 연결하면 즉시 망가집니다.
+            ⚠️ <strong style={{ color: '#DC2626' }}>경고:</strong> LED를 전원에 직접 연결하면 즉시 망가집니다.
             반드시 <strong>전류 제한 저항을 직렬로 연결</strong>해야 합니다.
           </div>
           <div style={{
@@ -222,7 +222,7 @@ export default function CircuitSimulatorPage() {
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 예시 (5V + 빨간 LED)</span></div>
             <div>V_LED = 2V, I_LED = 20mA</div>
-            <div>R = (5 − 2) / 0.02 = <span style={{ color: '#FFD700' }}>150Ω</span></div>
+            <div>R = (5 − 2) / 0.02 = <span style={{ color: '#CA8A04' }}>150Ω</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>안전 마진을 위해 220Ω 권장 (전류 약간 낮아짐 → LED 수명 ↑)</div>
           </div>
           <div style={{ overflowX: 'auto', marginTop: 12 }}>
@@ -245,8 +245,8 @@ export default function CircuitSimulatorPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.b}</td>
                   </tr>
                 ))}
               </tbody>
@@ -271,8 +271,8 @@ export default function CircuitSimulatorPage() {
               { n: 'STEP 5', t: '전력 계산',     d: 'P = V×I 또는 I²R 또는 V²/R' },
               { n: 'STEP 6', t: 'KVL·KCL 검증', d: '합산 결과 = 입력값 확인' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #3EFFD0', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#3EFFD0', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#0D9488', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>

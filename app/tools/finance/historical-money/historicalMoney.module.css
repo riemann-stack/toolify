@@ -1,0 +1,449 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.cardHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── 방향 토글 ── */
+.dirRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+@media (max-width: 540px) { .dirRow { grid-template-columns: 1fr; } }
+.dirBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+@media (hover: hover) { .dirBtn:hover { color: var(--text); border-color: var(--border-hover); } }
+.dirBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── 입력 그리드 ── */
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 640px) { .inputGrid { grid-template-columns: 1fr; gap: 14px; } }
+.inputField { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fieldLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.fieldHint {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+  margin: 4px 0 2px;
+}
+.sliderHead {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.yearInput {
+  flex: 0 0 90px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.yearInput::-webkit-outer-spin-button,
+.yearInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.yearInput:focus { border-color: var(--accent); }
+.sliderHead span {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.amountRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.amountInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.amountInput::-webkit-outer-spin-button,
+.amountInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.amountInput:focus { border-color: var(--accent); }
+.amountUnit {
+  font-size: 16px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.presetRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.presetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+@media (hover: hover) { .presetBtn:hover { color: var(--text); border-color: var(--border-hover); } }
+.presetBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── 히어로 ── */
+.hero {
+  background: linear-gradient(140deg, rgba(16,185,129,0.14), rgba(14,165,233,0.14));
+  border: 1px solid rgba(16,185,129,0.30);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1.4fr;
+  align-items: center;
+  gap: 18px;
+}
+@media (max-width: 640px) {
+  .hero { grid-template-columns: 1fr; gap: 8px; padding: 18px 16px; text-align: center; }
+  .heroArrow { transform: rotate(90deg); }
+}
+.heroIn, .heroOut { min-width: 0; }
+.heroLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 6px;
+}
+.heroSmall {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.heroSmall strong { color: var(--accent); }
+.heroSmall small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 4px;
+}
+.heroArrow {
+  font-size: 28px;
+  color: var(--muted);
+  font-weight: 800;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.heroBig {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(36px, 9vw, 56px);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
+}
+.heroUnit {
+  font-size: 0.55em;
+  color: var(--text);
+  font-weight: 700;
+  margin-left: 6px;
+}
+.heroNote {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroNote strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.factorAccent { color: var(--accent); }
+
+/* ── 5년 단위 시계열 ── */
+.timelineWrap { display: flex; flex-direction: column; gap: 4px; }
+.tlRow {
+  display: grid;
+  grid-template-columns: 60px 1fr 110px;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (max-width: 480px) {
+  .tlRow { grid-template-columns: 50px 1fr 90px; gap: 8px; }
+}
+.tlYear {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.tlBarTrack {
+  display: block;
+  width: 100%;
+  height: 14px;
+  background: var(--bg3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.tlBarFill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(16,185,129,0.4), var(--accent));
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+.tlVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tlVal small {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+/* ── 시대별 가격 비교 ── */
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.priceCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.priceHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.priceEmoji { font-size: 20px; line-height: 1; }
+.priceName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.priceRow {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.priceRow > div { min-width: 0; }
+.priceYear {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.priceVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.priceVal small {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-left: 2px;
+}
+.priceConv {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.priceArrow {
+  font-size: 16px;
+  color: var(--muted);
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+}
+.priceNote {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.5;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+
+/* ── 화폐개혁 타임라인 ── */
+.timeline { display: flex; flex-direction: column; gap: 14px; }
+.eraBand {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 4px;
+  background: var(--bg3);
+  padding: 6px;
+  border-radius: 12px;
+}
+.eraBox {
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.era_won_old { background: rgba(147,51,234,0.18); border: 1px solid rgba(147,51,234,0.30); }
+.era_hwan    { background: rgba(217,119,6,0.18);  border: 1px solid rgba(217,119,6,0.30); }
+.era_won     { background: rgba(16,185,129,0.18);  border: 1px solid rgba(16,185,129,0.30); }
+.eraLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.era_won_old .eraLabel { color: #9333EA; }
+.era_hwan .eraLabel    { color: #D97706; }
+.era_won .eraLabel     { color: #059669; }
+.eraYears {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.reformList { display: flex; flex-direction: column; gap: 10px; }
+.reformItem {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+@media (max-width: 540px) {
+  .reformItem { grid-template-columns: 1fr; gap: 4px; }
+}
+.reformDate {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.reformTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.reformTitle strong {
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.reformRatio {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--bg2);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.reformDesc {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif;
+}

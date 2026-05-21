@@ -288,7 +288,7 @@ export default function UnitPriceClient() {
                 return (
                   <p key={c.product.id} className={s.effectiveItem}>
                     <strong>{c.product.id} {c.product.name || '상품'}</strong> ({c.product.consumption}% 사용 시) →
-                    실질 <strong style={{ color: '#FF8C3E' }}>{fmt1(c.effectiveUnitPrice)}원/{base.label.replace('당', '')}</strong>
+                    실질 <strong style={{ color: '#EA580C' }}>{fmt1(c.effectiveUnitPrice)}원/{base.label.replace('당', '')}</strong>
                     <span style={{ color: 'var(--muted)' }}> (표시 단가의 {fmt1(100 / c.product.consumption)}배)</span>
                   </p>
                 )

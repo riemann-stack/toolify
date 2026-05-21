@@ -19,12 +19,12 @@ const COSMIC_SECOND_REAL_YEARS = COSMIC_MINUTE_REAL_YEARS / 60 // 약 437.5년
 type CatKey = 'cosmic' | 'solar' | 'earth' | 'life' | 'human' | 'civilization' | 'now'
 const CATEGORIES: Record<CatKey, { name: string; color: string; cls: string; borderCls: string }> = {
   cosmic:       { name: '우주 진화',  color: '#9B59B6', cls: s.catCosmic,       borderCls: s.borderCosmic },
-  solar:        { name: '태양계',     color: '#FFD700', cls: s.catSolar,        borderCls: s.borderSolar },
-  earth:        { name: '지구',       color: '#3EC8FF', cls: s.catEarth,        borderCls: s.borderEarth },
-  life:         { name: '생명·진화',  color: '#3EFF9B', cls: s.catLife,         borderCls: s.borderLife },
-  human:        { name: '인류 진화',  color: '#FF8C3E', cls: s.catHuman,        borderCls: s.borderHuman },
-  civilization: { name: '문명',       color: '#FF6B6B', cls: s.catCivilization, borderCls: s.borderCivilization },
-  now:          { name: '현재',       color: '#3EFFD0', cls: s.catNow,          borderCls: s.borderNow },
+  solar:        { name: '태양계',     color: '#CA8A04', cls: s.catSolar,        borderCls: s.borderSolar },
+  earth:        { name: '지구',       color: '#0891B2', cls: s.catEarth,        borderCls: s.borderEarth },
+  life:         { name: '생명·진화',  color: '#059669', cls: s.catLife,         borderCls: s.borderLife },
+  human:        { name: '인류 진화',  color: '#EA580C', cls: s.catHuman,        borderCls: s.borderHuman },
+  civilization: { name: '문명',       color: '#DC2626', cls: s.catCivilization, borderCls: s.borderCivilization },
+  now:          { name: '현재',       color: '#0D9488', cls: s.catNow,          borderCls: s.borderNow },
 }
 
 // ─────────────────────────────────────────────
@@ -177,10 +177,10 @@ export default function CosmicCalendarClient() {
     // 우주 1년 = 100% 기준, 로그 스케일로 시각화
     const items = [
       { label: '우주 1년',       cosmicSec: 365.25 * 24 * 3600,                color: '#9B59B6', desc: '138억 년' },
-      { label: '공룡 시대',      cosmicSec: (165_000_000 / COSMIC_SECOND_REAL_YEARS), color: '#FF8C3E', desc: '약 4.4일' },
-      { label: '인류 등장',      cosmicSec: (300_000   / COSMIC_SECOND_REAL_YEARS),   color: '#FFD700', desc: '약 11.4분' },
-      { label: '인류 문명',      cosmicSec: (12_000    / COSMIC_SECOND_REAL_YEARS),   color: '#3EFF9B', desc: '약 27.5초' },
-      { label: '내 나이',        cosmicSec: myLife.cosmicSeconds,             color: '#3EFFD0', desc: `약 ${round(myLife.cosmicSeconds, 3)}초` },
+      { label: '공룡 시대',      cosmicSec: (165_000_000 / COSMIC_SECOND_REAL_YEARS), color: '#EA580C', desc: '약 4.4일' },
+      { label: '인류 등장',      cosmicSec: (300_000   / COSMIC_SECOND_REAL_YEARS),   color: '#CA8A04', desc: '약 11.4분' },
+      { label: '인류 문명',      cosmicSec: (12_000    / COSMIC_SECOND_REAL_YEARS),   color: '#059669', desc: '약 27.5초' },
+      { label: '내 나이',        cosmicSec: myLife.cosmicSeconds,             color: '#0D9488', desc: `약 ${round(myLife.cosmicSeconds, 3)}초` },
     ]
     const max = items[0].cosmicSec
     return items.map(it => ({
@@ -249,10 +249,10 @@ export default function CosmicCalendarClient() {
         <defs>
           <linearGradient id="cosmicLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#9B59B6" />
-            <stop offset="40%"  stopColor="#FFD700" />
-            <stop offset="65%"  stopColor="#3EC8FF" />
-            <stop offset="85%"  stopColor="#3EFF9B" />
-            <stop offset="100%" stopColor="#3EFFD0" />
+            <stop offset="40%"  stopColor="#CA8A04" />
+            <stop offset="65%"  stopColor="#0891B2" />
+            <stop offset="85%"  stopColor="#059669" />
+            <stop offset="100%" stopColor="#0D9488" />
           </linearGradient>
         </defs>
 
@@ -292,8 +292,8 @@ export default function CosmicCalendarClient() {
         })}
 
         {/* "현재 (= 인류)" 마커 — 우측 끝 */}
-        <circle cx={W - padR} cy={lineY} r="7" fill="#3EFFD0" stroke="#0a0a2e" strokeWidth="2" />
-        <text x={W - padR - 4} y={lineY - 16} textAnchor="end" fontSize="11" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+        <circle cx={W - padR} cy={lineY} r="7" fill="#0D9488" stroke="#0a0a2e" strokeWidth="2" />
+        <text x={W - padR - 4} y={lineY - 16} textAnchor="end" fontSize="11" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
           🧍 현재
         </text>
       </svg>
@@ -375,7 +375,7 @@ export default function CosmicCalendarClient() {
       <svg viewBox={`0 0 ${size} ${size}`} className={s.clockSvg} width={size} height={size} aria-hidden="true">
         <defs>
           <radialGradient id="clockBg" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(62,255,208,0.15)" />
+            <stop offset="0%" stopColor="rgba(13,148,136,0.15)" />
             <stop offset="100%" stopColor="rgba(155,89,182,0.05)" />
           </radialGradient>
         </defs>
@@ -388,7 +388,7 @@ export default function CosmicCalendarClient() {
         {zoomLevel === '24h' && (
           <path
             d={describeArc(cx, cy, r - 4, ((23 * 3600) / (24 * 3600)) * 360 - 90, 270)}
-            fill="none" stroke="#3EFFD0" strokeWidth="3" opacity="0.75"
+            fill="none" stroke="#0D9488" strokeWidth="3" opacity="0.75"
           />
         )}
 
@@ -437,11 +437,11 @@ export default function CosmicCalendarClient() {
         })}
 
         {/* 중앙 */}
-        <circle cx={cx} cy={cy} r={centerR} fill="#3EFFD0" />
+        <circle cx={cx} cy={cy} r={centerR} fill="#0D9488" />
         <text x={cx} y={cy - r * 0.55} textAnchor="middle" fontSize="11" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} letterSpacing="0.06em">
           12월 31일
         </text>
-        <text x={cx} y={cy + r * 0.55} textAnchor="middle" fontSize="13" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+        <text x={cx} y={cy + r * 0.55} textAnchor="middle" fontSize="13" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
           {zoomLevel === '24h' ? '24h' : zoomLevel === 'lastHour' ? '23~24시' : '마지막 30초'}
         </text>
       </svg>
@@ -593,14 +593,14 @@ export default function CosmicCalendarClient() {
       {tab === 'year' && (
         <>
           <div className={s.spaceBg}>
-            <p style={{ textAlign: 'center', color: '#3EFFD0', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 12 }}>
+            <p style={{ textAlign: 'center', color: '#0D9488', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 12 }}>
               🌌 우주 138억 년 = 1년
             </p>
             <div className={s.yearTimelineWrap}>
               {yearTimelineSvg}
             </div>
             <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 12, lineHeight: 1.7 }}>
-              왼쪽 끝: 빅뱅(1월 1일) · 오른쪽 끝: <strong style={{ color: '#3EFFD0' }}>현재(12월 31일 24:00)</strong>
+              왼쪽 끝: 빅뱅(1월 1일) · 오른쪽 끝: <strong style={{ color: '#0D9488' }}>현재(12월 31일 24:00)</strong>
             </p>
           </div>
 
@@ -837,7 +837,7 @@ export default function CosmicCalendarClient() {
 
               {/* 해석 카드 */}
               <div className={s.saganQuote}>
-                {userName ? userName + '님의' : '당신의'} 인생은 우주 1년에서 약 <strong style={{ color: '#3EFFD0', fontStyle: 'normal' }}>{round(myLife.cosmicSeconds, 3)}초</strong>입니다.
+                {userName ? userName + '님의' : '당신의'} 인생은 우주 1년에서 약 <strong style={{ color: '#0D9488', fontStyle: 'normal' }}>{round(myLife.cosmicSeconds, 3)}초</strong>입니다.
                 하지만 그 짧은 시간 동안 {userName ? userName + '님은' : '당신은'} 별을 보고, 사랑하고, 생각할 수 있습니다. 우주 138억 년 중 단 한 번뿐인 시간입니다.
                 <span className={s.saganAttribution}>— 칼 세이건의 코스믹 관점</span>
               </div>
@@ -943,7 +943,7 @@ export default function CosmicCalendarClient() {
             </div>
             {compressionMode === '1km' && (
               <p style={{ marginTop: 12, fontSize: 13, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.85 }}>
-                💡 우주 1km 산책 중 <strong style={{ color: '#FF8C8C' }}>마지막 1mm</strong> 안에 인류 모든 문명이 들어갑니다.
+                💡 우주 1km 산책 중 <strong style={{ color: '#DC2626' }}>마지막 1mm</strong> 안에 인류 모든 문명이 들어갑니다.
               </p>
             )}
           </div>

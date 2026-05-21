@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
@@ -44,7 +44,7 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.numInput:focus { border-color: rgba(200,255,62,0.5); }
+.numInput:focus { border-color: rgba(14,165,233,0.5); }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
 .numInput:disabled { opacity: 0.55; background: var(--bg2); }
 .unit { font-size: 13px; color: var(--muted); flex-shrink: 0; }
@@ -59,7 +59,7 @@
 }@media (hover: hover) {
   .selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.selectBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.selectBtnActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
 
 /* ── 프리셋 ── */
 .presetRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -80,11 +80,11 @@
 }@media (hover: hover) {
   .modeTab:hover { color: var(--text); }
 }
-.modeTabActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.modeTabActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
 
 /* ── 결과 카드 ── */
 .resultCard {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px; padding: 20px 22px; animation: fadeUp 0.25s ease;
 }
 .heroRow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px; margin-bottom: 16px; }
@@ -106,7 +106,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.copyBtnDone { border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
 
 /* ── 비율 뱃지 ── */
 .ratioBadge {
@@ -114,7 +114,7 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   padding: 5px 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text);
 }
-.ratioBadgeAccent { color: var(--accent); border-color: rgba(200,255,62,0.3); }
+.ratioBadgeAccent { color: var(--accent); border-color: rgba(14,165,233,0.3); }
 
 /* ── 차이(%) 표시 ── */
 .diffRow {
@@ -153,12 +153,12 @@
 .spiralLightBg { --spiral-bg: #F0EFE8; }
 
 .downloadBtn {
-  background: var(--accent-dim); border: 1px solid rgba(200,255,62,0.4); border-radius: 10px;
+  background: var(--accent-dim); border: 1px solid rgba(14,165,233,0.4); border-radius: 10px;
   padding: 9px 16px; font-size: 13px; color: var(--accent);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .downloadBtn:hover { background: rgba(200,255,62,0.22); }
+  .downloadBtn:hover { background: rgba(14,165,233,0.22); }
 }
 
 /* ── 공통 ── */

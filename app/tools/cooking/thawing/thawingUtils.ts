@@ -154,16 +154,16 @@ export function evaluateRisk(input: RiskInput): RiskResult {
   let levelColor: string
   let recommendation: string
   if (score === 0) {
-    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#3EFF9B'
+    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
     recommendation = '안전한 해동 조건입니다. 식품 안전 가이드를 따라 진행하세요.'
   } else if (score <= 2) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#FFD700'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#CA8A04'
     recommendation = '약간의 주의가 필요합니다. 권장 사항을 따라 진행하세요.'
   } else if (score <= 4) {
-    level = 'warning'; levelLabel = '🟠 위험'; levelColor = '#FF8C3E'
+    level = 'warning'; levelLabel = '🟠 위험'; levelColor = '#EA580C'
     recommendation = '위험 요소가 있습니다. 다른 해동 방법 (냉장 또는 찬물) 검토를 권장합니다.'
   } else {
-    level = 'danger'; levelLabel = '🔴 매우 위험'; levelColor = '#FF6B6B'
+    level = 'danger'; levelLabel = '🔴 매우 위험'; levelColor = '#DC2626'
     recommendation = '매우 위험. 냉장 또는 찬물 해동으로 변경 강력 권장. 의심스러우면 폐기 권장.'
   }
 

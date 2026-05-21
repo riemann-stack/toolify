@@ -39,8 +39,8 @@ export default function LifeTimePage() {
             이 도구를 만든 이유
           </h2>
           <div style={{
-            background: 'rgba(62,255,155,0.05)',
-            border: '1px solid rgba(62,255,155,0.25)',
+            background: 'rgba(16,185,129,0.05)',
+            border: '1px solid rgba(16,185,129,0.25)',
             borderRadius: '12px',
             padding: '16px 20px',
             fontSize: '14px',
@@ -109,7 +109,7 @@ export default function LifeTimePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
                   </tr>
                 ))}
               </tbody>

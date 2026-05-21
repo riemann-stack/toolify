@@ -695,7 +695,7 @@ export default function IntervalTrainingClient() {
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
                         <td>{r.distance >= 1000 ? `${r.distance / 1000}km` : `${r.distance}m`}</td>
                         <td>{time}</td>
-                        <td style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
+                        <td style={{ color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
                         <td>{r.laps}바퀴</td>
                         <td>
                           <button
@@ -1036,7 +1036,7 @@ export default function IntervalTrainingClient() {
                   <tr>
                     <td>후반</td>
                     <td>{fmtMS(yassoCalc.secondHalfAvg)}</td>
-                    <td style={{ color: yassoCalc.decline < 5 ? '#3EFF9B' : yassoCalc.decline < 10 ? '#FFD93E' : '#FF6B6B' }}>
+                    <td style={{ color: yassoCalc.decline < 5 ? '#059669' : yassoCalc.decline < 10 ? '#FFD93E' : '#DC2626' }}>
                       {yassoCalc.decline > 0 ? '+' : ''}{yassoCalc.decline.toFixed(1)}초
                     </td>
                   </tr>
@@ -1061,7 +1061,7 @@ export default function IntervalTrainingClient() {
                 <li>후반 페이스 유지력</li>
               </ul>
               <p style={{ marginTop: 10, color: 'var(--text)', fontWeight: 600 }}>
-                야소 800은 <strong style={{ color: '#FF8C3E' }}>스피드 능력 지표</strong>이며, 지구력 평가는 별도 필요합니다.
+                야소 800은 <strong style={{ color: '#EA580C' }}>스피드 능력 지표</strong>이며, 지구력 평가는 별도 필요합니다.
               </p>
             </div>
           </div>
@@ -1226,11 +1226,11 @@ export default function IntervalTrainingClient() {
                       const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
                       const totalKm = fastKm + 3 // 워밍업·쿨다운
                       const phaseColor =
-                        w.phase === 'adapt'   ? '#3EFF9B' :
-                        w.phase === 'develop' ? '#FFD700' :
-                        w.phase === 'recover' ? '#3EC8FF' :
-                        w.phase === 'peak'    ? '#FF6B6B' :
-                        '#FF8C3E'
+                        w.phase === 'adapt'   ? '#059669' :
+                        w.phase === 'develop' ? '#CA8A04' :
+                        w.phase === 'recover' ? '#0891B2' :
+                        w.phase === 'peak'    ? '#DC2626' :
+                        '#EA580C'
                       const phaseEmoji =
                         w.phase === 'adapt'   ? '🟢' :
                         w.phase === 'develop' ? '🟡' :
@@ -1274,11 +1274,11 @@ export default function IntervalTrainingClient() {
                 const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
                 const totalKm = fastKm + 3
                 const phaseColor =
-                  w.phase === 'adapt'   ? '#3EFF9B' :
-                  w.phase === 'develop' ? '#FFD700' :
-                  w.phase === 'recover' ? '#3EC8FF' :
-                  w.phase === 'peak'    ? '#FF6B6B' :
-                  '#FF8C3E'
+                  w.phase === 'adapt'   ? '#059669' :
+                  w.phase === 'develop' ? '#CA8A04' :
+                  w.phase === 'recover' ? '#0891B2' :
+                  w.phase === 'peak'    ? '#DC2626' :
+                  '#EA580C'
                 const phaseEmoji =
                   w.phase === 'adapt'   ? '🟢' :
                   w.phase === 'develop' ? '🟡' :
@@ -1317,7 +1317,7 @@ export default function IntervalTrainingClient() {
                 <li>인터벌 전날: 휴식 또는 30분 이내 가벼운 조깅</li>
                 <li>주 {intervalsPerWeek}회 인터벌 (선택값 기준)</li>
                 <li>컨디션 ↓ 또는 통증 시 즉시 중단·휴식</li>
-                {!trackOk && <li style={{ color: '#FF8C3E' }}>⚠️ 트랙 없음: GPS 시계 거리 기반 또는 시간 기반 인터벌로 대체</li>}
+                {!trackOk && <li style={{ color: '#EA580C' }}>⚠️ 트랙 없음: GPS 시계 거리 기반 또는 시간 기반 인터벌로 대체</li>}
               </ul>
             </div>
           )}

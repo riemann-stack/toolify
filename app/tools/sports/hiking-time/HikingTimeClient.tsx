@@ -480,8 +480,8 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {/* 일몰 마커 */}
         {sunsetX !== null && (
           <>
-            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="#FF6B6B" strokeWidth="2" strokeDasharray="4 3" />
-            <text x={sunsetX} y={padT-12} fill="#FF6B6B" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
+            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="#DC2626" strokeWidth="2" strokeDasharray="4 3" />
+            <text x={sunsetX} y={padT-12} fill="#DC2626" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
               🌅 일몰 {fmtHHMM(sunsetMinutes)}
             </text>
           </>
@@ -491,7 +491,7 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {timeline.map((step, i) => {
           const x = xOf(step.km)
           const isEdge = i === 0 || i === timeline.length - 1
-          const fill = step.isSummit ? '#C8FF3E' : isEdge ? '#3EC8FF' : 'var(--muted)'
+          const fill = step.isSummit ? '#0EA5E9' : isEdge ? '#0891B2' : 'var(--muted)'
           const r = step.isSummit ? 7 : isEdge ? 6 : 4
           return (
             <g key={i}>

@@ -145,13 +145,13 @@ linear-gradient(in oklch, yellow, blue)         /* OKLCH: 중간이 자연스러
               <div style={faqAnswer}>
                 Tailwind 4의 arbitrary value 문법으로 직접 CSS를 넣거나 <code>theme.extend.backgroundImage</code>에 등록하는 방식이 있습니다.
                 <div style={codeBlock}>{`/* 1) arbitrary value (1회용) */
-<div className="bg-[radial-gradient(circle_at_0%_0%,#FF6B9D_0%,transparent_70%)]" />
+<div className="bg-[radial-gradient(circle_at_0%_0%,#E11D48_0%,transparent_70%)]" />
 
 /* 2) tailwind.config.js 등록 (재사용) */
 theme: {
   extend: {
     backgroundImage: {
-      'mesh-1': 'radial-gradient(circle at 0% 0%, #FF6B9D 0%, transparent 70%), radial-gradient(...)',
+      'mesh-1': 'radial-gradient(circle at 0% 0%, #E11D48 0%, transparent 70%), radial-gradient(...)',
     },
   },
 }
@@ -205,7 +205,7 @@ theme: {
                 <div style={codeBlock}>{`/* CSS multi-background로 노이즈 + 그라디언트 합성 */
 background-image:
   url("data:image/svg+xml,...feTurbulence..."),
-  linear-gradient(135deg, #FF6B9D, #3EC8FF);`}</div>
+  linear-gradient(135deg, #E11D48, #0891B2);`}</div>
               </div>
             </div>
 

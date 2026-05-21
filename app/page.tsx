@@ -102,42 +102,44 @@ export default function HomePage() {
               일상에서 자주 쓰는 도구들을 빠르고 간편하게 사용하세요.
             </p>
 
-            {/* 발견한 도구 — 탭 (최근 사용 / 즐겨찾기 / 랜덤 추천) */}
-            <div className={styles.randomSection}>
-              <div className={styles.discoverTabs} role="tablist">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'recent'}
-                  className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
-                  onClick={() => setTab('recent')}
-                >
-                  🕒 최근 사용
-                  {mounted && recentTools.length > 0 && (
-                    <span className={styles.discoverTabCount}>{recentTools.length}</span>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'favorite'}
-                  className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
-                  onClick={() => setTab('favorite')}
-                >
-                  ⭐ 즐겨찾기
-                  {mounted && favoriteTools.length > 0 && (
-                    <span className={styles.discoverTabCount}>{favoriteTools.length}</span>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'random'}
-                  className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
-                  onClick={() => setTab('random')}
-                >
-                  🎰 랜덤 추천
-                </button>
+            {/* 발견한 도구 — 섹션 카드 + 세그먼트 컨트롤 */}
+            <section className={styles.randomSection}>
+              <div className={styles.discoverHeader}>
+                <div className={styles.discoverTabs} role="tablist" aria-label="도구 발견 탭">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === 'recent'}
+                    className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
+                    onClick={() => setTab('recent')}
+                  >
+                    🕒 최근
+                    {mounted && recentTools.length > 0 && (
+                      <span className={styles.discoverTabCount}>{recentTools.length}</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === 'favorite'}
+                    className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
+                    onClick={() => setTab('favorite')}
+                  >
+                    ⭐ 즐겨찾기
+                    {mounted && favoriteTools.length > 0 && (
+                      <span className={styles.discoverTabCount}>{favoriteTools.length}</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === 'random'}
+                    className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
+                    onClick={() => setTab('random')}
+                  >
+                    🎰 랜덤
+                  </button>
+                </div>
                 {tab === 'random' && (
                   <button
                     type="button"
@@ -166,7 +168,7 @@ export default function HomePage() {
                     : '⭐를 눌러 즐겨찾기에 담아두면 다음에 한 번에 찾을 수 있어요.'}
                 </div>
               )}
-            </div>
+            </section>
 
             {/* 검색창 */}
             <div className={styles.searchWrap}>

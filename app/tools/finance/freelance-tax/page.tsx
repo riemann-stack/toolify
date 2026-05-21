@@ -172,7 +172,7 @@ export default function FreelanceTaxPage() {
                 ].map(([item, kind, lim, effect], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: kind === '세액공제' ? '#3EFF9B' : '#3EC8FF' }}>{kind}</td>
+                    <td style={{ padding: '10px 12px', color: kind === '세액공제' ? '#059669' : '#0891B2' }}>{kind}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{lim}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{effect}</td>
                   </tr>
@@ -192,7 +192,7 @@ export default function FreelanceTaxPage() {
               <div style={faqAnswer}>
                 아닙니다. 3.3% (소득세 3% + 지방소득세 0.3%)는 <strong style={{ color: 'var(--text)' }}>임시로 미리 낸 세금</strong>일 뿐, 진짜 세금은 매년 5월 종합소득세 신고로 정산합니다. 본인의 실제 세율(6~45% 누진)에 따라 더 받거나 더 내야 합니다.
                 <br /><br />
-                매출이 적고 경비·공제가 충분하면 <strong style={{ color: '#3EFF9B' }}>환급</strong>, 매출이 크고 한계세율 24% 이상이면 <strong style={{ color: '#FF8C8C' }}>추가 납부</strong>가 일반적입니다.
+                매출이 적고 경비·공제가 충분하면 <strong style={{ color: '#059669' }}>환급</strong>, 매출이 크고 한계세율 24% 이상이면 <strong style={{ color: '#DC2626' }}>추가 납부</strong>가 일반적입니다.
               </div>
             </div>
 
@@ -222,7 +222,7 @@ export default function FreelanceTaxPage() {
               <div style={faqAnswer}>
                 근로소득과 사업소득은 <strong style={{ color: 'var(--text)' }}>합산되어 종합과세</strong>됩니다. 회사에서 연말정산을 마쳐도, 부업 사업소득이 있으면 5월에 종소세 신고 의무가 있습니다.
                 <br /><br />
-                합산 시 한계세율이 더 높은 구간으로 점프해 <strong style={{ color: '#FF8C8C' }}>추가 납부</strong>가 발생하는 경우가 흔합니다. 예: 본업 7,000만(24% 구간) + 부업 1,500만 → 합산 8,500만으로 24% 구간 경계, 부업 일부는 35% 적용 가능. 본 계산기는 단독 사업소득 기준이므로 겸업자는 본업 근로소득과 합산해 계산해야 정확.
+                합산 시 한계세율이 더 높은 구간으로 점프해 <strong style={{ color: '#DC2626' }}>추가 납부</strong>가 발생하는 경우가 흔합니다. 예: 본업 7,000만(24% 구간) + 부업 1,500만 → 합산 8,500만으로 24% 구간 경계, 부업 일부는 35% 적용 가능. 본 계산기는 단독 사업소득 기준이므로 겸업자는 본업 근로소득과 합산해 계산해야 정확.
               </div>
             </div>
 
@@ -231,9 +231,9 @@ export default function FreelanceTaxPage() {
               <div style={faqAnswer}>
                 무신고 시 다음 가산세가 부과됩니다:
                 <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong style={{ color: '#FF6B6B' }}>무신고 가산세 20%</strong> (부정 무신고 40%)</li>
-                  <li><strong style={{ color: '#FF6B6B' }}>납부지연 가산세 일 0.025%</strong> (연 약 9.1%)</li>
-                  <li><strong style={{ color: '#FF6B6B' }}>무기장 가산세 20%</strong> (복식부기 의무자가 미작성 시)</li>
+                  <li><strong style={{ color: '#DC2626' }}>무신고 가산세 20%</strong> (부정 무신고 40%)</li>
+                  <li><strong style={{ color: '#DC2626' }}>납부지연 가산세 일 0.025%</strong> (연 약 9.1%)</li>
+                  <li><strong style={{ color: '#DC2626' }}>무기장 가산세 20%</strong> (복식부기 의무자가 미작성 시)</li>
                 </ul>
                 또한 환급 대상이었어도 신고하지 않으면 <strong style={{ color: 'var(--text)' }}>환급 받지 못합니다</strong>. 5월 1~31일 신고 의무는 매출 규모와 무관하게 모든 사업소득자에게 적용됩니다.
               </div>
@@ -256,7 +256,7 @@ export default function FreelanceTaxPage() {
                   <li><strong>간편장부</strong>: 일반 (사업 시작 후 누구나 권장)</li>
                   <li><strong>복식부기 의무</strong>: 인적용역 7,500만 / 부동산임대 7,500만 / 음식·숙박 1억5천 / 도소매 3억 등</li>
                 </ul>
-                복식부기 의무자가 미작성하면 <strong style={{ color: '#FF6B6B' }}>무기장 가산세 20%</strong>, 단순경비율 적용 불가. 매출이 위 한도를 넘으면 세무사 또는 회계 프로그램(삼쩜삼·자비스 등)을 통해 복식부기 작성이 일반적입니다.
+                복식부기 의무자가 미작성하면 <strong style={{ color: '#DC2626' }}>무기장 가산세 20%</strong>, 단순경비율 적용 불가. 매출이 위 한도를 넘으면 세무사 또는 회계 프로그램(삼쩜삼·자비스 등)을 통해 복식부기 작성이 일반적입니다.
               </div>
             </div>
 

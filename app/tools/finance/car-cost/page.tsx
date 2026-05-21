@@ -116,9 +116,9 @@ export default function CarCostPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>20대 신규</td><td style={cell}><strong style={{ color: '#FF6B6B' }}>약 150만원</strong></td><td style={cell}>경력 X · 가장 비쌈</td></tr>
+            <tr><td style={cell}>20대 신규</td><td style={cell}><strong style={{ color: '#DC2626' }}>약 150만원</strong></td><td style={cell}>경력 X · 가장 비쌈</td></tr>
             <tr><td style={cell}>30대 안정</td><td style={cell}>약 80~100만원</td><td style={cell}>경력 5년+</td></tr>
-            <tr><td style={cell}>40~50대 무사고</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>약 60~80만원</strong></td><td style={cell}>최저 구간</td></tr>
+            <tr><td style={cell}>40~50대 무사고</td><td style={cell}><strong style={{ color: '#059669' }}>약 60~80만원</strong></td><td style={cell}>최저 구간</td></tr>
             <tr><td style={cell}>60대+</td><td style={cell}>약 70~90만원</td><td style={cell}>연령 할증 시작</td></tr>
             <tr><td style={cell}>외제차</td><td style={cell}>+30~50%</td><td style={cell}>기본료의 1.3~1.5배</td></tr>
             <tr><td style={cell}>사고 경력</td><td style={cell}>+할증</td><td style={cell}>3년간 할증</td></tr>
@@ -146,8 +146,8 @@ export default function CarCostPage() {
             <tr><td style={cell}>2,000cc 이하</td><td style={cell}><strong>400,000원</strong></td><td style={cell}>준중형·중형 (쏘나타·K5)</td></tr>
             <tr><td style={cell}>2,500cc 이하</td><td style={cell}><strong>500,000원</strong></td><td style={cell}>중형~대형</td></tr>
             <tr><td style={cell}>3,000cc 이하</td><td style={cell}><strong>600,000원</strong></td><td style={cell}>대형 (그랜저 3.0)</td></tr>
-            <tr><td style={cell}>3,000cc 초과</td><td style={cell}><strong style={{ color: '#FF6B6B' }}>800,000원+</strong></td><td style={cell}>대형 SUV (팰리세이드)</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#3EC8FF' }}>전기차</strong></td><td style={cell}><strong style={{ color: '#3EC8FF' }}>130,000원 정액</strong></td><td style={cell}>아이오닉5·EV6 등</td></tr>
+            <tr><td style={cell}>3,000cc 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>800,000원+</strong></td><td style={cell}>대형 SUV (팰리세이드)</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#0891B2' }}>전기차</strong></td><td style={cell}><strong style={{ color: '#0891B2' }}>130,000원 정액</strong></td><td style={cell}>아이오닉5·EV6 등</td></tr>
           </tbody>
         </table>
       </div>
@@ -176,19 +176,19 @@ export default function CarCostPage() {
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>3년</td>
                 <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,000만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 333만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 333만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 비쌈 (초기 감가 큼)</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>5년 ⭐</td>
                 <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,800만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 360만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 360만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>한국 평균 보유 기간</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>10년</td>
                 <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 2,300만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 230만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 230만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 경제적 (정비비 ↑ 주의)</td>
               </tr>
             </tbody>
@@ -215,7 +215,7 @@ export default function CarCostPage() {
             </tr>
           </thead>
           <tbody>
-            <tr style={{ background: 'rgba(200,255,62,0.06)' }}>
+            <tr style={{ background: 'rgba(14,165,233,0.06)' }}>
               <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>현금 ★</td>
               <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 28만</td>
               <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 1,680만</td>
@@ -230,13 +230,13 @@ export default function CarCostPage() {
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>리스</td>
               <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 75만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 4,500만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 4,500만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 비용 처리 (사업자)</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>장기렌트</td>
               <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 84만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 5,040만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 5,040만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 보험·정비 포함</td>
             </tr>
           </tbody>
@@ -258,23 +258,23 @@ export default function CarCostPage() {
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
               <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>연료</th>
               <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>차량가</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontWeight: 700 }}>5년 연료비</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontWeight: 700 }}>5년 감가</th>
+              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700 }}>5년 연료비</th>
+              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>5년 감가</th>
               <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
             </tr>
           </thead>
           <tbody>
             <tr><td style={cell}>가솔린</td><td style={cell}>3,000만</td><td style={cell}>약 1,031만</td><td style={cell}>약 1,228만</td><td style={cell}><strong>2,259만</strong></td></tr>
             <tr><td style={cell}>디젤</td><td style={cell}>3,200만</td><td style={cell}>약 803만</td><td style={cell}>약 1,310만</td><td style={cell}><strong>2,113만</strong></td></tr>
-            <tr style={{ background: 'rgba(62,255,155,0.06)' }}>
-              <td style={cell}><strong style={{ color: '#3EFF9B' }}>LPG ★</strong></td>
+            <tr style={{ background: 'rgba(16,185,129,0.06)' }}>
+              <td style={cell}><strong style={{ color: '#059669' }}>LPG ★</strong></td>
               <td style={cell}>2,800만</td>
               <td style={cell}>약 833만</td>
               <td style={cell}>약 1,146만</td>
-              <td style={cell}><strong style={{ color: '#3EFF9B' }}>1,979만</strong></td>
+              <td style={cell}><strong style={{ color: '#059669' }}>1,979만</strong></td>
             </tr>
             <tr><td style={cell}>하이브리드</td><td style={cell}>3,500만</td><td style={cell}>약 688만</td><td style={cell}>약 1,500만</td><td style={cell}><strong>2,188만</strong></td></tr>
-            <tr><td style={cell}>전기 (가정)</td><td style={cell}>4,500만</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>약 300만</strong></td><td style={cell}>약 2,820만</td><td style={cell}>3,120만</td></tr>
+            <tr><td style={cell}>전기 (가정)</td><td style={cell}>4,500만</td><td style={cell}><strong style={{ color: '#059669' }}>약 300만</strong></td><td style={cell}>약 2,820만</td><td style={cell}>3,120만</td></tr>
             <tr><td style={cell}>전기 (급속)</td><td style={cell}>4,500만</td><td style={cell}>약 525만</td><td style={cell}>약 2,820만</td><td style={cell}>3,345만</td></tr>
           </tbody>
         </table>
@@ -314,10 +314,10 @@ export default function CarCostPage() {
           본 도구의 「보유 vs 카쉐어링」 탭에서 본인 상황 정량 비교.
         </p>
         <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13.5, lineHeight: 1.85, color: 'var(--text)' }}>
-          <li>월 500km 미만: <strong style={{ color: '#C485E0' }}>쏘카·그린카 압도적 유리</strong></li>
+          <li>월 500km 미만: <strong style={{ color: '#9333EA' }}>쏘카·그린카 압도적 유리</strong></li>
           <li>월 500~800km: 카쉐어링 약간 유리</li>
           <li>월 800~1,200km: 비슷</li>
-          <li>월 1,200km+: <strong style={{ color: '#3EC8FF' }}>보유 유리</strong></li>
+          <li>월 1,200km+: <strong style={{ color: '#0891B2' }}>보유 유리</strong></li>
         </ul>
         <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
           ※ 2026 쏘카 기준: 시간당 8,000원 + km당 200원 (보험·연료 포함). 서울 강남·홍대는 월 1,000km까지도 카쉐어링이 유리할 수 있음.
@@ -386,8 +386,8 @@ export default function CarCostPage() {
 
       {/* 10. 면책 강화 */}
       <div style={{
-        background: 'rgba(255, 107, 107, 0.04)',
-        border: '1px solid rgba(255, 107, 107, 0.30)',
+        background: 'rgba(220, 38, 38, 0.04)',
+        border: '1px solid rgba(220, 38, 38, 0.30)',
         borderRadius: '12px',
         padding: '18px 20px',
         marginTop: '32px',
@@ -395,7 +395,7 @@ export default function CarCostPage() {
         color: 'var(--muted)',
         lineHeight: 1.85,
       }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C8C', marginBottom: 10 }}>⚖️ 면책 조항</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 면책 조항</p>
         <p style={{ marginBottom: 8 }}>
           본 자동차 유지비 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다. 실제 비용은 다음에 따라 다를 수 있습니다:
         </p>

@@ -121,7 +121,7 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
-.numInput:focus { border-color: rgba(200,255,62,0.5); box-shadow: 0 0 0 3px rgba(200,255,62,0.08); }
+.numInput:focus { border-color: rgba(14,165,233,0.5); box-shadow: 0 0 0 3px rgba(14,165,233,0.14); }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -140,7 +140,7 @@
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.smallInput:focus { border-color: rgba(200,255,62,0.5); }
+.smallInput:focus { border-color: rgba(14,165,233,0.5); }
 .smallInput::-webkit-outer-spin-button,
 .smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -159,7 +159,7 @@
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.textInput:focus { border-color: rgba(200,255,62,0.5); }
+.textInput:focus { border-color: rgba(14,165,233,0.5); }
 
 .unit {
   font-size: 13px;
@@ -263,13 +263,13 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .ingRemove:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .ingRemove:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .ingTotalRow td {
   background: var(--accent-dim);
   font-weight: 700;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
   padding-top: 9px;
 }
@@ -324,20 +324,20 @@
   color: var(--accent);
   font-size: 11.5px;
 }
-.appBaemin    { border-color: rgba(62,255,155,0.45); }
-.appCoupang   { border-color: rgba(255,107,107,0.45); }
-.appYogiyo    { border-color: rgba(255,215,0,0.45); }
-.appOwn       { border-color: rgba(200,255,62,0.45); }
-.appBaemin.appActive    { background: rgba(62,255,155,0.10);  border-color: #3EFF9B; color: #3EFF9B; font-weight: 700; }
-.appCoupang.appActive   { background: rgba(255,107,107,0.10); border-color: #FF6B6B; color: #FF6B6B; font-weight: 700; }
-.appYogiyo.appActive    { background: rgba(255,215,0,0.10);   border-color: #FFD700; color: #FFD700; font-weight: 700; }
+.appBaemin    { border-color: rgba(16,185,129,0.45); }
+.appCoupang   { border-color: rgba(220,38,38,0.45); }
+.appYogiyo    { border-color: rgba(202,138,4,0.45); }
+.appOwn       { border-color: rgba(14,165,233,0.45); }
+.appBaemin.appActive    { background: rgba(16,185,129,0.18);  border-color: #059669; color: #059669; font-weight: 700; }
+.appCoupang.appActive   { background: rgba(220,38,38,0.18); border-color: #DC2626; color: #DC2626; font-weight: 700; }
+.appYogiyo.appActive    { background: rgba(202,138,4,0.18);   border-color: #CA8A04; color: #CA8A04; font-weight: 700; }
 .appOwn.appActive       { background: var(--accent-dim);      border-color: var(--accent); color: var(--accent); font-weight: 700; }
 .appBtn.appActive small { color: inherit; opacity: 0.85; }
 
 /* ── HERO (원가율 결과) ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 26px 24px;
   text-align: center;
@@ -367,10 +367,10 @@
   letter-spacing: -1px;
   line-height: 1;
 }
-.heroDualNum.basic { color: #3EC8FF; }
+.heroDualNum.basic { color: #0891B2; }
 .heroDualNum.real { color: var(--accent); }
-.heroDualNum.warn { color: #FF8C3E; }
-.heroDualNum.danger { color: #FF6B6B; }
+.heroDualNum.warn { color: #EA580C; }
+.heroDualNum.danger { color: #DC2626; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -399,11 +399,11 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.gradeExcellent { background: rgba(62,255,155,0.15);  color: #3EFF9B; }
+.gradeExcellent { background: rgba(16,185,129,0.15);  color: #059669; }
 .gradeGood      { background: var(--accent-dim);       color: var(--accent); }
-.gradeAverage   { background: rgba(255,215,0,0.15);   color: #FFD700; }
-.gradeWarning   { background: rgba(255,140,62,0.15);  color: #FF8C3E; }
-.gradeDanger    { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.gradeAverage   { background: rgba(202,138,4,0.15);   color: #CA8A04; }
+.gradeWarning   { background: rgba(234,88,12,0.15);  color: #EA580C; }
+.gradeDanger    { background: rgba(220,38,38,0.15); color: #DC2626; }
 
 /* ── breakdown 도넛 + 표 ── */
 .breakdownWrap {
@@ -478,7 +478,7 @@
 .breakdownTotalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .breakdownTotalRow td:nth-child(2) { color: var(--accent); font-size: 15px; }
@@ -487,8 +487,8 @@
 
 /* ── 실수령액 강조 ── */
 .netCard {
-  background: rgba(200,255,62,0.05);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 22px 24px;
   text-align: center;
@@ -507,7 +507,7 @@
   letter-spacing: -1px;
   line-height: 1;
 }
-.netCardValue.loss { color: #FF6B6B; }
+.netCardValue.loss { color: #DC2626; }
 .netCardSub {
   font-size: 12px;
   color: var(--muted);
@@ -539,10 +539,10 @@
   color: var(--text);
 }
 .compareStore td   { background: var(--bg2); }
-.compareBaemin td  { background: rgba(62,255,155,0.05); }
-.compareCoupang td { background: rgba(255,107,107,0.05); }
-.compareYogiyo td  { background: rgba(255,215,0,0.05); }
-.compareOwn td     { background: rgba(200,255,62,0.04); }
+.compareBaemin td  { background: rgba(16,185,129,0.14); }
+.compareCoupang td { background: rgba(220,38,38,0.14); }
+.compareYogiyo td  { background: rgba(202,138,4,0.14); }
+.compareOwn td     { background: rgba(14,165,233,0.14); }
 .compareTable .bestRow td:first-child { border-left: 3px solid var(--accent); padding-left: 8px; }
 .compareTable .bestRow td { color: var(--accent); }
 
@@ -578,8 +578,8 @@
 }
 .sliderUp::-webkit-slider-thumb { background: var(--accent); }
 .sliderUp::-moz-range-thumb { background: var(--accent); }
-.sliderDown::-webkit-slider-thumb { background: #FF6B6B; }
-.sliderDown::-moz-range-thumb { background: #FF6B6B; }
+.sliderDown::-webkit-slider-thumb { background: #DC2626; }
+.sliderDown::-moz-range-thumb { background: #DC2626; }
 .sliderZero::-webkit-slider-thumb { background: var(--muted); }
 .sliderZero::-moz-range-thumb { background: var(--muted); }
 
@@ -611,8 +611,8 @@
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillUp { color: var(--accent); border-color: rgba(200,255,62,0.35); }
-.pillDown { color: #FF6B6B; border-color: rgba(255,107,107,0.35); }
+.pillUp { color: var(--accent); border-color: rgba(14,165,233,0.35); }
+.pillDown { color: #DC2626; border-color: rgba(220,38,38,0.35); }
 
 /* ── 비교 카드 (현재 vs 인상 후) ── */
 .compareGrid {
@@ -650,8 +650,8 @@
 
 /* ── 월 추가 이익 강조 ── */
 .profitCard {
-  background: rgba(200,255,62,0.05);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -675,20 +675,20 @@
   letter-spacing: -0.5px;
   color: var(--text);
 }
-.profitCellValue.gain { color: #3EFF9B; }
-.profitCellValue.loss { color: #FF6B6B; }
+.profitCellValue.gain { color: #059669; }
+.profitCellValue.loss { color: #DC2626; }
 
 /* ── 위험 안내 ── */
 .warnBox {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.25);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnBox strong { color: #FF8C3E; font-weight: 700; }
+.warnBox strong { color: #EA580C; font-weight: 700; }
 
 /* ── 메뉴 등록 행 (월 수익) ── */
 .menuRow {
@@ -718,14 +718,14 @@
 
 /* ── 손익분기 카드 ── */
 .breakEvenCard {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.25);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.25);
   border-radius: 14px;
   padding: 18px 22px;
 }
 .breakEvenLead {
   font-size: 12px;
-  color: #FF8C3E;
+  color: #EA580C;
   font-weight: 700;
   margin-bottom: 10px;
 }
@@ -770,8 +770,8 @@
   letter-spacing: -0.5px;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos { color: #3EFF9B; }
-.kpiValueNeg { color: #FF6B6B; }
+.kpiValuePos { color: #059669; }
+.kpiValueNeg { color: #DC2626; }
 
 /* ── 추천 가격 카드 ── */
 .priceRecGrid {
@@ -789,7 +789,7 @@
   padding: 14px 14px;
   text-align: center;
 }
-.priceRecRound { border-color: var(--accent); background: rgba(200,255,62,0.04); }
+.priceRecRound { border-color: var(--accent); background: rgba(14,165,233,0.14); }
 .priceRecLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .priceRecValue {
   font-family: 'Inter', system-ui, sans-serif;

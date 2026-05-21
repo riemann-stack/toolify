@@ -56,7 +56,7 @@ function n(v: string): number {
 }
 
 /* 색상 팔레트 — 타격 분포 파이 */
-const PIE_COLORS = ['#C8FF3E', '#3EC8FF', '#FF8C3E', '#FFD700']
+const PIE_COLORS = ['#0EA5E9', '#0891B2', '#EA580C', '#CA8A04']
 
 /* ─────────────────────────────────────────────────────────
  * 메인
@@ -426,7 +426,7 @@ export default function BaseballStatsClient() {
                   <span className={styles.compareTitle}>{row.title}</span>
                   <span className={styles.compareValue}>
                     {row.mine.toFixed(row.fmt)}
-                    <span style={{ color: row.mine >= row.league ? '#3EFF9B' : '#FF8C3E', marginLeft: 8, fontSize: 12 }}>
+                    <span style={{ color: row.mine >= row.league ? '#059669' : '#EA580C', marginLeft: 8, fontSize: 12 }}>
                       ({row.mine >= row.league ? '+' : ''}{(row.mine - row.league).toFixed(row.fmt)})
                     </span>
                   </span>
@@ -628,7 +628,7 @@ export default function BaseballStatsClient() {
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
-              <strong style={{ color: pcalc.era <= league.avgERA ? '#3EFF9B' : '#FF8C3E', marginLeft: 6 }}>
+              <strong style={{ color: pcalc.era <= league.avgERA ? '#059669' : '#EA580C', marginLeft: 6 }}>
                 {pcalc.era <= league.avgERA ? '−' : '+'}{Math.abs(pcalc.era - league.avgERA).toFixed(2)}
               </strong>
               {pcalc.era <= league.avgERA ? ' (좋음)' : ' (나쁨)'}.

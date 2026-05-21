@@ -47,7 +47,7 @@ export default function FartRiskClient() {
           ⚠️ <strong>다음 증상 시 즉시 의료 상담</strong>: 혈변·검은 변 / 갑작스러운 체중 감소 / 심한 복통(한밤중) / 발열·구토 반복 / 1주+ 지속 변비·설사 / 임산부.
         </p>
         <p className={s.disclaimerBody} style={{ marginTop: 8 }}>
-          📞 <strong>도움</strong>: 한국 의료진 상담(보건복지부) <strong style={{ color: '#FF8C3E' }}>1339</strong> · 응급 <strong style={{ color: '#FF8C3E' }}>119</strong> · 소화기내과 직접 방문.
+          📞 <strong>도움</strong>: 한국 의료진 상담(보건복지부) <strong style={{ color: '#EA580C' }}>1339</strong> · 응급 <strong style={{ color: '#EA580C' }}>119</strong> · 소화기내과 직접 방문.
         </p>
       </div>
     </div>
@@ -153,9 +153,9 @@ function MainTab() {
           <div className={s.card}>
             <span className={s.cardLabel}>📊 3축 점수</span>
             {[
-              { label: '💨 가스량',    val: result.gas,   color: '#C8FF3E' },
-              { label: '🦨 냄새',      val: result.smell, color: '#FF6B9D' },
-              { label: '🎈 복부팽만',  val: result.bloat, color: '#3EC8FF' },
+              { label: '💨 가스량',    val: result.gas,   color: '#0EA5E9' },
+              { label: '🦨 냄새',      val: result.smell, color: '#E11D48' },
+              { label: '🎈 복부팽만',  val: result.bloat, color: '#0891B2' },
             ].map((g, i) => (
               <div key={i} className={s.gaugeRow}>
                 <div className={s.gaugeLabel}>
@@ -370,14 +370,14 @@ function SymptomTab() {
       </div>
 
       {showSymptoms.map(sym => (
-        <div key={sym.key} className={s.symCard} style={sym.severity === 'urgent' ? { borderColor: 'rgba(255,107,107,0.4)' } : {}}>
+        <div key={sym.key} className={s.symCard} style={sym.severity === 'urgent' ? { borderColor: 'rgba(220,38,38,0.4)' } : {}}>
           <div className={s.symHead}>
             <span className={s.symEmoji}>{sym.emoji}</span>
             <span className={s.symName}>{sym.name}</span>
           </div>
           <div className={s.symGrid}>
             <div>
-              <p className={s.symSubHead} style={{ color: '#3EC8FF' }}>✅ 즉시</p>
+              <p className={s.symSubHead} style={{ color: '#0891B2' }}>✅ 즉시</p>
               <ul className={s.tipUl}>
                 {sym.immediate.map((t, i) => <li key={i}>{t}</li>)}
               </ul>
@@ -390,7 +390,7 @@ function SymptomTab() {
             </div>
           </div>
           <div className={s.symDoctor}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: sym.severity === 'urgent' ? '#FF6B6B' : '#FF8C3E' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: sym.severity === 'urgent' ? '#DC2626' : '#EA580C' }}>
               ⚕️ 의료 상담:
             </span>
             <span style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{sym.seeDoctor}</span>

@@ -38,19 +38,19 @@ export default function AboutPage() {
               icon: '⚡',
               title: '무설치·무로그인',
               desc: '어떠한 가입 절차나 설치 없이 웹브라우저만 있으면 어디서든 즉시 실행됩니다. 사용자의 개인정보를 요구하지 않아 안전합니다.',
-              color: '#C8FF3E',
+              color: '#0EA5E9',
             },
             {
               icon: '🆓',
               title: '지속 가능한 무료 서비스',
               desc: 'Youtil의 모든 도구는 누구나 제한 없이 무료로 이용할 수 있습니다. 쾌적한 서비스 유지를 위해 최소한의 광고로 운영됩니다.',
-              color: '#3EC8FF',
+              color: '#0891B2',
             },
             {
               icon: '🎯',
               title: '데이터의 정확성',
               desc: '최신 법령(만 나이 통일법, 2026년 4대보험 요율 등)과 신뢰할 수 있는 수식을 바탕으로 정밀한 계산 결과를 제공합니다.',
-              color: '#FF8C3E',
+              color: '#EA580C',
             },
           ].map((item) => (
             <div key={item.title} style={{
@@ -130,7 +130,7 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
           지속적인 업데이트
         </h2>
-        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '24px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '24px' }}>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             Youtil은 <strong style={{ color: 'var(--text)' }}>2026년 최신 데이터</strong>(국민연금 인상분, 개정 세법, 만 나이 통일법 등)를 지속적으로 반영하고 있습니다.
             단순한 계산기를 넘어, 사용자의 삶에 실질적인 도움이 되는 유틸리티를 꾸준히 추가해 나가고 있습니다.

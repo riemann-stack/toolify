@@ -80,7 +80,7 @@ export default function FlooringPage() {
                 ['두께', '8~12mm'],
                 ['1박스 ≈', '0.73평'],
               ]},
-              { t: '강마루', c: '#FFD700', items: [
+              { t: '강마루', c: '#CA8A04', items: [
                 ['일반 박스', '약 2.6 ㎡'],
                 ['두께', '7~9mm'],
                 ['1박스 ≈', '0.79평'],
@@ -90,17 +90,17 @@ export default function FlooringPage() {
                 ['두께', '14~21mm'],
                 ['1박스 ≈', '0.61평'],
               ]},
-              { t: '데코타일', c: '#3EC8FF', items: [
+              { t: '데코타일', c: '#0891B2', items: [
                 ['일반 박스', '약 3.3 ㎡'],
                 ['두께', '3~5mm'],
                 ['1박스 ≈', '1평'],
               ]},
-              { t: '장판 (롤)', c: '#3EFF9B', items: [
+              { t: '장판 (롤)', c: '#059669', items: [
                 ['폭', '1.8m / 2.0m'],
                 ['길이', '미터 단위 절단'],
                 ['두께', '1.8~4.5mm'],
               ]},
-              { t: '도기 타일', c: '#FF6B6B', items: [
+              { t: '도기 타일', c: '#DC2626', items: [
                 ['주력 사이즈', '60×60cm'],
                 ['1장 면적', '0.36 ㎡'],
                 ['1평 ≈', '약 9.2장'],
@@ -141,10 +141,10 @@ export default function FlooringPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: 12 }}>
             {[
-              { t: '평행 시공',   c: '#3EFF9B',     v: '+0%', d: '벽과 평행하게 일자' },
+              { t: '평행 시공',   c: '#059669',     v: '+0%', d: '벽과 평행하게 일자' },
               { t: '대각선 시공', c: 'var(--accent)', v: '+5%', d: '45° 기울여 시공' },
-              { t: '헤링본',     c: '#FF8C3E',     v: '+10%', d: 'V자 반복 패턴' },
-              { t: '쉐브론',     c: '#FF6B6B',     v: '+15%', d: '대칭 V자 패턴' },
+              { t: '헤링본',     c: '#EA580C',     v: '+10%', d: 'V자 반복 패턴' },
+              { t: '쉐브론',     c: '#DC2626',     v: '+15%', d: '대칭 V자 패턴' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${m.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: m.c, fontWeight: 700, marginBottom: 4 }}>{m.t}</p>
@@ -213,20 +213,20 @@ export default function FlooringPage() {
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 2~3일</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#FF8C3E', fontWeight: 700, marginBottom: 8 }}>👷 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>👷 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>자재비: <strong>약 130만원</strong></li>
                 <li>인건비 (㎡당 1.5만원): <strong>약 75만원</strong></li>
                 <li>철거·정리: <strong>약 20만원</strong></li>
-                <li style={{ color: '#FF8C3E', fontWeight: 700, marginTop: 4 }}>총: 약 225만원</li>
+                <li style={{ color: '#EA580C', fontWeight: 700, marginTop: 4 }}>총: 약 225만원</li>
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 1일 (헤링본 +50%)</li>
               </ul>
             </div>
           </div>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.3)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.3)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,
@@ -234,7 +234,7 @@ export default function FlooringPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ✅ <strong style={{ color: 'var(--accent)' }}>장판·데코타일은 셀프 도전 가능</strong>, 강마루·원목마루는 단차·접착 난이도 높아 <strong style={{ color: '#FF8C3E' }}>전문 시공 권장</strong>
+            ✅ <strong style={{ color: 'var(--accent)' }}>장판·데코타일은 셀프 도전 가능</strong>, 강마루·원목마루는 단차·접착 난이도 높아 <strong style={{ color: '#EA580C' }}>전문 시공 권장</strong>
           </div>
         </div>
 
@@ -245,10 +245,10 @@ export default function FlooringPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { t: '💸 예산형 (~평당 5만원)', c: '#3EFF9B', items: ['장판 (PVC)', '저가 데코타일', '전세·임대·1~2년 거주'] },
+              { t: '💸 예산형 (~평당 5만원)', c: '#059669', items: ['장판 (PVC)', '저가 데코타일', '전세·임대·1~2년 거주'] },
               { t: '⚖️ 표준 (평당 8~15만원)', c: 'var(--accent)', items: ['강화마루', '강마루', '아파트 표준 선택'] },
               { t: '✨ 프리미엄 (평당 20만원~)', c: '#9B59B6', items: ['원목마루', '대형 포세린 타일', '신축·자가·장기 거주'] },
-              { t: '💧 방수 필수 공간', c: '#3EC8FF', items: ['도기/자기 타일', '데코타일 (LVT)', '욕실·주방·발코니'] },
+              { t: '💧 방수 필수 공간', c: '#0891B2', items: ['도기/자기 타일', '데코타일 (LVT)', '욕실·주방·발코니'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>

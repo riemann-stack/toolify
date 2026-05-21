@@ -125,7 +125,7 @@ export default function PacePage() {
             {[
               {
                 d: '5km',
-                color: '#FF6B6B',
+                color: '#DC2626',
                 strategy: '초반 빠르게 + 끝까지 유지',
                 points: [
                   '0~1km : 목표 페이스보다 5~10초 빠르게 (출발 흥분)',
@@ -148,7 +148,7 @@ export default function PacePage() {
               },
               {
                 d: '하프(21.0975km)',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 strategy: '네거티브 스플릿 — 후반에 페이스 ↑',
                 points: [
                   '0~10km (전반) : 목표 페이스 +2~3초 (여유)',
@@ -160,7 +160,7 @@ export default function PacePage() {
               },
               {
                 d: '풀 마라톤(42.195km)',
-                color: '#3EFF9B',
+                color: '#059669',
                 strategy: '3구간 분할 — 절제→유지→집중',
                 points: [
                   '🟢 0~15km : 목표 페이스 +3~5초 (절제 구간) — 신체 에너지 절약',
@@ -202,7 +202,7 @@ export default function PacePage() {
               { t: '⚠️ 주의', items: ['충분히 훈련된 러너만 가능', '초보는 일정 페이스 익히기 우선', '날씨·코스에 따라 조정 필요', '전반 너무 느슨하면 후반 만회 어려움'] },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: i === 0 ? '#3EFF9B' : '#FF8C3E', marginBottom: '8px' }}>{m.t}</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: i === 0 ? '#059669' : '#EA580C', marginBottom: '8px' }}>{m.t}</p>
                 <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
                   {m.items.map((it, j) => <li key={j}>{it}</li>)}
                 </ul>

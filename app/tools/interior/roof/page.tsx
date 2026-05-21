@@ -166,10 +166,10 @@ export default function RoofPage() {
       <h2 style={sectionTitle}>🏠 처마 길이 표준</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
         {[
-          { len: '0~30cm', use: '최소 (모던 주택·창고)', color: '#3EC8FF' },
-          { len: '60~90cm', use: '표준 (단독주택)', color: '#3EFF9B' },
+          { len: '0~30cm', use: '최소 (모던 주택·창고)', color: '#0891B2' },
+          { len: '60~90cm', use: '표준 (단독주택)', color: '#059669' },
           { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#FFD93E' },
-          { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#FF8C3E' },
+          { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#EA580C' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Inter, system-ui, sans-serif' }}>{p.len}</p>
@@ -210,8 +210,8 @@ export default function RoofPage() {
 
       {/* 5. 셀프 시공 vs 전문 시공 */}
       <h2 style={sectionTitle}>🛠️ 셀프 시공 vs 전문 시공 가이드</h2>
-      <div style={{ background: 'rgba(255, 107, 107, 0.06)', border: '1px solid rgba(255, 107, 107, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
-        <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '10px' }}>⚠️ 지붕 작업은 고소작업 — 전문가 시공 강력 권장</p>
+      <div style={{ background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
+        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '10px' }}>⚠️ 지붕 작업은 고소작업 — 전문가 시공 강력 권장</p>
         <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
           <li><strong>낙상 위험</strong>: 한국 산재 사망사고의 주요 원인 중 하나</li>
           <li><strong>방수 시공</strong>: 잘못하면 누수 → 구조물 손상·곰팡이</li>
@@ -221,7 +221,7 @@ export default function RoofPage() {
           <li>2층 이상·복잡한 형태는 반드시 전문 시공사 견적</li>
         </ul>
         <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '14px', lineHeight: 1.7, marginBottom: 0 }}>
-          📞 응급: <strong style={{ color: '#FFB83E' }}>119</strong> · 한국건설기술연구원 · 대한건축사협회 · 가까운 건축사사무소
+          📞 응급: <strong style={{ color: '#D97706' }}>119</strong> · 한국건설기술연구원 · 대한건축사협회 · 가까운 건축사사무소
         </p>
       </div>
 
@@ -331,7 +331,7 @@ export default function RoofPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q10. 셀프 시공 가능한가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>강력 비추천</strong>. 지붕 작업은 고소작업 — 한국 산재 사망사고 주요 원인. 안전벨트·헬멧·미끄럼 방지 신발 필수, 폭우·강풍·고온 시 작업 금지. 방수 시공 잘못하면 누수로 구조물 손상.
+          <strong style={{ color: '#DC2626' }}>강력 비추천</strong>. 지붕 작업은 고소작업 — 한국 산재 사망사고 주요 원인. 안전벨트·헬멧·미끄럼 방지 신발 필수, 폭우·강풍·고온 시 작업 금지. 방수 시공 잘못하면 누수로 구조물 손상.
           <br /><br />
           단순 보수(슁글 한 장 교체 등)는 가능하지만 전체 시공은 전문 시공사 강력 권장. 가까운 건축사사무소·시공사 견적 받으세요. 응급 119.
         </div>
@@ -340,8 +340,8 @@ export default function RoofPage() {
       {/* 면책 */}
       <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

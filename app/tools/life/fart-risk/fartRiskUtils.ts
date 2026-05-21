@@ -119,15 +119,15 @@ export const CATEGORIES: { id: string; label: string; ids: string[] }[] = [
 ]
 
 export const CAUSE_TYPES: Record<CauseType, { name: string; icon: string; desc: string; color: string }> = {
-  fermentation: { name: '발효형',     icon: '🫧', color: '#C8FF3E',
+  fermentation: { name: '발효형',     icon: '🫧', color: '#0EA5E9',
     desc: '콩·양파·마늘·밀·과일·인공감미료 (FODMAP 발효)' },
-  lactose:      { name: '유당형',     icon: '🥛', color: '#3EC8FF',
+  lactose:      { name: '유당형',     icon: '🥛', color: '#0891B2',
     desc: '우유·치즈·아이스크림·WPC (락타아제 부족)' },
   air:          { name: '탄산·공기형', icon: '🥤', color: '#FFD93E',
     desc: '탄산음료·맥주·빠른 식사 (삼킨 가스)' },
-  slow:         { name: '소화지연형',  icon: '🍔', color: '#FF8C3E',
+  slow:         { name: '소화지연형',  icon: '🍔', color: '#EA580C',
     desc: '과식·튀김·고지방·가공식품 (느린 소화)' },
-  smell:        { name: '냄새강화형',  icon: '🦨', color: '#FF6B9D',
+  smell:        { name: '냄새강화형',  icon: '🦨', color: '#E11D48',
     desc: '계란·고기·양배추·브로콜리 (황 성분)' },
 }
 
@@ -225,10 +225,10 @@ export function calcFartScore(
   let riskLevel: ScoreResult['riskLevel']
   let riskLabel: string
   let riskColor: string
-  if (total < 30)      { riskLevel = 'low';     riskLabel = '🟢 평온';   riskColor = '#3EFF9B' }
+  if (total < 30)      { riskLevel = 'low';     riskLabel = '🟢 평온';   riskColor = '#059669' }
   else if (total < 60) { riskLevel = 'medium';  riskLabel = '🟡 보통';   riskColor = '#FFD93E' }
-  else if (total < 85) { riskLevel = 'high';    riskLabel = '🟠 높음';   riskColor = '#FF8C3E' }
-  else                 { riskLevel = 'extreme'; riskLabel = '🔴 폭탄급'; riskColor = '#FF6B6B' }
+  else if (total < 85) { riskLevel = 'high';    riskLabel = '🟠 높음';   riskColor = '#EA580C' }
+  else                 { riskLevel = 'extreme'; riskLabel = '🔴 폭탄급'; riskColor = '#DC2626' }
 
   return {
     gas: gasScore, smell: smellScore, bloat: bloatScore, total,

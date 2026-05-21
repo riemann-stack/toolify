@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
@@ -30,15 +30,15 @@
 
 /* ── 탭 템포 메인 버튼 ── */
 .tapCard {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px; padding: 28px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
 .tapButton {
   position: relative; overflow: hidden;
   width: 100%; max-width: 320px; aspect-ratio: 1 / 1;
-  border-radius: 50%; border: 2px solid rgba(200,255,62,0.4);
-  background: radial-gradient(circle at center, rgba(200,255,62,0.1), var(--bg3));
+  border-radius: 50%; border: 2px solid rgba(14,165,233,0.4);
+  background: radial-gradient(circle at center, rgba(14,165,233,0.1), var(--bg3));
   color: var(--text); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; transition: transform 0.08s, border-color 0.18s;
@@ -49,7 +49,7 @@
 .tapButton:active { transform: scale(0.97); }
 .ripple {
   position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,255,62,0.35) 0%, rgba(200,255,62,0) 70%);
+  background: radial-gradient(circle, rgba(14,165,233,0.35) 0%, rgba(14,165,233,0) 70%);
   opacity: 0; pointer-events: none;
   animation: ripple 0.5s ease-out;
 }
@@ -107,7 +107,7 @@
   width: 100%; height: 6px; background: var(--bg3); border-radius: 999px; overflow: hidden;
 }
 .accBarFill {
-  height: 100%; background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  height: 100%; background: linear-gradient(90deg, #059669, var(--accent));
   transition: width 0.25s ease;
 }
 
@@ -150,15 +150,15 @@
 }
 .ctrlBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .ctrlBtnActive {
-  background: var(--accent) !important; color: #0D0D0D !important;
+  background: var(--accent) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 .ctrlBtnLink {
   grid-column: 1 / -1;
-  background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.3);
   color: var(--accent);
 }@media (hover: hover) {
-  .ctrlBtnLink:hover { background: rgba(200,255,62,0.15); color: var(--accent); }
+  .ctrlBtnLink:hover { background: rgba(14,165,233,0.15); color: var(--accent); }
 }
 
 /* ── 메트로놈 BPM 입력 ── */
@@ -207,7 +207,7 @@
   .sigBtn:hover { color: var(--text); }
 }
 .sigBtnActive {
-  background: var(--accent) !important; color: #0D0D0D !important;
+  background: var(--accent) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 
@@ -224,7 +224,7 @@
   transition: background 0.08s, border-color 0.08s, transform 0.08s;
 }
 .pulseActive { animation: pulseBeat 1s infinite; }
-.pulseAccent { background: rgba(200,255,62,0.2); border-color: var(--accent); }
+.pulseAccent { background: rgba(14,165,233,0.2); border-color: var(--accent); }
 .pulseBeat {
   font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 28px;
   color: var(--text); letter-spacing: 0.05em;
@@ -232,7 +232,7 @@
 .playBtn {
   padding: 13px 40px; border-radius: 10px;
   background: var(--accent); border: 1px solid var(--accent);
-  color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .playBtn:hover { filter: brightness(1.1); }
@@ -256,7 +256,7 @@
   .presetBtn:hover { border-color: var(--accent); color: var(--text); }
 }
 .presetBtnActive {
-  background: rgba(200,255,62,0.12) !important;
+  background: rgba(14,165,233,0.18) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
 .presetBpm { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 15px; line-height: 1; }
@@ -276,14 +276,14 @@
 .startBtn {
   padding: 14px; border-radius: 12px;
   background: var(--accent); border: 1px solid var(--accent);
-  color: #0D0D0D; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .startBtn:hover { filter: brightness(1.1); }
 }
 
 .testStageCard {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.25);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px; padding: 32px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
@@ -307,14 +307,14 @@
   transition: all 0.1s;
 }
 .previewDotActive { background: var(--accent); border-color: var(--accent); }
-.previewDotAccent { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(200,255,62,0.2); }
+.previewDotAccent { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(14,165,233,0.2); }
 .testHint {
   font-size: 12px; color: var(--muted); margin: 0; text-align: center;
 }
 .testTapBtn {
   width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
   border-radius: 50%; border: 2px solid var(--accent);
-  background: radial-gradient(circle at center, rgba(200,255,62,0.15), var(--bg3));
+  background: radial-gradient(circle at center, rgba(14,165,233,0.15), var(--bg3));
   color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
   font-size: 44px; letter-spacing: 0.05em;
   cursor: pointer; transition: transform 0.08s;
@@ -334,7 +334,7 @@
 
 /* ── 결과 ── */
 .resultCard {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px; padding: 28px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
   animation: fadeUp 0.3s ease;

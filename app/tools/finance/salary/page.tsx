@@ -101,7 +101,7 @@ export default function SalaryPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>항목</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>근로자</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>사업주</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E',       fontWeight: 500, whiteSpace: 'nowrap' }}>변경</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C',       fontWeight: 500, whiteSpace: 'nowrap' }}>변경</th>
                 </tr>
               </thead>
               <tbody>
@@ -116,7 +116,7 @@ export default function SalaryPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{worker}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{employer}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontSize: '12px', whiteSpace: 'nowrap' }}>{change}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontSize: '12px', whiteSpace: 'nowrap' }}>{change}</td>
                   </tr>
                 ))}
               </tbody>
@@ -125,7 +125,7 @@ export default function SalaryPage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.8 }}>
             ※ <strong style={{ color: 'var(--text)' }}>국민연금</strong>은 월 보수 상한 <strong style={{ color: 'var(--text)' }}>637만원</strong>까지만 부과 (초과분 적용 X). <strong style={{ color: 'var(--text)' }}>장기요양보험</strong>은 건강보험료에 연동(건보료 × 13.14%)됩니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>💡 2026년 국민연금 인상 배경</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               정부는 국민연금 기금 고갈 문제를 해결하기 위해 2026년부터 보험료율을 기존 9%(근로자 4.5%)에서
@@ -256,8 +256,8 @@ export default function SalaryPage() {
             {[
               { name: '세전 시급', desc: '공식 시급 — 연봉 ÷ (12 × 209h)', color: 'var(--muted)' },
               { name: '세후 시급', desc: '실수령 ÷ 209h — 약 86~91% 수준', color: 'var(--accent)' },
-              { name: '야근 포함', desc: '실수령 ÷ (근무 + 야근) — 야근 많을수록 ↓', color: '#FFD700' },
-              { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 17%↓', color: '#FF8C3E' },
+              { name: '야근 포함', desc: '실수령 ÷ (근무 + 야근) — 야근 많을수록 ↓', color: '#CA8A04' },
+              { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 17%↓', color: '#EA580C' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}40`, borderRadius: 10, padding: '11px 14px' }}>
                 <p style={{ fontSize: 13.5, color: m.color, fontWeight: 700, marginBottom: 3 }}>{m.name}</p>

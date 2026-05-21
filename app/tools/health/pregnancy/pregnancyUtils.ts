@@ -19,9 +19,9 @@ export interface Trimester {
 }
 
 export const TRIMESTERS: Trimester[] = [
-  { id: 1, name: '1삼분기', startWeek: 1,  endWeek: 13, color: '#FFD700', description: '배아·장기 형성기' },
-  { id: 2, name: '2삼분기', startWeek: 14, endWeek: 27, color: '#3EFF9B', description: '안정기, 태동 시작' },
-  { id: 3, name: '3삼분기', startWeek: 28, endWeek: 40, color: '#FF8C3E', description: '태아 급성장, 출산 준비' },
+  { id: 1, name: '1삼분기', startWeek: 1,  endWeek: 13, color: '#CA8A04', description: '배아·장기 형성기' },
+  { id: 2, name: '2삼분기', startWeek: 14, endWeek: 27, color: '#059669', description: '안정기, 태동 시작' },
+  { id: 3, name: '3삼분기', startWeek: 28, endWeek: 40, color: '#EA580C', description: '태아 급성장, 출산 준비' },
 ]
 
 /* ─── 산전 검사 (보건복지부·대한산부인과학회 기준 일반 가이드) ─── */

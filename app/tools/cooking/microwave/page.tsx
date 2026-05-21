@@ -144,9 +144,9 @@ export default function MicrowavePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '✅ 사용 가능', c: '#3EFFD0', items: ['도자기', '내열유리 (파이렉스)', 'PP 5번 플라스틱', '키친타올'] },
-            { t: '⚠️ 주의', c: '#FFB83E', items: ['전용 비닐 (한쪽 끝 자르기)', '멜라민 (저출력만)', '오래된 도자기 (테두리 X)'] },
-            { t: '❌ 절대 금지', c: '#FF3E8C', items: ['알루미늄 호일·캔', '금속 그릇·포크', '금색·은색 테두리', '일반 플라스틱', '계란 통째', '닫힌 캔·용기'] },
+            { t: '✅ 사용 가능', c: '#0D9488', items: ['도자기', '내열유리 (파이렉스)', 'PP 5번 플라스틱', '키친타올'] },
+            { t: '⚠️ 주의', c: '#D97706', items: ['전용 비닐 (한쪽 끝 자르기)', '멜라민 (저출력만)', '오래된 도자기 (테두리 X)'] },
+            { t: '❌ 절대 금지', c: '#DB2777', items: ['알루미늄 호일·캔', '금속 그릇·포크', '금색·은색 테두리', '일반 플라스틱', '계란 통째', '닫힌 캔·용기'] },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 6px' }}>{g.t}</p>
@@ -157,7 +157,7 @@ export default function MicrowavePage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#FF3E8C' }}>가장 흔한 사고</strong>: 금색·은색 테두리 그릇(중고·빈티지 식기) → 스파크 발생.
+          ⚠️ <strong style={{ color: '#DB2777' }}>가장 흔한 사고</strong>: 금색·은색 테두리 그릇(중고·빈티지 식기) → 스파크 발생.
           <strong> 빈 가열</strong>은 마그네트론(본체) 손상 — 절대 X.
         </p>
       </div>

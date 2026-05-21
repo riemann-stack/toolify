@@ -150,9 +150,9 @@ export default function BakingSchedulePage() {
         {/* 6. 반죽 상태 판단 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반죽 상태 판단 — 시간보다 중요</h2>
-          <div style={{ background: 'rgba(255,215,0,0.06)', border: '1px solid rgba(255,215,0,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(202,138,4,0.06)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.85 }}>
-              ⭐ <strong style={{ color: '#FFD700' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: '#FFD700' }}>반죽 상태를 함께 확인</strong>하세요.
+              ⭐ <strong style={{ color: '#CA8A04' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: '#CA8A04' }}>반죽 상태를 함께 확인</strong>하세요.
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -184,7 +184,7 @@ export default function BakingSchedulePage() {
               { problem: '오븐 예열 부족', signal: '굽기 색·구조 안 좋음',         fix: '250℃ 30분 이상 예열, 온도계로 확인' },
             ].map((it, i) => (
               <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '12.5px' }}>
-                <span style={{ color: '#FF6B6B', fontWeight: 700 }}>{it.problem}</span>
+                <span style={{ color: '#DC2626', fontWeight: 700 }}>{it.problem}</span>
                 <span style={{ color: 'var(--text)' }}>{it.signal}</span>
                 <span style={{ color: 'var(--muted)' }}>→ {it.fix}</span>
               </div>

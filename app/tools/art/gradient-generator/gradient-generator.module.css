@@ -33,7 +33,7 @@
 .tabActive {
   background: var(--bg3);
   color: var(--text);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.05);
 }
 
 .panel {
@@ -119,11 +119,11 @@
   flex-direction: column;
   gap: 6px;
 }@media (hover: hover) {
-  .spaceCard:hover { border-color: rgba(200, 255, 62, 0.35); }
+  .spaceCard:hover { border-color: rgba(14, 165, 233, 0.35); }
 }
 .spaceCardActive {
   border-color: var(--accent);
-  background: rgba(200, 255, 62, 0.06);
+  background: rgba(14, 165, 233, 0.06);
 }
 .spaceCardSwatch {
   width: 100%;
@@ -167,7 +167,7 @@
   .typeBtn:hover { color: var(--text); }
 }
 .typeBtnActive {
-  background: rgba(200, 255, 62, 0.08);
+  background: rgba(14, 165, 233, 0.08);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -247,7 +247,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--accent); }
 }
-.pillActive { background: var(--accent); color: #0B0B0B; border-color: var(--accent); }
+.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 /* ── Mesh corners ───────────── */
 .meshGrid {
@@ -400,7 +400,7 @@
   cursor: pointer;
   flex-shrink: 0;
 }@media (hover: hover) {
-  .removeBtn:hover:not(:disabled) { border-color: #FF8C8C; color: #FF8C8C; }
+  .removeBtn:hover:not(:disabled) { border-color: #DC2626; color: #DC2626; }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -526,7 +526,7 @@
 }
 .codeTabActive {
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border-color: var(--accent);
 }
 .codeBox {
@@ -615,7 +615,7 @@
 }
 .primaryBtn {
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 10px 18px;
@@ -681,7 +681,7 @@
 }@media (hover: hover) {
   .favItem:hover .favRemove { opacity: 1; }
 }@media (hover: hover) {
-  .favRemove:hover { background: #FF6B6B; }
+  .favRemove:hover { background: #DC2626; }
 }
 
 /* ── 분석 (Tab 2) ───────────── */
@@ -721,10 +721,10 @@
   margin: 0 0 6px;
   font-family: 'Inter', system-ui, sans-serif;
 }
-.contrastGrade[data-grade="aaa"] { background: rgba(62, 255, 155, 0.15); color: #3EFF9B; }
-.contrastGrade[data-grade="aa"]  { background: rgba(200, 255, 62, 0.15); color: var(--accent); }
-.contrastGrade[data-grade="aa-large"] { background: rgba(255, 184, 62, 0.15); color: #FFB83E; }
-.contrastGrade[data-grade="fail"] { background: rgba(255, 107, 107, 0.15); color: #FF6B6B; }
+.contrastGrade[data-grade="aaa"] { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.contrastGrade[data-grade="aa"]  { background: rgba(14, 165, 233, 0.15); color: var(--accent); }
+.contrastGrade[data-grade="aa-large"] { background: rgba(217, 119, 6, 0.15); color: #D97706; }
+.contrastGrade[data-grade="fail"] { background: rgba(220, 38, 38, 0.15); color: #DC2626; }
 .contrastNote { font-size: 11px; color: var(--muted); margin: 0; }
 .contrastTip {
   margin-top: 12px;
@@ -896,8 +896,8 @@
 
 /* ── 면책 ────────────────────── */
 .disclaimer {
-  background: rgba(200, 255, 62, 0.04);
-  border: 1px solid rgba(200, 255, 62, 0.18);
+  background: rgba(14, 165, 233, 0.04);
+  border: 1px solid rgba(14, 165, 233, 0.18);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;

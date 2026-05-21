@@ -36,12 +36,12 @@
 
 /* 워밍업·쿨다운 공통 안내 카드 */
 .warmupCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 12px; padding: 14px 18px;
 }
 .warmupTitle {
-  font-size: 13px; font-weight: 700; color: #3EC8FF;
+  font-size: 13px; font-weight: 700; color: #0891B2;
   margin: 0 0 10px;
 }
 .warmupList {
@@ -63,7 +63,7 @@
    ══════════════════════════════════════════════ */
 .goalCheck {
   position: absolute; top: 6px; right: 8px;
-  background: var(--accent); color: #0D0D0D;
+  background: var(--accent); color: #ffffff;
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -71,7 +71,7 @@
 .goalBtn { position: relative; }
 .goalActive {
   border-width: 2px !important;
-  box-shadow: 0 0 0 3px rgba(200,255,62,0.18);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.18);
   transform: translateY(-1px);
 }
 
@@ -81,8 +81,8 @@
 .lapHint {
   font-size: 11.5px; color: var(--muted); line-height: 1.7;
   margin: 12px 0 0; padding: 10px 12px;
-  background: rgba(62,200,255,0.06); border-radius: 8px;
-  border-left: 3px solid #3EC8FF;
+  background: rgba(8,145,178,0.14); border-radius: 8px;
+  border-left: 3px solid #0891B2;
 }
 .lapHint strong { color: var(--text); }
 
@@ -129,7 +129,7 @@
   .customDistBtn:hover { color: var(--text); border-color: var(--accent); }
 }
 .customDistBtnActive {
-  background: var(--accent) !important; color: #0D0D0D !important;
+  background: var(--accent) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 @media (max-width: 480px) {
@@ -137,7 +137,7 @@
 }
 
 .customResultCard {
-  background: var(--bg3); border: 1px solid rgba(200,255,62,0.3);
+  background: var(--bg3); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 10px; padding: 14px 16px;
 }
 .customResultTitle {
@@ -168,15 +168,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -264,10 +264,10 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeRecord { border-color: rgba(255,217,62,0.40); }
-.modeTarget { border-color: rgba(62,200,255,0.40); }
-.modeRecord.modeActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
-.modeTarget.modeActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.modeRecord { border-color: rgba(202,138,4,0.40); }
+.modeTarget { border-color: rgba(8,145,178,0.40); }
+.modeRecord.modeActive { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.modeTarget.modeActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 /* ── 시간 입력 (분:초 / 시:분:초) ── */
 .timeInputRow {
@@ -297,7 +297,7 @@
   text-align: center;
   box-sizing: border-box;
 }
-.timeInput:focus { border-color: #FFD93E; }
+.timeInput:focus { border-color: #CA8A04; }
 .timeInput::-webkit-outer-spin-button,
 .timeInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .timeInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -324,7 +324,7 @@
   box-sizing: border-box;
   margin-bottom: 8px;
 }
-.distSelect:focus { border-color: #FFD93E; }
+.distSelect:focus { border-color: #CA8A04; }
 .distSelect option { background: #1a1a1a; color: var(--text); }
 
 .recordTabs {
@@ -346,11 +346,11 @@
 }@media (hover: hover) {
   .recordTabBtn:hover { color: var(--text); }
 }
-.recordTabActive { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
+.recordTabActive { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 
 .vdotShow {
   font-size: 12px;
-  color: #FFD93E;
+  color: #CA8A04;
   margin-top: 6px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -388,16 +388,16 @@
 .goalLabel { font-size: 11.5px; font-weight: 600; }
 .goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; letter-spacing: 0.04em; }
 
-.goalSpeed { border-color: rgba(255,107,107,0.40); }
+.goalSpeed { border-color: rgba(220,38,38,0.40); }
 .goal5k    { border-color: var(--accent); }
-.goal10k   { border-color: rgba(255,140,62,0.40); }
-.goalHalf  { border-color: rgba(62,200,255,0.40); }
+.goal10k   { border-color: rgba(234,88,12,0.40); }
+.goalHalf  { border-color: rgba(8,145,178,0.40); }
 .goalMar   { border-color: rgba(155,89,182,0.40); }
-.goalSpeed.goalActive { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.goalSpeed.goalActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .goal5k.goalActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.goal10k.goalActive   { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.goalHalf.goalActive  { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.goalMar.goalActive   { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.goal10k.goalActive   { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.goalHalf.goalActive  { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.goalMar.goalActive   { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 /* ── 인터벌 거리 체크박스 ── */
 .distGrid {
@@ -429,7 +429,7 @@
   position: absolute;
   top: -8px;
   right: -2px;
-  background: #FFD93E;
+  background: #CA8A04;
   color: #000;
   font-size: 9px;
   padding: 1px 6px;
@@ -441,7 +441,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(255,217,62,0.40);
+  border: 1px solid rgba(202,138,4,0.40);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -452,7 +452,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #FFD93E;
+  color: #CA8A04;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -485,9 +485,9 @@
   font-weight: 600;
 }
 .lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
-.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #FFD93E; font-size: 14px; }
+.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #CA8A04; font-size: 14px; }
 .lapTable td:nth-child(3) { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
-.lapTable .standardRow td { background: rgba(255,217,62,0.04); }
+.lapTable .standardRow td { background: rgba(202,138,4,0.04); }
 .lapCopyBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -499,14 +499,14 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.12s;
 }@media (hover: hover) {
-  .lapCopyBtn:hover { color: #FFD93E; border-color: #FFD93E; }
+  .lapCopyBtn:hover { color: #CA8A04; border-color: #CA8A04; }
 }
-.lapCopyBtn.copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; }
+.lapCopyBtn.copied { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; }
 
 /* ── 추천 훈련 카드 ── */
 .recoCard {
-  background: rgba(255,217,62,0.05);
-  border: 1px solid rgba(255,217,62,0.30);
+  background: rgba(202,138,4,0.05);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -514,7 +514,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: #FFD93E;
+  color: #CA8A04;
   margin-bottom: 12px;
 }
 .recoRow {
@@ -554,8 +554,8 @@
 
 /* ── 경고 카드 ── */
 .warnCard {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 14px;
   padding: 16px 20px;
 }
@@ -563,7 +563,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 13.5px;
-  color: #FF6B6B;
+  color: #DC2626;
   margin-bottom: 10px;
 }
 .warnList {
@@ -580,7 +580,7 @@
 }
 .warnList li::before {
   content: '•';
-  color: #FF6B6B;
+  color: #DC2626;
   position: absolute;
   left: 6px;
   font-weight: 800;
@@ -596,14 +596,14 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 8px;
 }
-.relLow    { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.relMid    { background: rgba(255,217,62,0.15); color: #FFD93E; }
-.relHigh   { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+.relLow    { background: rgba(234,88,12,0.15); color: #EA580C; }
+.relMid    { background: rgba(202,138,4,0.15); color: #CA8A04; }
+.relHigh   { background: rgba(16,185,129,0.15); color: #059669; }
 
 /* ── 야소 800 안내 카드 ── */
 .yassoNote {
-  background: rgba(255,140,62,0.06);
-  border: 2px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 2px solid rgba(234,88,12,0.30);
   border-radius: 14px;
   padding: 16px 20px;
 }
@@ -611,7 +611,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 13.5px;
-  color: #FF8C3E;
+  color: #EA580C;
   margin-bottom: 10px;
 }
 .yassoNoteText {
@@ -640,7 +640,7 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.yassoTable td:first-child { color: #FFD93E; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.yassoTable td:first-child { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .yassoTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .yassoTable td:last-child { color: var(--muted); font-size: 12px; }
 
@@ -664,7 +664,7 @@
   text-align: center;
   box-sizing: border-box;
 }
-.splitInput:focus { border-color: #FFD93E; }
+.splitInput:focus { border-color: #CA8A04; }
 
 /* ── 슬라이더 ── */
 .sliderRow {
@@ -675,14 +675,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #FFD93E;
+  accent-color: #CA8A04;
 }
 .sliderValue {
   min-width: 64px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #FFD93E;
+  color: #CA8A04;
   text-align: right;
 }
 
@@ -717,11 +717,11 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
-.phaseAdapt  td:last-child { color: #3EFF9B; }
+.phaseAdapt  td:last-child { color: #059669; }
 .phaseDevel  td:last-child { color: var(--accent); }
-.phaseRecov  td:last-child { color: #3EC8FF; }
-.phasePeak   td:last-child { color: #FF8C3E; }
-.phaseTaper  td:last-child { color: #C485E0; }
+.phaseRecov  td:last-child { color: #0891B2; }
+.phasePeak   td:last-child { color: #EA580C; }
+.phaseTaper  td:last-child { color: #9333EA; }
 
 .scheduleDetailCard {
   background: var(--bg3);
@@ -743,7 +743,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.marathonExtra strong { color: #C485E0; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.marathonExtra strong { color: #9333EA; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 .marathonExtra ul { padding-left: 18px; margin: 8px 0 0; color: var(--muted); }
 
 /* ── 결과 복사 ── */
@@ -760,6 +760,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #FFD93E; color: #FFD93E; }
+  .copyBtn:hover { border-color: #CA8A04; color: #CA8A04; }
 }
-.copied { background: rgba(255,217,62,0.12); color: #FFD93E; border-color: #FFD93E; font-weight: 700; }
+.copied { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }

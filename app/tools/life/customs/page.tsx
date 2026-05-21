@@ -83,8 +83,8 @@ export default function CustomsPage() {
       <h2 style={sectionTitle}>📋 목록통관 vs 일반통관 차이</h2>
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EFFD0', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, margin: '0 0 6px' }}>✅ 목록통관 (Type C)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>✅ 목록통관 (Type C)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>관세·부가세 면제</strong><br />
               조건:<br />
@@ -94,8 +94,8 @@ export default function CustomsPage() {
               • 합산 과세 X (2일 내 분리)
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FF3E8C', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 6px' }}>❌ 일반통관 (Type D)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>❌ 일반통관 (Type D)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>관세 + 부가세 부과</strong><br />
               조건:<br />
@@ -157,11 +157,11 @@ export default function CustomsPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '⭐ 무관세 (0%)', d: '노트북·태블릿·핸드폰·도서. 부가세 10%만 부과 (도서는 부가세도 면제).', c: '#3EFFD0' },
-            { t: '👜 8%', d: '가방·핸드백·지갑·가죽 신발·시계·선글라스·전자제품·완구·운동용품.', c: '#FFB83E' },
-            { t: '👕 13%', d: '의류 (편직·직물·니트·셔츠·바지·재킷)·운동화·유아 의류.', c: '#FF8C3E' },
-            { t: '💄 6.5%', d: '화장품·헤어·바디 케어 (기초·립스틱·파운데이션 등).', c: '#3EC8FF' },
-            { t: '🍷 15~36%', d: '와인 15% + 주세 30% / 치즈 36% / 일부 식품 8~30%.', c: '#FF3E8C' },
+            { t: '⭐ 무관세 (0%)', d: '노트북·태블릿·핸드폰·도서. 부가세 10%만 부과 (도서는 부가세도 면제).', c: '#0D9488' },
+            { t: '👜 8%', d: '가방·핸드백·지갑·가죽 신발·시계·선글라스·전자제품·완구·운동용품.', c: '#D97706' },
+            { t: '👕 13%', d: '의류 (편직·직물·니트·셔츠·바지·재킷)·운동화·유아 의류.', c: '#EA580C' },
+            { t: '💄 6.5%', d: '화장품·헤어·바디 케어 (기초·립스틱·파운데이션 등).', c: '#0891B2' },
+            { t: '🍷 15~36%', d: '와인 15% + 주세 30% / 치즈 36% / 일부 식품 8~30%.', c: '#DB2777' },
             { t: '⚠️ 200만원+ 개소세', d: '가방·시계·주얼리: 200만원 초과분에 개별소비세 20% 추가.', c: '#9B59B6' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>

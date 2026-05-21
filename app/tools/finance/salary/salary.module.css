@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -40,10 +40,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveReverse  { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveRaise    { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveHourly   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveTable    { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveReverse  { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveRaise    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveHourly   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveTable    { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -270,16 +270,16 @@
   text-align: right;
 }
 .deductionRowSection {
-  background: rgba(62,200,255,0.06);
-  border-color: rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border-color: rgba(8,145,178,0.30);
   font-weight: 600;
 }
-.deductionRowSection span:not(:first-child) { color: #3EC8FF; }
+.deductionRowSection span:not(:first-child) { color: #0891B2; }
 .deductionRowTax {
-  background: rgba(255,140,62,0.06);
-  border-color: rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border-color: rgba(234,88,12,0.30);
 }
-.deductionRowTax span:not(:first-child) { color: #FF8C3E; }
+.deductionRowTax span:not(:first-child) { color: #EA580C; }
 .deductionRowTotal {
   background: var(--accent-dim);
   border-color: var(--accent);
@@ -365,17 +365,17 @@
   font-size: 13px;
 }
 .raiseRowHigh {
-  background: rgba(255,140,62,0.08);
-  border-color: rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border-color: rgba(234,88,12,0.30);
 }
 .raiseRowVeryHigh {
-  background: rgba(255,107,107,0.08);
-  border-color: rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border-color: rgba(220,38,38,0.30);
 }
 .raisePct {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #3EC8FF;
+  color: #0891B2;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
@@ -556,8 +556,8 @@
 
 /* ── 정보 박스 ── */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -565,11 +565,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -577,4 +577,4 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }

@@ -131,11 +131,11 @@ export default function SourdoughPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { t: '15~18°C', c: '#3EC8FF', title: '느린 발효', desc: '피크 12~18시간. 복잡한 산미 발달에 유리합니다. 겨울철 실내 일반.' },
-              { t: '20~22°C', c: '#3EFF9B', title: '표준 속도', desc: '균형 잡힌 발효. 대부분의 레시피가 가정하는 기준 온도입니다.' },
-              { t: '23~25°C', c: '#C8FF3E', title: '빠른 발효', desc: '여름 실내 일반. 급이 주기를 12시간 이하로 짧게 가져가세요.' },
-              { t: '26~28°C', c: '#FF8C3E', title: '매우 빠름', desc: '급이 비율을 1:3:3 이상으로 늘려야 과발효를 막을 수 있습니다.' },
-              { t: '28°C+',   c: '#FF6B6B', title: '주의 구간', desc: '아세톤 생성 위험. 냉장 보관이나 에어컨 공간 활용을 고려하세요.' },
+              { t: '15~18°C', c: '#0891B2', title: '느린 발효', desc: '피크 12~18시간. 복잡한 산미 발달에 유리합니다. 겨울철 실내 일반.' },
+              { t: '20~22°C', c: '#059669', title: '표준 속도', desc: '균형 잡힌 발효. 대부분의 레시피가 가정하는 기준 온도입니다.' },
+              { t: '23~25°C', c: '#0EA5E9', title: '빠른 발효', desc: '여름 실내 일반. 급이 주기를 12시간 이하로 짧게 가져가세요.' },
+              { t: '26~28°C', c: '#EA580C', title: '매우 빠름', desc: '급이 비율을 1:3:3 이상으로 늘려야 과발효를 막을 수 있습니다.' },
+              { t: '28°C+',   c: '#DC2626', title: '주의 구간', desc: '아세톤 생성 위험. 냉장 보관이나 에어컨 공간 활용을 고려하세요.' },
             ].map((z, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${z.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: z.c, marginBottom: '4px' }}>{z.t}</p>
@@ -153,11 +153,11 @@ export default function SourdoughPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { p: '🧪 아세톤/매니큐어 냄새', c: '#FF6B6B', s: '과산성화 상태. 스타터 일부만 남기고 1:5:5 비율로 리셋. 2~3회 급이 후 정상화됩니다.' },
-              { p: '💥 초반 폭발 후 조용해짐', c: '#C8FF3E', s: '유해균→효모로 교체되는 정상 과정. 2~3일 더 급이를 유지하면 다시 반응이 올라옵니다.' },
-              { p: '⏱️ 피크가 너무 빠름 (2시간 이내)', c: '#FF8C3E', s: '온도가 과도하게 높습니다. 더 시원한 곳으로 옮기거나 급이 비율을 1:3:3 이상으로 늘리세요.' },
-              { p: '⏳ 24시간 동안 피크 없음', c: '#3EC8FF', s: '너무 차갑습니다. 22~25°C 공간으로 옮기거나 호밀가루 10~20%를 섞어 활성화 속도를 높이세요.' },
-              { p: '💧 물처럼 묽어짐', c: '#FF8C3E', s: '과발효로 글루텐이 분해된 상태. 급이 횟수를 1일 2회로 늘리고, 밀가루 비율을 스타터의 2배로.' },
+              { p: '🧪 아세톤/매니큐어 냄새', c: '#DC2626', s: '과산성화 상태. 스타터 일부만 남기고 1:5:5 비율로 리셋. 2~3회 급이 후 정상화됩니다.' },
+              { p: '💥 초반 폭발 후 조용해짐', c: '#0EA5E9', s: '유해균→효모로 교체되는 정상 과정. 2~3일 더 급이를 유지하면 다시 반응이 올라옵니다.' },
+              { p: '⏱️ 피크가 너무 빠름 (2시간 이내)', c: '#EA580C', s: '온도가 과도하게 높습니다. 더 시원한 곳으로 옮기거나 급이 비율을 1:3:3 이상으로 늘리세요.' },
+              { p: '⏳ 24시간 동안 피크 없음', c: '#0891B2', s: '너무 차갑습니다. 22~25°C 공간으로 옮기거나 호밀가루 10~20%를 섞어 활성화 속도를 높이세요.' },
+              { p: '💧 물처럼 묽어짐', c: '#EA580C', s: '과발효로 글루텐이 분해된 상태. 급이 횟수를 1일 2회로 늘리고, 밀가루 비율을 스타터의 2배로.' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.c}55`, borderLeft: `3px solid ${m.c}`, borderRadius: '10px', padding: '14px 18px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: m.c, marginBottom: '6px' }}>{m.p}</p>
@@ -177,9 +177,9 @@ export default function SourdoughPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
-              { icon: '✅', title: '뜨면', color: '#3EFF9B', desc: '충분한 가스 생성 = 베이킹 준비 완료. 피크 직후 타이밍일 가능성이 높습니다.' },
-              { icon: '❌', title: '가라앉으면', color: '#FF6B6B', desc: '아직 미성숙이거나 이미 피크를 지난 상태. 1~2시간 더 기다리거나 다음 급이 후 재테스트.' },
-              { icon: '⚠️', title: '주의', color: '#FF8C3E', desc: '묽은 스타터·호밀 비율이 높은 경우 부정확할 수 있습니다. 부피 2배 팽창 확인을 병행하세요.' },
+              { icon: '✅', title: '뜨면', color: '#059669', desc: '충분한 가스 생성 = 베이킹 준비 완료. 피크 직후 타이밍일 가능성이 높습니다.' },
+              { icon: '❌', title: '가라앉으면', color: '#DC2626', desc: '아직 미성숙이거나 이미 피크를 지난 상태. 1~2시간 더 기다리거나 다음 급이 후 재테스트.' },
+              { icon: '⚠️', title: '주의', color: '#EA580C', desc: '묽은 스타터·호밀 비율이 높은 경우 부정확할 수 있습니다. 부피 2배 팽창 확인을 병행하세요.' },
             ].map((f, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '18px', marginBottom: '6px' }}>{f.icon}</p>

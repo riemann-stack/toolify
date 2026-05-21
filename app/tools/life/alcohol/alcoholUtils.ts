@@ -213,10 +213,10 @@ export function riskLevel(alcoholG: number, sex: 'male' | 'female'): {
 } {
   const limit = sex === 'male' ? KOREAN_DAILY_LOW_RISK_G.male : KOREAN_DAILY_LOW_RISK_G.female
   const pct = Math.round((alcoholG / limit) * 100)
-  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 적정',         color: '#3EFF9B' }
+  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 적정',         color: '#059669' }
   if (pct <= 100) return { level: 'caution',   pct, label: '🟡 권장 한도 근접', color: '#FFD93E' }
-  if (pct <= 200) return { level: 'high',      pct, label: '🟠 큰 폭 초과',    color: '#FF8C3E' }
-  return                  { level: 'very-high', pct, label: '🔴 위험 음주',    color: '#FF6B6B' }
+  if (pct <= 200) return { level: 'high',      pct, label: '🟠 큰 폭 초과',    color: '#EA580C' }
+  return                  { level: 'very-high', pct, label: '🔴 위험 음주',    color: '#DC2626' }
 }
 
 // ─────────────────────────────────────────────────────────────

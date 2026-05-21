@@ -106,13 +106,13 @@ export default function HousingScorePage() {
               <tbody>
                 <tr>
                   <td style={cell}><strong>🏠 무주택 기간</strong></td>
-                  <td style={cell}><strong style={{ color: '#3EC8FF' }}>32점</strong></td>
+                  <td style={cell}><strong style={{ color: '#0891B2' }}>32점</strong></td>
                   <td style={cell}>38%</td>
                   <td style={cell}>만 30세 또는 결혼일부터. 1년당 +2점, 15년 만점</td>
                 </tr>
                 <tr>
                   <td style={cell}><strong>👨‍👩‍👧‍👦 부양가족</strong></td>
-                  <td style={cell}><strong style={{ color: '#3EFF9B' }}>35점</strong></td>
+                  <td style={cell}><strong style={{ color: '#059669' }}>35점</strong></td>
                   <td style={cell}>42%</td>
                   <td style={cell}>본인 제외 0명 = 5점, 1명당 +5점, 6명 만점</td>
                 </tr>
@@ -138,7 +138,7 @@ export default function HousingScorePage() {
               <li><strong style={{ color: 'var(--text)' }}>만 30세 이상 + 미혼</strong>: 만 30세 생일부터</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이전 결혼</strong>: 혼인 신고일부터 (가장 유리)</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이후 결혼·이혼</strong>: 만 30세 생일부터 (결혼일과 무관)</li>
-              <li><strong style={{ color: 'var(--text)' }}>만 30세 미만 + 미혼</strong>: <strong style={{ color: '#FF6B6B' }}>0년 (불리)</strong></li>
+              <li><strong style={{ color: 'var(--text)' }}>만 30세 미만 + 미혼</strong>: <strong style={{ color: '#DC2626' }}>0년 (불리)</strong></li>
               <li><strong style={{ color: 'var(--text)' }}>1주택 처분서약</strong>: 매도일 또는 처분 동의일부터 카운트 재시작</li>
             </ul>
           </div>
@@ -185,8 +185,8 @@ export default function HousingScorePage() {
             ].map((b, i) => {
               const ok = b.name.startsWith('✅')
               return (
-                <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${ok ? '#3EFF9B44' : '#FF6B6B44'}`, borderRadius: 10, padding: '11px 14px' }}>
-                  <p style={{ fontSize: 13, color: ok ? '#3EFF9B' : '#FF6B6B', fontWeight: 700, margin: '0 0 4px' }}>{b.name}</p>
+                <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${ok ? '#05966944' : '#DC262644'}`, borderRadius: 10, padding: '11px 14px' }}>
+                  <p style={{ fontSize: 13, color: ok ? '#059669' : '#DC2626', fontWeight: 700, margin: '0 0 4px' }}>{b.name}</p>
                   <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{b.desc}</p>
                 </div>
               )
@@ -380,7 +380,7 @@ export default function HousingScorePage() {
                 <li><strong>본인이 세대주</strong> + 부모가 세대원</li>
                 <li><strong>부모도 무주택</strong> (주택 소유 시 부양가족 X)</li>
               </ul>
-              <strong style={{ color: '#FF6B6B' }}>주의</strong>: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수.
+              <strong style={{ color: '#DC2626' }}>주의</strong>: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수.
             </div>
           </details>
 

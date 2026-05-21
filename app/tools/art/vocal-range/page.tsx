@@ -50,7 +50,7 @@ export default function VocalRangePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>분류</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#C485E0', fontWeight: 700 }}>음역</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#9333EA', fontWeight: 700 }}>음역</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>예시 (한국 가수)</th>
                 </tr>
               </thead>
@@ -67,7 +67,7 @@ export default function VocalRangePage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -95,8 +95,8 @@ export default function VocalRangePage() {
         {/* 4. 정확도 한계 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>측정 정확도 한계 (중요)</h2>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '8px' }}>⚠️ 본 도구의 정확도 한계</p>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>⚠️ 본 도구의 정확도 한계</p>
             <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
               <li>· <strong style={{ color: 'var(--text)' }}>마이크 품질</strong> 영향 큼 — PC 외장 마이크 &gt; 노트북 내장 &gt; 모바일 내장</li>
               <li>· <strong style={{ color: 'var(--text)' }}>주변 소음</strong> — 반주·말소리·에어컨 소리는 측정값을 흔듭니다</li>
@@ -114,9 +114,9 @@ export default function VocalRangePage() {
             본 도구는 한국 인기곡 <strong style={{ color: 'var(--text)' }}>30곡 이상</strong>의 음역 데이터를 보유합니다. 사용자 음역에 맞는 노래를 자동 추천하며, 노래방 키 변경(±6) 시뮬레이션을 통해 다음을 알려드립니다 —
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>· <strong style={{ color: '#3EFF9B' }}>원키</strong> — 키 변경 없이 부를 수 있는 곡</li>
-            <li>· <strong style={{ color: '#FFD700' }}>±1~2 키</strong> — 살짝 조정으로 안정적</li>
-            <li>· <strong style={{ color: '#FF8C3E' }}>±3~6 키</strong> — 큰 폭 조정 필요 (편곡 영향 있음)</li>
+            <li>· <strong style={{ color: '#059669' }}>원키</strong> — 키 변경 없이 부를 수 있는 곡</li>
+            <li>· <strong style={{ color: '#CA8A04' }}>±1~2 키</strong> — 살짝 조정으로 안정적</li>
+            <li>· <strong style={{ color: '#EA580C' }}>±3~6 키</strong> — 큰 폭 조정 필요 (편곡 영향 있음)</li>
           </ul>
           <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ⓘ 음역만 비교한 결과이며, 실제 노래 난이도는 멜로디 도약·리듬·발성 기교에 따라 더 어려울 수 있습니다. 본 정보는 일반 참고용입니다.
@@ -153,7 +153,7 @@ export default function VocalRangePage() {
               <li><strong style={{ color: 'var(--text)' }}>가장자리 음역 천천히 도전</strong> — 매일 조금씩, 무리 X</li>
               <li><strong style={{ color: 'var(--text)' }}>복부 호흡(횡격막 호흡)</strong> — 안정적 발성 기초</li>
               <li><strong style={{ color: 'var(--text)' }}>믹스 보이스 훈련</strong> — 진성·가성 연결 (유튜브·전문가 강의 권장)</li>
-              <li style={{ color: '#FF6B6B' }}><strong>금기 — 무리한 고음·소리 지르기</strong>: 성대 결절·출혈 위험</li>
+              <li style={{ color: '#DC2626' }}><strong>금기 — 무리한 고음·소리 지르기</strong>: 성대 결절·출혈 위험</li>
             </ul>
           </div>
           <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
@@ -210,8 +210,8 @@ export default function VocalRangePage() {
 
         {/* 면책 강화 */}
         <section>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '8px' }}>⚠️ 면책 조항</p>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 20px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>⚠️ 면책 조항</p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '6px' }}>
               본 도구는 <strong style={{ color: 'var(--text)' }}>마이크 입력 기반 추정 도구</strong>이며 정확한 음역대 측정·평가 도구가 아닙니다. 보컬 트레이너의 청각 평가·전문 장비를 권장합니다.
             </p>

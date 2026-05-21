@@ -52,7 +52,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* ── 입력 ── */
 .input {
@@ -122,7 +122,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 /* ── 프로파일 ── */
 .profileGrid {
@@ -201,8 +201,8 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(135deg, rgba(62,255,208,0.1) 0%, rgba(200,255,62,0.06) 100%);
-  border: 1px solid rgba(62,255,208,0.3);
+  background: linear-gradient(135deg, rgba(13,148,136,0.1) 0%, rgba(14,165,233,0.14) 100%);
+  border: 1px solid rgba(13,148,136,0.3);
   border-radius: 14px;
   padding: 24px 22px;
   text-align: center;
@@ -275,36 +275,36 @@
   line-height: 1.6;
   margin: 0;
 }
-.warnLevel_green   { background: rgba(62, 255, 155, 0.06); border-color: rgba(62, 255, 155, 0.4); }
-.warnLevel_green .warnTitle { color: #3EFF9B; }
+.warnLevel_green   { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.4); }
+.warnLevel_green .warnTitle { color: #059669; }
 .warnLevel_yellow  { background: rgba(255, 217, 62, 0.06); border-color: rgba(255, 217, 62, 0.4); }
-.warnLevel_yellow .warnTitle { color: #FFD93E; }
-.warnLevel_orange  { background: rgba(255, 140, 62, 0.06); border-color: rgba(255, 140, 62, 0.4); }
-.warnLevel_orange .warnTitle { color: #FF8C3E; }
-.warnLevel_red     { background: rgba(255, 107, 107, 0.06); border-color: rgba(255, 107, 107, 0.4); }
-.warnLevel_red .warnTitle { color: #FF6B6B; }
+.warnLevel_yellow .warnTitle { color: #CA8A04; }
+.warnLevel_orange  { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.4); }
+.warnLevel_orange .warnTitle { color: #EA580C; }
+.warnLevel_red     { background: rgba(220, 38, 38, 0.06); border-color: rgba(220, 38, 38, 0.4); }
+.warnLevel_red .warnTitle { color: #DC2626; }
 
 /* ── 위험·주의 카드 (자가체크) ── */
 .dangerCard {
   margin-top: 8px;
-  background: rgba(255, 107, 107, 0.08);
-  border: 1px solid rgba(255, 107, 107, 0.4);
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.4);
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 12px;
 }
-.dangerCard strong { display: block; color: #FF6B6B; margin-bottom: 4px; }
+.dangerCard strong { display: block; color: #DC2626; margin-bottom: 4px; }
 .dangerCard p { margin: 0; color: var(--muted); line-height: 1.6; }
 
 .cautionCard {
   margin-top: 8px;
-  background: rgba(255, 184, 62, 0.08);
-  border: 1px solid rgba(255, 184, 62, 0.4);
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px solid rgba(217, 119, 6, 0.4);
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 12px;
 }
-.cautionCard strong { display: block; color: #FFB83E; margin-bottom: 4px; }
+.cautionCard strong { display: block; color: #D97706; margin-bottom: 4px; }
 .cautionCard p { margin: 0; color: var(--muted); line-height: 1.6; }
 
 .warnCard {
@@ -386,7 +386,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: #3EFF9B; color: #3EFF9B; }
+.copyBtnDone { border-color: #059669; color: #059669; }
 
 .routineSaveRow {
   display: flex;
@@ -404,7 +404,7 @@
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap;
@@ -426,7 +426,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
-  .clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
+  .clearBtn:hover { border-color: #DC2626; color: #DC2626; }
 }
 
 /* ── 추천 카드 (레이스 기반) ── */
@@ -506,7 +506,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .routineRemove:hover { color: #FF8C8C; }
+  .routineRemove:hover { color: #DC2626; }
 }
 .routineMeta {
   font-size: 12px;
@@ -535,7 +535,7 @@
   margin-top: 4px;
   align-self: flex-start;
 }@media (hover: hover) {
-  .routineApply:hover { background: var(--accent); color: #0D0D0D; }
+  .routineApply:hover { background: var(--accent); color: #ffffff; }
 }
 .routineActions {
   display: grid;
@@ -559,8 +559,8 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.25);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -569,7 +569,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -685,9 +685,9 @@
 
 /* 웜업·쿨다운 결과 표 행 */
 .warmRow td {
-  background: rgba(62,255,155,0.04);
+  background: rgba(16,185,129,0.14);
 }
 .warmRow .cellNum {
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 800;
 }

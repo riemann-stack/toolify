@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -99,10 +99,10 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(200,255,62,0.40); }
-.modeMeter { border-color: rgba(62,200,255,0.40); }
+.modePyung { border-color: rgba(14,165,233,0.40); }
+.modeMeter { border-color: rgba(8,145,178,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(62,200,255,0.10); color: #3EC8FF;       border-color: #3EC8FF;     font-weight: 700; }
+.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
 
 /* ── 평수 드롭다운 ── */
 .pyungSelect {
@@ -255,13 +255,13 @@
   font-weight: 400;
   margin-top: 2px;
 }
-.partWalls   { border-color: rgba(200,255,62,0.45); }
-.partCeiling { border-color: rgba(62,200,255,0.45); }
-.partDoors   { border-color: rgba(255,215,0,0.45); }
+.partWalls   { border-color: rgba(14,165,233,0.45); }
+.partCeiling { border-color: rgba(8,145,178,0.45); }
+.partDoors   { border-color: rgba(202,138,4,0.45); }
 .partFrame   { border-color: rgba(155,89,182,0.45); }
 .partWalls.partActive   { background: var(--accent-dim);      border-color: var(--accent); }
-.partCeiling.partActive { background: rgba(62,200,255,0.10); border-color: #3EC8FF; }
-.partDoors.partActive   { background: rgba(255,215,0,0.10);  border-color: #FFD700; }
+.partCeiling.partActive { background: rgba(8,145,178,0.18); border-color: #0891B2; }
+.partDoors.partActive   { background: rgba(202,138,4,0.18);  border-color: #CA8A04; }
 .partFrame.partActive   { background: rgba(155,89,182,0.10); border-color: #9B59B6; }
 
 /* ── 창문·문 프리셋 ── */
@@ -324,20 +324,20 @@
 }@media (hover: hover) {
   .paintCard:hover { border-color: var(--border-hover); }
 }
-.pntWater   { border-color: rgba(200,255,62,0.40); }
-.pntOil     { border-color: rgba(255,140,62,0.40); }
-.pntEnamel  { border-color: rgba(255,215,0,0.40); }
-.pntExterior { border-color: rgba(62,200,255,0.40); }
-.pntPrimer  { border-color: rgba(232,151,87,0.40); }
-.pntEco     { border-color: rgba(62,255,155,0.40); }
+.pntWater   { border-color: rgba(14,165,233,0.40); }
+.pntOil     { border-color: rgba(234,88,12,0.40); }
+.pntEnamel  { border-color: rgba(202,138,4,0.40); }
+.pntExterior { border-color: rgba(8,145,178,0.40); }
+.pntPrimer  { border-color: rgba(234,88,12,0.40); }
+.pntEco     { border-color: rgba(16,185,129,0.40); }
 .pntCustom  { border-color: var(--border); }
 
 .pntWater.pntActive    { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
-.pntOil.pntActive      { background: rgba(255,140,62,0.10);  border-color: #FF8C3E;       color: #FF8C3E; }
-.pntEnamel.pntActive   { background: rgba(255,215,0,0.10);   border-color: #FFD700;       color: #FFD700; }
-.pntExterior.pntActive { background: rgba(62,200,255,0.10);  border-color: #3EC8FF;       color: #3EC8FF; }
-.pntPrimer.pntActive   { background: rgba(232,151,87,0.10);  border-color: #E89757;       color: #E89757; }
-.pntEco.pntActive      { background: rgba(62,255,155,0.10);  border-color: #3EFF9B;       color: #3EFF9B; }
+.pntOil.pntActive      { background: rgba(234,88,12,0.18);  border-color: #EA580C;       color: #EA580C; }
+.pntEnamel.pntActive   { background: rgba(202,138,4,0.18);   border-color: #CA8A04;       color: #CA8A04; }
+.pntExterior.pntActive { background: rgba(8,145,178,0.18);  border-color: #0891B2;       color: #0891B2; }
+.pntPrimer.pntActive   { background: rgba(234,88,12,0.18);  border-color: #EA580C;       color: #EA580C; }
+.pntEco.pntActive      { background: rgba(16,185,129,0.18);  border-color: #059669;       color: #059669; }
 .pntCustom.pntActive   { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
 
 .paintName {
@@ -363,12 +363,12 @@
   border-radius: 999px;
   margin-top: 6px;
 }
-.bgWater   { background: rgba(200,255,62,0.15); color: var(--accent); }
-.bgOil     { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.bgEnamel  { background: rgba(255,215,0,0.15);  color: #FFD700; }
-.bgExterior{ background: rgba(62,200,255,0.15); color: #3EC8FF; }
-.bgPrimer  { background: rgba(232,151,87,0.15); color: #E89757; }
-.bgEco     { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+.bgWater   { background: rgba(14,165,233,0.15); color: var(--accent); }
+.bgOil     { background: rgba(234,88,12,0.15); color: #EA580C; }
+.bgEnamel  { background: rgba(202,138,4,0.15);  color: #CA8A04; }
+.bgExterior{ background: rgba(8,145,178,0.15); color: #0891B2; }
+.bgPrimer  { background: rgba(234,88,12,0.15); color: #EA580C; }
+.bgEco     { background: rgba(16,185,129,0.15); color: #059669; }
 
 /* ── 브랜드 프리셋 ── */
 .brandRow {
@@ -391,17 +391,17 @@
 }@media (hover: hover) {
   .brandBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.brandSamhwa     { border-color: rgba(255,107,107,0.40); }
-.brandKcc        { border-color: rgba(62,200,255,0.40); }
-.brandNoroo      { border-color: rgba(255,215,0,0.40); }
-.brandDunn       { border-color: rgba(200,255,62,0.40); }
+.brandSamhwa     { border-color: rgba(220,38,38,0.40); }
+.brandKcc        { border-color: rgba(8,145,178,0.40); }
+.brandNoroo      { border-color: rgba(202,138,4,0.40); }
+.brandDunn       { border-color: rgba(14,165,233,0.40); }
 .brandBenjamin   { border-color: rgba(155,89,182,0.40); }
 
-.brandSamhwa.brandActive   { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.brandKcc.brandActive      { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.brandNoroo.brandActive    { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.brandSamhwa.brandActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.brandKcc.brandActive      { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.brandNoroo.brandActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 .brandDunn.brandActive     { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.brandBenjamin.brandActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.brandBenjamin.brandActive { background: rgba(155,89,182,0.10); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 .coverageInputRow {
   display: grid;
@@ -436,13 +436,13 @@
   margin-bottom: 2px;
 }
 .coatOnce  { border-color: var(--border); }
-.coatTwice { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.coatThree { border-color: rgba(255,140,62,0.45); }@media (hover: hover) {
+.coatTwice { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.coatThree { border-color: rgba(234,88,12,0.45); }@media (hover: hover) {
   .coatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.coatOnce.coatActive  { background: rgba(255,255,255,0.06);   color: var(--text);   border-color: var(--text);  font-weight: 700; }
+.coatOnce.coatActive  { background: rgba(15,23,42,0.04);   color: var(--text);   border-color: var(--text);  font-weight: 700; }
 .coatTwice.coatActive { background: var(--accent-dim);        color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.coatThree.coatActive { background: rgba(255,140,62,0.10);   color: #FF8C3E;       border-color: #FF8C3E;       font-weight: 700; }
+.coatThree.coatActive { background: rgba(234,88,12,0.18);   color: #EA580C;       border-color: #EA580C;       font-weight: 700; }
 
 /* ── 로스율 ── */
 .lossGrid {
@@ -469,19 +469,19 @@
   font-size: 16px;
   margin-bottom: 2px;
 }
-.lossSafe { border-color: rgba(62,255,155,0.40); }
-.lossStd  { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.lossWarn { border-color: rgba(255,140,62,0.40); }@media (hover: hover) {
+.lossSafe { border-color: rgba(16,185,129,0.40); }
+.lossStd  { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.lossWarn { border-color: rgba(234,88,12,0.40); }@media (hover: hover) {
   .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.lossSafe.lossActive { background: rgba(62,255,155,0.12);  color: #3EFF9B;       border-color: #3EFF9B; font-weight: 700; }
+.lossSafe.lossActive { background: rgba(16,185,129,0.18);  color: #059669;       border-color: #059669; font-weight: 700; }
 .lossStd.lossActive  { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.lossWarn.lossActive { background: rgba(255,140,62,0.12);  color: #FF8C3E;       border-color: #FF8C3E; font-weight: 700; }
+.lossWarn.lossActive { background: rgba(234,88,12,0.18);  color: #EA580C;       border-color: #EA580C; font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(232,151,87,0.40);
+  border: 1px solid rgba(234,88,12,0.40);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -506,7 +506,7 @@
 
 /* ── 추천 구매 조합 카드 ── */
 .canRecCard {
-  background: rgba(200,255,62,0.05);
+  background: rgba(14,165,233,0.14);
   border: 2px solid var(--accent);
   border-radius: 16px;
   padding: 22px 24px;
@@ -600,8 +600,8 @@
   color: var(--text);
   white-space: nowrap;
 }
-.subRow td:last-child { color: #FF6B6B; }
-.addRow td:last-child { color: #3EC8FF; }
+.subRow td:last-child { color: #DC2626; }
+.addRow td:last-child { color: #0891B2; }
 .coatRow td {
   background: var(--accent-dim);
   font-weight: 700;
@@ -611,7 +611,7 @@
 .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .totalRow td:first-child { color: var(--accent); }
@@ -667,7 +667,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeRoomBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .wallSubBlock {
@@ -714,8 +714,8 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
 }
-.openingWindow { color: #3EC8FF; border-color: rgba(62,200,255,0.4); }
-.openingDoor   { color: #FF8C3E; border-color: rgba(255,140,62,0.4); }
+.openingWindow { color: #0891B2; border-color: rgba(8,145,178,0.4); }
+.openingDoor   { color: #EA580C; border-color: rgba(234,88,12,0.4); }
 .iconBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -727,7 +727,7 @@
 }@media (hover: hover) {
   .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .addBtn {
@@ -785,7 +785,7 @@
 }
 .summaryTotal td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
   font-weight: 800;
 }
@@ -817,24 +817,24 @@
   color: var(--text);
   white-space: nowrap;
 }
-.selfRow td  { background: rgba(200,255,62,0.05); }
-.proRow td   { background: rgba(62,200,255,0.05); }
+.selfRow td  { background: rgba(14,165,233,0.14); }
+.proRow td   { background: rgba(8,145,178,0.14); }
 .totalRowSelf td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .totalRowSelf td:first-child { color: var(--accent); }
 .totalRowSelf td:last-child  { color: var(--accent); font-size: 15px; }
 .totalRowPro td {
-  background: rgba(62,200,255,0.12);
+  background: rgba(8,145,178,0.18);
   font-weight: 800;
-  border-top: 2px solid rgba(62,200,255,0.3);
+  border-top: 2px solid rgba(8,145,178,0.3);
   border-bottom: none;
 }
-.totalRowPro td:first-child { color: #3EC8FF; }
-.totalRowPro td:last-child  { color: #3EC8FF; font-size: 15px; }
+.totalRowPro td:first-child { color: #0891B2; }
+.totalRowPro td:last-child  { color: #0891B2; font-size: 15px; }
 
 .priceTierGrid {
   display: grid;
@@ -870,8 +870,8 @@
 .priceTierActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 .compareLine {
-  background: rgba(232,151,87,0.05);
-  border: 1px solid rgba(232,151,87,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -879,7 +879,7 @@
   line-height: 1.85;
   margin-top: 12px;
 }
-.compareLine strong { color: #E89757; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareLine strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 결과 복사 ── */
 .copyBtn {

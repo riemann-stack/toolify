@@ -50,8 +50,8 @@
   justify-content: center;
   width: 100%; box-sizing: border-box;
   padding: 12px 10px;
-  background: rgba(200,255,62,0.06);
-  border: 1px solid rgba(200,255,62,0.30);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 10px;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px; font-weight: 800;
@@ -133,8 +133,8 @@
   .resultCell:hover { border-color: var(--border-hover); }
 }
 .resultCellHighlight {
-  background: rgba(200,255,62,0.06);
-  border-color: rgba(200,255,62,0.40);
+  background: rgba(14,165,233,0.14);
+  border-color: rgba(14,165,233,0.40);
 }
 .resultCellTop {
   display: flex;
@@ -190,17 +190,17 @@
   display: flex; flex-direction: column; gap: 6px;
   border: 1px solid var(--border);
 }
-.gradeStar { background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.4); }
-.gradeGood { background: rgba(62,255,155,0.08); border-color: rgba(62,255,155,0.4); }
+.gradeStar { background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.4); }
+.gradeGood { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.4); }
 .gradeMid  { background: var(--bg2); }
-.gradeLow  { background: rgba(255,140,62,0.08); border-color: rgba(255,140,62,0.4); }
-.gradeBad  { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.4); }
+.gradeLow  { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.4); }
+.gradeBad  { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.4); }
 
 .gradeStar .gradeTitle { color: var(--accent); }
-.gradeGood .gradeTitle { color: #3EFF9B; }
+.gradeGood .gradeTitle { color: #059669; }
 .gradeMid  .gradeTitle { color: var(--text); }
-.gradeLow  .gradeTitle { color: #FF8C3E; }
-.gradeBad  .gradeTitle { color: #FF6B6B; }
+.gradeLow  .gradeTitle { color: #EA580C; }
+.gradeBad  .gradeTitle { color: #DC2626; }
 
 .gradeTitle { font-size: 16px; font-weight: 800; }
 .gradeDesc  { font-size: 12px; color: var(--muted); line-height: 1.7; }

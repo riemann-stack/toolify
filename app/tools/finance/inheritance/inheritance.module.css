@@ -3,15 +3,15 @@
 
 /* ── 면책 조항 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── TABS (5개) ── */
 .tabs {
@@ -40,10 +40,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveInherit { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveHeirs   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveSplit   { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveCompare { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveInherit { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveHeirs   { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveSplit   { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveCompare { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* ── CARDS ── */
 .card {
@@ -81,8 +81,8 @@
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
 .numInput:focus {
-  border-color: rgba(200,255,62,0.5);
-  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+  border-color: rgba(14,165,233,0.5);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
 }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -120,17 +120,17 @@
 }@media (hover: hover) {
   .relBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.relSpouse { border-color: rgba(255,215,0,0.4); }
-.relAdult { border-color: rgba(200,255,62,0.4); }
-.relMinor { border-color: rgba(62,200,255,0.4); }
-.relParent { border-color: rgba(255,140,62,0.4); }
+.relSpouse { border-color: rgba(202,138,4,0.4); }
+.relAdult { border-color: rgba(14,165,233,0.4); }
+.relMinor { border-color: rgba(8,145,178,0.4); }
+.relParent { border-color: rgba(234,88,12,0.4); }
 .relRelative { border-color: var(--border); }
 .relOther { border-color: var(--border); }
 
-.relSpouse.relActive { background: rgba(255,215,0,0.12); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.relSpouse.relActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 .relAdult.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.relMinor.relActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.relParent.relActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.relMinor.relActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.relParent.relActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 .relRelative.relActive,
 .relOther.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -177,7 +177,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); color: var(--accent); }
 
 /* ── select ── */
 .selectInput {
@@ -196,7 +196,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -280,8 +280,8 @@
 
 /* ── 주의 체크 항목 ── */
 .warnList {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.2);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -306,8 +306,8 @@
   border-radius: 14px;
   padding: 20px;
 }
-.compareGift { border-top: 3px solid #3EC8FF; }
-.compareInherit { border-top: 3px solid #FF8C3E; }
+.compareGift { border-top: 3px solid #0891B2; }
+.compareInherit { border-top: 3px solid #EA580C; }
 .compareLabel {
   font-size: 12px;
   color: var(--muted);
@@ -368,13 +368,13 @@
   font-weight: 700;
 }
 .compareTable tr.zeroTaxRow td.numCell {
-  color: #3EFF9B;
+  color: #059669;
 }
 
 /* ── 설명 카드 ── */
 .explainCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -405,7 +405,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .addBtn {
@@ -485,8 +485,8 @@
 
 /* ─── 정보 박스 ─── */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -494,11 +494,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -506,11 +506,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .cautionBox {
-  background: rgba(255,140,62,0.05);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -518,19 +518,19 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.cautionBox strong { color: #FF8C3E; }
+.cautionBox strong { color: #EA580C; }
 .cautionBox ul { margin: 6px 0 0; padding-left: 18px; }
 .cautionBox li { margin: 3px 0; color: var(--muted); }
 
 /* 히어로 색상 변형 */
-.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
-.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
-.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
+.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
+.heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
 .heroPurple { background: rgba(155,89,182,0.04); border-color: rgba(155,89,182,0.30); }
-.heroNumGold   { color: #FFD700; }
-.heroNumOrange { color: #FF8C3E; }
-.heroNumCyan   { color: #3EC8FF; }
-.heroNumPurple { color: #C485E0; }
+.heroNumGold   { color: #CA8A04; }
+.heroNumOrange { color: #EA580C; }
+.heroNumCyan   { color: #0891B2; }
+.heroNumPurple { color: #9333EA; }
 
 /* ─── 상속인 분배 표 ─── */
 .heirsTableWrap { overflow-x: auto; }
@@ -639,7 +639,7 @@
   left: 5%;
   right: 5%;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent), #3EC8FF, var(--accent));
+  background: linear-gradient(90deg, var(--accent), #0891B2, var(--accent));
 }
 .timelineNodes {
   position: relative;
@@ -729,8 +729,8 @@
   font-variant-numeric: tabular-nums;
 }
 .metricValueAccent { color: var(--accent); }
-.metricValueGreen  { color: #3EFF9B; }
-.metricValueRed    { color: #FF6B6B; }
+.metricValueGreen  { color: #059669; }
+.metricValueRed    { color: #DC2626; }
 @media (max-width: 540px) { .metrics { grid-template-columns: 1fr; } }
 
 /* 옵션 버튼 그리드 */

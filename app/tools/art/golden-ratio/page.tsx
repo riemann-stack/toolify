@@ -36,7 +36,7 @@ export default function GoldenRatioPage() {
             그리스 문자 φ(파이)로 표기합니다. 자연·예술·건축에서 가장 아름답게 인식되는 비율로 알려져 있습니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>황금 비율 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.5px' }}>
               φ = (1 + √5) / 2
@@ -85,19 +85,19 @@ export default function GoldenRatioPage() {
             {[
               {
                 title: '1. 로고 디자인 — 요소 크기 비율',
-                color: '#C8FF3E',
+                color: '#0EA5E9',
                 desc: '로고의 심볼과 텍스트, 여백 사이 관계를 황금 비율로 정하면 시각적 안정감이 생깁니다.',
                 example: '심볼 크기 100px → 텍스트 크기 61.8px, 좌우 여백 38.2px',
               },
               {
                 title: '2. 레이아웃 — 본문과 사이드바',
-                color: '#3EFF9B',
+                color: '#059669',
                 desc: '웹사이트 2단 레이아웃에서 콘텐츠와 사이드바를 61.8% : 38.2%로 나누면 황금 비율 구도가 됩니다.',
                 example: '전체 1000px → 본문 618px + 사이드바 382px',
               },
               {
                 title: '3. 타이포그래피 — 제목과 본문',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 desc: '본문 폰트 크기에 φ를 곱한 값을 제목 크기로 사용하면 자연스러운 위계가 생깁니다.',
                 example: '본문 16px × 1.618 ≈ 26px (H3), × 1.618² ≈ 42px (H1)',
               },
@@ -179,14 +179,14 @@ export default function GoldenRatioPage() {
               </thead>
               <tbody>
                 {[
-                  { n: '황금 비율 (φ)', v: '1.618', u: '디자인·예술·자연 — 가장 미적 비율', c: '#C8FF3E' },
-                  { n: '백은 비율 (√2)', v: '1.414', u: 'A4·B5 등 종이 규격 — 반 접어도 같은 비율', c: '#3EC8FF' },
-                  { n: '16:9 (HD)',     v: '1.778', u: '유튜브·TV·모니터·가로 영상',           c: '#FFD700' },
+                  { n: '황금 비율 (φ)', v: '1.618', u: '디자인·예술·자연 — 가장 미적 비율', c: '#0EA5E9' },
+                  { n: '백은 비율 (√2)', v: '1.414', u: 'A4·B5 등 종이 규격 — 반 접어도 같은 비율', c: '#0891B2' },
+                  { n: '16:9 (HD)',     v: '1.778', u: '유튜브·TV·모니터·가로 영상',           c: '#CA8A04' },
                   { n: '4:3',           v: '1.333', u: '구식 TV·아이패드·일부 카메라',         c: '#9B59B6' },
-                  { n: '21:9 (시네마)', v: '2.333', u: '울트라와이드 모니터·영화관',           c: '#FF6B9D' },
-                  { n: '3:2',           v: '1.500', u: '35mm 카메라 사진 표준',                 c: '#3EFF9B' },
+                  { n: '21:9 (시네마)', v: '2.333', u: '울트라와이드 모니터·영화관',           c: '#E11D48' },
+                  { n: '3:2',           v: '1.500', u: '35mm 카메라 사진 표준',                 c: '#059669' },
                   { n: '1:1 (정사각)',  v: '1.000', u: '인스타 피드·앨범 커버·로고',           c: '#FFFFFF' },
-                  { n: '9:16 (세로)',   v: '0.563', u: '인스타 스토리·릴스·틱톡 (모바일 세로)', c: '#FF8C3E' },
+                  { n: '9:16 (세로)',   v: '0.563', u: '인스타 스토리·릴스·틱톡 (모바일 세로)', c: '#EA580C' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.n}</td>

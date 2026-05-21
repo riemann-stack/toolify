@@ -17,29 +17,29 @@ export interface BmiCategory {
 
 export const BMI_CATEGORIES: Record<Standard, BmiCategory[]> = {
   WHO: [
-    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#3EC8FF',
+    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#0891B2',
       desc: '영양 부족 위험. 적정 영양 섭취 권장.' },
-    { id: 'normal',      min: 18.5, max: 25.0, name: '정상',     color: '#3EFF9B',
+    { id: 'normal',      min: 18.5, max: 25.0, name: '정상',     color: '#059669',
       desc: '건강 체중 범위. 균형 잡힌 식단 + 규칙적 운동 유지.' },
-    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: '#FFD700',
+    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: '#CA8A04',
       desc: '대사질환 위험 약간 증가. 체중 관리 권장.' },
-    { id: 'obese-1',     min: 30.0, max: 35.0, name: '비만 1단계', color: '#FF8C3E',
+    { id: 'obese-1',     min: 30.0, max: 35.0, name: '비만 1단계', color: '#EA580C',
       desc: '대사질환·심혈관 위험 증가.' },
-    { id: 'obese-2',     min: 35.0, max: 40.0, name: '비만 2단계', color: '#FF6B6B',
+    { id: 'obese-2',     min: 35.0, max: 40.0, name: '비만 2단계', color: '#DC2626',
       desc: '건강 위험 매우 높음. 의료 상담 권장.' },
     { id: 'obese-3',     min: 40.0, max: 999,  name: '비만 3단계', color: '#CC4444',
       desc: '고도 비만. 의료 전문가 상담 필수.' },
   ],
   KOREA: [
-    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#3EC8FF',
+    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#0891B2',
       desc: '영양 부족 위험.' },
-    { id: 'normal',      min: 18.5, max: 23.0, name: '정상',     color: '#3EFF9B',
+    { id: 'normal',      min: 18.5, max: 23.0, name: '정상',     color: '#059669',
       desc: '건강 체중 범위 (한국 기준).' },
-    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: '#FFD700',
+    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: '#CA8A04',
       desc: '한국인 기준 건강 위험 시작 구간.' },
-    { id: 'obese-1',     min: 25.0, max: 30.0, name: '비만 1단계', color: '#FF8C3E',
+    { id: 'obese-1',     min: 25.0, max: 30.0, name: '비만 1단계', color: '#EA580C',
       desc: '대사질환 위험 증가.' },
-    { id: 'obese-2',     min: 30.0, max: 35.0, name: '비만 2단계', color: '#FF6B6B',
+    { id: 'obese-2',     min: 30.0, max: 35.0, name: '비만 2단계', color: '#DC2626',
       desc: '건강 위험 매우 높음.' },
     { id: 'obese-3',     min: 35.0, max: 999,  name: '비만 3단계', color: '#CC4444',
       desc: '고도 비만.' },
@@ -191,18 +191,18 @@ export interface WHtRResult {
 
 export function calcWaistHeightRatio(waist: number, height: number): WHtRResult {
   if (height <= 0 || waist <= 0) {
-    return { ratio: 0, category: 'normal', name: '정상', color: '#3EFF9B', desc: '입력 필요' }
+    return { ratio: 0, category: 'normal', name: '정상', color: '#059669', desc: '입력 필요' }
   }
   const ratio = waist / height
   if (ratio < 0.43)
-    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: '#3EC8FF', desc: '매우 마른 편. 영양·근육 점검 권장.' }
+    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: '#0891B2', desc: '매우 마른 편. 영양·근육 점검 권장.' }
   if (ratio < 0.49)
-    return { ratio: round2(ratio), category: 'ideal',       name: '이상적',   color: '#3EFF9B', desc: '이상적인 비율. 건강 유지.' }
+    return { ratio: round2(ratio), category: 'ideal',       name: '이상적',   color: '#059669', desc: '이상적인 비율. 건강 유지.' }
   if (ratio < 0.53)
-    return { ratio: round2(ratio), category: 'normal',      name: '정상',     color: '#FFD700', desc: '정상 범위. 0.5 미만 유지 권장.' }
+    return { ratio: round2(ratio), category: 'normal',      name: '정상',     color: '#CA8A04', desc: '정상 범위. 0.5 미만 유지 권장.' }
   if (ratio < 0.58)
-    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: '#FF8C3E', desc: '복부비만 주의 시작. 허리둘레 관리 필요.' }
-  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: '#FF6B6B', desc: '복부비만. 의료 전문가 상담 권장.' }
+    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: '#EA580C', desc: '복부비만 주의 시작. 허리둘레 관리 필요.' }
+  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: '#DC2626', desc: '복부비만. 의료 전문가 상담 권장.' }
 }
 
 function round2(n: number): number { return Math.round(n * 100) / 100 }
@@ -220,12 +220,12 @@ export function classifyAbdominal(waist: number, gender: Gender): AbdominalResul
   const std = WAIST_STANDARDS[gender]
   const limit = gender === 'male' ? '90cm' : '85cm'
   if (waist < std.warning)
-    return { isObese: false, category: 'normal', name: '정상', color: '#3EFF9B',
+    return { isObese: false, category: 'normal', name: '정상', color: '#059669',
              desc: `정상 범위 (${gender === 'male' ? '남성' : '여성'} ${limit} 미만).` }
   if (waist < std.obese)
-    return { isObese: true, category: 'mild', name: '경도 복부비만', color: '#FF8C3E',
+    return { isObese: true, category: 'mild', name: '경도 복부비만', color: '#EA580C',
              desc: '경도 복부비만. 식단·운동 관리 권장.' }
-  return     { isObese: true, category: 'severe', name: '중증 복부비만', color: '#FF6B6B',
+  return     { isObese: true, category: 'severe', name: '중증 복부비만', color: '#DC2626',
              desc: '중증 복부비만. 의료 전문가 상담 권장.' }
 }
 
@@ -250,18 +250,18 @@ export function combinedJudgment(
   if (bmiNormal && !isAbdominalObese)
     return { kind: 'healthy', emoji: '✅', title: '건강한 체형',
              desc: 'BMI·허리둘레 모두 정상 범위. 현재 상태 유지를 권장합니다.',
-             color: '#3EFF9B' }
+             color: '#059669' }
   if (bmiNormal && isAbdominalObese)
     return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
              desc: 'BMI는 정상이지만 허리둘레가 높습니다. 근육 부족 + 복부 지방 가능성이 있어 근력 운동 + 식단 점검을 권장합니다.',
-             color: '#FFD700' }
+             color: '#CA8A04' }
   if (bmiObese && !isAbdominalObese)
     return { kind: 'muscular', emoji: '⚠️', title: '근육 우세형 가능성',
              desc: 'BMI는 비만 범위지만 허리둘레가 정상입니다. 근육량이 많은 운동선수형일 수 있으니 체성분 검사로 정확한 판정을 권장합니다.',
-             color: '#3EC8FF' }
+             color: '#0891B2' }
   return     { kind: 'combined-obese', emoji: '🔴', title: '종합 비만',
              desc: '체중과 복부 지방 모두 관리가 필요합니다. 대사질환 위험이 높으니 의료 전문가 상담을 권장합니다.',
-             color: '#FF6B6B' }
+             color: '#DC2626' }
 }
 
 /* ─── 체지방률 (Navy 공식) ─── */
@@ -293,11 +293,11 @@ export function classifyBodyFat(bf: number, gender: Gender): {
   name: string; color: string; rangeText: string
 } {
   const r = BODY_FAT_RANGES[gender]
-  if (bf < r.excellent)    return { name: '우수',     color: '#3EC8FF', rangeText: gender === 'male' ? '<10%' : '<18%' }
-  if (bf < r.good)         return { name: '좋음',     color: '#3EFF9B', rangeText: gender === 'male' ? '10~15%' : '18~23%' }
-  if (bf < r.average)      return { name: '평균',     color: '#FFD700', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
-  if (bf < r.aboveAverage) return { name: '평균 이상', color: '#FF8C3E', rangeText: gender === 'male' ? '20~25%' : '28~33%' }
-  if (bf < r.poor)         return { name: '높음',     color: '#FF6B6B', rangeText: gender === 'male' ? '25~30%' : '33~38%' }
+  if (bf < r.excellent)    return { name: '우수',     color: '#0891B2', rangeText: gender === 'male' ? '<10%' : '<18%' }
+  if (bf < r.good)         return { name: '좋음',     color: '#059669', rangeText: gender === 'male' ? '10~15%' : '18~23%' }
+  if (bf < r.average)      return { name: '평균',     color: '#CA8A04', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
+  if (bf < r.aboveAverage) return { name: '평균 이상', color: '#EA580C', rangeText: gender === 'male' ? '20~25%' : '28~33%' }
+  if (bf < r.poor)         return { name: '높음',     color: '#DC2626', rangeText: gender === 'male' ? '25~30%' : '33~38%' }
   return                          { name: '위험',     color: '#CC4444', rangeText: gender === 'male' ? '>30%' : '>38%' }
 }
 

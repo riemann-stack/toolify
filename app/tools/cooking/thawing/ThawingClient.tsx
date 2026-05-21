@@ -460,7 +460,7 @@ function ThawTab() {
                 </div>
                 <div className={s.reverseResultRow}>
                   <span>해동 시작 권장</span>
-                  <span style={{ color: '#FFD700', fontSize: 16 }}>{reverseInfo.display}</span>
+                  <span style={{ color: '#CA8A04', fontSize: 16 }}>{reverseInfo.display}</span>
                 </div>
                 <div className={s.reverseResultRow}>
                   <span>현재 시점 대비</span>
@@ -632,7 +632,7 @@ function FreezeTab() {
             </div>
           </div>
           <div>
-            <span className={s.heroNum} style={{ color: '#7DC4FF' }}>{ft.value}</span>
+            <span className={s.heroNum} style={{ color: '#0284C7' }}>{ft.value}</span>
             <span className={s.heroUnit}>{ft.sub}</span>
           </div>
           <div className={s.heroSub}>
@@ -671,7 +671,7 @@ function FreezeTab() {
 
       <div className={s.warnBox}>
         <strong>⚠️ 냉동 전 반드시 확인</strong><br/>
-        · 조리 직후 식품은 <strong style={{ color: '#FF6B6B' }}>반드시 식힌 후</strong> 냉동 (1시간 이내)<br/>
+        · 조리 직후 식품은 <strong style={{ color: '#DC2626' }}>반드시 식힌 후</strong> 냉동 (1시간 이내)<br/>
         · 공기 최대한 제거 · 1회분씩 소분하면 재냉동 방지<br/>
         · 해동한 생 식품의 재냉동은 식중독 위험으로 권장하지 않습니다
       </div>
@@ -690,10 +690,10 @@ function ThermometerBox() {
       <svg className={s.thermSvg} viewBox="0 0 560 80" preserveAspectRatio="xMidYMid meet">
         {/* 4구간 바 */}
         {[
-          { x: 0,   w: 140, color: '#7DC4FF', label: '냉동', range: '−24~−18°C' },
-          { x: 140, w: 120, color: '#3EC8FF', label: '냉장', range: '0~4°C' },
-          { x: 260, w: 160, color: '#FF6B6B', label: '위험 온도대', range: '4~60°C' },
-          { x: 420, w: 140, color: '#FF8C3E', label: '조리 안전', range: '60°C 이상' },
+          { x: 0,   w: 140, color: '#0284C7', label: '냉동', range: '−24~−18°C' },
+          { x: 140, w: 120, color: '#0891B2', label: '냉장', range: '0~4°C' },
+          { x: 260, w: 160, color: '#DC2626', label: '위험 온도대', range: '4~60°C' },
+          { x: 420, w: 140, color: '#EA580C', label: '조리 안전', range: '60°C 이상' },
         ].map((seg, i) => (
           <g key={i}>
             <rect x={seg.x} y={22} width={seg.w} height={34} fill={seg.color} opacity="0.85"

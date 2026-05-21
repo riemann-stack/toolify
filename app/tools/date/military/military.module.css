@@ -128,7 +128,7 @@
   box-sizing: border-box;
   min-width: 0;
 }
-.dobSelect:focus { border-color: rgba(200,255,62,0.5); }
+.dobSelect:focus { border-color: rgba(14,165,233,0.5); }
 .dobSelect option { background: #1a1a1a; color: var(--text); }
 
 /* ── 직접 타이핑 입력 ── */
@@ -146,11 +146,11 @@
   box-sizing: border-box;
   letter-spacing: 0.04em;
 }
-.directInput:focus { border-color: rgba(200,255,62,0.5); }
-.directInput.invalid { border-color: rgba(255,107,107,0.5); }
+.directInput:focus { border-color: rgba(14,165,233,0.5); }
+.directInput.invalid { border-color: rgba(220,38,38,0.5); }
 .validMsg {
   font-size: 11.5px;
-  color: #FF8C8C;
+  color: #DC2626;
   margin-top: 6px;
 }
 
@@ -269,7 +269,7 @@
 }
 .calCellSelected {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   font-weight: 800;
 }
 .calCellToday {
@@ -318,20 +318,20 @@
 }@media (hover: hover) {
   .serviceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.svc18 { border-color: rgba(62,255,155,0.40); }
-.svc20 { border-color: rgba(200,255,62,0.40); }
-.svc21 { border-color: rgba(255,215,0,0.40); }
-.svc23 { border-color: rgba(255,140,62,0.40); }
-.svc34 { border-color: rgba(255,107,107,0.40); }
+.svc18 { border-color: rgba(16,185,129,0.40); }
+.svc20 { border-color: rgba(14,165,233,0.40); }
+.svc21 { border-color: rgba(202,138,4,0.40); }
+.svc23 { border-color: rgba(234,88,12,0.40); }
+.svc34 { border-color: rgba(220,38,38,0.40); }
 .svc36 { border-color: rgba(155,89,182,0.40); }
 .svcCustom { border-color: var(--border); }
 
-.svc18.serviceActive  { background: rgba(62,255,155,0.12);  color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.svc18.serviceActive  { background: rgba(16,185,129,0.18);  color: #059669; border-color: #059669; font-weight: 700; }
 .svc20.serviceActive  { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.svc21.serviceActive  { background: rgba(255,215,0,0.12);   color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.svc23.serviceActive  { background: rgba(255,140,62,0.12);  color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.svc34.serviceActive  { background: rgba(255,107,107,0.12); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.svc36.serviceActive  { background: rgba(155,89,182,0.15);  color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.svc21.serviceActive  { background: rgba(202,138,4,0.18);   color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.svc23.serviceActive  { background: rgba(234,88,12,0.18);  color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.svc34.serviceActive  { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.svc36.serviceActive  { background: rgba(155,89,182,0.15);  color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 .svcCustom.serviceActive { background: var(--accent-dim);    color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 직접 입력 (커스텀 복무기간) ── */
@@ -391,8 +391,8 @@
 
 /* ── 폐지 제도 안내 ── */
 .deprecatedNote {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.25);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.25);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 11.5px;
@@ -430,7 +430,7 @@
 
 /* ── 오늘 알림 카드 ── */
 .todayBanner {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border: 2px solid var(--accent);
   border-radius: 14px;
   padding: 18px 22px;
@@ -454,7 +454,7 @@
 /* ── 히어로: 진행바 + 핵심 ── */
 .heroWrap {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 24px;
   display: flex;
@@ -480,7 +480,7 @@
   position: absolute;
   top: 0; left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  background: linear-gradient(90deg, #059669, var(--accent));
   border-radius: 99px;
   transition: width 0.6s ease;
 }
@@ -556,9 +556,9 @@
   letter-spacing: -1px;
   line-height: 1;
 }
-.dDayValue.passed { color: #3EFF9B; }
-.dDayValue.warn { color: #FF8C3E; }
-.dDayValue.danger { color: #FF6B6B; }
+.dDayValue.passed { color: #059669; }
+.dDayValue.warn { color: #EA580C; }
+.dDayValue.danger { color: #DC2626; }
 .dDaySub {
   font-size: 11px;
   color: var(--muted);
@@ -568,7 +568,7 @@
 }
 .dDayPassed {
   font-size: 13px;
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -585,7 +585,7 @@
   position: absolute;
   top: 0; left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  background: linear-gradient(90deg, #059669, var(--accent));
   border-radius: 99px;
   transition: width 0.6s ease;
 }
@@ -600,8 +600,8 @@
   transform: translate(-50%, -50%);
 }
 .progressBarMarker.markerLast100 {
-  background: #FF6B6B;
-  border-color: #FF6B6B;
+  background: #DC2626;
+  border-color: #DC2626;
   width: 3px;
 }
 .progressBarMarkerLabel {
@@ -615,7 +615,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
-.progressBarMarkerLabel.last100 { color: #FF6B6B; }
+.progressBarMarkerLabel.last100 { color: #DC2626; }
 .progressBarCurrent {
   position: absolute;
   top: 50%;
@@ -649,17 +649,17 @@
   transition: all 0.2s;
 }
 .milestoneReached {
-  background: rgba(200,255,62,0.05);
-  border-color: rgba(200,255,62,0.2);
+  background: rgba(14,165,233,0.14);
+  border-color: rgba(14,165,233,0.2);
 }
 .milestoneToday {
-  background: rgba(200,255,62,0.12);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   animation: msPulse 2s ease-in-out infinite;
 }
 @keyframes msPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200,255,62,0.4); }
-  50% { box-shadow: 0 0 0 6px rgba(200,255,62,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(14,165,233,0); }
 }
 .milestoneIcon {
   font-size: 16px;

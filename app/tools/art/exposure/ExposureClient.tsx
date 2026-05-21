@@ -565,7 +565,7 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{dof.label}</p>
               </div>
             </div>
-            <RatingBar level={dof.level} max={5} color="#3EFFD0" />
+            <RatingBar level={dof.level} max={5} color="#0D9488" />
             <p className={s.tradeDesc}>{dof.desc}</p>
             <p className={s.tradeNote}>
               현재 {apt.label} → 5 단계 중 <strong>{dof.level}단계</strong>.
@@ -582,7 +582,7 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{blur.label}{blur.tripod && ' · 🛠️ 삼각대 권장'}</p>
               </div>
             </div>
-            <RatingBar level={6 - blur.level} max={5} color="#FFB83E" />
+            <RatingBar level={6 - blur.level} max={5} color="#D97706" />
             <p className={s.tradeDesc}>{blur.desc}</p>
             <p className={s.tradeNote}>
               📐 안전 셔터 룰: <strong>1 / (초점거리 × 크롭 팩터)</strong> 이상.
@@ -599,7 +599,7 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{noise.label}</p>
               </div>
             </div>
-            <RatingBar level={noise.level} max={5} color="#FF3E8C" />
+            <RatingBar level={noise.level} max={5} color="#DB2777" />
             <p className={s.tradeDesc}>{noise.desc}</p>
             <p className={s.tradeNote}>
               💡 최신 풀프레임 카메라(2020~)는 ISO 6400~12800까지 실용 가능.

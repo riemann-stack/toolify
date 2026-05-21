@@ -833,7 +833,7 @@ function PaceTab({ now }: { now: Date }) {
                   <span className={s.paceBarFill}
                     style={{
                       width: `${Math.min(100, totalN > 0 ? (pace.expectedFinish / totalN) * 100 : 0)}%`,
-                      background: pace.isOnTrack ? '#3EFF9B' : '#FF6B6B',
+                      background: pace.isOnTrack ? '#059669' : '#DC2626',
                     }} />
                 </span>
                 <span className={s.paceBarValue}>{pace.expectedFinish.toLocaleString()}</span>
@@ -841,7 +841,7 @@ function PaceTab({ now }: { now: Date }) {
               <div className={s.paceBarRow}>
                 <span className={s.paceBarLabel}>완료한 양</span>
                 <span className={s.paceBarTrack}>
-                  <span className={s.paceBarFill} style={{ width: `${pace.percent}%`, background: '#3EC8FF' }} />
+                  <span className={s.paceBarFill} style={{ width: `${pace.percent}%`, background: '#0891B2' }} />
                 </span>
                 <span className={s.paceBarValue}>{doneN.toLocaleString()}</span>
               </div>

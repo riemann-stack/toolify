@@ -22,7 +22,7 @@
 /* ── 히어로 결과 (sticky) ── */
 .heroResult {
   background: var(--bg2);
-  border: 1.5px solid rgba(200,255,62,0.4);
+  border: 1.5px solid rgba(14,165,233,0.4);
   border-radius: 14px;
   padding: 16px 18px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -33,7 +33,7 @@
   top: 8px;
   z-index: 10;
   backdrop-filter: blur(6px);
-  background: rgba(20, 20, 20, 0.92);
+  background: rgba(240, 247, 255, 0.92);
 }
 .heroLeft { flex: 1; min-width: 0; }
 .heroLead { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 4px; }
@@ -48,7 +48,7 @@
   color: var(--accent); line-height: 1; letter-spacing: -1px;
 }
 .heroPriceUnit { font-size: 14px; font-weight: 700; margin-left: 2px; color: var(--muted); }
-.heroDiff { font-size: 11px; color: #3EFF9B; margin-top: 4px; font-weight: 600; }
+.heroDiff { font-size: 11px; color: #059669; margin-top: 4px; font-weight: 600; }
 
 /* ── 빈 상태 ── */
 .empty {
@@ -76,9 +76,9 @@
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
   border-radius: 14px 14px 0 0;
 }
-.cardA::before { background: #3EC8FF; }
-.cardB::before { background: #C8FF3E; }
-.cardC::before { background: #FF8C3E; }
+.cardA::before { background: #0891B2; }
+.cardB::before { background: #0EA5E9; }
+.cardC::before { background: #EA580C; }
 
 /* 상품명 라인: 라벨 inline + input — 라벨이 글자와 겹치지 않도록 */
 .nameRow {
@@ -89,11 +89,11 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 800;
   width: 24px; height: 24px; border-radius: 999px;
   display: inline-flex; align-items: center; justify-content: center;
-  color: #0D0D0D;
+  color: #ffffff;
 }
-.nameBadge.cardA { background: #3EC8FF; }
-.nameBadge.cardB { background: #C8FF3E; }
-.nameBadge.cardC { background: #FF8C3E; }
+.nameBadge.cardA { background: #0891B2; }
+.nameBadge.cardB { background: #0EA5E9; }
+.nameBadge.cardC { background: #EA580C; }
 .nameInput {
   flex: 1; min-width: 0; padding: 8px 10px !important;
   min-height: 36px !important; font-size: 14px !important;
@@ -105,7 +105,7 @@
   font-size: 18px; cursor: pointer; padding: 4px 8px; line-height: 1;
   min-width: 28px; min-height: 28px; z-index: 1;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; }
+  .removeBtn:hover { color: #DC2626; }
 }
 
 .addBtn {
@@ -141,7 +141,7 @@
   outline: none; transition: border-color 0.2s;
   min-height: 40px;  /* 모바일 터치 타깃 */
 }
-.input:focus, .select:focus { border-color: rgba(200,255,62,0.5); }
+.input:focus, .select:focus { border-color: rgba(14,165,233,0.5); }
 .inputBig { font-size: 16px; font-weight: 700; }
 .inputRight { text-align: right; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
@@ -212,11 +212,11 @@
   text-align: center; min-height: 44px; transition: all 0.15s;
 }
 @media (hover: hover) {
-  .consumptionPill:hover { border-color: rgba(255,140,62,0.4); }
+  .consumptionPill:hover { border-color: rgba(234,88,12,0.4); }
 }
 .consumptionPillActive {
-  background: rgba(255,140,62,0.12); border-color: #FF8C3E;
-  color: #FF8C3E; font-weight: 800;
+  background: rgba(234,88,12,0.18); border-color: #EA580C;
+  color: #EA580C; font-weight: 800;
 }
 /* 직접입력 칩 — input + % 단위 */
 .consumptionCustomWrap {
@@ -236,11 +236,11 @@
 .consumptionCustomInput::placeholder { color: var(--muted); font-weight: 400; font-size: 11.5px; font-family: 'Noto Sans KR', sans-serif; }
 .consumptionCustomUnit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .consumptionCustomWrap.consumptionPillActive {
-  background: rgba(255,140,62,0.12);
-  border-color: #FF8C3E;
+  background: rgba(234,88,12,0.18);
+  border-color: #EA580C;
 }
 .consumptionCustomWrap.consumptionPillActive .consumptionCustomInput,
-.consumptionCustomWrap.consumptionPillActive .consumptionCustomUnit { color: #FF8C3E; }
+.consumptionCustomWrap.consumptionPillActive .consumptionCustomUnit { color: #EA580C; }
 @media (max-width: 480px) {
   .consumptionPills { gap: 4px; }
   .consumptionPill { font-size: 12px; padding: 9px 2px; }
@@ -260,20 +260,20 @@
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px; transition: all 0.15s;
 }@media (hover: hover) {
-  .basePill:hover:not(:disabled) { border-color: rgba(200,255,62,0.4); }
+  .basePill:hover:not(:disabled) { border-color: rgba(14,165,233,0.4); }
 }
 .basePillActive {
-  background: var(--accent); color: #0D0D0D; border-color: var(--accent); font-weight: 700;
+  background: var(--accent); color: #ffffff; border-color: var(--accent); font-weight: 700;
 }
 .basePill:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .sameMoneyRow {
   margin-top: 12px; display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2); border-radius: 10px;
+  padding: 10px 14px; background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2); border-radius: 10px;
   flex-wrap: wrap;
 }
-.sameMoneyCheck { width: 18px; height: 18px; accent-color: #3EC8FF; cursor: pointer; }
+.sameMoneyCheck { width: 18px; height: 18px; accent-color: #0891B2; cursor: pointer; }
 .sameMoneyLabel { font-size: 13px; color: var(--text); cursor: pointer; flex: 1; }
 .sameMoneyInput {
   width: 110px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
@@ -299,7 +299,7 @@
 .compareTable tbody td.num {
   text-align: right; font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
 }
-.winnerRow { background: rgba(200,255,62,0.08); }
+.winnerRow { background: rgba(14,165,233,0.14); }
 .trophy { font-size: 14px; margin-left: 4px; }
 .unitPriceCell {
   font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 800;
@@ -309,11 +309,11 @@
 .productLabel { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .productTag {
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
-  color: #0D0D0D; padding: 2px 8px; border-radius: 99px;
+  color: #ffffff; padding: 2px 8px; border-radius: 99px;
 }
-.tagA { background: #3EC8FF; }
-.tagB { background: #C8FF3E; }
-.tagC { background: #FF8C3E; }
+.tagA { background: #0891B2; }
+.tagB { background: #0EA5E9; }
+.tagC { background: #EA580C; }
 
 /* ── 배지 ── */
 .badgeRow { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
@@ -321,15 +321,15 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 700;
   padding: 2px 8px; border-radius: 99px;
 }
-.badgeCount { background: var(--bg3); color: var(--accent); border: 1px solid rgba(200,255,62,0.3); }
-.badgeConsumption { background: rgba(255,140,62,0.12); color: #FF8C3E; border: 1px solid rgba(255,140,62,0.3); }
+.badgeCount { background: var(--bg3); color: var(--accent); border: 1px solid rgba(14,165,233,0.3); }
+.badgeConsumption { background: rgba(234,88,12,0.18); color: #EA580C; border: 1px solid rgba(234,88,12,0.3); }
 
 /* ── 실질 단가 박스 ── */
 .effectiveBox {
-  background: rgba(255,140,62,0.06); border: 1px solid rgba(255,140,62,0.3);
+  background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.3);
   border-radius: 10px; padding: 14px 16px; margin-top: 14px;
 }
-.effectiveTitle { font-size: 13px; font-weight: 700; color: #FF8C3E; margin: 0 0 8px; }
+.effectiveTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
 .effectiveItem { font-size: 13px; color: var(--text); line-height: 1.8; margin: 0 0 4px; }
 .effectiveItem strong { color: var(--text); }
 .effectiveHint { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 8px 0 0; }
@@ -344,7 +344,7 @@
 .diffBox { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 .diffLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .diffValue { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; color: var(--accent); }
-.diffStrong { color: #3EFF9B; }
+.diffStrong { color: #059669; }
 .diffMedium { color: var(--accent); }
 .diffWeak   { color: var(--muted); }
 
@@ -352,14 +352,14 @@
 .actionRow { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-top: 14px; }
 @media (max-width: 480px) { .actionRow { grid-template-columns: 1fr; } }
 .shareBtn {
-  background: var(--accent); color: #0D0D0D; border: none;
+  background: var(--accent); color: #ffffff; border: none;
   padding: 14px 18px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: all 0.15s; min-height: 48px;
 }@media (hover: hover) {
   .shareBtn:hover { opacity: 0.88; }
 }
-.shareBtn.copied { background: #3EFF9B; }
+.shareBtn.copied { background: #059669; }
 .resetBtn {
   background: var(--bg3); color: var(--text); border: 1px solid var(--border);
   padding: 14px 18px; border-radius: 10px;
@@ -378,7 +378,7 @@
 .errorBox {
   background: rgba(255,80,80,0.08); border: 1px solid rgba(255,80,80,0.3);
   border-radius: 12px; padding: 12px 16px;
-  font-size: 13px; color: #FF6B6B; line-height: 1.7;
+  font-size: 13px; color: #DC2626; line-height: 1.7;
 }
 
 @keyframes fadeUp {

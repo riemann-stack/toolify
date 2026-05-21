@@ -104,9 +104,9 @@ export default function ScrewPage() {
       <h2 style={sectionTitle}>📐 탭드릴 vs 관통홀 vs 파일럿홀 차이</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { name: '🔩 탭드릴 (Tap Drill)', color: '#3EFF9B', desc: '탭(나사산 절삭) 가공 전 미리 뚫는 홀. 외경보다 작음 (피치만큼).', use: '예: M6 → 5.0mm로 뚫고 → M6 탭으로 나사산 가공' },
-          { name: '🟦 관통홀 (Clearance)', color: '#3EC8FF', desc: '볼트가 통과하는 홀. 외경보다 약간 큼 (정밀/일반/헐거움).', use: '예: M6 → 6.4mm(정밀) / 6.6mm(일반) / 7.0mm(헐거움)' },
-          { name: '🟧 파일럿홀 (Pilot)', color: '#FFB83E', desc: '목재피스 박기 전 미리 뚫는 안내홀. 직경의 65~70%.', use: '예: 3.5mm 피스 → 2.5mm(경질목) / 2.0mm(연질목)' },
+          { name: '🔩 탭드릴 (Tap Drill)', color: '#059669', desc: '탭(나사산 절삭) 가공 전 미리 뚫는 홀. 외경보다 작음 (피치만큼).', use: '예: M6 → 5.0mm로 뚫고 → M6 탭으로 나사산 가공' },
+          { name: '🟦 관통홀 (Clearance)', color: '#0891B2', desc: '볼트가 통과하는 홀. 외경보다 약간 큼 (정밀/일반/헐거움).', use: '예: M6 → 6.4mm(정밀) / 6.6mm(일반) / 7.0mm(헐거움)' },
+          { name: '🟧 파일럿홀 (Pilot)', color: '#D97706', desc: '목재피스 박기 전 미리 뚫는 안내홀. 직경의 65~70%.', use: '예: 3.5mm 피스 → 2.5mm(경질목) / 2.0mm(연질목)' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: p.color, fontWeight: 700, marginBottom: '8px' }}>{p.name}</p>
@@ -133,19 +133,19 @@ export default function ScrewPage() {
           </thead>
           <tbody>
             <tr>
-              <td style={{ ...cell, color: '#3EC8FF', fontWeight: 700 }}>50%</td>
+              <td style={{ ...cell, color: '#0891B2', fontWeight: 700 }}>50%</td>
               <td style={cell}>약 D − 0.65×P</td>
               <td style={cell}>얕은 탭·가공 쉬움·분리 쉬움</td>
               <td style={cell}>임시·자주 분해</td>
             </tr>
             <tr>
-              <td style={{ ...cell, color: '#3EFF9B', fontWeight: 700 }}>75% ⭐</td>
+              <td style={{ ...cell, color: '#059669', fontWeight: 700 }}>75% ⭐</td>
               <td style={cell}>약 D − P (표준)</td>
               <td style={cell}>표준·강도·가공성 균형</td>
               <td style={cell}>대부분 — 권장</td>
             </tr>
             <tr>
-              <td style={{ ...cell, color: '#FF8C3E', fontWeight: 700 }}>85%</td>
+              <td style={{ ...cell, color: '#EA580C', fontWeight: 700 }}>85%</td>
               <td style={cell}>약 D − 1.10×P</td>
               <td style={cell}>깊은 탭·강한 결합·가공 어려움</td>
               <td style={cell}>높은 하중·진동 환경</td>
@@ -161,10 +161,10 @@ export default function ScrewPage() {
       <h2 style={sectionTitle}>🧱 소재별 탭 가공 주의사항</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
-          { name: '🔩 철 (Steel)', color: '#3EFFD0', tips: '표준 탭드릴. 절삭유 사용 권장. 일반 고속강(HSS) 탭 OK.' },
-          { name: '🟦 알루미늄', color: '#3EC8FF', tips: '연성 ↑ → 살짝 큰 드릴 (+0.05mm). 절삭유 필수. 칩이 잘 끼어 자주 빼주기.' },
-          { name: '⚪ 스테인리스', color: '#C8FF3E', tips: '마찰열 ↑ + 가공 경화. 저속 회전·강한 절삭유 필수. 코발트 함유 탭 권장.' },
-          { name: '🟫 황동', color: '#FFB83E', tips: '절삭성 우수. 표준 드릴. 절삭유 X도 가능 (단, 발열 주의).' },
+          { name: '🔩 철 (Steel)', color: '#0D9488', tips: '표준 탭드릴. 절삭유 사용 권장. 일반 고속강(HSS) 탭 OK.' },
+          { name: '🟦 알루미늄', color: '#0891B2', tips: '연성 ↑ → 살짝 큰 드릴 (+0.05mm). 절삭유 필수. 칩이 잘 끼어 자주 빼주기.' },
+          { name: '⚪ 스테인리스', color: '#0EA5E9', tips: '마찰열 ↑ + 가공 경화. 저속 회전·강한 절삭유 필수. 코발트 함유 탭 권장.' },
+          { name: '🟫 황동', color: '#D97706', tips: '절삭성 우수. 표준 드릴. 절삭유 X도 가능 (단, 발열 주의).' },
           { name: '🟩 플라스틱', color: '#B885DA', tips: '셀프태핑 가능 — 탭 가공 X, 파일럿홀만 뚫고 직접 박기. 균열 주의.' },
         ].map((m, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}44`, borderLeft: `3px solid ${m.color}`, borderRadius: '10px', padding: '12px 16px' }}>
@@ -217,14 +217,14 @@ export default function ScrewPage() {
           <li>녹·이물질·윤활 유무에 따라 토크 ±20~30% 변동</li>
         </ul>
       </div>
-      <div style={{ ...card, marginTop: 14, background: 'rgba(255, 107, 107, 0.06)', border: '1px solid rgba(255, 107, 107, 0.3)' }}>
-        <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '8px' }}>🚨 드릴·탭 작업 안전</p>
+      <div style={{ ...card, marginTop: 14, background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)' }}>
+        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>🚨 드릴·탭 작업 안전</p>
         <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
           <li>보호 안경·장갑 착용 (장갑은 회전체 끼임 주의)</li>
           <li>절삭유 사용 (특히 스테인리스·알루미늄)</li>
           <li>탭 부러짐 주의 — 무리한 힘 X, 1~2바퀴마다 1바퀴 역회전 (칩 배출)</li>
           <li>드릴 척에 단단히 고정, 작업물 클램핑</li>
-          <li>응급: <strong style={{ color: '#FFB83E' }}>119</strong></li>
+          <li>응급: <strong style={{ color: '#D97706' }}>119</strong></li>
         </ul>
       </div>
 
@@ -329,7 +329,7 @@ export default function ScrewPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q9. 본 도구의 토크 안내는 정확한가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>일반 참고값</strong>입니다 — 정확치 X. 본 도구는 8.8 등급 강 볼트 기준 일반 범위만 표시.
+          <strong style={{ color: '#DC2626' }}>일반 참고값</strong>입니다 — 정확치 X. 본 도구는 8.8 등급 강 볼트 기준 일반 범위만 표시.
           <br /><br />
           정확한 토크는:
           <ul style={{ paddingLeft: 18, marginTop: 8 }}>
@@ -358,8 +358,8 @@ export default function ScrewPage() {
       {/* 면책 */}
       <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

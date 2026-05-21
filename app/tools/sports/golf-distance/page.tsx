@@ -36,7 +36,7 @@ export default function GolfDistancePage() {
           </p>
 
           {/* 남성 */}
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EC8FF', marginBottom: '8px' }}>👨 남성 아마추어 평균</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>👨 남성 아마추어 평균</p>
           <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -70,7 +70,7 @@ export default function GolfDistancePage() {
           </div>
 
           {/* 여성 */}
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF8C3E', marginBottom: '8px' }}>👩 여성 아마추어 평균</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>👩 여성 아마추어 평균</p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -111,10 +111,10 @@ export default function GolfDistancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             {[
-              { label: '아이언 사이', range: '10~15m', color: '#3EFF9B', desc: '번호당 한 클럽 차이가 이상적' },
-              { label: '우드/유틸 사이', range: '15~25m', color: '#3EC8FF', desc: '로프트 차이가 커서 간격도 큼' },
-              { label: '아이언 ↔ 웨지', range: '10~15m', color: '#C8FF3E', desc: '어프로치 거리 정확도 직결' },
-              { label: '웨지 사이',     range: '10~18m', color: '#FF8C3E', desc: '4도 차이 = 약 10~12m 변화' },
+              { label: '아이언 사이', range: '10~15m', color: '#059669', desc: '번호당 한 클럽 차이가 이상적' },
+              { label: '우드/유틸 사이', range: '15~25m', color: '#0891B2', desc: '로프트 차이가 커서 간격도 큼' },
+              { label: '아이언 ↔ 웨지', range: '10~15m', color: '#0EA5E9', desc: '어프로치 거리 정확도 직결' },
+              { label: '웨지 사이',     range: '10~18m', color: '#EA580C', desc: '4도 차이 = 약 10~12m 변화' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}30`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '6px' }}>{g.label}</p>
@@ -127,7 +127,7 @@ export default function GolfDistancePage() {
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               <strong style={{ color: 'var(--text)' }}>너무 좁으면</strong>: 클럽 개수 낭비, 코스 공략 옵션이 겹침<br/>
               <strong style={{ color: 'var(--text)' }}>너무 넓으면</strong>: 특정 거리 대응 어려움<br/>
-              <strong style={{ color: '#FF6B6B' }}>가장 자주 발생하는 Gap</strong>: PW(110m) ~ SW(85m) 사이 — 갭웨지(AW)로 채우는 구간
+              <strong style={{ color: '#DC2626' }}>가장 자주 발생하는 Gap</strong>: PW(110m) ~ SW(85m) 사이 — 갭웨지(AW)로 채우는 구간
             </p>
           </div>
         </div>
@@ -139,9 +139,9 @@ export default function GolfDistancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '14px' }}>
             {[
-              { name: 'PW', distance: '110~115m', loft: '44~48°', color: '#3EC8FF' },
-              { name: 'AW', distance: '95~100m',  loft: '50~52°', color: '#C8FF3E' },
-              { name: 'SW', distance: '80~90m',   loft: '54~56°', color: '#FF8C3E' },
+              { name: 'PW', distance: '110~115m', loft: '44~48°', color: '#0891B2' },
+              { name: 'AW', distance: '95~100m',  loft: '50~52°', color: '#0EA5E9' },
+              { name: 'SW', distance: '80~90m',   loft: '54~56°', color: '#EA580C' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${c.color}40`, borderRadius: '12px', padding: '16px 14px', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '24px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.name}</p>
@@ -150,9 +150,9 @@ export default function GolfDistancePage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(200,255,62,0.06)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              PW와 SW 사이 <strong style={{ color: '#FF6B6B' }}>약 30m 간격</strong>은 어프로치에서 가장 애매한 거리입니다.
+              PW와 SW 사이 <strong style={{ color: '#DC2626' }}>약 30m 간격</strong>은 어프로치에서 가장 애매한 거리입니다.
               스윙 강도로 거리를 조절하면 정확도가 떨어지므로 <strong style={{ color: 'var(--accent)' }}>AW(52도 웨지)</strong>를 추가해
               풀스윙으로 95~100m를 안정적으로 보낼 수 있게 구성하는 것이 유리합니다.
               많은 투어 프로는 PW · 50도 · 54도 · 58도(또는 60도) 4개 웨지를 사용합니다.
@@ -166,21 +166,21 @@ export default function GolfDistancePage() {
             7번 아이언이 골프 기준 클럽인 이유
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>📐 클럽 세트 중간에 위치</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 드라이버~샌드 웨지 사이의 정중앙. 길이·로프트·라이각·헤드 무게가 가장 균형 잡힌 클럽입니다.
                 롱아이언처럼 길지도, 웨지처럼 짧지도 않아 평균 스윙 특성을 가장 잘 드러냅니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EC8FF', marginBottom: '8px' }}>🎓 레슨·피팅의 기준</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>🎓 레슨·피팅의 기준</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 대부분의 골프 레슨에서 7번 아이언으로 스윙을 가르치고, 클럽 피팅에서도 7I 비거리·런치 앵글·스핀량을 기준으로 다른 클럽 스펙을 결정합니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EFF9B', marginBottom: '8px' }}>🔢 비거리 추정의 기준</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>🔢 비거리 추정의 기준</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 7번 아이언 비거리만 알면 다른 클럽의 평균 비율(DR ≒ 2.3배, PW ≒ 0.76배 등)로 전체 비거리를 추정할 수 있습니다.
                 개인별 차이가 있으나 큰 윤곽을 잡기에 충분합니다.
@@ -208,15 +208,15 @@ export default function GolfDistancePage() {
               </thead>
               <tbody>
                 {[
-                  { f: '🌡️ 기온 +10°C', r: '+2.7%',  e: '+3.9m (여름)', c: '#FF8C3E' },
-                  { f: '🌡️ 기온 -15°C', r: '-4.0%',  e: '-5.9m (한겨울)', c: '#3EC8FF' },
-                  { f: '🏔️ 고도 +1,000m', r: '+4.5%', e: '+6.5m (강원도 고지대)', c: '#3EFF9B' },
-                  { f: '💨 정면 5m/s', r: '-7%',     e: '-10m (강한 역풍)', c: '#FF6B6B' },
-                  { f: '💨 등 5m/s',   r: '+5%',     e: '+7.5m (순풍)', c: '#3EFF9B' },
-                  { f: '⛰️ 오르막 5°', r: '-2%',     e: '-2.5m (약 오르막)', c: '#FF8C3E' },
-                  { f: '⛰️ 내리막 5°', r: '+2.5%',   e: '+3.5m', c: '#3EFF9B' },
-                  { f: '🌿 깊은 러프', r: '-15%',    e: '-22m (코스 진입)', c: '#FF6B6B' },
-                  { f: '🏖️ 벙커',     r: '-30%',    e: '-44m', c: '#FF6B6B' },
+                  { f: '🌡️ 기온 +10°C', r: '+2.7%',  e: '+3.9m (여름)', c: '#EA580C' },
+                  { f: '🌡️ 기온 -15°C', r: '-4.0%',  e: '-5.9m (한겨울)', c: '#0891B2' },
+                  { f: '🏔️ 고도 +1,000m', r: '+4.5%', e: '+6.5m (강원도 고지대)', c: '#059669' },
+                  { f: '💨 정면 5m/s', r: '-7%',     e: '-10m (강한 역풍)', c: '#DC2626' },
+                  { f: '💨 등 5m/s',   r: '+5%',     e: '+7.5m (순풍)', c: '#059669' },
+                  { f: '⛰️ 오르막 5°', r: '-2%',     e: '-2.5m (약 오르막)', c: '#EA580C' },
+                  { f: '⛰️ 내리막 5°', r: '+2.5%',   e: '+3.5m', c: '#059669' },
+                  { f: '🌿 깊은 러프', r: '-15%',    e: '-22m (코스 진입)', c: '#DC2626' },
+                  { f: '🏖️ 벙커',     r: '-30%',    e: '-44m', c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>

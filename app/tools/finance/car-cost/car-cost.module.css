@@ -68,8 +68,8 @@
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
 .numInput:focus {
-  border-color: rgba(200,255,62,0.5);
-  box-shadow: 0 0 0 3px rgba(200,255,62,0.08);
+  border-color: rgba(14,165,233,0.5);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
 }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -110,13 +110,13 @@
 }@media (hover: hover) {
   .fuelBtn:hover { color: var(--text); }
 }
-.fuelGas { border-color: rgba(255,140,62,0.4); }
-.fuelEv { border-color: rgba(62,255,155,0.4); }
-.fuelHybrid { border-color: rgba(62,200,255,0.4); }
+.fuelGas { border-color: rgba(234,88,12,0.4); }
+.fuelEv { border-color: rgba(16,185,129,0.4); }
+.fuelHybrid { border-color: rgba(8,145,178,0.4); }
 
-.fuelGas.fuelActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.fuelEv.fuelActive { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
-.fuelHybrid.fuelActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.fuelGas.fuelActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.fuelEv.fuelActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.fuelHybrid.fuelActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 /* ── PILL ── */
 .pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
@@ -133,7 +133,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); color: var(--accent); }
 
 /* ── 토글 (체크박스 형태) ── */
 .toggleHeader {
@@ -268,7 +268,7 @@
   box-sizing: border-box;
   min-width: 0;
 }
-.smallNum:focus { border-color: rgba(200,255,62,0.5); }
+.smallNum:focus { border-color: rgba(14,165,233,0.5); }
 .smallNum::-webkit-outer-spin-button,
 .smallNum::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .smallNum[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -293,7 +293,7 @@
 }@media (hover: hover) {
   .miniToggle:hover { color: var(--text); }
 }
-.miniToggleOff { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }
+.miniToggleOff { color: #DC2626; border-color: rgba(220,38,38,0.3); }
 
 @media (max-width: 580px) {
   .consumableHeader { display: none; }
@@ -336,8 +336,8 @@
   color: var(--muted);
   line-height: 1.7;
   margin: 0 0 12px;
-  background: rgba(200,255,62,0.04);
-  border-left: 2px solid rgba(200,255,62,0.4);
+  background: rgba(14,165,233,0.14);
+  border-left: 2px solid rgba(14,165,233,0.4);
   padding: 8px 12px;
   border-radius: 6px;
 }
@@ -355,7 +355,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -448,8 +448,8 @@
   text-align: right;
 }
 .breakdownTable tr.deprRow td {
-  background: rgba(255,107,107,0.06);
-  color: #FF6B6B;
+  background: rgba(220,38,38,0.14);
+  color: #DC2626;
 }
 .breakdownTable tr.maxRow td:first-child {
   border-left: 3px solid var(--accent);
@@ -538,7 +538,7 @@
 /* 연간 카드 */
 .annualCard {
   background: var(--bg2);
-  border: 1px solid rgba(255,140,62,0.3);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px;
   padding: 18px 22px;
   text-align: center;
@@ -552,7 +552,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 800;
-  color: #FF8C3E;
+  color: #EA580C;
   letter-spacing: -0.8px;
 }
 .annualSub {
@@ -576,8 +576,8 @@
 .transitLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
 .transitVal { font-family: 'Inter', system-ui, sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
 .transitDiff {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 10px;
   padding: 12px 14px;
   margin-top: 10px;
@@ -588,8 +588,8 @@
 
 /* 절약 팁 */
 .tipsCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -601,8 +601,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12px;
@@ -630,7 +630,7 @@
 /* 외부 링크 */
 .extLink {
   font-size: 12px;
-  color: #3EC8FF;
+  color: #0891B2;
   text-decoration: none;
   margin-top: 6px;
   display: inline-block;
@@ -664,15 +664,15 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActivePurchase  { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveCar       { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveFuel      { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveShare     { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActivePurchase  { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveCar       { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveFuel      { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveShare     { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 정보 박스 */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -680,11 +680,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -692,7 +692,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 /* 도움말 ? — 모바일에서도 탭으로 동작 */
 .helpTipWrap {
@@ -825,8 +825,8 @@
   position: relative;
 }
 .periodCardHighlight {
-  border-color: rgba(200,255,62,0.40);
-  background: rgba(200,255,62,0.04);
+  border-color: rgba(14,165,233,0.40);
+  background: rgba(14,165,233,0.14);
 }
 .periodCardLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .periodCardExcl {
@@ -873,8 +873,8 @@
   position: relative;
 }
 .purchaseCardWinner {
-  border-color: rgba(200,255,62,0.40);
-  background: rgba(200,255,62,0.04);
+  border-color: rgba(14,165,233,0.40);
+  background: rgba(14,165,233,0.14);
 }
 .purchaseWinnerBadge {
   position: absolute;
@@ -946,8 +946,8 @@
 }
 .carCompareTable tbody tr.totalRow { background: var(--accent-dim); }
 .carCompareTable tbody tr.totalRow td:first-child { color: var(--accent); }
-.carCompareTable tbody tr.bestRow { background: rgba(62,255,155,0.06); }
-.carCompareTable tbody tr.bestRow td:first-child { color: #3EFF9B; }
+.carCompareTable tbody tr.bestRow { background: rgba(16,185,129,0.14); }
+.carCompareTable tbody tr.bestRow td:first-child { color: #059669; }
 
 /* 차량 입력 행 */
 .carInputRow {
@@ -984,7 +984,7 @@
   color: var(--muted);
   margin-left: 8px;
 }@media (hover: hover) {
-  .carInputDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .carInputDel:hover { color: #DC2626; border-color: #DC2626; }
 }
 .carInputGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 
@@ -1020,7 +1020,7 @@
   font-size: 12px;
   text-align: right;
 }
-.shareRowOwn { color: #3EC8FF; }
+.shareRowOwn { color: #0891B2; }
 .shareRowShare { color: var(--accent); }
 .shareRowEqual { color: var(--muted); }
 

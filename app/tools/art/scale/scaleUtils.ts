@@ -282,9 +282,9 @@ function chordFunction(degree: number, isMajor: boolean): 'Tonic' | 'Subdominant
 }
 
 const FUNCTION_COLOR = {
-  Tonic: '#3EFFD0',
-  Subdominant: '#FFB83E',
-  Dominant: '#FF3E8C',
+  Tonic: '#0D9488',
+  Subdominant: '#D97706',
+  Dominant: '#DB2777',
 }
 
 const DEGREE_LABELS_MAJOR = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'viiº']
@@ -397,10 +397,10 @@ export const fmt = (n: number, digits = 1) =>
 
 /* 컬러 (피아노·기타 시각화 공통) */
 export const COLORS = {
-  root: '#FF3E8C',
-  third: '#FFB83E',
-  fifth: '#FFB83E',
-  other: '#3EFFD0',
+  root: '#DB2777',
+  third: '#D97706',
+  fifth: '#D97706',
+  other: '#0D9488',
   bg: 'var(--bg3)',
 }
 

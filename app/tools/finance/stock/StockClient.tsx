@@ -239,7 +239,7 @@ export default function StockClient() {
         {/* 현재가 가로선 */}
         {cPrice >= minAvg && cPrice <= maxAvg && (
           <line x1={P} x2={W - P} y1={ys(cPrice)} y2={ys(cPrice)}
-            stroke="#FF8C3E" strokeWidth="1.5" strokeDasharray="5 4" />
+            stroke="#EA580C" strokeWidth="1.5" strokeDasharray="5 4" />
         )}
         <path d={path} fill="none" stroke="var(--accent)" strokeWidth="2.5" />
         {/* 핀 */}
@@ -284,12 +284,12 @@ export default function StockClient() {
         ))}
         {cPrice >= minY && cPrice <= maxY && (
           <line x1={P} x2={W - P} y1={ys(cPrice)} y2={ys(cPrice)}
-            stroke="#FF8C3E" strokeWidth="1.5" strokeDasharray="5 4" />
+            stroke="#EA580C" strokeWidth="1.5" strokeDasharray="5 4" />
         )}
         <path d={avgPath} fill="none" stroke="var(--accent)" strokeWidth="2.5" />
         {dcaResult.map((d, i) => (
           <g key={i}>
-            <circle cx={xs(i)} cy={ys(d.price)} r="4" fill="#3EC8FF" />
+            <circle cx={xs(i)} cy={ys(d.price)} r="4" fill="#0891B2" />
             <circle cx={xs(i)} cy={ys(d.cumulativeAvg)} r="5" fill="var(--accent)" stroke="var(--bg)" strokeWidth="1.5" />
             <text x={xs(i)} y={H - 8} textAnchor="middle" fill="var(--muted)" fontSize="10"
               fontFamily="Noto Sans KR, sans-serif">{i === 0 ? '초기' : `${i}차`}</text>
@@ -321,11 +321,11 @@ export default function StockClient() {
           <line x1={P} x2={W - P} y1={ys(0)} y2={ys(0)}
             stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="5 4" />
         )}
-        <path d={path} fill="none" stroke="#FF8C3E" strokeWidth="2.5" />
+        <path d={path} fill="none" stroke="#EA580C" strokeWidth="2.5" />
         {recoveryRows.map((r, i) => (
           <g key={i}>
             <circle cx={xs(i)} cy={ys(r.roi)} r="4"
-              fill={r.roi >= 0 ? '#3EFF9B' : '#FF6B6B'} />
+              fill={r.roi >= 0 ? '#059669' : '#DC2626'} />
             {(r.delta === 0 || r.delta === RECOVERY_DELTAS[RECOVERY_DELTAS.length - 1]) && (
               <text x={xs(i)} y={H - 8} textAnchor="middle" fill="var(--muted)"
                 fontSize="10" fontFamily="Noto Sans KR, sans-serif">
@@ -621,7 +621,7 @@ export default function StockClient() {
                   <div className={styles.chartWrap}>{renderSliderChart()}</div>
                   <div className={styles.chartLegend}>
                     <span><i style={{ background: 'var(--accent)' }} />새 평단가</span>
-                    <span><i style={{ background: '#FF8C3E' }} />현재 주가</span>
+                    <span><i style={{ background: '#EA580C' }} />현재 주가</span>
                   </div>
                 </div>
               )}
@@ -753,7 +753,7 @@ export default function StockClient() {
               <div className={styles.heroSub}>
                 필요 자금 약 {formatEok(reverseResult.requiredAmount ?? 0)}
               </div>
-              <div className={styles.rateBadge} style={{ background: 'rgba(255,215,0,0.10)', color: '#FFD700', borderColor: 'rgba(255,215,0,0.40)' }}>
+              <div className={styles.rateBadge} style={{ background: 'rgba(202,138,4,0.10)', color: '#CA8A04', borderColor: 'rgba(202,138,4,0.40)' }}>
                 추가 후 본전까지 {formatPct(reverseResult.breakEvenRiseAfter ?? 0)} 상승 필요
               </div>
             </div>
@@ -874,7 +874,7 @@ export default function StockClient() {
                 <div className={styles.heroSub}>
                   총 {dcaFinal.cumulativeShares.toLocaleString()}주 · 투자 {formatEok(dcaFinal.cumulativeInvestment)}
                 </div>
-                <div className={styles.rateBadge} style={{ background: 'rgba(62,200,255,0.10)', color: '#3EC8FF', borderColor: 'rgba(62,200,255,0.40)' }}>
+                <div className={styles.rateBadge} style={{ background: 'rgba(8,145,178,0.10)', color: '#0891B2', borderColor: 'rgba(8,145,178,0.40)' }}>
                   평단 {formatKRW(cAvg)} → {formatKRW(dcaFinal.cumulativeAvg)} ({formatPct((dcaFinal.cumulativeAvg / cAvg - 1) * 100)})
                 </div>
               </div>
@@ -884,8 +884,8 @@ export default function StockClient() {
                 <div className={styles.chartWrap}>{renderDCAChart()}</div>
                 <div className={styles.chartLegend}>
                   <span><i style={{ background: 'var(--accent)' }} />누적 평단가</span>
-                  <span><i style={{ background: '#3EC8FF' }} />차수별 매수가</span>
-                  <span><i style={{ background: '#FF8C3E' }} />현재 주가</span>
+                  <span><i style={{ background: '#0891B2' }} />차수별 매수가</span>
+                  <span><i style={{ background: '#EA580C' }} />현재 주가</span>
                 </div>
               </div>
 
@@ -904,7 +904,7 @@ export default function StockClient() {
                       <span>{d.shares.toLocaleString()}</span>
                       <span>{d.cumulativeShares.toLocaleString()}</span>
                       <span style={{ color: 'var(--accent)' }}>{formatKRW(d.cumulativeAvg)}</span>
-                      <span style={{ color: d.unrealizedROI >= 0 ? '#3EFF9B' : '#FF6B6B' }}>{formatPct(d.unrealizedROI)}</span>
+                      <span style={{ color: d.unrealizedROI >= 0 ? '#059669' : '#DC2626' }}>{formatPct(d.unrealizedROI)}</span>
                     </div>
                   ))}
                 </div>
@@ -922,9 +922,9 @@ export default function StockClient() {
                         {r.delta > 0 ? `+${r.delta}%` : `${r.delta}%`}
                       </span>
                       <span>{formatKRW(r.price)}</span>
-                      <span style={{ color: r.roi >= 0 ? '#3EFF9B' : '#FF6B6B' }}>{formatPct(r.roi)}</span>
+                      <span style={{ color: r.roi >= 0 ? '#059669' : '#DC2626' }}>{formatPct(r.roi)}</span>
                       <span>{formatEok(r.value)}</span>
-                      <span style={{ color: r.pl >= 0 ? '#3EFF9B' : '#FF6B6B' }}>{formatEok(r.pl)}</span>
+                      <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{formatEok(r.pl)}</span>
                     </div>
                   ))}
                 </div>
@@ -960,7 +960,7 @@ export default function StockClient() {
             <div className={styles.cardLabel}>주가별 수익률 곡선</div>
             <div className={styles.chartWrap}>{renderRecoveryChart()}</div>
             <div className={styles.chartLegend}>
-              <span><i style={{ background: '#FF8C3E' }} />수익률</span>
+              <span><i style={{ background: '#EA580C' }} />수익률</span>
               <span><i style={{ background: 'var(--accent)' }} />0% (본전 라인)</span>
             </div>
           </div>
@@ -980,9 +980,9 @@ export default function StockClient() {
                       {r.delta > 0 ? `+${r.delta}%` : `${r.delta}%`}
                     </span>
                     <span>{formatKRW(r.price)}</span>
-                    <span style={{ color: r.roi >= 0 ? '#3EFF9B' : '#FF6B6B' }}>{formatPct(r.roi)}</span>
+                    <span style={{ color: r.roi >= 0 ? '#059669' : '#DC2626' }}>{formatPct(r.roi)}</span>
                     <span>{formatEok(r.value)}</span>
-                    <span style={{ color: r.pl >= 0 ? '#3EFF9B' : '#FF6B6B' }}>{formatEok(r.pl)}</span>
+                    <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{formatEok(r.pl)}</span>
                   </div>
                 )
               })}
@@ -1094,7 +1094,7 @@ export default function StockClient() {
                   {compareResult.avgDownIsBetter && <div className={styles.winnerBadge}>★ 유리</div>}
                   <p className={styles.compareCardTitle}>A. 물타기 (추가 매수)</p>
                   <p className={styles.compareCardDesc}>본 종목 회복 가정 시</p>
-                  <p className={styles.compareCardMain} style={{ color: compareResult.avgDown.profit >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+                  <p className={styles.compareCardMain} style={{ color: compareResult.avgDown.profit >= 0 ? '#059669' : '#DC2626' }}>
                     {compareResult.avgDown.profit >= 0 ? '+' : ''}{formatEok(compareResult.avgDown.profit)}
                   </p>
                   <p className={styles.compareCardLabel}>{formatPct(compareResult.avgDown.profitPct)} · 회복 가정 매도 시</p>
@@ -1109,12 +1109,12 @@ export default function StockClient() {
                   {!compareResult.avgDownIsBetter && <div className={styles.winnerBadge}>★ 유리</div>}
                   <p className={styles.compareCardTitle}>B. 손절 + 대안 투자</p>
                   <p className={styles.compareCardDesc}>대안 {alternativeReturn}% 수익 가정</p>
-                  <p className={styles.compareCardMain} style={{ color: compareResult.cutLoss.netProfit >= 0 ? '#3EFF9B' : '#FF6B6B' }}>
+                  <p className={styles.compareCardMain} style={{ color: compareResult.cutLoss.netProfit >= 0 ? '#059669' : '#DC2626' }}>
                     {compareResult.cutLoss.netProfit >= 0 ? '+' : ''}{formatEok(compareResult.cutLoss.netProfit)}
                   </p>
                   <p className={styles.compareCardLabel}>{formatPct(compareResult.cutLoss.netProfitPct)} · 1년 후</p>
                   <div className={styles.compareCardDivider} />
-                  <div className={styles.compareCardRow}><span>실현 손익</span><span style={{ color: '#FF6B6B' }}>{formatEok(compareResult.cutLoss.realizedLoss)}</span></div>
+                  <div className={styles.compareCardRow}><span>실현 손익</span><span style={{ color: '#DC2626' }}>{formatEok(compareResult.cutLoss.realizedLoss)}</span></div>
                   <div className={styles.compareCardRow}><span>총 투자금</span><span>{formatEok(compareResult.cutLoss.totalInvested)}</span></div>
                   <div className={styles.compareCardRow}><span>1년 후 평가액</span><span>{formatEok(compareResult.cutLoss.finalValue)}</span></div>
                 </div>
@@ -1132,7 +1132,7 @@ export default function StockClient() {
             <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, fontFamily: 'Noto Sans KR, sans-serif' }}>📋 손절 vs 물타기 결정 가이드</h3>
             <div className={styles.decisionList}>
               <div>
-                <h4 style={{ color: '#FF6B6B' }}>❌ 손절 검토 신호</h4>
+                <h4 style={{ color: '#DC2626' }}>❌ 손절 검토 신호</h4>
                 <ul>
                   <li>손실률 -30% 이상</li>
                   <li>3개월 이상 회복 없음</li>
@@ -1144,7 +1144,7 @@ export default function StockClient() {
                 </ul>
               </div>
               <div>
-                <h4 style={{ color: '#3EFF9B' }}>✅ 물타기 검토 신호</h4>
+                <h4 style={{ color: '#059669' }}>✅ 물타기 검토 신호</h4>
                 <ul>
                   <li>일시적 시장 조정 (전체 하락)</li>
                   <li>회사 펀더멘털 안정·성장</li>

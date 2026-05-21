@@ -1,24 +1,37 @@
 /* @hover-wrapped */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg: #0D0D0D;
-  --bg2: #141414;
-  --bg3: #1A1A1A;
-  --border: rgba(255,255,255,0.08);
-  --border-hover: rgba(255,255,255,0.18);
-  --text: #F0EFE8;
-  --muted: #B8B8B0;          /* 일반 보조 텍스트 (대비 약 9.5:1) */
-  --muted-strong: #D0D0C8;   /* 더 강한 대비 필요한 작은 글씨용 */
-  --accent: #C8FF3E;
-  --accent-dim: rgba(200,255,62,0.12);
+  /* ── Ocean Blue Light Theme ────────────────────────── */
+  --bg:  #f0f7ff;             /* page background — soft sky tint */
+  --bg2: #ffffff;             /* card surface */
+  --bg3: #f8fafc;             /* secondary surface (inputs, dim cards) */
 
-  --cat-finance: #3EFF9B;
-  --cat-health:  #3EC8FF;
-  --cat-life:    #FF8C3E;
-  --cat-unit:    #B03EFF;
-  --cat-date:    #FF3E8C;
-  --cat-dev:     #C8FF3E;
+  --border:        #e2e8f0;   /* slate-200 — standard divider */
+  --border-hover:  #cbd5e1;   /* slate-300 — hover/focus */
+
+  --text:          #0f172a;   /* slate-900 — primary text */
+  --muted:         #64748b;   /* slate-500 — secondary text */
+  --muted-strong:  #475569;   /* slate-600 — small text needing contrast */
+
+  --accent:        #0EA5E9;   /* sky-500 — primary brand */
+  --accent-hover:  #0284C7;   /* sky-600 — hover state */
+  --accent-dim:    rgba(14,165,233,0.18);  /* dim accent background */
+  --accent-light:  #e0f2fe;   /* sky-100 — soft background tint */
+
+  /* category accent colors — 600-level for AA contrast on white */
+  --cat-finance: #059669;     /* emerald-600 */
+  --cat-health:  #0891B2;     /* cyan-600 */
+  --cat-life:    #EA580C;     /* orange-600 */
+  --cat-unit:    #7C3AED;     /* violet-600 */
+  --cat-date:    #DB2777;     /* pink-600 */
+  --cat-dev:     #0284C7;     /* sky-600 */
+
+  /* semantic */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger:  #EF4444;
+  --danger-soft: #fef2f2;
 }
 
 *, *::before, *::after {
@@ -29,34 +42,30 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden; /* iOS Safari에서 body만으로는 가로 스크롤이 막히지 않는 버그 대응 */
+  overflow-x: hidden;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 300;
+  /* Windows ClearType + macOS subpixel 모두에서 또렷한 가독성 */
+  font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
   line-height: 1.6;
+  letter-spacing: -0.005em;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 999;
-  opacity: 0.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 a { text-decoration: none; color: inherit; }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }

@@ -45,7 +45,7 @@ export default function LoanPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>원리금균등 월 납입액 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, whiteSpace: 'nowrap', overflowX: 'auto' }}>
                 월 납입액 = 대출원금×[r(1+r)ⁿ]÷[(1+r)ⁿ-1]
@@ -54,8 +54,8 @@ export default function LoanPage() {
                 r = 월 이자율(연 금리 ÷ 12), n = 총 납입 횟수(개월 수)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#3EC8FF', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>원금균등 월 납입액 공식</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>원금균등 월 납입액 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, whiteSpace: 'nowrap', overflowX: 'auto' }}>
                 월 납입액 = (대출원금÷n)+(잔여원금×r)
               </p>
@@ -71,7 +71,7 @@ export default function LoanPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>원리금균등</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700 }}>원금균등</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>원금균등</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,7 +151,7 @@ export default function LoanPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>연 금리</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>원리금균등 월납입</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>총 납입액</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontWeight: 500 }}>총 이자</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 500 }}>총 이자</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,7 +169,7 @@ export default function LoanPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{rate}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 500 }}>{monthly}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{total}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B' }}>{interest}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626' }}>{interest}</td>
                   </tr>
                 ))}
               </tbody>
@@ -189,8 +189,8 @@ export default function LoanPage() {
             중도상환 효과 — 잔여 원금 ↓ → 이자 ↓. 단, 중도상환수수료가 발생하므로 <strong style={{ color: 'var(--text)' }}>순절감 = 줄어든 이자 − 수수료</strong>로 계산해야 합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,215,0,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFD700', marginBottom: '6px' }}>✅ 중도상환이 유리한 경우</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>✅ 중도상환이 유리한 경우</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                 <li>· 3년 이상 지났을 때 (수수료 0%)</li>
                 <li>· 금리 높은 시점</li>
@@ -198,8 +198,8 @@ export default function LoanPage() {
                 <li>· 심리적 부채 부담 큰 경우</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '6px' }}>⚠️ 신중해야 할 경우</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>⚠️ 신중해야 할 경우</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                 <li>· 3년 이내 + 수수료 1.0~1.5%</li>
                 <li>· 다른 투자처 수익률 &gt; 대출 금리</li>
@@ -221,8 +221,8 @@ export default function LoanPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>손익분기 = 부대비용 ÷ 월 절감액</strong>. 이 기간 이상 새 대출을 유지해야 갈아타기가 이득입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#3EC8FF', marginBottom: 8 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2', marginBottom: 8 }}>
               📌 예시 — 잔액 2.5억, 5% → 4% 갈아타기
             </p>
             <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -265,7 +265,7 @@ export default function LoanPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#C485E0', marginBottom: '6px' }}>📊 DSR (총부채원리금상환비율)</p>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>📊 DSR (총부채원리금상환비율)</p>
               <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 6 }}>
                 연간 모든 대출 원리금 ÷ 연소득 × 100
               </p>
@@ -275,8 +275,8 @@ export default function LoanPage() {
                 <li>스트레스 DSR (2024 적용): 가산 0.38~1.5%p</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,157,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B9D', marginBottom: '6px' }}>🏠 LTV (담보인정비율)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(225,29,72,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#E11D48', marginBottom: '6px' }}>🏠 LTV (담보인정비율)</p>
               <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 6 }}>
                 담보 자산 가치 대비 대출 가능 비율
               </p>

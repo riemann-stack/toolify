@@ -125,7 +125,7 @@ export default function TeaPage() {
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           많은 사람이 <strong>&quot;차가 연하다&quot;고 우림 시간을 늘리는데, 이건 가장 잘못된 선택</strong>입니다.
-          시간을 길게 하면 <strong style={{ color: '#FF3E8C' }}>탄닌(떫음)·쓴맛이 폭증</strong>해 마실 수 없게 돼요.
+          시간을 길게 하면 <strong style={{ color: '#DB2777' }}>탄닌(떫음)·쓴맛이 폭증</strong>해 마실 수 없게 돼요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, margin: '0 0 8px' }}>✅ 올바른 진하게 마시기</p>
@@ -136,8 +136,8 @@ export default function TeaPage() {
             <li><strong>고급 찻잎</strong>으로 변경 (세작 → 우전, 세작 → 옥로)</li>
           </ul>
         </div>
-        <div style={{ background: 'rgba(255, 62, 140, 0.06)', borderRadius: 10, padding: '14px 16px', marginTop: 10, border: '1px solid rgba(255, 62, 140, 0.3)' }}>
-          <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 6px' }}>❌ 피해야 할 것</p>
+        <div style={{ background: 'rgba(219, 39, 119, 0.06)', borderRadius: 10, padding: '14px 16px', marginTop: 10, border: '1px solid rgba(219, 39, 119, 0.3)' }}>
+          <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>❌ 피해야 할 것</p>
           <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.8 }}>
             우림 시간을 권장 대비 1.5배 이상 늘리면 떫음·쓴맛이 비선형적으로 폭증합니다.
             특히 녹차·옥로는 시간보다 <strong style={{ color: 'var(--text)' }}>온도</strong>가 핵심이에요.
@@ -155,9 +155,9 @@ export default function TeaPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: '💦 세차 (洗茶)',  d: '뜨거운 물로 10초 헹구고 첫 물은 버림. 잡내 제거 + 찻잎 깨움. 보이·우롱 필수.', c: '#9B9B9B' },
-            { t: '🍃 1탕',          d: '본 추출 시작. 가장 산뜻하고 풀향·꽃향이 강한 단계.',                            c: '#3EFFD0' },
-            { t: '🌿 2탕',          d: '풍미가 가장 균형잡힌 단계. 단맛·바디감 풍부.',                                  c: '#3EC8FF' },
-            { t: '🪴 3탕 이후',     d: '깊은 후미·은은한 마무리. 우롱·보이는 5~8탕까지 가능.',                          c: '#FFB83E' },
+            { t: '🍃 1탕',          d: '본 추출 시작. 가장 산뜻하고 풀향·꽃향이 강한 단계.',                            c: '#0D9488' },
+            { t: '🌿 2탕',          d: '풍미가 가장 균형잡힌 단계. 단맛·바디감 풍부.',                                  c: '#0891B2' },
+            { t: '🪴 3탕 이후',     d: '깊은 후미·은은한 마무리. 우롱·보이는 5~8탕까지 가능.',                          c: '#D97706' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>

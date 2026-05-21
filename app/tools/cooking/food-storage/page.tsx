@@ -23,13 +23,13 @@ export default function FoodStoragePage() {
 
       {/* ── 면책 조항 (상단) ── */}
       <div style={{
-        background: 'rgba(255,140,62,0.06)',
-        border: '1px solid rgba(255,140,62,0.25)',
+        background: 'rgba(234,88,12,0.06)',
+        border: '1px solid rgba(234,88,12,0.25)',
         borderRadius: '12px',
         padding: '14px 18px',
         marginBottom: '40px',
       }}>
-        <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '6px' }}>⚠️ 안내</p>
+        <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '6px' }}>⚠️ 안내</p>
         <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
           본 계산기는 식약처 권고 일반 기준에 따른 <strong style={{ color: 'var(--text)' }}>참고용 정보</strong>입니다. 실제 보관 가능 기간은 냉장고 온도·포장 상태·취급 환경에 따라 크게 달라질 수 있습니다. 색·냄새·점성에 이상이 있다면 D-day와 무관하게 폐기하세요.
         </p>
@@ -91,7 +91,7 @@ export default function FoodStoragePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                icon: '🌡️', name: '실온 보관',  c: '#FFD700',
+                icon: '🌡️', name: '실온 보관',  c: '#CA8A04',
                 temp: '15~25°C, 직사광선 X',
                 tips: [
                   '바나나·토마토·양파·마늘·감자 등은 실온이 더 적합',
@@ -100,7 +100,7 @@ export default function FoodStoragePage() {
                 ],
               },
               {
-                icon: '❄️', name: '냉장 보관',  c: '#3EC8FF',
+                icon: '❄️', name: '냉장 보관',  c: '#0891B2',
                 temp: '0~4°C, 70% 이하 채움',
                 tips: [
                   '냉장고 안쪽이 가장 차갑고, 문쪽이 가장 따뜻함 (계란·우유는 안쪽 권장)',
@@ -190,18 +190,18 @@ export default function FoodStoragePage() {
             위험 신호 — 절대 먹지 말아야 할 식재료
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
-            D-day가 남아도 다음 신호가 보이면 <strong style={{ color: '#FF6B6B' }}>즉시 폐기</strong>하세요.
+            D-day가 남아도 다음 신호가 보이면 <strong style={{ color: '#DC2626' }}>즉시 폐기</strong>하세요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { n: '🥩 고기',   c: '#FF6B6B', d: '회녹색·회갈색 변색, 끈적한 점성, 시큼하거나 강한 암모니아 냄새' },
-              { n: '🐟 생선',   c: '#FF6B6B', d: '눈이 흐림·움푹 들어감, 비린내가 강하게 시큼함, 살이 으스러짐' },
-              { n: '🥚 계란',   c: '#FFB83E', d: '깼을 때 흰자가 묽음, 노른자 모양 무너짐, 황화수소(썩은 달걀) 냄새' },
-              { n: '🥛 우유',   c: '#FFB83E', d: '응어리지거나 분리됨, 시큼한 냄새, 노란빛으로 변색' },
-              { n: '🍚 밥·면',  c: '#FF8C3E', d: '실 같은 곰팡이, 끈적한 점액, 시큼한 발효 냄새' },
-              { n: '🥬 채소',   c: '#3EFF9B', d: '검은 반점, 무른 부분, 곰팡이 — 일부분만 변색이라도 전체 폐기' },
-              { n: '🍲 국·찌개', c: '#FF8C3E', d: '표면 거품·기포, 시큼한 냄새, 점성이 생김 (정상 점도와 다름)' },
-              { n: '🍞 빵',     c: '#FF8C3E', d: '곰팡이 (녹·흰·검은색), 한 부분이라도 보이면 전체 폐기' },
+              { n: '🥩 고기',   c: '#DC2626', d: '회녹색·회갈색 변색, 끈적한 점성, 시큼하거나 강한 암모니아 냄새' },
+              { n: '🐟 생선',   c: '#DC2626', d: '눈이 흐림·움푹 들어감, 비린내가 강하게 시큼함, 살이 으스러짐' },
+              { n: '🥚 계란',   c: '#D97706', d: '깼을 때 흰자가 묽음, 노른자 모양 무너짐, 황화수소(썩은 달걀) 냄새' },
+              { n: '🥛 우유',   c: '#D97706', d: '응어리지거나 분리됨, 시큼한 냄새, 노란빛으로 변색' },
+              { n: '🍚 밥·면',  c: '#EA580C', d: '실 같은 곰팡이, 끈적한 점액, 시큼한 발효 냄새' },
+              { n: '🥬 채소',   c: '#059669', d: '검은 반점, 무른 부분, 곰팡이 — 일부분만 변색이라도 전체 폐기' },
+              { n: '🍲 국·찌개', c: '#EA580C', d: '표면 거품·기포, 시큼한 냄새, 점성이 생김 (정상 점도와 다름)' },
+              { n: '🍞 빵',     c: '#EA580C', d: '곰팡이 (녹·흰·검은색), 한 부분이라도 보이면 전체 폐기' },
             ].map((s, i) => (
               <div key={i} style={{
                 background: 'var(--bg2)',
@@ -216,12 +216,12 @@ export default function FoodStoragePage() {
           </div>
           <div style={{
             marginTop: '14px',
-            background: 'rgba(255,107,107,0.06)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.06)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: '12px',
             padding: '14px 18px',
           }}>
-            <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '6px' }}>🚫 위험 온도대 (4~60°C)</p>
+            <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '6px' }}>🚫 위험 온도대 (4~60°C)</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
               이 온도 범위에서 식중독균이 가장 빠르게 증식합니다. 조리한 음식을 <strong style={{ color: 'var(--text)' }}>2시간 이상 실온</strong>에 두면 (여름철 1시간) 보관 기간과 무관하게 폐기하세요.
             </p>

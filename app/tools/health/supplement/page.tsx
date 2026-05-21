@@ -45,8 +45,8 @@ export default function SupplementPage() {
 
       {/* 상단 면책 */}
       <div style={{
-        background: 'rgba(255, 107, 107, 0.06)',
-        border: '1px solid rgba(255, 107, 107, 0.25)',
+        background: 'rgba(220, 38, 38, 0.06)',
+        border: '1px solid rgba(220, 38, 38, 0.25)',
         borderRadius: '12px',
         padding: '14px 18px',
         marginBottom: '32px',
@@ -54,9 +54,9 @@ export default function SupplementPage() {
         color: 'var(--text)',
         lineHeight: 1.7,
       }}>
-        ⚕️ <strong style={{ color: '#FF8C8C' }}>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
+        ⚕️ <strong style={{ color: '#DC2626' }}>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
         처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담.<br />
-        도움: 한국 식약처 식품안전정보 <strong style={{ color: '#FF8C8C' }}>1577-1255</strong> · 의약품안전사용서비스 <strong style={{ color: '#FF8C8C' }}>1577-2334</strong><br />
+        도움: 한국 식약처 식품안전정보 <strong style={{ color: '#DC2626' }}>1577-1255</strong> · 의약품안전사용서비스 <strong style={{ color: '#DC2626' }}>1577-2334</strong><br />
         <span style={{ color: 'var(--muted)', fontSize: 12 }}>참고: 한국영양학회, 보건복지부 한국인 영양소 섭취 기준 (2026)</span>
       </div>
 
@@ -119,7 +119,7 @@ export default function SupplementPage() {
                   <tr key={i}>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontWeight: 600, color: 'var(--accent)' }}>{row[0]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif', color: '#FF8C3E' }}>{row[2]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif', color: '#EA580C' }}>{row[2]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)', fontSize: 12 }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -178,7 +178,7 @@ export default function SupplementPage() {
               { pair: '셀레늄 + 브라질너트',   text: '브라질너트 1알에 셀레늄 상한량에 근접. 보충제와 동시 섭취 시 독성 위험.' },
               { pair: '비타민A + 레티놀 화장품', text: '경피 흡수도 소량 축적됩니다. 고용량 비타민A 보충제와 중복 고려.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'rgba(255, 140, 62, 0.06)', border: '1px solid rgba(255, 140, 62, 0.3)', borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'rgba(234, 88, 12, 0.06)', border: '1px solid rgba(234, 88, 12, 0.3)', borderRadius: '12px', padding: '14px 18px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: '#FFB86B', marginBottom: '4px' }}>⚡ {item.pair}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.text}</p>
               </div>
@@ -198,15 +198,15 @@ export default function SupplementPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>EPA + DHA 합산</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EC8FF', fontWeight: 700 }}>구간</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>구간</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>설명</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#FFD700' }}>🟡 권장 미달</strong></td><td style={cell}>식사 (등푸른 생선) 보충 권장</td></tr>
-                <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#3EFF9B' }}>🟢 적정 (일반 권장)</strong></td><td style={cell}>WHO·미국심장협회 일반 권장 범위</td></tr>
-                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#FF8C3E' }}>🟠 약간 초과 (안전)</strong></td><td style={cell}>심혈관 치료 목적이면 의사 상담</td></tr>
-                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#FF6B6B' }}>🔴 상한 초과</strong></td><td style={cell}>FDA 상한 초과 — 출혈 위험 ↑, 즉시 조정</td></tr>
+                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#CA8A04' }}>🟡 권장 미달</strong></td><td style={cell}>식사 (등푸른 생선) 보충 권장</td></tr>
+                <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#059669' }}>🟢 적정 (일반 권장)</strong></td><td style={cell}>WHO·미국심장협회 일반 권장 범위</td></tr>
+                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 약간 초과 (안전)</strong></td><td style={cell}>심혈관 치료 목적이면 의사 상담</td></tr>
+                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 상한 초과</strong></td><td style={cell}>FDA 상한 초과 — 출혈 위험 ↑, 즉시 조정</td></tr>
               </tbody>
             </table>
           </div>
@@ -227,7 +227,7 @@ export default function SupplementPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#FF6B6B', fontWeight: 700 }}>주의 영양제</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626', fontWeight: 700 }}>주의 영양제</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>대응</th>
                 </tr>
               </thead>
@@ -253,8 +253,8 @@ export default function SupplementPage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🤰 임산부·수유부 영양제 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 임신 시 권장</p>
+            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 임신 시 권장</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
                 <li>엽산 600~800μg (신경관 결손 예방, 임신 전 3개월부터)</li>
                 <li>철분 27mg (빈혈 예방)</li>
@@ -263,8 +263,8 @@ export default function SupplementPage() {
                 <li>콜린 450mg (뇌 발달)</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 임신 시 주의</p>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 임신 시 주의</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
                 <li>비타민A 레티놀 고용량 (3,000μg+) — 1삼분기 기형아 위험. 베타카로틴 형태로 변경</li>
                 <li>비타민D 4,000IU 초과 — 태아 위험</li>
@@ -282,8 +282,8 @@ export default function SupplementPage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>👴 65세 이상 고령자 영양제 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 고령자 권장 추가</p>
+            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 고령자 권장 추가</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
                 <li>비타민D 800~1,000IU (낙상·골절 예방)</li>
                 <li>칼슘 1,200mg (남 1,000 / 여 1,200)</li>
@@ -292,8 +292,8 @@ export default function SupplementPage() {
                 <li>마그네슘 (부족 흔함, 수면·근육)</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>⚠️ 고령자 주의</p>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 고령자 주의</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
                 <li>비타민E 400IU 초과 X (출혈 위험)</li>
                 <li>철분 결핍 진단 X면 비섭취 (산화 스트레스)</li>
@@ -316,8 +316,8 @@ export default function SupplementPage() {
               { pair: '아연 + 비타민C',     desc: '면역력 강화 시너지' },
               { pair: '프로 + 프리바이오틱스', desc: '유산균 + 유산균 먹이 시너지' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 4 }}>✅ {s.pair}</p>
+              <div key={i} style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 4 }}>✅ {s.pair}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.desc}</p>
               </div>
             ))}
@@ -354,15 +354,15 @@ export default function SupplementPage() {
 
         {/* 11. 면책 강화 */}
         <div style={{
-          background: 'rgba(255, 107, 107, 0.06)',
-          border: '1px solid rgba(255, 107, 107, 0.30)',
+          background: 'rgba(220, 38, 38, 0.06)',
+          border: '1px solid rgba(220, 38, 38, 0.30)',
           borderRadius: '12px',
           padding: '18px 20px',
           fontSize: '12.5px',
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C8C', marginBottom: 10 }}>⚕️ 면책 조항 (강화)</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚕️ 면책 조항 (강화)</p>
           <p style={{ marginBottom: 8 }}>
             본 영양제 중복 체크 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다.
             의학적 진단·처방·복용 권유 도구가 아닙니다.
@@ -386,8 +386,8 @@ export default function SupplementPage() {
           <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>도움 받기:</p>
           <ul style={{ paddingLeft: 18 }}>
             <li>단골 약사 상담 (가장 빠르고 정확)</li>
-            <li>한국 식약처 식품안전정보: <strong style={{ color: '#FF8C8C' }}>1577-1255</strong></li>
-            <li>의약품안전사용서비스: <strong style={{ color: '#FF8C8C' }}>1577-2334</strong></li>
+            <li>한국 식약처 식품안전정보: <strong style={{ color: '#DC2626' }}>1577-1255</strong></li>
+            <li>의약품안전사용서비스: <strong style={{ color: '#DC2626' }}>1577-2334</strong></li>
             <li>한국임상영양학회</li>
           </ul>
           <p style={{ marginTop: 10, color: 'var(--text)', fontWeight: 600 }}>

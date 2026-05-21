@@ -17,7 +17,7 @@ export const PRIMES_1_45 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
 export const NUMBER_RANGES = [
   { id: '1-10',  start: 1,  end: 10, name: '1구간 (1~10)',  color: '#FBC400' },
   { id: '11-20', start: 11, end: 20, name: '2구간 (11~20)', color: '#69C8F2' },
-  { id: '21-30', start: 21, end: 30, name: '3구간 (21~30)', color: '#FF7272' },
+  { id: '21-30', start: 21, end: 30, name: '3구간 (21~30)', color: '#DC2626' },
   { id: '31-40', start: 31, end: 40, name: '4구간 (31~40)', color: '#AAAAAA' },
   { id: '41-45', start: 41, end: 45, name: '5구간 (41~45)', color: '#B0D840' },
 ]
@@ -26,15 +26,15 @@ export type ModeId =
   | 'random' | 'balanced' | 'no-birthday' | 'consecutive'
   | 'no-consecutive' | 'spread-tail' | 'even-spread' | 'sum-balanced'
 
-export const GENERATION_MODES: { id: ModeId; name: string; icon: string; desc: string }[] = [
-  { id: 'random',         name: '완전 랜덤',  icon: '🎲', desc: '아무 제약 없이 1~45 무작위 6개' },
-  { id: 'balanced',       name: '균형형',     icon: '⚖️', desc: '5구간에 골고루 분포되도록 생성' },
-  { id: 'no-birthday',    name: '생일 제외',  icon: '🚫', desc: '1~31 비중 줄이고 32~45 강조' },
-  { id: 'consecutive',    name: '연속 포함',  icon: '🔗', desc: '12·13 같은 연속 쌍 1개 포함' },
-  { id: 'no-consecutive', name: '연속 제외',  icon: '✂️', desc: '인접한 번호가 없도록 생성' },
-  { id: 'spread-tail',    name: '끝수 분산',  icon: '🎯', desc: '같은 끝자리 숫자 겹침 최소화' },
-  { id: 'even-spread',    name: '균등 간격',  icon: '📊', desc: '번호 간 간격을 균등하게' },
-  { id: 'sum-balanced',   name: '합 균형형',  icon: '🧮', desc: '총합이 100~170 사이가 되도록 (역대 평균 138)' },
+export const GENERATION_MODES: { id: ModeId; name: string; shortName: string; icon: string; desc: string }[] = [
+  { id: 'random',         name: '완전 랜덤',  shortName: '랜덤',     icon: '🎲', desc: '아무 제약 없이 1~45 무작위 6개' },
+  { id: 'balanced',       name: '균형형',     shortName: '균형',     icon: '⚖️', desc: '5구간에 골고루 분포되도록 생성' },
+  { id: 'no-birthday',    name: '생일 제외',  shortName: '생일제외', icon: '🚫', desc: '1~31 비중 줄이고 32~45 강조' },
+  { id: 'consecutive',    name: '연속 포함',  shortName: '연속포함', icon: '🔗', desc: '12·13 같은 연속 쌍 1개 포함' },
+  { id: 'no-consecutive', name: '연속 제외',  shortName: '연속제외', icon: '✂️', desc: '인접한 번호가 없도록 생성' },
+  { id: 'spread-tail',    name: '끝수 분산',  shortName: '끝수분산', icon: '🎯', desc: '같은 끝자리 숫자 겹침 최소화' },
+  { id: 'even-spread',    name: '균등 간격',  shortName: '균등간격', icon: '📊', desc: '번호 간 간격을 균등하게' },
+  { id: 'sum-balanced',   name: '합 균형형',  shortName: '합균형',   icon: '🧮', desc: '총합이 100~170 사이가 되도록 (역대 평균 138)' },
 ]
 
 /* ─── 생성 옵션 ─── */
@@ -444,7 +444,7 @@ export function calcAfterTax(gross: number): TaxResult {
 export function getBallColor(n: number): string {
   if (n <= 10) return '#FBC400'
   if (n <= 20) return '#69C8F2'
-  if (n <= 30) return '#FF7272'
+  if (n <= 30) return '#DC2626'
   if (n <= 40) return '#AAAAAA'
   return '#B0D840'
 }

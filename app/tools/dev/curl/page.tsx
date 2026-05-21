@@ -61,7 +61,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'Syne, SF Mono, Consolas, monospace',
   fontSize: '12.5px',
-  color: '#C8FF3E',
+  color: '#0EA5E9',
 }
 
 export default function CurlPage() {
@@ -168,11 +168,11 @@ export default function CurlPage() {
             { emoji: '🟩', name: 'Node.js http/https', when: '의존성 없는 환경', pros: '내장, 가벼움', cons: '장황함, 콜백 패턴' },
             { emoji: '🐹', name: 'Go net/http', when: '백엔드·CLI', pros: '내장, 동시성', cons: 'Go 문법 학습 필요' },
           ].map((l, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #C8FF3E' }}>
+            <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #0EA5E9' }}>
               <p style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{l.emoji} {l.name}</p>
               <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 4px' }}><strong>언제:</strong> {l.when}</p>
-              <p style={{ fontSize: 11.5, color: '#3EFFD0', margin: '0 0 4px' }}>✓ {l.pros}</p>
-              <p style={{ fontSize: 11.5, color: '#FF8C3E', margin: 0 }}>✗ {l.cons}</p>
+              <p style={{ fontSize: 11.5, color: '#0D9488', margin: '0 0 4px' }}>✓ {l.pros}</p>
+              <p style={{ fontSize: 11.5, color: '#EA580C', margin: 0 }}>✗ {l.cons}</p>
             </div>
           ))}
         </div>

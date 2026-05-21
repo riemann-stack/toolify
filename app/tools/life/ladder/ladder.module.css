@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 카드 ── */
 .card {
@@ -85,7 +85,7 @@
   box-sizing: border-box;
 }
 .nameInput:focus, .resultInput:focus { border-color: var(--accent); }
-.resultInput { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
+.resultInput { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
 
 /* 인원 조절 */
 .countRow {
@@ -222,7 +222,7 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .miniBtn {
@@ -237,8 +237,8 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
 .copyBtn {
@@ -322,7 +322,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.resultTagOn { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 800; }
+.resultTagOn { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 800; }
 
 /* SVG */
 .ladderSvg {
@@ -341,10 +341,10 @@
 
 /* 사다리 기본 선 — 다채로운 모드 (기본) */
 .baseLine {
-  stroke: rgba(255,255,255,0.18);
+  stroke: rgba(15,23,42,0.08);
 }
 .rungLine {
-  stroke: rgba(200,255,62,0.50);
+  stroke: rgba(14,165,233,0.50);
   stroke-linecap: round;
 }
 
@@ -367,8 +367,8 @@
 
 /* 결과 카드 (한명씩 모드) */
 .singleResult {
-  background: linear-gradient(140deg, rgba(200,255,62,0.08), rgba(62,200,255,0.04));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -470,12 +470,12 @@
   text-align: center;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .reverseCard:hover { transform: translateY(-2px); border-color: #FFD700; }
+  .reverseCard:hover { transform: translateY(-2px); border-color: #CA8A04; }
 }
 .reverseLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
 .reverseResult { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
-.reverseRevealed { background: rgba(255,215,0,0.10); border-color: #FFD700; }
-.reverseRevealed .reverseResult { color: #FFD700; }
+.reverseRevealed { background: rgba(202,138,4,0.18); border-color: #CA8A04; }
+.reverseRevealed .reverseResult { color: #CA8A04; }
 .reverseAnswer {
   font-size: 12.5px;
   color: var(--accent);
@@ -524,8 +524,8 @@
 /* 클릭 안내 배너 */
 .clickHint {
   text-align: center;
-  background: rgba(62,200,255,0.05);
-  border: 1px dashed rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px dashed rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 9px 14px;
   font-size: 12px;
@@ -533,7 +533,7 @@
   line-height: 1.6;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.clickHint strong { color: #3EC8FF; }
+.clickHint strong { color: #0891B2; }
 
 /* 시작·공개 버튼 행 (3개) */
 .startBtnRow {
@@ -565,7 +565,7 @@
   border-radius: 8px;
   padding: 7px 14px;
   font-size: 13px;
-  color: #C485E0;
+  color: #9333EA;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;

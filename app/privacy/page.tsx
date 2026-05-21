@@ -83,7 +83,7 @@ export default function PrivacyPage() {
           {/* 맞춤형 광고 거부 안내 박스 */}
           <div style={{
             background: 'var(--bg2)',
-            border: '1px solid rgba(200,255,62,0.2)',
+            border: '1px solid rgba(14,165,233,0.2)',
             borderRadius: '12px',
             padding: '16px 20px',
             marginBottom: '12px',

@@ -128,8 +128,8 @@ export default function CaffeinePage() {
                   <tr><td style={cell}>🍵 말차 1잔</td><td style={cell}>200ml</td><td style={cell}>70mg</td><td style={cell}>0.5배</td></tr>
                   <tr><td style={cell}>🥤 콜라 캔</td><td style={cell}>355ml</td><td style={cell}>35mg</td><td style={cell}>0.2배</td></tr>
                   <tr><td style={cell}>🥤 다이어트콜라</td><td style={cell}>355ml</td><td style={cell}>47mg</td><td style={cell}>0.3배</td></tr>
-                  <tr><td style={cell}>⚡ 레드불</td><td style={cell}>250ml</td><td style={cell}><strong style={{ color: '#FFB83E' }}>80mg</strong></td><td style={cell}>0.5배</td></tr>
-                  <tr><td style={cell}>⚡ 몬스터</td><td style={cell}>473ml</td><td style={cell}><strong style={{ color: '#FF8C3E' }}>160mg</strong></td><td style={cell}>1.1배</td></tr>
+                  <tr><td style={cell}>⚡ 레드불</td><td style={cell}>250ml</td><td style={cell}><strong style={{ color: '#D97706' }}>80mg</strong></td><td style={cell}>0.5배</td></tr>
+                  <tr><td style={cell}>⚡ 몬스터</td><td style={cell}>473ml</td><td style={cell}><strong style={{ color: '#EA580C' }}>160mg</strong></td><td style={cell}>1.1배</td></tr>
                   <tr><td style={cell}>⚡ 핫식스</td><td style={cell}>250ml</td><td style={cell}>60mg</td><td style={cell}>0.4배</td></tr>
                   <tr><td style={cell}>⚡ 박카스</td><td style={cell}>100ml</td><td style={cell}>30mg</td><td style={cell}>0.2배</td></tr>
                   <tr><td style={cell}>🍫 다크초콜릿 28g</td><td style={cell}>—</td><td style={cell}>24mg</td><td style={cell}>0.16배</td></tr>
@@ -153,10 +153,10 @@ export default function CaffeinePage() {
             {[
               { name: '🚬 흡연자', color: '#FFD93E', desc: '반감기 ≈ 3시간 — 니코틴이 CYP1A2 강력 활성화. 같은 양 마셔도 효과 짧음' },
               { name: '💊 경구 피임약', color: '#B885DA', desc: '반감기 ≈ 8~10시간 — 에스트로겐이 효소 억제. 잠 안 옴 호소 흔함' },
-              { name: '🤰 임신·수유 중', color: '#FF6B6B', desc: '반감기 ≈ 10~15시간 — 호르몬 변화로 매우 느림. 식약처 200mg 권장' },
-              { name: '🧬 유전 fast/slow', color: '#3EC8FF', desc: 'CYP1A2 변이로 빠른/느린 대사자. 한국인 약 50%가 보통, 25%가 빠름' },
-              { name: '👶 청소년·어린이', color: '#FF8C3E', desc: '반감기 ≈ 4시간이지만 체중 대비 영향 큼. WHO·식약처 권장량 낮음' },
-              { name: '👴 고령자', color: '#3EFF9B', desc: '간 기능 ↓로 약간 느려질 수 있음. 야간 깊은 수면 영향 ↑' },
+              { name: '🤰 임신·수유 중', color: '#DC2626', desc: '반감기 ≈ 10~15시간 — 호르몬 변화로 매우 느림. 식약처 200mg 권장' },
+              { name: '🧬 유전 fast/slow', color: '#0891B2', desc: 'CYP1A2 변이로 빠른/느린 대사자. 한국인 약 50%가 보통, 25%가 빠름' },
+              { name: '👶 청소년·어린이', color: '#EA580C', desc: '반감기 ≈ 4시간이지만 체중 대비 영향 큼. WHO·식약처 권장량 낮음' },
+              { name: '👴 고령자', color: '#059669', desc: '간 기능 ↓로 약간 느려질 수 있음. 야간 깊은 수면 영향 ↑' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.name}</p>
@@ -188,19 +188,19 @@ export default function CaffeinePage() {
                 </tr>
                 <tr>
                   <td style={cell}>임산부·수유부</td>
-                  <td style={cell}><strong style={{ color: '#FF8C3E' }}>200mg</strong></td>
+                  <td style={cell}><strong style={{ color: '#EA580C' }}>200mg</strong></td>
                   <td style={cell}>Tall 약 1.3잔</td>
                   <td style={cell}>식약처·ACOG</td>
                 </tr>
                 <tr>
                   <td style={cell}>청소년 (만 11~18)</td>
-                  <td style={cell}><strong style={{ color: '#FF8C3E' }}>2.5mg/kg/일 (≈125mg)</strong></td>
+                  <td style={cell}><strong style={{ color: '#EA580C' }}>2.5mg/kg/일 (≈125mg)</strong></td>
                   <td style={cell}>Tall 약 0.8잔</td>
                   <td style={cell}>식약처·EFSA</td>
                 </tr>
                 <tr>
                   <td style={cell}>어린이 (~만 10)</td>
-                  <td style={cell}><strong style={{ color: '#FF6B6B' }}>2.5mg/kg/일 (≈45mg)</strong></td>
+                  <td style={cell}><strong style={{ color: '#DC2626' }}>2.5mg/kg/일 (≈45mg)</strong></td>
                   <td style={cell}>콜라 캔 1.3개 이하</td>
                   <td style={cell}>식약처·EFSA</td>
                 </tr>
@@ -222,11 +222,11 @@ export default function CaffeinePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
-              { range: '< 30mg', desc: '수면 영향 거의 없음', color: '#3EFF9B' },
-              { range: '30~100mg', desc: '입면 가능 · 깊은 수면 약간 ↓', color: '#3EC8FF' },
-              { range: '100~200mg', desc: '입면 지연 가능 · N3 수면 25% ↓', color: '#FFB83E' },
-              { range: '200~400mg', desc: '수면 질 큰 영향 · 다음날 피로', color: '#FF8C3E' },
-              { range: '> 400mg', desc: '심박 ↑·불면·불안', color: '#FF6B6B' },
+              { range: '< 30mg', desc: '수면 영향 거의 없음', color: '#059669' },
+              { range: '30~100mg', desc: '입면 가능 · 깊은 수면 약간 ↓', color: '#0891B2' },
+              { range: '100~200mg', desc: '입면 지연 가능 · N3 수면 25% ↓', color: '#D97706' },
+              { range: '200~400mg', desc: '수면 질 큰 영향 · 다음날 피로', color: '#EA580C' },
+              { range: '> 400mg', desc: '심박 ↑·불면·불안', color: '#DC2626' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'Inter, system-ui, sans-serif' }}>{b.range}</p>
@@ -306,7 +306,7 @@ export default function CaffeinePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q7. 본 도구의 데이터는 어디 저장되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
+              <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>✅ youtil 서버 전송 X</li>
                 <li>✅ 36시간 지난 항목은 자동 정리 (오늘+어제 누적까지만 필요)</li>
@@ -320,8 +320,8 @@ export default function CaffeinePage() {
         <section>
           <h2 style={sectionTitle}>⚠️ 의료 면책</h2>
           <div style={{
-            background: 'rgba(255, 184, 62, 0.06)',
-            border: '1px solid rgba(255, 184, 62, 0.25)',
+            background: 'rgba(217, 119, 6, 0.06)',
+            border: '1px solid rgba(217, 119, 6, 0.25)',
             borderRadius: '12px',
             padding: '18px 22px',
             fontSize: '14px',

@@ -58,24 +58,24 @@ function calcStats(samples: number[], loss: number): LatencyStats {
 
 /* ─── 등급 함수 ─── */
 function rateLatency(min: number): { label: string; color: string; desc: string } {
-  if (min < 20) return { label: '🟢 매우 좋음', color: '#3EFF9B', desc: '광랜·5G·우수 Wi-Fi 수준' }
-  if (min < 50) return { label: '🟢 좋음', color: '#3EC8FF', desc: '일반 광랜·5G 수준' }
-  if (min < 100) return { label: '🟡 보통', color: '#FFB83E', desc: 'LTE·Wi-Fi 5GHz 수준' }
-  if (min < 200) return { label: '🟠 느림', color: '#FF8C3E', desc: '혼잡한 Wi-Fi·LTE 약함' }
-  return { label: '🔴 매우 느림', color: '#FF6B6B', desc: '회선·라우터 점검 필요' }
+  if (min < 20) return { label: '🟢 매우 좋음', color: '#059669', desc: '광랜·5G·우수 Wi-Fi 수준' }
+  if (min < 50) return { label: '🟢 좋음', color: '#0891B2', desc: '일반 광랜·5G 수준' }
+  if (min < 100) return { label: '🟡 보통', color: '#D97706', desc: 'LTE·Wi-Fi 5GHz 수준' }
+  if (min < 200) return { label: '🟠 느림', color: '#EA580C', desc: '혼잡한 Wi-Fi·LTE 약함' }
+  return { label: '🔴 매우 느림', color: '#DC2626', desc: '회선·라우터 점검 필요' }
 }
 function rateJitter(jitter: number): { label: string; color: string; desc: string } {
-  if (jitter < 5) return { label: '🟢 매우 안정', color: '#3EFF9B', desc: '티켓팅 적합' }
-  if (jitter < 15) return { label: '🟢 안정', color: '#3EC8FF', desc: '일반 사용 OK' }
-  if (jitter < 30) return { label: '🟡 약간 불안정', color: '#FFB83E', desc: '간헐적 지연 가능' }
-  return { label: '🔴 매우 불안정', color: '#FF6B6B', desc: 'Wi-Fi 채널·라우터 점검' }
+  if (jitter < 5) return { label: '🟢 매우 안정', color: '#059669', desc: '티켓팅 적합' }
+  if (jitter < 15) return { label: '🟢 안정', color: '#0891B2', desc: '일반 사용 OK' }
+  if (jitter < 30) return { label: '🟡 약간 불안정', color: '#D97706', desc: '간헐적 지연 가능' }
+  return { label: '🔴 매우 불안정', color: '#DC2626', desc: 'Wi-Fi 채널·라우터 점검' }
 }
 function rateSpeed(mbps: number): { label: string; color: string; desc: string } {
-  if (mbps >= 100) return { label: '🟢 매우 빠름', color: '#3EFF9B', desc: '광랜·5G' }
-  if (mbps >= 50) return { label: '🟢 빠름', color: '#3EC8FF', desc: '광랜·5G·우수 LTE' }
-  if (mbps >= 20) return { label: '🟡 보통', color: '#FFB83E', desc: 'LTE·일반 Wi-Fi' }
-  if (mbps >= 5) return { label: '🟠 느림', color: '#FF8C3E', desc: 'LTE 약함·Wi-Fi 2.4GHz' }
-  return { label: '🔴 매우 느림', color: '#FF6B6B', desc: '회선 점검 필요' }
+  if (mbps >= 100) return { label: '🟢 매우 빠름', color: '#059669', desc: '광랜·5G' }
+  if (mbps >= 50) return { label: '🟢 빠름', color: '#0891B2', desc: '광랜·5G·우수 LTE' }
+  if (mbps >= 20) return { label: '🟡 보통', color: '#D97706', desc: 'LTE·일반 Wi-Fi' }
+  if (mbps >= 5) return { label: '🟠 느림', color: '#EA580C', desc: 'LTE 약함·Wi-Fi 2.4GHz' }
+  return { label: '🔴 매우 느림', color: '#DC2626', desc: '회선 점검 필요' }
 }
 
 /* ─── 측정 함수 ─── */
@@ -320,9 +320,9 @@ export default function NetworkTestClient() {
               </div>
               <div className={s.statSub}>{rateJitter(latency.jitter).label}</div>
             </div>
-            <div className={s.statBox} style={{ borderColor: latency.loss > 0 ? '#FF6B6B66' : undefined }}>
+            <div className={s.statBox} style={{ borderColor: latency.loss > 0 ? '#DC262666' : undefined }}>
               <div className={s.statLabel}>실패율</div>
-              <div className={s.statNum} style={{ color: latency.loss > 0 ? '#FF6B6B' : '#3EFF9B' }}>
+              <div className={s.statNum} style={{ color: latency.loss > 0 ? '#DC2626' : '#059669' }}>
                 {(latency.loss * 100).toFixed(0)}<span>%</span>
               </div>
               <div className={s.statSub}>{latency.samples.length}/{latency.samples.length + Math.round(latency.loss * (latency.samples.length / Math.max(1 - latency.loss, 0.01)))}회 성공</div>

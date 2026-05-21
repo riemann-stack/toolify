@@ -118,22 +118,22 @@ export default function NetworkTestPage() {
                   <tr>
                     <td style={cell}><strong>핑 (Latency)</strong></td>
                     <td style={cell}>요청 후 응답까지 걸리는 시간</td>
-                    <td style={cell}><strong style={{ color: '#3EFF9B' }}>&lt; 50ms</strong></td>
+                    <td style={cell}><strong style={{ color: '#059669' }}>&lt; 50ms</strong></td>
                   </tr>
                   <tr>
                     <td style={cell}><strong>지터 (Jitter)</strong></td>
                     <td style={cell}>핑의 변동성 (표준편차)</td>
-                    <td style={cell}><strong style={{ color: '#3EFF9B' }}>&lt; 10ms</strong></td>
+                    <td style={cell}><strong style={{ color: '#059669' }}>&lt; 10ms</strong></td>
                   </tr>
                   <tr>
                     <td style={cell}><strong>실패율 (Loss)</strong></td>
                     <td style={cell}>요청이 응답을 받지 못하는 비율</td>
-                    <td style={cell}><strong style={{ color: '#3EFF9B' }}>0%</strong></td>
+                    <td style={cell}><strong style={{ color: '#059669' }}>0%</strong></td>
                   </tr>
                   <tr>
                     <td style={cell}><strong>다운로드 속도</strong></td>
                     <td style={cell}>대용량 데이터 받는 속도 (Mbps)</td>
-                    <td style={cell}><strong style={{ color: '#3EFF9B' }}>20 Mbps 이상</strong></td>
+                    <td style={cell}><strong style={{ color: '#059669' }}>20 Mbps 이상</strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -150,12 +150,12 @@ export default function NetworkTestPage() {
           <h2 style={sectionTitle}>회선 환경별 권장 사항</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { env: '🏠 광랜 (KT·SK·LGU+)', color: '#3EFF9B', tips: '유선 LAN 연결 시 최고. Wi-Fi 5GHz로도 충분. 라우터 5m 이내' },
-              { env: '📡 5G (휴대폰)', color: '#3EC8FF', tips: '핑은 광랜급. 시간대·기지국 거리로 변동. 측정해서 적합 시 사용' },
-              { env: '📶 LTE (휴대폰)', color: '#FFB83E', tips: '핑 50~120ms. 지터 큼. 티켓팅 권장 X — 필요 시 광랜·5G로 전환' },
-              { env: '🌐 Wi-Fi 2.4GHz', color: '#FF8C3E', tips: '간섭·혼잡 심함. 핑 ↑·지터 ↑. 5GHz로 전환 또는 유선' },
-              { env: '🏢 사내·학교 Wi-Fi', color: '#FF8C3E', tips: '프록시·방화벽 지연. 가능하면 개인 5G·핫스팟 사용' },
-              { env: '☕ 카페·공공 Wi-Fi', color: '#FF6B6B', tips: '티켓팅 절대 X. 패킷 손실·지연·CAPTCHA 위험' },
+              { env: '🏠 광랜 (KT·SK·LGU+)', color: '#059669', tips: '유선 LAN 연결 시 최고. Wi-Fi 5GHz로도 충분. 라우터 5m 이내' },
+              { env: '📡 5G (휴대폰)', color: '#0891B2', tips: '핑은 광랜급. 시간대·기지국 거리로 변동. 측정해서 적합 시 사용' },
+              { env: '📶 LTE (휴대폰)', color: '#D97706', tips: '핑 50~120ms. 지터 큼. 티켓팅 권장 X — 필요 시 광랜·5G로 전환' },
+              { env: '🌐 Wi-Fi 2.4GHz', color: '#EA580C', tips: '간섭·혼잡 심함. 핑 ↑·지터 ↑. 5GHz로 전환 또는 유선' },
+              { env: '🏢 사내·학교 Wi-Fi', color: '#EA580C', tips: '프록시·방화벽 지연. 가능하면 개인 5G·핫스팟 사용' },
+              { env: '☕ 카페·공공 Wi-Fi', color: '#DC2626', tips: '티켓팅 절대 X. 패킷 손실·지연·CAPTCHA 위험' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.env}</p>
@@ -208,7 +208,7 @@ export default function NetworkTestPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q3. 사이트별 응답 시간이 실제 티켓팅 속도인가요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#FF8C3E' }}>완전 같진 않습니다.</strong>
+              <strong style={{ color: '#EA580C' }}>완전 같진 않습니다.</strong>
               브라우저 → youtil Edge (서울) → 사이트로 측정 — 중간에 Edge를 한 번 거칩니다.
               <br /><br />
               그러나 youtil Edge가 한국 내부망이라 거의 직접 연결과 비슷한 결과 — <strong>상대적 비교</strong>(어떤 사이트가 더 빠른지)는 신뢰할 수 있습니다.
@@ -249,7 +249,7 @@ export default function NetworkTestPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q6. 본 도구는 데이터를 저장하나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>저장하지 않습니다.</strong>
+              <strong style={{ color: '#059669' }}>저장하지 않습니다.</strong>
               모든 측정값은 본인 브라우저 메모리에만 존재. 페이지 새로고침 시 사라집니다.
               <br /><br />
               측정 시 youtil Edge 서버(/api/time, /api/speedtest, /api/proxy-time)로 요청이 가지만 IP·결과 모두 로그 X.
@@ -261,8 +261,8 @@ export default function NetworkTestPage() {
         <section>
           <h2 style={sectionTitle}>⚠️ 본 도구의 한계</h2>
           <div style={{
-            background: 'rgba(255, 184, 62, 0.06)',
-            border: '1px solid rgba(255, 184, 62, 0.25)',
+            background: 'rgba(217, 119, 6, 0.06)',
+            border: '1px solid rgba(217, 119, 6, 0.25)',
             borderRadius: '12px',
             padding: '18px 22px',
             fontSize: '14px',

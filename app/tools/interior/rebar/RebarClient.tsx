@@ -531,7 +531,7 @@ export default function RebarClient() {
                         <strong className={s.cellAccent}>{trips}회</strong>
                       </p>
                     ) : (
-                      <p className={s.truckTrips} style={{ color: '#FF3E8C' }}>
+                      <p className={s.truckTrips} style={{ color: '#DB2777' }}>
                         ❌ 길이 초과
                       </p>
                     )}

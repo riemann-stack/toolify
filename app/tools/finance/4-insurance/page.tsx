@@ -48,12 +48,12 @@ export default function FourInsurancePage() {
               </thead>
               <tbody>
                 {[
-                  { n: '국민연금',          c: '#C8FF3E', t: '9.5%',  e: '4.75%',  r: '4.75%' },
-                  { n: '건강보험',          c: '#FF6B6B', t: '7.19%', e: '3.595%', r: '3.595%' },
-                  { n: '장기요양보험*',     c: '#FF8C3E', t: '0.9448%', e: '0.4724%', r: '0.4724%' },
-                  { n: '고용보험 (실업급여)', c: '#3EC8FF', t: '1.8%',  e: '0.9%',  r: '0.9%' },
-                  { n: '고용보험 (사업주 추가)', c: '#3EC8FF', t: '0.25~0.85%', e: '0%', r: '0.25~0.85%' },
-                  { n: '산재보험',          c: '#FFD700', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
+                  { n: '국민연금',          c: '#0EA5E9', t: '9.5%',  e: '4.75%',  r: '4.75%' },
+                  { n: '건강보험',          c: '#DC2626', t: '7.19%', e: '3.595%', r: '3.595%' },
+                  { n: '장기요양보험*',     c: '#EA580C', t: '0.9448%', e: '0.4724%', r: '0.4724%' },
+                  { n: '고용보험 (실업급여)', c: '#0891B2', t: '1.8%',  e: '0.9%',  r: '0.9%' },
+                  { n: '고용보험 (사업주 추가)', c: '#0891B2', t: '0.25~0.85%', e: '0%', r: '0.25~0.85%' },
+                  { n: '산재보험',          c: '#CA8A04', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, boxShadow: `inset 3px 0 0 0 ${r.c}`, paddingLeft: 16 }}>{r.n}</td>
@@ -76,7 +76,7 @@ export default function FourInsurancePage() {
             📅 2026년 4대보험 변경사항
           </h2>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
+            background: 'rgba(14,165,233,0.05)',
             border: '1px solid var(--accent)',
             borderRadius: '12px',
             padding: '18px 20px',
@@ -103,11 +103,11 @@ export default function FourInsurancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { n: '국민연금',     c: '#C8FF3E', d: '만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 40만~637만원.' },
-              { n: '건강보험',     c: '#FF6B6B', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
-              { n: '장기요양보험', c: '#FF8C3E', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
-              { n: '고용보험',     c: '#3EC8FF', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },
-              { n: '산재보험',     c: '#FFD700', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
+              { n: '국민연금',     c: '#0EA5E9', d: '만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 40만~637만원.' },
+              { n: '건강보험',     c: '#DC2626', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
+              { n: '장기요양보험', c: '#EA580C', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
+              { n: '고용보험',     c: '#0891B2', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },
+              { n: '산재보험',     c: '#CA8A04', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.n}</p>
@@ -160,24 +160,24 @@ export default function FourInsurancePage() {
             💡 두루누리 사회보험료 지원 (소상공인·자영업자 필독)
           </h2>
           <div style={{
-            background: 'rgba(62,255,155,0.06)',
-            border: '1px solid #3EFF9B',
+            background: 'rgba(16,185,129,0.06)',
+            border: '1px solid #059669',
             borderRadius: '12px',
             padding: '18px 20px',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 1.95,
           }}>
-            <p style={{ fontWeight: 700, color: '#3EFF9B', marginBottom: 10 }}>대상 조건</p>
+            <p style={{ fontWeight: 700, color: '#059669', marginBottom: 10 }}>대상 조건</p>
             <ul style={{ paddingLeft: 20, margin: 0, color: 'var(--muted)' }}>
               <li>사업장 근로자 <strong style={{ color: 'var(--text)' }}>10인 미만</strong></li>
               <li>월 평균 보수 <strong style={{ color: 'var(--text)' }}>270만원 미만</strong></li>
               <li>입사일 직전 6개월간 고용 이력 없음</li>
               <li>재산 6억 이하, 종합소득 4,300만 이하</li>
             </ul>
-            <p style={{ fontWeight: 700, color: '#3EFF9B', marginTop: 12, marginBottom: 6 }}>지원 내용</p>
+            <p style={{ fontWeight: 700, color: '#059669', marginTop: 12, marginBottom: 6 }}>지원 내용</p>
             <p style={{ color: 'var(--muted)' }}><strong style={{ color: 'var(--text)' }}>국민연금·고용보험 최대 80% 지원</strong>, 36개월간</p>
-            <p style={{ fontWeight: 700, color: '#3EFF9B', marginTop: 12, marginBottom: 6 }}>신청</p>
+            <p style={{ fontWeight: 700, color: '#059669', marginTop: 12, marginBottom: 6 }}>신청</p>
             <p style={{ color: 'var(--muted)' }}>4대보험 취득신고 시 동시 신청 · 국민연금공단 <strong style={{ color: 'var(--text)' }}>1355</strong></p>
           </div>
         </div>
@@ -188,16 +188,16 @@ export default function FourInsurancePage() {
             알바 4대보험 의무 가입 기준
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFF9B', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 가입 의무</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 가입 의무</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>1개월 이상 근무 + 월 60시간 이상 → 국민·건강·고용 의무</li>
                 <li>주 15시간 이상 → 주휴수당 + 고용보험 의무</li>
                 <li>산재보험은 모든 근로자 의무 (시간 무관)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FF8C3E', fontWeight: 700, marginBottom: 8 }}>❌ 미가입 가능</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>❌ 미가입 가능</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>1개월 미만 단기 근무</li>
                 <li>월 60시간 미만 (4대보험 일부 면제)</li>
@@ -214,7 +214,7 @@ export default function FourInsurancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'rgba(155,89,182,0.05)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#C485E0', fontWeight: 700, marginBottom: 8 }}>프리랜서 (사업소득자)</p>
+              <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>프리랜서 (사업소득자)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>원천징수 3.3% (사업소득세 3% + 지방세 0.3%)</li>
                 <li>5월 종합소득세 신고 의무</li>
@@ -223,7 +223,7 @@ export default function FourInsurancePage() {
                 <li>실업급여·산재 보장 X (특수형태근로자 일부 적용)</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(200,255,62,0.04)', border: '1px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>근로자 (4대보험)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>4대보험 약 9.7% 공제</li>
@@ -234,8 +234,8 @@ export default function FourInsurancePage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -243,7 +243,7 @@ export default function FourInsurancePage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#FF8C8C' }}>위장도급 주의:</strong> 실질이 근로자인데 프리랜서 계약 = 법 위반.
+            ⚠️ <strong style={{ color: '#DC2626' }}>위장도급 주의:</strong> 실질이 근로자인데 프리랜서 계약 = 법 위반.
             의심 시 고용노동부 <strong style={{ color: 'var(--text)' }}>1350</strong> 또는 노무사 상담을 권장합니다.
           </div>
         </div>

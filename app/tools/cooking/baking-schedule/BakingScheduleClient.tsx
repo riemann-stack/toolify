@@ -452,7 +452,7 @@ function TimelineList({ result }: { result: ScheduleResult }) {
             <span className={s.tlBody}>
               {step.name}
               {step.guide && <small>{step.guide}</small>}
-              {step.warning && <small style={{ color: '#FFD700' }}>⚠️ {step.warning}</small>}
+              {step.warning && <small style={{ color: '#CA8A04' }}>⚠️ {step.warning}</small>}
             </span>
             <span className={s.tlDuration}>{fmtDuration(step.duration)}</span>
           </div>
@@ -955,8 +955,8 @@ function SleepConflictBanner({ result, sleepStart, sleepEnd }: { result: Schedul
   if (conflicts.length === 0) return null
   return (
     <div style={{
-      background: 'rgba(255, 184, 62, 0.08)',
-      border: '1px solid rgba(255, 184, 62, 0.40)',
+      background: 'rgba(217, 119, 6, 0.08)',
+      border: '1px solid rgba(217, 119, 6, 0.40)',
       borderRadius: 12,
       padding: '14px 18px',
       marginBottom: 12,
@@ -964,13 +964,13 @@ function SleepConflictBanner({ result, sleepStart, sleepEnd }: { result: Schedul
       color: 'var(--text)',
       lineHeight: 1.7,
     }}>
-      <strong style={{ color: '#FFB83E', display: 'block', marginBottom: 6 }}>
+      <strong style={{ color: '#D97706', display: 'block', marginBottom: 6 }}>
         🛌 수면 시간 ({sleepStart} ~ {sleepEnd}) 중 작업 {conflicts.length}건
       </strong>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
         {conflicts.map((c, i) => (
           <div key={i} style={{ fontSize: 12, color: 'var(--muted)' }}>
-            · <strong style={{ color: '#FFB83E' }}>{fmtTime(c.startTime)}</strong> {c.emoji} {c.name}
+            · <strong style={{ color: '#D97706' }}>{fmtTime(c.startTime)}</strong> {c.emoji} {c.name}
           </div>
         ))}
       </div>

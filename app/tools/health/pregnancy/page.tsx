@@ -29,8 +29,8 @@ export default function PregnancyPage() {
       {/* 면책 — 상단 강조 */}
       <div style={{
         display: 'flex', alignItems: 'flex-start', gap: '10px',
-        background: 'rgba(255,107,107,0.06)',
-        border: '1px solid rgba(255,107,107,0.3)',
+        background: 'rgba(220,38,38,0.06)',
+        border: '1px solid rgba(220,38,38,0.3)',
         borderRadius: '12px', padding: '14px 18px',
         marginBottom: '40px',
         fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7,
@@ -40,7 +40,7 @@ export default function PregnancyPage() {
           <strong style={{ color: 'var(--text)' }}>의료 면책 조항:</strong>{' '}
           본 계산기는 참고용이며, 정확한 진단은 반드시 <strong style={{ color: 'var(--text)' }}>산부인과 전문의와 상담</strong>하십시오.
           계산 결과는 마지막 생리일을 기준으로 한 이론적 수치이며, 실제 주수는 초음파 검사 결과에 따라 다를 수 있습니다.
-          출혈·복통·발열·태동 감소 등 응급 신호가 있다면 <strong style={{ color: '#FF6B6B' }}>즉시 산부인과·119·1339</strong>로 연락하세요.
+          출혈·복통·발열·태동 감소 등 응급 신호가 있다면 <strong style={{ color: '#DC2626' }}>즉시 산부인과·119·1339</strong>로 연락하세요.
         </p>
       </div>
 
@@ -78,8 +78,8 @@ export default function PregnancyPage() {
                 item.isSym
                   ? <span key={i} style={{ fontSize: '20px', color: 'var(--muted)', fontWeight: 700, flexShrink: 0 }}>{item.label}</span>
                   : <div key={i} style={{
-                    background: item.isResult ? 'rgba(255,107,217,0.15)' : item.isInput ? 'var(--bg3)' : 'rgba(200,255,62,0.1)',
-                    border: `1px solid ${item.isResult ? 'rgba(255,107,217,0.4)' : item.isInput ? 'var(--border)' : 'rgba(200,255,62,0.3)'}`,
+                    background: item.isResult ? 'rgba(255,107,217,0.15)' : item.isInput ? 'var(--bg3)' : 'rgba(14,165,233,0.1)',
+                    border: `1px solid ${item.isResult ? 'rgba(255,107,217,0.4)' : item.isInput ? 'var(--border)' : 'rgba(14,165,233,0.3)'}`,
                     borderRadius: '8px', padding: '8px 12px', textAlign: 'center',
                     fontSize: '12px', fontWeight: 600, whiteSpace: 'pre-line', lineHeight: 1.4,
                     color: item.isResult ? '#FF6BD9' : item.isInput ? 'var(--text)' : 'var(--accent)',
@@ -105,9 +105,9 @@ export default function PregnancyPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { period: '1삼분기 (1~13주)', color: '#FFD700', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
-              { period: '2삼분기 (14~27주)', color: '#3EFF9B', items: ['입덧 감소, 안정기 진입', '태동 시작 (18~22주)', '성별 확인 가능 (초음파)', '정밀 초음파, 기형아 2차 검사'] },
-              { period: '3삼분기 (28~40주)', color: '#FF8C3E', items: ['태아 급성장 (체중·폐 발달)', '분만 준비 교육 권장', 'GBS 검사, NST(태아심박동 검사)', '출산 준비 (입원 가방 등)'] },
+              { period: '1삼분기 (1~13주)', color: '#CA8A04', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
+              { period: '2삼분기 (14~27주)', color: '#059669', items: ['입덧 감소, 안정기 진입', '태동 시작 (18~22주)', '성별 확인 가능 (초음파)', '정밀 초음파, 기형아 2차 검사'] },
+              { period: '3삼분기 (28~40주)', color: '#EA580C', items: ['태아 급성장 (체중·폐 발달)', '분만 준비 교육 권장', 'GBS 검사, NST(태아심박동 검사)', '출산 준비 (입원 가방 등)'] },
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderRadius: '12px', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: t.color, marginBottom: '10px' }}>{t.period}</p>
@@ -203,15 +203,15 @@ export default function PregnancyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
-                period: '1삼분기 (1~13주)', color: '#FFD700',
+                period: '1삼분기 (1~13주)', color: '#CA8A04',
                 items: ['산부인과 등록·정기 검진 시작', '엽산 섭취 시작 (산부인과 상담)', '음주·흡연·카페인 제한', '직장·보험 검토', '입덧 기록·식이 조절'],
               },
               {
-                period: '2삼분기 (14~27주)', color: '#3EFF9B',
+                period: '2삼분기 (14~27주)', color: '#059669',
                 items: ['정밀 초음파 (20~24주)', '임신성 당뇨 검사', '태동 기록 시작', '산모교실·임산부 요가', '출산 병원 결정', '태명 정하기'],
               },
               {
-                period: '3삼분기 (28~40주)', color: '#FF8C3E',
+                period: '3삼분기 (28~40주)', color: '#EA580C',
                 items: ['GBS 검사 (35~37주)', '출산 가방·신생아 용품', '아기침대·카시트', '산후조리원 예약', '분만 신호 학습', '응급 연락처 준비', '출산 휴가·육아 휴직 신청'],
               },
             ].map((t, i) => (
@@ -260,8 +260,8 @@ export default function PregnancyPage() {
 
         {/* ── 7. 임신 중 응급 신호 (NEW · 의료 필수 정보) ── */}
         <section>
-          <div style={{ background: 'rgba(255,107,107,0.08)', border: '2px solid #FF6B6B', borderRadius: 12, padding: '18px 22px' }}>
-            <p style={{ fontSize: '15px', fontWeight: 800, color: '#FF6B6B', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(220,38,38,0.08)', border: '2px solid #DC2626', borderRadius: 12, padding: '18px 22px' }}>
+            <p style={{ fontSize: '15px', fontWeight: 800, color: '#DC2626', marginBottom: '12px' }}>
               ⚠️ 임신 중 응급 신호 — 다음 증상 시 즉시 의료기관
             </p>
             <ul style={{ paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '5px', margin: 0 }}>
@@ -278,7 +278,7 @@ export default function PregnancyPage() {
               ))}
             </ul>
             <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '12px', lineHeight: 1.7, fontWeight: 600 }}>
-              📞 <strong style={{ color: '#FF6B6B' }}>119</strong> 또는 가까운 산부인과 응급실 / 한국 응급의료정보센터 <strong style={{ color: '#FF6B6B' }}>1339</strong>
+              📞 <strong style={{ color: '#DC2626' }}>119</strong> 또는 가까운 산부인과 응급실 / 한국 응급의료정보센터 <strong style={{ color: '#DC2626' }}>1339</strong>
             </p>
           </div>
         </section>
@@ -344,8 +344,8 @@ export default function PregnancyPage() {
 
         {/* ── 9. 면책 강화 ── */}
         <section>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '2px solid #FF6B6B', borderRadius: 12, padding: '18px 22px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 800, color: '#FF6B6B', marginBottom: '10px' }}>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '2px solid #DC2626', borderRadius: 12, padding: '18px 22px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 800, color: '#DC2626', marginBottom: '10px' }}>
               ⚕️ 의료 면책 조항 — 본 도구는 참고용이며 의학적 진단·치료 도구가 아닙니다
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
@@ -353,7 +353,7 @@ export default function PregnancyPage() {
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
               본 도구의 정보는 <strong style={{ color: 'var(--text)' }}>보건복지부·대한산부인과학회·WHO 공식 자료</strong>를 기반으로 일반화한 추정치이며, 개별 산모·태아에 적용 시 반드시 의료진 상담이 필요합니다.
-              <br /><br />응급 시 — <strong style={{ color: '#FF6B6B' }}>119</strong> · 한국 응급의료정보센터 <strong style={{ color: '#FF6B6B' }}>1339</strong>.
+              <br /><br />응급 시 — <strong style={{ color: '#DC2626' }}>119</strong> · 한국 응급의료정보센터 <strong style={{ color: '#DC2626' }}>1339</strong>.
             </p>
           </div>
         </section>

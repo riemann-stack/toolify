@@ -40,16 +40,16 @@ const SEVERITY_LABEL: Record<Severity, string> = {
 }
 
 const SEVERITY_BORDER: Record<Severity, string> = {
-  safe:    'rgba(62,255,155,0.40)',
-  caution: 'rgba(255,215,0,0.40)',
-  warning: 'rgba(255,140,62,0.40)',
-  danger:  '#FF6B6B',
+  safe:    'rgba(16,185,129,0.40)',
+  caution: 'rgba(202,138,4,0.40)',
+  warning: 'rgba(234,88,12,0.40)',
+  danger:  '#DC2626',
 }
 const SEVERITY_BG: Record<Severity, string> = {
-  safe:    'rgba(62,255,155,0.06)',
-  caution: 'rgba(255,215,0,0.06)',
-  warning: 'rgba(255,140,62,0.06)',
-  danger:  'rgba(255,107,107,0.10)',
+  safe:    'rgba(16,185,129,0.06)',
+  caution: 'rgba(202,138,4,0.06)',
+  warning: 'rgba(234,88,12,0.06)',
+  danger:  'rgba(220,38,38,0.10)',
 }
 
 const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR')
@@ -366,7 +366,7 @@ export default function WeightLossClient() {
                 {plan.safety.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
               </ul>
               <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#FF6B6B' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#FF6B6B' }}>1393</strong> (24시간)
+                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
               </p>
               {(plan.safety.severity === 'danger' || plan.safety.severity === 'warning') && (
                 <button className={styles.copyBtn} style={{ marginTop: 8 }}
@@ -413,13 +413,13 @@ export default function WeightLossClient() {
                       x={chartData.pad.l} y={chartData.normalTop}
                       width={innerW}
                       height={Math.max(0, chartData.normalBottom - chartData.normalTop)}
-                      fill="rgba(62,255,155,0.10)" />
+                      fill="rgba(16,185,129,0.10)" />
                     {/* 저체중 영역 */}
                     <rect
                       x={chartData.pad.l} y={chartData.underTop}
                       width={innerW}
                       height={Math.max(0, chartData.underBottom - chartData.underTop)}
-                      fill="rgba(255,107,107,0.08)" />
+                      fill="rgba(220,38,38,0.08)" />
 
                     {/* y축 보조선 */}
                     {yTicks.map((y, i) => (
@@ -450,13 +450,13 @@ export default function WeightLossClient() {
                     {/* 정상 BMI 경계 라벨 */}
                     {normalMaxKg < chartData.maxY && normalMaxKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMaxKg) - 4}
-                        fontSize="10" fill="#3EFF9B" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        fontSize="10" fill="#059669" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
                         BMI 23 ({normalMaxKg.toFixed(0)}kg)
                       </text>
                     )}
                     {normalMinKg < chartData.maxY && normalMinKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMinKg) - 4}
-                        fontSize="10" fill="#FF8C8C" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        fontSize="10" fill="#DC2626" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
                         BMI 18.5 ({normalMinKg.toFixed(0)}kg)
                       </text>
                     )}
@@ -491,8 +491,8 @@ export default function WeightLossClient() {
                 </div>
                 <div className={styles.chartLegend}>
                   <span><i style={{ background: 'var(--accent)' }} /> 체중 변화</span>
-                  <span><i style={{ background: 'rgba(62,255,155,0.30)' }} /> 정상 BMI 범위</span>
-                  <span><i style={{ background: 'rgba(255,107,107,0.30)' }} /> 저체중</span>
+                  <span><i style={{ background: 'rgba(16,185,129,0.30)' }} /> 정상 BMI 범위</span>
+                  <span><i style={{ background: 'rgba(220,38,38,0.30)' }} /> 저체중</span>
                 </div>
               </div>
             )
@@ -506,10 +506,10 @@ export default function WeightLossClient() {
                 <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
                   단 {macros.protein.percent}%
                 </div>
-                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#FFD700' }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#CA8A04' }}>
                   지 {macros.fat.percent}%
                 </div>
-                <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#FF8C3E' }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#EA580C' }}>
                   탄 {macros.carb.percent}%
                 </div>
               </div>
@@ -523,13 +523,13 @@ export default function WeightLossClient() {
                   <span>{fmt(macros.protein.kcal)}</span>
                   <span>{macros.protein.percent}%</span>
                 </div>
-                <div className={styles.macroRow} style={{ borderLeftColor: '#FFD700' }}>
+                <div className={styles.macroRow} style={{ borderLeftColor: '#CA8A04' }}>
                   <span>🥑 지방 ({fatRatio}%)</span>
                   <span>{macros.fat.g}g</span>
                   <span>{fmt(macros.fat.kcal)}</span>
                   <span>{macros.fat.percent}%</span>
                 </div>
-                <div className={styles.macroRow} style={{ borderLeftColor: '#FF8C3E' }}>
+                <div className={styles.macroRow} style={{ borderLeftColor: '#EA580C' }}>
                   <span>🍚 탄수화물</span>
                   <span>{macros.carb.g}g</span>
                   <span>{fmt(macros.carb.kcal)}</span>
@@ -578,15 +578,15 @@ export default function WeightLossClient() {
             <>
               <div className={styles.hero}
                 style={{
-                  borderColor: targetDateResult.feasibility === 'safe' ? '#3EFF9B' :
-                               targetDateResult.feasibility === 'caution' ? '#FFD700' :
-                               targetDateResult.feasibility === 'aggressive' ? '#FF8C3E' : '#FF6B6B',
-                  background: targetDateResult.feasibility === 'safe' ? 'rgba(62,255,155,0.06)' :
-                              targetDateResult.feasibility === 'caution' ? 'rgba(255,215,0,0.06)' :
-                              targetDateResult.feasibility === 'aggressive' ? 'rgba(255,140,62,0.06)' : 'rgba(255,107,107,0.10)',
+                  borderColor: targetDateResult.feasibility === 'safe' ? '#059669' :
+                               targetDateResult.feasibility === 'caution' ? '#CA8A04' :
+                               targetDateResult.feasibility === 'aggressive' ? '#EA580C' : '#DC2626',
+                  background: targetDateResult.feasibility === 'safe' ? 'rgba(16,185,129,0.06)' :
+                              targetDateResult.feasibility === 'caution' ? 'rgba(202,138,4,0.06)' :
+                              targetDateResult.feasibility === 'aggressive' ? 'rgba(234,88,12,0.06)' : 'rgba(220,38,38,0.10)',
                 }}>
                 <div className={styles.heroLabel}>{targetDateResult.totalWeeks.toFixed(1)}주 안에 {fmt1(cw - tw)}kg 감량</div>
-                <div className={styles.heroNum} style={{ color: '#FFD700' }}>
+                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
                   {fmt(targetDateResult.dailyDeficit)}<span className={styles.heroNumUnit}>kcal/일</span>
                 </div>
                 <div className={styles.heroSub}>
@@ -622,9 +622,9 @@ export default function WeightLossClient() {
                 <label className={styles.cardLabel}>대안 기간 비교 (안전 대안 자동 추천)</label>
                 <div className={styles.altTable}>
                   {alternatives.map((alt, i) => {
-                    const color = alt.feasibility === 'safe' ? '#3EFF9B' :
-                                  alt.feasibility === 'caution' ? '#FFD700' :
-                                  alt.feasibility === 'aggressive' ? '#FF8C3E' : '#FF6B6B'
+                    const color = alt.feasibility === 'safe' ? '#059669' :
+                                  alt.feasibility === 'caution' ? '#CA8A04' :
+                                  alt.feasibility === 'aggressive' ? '#EA580C' : '#DC2626'
                     return (
                       <div key={i}
                         className={styles.altRow}
@@ -698,14 +698,14 @@ export default function WeightLossClient() {
           </div>
 
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(255,140,62,0.30)', background: 'rgba(255,140,62,0.06)' }}>
+            style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
             <div className={styles.heroLabel}>분배 결과</div>
-            <div className={styles.heroNum} style={{ color: '#FF8C3E' }}>
+            <div className={styles.heroNum} style={{ color: '#EA580C' }}>
               {fmt(split.dietDailyDeficit)}<span style={{ fontSize: '0.4em', color: 'var(--muted)' }}>+</span>{fmt(split.exerciseDailyDeficit)}
               <span className={styles.heroNumUnit}>kcal/일</span>
             </div>
             <div className={styles.heroSub}>
-              하루 식단 적자 <strong style={{ color: '#FF8C3E' }}>{fmt(split.dietDailyDeficit)}kcal</strong> + 운동 소모 <strong style={{ color: '#FF8C3E' }}>{fmt(split.exerciseDailyDeficit)}kcal</strong>
+              하루 식단 적자 <strong style={{ color: '#EA580C' }}>{fmt(split.dietDailyDeficit)}kcal</strong> + 운동 소모 <strong style={{ color: '#EA580C' }}>{fmt(split.exerciseDailyDeficit)}kcal</strong>
               {exerciseFreq > 0 && <><br />주 {exerciseFreq}회 · 1회당 {fmt(split.perSessionKcal)}kcal 소모</>}
             </div>
           </div>

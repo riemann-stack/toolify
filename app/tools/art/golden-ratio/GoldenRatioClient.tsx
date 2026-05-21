@@ -216,7 +216,7 @@ function MiniGoldenRect({ A, B, unit }: { A: number; B: number; unit: string }) 
         {/* 전체 직사각형 */}
         <rect x={0} y={0} width={W} height={H} fill="none" stroke="var(--accent)" strokeWidth={1.5} />
         {/* B × B 정사각형 (왼쪽) — 황금 분할 */}
-        <rect x={0} y={0} width={H} height={H} fill="rgba(200,255,62,0.07)" stroke="rgba(200,255,62,0.5)" strokeWidth={1} />
+        <rect x={0} y={0} width={H} height={H} fill="rgba(14,165,233,0.07)" stroke="rgba(14,165,233,0.5)" strokeWidth={1} />
         {/* 분할 호 (사분원) */}
         <path
           d={`M ${H} 0 A ${H} ${H} 0 0 1 0 ${H}`}
@@ -398,7 +398,7 @@ function SpiralTab() {
   }, [])
 
   const bg = theme === 'dark' ? '#141414' : '#F0EFE8'
-  const stroke = theme === 'dark' ? '#C8FF3E' : '#1F1F1F'
+  const stroke = theme === 'dark' ? '#0EA5E9' : '#1F1F1F'
   const squareStroke = theme === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'
   const textColor = theme === 'dark' ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)'
 
@@ -549,14 +549,14 @@ export default function GoldenRatioClient() {
 
 /* ──────────────────────── 비율 비교 시각화 ──────────────────────── */
 const RATIO_PRESETS = [
-  { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       color: '#C8FF3E' },
-  { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       color: '#3EC8FF' },
-  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#FFD700' },
+  { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       color: '#0EA5E9' },
+  { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       color: '#0891B2' },
+  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#CA8A04' },
   { name: '4:3',           ratio: 1.333, sub: '구식 TV·아이패드',       color: '#9B59B6' },
-  { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     color: '#FF6B9D' },
-  { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      color: '#3EFF9B' },
+  { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     color: '#E11D48' },
+  { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      color: '#059669' },
   { name: '1:1',           ratio: 1.000, sub: '인스타 피드',            color: '#FFFFFF' },
-  { name: '9:16',          ratio: 0.563, sub: '스토리·릴스·틱톡(세로)', color: '#FF8C3E' },
+  { name: '9:16',          ratio: 0.563, sub: '스토리·릴스·틱톡(세로)', color: '#EA580C' },
 ]
 
 function RatioCompareCard() {

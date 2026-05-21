@@ -3,15 +3,15 @@
 
 /* ── 강조 면책 ── */
 .medicalDisclaimer {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.medicalDisclaimer strong { color: #FF8C3E; }
+.medicalDisclaimer strong { color: #EA580C; }
 .medicalDisclaimer ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 /* ── 탭 ── */
@@ -39,7 +39,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive { background: rgba(62,255,208,0.10); color: #3EFFD0; font-weight: 700; }
+.tabActive { background: rgba(13,148,136,0.18); color: #0D9488; font-weight: 700; }
 
 .card {
   background: var(--bg2);
@@ -80,18 +80,18 @@
   margin-bottom: 18px;
 }
 .startBtn {
-  background: rgba(62,255,208,0.12);
-  border: 2px solid #3EFFD0;
+  background: rgba(13,148,136,0.18);
+  border: 2px solid #0D9488;
   border-radius: 12px;
   padding: 14px 32px;
   font-size: 15px;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 800;
-  color: #3EFFD0;
+  color: #0D9488;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .startBtn:hover { background: rgba(62,255,208,0.20); transform: translateY(-1px); }
+  .startBtn:hover { background: rgba(13,148,136,0.20); transform: translateY(-1px); }
 }
 
 .progressBar {
@@ -103,7 +103,7 @@
 }
 .progressFill {
   height: 100%;
-  background: #3EFFD0;
+  background: #0D9488;
   transition: width 0.3s;
 }
 .progressLabel {
@@ -134,7 +134,7 @@
 .stageReady    { background: var(--bg2); border: 1px solid var(--border); color: var(--text); }
 .stageWaiting  { background: #C03030; color: #fff; }
 .stageGo       { background: #2E9D5C; color: #fff; }
-.stageEarly    { background: #FF8C3E; color: #fff; }
+.stageEarly    { background: #EA580C; color: #fff; }
 
 .stageBigText {
   font-size: clamp(28px, 6vw, 42px);
@@ -158,8 +158,8 @@
 
 /* ── HERO ── */
 .hero {
-  background: rgba(62,255,208,0.05);
-  border: 1px solid #3EFFD0;
+  background: rgba(13,148,136,0.14);
+  border: 1px solid #0D9488;
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -172,18 +172,18 @@
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1;
-  color: #3EFFD0;
+  color: #0D9488;
 }
-.heroSafe      { border-color: #3EFFD0; }
-.heroSafe .heroNum { color: #3EFFD0; }
-.heroFast      { border-color: #3EFF9B; background: rgba(62,255,155,0.05); }
-.heroFast .heroNum { color: #3EFF9B; }
+.heroSafe      { border-color: #0D9488; }
+.heroSafe .heroNum { color: #0D9488; }
+.heroFast      { border-color: #059669; background: rgba(16,185,129,0.14); }
+.heroFast .heroNum { color: #059669; }
 .heroAvg       { border-color: var(--accent); background: var(--accent-dim); }
 .heroAvg .heroNum { color: var(--accent); }
-.heroBelow     { border-color: #FFD700; background: rgba(255,215,0,0.05); }
-.heroBelow .heroNum { color: #FFD700; }
-.heroSlow      { border-color: #FF8C3E; background: rgba(255,140,62,0.05); }
-.heroSlow .heroNum { color: #FF8C3E; }
+.heroBelow     { border-color: #CA8A04; background: rgba(202,138,4,0.14); }
+.heroBelow .heroNum { color: #CA8A04; }
+.heroSlow      { border-color: #EA580C; background: rgba(234,88,12,0.14); }
+.heroSlow .heroNum { color: #EA580C; }
 
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroBadge {
@@ -251,7 +251,7 @@
   color: var(--muted);
   line-height: 1.85;
 }
-.compareCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareCard strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 스트룹 ── */
 .stroopWord {
@@ -269,7 +269,7 @@
 }
 @keyframes flashCorrect {
   0%   { background: var(--bg2); }
-  50%  { background: rgba(62,255,155,0.20); }
+  50%  { background: rgba(16,185,129,0.20); }
   100% { background: var(--bg2); }
 }
 .stroopFlashWrong {
@@ -277,7 +277,7 @@
 }
 @keyframes flashWrong {
   0%   { background: var(--bg2); }
-  50%  { background: rgba(255,107,107,0.20); }
+  50%  { background: rgba(220,38,38,0.20); }
   100% { background: var(--bg2); }
 }
 
@@ -309,7 +309,7 @@
   margin-bottom: 12px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.stroopInstruct strong { color: #3EFFD0; }
+.stroopInstruct strong { color: #0D9488; }
 
 /* 비교 막대 (스트룹 결과) */
 .barCompare {
@@ -340,10 +340,10 @@
   border-radius: 6px;
   transition: width 0.4s ease;
 }
-.barCongruent { background: linear-gradient(90deg, var(--accent), #3EFFD0); }
-.barIncongruent { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
-.barSingle { background: linear-gradient(90deg, var(--accent), #3EFFD0); }
-.barDual { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
+.barCongruent { background: linear-gradient(90deg, var(--accent), #0D9488); }
+.barIncongruent { background: linear-gradient(90deg, #EA580C, #DC2626); }
+.barSingle { background: linear-gradient(90deg, var(--accent), #0D9488); }
+.barDual { background: linear-gradient(90deg, #EA580C, #DC2626); }
 .barValue {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
@@ -385,7 +385,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(72px, 16vw, 128px);
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -3px;
   line-height: 1;
   margin: 8px 0;
@@ -409,10 +409,10 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .dualBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
+  .dualBtn:hover { color: #0D9488; border-color: #0D9488; }
 }
-.dualBtnOdd  { color: #FFD700; border-color: rgba(255,215,0,0.40); }
-.dualBtnEven { color: #3EC8FF; border-color: rgba(62,200,255,0.40); }
+.dualBtnOdd  { color: #CA8A04; border-color: rgba(202,138,4,0.40); }
+.dualBtnEven { color: #0891B2; border-color: rgba(8,145,178,0.40); }
 .dualBtnRed {
   background: rgba(255,68,68,0.08);
   border-color: #FF4444;
@@ -454,7 +454,7 @@
 .summaryCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-top: 3px solid #3EFFD0;
+  border-top: 3px solid #0D9488;
   border-radius: 12px;
   padding: 14px 16px;
   text-align: center;
@@ -465,7 +465,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(20px, 4.5vw, 26px);
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -0.5px;
 }
 .summaryUnit { font-size: 12px; color: var(--muted); margin-left: 2px; font-family: 'Noto Sans KR', sans-serif; }
@@ -480,9 +480,9 @@
 
 .totalScoreCard {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(62,255,208,0.15), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.15), transparent 60%),
     var(--bg2);
-  border: 2px solid #3EFFD0;
+  border: 2px solid #0D9488;
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -500,7 +500,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 56px;
-  color: #3EFFD0;
+  color: #0D9488;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -509,15 +509,15 @@
 
 /* 최고 기록 카드 */
 .recordCard {
-  background: rgba(255,215,0,0.05);
-  border: 1px solid rgba(255,215,0,0.30);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 12px;
   padding: 14px 18px;
 }
 .recordTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
-  color: #FFD700;
+  color: #CA8A04;
   font-size: 13px;
   margin-bottom: 10px;
 }
@@ -534,10 +534,10 @@
 /* 공유 카드 */
 .shareCard {
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(62,255,208,0.18), transparent 55%),
+    radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.18), transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(155,89,182,0.18), transparent 60%),
     #0a0e1a;
-  border: 1px solid #3EFFD0;
+  border: 1px solid #0D9488;
   border-radius: 18px;
   padding: 24px 22px;
   position: relative;
@@ -560,7 +560,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
-  color: #3EFFD0;
+  color: #0D9488;
   text-align: center;
   margin-bottom: 16px;
   letter-spacing: -0.5px;
@@ -583,15 +583,15 @@
   margin-top: 14px;
   padding: 14px;
   text-align: center;
-  background: rgba(62,255,208,0.10);
-  border: 1px solid rgba(62,255,208,0.30);
+  background: rgba(13,148,136,0.18);
+  border: 1px solid rgba(13,148,136,0.30);
   border-radius: 10px;
 }
 .shareScoreNum {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 32px;
-  color: #3EFFD0;
+  color: #0D9488;
 }
 .shareWatermark {
   position: absolute;
@@ -600,32 +600,32 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 11px;
-  color: rgba(62,255,208,0.6);
+  color: rgba(13,148,136,0.6);
   letter-spacing: 0.04em;
 }
 
 /* 안내 카드 */
 .interpretCard {
   background: var(--bg3);
-  border-left: 4px solid #3EFFD0;
+  border-left: 4px solid #0D9488;
   border-radius: 8px;
   padding: 14px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: #3EFFD0; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.interpretCard strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .deviceNote {
-  background: rgba(62,200,255,0.05);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
 }
-.deviceNote strong { color: #3EC8FF; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.deviceNote strong { color: #0891B2; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* 결과 → 다시 도전 */
 .actionRow {
@@ -647,10 +647,10 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { color: #3EFFD0; border-color: #3EFFD0; }
+  .actionBtn:hover { color: #0D9488; border-color: #0D9488; }
 }
-.actionBtnPrimary { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; }@media (hover: hover) {
-  .actionBtnPrimary:hover { background: rgba(62,255,208,0.20); }
+.actionBtnPrimary { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; }@media (hover: hover) {
+  .actionBtnPrimary:hover { background: rgba(13,148,136,0.20); }
 }
 
 .copyBtn {
@@ -666,6 +666,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #3EFFD0; color: #3EFFD0; }
+  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
 }
-.copied { background: rgba(62,255,208,0.10); color: #3EFFD0; border-color: #3EFFD0; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }

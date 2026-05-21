@@ -64,7 +64,7 @@ function PianoKeyboard({ midiA, midiB }: { midiA: number | null; midiB?: number 
     const exactB = inRange(midiB ?? -1) ? midiB === midi : false
     const pc = ((midi % 12) + 12) % 12
     if (exact || (!inRange(midiA ?? -1) && midiA !== null && pc === pcA)) return 'var(--accent)'
-    if (exactB || (!inRange(midiB ?? -1) && midiB != null && pc === pcB)) return '#3EC8FF'
+    if (exactB || (!inRange(midiB ?? -1) && midiB != null && pc === pcB)) return '#0891B2'
     return isBlack ? '#1A1A1A' : '#E8E8E8'
   }
 
@@ -362,7 +362,7 @@ function IntervalTab({ a4 }: { a4: number }) {
             <div className={styles.neighborHz}>{result.hzA.toFixed(3)} Hz</div>
           </div>
           <div className={styles.neighborItem}>
-            <div className={styles.neighborLabel} style={{ color: '#3EC8FF' }}>● 음정 B</div>
+            <div className={styles.neighborLabel} style={{ color: '#0891B2' }}>● 음정 B</div>
             <div className={styles.neighborNote}>{NOTE_NAMES[bNi]}{bOct}</div>
             <div className={styles.neighborHz}>{result.hzB.toFixed(3)} Hz</div>
           </div>

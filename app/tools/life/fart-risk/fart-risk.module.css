@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
 
 /* ── 히어로 (3축 점수 위) ── */
 .heroCard {
@@ -79,7 +79,7 @@
 .symName { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 .symGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
 .symSubHead { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
-.symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: 8px; border-left: 3px solid #FF8C3E; }
+.symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: 8px; border-left: 3px solid #EA580C; }
 
 @media (max-width: 500px) {
   .tabBtn { font-size: 11px; padding: 9px 2px; }
@@ -90,10 +90,10 @@
 
 /* ── 위험 신호 카드 (★★★★) ── */
 .redFlagCard {
-  background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.4);
+  background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.4);
   border-radius: 14px; padding: 18px 22px;
 }
-.redFlagHead { font-size: 14px; font-weight: 700; color: #FF6B6B; margin-bottom: 12px; }
+.redFlagHead { font-size: 14px; font-weight: 700; color: #DC2626; margin-bottom: 12px; }
 .redFlagList { margin: 0 0 12px 18px; padding: 0; font-size: 13px; color: var(--text); line-height: 1.9; }
 .redFlagFooter { background: var(--bg3); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.9; }
 .redFlagFooter p { margin: 0; }
@@ -104,14 +104,14 @@
   background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
   padding: 14px 18px; margin-top: 4px;
 }
-.disclaimerTitle { font-size: 13px; font-weight: 700; color: #FF8C3E; margin: 0 0 8px; }
+.disclaimerTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
 .disclaimerBody { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 0; }
 
 /* ── 팁 카드 보조 ── */
 .tipSubHead { font-size: 12px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
 .tipUl { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.85; }
 .tipUl li { margin-bottom: 2px; }
-.tipWarn { font-size: 12px; color: #FF6B6B; margin-top: 12px; padding: 8px 12px; background: rgba(255,107,107,0.08); border-radius: 8px; line-height: 1.6; }
+.tipWarn { font-size: 12px; color: #DC2626; margin-top: 12px; padding: 8px 12px; background: rgba(220,38,38,0.14); border-radius: 8px; line-height: 1.6; }
 
 
 .card {
@@ -166,12 +166,12 @@
   gap: 6px;
   text-align: center;
 }@media (hover: hover) {
-  .foodBtn:hover { border-color: rgba(200,255,62,0.3); }
+  .foodBtn:hover { border-color: rgba(14,165,233,0.3); }
 }
 .foodEmoji { font-size: 18px; line-height: 1; }
 .foodActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -206,11 +206,11 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .condItem:hover { border-color: rgba(200,255,62,0.3); }
+  .condItem:hover { border-color: rgba(14,165,233,0.3); }
 }
 .condActive {
-  background: rgba(200,255,62,0.08);
-  border-color: rgba(200,255,62,0.4);
+  background: rgba(14,165,233,0.14);
+  border-color: rgba(14,165,233,0.4);
 }
 .condCheck {
   width: 18px;
@@ -257,12 +257,12 @@
 }
 .charUnit { font-size: 22px; font-weight: 700; margin-left: 4px; }
 
-.levelCalm    { background: rgba(62,255,155,0.15); border-color: #3EFF9B; }
-.levelCalm    .charName, .levelCalm .charScore { color: #3EFF9B; }
-.levelSlight  { background: rgba(200,255,62,0.15); border-color: #C8FF3E; }
-.levelSlight  .charName, .levelSlight .charScore { color: #C8FF3E; }
-.levelWarn    { background: rgba(255,140,62,0.15); border-color: #FF8C3E; }
-.levelWarn    .charName, .levelWarn .charScore { color: #FF8C3E; }
+.levelCalm    { background: rgba(16,185,129,0.15); border-color: #059669; }
+.levelCalm    .charName, .levelCalm .charScore { color: #059669; }
+.levelSlight  { background: rgba(14,165,233,0.15); border-color: #0EA5E9; }
+.levelSlight  .charName, .levelSlight .charScore { color: #0EA5E9; }
+.levelWarn    { background: rgba(234,88,12,0.15); border-color: #EA580C; }
+.levelWarn    .charName, .levelWarn .charScore { color: #EA580C; }
 .levelBomb    { background: rgba(255,70,70,0.15); border-color: #FF4646; }
 .levelBomb    .charName, .levelBomb .charScore { color: #FF4646; }
 
@@ -316,18 +316,18 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 800;
-  color: #0D0D0D;
+  color: #ffffff;
   flex-shrink: 0;
 }
-.rank1 { background: #FFD700; }
+.rank1 { background: #CA8A04; }
 .rank2 { background: #C0C0C0; }
 .rank3 { background: #CD7F32; color: #fff; }
 .topEmoji { font-size: 22px; }
 .topName { font-size: 14px; color: var(--text); font-weight: 500; flex: 1; }
 .topReason { font-size: 11px; color: var(--muted); }
 .topScore {
-  background: rgba(200,255,62,0.15);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.15);
+  border: 1px solid rgba(14,165,233,0.3);
   color: var(--accent);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
@@ -348,7 +348,7 @@
   font-size: 12px;
   letter-spacing: 0.04em;
   font-weight: 700;
-  color: #FF6B6B;
+  color: #DC2626;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -365,7 +365,7 @@
 }
 .comboItem:first-of-type { border-top: none; }
 .comboBonus {
-  color: #FF6B6B;
+  color: #DC2626;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
 }
@@ -410,8 +410,8 @@
 
 /* ── 완화 팁 ── */
 .tipCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -419,7 +419,7 @@
   font-size: 12px;
   letter-spacing: 0.04em;
   font-weight: 700;
-  color: #3EC8FF;
+  color: #0891B2;
   margin-bottom: 10px;
 }
 .tipList {
@@ -445,7 +445,7 @@
 @media (max-width: 480px) { .actionRow { grid-template-columns: 1fr; } }
 .shareBtn {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border: none;
   padding: 14px 18px;
   border-radius: 10px;
@@ -457,7 +457,7 @@
 }@media (hover: hover) {
   .shareBtn:hover { opacity: 0.88; }
 }
-.shareBtn.copied { background: #3EFF9B; }
+.shareBtn.copied { background: #059669; }
 .resetBtn {
   background: var(--bg3);
   color: var(--text);

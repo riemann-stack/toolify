@@ -107,10 +107,10 @@ export default function BuildupPage() {
       <h2 style={sectionTitle}>📐 4가지 빌드업 프로파일 가이드</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { name: '🟢 균등 (Linear)', color: '#3EFFD0', curve: '6:00 → 5:45 → 5:30 → 5:15 → 5:00', use: '가장 단순·표준. 모든 거리에 적합.' },
-          { name: '🟡 후반 집중 (Back-loaded)', color: '#3EFF9B', curve: '6:00 → 6:00 → 5:50 → 5:30 → 5:00', use: '하프·풀 준비. 후반 30%에 가속.' },
+          { name: '🟢 균등 (Linear)', color: '#0D9488', curve: '6:00 → 5:45 → 5:30 → 5:15 → 5:00', use: '가장 단순·표준. 모든 거리에 적합.' },
+          { name: '🟡 후반 집중 (Back-loaded)', color: '#059669', curve: '6:00 → 6:00 → 5:50 → 5:30 → 5:00', use: '하프·풀 준비. 후반 30%에 가속.' },
           { name: '🟠 마지막 자극 (Sprint Finish)', color: '#FFD93E', curve: '6:00 → 6:00 → 6:00 → 5:40 → 4:50', use: '회복 후 가벼운 자극·평일 짧은 훈련.' },
-          { name: '🔴 레이스 페이스 단계 (Race-pace Ladder)', color: '#FF8C3E', curve: 'E → M → HM → 10K (4구간 고정)', use: '레이스 페이스 적응·하프 대비.' },
+          { name: '🔴 레이스 페이스 단계 (Race-pace Ladder)', color: '#EA580C', curve: 'E → M → HM → 10K (4구간 고정)', use: '레이스 페이스 적응·하프 대비.' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: p.color, fontWeight: 700, marginBottom: '8px' }}>{p.name}</p>
@@ -155,8 +155,8 @@ export default function BuildupPage() {
           { title: '4. 고강도 구간이 너무 많음 (>50%)', err: '후반 절반 이상이 T·I 강도 → 누적 피로로 부상 위험', fix: '고강도는 마지막 20~30% 권장' },
           { title: '5. 회복 다음날 강한 빌드업', err: '전날 LSD·인터벌 후 강한 빌드업 → 누적 부하', fix: '회복 다음날은 회복 빌드업(🌱 프리셋) 또는 휴식' },
         ].map((m, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #FFB83E', borderRadius: '10px', padding: '12px 16px' }}>
-            <p style={{ fontSize: '13px', color: '#FFB83E', fontWeight: 700, marginBottom: '6px' }}>{m.title}</p>
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #D97706', borderRadius: '10px', padding: '12px 16px' }}>
+            <p style={{ fontSize: '13px', color: '#D97706', fontWeight: 700, marginBottom: '6px' }}>{m.title}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: '0 0 4px' }}>❌ {m.err}</p>
             <p style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>✅ {m.fix}</p>
           </div>
@@ -201,7 +201,7 @@ export default function BuildupPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q3. 끝 페이스는 5K 페이스보다 빨라도 되나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>비추천</strong>. 5K 페이스 이하는 인터벌(I·R) 영역으로 빌드업 정의를 벗어남. 표준은 <strong style={{ color: 'var(--text)' }}>T(역치) 페이스 ~ 10K 페이스</strong>까지가 안전.
+          <strong style={{ color: '#DC2626' }}>비추천</strong>. 5K 페이스 이하는 인터벌(I·R) 영역으로 빌드업 정의를 벗어남. 표준은 <strong style={{ color: 'var(--text)' }}>T(역치) 페이스 ~ 10K 페이스</strong>까지가 안전.
           본 도구의 안전성 체크가 자동 경고합니다.
         </div>
       </details>
@@ -295,8 +295,8 @@ export default function BuildupPage() {
       {/* 7. 면책 */}
       <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

@@ -26,7 +26,7 @@
   .tab:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   color: var(--accent);
   font-weight: 700;
 }
@@ -86,7 +86,7 @@
 }@media (hover: hover) {
   .door:not(:disabled):hover {
   transform: scale(1.05);
-  border-color: rgba(200, 255, 62, 0.4);
+  border-color: rgba(14, 165, 233, 0.4);
 }
 }
 .door:disabled { cursor: default; }
@@ -105,30 +105,30 @@
 }
 
 .doorSelected {
-  background: rgba(200,255,62,0.1);
+  background: rgba(14,165,233,0.1);
   border-color: var(--accent);
   transform: scale(1.03);
 }
 .doorSelected .doorNum { color: var(--accent); }
 
 .doorOpened {
-  background: rgba(255,140,62,0.06);
-  border-color: #FF8C3E;
+  background: rgba(234,88,12,0.14);
+  border-color: #EA580C;
   opacity: 0.75;
   animation: shake 0.5s ease;
 }
 .doorWin {
-  background: rgba(62,255,155,0.1);
-  border-color: #3EFF9B;
+  background: rgba(16,185,129,0.1);
+  border-color: #059669;
   animation: bounce 0.6s ease;
 }
 .doorLose {
-  background: rgba(255,107,107,0.08);
-  border-color: #FF6B6B;
+  background: rgba(220,38,38,0.14);
+  border-color: #DC2626;
 }
 .doorCar {
-  background: rgba(62,255,155,0.06);
-  border-color: rgba(62,255,155,0.4);
+  background: rgba(16,185,129,0.14);
+  border-color: rgba(16,185,129,0.4);
 }
 
 @keyframes shake {
@@ -154,7 +154,7 @@
 .decideSwitch {
   padding: 14px 16px;
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   font-size: 15px;
@@ -163,7 +163,7 @@
   transition: all .15s;
   min-height: 48px;
 }@media (hover: hover) {
-  .decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,255,62,0.25); }
+  .decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,165,233,0.25); }
 }
 .decideStay {
   padding: 14px 16px;
@@ -186,8 +186,8 @@
   border-radius: 14px;
   text-align: center;
 }
-.resultWin  { background: rgba(62,255,155,0.08);  border: 1px solid rgba(62,255,155,0.4); }
-.resultLose { background: rgba(255,140,62,0.08); border: 1px solid rgba(255,140,62,0.4); }
+.resultWin  { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.4); }
+.resultLose { background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.4); }
 .resultTitle {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(20px, 5vw, 26px);
@@ -195,8 +195,8 @@
   margin: 0 0 8px;
   letter-spacing: -0.01em;
 }
-.resultWin  .resultTitle { color: #3EFF9B; }
-.resultLose .resultTitle { color: #FF8C3E; }
+.resultWin  .resultTitle { color: #059669; }
+.resultLose .resultTitle { color: #EA580C; }
 .resultSub {
   font-size: 13px;
   color: var(--muted);
@@ -253,7 +253,7 @@
   font-size: 11px;
   cursor: pointer;
 }@media (hover: hover) {
-  .statsReset:hover { color: var(--text); border-color: #FF6B6B; }
+  .statsReset:hover { color: var(--text); border-color: #DC2626; }
 }
 .statsGrid {
   display: flex;
@@ -319,7 +319,7 @@
 }
 .variantCard:disabled { opacity: 0.5; cursor: not-allowed; }
 .variantCardActive {
-  background: rgba(200,255,62,0.1) !important;
+  background: rgba(14,165,233,0.1) !important;
   border-color: var(--accent) !important;
 }
 .variantHead {
@@ -328,7 +328,7 @@
 }
 .variantTheory {
   font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent);
-  background: rgba(200,255,62,0.08); padding: 2px 6px; border-radius: 4px;
+  background: rgba(14,165,233,0.14); padding: 2px 6px; border-radius: 4px;
   white-space: nowrap;
 }
 .variantDesc { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0; }
@@ -369,7 +369,7 @@
 .nBtn_1000  { font-size: 15px; }
 .nBtn_10000 { font-size: 16px; }
 .nBtnActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -397,7 +397,7 @@
 }
 .segBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .segBtnActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -406,7 +406,7 @@
 .runBtn {
   padding: 16px;
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   font-size: 15px;
@@ -415,7 +415,7 @@
   transition: all .15s;
   min-height: 52px;
 }@media (hover: hover) {
-  .runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(200,255,62,0.3); }
+  .runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(14,165,233,0.3); }
 }
 
 .progressBar {
@@ -426,7 +426,7 @@
 }
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent) 0%, #3EFF9B 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, #059669 100%);
   transition: width .05s linear;
 }
 
@@ -547,7 +547,7 @@
   font-family: inherit !important;
 }
 .compAccent { color: var(--accent) !important; font-weight: 800 !important; }
-.compBlue   { color: #3EC8FF !important; font-weight: 800 !important; }
+.compBlue   { color: #0891B2 !important; font-weight: 800 !important; }
 
 .interpret {
   padding: 14px 18px;
@@ -592,7 +592,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 800;
-  color: #0B0B0B;
+  color: #ffffff;
   background: var(--accent);
   width: 22px;
   height: 22px;
@@ -619,11 +619,11 @@
 }
 .whyBody strong { color: var(--text); }
 .hi  { color: var(--accent) !important; }
-.hi2 { color: #FF8C3E !important; }
+.hi2 { color: #EA580C !important; }
 .whyConclusion {
   padding: 12px 16px;
-  background: rgba(200,255,62,0.06);
-  border: 1px solid rgba(200,255,62,0.25);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 10px;
   font-size: 13px;
   color: var(--text);
@@ -748,7 +748,7 @@
   gap: 2px;
   padding: 12px;
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.25);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 12px;
   margin-bottom: 14px;
 }
@@ -762,18 +762,18 @@
   opacity: 0.4;
 }
 .hundredGoat {
-  background: rgba(255,255,255,0.02);
+  background: rgba(15,23,42,0.04);
 }
 .hundredPick {
   opacity: 1;
-  background: rgba(200,255,62,0.2);
+  background: rgba(14,165,233,0.2);
   border: 1.5px solid var(--accent);
   font-size: 12px;
 }
 .hundredSwitch {
   opacity: 1;
-  background: rgba(62,200,255,0.2);
-  border: 1.5px solid #3EC8FF;
+  background: rgba(8,145,178,0.2);
+  border: 1.5px solid #0891B2;
   font-size: 12px;
 }
 

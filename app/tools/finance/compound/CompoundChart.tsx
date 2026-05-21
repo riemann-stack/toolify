@@ -7,10 +7,10 @@ interface Props {
 }
 
 const RATES = [
-  { rate: 3,  label: '3%',  color: '#3EC8FF' },
-  { rate: 5,  label: '5%',  color: '#3EFF9B' },
-  { rate: 7,  label: '7%',  color: '#C8FF3E' },
-  { rate: 10, label: '10%', color: '#FF8C3E' },
+  { rate: 3,  label: '3%',  color: '#0891B2' },
+  { rate: 5,  label: '5%',  color: '#059669' },
+  { rate: 7,  label: '7%',  color: '#0EA5E9' },
+  { rate: 10, label: '10%', color: '#EA580C' },
 ]
 
 const PRINCIPAL = 1000 // 만원

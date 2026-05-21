@@ -910,7 +910,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
             </tr>
             <tr>
               <td>매각 잔존가치</td>
-              <td className={s.numCell} style={{ color: '#3EFF9B' }}>−{fmtKrw(resaleValue)}</td>
+              <td className={s.numCell} style={{ color: '#059669' }}>−{fmtKrw(resaleValue)}</td>
               <td className={s.numCell}>—</td>
             </tr>
             <tr className={s.totalRow}>

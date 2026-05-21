@@ -39,7 +39,7 @@
 
 /* ── input — 점선 박스 + 약간 다른 배경 ── */
 .section-input .body {
-  background: rgba(255, 255, 255, 0.012);
+  background: #ffffff;
   border: 1px dashed var(--border);
   border-radius: 14px;
   padding: 14px;
@@ -53,8 +53,8 @@
   border-radius: 4px 14px 14px 4px;
 }
 .section-result .body {
-  background: linear-gradient(135deg, rgba(200, 255, 62, 0.045) 0%, rgba(200, 255, 62, 0.012) 60%, transparent 100%);
-  border: 1px solid rgba(200, 255, 62, 0.18);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.10) 0%, rgba(14, 165, 233, 0.04) 60%, transparent 100%);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   border-left: none;
   border-radius: 0 14px 14px 4px;
   padding: 16px;
@@ -80,7 +80,7 @@
 .guideDividerLine {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(200,255,62,0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(14,165,233,0.35), transparent);
 }
 .guideDividerLabel {
   flex-shrink: 0;
@@ -92,7 +92,7 @@
   background: var(--bg);
   padding: 6px 18px;
   white-space: nowrap;
-  border: 1px solid rgba(200,255,62,0.3);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 999px;
 }
 

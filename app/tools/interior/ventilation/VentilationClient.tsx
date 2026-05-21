@@ -216,7 +216,7 @@ export default function VentilationClient() {
       {tab === 'main' && main && (
         <>
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(232,151,87,0.40)', background: 'rgba(232,151,87,0.06)' }}>
+            style={{ borderColor: 'rgba(234,88,12,0.40)', background: 'rgba(234,88,12,0.06)' }}>
             <div className={styles.heroLabel}>필요 환기량</div>
             <div className={styles.heroNum} style={{ color: '#E89757' }}>
               {fmt(main.requiredAirflow)}<span className={styles.heroNumUnit}>㎥/h</span>
@@ -271,13 +271,13 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.hero}
-            style={{ borderColor: 'rgba(62,200,255,0.40)', background: 'rgba(62,200,255,0.06)' }}>
+            style={{ borderColor: 'rgba(8,145,178,0.40)', background: 'rgba(8,145,178,0.06)' }}>
             <div className={styles.heroLabel}>권장 CADR</div>
-            <div className={styles.heroNum} style={{ color: '#3EC8FF' }}>
+            <div className={styles.heroNum} style={{ color: '#0891B2' }}>
               {fmt(cadr.minCadr)}~{fmt(cadr.idealCadr)}<span className={styles.heroNumUnit}>㎥/h</span>
             </div>
             <div className={styles.heroSub}>
-              한국 공기청정기 표시면적 ≈ <strong style={{ color: '#3EC8FF' }}>{cadr.displayAreaApprox}㎡</strong> 제품 권장
+              한국 공기청정기 표시면적 ≈ <strong style={{ color: '#0891B2' }}>{cadr.displayAreaApprox}㎡</strong> 제품 권장
             </div>
           </div>
 
@@ -340,7 +340,7 @@ export default function VentilationClient() {
           {!perf.isAdequate && perf.shortageAirflow > 0 && (
             <div className={styles.warnBox}>
               ⚠️ <strong>목표 ACH 대비 약 {Math.round((1 - perf.currentAch / targetAch) * 100)}% 부족</strong>
-              <br />추가 풍량 필요: <strong style={{ color: '#FF6B6B' }}>약 {fmt(perf.shortageAirflow)} ㎥/h</strong>
+              <br />추가 풍량 필요: <strong style={{ color: '#DC2626' }}>약 {fmt(perf.shortageAirflow)} ㎥/h</strong>
               <br /><br />옵션 — ① 더 강한 환풍기 설치 / ② 창문 환기 보조 (탭 4) / ③ 공기청정기 추가 (CADR {Math.ceil(perf.shortageAirflow)}+, 미세먼지 한정).
             </div>
           )}
@@ -406,9 +406,9 @@ export default function VentilationClient() {
           {window && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(62,255,155,0.40)', background: 'rgba(62,255,155,0.06)' }}>
+                style={{ borderColor: 'rgba(16,185,129,0.40)', background: 'rgba(16,185,129,0.06)' }}>
                 <div className={styles.heroLabel}>{window.modeName} · 바람 {window.windName} · {window.cycles}회 교체</div>
-                <div className={styles.heroNum} style={{ color: '#3EFF9B', fontSize: 'clamp(36px, 9vw, 52px)' }}>
+                <div className={styles.heroNum} style={{ color: '#059669', fontSize: 'clamp(36px, 9vw, 52px)' }}>
                   {window.minMinutes}~{window.maxMinutes}<span className={styles.heroNumUnit}>분</span>
                 </div>
                 <div className={styles.heroSub}>
@@ -526,7 +526,7 @@ export default function VentilationClient() {
 
               {co2Airflow === 0 && (
                 <div className={styles.infoBox}>
-                  💡 <strong>환기 권장 주기</strong> — 무환기 상태에서 1,000 ppm 도달까지 약 <strong style={{ color: '#3EC8FF' }}>{co2.recommendVentilateMinutes}분</strong>.
+                  💡 <strong>환기 권장 주기</strong> — 무환기 상태에서 1,000 ppm 도달까지 약 <strong style={{ color: '#0891B2' }}>{co2.recommendVentilateMinutes}분</strong>.
                   {co2.recommendVentilateMinutes < 60
                     ? ' 30~45분마다 5~10분 맞통풍 환기를 권장합니다.'
                     : ' 1~2시간마다 짧은 환기로 충분합니다.'}

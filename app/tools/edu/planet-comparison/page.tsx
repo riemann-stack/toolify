@@ -39,9 +39,9 @@ export default function PlanetComparisonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '지구형 행성',     c: '#3EC8FF', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
-              { t: '거대 가스 행성',  c: '#FF8C3E', d: '목성·토성 — 수소·헬륨이 주성분, 표면 없음' },
-              { t: '거대 얼음 행성',  c: '#3EFFD0', d: '천왕성·해왕성 — 메탄·물·암모니아 얼음 풍부' },
+              { t: '지구형 행성',     c: '#0891B2', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
+              { t: '거대 가스 행성',  c: '#EA580C', d: '목성·토성 — 수소·헬륨이 주성분, 표면 없음' },
+              { t: '거대 얼음 행성',  c: '#0D9488', d: '천왕성·해왕성 — 메탄·물·암모니아 얼음 풍부' },
               { t: '왜소행성',        c: '#A8A29E', d: '명왕성은 2006년 IAU에서 왜소행성으로 재분류' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
@@ -83,14 +83,14 @@ export default function PlanetComparisonPage() {
                 {[
                   { p: '수성·화성',           c: '#A8A29E', g: '0.38 g', w: '28.5 kg' },
                   { p: '금성·토성·천왕성',    c: '#FFC857', g: '0.90~0.92 g', w: '67.5~69 kg' },
-                  { p: '지구',                 c: '#3EC8FF', g: '1.00 g', w: '75.0 kg' },
+                  { p: '지구',                 c: '#0891B2', g: '1.00 g', w: '75.0 kg' },
                   { p: '해왕성',               c: '#3E5BFF', g: '1.12 g', w: '84.0 kg' },
-                  { p: '목성',                 c: '#FF8C3E', g: '2.36 g', w: '177.0 kg' },
+                  { p: '목성',                 c: '#EA580C', g: '2.36 g', w: '177.0 kg' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.w}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.w}</td>
                   </tr>
                 ))}
               </tbody>
@@ -104,8 +104,8 @@ export default function PlanetComparisonPage() {
             행성 1년·1일의 길이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFFD0', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFFD0', fontWeight: 700, marginBottom: 8 }}>🌀 공전주기 (1년)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>🌀 공전주기 (1년)</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>태양을 한 바퀴 도는 시간</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>수성: 88일 (가장 짧음)</li>
@@ -116,20 +116,20 @@ export default function PlanetComparisonPage() {
                 <li>천왕성: 30,689일 (84년)</li>
                 <li>해왕성: 60,182일 (165년)</li>
               </ul>
-              <p style={{ fontSize: 12, color: '#3EFFD0', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,773년!</p>
+              <p style={{ fontSize: 12, color: '#0D9488', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,773년!</p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FF8C3E', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>한 바퀴 자전하는 시간</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>목성: 9.93h (가장 짧음)</li>
                 <li>토성: 10.7h</li>
                 <li>해왕성: 16.11h</li>
-                <li>천왕성: 17.24h <span style={{ color: '#FF8C8C' }}>(역행)</span></li>
-                <li>화성: 24.6h <span style={{ color: '#3EC8FF' }}>(지구와 비슷!)</span></li>
+                <li>천왕성: 17.24h <span style={{ color: '#DC2626' }}>(역행)</span></li>
+                <li>화성: 24.6h <span style={{ color: '#0891B2' }}>(지구와 비슷!)</span></li>
                 <li>지구: 24h</li>
                 <li>수성: 4,223h (176일)</li>
-                <li>금성: 5,833h (243일, <span style={{ color: '#FF8C8C' }}>역행</span>)</li>
+                <li>금성: 5,833h (243일, <span style={{ color: '#DC2626' }}>역행</span>)</li>
               </ul>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function PlanetComparisonPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ✨ <strong style={{ color: '#C485E0' }}>특별한 점:</strong> 금성은 자전축이 거꾸로 (역행),
+            ✨ <strong style={{ color: '#9333EA' }}>특별한 점:</strong> 금성은 자전축이 거꾸로 (역행),
             천왕성은 자전축이 98° 기울어져 옆으로 굴러갑니다.
           </div>
         </div>
@@ -164,16 +164,16 @@ export default function PlanetComparisonPage() {
             lineHeight: 2.1,
             marginBottom: 12,
           }}>
-            <span style={{ color: 'var(--muted)' }}>빛의 속도</span> = 약 <strong style={{ color: '#3EFFD0' }}>30만 km/초</strong>
+            <span style={{ color: 'var(--muted)' }}>빛의 속도</span> = 약 <strong style={{ color: '#0D9488' }}>30만 km/초</strong>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
             {[
               { p: '달',      t: '1.3초',  c: '#A8A29E' },
               { p: '수성·금성', t: '2~5분',   c: '#FFC857' },
-              { p: '화성',     t: '13분',    c: '#FF6B6B' },
-              { p: '목성',     t: '35분',    c: '#FF8C3E' },
-              { p: '토성',     t: '71분',    c: '#FFD700' },
-              { p: '천왕성',   t: '2.5시간', c: '#3EFFD0' },
+              { p: '화성',     t: '13분',    c: '#DC2626' },
+              { p: '목성',     t: '35분',    c: '#EA580C' },
+              { p: '토성',     t: '71분',    c: '#CA8A04' },
+              { p: '천왕성',   t: '2.5시간', c: '#0D9488' },
               { p: '해왕성',   t: '4시간',   c: '#3E5BFF' },
               { p: '프록시마 센타우리', t: '4.2년', c: '#9B59B6' },
             ].map((r, i) => (
@@ -184,8 +184,8 @@ export default function PlanetComparisonPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -193,7 +193,7 @@ export default function PlanetComparisonPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ 화성 탐사선과의 통신은 평균 <strong style={{ color: '#FF8C8C' }}>13분 지연</strong> → 실시간 조작 불가능.
+            ⚠️ 화성 탐사선과의 통신은 평균 <strong style={{ color: '#DC2626' }}>13분 지연</strong> → 실시간 조작 불가능.
             모든 명령은 13분 이상 지연되며 응답까지 최소 26분 소요.
           </div>
         </div>
@@ -216,17 +216,17 @@ export default function PlanetComparisonPage() {
                 {[
                   { p: '수성', c: '#A8A29E', r: '-173~427°C', avg: '167°C',  d: '극단적 변화 (대기 없음)' },
                   { p: '금성', c: '#FFC857', r: '462°C',       avg: '462°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
-                  { p: '지구', c: '#3EC8FF', r: '-88~58°C',    avg: '15°C',  d: '생명체 거주 가능' },
-                  { p: '화성', c: '#FF6B6B', r: '-143~35°C',   avg: '-65°C', d: '추움' },
-                  { p: '목성', c: '#FF8C3E', r: '-145°C',       avg: '-145°C', d: '가스 행성 — 표면 없음' },
-                  { p: '토성', c: '#FFD700', r: '-178°C',       avg: '-178°C', d: '가스 행성' },
-                  { p: '천왕성', c: '#3EFFD0', r: '-224°C',      avg: '-224°C', d: '가장 추운 행성' },
+                  { p: '지구', c: '#0891B2', r: '-88~58°C',    avg: '15°C',  d: '생명체 거주 가능' },
+                  { p: '화성', c: '#DC2626', r: '-143~35°C',   avg: '-65°C', d: '추움' },
+                  { p: '목성', c: '#EA580C', r: '-145°C',       avg: '-145°C', d: '가스 행성 — 표면 없음' },
+                  { p: '토성', c: '#CA8A04', r: '-178°C',       avg: '-178°C', d: '가스 행성' },
+                  { p: '천왕성', c: '#0D9488', r: '-224°C',      avg: '-224°C', d: '가장 추운 행성' },
                   { p: '해왕성', c: '#3E5BFF', r: '-218°C',      avg: '-218°C', d: '얼음 행성' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.avg}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.avg}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.d}</td>
                   </tr>
                 ))}
@@ -247,10 +247,10 @@ export default function PlanetComparisonPage() {
             {[
               { t: '수성', d: '메신저호 (2011-2015) · BepiColombo (현재 진행 중)', c: '#A8A29E' },
               { t: '금성', d: '비너스 익스프레스 (ESA) · 아카츠키 (JAXA) 등', c: '#FFC857' },
-              { t: '화성', d: '큐리오시티·퍼서비어런스·인저뉴어티 헬리콥터 활동 중', c: '#FF6B6B' },
-              { t: '목성', d: '주노 (NASA, 현재 활동 중) · Europa Clipper 진행 중', c: '#FF8C3E' },
-              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#FFD700' },
-              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#3EFFD0' },
+              { t: '화성', d: '큐리오시티·퍼서비어런스·인저뉴어티 헬리콥터 활동 중', c: '#DC2626' },
+              { t: '목성', d: '주노 (NASA, 현재 활동 중) · Europa Clipper 진행 중', c: '#EA580C' },
+              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#CA8A04' },
+              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#0D9488' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: c.c, fontWeight: 700, marginBottom: 4 }}>{c.t}</p>
@@ -259,8 +259,8 @@ export default function PlanetComparisonPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(62,255,208,0.05)',
-            border: '1px solid rgba(62,255,208,0.30)',
+            background: 'rgba(13,148,136,0.05)',
+            border: '1px solid rgba(13,148,136,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -268,7 +268,7 @@ export default function PlanetComparisonPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🚀 다음 행성 탐사 미션은 NASA의 <strong style={{ color: '#3EFFD0' }}>Europa Clipper</strong>, ESA·JAXA의 <strong style={{ color: '#3EFFD0' }}>BepiColombo</strong>,
+            🚀 다음 행성 탐사 미션은 NASA의 <strong style={{ color: '#0D9488' }}>Europa Clipper</strong>, ESA·JAXA의 <strong style={{ color: '#0D9488' }}>BepiColombo</strong>,
             한국천문연구원(KASI) 협력 미션 등이 진행 중입니다.
           </div>
         </div>

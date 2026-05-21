@@ -148,21 +148,21 @@ export default function FormationPage() {
         {/* 3. 주요 11인 포메이션 비교 */}
         <section>
           <h2 style={sectionTitle}>⚽ 주요 11인 포메이션 비교</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
             {[
-              { name: '4-4-2',   color: '#3EC8FF', tag: '클래식', desc: '균형의 정석. 측면 미드와 투톱이 명확. 알렉스 퍼거슨의 맨유 황금기' },
-              { name: '4-3-3',   color: '#3EFF9B', tag: '현대 공격', desc: '윙어 활용 + 중원 3인. 펩의 바르샤·클롭의 리버풀' },
+              { name: '4-4-2',   color: '#0891B2', tag: '클래식', desc: '균형의 정석. 측면 미드와 투톱이 명확. 알렉스 퍼거슨의 맨유 황금기' },
+              { name: '4-3-3',   color: '#059669', tag: '현대 공격', desc: '윙어 활용 + 중원 3인. 펩의 바르샤·클롭의 리버풀' },
               { name: '4-2-3-1', color: '#FFD93E', tag: '현대 표준', desc: '더블 볼란치 + 톱2.5. 22 카타르 월드컵에서 가장 흔한 포메이션' },
-              { name: '3-5-2',   color: '#FF8C3E', tag: '스리백', desc: '윙백 공격 가담 + 투톱. 안토니오 콘테 인터' },
+              { name: '3-5-2',   color: '#EA580C', tag: '스리백', desc: '윙백 공격 가담 + 투톱. 안토니오 콘테 인터' },
               { name: '3-4-3',   color: '#B885DA', tag: '공격적 3백', desc: '윙백 + 스리톱. 콘테 첼시·과르디올라 시티 변형' },
-              { name: '5-4-1',   color: '#FF6B6B', tag: '5백 카운터', desc: '강팀 상대 잠그기 + 빠른 역습. 약체팀이 즐겨 쓰는 잠금 전술' },
-              { name: '4-1-4-1', color: '#3EFFD0', tag: '수비 안정', desc: '단일 수비형 미드 + 박스 4. 점유와 안정 동시. 만치니 시티 시기' },
-              { name: '3-6-1',   color: '#FF3E8C', tag: '점유 압도', desc: '미드 6인으로 중원 압도. 빌드업·점유 위주' },
+              { name: '5-4-1',   color: '#DC2626', tag: '5백 카운터', desc: '강팀 상대 잠그기 + 빠른 역습. 약체팀이 즐겨 쓰는 잠금 전술' },
+              { name: '4-1-4-1', color: '#0D9488', tag: '수비 안정', desc: '단일 수비형 미드 + 박스 4. 점유와 안정 동시. 만치니 시티 시기' },
+              { name: '3-6-1',   color: '#DB2777', tag: '점유 압도', desc: '미드 6인으로 중원 압도. 빌드업·점유 위주' },
             ].map((f, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 12, padding: '12px 16px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 12, padding: '10px 12px', minWidth: 0 }}>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 17, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
                 <p style={{ fontSize: 11, color: f.color, fontWeight: 700, margin: '2px 0 6px', opacity: 0.85 }}>{f.tag}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{f.desc}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -357,7 +357,7 @@ export default function FormationPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q6. 데이터는 어디 저장되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
+              <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>✅ youtil 서버 전송 X · 다른 사람이 볼 수 없음</li>
                 <li>✅ 다음 방문 시 자동 복원 (명단·포메이션·등번호·팀 색상)</li>

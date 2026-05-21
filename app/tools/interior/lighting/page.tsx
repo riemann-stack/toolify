@@ -103,9 +103,9 @@ export default function LightingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px', marginBottom: 14 }}>
             {[
-              { i: '⚡', t: '와트 (W)',     d: '전력 소비량 (전기 사용)', c: '#FF6B6B' },
+              { i: '⚡', t: '와트 (W)',     d: '전력 소비량 (전기 사용)', c: '#DC2626' },
               { i: '💡', t: '루멘 (lm)',    d: '빛의 양 (밝기)',           c: 'var(--accent)' },
-              { i: '📐', t: 'lux',         d: '단위 면적당 빛의 양 (lm/㎡)', c: '#3EC8FF' },
+              { i: '📐', t: 'lux',         d: '단위 면적당 빛의 양 (lm/㎡)', c: '#0891B2' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 22, marginBottom: 4 }}>{s.i}</p>
@@ -115,8 +115,8 @@ export default function LightingPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(232,151,87,0.06)',
-            border: '1px solid rgba(232,151,87,0.25)',
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -152,9 +152,9 @@ export default function LightingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.lm.toLocaleString()} lm</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.inc}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.hal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.inc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.hal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.led}</td>
                   </tr>
                 ))}
@@ -194,10 +194,10 @@ export default function LightingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { s: '소형',     w: '6~9W',     lm: '600~900 lm',     u: '작은방·복도', c: '#3EC8FF' },
+              { s: '소형',     w: '6~9W',     lm: '600~900 lm',     u: '작은방·복도', c: '#0891B2' },
               { s: '중형',     w: '12~15W',   lm: '1,200~1,500 lm', u: '침실·서재',   c: 'var(--accent)' },
-              { s: '대형',     w: '30~50W',   lm: '3,000~5,000 lm', u: '거실·큰방',   c: '#FF8C3E' },
-              { s: '초대형',   w: '50~75W',   lm: '5,000~7,500 lm', u: '대형 거실',   c: '#FF6B6B' },
+              { s: '대형',     w: '30~50W',   lm: '3,000~5,000 lm', u: '거실·큰방',   c: '#EA580C' },
+              { s: '초대형',   w: '50~75W',   lm: '5,000~7,500 lm', u: '대형 거실',   c: '#DC2626' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.s}</p>
@@ -217,7 +217,7 @@ export default function LightingPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { i: '🔆', t: '메인 조명 (천장등·실링팬)', d: '공간 전체 균일 밝기. 권장 루멘의 70~80% 차지. 방 중앙·격자 배치.', c: 'var(--accent)' },
-              { i: '✨', t: '보조 조명 (펜던트·다운라이트·테이블 램프)', d: '특정 공간·작업 강조. 식탁 위 펜던트, 책상 위 스탠드. 색온도 차별화 가능.', c: '#3EC8FF' },
+              { i: '✨', t: '보조 조명 (펜던트·다운라이트·테이블 램프)', d: '특정 공간·작업 강조. 식탁 위 펜던트, 책상 위 스탠드. 색온도 차별화 가능.', c: '#0891B2' },
               { i: '🌙', t: '무드 조명 (간접·LED 스트립·플로어 램프)', d: '분위기 연출. 색온도 2700~3000K 권장. 가구 뒤·벽면 코브에 설치.', c: '#9B59B6' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 18px' }}>
@@ -227,8 +227,8 @@ export default function LightingPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.3)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.3)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,

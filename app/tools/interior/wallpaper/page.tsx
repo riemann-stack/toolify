@@ -67,8 +67,8 @@ export default function WallpaperPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { i: '🧵', name: '실크벽지', spec: '폭 106cm × 길이 15.6m', area: '1롤 약 16.5㎡', price: '2~5만원', tip: '주거용 일반', color: 'var(--accent)' },
-              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.5m',  area: '1롤 약 16.3㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: '#3EFF9B' },
-              { i: '🛡️', name: 'PVC벽지', spec: '폭 106cm × 길이 15.6m', area: '방수·내구성',     price: '3~6만원', tip: '욕실·주방 추천',    color: '#3EC8FF' },
+              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.5m',  area: '1롤 약 16.3㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: '#059669' },
+              { i: '🛡️', name: 'PVC벽지', spec: '폭 106cm × 길이 15.6m', area: '방수·내구성',     price: '3~6만원', tip: '욕실·주방 추천',    color: '#0891B2' },
             ].map((w, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${w.color}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{w.i}</p>
@@ -128,10 +128,10 @@ export default function WallpaperPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { p: '5%',  c: '#3EFF9B',       t: '단색·작은 패턴',  d: '숙련 시공자, 솔리드 컬러' },
+              { p: '5%',  c: '#059669',       t: '단색·작은 패턴',  d: '숙련 시공자, 솔리드 컬러' },
               { p: '10%', c: 'var(--accent)', t: '한국 표준 권장',  d: '일반 가정용 기본값' },
-              { p: '15%', c: '#FF8C3E',       t: '큰 패턴',          d: '무늬 맞춤 필요' },
-              { p: '20%', c: '#FF6B6B',       t: '셀프 + 큰 패턴',  d: '안전 마진' },
+              { p: '15%', c: '#EA580C',       t: '큰 패턴',          d: '무늬 맞춤 필요' },
+              { p: '20%', c: '#DC2626',       t: '셀프 + 큰 패턴',  d: '안전 마진' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
@@ -141,8 +141,8 @@ export default function WallpaperPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,140,62,0.06)',
-            border: '1px solid rgba(255,140,62,0.25)',
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -150,7 +150,7 @@ export default function WallpaperPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ⚠️ <strong style={{ color: '#FF8C3E' }}>무늬벽지 주의</strong> — 패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요.
+            ⚠️ <strong style={{ color: '#EA580C' }}>무늬벽지 주의</strong> — 패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요.
           </div>
         </div>
 
@@ -169,8 +169,8 @@ export default function WallpaperPage() {
                 <li>실수 복구 가능 (합지 추천)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>평당 15,000~25,000원 (벽지 포함)</li>
                 <li>빠르고 깔끔 (24평 1~2일)</li>
@@ -203,11 +203,11 @@ export default function WallpaperPage() {
               <li>헤라 (매끄럽게 펴는 도구)</li>
               <li>마른 걸레 (기포 제거)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#FF8C3E', marginBottom: 8 }}>🪜 천장 높이 따라</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>🪜 천장 높이 따라</p>
             <ul style={{ paddingLeft: 22, margin: 0, marginBottom: 12 }}>
               <li>사다리 2~5만원 (천장 도배 시 필수)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#3EC8FF', marginBottom: 8 }}>💡 선택</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: '#0891B2', marginBottom: 8 }}>💡 선택</p>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>프라이머·바인더 (벽 상태 안 좋을 때)</li>
               <li>마스킹 테이프 (보호용)</li>

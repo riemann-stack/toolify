@@ -6,8 +6,8 @@
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  background: rgba(62,200,255,0.05);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13.5px;
@@ -37,11 +37,11 @@
 }@media (hover: hover) {
   .modeCard:hover { border-color: var(--border-hover); }
 }
-.modeGrowth      { border-left: 3px solid #3EFF9B; }
+.modeGrowth      { border-left: 3px solid #059669; }
 .modeBalance     { border-left: 3px solid var(--accent); }
 .modeMemento     { border-left: 3px solid #9B59B6; }
-.modeActive      { background: rgba(255,255,255,0.04); border-color: var(--text); }
-.modeGrowth.modeActive   { border-color: #3EFF9B; }
+.modeActive      { background: rgba(15,23,42,0.04); border-color: var(--text); }
+.modeGrowth.modeActive   { border-color: #059669; }
 .modeBalance.modeActive  { border-color: var(--accent); }
 .modeMemento.modeActive  { border-color: #9B59B6; }
 .modeIcon { font-size: 22px; margin-bottom: 6px; }
@@ -165,7 +165,7 @@
   padding-right: 32px;
   box-sizing: border-box;
 }
-.dobSelect:focus { border-color: rgba(200,255,62,0.5); }
+.dobSelect:focus { border-color: rgba(14,165,233,0.5); }
 .dobSelect option { background: #1a1a1a; color: var(--text); }
 
 /* ── 기대수명 프리셋 + 직접 입력 ── */
@@ -264,7 +264,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -324,7 +324,7 @@
   line-height: 1.05;
 }
 .heroDualNum.lived { color: var(--accent); }
-.heroDualNum.ahead { color: #3EC8FF; }
+.heroDualNum.ahead { color: #0891B2; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -371,7 +371,7 @@
   position: absolute;
   top: 0; left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #3EFF9B, var(--accent));
+  background: linear-gradient(90deg, #059669, var(--accent));
   border-radius: 99px;
   transition: width 0.8s ease;
 }
@@ -443,8 +443,8 @@
   border-radius: 2px;
   background: var(--bg3);
 }
-.yearCalPast    { background: rgba(255,255,255,0.12); }
-.yearCalFuture  { background: rgba(255,255,255,0.04); }
+.yearCalPast    { background: rgba(15,23,42,0.08); }
+.yearCalFuture  { background: rgba(15,23,42,0.04); }
 .yearCalToday   {
   background: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
@@ -483,9 +483,9 @@
   margin-right: 5px;
   vertical-align: middle;
 }
-.legendDotPast    { background: rgba(255,255,255,0.35); }
+.legendDotPast    { background: rgba(15,23,42,0.12); }
 .legendDotNow     { background: var(--accent); }
-.legendDotAhead   { background: rgba(255,255,255,0.08); border: 1px solid var(--border); }
+.legendDotAhead   { background: rgba(15,23,42,0.04); border: 1px solid var(--border); }
 
 /* ── 행동 전환 카드 ── */
 .actionInputRow {
@@ -577,8 +577,8 @@
 .actionResultUnit { font-size: 12px; color: var(--muted); margin-left: 3px; }
 
 .actionEquivalent {
-  background: rgba(62,255,155,0.06);
-  border: 1px solid rgba(62,255,155,0.25);
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.25);
   border-radius: 12px;
   padding: 14px 18px;
   margin-top: 14px;
@@ -589,8 +589,8 @@
 .actionEquivalent strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .proverbCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
   margin-top: 10px;
@@ -599,7 +599,7 @@
   line-height: 1.85;
   font-style: italic;
 }
-.proverbCard::before { content: '"'; color: #3EC8FF; font-size: 26px; font-family: serif; vertical-align: -6px; margin-right: 4px; }
+.proverbCard::before { content: '"'; color: #0891B2; font-size: 26px; font-family: serif; vertical-align: -6px; margin-right: 4px; }
 
 /* ── 명상 카드 (메멘토) ── */
 .meditationCard {
@@ -653,8 +653,8 @@
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 16px 18px;
 }
@@ -664,13 +664,13 @@
   color: var(--text);
   line-height: 1.8;
 }
-.supportBody strong { color: #3EC8FF; }
+.supportBody strong { color: #0891B2; }
 .supportBody ul {
   margin: 8px 0 0 0;
   padding-left: 18px;
   color: var(--muted);
 }
 .supportBody li { margin: 3px 0; }
-.supportBody a { color: #3EC8FF; text-decoration: none; }@media (hover: hover) {
+.supportBody a { color: #0891B2; text-decoration: none; }@media (hover: hover) {
   .supportBody a:hover { text-decoration: underline; }
 }

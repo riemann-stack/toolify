@@ -86,12 +86,12 @@ function getSplits(distanceKm: number): SplitRow[] {
 
 // 빠른 페이스 칩
 const QUICK_PACES = [
-  { mm: 4, ss: 0,  label: '엘리트',    color: '#FF6B6B' },
-  { mm: 4, ss: 30, label: '서브3',     color: '#FF8C3E' },
+  { mm: 4, ss: 0,  label: '엘리트',    color: '#DC2626' },
+  { mm: 4, ss: 30, label: '서브3',     color: '#EA580C' },
   { mm: 5, ss: 0,  label: '준중급',    color: '#FFD93E' },
-  { mm: 5, ss: 30, label: '중급',      color: '#C8FF3E' },
-  { mm: 6, ss: 0,  label: '가벼운 조깅', color: '#3EFF9B' },
-  { mm: 6, ss: 30, label: '조깅',      color: '#3EC8FF' },
+  { mm: 5, ss: 30, label: '중급',      color: '#0EA5E9' },
+  { mm: 6, ss: 0,  label: '가벼운 조깅', color: '#059669' },
+  { mm: 6, ss: 30, label: '조깅',      color: '#0891B2' },
   { mm: 7, ss: 0,  label: '초보',      color: '#9B59B6' },
 ]
 
@@ -382,12 +382,12 @@ export default function PaceClient() {
                   <div className={styles.negGrid}>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>전반 (0~{negativeSplit.halfKm.toFixed(1)}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#3EC8FF' }}>{negativeSplit.front}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: '#0891B2' }}>{negativeSplit.front}/km</span>
                       <span className={styles.negBoxSub}>1.5초 느슨하게</span>
                     </div>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>후반 ({negativeSplit.halfKm.toFixed(1)}~{dist}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#FF8C3E' }}>{negativeSplit.back}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: '#EA580C' }}>{negativeSplit.back}/km</span>
                       <span className={styles.negBoxSub}>1.5초 빠르게</span>
                     </div>
                   </div>

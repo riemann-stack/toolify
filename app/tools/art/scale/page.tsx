@@ -84,18 +84,18 @@ export default function ScalePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '😊 Major (Ionian)',   d: '도-레-미-파-솔-라-시. 가장 밝음. 팝·동요·축가.', c: '#3EFFD0' },
-            { t: '😢 Natural Minor',     d: '슬픔·차분. 록·발라드·블루스 표준.',              c: '#3EC8FF' },
+            { t: '😊 Major (Ionian)',   d: '도-레-미-파-솔-라-시. 가장 밝음. 팝·동요·축가.', c: '#0D9488' },
+            { t: '😢 Natural Minor',     d: '슬픔·차분. 록·발라드·블루스 표준.',              c: '#0891B2' },
             { t: '🌌 Harmonic Minor',    d: '7도 반음 ↑. 이국적·드라마틱·메탈·플라멩코.',     c: '#9B59B6' },
-            { t: '✨ Melodic Minor',     d: '6·7도 ↑(상행). 재즈·세련·복합.',                 c: '#FFB83E' },
-            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 불협 없음. 동요·민요.',         c: '#FF8C3E' },
-            { t: '🎸 Minor Pentatonic',  d: '록·블루스 솔로 표준. 가장 쉬운 스케일.',          c: '#FF3E8C' },
-            { t: '🎺 Blues',             d: 'Minor Pent + ♭5. 12-bar blues 표준.',           c: '#3EC8FF' },
-            { t: '🍃 Dorian',            d: 'Minor + M6. 재즈·소울 모달.',                    c: '#3EFF9B' },
-            { t: '🌶️ Phrygian',           d: 'Minor + ♭2. 스페인·메탈.',                       c: '#FFB83E' },
-            { t: '🌙 Lydian',            d: 'Major + ♯4. 꿈결·환상적·OST.',                   c: '#C485E0' },
-            { t: '🤘 Mixolydian',        d: 'Major + ♭7. 블루스·록·아일랜드.',                c: '#FF8C3E' },
-            { t: '😈 Locrian',           d: '♭2 + ♭5. 가장 어두움. 메탈·실험.',               c: '#FF3E8C' },
+            { t: '✨ Melodic Minor',     d: '6·7도 ↑(상행). 재즈·세련·복합.',                 c: '#D97706' },
+            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 불협 없음. 동요·민요.',         c: '#EA580C' },
+            { t: '🎸 Minor Pentatonic',  d: '록·블루스 솔로 표준. 가장 쉬운 스케일.',          c: '#DB2777' },
+            { t: '🎺 Blues',             d: 'Minor Pent + ♭5. 12-bar blues 표준.',           c: '#0891B2' },
+            { t: '🍃 Dorian',            d: 'Minor + M6. 재즈·소울 모달.',                    c: '#059669' },
+            { t: '🌶️ Phrygian',           d: 'Minor + ♭2. 스페인·메탈.',                       c: '#D97706' },
+            { t: '🌙 Lydian',            d: 'Major + ♯4. 꿈결·환상적·OST.',                   c: '#9333EA' },
+            { t: '🤘 Mixolydian',        d: 'Major + ♭7. 블루스·록·아일랜드.',                c: '#EA580C' },
+            { t: '😈 Locrian',           d: '♭2 + ♭5. 가장 어두움. 메탈·실험.',               c: '#DB2777' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -123,13 +123,13 @@ export default function ScalePage() {
             </thead>
             <tbody>
               {[
-                ['I',    'Cmaj7',  'Tonic (안정)',          '#3EFFD0'],
-                ['ii',   'Dm7',    'Subdominant (전이)',     '#FFB83E'],
-                ['iii',  'Em7',    'Tonic',                  '#3EFFD0'],
-                ['IV',   'Fmaj7',  'Subdominant',            '#FFB83E'],
-                ['V',    'G7',     'Dominant (긴장)',         '#FF3E8C'],
-                ['vi',   'Am7',    'Tonic (relative minor)', '#3EFFD0'],
-                ['viiº', 'Bm7♭5',  'Dominant',                '#FF3E8C'],
+                ['I',    'Cmaj7',  'Tonic (안정)',          '#0D9488'],
+                ['ii',   'Dm7',    'Subdominant (전이)',     '#D97706'],
+                ['iii',  'Em7',    'Tonic',                  '#0D9488'],
+                ['IV',   'Fmaj7',  'Subdominant',            '#D97706'],
+                ['V',    'G7',     'Dominant (긴장)',         '#DB2777'],
+                ['vi',   'Am7',    'Tonic (relative minor)', '#0D9488'],
+                ['viiº', 'Bm7♭5',  'Dominant',                '#DB2777'],
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
@@ -141,9 +141,9 @@ export default function ScalePage() {
           </table>
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          기능 분류: <strong style={{ color: '#3EFFD0' }}>Tonic</strong>(안정) /
-          <strong style={{ color: '#FFB83E' }}> Subdominant</strong>(전이) /
-          <strong style={{ color: '#FF3E8C' }}> Dominant</strong>(긴장 → Tonic으로 해결)
+          기능 분류: <strong style={{ color: '#0D9488' }}>Tonic</strong>(안정) /
+          <strong style={{ color: '#D97706' }}> Subdominant</strong>(전이) /
+          <strong style={{ color: '#DB2777' }}> Dominant</strong>(긴장 → Tonic으로 해결)
         </p>
       </div>
 

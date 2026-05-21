@@ -126,15 +126,15 @@ export type DdayCategory = {
   color: string
 }
 export const DDAY_CATEGORIES: DdayCategory[] = [
-  { id: 'exam',        name: '시험·자격증',  emoji: '📚', color: '#3EC8FF' },
-  { id: 'travel',      name: '여행',         emoji: '✈️', color: '#FFD700' },
-  { id: 'anniversary', name: '기념일',       emoji: '🎉', color: '#FF6B6B' },
+  { id: 'exam',        name: '시험·자격증',  emoji: '📚', color: '#0891B2' },
+  { id: 'travel',      name: '여행',         emoji: '✈️', color: '#CA8A04' },
+  { id: 'anniversary', name: '기념일',       emoji: '🎉', color: '#DC2626' },
   { id: 'work',        name: '업무·프로젝트', emoji: '💼', color: '#9B59B6' },
-  { id: 'sport',       name: '운동·대회',    emoji: '🏃', color: '#3EFF9B' },
-  { id: 'military',    name: '군 복무',      emoji: '🎖️', color: '#FF8C3E' },
+  { id: 'sport',       name: '운동·대회',    emoji: '🏃', color: '#059669' },
+  { id: 'military',    name: '군 복무',      emoji: '🎖️', color: '#EA580C' },
   { id: 'birthday',    name: '생일',         emoji: '🎂', color: '#FF85B3' },
   { id: 'wedding',     name: '결혼',         emoji: '💒', color: '#FFD0E1' },
-  { id: 'health',      name: '건강·금연',    emoji: '🌿', color: '#3EFFD0' },
+  { id: 'health',      name: '건강·금연',    emoji: '🌿', color: '#0D9488' },
   { id: 'finance',     name: '월급·결제일',  emoji: '💰', color: '#FFC53E' },
   { id: 'other',       name: '기타',         emoji: '📌', color: '#94A3B8' },
 ]

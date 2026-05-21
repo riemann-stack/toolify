@@ -539,7 +539,7 @@ function GuideTab() {
             {
               title: 'KRX 금현물',
               emoji: '📊',
-              color: '#3EFF9B',
+              color: '#059669',
               recommend: '단기·중기 투자',
               vat: '면제 ✓',
               capitalGain: '비과세 ✓',
@@ -551,7 +551,7 @@ function GuideTab() {
             {
               title: '골드바',
               emoji: '🪙',
-              color: '#FFD700',
+              color: '#CA8A04',
               recommend: '선물·증여·실물 보유',
               vat: '10% 부담 ✗',
               capitalGain: '비과세 ✓',
@@ -563,7 +563,7 @@ function GuideTab() {
             {
               title: '금통장 (KB·신한 등)',
               emoji: '💳',
-              color: '#3EC8FF',
+              color: '#0891B2',
               recommend: '소액 적립·환금성',
               vat: '면제 ✓',
               capitalGain: '15.4% 부과 ✗',

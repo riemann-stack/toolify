@@ -693,7 +693,7 @@ export default function CarCostClient() {
               {(deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) > transitCost ? (
                 <>차이: 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost)}</strong>, 연간 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKoreanCurrency(((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost) * 12)}</strong></>
               ) : (
-                <>차량이 대중교통보다 월 <strong style={{ color: '#3EFF9B', fontFamily: 'Inter' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
+                <>차량이 대중교통보다 월 <strong style={{ color: '#059669', fontFamily: 'Inter' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
               )}
             </div>
           </div>
@@ -787,8 +787,8 @@ export default function CarCostClient() {
                   <div className={s.purchaseDetail}>{r.detail}</div>
                   <div className={s.purchaseProsCons}>
                     <div>📌 <strong>소유:</strong> {r.ownership}</div>
-                    <div style={{ color: '#3EFF9B' }}>✅ {r.pros}</div>
-                    <div style={{ color: '#FF6B6B' }}>⚠️ {r.cons}</div>
+                    <div style={{ color: '#059669' }}>✅ {r.pros}</div>
+                    <div style={{ color: '#DC2626' }}>⚠️ {r.cons}</div>
                   </div>
                 </div>
               )
@@ -804,9 +804,9 @@ export default function CarCostClient() {
             <strong>💡 본인 상황별 추천:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>자금 충분 + 5년+ 보유: <strong style={{ color: 'var(--accent)' }}>현금 구매</strong></li>
-              <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#FFD700' }}>할부</strong></li>
-              <li>사업자 (비용 처리·절세): <strong style={{ color: '#FF8C3E' }}>리스</strong></li>
-              <li>관리 편함 + 신차 자주: <strong style={{ color: '#C485E0' }}>장기렌트</strong></li>
+              <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#CA8A04' }}>할부</strong></li>
+              <li>사업자 (비용 처리·절세): <strong style={{ color: '#EA580C' }}>리스</strong></li>
+              <li>관리 편함 + 신차 자주: <strong style={{ color: '#9333EA' }}>장기렌트</strong></li>
             </ul>
           </div>
         </>
@@ -903,22 +903,22 @@ export default function CarCostClient() {
                   <tr><td>연 보험</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyInsurance)}</td>)}</tr>
                   <tr><td>연 자동차세</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyTax)}</td>)}</tr>
                   <tr><td>연 소모품·정비</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyVariable)}</td>)}</tr>
-                  <tr><td>연 감가</td>{carCompareResults.map((c, i) => <td key={i} style={{ color: '#FF8C3E' }}>{formatKoreanCurrency(c.yearlyDep)}</td>)}</tr>
+                  <tr><td>연 감가</td>{carCompareResults.map((c, i) => <td key={i} style={{ color: '#EA580C' }}>{formatKoreanCurrency(c.yearlyDep)}</td>)}</tr>
                   <tr className={s.totalRow}>
                     <td>연 총비용</td>
                     {carCompareResults.map((c, i) => (
-                      <td key={i} style={{ color: i === carBestIdx ? '#3EFF9B' : 'var(--accent)' }}>
+                      <td key={i} style={{ color: i === carBestIdx ? '#059669' : 'var(--accent)' }}>
                         {formatKoreanCurrency(c.yearlyTotal)}{i === carBestIdx && ' ★'}
                       </td>
                     ))}
                   </tr>
-                  <tr><td>5년 총비용</td>{carCompareResults.map((c, i) => <td key={i} style={{ fontSize: 14, color: i === carBestIdx ? '#3EFF9B' : 'var(--text)' }}>{formatKoreanCurrency(c.fiveYearTotal)}</td>)}</tr>
+                  <tr><td>5년 총비용</td>{carCompareResults.map((c, i) => <td key={i} style={{ fontSize: 14, color: i === carBestIdx ? '#059669' : 'var(--text)' }}>{formatKoreanCurrency(c.fiveYearTotal)}</td>)}</tr>
                   <tr><td>1km당 비용</td>{carCompareResults.map((c, i) => <td key={i}>{formatKRW(c.perKm)}</td>)}</tr>
                 </tbody>
               </table>
             </div>
             <div className={s.helperText} style={{ marginTop: 10 }}>
-              ★ 가장 저렴: <strong style={{ color: '#3EFF9B' }}>{carCompareResults[carBestIdx]?.name}</strong> ({formatKoreanCurrency(carCompareResults[carBestIdx]?.fiveYearTotal ?? 0)})
+              ★ 가장 저렴: <strong style={{ color: '#059669' }}>{carCompareResults[carBestIdx]?.name}</strong> ({formatKoreanCurrency(carCompareResults[carBestIdx]?.fiveYearTotal ?? 0)})
             </div>
           </div>
 
@@ -988,8 +988,8 @@ export default function CarCostClient() {
                       <td>{formatKoreanCurrency(r.carPrice)}</td>
                       <td>{formatKoreanCurrency(r.yearlyFuelCost)}</td>
                       <td>{formatKoreanCurrency(r.totalFuelCost)}</td>
-                      <td style={{ color: '#FF8C3E' }}>{formatKoreanCurrency(r.totalDep)}</td>
-                      <td style={{ color: i === fuelBestIdx ? '#3EFF9B' : 'var(--accent)' }}>
+                      <td style={{ color: '#EA580C' }}>{formatKoreanCurrency(r.totalDep)}</td>
+                      <td style={{ color: i === fuelBestIdx ? '#059669' : 'var(--accent)' }}>
                         {formatKoreanCurrency(r.totalCost)}
                       </td>
                     </tr>
@@ -998,7 +998,7 @@ export default function CarCostClient() {
               </table>
             </div>
             <div className={s.helperText} style={{ marginTop: 10 }}>
-              ★ 가장 저렴: <strong style={{ color: '#3EFF9B' }}>{fuelCompare[fuelBestIdx]?.fuel.name}</strong>
+              ★ 가장 저렴: <strong style={{ color: '#059669' }}>{fuelCompare[fuelBestIdx]?.fuel.name}</strong>
             </div>
           </div>
 
@@ -1037,17 +1037,17 @@ export default function CarCostClient() {
             <div className={s.threeCol}>
               <div>
                 <div className={s.subLabel}>시간당 요금</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
                 <div className={s.helperText}>소형 기준</div>
               </div>
               <div>
                 <div className={s.subLabel}>km당 요금</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
                 <div className={s.helperText}>보험·연료 포함</div>
               </div>
               <div>
                 <div className={s.subLabel}>100km당 평균 시간</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#C485E0' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
+                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
                 <div className={s.helperText}>도심 운전 가정</div>
               </div>
             </div>
@@ -1075,10 +1075,10 @@ export default function CarCostClient() {
           <div className={s.infoBox}>
             <strong>💡 손익분기 가이드:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
-              <li>월 500km 미만: <strong style={{ color: '#C485E0' }}>쏘카·그린카 압도적 유리</strong></li>
+              <li>월 500km 미만: <strong style={{ color: '#9333EA' }}>쏘카·그린카 압도적 유리</strong></li>
               <li>월 500~800km: 카쉐어링 약간 유리</li>
               <li>월 800~1,200km: 비슷 (편의성 가치 따라)</li>
-              <li>월 1,200km+: <strong style={{ color: '#3EC8FF' }}>보유 유리</strong></li>
+              <li>월 1,200km+: <strong style={{ color: '#0891B2' }}>보유 유리</strong></li>
             </ul>
           </div>
 

@@ -252,8 +252,8 @@ export default function BmiClient() {
   const ageNum = parseInt(age, 10)
   const ageGuide = (() => {
     if (!Number.isFinite(ageNum) || ageNum <= 0) return null
-    if (ageNum < 18) return { color: '#FF8C3E', text: '본 도구는 성인(18세 이상) 기준입니다. 소아청소년은 백분위수 차트 활용을 권장합니다.' }
-    if (ageNum >= 65) return { color: '#3EC8FF', text: '65세 이상에서는 BMI 22~27도 적정일 수 있습니다. 근감소증·낙상 위험을 고려해 단순 BMI보다 종합 평가를 권장합니다.' }
+    if (ageNum < 18) return { color: '#EA580C', text: '본 도구는 성인(18세 이상) 기준입니다. 소아청소년은 백분위수 차트 활용을 권장합니다.' }
+    if (ageNum >= 65) return { color: '#0891B2', text: '65세 이상에서는 BMI 22~27도 적정일 수 있습니다. 근감소증·낙상 위험을 고려해 단순 BMI보다 종합 평가를 권장합니다.' }
     return null
   })()
 
@@ -451,7 +451,7 @@ export default function BmiClient() {
                 </div>
                 <div className={styles.detailItem}>
                   <small>정상까지</small>
-                  <div style={{ color: rich.toNormal.direction === 'in' ? '#3EFF9B' : 'var(--accent)' }}>
+                  <div style={{ color: rich.toNormal.direction === 'in' ? '#059669' : 'var(--accent)' }}>
                     {rich.toNormal.direction === 'in' ? '범위 내' :
                       `${rich.toNormal.direction === 'lose' ? '−' : '+'}${rich.toNormal.kg}`}
                   </div>
@@ -548,14 +548,14 @@ export default function BmiClient() {
           {rich && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: '#FFD70050', background: '#FFD70010' }}>
+                style={{ borderColor: '#CA8A0450', background: '#CA8A0410' }}>
                 <div className={styles.heroLabel}>목표 BMI {targetBMI.toFixed(1)} 체중</div>
-                <div className={styles.heroNum} style={{ color: '#FFD700' }}>
+                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
                   {targetWeight}<span className={styles.heroNumUnit}>kg</span>
                 </div>
                 <div className={styles.heroSub}>
                   현재 {Math.round(weightKg * 10) / 10}kg →&nbsp;
-                  {targetDiff.dir === 'eq' ? <strong style={{ color: '#3EFF9B' }}>이미 목표 도달</strong>
+                  {targetDiff.dir === 'eq' ? <strong style={{ color: '#059669' }}>이미 목표 도달</strong>
                     : targetDiff.dir === 'lose'
                       ? <span>{targetDiff.kg}kg 감량 필요</span>
                       : <span>+{targetDiff.kg}kg 증량 필요</span>}

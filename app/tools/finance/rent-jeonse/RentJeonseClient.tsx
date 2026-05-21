@@ -6,9 +6,8 @@ import Disclaimer from '@/components/Disclaimer'
 import styles from './rent-jeonse.module.css'
 import {
   type CalcInputs, type OptionResult, type Option,
-  CITY_AVERAGES,
   compareAll, simulateOpportunity, assessRisk,
-  fmtKRW, fmtKRWFull,
+  fmtKRW,
 } from './rentJeonseUtils'
 
 type TabKey = 'compare' | 'sim' | 'guide'
@@ -37,17 +36,9 @@ const DEFAULT_INPUTS: CalcInputs = {
 
 const TABS = [
   { k: 'compare', l: '🏠 빠른 비교' },
-  { k: 'sim',     l: '📈 시간 시뮬' },
+  { k: 'sim',     l: '📈 시뮬레이션' },
   { k: 'guide',   l: '📚 가이드·체크리스트' },
 ] as const
-
-const LOAN_RATE_PRESETS = [3.5, 4.0, 4.5]
-const CONVERSION_PRESETS = [4.0, 5.0, 5.5]
-const RETURN_PRESETS = [
-  { label: '예금 3%', value: 3 },
-  { label: '채권 4%', value: 4 },
-  { label: '주식 7%', value: 7 },
-]
 
 export default function RentJeonseClient() {
   const [tab, setTab] = useState<TabKey>('compare')
@@ -95,7 +86,7 @@ export default function RentJeonseClient() {
         related={[
           { href: '/tools/finance/loan',         label: '대출이자 계산기' },
           { href: '/tools/finance/real-estate',  label: '부동산 투자 수익률' },
-          { href: '/tools/finance/savings',      label: '월 저축가능 금액' },
+          { href: '/tools/finance/savings',      label: '저축액 계산기' },
         ]}
       >
         실제 계약은 공인중개사·법무사·HUG 사이트에서 확인 필수. 2026년 금리·세법 기준이며 매년 변동 가능. 전세사기 위험 점수는 일반 가이드이므로 정확한 평가는 등기부·실거래가 확인 필요. 임대료 5% 인상은 계약갱신청구권 행사 시만 적용되며 신규 계약은 시세대로.
@@ -113,31 +104,6 @@ function CompareTab({ inputs, update, results, best }: {
 }) {
   return (
     <div className={styles.panel}>
-      {/* 도시 평균 빠른 적용 */}
-      <section>
-        <label className={styles.label}>도시 평균 시세 빠른 적용 <span className={styles.labelSub}>(33평 아파트 참고치)</span></label>
-        <select
-          className={styles.select}
-          onChange={(e) => {
-            const c = CITY_AVERAGES.find((x) => x.city === e.target.value)
-            if (!c) return
-            update('marketPrice', c.apt33.price)
-            update('jeonseDeposit', c.apt33.jeonse)
-            update('monthlyDeposit', c.apt33.monthlyDeposit)
-            update('monthlyRent', c.apt33.monthlyRent)
-          }}
-          defaultValue=""
-        >
-          <option value="">도시 선택…</option>
-          {CITY_AVERAGES.map((c) => (
-            <option key={c.city} value={c.city}>
-              {c.city} (시세 {fmtKRW(c.apt33.price)} / 전세 {fmtKRW(c.apt33.jeonse)})
-            </option>
-          ))}
-        </select>
-        <p className={styles.note}>※ 평균치 — 실제 시세는 매물별 차이 큼. 국토부 실거래가 공개시스템에서 확인 권장.</p>
-      </section>
-
       {/* 매물 시세 */}
       <section>
         <label className={styles.label}>매물 시세</label>
@@ -161,22 +127,7 @@ function CompareTab({ inputs, update, results, best }: {
         </div>
         <div className={styles.numberRow}>
           <label>전세대출 금리</label>
-          <div className={styles.presetRow}>
-            {LOAN_RATE_PRESETS.map((r) => (
-              <button key={r}
-                className={`${styles.preset} ${inputs.jeonseLoanRate === r ? styles.presetActive : ''}`}
-                onClick={() => update('jeonseLoanRate', r)}>
-                {r}%
-              </button>
-            ))}
-            <input
-              type="number" step={0.1} min={0} max={15}
-              className={styles.smallNumber}
-              value={inputs.jeonseLoanRate}
-              onChange={(e) => update('jeonseLoanRate', +e.target.value || 0)}
-            />
-            <span>%</span>
-          </div>
+          <PercentInput value={inputs.jeonseLoanRate} onChange={(n) => update('jeonseLoanRate', n)} min={0} max={15} />
         </div>
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={inputs.hugInsurance}
@@ -213,22 +164,7 @@ function CompareTab({ inputs, update, results, best }: {
         <p className={styles.gapTitle}>🔁 반전세 시뮬 (전세 일부 → 월세 전환)</p>
         <div className={styles.numberRow}>
           <label>전월세 전환율</label>
-          <div className={styles.presetRow}>
-            {CONVERSION_PRESETS.map((r) => (
-              <button key={r}
-                className={`${styles.preset} ${inputs.conversionRate === r ? styles.presetActive : ''}`}
-                onClick={() => update('conversionRate', r)}>
-                {r}%
-              </button>
-            ))}
-            <input
-              type="number" step={0.1} min={2} max={10}
-              className={styles.smallNumber}
-              value={inputs.conversionRate}
-              onChange={(e) => update('conversionRate', +e.target.value || 0)}
-            />
-            <span>%</span>
-          </div>
+          <PercentInput value={inputs.conversionRate} onChange={(n) => update('conversionRate', n)} min={2} max={10} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
@@ -268,22 +204,7 @@ function CompareTab({ inputs, update, results, best }: {
         </div>
         <div className={styles.numberRow}>
           <label>기회비용 기대수익률</label>
-          <div className={styles.presetRow}>
-            {RETURN_PRESETS.map((p) => (
-              <button key={p.value}
-                className={`${styles.preset} ${inputs.expectedReturn === p.value ? styles.presetActive : ''}`}
-                onClick={() => update('expectedReturn', p.value)}>
-                {p.label}
-              </button>
-            ))}
-            <input
-              type="number" step={0.1} min={0} max={20}
-              className={styles.smallNumber}
-              value={inputs.expectedReturn}
-              onChange={(e) => update('expectedReturn', +e.target.value || 0)}
-            />
-            <span>%</span>
-          </div>
+          <PercentInput value={inputs.expectedReturn} onChange={(n) => update('expectedReturn', n)} min={0} max={20} />
         </div>
       </section>
 
@@ -398,11 +319,11 @@ function SimTab({ inputs, results, breakeven }: {
 
 /* SVG 누적 비용 차트 */
 function CumulativeChart({ results }: { results: OptionResult[] }) {
-  const W = 600, H = 280, padL = 50, padR = 16, padT = 16, padB = 36
+  const W = 600, H = 320, padL = 80, padR = 20, padT = 18, padB = 48
   const allValues = results.flatMap((r) => r.monthlySeries)
   const maxV = Math.max(...allValues, 1)
   const months = results[0]?.monthlySeries.length || 1
-  const colors: Record<Option, string> = { jeonse: '#3EC8FF', monthly: '#FF8C8C', semi: '#C8FF3E' }
+  const colors: Record<Option, string> = { jeonse: '#0891B2', monthly: '#DC2626', semi: '#0EA5E9' }
 
   const xOf = (i: number) => padL + (i / Math.max(1, months - 1)) * (W - padL - padR)
   const yOf = (v: number) => padT + (H - padT - padB) - (v / maxV) * (H - padT - padB)
@@ -415,8 +336,8 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
           <g key={t}>
             <line x1={padL} y1={padT + (H - padT - padB) * (1 - t)} x2={W - padR} y2={padT + (H - padT - padB) * (1 - t)}
               stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" opacity={0.5} />
-            <text x={padL - 6} y={padT + (H - padT - padB) * (1 - t) + 4}
-              fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+            <text x={padL - 8} y={padT + (H - padT - padB) * (1 - t) + 5}
+              fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
               {fmtKRW(maxV * t)}
             </text>
           </g>
@@ -424,8 +345,8 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
 
         {/* x-axis labels */}
         {[0, 0.25, 0.5, 0.75, 1].map((t) => (
-          <text key={t} x={padL + (W - padL - padR) * t} y={H - 12}
-            fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+          <text key={t} x={padL + (W - padL - padR) * t} y={H - 16}
+            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
             {Math.floor(months * t)}개월
           </text>
         ))}
@@ -434,7 +355,7 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
         {results.map((r) => (
           <polyline key={r.option}
             points={r.monthlySeries.map((v, i) => `${xOf(i)},${yOf(v)}`).join(' ')}
-            stroke={colors[r.option]} strokeWidth="2.5" fill="none" strokeLinejoin="round" />
+            stroke={colors[r.option]} strokeWidth="3" fill="none" strokeLinejoin="round" />
         ))}
       </svg>
       <div className={styles.legend}>
@@ -451,10 +372,10 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
 
 /* ROI SVG 차트 */
 function RoiChart({ scenarios, initial, months }: { scenarios: ReturnType<typeof simulateOpportunity>; initial: number; months: number }) {
-  const W = 600, H = 220, padL = 60, padR = 16, padT = 16, padB = 30
+  const W = 600, H = 260, padL = 90, padR = 20, padT = 18, padB = 40
   const all = scenarios.flatMap((s) => s.series)
   const maxV = Math.max(...all, initial)
-  const colors = ['#3EC8FF', '#C8FF3E', '#FF8C3E', '#FF6B9D']
+  const colors = ['#0891B2', '#0EA5E9', '#EA580C', '#E11D48']
 
   const xOf = (i: number) => padL + (i / Math.max(1, months - 1)) * (W - padL - padR)
   const yOf = (v: number) => padT + (H - padT - padB) - ((v - initial * 0.95) / (maxV - initial * 0.95)) * (H - padT - padB)
@@ -466,16 +387,23 @@ function RoiChart({ scenarios, initial, months }: { scenarios: ReturnType<typeof
           <line key={t} x1={padL} y1={padT + (H - padT - padB) * (1 - t)} x2={W - padR} y2={padT + (H - padT - padB) * (1 - t)}
             stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" opacity={0.4} />
         ))}
-        <text x={padL - 6} y={yOf(initial) + 4} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+        <text x={padL - 8} y={yOf(initial) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
           {fmtKRW(initial)}
         </text>
-        <text x={padL - 6} y={yOf(maxV) + 4} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+        <text x={padL - 8} y={yOf(maxV) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
           {fmtKRW(maxV)}
         </text>
+        {/* x-axis labels */}
+        {[0, 0.5, 1].map((t) => (
+          <text key={t} x={padL + (W - padL - padR) * t} y={H - 12}
+            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+            {Math.floor(months * t)}개월
+          </text>
+        ))}
         {scenarios.map((s, idx) => (
           <polyline key={s.label}
             points={s.series.map((v, i) => `${xOf(i)},${yOf(v)}`).join(' ')}
-            stroke={colors[idx]} strokeWidth="2" fill="none" strokeLinejoin="round" />
+            stroke={colors[idx]} strokeWidth="2.5" fill="none" strokeLinejoin="round" />
         ))}
       </svg>
       <div className={styles.legend}>
@@ -508,7 +436,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
   }), [jeonsePriceRatio, risk])
 
   const levelColor: Record<typeof assessment.level, string> = {
-    low: '#3EFF9B', medium: '#FFB83E', high: '#FF8C3E', danger: '#FF6B6B',
+    low: '#059669', medium: '#D97706', high: '#EA580C', danger: '#DC2626',
   }
   const levelText: Record<typeof assessment.level, string> = {
     low: '낮음 ✓', medium: '주의', high: '높음', danger: '위험',
@@ -619,7 +547,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
         <ul className={styles.relatedList}>
           <li><Link href="/tools/finance/loan">대출이자 계산기</Link> — 전세자금대출 원리금균등·금리 시뮬</li>
           <li><Link href="/tools/finance/real-estate">부동산 수익률 계산기</Link> — 매수 결정 시</li>
-          <li><Link href="/tools/finance/savings">월 저축 계산기</Link> — 월세 절약분 저축 시뮬</li>
+          <li><Link href="/tools/finance/savings">저축액 계산기</Link> — 월세 절약분 저축 시뮬</li>
           <li><Link href="/tools/finance/compound">복리 계산기</Link> — 자기자본 운용 시 장기 수익</li>
         </ul>
       </section>
@@ -662,6 +590,24 @@ function CompactInput({ value, onChange, placeholder }: { value: number; onChang
         }}
       />
       <span>원</span>
+    </div>
+  )
+}
+
+function PercentInput({ value, onChange, min = 0, max = 20 }: { value: number; onChange: (n: number) => void; min?: number; max?: number }) {
+  return (
+    <div className={styles.compactInputWrap}>
+      <input
+        type="number"
+        inputMode="decimal"
+        step={0.1}
+        min={min}
+        max={max}
+        className={styles.percentInput}
+        value={value}
+        onChange={(e) => onChange(Math.max(min, Math.min(max, +e.target.value || 0)))}
+      />
+      <span>%</span>
     </div>
   )
 }

@@ -294,12 +294,12 @@ export function deltaE(lab1: { L: number; a: number; b: number }, lab2: { L: num
 
 /** ΔE → 등급 라벨 */
 export function deltaEGrade(d: number): { label: string; pct: number; color: string } {
-  if (d < 1)  return { label: '완벽',     pct: 100, color: '#3EFFD0' }
-  if (d < 2)  return { label: '매우 비슷', pct: 90,  color: '#3EFFD0' }
-  if (d < 5)  return { label: '비슷',     pct: 75,  color: '#FFB83E' }
-  if (d < 10) return { label: '가능',     pct: 55,  color: '#FF8C3E' }
-  if (d < 20) return { label: '차이 큼',   pct: 30,  color: '#FF3E8C' }
-  return       { label: '매우 다름',      pct: 10,  color: '#FF3E8C' }
+  if (d < 1)  return { label: '완벽',     pct: 100, color: '#0D9488' }
+  if (d < 2)  return { label: '매우 비슷', pct: 90,  color: '#0D9488' }
+  if (d < 5)  return { label: '비슷',     pct: 75,  color: '#D97706' }
+  if (d < 10) return { label: '가능',     pct: 55,  color: '#EA580C' }
+  if (d < 20) return { label: '차이 큼',   pct: 30,  color: '#DB2777' }
+  return       { label: '매우 다름',      pct: 10,  color: '#DB2777' }
 }
 
 /* ═════════════════════════════════════════════

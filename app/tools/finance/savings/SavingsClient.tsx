@@ -253,7 +253,7 @@ export default function SavingsClient() {
 
           {/* 메인 결과 */}
           <div className={s.hero}>
-            <p className={s.heroLabel}>월 저축 가능액 진단</p>
+            <p className={s.heroLabel}>저축 가능액 진단</p>
             <p className={s.heroValue} style={{ color: grade.color }}>
               {grade.emoji} <strong>{fmtMan(savings)}</strong>
             </p>
@@ -266,11 +266,11 @@ export default function SavingsClient() {
             <svg viewBox="0 0 420 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }}>
               <defs>
                 <linearGradient id="rateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#FF3E8C" />
-                  <stop offset="20%" stopColor="#FFB83E" />
-                  <stop offset="50%" stopColor="#3EC8FF" />
-                  <stop offset="80%" stopColor="#3EFF9B" />
-                  <stop offset="100%" stopColor="#3EFFD0" />
+                  <stop offset="0%" stopColor="#DB2777" />
+                  <stop offset="20%" stopColor="#D97706" />
+                  <stop offset="50%" stopColor="#0891B2" />
+                  <stop offset="80%" stopColor="#059669" />
+                  <stop offset="100%" stopColor="#0D9488" />
                 </linearGradient>
               </defs>
               <rect x={0} y={20} width={420} height={20} rx={5} fill="var(--bg3)" />
@@ -287,23 +287,21 @@ export default function SavingsClient() {
           {/* 진단 카드 */}
           <div className={s.card}>
             <span className={s.cardLabel}>진단 상세</span>
-            <div className={s.tableScroll}>
-              <table className={s.detailTable}>
-                <tbody>
-                  <tr><td>총 수입</td><td className={s.cellMono}>{fmtMan(totalIncome)}</td></tr>
-                  <tr><td>고정비</td><td className={s.cellMono}>{fmtMan(totalFixed)}</td></tr>
-                  <tr><td>변동비</td><td className={s.cellMono}>{fmtMan(totalVar)}</td></tr>
-                  <tr><td>총 지출</td><td className={s.cellMono}>{fmtMan(totalExpense)}</td></tr>
-                  <tr><td>저축액</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(savings)}</td></tr>
-                  <tr><td>저축률</td><td className={`${s.cellMono}`} style={{ color: grade.color }}>{savingsRate.toFixed(1)}%</td></tr>
-                  <tr className={s.cellSubtitle}><td colSpan={2}>비교</td></tr>
-                  <tr><td>{HOUSEHOLD_AVG_EXPENSE[household].label} 평균 지출</td><td className={s.cellMono}>{avgExp} 만원</td></tr>
-                  <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? '#FF3E8C' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
-                  <tr><td>{ageMeta.label.split(' ')[0]} 권장 저축률</td><td className={s.cellMono}>{ageMeta.rateMin}~{ageMeta.rateMax}%</td></tr>
-                  <tr><td>본인 vs 권장</td><td className={s.cellMono} style={{ color: savingsRate >= recoMid ? 'var(--accent)' : '#FFB83E' }}>{(savingsRate - recoMid > 0 ? '+' : '')}{(savingsRate - recoMid).toFixed(1)}%p</td></tr>
-                </tbody>
-              </table>
-            </div>
+            <table className={s.detailTable}>
+              <tbody>
+                <tr><td>총 수입</td><td className={s.cellMono}>{fmtMan(totalIncome)}</td></tr>
+                <tr><td>고정비</td><td className={s.cellMono}>{fmtMan(totalFixed)}</td></tr>
+                <tr><td>변동비</td><td className={s.cellMono}>{fmtMan(totalVar)}</td></tr>
+                <tr><td>총 지출</td><td className={s.cellMono}>{fmtMan(totalExpense)}</td></tr>
+                <tr><td>저축액</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(savings)}</td></tr>
+                <tr><td>저축률</td><td className={`${s.cellMono}`} style={{ color: grade.color }}>{savingsRate.toFixed(1)}%</td></tr>
+                <tr className={s.cellSubtitle}><td colSpan={2}>비교</td></tr>
+                <tr><td>평균 지출 ({HOUSEHOLD_AVG_EXPENSE[household].label})</td><td className={s.cellMono}>{avgExp} 만원</td></tr>
+                <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? '#DB2777' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
+                <tr><td>권장 저축률 ({ageMeta.label.split(' ')[0]})</td><td className={s.cellMono}>{ageMeta.rateMin}~{ageMeta.rateMax}%</td></tr>
+                <tr><td>본인 vs 권장</td><td className={s.cellMono} style={{ color: savingsRate >= recoMid ? 'var(--accent)' : '#D97706' }}>{(savingsRate - recoMid > 0 ? '+' : '')}{(savingsRate - recoMid).toFixed(1)}%p</td></tr>
+              </tbody>
+            </table>
             <div className={s.tipBox}>
               💬 <strong>{grade.grade}등급 · {grade.label}</strong> — {grade.desc}
             </div>
@@ -360,7 +358,7 @@ export default function SavingsClient() {
               </div>
             </div>
             {jarTotal !== 100 && (
-              <p className={s.helpText} style={{ color: '#FFB83E' }}>
+              <p className={s.helpText} style={{ color: '#D97706' }}>
                 ⚠️ 본인 입력 합계가 {jarTotal.toFixed(0)}% — 100%가 되도록 조정해 주세요.
               </p>
             )}
@@ -396,7 +394,7 @@ export default function SavingsClient() {
                       />
                       <span className={s.jarUserMan}>= {fmt(userMan)}만원</span>
                     </div>
-                    <p className={s.jarDiff} style={{ color: Math.abs(diff) < 3 ? 'var(--accent)' : diff > 0 ? '#FF8C3E' : '#FFB83E' }}>
+                    <p className={s.jarDiff} style={{ color: Math.abs(diff) < 3 ? 'var(--accent)' : diff > 0 ? '#EA580C' : '#D97706' }}>
                       {diff > 0 ? `▲ +${diff.toFixed(0)}%p (과다)` : diff < 0 ? `▼ ${diff.toFixed(0)}%p (부족)` : '✓ 권장 일치'}
                     </p>
                     <p className={s.jarExamples}>예: {j.examples}</p>
@@ -504,58 +502,10 @@ export default function SavingsClient() {
             </p>
             <p className={s.heroSub}>
               총 적립 {fmtMan(monthlyNeeded * yearsN * 12)} + 이자 {fmtMan(goalMan - monthlyNeeded * yearsN * 12)}
-              {' · '}현재 저축액 대비 <strong style={{ color: monthlyNeeded <= savings ? 'var(--accent)' : '#FF3E8C' }}>
+              {' · '}현재 저축액 대비 <strong style={{ color: monthlyNeeded <= savings ? 'var(--accent)' : '#DB2777' }}>
                 {monthlyNeeded <= savings ? '✅ 달성 가능' : `❌ ${fmt(monthlyNeeded - savings, 1)} 만원 부족`}
               </strong>
             </p>
-          </div>
-
-          {/* SVG 성장 그래프 */}
-          <div className={s.card}>
-            <span className={s.cardLabel}>복리 성장 곡선</span>
-            <svg viewBox="0 0 420 200" width="100%" style={{ maxWidth: 600 }}>
-              {(() => {
-                if (growth.length === 0) return null
-                const maxVal = growth[growth.length - 1].balance
-                const points = growth.map((g, i) => {
-                  const x = 30 + (i / (growth.length - 1 || 1)) * 380
-                  const y = 180 - (g.balance / maxVal) * 160
-                  return `${x},${y}`
-                }).join(' ')
-                return (
-                  <>
-                    {/* 축 */}
-                    <line x1={30} y1={180} x2={420} y2={180} stroke="var(--border)" strokeWidth="1" />
-                    <line x1={30} y1={20} x2={30} y2={180} stroke="var(--border)" strokeWidth="1" />
-                    {/* 면적 */}
-                    <polyline
-                      points={`30,180 ${points} ${30 + 380},180`}
-                      fill="rgba(232,151,87,0.15)"
-                    />
-                    {/* 라인 */}
-                    <polyline
-                      points={points}
-                      fill="none"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                    />
-                    {/* 목표 라인 */}
-                    <line x1={30} y1={20} x2={420} y2={20} stroke="var(--accent)" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
-                    <text x={415} y={18} fill="var(--accent)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">목표 {fmtMan(goalMan)}</text>
-                    {/* 연도 라벨 */}
-                    {growth.filter((_, i) => i % Math.max(1, Math.floor(growth.length / 5)) === 0).map((g) => {
-                      const idx = growth.indexOf(g)
-                      const x = 30 + (idx / (growth.length - 1 || 1)) * 380
-                      return (
-                        <text key={idx} x={x} y={195} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
-                          {g.month / 12}년
-                        </text>
-                      )
-                    })}
-                  </>
-                )
-              })()}
-            </svg>
           </div>
 
           {/* 연도별 표 */}

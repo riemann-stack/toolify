@@ -32,7 +32,7 @@ export default function ChordPage() {
             자주 검색하는 주요 코드 구성음
           </h2>
 
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EC8FF', marginBottom: '8px' }}>트라이어드 (3화음)</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>트라이어드 (3화음)</p>
           <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -61,7 +61,7 @@ export default function ChordPage() {
             </table>
           </div>
 
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF8C3E', marginBottom: '8px' }}>세븐스(7th) 코드</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>세븐스(7th) 코드</p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -98,14 +98,14 @@ export default function ChordPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { sym: 'maj7',  desc: '장7도 포함. 밝고 안정적인 느낌',                  color: '#3EFF9B' },
-              { sym: 'm7',    desc: '단3도 + 단7도. 재즈에서 매우 자주 사용',           color: '#3EC8FF' },
-              { sym: '7',     desc: '도미넌트7. 장3도 + 단7도. 해결 욕구가 있는 긴장감', color: '#FF8C3E' },
-              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: '#FFD700' },
-              { sym: 'add9',  desc: '기존 코드에 9도(=옥타브 위 2도) 추가. 색채감',       color: '#C8FF3E' },
-              { sym: 'b5',    desc: '5도를 반음 낮춤. 긴장 또는 블루스적 색채',         color: '#FF6B6B' },
-              { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: '#FF6B6B' },
-              { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: '#FF6B6B' },
+              { sym: 'maj7',  desc: '장7도 포함. 밝고 안정적인 느낌',                  color: '#059669' },
+              { sym: 'm7',    desc: '단3도 + 단7도. 재즈에서 매우 자주 사용',           color: '#0891B2' },
+              { sym: '7',     desc: '도미넌트7. 장3도 + 단7도. 해결 욕구가 있는 긴장감', color: '#EA580C' },
+              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: '#CA8A04' },
+              { sym: 'add9',  desc: '기존 코드에 9도(=옥타브 위 2도) 추가. 색채감',       color: '#0EA5E9' },
+              { sym: 'b5',    desc: '5도를 반음 낮춤. 긴장 또는 블루스적 색채',         color: '#DC2626' },
+              { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: '#DC2626' },
+              { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: '#DC2626' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${c.color}30`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
@@ -135,13 +135,13 @@ export default function ChordPage() {
               </thead>
               <tbody>
                 {[
-                  { roman: 'Ⅰ',  chord: 'Cmaj7',  notes: 'C, E, G, B',    func: '토닉',         color: '#3EFF9B' },
-                  { roman: 'Ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: '#3EC8FF' },
-                  { roman: 'Ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: '#3EFF9B' },
-                  { roman: 'Ⅳ',  chord: 'Fmaj7',  notes: 'F, A, C, E',    func: '서브도미넌트', color: '#3EC8FF' },
-                  { roman: 'Ⅴ',  chord: 'G7',     notes: 'G, B, D, F',    func: '도미넌트',     color: '#FF8C3E' },
-                  { roman: 'Ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: '#3EFF9B' },
-                  { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: '#FF8C3E' },
+                  { roman: 'Ⅰ',  chord: 'Cmaj7',  notes: 'C, E, G, B',    func: '토닉',         color: '#059669' },
+                  { roman: 'Ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: '#0891B2' },
+                  { roman: 'Ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: '#059669' },
+                  { roman: 'Ⅳ',  chord: 'Fmaj7',  notes: 'F, A, C, E',    func: '서브도미넌트', color: '#0891B2' },
+                  { roman: 'Ⅴ',  chord: 'G7',     notes: 'G, B, D, F',    func: '도미넌트',     color: '#EA580C' },
+                  { roman: 'Ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: '#059669' },
+                  { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: '#EA580C' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
@@ -167,28 +167,28 @@ export default function ChordPage() {
                 deg: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ',
                 ex: 'Cmaj7 → Am7 → Fmaj7 → G7',
                 desc: '수많은 팝·발라드의 기본. 친숙하고 듣기 편한 진행',
-                color: '#C8FF3E',
+                color: '#0EA5E9',
               },
               {
                 name: '2-5-1 진행 (재즈 기본)',
                 deg: 'Ⅱm7 → Ⅴ7 → Ⅰmaj7',
                 ex: 'Dm7 → G7 → Cmaj7',
                 desc: '재즈 스탠더드 대부분에 등장. 도미넌트 모션의 기본',
-                color: '#3EC8FF',
+                color: '#0891B2',
               },
               {
                 name: '1-4-5 진행 (블루스·록)',
                 deg: 'Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → F → G',
                 desc: '블루스·록큰롤의 뼈대. 12마디 블루스의 핵심 코드',
-                color: '#FF8C3E',
+                color: '#EA580C',
               },
               {
                 name: '카논 진행',
                 deg: 'Ⅰ → Ⅴ → Ⅵm → Ⅲm → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → G → Am → Em → F → C → F → G',
                 desc: '파헬벨 카논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
-                color: '#FFD700',
+                color: '#CA8A04',
               },
             ].map((p, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}30`, borderRadius: '12px', padding: '16px 20px' }}>

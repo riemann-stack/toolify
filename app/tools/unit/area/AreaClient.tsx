@@ -226,12 +226,12 @@ export default function AreaClient() {
               </thead>
               <tbody>
                 <tr>
-                  <td><strong style={{ color: '#3EFF9B' }}>전용면적</strong></td>
+                  <td><strong style={{ color: '#059669' }}>전용면적</strong></td>
                   <td>거실·방·주방·화장실·발코니</td>
                   <td>약 84.96㎡ <small style={{ color: 'var(--muted)' }}>(약 25.7평)</small></td>
                 </tr>
                 <tr>
-                  <td><strong style={{ color: '#FFD700' }}>주거공용</strong></td>
+                  <td><strong style={{ color: '#CA8A04' }}>주거공용</strong></td>
                   <td>계단·복도·엘리베이터</td>
                   <td>약 25㎡</td>
                 </tr>
@@ -241,12 +241,12 @@ export default function AreaClient() {
                   <td>약 110㎡ <small style={{ color: 'var(--muted)' }}>(약 33평)</small></td>
                 </tr>
                 <tr>
-                  <td><strong style={{ color: '#FF8C3E' }}>기타공용</strong></td>
+                  <td><strong style={{ color: '#EA580C' }}>기타공용</strong></td>
                   <td>지하주차장·관리실·놀이터</td>
                   <td>약 50㎡</td>
                 </tr>
                 <tr>
-                  <td><strong style={{ color: '#FF6B6B' }}>계약면적</strong></td>
+                  <td><strong style={{ color: '#DC2626' }}>계약면적</strong></td>
                   <td>공급 + 기타공용 (분양가 산정)</td>
                   <td>약 160㎡ <small style={{ color: 'var(--muted)' }}>(약 48평)</small></td>
                 </tr>
@@ -256,9 +256,9 @@ export default function AreaClient() {
 
           <div className={styles.cardGrid}>
             {[
-              { name: '✅ 실거주 면적이 궁금할 때', use: '전용면적', color: '#3EFF9B' },
+              { name: '✅ 실거주 면적이 궁금할 때', use: '전용면적', color: '#059669' },
               { name: '🏷️ 분양·매매 광고 평수', use: '공급면적', color: 'var(--accent)' },
-              { name: '💰 분양가 비교·재산세', use: '계약면적', color: '#FF6B6B' },
+              { name: '💰 분양가 비교·재산세', use: '계약면적', color: '#DC2626' },
             ].map((c, i) => (
               <div key={i} className={styles.guideCard} style={{ borderColor: `${c.color}40` }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: c.color, marginBottom: 4 }}>{c.name}</p>

@@ -103,16 +103,16 @@ export default function SeverancePage() {
           → 근로자에게 항상 유리한 큰 금액을 적용.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 10, marginTop: 12 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EC8FF', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, margin: '0 0 4px' }}>📊 평균임금</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0891B2', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, margin: '0 0 4px' }}>📊 평균임금</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               3개월 임금 총액 ÷ 3개월 총일수<br />
               <strong>포함</strong>: 기본급·고정수당·상여금×3/12·연차수당×3/12<br />
               <strong>특징</strong>: 변동 임금 모두 반영해 더 큰 경향
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FFB83E', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FFB83E', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 통상임금</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 통상임금</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               월 통상임금 / 209시간 × 1일 소정시간<br />
               <strong>포함</strong>: 기본급·고정수당만 (변동성 X)<br />
@@ -151,10 +151,10 @@ export default function SeverancePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '💼 일반 퇴직금', d: '근로기준법 기준 법정 퇴직금. 회사가 직접 지급. 14일 내 의무.', c: '#3EFFD0' },
-            { t: '🏦 DB형 퇴직연금', d: '확정급여형 — 평균임금 × 30 × 근속/365 (일반과 동일 계산). 회사가 적립·운용.', c: '#3EC8FF' },
-            { t: '📊 DC형 퇴직연금', d: '확정기여형 — 회사가 매년 임금총액의 1/12 이상 적립, 근로자 운용. 결과 변동.', c: '#FFB83E' },
-            { t: '🏛️ IRP', d: '5,500만원 초과 퇴직금은 의무 이전. 연금 수령 시 절세 효과.', c: '#FF8C3E' },
+            { t: '💼 일반 퇴직금', d: '근로기준법 기준 법정 퇴직금. 회사가 직접 지급. 14일 내 의무.', c: '#0D9488' },
+            { t: '🏦 DB형 퇴직연금', d: '확정급여형 — 평균임금 × 30 × 근속/365 (일반과 동일 계산). 회사가 적립·운용.', c: '#0891B2' },
+            { t: '📊 DC형 퇴직연금', d: '확정기여형 — 회사가 매년 임금총액의 1/12 이상 적립, 근로자 운용. 결과 변동.', c: '#D97706' },
+            { t: '🏛️ IRP', d: '5,500만원 초과 퇴직금은 의무 이전. 연금 수령 시 절세 효과.', c: '#EA580C' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -163,7 +163,7 @@ export default function SeverancePage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#FF3E8C' }}>DC형은 별도 계산 필요</strong> — 운용 결과에 따라 법정 퇴직금과 다를 수 있음.
+          ⚠️ <strong style={{ color: '#DB2777' }}>DC형은 별도 계산 필요</strong> — 운용 결과에 따라 법정 퇴직금과 다를 수 있음.
           정확한 금액은 회사 인사팀·금융사 IRP 계좌에서 확인하세요.
         </p>
       </div>

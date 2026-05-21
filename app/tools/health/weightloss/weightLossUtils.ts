@@ -18,11 +18,11 @@ export interface SpeedOption {
 }
 
 export const SAFE_SPEEDS: SpeedOption[] = [
-  { id: 'very-slow',  name: '매우 천천히', percentPerWeek: 0.3, desc: '체중의 0.3%/주 · 가장 안전 · 근육 유지 ★★★', stars: 3, severity: 'safe',    color: '#3EFF9B' },
-  { id: 'slow',       name: '안정 감량',   percentPerWeek: 0.5, desc: '체중의 0.5%/주 · 권장 표준 ★★★',           stars: 3, severity: 'safe',    color: '#3EFF9B' },
-  { id: 'normal',     name: '보통 감량',   percentPerWeek: 0.7, desc: '체중의 0.7%/주 · 활동량 충분 시',          stars: 2, severity: 'caution', color: '#FFD700' },
-  { id: 'fast',       name: '적극 감량',   percentPerWeek: 1.0, desc: '체중의 1.0%/주 · 단기만 권장 ⚠️',         stars: 1, severity: 'warning', color: '#FF8C3E' },
-  { id: 'aggressive', name: '매우 빠른',   percentPerWeek: 1.5, desc: '체중의 1.5%/주 · 의료 감독 시만 ⚠️⚠️',    stars: 0, severity: 'danger',  color: '#FF6B6B' },
+  { id: 'very-slow',  name: '매우 천천히', percentPerWeek: 0.3, desc: '체중의 0.3%/주 · 가장 안전 · 근육 유지 ★★★', stars: 3, severity: 'safe',    color: '#059669' },
+  { id: 'slow',       name: '안정 감량',   percentPerWeek: 0.5, desc: '체중의 0.5%/주 · 권장 표준 ★★★',           stars: 3, severity: 'safe',    color: '#059669' },
+  { id: 'normal',     name: '보통 감량',   percentPerWeek: 0.7, desc: '체중의 0.7%/주 · 활동량 충분 시',          stars: 2, severity: 'caution', color: '#CA8A04' },
+  { id: 'fast',       name: '적극 감량',   percentPerWeek: 1.0, desc: '체중의 1.0%/주 · 단기만 권장 ⚠️',         stars: 1, severity: 'warning', color: '#EA580C' },
+  { id: 'aggressive', name: '매우 빠른',   percentPerWeek: 1.5, desc: '체중의 1.5%/주 · 의료 감독 시만 ⚠️⚠️',    stars: 0, severity: 'danger',  color: '#DC2626' },
 ]
 
 /* ─── 운동 — METs 기반 ─── */
@@ -102,11 +102,11 @@ export function calcBMI(height: number, weight: number): number {
 }
 
 export function bmiCategoryName(bmi: number): { name: string; color: string; isUnder: boolean } {
-  if (bmi < 18.5) return { name: '저체중', color: '#3EC8FF', isUnder: true }
-  if (bmi < 23.0) return { name: '정상',   color: '#3EFF9B', isUnder: false }
-  if (bmi < 25.0) return { name: '과체중', color: '#FFD700', isUnder: false }
-  if (bmi < 30.0) return { name: '비만 1단계', color: '#FF8C3E', isUnder: false }
-  return { name: '비만 2~3단계', color: '#FF6B6B', isUnder: false }
+  if (bmi < 18.5) return { name: '저체중', color: '#0891B2', isUnder: true }
+  if (bmi < 23.0) return { name: '정상',   color: '#059669', isUnder: false }
+  if (bmi < 25.0) return { name: '과체중', color: '#CA8A04', isUnder: false }
+  if (bmi < 30.0) return { name: '비만 1단계', color: '#EA580C', isUnder: false }
+  return { name: '비만 2~3단계', color: '#DC2626', isUnder: false }
 }
 
 /* ─── 메인 입력·결과 타입 ─── */

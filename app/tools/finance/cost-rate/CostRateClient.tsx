@@ -26,12 +26,12 @@ interface Ingredient {
 
 /* breakdown 색상 팔레트 */
 const C = {
-  ingredient: '#FF8C3E',
-  packaging:  '#FFD700',
-  commission: '#FF6B6B',
+  ingredient: '#EA580C',
+  packaging:  '#CA8A04',
+  commission: '#DC2626',
   delivery:   '#9B59B6',
-  ad:         '#3EC8FF',
-  margin:     '#C8FF3E',
+  ad:         '#0891B2',
+  margin:     '#0EA5E9',
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -541,7 +541,7 @@ export default function CostRateClient() {
         <>
           <div className={styles.hero}>
             <p className={styles.heroLead}>
-              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: '#3EC8FF' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
+              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: '#0891B2' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
             </p>
             <div className={styles.heroDual}>
               <div>
@@ -728,7 +728,7 @@ export default function CostRateClient() {
                 value={increase}
                 onChange={e => setIncreaseStr(e.target.value)}
               />
-              <span className={styles.sliderValue} style={{ color: increase > 0 ? 'var(--accent)' : increase < 0 ? '#FF6B6B' : 'var(--muted)' }}>
+              <span className={styles.sliderValue} style={{ color: increase > 0 ? 'var(--accent)' : increase < 0 ? '#DC2626' : 'var(--muted)' }}>
                 {fmtSign(increase)}원
               </span>
             </div>
@@ -785,7 +785,7 @@ export default function CostRateClient() {
               </div>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, textAlign: 'center' }}>
-              연간 환산 <strong style={{ color: monthlyDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(annualDelta)}원</strong>
+              연간 환산 <strong style={{ color: monthlyDelta >= 0 ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(annualDelta)}원</strong>
             </p>
           </div>
 
@@ -811,8 +811,8 @@ export default function CostRateClient() {
               </div>
               <div className={styles.warnBox} style={{ marginTop: 12 }}>
                 가격 변화 <strong>{priceChangePct >= 0 ? '+' : ''}{priceChangePct.toFixed(1)}%</strong> →
-                예상 판매량 변화 <strong style={{ color: volumeChangePct < 0 ? '#FF6B6B' : '#3EFF9B' }}>{volumeChangePct >= 0 ? '+' : ''}{volumeChangePct.toFixed(1)}%</strong> ({fmt(adjustedVolume)}개) →
-                <br />보정된 월 추가 이익: <strong style={{ color: adjustedDelta >= 0 ? '#3EFF9B' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(adjustedDelta)}원</strong>
+                예상 판매량 변화 <strong style={{ color: volumeChangePct < 0 ? '#DC2626' : '#059669' }}>{volumeChangePct >= 0 ? '+' : ''}{volumeChangePct.toFixed(1)}%</strong> ({fmt(adjustedVolume)}개) →
+                <br />보정된 월 추가 이익: <strong style={{ color: adjustedDelta >= 0 ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(adjustedDelta)}원</strong>
               </div>
             </div>
           )}
@@ -907,8 +907,8 @@ export default function CostRateClient() {
                   영업일 <strong>{businessDays}일</strong> 기준 → 일 평균 <strong>{monthlyMenuStats.breakEvenDaily}개</strong> 이상 판매 필요.<br />
                   현재 일 평균 주문 <strong>{monthlyMenuStats.dailyOrders}개</strong> →{' '}
                   {monthlyMenuStats.dailyOrders >= monthlyMenuStats.breakEvenDaily
-                    ? <span style={{ color: '#3EFF9B' }}>✅ 손익분기 통과</span>
-                    : <span style={{ color: '#FF6B6B' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
+                    ? <span style={{ color: '#059669' }}>✅ 손익분기 통과</span>
+                    : <span style={{ color: '#DC2626' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
                 </p>
               </>
             ) : (

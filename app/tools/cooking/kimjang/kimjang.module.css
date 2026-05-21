@@ -28,8 +28,8 @@
 
 /* ── 메인 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(255,107,107,0.08), rgba(255,184,62,0.05));
-  border: 1px solid rgba(255,107,107,0.30);
+  background: linear-gradient(140deg, rgba(220,38,38,0.14), rgba(217,119,6,0.14));
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 16px;
   padding: 22px 24px;
   text-align: center;
@@ -63,11 +63,11 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(48px, 12vw, 80px);
   font-weight: 800;
-  color: #FF6B6B;
+  color: #DC2626;
   letter-spacing: -2px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 24px rgba(255,107,107,0.20);
+  text-shadow: 0 0 24px rgba(220,38,38,0.20);
 }
 .heroUnit {
   font-size: 18px;
@@ -142,7 +142,7 @@
   font-weight: 800;
 }
 @media (hover: hover) {
-  .numCtrl button:hover { background: rgba(200,255,62,0.08); }
+  .numCtrl button:hover { background: rgba(14,165,233,0.14); }
 }
 .numCtrl span {
   flex: 1;
@@ -175,7 +175,7 @@
   .profileBtn:hover { border-color: var(--accent); }
 }
 .profileActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .profileTitle {
@@ -241,7 +241,7 @@
   .variantBtn:hover { border-color: var(--accent); }
 }
 .variantActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
 }
 .variantCheck {
@@ -260,7 +260,7 @@
 .variantActive .variantCheck {
   background: var(--accent);
   border-color: var(--accent);
-  color: #0a0a0a;
+  color: #ffffff;
 }
 .variantText { min-width: 0; flex: 1; }
 .variantName {
@@ -373,8 +373,8 @@
 }
 .ingLive {
   font-size: 9.5px;
-  color: #3EFF9B;
-  background: rgba(62,255,155,0.10);
+  color: #059669;
+  background: rgba(16,185,129,0.18);
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 700;
@@ -395,8 +395,8 @@
   justify-content: space-between;
   align-items: baseline;
   padding: 12px 14px;
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   margin-top: 10px;
   font-size: 14px;
@@ -408,14 +408,14 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
-  color: #FF6B6B;
+  color: #DC2626;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.5px;
 }
 .copyBtn {
   width: 100%;
   background: var(--accent);
-  color: #0a0a0a;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -445,7 +445,7 @@
   border-radius: 8px;
   padding: 10px 12px;
 }
-.timelinePre { border-left: 3px solid #3EC8FF; }
+.timelinePre { border-left: 3px solid #0891B2; }
 .timelinePost { border-left: 3px solid var(--accent); }
 .timelineDay {
   font-family: 'Inter', system-ui, sans-serif;
@@ -458,7 +458,7 @@
   padding: 6px 4px;
   letter-spacing: -0.5px;
 }
-.timelinePre .timelineDay { color: #3EC8FF; }
+.timelinePre .timelineDay { color: #0891B2; }
 .timelinePost .timelineDay { color: var(--accent); }
 .timelineBody { font-size: 12.5px; line-height: 1.6; }
 .timelineLabel {

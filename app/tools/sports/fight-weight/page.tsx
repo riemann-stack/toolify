@@ -35,15 +35,15 @@ export default function FightWeightPage() {
 
         {/* ── 1. 면책 강조 ── */}
         <div style={{
-          background: 'rgba(255,107,107,0.08)',
-          border: '2px solid rgba(255,107,107,0.4)',
+          background: 'rgba(220,38,38,0.08)',
+          border: '2px solid rgba(220,38,38,0.4)',
           borderRadius: '14px',
           padding: '18px 22px',
           fontSize: '14px',
           color: 'var(--text)',
           lineHeight: 1.85,
         }}>
-          <strong style={{ color: '#FF6B6B', fontSize: '14px' }}>⚠️ 시작 전 반드시 읽어주세요</strong>
+          <strong style={{ color: '#DC2626', fontSize: '14px' }}>⚠️ 시작 전 반드시 읽어주세요</strong>
           <p style={{ marginTop: '10px' }}>
             본 계산기는 격투기 체급과 감량 일정을 계획하기 위한 참고용 도구입니다.
             급격한 체중 감량은 <strong style={{ color: 'var(--text)' }}>심혈관·신장·신경계에 심각한 손상</strong>을 일으킬 수 있으며,
@@ -62,11 +62,11 @@ export default function FightWeightPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { sport: '🥊 복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#FF6B6B' },
-              { sport: '🥋 UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#FFD700' },
-              { sport: '🌿 ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#3EFF9B' },
-              { sport: '🦵 킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#3EC8FF' },
-              { sport: '🥋 유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#C8FF3E' },
+              { sport: '🥊 복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
+              { sport: '🥋 UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#CA8A04' },
+              { sport: '🌿 ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
+              { sport: '🦵 킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#0891B2' },
+              { sport: '🥋 유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
               { sport: '🦿 태권도',   cls: '라이트급',   limit: '74.0kg',  color: '#9B59B6' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.color}`, borderRadius: 12, padding: '12px 14px' }}>
@@ -84,8 +84,8 @@ export default function FightWeightPage() {
             격투기 감량의 3단계 완전 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 6 }}>1단계 · 체지방 감량 (D-30 ~ D-7)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>1단계 · 체지방 감량 (D-30 ~ D-7)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>칼로리 적자 500~750kcal/일</li>
                 <li>유산소 + 근력 운동 병행</li>
@@ -93,8 +93,8 @@ export default function FightWeightPage() {
                 <li>주당 1kg 이내 안전한 감량</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 6 }}>2단계 · 수분 감량 (D-7 ~ D-1)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>2단계 · 수분 감량 (D-7 ~ D-1)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>나트륨 제한 (D-5)</li>
                 <li>탄수화물 제한 (D-3)</li>
@@ -102,8 +102,8 @@ export default function FightWeightPage() {
                 <li>단기간 5~10kg 감량 가능 — 가장 위험</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFF9B', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 6 }}>3단계 · 재수화 (계체 후 ~ 시합)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 6 }}>3단계 · 재수화 (계체 후 ~ 시합)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>계체 직후 IV 수액 (UFC 등 일부 단체 금지)</li>
                 <li>전해질 음료 + 탄수화물 보충</li>
@@ -139,7 +139,7 @@ export default function FightWeightPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.o}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.x}</td>
                   </tr>
                 ))}
@@ -162,8 +162,8 @@ export default function FightWeightPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FFD700', fontWeight: 700 }}>적극 (1.5%/주)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontWeight: 700 }}>위험 (2%/주)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04', fontWeight: 700 }}>적극 (1.5%/주)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700 }}>위험 (2%/주)</th>
                 </tr>
               </thead>
               <tbody>
@@ -177,8 +177,8 @@ export default function FightWeightPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                   </tr>
                 ))}
               </tbody>
@@ -198,7 +198,7 @@ export default function FightWeightPage() {
             {[
               {
                 stage: '🍗 체지방 감량기 (D-30 ~ D-7)',
-                color: '#FF8C3E',
+                color: '#EA580C',
                 items: [
                   '단백질 — 체중 1kg당 2.0~2.4g (근손실 방지 핵심)',
                   '탄수화물 — 체중 1kg당 3~4g (운동량 유지)',
@@ -209,7 +209,7 @@ export default function FightWeightPage() {
               },
               {
                 stage: '💧 수분 감량기 (D-7 ~ D-1)',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 items: [
                   'D-7~D-3 — 나트륨 1g/일 이하로 제한',
                   'D-5~D-3 — 섬유질 감소 (장 잔여물 줄임)',
@@ -220,7 +220,7 @@ export default function FightWeightPage() {
               },
               {
                 stage: '🔋 재수화·시합기 (계체 후 ~ 시합)',
-                color: '#3EFF9B',
+                color: '#059669',
                 items: [
                   '계체 직후 30분 — 전해질 음료 500~750ml',
                   '~6시간 — 탄수화물 (체중 1kg당 5~10g) 재충전',
@@ -249,7 +249,7 @@ export default function FightWeightPage() {
             {[
               {
                 head: '✅ 한 단계 아래 체급으로 내리는 게 유리한 경우',
-                color: '#3EFF9B',
+                color: '#059669',
                 items: [
                   '체지방률이 평균(남 15%·여 23%) 이상 — 줄일 여지 ↑',
                   '키·리치(팔 길이) 우위가 명확',
@@ -260,7 +260,7 @@ export default function FightWeightPage() {
               },
               {
                 head: '⚠️ 한 단계 위 체급으로 올리는 게 나은 경우',
-                color: '#FF8C3E',
+                color: '#EA580C',
                 items: [
                   '체지방률이 이미 낮음 (남 10%·여 18% 이하)',
                   '체급 한도가 평소보다 −10% 초과',

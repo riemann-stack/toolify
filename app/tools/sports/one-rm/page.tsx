@@ -136,31 +136,31 @@ export default function OneRMPage() {
           </thead>
           <tbody>
             <tr>
-              <td style={cell}><strong style={{ color: '#FF6B6B' }}>10</strong></td>
+              <td style={cell}><strong style={{ color: '#DC2626' }}>10</strong></td>
               <td style={cell}>0회 (AMRAP)</td>
               <td style={cell}>한 번도 더 불가능</td>
               <td style={cell}>보정 없음 (기준)</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#FFB83E' }}>9</strong></td>
+              <td style={cell}><strong style={{ color: '#D97706' }}>9</strong></td>
               <td style={cell}>1회</td>
               <td style={cell}>한 번 더 가능했음</td>
               <td style={cell}>+1회로 추정</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#FFB83E' }}>8</strong></td>
+              <td style={cell}><strong style={{ color: '#D97706' }}>8</strong></td>
               <td style={cell}>2~3회</td>
               <td style={cell}>2~3회 여유</td>
               <td style={cell}>+2회로 추정</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#3EFF9B' }}>7</strong></td>
+              <td style={cell}><strong style={{ color: '#059669' }}>7</strong></td>
               <td style={cell}>3~4회</td>
               <td style={cell}>꽤 가벼움</td>
               <td style={cell}>+3회로 추정</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#3EFF9B' }}>6</strong></td>
+              <td style={cell}><strong style={{ color: '#059669' }}>6</strong></td>
               <td style={cell}>5회+</td>
               <td style={cell}>워밍업 수준</td>
               <td style={cell}>+4회 (참고용)</td>
@@ -323,14 +323,14 @@ export default function OneRMPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong style={{ color: '#FF6B6B' }}>95~100%</strong></td><td style={cell}>1~2회</td><td style={cell}>최대 근력 테스트</td><td style={cell}>3~5분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#FF6B6B' }}>90%</strong></td><td style={cell}>3~4회</td><td style={cell}>최대 근력</td><td style={cell}>3~5분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#FFB83E' }}>85%</strong></td><td style={cell}>5~6회</td><td style={cell}>근력·근비대</td><td style={cell}>2~3분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#FFB83E' }}>80%</strong></td><td style={cell}>8회</td><td style={cell}>근비대 (최적)</td><td style={cell}>90초~2분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#C8FF3E' }}>75%</strong></td><td style={cell}>10회</td><td style={cell}>근비대</td><td style={cell}>90초</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#3EFF9B' }}>70%</strong></td><td style={cell}>12회</td><td style={cell}>근비대·지구력</td><td style={cell}>60~90초</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#3EFF9B' }}>65%</strong></td><td style={cell}>15회</td><td style={cell}>근지구력</td><td style={cell}>60초</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#3EFF9B' }}>60%</strong></td><td style={cell}>15회+</td><td style={cell}>워밍업·회복</td><td style={cell}>30~60초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#DC2626' }}>95~100%</strong></td><td style={cell}>1~2회</td><td style={cell}>최대 근력 테스트</td><td style={cell}>3~5분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#DC2626' }}>90%</strong></td><td style={cell}>3~4회</td><td style={cell}>최대 근력</td><td style={cell}>3~5분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#D97706' }}>85%</strong></td><td style={cell}>5~6회</td><td style={cell}>근력·근비대</td><td style={cell}>2~3분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#D97706' }}>80%</strong></td><td style={cell}>8회</td><td style={cell}>근비대 (최적)</td><td style={cell}>90초~2분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#0EA5E9' }}>75%</strong></td><td style={cell}>10회</td><td style={cell}>근비대</td><td style={cell}>90초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#059669' }}>70%</strong></td><td style={cell}>12회</td><td style={cell}>근비대·지구력</td><td style={cell}>60~90초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#059669' }}>65%</strong></td><td style={cell}>15회</td><td style={cell}>근지구력</td><td style={cell}>60초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#059669' }}>60%</strong></td><td style={cell}>15회+</td><td style={cell}>워밍업·회복</td><td style={cell}>30~60초</td></tr>
           </tbody>
         </table>
       </div>
@@ -514,8 +514,8 @@ export default function OneRMPage() {
       {/* 11. 안전 주의사항 */}
       <h2 style={sectionTitle}>⚠️ 안전 주의사항</h2>
       <div style={{
-        background: 'rgba(255, 107, 107, 0.06)',
-        border: '1px solid rgba(255, 107, 107, 0.25)',
+        background: 'rgba(220, 38, 38, 0.06)',
+        border: '1px solid rgba(220, 38, 38, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',
@@ -523,11 +523,11 @@ export default function OneRMPage() {
         lineHeight: 1.8,
       }}>
         <ul style={{ paddingLeft: '20px', margin: 0 }}>
-          <li><strong style={{ color: '#FF8C8C' }}>워밍업 필수</strong> — 점진적으로 중량을 올려 5~6세트 워밍업 후 본 세트 진입.</li>
-          <li><strong style={{ color: '#FF8C8C' }}>스쿼트·벤치는 스포터·세이프티 필수</strong> — 90% 이상 시도 시 혼자 하지 마세요.</li>
-          <li><strong style={{ color: '#FF8C8C' }}>폼 붕괴 = 실패</strong> — 반복수보다 동작의 일관성이 중요합니다. 폼이 무너진 반복은 카운트에서 제외하세요.</li>
-          <li><strong style={{ color: '#FF8C8C' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 운동 후 지속되면 전문의 상담.</li>
-          <li><strong style={{ color: '#FF8C8C' }}>초보자는 고반복 권장</strong> — 운동 경력 6개월 미만은 1RM 추정보다 8~12회 폼 익히기가 우선입니다.</li>
+          <li><strong style={{ color: '#DC2626' }}>워밍업 필수</strong> — 점진적으로 중량을 올려 5~6세트 워밍업 후 본 세트 진입.</li>
+          <li><strong style={{ color: '#DC2626' }}>스쿼트·벤치는 스포터·세이프티 필수</strong> — 90% 이상 시도 시 혼자 하지 마세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>폼 붕괴 = 실패</strong> — 반복수보다 동작의 일관성이 중요합니다. 폼이 무너진 반복은 카운트에서 제외하세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 운동 후 지속되면 전문의 상담.</li>
+          <li><strong style={{ color: '#DC2626' }}>초보자는 고반복 권장</strong> — 운동 경력 6개월 미만은 1RM 추정보다 8~12회 폼 익히기가 우선입니다.</li>
         </ul>
         <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', marginBottom: 0, lineHeight: 1.7 }}>
           본 도구는 <strong>부상 진단·보충제·도핑·영양 상담·코칭/PT 추천</strong>을 하지 않습니다. 통증이 지속되면 정형외과 또는 스포츠의학과 전문의와 상담하세요.

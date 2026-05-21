@@ -33,11 +33,11 @@ export default function FryingPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
             {[
-              { range: '150~160°C', label: '저온',     color: '#3EC8FF', desc: '채소·고구마·두꺼운 재료 속 익히기' },
+              { range: '150~160°C', label: '저온',     color: '#0891B2', desc: '채소·고구마·두꺼운 재료 속 익히기' },
               { range: '160~170°C', label: '중저온',   color: '#5CC8FF', desc: '두꺼운 고기류 1차 튀김, 냉동 재료' },
-              { range: '170~180°C', label: '중온(표준)', color: '#C8FF3E', desc: '대부분 재료의 적정 온도' },
-              { range: '180~190°C', label: '고온',     color: '#FFB83E', desc: '얇은 재료, 2차 튀김 바삭함 완성' },
-              { range: '190°C 이상', label: '초고온',  color: '#FF6B6B', desc: '오징어·새우 등 빠른 완성, 타기 쉬우니 주의' },
+              { range: '170~180°C', label: '중온(표준)', color: '#0EA5E9', desc: '대부분 재료의 적정 온도' },
+              { range: '180~190°C', label: '고온',     color: '#D97706', desc: '얇은 재료, 2차 튀김 바삭함 완성' },
+              { range: '190°C 이상', label: '초고온',  color: '#DC2626', desc: '오징어·새우 등 빠른 완성, 타기 쉬우니 주의' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${r.color}44`, borderLeft: `4px solid ${r.color}`, borderRadius: '10px', padding: '12px 16px', display: 'grid', gridTemplateColumns: '110px 80px 1fr', gap: '12px', alignItems: 'center' }}>
                 <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: r.color }}>{r.range}</span>
@@ -108,9 +108,9 @@ export default function FryingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { n: '1차', c: '#3EC8FF', t: '속 익히기', d: '내부 수분을 증발시키면서 속까지 익힘. 중저온(160~170°C)으로 천천히.' },
-              { n: '휴지', c: '#FFB83E', t: '온도 균일화', d: '2~3분 쉬어 내부 온도가 전체로 퍼짐. 증기가 빠지며 튀김옷이 마르기 시작.' },
-              { n: '2차', c: '#C8FF3E', t: '크리스피 완성', d: '고온(180~190°C) 짧게. 표면 남은 수분 완전 제거 → 바삭함 극대화.' },
+              { n: '1차', c: '#0891B2', t: '속 익히기', d: '내부 수분을 증발시키면서 속까지 익힘. 중저온(160~170°C)으로 천천히.' },
+              { n: '휴지', c: '#D97706', t: '온도 균일화', d: '2~3분 쉬어 내부 온도가 전체로 퍼짐. 증기가 빠지며 튀김옷이 마르기 시작.' },
+              { n: '2차', c: '#0EA5E9', t: '크리스피 완성', d: '고온(180~190°C) 짧게. 표면 남은 수분 완전 제거 → 바삭함 극대화.' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, marginBottom: '4px' }}>{s.n}</p>
@@ -121,7 +121,7 @@ export default function FryingPage() {
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-              <strong style={{ color: '#3EFF9B' }}>✅ 추천:</strong> 감자튀김·치킨·돈까스<br />
+              <strong style={{ color: '#059669' }}>✅ 추천:</strong> 감자튀김·치킨·돈까스<br />
               <strong style={{ color: 'var(--accent)' }}>🔁 선택:</strong> 고구마·생선<br />
               <strong style={{ color: 'var(--muted)' }}>⬜ 불필요:</strong> 새우·오징어·김말이·가지
             </p>
@@ -134,14 +134,14 @@ export default function FryingPage() {
             냉동 재료 튀김 완전 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            냉동 재료는 기름 온도를 <strong style={{ color: '#FF6B6B' }}>20~30°C 급락</strong>시킵니다. 한 번에 많이 넣으면 회복이 안 돼 기름 흡수가 폭증하고 눅눅해집니다.
+            냉동 재료는 기름 온도를 <strong style={{ color: '#DC2626' }}>20~30°C 급락</strong>시킵니다. 한 번에 많이 넣으면 회복이 안 돼 기름 흡수가 폭증하고 눅눅해집니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
             {[
-              { n: '🍗 냉동 치킨',    c: '#FF6B6B', d: '해동 필수. 두꺼운 고기는 냉동 상태에서 속까지 익지 않습니다(생식 위험).' },
-              { n: '🥟 냉동 만두',    c: '#FFB83E', d: '반해동 후 튀김 권장. 완전 냉동 상태는 터짐과 온도 급락 원인.' },
-              { n: '🍤 냉동 새우',    c: '#3EC8FF', d: '찬물에 5~10분 해동 → 물기 완전 제거 → 튀김옷 → 고온 단시간.' },
-              { n: '🍟 냉동 감자',    c: '#3EFF9B', d: '해동 없이 바로 튀김 OK. 오히려 해동하면 물러져서 바삭함이 떨어집니다.' },
+              { n: '🍗 냉동 치킨',    c: '#DC2626', d: '해동 필수. 두꺼운 고기는 냉동 상태에서 속까지 익지 않습니다(생식 위험).' },
+              { n: '🥟 냉동 만두',    c: '#D97706', d: '반해동 후 튀김 권장. 완전 냉동 상태는 터짐과 온도 급락 원인.' },
+              { n: '🍤 냉동 새우',    c: '#0891B2', d: '찬물에 5~10분 해동 → 물기 완전 제거 → 튀김옷 → 고온 단시간.' },
+              { n: '🍟 냉동 감자',    c: '#059669', d: '해동 없이 바로 튀김 OK. 오히려 해동하면 물러져서 바삭함이 떨어집니다.' },
             ].map((f, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.c}44`, borderLeft: `3px solid ${f.c}`, borderRadius: '10px', padding: '12px 16px' }}>
                 <p style={{ fontSize: '13px', color: f.c, fontWeight: 700, marginBottom: '4px' }}>{f.n}</p>
@@ -149,7 +149,7 @@ export default function FryingPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(200,255,62,0.05)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '10px', padding: '12px 16px' }}>
+          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--accent)' }}>💡 온도 급락 방지 팁:</strong> 재료를 <strong>3~5개씩 나눠</strong> 넣고, 사이에 30초 이상 간격을 두세요. 용량 대비 30% 이하가 이상적.
             </p>
@@ -161,8 +161,8 @@ export default function FryingPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에어프라이어 완전 변환 가이드
           </h2>
-          <div style={{ background: 'rgba(62,200,255,0.05)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
-            <p style={{ fontSize: '13px', color: '#3EC8FF', fontWeight: 700, marginBottom: '10px' }}>일반 변환 규칙</p>
+          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
+            <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '10px' }}>일반 변환 규칙</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
               <li>온도: 기름 튀김 온도 <strong>− 10~20°C</strong></li>
               <li>시간: 기름 튀김 <strong>× 1.3~1.5배</strong></li>
@@ -191,7 +191,7 @@ export default function FryingPage() {
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{r.n}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.m}</td>
-                    <td style={{ padding: '9px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.f}</td>
+                    <td style={{ padding: '9px 12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.f}</td>
                   </tr>
                 ))}
               </tbody>
@@ -230,17 +230,17 @@ export default function FryingPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             식품 안전 주의사항
           </h2>
-          <div style={{ background: 'rgba(255,140,62,0.05)', border: '1px solid rgba(255,140,62,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
+          <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, margin: 0 }}>
               본 가이드는 일반적인 참고용입니다. 조리 환경, 재료 크기, 냉동/냉장 보관 상태에 따라 실제 시간이 다를 수 있습니다. 육류와 냉동 재료는 반드시 내부 익힘 상태를 확인하세요.
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
-              { n: '🐔 닭고기', t: '75°C', c: '#FF6B6B' },
-              { n: '🐖 돼지고기', t: '63°C', c: '#FFB83E' },
-              { n: '🐟 생선', t: '63°C', c: '#3EC8FF' },
-              { n: '🥩 갈은 고기', t: '71°C', c: '#FF8C3E' },
+              { n: '🐔 닭고기', t: '75°C', c: '#DC2626' },
+              { n: '🐖 돼지고기', t: '63°C', c: '#D97706' },
+              { n: '🐟 생선', t: '63°C', c: '#0891B2' },
+              { n: '🥩 갈은 고기', t: '71°C', c: '#EA580C' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n} 안전 내부온도</p>

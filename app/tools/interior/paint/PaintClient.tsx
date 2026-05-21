@@ -824,7 +824,7 @@ export default function PaintClient() {
                   <svg className={styles.floorPlanSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     {/* 천장 도장 시 dim 표시 */}
                     <rect x={x0} y={y0} width={drawW} height={drawH}
-                      fill={paintCeiling ? 'rgba(62,200,255,0.10)' : 'rgba(232,151,87,0.05)'}
+                      fill={paintCeiling ? 'rgba(8,145,178,0.10)' : 'rgba(234,88,12,0.05)'}
                       stroke="#fff" strokeWidth={2} />
                     {paintWalls && (
                       <rect x={x0 + 4} y={y0 + 4} width={drawW - 8} height={drawH - 8} fill="none" stroke="var(--accent)" strokeWidth={1} strokeDasharray="5 4" opacity={0.7} />
@@ -832,15 +832,15 @@ export default function PaintClient() {
                     <text x={x0 + drawW / 2} y={y0 - 10} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="monospace">{w.toFixed(2)}m</text>
                     <text x={x0 - 8} y={y0 + drawH / 2} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="monospace" transform={`rotate(-90 ${x0 - 8} ${y0 + drawH / 2})`}>{l.toFixed(2)}m</text>
                     {paintCeiling && (
-                      <text x={x0 + drawW / 2} y={y0 + drawH / 2} textAnchor="middle" fill="#3EC8FF" fontSize="13" fontFamily="monospace" fontWeight={700}>천장 도장</text>
+                      <text x={x0 + drawW / 2} y={y0 + drawH / 2} textAnchor="middle" fill="#0891B2" fontSize="13" fontFamily="monospace" fontWeight={700}>천장 도장</text>
                     )}
                     {/* 창문 (위) */}
                     {winCount > 0 && winW > 0 && (
-                      <line x1={x0 + drawW * 0.3} y1={y0} x2={x0 + drawW * 0.7} y2={y0} stroke="#3EC8FF" strokeWidth={5} />
+                      <line x1={x0 + drawW * 0.3} y1={y0} x2={x0 + drawW * 0.7} y2={y0} stroke="#0891B2" strokeWidth={5} />
                     )}
                     {/* 문 (아래) */}
                     {doorCount > 0 && doorW > 0 && (
-                      <line x1={x0 + drawW * 0.7} y1={y0 + drawH} x2={x0 + drawW * 0.85} y2={y0 + drawH} stroke="#FF8C3E" strokeWidth={5} />
+                      <line x1={x0 + drawW * 0.7} y1={y0 + drawH} x2={x0 + drawW * 0.85} y2={y0 + drawH} stroke="#EA580C" strokeWidth={5} />
                     )}
                     <text x={x0 + drawW / 2} y={y0 + drawH + 22} textAnchor="middle" fill="var(--accent)" fontSize="11" fontFamily="monospace" fontWeight={700}>둘레 {fmt(t1.perimeter, 2)}m</text>
                   </svg>
@@ -1156,7 +1156,7 @@ export default function PaintClient() {
 function CanSvg({ size }: { size: number }) {
   // 사이즈별 크기 비례 (18L > 4L > 2L > 1L)
   const dim = size === 18 ? 56 : size === 4 ? 38 : size === 2 ? 30 : 24
-  const color = size === 18 ? '#C8FF3E' : size === 4 ? '#3EFF9B' : size === 2 ? '#3EC8FF' : '#FFD700'
+  const color = size === 18 ? '#0EA5E9' : size === 4 ? '#059669' : size === 2 ? '#0891B2' : '#CA8A04'
   return (
     <svg width={dim} height={dim * 1.1} viewBox="0 0 50 56" aria-hidden="true">
       {/* 손잡이 */}

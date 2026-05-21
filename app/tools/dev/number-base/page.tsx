@@ -48,9 +48,9 @@ export default function NumberBasePage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 자리값 (오른쪽이 0번째)</span></div>
             <div><span style={{ color: 'var(--accent)' }}>2진수</span>:  1, 2, 4, 8, 16, 32, 64, 128, 256, ...</div>
-            <div><span style={{ color: '#FFD700' }}>8진수</span>:  1, 8, 64, 512, 4096, ...</div>
-            <div><span style={{ color: '#3EC8FF' }}>10진수</span>: 1, 10, 100, 1000, 10000, ...</div>
-            <div><span style={{ color: '#FF8C3E' }}>16진수</span>: 1, 16, 256, 4096, 65536, ...</div>
+            <div><span style={{ color: '#CA8A04' }}>8진수</span>:  1, 8, 64, 512, 4096, ...</div>
+            <div><span style={{ color: '#0891B2' }}>10진수</span>: 1, 10, 100, 1000, 10000, ...</div>
+            <div><span style={{ color: '#EA580C' }}>16진수</span>: 1, 16, 256, 4096, 65536, ...</div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>변환 원리:</strong>
@@ -75,8 +75,8 @@ export default function NumberBasePage() {
                 <br />8비트(1바이트) = 16진수 2자리 (예: 0xFF)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FFD700', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FFD700', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #CA8A04', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#CA8A04', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 3자리 = 8진수 1자리</strong>
                 <br />000 = 0 / 111 = 7
@@ -85,8 +85,8 @@ export default function NumberBasePage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(62,200,255,0.05)',
-            border: '1px solid rgba(62,200,255,0.30)',
+            background: 'rgba(8,145,178,0.05)',
+            border: '1px solid rgba(8,145,178,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -94,7 +94,7 @@ export default function NumberBasePage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#3EC8FF' }}>왜 16진수를 자주 쓰나?</strong> 2진수는 너무 길어서 (8비트 = 16진 2자리),
+            💡 <strong style={{ color: '#0891B2' }}>왜 16진수를 자주 쓰나?</strong> 2진수는 너무 길어서 (8비트 = 16진 2자리),
             메모리 주소·색상 코드·HEX 덤프 등에서 표준입니다.
             <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>0xFF</code>가
             <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>11111111</code>보다 훨씬 읽기 쉽습니다.
@@ -125,7 +125,7 @@ export default function NumberBasePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.u}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
               </tbody>
@@ -163,7 +163,7 @@ export default function NumberBasePage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 8-bit 예시</span></div>
             <div>+5 = <span style={{ color: 'var(--accent)' }}>00000101</span></div>
-            <div>−5 = <span style={{ color: '#FF6B6B' }}>11111011</span> (00000101 비트 반전 후 +1)</div>
+            <div>−5 = <span style={{ color: '#DC2626' }}>11111011</span> (00000101 비트 반전 후 +1)</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 8-bit 표현 범위 — MSB가 부호 비트</span></div>
             <div>00000000 (0) ~ 01111111 (+127)</div>
@@ -175,8 +175,8 @@ export default function NumberBasePage() {
               { t: '✓ 장점 2', d: '덧셈·뺄셈을 같은 회로로 처리 (a − b = a + (−b))' },
               { t: '✓ 장점 3', d: '비트 반전 후 +1로 매우 간단히 변환' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'rgba(62,255,155,0.05)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
+              <div key={i} style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
             ))}
@@ -238,11 +238,11 @@ export default function NumberBasePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
             {[
               { range: '0~31',   label: '제어 문자',   c: '#A8A29E', d: 'NUL, TAB(9), LF(10), CR(13), ESC(27) 등' },
-              { range: '32',     label: '공백 (SPACE)', c: '#3EFFD0', d: '문자열 구분' },
-              { range: '48~57',  label: '숫자 0~9',     c: '#FFD700', d: 'ord(\'0\') = 48' },
+              { range: '32',     label: '공백 (SPACE)', c: '#0D9488', d: '문자열 구분' },
+              { range: '48~57',  label: '숫자 0~9',     c: '#CA8A04', d: 'ord(\'0\') = 48' },
               { range: '65~90',  label: '대문자 A~Z',   c: 'var(--accent)', d: 'ord(\'A\') = 65' },
-              { range: '97~122', label: '소문자 a~z',   c: '#3EC8FF', d: 'ord(\'a\') = 97 (대문자+32)' },
-              { range: '127',    label: 'DEL',          c: '#FF6B6B', d: '구식 천공카드 삭제 표시' },
+              { range: '97~122', label: '소문자 a~z',   c: '#0891B2', d: 'ord(\'a\') = 97 (대문자+32)' },
+              { range: '127',    label: 'DEL',          c: '#DC2626', d: '구식 천공카드 삭제 표시' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: g.c, fontWeight: 800, marginBottom: 2 }}>{g.range}</p>
@@ -261,7 +261,7 @@ export default function NumberBasePage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🌏 <strong style={{ color: '#C485E0' }}>유니코드:</strong> ASCII 0~127은 유니코드와 완전 동일.
+            🌏 <strong style={{ color: '#9333EA' }}>유니코드:</strong> ASCII 0~127은 유니코드와 완전 동일.
             한글은 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>U+AC00 ~ U+D7A3</code> 범위에 11,172개가 정의 (가~힣).
           </div>
         </div>
@@ -292,9 +292,9 @@ export default function NumberBasePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', color: '#FF8C3E', fontFamily: 'var(--font-mono)' }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', color: '#EA580C', fontFamily: 'var(--font-mono)' }}>{r.h}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', color: '#FFD700', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
                   </tr>
                 ))}
               </tbody>

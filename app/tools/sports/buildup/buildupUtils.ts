@@ -27,11 +27,11 @@ export const PROFILE_DESC: Record<Profile, string> = {
 // ── 강도 라벨 (VDOT 페이스 대비) ────────
 export type Intensity = 'E' | 'M' | 'T' | 'I' | 'R'
 export const INTENSITY_LABEL: Record<Intensity, { label: string; color: string; pct: number }> = {
-  'E': { label: 'Easy',       color: '#3EFFD0', pct: 0.59 },
-  'M': { label: 'Marathon',   color: '#3EFF9B', pct: 0.70 },
+  'E': { label: 'Easy',       color: '#0D9488', pct: 0.59 },
+  'M': { label: 'Marathon',   color: '#059669', pct: 0.70 },
   'T': { label: 'Threshold',  color: '#FFD93E', pct: 0.78 },
-  'I': { label: 'Interval',   color: '#FF8C3E', pct: 0.85 },
-  'R': { label: 'Repetition', color: '#FF6B6B', pct: 0.93 },
+  'I': { label: 'Interval',   color: '#EA580C', pct: 0.85 },
+  'R': { label: 'Repetition', color: '#DC2626', pct: 0.93 },
 }
 
 // ── 시간 입력 헬퍼 ──────────────────────

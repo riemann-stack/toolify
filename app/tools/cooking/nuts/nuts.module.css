@@ -53,7 +53,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
   .nutBtn:hover {
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
 }
 }
 .nutEmoji { font-size: 26px; line-height: 1; }
@@ -72,13 +72,13 @@
   background: var(--accent);
   border-color: var(--accent);
 }
-.nutActive .nutName { color: #0D0D0D; font-weight: 700; }
-.nutActive .nutKcal { color: #0D0D0D; opacity: 0.7; }
+.nutActive .nutName { color: #ffffff; font-weight: 700; }
+.nutActive .nutKcal { color: #ffffff; opacity: 0.7; }
 .nutBadge {
   position: absolute;
   top: 5px; right: 5px;
   width: 16px; height: 16px;
-  background: #0D0D0D;
+  background: var(--bg2);
   color: var(--accent);
   border-radius: 50%;
   font-size: 10px;
@@ -110,17 +110,17 @@
 }
 .condActive {
   background: var(--accent-dim);
-  border-color: rgba(200,255,62,0.5);
+  border-color: rgba(14,165,233,0.5);
   color: var(--accent);
   font-weight: 700;
 }
 .condWarn {
-  border-color: rgba(255,140,62,0.4);
+  border-color: rgba(234,88,12,0.4);
 }
 .condWarn.condActive {
-  background: rgba(255,140,62,0.12);
-  border-color: rgba(255,140,62,0.5);
-  color: #FF8C3E;
+  background: rgba(234,88,12,0.18);
+  border-color: rgba(234,88,12,0.5);
+  color: #EA580C;
 }
 
 /* ── SLIDER ── */
@@ -179,13 +179,13 @@
   box-sizing: border-box;
 }
 .numInput:focus {
-  border-color: rgba(200,255,62,0.5);
+  border-color: rgba(14,165,233,0.5);
 }
 
 /* ── RESULT CARD ── */
 .result {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.25);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px;
   padding: 22px 24px;
   animation: fadeUp 0.3s ease;
@@ -219,16 +219,16 @@
   transition: all 0.15s;
 }
 .amountHeroSafe {
-  background: rgba(62, 255, 155, 0.06);
-  border-color: rgba(62, 255, 155, 0.30);
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.30);
 }
 .amountHeroOver {
-  background: rgba(255, 184, 62, 0.08);
-  border-color: rgba(255, 184, 62, 0.40);
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.40);
 }
 .amountHeroDanger {
-  background: rgba(255, 107, 107, 0.10);
-  border-color: rgba(255, 107, 107, 0.50);
+  background: rgba(220, 38, 38, 0.10);
+  border-color: rgba(220, 38, 38, 0.50);
 }
 .amountLead {
   font-size: 12px;
@@ -237,9 +237,9 @@
   margin-bottom: 6px;
   font-weight: 700;
 }
-.amountHeroSafe .amountLead { color: #3EFF9B; }
-.amountHeroOver .amountLead { color: #FFB83E; }
-.amountHeroDanger .amountLead { color: #FF6B6B; }
+.amountHeroSafe .amountLead { color: #059669; }
+.amountHeroOver .amountLead { color: #D97706; }
+.amountHeroDanger .amountLead { color: #DC2626; }
 .amountValue {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 26px;
@@ -248,8 +248,8 @@
   letter-spacing: -0.5px;
   line-height: 1.1;
 }
-.amountHeroDanger .amountValue { color: #FF6B6B; }
-.amountHeroOver .amountValue { color: #FFB83E; }
+.amountHeroDanger .amountValue { color: #DC2626; }
+.amountHeroOver .amountValue { color: #D97706; }
 .amountSub {
   font-size: 13px;
   color: var(--text);
@@ -281,8 +281,8 @@
   font-size: 11px;
   font-weight: 700;
   padding: 2px 6px;
-  background: rgba(62, 255, 155, 0.15);
-  color: #3EFF9B;
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
   border-radius: 4px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -292,8 +292,8 @@
   font-size: 11px;
   font-weight: 700;
   padding: 2px 6px;
-  background: rgba(255, 107, 107, 0.15);
-  color: #FF6B6B;
+  background: rgba(220, 38, 38, 0.15);
+  color: #DC2626;
   border-radius: 4px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -333,7 +333,7 @@
 }
 .keyBadge {
   background: var(--accent-dim);
-  border: 1px solid rgba(200,255,62,0.4);
+  border: 1px solid rgba(14,165,233,0.4);
   color: var(--accent);
   padding: 5px 11px;
   border-radius: 99px;
@@ -352,8 +352,8 @@
 
 /* warning */
 .warnBox {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 12px;
@@ -374,7 +374,7 @@
   margin-top: 8px;
 }
 .dangerBox strong {
-  color: #FF6B6B;
+  color: #DC2626;
   font-weight: 700;
 }
 
@@ -430,9 +430,9 @@
   border-radius: 99px;
   transition: width 0.4s ease;
 }
-.progressFillGreen { background: linear-gradient(90deg, #3EFF9B, #3EC8FF); }
+.progressFillGreen { background: linear-gradient(90deg, #059669, #0891B2); }
 .progressFillAccent { background: linear-gradient(90deg, var(--accent), #FFC83E); }
-.progressFillOrange { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
+.progressFillOrange { background: linear-gradient(90deg, #EA580C, #DC2626); }
 .progressPct {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
@@ -454,19 +454,19 @@
 
 /* processing warning card */
 .procWarn {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.procWarn strong { color: #FF8C3E; }
+.procWarn strong { color: #EA580C; }
 
 .disclaimer {
-  background: rgba(200,255,62,0.04);
-  border: 1px solid rgba(200,255,62,0.15);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.15);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12px;
@@ -555,9 +555,9 @@
   .allergyChip:hover { border-color: var(--accent); color: var(--text); }
 }
 .allergyChipActive {
-  background: rgba(255, 107, 107, 0.12);
-  border-color: rgba(255, 107, 107, 0.5);
-  color: #FF6B6B;
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.5);
+  color: #DC2626;
 }
 .allergyHint {
   margin-top: 8px;
@@ -579,11 +579,11 @@
   transition: border-color 0.15s;
   min-width: 0;
 }@media (hover: hover) {
-  .nutCard:hover { border-color: rgba(200, 255, 62, 0.3); }
+  .nutCard:hover { border-color: rgba(14, 165, 233, 0.3); }
 }
 .nutCardActive { border-color: var(--accent); background: var(--bg2); }
-.nutCardDanger { border-color: rgba(255, 107, 107, 0.4); }
-.nutCardDanger.nutCardActive { border-color: #FF6B6B; background: rgba(255, 107, 107, 0.08); }
+.nutCardDanger { border-color: rgba(220, 38, 38, 0.4); }
+.nutCardDanger.nutCardActive { border-color: #DC2626; background: rgba(220, 38, 38, 0.08); }
 
 .nutToggle {
   display: flex;
@@ -606,7 +606,7 @@
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(15,23,42,0.08);
 }
 .nutHeadRow {
   display: flex;
@@ -621,10 +621,10 @@
 /* 권장량 표시 — 항상 보이게 */
 .nutDailyRec {
   font-size: 10.5px;
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
-  background: rgba(62, 255, 155, 0.10);
+  background: rgba(16, 185, 129, 0.10);
   padding: 2px 6px;
   border-radius: 4px;
   margin-top: 2px;
@@ -632,16 +632,16 @@
   align-self: flex-start;
 }
 .nutDailyRecDanger {
-  color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.10);
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.10);
 }
 
 /* 권장량 초과 즉시 경고 */
 .nutOverWarn {
   margin-top: 4px;
   padding: 4px 8px;
-  background: rgba(255, 184, 62, 0.12);
-  color: #FFB83E;
+  background: rgba(217, 119, 6, 0.12);
+  color: #D97706;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
@@ -689,9 +689,9 @@
   border-radius: 10px;
   border: 1px solid;
 }
-.seleniumOk { background: rgba(62, 255, 155, 0.06); border-color: rgba(62, 255, 155, 0.3); }
-.seleniumWarn { background: rgba(255, 184, 62, 0.08); border-color: rgba(255, 184, 62, 0.4); }
-.seleniumDanger { background: rgba(255, 107, 107, 0.08); border-color: rgba(255, 107, 107, 0.5); }
+.seleniumOk { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.3); }
+.seleniumWarn { background: rgba(217, 119, 6, 0.08); border-color: rgba(217, 119, 6, 0.4); }
+.seleniumDanger { background: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.5); }
 
 .seleniumHead {
   display: flex;
@@ -717,7 +717,7 @@
 }
 .seleniumBarFill {
   height: 100%;
-  background: linear-gradient(to right, #3EFF9B 0%, #FFB83E 50%, #FF6B6B 100%);
+  background: linear-gradient(to right, #059669 0%, #D97706 50%, #DC2626 100%);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -736,7 +736,7 @@
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(15,23,42,0.08);
   margin-right: 4px;
 }
 
@@ -761,7 +761,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 4px;
 }

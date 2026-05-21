@@ -81,20 +81,20 @@ export default function ExposurePage() {
       {/* 1.5 잠금 모델 — 신규 섹션 */}
       <h2 style={sectionTitle}>🔒 잠금 모드 3가지 — 학습 → 응용 → 제약 시뮬</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: 14 }}>
-        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #3EFFD0', borderRadius: 10, padding: '14px 16px' }}>
-          <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, margin: '0 0 6px' }}>🆓 0개 잠금 — 자유 모드</p>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>🆓 0개 잠금 — 자유 모드</p>
           <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             각 슬라이더가 EV를 직접 변경. 노출 3요소를 처음 배울 때, 또는 효과(심도·흔들림·노이즈)를 한 변수씩 비교해볼 때.
           </p>
         </div>
-        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #FFB83E', borderRadius: 10, padding: '14px 16px' }}>
-          <p style={{ fontSize: 13, color: '#FFB83E', fontWeight: 700, margin: '0 0 6px' }}>🔁 1개 잠금 — 등가 노출 모드</p>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #D97706', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>🔁 1개 잠금 — 등가 노출 모드</p>
           <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             잠근 축 고정 + 나머지 두 축이 서로 보정. 「심도 유지하면서 셔터·ISO만 바꿔보고 싶을 때」 가장 유용. Av/Tv 모드 시뮬에 가까움.
           </p>
         </div>
-        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #FF3E8C', borderRadius: 10, padding: '14px 16px' }}>
-          <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 6px' }}>🎯 2개 잠금 — 1축 자유</p>
+        <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
+          <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>🎯 2개 잠금 — 1축 자유</p>
           <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             두 축 고정 + 남은 한 축만 움직임 → EV가 변함. 「조리개 f/8 + ISO 100 고정인 풍경 촬영에서 셔터만 조정」처럼 실전 제약 시뮬.
           </p>
@@ -109,20 +109,20 @@ export default function ExposurePage() {
           한 축의 변화는 <strong>stop</strong>(2배 광량 단위)으로 표현되며, 같은 stop만큼 다른 축에서 빼면 노출이 유지됩니다.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EFFD0', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, margin: '0 0 4px' }}>🌀 조리개 (Aperture)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 4px' }}>🌀 조리개 (Aperture)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               렌즈 구멍 크기. f/1.4 = 큼(밝음·얕은 심도) / f/22 = 작음(어두움·깊은 심도). 풀스톱 = 1.4 → 2 → 2.8 → 4 → 5.6 → 8 → 11 → 16 → 22.
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FFB83E', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FFB83E', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 셔터스피드 (Shutter)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 셔터스피드 (Shutter)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               빛 받는 시간. 30s = 길음(밝음·흐림 위험) / 1/8000 = 짧음(어두움·정지). 1 stop = 2배. 30 → 15 → 8 → 4 → 2 → 1 → 1/2 …
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FF3E8C', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 4px' }}>📊 ISO (감도)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 4px' }}>📊 ISO (감도)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               센서의 빛 증폭. ISO 100 = 깨끗 / ISO 51200 = 어두운 곳에서 촬영 가능하지만 노이즈. 1 stop = 2배. 100 → 200 → 400 → 800 …
             </p>

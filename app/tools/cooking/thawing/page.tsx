@@ -27,12 +27,12 @@ export default function ThawingPage() {
       </p>
 
       {/* 상단 면책 */}
-      <div style={{ background: 'rgba(255,107,107,0.07)', border: '1px solid rgba(255,107,107,0.35)', borderRadius: '14px', padding: '16px 20px', marginBottom: '32px' }}>
-        <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF6B6B', marginBottom: '8px' }}>⚠️ 식품 안전 안내</p>
+      <div style={{ background: 'rgba(220,38,38,0.07)', border: '1px solid rgba(220,38,38,0.35)', borderRadius: '14px', padding: '16px 20px', marginBottom: '32px' }}>
+        <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>⚠️ 식품 안전 안내</p>
         <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
           본 계산기는 <strong style={{ color: 'var(--text)' }}>일반적인 참고용 수치</strong>를 제공합니다.
           실제 해동 시간은 냉동고 온도, 식품 포장 상태, 냉장고 성능에 따라 다를 수 있습니다.
-          식품 안전을 위해 항상 내부 온도를 확인하고 <strong style={{ color: '#FF6B6B' }}>의심스러운 식품은 폐기</strong>하세요.
+          식품 안전을 위해 항상 내부 온도를 확인하고 <strong style={{ color: '#DC2626' }}>의심스러운 식품은 폐기</strong>하세요.
           (참고: 식품의약품안전처 식품 안전 가이드라인)
         </p>
       </div>
@@ -58,10 +58,10 @@ export default function ThawingPage() {
               </thead>
               <tbody>
                 {[
-                  ['🧊 냉장 해동',   '느림 (8~24h)',  '★★★★★', '모든 식품',    '1~2일 내 조리',   '#3EC8FF'],
-                  ['💧 흐르는 물',   '빠름 (1~3h)',   '★★★★',  '생선·해산물',  '2시간 이내 · 밀봉', '#3EC8FF'],
-                  ['🌡️ 실온 해동',   '보통 (2~6h)',   '★★',    '비권장',       '2시간 초과 금지', '#FF8C3E'],
-                  ['⚡ 전자레인지',  '매우빠름 (5~30분)', '★★★', '얇은 육류',   '즉시 조리 필수',  '#C8FF3E'],
+                  ['🧊 냉장 해동',   '느림 (8~24h)',  '★★★★★', '모든 식품',    '1~2일 내 조리',   '#0891B2'],
+                  ['💧 흐르는 물',   '빠름 (1~3h)',   '★★★★',  '생선·해산물',  '2시간 이내 · 밀봉', '#0891B2'],
+                  ['🌡️ 실온 해동',   '보통 (2~6h)',   '★★',    '비권장',       '2시간 초과 금지', '#EA580C'],
+                  ['⚡ 전자레인지',  '매우빠름 (5~30분)', '★★★', '얇은 육류',   '즉시 조리 필수',  '#0EA5E9'],
                 ].map(([m, sp, saf, food, note, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{m}</td>
@@ -103,8 +103,8 @@ export default function ThawingPage() {
                 ].map(([food, best, max, tip], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{food}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{best}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{max}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{best}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{max}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{tip}</td>
                   </tr>
                 ))}
@@ -119,17 +119,17 @@ export default function ThawingPage() {
             ⚠️ 위험 온도대와 2시간 규칙
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            <strong style={{ color: '#FF6B6B' }}>4°C ~ 60°C는 세균이 가장 빠르게 증식하는 위험 온도대</strong>입니다.
+            <strong style={{ color: '#DC2626' }}>4°C ~ 60°C는 세균이 가장 빠르게 증식하는 위험 온도대</strong>입니다.
             식품이 이 구간에 <strong style={{ color: 'var(--text)' }}>2시간 이상 노출</strong>되면 살모넬라·대장균·리스테리아 등 식중독균이 급증해 폐기하는 것이 안전합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px' }}>
             {[
               { range: '−24°C 이하', label: '급속 냉동', color: '#5AA9E8', desc: '조직 손상 최소' },
-              { range: '−18°C 이하', label: '냉동 안전', color: '#7DC4FF', desc: '장기 보관 가능' },
-              { range: '0~4°C',     label: '냉장 안전', color: '#3EC8FF', desc: '세균 증식 억제' },
-              { range: '4~60°C',    label: '⚠ 위험 온도대', color: '#FF6B6B', desc: '세균 급증' },
-              { range: '60~74°C',   label: '조리 구간', color: '#FF8C3E', desc: '가열 살균' },
-              { range: '74°C 이상', label: '조리 완료', color: '#FFD700', desc: '중심부 가열 완료' },
+              { range: '−18°C 이하', label: '냉동 안전', color: '#0284C7', desc: '장기 보관 가능' },
+              { range: '0~4°C',     label: '냉장 안전', color: '#0891B2', desc: '세균 증식 억제' },
+              { range: '4~60°C',    label: '⚠ 위험 온도대', color: '#DC2626', desc: '세균 급증' },
+              { range: '60~74°C',   label: '조리 구간', color: '#EA580C', desc: '가열 살균' },
+              { range: '74°C 이상', label: '조리 완료', color: '#CA8A04', desc: '중심부 가열 완료' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}30`, borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 800, color: item.color, marginBottom: '4px' }}>{item.range}</p>
@@ -149,17 +149,17 @@ export default function ThawingPage() {
             {[
               {
                 title: '시나리오 1 — 오늘 저녁 삼겹살 파티 (3인분, 600g)',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 body: '아침 8시에 냉장고로 옮기면 저녁 7시쯤 완전 해동. 급하면 밀봉 후 찬물 흐르는 물 해동으로 1~2시간 소요. 해동 후 키친타올로 물기 제거해 구우세요.',
               },
               {
                 title: '시나리오 2 — 급하게 닭볶음탕 (닭 1마리, 1kg)',
-                color: '#C8FF3E',
+                color: '#0EA5E9',
                 body: '지퍼백에 밀봉 후 찬물 흐르는 물에 담가 2~3시간 해동. 급하면 전자레인지 해동 모드 후 즉시 조리. 도마·칼은 사용 후 뜨거운 물과 세제로 즉시 세척.',
               },
               {
                 title: '시나리오 3 — 명절 제수용 생선 (갈치 2마리, 두께 3cm)',
-                color: '#FF8C3E',
+                color: '#EA580C',
                 body: '전날 밤 냉장실로 이동하면 아침까지 8~12시간에 걸쳐 완전 해동. 해동 후 키친타올로 물기 제거하고 바로 조리. 다시 냉동하지 마세요.',
               },
             ].map((sc, i) => (
@@ -172,12 +172,12 @@ export default function ThawingPage() {
         </div>
 
         {/* ── 5. 재냉동 안내 ── */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '16px', fontWeight: 700, color: '#FF8C3E', marginBottom: '10px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '14px', padding: '20px 22px' }}>
+          <p style={{ fontSize: '16px', fontWeight: 700, color: '#EA580C', marginBottom: '10px' }}>
             🔄 해동 후 재냉동 안내
           </p>
           <ul style={{ paddingLeft: '18px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            <li><strong style={{ color: 'var(--text)' }}>원칙</strong>: 해동한 생 식품은 <strong style={{ color: '#FF6B6B' }}>재냉동 금지</strong></li>
+            <li><strong style={{ color: 'var(--text)' }}>원칙</strong>: 해동한 생 식품은 <strong style={{ color: '#DC2626' }}>재냉동 금지</strong></li>
             <li><strong style={{ color: 'var(--text)' }}>예외</strong>: 완전히 조리한 후에는 재냉동 가능 (단, 24시간 이내)</li>
             <li><strong style={{ color: 'var(--text)' }}>이유</strong>: 해동 과정에서 증식한 세균이 재냉동 시 그대로 보존됨</li>
             <li><strong style={{ color: 'var(--text)' }}>권장</strong>: &ldquo;해동 = 조리 예정&rdquo;으로 생각하고 <strong style={{ color: 'var(--accent)' }}>소분 냉동</strong> 습관화</li>
@@ -197,15 +197,15 @@ export default function ThawingPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>출력</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontWeight: 700 }}>1kg 고기 해동</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>1kg 고기 해동</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
                 </tr>
               </thead>
               <tbody>
                 <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>700W (소형·구식)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 27분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 1.5배</td></tr>
-                <tr style={{ background: 'rgba(62,200,255,0.06)' }}>
-                  <td style={{ padding: '10px 12px', color: '#3EC8FF', fontWeight: 700 }}>900W (한국 표준) ⭐</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 18분</td>
+                <tr style={{ background: 'rgba(8,145,178,0.06)' }}>
+                  <td style={{ padding: '10px 12px', color: '#0891B2', fontWeight: 700 }}>900W (한국 표준) ⭐</td>
+                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 18분</td>
                   <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>일반 가정용 평균</td>
                 </tr>
                 <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,100W (대형)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 15분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.85배</td></tr>
@@ -281,7 +281,7 @@ export default function ThawingPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>식품</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>무게·두께</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EC8FF', fontWeight: 700 }}>권장 방법</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>권장 방법</th>
                 </tr>
               </thead>
               <tbody>
@@ -329,8 +329,8 @@ export default function ThawingPage() {
         </div>
 
         {/* ── 11. 면책 강화 + 참고 출처 ── */}
-        <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF6B6B', marginBottom: 10 }}>⚖️ 면책 강화</p>
+        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 면책 강화</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 해동 시간 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다. 식품 안전 진단·판정 도구가 아닙니다.
           </p>
@@ -343,9 +343,9 @@ export default function ThawingPage() {
           </ul>
           <p style={{ fontSize: 12.5, color: 'var(--text)', fontWeight: 600, marginBottom: 6 }}>식품 안전 도움:</p>
           <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
-            <li>식약처 식품안전정보: <strong style={{ color: '#FF6B6B' }}>1399</strong></li>
-            <li>식품안전나라: <strong style={{ color: '#FF6B6B' }}>foodsafetykorea.go.kr</strong></li>
-            <li>식중독 의심 시 응급: <strong style={{ color: '#FF6B6B' }}>119</strong></li>
+            <li>식약처 식품안전정보: <strong style={{ color: '#DC2626' }}>1399</strong></li>
+            <li>식품안전나라: <strong style={{ color: '#DC2626' }}>foodsafetykorea.go.kr</strong></li>
+            <li>식중독 의심 시 응급: <strong style={{ color: '#DC2626' }}>119</strong></li>
             <li>USDA FSIS (영문): fsis.usda.gov</li>
           </ul>
         </div>

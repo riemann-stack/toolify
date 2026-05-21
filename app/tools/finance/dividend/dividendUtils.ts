@@ -147,7 +147,7 @@ export function reverseCalcMonthlyContribution(input: ReverseInput): ReverseResu
       totalGrowth: simulate(0) - input.currentCapital,
       feasibility: 'easy',
       feasibilityLabel: '🟢 추가 적립 불필요',
-      feasibilityColor: '#3EFF9B',
+      feasibilityColor: '#059669',
       feasibilityNote: '현재 자산만으로 목표 도달 가능',
     }
   }
@@ -172,16 +172,16 @@ export function reverseCalcMonthlyContribution(input: ReverseInput): ReverseResu
   let feasibilityNote: string
 
   if (requiredMonthly < 300_000) {
-    feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'; feasibilityColor = '#3EFF9B'
+    feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'; feasibilityColor = '#059669'
     feasibilityNote = '월 30만 미만 — 일반 직장인 충분히 가능'
   } else if (requiredMonthly < 800_000) {
-    feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'; feasibilityColor = '#3EC8FF'
+    feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'; feasibilityColor = '#0891B2'
     feasibilityNote = '월 30~80만 — 안정적 직장인에게 적합'
   } else if (requiredMonthly < 2_000_000) {
-    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = '#FFD700'
+    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = '#CA8A04'
     feasibilityNote = '월 80~200만 — 부담 큼 · 기간 늘리기 검토'
   } else {
-    feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'; feasibilityColor = '#FF6B6B'
+    feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'; feasibilityColor = '#DC2626'
     feasibilityNote = '월 200만+ — 일반 직장인 매우 부담 · 기간 ↑ 또는 목표 ↓ 권장'
   }
 
@@ -221,13 +221,13 @@ export function evaluateComprehensiveTax(
 
   let level: ComprehensiveResult['level'], levelLabel: string, levelColor: string
   if (pct < 50) {
-    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#3EFF9B'
+    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
   } else if (pct < 80) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#FFD700'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#CA8A04'
   } else if (pct < 100) {
-    level = 'near'; levelLabel = '🟠 한도 임박'; levelColor = '#FF8C3E'
+    level = 'near'; levelLabel = '🟠 한도 임박'; levelColor = '#EA580C'
   } else {
-    level = 'over'; levelLabel = '🔴 종합과세 진입'; levelColor = '#FF6B6B'
+    level = 'over'; levelLabel = '🔴 종합과세 진입'; levelColor = '#DC2626'
   }
 
   const bracket = PROGRESSIVE_BRACKETS.find(b => total >= b.min && total < b.max)

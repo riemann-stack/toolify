@@ -3,8 +3,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
@@ -12,11 +12,11 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -24,11 +24,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -36,7 +36,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 /* ─── 탭 (5개) ─── */
 .tabs {
@@ -64,10 +64,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveQuote     { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveNet       { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveInvoice   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveCompare   { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveQuote     { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveNet       { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveInvoice   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveCompare   { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -168,7 +168,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { border-color: var(--border-hover); }
 }
-.modeBtnActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.4); }
+.modeBtnActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); }
 .modeBtnLabel { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .modeBtnActive .modeBtnLabel { color: var(--accent); }
 .modeBtnDesc { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
@@ -214,10 +214,10 @@
   border-width: 1px;
   border-style: solid;
 }
-.heroAccent { background: var(--bg2); border-color: rgba(200,255,62,0.30); }
-.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
-.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
-.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
+.heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
+.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
+.heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
 .heroPurple { background: rgba(155,89,182,0.04); border-color: rgba(155,89,182,0.30); }
 
 .heroLabel {
@@ -237,10 +237,10 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumAccent { color: var(--accent); }
-.heroNumGold   { color: #FFD700; }
-.heroNumCyan   { color: #3EC8FF; }
-.heroNumOrange { color: #FF8C3E; }
-.heroNumPurple { color: #C485E0; }
+.heroNumGold   { color: #CA8A04; }
+.heroNumCyan   { color: #0891B2; }
+.heroNumOrange { color: #EA580C; }
+.heroNumPurple { color: #9333EA; }
 .heroSub  { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
 
@@ -248,7 +248,7 @@
   display: inline-block;
   margin-top: 12px;
   background: var(--accent-dim);
-  border: 1px solid rgba(200,255,62,0.30);
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 999px;
   padding: 5px 14px;
   font-size: 12.5px;
@@ -264,19 +264,19 @@
 .resultItem { display: flex; flex-direction: column; gap: 6px; padding: 4px 4px; }
 .resultLabel { font-size: 11.5px; color: var(--muted); }
 .resultValue { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
-.vatValue { color: #FF8C3E; }
+.vatValue { color: #EA580C; }
 .totalValue { color: var(--accent); font-size: 28px; }
 
 .formulaBox {
   background: var(--bg2);
-  border: 1px solid rgba(62,200,255,0.25);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 12px;
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-.formulaTitle { font-size: 12px; font-weight: 600; color: #3EC8FF; margin-bottom: 4px; }
+.formulaTitle { font-size: 12px; font-weight: 600; color: #0891B2; margin-bottom: 4px; }
 .formulaLine { font-family: monospace; font-size: 13px; color: var(--muted); line-height: 1.7; }
 .formulaLine strong { color: var(--text); }
 
@@ -324,7 +324,7 @@
   font-size: 13.5px;
 }
 .quoteTable tbody tr.quoteTotalRow td:first-child { color: var(--accent); }
-.quoteTable .vatCol { color: #FF8C3E; }
+.quoteTable .vatCol { color: #EA580C; }
 .quoteTable .totalCol { color: var(--accent); font-weight: 800; }
 
 /* 견적 품목 입력 행 */
@@ -344,7 +344,7 @@
   color: var(--muted);
   font-size: 16px;
 }@media (hover: hover) {
-  .quoteItemRowDelete:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .quoteItemRowDelete:hover { color: #DC2626; border-color: #DC2626; }
 }
 .quoteItemTaxBtn {
   background: var(--bg3);
@@ -360,8 +360,8 @@
 }@media (hover: hover) {
   .quoteItemTaxBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quoteItemTaxBtnTaxable { background: rgba(200,255,62,0.10); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.quoteItemTaxBtnExempt  { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: rgba(62,200,255,0.4); font-weight: 700; }
+.quoteItemTaxBtnTaxable { background: rgba(14,165,233,0.18); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.quoteItemTaxBtnExempt  { background: rgba(8,145,178,0.18); color: #0891B2; border-color: rgba(8,145,178,0.4); font-weight: 700; }
 
 @media (max-width: 720px) {
   .quoteItemRow {
@@ -416,12 +416,12 @@
   position: relative;
 }
 .compareCardWinner {
-  border-color: rgba(200,255,62,0.40);
-  background: rgba(200,255,62,0.04);
+  border-color: rgba(14,165,233,0.40);
+  background: rgba(14,165,233,0.14);
 }
 .compareCardLoser {
-  border-color: rgba(255,107,107,0.30);
-  background: rgba(255,107,107,0.03);
+  border-color: rgba(220,38,38,0.30);
+  background: rgba(220,38,38,0.14);
 }
 .winnerBadge {
   position: absolute;
@@ -484,8 +484,8 @@
   font-size: 14px;
   color: var(--muted);
 }
-.stepSignPlus  { color: #3EC8FF; }
-.stepSignMinus { color: #FF6B6B; }
+.stepSignPlus  { color: #0891B2; }
+.stepSignMinus { color: #DC2626; }
 .stepSignEq    { color: var(--accent); }
 .stepLabel { color: var(--text); }
 .stepValue {
@@ -615,7 +615,7 @@
   font-variant-numeric: tabular-nums;
 }
 .invoiceTotalValueAccent { color: var(--accent); }
-.invoiceTotalValueOrange { color: #FF8C3E; }
+.invoiceTotalValueOrange { color: #EA580C; }
 @media (max-width: 540px) {
   .invoiceTotalGrid { grid-template-columns: 1fr; }
   .invoiceHeader { grid-template-columns: 1fr; }
@@ -636,7 +636,7 @@
   position: relative;
 }
 .gsCardActive  { border-color: rgba(155,89,182,0.40); background: rgba(155,89,182,0.04); }
-.gsCardWinner  { border-color: rgba(200,255,62,0.40); background: rgba(200,255,62,0.04); }
+.gsCardWinner  { border-color: rgba(14,165,233,0.40); background: rgba(14,165,233,0.14); }
 .gsCardDisabled { opacity: 0.55; }
 
 .guideTable { display: flex; flex-direction: column; gap: 4px; }

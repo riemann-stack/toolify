@@ -240,10 +240,10 @@ export default function ServingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             {[
-              { age: '만 3~5세',   pct: '30~40%', c: '#3EC8FF' },
-              { age: '만 6~9세',   pct: '50~60%', c: '#3EFF9B' },
-              { age: '만 10~13세', pct: '70~80%', c: '#C8FF3E' },
-              { age: '만 14세+',   pct: '거의 성인', c: '#FFB83E' },
+              { age: '만 3~5세',   pct: '30~40%', c: '#0891B2' },
+              { age: '만 6~9세',   pct: '50~60%', c: '#059669' },
+              { age: '만 10~13세', pct: '70~80%', c: '#0EA5E9' },
+              { age: '만 14세+',   pct: '거의 성인', c: '#D97706' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{g.age}</p>
@@ -251,7 +251,7 @@ export default function ServingPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(200,255,62,0.04)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>💡 계산 예시</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>
               성인 2명 + 초등생(10세) 1명 = 2 + 0.75 = <strong>2.75인분</strong>으로 계산
@@ -266,11 +266,11 @@ export default function ServingPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { n: '🔥 구이',             c: '#FFB83E', d: '고기가 메인 — 1인당 200~250g 필요' },
-              { n: '🍳 볶음 (제육·불고기)', c: '#FF8C3E', d: '양념·채소가 섞여 포만감 증가 — 1인당 150~180g' },
-              { n: '🍲 국·찌개',          c: '#3EC8FF', d: '국물이 포만감을 채움 — 1인당 100~130g' },
+              { n: '🔥 구이',             c: '#D97706', d: '고기가 메인 — 1인당 200~250g 필요' },
+              { n: '🍳 볶음 (제육·불고기)', c: '#EA580C', d: '양념·채소가 섞여 포만감 증가 — 1인당 150~180g' },
+              { n: '🍲 국·찌개',          c: '#0891B2', d: '국물이 포만감을 채움 — 1인당 100~130g' },
               { n: '♨️ 전골·샤브샤브',     c: '#B885DA', d: '채소·두부·면사리와 함께 — 1인당 120~150g' },
-              { n: '🥣 육수 베이스 (설렁탕)', c: '#3EFF9B', d: '뼈 포함으로 무게 증가 — 1인당 300~400g (뼈 포함)' },
+              { n: '🥣 육수 베이스 (설렁탕)', c: '#059669', d: '뼈 포함으로 무게 증가 — 1인당 300~400g (뼈 포함)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderLeft: `3px solid ${s.c}`, borderRadius: '10px', padding: '12px 16px' }}>
                 <p style={{ fontSize: '13px', color: s.c, fontWeight: 700, marginBottom: '4px' }}>{s.n}</p>
@@ -336,9 +336,9 @@ export default function ServingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { name: '🥬 채식', color: '#3EFF9B', desc: '고기·생선 자동 제외. 두부·계란·우유·치즈는 포함.' },
-              { name: '🌱 비건', color: '#C8FF3E', desc: '모든 동물성 제외 (고기·생선·계란·우유 X). 단백질은 콩·두부·렌틸로 보충.' },
-              { name: '🌾 글루텐프리', color: '#FFB83E', desc: '밀가루 면류 자동 제외. 쌀국수면·당면·메밀국수는 OK.' },
+              { name: '🥬 채식', color: '#059669', desc: '고기·생선 자동 제외. 두부·계란·우유·치즈는 포함.' },
+              { name: '🌱 비건', color: '#0EA5E9', desc: '모든 동물성 제외 (고기·생선·계란·우유 X). 단백질은 콩·두부·렌틸로 보충.' },
+              { name: '🌾 글루텐프리', color: '#D97706', desc: '밀가루 면류 자동 제외. 쌀국수면·당면·메밀국수는 OK.' },
             ].map((d, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${d.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: d.color, fontWeight: 700, marginBottom: '6px' }}>{d.name}</p>

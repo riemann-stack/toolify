@@ -147,7 +147,7 @@ export const INJURIES = [
       '회내근 과부하로 인한 전완 통증',
       '회전을 막으려 손목·전완 근육 과긴장',
     ],
-    color: '#FF6B6B',
+    color: '#DC2626',
   },
   {
     cause: '그립이 너무 큼',
@@ -157,7 +157,7 @@ export const INJURIES = [
       '컨트롤·스핀 감소 (스윙 일관성 ↓)',
       '엄지 관절 부담 (TFCC 자극)',
     ],
-    color: '#FF8C3E',
+    color: '#EA580C',
   },
   {
     cause: '골프 그립이 너무 가늘음',
@@ -167,7 +167,7 @@ export const INJURIES = [
       '훅(좌측 빠짐) 경향 ↑',
       '장기적으로 골프 엘보(내측 상과염)',
     ],
-    color: '#FF6B6B',
+    color: '#DC2626',
   },
   {
     cause: '골프 그립이 너무 굵음',
@@ -177,6 +177,6 @@ export const INJURIES = [
       '클럽 페이스 컨트롤 저하',
       '비거리 손실 (스피드 ↓)',
     ],
-    color: '#FF8C3E',
+    color: '#EA580C',
   },
 ]

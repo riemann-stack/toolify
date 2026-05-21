@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -111,17 +111,17 @@
   margin-top: 4px;
   font-weight: 600;
 }
-.prodCurtain { border-color: rgba(200,255,62,0.40); }
-.prodBlind   { border-color: rgba(62,200,255,0.40); }
-.prodRoll    { border-color: rgba(255,215,0,0.40); }
+.prodCurtain { border-color: rgba(14,165,233,0.40); }
+.prodBlind   { border-color: rgba(8,145,178,0.40); }
+.prodRoll    { border-color: rgba(202,138,4,0.40); }
 .prodRoman   { border-color: rgba(155,89,182,0.40); }
-.prodVert    { border-color: rgba(255,107,107,0.40); }
+.prodVert    { border-color: rgba(220,38,38,0.40); }
 
 .prodCurtain.prodActive { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.prodBlind.prodActive   { background: rgba(62,200,255,0.10);  color: #3EC8FF;       border-color: #3EC8FF;     font-weight: 700; }
-.prodRoll.prodActive    { background: rgba(255,215,0,0.10);   color: #FFD700;       border-color: #FFD700;     font-weight: 700; }
-.prodRoman.prodActive   { background: rgba(155,89,182,0.12);  color: #C485E0;       border-color: #9B59B6;     font-weight: 700; }
-.prodVert.prodActive    { background: rgba(255,107,107,0.10); color: #FF6B6B;       border-color: #FF6B6B;     font-weight: 700; }
+.prodBlind.prodActive   { background: rgba(8,145,178,0.18);  color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
+.prodRoll.prodActive    { background: rgba(202,138,4,0.18);   color: #CA8A04;       border-color: #CA8A04;     font-weight: 700; }
+.prodRoman.prodActive   { background: rgba(155,89,182,0.12);  color: #9333EA;       border-color: #9B59B6;     font-weight: 700; }
+.prodVert.prodActive    { background: rgba(220,38,38,0.18); color: #DC2626;       border-color: #DC2626;     font-weight: 700; }
 
 /* ── 입력 ── */
 .dimRow {
@@ -235,15 +235,15 @@
   .installBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .installCeilingRecessed { border-color: rgba(155,89,182,0.40); }
-.installCeilingMount    { border-color: rgba(255,215,0,0.40); }
-.installWallMount       { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.installInside          { border-color: rgba(62,200,255,0.40); }
-.installOutside         { border-color: rgba(255,140,62,0.40); }
-.installCeilingRecessed.installActive { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
-.installCeilingMount.installActive    { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.installCeilingMount    { border-color: rgba(202,138,4,0.40); }
+.installWallMount       { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.installInside          { border-color: rgba(8,145,178,0.40); }
+.installOutside         { border-color: rgba(234,88,12,0.40); }
+.installCeilingRecessed.installActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.installCeilingMount.installActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 .installWallMount.installActive       { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.installInside.installActive          { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.installOutside.installActive         { background: rgba(255,140,62,0.10); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.installInside.installActive          { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.installOutside.installActive         { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 
 /* ── 길이 옵션 (커튼만) ── */
 .lengthGrid {
@@ -337,7 +337,7 @@
 }@media (hover: hover) {
   .pleatPill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pleatPillStd { background: rgba(200,255,62,0.04); border-color: var(--accent); color: var(--accent); }
+.pleatPillStd { background: rgba(14,165,233,0.14); border-color: var(--accent); color: var(--accent); }
 .pleatPillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 800; }
 
 /* ── 패널 스타일 ── */
@@ -385,7 +385,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(232,151,87,0.40);
+  border: 1px solid rgba(234,88,12,0.40);
   border-radius: 16px;
   padding: 26px 24px;
   text-align: center;
@@ -447,7 +447,7 @@
   background: var(--accent-dim);
   font-weight: 800;
   border-bottom: none;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
 }
 .sizeTable .highlightRow td:first-child { color: var(--accent); }
 .sizeTable .highlightRow td:nth-child(2) { color: var(--accent); font-size: 15px; }
@@ -477,23 +477,23 @@
   line-height: 1.85;
 }
 .installNoteCard.noteCeilingRecessed { border-left: 3px solid #9B59B6; }
-.installNoteCard.noteCeilingMount    { border-left: 3px solid #FFD700; }
+.installNoteCard.noteCeilingMount    { border-left: 3px solid #CA8A04; }
 .installNoteCard.noteWallMount       { border-left: 3px solid var(--accent); }
-.installNoteCard.noteInside          { border-left: 3px solid #3EC8FF; }
-.installNoteCard.noteOutside         { border-left: 3px solid #FF8C3E; }
+.installNoteCard.noteInside          { border-left: 3px solid #0891B2; }
+.installNoteCard.noteOutside         { border-left: 3px solid #EA580C; }
 .installNoteCard strong { color: var(--text); }
 
 /* ── 패널 안내 ── */
 .panelTipCard {
-  background: rgba(232,151,87,0.05);
-  border: 1px solid rgba(232,151,87,0.25);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.25);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.panelTipCard strong { color: #E89757; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.panelTipCard strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 종류별 비교표 (탭 2) ── */
 .compareTable {

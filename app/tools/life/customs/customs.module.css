@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -86,7 +86,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 /* 국가 그리드 */
 .countryRow {
@@ -154,7 +154,7 @@
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(232, 151, 87, 0.10) 0%, rgba(255, 184, 62, 0.06) 100%);
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.10) 0%, rgba(217, 119, 6, 0.06) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
   border-radius: 14px;
   padding: 24px 22px;
@@ -175,8 +175,8 @@
 .heroSub strong { color: var(--text); }
 
 .heroFinal {
-  background: linear-gradient(135deg, rgba(62, 255, 208, 0.08) 0%, rgba(232, 151, 87, 0.06) 100%);
-  border: 1px solid rgba(62, 255, 208, 0.3);
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(232, 151, 87, 0.06) 100%);
+  border: 1px solid rgba(13, 148, 136, 0.3);
   border-radius: 14px;
   padding: 24px 22px;
   text-align: center;
@@ -245,7 +245,7 @@
 }
 .cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
 .cellTotal td {
-  background: rgba(62, 255, 208, 0.06);
+  background: rgba(13, 148, 136, 0.06);
   font-weight: 700;
 }
 
@@ -395,7 +395,7 @@
 }
 .scenarioApply {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 8px 14px;
@@ -405,7 +405,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 4px;
 }@media (hover: hover) {
-  .scenarioApply:hover { background: #FFB83E; }
+  .scenarioApply:hover { background: #D97706; }
 }
 
 /* 크로스링크 */
@@ -429,35 +429,35 @@
 
 /* 안내 */
 .warnCard {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.3);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.3);
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #FFB83E; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 .warnCardStrong {
-  background: rgba(255, 62, 140, 0.08);
-  border: 1px solid rgba(255, 62, 140, 0.4);
-  border-left: 4px solid #FF3E8C;
+  background: rgba(219, 39, 119, 0.08);
+  border: 1px solid rgba(219, 39, 119, 0.4);
+  border-left: 4px solid #DB2777;
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardStrong strong { display: block; color: #FF3E8C; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardStrong strong { display: block; color: #DB2777; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCardStrong p { margin: 0; color: var(--text); line-height: 1.75; }
 
 .warnCardGood {
-  background: rgba(62, 255, 208, 0.08);
-  border: 1px solid rgba(62, 255, 208, 0.4);
-  border-left: 4px solid #3EFFD0;
+  background: rgba(13, 148, 136, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.4);
+  border-left: 4px solid #0D9488;
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardGood strong { display: block; color: #3EFFD0; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardGood strong { display: block; color: #0D9488; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCardGood p { margin: 0; color: var(--text); line-height: 1.75; }
 
 /* 면책 */

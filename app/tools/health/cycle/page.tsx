@@ -93,7 +93,7 @@ export default function CyclePage() {
           </thead>
           <tbody>
             <tr>
-              <td style={cell}><strong style={{ color: '#FF8C8C' }}>🩸 생리기</strong></td>
+              <td style={cell}><strong style={{ color: '#DC2626' }}>🩸 생리기</strong></td>
               <td style={cell}>1~5일</td>
               <td style={cell}>몸 회복 집중 · 컨디션 ↓ · 가벼운 운동·휴식 우선</td>
             </tr>
@@ -103,7 +103,7 @@ export default function CyclePage() {
               <td style={cell}>에너지·집중력 ↑ · 새 운동 루틴 시작에 적합</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#3EFF9B' }}>🥚 배란기</strong></td>
+              <td style={cell}><strong style={{ color: '#059669' }}>🥚 배란기</strong></td>
               <td style={cell}>13~15일</td>
               <td style={cell}>체온 0.3~0.5°C ↑ · 분비물 변화 · 일부 중간통</td>
             </tr>
@@ -158,10 +158,10 @@ export default function CyclePage() {
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { name: '신체 증상', color: '#FFB83E', items: '붓기·체중 일시 ↑·복부 팽만·유방 압통·두통·여드름·피로' },
+          { name: '신체 증상', color: '#D97706', items: '붓기·체중 일시 ↑·복부 팽만·유방 압통·두통·여드름·피로' },
           { name: '정서 증상', color: '#B885DA', items: '기분 변동·짜증·불안·우울·집중력 ↓·식욕 ↑·수면 변화' },
-          { name: '일반 대처', color: '#3EFF9B', items: '카페인·염분 ↓·수분 ↑·규칙 운동·충분한 수면·일정 여유' },
-          { name: '🚨 심한 PMS (PMDD)', color: '#FF6B6B', items: '일상에 심각한 영향 → 산부인과·정신건강의학과 상담 권장' },
+          { name: '일반 대처', color: '#059669', items: '카페인·염분 ↓·수분 ↑·규칙 운동·충분한 수면·일정 여유' },
+          { name: '🚨 심한 PMS (PMDD)', color: '#DC2626', items: '일상에 심각한 영향 → 산부인과·정신건강의학과 상담 권장' },
         ].map((b, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.name}</p>
@@ -175,8 +175,8 @@ export default function CyclePage() {
 
       {/* 5. 산부인과 상담 신호 */}
       <h2 style={sectionTitle}>🏥 산부인과 상담 신호</h2>
-      <div style={{ background: 'rgba(255, 107, 107, 0.06)', border: '1px solid rgba(255, 107, 107, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
-        <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '10px' }}>다음 경우 산부인과 상담 권장</p>
+      <div style={{ background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
+        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '10px' }}>다음 경우 산부인과 상담 권장</p>
         <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
           <li>주기 변동폭 <strong>±8일 이상</strong> 지속 (PCOS·갑상선·스트레스 등)</li>
           <li><strong>부정출혈</strong> (생리 외 출혈, 관계 후 출혈)</li>
@@ -187,7 +187,7 @@ export default function CyclePage() {
           <li>21일 미만 / 45일 초과 주기</li>
         </ul>
         <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '14px', lineHeight: 1.7, marginBottom: 0 }}>
-          📞 <strong>도움 받기</strong>: 보건복지부 여성·아동 상담 <strong style={{ color: '#FFB83E' }}>1577-1366</strong> · 청소년 상담 <strong style={{ color: '#FFB83E' }}>1388</strong> · 응급 <strong style={{ color: '#FFB83E' }}>119</strong>
+          📞 <strong>도움 받기</strong>: 보건복지부 여성·아동 상담 <strong style={{ color: '#D97706' }}>1577-1366</strong> · 청소년 상담 <strong style={{ color: '#D97706' }}>1388</strong> · 응급 <strong style={{ color: '#D97706' }}>119</strong>
         </p>
       </div>
 
@@ -219,7 +219,7 @@ export default function CyclePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q3. 본 도구를 피임으로 써도 되나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>절대 비추천.</strong> 캘린더 기반 피임의 실패율은 <strong>약 24%</strong>(일반 사용 기준)로 매우 높습니다.
+          <strong style={{ color: '#DC2626' }}>절대 비추천.</strong> 캘린더 기반 피임의 실패율은 <strong>약 24%</strong>(일반 사용 기준)로 매우 높습니다.
           배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동 가능. 본 도구는 <strong>참고 정보 제공</strong>만 합니다.
           <br /><br />
           피임 방법은 산부인과 상담 필수 (호르몬·기구·자연 등 다양한 옵션). 보건복지부 여성건강 상담 <strong>1577-1366</strong>.
@@ -246,7 +246,7 @@ export default function CyclePage() {
           <br /><br />
           일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고.
           <br /><br />
-          <strong style={{ color: '#FF6B6B' }}>심한 PMS (PMDD)</strong>: 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지부 1577-1366.
+          <strong style={{ color: '#DC2626' }}>심한 PMS (PMDD)</strong>: 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지부 1577-1366.
         </div>
       </details>
 
@@ -273,7 +273,7 @@ export default function CyclePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q8. 본 도구의 데이터는 어디 저장되나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#3EFF9B' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
+          <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
           <ul style={{ paddingLeft: 18, marginTop: 8 }}>
             <li>✅ youtil 서버 전송 X · 외부 서비스 X</li>
             <li>✅ Google Analytics에 cycle 데이터 X (일반 페이지뷰만)</li>
@@ -315,8 +315,8 @@ export default function CyclePage() {
       {/* 7. 면책 */}
       <h2 style={sectionTitle}>⚠️ 의료 면책</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

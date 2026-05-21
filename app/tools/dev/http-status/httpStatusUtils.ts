@@ -9,10 +9,10 @@ export type DebugCategory = 'all' | 'auth' | 'cors' | 'timeout' | 'rate' | 'serv
    ───────────────────────────────────────────── */
 export const CATEGORY_META: Record<CategoryKey, { color: string; label: string; range: string; desc: string; emoji: string }> = {
   '1xx':           { color: '#888888', label: 'Informational', range: '100–199', desc: '정보성 응답 (드물게 사용)', emoji: 'ℹ️' },
-  '2xx':           { color: '#3EFFD0', label: 'Success',       range: '200–299', desc: '요청 성공',                emoji: '✅' },
-  '3xx':           { color: '#3EC8FF', label: 'Redirect',      range: '300–399', desc: '리다이렉트',              emoji: '↪️' },
-  '4xx':           { color: '#FFB83E', label: 'Client Error',  range: '400–499', desc: '클라이언트 오류',          emoji: '⚠️' },
-  '5xx':           { color: '#FF3E8C', label: 'Server Error',  range: '500–599', desc: '서버 오류',               emoji: '🚨' },
+  '2xx':           { color: '#0D9488', label: 'Success',       range: '200–299', desc: '요청 성공',                emoji: '✅' },
+  '3xx':           { color: '#0891B2', label: 'Redirect',      range: '300–399', desc: '리다이렉트',              emoji: '↪️' },
+  '4xx':           { color: '#D97706', label: 'Client Error',  range: '400–499', desc: '클라이언트 오류',          emoji: '⚠️' },
+  '5xx':           { color: '#DB2777', label: 'Server Error',  range: '500–599', desc: '서버 오류',               emoji: '🚨' },
   nonstandard:     { color: '#9B59B6', label: 'Non-standard',  range: '벤더',     desc: 'Cloudflare·nginx 비표준',  emoji: '🔌' },
 }
 

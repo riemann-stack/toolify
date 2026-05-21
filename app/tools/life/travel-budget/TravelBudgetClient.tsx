@@ -360,7 +360,7 @@ export default function TravelBudgetClient() {
               1인 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perPerson)}</strong>
               {' · '}하루 평균 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perDay)}</strong>
               {' · '}현지 통화 ≈ <strong>{fmtCurrency(totalNative, city.currencyUnit, totalNative > 1000 ? 0 : 2)}</strong>
-              <br />도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? '#FF3E8C' : vsAvgPct < -30 ? '#3EFFD0' : 'var(--text)' }}>
+              <br />도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? '#DB2777' : vsAvgPct < -30 ? '#0D9488' : 'var(--text)' }}>
                 {vsAvgPct > 0 ? '+' : ''}{vsAvgPct.toFixed(0)}%
               </strong>
             </p>
@@ -490,10 +490,10 @@ export default function TravelBudgetClient() {
                 const userW = (d.user / max) * 100
                 const avgW = (d.avg / max) * 100
                 const colorMap = {
-                  low:    '#3EC8FF',
-                  normal: '#3EFFD0',
-                  high:   '#FFB83E',
-                  over:   '#FF3E8C',
+                  low:    '#0891B2',
+                  normal: '#0D9488',
+                  high:   '#D97706',
+                  over:   '#DB2777',
                 }
                 return (
                   <div key={d.id} className={s.diagCard}>
@@ -613,7 +613,7 @@ export default function TravelBudgetClient() {
                         <td>{sc.style.emoji} {sc.style.label}</td>
                         <td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(sc.result.total)}</td>
                         <td className={s.cellMono}>{fmtMan(sc.result.perPerson)}</td>
-                        <td className={s.cellMono} style={{ color: diff > 0 ? '#FF8C3E' : 'var(--muted)' }}>
+                        <td className={s.cellMono} style={{ color: diff > 0 ? '#EA580C' : 'var(--muted)' }}>
                           {diff === 0 ? '기준' : `+${fmtMan(diff)}`}
                         </td>
                       </tr>

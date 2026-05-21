@@ -35,9 +35,9 @@ export default function AreaPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평수 계산 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.20)', borderRadius: 14, padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
-            <p style={{ fontSize: 12, color: '#C485E0', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
+            <p style={{ fontSize: 12, color: '#9333EA', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
-              1 평 = 400/121 ㎡ ≈ <strong style={{ color: '#C485E0' }}>3.305785 ㎡</strong>
+              1 평 = 400/121 ㎡ ≈ <strong style={{ color: '#9333EA' }}>3.305785 ㎡</strong>
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
               평 → ㎡: 평수 × 3.3058 / ㎡ → 평: 면적 ÷ 3.3058
@@ -62,7 +62,7 @@ export default function AreaPage() {
               📌 <strong style={{ color: 'var(--text)' }}>예시 — 전용 84㎡ 아파트</strong><br />
               · 전용면적: 84㎡ ≈ 25.4평 (실제 사용 공간)<br />
               · 주거공용: ≈ 26㎡ ≈ 7.9평 (계단·복도·엘리베이터)<br />
-              · <strong style={{ color: '#C485E0' }}>분양면적(공급면적): ≈ 110㎡ ≈ 33~34평</strong> (광고 표기)<br />
+              · <strong style={{ color: '#9333EA' }}>분양면적(공급면적): ≈ 110㎡ ≈ 33~34평</strong> (광고 표기)<br />
               · 계약면적: ≈ 160㎡ ≈ 48평 (지하주차장 포함, 분양가 산정 기준)
             </p>
           </div>

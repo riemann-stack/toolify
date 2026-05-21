@@ -88,8 +88,8 @@ export default function PipePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: 'A호칭 (한국·일본)', s: 'KS B 1503', d: '15A · 20A · 25A · 50A — mm 베이스 정수', c: 'var(--accent)' },
-            { t: 'B호칭 / 인치 (미국)', s: 'ASME B36.10', d: '1/2" · 3/4" · 1" · 2" — 분수 형태', c: '#3EC8FF' },
-            { t: 'DN (유럽·국제)', s: 'ISO 6708', d: 'DN15 · DN20 · DN25 · DN50 — Diametre Nominal', c: '#FF8C3E' },
+            { t: 'B호칭 / 인치 (미국)', s: 'ASME B36.10', d: '1/2" · 3/4" · 1" · 2" — 분수 형태', c: '#0891B2' },
+            { t: 'DN (유럽·국제)', s: 'ISO 6708', d: 'DN15 · DN20 · DN25 · DN50 — Diametre Nominal', c: '#EA580C' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -122,7 +122,7 @@ export default function PipePage() {
               <tr><td style={{ padding: '4px 0' }}>STS (Su)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>19.05 mm</td></tr>
             </tbody>
           </table>
-          <p style={{ fontSize: 12, color: '#FFB83E', margin: '10px 0 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: '#D97706', margin: '10px 0 0', lineHeight: 1.7 }}>
             → 같은 15A지만 외경이 <strong>15.88 ~ 22mm</strong> (약 6mm 차이).
             이종 재질 연결에는 <strong>이종 어댑터·이종조인</strong>이 필수입니다.
           </p>
@@ -135,13 +135,13 @@ export default function PipePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
             { t: '🔩 강관 백관 (SGP)', d: '아연도금 처리. 부식 강함. 급수·소방·옥내 일반.', c: 'var(--accent)' },
-            { t: '🔩 강관 흑관 (SGP)', d: '도금 없음. 난방·기름·증기·공정. 옥외 노출 비추천.', c: '#FF8C3E' },
-            { t: '🔵 PVC VG1', d: '수도용 두꺼움. 1.0~1.6 MPa. 음용수 가능.', c: '#3EC8FF' },
-            { t: '🔵 PVC VG2', d: '배수용 얇음. 비압력. 통기·우수·하수.', c: '#3EFFD0' },
+            { t: '🔩 강관 흑관 (SGP)', d: '도금 없음. 난방·기름·증기·공정. 옥외 노출 비추천.', c: '#EA580C' },
+            { t: '🔵 PVC VG1', d: '수도용 두꺼움. 1.0~1.6 MPa. 음용수 가능.', c: '#0891B2' },
+            { t: '🔵 PVC VG2', d: '배수용 얇음. 비압력. 통기·우수·하수.', c: '#0D9488' },
             { t: '🔵 PVC HI-VG', d: 'VG1 + 내충격. 한랭지·노출 배관.', c: '#9B59B6' },
-            { t: '🟤 동관 K Type', d: '가장 두꺼움. 의료용 가스·고압.', c: '#FFB83E' },
-            { t: '🟤 동관 L Type', d: '중간. 가정용 가스·급수 표준.', c: '#FF3E8C' },
-            { t: '🟤 동관 M Type', d: '가장 얇음. 저압·일반 냉난방.', c: '#3EFF9B' },
+            { t: '🟤 동관 K Type', d: '가장 두꺼움. 의료용 가스·고압.', c: '#D97706' },
+            { t: '🟤 동관 L Type', d: '중간. 가정용 가스·급수 표준.', c: '#DB2777' },
+            { t: '🟤 동관 M Type', d: '가장 얇음. 저압·일반 냉난방.', c: '#059669' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '10px 14px' }}>
               <p style={{ fontSize: 12, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>

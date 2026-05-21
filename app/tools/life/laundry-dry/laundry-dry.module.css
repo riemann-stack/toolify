@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
@@ -28,7 +28,7 @@
 }@media (hover: hover) {
   .eqCard:hover { border-color: var(--accent); }
 }
-.eqCardActive { background: rgba(200,255,62,0.1); border-color: var(--accent); }
+.eqCardActive { background: rgba(14,165,233,0.1); border-color: var(--accent); }
 .eqIcon { font-size: 22px; line-height: 1; }
 .eqName { font-size: 12px; color: var(--text); font-weight: 600; }
 .eqMeta { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent); }
@@ -37,7 +37,7 @@
 /* 장비 칩 (히어로 안) */
 .eqChip {
   display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(200,255,62,0.1); border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 8px; padding: 4px 10px; font-size: 12px; color: var(--text);
   font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
 }
@@ -74,7 +74,7 @@
   color: var(--text); letter-spacing: -0.5px;
 }
 .note      { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
-.noteWarn  { font-size: 12px; color: #FF8C3E; line-height: 1.6; margin: 10px 0 0; font-weight: 500; }
+.noteWarn  { font-size: 12px; color: #EA580C; line-height: 1.6; margin: 10px 0 0; font-weight: 500; }
 
 /* ── 환경 버튼 3개 ── */
 .envRow {
@@ -91,23 +91,23 @@
 .envName { font-size: 13px; font-weight: 700; line-height: 1; }
 .envSub  { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
 
-.envBtn_indoor  { border-color: rgba(62,200,255,0.35); }@media (hover: hover) {
-  .envBtn_indoor:hover  { background: rgba(62,200,255,0.05); }
+.envBtn_indoor  { border-color: rgba(8,145,178,0.35); }@media (hover: hover) {
+  .envBtn_indoor:hover  { background: rgba(8,145,178,0.14); }
 }
-.envBtn_indoor.envBtnActive { background: rgba(62,200,255,0.12); border-color: #3EC8FF; }
-.envBtn_indoor.envBtnActive .envName { color: #3EC8FF; }
+.envBtn_indoor.envBtnActive { background: rgba(8,145,178,0.18); border-color: #0891B2; }
+.envBtn_indoor.envBtnActive .envName { color: #0891B2; }
 
-.envBtn_balcony { border-color: rgba(200,255,62,0.35); }@media (hover: hover) {
-  .envBtn_balcony:hover { background: rgba(200,255,62,0.05); }
+.envBtn_balcony { border-color: rgba(14,165,233,0.35); }@media (hover: hover) {
+  .envBtn_balcony:hover { background: rgba(14,165,233,0.14); }
 }
-.envBtn_balcony.envBtnActive { background: rgba(200,255,62,0.12); border-color: var(--accent); }
+.envBtn_balcony.envBtnActive { background: rgba(14,165,233,0.18); border-color: var(--accent); }
 .envBtn_balcony.envBtnActive .envName { color: var(--accent); }
 
-.envBtn_outdoor { border-color: rgba(255,215,0,0.4); }@media (hover: hover) {
-  .envBtn_outdoor:hover { background: rgba(255,215,0,0.05); }
+.envBtn_outdoor { border-color: rgba(202,138,4,0.4); }@media (hover: hover) {
+  .envBtn_outdoor:hover { background: rgba(202,138,4,0.14); }
 }
-.envBtn_outdoor.envBtnActive { background: rgba(255,215,0,0.12); border-color: #FFD700; }
-.envBtn_outdoor.envBtnActive .envName { color: #FFD700; }
+.envBtn_outdoor.envBtnActive { background: rgba(202,138,4,0.18); border-color: #CA8A04; }
+.envBtn_outdoor.envBtnActive .envName { color: #CA8A04; }
 
 /* ── 슬라이더 ── */
 .slider {
@@ -116,10 +116,10 @@
   outline: none; cursor: pointer; margin: 4px 0 12px;
 }
 .sliderTemp {
-  background: linear-gradient(90deg, #3EA0FF 0%, #3EC8FF 20%, #3EFF9B 45%, #C8FF3E 65%, #FF8C3E 100%);
+  background: linear-gradient(90deg, #3EA0FF 0%, #0891B2 20%, #059669 45%, #0EA5E9 65%, #EA580C 100%);
 }
 .sliderHumid {
-  background: linear-gradient(90deg, #C8FF3E 0%, #3EFF9B 25%, #FFE33E 55%, #FF8C3E 80%, #FF6B6B 100%);
+  background: linear-gradient(90deg, #0EA5E9 0%, #059669 25%, #FFE33E 55%, #EA580C 80%, #DC2626 100%);
 }
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
@@ -152,7 +152,7 @@
   .pBtn:hover { color: var(--text); border-color: var(--accent); }
 }
 .pBtnActive {
-  background: rgba(200,255,62,0.12) !important;
+  background: rgba(14,165,233,0.18) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
 .pBtnLabel { font-size: 11px; font-weight: 500; line-height: 1; }
@@ -160,12 +160,12 @@
 
 /* 값 색상 */
 .valCold        { color: #3EA0FF !important; }
-.valCool        { color: #3EC8FF !important; }
-.valGood        { color: #3EFF9B !important; }
+.valCool        { color: #0891B2 !important; }
+.valGood        { color: #059669 !important; }
 .valGoodAccent  { color: var(--accent) !important; }
 .valWarn        { color: #FFE33E !important; }
-.valHot         { color: #FF8C3E !important; }
-.valBad         { color: #FF6B6B !important; }
+.valHot         { color: #EA580C !important; }
+.valBad         { color: #DC2626 !important; }
 
 /* ── 세그먼트 (바람·햇빛·소재·두께 등) ── */
 .segRow3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -182,7 +182,7 @@
 }
 .segBtn:disabled { opacity: 0.35; cursor: not-allowed; }
 .segBtnActive {
-  background: var(--accent) !important; color: #0D0D0D !important;
+  background: var(--accent) !important; color: #ffffff !important;
   border-color: var(--accent) !important; font-weight: 700;
 }
 
@@ -201,7 +201,7 @@
   .itemBtn:hover { border-color: var(--accent); }
 }
 .itemBtnActive {
-  background: rgba(200,255,62,0.12) !important;
+  background: rgba(14,165,233,0.18) !important;
   border-color: var(--accent) !important;
 }
 .itemIcon { font-size: 26px; line-height: 1; }
@@ -210,7 +210,7 @@
 .itemCheck {
   position: absolute; top: 4px; right: 6px;
   width: 16px; height: 16px; border-radius: 50%;
-  background: var(--accent); color: #0D0D0D;
+  background: var(--accent); color: #ffffff;
   font-size: 10px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
 }
@@ -228,7 +228,7 @@
   .toggleRow:hover { border-color: var(--accent); }
 }
 .toggleRowOn {
-  background: rgba(200,255,62,0.08); border-color: rgba(200,255,62,0.4);
+  background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.4);
 }
 .toggleIcon { font-size: 20px; line-height: 1; flex-shrink: 0; }
 .toggleBody { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -249,7 +249,7 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.35);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px; padding: 24px 22px;
   display: flex; flex-direction: column; gap: 16px;
   animation: fadeUp 0.25s ease;
@@ -317,12 +317,12 @@
 }
 .timelineSurface {
   position: absolute; top: 0; left: 0; height: 100%;
-  background: linear-gradient(90deg, #3EC8FF, #C8FF3E);
+  background: linear-gradient(90deg, #0891B2, #0EA5E9);
   border-radius: 999px 0 0 999px;
 }
 .timelineFull {
   position: absolute; top: 0; height: 100%;
-  background: linear-gradient(90deg, #C8FF3E, #3EFF9B);
+  background: linear-gradient(90deg, #0EA5E9, #059669);
   border-radius: 0 999px 999px 0;
 }
 .timelineMarker {
@@ -369,10 +369,10 @@
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
   letter-spacing: -0.2px;
 }
-.impactGood { border-color: rgba(62,255,155,0.3); }
-.impactGood .impactVal { color: #3EFF9B; }
-.impactBad  { border-color: rgba(255,140,62,0.3); }
-.impactBad .impactVal { color: #FF8C3E; }
+.impactGood { border-color: rgba(16,185,129,0.3); }
+.impactGood .impactVal { color: #059669; }
+.impactBad  { border-color: rgba(234,88,12,0.3); }
+.impactBad .impactVal { color: #EA580C; }
 .impactNeutral .impactVal { color: var(--muted); }
 
 /* ── 팁 ── */

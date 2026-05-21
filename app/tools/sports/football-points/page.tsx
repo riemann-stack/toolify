@@ -86,7 +86,7 @@ export default function FootballPointsPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.g}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
               </tbody>
@@ -116,8 +116,8 @@ export default function FootballPointsPage() {
             </ol>
           </div>
           <div style={{
-            background: 'rgba(62,200,255,0.06)',
-            border: '1px solid rgba(62,200,255,0.2)',
+            background: 'rgba(8,145,178,0.06)',
+            border: '1px solid rgba(8,145,178,0.2)',
             borderRadius: '12px',
             padding: '14px 18px',
             fontSize: '13px',
@@ -125,7 +125,7 @@ export default function FootballPointsPage() {
             lineHeight: 1.8,
             marginTop: 12,
           }}>
-            <strong style={{ color: '#3EC8FF' }}>리그별 차이</strong> — EPL·K리그·분데스리가는 <strong>득실차 → 다득점</strong> 순서이지만,
+            <strong style={{ color: '#0891B2' }}>리그별 차이</strong> — EPL·K리그·분데스리가는 <strong>득실차 → 다득점</strong> 순서이지만,
             라리가는 <strong>head-to-head 우선</strong> 적용으로 시즌 막판 동률 다툼에서 결과가 자주 갈립니다.
           </div>
         </div>
@@ -157,8 +157,8 @@ export default function FootballPointsPage() {
             🎯 승점 활용 전략 — 무승부 가치
           </h2>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.25)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.25)',
             borderRadius: '12px',
             padding: '16px 18px',
             fontSize: '13.5px',

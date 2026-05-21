@@ -460,10 +460,10 @@ export default function RoomAreaClient() {
                   <svg className={styles.boxSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-label="평면도">
                     {/* 외곽선 */}
                     <rect x={x0} y={y0} width={w} height={d}
-                      fill="rgba(200,255,62,0.08)" stroke="#C8FF3E" strokeWidth={2} />
+                      fill="rgba(14,165,233,0.08)" stroke="#0EA5E9" strokeWidth={2} />
                     {/* 면적 라벨 */}
                     <text x={x0 + w / 2} y={y0 + d / 2 - 4} textAnchor="middle"
-                      fill="#C8FF3E" fontSize="14" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+                      fill="#0EA5E9" fontSize="14" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
                       {fmt(t1.floorArea)}㎡
                     </text>
                     <text x={x0 + w / 2} y={y0 + d / 2 + 14} textAnchor="middle"
@@ -516,13 +516,13 @@ export default function RoomAreaClient() {
                         fill={face.fill} stroke={face.stroke} strokeWidth={1.5} />
                     ))}
                     {/* 면적 라벨 */}
-                    <text x={floorC.x} y={floorC.y + 4} textAnchor="middle" fill="#C8FF3E" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={floorC.x} y={floorC.y + 4} textAnchor="middle" fill="#0EA5E9" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       바닥 {fmt(t1.floorArea)}㎡
                     </text>
-                    <text x={frontC.x} y={frontC.y + 4} textAnchor="middle" fill="#FF8C3E" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={frontC.x} y={frontC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       정면 {fmt(tab1Dims.width * heightM)}㎡
                     </text>
-                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#FF8C3E" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       우측 {fmt(tab1Dims.length * heightM)}㎡
                     </text>
                     <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
@@ -667,8 +667,8 @@ export default function RoomAreaClient() {
                 <div style={{
                   marginTop: 12,
                   padding: '10px 14px',
-                  background: 'rgba(232,151,87,0.05)',
-                  border: '1px solid rgba(232,151,87,0.2)',
+                  background: 'rgba(234,88,12,0.05)',
+                  border: '1px solid rgba(234,88,12,0.2)',
                   borderRadius: 10,
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
@@ -678,7 +678,7 @@ export default function RoomAreaClient() {
                 }}>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>바닥</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#C8FF3E', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
+                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#0EA5E9', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>벽 (실)</p>
@@ -686,7 +686,7 @@ export default function RoomAreaClient() {
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>부피</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#FFD700', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
+                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#CA8A04', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
                   </div>
                 </div>
               </div>

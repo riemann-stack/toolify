@@ -344,8 +344,8 @@ export default function HousingScoreClient() {
           </div>
           <p className={s.autoBoxHint}>
             1순위 자격: {is1stRank
-              ? <strong style={{ color: '#3EFF9B' }}>✓ 충족 (2년 + 24회)</strong>
-              : <strong style={{ color: '#FF8C3E' }}>미충족 — 2년 가입 + 24회 납입 필수 (수도권 기준)</strong>}
+              ? <strong style={{ color: '#059669' }}>✓ 충족 (2년 + 24회)</strong>
+              : <strong style={{ color: '#EA580C' }}>미충족 — 2년 가입 + 24회 납입 필수 (수도권 기준)</strong>}
           </p>
         </div>
       </div>
@@ -363,8 +363,8 @@ export default function HousingScoreClient() {
 
         {/* 영역별 막대 */}
         <div className={s.barList}>
-          <ScoreBar label="무주택 기간" value={score.unhomedPoints} max={32} color="#3EC8FF" />
-          <ScoreBar label="부양가족" value={score.dependentPoints} max={35} color="#3EFF9B" />
+          <ScoreBar label="무주택 기간" value={score.unhomedPoints} max={32} color="#0891B2" />
+          <ScoreBar label="부양가족" value={score.dependentPoints} max={35} color="#059669" />
           <ScoreBar label="청약통장" value={score.bankbookPoints} max={17} color="#FFD93E" />
         </div>
       </div>

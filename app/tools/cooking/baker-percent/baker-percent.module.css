@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 4개 ── */
 .tabs {
@@ -207,10 +207,10 @@
 }@media (hover: hover) {
   .scaleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.scaleHalf  { border-color: rgba(62,200,255,0.40); }
+.scaleHalf  { border-color: rgba(8,145,178,0.40); }
 .scaleOne   { border-color: var(--accent); }
-.scaleTwo   { border-color: rgba(255,140,62,0.40); }
-.scaleThree { border-color: rgba(255,107,107,0.40); }
+.scaleTwo   { border-color: rgba(234,88,12,0.40); }
+.scaleThree { border-color: rgba(220,38,38,0.40); }
 
 /* 빠른 밀가루 양 버튼 */
 .flourQuickRow {
@@ -256,7 +256,7 @@
   padding-right: 24px;
   box-sizing: border-box;
 }
-.catSelect option { background: #1a1a1a; color: var(--text); }
+.catSelect option { background: #ffffff; color: var(--text); }
 
 /* ── 재료 행 (탭 1·2·3) ── */
 .ingredientList {
@@ -297,11 +297,11 @@
 .ingredientRow .pctCell input { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); font-size: 13px; text-align: right; }
 
 .ingFlour    { border-left-color: var(--accent); }
-.ingLiquid   { border-left-color: #3EC8FF; }
-.ingSalt     { border-left-color: #FFD93E; }
+.ingLiquid   { border-left-color: #0891B2; }
+.ingSalt     { border-left-color: #CA8A04; }
 .ingYeast    { border-left-color: #9B59B6; }
-.ingSugar    { border-left-color: #FF8C3E; }
-.ingFat      { border-left-color: #FFD700; }
+.ingSugar    { border-left-color: #EA580C; }
+.ingFat      { border-left-color: #CA8A04; }
 .ingOther    { border-left-color: var(--muted); }
 
 .removeBtn {
@@ -319,7 +319,7 @@
   align-items: center;
   justify-content: center;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.40); }
 }
 
 .addRowBtn {
@@ -340,11 +340,11 @@
 
 .dotIcon { width: 8px; height: 8px; border-radius: 50%; }
 .dotFlour    { background: var(--accent); }
-.dotLiquid   { background: #3EC8FF; }
-.dotSalt     { background: #FFD93E; }
+.dotLiquid   { background: #0891B2; }
+.dotSalt     { background: #CA8A04; }
 .dotYeast    { background: #9B59B6; }
-.dotSugar    { background: #FF8C3E; }
-.dotFat      { background: #FFD700; }
+.dotSugar    { background: #EA580C; }
+.dotFat      { background: #CA8A04; }
 .dotOther    { background: var(--muted); }
 
 /* ── HERO ── */
@@ -401,14 +401,14 @@
 }
 .metricHint { font-size: 10.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
 
-.metricHydration { border-top-color: #3EC8FF; }
-.metricHydration .metricValue { color: #3EC8FF; }
-.metricSalt      { border-top-color: #FFD93E; }
-.metricSalt      .metricValue { color: #FFD93E; }
+.metricHydration { border-top-color: #0891B2; }
+.metricHydration .metricValue { color: #0891B2; }
+.metricSalt      { border-top-color: #CA8A04; }
+.metricSalt      .metricValue { color: #CA8A04; }
 .metricYeast     { border-top-color: #9B59B6; }
-.metricYeast     .metricValue { color: #C485E0; }
-.metricSugar     { border-top-color: #FF8C3E; }
-.metricSugar     .metricValue { color: #FF8C3E; }
+.metricYeast     .metricValue { color: #9333EA; }
+.metricSugar     { border-top-color: #EA580C; }
+.metricSugar     .metricValue { color: #EA580C; }
 
 /* ── 수분율 게이지 ── */
 .gaugeWrap {
@@ -419,14 +419,14 @@
   height: 18px;
   border-radius: 6px;
   background: linear-gradient(90deg,
-    #3EFF9B 0%,
-    #3EFF9B 35%,
+    #059669 0%,
+    #059669 35%,
     var(--accent) 35%,
     var(--accent) 65%,
-    #FF8C3E 65%,
-    #FF8C3E 85%,
-    #FF6B6B 85%,
-    #FF6B6B 100%
+    #EA580C 65%,
+    #EA580C 85%,
+    #DC2626 85%,
+    #DC2626 100%
   );
   overflow: visible;
 }
@@ -475,11 +475,11 @@
 .summaryTable td:nth-child(3) { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .summaryTable td:nth-child(4) { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
-.summaryTable tr.flourRow td { background: rgba(200,255,62,0.05); }
-.summaryTable tr.liquidRow td { background: rgba(62,200,255,0.04); }
+.summaryTable tr.flourRow td { background: rgba(14,165,233,0.14); }
+.summaryTable tr.liquidRow td { background: rgba(8,145,178,0.14); }
 .summaryTable tr.totalRow td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
   font-weight: 800;
 }
@@ -582,14 +582,14 @@
 
 /* 식감 설명 카드 */
 .textureCard {
-  background: linear-gradient(140deg, rgba(255,215,0,0.06), rgba(62,200,255,0.04));
-  border: 1px solid rgba(255,215,0,0.30);
+  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 14px;
   padding: 16px 18px;
 }
 .textureLabel {
   font-size: 11px;
-  color: #FFD700;
+  color: #CA8A04;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
@@ -602,7 +602,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.textureBody strong { color: #FFD700; font-weight: 700; }
+.textureBody strong { color: #CA8A04; font-weight: 700; }
 .textureTags {
   display: flex;
   flex-wrap: wrap;
@@ -610,9 +610,9 @@
   margin-top: 10px;
 }
 .textureTag {
-  background: rgba(255,215,0,0.10);
-  border: 1px solid rgba(255,215,0,0.30);
-  color: #FFD700;
+  background: rgba(202,138,4,0.18);
+  border: 1px solid rgba(202,138,4,0.30);
+  color: #CA8A04;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 11.5px;
@@ -622,14 +622,14 @@
 
 /* ── 빵 종류별 예상 완성품 ── */
 .outputCard {
-  background: rgba(255,140,62,0.05);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 14px;
   padding: 16px 20px;
 }
 .outputTitle {
   font-size: 13px;
-  color: #FF8C3E;
+  color: #EA580C;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   margin-bottom: 10px;
@@ -676,7 +676,7 @@
 }
 .prefermentActive {
   background: rgba(155,89,182,0.12);
-  color: #C485E0;
+  color: #9333EA;
   border-color: #9B59B6;
   font-weight: 700;
 }
@@ -701,7 +701,7 @@
 }
 .dualTable td:first-child { color: var(--text); font-weight: 600; }
 .dualTable .colMain      { background: var(--bg2);                     color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.dualTable .colPreferment{ background: rgba(155,89,182,0.06);          color: #C485E0;     font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.dualTable .colPreferment{ background: rgba(155,89,182,0.06);          color: #9333EA;     font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .dualTable .colTotal     { background: var(--accent-dim);              color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dualTable .zero { color: var(--muted); opacity: 0.6; font-weight: 500; }
 .dualTable tr.totalRow td {
@@ -719,7 +719,7 @@
 }
 .yeastTitle {
   font-size: 13px;
-  color: #C485E0;
+  color: #9333EA;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   margin-bottom: 10px;
@@ -755,10 +755,10 @@
   font-weight: 600;
 }
 .hydroGuide td:first-child { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
-.hydroLow    td:first-child { color: #3EFF9B !important; }
+.hydroLow    td:first-child { color: #059669 !important; }
 .hydroMid    td:first-child { color: var(--accent) !important; }
-.hydroHigh   td:first-child { color: #FF8C3E !important; }
-.hydroVHigh  td:first-child { color: #FF6B6B !important; }
+.hydroHigh   td:first-child { color: #EA580C !important; }
+.hydroVHigh  td:first-child { color: #DC2626 !important; }
 
 /* ── 즐겨찾기 ── */
 .favSection { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
@@ -822,7 +822,7 @@
 }@media (hover: hover) {
   .favLoadBtn:hover { color: var(--accent); border-color: var(--accent); }
 }@media (hover: hover) {
-  .favDeleteBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.40); }
+  .favDeleteBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.40); }
 }
 
 /* ── 결과 복사 ── */

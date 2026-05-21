@@ -87,7 +87,7 @@ export default function HistoryEraPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', fontWeight: 600, color: 'var(--text)' }}>{row[0]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'serif' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#DB2777' }}>{row[2]}</td>
                     <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)', fontSize: '12px' }}>{row[3]}</td>
                     <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{row[4]}</td>
                   </tr>
@@ -118,7 +118,7 @@ export default function HistoryEraPage() {
                     <td style={{ padding: '7px 10px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{k.num}대</td>
                     <td style={{ padding: '7px 10px', fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap' }}>{k.name}</td>
                     <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)', whiteSpace: 'nowrap' }}>{k.s}~{k.e}</td>
-                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF3E8C' }}>{k.e - k.s + 1}년</td>
+                    <td style={{ padding: '7px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#DB2777' }}>{k.e - k.s + 1}년</td>
                     <td style={{ padding: '7px 10px', color: 'var(--muted)' }}>{k.event}</td>
                   </tr>
                 ))}
@@ -145,14 +145,14 @@ export default function HistoryEraPage() {
               { stem:'기(己)', branch:'유(酉)', year:2029, animal:'닭의 해' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: '#FF3E8C', marginBottom: '4px' }}>{item.year}</p>
+                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: '#DB2777', marginBottom: '4px' }}>{item.year}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{item.stem}{item.branch}년</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{item.animal}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,62,140,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
-            <p style={{ fontSize: '12px', color: '#FF3E8C', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>간지 공식</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
+            <p style={{ fontSize: '12px', color: '#DB2777', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>간지 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.7 }}>
               천간 = ((서기년 − 4) mod 10 + 10) mod 10<br />
               지지 = ((서기년 − 4) mod 12 + 12) mod 12
@@ -190,7 +190,7 @@ export default function HistoryEraPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', color: '#FF3E8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: '#DB2777', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.ev}</td>
                   </tr>
                 ))}
@@ -212,9 +212,9 @@ export default function HistoryEraPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>서기</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#3EFF9B',     fontWeight: 600 }}>🇰🇷 한국</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#3EC8FF',     fontWeight: 600 }}>🇯🇵 일본</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#FFD700',     fontWeight: 600 }}>🇨🇳 중국</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#059669',     fontWeight: 600 }}>🇰🇷 한국</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#0891B2',     fontWeight: 600 }}>🇯🇵 일본</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#CA8A04',     fontWeight: 600 }}>🇨🇳 중국</th>
                 </tr>
               </thead>
               <tbody>
@@ -280,7 +280,7 @@ export default function HistoryEraPage() {
                   { y: '2002',    ev: '한일 FIFA 월드컵',           era: '대한민국 55년' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '8px 12px', textAlign: 'right', color: '#FF3E8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.y}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'right', color: '#DB2777', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.y}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.ev}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.era}</td>
                   </tr>
@@ -309,7 +309,7 @@ export default function HistoryEraPage() {
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '20px', marginBottom: '4px' }}>{m.e}</p>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF3E8C', marginBottom: '6px' }}>{m.t}</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: '#DB2777', marginBottom: '6px' }}>{m.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{m.d}</p>
               </div>
             ))}

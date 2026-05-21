@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -99,10 +99,10 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(200,255,62,0.40); }
-.modeMeter { border-color: rgba(62,200,255,0.40); }
+.modePyung { border-color: rgba(14,165,233,0.40); }
+.modeMeter { border-color: rgba(8,145,178,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(62,200,255,0.10); color: #3EC8FF;       border-color: #3EC8FF;     font-weight: 700; }
+.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
 
 /* ── 평수 드롭다운 ── */
 .pyungSelect {
@@ -281,13 +281,13 @@
 }@media (hover: hover) {
   .wallpaperCard:hover { border-color: var(--border-hover); }
 }
-.wpSilk   { border-color: rgba(200,255,62,0.40); }
-.wpSturdy { border-color: rgba(62,255,155,0.40); }
-.wpPvc    { border-color: rgba(62,200,255,0.40); }
+.wpSilk   { border-color: rgba(14,165,233,0.40); }
+.wpSturdy { border-color: rgba(16,185,129,0.40); }
+.wpPvc    { border-color: rgba(8,145,178,0.40); }
 .wpCustom { border-color: var(--border); }
 .wpSilk.wpActive   { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
-.wpSturdy.wpActive { background: rgba(62,255,155,0.10);  border-color: #3EFF9B;       color: #3EFF9B; }
-.wpPvc.wpActive    { background: rgba(62,200,255,0.10);  border-color: #3EC8FF;       color: #3EC8FF; }
+.wpSturdy.wpActive { background: rgba(16,185,129,0.18);  border-color: #059669;       color: #059669; }
+.wpPvc.wpActive    { background: rgba(8,145,178,0.18);  border-color: #0891B2;       color: #0891B2; }
 .wpCustom.wpActive { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
 .wpName {
   font-size: 14px;
@@ -312,9 +312,9 @@
   border-radius: 999px;
   margin-top: 6px;
 }
-.wpSilkBadge   { background: rgba(200,255,62,0.15); color: var(--accent); }
-.wpSturdyBadge { background: rgba(62,255,155,0.15); color: #3EFF9B; }
-.wpPvcBadge    { background: rgba(62,200,255,0.15); color: #3EC8FF; }
+.wpSilkBadge   { background: rgba(14,165,233,0.15); color: var(--accent); }
+.wpSturdyBadge { background: rgba(16,185,129,0.15); color: #059669; }
+.wpPvcBadge    { background: rgba(8,145,178,0.15); color: #0891B2; }
 
 /* 직접 입력 시 입력 필드 */
 .customWpRow {
@@ -352,15 +352,15 @@
   font-size: 16px;
   margin-bottom: 2px;
 }
-.lossSafe   { border-color: rgba(62,255,155,0.40); }
-.lossStd    { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.lossWarn   { border-color: rgba(255,140,62,0.40); }
-.lossDanger { border-color: rgba(255,107,107,0.40); }
+.lossSafe   { border-color: rgba(16,185,129,0.40); }
+.lossStd    { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.lossWarn   { border-color: rgba(234,88,12,0.40); }
+.lossDanger { border-color: rgba(220,38,38,0.40); }
 
-.lossSafe.lossActive   { background: rgba(62,255,155,0.12);  color: #3EFF9B;       border-color: #3EFF9B; font-weight: 700; }
+.lossSafe.lossActive   { background: rgba(16,185,129,0.18);  color: #059669;       border-color: #059669; font-weight: 700; }
 .lossStd.lossActive    { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.lossWarn.lossActive   { background: rgba(255,140,62,0.12);  color: #FF8C3E;       border-color: #FF8C3E; font-weight: 700; }
-.lossDanger.lossActive { background: rgba(255,107,107,0.12); color: #FF6B6B;       border-color: #FF6B6B; font-weight: 700; }
+.lossWarn.lossActive   { background: rgba(234,88,12,0.18);  color: #EA580C;       border-color: #EA580C; font-weight: 700; }
+.lossDanger.lossActive { background: rgba(220,38,38,0.18); color: #DC2626;       border-color: #DC2626; font-weight: 700; }
 
 /* ── 천장 도배 토글 ── */
 .toggleRow {
@@ -378,7 +378,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(232,151,87,0.40);
+  border: 1px solid rgba(234,88,12,0.40);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -419,12 +419,12 @@
   color: var(--text);
   white-space: nowrap;
 }
-.subRow td:last-child { color: #FF6B6B; }
-.addRow td:last-child { color: #3EC8FF; }
+.subRow td:last-child { color: #DC2626; }
+.addRow td:last-child { color: #0891B2; }
 .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .totalRow td:first-child { color: var(--accent); }
@@ -432,8 +432,8 @@
 
 /* ── 롤 카드 ── */
 .rollCard {
-  background: rgba(200,255,62,0.05);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -543,8 +543,8 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
 }
-.openingWindow { color: #3EC8FF; border-color: rgba(62,200,255,0.4); }
-.openingDoor   { color: #FF8C3E; border-color: rgba(255,140,62,0.4); }
+.openingWindow { color: #0891B2; border-color: rgba(8,145,178,0.4); }
+.openingDoor   { color: #EA580C; border-color: rgba(234,88,12,0.4); }
 
 .iconBtn {
   background: var(--bg3);
@@ -557,7 +557,7 @@
 }@media (hover: hover) {
   .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .addBtn {
@@ -585,7 +585,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeRoomBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 /* ── 합계 표 (탭 2) ── */
@@ -614,7 +614,7 @@
 }
 .summaryTotal td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
   font-weight: 800;
 }
@@ -646,24 +646,24 @@
   color: var(--text);
   white-space: nowrap;
 }
-.selfRow td  { background: rgba(200,255,62,0.05); }
-.proRow td   { background: rgba(62,200,255,0.05); }
+.selfRow td  { background: rgba(14,165,233,0.14); }
+.proRow td   { background: rgba(8,145,178,0.14); }
 .totalRowSelf td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .totalRowSelf td:first-child { color: var(--accent); }
 .totalRowSelf td:last-child  { color: var(--accent); font-size: 15px; }
 .totalRowPro td {
-  background: rgba(62,200,255,0.12);
+  background: rgba(8,145,178,0.18);
   font-weight: 800;
-  border-top: 2px solid rgba(62,200,255,0.3);
+  border-top: 2px solid rgba(8,145,178,0.3);
   border-bottom: none;
 }
-.totalRowPro td:first-child { color: #3EC8FF; }
-.totalRowPro td:last-child  { color: #3EC8FF; font-size: 15px; }
+.totalRowPro td:first-child { color: #0891B2; }
+.totalRowPro td:last-child  { color: #0891B2; font-size: 15px; }
 
 /* ── 가격 프리셋 ── */
 .priceTierGrid {
@@ -701,8 +701,8 @@
 
 /* ── 평당 비교 ── */
 .compareLine {
-  background: rgba(232,151,87,0.05);
-  border: 1px solid rgba(232,151,87,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -710,7 +710,7 @@
   line-height: 1.85;
   margin-top: 12px;
 }
-.compareLine strong { color: #E89757; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareLine strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 /* ── 결과 복사 ── */
 .copyBtn {

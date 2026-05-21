@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -124,7 +124,7 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 .copyBtn {
   background: var(--bg2);
@@ -187,9 +187,9 @@
   max-height: 480px;
   overflow-y: auto;
 }
-.codeBlock .key { color: #3EC8FF; }
-.codeBlock .str { color: #3EFF9B; }
-.codeBlock .num { color: #FFD700; }
+.codeBlock .key { color: #0891B2; }
+.codeBlock .str { color: #059669; }
+.codeBlock .num { color: #CA8A04; }
 .codeBlock .comment { color: var(--muted); font-style: italic; }
 
 /* ── UI 요소 카드 그리드 ── */
@@ -263,7 +263,7 @@
   .dataTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .dataTypeBtn small { display: block; font-size: 22px; margin-bottom: 4px; }
-.dataTypeActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.dataTypeActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 
 .formatRow {
   display: grid;
@@ -285,7 +285,7 @@
 }@media (hover: hover) {
   .formatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.formatActive { background: rgba(255,215,0,0.10); color: #FFD700; border-color: #FFD700; font-weight: 700; }
+.formatActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
 
 .checkRow {
   display: flex;
@@ -328,8 +328,8 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(255,140,62,0.15);
-  color: #FF8C3E;
+  background: rgba(234,88,12,0.15);
+  color: #EA580C;
   font-size: 10px;
   padding: 3px 9px;
   border-radius: 999px;
@@ -363,7 +363,7 @@
   font-size: 14px;
   color: var(--accent);
 }
-.previewRating { color: #FFD700; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.previewRating { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── UX 라이팅 시나리오 ── */
 .scenarioGrid {
@@ -389,7 +389,7 @@
   .scenarioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .scenarioBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
-.scenarioActive { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.scenarioActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 .uxResultCard {
   background: var(--bg2);
@@ -532,11 +532,11 @@
   cursor: pointer;
 }
 .btnDanger {
-  background: rgba(255,107,107,0.12);
-  border: 1px solid #FF6B6B;
+  background: rgba(220,38,38,0.18);
+  border: 1px solid #DC2626;
   border-radius: 8px;
   padding: 10px 16px;
-  color: #FF6B6B;
+  color: #DC2626;
   font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;

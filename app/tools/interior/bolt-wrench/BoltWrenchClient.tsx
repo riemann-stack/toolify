@@ -484,7 +484,7 @@ export default function BoltWrenchClient() {
                 재사용:{' '}
                 <span style={{
                   color: nut.reuse === '재사용 가능' ? 'var(--accent)'
-                    : nut.reuse === '1회용 권장' ? '#FF3E8C' : '#FFB83E',
+                    : nut.reuse === '1회용 권장' ? '#DB2777' : '#D97706',
                   fontWeight: 700,
                 }}>
                   {nut.reuse}

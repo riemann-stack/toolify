@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -39,9 +39,9 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveBack    { background: rgba(155,89,182,0.12); color: #C485E0; font-weight: 700; }
-.tabActivePreset  { background: rgba(255,215,0,0.10);  color: #FFD700; font-weight: 700; }
-.tabActiveRecipe  { background: rgba(62,255,155,0.10); color: #3EFF9B; font-weight: 700; }
+.tabActiveBack    { background: rgba(155,89,182,0.12); color: #9333EA; font-weight: 700; }
+.tabActivePreset  { background: rgba(202,138,4,0.18);  color: #CA8A04; font-weight: 700; }
+.tabActiveRecipe  { background: rgba(16,185,129,0.18); color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -86,7 +86,7 @@
 }@media (hover: hover) {
   .breadCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
-.breadCardActive { background: var(--accent-dim); border-color: var(--accent); box-shadow: 0 0 0 2px rgba(200,255,62,0.18); }
+.breadCardActive { background: var(--accent-dim); border-color: var(--accent); box-shadow: 0 0 0 2px rgba(14,165,233,0.18); }
 .breadCardEmoji { font-size: 36px; line-height: 1; margin-bottom: 6px; }
 .breadCardName { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 4px; }
 .breadCardActive .breadCardName { color: var(--accent); }
@@ -99,10 +99,10 @@
   margin-top: 4px;
   font-weight: 700;
 }
-.diffEasy   { background: rgba(62,255,155,0.12); color: #3EFF9B; }
-.diffMid    { background: rgba(62,200,255,0.10); color: #3EC8FF; }
-.diffHard   { background: rgba(255,140,62,0.12); color: #FF8C3E; }
-.diffExpert { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+.diffEasy   { background: rgba(16,185,129,0.18); color: #059669; }
+.diffMid    { background: rgba(8,145,178,0.18); color: #0891B2; }
+.diffHard   { background: rgba(234,88,12,0.18); color: #EA580C; }
+.diffExpert { background: rgba(220,38,38,0.18); color: #DC2626; }
 
 /* 입력 */
 .dateInput, .textInput, .numInput {
@@ -186,7 +186,7 @@
   height: 18px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, #3EC8FF 0%, #3EC8FF 25%, #3EFF9B 35%, #3EFF9B 55%, #FFD700 65%, #FF8C3E 80%, #FF6B6B 100%);
+  background: linear-gradient(to right, #0891B2 0%, #0891B2 25%, #059669 35%, #059669 55%, #CA8A04 65%, #EA580C 80%, #DC2626 100%);
   border-radius: 999px;
   outline: none;
   cursor: pointer;
@@ -222,10 +222,10 @@
   font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.6;
 }
-.tempCold   { background: rgba(62,200,255,0.08);  border: 1px solid rgba(62,200,255,0.30);  color: #3EC8FF; }
-.tempNormal { background: rgba(62,255,155,0.08);  border: 1px solid rgba(62,255,155,0.30);  color: #3EFF9B; }
-.tempFast   { background: rgba(255,215,0,0.08);   border: 1px solid rgba(255,215,0,0.30);   color: #FFD700; }
-.tempDanger { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.30); color: #FF6B6B; }
+.tempCold   { background: rgba(8,145,178,0.14);  border: 1px solid rgba(8,145,178,0.30);  color: #0891B2; }
+.tempNormal { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.30);  color: #059669; }
+.tempFast   { background: rgba(202,138,4,0.14);   border: 1px solid rgba(202,138,4,0.30);   color: #CA8A04; }
+.tempDanger { background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.30); color: #DC2626; }
 
 /* 옵션 토글 */
 .toggleLabel {
@@ -241,13 +241,13 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(140deg, rgba(200,255,62,0.06), rgba(255,215,0,0.04));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(202,138,4,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
 }
-.heroBack { background: linear-gradient(140deg, rgba(155,89,182,0.06), rgba(255,107,107,0.04)); border-color: rgba(155,89,182,0.30); }
+.heroBack { background: linear-gradient(140deg, rgba(155,89,182,0.06), rgba(220,38,38,0.14)); border-color: rgba(155,89,182,0.30); }
 .heroEmoji { font-size: 44px; line-height: 1; margin-bottom: 8px; }
 .heroTitle {
   font-family: 'Noto Sans KR', sans-serif;
@@ -289,8 +289,8 @@
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.heroBack .heroTimeValue { color: #C485E0; }
-.heroDayLabel { font-size: 11px; color: #FFD700; margin-left: 6px; }
+.heroBack .heroTimeValue { color: #9333EA; }
+.heroDayLabel { font-size: 11px; color: #CA8A04; margin-left: 6px; }
 
 .heroTotal {
   margin-top: 12px;
@@ -349,23 +349,23 @@
 .tlChecked  { opacity: 0.45; }
 .tlChecked .tlBody { text-decoration: line-through; }
 
-.tlTempSensitive { border-left-color: #FFD700; }
-.tlCold          { border-left-color: #3EC8FF; }
-.tlBake          { border-left-color: #FF6B6B; }
-.tlFold          { border-left-color: rgba(200,255,62,0.6); }
-.tlObservation { background: rgba(255,215,0,0.04); }
+.tlTempSensitive { border-left-color: #CA8A04; }
+.tlCold          { border-left-color: #0891B2; }
+.tlBake          { border-left-color: #DC2626; }
+.tlFold          { border-left-color: rgba(14,165,233,0.6); }
+.tlObservation { background: rgba(202,138,4,0.14); }
 
 .tlDayBreak {
   text-align: center;
   font-size: 11px;
-  color: #FFD700;
+  color: #CA8A04;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 0;
-  border-top: 1px dashed rgba(255,215,0,0.30);
-  border-bottom: 1px dashed rgba(255,215,0,0.30);
+  border-top: 1px dashed rgba(202,138,4,0.30);
+  border-bottom: 1px dashed rgba(202,138,4,0.30);
   margin: 4px 0;
 }
 
@@ -420,8 +420,8 @@
 }
 
 .presetNote {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.25);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.25);
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 12.5px;
@@ -429,7 +429,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.presetNote strong { color: #FFD700; }
+.presetNote strong { color: #CA8A04; }
 
 /* 액션 버튼 */
 .actionBtn {
@@ -446,7 +446,7 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .miniBtn {
@@ -462,8 +462,8 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.3); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); border-color: #FF6B6B; }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
 }
 
 .btnRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -499,8 +499,8 @@
 
 /* 관찰 가이드 카드 */
 .observeBox {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.30);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12.5px;
@@ -508,7 +508,7 @@
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.observeBox strong { color: #FFD700; }
+.observeBox strong { color: #CA8A04; }
 
 /* 내 레시피 카드 */
 .recipeGrid {
@@ -521,7 +521,7 @@
 .recipeCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #3EFF9B;
+  border-left: 4px solid #059669;
   border-radius: 12px;
   padding: 14px 16px;
 }
@@ -571,7 +571,7 @@
 /* 새 레시피 폼 */
 .recipeForm {
   background: var(--bg2);
-  border: 1px solid #3EFF9B;
+  border: 1px solid #059669;
   border-radius: 12px;
   padding: 16px 18px;
   display: flex;
@@ -580,7 +580,7 @@
 }
 .recipeFormTitle {
   font-size: 13px;
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -607,7 +607,7 @@
 .ddtCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #FFD700;
+  border-left: 4px solid #CA8A04;
   border-radius: 14px;
   padding: 18px 20px;
   display: flex;
@@ -617,7 +617,7 @@
 .ddtTitle {
   font-size: 13px;
   font-weight: 700;
-  color: #FFD700;
+  color: #CA8A04;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-family: 'Noto Sans KR', sans-serif;
@@ -661,7 +661,7 @@
   box-sizing: border-box;
   font-variant-numeric: tabular-nums;
 }
-.ddtNumInput:focus { border-color: #FFD700; }
+.ddtNumInput:focus { border-color: #CA8A04; }
 
 .mixRow {
   display: grid;
@@ -685,12 +685,12 @@
 }
 .mixBtn strong { display: block; color: var(--text); font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
 .mixBtn small { display: block; color: var(--muted); font-size: 10.5px; }
-.mixActive { background: rgba(255,215,0,0.10); border-color: #FFD700; }
-.mixActive strong { color: #FFD700; }
+.mixActive { background: rgba(202,138,4,0.18); border-color: #CA8A04; }
+.mixActive strong { color: #CA8A04; }
 
 .ddtResult {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.30);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   text-align: center;
@@ -710,7 +710,7 @@
   font-size: clamp(40px, 8vw, 56px);
   letter-spacing: -1px;
   line-height: 1;
-  color: #FFD700;
+  color: #CA8A04;
   font-variant-numeric: tabular-nums;
 }
 .ddtResultUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }
@@ -722,16 +722,16 @@
   line-height: 1.7;
 }
 
-.ddtBandFrozen { color: #3EC8FF; }
-.ddtBandCold   { color: #3EFF9B; }
-.ddtBandNormal { color: #C8FF3E; }
-.ddtBandWarm   { color: #FF8C3E; }
-.ddtBandHot    { color: #FF6B6B; }
+.ddtBandFrozen { color: #0891B2; }
+.ddtBandCold   { color: #059669; }
+.ddtBandNormal { color: #0EA5E9; }
+.ddtBandWarm   { color: #EA580C; }
+.ddtBandHot    { color: #DC2626; }
 
 .ddtWarn {
-  background: rgba(255,107,107,0.08);
-  border: 1px solid rgba(255,107,107,0.35);
-  color: #FF6B6B;
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.35);
+  color: #DC2626;
   border-radius: 8px;
   padding: 9px 12px;
   font-size: 12.5px;
@@ -753,8 +753,8 @@
 }
 
 .ddtSeasonGuide {
-  background: rgba(62,200,255,0.05);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 12.5px;
@@ -762,7 +762,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.ddtSeasonGuide strong { color: #3EC8FF; }
+.ddtSeasonGuide strong { color: #0891B2; }
 
 .ddtDisclaimer {
   font-size: 11.5px;

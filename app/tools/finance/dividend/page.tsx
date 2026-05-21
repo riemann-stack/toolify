@@ -49,7 +49,7 @@ export default function DividendPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(200,255,62,0.05)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
+          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '8px' }}>예시: 월 100만원, 연 4.5%, 세율 15.4%</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, margin: 0, fontFamily: 'Inter, system-ui, sans-serif' }}>
               → 세후수익률 = 4.5% × (1−0.154) = <strong style={{ color: 'var(--accent)' }}>3.807%</strong><br />
@@ -102,9 +102,9 @@ export default function DividendPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { t: '🇰🇷 국내 주식', c: '#C8FF3E', r: '15.4%', d: '배당소득세 14% + 지방소득세 1.4%. 증권사가 원천징수 후 입금.' },
-              { t: '🇺🇸 해외 ETF', c: '#3EC8FF', r: '15.0%', d: '미국 배당의 경우 조세조약으로 현지 원천징수. 추가 국내 과세 없음(2,000만원 이하).' },
-              { t: '📊 종합과세', c: '#FF8C3E', r: '6.6~49.5%', d: '연간 금융소득 2,000만원 초과 시 다른 소득과 합산. 과표 구간별 누진세율.' },
+              { t: '🇰🇷 국내 주식', c: '#0EA5E9', r: '15.4%', d: '배당소득세 14% + 지방소득세 1.4%. 증권사가 원천징수 후 입금.' },
+              { t: '🇺🇸 해외 ETF', c: '#0891B2', r: '15.0%', d: '미국 배당의 경우 조세조약으로 현지 원천징수. 추가 국내 과세 없음(2,000만원 이하).' },
+              { t: '📊 종합과세', c: '#EA580C', r: '6.6~49.5%', d: '연간 금융소득 2,000만원 초과 시 다른 소득과 합산. 과표 구간별 누진세율.' },
             ].map((z, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${z.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: z.c, fontWeight: 700, marginBottom: '4px' }}>{z.t}</p>
@@ -149,8 +149,8 @@ export default function DividendPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 고배당 함정 주의 안내
           </h2>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '12px', padding: '14px 18px', marginBottom: '14px' }}>
-            <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '6px' }}>수익률 경고 구간</p>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '12px', padding: '14px 18px', marginBottom: '14px' }}>
+            <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '6px' }}>수익률 경고 구간</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               <strong>7% 이상</strong> — 주의 필요 &nbsp;·&nbsp; <strong>10% 이상</strong> — 함정 배당 가능성 높음
             </p>
@@ -163,13 +163,13 @@ export default function DividendPage() {
               { n: '④', t: '리츠(REITs) — 금리 인상 시 주가 하락과 임대료 하락 이중 타격' },
             ].map((w, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px', display: 'flex', gap: '12px' }}>
-                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 800, color: '#FF8C3E', flexShrink: 0 }}>{w.n}</span>
+                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 800, color: '#EA580C', flexShrink: 0 }}>{w.n}</span>
                 <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>{w.t}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(62,255,155,0.05)', border: '1px solid rgba(62,255,155,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
-            <p style={{ fontSize: '13px', color: '#3EFF9B', fontWeight: 700, marginBottom: '6px' }}>✅ 안전한 고배당 기준</p>
+          <div style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
+            <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '6px' }}>✅ 안전한 고배당 기준</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               배당수익률 <strong>4~6%</strong> · 배당성향 <strong>50~70%</strong> · <strong>10년 이상</strong> 배당 유지 기록
             </p>
@@ -210,7 +210,7 @@ export default function DividendPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
                   </tr>
                 ))}
               </tbody>
@@ -227,7 +227,7 @@ export default function DividendPage() {
             🎯 월 적립 역산 — &ldquo;월배당 100만 만들려면 월 얼마?&rdquo;
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            「월 적립 역산」 탭은 목표 월배당 + 기간 + 시드 + 배당 재투자 가정을 받아 <strong style={{ color: '#FFD700' }}>이진 탐색</strong>으로 필요 월 적립액을 계산하고,
+            「월 적립 역산」 탭은 목표 월배당 + 기간 + 시드 + 배당 재투자 가정을 받아 <strong style={{ color: '#CA8A04' }}>이진 탐색</strong>으로 필요 월 적립액을 계산하고,
             결과를 4단계(매우 합리적/합리적/도전적/비현실적) 배지로 평가합니다.
           </p>
 
@@ -236,7 +236,7 @@ export default function DividendPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>월배당 100만 목표 + 시드 1,000만</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontWeight: 700 }}>월 적립 필요</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>월 적립 필요</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>현실성</th>
                 </tr>
               </thead>
@@ -252,7 +252,7 @@ export default function DividendPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -279,7 +279,7 @@ export default function DividendPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>자산</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>비중</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontWeight: 700 }}>배당수익률</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>배당수익률</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>주기</th>
                 </tr>
               </thead>
@@ -292,9 +292,9 @@ export default function DividendPage() {
                   ['채권/현금',                     '5%',  '4.0%', '월',   '안정성'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}{row[4] && <span style={{ marginLeft: 8, color: '#FF8C3E', fontSize: 11 }}>{row[4]}</span>}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}{row[4] && <span style={{ marginLeft: 8, color: '#EA580C', fontSize: 11 }}>{row[4]}</span>}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -318,16 +318,16 @@ export default function DividendPage() {
             본 도구의 「포트폴리오」 탭에서 12개월 막대 차트로 시각화 가능.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 6 }}>⚠️ 분기 배당 위주 단점</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>⚠️ 분기 배당 위주 단점</p>
               <ul style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>3·6·9·12월에 배당 집중</li>
                 <li>나머지 8개월은 거의 0</li>
                 <li>월별 생활비 운용 어려움</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 6 }}>✅ 월별 격차 줄이기</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 6 }}>✅ 월별 격차 줄이기</p>
               <ul style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>월배당 ETF 비중 ↑ (변동성 주의)</li>
                 <li>시기 다른 분기 ETF 분산 (1·4·7·10 vs 3·6·9·12)</li>
@@ -349,9 +349,9 @@ export default function DividendPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
             {[
-              { name: 'ISA 계좌',     color: '#3EC8FF',  desc: '200~400만 비과세 + 9.9% 분리과세 · 종합과세 비포함 · 연 2,000만 한도 / 총 1억' },
-              { name: '연금저축',     color: '#FFD700',  desc: '5.5% 분리과세 (55세 이후) + 16.5% 세액공제 · 연 600만 한도' },
-              { name: 'IRP',          color: '#C485E0',  desc: '연금저축 합산 연 900만 한도 · 추가 300만 세액공제' },
+              { name: 'ISA 계좌',     color: '#0891B2',  desc: '200~400만 비과세 + 9.9% 분리과세 · 종합과세 비포함 · 연 2,000만 한도 / 총 1억' },
+              { name: '연금저축',     color: '#CA8A04',  desc: '5.5% 분리과세 (55세 이후) + 16.5% 세액공제 · 연 600만 한도' },
+              { name: 'IRP',          color: '#9333EA',  desc: '연금저축 합산 연 900만 한도 · 추가 300만 세액공제' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 6 }}>{s.name}</p>
@@ -381,7 +381,7 @@ export default function DividendPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>환율</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontWeight: 700 }}>$100 → 원화</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>$100 → 원화</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>변동</th>
                 </tr>
               </thead>
@@ -394,8 +394,8 @@ export default function DividendPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#3EFF9B' : row[2] === '기준' ? 'var(--muted)' : '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#059669' : row[2] === '기준' ? 'var(--muted)' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -469,8 +469,8 @@ export default function DividendPage() {
         </div>
 
         {/* ── 12. 면책 ── */}
-        <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-          <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 10 }}>⚠️ 면책 조항</p>
+        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+          <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 10 }}>⚠️ 면책 조항</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 월배당 계산기는 <strong style={{ color: 'var(--text)' }}>수학적 시뮬레이션 도구</strong>이며, 투자 자문·종목 권유 도구가 아닙니다.
           </p>
@@ -485,10 +485,10 @@ export default function DividendPage() {
             투자 도움 필요 시:
           </p>
           <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18 }}>
-            <li>한국 금융감독원 e-금융민원: <strong style={{ color: '#FF6B6B' }}>1332</strong></li>
-            <li>한국 국세청 (세무 상담): <strong style={{ color: '#FF6B6B' }}>126</strong></li>
+            <li>한국 금융감독원 e-금융민원: <strong style={{ color: '#DC2626' }}>1332</strong></li>
+            <li>한국 국세청 (세무 상담): <strong style={{ color: '#DC2626' }}>126</strong></li>
             <li>거래 증권사 고객센터 상담</li>
-            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong style={{ color: '#FF6B6B' }}>1577-0199</strong></li>
+            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong style={{ color: '#DC2626' }}>1577-0199</strong></li>
           </ul>
         </div>
 

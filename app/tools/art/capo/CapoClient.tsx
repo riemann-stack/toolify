@@ -15,7 +15,7 @@ const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]
 const MAJOR_QUALITIES = ['', 'm', 'm', '', '', 'm', 'dim'] as const
 const ROMAN = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']
 const FUNCTION_LABELS = ['토닉 (T)', '서브도미넌트 (SD)', '토닉 대리', '서브도미넌트 (SD)', '도미넌트 (D)', '토닉 대리', '도미넌트 대리']
-const FUNCTION_COLORS = ['#C8FF3E', '#3EC8FF', '#C8FF3E', '#3EC8FF', '#FF8C3E', '#C8FF3E', '#FF8C3E']
+const FUNCTION_COLORS = ['#0EA5E9', '#0891B2', '#0EA5E9', '#0891B2', '#EA580C', '#0EA5E9', '#EA580C']
 
 const EASY_OPEN_CHORDS = new Set(['C','G','D','Em','Am','A','E','Dm'])
 const BARRE_CHORDS = new Set([
@@ -271,7 +271,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
         {whiteNotes.map((n, i) => {
           const fromHit = (i < 7 && n === highlightFrom) || (i === 7 && highlightFrom === 'C')
           const toHit   = (i < 7 && n === highlightTo)   || (i === 7 && highlightTo === 'C')
-          const fill = fromHit ? '#C8FF3E' : toHit ? '#3EC8FF' : '#E8E8E8'
+          const fill = fromHit ? '#0EA5E9' : toHit ? '#0891B2' : '#E8E8E8'
           return (
             <g key={`w-${i}`}>
               <rect
@@ -291,10 +291,10 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 textAnchor="middle"
               >{n}</text>
               {fromHit && (
-                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#C8FF3E" />
+                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#0EA5E9" />
               )}
               {toHit && !fromHit && (
-                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#3EC8FF" />
+                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#0891B2" />
               )}
             </g>
           )
@@ -305,7 +305,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
           if (!n) return null
           const fromHit = n === highlightFrom
           const toHit   = n === highlightTo
-          const fill = fromHit ? '#C8FF3E' : toHit ? '#3EC8FF' : '#1a1a1a'
+          const fill = fromHit ? '#0EA5E9' : toHit ? '#0891B2' : '#1a1a1a'
           const cx = (i + 1) * whiteW - blackW / 2
           return (
             <g key={`b-${i}`}>

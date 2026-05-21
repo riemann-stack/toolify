@@ -139,38 +139,38 @@ export default function FovPage() {
           공식: <strong>AOV = 2 × atan(센서변 / 2 × 초점거리)</strong>
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FF3E8C', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 4px' }}>🌌 14mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 4px' }}>🌌 14mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>104°</strong> · 대각 <strong>114°</strong> · 광활한 풍경, 실내 인테리어, 별 사진
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FFB83E', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FFB83E', fontWeight: 700, margin: '0 0 4px' }}>🚶 35mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 4px' }}>🚶 35mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>54°</strong> · 대각 <strong>63°</strong> · 자연스러운 시야, 스트리트, 환경 인물
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EFFD0', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, margin: '0 0 4px' }}>👤 50mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 4px' }}>👤 50mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>40°</strong> · 대각 <strong>47°</strong> · 사람 눈에 가장 가까운 자연스러운 화각
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EC8FF', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, margin: '0 0 4px' }}>🎤 85mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0891B2', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, margin: '0 0 4px' }}>🎤 85mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>23.9°</strong> · 대각 <strong>28.6°</strong> · 인물 단렌즈 표준, 압축감
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #C485E0', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, margin: '0 0 4px' }}>⚽ 200mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #9333EA', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '0 0 4px' }}>⚽ 200mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>10.3°</strong> · 대각 <strong>12.3°</strong> · 인물 압축, 스포츠, 이벤트
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FF8C3E', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, margin: '0 0 4px' }}>🦒 600mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #EA580C', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, margin: '0 0 4px' }}>🦒 600mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>3.4°</strong> · 대각 <strong>4.1°</strong> · 야생 동물, 달, 스포츠 사이드라인
             </p>

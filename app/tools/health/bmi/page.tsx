@@ -44,7 +44,7 @@ export default function BmiPage() {
             한국인을 포함한 아시아인은 서양인보다 같은 BMI에서 체지방률이 높아
             대한비만학회에서는 별도 기준을 적용합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>BMI 계산 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
               BMI = 체중(kg) ÷ 키(m)²
@@ -72,11 +72,11 @@ export default function BmiPage() {
               </thead>
               <tbody>
                 {[
-                  ['저체중',     '18.5 미만',   '18.5 미만',   '낮음 (영양불량 위험)', '#3EC8FF'],
-                  ['정상',       '18.5 ~ 24.9', '18.5 ~ 22.9', '보통',                '#3EFF9B'],
-                  ['과체중',     '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음',           '#FFD700'],
-                  ['비만 1단계', '25.0 ~ 29.9', '25.0 ~ 29.9', '높음',                '#FF8C3E'],
-                  ['비만 2단계', '30.0 이상',   '30.0 이상',   '매우 높음',           '#FF6B6B'],
+                  ['저체중',     '18.5 미만',   '18.5 미만',   '낮음 (영양불량 위험)', '#0891B2'],
+                  ['정상',       '18.5 ~ 24.9', '18.5 ~ 22.9', '보통',                '#059669'],
+                  ['과체중',     '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음',           '#CA8A04'],
+                  ['비만 1단계', '25.0 ~ 29.9', '25.0 ~ 29.9', '높음',                '#EA580C'],
+                  ['비만 2단계', '30.0 이상',   '30.0 이상',   '매우 높음',           '#DC2626'],
                 ].map(([label, who, korea, risk, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{label}</td>
@@ -121,9 +121,9 @@ export default function BmiPage() {
                 ].map(([height, normal, over, obese], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{height}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EFF9B' }}>{normal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FFD700' }}>{over}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF6B6B' }}>{obese}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669' }}>{normal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04' }}>{over}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#DC2626' }}>{obese}</td>
                   </tr>
                 ))}
               </tbody>
@@ -163,16 +163,16 @@ export default function BmiPage() {
             근육 우세형(운동선수)·마른 비만 모두 BMI 단독으로는 구분할 수 없습니다. 본 도구는 허리둘레로 이를 보완합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#FF8C3E', marginBottom: '6px' }}>📐 허리둘레 기준 (대한비만학회)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>📐 허리둘레 기준 (대한비만학회)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 남성: <strong style={{ color: 'var(--text)' }}>90cm 이상</strong> = 복부비만</li>
                 <li>· 여성: <strong style={{ color: 'var(--text)' }}>85cm 이상</strong> = 복부비만</li>
                 <li>· 측정: 배꼽 위 2cm, 호흡 후 자연 자세</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>📏 허리-신장비 (WHtR)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>📏 허리-신장비 (WHtR)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 허리(cm) ÷ 키(cm)</li>
                 <li>· <strong style={{ color: 'var(--text)' }}>0.5 미만</strong> 권장</li>
@@ -183,10 +183,10 @@ export default function BmiPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
             <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>BMI + 허리둘레 종합 — 4가지 경우</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px', fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              <p>✅ <strong style={{ color: '#3EFF9B' }}>BMI 정상 + 허리 정상</strong> — 건강한 체형. 현재 상태 유지 권장.</p>
-              <p>⚠️ <strong style={{ color: '#FFD700' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
-              <p>⚠️ <strong style={{ color: '#3EC8FF' }}>BMI 비만 + 허리 정상</strong> — 근육 우세형 가능성. 체성분 검사 권장.</p>
-              <p>🔴 <strong style={{ color: '#FF6B6B' }}>BMI 비만 + 허리 비만</strong> — 종합 비만. 의료 상담 필요.</p>
+              <p>✅ <strong style={{ color: '#059669' }}>BMI 정상 + 허리 정상</strong> — 건강한 체형. 현재 상태 유지 권장.</p>
+              <p>⚠️ <strong style={{ color: '#CA8A04' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
+              <p>⚠️ <strong style={{ color: '#0891B2' }}>BMI 비만 + 허리 정상</strong> — 근육 우세형 가능성. 체성분 검사 권장.</p>
+              <p>🔴 <strong style={{ color: '#DC2626' }}>BMI 비만 + 허리 비만</strong> — 종합 비만. 의료 상담 필요.</p>
             </div>
           </div>
         </section>
@@ -233,9 +233,9 @@ export default function BmiPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             {[
-              { icon: '⚡', color: '#C8FF3E', title: '체중과 러닝 기록의 관계',   content: '스포츠 과학 연구에 따르면 체중 1kg 감량 시 10km 레이스에서 약 2~3분, 마라톤에서 약 8~12분 기록이 향상될 수 있습니다. 단, 이는 근육량을 유지한 상태의 체지방 감량일 때 해당합니다.' },
-              { icon: '⚠️', color: '#FF8C3E', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
-              { icon: '🎯', color: '#3EC8FF', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다. 자신의 적정 체중을 확인하고 건강한 러닝 라이프를 즐기세요!' },
+              { icon: '⚡', color: '#0EA5E9', title: '체중과 러닝 기록의 관계',   content: '스포츠 과학 연구에 따르면 체중 1kg 감량 시 10km 레이스에서 약 2~3분, 마라톤에서 약 8~12분 기록이 향상될 수 있습니다. 단, 이는 근육량을 유지한 상태의 체지방 감량일 때 해당합니다.' },
+              { icon: '⚠️', color: '#EA580C', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
+              { icon: '🎯', color: '#0891B2', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다. 자신의 적정 체중을 확인하고 건강한 러닝 라이프를 즐기세요!' },
             ].map((tip, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${tip.color}30`, borderRadius: '12px', padding: '16px 20px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{tip.icon}</span>
@@ -246,7 +246,7 @@ export default function BmiPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>✅ 러너를 위한 체중 관리 핵심 요약</p>
             <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {[
@@ -376,8 +376,8 @@ export default function BmiPage() {
 
         {/* ── 면책 강화 ── */}
         <section>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF6B6B', marginBottom: '10px' }}>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 20px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>
               ⚠️ 본 BMI 계산기는 건강 정보 참고용입니다
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
@@ -388,7 +388,7 @@ export default function BmiPage() {
               <strong style={{ color: 'var(--text)' }}>종합적 건강 평가에는</strong> 허리둘레·체지방률 측정, 혈압·혈당·콜레스테롤 검사, 의료 전문가 상담이 함께 필요합니다.
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              체중 강박·거식증 우려 시 — 정신건강 위기상담 <strong style={{ color: '#FF6B6B' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#FF6B6B' }}>1393</strong> (24시간)
+              체중 강박·거식증 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
             </p>
           </div>
         </section>

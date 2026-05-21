@@ -109,8 +109,8 @@ export default function LottoPage() {
             <li>· <strong style={{ color: 'var(--text)' }}>연속 번호</strong> 쌍·끝자리 겹침</li>
             <li>· <strong style={{ color: 'var(--text)' }}>번호 간 간격</strong> — 평균 7.5가 이론값</li>
           </ul>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', background: 'rgba(255,107,107,0.06)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 10, padding: '11px 14px' }}>
-            ⚠️ 통계 패턴은 <strong style={{ color: '#FF6B6B' }}>학습 목적</strong>입니다. 어떤 패턴도 다음 회차의 당첨 확률에 영향을 주지 않습니다.
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 10, padding: '11px 14px' }}>
+            ⚠️ 통계 패턴은 <strong style={{ color: '#DC2626' }}>학습 목적</strong>입니다. 어떤 패턴도 다음 회차의 당첨 확률에 영향을 주지 않습니다.
           </p>
         </section>
 
@@ -183,7 +183,7 @@ export default function LottoPage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>1등 (25억) 시 실수령</strong>:
-            {' '}3억까지 22% 세금 + 22억은 33% 세금 → 약 7.3억 세금 → <strong style={{ color: '#3EFF9B' }}>약 17.7억 실수령</strong>.
+            {' '}3억까지 22% 세금 + 22억은 33% 세금 → 약 7.3억 세금 → <strong style={{ color: '#059669' }}>약 17.7억 실수령</strong>.
             정확한 세금은 다른 소득 합산·신고 방식에 따라 달라지므로 <strong style={{ color: 'var(--text)' }}>1등 당첨 시 세무사 상담 필수</strong>.
           </p>
         </section>
@@ -203,15 +203,15 @@ export default function LottoPage() {
               '구매 사실을 가족에게 숨김',
               '돈 빌려서 구매',
             ].map((sign, i) => (
-              <div key={i} style={{ background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '8px', padding: '10px 14px', fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.6 }}>
+              <div key={i} style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '8px', padding: '10px 14px', fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.6 }}>
                 ⚠️ {sign}
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(62,255,155,0.06)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: '12px', padding: '14px 18px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: '#3EFF9B', marginBottom: '8px' }}>📞 도움이 필요하시면</p>
+          <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: '12px', padding: '14px 18px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>📞 도움이 필요하시면</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'Noto Sans KR, sans-serif' }}>
-              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#3EFF9B', fontWeight: 700 }}>1336</a> (24시간 무료, 익명)</li>
+              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#059669', fontWeight: 700 }}>1336</a> (24시간 무료, 익명)</li>
               <li>· 인터넷 상담: kcgp.or.kr</li>
               <li>· 단도박 모임 (GA): dandobakkorea.org</li>
             </ul>

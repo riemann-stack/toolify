@@ -417,7 +417,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
             </div>
             <div className={styles.distItem}>
               <div className={styles.distItemLabel}>가장 가까운 문명</div>
-              <div className={styles.distItemValue} style={{ color: '#FF6B6B' }}>{fmtLy(distance.nearestDistance)}</div>
+              <div className={styles.distItemValue} style={{ color: '#DC2626' }}>{fmtLy(distance.nearestDistance)}</div>
             </div>
             <div className={styles.distItem}>
               <div className={styles.distItemLabel}>왕복 통신 시간</div>
@@ -426,8 +426,8 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
             <div className={styles.distItem}>
               <div className={styles.distItemLabel}>인류 전파권 (126광년) 내</div>
               <div className={styles.distItemValue} style={{
-                color: distance.rangeLabel === 'high' ? '#3EFF9B'
-                  : distance.rangeLabel === 'medium' ? '#FFD93E' : '#FF8C3E',
+                color: distance.rangeLabel === 'high' ? '#059669'
+                  : distance.rangeLabel === 'medium' ? '#FFD93E' : '#EA580C',
               }}>
                 {distance.potentialContactsInRange < 0.001
                   ? distance.potentialContactsInRange.toExponential(2)
@@ -650,7 +650,7 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
         <circle
           key={`h-${i}`}
           cx={h.x} cy={h.y} r={2.2}
-          fill="#C8FF3E"
+          fill="#0EA5E9"
           className={styles.highlightStar}
           style={{ animationDelay: `${(i % 10) * 0.15}s` }}
         />
@@ -658,22 +658,22 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
 
       {/* 인류 전파권 (태양 중심 원) */}
       <circle cx={SUN_X} cy={SUN_Y} r={RADIO_RANGE_R}
-        fill="rgba(62,200,255,0.08)" stroke="#3EC8FF" strokeWidth={0.8}
+        fill="rgba(8,145,178,0.08)" stroke="#0891B2" strokeWidth={0.8}
         strokeDasharray="2,2" />
 
       {/* 가장 가까운 문명 라인 + 강조 */}
       {nearest && nearest !== undefined && (
         <>
           <line x1={SUN_X} y1={SUN_Y} x2={nearest.x} y2={nearest.y}
-            stroke="#FF6B6B" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
+            stroke="#DC2626" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
           <circle cx={nearest.x} cy={nearest.y} r={3}
-            fill="#FF6B6B" stroke="#fff" strokeWidth={0.5} />
+            fill="#DC2626" stroke="#fff" strokeWidth={0.5} />
         </>
       )}
 
       {/* 태양 (지구 위치) */}
-      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#FFD700" />
-      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#FFD700" strokeWidth={0.6} opacity={0.6} />
+      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#CA8A04" />
+      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#CA8A04" strokeWidth={0.6} opacity={0.6} />
     </svg>
   )
 }

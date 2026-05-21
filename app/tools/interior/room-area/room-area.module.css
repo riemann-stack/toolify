@@ -87,10 +87,10 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(200,255,62,0.40); }
-.modeMeter { border-color: rgba(62,200,255,0.40); }
+.modePyung { border-color: rgba(14,165,233,0.40); }
+.modeMeter { border-color: rgba(8,145,178,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(62,200,255,0.10); color: #3EC8FF;       border-color: #3EC8FF;     font-weight: 700; }
+.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
 
 /* ── 평수 드롭다운 ── */
 .pyungSelect {
@@ -249,7 +249,7 @@
 /* ── 히어로 ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(232,151,87,0.40);
+  border: 1px solid rgba(234,88,12,0.40);
   border-radius: 16px;
   padding: 22px 24px;
 }
@@ -285,7 +285,7 @@
   line-height: 1.05;
 }
 .heroDualUnit { font-size: 14px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
-.heroFloor { color: #C8FF3E; }
+.heroFloor { color: #0EA5E9; }
 .heroWall  { color: var(--accent); }
 .heroSub {
   font-size: 12px;
@@ -316,12 +316,12 @@
   position: relative;
   overflow: hidden;
 }
-.areaWallTotal { border-left: 3px solid #3EC8FF; }
-.areaWallNet   { border-left: 3px solid var(--accent); background: rgba(200,255,62,0.04); }
-.areaFloor     { border-left: 3px solid #C8FF3E; }
+.areaWallTotal { border-left: 3px solid #0891B2; }
+.areaWallNet   { border-left: 3px solid var(--accent); background: rgba(14,165,233,0.14); }
+.areaFloor     { border-left: 3px solid #0EA5E9; }
 .areaCeiling   { border-left: 3px solid #9B59B6; }
-.areaVolume    { border-left: 3px solid #FFD700; }
-.areaSurface   { border-left: 3px solid #FF8C3E; }
+.areaVolume    { border-left: 3px solid #CA8A04; }
+.areaSurface   { border-left: 3px solid #EA580C; }
 
 .areaIcon {
   font-size: 24px;
@@ -378,11 +378,11 @@
   color: var(--text);
   white-space: nowrap;
 }
-.subRow td:last-child { color: #FF6B6B; }
+.subRow td:last-child { color: #DC2626; }
 .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .totalRow td:first-child { color: var(--accent); }
@@ -422,10 +422,10 @@
 }@media (hover: hover) {
   .usageCard:hover { border-color: var(--border-hover); }
 }
-.usageWallpaper { border-left: 3px solid #C8FF3E; }
-.usagePaint     { border-left: 3px solid #FF8C3E; }
-.usageAirCon    { border-left: 3px solid #3EC8FF; opacity: 0.7; }
-.usageLighting  { border-left: 3px solid #FFD700; opacity: 0.7; }
+.usageWallpaper { border-left: 3px solid #0EA5E9; }
+.usagePaint     { border-left: 3px solid #EA580C; }
+.usageAirCon    { border-left: 3px solid #0891B2; opacity: 0.7; }
+.usageLighting  { border-left: 3px solid #CA8A04; opacity: 0.7; }
 
 .usageIcon {
   font-size: 24px;
@@ -506,7 +506,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeRoomBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeRoomBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .wallSubBlock {
@@ -553,8 +553,8 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
 }
-.openingWindow { color: #3EC8FF; border-color: rgba(62,200,255,0.4); }
-.openingDoor   { color: #FF8C3E; border-color: rgba(255,140,62,0.4); }
+.openingWindow { color: #0891B2; border-color: rgba(8,145,178,0.4); }
+.openingDoor   { color: #EA580C; border-color: rgba(234,88,12,0.4); }
 .iconBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -566,7 +566,7 @@
 }@media (hover: hover) {
   .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .addBtn {
@@ -611,7 +611,7 @@
 }
 .summaryTotal td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
   font-weight: 800;
 }
@@ -619,8 +619,8 @@
 .summaryTotal td:last-child  { color: var(--accent); }
 
 .totalPyungLine {
-  background: rgba(232,151,87,0.05);
-  border: 1px solid rgba(232,151,87,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 12px;
   padding: 14px 18px;
   margin-top: 12px;

@@ -307,7 +307,7 @@ function RouletteTab() {
                 <input type="range" className={s.weightSlider} min={1} max={10} step={1}
                   value={Math.min(10, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#FF6B6B' }}>×{it.weight}</span>
+                <span className={s.weightPct} style={{ color: '#DC2626' }}>×{it.weight}</span>
               </div>
             ))}
           </div>
@@ -327,7 +327,7 @@ function RouletteTab() {
                 <input type="range" className={s.weightSlider} min={1} max={10} step={1}
                   value={Math.min(10, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#FF6B6B' }}>×{it.weight}</span>
+                <span className={s.weightPct} style={{ color: '#DC2626' }}>×{it.weight}</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
                   disabled={items.length <= 2}>×</button>
               </div>
@@ -943,7 +943,7 @@ function FairnessTab() {
                 <input type="range" className={s.weightSlider} min={1} max={20} step={1}
                   value={Math.min(20, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#3EFF9B' }}>{expected.toFixed(1)}%</span>
+                <span className={s.weightPct} style={{ color: '#059669' }}>{expected.toFixed(1)}%</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
                   disabled={items.length <= 2}>×</button>
               </div>
@@ -1017,14 +1017,14 @@ function FairnessTab() {
                       style={{ left: `${maxBar > 0 ? (r.expectedPct / maxBar) * 100 : 0}%` }}
                       title="기대 비율" />
                   </span>
-                  <span className={s.weightPct} style={{ color: '#3EFF9B' }}>
+                  <span className={s.weightPct} style={{ color: '#059669' }}>
                     {r.actualPct.toFixed(1)}%
                   </span>
                 </div>
               ))}
             </div>
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
-              ⓘ 흰색 마커는 <strong style={{ color: 'var(--text)' }}>기대 비율</strong>, 초록 막대는 <strong style={{ color: '#3EFF9B' }}>실제 비율</strong>입니다.
+              ⓘ 흰색 마커는 <strong style={{ color: 'var(--text)' }}>기대 비율</strong>, 초록 막대는 <strong style={{ color: '#059669' }}>실제 비율</strong>입니다.
             </p>
           </div>
 

@@ -110,6 +110,7 @@ function ShareButton() {
 
 export default function Nav() {
   const [mobileOpen,  setMobileOpen]  = useState(false)
+  const [mobileQuery, setMobileQuery] = useState('')
   const [searchOpen,  setSearchOpen]  = useState(false)
   const [query,       setQuery]       = useState('')
   const [activecat,   setActivecat]   = useState<string | null>(null)
@@ -119,6 +120,7 @@ export default function Nav() {
   const pathname  = usePathname()
   const router    = useRouter()
   const searchRef = useRef<HTMLInputElement>(null)
+  const mobileSearchRef = useRef<HTMLInputElement>(null)
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const megaRef = useRef<HTMLDivElement | null>(null)
 
@@ -174,9 +176,16 @@ export default function Nav() {
       setMobileOpen(false)
       setSearchOpen(false)
       setQuery('')
+      setMobileQuery('')
     }, 0)
     return () => clearTimeout(id)
   }, [pathname])
+
+  // 드로어 열리면 검색창 자동 포커스
+  useEffect(() => {
+    if (mobileOpen) setTimeout(() => mobileSearchRef.current?.focus(), 50)
+    else setMobileQuery('')
+  }, [mobileOpen])
 
   // Cmd+K / Ctrl+K + 전역 ESC
   useEffect(() => {
@@ -471,59 +480,196 @@ export default function Nav() {
         </div>
       )}
 
-      {/* 모바일 드로어 */}
+      {/* ── 모바일 드로어 ── 검색·카테고리 탭·아코디언 3단 구조 */}
       {mobileOpen && (
         <>
           <div className={styles.drawer}>
+            {/* 1) 상단 고정 검색 */}
+            <div className={styles.drawerSearchSticky}>
+              <div className={styles.drawerSearchInner}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  ref={mobileSearchRef}
+                  type="text"
+                  className={styles.drawerSearchInput}
+                  placeholder="필요한 도구를 검색하세요."
+                  value={mobileQuery}
+                  onChange={(e) => setMobileQuery(e.target.value)}
+                />
+                {mobileQuery && (
+                  <button
+                    type="button"
+                    className={styles.drawerSearchClear}
+                    onClick={() => { setMobileQuery(''); mobileSearchRef.current?.focus() }}
+                    aria-label="지우기"
+                  >×</button>
+                )}
+              </div>
+            </div>
+
             <div className={styles.drawerInner}>
-              {favoriteTools.length > 0 && (
-                <div className={styles.drawerSection}>
-                  <p className={styles.drawerLabel}>⭐ 즐겨찾기</p>
-                  <div className={styles.drawerTools}>
-                    {favoriteTools.map((t) => (
-                      <Link key={t.href} href={t.href} className={styles.drawerToolItem}
-                        onClick={() => setMobileOpen(false)}>
-                        <span>{t.icon}</span>
-                        <span>{t.name}</span>
-                      </Link>
+              {mobileQuery.trim() ? (
+                /* ── 검색 모드 ── */
+                (() => {
+                  const hits = searchTools(mobileQuery, 20)
+                  if (hits.length > 0) {
+                    return (
+                      <div className={styles.drawerSearchResults}>
+                        {hits.map(({ tool, category }) => (
+                          <Link
+                            key={tool.href}
+                            href={tool.href}
+                            className={styles.drawerSearchItem}
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            <span className={styles.drawerSearchIcon}>{tool.icon}</span>
+                            <span className={styles.drawerSearchBody}>
+                              <span className={styles.drawerSearchName}>{tool.name}</span>
+                              {category && (
+                                <span className={styles.drawerSearchCat} style={{ color: category.color }}>
+                                  {category.icon} {category.name}
+                                </span>
+                              )}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    )
+                  }
+                  // 검색 결과 없을 때 — 추천 5개 (badge: hot 우선 + new)
+                  const suggestions = [
+                    ...allTools.filter((t) => t.badge === 'hot'),
+                    ...allTools.filter((t) => t.badge === 'new'),
+                  ].slice(0, 5)
+                  return (
+                    <div className={styles.drawerSearchEmpty}>
+                      <p className={styles.drawerEmptyTitle}>
+                        <strong>&quot;{mobileQuery}&quot;</strong>을(를) 찾지 못했어요.
+                      </p>
+                      <p className={styles.drawerEmptySub}>
+                        다른 키워드로 검색하거나 아래 도구도 사용해보세요.
+                      </p>
+                      <div className={styles.drawerSearchResults}>
+                        {suggestions.map((tool) => (
+                          <Link
+                            key={tool.href}
+                            href={tool.href}
+                            className={styles.drawerSearchItem}
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            <span className={styles.drawerSearchIcon}>{tool.icon}</span>
+                            <span className={styles.drawerSearchBody}>
+                              <span className={styles.drawerSearchName}>{tool.name}</span>
+                              <span className={styles.drawerSearchDesc}>{tool.desc}</span>
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })()
+              ) : (
+                <>
+                  {/* 2) 가로 스크롤 카테고리 탭 */}
+                  <div className={styles.drawerCatTabs} role="tablist" aria-label="카테고리 바로가기">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        className={styles.drawerCatTab}
+                        style={{ ['--chip-color' as string]: cat.color }}
+                        onClick={() => {
+                          const el = document.getElementById(`drawer-cat-${cat.id}`) as HTMLDetailsElement | null
+                          if (el) {
+                            el.open = true
+                            // 스크롤은 다음 frame에서 (open 트랜지션 후)
+                            requestAnimationFrame(() => {
+                              el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                            })
+                          }
+                        }}
+                      >
+                        <span>{cat.icon}</span>
+                        <span>{cat.name}</span>
+                        <span className={styles.drawerCatTabCount}>{cat.tools.length}</span>
+                      </button>
                     ))}
                   </div>
-                </div>
-              )}
 
-              {recentTools.length > 0 && (
-                <div className={styles.drawerSection}>
-                  <p className={styles.drawerLabel}>🕐 최근 사용</p>
-                  <div className={styles.drawerTools}>
-                    {recentTools.map((t) => (
-                      <Link key={t.href} href={t.href} className={styles.drawerToolItem}
-                        onClick={() => setMobileOpen(false)}>
-                        <span>{t.icon}</span>
-                        <span>{t.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+                  {/* 즐겨찾기·최근 사용 (있을 때만, 축약 노출) */}
+                  {favoriteTools.length > 0 && (
+                    <details className={styles.drawerAccItem} open>
+                      <summary className={styles.drawerAccSummary}>
+                        <span className={styles.drawerAccIcon}>⭐</span>
+                        <span className={styles.drawerAccTitle}>즐겨찾기</span>
+                        <span className={styles.drawerAccCount}>{favoriteTools.length}</span>
+                      </summary>
+                      <div className={styles.drawerTools}>
+                        {favoriteTools.map((t) => (
+                          <Link key={t.href} href={t.href} className={styles.drawerToolItem}
+                            onClick={() => setMobileOpen(false)}>
+                            <span>{t.icon}</span>
+                            <span>{t.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </details>
+                  )}
 
-              <p className={styles.drawerLabel}>카테고리</p>
-              {categories.map((cat) => (
-                <div key={cat.id} className={styles.drawerSection}>
-                  <Link href={`/tools/${cat.id}`} className={styles.drawerCatLink}
-                    onClick={() => setMobileOpen(false)}>
-                    {cat.name}
-                  </Link>
-                  <div className={styles.drawerTools}>
-                    {cat.tools.map((tool) => (
-                      <Link key={tool.href} href={tool.href} className={styles.drawerToolItem}
-                        onClick={() => setMobileOpen(false)}>
-                        <span>{tool.icon}</span>
-                        <span>{tool.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                  {recentTools.length > 0 && (
+                    <details className={styles.drawerAccItem}>
+                      <summary className={styles.drawerAccSummary}>
+                        <span className={styles.drawerAccIcon}>🕐</span>
+                        <span className={styles.drawerAccTitle}>최근 사용</span>
+                        <span className={styles.drawerAccCount}>{recentTools.length}</span>
+                      </summary>
+                      <div className={styles.drawerTools}>
+                        {recentTools.map((t) => (
+                          <Link key={t.href} href={t.href} className={styles.drawerToolItem}
+                            onClick={() => setMobileOpen(false)}>
+                            <span>{t.icon}</span>
+                            <span>{t.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+
+                  {/* 3) 아코디언 — 전체 카테고리 */}
+                  {categories.map((cat) => (
+                    <details
+                      key={cat.id}
+                      id={`drawer-cat-${cat.id}`}
+                      className={styles.drawerAccItem}
+                    >
+                      <summary className={styles.drawerAccSummary}>
+                        <span className={styles.drawerAccIcon}>{cat.icon}</span>
+                        <span className={styles.drawerAccTitle} style={{ color: cat.color }}>{cat.name}</span>
+                        <span className={styles.drawerAccCount}>{cat.tools.length}</span>
+                      </summary>
+                      <div className={styles.drawerTools}>
+                        <Link
+                          href={`/tools/${cat.id}`}
+                          className={styles.drawerCatAllLink}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          전체 보기 →
+                        </Link>
+                        {cat.tools.map((tool) => (
+                          <Link key={tool.href} href={tool.href} className={styles.drawerToolItem}
+                            onClick={() => setMobileOpen(false)}>
+                            <span>{tool.icon}</span>
+                            <span>{tool.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </details>
+                  ))}
+                </>
+              )}
             </div>
           </div>
           <div className={styles.overlay} onClick={() => setMobileOpen(false)} />

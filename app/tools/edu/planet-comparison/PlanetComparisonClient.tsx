@@ -59,35 +59,35 @@ const PLANETS: Planet[] = [
     yearDays: 365.25,   dayHours: 24,
     surfaceTempC: { min: -88, max: 58, avg: 15 },
     distanceFromSunKm: 149_600_000, distanceFromEarthAvgKm: 0,
-    lightTimeMinutes: 0, color: '#3EC8FF', borderCls: s.borderEarth,
+    lightTimeMinutes: 0, color: '#0891B2', borderCls: s.borderEarth,
     funFact: '우리 집입니다. 표면의 71%가 물로 덮여 있습니다.' },
   { id: 'mars', name: '화성',   emoji: '♂️', nameEn: 'Mars',
     radiusKm: 3_389.5,  radiusRatio: 0.532, gravityRatio: 0.377,
     yearDays: 686.97,  dayHours: 24.6,
     surfaceTempC: { min: -143, max: 35, avg: -65 },
     distanceFromSunKm: 227_900_000, distanceFromEarthAvgKm: 78_300_000,
-    lightTimeMinutes: 12.7, color: '#FF6B6B', borderCls: s.borderMars,
+    lightTimeMinutes: 12.7, color: '#DC2626', borderCls: s.borderMars,
     funFact: '하루 길이가 지구와 비슷합니다(24시간 37분). 최고 산은 올림푸스 산(높이 22km).' },
   { id: 'jupiter', name: '목성', emoji: '♃', nameEn: 'Jupiter',
     radiusKm: 69_911,   radiusRatio: 10.97, gravityRatio: 2.36,
     yearDays: 4_332.59, dayHours: 9.93,
     surfaceTempC: { min: -145, max: -145, avg: -145 },
     distanceFromSunKm: 778_500_000, distanceFromEarthAvgKm: 628_700_000,
-    lightTimeMinutes: 35, color: '#FF8C3E', borderCls: s.borderJupiter,
+    lightTimeMinutes: 35, color: '#EA580C', borderCls: s.borderJupiter,
     funFact: '태양계 행성 모두를 합친 것보다 2배 무겁습니다. 대적반(거대 폭풍)은 350년 이상 지속.' },
   { id: 'saturn', name: '토성',  emoji: '♄', nameEn: 'Saturn',
     radiusKm: 58_232,   radiusRatio: 9.14,  gravityRatio: 0.916,
     yearDays: 10_759.22, dayHours: 10.7,
     surfaceTempC: { min: -178, max: -178, avg: -178 },
     distanceFromSunKm: 1_434_000_000, distanceFromEarthAvgKm: 1_280_000_000,
-    lightTimeMinutes: 71, color: '#FFD700', borderCls: s.borderSaturn,
+    lightTimeMinutes: 71, color: '#CA8A04', borderCls: s.borderSaturn,
     funFact: '아름다운 고리는 얼음과 암석. 밀도가 매우 낮아 큰 욕조에 넣으면 둥둥 뜹니다.' },
   { id: 'uranus', name: '천왕성', emoji: '♅', nameEn: 'Uranus',
     radiusKm: 25_362,   radiusRatio: 3.98,  gravityRatio: 0.889,
     yearDays: 30_688.5, dayHours: -17.24,
     surfaceTempC: { min: -224, max: -224, avg: -224 },
     distanceFromSunKm: 2_871_000_000, distanceFromEarthAvgKm: 2_721_000_000,
-    lightTimeMinutes: 151, color: '#3EFFD0', borderCls: s.borderUranus,
+    lightTimeMinutes: 151, color: '#0D9488', borderCls: s.borderUranus,
     funFact: '자전축이 98° 기울어져 옆으로 굴러갑니다. 태양계에서 가장 추운 행성.' },
   { id: 'neptune', name: '해왕성', emoji: '♆', nameEn: 'Neptune',
     radiusKm: 24_622,   radiusRatio: 3.86,  gravityRatio: 1.12,
@@ -136,7 +136,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 토성 고리 (뒤쪽 절반) */}
       {planet.id === 'saturn' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#FFD700" strokeWidth="2" opacity="0.55" />
+        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#CA8A04" strokeWidth="2" opacity="0.55" />
       )}
 
       <circle cx={cx} cy={cy} r={r} fill={`url(#${id})`} stroke={planet.color} strokeWidth="0.5" opacity="0.95" />
@@ -145,7 +145,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {planet.id === 'saturn' && (
         <path
           d={`M ${cx - r * 1.55} ${cy} A ${r * 1.55} ${r * 0.30} 0 0 0 ${cx + r * 1.55} ${cy}`}
-          fill="none" stroke="#FFD700" strokeWidth="2.5" opacity="0.9"
+          fill="none" stroke="#CA8A04" strokeWidth="2.5" opacity="0.9"
         />
       )}
 
@@ -163,9 +163,9 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {/* 지구: 대륙 단순화 */}
       {planet.id === 'earth' && (
         <g clipPath={`circle(${r}px at ${cx}px ${cy}px)`} opacity="0.85">
-          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="#3EFF9B" />
-          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="#3EFF9B" />
-          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="#3EFF9B" />
+          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="#059669" />
+          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="#059669" />
+          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="#059669" />
         </g>
       )}
 
@@ -180,7 +180,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 천왕성: 자전축 옆으로 굴러가는 느낌 */}
       {planet.id === 'uranus' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="#3EFFD0" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
+        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="#0D9488" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
       )}
 
       {/* 광택 하이라이트 */}
@@ -307,7 +307,7 @@ export default function PlanetComparisonClient() {
             <g key={p.id}>
               {/* 행성 */}
               {p.id === 'saturn' && (
-                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#FFD700" strokeWidth="1.5" opacity="0.7" />
+                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#CA8A04" strokeWidth="1.5" opacity="0.7" />
               )}
               <circle cx={cx} cy={cy} r={r} fill={p.color} opacity="0.95" />
               <ellipse cx={cx - r * 0.3} cy={cy - r * 0.3} rx={r * 0.3} ry={r * 0.15} fill="#fff" opacity="0.30" />
@@ -322,7 +322,7 @@ export default function PlanetComparisonClient() {
           )
         })}
         {/* 기준 라벨 */}
-        <text x={W / 2} y={20} textAnchor="middle" fill="#3EFFD0" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} fontSize={12} letterSpacing="0.06em">
+        <text x={W / 2} y={20} textAnchor="middle" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} fontSize={12} letterSpacing="0.06em">
           크기 비교 (지구 = 1.0×)
         </text>
       </svg>
@@ -557,7 +557,7 @@ export default function PlanetComparisonClient() {
           })}
         </div>
         <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 18, lineHeight: 1.7, textAlign: 'center' }}>
-          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: '#FF8C3E' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: '#FF6B6B' }}>1.6배 천천히</strong> 떨어집니다.
+          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: '#EA580C' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: '#DC2626' }}>1.6배 천천히</strong> 떨어집니다.
         </p>
       </div>
 
@@ -657,7 +657,7 @@ export default function PlanetComparisonClient() {
           </table>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-          💡 지금 화성에 메시지를 보내면 빛의 속도로 약 <strong style={{ color: '#FF6B6B' }}>13분</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>4시간</strong>.
+          💡 지금 화성에 메시지를 보내면 빛의 속도로 약 <strong style={{ color: '#DC2626' }}>13분</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>4시간</strong>.
         </p>
       </div>
 

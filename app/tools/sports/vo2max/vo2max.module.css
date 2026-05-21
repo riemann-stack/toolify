@@ -55,7 +55,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .sexActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -118,7 +118,7 @@
   .methodBtn:hover { border-color: var(--accent); }
 }
 .methodActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .methodEmoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
@@ -150,9 +150,9 @@
   border-radius: 4px;
   font-weight: 700;
 }
-.diff_easy { background: rgba(62,255,155,0.10); color: #3EFF9B; }
-.diff_medium { background: rgba(255,184,62,0.10); color: #FFB83E; }
-.diff_hard { background: rgba(255,107,107,0.10); color: #FF6B6B; }
+.diff_easy { background: rgba(16,185,129,0.18); color: #059669; }
+.diff_medium { background: rgba(217,119,6,0.18); color: #D97706; }
+.diff_hard { background: rgba(220,38,38,0.18); color: #DC2626; }
 .methodAccuracy {
   background: var(--bg2);
   padding: 1px 6px;
@@ -177,8 +177,8 @@
   color: var(--muted);
   margin: 8px 0 0;
   line-height: 1.7;
-  background: rgba(200,255,62,0.04);
-  border-left: 2px solid rgba(200,255,62,0.4);
+  background: rgba(14,165,233,0.14);
+  border-left: 2px solid rgba(14,165,233,0.4);
   padding: 8px 10px;
   border-radius: 6px;
 }
@@ -221,7 +221,7 @@
   line-height: 1.4;
 }
 .paOptActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -229,8 +229,8 @@
 
 /* ── 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(200,255,62,0.10), rgba(62,200,255,0.05));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.18), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 22px 24px;
   text-align: center;
@@ -256,7 +256,7 @@
   letter-spacing: -2px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 28px rgba(200,255,62,0.20);
+  text-shadow: 0 0 28px rgba(14,165,233,0.20);
 }
 .heroUnit {
   font-size: 14px;
@@ -295,7 +295,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .normMe {
-  background: rgba(200,255,62,0.06);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .normLeft { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

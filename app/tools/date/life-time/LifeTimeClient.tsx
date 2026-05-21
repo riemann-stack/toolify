@@ -343,9 +343,9 @@ export default function LifeTimeClient() {
             </div>
           </div>
 
-          <div className={styles.hero} style={{ borderColor: 'rgba(62,200,255,0.35)' }}>
+          <div className={styles.hero} style={{ borderColor: 'rgba(8,145,178,0.35)' }}>
             <p className={styles.heroLabel}>앞으로 펼쳐질</p>
-            <p className={`${styles.heroNum} ${styles.heroNumSmall}`} style={{ color: '#3EC8FF' }}>{fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 함께할 가능 시간</span></p>
+            <p className={`${styles.heroNum} ${styles.heroNumSmall}`} style={{ color: '#0891B2' }}>{fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 함께할 가능 시간</span></p>
             <p className={styles.heroSub}>“가능 시간”은 채워가는 것입니다. 어떻게 채울지는 오늘의 선택에 달려 있어요.</p>
           </div>
         </>
@@ -446,7 +446,7 @@ export default function LifeTimeClient() {
                     const isNow  = idx === weekGrid.passedCells
                     const x = col * (weekGrid.cellSize + weekGrid.gap)
                     const y = row * (weekGrid.cellSize + weekGrid.gap)
-                    const fill = isPast ? 'rgba(255,255,255,0.35)' : isNow ? '#C8FF3E' : 'rgba(255,255,255,0.06)'
+                    const fill = isPast ? 'rgba(255,255,255,0.35)' : isNow ? '#0EA5E9' : 'rgba(255,255,255,0.06)'
                     return (
                       <rect
                         key={`${row}-${col}`}

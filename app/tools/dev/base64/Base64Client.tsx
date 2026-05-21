@@ -276,7 +276,7 @@ export default function Base64Client() {
             </div>
             <div className={`${s.outputBox} ${textOutput.error ? s.outputError : ''}`}>
               {textOutput.error
-                ? <span style={{ color: '#FF6B6B' }}>⚠️ {textOutput.error}</span>
+                ? <span style={{ color: '#DC2626' }}>⚠️ {textOutput.error}</span>
                 : (textOutput.value || <span className={s.outputPlaceholder}>결과가 여기에 표시됩니다</span>)
               }
             </div>
@@ -290,7 +290,7 @@ export default function Base64Client() {
               </div>
               <div className={s.sizeRow}><span>원본 (UTF-8 바이트)</span><strong>{sizeAnalysis.origBytes.toLocaleString()} B</strong></div>
               <div className={s.sizeRow}><span>Base64 결과</span><strong>{sizeAnalysis.encBytes.toLocaleString()} B</strong></div>
-              <div className={s.sizeRow}><span>오버헤드</span><strong style={{ color: '#FF8C3E' }}>+{sizeAnalysis.overhead.toFixed(1)}%</strong></div>
+              <div className={s.sizeRow}><span>오버헤드</span><strong style={{ color: '#EA580C' }}>+{sizeAnalysis.overhead.toFixed(1)}%</strong></div>
               <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
                 ※ Base64 인코딩은 약 33% 크기 증가 (3바이트 → 4문자)
               </p>
@@ -435,7 +435,7 @@ export default function Base64Client() {
                       </div>
                       <div className={s.sizeRow}>
                         <span>상태</span>
-                        <strong style={{ color: jwtExpInfo.isExpired ? '#FF6B6B' : '#3EFF9B' }}>
+                        <strong style={{ color: jwtExpInfo.isExpired ? '#DC2626' : '#059669' }}>
                           {jwtExpInfo.isExpired
                             ? `❌ 만료됨 (${Math.abs(jwtExpInfo.remainingSec ?? 0)}초 전)`
                             : `✓ 유효 (남은 ${jwtExpInfo.remainingSec}초)`}

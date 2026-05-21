@@ -16,8 +16,8 @@
 @media (max-width: 540px) { .tab { font-size: 12px; padding: 11px 4px; } }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabThawActive   { background: #3EC8FF !important; color: #000 !important; font-weight: 700 !important; }
-.tabFreezeActive { background: #7DC4FF !important; color: #000 !important; font-weight: 700 !important; }
+.tabThawActive   { background: #0891B2 !important; color: #fff !important; font-weight: 700 !important; }
+.tabFreezeActive { background: #0284C7 !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 카드 ── */
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
@@ -36,8 +36,8 @@
 .foodBtnIcon { font-size: 22px; line-height: 1; }
 .foodBtnText { font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); text-align: center; line-height: 1.3; }
 .foodActive {
-  background: rgba(62,200,255,0.12) !important;
-  border-color: rgba(62,200,255,0.5) !important;
+  background: rgba(8,145,178,0.18) !important;
+  border-color: rgba(8,145,178,0.5) !important;
 }
 
 /* ── 두께 가이드 ── */
@@ -47,12 +47,12 @@
   padding: 6px 12px; font-size: 11px; color: var(--muted);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
 }@media (hover: hover) {
-  .guideBtn:hover { border-color: rgba(62,200,255,0.4); color: #3EC8FF; }
+  .guideBtn:hover { border-color: rgba(8,145,178,0.4); color: #0891B2; }
 }
 .guideActive {
-  background: rgba(62,200,255,0.12) !important;
-  border-color: rgba(62,200,255,0.4) !important;
-  color: #3EC8FF !important;
+  background: rgba(8,145,178,0.18) !important;
+  border-color: rgba(8,145,178,0.4) !important;
+  color: #0891B2 !important;
 }
 
 /* ── 슬라이더 + 입력 ── */
@@ -64,9 +64,9 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .valueInput::-webkit-inner-spin-button, .valueInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.valueInput:focus { border-color: rgba(62,200,255,0.4); }
+.valueInput:focus { border-color: rgba(8,145,178,0.4); }
 .valueUnit { font-size: 16px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; flex-shrink: 0; }
-.slider { width: 100%; accent-color: #3EC8FF; cursor: pointer; height: 6px; display: block; }
+.slider { width: 100%; accent-color: #0891B2; cursor: pointer; height: 6px; display: block; }
 .sliderLabels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; margin-top: 4px; }
 
 /* ── 프리셋 ── */
@@ -76,12 +76,12 @@
   padding: 6px 12px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; transition: all 0.15s;
 }@media (hover: hover) {
-  .presetBtn:hover { border-color: rgba(62,200,255,0.4); color: #3EC8FF; }
+  .presetBtn:hover { border-color: rgba(8,145,178,0.4); color: #0891B2; }
 }
 .presetActive {
-  background: rgba(62,200,255,0.12) !important;
-  border-color: rgba(62,200,255,0.4) !important;
-  color: #3EC8FF !important;
+  background: rgba(8,145,178,0.18) !important;
+  border-color: rgba(8,145,178,0.4) !important;
+  color: #0891B2 !important;
 }
 
 /* ── 토글 버튼 그룹 ── */
@@ -96,9 +96,9 @@
   .toggleBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .toggleActive {
-  background: rgba(62,200,255,0.12) !important;
-  border-color: rgba(62,200,255,0.4) !important;
-  color: #3EC8FF !important;
+  background: rgba(8,145,178,0.18) !important;
+  border-color: rgba(8,145,178,0.4) !important;
+  color: #0891B2 !important;
 }
 /* 컴팩트 토글 — 라벨 + 작은 온도 표시 */
 .toggleBtnMini {
@@ -119,7 +119,7 @@
 @media (hover: hover) {
   .toggleBtnMini:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.toggleBtnMini.toggleActive small { color: #3EC8FF; opacity: 1; }
+.toggleBtnMini.toggleActive small { color: #0891B2; opacity: 1; }
 .fieldLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
 
 /* ── 해동 방법 4카드 ── */
@@ -131,17 +131,17 @@
 }@media (hover: hover) {
   .methodCard:hover { transform: translateY(-2px); }
 }
-.methodFridge  { border-color: rgba(62,200,255,0.35); }
-.methodWater   { border-color: rgba(62,200,255,0.55); }
-.methodRoom    { border-color: rgba(255,140,62,0.35); }
-.methodMicro   { border-color: rgba(200,255,62,0.35); }
+.methodFridge  { border-color: rgba(8,145,178,0.35); }
+.methodWater   { border-color: rgba(8,145,178,0.55); }
+.methodRoom    { border-color: rgba(234,88,12,0.35); }
+.methodMicro   { border-color: rgba(14,165,233,0.35); }
 
 .methodSelected {
-  box-shadow: 0 0 0 2px rgba(62,200,255,0.35);
+  box-shadow: 0 0 0 2px rgba(8,145,178,0.35);
   transform: translateY(-2px);
 }
-.methodRoom.methodSelected { box-shadow: 0 0 0 2px rgba(255,140,62,0.45); }
-.methodMicro.methodSelected { box-shadow: 0 0 0 2px rgba(200,255,62,0.35); }
+.methodRoom.methodSelected { box-shadow: 0 0 0 2px rgba(234,88,12,0.45); }
+.methodMicro.methodSelected { box-shadow: 0 0 0 2px rgba(14,165,233,0.35); }
 
 .methodHead { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .methodName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
@@ -154,24 +154,24 @@
   font-size: 10px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.04em; flex-shrink: 0;
 }
-.safeHigh { background: rgba(62,255,155,0.15); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.4); }
-.safeMid  { background: rgba(200,255,62,0.15); color: var(--accent); border: 1px solid rgba(200,255,62,0.4); }
-.safeCaution { background: rgba(255,140,62,0.15); color: #FF8C3E; border: 1px solid rgba(255,140,62,0.4); }
-.safeLow  { background: rgba(255,107,107,0.15); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.4); }
+.safeHigh { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
+.safeMid  { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
+.safeCaution { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
+.safeLow  { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
 
 /* ── 히어로 ── */
 .hero {
-  background: var(--bg2); border: 1px solid rgba(62,200,255,0.35);
+  background: var(--bg2); border: 1px solid rgba(8,145,178,0.35);
   border-radius: 14px; padding: 22px 24px;
   animation: thawFadeUp 0.25s ease;
 }
-.heroRoom  { border-color: rgba(255,140,62,0.45) !important; }
-.heroMicro { border-color: rgba(200,255,62,0.4) !important; }
-.heroFreeze { border-color: rgba(125,196,255,0.45) !important; }
+.heroRoom  { border-color: rgba(234,88,12,0.45) !important; }
+.heroMicro { border-color: rgba(14,165,233,0.4) !important; }
+.heroFreeze { border-color: rgba(8,145,178,0.45) !important; }
 .heroTop { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
 .heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
 .heroMethod { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 9vw, 56px); font-weight: 800; line-height: 1; color: #3EC8FF; }
+.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 9vw, 56px); font-weight: 800; line-height: 1; color: #0891B2; }
 .heroUnit { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--muted); margin-left: 6px; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
 
@@ -195,11 +195,11 @@
 }
 .thermRule {
   font-size: 11.5px;
-  color: #FF6B6B;
+  color: #DC2626;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
-  background: rgba(255,107,107,0.08);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 999px;
   padding: 4px 10px;
   line-height: 1.4;
@@ -217,16 +217,16 @@
 
 /* ── 안전 경고 ── */
 .warnBox {
-  background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.3);
+  background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.3);
   border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06); border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14); border: 1px solid rgba(8,145,178,0.25);
   border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 /* ── 보관 기간 바 ── */
 .storageList { display: flex; flex-direction: column; gap: 10px; }
@@ -237,7 +237,7 @@
   border: 1px solid var(--border);
 }
 .storageBarFill {
-  height: 100%; background: linear-gradient(90deg, #3EC8FF, #7DC4FF); border-radius: 6px;
+  height: 100%; background: linear-gradient(90deg, #0891B2, #0284C7); border-radius: 6px;
 }
 .storageTime { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; }
 
@@ -247,9 +247,9 @@
   border-radius: 10px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: rgba(62,200,255,0.4); color: #3EC8FF; }
+  .copyBtn:hover { border-color: rgba(8,145,178,0.4); color: #0891B2; }
 }
-.copyBtnDone { border-color: rgba(62,255,155,0.4) !important; color: #3EFF9B !important; }
+.copyBtnDone { border-color: rgba(16,185,129,0.4) !important; color: #059669 !important; }
 
 /* ── 비교표 ── */
 .compareList { display: flex; flex-direction: column; gap: 8px; }
@@ -274,12 +274,12 @@
 }
 
 /* ─── 3탭 색상 추가 ─── */
-.tabGuideActive { background: #FFD700 !important; color: #000 !important; font-weight: 700 !important; }
+.tabGuideActive { background: #CA8A04 !important; color: #fff !important; font-weight: 700 !important; }
 
 /* 정보 박스 */
 .infoBox2 {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -287,7 +287,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox2 strong { color: #3EC8FF; }
+.infoBox2 strong { color: #0891B2; }
 
 /* 위험도 카드 */
 .riskCard {
@@ -297,10 +297,10 @@
   border-style: solid;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.riskCardSafe    { background: rgba(62,255,155,0.04); border-color: rgba(62,255,155,0.40); }
-.riskCardCaution { background: rgba(255,215,0,0.04);  border-color: rgba(255,215,0,0.40); }
-.riskCardWarning { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.40); }
-.riskCardDanger  { background: rgba(255,107,107,0.04); border-color: rgba(255,107,107,0.40); }
+.riskCardSafe    { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.40); }
+.riskCardCaution { background: rgba(202,138,4,0.14);  border-color: rgba(202,138,4,0.40); }
+.riskCardWarning { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.40); }
+.riskCardDanger  { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.40); }
 
 .riskHeader {
   display: flex;
@@ -345,8 +345,8 @@
 
 /* 빠른 경고 */
 .quickWarn {
-  background: rgba(255,107,107,0.08);
-  border: 1px solid rgba(255,107,107,0.40);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.40);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -404,7 +404,7 @@
 }@media (hover: hover) {
   .microPowerBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.microPowerBtnActive { background: rgba(62,200,255,0.12); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.microPowerBtnActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 .microCompareTable {
   width: 100%;
@@ -436,8 +436,8 @@
   font-weight: 600;
   color: var(--text);
 }
-.microCompareTable tbody tr.activePower { background: rgba(62,200,255,0.06); }
-.microCompareTable tbody tr.activePower td:first-child { color: #3EC8FF; }
+.microCompareTable tbody tr.activePower { background: rgba(8,145,178,0.14); }
+.microCompareTable tbody tr.activePower td:first-child { color: #0891B2; }
 
 /* 식품 가이드 카드 (Tab 3) */
 .foodGuideGrid {
@@ -452,7 +452,7 @@
   padding: 16px 18px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.foodGuideCardHigh { border-color: rgba(255,140,62,0.30); }
+.foodGuideCardHigh { border-color: rgba(234,88,12,0.30); }
 .foodGuideHeader {
   display: flex;
   align-items: center;
@@ -463,7 +463,7 @@
 }
 .foodGuideEmoji { font-size: 26px; }
 .foodGuideName { font-size: 16px; font-weight: 800; color: var(--text); }
-.foodGuideHighRisk { font-size: 10.5px; color: #FF8C3E; font-weight: 700; margin-left: auto; padding: 2px 8px; background: rgba(255,140,62,0.10); border-radius: 999px; }
+.foodGuideHighRisk { font-size: 10.5px; color: #EA580C; font-weight: 700; margin-left: auto; padding: 2px 8px; background: rgba(234,88,12,0.18); border-radius: 999px; }
 .foodGuideTipList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
 .foodGuideTipList li { font-size: 12.5px; color: var(--muted); line-height: 1.65; }
 
@@ -478,8 +478,8 @@
 
 /* 역산 결과 */
 .reverseResultCard {
-  background: rgba(255,215,0,0.04);
-  border: 1px solid rgba(255,215,0,0.30);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 10px;
   padding: 12px 16px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -487,15 +487,15 @@
   color: var(--text);
   line-height: 1.85;
 }
-.reverseResultCard strong { color: #FFD700; }
+.reverseResultCard strong { color: #CA8A04; }
 .reverseResultRow { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; }
 .reverseResultRow span:first-child { color: var(--muted); font-size: 12px; }
 .reverseResultRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); }
 
 /* 면책 강화 */
 .disclaimerStrong2 {
-  background: rgba(255,107,107,0.04);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
@@ -503,7 +503,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.disclaimerStrong2 strong { color: #FF6B6B; }
+.disclaimerStrong2 strong { color: #DC2626; }
 .disclaimerStrong2 ul { margin: 6px 0 8px; padding-left: 18px; }
 .disclaimerStrong2 li { margin-bottom: 3px; color: var(--muted); }
 

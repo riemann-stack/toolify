@@ -1,0 +1,516 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.note {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+.note strong { color: var(--text); }
+.kbd {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--text);
+}
+.link { color: var(--accent); text-decoration: none; font-weight: 600; }
+.link:hover { text-decoration: underline; }
+
+/* ── 모드 토글 ── */
+.modeRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.modeBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.12s;
+}
+@media (hover: hover) { .modeBtn:hover { color: var(--text); border-color: var(--border-hover); } }
+.modeBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.sampleBtn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 11.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) { .sampleBtn:hover { color: var(--accent); border-color: var(--accent); } }
+
+/* ── URL 모드 ── */
+.urlRow {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+.urlInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.urlInput:focus { border-color: var(--accent); }
+@media (max-width: 640px) { .urlInput { font-size: 16px; } }
+.fetchBtn {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.fetchBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+@media (hover: hover) { .fetchBtn:not(:disabled):hover { filter: brightness(1.1); } }
+
+.errBox {
+  margin-top: 10px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.30);
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 12.5px;
+  color: #DC2626;
+}
+
+/* ── HTML 모드 ── */
+.htmlInput {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 140px;
+  outline: none;
+  box-sizing: border-box;
+}
+.htmlInput:focus { border-color: var(--accent); }
+@media (max-width: 640px) { .htmlInput { font-size: 13px; } }
+
+/* ── 검증 ── */
+.issueList { display: flex; flex-direction: column; gap: 5px; }
+.issue {
+  display: grid;
+  grid-template-columns: 18px auto 1fr;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  border: 1px solid;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.issueIcon {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  text-align: center;
+}
+.issueField {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  background: var(--bg2);
+  padding: 1px 7px;
+  border-radius: 4px;
+  color: var(--text);
+}
+.issueMsg { color: var(--muted); line-height: 1.5; }
+.issue_ok    { background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.30); }
+.issue_ok    .issueIcon { color: #059669; }
+.issue_warn  { background: rgba(217, 119, 6, 0.05); border-color: rgba(217, 119, 6, 0.30); }
+.issue_warn  .issueIcon { color: #D97706; }
+.issue_error { background: rgba(220, 38, 38, 0.06); border-color: rgba(220, 38, 38, 0.35); }
+.issue_error .issueIcon { color: #DC2626; }
+.issue_info  { background: var(--bg3); border-color: var(--border); }
+.issue_info  .issueIcon { color: var(--muted); }
+
+/* ── 미리보기 그리드 ── */
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 720px) { .previewGrid { grid-template-columns: 1fr; } }
+.previewBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.previewHead {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.previewHead small { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+/* ── 카카오톡 ── */
+.kakaoWrap {
+  background: #ABC1D1;
+  border-radius: 8px;
+  padding: 12px;
+}
+.kakaoCard {
+  background: #FFFFFF;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 320px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.kakaoImg {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  display: block;
+}
+.kakaoImgPlaceholder {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  background: #EEE;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.kakaoBody { padding: 10px 12px; }
+.kakaoTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #212121;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 4px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.kakaoDesc {
+  font-size: 12px;
+  color: #767676;
+  line-height: 1.45;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 6px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.kakaoDomain { font-size: 11px; color: #ACACAC; font-family: 'Noto Sans KR', sans-serif; }
+
+/* ── Facebook ── */
+.fbCard {
+  background: #F0F2F5;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #CED0D4;
+}
+.fbImg, .fbImgPlaceholder {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  object-fit: cover;
+  display: block;
+  background: #DADDE1;
+  color: #65676B;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+}
+.fbImgPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fbBody {
+  padding: 10px 12px;
+  background: #F0F2F5;
+}
+.fbDomain {
+  font-size: 11px;
+  color: #65676B;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+}
+.fbTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C1E21;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.3;
+  margin-bottom: 3px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.fbDesc {
+  font-size: 12px;
+  color: #65676B;
+  line-height: 1.4;
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+/* ── X (Twitter) ── */
+.twCardLarge {
+  background: #FFF;
+  border: 1px solid #2F3336;
+  border-radius: 16px;
+  overflow: hidden;
+  color: #0F1419;
+}
+.twImgLarge {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  object-fit: cover;
+  display: block;
+}
+.twBody { padding: 10px 12px; }
+.twCardSmall {
+  background: #FFF;
+  border: 1px solid #2F3336;
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  color: #0F1419;
+}
+.twImgSmall {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+.twImgSmallPlaceholder {
+  width: 100px;
+  height: 100px;
+  background: #E1E8ED;
+  color: #657786;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.twDomain {
+  font-size: 12px;
+  color: #536471;
+  font-family: 'Inter', system-ui, sans-serif;
+  margin-bottom: 1px;
+}
+.twTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F1419;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.35;
+  margin-bottom: 2px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.twDesc {
+  font-size: 13px;
+  color: #536471;
+  line-height: 1.4;
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ── LinkedIn ── */
+.liCard {
+  background: #FFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.liImg {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  object-fit: cover;
+  display: block;
+  background: #EEF3F8;
+}
+.liBody { padding: 10px 12px; background: #EEF3F8; }
+.liTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.35;
+  margin-bottom: 2px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.liDomain {
+  font-size: 12px;
+  color: #5E6A75;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Slack ── */
+.slackCard {
+  background: #1A1D21;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 4px 1fr;
+  overflow: hidden;
+}
+.slackBar { background: #ABABAD; }
+.slackContent { padding: 10px 14px; color: #D1D2D3; }
+.slackSite {
+  font-size: 12px;
+  color: #ABABAD;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 3px;
+}
+.slackTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1D9BD1;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.35;
+  margin-bottom: 3px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.slackDesc {
+  font-size: 13px;
+  color: #D1D2D3;
+  line-height: 1.45;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 8px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.slackImg {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-top: 4px;
+  display: block;
+  max-height: 200px;
+}
+
+/* ── 코드 출력 ── */
+.code {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+  box-sizing: border-box;
+}
+.copyBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.12s;
+}
+@media (hover: hover) { .copyBtn:hover { color: var(--accent); border-color: var(--accent); } }
+.copyBtnDone { color: #059669 !important; border-color: rgba(16,185,129,0.5) !important; }
+
+/* ── 빈 상태 ── */
+.empty {
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 40px 24px;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.emptyTitle {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.empty p:last-child {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0;
+}

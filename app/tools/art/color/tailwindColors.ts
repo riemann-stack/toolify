@@ -105,13 +105,13 @@ export const BRAND_COLORS: { name: string; hex: string }[] = [
 
 /** 그라디언트 프리셋 */
 export const GRADIENT_PRESETS: { name: string; stops: { hex: string; pos: number }[]; angle: number }[] = [
-  { name: 'Sunset',   stops: [{ hex: '#FF6B6B', pos: 0 }, { hex: '#FFD93D', pos: 50 }, { hex: '#FF8E3C', pos: 100 }], angle: 135 },
-  { name: 'Ocean',    stops: [{ hex: '#3EC8FF', pos: 0 }, { hex: '#0066FF', pos: 100 }], angle: 135 },
-  { name: 'Forest',   stops: [{ hex: '#3EFF9B', pos: 0 }, { hex: '#0E7C66', pos: 100 }], angle: 135 },
+  { name: 'Sunset',   stops: [{ hex: '#DC2626', pos: 0 }, { hex: '#FFD93D', pos: 50 }, { hex: '#FF8E3C', pos: 100 }], angle: 135 },
+  { name: 'Ocean',    stops: [{ hex: '#0891B2', pos: 0 }, { hex: '#0066FF', pos: 100 }], angle: 135 },
+  { name: 'Forest',   stops: [{ hex: '#059669', pos: 0 }, { hex: '#0E7C66', pos: 100 }], angle: 135 },
   { name: 'Twilight', stops: [{ hex: '#8B5CF6', pos: 0 }, { hex: '#3B82F6', pos: 100 }], angle: 135 },
-  { name: 'Aurora',   stops: [{ hex: '#3EFF9B', pos: 0 }, { hex: '#3EC8FF', pos: 50 }, { hex: '#A855F7', pos: 100 }], angle: 135 },
+  { name: 'Aurora',   stops: [{ hex: '#059669', pos: 0 }, { hex: '#0891B2', pos: 50 }, { hex: '#A855F7', pos: 100 }], angle: 135 },
   { name: 'Berry',    stops: [{ hex: '#EC4899', pos: 0 }, { hex: '#A855F7', pos: 100 }], angle: 135 },
-  { name: 'Citrus',   stops: [{ hex: '#FFD700', pos: 0 }, { hex: '#FF6B00', pos: 100 }], angle: 135 },
-  { name: 'Mint',     stops: [{ hex: '#3EFF9B', pos: 0 }, { hex: '#3EC8FF', pos: 100 }], angle: 90 },
+  { name: 'Citrus',   stops: [{ hex: '#CA8A04', pos: 0 }, { hex: '#FF6B00', pos: 100 }], angle: 135 },
+  { name: 'Mint',     stops: [{ hex: '#059669', pos: 0 }, { hex: '#0891B2', pos: 100 }], angle: 90 },
   { name: 'Mono',     stops: [{ hex: '#FAFAFA', pos: 0 }, { hex: '#1F2937', pos: 100 }], angle: 135 },
 ]

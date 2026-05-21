@@ -44,11 +44,11 @@ const catMeta = (k: Category) => CATEGORIES.find(c => c.key === k) ?? CATEGORIES
 
 // 카테고리별 SVG 색상 (CSS dot 색상과 일치)
 const CATEGORY_COLORS: Record<Category, string> = {
-  flour:  '#C8FF3E',
-  liquid: '#3EC8FF',
-  salt:   '#FFD93E',
+  flour:  '#0EA5E9',
+  liquid: '#0891B2',
+  salt:   '#D97706',
   yeast:  '#9B59B6',
-  sugar:  '#FF8C3E',
+  sugar:  '#EA580C',
   fat:    '#E8B947',
   other:  '#94A3B8',
 }
@@ -893,7 +893,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 

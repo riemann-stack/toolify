@@ -61,7 +61,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'Syne, SF Mono, Consolas, monospace',
   fontSize: '12.5px',
-  color: '#C8FF3E',
+  color: '#0EA5E9',
 }
 
 export default function HttpStatusPage() {
@@ -128,10 +128,10 @@ export default function HttpStatusPage() {
             <tbody>
               {[
                 ['ℹ️ 1xx', '100~199', 'Informational (정보)', '100, 101, 103', '#888888'],
-                ['✅ 2xx', '200~299', 'Success (성공)', '200, 201, 204, 304', '#3EFFD0'],
-                ['↪️ 3xx', '300~399', 'Redirect (리다이렉트)', '301, 302, 307, 308', '#3EC8FF'],
-                ['⚠️ 4xx', '400~499', 'Client Error (클라이언트 오류)', '400, 401, 403, 404, 429', '#FFB83E'],
-                ['🚨 5xx', '500~599', 'Server Error (서버 오류)', '500, 502, 503, 504', '#FF3E8C'],
+                ['✅ 2xx', '200~299', 'Success (성공)', '200, 201, 204, 304', '#0D9488'],
+                ['↪️ 3xx', '300~399', 'Redirect (리다이렉트)', '301, 302, 307, 308', '#0891B2'],
+                ['⚠️ 4xx', '400~499', 'Client Error (클라이언트 오류)', '400, 401, 403, 404, 429', '#D97706'],
+                ['🚨 5xx', '500~599', 'Server Error (서버 오류)', '500, 502, 503, 504', '#DB2777'],
                 ['🔌 비표준', '벤더', 'Cloudflare·nginx 자체 정의', '521, 524, 499', '#9B59B6'],
               ].map((row, i) => (
                 <tr key={i}>
@@ -203,7 +203,7 @@ export default function HttpStatusPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Syne, monospace', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Syne, monospace', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>

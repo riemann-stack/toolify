@@ -52,10 +52,10 @@ export default function CurtainBlindPage() {
             <div><span style={{ color: 'var(--muted)' }}>커튼 폭</span> = 봉 길이 × 주름 배수 (1.5~3배)</div>
             <div><span style={{ color: 'var(--muted)' }}>1패널당 폭</span> = 커튼 폭 ÷ 패널 수</div>
             <div><span style={{ color: 'var(--muted)' }}>커튼 길이</span> = 봉 위치 ~ 끝 + 헴 10cm</div>
-            <div style={{ marginTop: 14, color: '#3EC8FF', fontWeight: 700 }}>블라인드 (인사이드)</div>
+            <div style={{ marginTop: 14, color: '#0891B2', fontWeight: 700 }}>블라인드 (인사이드)</div>
             <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 안쪽 폭 − 1cm</div>
             <div><span style={{ color: 'var(--muted)' }}>길이</span> = 창문 안쪽 높이 − 0.5cm</div>
-            <div style={{ marginTop: 14, color: '#FF8C3E', fontWeight: 700 }}>블라인드 (아웃사이드)</div>
+            <div style={{ marginTop: 14, color: '#EA580C', fontWeight: 700 }}>블라인드 (아웃사이드)</div>
             <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 폭 + 10cm</div>
             <div><span style={{ color: 'var(--muted)' }}>길이</span> = 창문 높이 + 10cm</div>
           </div>
@@ -102,10 +102,10 @@ export default function CurtainBlindPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { p: '×1.5', c: '#3EC8FF', t: '가벼운 주름',     d: '미니멀, 시어 커튼' },
+              { p: '×1.5', c: '#0891B2', t: '가벼운 주름',     d: '미니멀, 시어 커튼' },
               { p: '×2.0', c: 'var(--accent)', t: '한국 표준',  d: '풍성, 일반 거실·침실' },
-              { p: '×2.5', c: '#FF8C3E', t: '매우 풍성',       d: '호텔 스타일' },
-              { p: '×3.0', c: '#FF6B6B', t: '가장 풍성',       d: '고급 인테리어·암막' },
+              { p: '×2.5', c: '#EA580C', t: '매우 풍성',       d: '호텔 스타일' },
+              { p: '×3.0', c: '#DC2626', t: '가장 풍성',       d: '고급 인테리어·암막' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
@@ -123,8 +123,8 @@ export default function CurtainBlindPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { i: '🪟', t: '창문형 (창문 + 10cm)',         d: '창문만 가리는 짧은 커튼. 작은 창문·주방·욕실에 적합.', c: '#3EC8FF' },
-              { i: '🦵', t: '무릎형 (바닥 ~ 무릎)',          d: '한국에서는 비추천. 가구가 많은 공간에서 사용.', c: '#FF8C3E' },
+              { i: '🪟', t: '창문형 (창문 + 10cm)',         d: '창문만 가리는 짧은 커튼. 작은 창문·주방·욕실에 적합.', c: '#0891B2' },
+              { i: '🦵', t: '무릎형 (바닥 ~ 무릎)',          d: '한국에서는 비추천. 가구가 많은 공간에서 사용.', c: '#EA580C' },
               { i: '✨', t: '바닥형 (바닥 5cm 위) — 한국 표준', d: '깔끔한 인상, 청소 편함. 거실·침실 모두 적합.', c: 'var(--accent)' },
               { i: '👑', t: '바닥 닿기 / 풀링 (+15cm)',     d: '호텔·고급 인테리어. 우아하지만 청소 어려움.', c: '#9B59B6' },
             ].map((s, i) => (
@@ -147,10 +147,10 @@ export default function CurtainBlindPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
               { t: '🟪 천장 매립 (커튼박스)',  c: '#9B59B6', d: '신축 아파트에 자주 있음. 가장 깔끔, 천장이 높아 보임. 길이는 천장 ~ 바닥까지.' },
-              { t: '🟨 천장 부착',              c: '#FFD700', d: '봉·레일을 천장에 직접. 콘크리트는 앵커, 석고보드는 보강 필수. 시각적으로 천장 높이 강조.' },
+              { t: '🟨 천장 부착',              c: '#CA8A04', d: '봉·레일을 천장에 직접. 콘크리트는 앵커, 석고보드는 보강 필수. 시각적으로 천장 높이 강조.' },
               { t: '⬜ 벽면 부착 (가장 일반적)', c: 'var(--accent)', d: '창문 위 벽에 봉·브래킷 설치. 창문 상단 +10~15cm 위 부착. 시공이 가장 쉬움.' },
-              { t: '🔷 창문틀 안 (인사이드)',   c: '#3EC8FF', d: '깔끔하고 미니멀. 창문틀 깊이 6cm 이상 필요. 빛이 좌우 가장자리로 새는 단점.' },
-              { t: '🔶 창문틀 밖 (아웃사이드)', c: '#FF8C3E', d: '빛 차단 효과 우수. 작은 창을 크게 보이게 함. 시각적 임팩트 큼.' },
+              { t: '🔷 창문틀 안 (인사이드)',   c: '#0891B2', d: '깔끔하고 미니멀. 창문틀 깊이 6cm 이상 필요. 빛이 좌우 가장자리로 새는 단점.' },
+              { t: '🔶 창문틀 밖 (아웃사이드)', c: '#EA580C', d: '빛 차단 효과 우수. 작은 창을 크게 보이게 함. 시각적 임팩트 큼.' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 6 }}>{s.t}</p>
@@ -192,8 +192,8 @@ export default function CurtainBlindPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { i: '🪟', t: '커튼',       c: 'var(--accent)', d: '거실·침실, 포근한 느낌, 풍성한 인테리어, 단열·방음 우수' },
-              { i: '🎚️', t: '블라인드',  c: '#3EC8FF',       d: '사무실·미니멀, 큰 창문(버티칼), 빛 양 세밀 조절' },
-              { i: '📜', t: '롤스크린',   c: '#FFD700',       d: '욕실·주방·작은 창, 단순한 인테리어, 가성비' },
+              { i: '🎚️', t: '블라인드',  c: '#0891B2',       d: '사무실·미니멀, 큰 창문(버티칼), 빛 양 세밀 조절' },
+              { i: '📜', t: '롤스크린',   c: '#CA8A04',       d: '욕실·주방·작은 창, 단순한 인테리어, 가성비' },
               { i: '🧵', t: '로만쉐이드', c: '#9B59B6',       d: '커튼 분위기 + 블라인드 기능, 침실·소형 창문' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>

@@ -84,7 +84,7 @@ export default function FartRiskPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>나쁜 조합 vs 괜찮은 조합</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'rgba(255,70,70,0.06)', border: '1px solid rgba(255,70,70,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF6B6B', marginBottom: '10px' }}>🚨 최악 조합</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>🚨 최악 조합</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
                   '콩밥 + 양파볶음 + 탄산',
@@ -95,8 +95,8 @@ export default function FartRiskPage() {
                 ))}
               </ul>
             </div>
-            <div style={{ background: 'rgba(62,255,155,0.06)', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EFF9B', marginBottom: '10px' }}>✅ 괜찮은 조합</p>
+            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 괜찮은 조합</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
                   '현미밥 + 두부(소량) + 채소(브로콜리 제외)',
@@ -148,11 +148,11 @@ export default function FartRiskPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { e: '🫧', t: '발효형',     c: '#C8FF3E', d: '콩·양파·마늘·밀·과일·인공감미료 (FODMAP 발효)' },
-              { e: '🥛', t: '유당형',     c: '#3EC8FF', d: '우유·치즈·아이스크림·WPC (락타아제 부족)' },
+              { e: '🫧', t: '발효형',     c: '#0EA5E9', d: '콩·양파·마늘·밀·과일·인공감미료 (FODMAP 발효)' },
+              { e: '🥛', t: '유당형',     c: '#0891B2', d: '우유·치즈·아이스크림·WPC (락타아제 부족)' },
               { e: '🥤', t: '탄산·공기형', c: '#FFD93E', d: '탄산음료·맥주·빠른 식사·빨대 (삼킨 가스)' },
-              { e: '🍔', t: '소화지연형', c: '#FF8C3E', d: '과식·튀김·고지방·가공식품 (느린 소화)' },
-              { e: '🦨', t: '냄새강화형', c: '#FF6B9D', d: '계란·고기·양배추·브로콜리 (황 성분 → H₂S)' },
+              { e: '🍔', t: '소화지연형', c: '#EA580C', d: '과식·튀김·고지방·가공식품 (느린 소화)' },
+              { e: '🦨', t: '냄새강화형', c: '#E11D48', d: '계란·고기·양배추·브로콜리 (황 성분 → H₂S)' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.c}55`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: m.c, marginBottom: '6px' }}>{m.e} {m.t}</p>
@@ -175,8 +175,8 @@ export default function FartRiskPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#FF6B6B',     fontWeight: 600 }}>🔴 고FODMAP (피하기)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EFF9B',     fontWeight: 600 }}>🟢 저FODMAP (대체)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626',     fontWeight: 600 }}>🔴 고FODMAP (피하기)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#059669',     fontWeight: 600 }}>🟢 저FODMAP (대체)</th>
                 </tr>
               </thead>
               <tbody>
@@ -225,9 +225,9 @@ export default function FartRiskPage() {
               </thead>
               <tbody>
                 {[
-                  { n: '💪 WPC (농축유청)',          p: '70~80%', l: '4~8% (많음)', r: '★★★ (특히 유당불내증)', c: '#FF6B6B' },
+                  { n: '💪 WPC (농축유청)',          p: '70~80%', l: '4~8% (많음)', r: '★★★ (특히 유당불내증)', c: '#DC2626' },
                   { n: '💪 WPI (분리유청)',          p: '90%+',   l: '<1% (거의 X)', r: '★★ (낮음)',              c: '#FFD93E' },
-                  { n: '🌱 식물성 (완두·쌀·콩)',     p: '80~90%', l: '0%',          r: '★★ (콩 발효 가능)',       c: '#3EC8FF' },
+                  { n: '🌱 식물성 (완두·쌀·콩)',     p: '80~90%', l: '0%',          r: '★★ (콩 발효 가능)',       c: '#0891B2' },
                   { n: '🥛 카제인 (천천히 흡수)',    p: '80%+',   l: '소량',         r: '★★ (소화 지연)',          c: '#FFD93E' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -280,8 +280,8 @@ export default function FartRiskPage() {
         </div>
 
         {/* 9. 면책 강화 */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '14px', fontWeight: 700, color: '#FF6B6B', marginBottom: '12px' }}>⚠️ 책임 있는 사용 안내</p>
+        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#DC2626', marginBottom: '12px' }}>⚠️ 책임 있는 사용 안내</p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 계산기는 <strong style={{ color: 'var(--text)' }}>재미·교육용 참고 도구</strong>입니다. 의학적 진단·처방·치료 도구가 아니며, 모든 점수는 추정으로 개인 체질에 따라 다릅니다. 본 결과로 질병 진단은 불가합니다.
           </p>
@@ -312,7 +312,7 @@ export default function FartRiskPage() {
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
                   <span style={{ color: 'var(--muted)' }}>{c.l}</span>
-                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF8C3E' }}>{c.t}</span>
+                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#EA580C' }}>{c.t}</span>
                 </div>
               ))}
             </div>

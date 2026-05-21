@@ -55,8 +55,8 @@ const DEFAULT_CONFIG = (): GradientConfig => ({
   space: 'oklch',
   angle: 135,
   shape: 'circle',
-  stops: [makeStop('#FF6B9D', 0), makeStop('#7B82E0', 50), makeStop('#3EC8FF', 100)],
-  mesh:  { tl: '#FF6B9D', tr: '#FFB938', bl: '#3EC8FF', br: '#7B82E0' },
+  stops: [makeStop('#E11D48', 0), makeStop('#7B82E0', 50), makeStop('#0891B2', 100)],
+  mesh:  { tl: '#E11D48', tr: '#FFB938', bl: '#0891B2', br: '#7B82E0' },
   noise: 0,
 })
 
@@ -176,7 +176,7 @@ export default function GradientGeneratorClient() {
   }), [cfg.stops])
 
   /* ── 자동 추천 (1색 기준) ── */
-  const [autoBase, setAutoBase] = useState('#3EC8FF')
+  const [autoBase, setAutoBase] = useState('#0891B2')
   const suggestions = useMemo(() => autoSuggestions(autoBase), [autoBase])
 
   /* ── 즐겨찾기 ── */

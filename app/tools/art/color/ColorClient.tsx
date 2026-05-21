@@ -41,8 +41,8 @@ const PRESETS = [
   { name: '흰색',     hex: '#FFFFFF' },
   { name: '아이보리', hex: '#FFFFF0' },
   { name: '회색',     hex: '#737373' },
-  { name: 'Toolify',  hex: '#3EC8FF' },
-  { name: '액센트',   hex: '#C8FF3E' },
+  { name: 'Toolify',  hex: '#0891B2' },
+  { name: '액센트',   hex: '#0EA5E9' },
 ]
 
 /* localStorage 히스토리 */
@@ -81,7 +81,7 @@ function useCopy(): [string | null, (key: string, text: string) => void] {
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function ColorClient() {
   const [tab, setTab] = useState<Tab>('convert')
-  const [hex, setHex] = useState('#3EC8FF')
+  const [hex, setHex] = useState('#0891B2')
   const [alpha, setAlpha] = useState(100)
   const [history, setHistory] = useState<string[]>([])
   const [copiedKey, copy] = useCopy()
@@ -367,10 +367,10 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
   }, [textRgb, bgRgb, grade.aa_normal])
 
   const interpretation = useMemo(() => {
-    if (ratio >= 7)   return { msg: '대비비가 매우 우수합니다. 모든 텍스트 크기와 UI에서 사용 가능합니다.', color: '#3EFF9B' }
-    if (ratio >= 4.5) return { msg: '일반 텍스트(AA)와 큰 텍스트(AAA) 기준을 통과합니다. 충분한 가독성입니다.', color: '#C8FF3E' }
-    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: '#FFD700' }
-    return                   { msg: '대비비가 낮아 가독성이 떨어집니다. 일반 본문에는 권장하지 않습니다.', color: '#FF6B6B' }
+    if (ratio >= 7)   return { msg: '대비비가 매우 우수합니다. 모든 텍스트 크기와 UI에서 사용 가능합니다.', color: '#059669' }
+    if (ratio >= 4.5) return { msg: '일반 텍스트(AA)와 큰 텍스트(AAA) 기준을 통과합니다. 충분한 가독성입니다.', color: '#0EA5E9' }
+    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: '#CA8A04' }
+    return                   { msg: '대비비가 낮아 가독성이 떨어집니다. 일반 본문에는 권장하지 않습니다.', color: '#DC2626' }
   }, [ratio])
 
   // 색맹 시뮬레이션 — 두 색상 동시 변환
@@ -422,7 +422,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       {/* 대비비 결과 */}
       <div className={styles.contrastHero}>
         <div className={styles.contrastValue}
-          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? '#3EFF9B' : grade.level === 'AA Large' ? '#FFD700' : '#FF6B6B' }}>
+          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? '#059669' : grade.level === 'AA Large' ? '#CA8A04' : '#DC2626' }}>
           {ratio.toFixed(2)} : 1
         </div>
         <div className={styles.contrastLabel}>WCAG 대비비 — 등급 {grade.level}</div>
@@ -886,7 +886,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
 /* ═════════════════════════════════════════ 탭 5: 그라디언트 ═════════════════════════════════════════ */
 function GradientTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: string, t: string) => void }) {
   const [stops, setStops] = useState<{ hex: string; pos: number }[]>([
-    { hex: '#3EC8FF', pos: 0 },
+    { hex: '#0891B2', pos: 0 },
     { hex: '#A855F7', pos: 100 },
   ])
   const [type, setType] = useState<GradientType>('linear')

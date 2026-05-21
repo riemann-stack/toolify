@@ -50,7 +50,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* ── 필드 ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -148,7 +148,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 .checkRow {
   display: inline-flex;
@@ -163,8 +163,8 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(135deg, rgba(200,255,62,0.1) 0%, rgba(62,200,255,0.05) 100%);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(8,145,178,0.14) 100%);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 28px 24px;
   text-align: center;
@@ -193,7 +193,7 @@
 .heroLimit {
   display: inline-block;
   margin-left: 4px;
-  color: #FF6B6B;
+  color: #DC2626;
   font-weight: 600;
 }
 @media (max-width: 600px) {
@@ -218,7 +218,7 @@
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellGood { color: #3EFF9B; }
+.cellGood { color: #059669; }
 .rowBig td {
   background: var(--bg3);
   font-weight: 700;
@@ -261,7 +261,7 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 .scenarioTable tr:last-child td { border-bottom: none; }
-.rowDanger td { background: rgba(255, 107, 107, 0.06); }
+.rowDanger td { background: rgba(220, 38, 38, 0.06); }
 .scenarioNote {
   margin-top: 10px;
   font-size: 12px;
@@ -271,21 +271,21 @@
 
 /* ── 위험·주의 카드 ── */
 .dangerCard {
-  background: rgba(255, 107, 107, 0.06);
-  border: 1px solid rgba(255, 107, 107, 0.4);
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.4);
   border-radius: 12px;
   padding: 14px 16px;
 }
-.dangerCard strong { display: block; color: #FF6B6B; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.dangerCard strong { display: block; color: #DC2626; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .dangerCard p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 .cautionCard {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.4);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.4);
   border-radius: 12px;
   padding: 14px 16px;
 }
-.cautionCard strong { display: block; color: #FFB83E; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.cautionCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .cautionCard p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 /* ── 빈 상태 ── */
@@ -316,7 +316,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: #3EFF9B; color: #3EFF9B; }
+.copyBtnDone { border-color: #059669; color: #059669; }
 
 /* ── 메모 ── */
 .saveBtn {
@@ -327,7 +327,7 @@
   padding: 12px;
   font-size: 13px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 44px;
@@ -348,7 +348,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
-  .clearBtn:hover { border-color: #FF8C8C; color: #FF8C8C; }
+  .clearBtn:hover { border-color: #DC2626; color: #DC2626; }
 }
 
 .memoActions {
@@ -387,7 +387,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .memoRemove:hover { color: #FF8C8C; }
+  .memoRemove:hover { color: #DC2626; }
 }
 .memoMeta {
   font-size: 12px;
@@ -411,12 +411,12 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 .memoDateChipAccent {
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
   color: var(--accent);
 }
 .memoRefund {
   font-size: 12px;
-  color: #3EFF9B;
+  color: #059669;
   font-family: 'Inter', system-ui, sans-serif;
 }
 .memoNotes {
@@ -427,8 +427,8 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.25);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -437,7 +437,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

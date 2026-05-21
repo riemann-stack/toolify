@@ -721,17 +721,17 @@ function FermentationGraph({
         {/* 사용 적정 구간 */}
         <rect x={usableStart} y={padT}
           width={Math.max(0, usableEnd - usableStart)} height={plotH}
-          fill="rgba(62,255,155,0.12)" />
+          fill="rgba(16,185,129,0.12)" />
 
         {/* 피크 기준선 */}
         <line x1={padL} x2={W - padR} y1={toY(200)} y2={toY(200)}
-          stroke="rgba(200,255,62,0.2)" strokeDasharray="3 4" />
+          stroke="rgba(14,165,233,0.2)" strokeDasharray="3 4" />
 
         {/* 발효 곡선 */}
         <polyline points={poly} fill="none" stroke="var(--accent)" strokeWidth={2.5} strokeLinejoin="round" />
 
         {/* 피크 마커 */}
-        <circle cx={peakX} cy={peakY} r={6} fill="#3EFF9B" stroke="var(--bg2)" strokeWidth={2} />
+        <circle cx={peakX} cy={peakY} r={6} fill="#059669" stroke="var(--bg2)" strokeWidth={2} />
 
         {/* 주요 지점 */}
         {markers.map((m, i) => {
@@ -739,7 +739,7 @@ function FermentationGraph({
           return (
             <g key={i}>
               <circle cx={toX(m.t)} cy={toY(v)} r={3}
-                fill={m.highlight ? '#3EFF9B' : 'var(--accent)'} />
+                fill={m.highlight ? '#059669' : 'var(--accent)'} />
             </g>
           )
         })}

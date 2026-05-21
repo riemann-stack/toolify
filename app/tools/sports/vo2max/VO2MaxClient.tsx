@@ -376,11 +376,11 @@ export default function VO2MaxClient() {
           <div className={s.cardLabel}>🎯 강도별 트레이닝 페이스</div>
           <div className={s.paceGrid}>
             {[
-              { id: 'E', name: 'Easy (회복)', desc: '대화 가능. 70~75% HRmax', sec: paces.E, color: '#3EFF9B' },
-              { id: 'M', name: '마라톤',       desc: '풀코스 race pace',         sec: paces.M, color: '#3EC8FF' },
+              { id: 'E', name: 'Easy (회복)', desc: '대화 가능. 70~75% HRmax', sec: paces.E, color: '#059669' },
+              { id: 'M', name: '마라톤',       desc: '풀코스 race pace',         sec: paces.M, color: '#0891B2' },
               { id: 'T', name: 'Threshold (역치)', desc: '1시간 race pace · 20~40분', sec: paces.T, color: '#FFD93E' },
-              { id: 'I', name: 'Interval',     desc: 'VO₂max 자극 · 3~5분 반복',  sec: paces.I, color: '#FF8C3E' },
-              { id: 'R', name: 'Repetition',   desc: '스피드 · 200~600m 반복',    sec: paces.R, color: '#FF6B6B' },
+              { id: 'I', name: 'Interval',     desc: 'VO₂max 자극 · 3~5분 반복',  sec: paces.I, color: '#EA580C' },
+              { id: 'R', name: 'Repetition',   desc: '스피드 · 200~600m 반복',    sec: paces.R, color: '#DC2626' },
             ].map(p => (
               <div key={p.id} className={s.paceRow}
                 style={{ borderLeftColor: p.color }}>

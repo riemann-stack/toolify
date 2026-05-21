@@ -16,11 +16,11 @@ type TabKey = 'diagnose' | 'random' | 'learn'
 const DEFAULT_OPTIONS = ['🟢 BUY', '🟡 HOLD', '🔴 SELL']
 
 // 옵션별 시각 색상 (BUY/HOLD/SELL 자동 매핑 + 폴백)
-const SLICE_COLORS = ['#3EFF9B', '#FFD93E', '#FF6B6B', '#3EC8FF', '#C8FF3E', '#FF8C3E', '#B885DA', '#3EFFD0']
+const SLICE_COLORS = ['#059669', '#FFD93E', '#DC2626', '#0891B2', '#0EA5E9', '#EA580C', '#B885DA', '#0D9488']
 
 function colorFor(option: string, idx: number): string {
-  if (option.includes('BUY') || option.includes('매수')) return '#3EFF9B'
-  if (option.includes('SELL') || option.includes('매도')) return '#FF6B6B'
+  if (option.includes('BUY') || option.includes('매수')) return '#059669'
+  if (option.includes('SELL') || option.includes('매도')) return '#DC2626'
   if (option.includes('HOLD') || option.includes('보유')) return '#FFD93E'
   return SLICE_COLORS[idx % SLICE_COLORS.length]
 }
@@ -231,11 +231,11 @@ export default function StockDecisionClient() {
               <div className={s.scoreRow}>
                 <div className={s.scoreCol}>
                   <span className={s.scoreLabel}>위험 신호</span>
-                  <span className={s.scoreVal} style={{ color: '#FF8C8C' }}>{result.riskScore}</span>
+                  <span className={s.scoreVal} style={{ color: '#DC2626' }}>{result.riskScore}</span>
                 </div>
                 <div className={s.scoreCol}>
                   <span className={s.scoreLabel}>이성 신호</span>
-                  <span className={s.scoreVal} style={{ color: '#3EFF9B' }}>{result.rationalScore}</span>
+                  <span className={s.scoreVal} style={{ color: '#059669' }}>{result.rationalScore}</span>
                 </div>
                 <div className={s.scoreCol}>
                   <span className={s.scoreLabel}>총 체크</span>
@@ -414,7 +414,7 @@ export default function StockDecisionClient() {
                 </div>
               )}
               {summary.total >= 3 && !summary.winner && (
-                <div className={s.winnerBox} style={{ borderColor: '#FFB83E' }}>
+                <div className={s.winnerBox} style={{ borderColor: '#D97706' }}>
                   <p className={s.winnerLabel}>🤷 의견 분분</p>
                   <p className={s.winnerHint}>모드 결과가 갈렸습니다. 본인 마음에 더 끌리는 쪽이 본심일 수 있어요.</p>
                 </div>

@@ -409,7 +409,7 @@ export default function PregnancyClient() {
                         {t.status === 'past' ? '✅' : t.status === 'current' ? '🟡' : '📅'}
                         {' '}{t.test.name}
                         {t.test.importance === 'essential' && (
-                          <span style={{ marginLeft: 6, fontSize: 10, color: '#FF8C3E', fontWeight: 700 }}>핵심</span>
+                          <span style={{ marginLeft: 6, fontSize: 10, color: '#EA580C', fontWeight: 700 }}>핵심</span>
                         )}
                       </div>
                       <div className={styles.testDesc}>{t.test.desc}</div>

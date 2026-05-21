@@ -499,7 +499,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {(eaveL + eaveR + eaveT + eaveB) > 0 && (
           <rect x={planX1 - eaveL} y={planY1 - eaveT}
             width={planW + eaveL + eaveR} height={planH + eaveT + eaveB}
-            fill="rgba(200,255,62,0.05)"
+            fill="rgba(14,165,233,0.05)"
             stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="4 3" />
         )}
         {/* 건물 외곽 */}
@@ -509,21 +509,21 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 형태별 능선 표시 */}
         {input.type === 'gable' && (
           <line x1={planX1} y1={planArea.cy} x2={planX2} y2={planArea.cy}
-            stroke="#FF8C3E" strokeWidth="2" />
+            stroke="#EA580C" strokeWidth="2" />
         )}
         {input.type === 'maetbae' && (
           <line x1={planX1} y1={planArea.cy} x2={planX2} y2={planArea.cy}
-            stroke="#FF8C3E" strokeWidth="2" />
+            stroke="#EA580C" strokeWidth="2" />
         )}
         {input.type === 'hip' && (
           <>
             <line x1={planX1} y1={planY1} x2={planX2} y2={planY2}
-              stroke="#FF8C3E" strokeWidth="1.5" />
+              stroke="#EA580C" strokeWidth="1.5" />
             <line x1={planX2} y1={planY1} x2={planX1} y2={planY2}
-              stroke="#FF8C3E" strokeWidth="1.5" />
+              stroke="#EA580C" strokeWidth="1.5" />
             <line x1={planX1 + planW * 0.25} y1={planArea.cy}
               x2={planX1 + planW * 0.75} y2={planArea.cy}
-              stroke="#FF8C3E" strokeWidth="2" />
+              stroke="#EA580C" strokeWidth="2" />
           </>
         )}
         {input.type === 'shed' && (
@@ -531,7 +531,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
           <g>
             <line x1={planX1 + 10} y1={planY1 + 10}
               x2={planX2 - 10} y2={planY1 + 10}
-              stroke="#FF8C3E" strokeWidth="2" markerEnd="url(#arrowhead)" />
+              stroke="#EA580C" strokeWidth="2" markerEnd="url(#arrowhead)" />
             <text x={planArea.cx} y={planY1 + planH + 22} fontSize="10" fill="var(--muted)" textAnchor="middle">
               ← 낮음 / 높음 →
             </text>
@@ -558,7 +558,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 화살표 정의 */}
         <defs>
           <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#FF8C3E" />
+            <polygon points="0 0, 8 3, 0 6" fill="#EA580C" />
           </marker>
         </defs>
 
@@ -574,28 +574,28 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 지붕 형태별 측면 */}
         {input.type === 'gable' && (
           <polygon points={`${elevX1},${wallTopY} ${elevArea.cx},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(255,140,62,0.18)" stroke="#FF8C3E" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
         )}
         {input.type === 'maetbae' && (
           <polygon points={`${elevX1},${wallTopY} ${elevArea.cx},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(255,140,62,0.18)" stroke="#FF8C3E" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
         )}
         {input.type === 'hip' && (
           <polygon points={`${elevX1 + elevWidth * 0.2},${wallTopY - ridgeHeightScaled} ${elevX2 - elevWidth * 0.2},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY} ${elevX1},${wallTopY}`}
-            fill="rgba(255,140,62,0.18)" stroke="#FF8C3E" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
         )}
         {input.type === 'shed' && (
           <polygon points={`${elevX1},${wallTopY} ${elevX2},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(255,140,62,0.18)" stroke="#FF8C3E" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
         )}
         {input.type === 'flat' && (
           <line x1={elevX1} y1={wallTopY} x2={elevX2} y2={wallTopY}
-            stroke="#FF8C3E" strokeWidth="3" />
+            stroke="#EA580C" strokeWidth="3" />
         )}
 
         {/* 경사각 표기 */}
         {input.type !== 'flat' && (
-          <text x={elevArea.cx} y={wallTopY - ridgeHeightScaled - 8} fontSize="11" fill="#FF8C3E"
+          <text x={elevArea.cx} y={wallTopY - ridgeHeightScaled - 8} fontSize="11" fill="#EA580C"
             textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
             {input.pitchDeg.toFixed(1)}° ({fmtMoemae(degToMoemae(input.pitchDeg))})
           </text>

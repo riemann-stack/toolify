@@ -174,10 +174,10 @@ export default function AuctionPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🚪 명도비 (이사비)', d: '점유자 인도 비용. 평균 200만원, 협상 시 50~70% 절감 가능. 최후 수단은 강제집행.', c: '#FF8C3E' },
-            { t: '💸 체납 관리비', d: '전 소유자 미납 관리비를 낙찰자가 부담. 입찰 전 관리사무소 방문 확인 필수.', c: '#FF3E8C' },
-            { t: '⚡ 체납 공과금', d: '전기·수도·가스 미납. 대부분 100만원 이내, 한국전력·가스공사 조회.', c: '#FFB83E' },
-            { t: '🔨 수리비', d: '도배·바닥·주방·욕실 평당 30~100만원. DIY·셀프 시공으로 30~50% 절감.', c: '#3EC8FF' },
+            { t: '🚪 명도비 (이사비)', d: '점유자 인도 비용. 평균 200만원, 협상 시 50~70% 절감 가능. 최후 수단은 강제집행.', c: '#EA580C' },
+            { t: '💸 체납 관리비', d: '전 소유자 미납 관리비를 낙찰자가 부담. 입찰 전 관리사무소 방문 확인 필수.', c: '#DB2777' },
+            { t: '⚡ 체납 공과금', d: '전기·수도·가스 미납. 대부분 100만원 이내, 한국전력·가스공사 조회.', c: '#D97706' },
+            { t: '🔨 수리비', d: '도배·바닥·주방·욕실 평당 30~100만원. DIY·셀프 시공으로 30~50% 절감.', c: '#0891B2' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -186,7 +186,7 @@ export default function AuctionPage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#FF3E8C' }}>유치권·법정지상권</strong>이 있는 물건은 추가 변호사·법무사 비용
+          ⚠️ <strong style={{ color: '#DB2777' }}>유치권·법정지상권</strong>이 있는 물건은 추가 변호사·법무사 비용
           (수백만~수천만원) 발생 가능. 입찰 전 반드시 법무사 자문을 받으세요.
         </p>
       </div>

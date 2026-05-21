@@ -723,7 +723,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 x={x + 1} y={0}
                 width={whiteW - 2} height={whiteH}
                 rx={4}
-                fill={isHighlight ? '#C8FF3E' : '#E8E8E8'}
+                fill={isHighlight ? '#0EA5E9' : '#E8E8E8'}
                 stroke={isRoot ? '#0D0D0D' : '#888'}
                 strokeWidth={isRoot ? 2.5 : 1}
               />
@@ -753,7 +753,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 x={x} y={0}
                 width={blackW} height={blackH}
                 rx={3}
-                fill={isHighlight ? '#C8FF3E' : '#1a1a1a'}
+                fill={isHighlight ? '#0EA5E9' : '#1a1a1a'}
                 stroke={isRoot ? '#0D0D0D' : '#000'}
                 strokeWidth={isRoot ? 2.5 : 1}
               />

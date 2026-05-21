@@ -115,7 +115,7 @@ export default function UnitPricePage() {
               {
                 title: '⚠️ 코스트코 대용량 함정 (소비 가능량 반영)',
                 a: 'A: 일반 마트 샴푸 500ml 1+1 · 12,000원 (개수 2, 100% 사용) → 100ml당 1,200원',
-                b: 'B: 코스트코 샴푸 1.5L · 18,000원 (개수 1, <strong style="color:#FF8C3E">50% 사용</strong>) → 100ml당 1,200원, <strong style="color:#FF8C3E">실질 2,400원</strong>',
+                b: 'B: 코스트코 샴푸 1.5L · 18,000원 (개수 1, <strong style="color:#EA580C">50% 사용</strong>) → 100ml당 1,200원, <strong style="color:#EA580C">실질 2,400원</strong>',
                 tip: '단가는 같지만 1.5L를 6개월 안에 다 못 쓰면 실질 단가가 2배. 본 도구의 [소비 가능량] 옵션 활용.',
               },
             ].map((ex, i) => (
@@ -148,10 +148,10 @@ export default function UnitPricePage() {
               </thead>
               <tbody>
                 {[
-                  { p: '100% (다 씀)',     s: '매일 사용 — 생수·우유·티슈·계란', m: '×1.0', c: '#3EFF9B' },
-                  { p: '75% (자주 씀)',    s: '자주 사용 — 샴푸·세제·화장품',     m: '×1.33', c: '#C8FF3E' },
-                  { p: '50% (가끔 씀)',    s: '가끔 사용 — 소스·조미료·향신료',   m: '×2.00', c: '#FF8C3E' },
-                  { p: '25% (별로 안 씀)', s: '시즌·이벤트용 — 거의 안 씀',        m: '×4.00', c: '#FF6B6B' },
+                  { p: '100% (다 씀)',     s: '매일 사용 — 생수·우유·티슈·계란', m: '×1.0', c: '#059669' },
+                  { p: '75% (자주 씀)',    s: '자주 사용 — 샴푸·세제·화장품',     m: '×1.33', c: '#0EA5E9' },
+                  { p: '50% (가끔 씀)',    s: '가끔 사용 — 소스·조미료·향신료',   m: '×2.00', c: '#EA580C' },
+                  { p: '25% (별로 안 씀)', s: '시즌·이벤트용 — 거의 안 씀',        m: '×4.00', c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.p}</td>

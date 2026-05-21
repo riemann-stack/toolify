@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -41,10 +41,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive    { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveDday      { background: rgba(255,107,107,0.12);  color: #FF6B6B; font-weight: 700; }
-.tabActiveStats     { background: rgba(155,89,182,0.12);   color: #C485E0; font-weight: 700; }
-.tabActiveMilestone { background: rgba(255,215,0,0.10);    color: #FFD700; font-weight: 700; }
-.tabActiveCulture   { background: rgba(62,200,255,0.10);   color: #3EC8FF; font-weight: 700; }
+.tabActiveDday      { background: rgba(220,38,38,0.18);  color: #DC2626; font-weight: 700; }
+.tabActiveStats     { background: rgba(155,89,182,0.12);   color: #9333EA; font-weight: 700; }
+.tabActiveMilestone { background: rgba(202,138,4,0.18);    color: #CA8A04; font-weight: 700; }
+.tabActiveCulture   { background: rgba(8,145,178,0.18);   color: #0891B2; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -131,8 +131,8 @@
 
 /* ── 만 나이 히어로 ── */
 .ageHero {
-  background: linear-gradient(140deg, rgba(200,255,62,0.06), rgba(155,89,182,0.05));
-  border: 1px solid rgba(200,255,62,0.25);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(155,89,182,0.05));
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -152,7 +152,7 @@
   letter-spacing: -2px;
   line-height: 1;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(200,255,62,0.25);
+  text-shadow: 0 0 30px rgba(14,165,233,0.25);
 }
 .ageHeroUnit {
   font-size: 0.4em;
@@ -168,12 +168,12 @@
 }
 
 .birthdayBanner {
-  background: linear-gradient(135deg, rgba(255,107,107,0.18), rgba(255,215,0,0.18));
-  border: 1px solid rgba(255,107,107,0.50);
+  background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(202,138,4,0.18));
+  border: 1px solid rgba(220,38,38,0.50);
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 14px;
-  color: #FFD700;
+  color: #CA8A04;
   font-weight: 700;
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
@@ -199,7 +199,7 @@
   padding: 14px 16px;
   text-align: center;
 }
-.compareCardActive { background: rgba(200,255,62,0.08); border-color: var(--accent); }
+.compareCardActive { background: rgba(14,165,233,0.14); border-color: var(--accent); }
 .compareLabel {
   font-size: 11px;
   color: var(--muted);
@@ -267,8 +267,8 @@
 
 /* ───────── D-day 탭 ───────── */
 .ddayHero {
-  background: linear-gradient(140deg, rgba(255,107,107,0.10), rgba(255,140,62,0.05));
-  border: 1px solid rgba(255,107,107,0.35);
+  background: linear-gradient(140deg, rgba(220,38,38,0.18), rgba(234,88,12,0.14));
+  border: 1px solid rgba(220,38,38,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -287,8 +287,8 @@
   font-size: clamp(56px, 12vw, 84px);
   letter-spacing: -2px;
   line-height: 1;
-  color: #FF6B6B;
-  text-shadow: 0 0 28px rgba(255,107,107,0.30);
+  color: #DC2626;
+  text-shadow: 0 0 28px rgba(220,38,38,0.30);
 }
 .ddayHeroSub {
   font-size: 13px;
@@ -305,8 +305,8 @@
   margin-top: 14px;
 }
 .countdownBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 10px 6px;
   text-align: center;
@@ -315,7 +315,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
-  color: #FF6B6B;
+  color: #DC2626;
   line-height: 1;
   margin-bottom: 3px;
   font-variant-numeric: tabular-nums;
@@ -353,8 +353,8 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.ddayClose { color: #FF6B6B; }
-.ddayMid   { color: #FFD700; }
+.ddayClose { color: #DC2626; }
+.ddayMid   { color: #CA8A04; }
 .ddayFar   { color: var(--muted); }
 
 /* ───────── 인생 통계 탭 ───────── */
@@ -367,7 +367,7 @@
 @media (max-width: 380px) { .statsGrid { grid-template-columns: 1fr; } }
 
 .statBigCard {
-  background: linear-gradient(140deg, rgba(155,89,182,0.06), rgba(62,200,255,0.04));
+  background: linear-gradient(140deg, rgba(155,89,182,0.06), rgba(8,145,178,0.14));
   border: 1px solid rgba(155,89,182,0.25);
   border-radius: 12px;
   padding: 16px 18px;
@@ -377,7 +377,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(22px, 4.5vw, 30px);
-  color: #C485E0;
+  color: #9333EA;
   line-height: 1.1;
   margin-bottom: 4px;
   font-variant-numeric: tabular-nums;
@@ -412,7 +412,7 @@
 .funStatValue {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #C485E0;
+  color: #9333EA;
   font-variant-numeric: tabular-nums;
 }
 
@@ -441,7 +441,7 @@
   overflow: hidden;
   position: relative;
 }
-.cosmicBar { height: 100%; background: linear-gradient(90deg, #9B59B6, #3EC8FF, #3EFF9B); border-radius: 999px; transition: width 0.4s; }
+.cosmicBar { height: 100%; background: linear-gradient(90deg, #9B59B6, #0891B2, #059669); border-radius: 999px; transition: width 0.4s; }
 .cosmicValue { color: var(--muted); font-family: 'JetBrains Mono', monospace; text-align: right; font-size: 11.5px; }
 
 /* ───────── 마일스톤 탭 ───────── */
@@ -469,9 +469,9 @@
   opacity: 0.55;
 }
 .milestoneNext {
-  background: rgba(255,215,0,0.08);
-  border-color: #FFD700;
-  box-shadow: 0 0 0 3px rgba(255,215,0,0.10);
+  background: rgba(202,138,4,0.14);
+  border-color: #CA8A04;
+  box-shadow: 0 0 0 3px rgba(202,138,4,0.18);
 }
 .milestoneIcon { font-size: 18px; text-align: center; }
 .milestoneName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
@@ -528,9 +528,9 @@
   justify-content: center;
 }
 .cultureTrait {
-  background: rgba(62,200,255,0.10);
-  border: 1px solid rgba(62,200,255,0.30);
-  color: #3EC8FF;
+  background: rgba(8,145,178,0.18);
+  border: 1px solid rgba(8,145,178,0.30);
+  color: #0891B2;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 11px;
@@ -539,8 +539,8 @@
 }
 
 .traditionalCard {
-  background: linear-gradient(140deg, rgba(255,215,0,0.06), rgba(255,140,62,0.04));
-  border: 1px solid rgba(255,215,0,0.30);
+  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(234,88,12,0.14));
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 14px;
   padding: 20px 22px;
   text-align: center;
@@ -548,7 +548,7 @@
 .traditionalHanja {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 36px;
-  color: #FFD700;
+  color: #CA8A04;
   font-weight: 800;
   margin-bottom: 6px;
   letter-spacing: 4px;
@@ -630,7 +630,7 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .copyBtn {
@@ -667,4 +667,4 @@
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
 }
-.timelineActive { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.timelineActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }

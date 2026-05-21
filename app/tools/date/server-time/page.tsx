@@ -125,16 +125,16 @@ export default function ServerTimePage() {
             본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버</strong>가 가장 정확합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EC8FF', fontWeight: 700, marginBottom: 6 }}>🪟 Windows</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>🪟 Windows</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 시간 및 언어 → 날짜 및 시간 → 「지금 동기화」<br/>
                 또는 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>w32tm /resync</code> (관리자 cmd)<br/>
                 NTP 서버: <strong style={{ color: 'var(--text)' }}>time.kriss.re.kr</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #C8FF3E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#C8FF3E', fontWeight: 700, marginBottom: 6 }}>🍎 macOS</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0EA5E9', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#0EA5E9', fontWeight: 700, marginBottom: 6 }}>🍎 macOS</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 자동 ON<br/>
                 또는 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>sudo sntp -sS time.apple.com</code><br/>

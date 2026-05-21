@@ -444,8 +444,8 @@ function DiagnoseTab({ item, ratios, setRatios }: DiagnoseTabProps) {
 
   const sevColor: Record<string, string> = {
     info: 'var(--accent)',
-    caution: '#FFB83E',
-    warning: '#FF8C8C',
+    caution: '#D97706',
+    warning: '#DC2626',
   }
   const sevIcon: Record<string, string> = {
     info: 'ℹ️',

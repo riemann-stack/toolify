@@ -108,8 +108,8 @@ export default function PaintMixPage() {
           색을 섞는 방법은 크게 세 가지입니다. 어떤 모델을 쓰느냐에 따라 결과가 완전히 달라요.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #C485E0', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#C485E0', fontWeight: 700, margin: '0 0 6px' }}>⚫ Subtractive (물감·잉크)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #9333EA', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, margin: '0 0 6px' }}>⚫ Subtractive (물감·잉크)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               안료가 빛을 <strong>흡수</strong>하고 남은 빛을 반사. 섞을수록 어두워짐.<br />
               <strong>3원색 = Cyan·Magenta·Yellow (CMY)</strong>, 모두 합치면 검정.
@@ -118,8 +118,8 @@ export default function PaintMixPage() {
               👉 수채·아크릴·유화·잉크·인쇄·머리 염색 모두 이 방식
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FFB83E', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#FFB83E', fontWeight: 700, margin: '0 0 6px' }}>💡 Additive (빛)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>💡 Additive (빛)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               빛이 <strong>더해질수록</strong> 밝아짐. <br />
               <strong>3원색 = Red·Green·Blue (RGB)</strong>, 모두 합치면 흰색.
@@ -128,8 +128,8 @@ export default function PaintMixPage() {
               👉 모니터·LED·무대 조명·프로젝터
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #3EFFD0', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#3EFFD0', fontWeight: 700, margin: '0 0 6px' }}>🎒 RYB (전통)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>🎒 RYB (전통)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               학교 미술의 <strong>빨강·노랑·파랑</strong> 3원색. <br />
               직관적이지만 과학적으론 부정확 (CMY가 더 정확).
@@ -173,7 +173,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[3]}</td>
                 </tr>
               ))}
@@ -226,7 +226,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>

@@ -66,7 +66,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* ── 필드·input ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -115,7 +115,7 @@
 }@media (hover: hover) {
   .pill:hover { background: var(--bg2); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 /* ── 품목 그리드 ── */
 .itemGrid {
@@ -222,7 +222,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: #3EFF9B; color: #3EFF9B; }
+.copyBtnDone { border-color: #059669; color: #059669; }
 
 /* ── 굽기 가이드 ── */
 .bakeGrid {
@@ -310,7 +310,7 @@
 .saveRow .input { flex: 1; }
 .saveBtn {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 10px 18px;
@@ -354,7 +354,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 32px;
 }@media (hover: hover) {
-  .loadBtn:hover { background: var(--accent); color: #0D0D0D; }
+  .loadBtn:hover { background: var(--accent); color: #ffffff; }
 }
 .removeBtn {
   background: transparent;
@@ -364,7 +364,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF8C8C; }
+  .removeBtn:hover { color: #DC2626; }
 }
 .savedEmpty {
   margin: 12px 0 0;
@@ -384,7 +384,7 @@
 }
 .diagOk {
   font-size: 14px;
-  color: #3EFF9B;
+  color: #059669;
   margin: 0;
   text-align: center;
   padding: 10px;
@@ -446,7 +446,7 @@
 }
 .predBarFill {
   height: 100%;
-  background: linear-gradient(to right, var(--accent), #3EFF9B);
+  background: linear-gradient(to right, var(--accent), #059669);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -596,8 +596,8 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.25);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -605,7 +605,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

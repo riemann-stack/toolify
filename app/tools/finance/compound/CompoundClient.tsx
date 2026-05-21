@@ -385,7 +385,7 @@ export default function CompoundClient() {
                   <div key={scenario.id}
                     className={`${styles.scenarioRow} ${isBaseline ? styles.scenarioRowBaseline : ''}`}>
                     <span className={styles.scenarioName} style={{ color: scenario.color }}>
-                      {scenario.name}{scenario.warning && <span style={{ fontSize: 10.5, color: '#FF8C3E', marginLeft: 6 }}>⚠ {scenario.warning}</span>}
+                      {scenario.name}{scenario.warning && <span style={{ fontSize: 10.5, color: '#EA580C', marginLeft: 6 }}>⚠ {scenario.warning}</span>}
                     </span>
                     <span className={styles.scenarioRate} style={{ color: scenario.color }}>{scenario.rate}%</span>
                     <span className={styles.scenarioValue}>{formatEok(r.finalValue)}</span>

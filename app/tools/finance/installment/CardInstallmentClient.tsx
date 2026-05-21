@@ -331,7 +331,7 @@ export default function CardInstallmentClient() {
               y={padT + innerH - h}
               width={barW}
               height={h}
-              fill="#FF6B6B"
+              fill="#DC2626"
               opacity={0.55}
             />
           )
@@ -778,7 +778,7 @@ export default function CardInstallmentClient() {
                 <div className={s.compareDetail}>
                   초기 부담: 0원<br />
                   월 부담: <strong>{fmtKRW(cmpCalc.paid.monthlyPayment)}</strong> × {cmpPaidMonths}개월<br />
-                  총 이자: <strong style={{ color: '#FF6B6B' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
+                  총 이자: <strong style={{ color: '#DC2626' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
                 </div>
               </div>
             </div>
@@ -944,7 +944,7 @@ export default function CardInstallmentClient() {
               </div>
               <div className={s.graphWrap}>{graph}</div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, textAlign: 'center' }}>
-                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: '#FF6B6B' }}>총 이자는 급증</strong>합니다.
+                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: '#DC2626' }}>총 이자는 급증</strong>합니다.
               </p>
             </div>
           )}

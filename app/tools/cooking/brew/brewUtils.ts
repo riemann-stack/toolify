@@ -202,7 +202,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 0, endSec: 30,
       waterMl: bloomMl, cumulativeMl: bloomMl,
       desc: `원두 무게 × 2 = ${bloomMl}ml의 물로 적셔 30초 휴지. CO₂ 가스가 빠지며 부풀어요.`,
-      color: '#3EFFD0',
+      color: '#0D9488',
     },
     {
       id: 'first',
@@ -211,7 +211,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 30, endSec: 90,
       waterMl: second1st, cumulativeMl: target1st,
       desc: `누적 ${target1st}ml까지 (전체의 60%). 가운데서 원형으로 천천히.`,
-      color: '#3EC8FF',
+      color: '#0891B2',
     },
     {
       id: 'second',
@@ -220,7 +220,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 90, endSec: 150,
       waterMl: pour2nd, cumulativeMl: target2nd,
       desc: `누적 ${target2nd}ml까지 (전체의 100%). 안쪽 원만 따라.`,
-      color: '#FF8C3E',
+      color: '#EA580C',
     },
     {
       id: 'drain',
@@ -249,10 +249,10 @@ export interface IntensityZone {
 }
 
 export const INTENSITY_ZONES: IntensityZone[] = [
-  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '에스프레소 영역',     emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트 영역', color: '#FF3E8C' },
-  { id: 'strong',   ratioMin: 12, ratioMax: 15, label: '스트롱',              emoji: '🔥', desc: '진한 추출 · 다크 로스팅·콜드브루 농축', color: '#FFB83E' },
-  { id: 'golden',   ratioMin: 15, ratioMax: 17, label: 'SCA 골든 컵 ⭐',       emoji: '🏆', desc: 'SCA 표준 · 균형 잡힌 추출 영역',      color: '#3EFFD0' },
-  { id: 'sig',      ratioMin: 17, ratioMax: 20, label: '시그니처·연함',        emoji: '🌿', desc: '연한 추출 · 산미·향 강조',            color: '#3EC8FF' },
+  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '에스프레소 영역',     emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트 영역', color: '#DB2777' },
+  { id: 'strong',   ratioMin: 12, ratioMax: 15, label: '스트롱',              emoji: '🔥', desc: '진한 추출 · 다크 로스팅·콜드브루 농축', color: '#D97706' },
+  { id: 'golden',   ratioMin: 15, ratioMax: 17, label: 'SCA 골든 컵 ⭐',       emoji: '🏆', desc: 'SCA 표준 · 균형 잡힌 추출 영역',      color: '#0D9488' },
+  { id: 'sig',      ratioMin: 17, ratioMax: 20, label: '시그니처·연함',        emoji: '🌿', desc: '연한 추출 · 산미·향 강조',            color: '#0891B2' },
   { id: 'weak',     ratioMin: 20, ratioMax: 99, label: '너무 묽음',            emoji: '💧', desc: '추출 부족 · 묽고 향 약함',            color: '#9B9B9B' },
 ]
 

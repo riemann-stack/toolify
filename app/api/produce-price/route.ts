@@ -2,28 +2,29 @@
 // /api/produce-price?items=baechu,mu,gochugaru
 //   - 농산물 가격 조회 — KAMIS OpenAPI (한국농수산식품유통공사)
 //   - 환경변수 KAMIS_API_KEY / KAMIS_API_ID 설정 시 실시간 조회
-//   - 미설정 시 폴백: 최근 평균 소매가 반환
+//   - 미설정 또는 응답 없음 시 폴백: 최근 평균 소매가
 //   - 1시간 캐싱 (revalidate)
 // ─────────────────────────────────────────────────────────────
 
 export const runtime = 'edge'
 export const revalidate = 3600  // 1h 캐시
 
-/** 김장 도구의 ingredient id → KAMIS 품목/품종 코드 매핑
- *  실측 코드는 https://www.kamis.or.kr/customer/reference/openapi_list.do 참조 */
+/** 김장·명절 도구의 ingredient id → KAMIS 품목/품종 코드 매핑
+ *  실측 코드는 https://www.kamis.or.kr/customer/reference/openapi_list.do 참조
+ *  unitFactor: p_convert_kg_yn=Y 사용 시 dpr1은 kg당 가격이므로,
+ *              kg → 도구 단위(포기/개/g/단)로 환산하는 계수 */
 const KAMIS_MAP: Record<string, { itemCode: string; kindCode: string; unitFactor: number; defaultPrice: number; defaultDate: string; unit: string }> = {
-  // unitFactor: KAMIS 단가(보통 kg 또는 단)를 도구의 unit(포기/개/g 등)로 환산할 때 쓰는 임시값
   baechu:    { itemCode: '211', kindCode: '01', unitFactor: 3,    defaultPrice: 5500, defaultDate: '2025-11', unit: '포기' },  // 1포기 ≈ 3kg
-  mu:        { itemCode: '231', kindCode: '01', unitFactor: 1,    defaultPrice: 2200, defaultDate: '2025-11', unit: '개' },
+  mu:        { itemCode: '231', kindCode: '01', unitFactor: 1,    defaultPrice: 2200, defaultDate: '2025-11', unit: '개' },    // 1개 ≈ 1kg
   jjokpa:    { itemCode: '245', kindCode: '00', unitFactor: 1,    defaultPrice: 4000, defaultDate: '2025-11', unit: '단' },
-  gochugaru: { itemCode: '244', kindCode: '00', unitFactor: 0.001,defaultPrice: 55,   defaultDate: '2025-11', unit: 'g' },     // kg→g
+  gochugaru: { itemCode: '244', kindCode: '00', unitFactor: 0.001,defaultPrice: 55,   defaultDate: '2025-11', unit: 'g' },     // kg → g
   maneul:    { itemCode: '258', kindCode: '00', unitFactor: 0.001,defaultPrice: 25,   defaultDate: '2025-11', unit: 'g' },
   saenggang: { itemCode: '241', kindCode: '00', unitFactor: 0.001,defaultPrice: 22,   defaultDate: '2025-11', unit: 'g' },
   // 🎑 명절 상차림용
-  sagua:     { itemCode: '411', kindCode: '06', unitFactor: 0.25, defaultPrice: 2500, defaultDate: '2025-10', unit: '개' },    // 사과 부사 1개 ≈ 250g
+  sagua:     { itemCode: '411', kindCode: '06', unitFactor: 0.25, defaultPrice: 2500, defaultDate: '2025-10', unit: '개' },    // 부사 1개 ≈ 250g
   bae:       { itemCode: '412', kindCode: '02', unitFactor: 0.55, defaultPrice: 4500, defaultDate: '2025-10', unit: '개' },    // 신고배 1개 ≈ 550g
   gam:       { itemCode: '413', kindCode: '06', unitFactor: 0.20, defaultPrice: 1500, defaultDate: '2025-10', unit: '개' },    // 단감 1개 ≈ 200g
-  sigeumchi: { itemCode: '226', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, defaultDate: '2025-10', unit: '단' },   // 시금치 단(약 200g)
+  sigeumchi: { itemCode: '226', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, defaultDate: '2025-10', unit: '단' },
   hobak:     { itemCode: '224', kindCode: '00', unitFactor: 0.30, defaultPrice: 2000, defaultDate: '2025-10', unit: '개' },    // 애호박 1개 ≈ 300g
   daepa:     { itemCode: '246', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, defaultDate: '2025-10', unit: '단' },
 }
@@ -34,6 +35,17 @@ interface PriceResult {
   unit: string
   date: string        // YYYY-MM 또는 YYYY-MM-DD
   source: 'kamis' | 'fallback'
+}
+
+interface KamisItem {
+  item_code?: string
+  itemcode?: string
+  kind_code?: string
+  kindcode?: string
+  dpr1?: string
+  day1?: string
+  regday?: string
+  unit?: string
 }
 
 function json(data: { ok: boolean; results?: PriceResult[]; error?: string }, status = 200): Response {
@@ -47,68 +59,111 @@ function json(data: { ok: boolean; results?: PriceResult[]; error?: string }, st
   })
 }
 
-async function fetchKamis(itemCode: string, kindCode: string, categoryCode: string): Promise<{ price: number; date: string } | null> {
+/** UTC 기준 daysAgo일 전 날짜 (YYYY-MM-DD). KAMIS는 KST/UTC 모두 같은 날짜로 인식. */
+function kamisDate(daysAgo: number): string {
+  const d = new Date(Date.now() - daysAgo * 86_400_000)
+  const y = d.getUTCFullYear()
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(d.getUTCDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+/** 카테고리 단위로 1회 호출 — 결과를 응답 그대로의 item 배열로 돌려줍니다. */
+async function fetchKamisCategory(categoryCode: string, regday: string): Promise<KamisItem[]> {
   const apiKey = process.env.KAMIS_API_KEY
   const apiId = process.env.KAMIS_API_ID
-  if (!apiKey || !apiId) return null
+  if (!apiKey || !apiId) return []
+
+  const url = new URL('https://www.kamis.or.kr/service/price/xml.do')
+  url.searchParams.set('action', 'dailyPriceByCategoryList')
+  url.searchParams.set('p_product_cls_code', '01')        // 01: 소매
+  url.searchParams.set('p_country_code', '1101')          // 1101: 서울
+  url.searchParams.set('p_regday', regday)
+  url.searchParams.set('p_convert_kg_yn', 'Y')
+  url.searchParams.set('p_item_category_code', categoryCode)
+  url.searchParams.set('p_cert_key', apiKey)
+  url.searchParams.set('p_cert_id', apiId)
+  url.searchParams.set('p_returntype', 'json')
 
   try {
-    const url = new URL('https://www.kamis.or.kr/service/price/xml.do')
-    url.searchParams.set('action', 'dailyPriceByCategoryList')
-    url.searchParams.set('p_product_cls_code', '01')   // 01: 소매
-    url.searchParams.set('p_item_category_code', categoryCode)
-    url.searchParams.set('p_item_code', itemCode)
-    url.searchParams.set('p_kind_code', kindCode)
-    url.searchParams.set('p_country_code', '1101')      // 서울
-    url.searchParams.set('p_cert_key', apiKey)
-    url.searchParams.set('p_cert_id', apiId)
-    url.searchParams.set('p_returntype', 'json')
-
-    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(3500) })
-    if (!res.ok) return null
-    const data = await res.json() as {
-      price?: Array<{ dpr1: string; regday?: string }>
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(4000) })
+    if (!res.ok) {
+      console.error('[kamis] HTTP', res.status, categoryCode, regday)
+      return []
     }
-    const first = data.price?.[0]
-    if (!first || !first.dpr1) return null
-    const priceNum = parseInt(first.dpr1.replace(/,/g, ''), 10)
-    if (!isFinite(priceNum) || priceNum <= 0) return null
-    return { price: priceNum, date: first.regday || new Date().toISOString().slice(0, 10) }
-  } catch {
-    return null
+    const j: unknown = await res.json()
+    // 응답 구조 변종 흡수: {data:{item:[...]}} | {data:[...]} | {price:[...]}
+    type AnyShape = { data?: { item?: KamisItem[] } | KamisItem[]; price?: KamisItem[]; error_code?: string }
+    const root = j as AnyShape
+    if (Array.isArray(root.data)) return root.data
+    if (root.data && Array.isArray((root.data as { item?: KamisItem[] }).item)) {
+      return (root.data as { item?: KamisItem[] }).item ?? []
+    }
+    if (Array.isArray(root.price)) return root.price
+    return []
+  } catch (e) {
+    console.error('[kamis] fetch error', categoryCode, regday, String(e))
+    return []
   }
 }
 
-/** 품목 코드 첫 자리로 category code 추정: 2xx → 200(채소·식량), 4xx → 400(과일) */
+/** 어제·그제·3일·5일 전까지 차례로 시도. 주말/공휴일 데이터 공백 대응. */
+async function fetchKamisCategoryWithRetry(categoryCode: string): Promise<{ items: KamisItem[]; date: string }> {
+  for (const daysAgo of [1, 2, 3, 5]) {
+    const date = kamisDate(daysAgo)
+    const items = await fetchKamisCategory(categoryCode, date)
+    if (items.length > 0) return { items, date }
+  }
+  return { items: [], date: '' }
+}
+
+/** 품목 코드 첫 자리로 category code 추정 (200=채소·식량, 400=과일) */
 function categoryFromItemCode(itemCode: string): string {
   if (itemCode.startsWith('4')) return '400'
   return '200'
 }
 
+function matchItem(items: KamisItem[], itemCode: string, kindCode: string): KamisItem | undefined {
+  return items.find((x) => {
+    const ic = x.item_code ?? x.itemcode
+    const kc = x.kind_code ?? x.kindcode
+    return ic === itemCode && kc === kindCode
+  })
+}
+
 export async function GET(req: Request): Promise<Response> {
   const itemsParam = new URL(req.url).searchParams.get('items') ?? ''
-  const ids = itemsParam.split(',').map(s => s.trim()).filter(Boolean)
+  const ids = itemsParam.split(',').map((s) => s.trim()).filter(Boolean)
   if (ids.length === 0) return json({ ok: false, error: 'items 파라미터 필요' }, 400)
 
-  // 매핑된 항목만 추출 + 병렬 호출
+  // 매핑된 항목만 추출
   const targets = ids
-    .map(id => ({ id, m: KAMIS_MAP[id] }))
+    .map((id) => ({ id, m: KAMIS_MAP[id] }))
     .filter((x): x is { id: string; m: typeof KAMIS_MAP[string] } => !!x.m)
 
-  const settled = await Promise.allSettled(
-    targets.map(({ m }) => fetchKamis(m.itemCode, m.kindCode, categoryFromItemCode(m.itemCode)))
+  // 카테고리별로 1회씩만 호출 (9개 아이템이라도 200+400 두 번이면 끝)
+  const neededCategories = Array.from(new Set(targets.map((t) => categoryFromItemCode(t.m.itemCode))))
+  const fetched = await Promise.all(
+    neededCategories.map(async (cat) => [cat, await fetchKamisCategoryWithRetry(cat)] as const)
   )
+  const byCategory = new Map(fetched)
 
-  const results: PriceResult[] = targets.map(({ id, m }, i) => {
-    const r = settled[i]
-    const kamis = r.status === 'fulfilled' ? r.value : null
-    if (kamis) {
-      return {
-        id,
-        price: Math.round(kamis.price * m.unitFactor),
-        unit: m.unit,
-        date: kamis.date,
-        source: 'kamis',
+  const results: PriceResult[] = targets.map(({ id, m }) => {
+    const cat = categoryFromItemCode(m.itemCode)
+    const bundle = byCategory.get(cat)
+    if (bundle && bundle.items.length > 0) {
+      const hit = matchItem(bundle.items, m.itemCode, m.kindCode)
+      if (hit?.dpr1) {
+        const priceNum = parseInt(String(hit.dpr1).replace(/[^0-9.]/g, ''), 10)
+        if (isFinite(priceNum) && priceNum > 0) {
+          return {
+            id,
+            price: Math.round(priceNum * m.unitFactor),
+            unit: m.unit,
+            date: hit.day1 ?? hit.regday ?? bundle.date,
+            source: 'kamis',
+          }
+        }
       }
     }
     return {

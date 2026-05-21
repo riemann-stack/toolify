@@ -3,19 +3,19 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -23,11 +23,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .criticalBox {
-  background: rgba(255,107,107,0.10);
-  border: 3px solid #FF6B6B;
+  background: rgba(220,38,38,0.18);
+  border: 3px solid #DC2626;
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -35,7 +35,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.criticalBox strong { color: #FF6B6B; font-weight: 800; }
+.criticalBox strong { color: #DC2626; font-weight: 800; }
 
 /* ── 안전 배지 ── */
 .severityBadge {
@@ -48,10 +48,10 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.severitySafe    { background: rgba(62,255,155,0.15);  color: #3EFF9B; border: 1px solid rgba(62,255,155,0.40); }
-.severityCaution { background: rgba(255,215,0,0.15);   color: #FFD700; border: 1px solid rgba(255,215,0,0.40); }
-.severityWarning { background: rgba(255,140,62,0.15);  color: #FF8C3E; border: 1px solid rgba(255,140,62,0.40); }
-.severityDanger  { background: rgba(255,107,107,0.20); color: #FF6B6B; border: 2px solid #FF6B6B; }
+.severitySafe    { background: rgba(16,185,129,0.15);  color: #059669; border: 1px solid rgba(16,185,129,0.40); }
+.severityCaution { background: rgba(202,138,4,0.15);   color: #CA8A04; border: 1px solid rgba(202,138,4,0.40); }
+.severityWarning { background: rgba(234,88,12,0.15);  color: #EA580C; border: 1px solid rgba(234,88,12,0.40); }
+.severityDanger  { background: rgba(220,38,38,0.20); color: #DC2626; border: 2px solid #DC2626; }
 
 /* ── 탭 — 3개 1줄 (모바일도 1줄 유지) ── */
 .tabs {
@@ -82,10 +82,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveDate   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveSplit  { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActivePlateau{ background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveMacro  { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveDate   { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveSplit  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActivePlateau{ background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveMacro  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -615,8 +615,8 @@
 
 /* ── 정보 박스 ── */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -624,4 +624,4 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }

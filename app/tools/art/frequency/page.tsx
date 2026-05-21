@@ -36,7 +36,7 @@ export default function FrequencyPage() {
             A4 = 440 Hz를 기준으로 반음마다 2^(1/12) ≈ 1.0595배씩 주파수가 증가합니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>핵심 공식</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
@@ -77,17 +77,17 @@ export default function FrequencyPage() {
               </thead>
               <tbody>
                 {[
-                  ['C3', '130.81', '48', '262.2', '3', '#3EFF9B'],
-                  ['G3', '196.00', '55', '175.0', '3', '#3EFF9B'],
-                  ['C4 (중간 도)', '261.63', '60', '131.1', '4', '#C8FF3E'],
-                  ['D4', '293.66', '62', '116.8', '4', '#C8FF3E'],
-                  ['E4', '329.63', '64', '104.1', '4', '#C8FF3E'],
-                  ['F4', '349.23', '65', '98.2', '4', '#C8FF3E'],
-                  ['G4', '392.00', '67', '87.5', '4', '#C8FF3E'],
-                  ['A4 (국제 표준)', '440.00', '69', '77.9', '4', '#C8FF3E'],
-                  ['B4', '493.88', '71', '69.4', '4', '#C8FF3E'],
-                  ['C5', '523.25', '72', '65.5', '5', '#3EC8FF'],
-                  ['A5', '880.00', '81', '39.0', '5', '#3EC8FF'],
+                  ['C3', '130.81', '48', '262.2', '3', '#059669'],
+                  ['G3', '196.00', '55', '175.0', '3', '#059669'],
+                  ['C4 (중간 도)', '261.63', '60', '131.1', '4', '#0EA5E9'],
+                  ['D4', '293.66', '62', '116.8', '4', '#0EA5E9'],
+                  ['E4', '329.63', '64', '104.1', '4', '#0EA5E9'],
+                  ['F4', '349.23', '65', '98.2', '4', '#0EA5E9'],
+                  ['G4', '392.00', '67', '87.5', '4', '#0EA5E9'],
+                  ['A4 (국제 표준)', '440.00', '69', '77.9', '4', '#0EA5E9'],
+                  ['B4', '493.88', '71', '69.4', '4', '#0EA5E9'],
+                  ['C5', '523.25', '72', '65.5', '5', '#0891B2'],
+                  ['A5', '880.00', '81', '39.0', '5', '#0891B2'],
                 ].map(([note, hz, midi, wave, oct, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{note}</td>
@@ -115,28 +115,28 @@ export default function FrequencyPage() {
               {
                 hz: '440 Hz',
                 badge: '현재 국제 표준',
-                color: '#C8FF3E',
+                color: '#0EA5E9',
                 year: '1939년 국제 표준화',
                 desc: '1939년 런던 국제음악회의에서 채택된 표준 피치. ISO 16:1975로 공식화. 현대 클래식, 팝, 재즈, 방송 등 대부분의 음악에서 사용됩니다.',
               },
               {
                 hz: '432 Hz',
                 badge: '대안 튜닝',
-                color: '#3EFF9B',
+                color: '#059669',
                 year: '일부 뮤지션 선호',
                 desc: '432 Hz는 일부 음악가들이 "더 자연스럽고 따뜻한 음색"이라고 주장하는 대안 피치입니다. 과학적 근거는 논쟁 중이지만, 특정 장르(명상 음악, 힐링 음악)에서 의도적으로 사용됩니다.',
               },
               {
                 hz: '443 Hz',
                 badge: '오케스트라',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 year: '유럽 오케스트라',
                 desc: '베를린 필하모닉, 빈 필하모닉 등 일부 유럽 오케스트라는 더 밝고 화려한 음색을 위해 443–445 Hz를 사용합니다. 440 Hz보다 약 12센트 높습니다.',
               },
               {
                 hz: '415 Hz',
                 badge: '바로크 피치',
-                color: '#FF8C3E',
+                color: '#EA580C',
                 year: '17–18세기 바로크 시대',
                 desc: '바흐, 헨델, 비발디 시대의 악기는 약 415 Hz로 튜닝되었습니다. 현대 바로크 앙상블이 시대 연주(HIP) 시 사용. 440 Hz보다 정확히 반음 낮습니다.',
               },

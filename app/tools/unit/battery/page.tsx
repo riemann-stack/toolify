@@ -45,7 +45,7 @@ export default function BatteryPage() {
                 전류량 × 시간. <strong>전압이 다르면 직접 비교 불가</strong>. 예) 3.7V 10,000mAh와 5V 10,000mAh는 다른 에너지.
               </p>
             </div>
-            <div style={{ background: 'rgba(200,255,62,0.05)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '12px 14px' }}>
+            <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '12px 14px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', marginBottom: '4px', fontWeight: 700 }}>Wh (와트시)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>
                 전압 × 전류 × 시간 = <strong>실제 에너지량</strong>. 항공 규정·노트북·전기차 모두 Wh 기준.
@@ -62,7 +62,7 @@ export default function BatteryPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 공식
           </h2>
-          <div style={{ background: 'rgba(200,255,62,0.05)', border: '1px solid rgba(200,255,62,0.3)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: '6px' }}>
               Wh = (<span style={{ color: 'var(--accent)' }}>mAh</span> × <span style={{ color: 'var(--accent)' }}>V</span>) ÷ 1000
             </p>
@@ -104,15 +104,15 @@ export default function BatteryPage() {
               </thead>
               <tbody>
                 {[
-                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: '#3EFF9B' },
-                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: '#3EFF9B' },
-                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: '#3EFF9B' },
-                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: '#3EFF9B' },
-                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: '#3EFF9B' },
-                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: '#3EFF9B' },
-                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: '#3EFF9B' },
-                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: '#3EFF9B' },
-                  { n: 'EcoFlow RIVER 2 mini',    m: '~70,000',w: '256',   s: '❌', c: '#FF6B6B' },
+                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: '#059669' },
+                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: '#059669' },
+                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: '#059669' },
+                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: '#059669' },
+                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: '#059669' },
+                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: '#059669' },
+                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: '#059669' },
+                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: '#059669' },
+                  { n: 'EcoFlow RIVER 2 mini',    m: '~70,000',w: '256',   s: '❌', c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>

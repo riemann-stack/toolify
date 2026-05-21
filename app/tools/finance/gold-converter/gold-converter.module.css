@@ -29,7 +29,7 @@
 .tabActive {
   background: var(--bg3);
   color: var(--text);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.05);
 }
 
 .panel {
@@ -98,7 +98,7 @@
   text-align: left;
   transition: all .15s;
 }@media (hover: hover) {
-  .scenarioCard:hover { border-color: #FFD700; }
+  .scenarioCard:hover { border-color: #CA8A04; }
 }
 .scenarioEmoji { font-size: 22px; flex-shrink: 0; }
 .scenarioLabel {
@@ -186,7 +186,7 @@
 }
 .karatPillActive {
   background: var(--karat-color);
-  color: #0B0B0B;
+  color: #ffffff;
   border-color: var(--karat-color);
 }
 @media (max-width: 480px) {
@@ -220,7 +220,7 @@
   gap: 4px;
 }
 .unitCardActive {
-  background: rgba(200, 255, 62, 0.08);
+  background: rgba(14, 165, 233, 0.08);
   border-color: var(--accent);
 }
 .unitCardLabel {
@@ -269,7 +269,7 @@
   position: relative;
 }
 .purityCardCurrent {
-  background: rgba(200, 255, 62, 0.05);
+  background: rgba(14, 165, 233, 0.05);
   border-color: var(--karat-color);
   border-width: 2px;
 }
@@ -350,7 +350,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 800;
-  color: #FFD700;
+  color: #CA8A04;
   letter-spacing: -0.02em;
   margin: 0 0 6px;
 }
@@ -464,7 +464,7 @@
 }
 .presetActive {
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border-color: var(--accent);
 }
 
@@ -500,12 +500,12 @@
   gap: 4px;
 }
 .priceCardBuy {
-  background: linear-gradient(135deg, rgba(255, 140, 140, 0.08) 0%, rgba(255, 184, 62, 0.04) 100%);
-  border-color: rgba(255, 140, 140, 0.3);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.08) 0%, rgba(217, 119, 6, 0.04) 100%);
+  border-color: rgba(220, 38, 38, 0.3);
 }
 .priceCardSell {
-  background: linear-gradient(135deg, rgba(62, 255, 155, 0.08) 0%, rgba(62, 200, 255, 0.04) 100%);
-  border-color: rgba(62, 255, 155, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(8, 145, 178, 0.04) 100%);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 .priceLabel {
   font-size: 12px;
@@ -521,8 +521,8 @@
   letter-spacing: -0.02em;
   margin: 0;
 }
-.priceCardBuy .priceBig { color: #FF8C8C; }
-.priceCardSell .priceBig { color: #3EFF9B; }
+.priceCardBuy .priceBig { color: #DC2626; }
+.priceCardSell .priceBig { color: #059669; }
 .priceFull {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
@@ -547,18 +547,18 @@
   font-weight: 600;
   color: var(--text);
 }
-.warnRow span:first-child { color: #FF8C8C; }
+.warnRow span:first-child { color: #DC2626; }
 .warnRow span:last-child { color: var(--muted) !important; }
 
 .spreadInfo {
   margin-top: 14px;
   padding: 12px 16px;
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.2);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.2);
   border-radius: 10px;
 }
 .spreadInfo p { margin: 0 0 4px; font-size: 13px; color: var(--text); line-height: 1.6; }
-.spreadInfo strong { color: #FFB83E; }
+.spreadInfo strong { color: #D97706; }
 
 /* 가격표 */
 .priceTable {
@@ -590,8 +590,8 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.tableBuy { color: #FF8C8C; font-weight: 700; }
-.tableSell { color: #3EFF9B; font-weight: 700; }
+.tableBuy { color: #DC2626; font-weight: 700; }
+.tableSell { color: #059669; font-weight: 700; }
 .tableDiff { color: var(--muted); }
 
 /* 코리아 프리미엄 */
@@ -642,8 +642,8 @@
   margin: 0;
   letter-spacing: -0.02em;
 }
-.premiumPos { color: #FFB83E; }
-.premiumNeg { color: #3EFF9B; }
+.premiumPos { color: #D97706; }
+.premiumNeg { color: #059669; }
 
 /* 자산 합산 */
 .emptyMsg {
@@ -706,7 +706,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .assetRemove:hover { border-color: #FF8C8C; color: #FF8C8C; }
+  .assetRemove:hover { border-color: #DC2626; color: #DC2626; }
 }
 @media (max-width: 640px) {
   .assetNickname, .assetWeight, .assetKarat { font-size: 16px; }
@@ -757,7 +757,7 @@
   color: var(--text);
 }
 .assetTotalSub { font-size: 11px; color: var(--muted) !important; }
-.assetTotalAccent strong { color: #FFD700 !important; }
+.assetTotalAccent strong { color: #CA8A04 !important; }
 
 /* 비교 카드 */
 .comparisonGrid {
@@ -848,7 +848,7 @@
   width: 28px;
   height: 28px;
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -893,8 +893,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.04);
-  border: 1px solid rgba(255, 184, 62, 0.18);
+  background: rgba(217, 119, 6, 0.04);
+  border: 1px solid rgba(217, 119, 6, 0.18);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -903,7 +903,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

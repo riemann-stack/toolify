@@ -1,0 +1,418 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  .card { padding: 14px 14px; border-radius: 12px; }
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.cardHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; }
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* ── 샘플 버튼 ── */
+.sampleRow { display: flex; flex-wrap: wrap; gap: 5px; }
+.sampleBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 11.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.12s;
+}
+@media (hover: hover) {
+  .sampleBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
+.clearBtn { color: #DC2626; }
+
+/* ── 텍스트 영역 ── */
+.textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  color: var(--text);
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 160px;
+  outline: none;
+  box-sizing: border-box;
+}
+.textarea:focus { border-color: var(--accent); }
+@media (max-width: 640px) {
+  .textarea { font-size: 16px; min-height: 140px; }
+}
+
+/* ── 메타 (글자수/분포) ── */
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.metaRow strong {
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.dot { color: var(--muted); opacity: 0.4; }
+
+/* ── 히어로 ── */
+.hero {
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
+  border-radius: 14px;
+  padding: 20px 22px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(40px, 11vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  line-height: 1;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.heroSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroSub strong {
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 인사이트 ── */
+.insightCard {
+  background: rgba(8, 145, 178, 0.06);
+  border: 1px solid rgba(8, 145, 178, 0.30);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.insightCard strong:first-child {
+  display: block;
+  font-size: 13px;
+  color: #0891B2;
+  margin-bottom: 6px;
+}
+.insightCard p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.75;
+}
+.savingAmt { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.savingPct { color: #059669; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+
+/* ── 옵션 ── */
+.optRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .optRow { grid-template-columns: 1fr; gap: 12px; } }
+.optBlock { min-width: 0; }
+.optLabel {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.optHint {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.toggleRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.toggleBtn {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  transition: all 0.12s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.toggleBtn small {
+  font-size: 10.5px;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--muted);
+  opacity: 0.8;
+}
+@media (hover: hover) {
+  .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
+.toggleActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.toggleActive small { color: var(--accent); opacity: 1; }
+
+.bulkInput {
+  width: 100%;
+  margin-top: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+  box-sizing: border-box;
+  -moz-appearance: textfield;
+}
+.bulkInput::-webkit-outer-spin-button,
+.bulkInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.bulkInput:focus { border-color: var(--accent); }
+
+/* ── 모델 그리드 ── */
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (min-width: 1024px) { .modelGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 540px) { .modelGrid { grid-template-columns: 1fr; } }
+.modelCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.modelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.vendorTag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.modelName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  margin-top: 2px;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.tokenRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.tokenLabel { font-size: 12px; color: var(--muted); }
+.tokenVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.ctxBar { display: flex; flex-direction: column; gap: 4px; }
+.ctxBarTrack {
+  width: 100%;
+  height: 6px;
+  background: var(--bg2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ctxBarFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+.ctxLabel {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.priceBlock {
+  border-top: 1px dashed var(--border);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.priceRow strong {
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.priceTotal {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-weight: 700;
+}
+.priceTotal span { color: var(--text); }
+.priceTotal strong { color: var(--accent); font-size: 14px; }
+.krwHint {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* ── 컨텍스트 윈도우 표 ── */
+.ctxTable {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ctxRow {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (max-width: 480px) { .ctxRow { grid-template-columns: 110px 1fr 55px; gap: 8px; } }
+.ctxName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vendorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ctxMeter { display: block; }
+.ctxMeterTrack {
+  display: block;
+  width: 100%;
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ctxMeterFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+}
+.ctxNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 10px 0 0;
+}
+.note strong { color: var(--text); }

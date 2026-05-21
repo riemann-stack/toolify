@@ -98,11 +98,11 @@ export interface BrothStrength {
 }
 
 export const BROTH_STRENGTH: BrothStrength[] = [
-  { id: 'very-strong', name: '매우 진하게', delta: -100, desc: '소금기 매우 강함', color: '#FF6B6B' },
-  { id: 'strong',      name: '짜게',        delta:  -50, desc: '국물 진함',         color: '#FF8C3E' },
+  { id: 'very-strong', name: '매우 진하게', delta: -100, desc: '소금기 매우 강함', color: '#DC2626' },
+  { id: 'strong',      name: '짜게',        delta:  -50, desc: '국물 진함',         color: '#EA580C' },
   { id: 'normal',      name: '기본',        delta:    0, desc: '봉지 권장량',       color: 'var(--accent)' },
-  { id: 'mild',        name: '싱겁게',      delta:  +50, desc: '나트륨 ↓',          color: '#3EC8FF' },
-  { id: 'extra-broth', name: '국물 넉넉',   delta: +100, desc: '밥 말아 먹기 좋음', color: '#C485E0' },
+  { id: 'mild',        name: '싱겁게',      delta:  +50, desc: '나트륨 ↓',          color: '#0891B2' },
+  { id: 'extra-broth', name: '국물 넉넉',   delta: +100, desc: '밥 말아 먹기 좋음', color: '#9333EA' },
 ]
 
 /* ─── 면 익힘 ─── */

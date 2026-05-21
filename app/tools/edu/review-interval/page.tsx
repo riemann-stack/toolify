@@ -51,12 +51,12 @@ export default function ReviewIntervalPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '학습 직후',   r: '100%', c: '#3EFFD0' },
-                  { t: '20분 후',     r: '약 58%', c: '#3EFF9B' },
-                  { t: '1시간 후',    r: '약 44%', c: '#FFD700' },
-                  { t: '1일 후',      r: '약 33%', c: '#FF8C3E' },
-                  { t: '6일 후',      r: '약 25%', c: '#FF8C3E' },
-                  { t: '31일 후',     r: '약 21%', c: '#FF6B6B' },
+                  { t: '학습 직후',   r: '100%', c: '#0D9488' },
+                  { t: '20분 후',     r: '약 58%', c: '#059669' },
+                  { t: '1시간 후',    r: '약 44%', c: '#CA8A04' },
+                  { t: '1일 후',      r: '약 33%', c: '#EA580C' },
+                  { t: '6일 후',      r: '약 25%', c: '#EA580C' },
+                  { t: '31일 후',     r: '약 21%', c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.t}</td>
@@ -78,7 +78,7 @@ export default function ReviewIntervalPage() {
             marginTop: 12,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 단순 모델</span></div>
-            <div><span style={{ color: '#3EFFD0' }}>R(t)</span> = e^(−t/<span style={{ color: '#FFD700' }}>S</span>) × 100</div>
+            <div><span style={{ color: '#0D9488' }}>R(t)</span> = e^(−t/<span style={{ color: '#CA8A04' }}>S</span>) × 100</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>R: 기억 유지율(%) · t: 경과 시간 · S: 기억 안정도</div>
           </div>
         </div>
@@ -99,8 +99,8 @@ export default function ReviewIntervalPage() {
               { t: '📚 장기 기억 형성', d: '시험 직전 벼락치기보다 효과적. 평생 활용 가능한 지식으로 정착.' },
               { t: '🎯 정확한 타이밍', d: '"잊을 만 할 때" 복습이 가장 효과적. SM-2가 자동 계산.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #3EFFD0', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
@@ -136,14 +136,14 @@ export default function ReviewIntervalPage() {
             lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 핵심 원리</span></div>
-            <div>각 학습 항목에 <span style={{ color: '#3EFFD0' }}>난이도 계수(EF)</span> 부여 (기본 2.5)</div>
+            <div>각 학습 항목에 <span style={{ color: '#0D9488' }}>난이도 계수(EF)</span> 부여 (기본 2.5)</div>
             <div>기억 점수(0~5)에 따라 EF 자동 조정</div>
             <div>점수 ↑ → EF ↑ → 다음 간격 길어짐</div>
             <div>점수 낮음(&lt;3) → 처음부터 다시 (간격 1일)</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 계산 공식</span></div>
-            <div><span style={{ color: '#3EFFD0' }}>EF&apos;</span> = EF + (0.1 − (5 − q) × (0.08 + (5 − q) × 0.02))</div>
-            <div><span style={{ color: '#3EFFD0' }}>다음 간격</span> = 이전 간격 × EF (3회 성공 후)</div>
+            <div><span style={{ color: '#0D9488' }}>EF&apos;</span> = EF + (0.1 − (5 − q) × (0.08 + (5 − q) × 0.02))</div>
+            <div><span style={{ color: '#0D9488' }}>다음 간격</span> = 이전 간격 × EF (3회 성공 후)</div>
           </div>
         </div>
 
@@ -155,8 +155,8 @@ export default function ReviewIntervalPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '📘 일반 학습 (보통)', c: 'var(--accent)', items: ['1차: 학습 다음 날', '2차: 3일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '시험 2일 전 최종 복습'] },
-              { t: '📕 어려운 내용',      c: '#FF6B6B',     items: ['1차: 당일 또는 다음 날', '2차: 2일 후', '3차: 5일 후', '4차: 10일 후', '5차: 21일 후'] },
-              { t: '📗 외국어 단어장',    c: '#3EC8FF',     items: ['1차: 다음 날', '2차: 3~4일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '이후 매월 1회'] },
+              { t: '📕 어려운 내용',      c: '#DC2626',     items: ['1차: 당일 또는 다음 날', '2차: 2일 후', '3차: 5일 후', '4차: 10일 후', '5차: 21일 후'] },
+              { t: '📗 외국어 단어장',    c: '#0891B2',     items: ['1차: 다음 날', '2차: 3~4일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '이후 매월 1회'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -180,8 +180,8 @@ export default function ReviewIntervalPage() {
               { t: '🔗 개념 연결',                    d: '새 정보를 기존 지식과 연결 · 시각화·이미지화 · 비유와 예시 활용 → 장기 기억 형성' },
               { t: '✏️ 손으로 쓰기',                  d: '키보드 입력보다 손글씨가 기억 정착에 효과적 (cognitive engagement ↑)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'rgba(62,255,208,0.05)', border: '1px solid rgba(62,255,208,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'rgba(13,148,136,0.05)', border: '1px solid rgba(13,148,136,0.30)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
@@ -220,8 +220,8 @@ export default function ReviewIntervalPage() {
               { t: '🌳 고급자',  d: '<strong>탭 2 (SM-2)</strong> + 탭 3 조합 · EF 변화 추적 · 백업 다운로드로 데이터 보존 · 다른 기기 사용 시 가져오기' },
               { t: '📅 시험 대비', d: '<strong>탭 4 (시험일 역산)</strong>으로 일별 학습량 미리 계산 · 시험 2일 전 최종 복습 시간 확보' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #3EFFD0', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }} dangerouslySetInnerHTML={{ __html: g.d }} />
               </div>
             ))}

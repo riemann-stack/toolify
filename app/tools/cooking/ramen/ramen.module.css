@@ -3,8 +3,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
@@ -12,11 +12,11 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.disclaimer strong { color: #FF8C3E; }
+.disclaimer strong { color: #EA580C; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -24,11 +24,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -36,11 +36,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .adviceBox {
-  background: rgba(255,215,0,0.06);
-  border: 1px solid rgba(255,215,0,0.30);
+  background: rgba(202,138,4,0.14);
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -48,7 +48,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.adviceBox strong { color: #FFD700; }
+.adviceBox strong { color: #CA8A04; }
 
 /* ─── 탭 (4개) ─── */
 .tabs {
@@ -75,9 +75,9 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveTopping   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActivePreset    { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveNutrition { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
+.tabActiveTopping   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActivePreset    { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveNutrition { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -258,12 +258,12 @@
   border-width: 1px;
   border-style: solid;
   background: var(--bg2);
-  border-color: rgba(200,255,62,0.30);
+  border-color: rgba(14,165,233,0.30);
 }
-.heroAccent { background: var(--bg2); border-color: rgba(200,255,62,0.30); }
-.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
-.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
-.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
+.heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
+.heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
+.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
 
 .heroLabel {
   font-size: 12px;
@@ -282,9 +282,9 @@
   font-variant-numeric: tabular-nums;
   color: var(--accent);
 }
-.heroNumOrange { color: #FF8C3E; }
-.heroNumGold   { color: #FFD700; }
-.heroNumCyan   { color: #3EC8FF; }
+.heroNumOrange { color: #EA580C; }
+.heroNumGold   { color: #CA8A04; }
+.heroNumCyan   { color: #0891B2; }
 .heroSub  { font-size: 14px; color: var(--text); margin-top: 12px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .heroRange {
@@ -315,7 +315,7 @@
   font-size: 13px;
   padding: 4px 0;
 }
-.compareRowBad span:last-child { color: #FF6B6B; text-decoration: line-through; opacity: 0.7; }
+.compareRowBad span:last-child { color: #DC2626; text-decoration: line-through; opacity: 0.7; }
 .compareRowGood span:last-child { color: var(--accent); font-weight: 700; }
 .compareRow span:first-child { color: var(--muted); }
 .compareRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -338,8 +338,8 @@
   font-variant-numeric: tabular-nums;
 }
 .metricValueAccent { color: var(--accent); }
-.metricValueOrange { color: #FF8C3E; }
-.metricValueRed    { color: #FF6B6B; }
+.metricValueOrange { color: #EA580C; }
+.metricValueRed    { color: #DC2626; }
 .metricSub { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; }
 
 /* 조리 타임라인 */
@@ -408,7 +408,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }
-.nutritionTable tbody td.warnCell { color: #FF6B6B; }
+.nutritionTable tbody td.warnCell { color: #DC2626; }
 
 .nutritionBar {
   background: var(--bg3);
@@ -420,10 +420,10 @@
 }
 .nutritionBarFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #3EC8FF);
+  background: linear-gradient(90deg, var(--accent), #0891B2);
 }
-.nutritionBarFillWarn { background: linear-gradient(90deg, #FFD700, #FF8C3E); }
-.nutritionBarFillDanger { background: linear-gradient(90deg, #FF8C3E, #FF6B6B); }
+.nutritionBarFillWarn { background: linear-gradient(90deg, #CA8A04, #EA580C); }
+.nutritionBarFillDanger { background: linear-gradient(90deg, #EA580C, #DC2626); }
 
 /* 라면 프리셋 카테고리별 그리드 */
 .presetSection { display: flex; flex-direction: column; gap: 12px; }

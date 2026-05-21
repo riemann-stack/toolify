@@ -25,7 +25,7 @@ export default function FormationClient() {
   const [customInput, setCustomInput] = useState('')
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [showLabels, setShowLabels] = useState(true)
-  const [teamColor, setTeamColor] = useState('#3EC8FF')
+  const [teamColor, setTeamColor] = useState('#0891B2')
   const [teamName, setTeamName] = useState('Our Team')
 
   const [players, setPlayers] = useState<PlayerData[]>(() => Array.from({ length: 11 }, () => ({ name: '', number: '' })))
@@ -106,30 +106,35 @@ export default function FormationClient() {
     setFormationId('custom')
   }
 
-  /* 좌표 계산 (SVG 800 × 1000) */
+  /* 좌표 계산 (SVG 800 × 1000)
+   * direction 'up' → 우리팀이 아래에서 위로 공격
+   * 실제 축구 위치 비율 참고:
+   *   - GK: 자신의 골 라인 근처 (~5-7%)
+   *   - DEF: 자기 진영 20-25%
+   *   - MID: 하프라인 ±10%
+   *   - FW: 상대 진영 70-80% (페널티 박스 근처, 골 라인 X)
+   */
   const positions = useMemo(() => {
     if (!currentFormation) return []
     const W = 800, H = 1000
     const lines = currentFormation.lines
     const totalLines = lines.length
-    // 골키퍼 + 라인들 → 세로 균등 분할
-    // direction 'up' → 우리팀이 아래에서 위로 공격 (GK 아래)
-    // direction 'down' → 위에서 아래로 공격
     const points: { x: number; y: number; label: string; idx: number }[] = []
     // GK
-    const gkY = direction === 'up' ? H - 70 : 70
+    const gkY = direction === 'up' ? H - 80 : 80
     points.push({ x: W / 2, y: gkY, label: 'GK', idx: 0 })
-    // 라인들 — 아래 6%~84% 사이를 totalLines 등분 (위쪽 16% 공격수 영역)
-    const startY = direction === 'up' ? H - 220 : 220
-    const endY   = direction === 'up' ? 80      : H - 80
+    // 라인들 — 수비라인 H*0.78 / 공격라인 H*0.24 사이 균등 분할
+    // (위쪽 24%는 골 박스 영역 — 공격수가 너무 깊이 들어가지 않도록)
+    const startY = direction === 'up' ? H * 0.78 : H * 0.22  // 수비 라인
+    const endY   = direction === 'up' ? H * 0.24 : H * 0.76  // 공격 라인
     const stepY = totalLines > 1 ? (endY - startY) / (totalLines - 1) : 0
     let idxCounter = 1
     lines.forEach((cnt, lineIdx) => {
       const y = totalLines === 1 ? (startY + endY) / 2 : startY + stepY * lineIdx
-      // 라인 내 좌우 균등 — 양쪽 90px 여유
-      const lineWidth = W - 180
+      // 라인 내 좌우 균등 — 양쪽 100px 여유
+      const lineWidth = W - 200
       for (let i = 0; i < cnt; i++) {
-        const x = 90 + (cnt === 1 ? lineWidth / 2 : (lineWidth * i) / (cnt - 1))
+        const x = 100 + (cnt === 1 ? lineWidth / 2 : (lineWidth * i) / (cnt - 1))
         points.push({
           x,
           y,
@@ -388,12 +393,12 @@ export default function FormationClient() {
                 onClick={() => setEditingIdx(pos.idx)}
                 style={{ cursor: 'pointer' }}
               >
-                <circle cx={pos.x} cy={pos.y} r={42}
+                <circle cx={pos.x} cy={pos.y} r={48}
                   fill={teamColor} stroke="#fff" strokeWidth="4"
                   opacity="0.95" />
-                <text x={pos.x} y={pos.y + 11} textAnchor="middle"
+                <text x={pos.x} y={pos.y + 14} textAnchor="middle"
                   fill="#fff" fontFamily="Inter, system-ui, sans-serif"
-                  fontSize="32" fontWeight="800"
+                  fontSize="42" fontWeight="800"
                   style={{ pointerEvents: 'none' }}>
                   {p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}
                 </text>
@@ -401,23 +406,23 @@ export default function FormationClient() {
                 {p.name && (
                   <g style={{ pointerEvents: 'none' }}>
                     <rect
-                      x={pos.x - 70} y={pos.y + 48}
-                      width="140" height="34" rx="8"
-                      fill="rgba(0,0,0,0.72)"
+                      x={pos.x - 80} y={pos.y + 54}
+                      width="160" height="40" rx="10"
+                      fill="rgba(0,0,0,0.78)"
                     />
-                    <text x={pos.x} y={pos.y + 70} textAnchor="middle"
+                    <text x={pos.x} y={pos.y + 80} textAnchor="middle"
                       fill="#fff" fontFamily="Noto Sans KR, sans-serif"
-                      fontSize="20" fontWeight="700">
+                      fontSize="26" fontWeight="700">
                       {p.name.length > 6 ? p.name.slice(0, 6) + '…' : p.name}
                     </text>
                   </g>
                 )}
                 {/* 포지션 라벨 */}
                 {showLabels && (
-                  <text x={pos.x} y={pos.y - 52} textAnchor="middle"
+                  <text x={pos.x} y={pos.y - 58} textAnchor="middle"
                     fill="#fff" fontFamily="Inter, system-ui, sans-serif"
-                    fontSize="16" fontWeight="800"
-                    opacity="0.9"
+                    fontSize="22" fontWeight="800"
+                    opacity="0.92"
                     style={{ pointerEvents: 'none' }}>
                     {pos.label}
                   </text>
@@ -451,7 +456,7 @@ export default function FormationClient() {
                 <path d={`M ${arrowX} ${tipY} L ${arrowX - tipDx} ${tipY + tipDy} M ${arrowX} ${tipY} L ${arrowX + tipDx} ${tipY + tipDy}`}
                   stroke="#fff" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85" />
                 {/* 텍스트 */}
-                <text x={arrowX} y={labelY} fill="#fff" fontSize="22" fontWeight="800"
+                <text x={arrowX} y={labelY} fill="#fff" fontSize="28" fontWeight="800"
                   textAnchor="middle" fontFamily="Noto Sans KR, sans-serif"
                   style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 3 } as React.CSSProperties}>
                   공격

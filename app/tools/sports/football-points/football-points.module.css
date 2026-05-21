@@ -36,13 +36,13 @@
 }
 .leagueActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
 }
-.leagueActive small { color: #0D0D0D; opacity: 0.75; }
+.leagueActive small { color: #ffffff; opacity: 0.75; }
 .leagueK {
-  border-color: rgba(200,255,62,0.45);
+  border-color: rgba(14,165,233,0.45);
 }
 
 /* ── 탭 ── */
@@ -119,7 +119,7 @@
   transition: border-color 0.2s;
   margin-bottom: 14px;
 }
-.teamNameInput:focus { border-color: rgba(200,255,62,0.5); }
+.teamNameInput:focus { border-color: rgba(14,165,233,0.5); }
 
 /* ── 승무패 입력 (3열) ── */
 .wdlGrid {
@@ -134,9 +134,9 @@
   padding: 12px 10px;
   text-align: center;
 }
-.wdlWin  { border-left: 3px solid #3EFF9B; }
-.wdlDraw { border-left: 3px solid #FFD700; }
-.wdlLoss { border-left: 3px solid #FF6B6B; }
+.wdlWin  { border-left: 3px solid #059669; }
+.wdlDraw { border-left: 3px solid #CA8A04; }
+.wdlLoss { border-left: 3px solid #DC2626; }
 .wdlLabel {
   font-size: 11px;
   color: var(--muted);
@@ -187,8 +187,8 @@
   gap: 6px;
 }
 .gfSign { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px; }
-.gfPositive { color: #3EFF9B; }
-.gfNegative { color: #FF6B6B; }
+.gfPositive { color: #059669; }
+.gfNegative { color: #DC2626; }
 .gfInput {
   flex: 1;
   background: transparent;
@@ -222,8 +222,8 @@
   font-weight: 800;
   font-size: 18px;
 }
-.gdValue.pos { color: #3EFF9B; }
-.gdValue.neg { color: #FF6B6B; }
+.gdValue.pos { color: #059669; }
+.gdValue.neg { color: #DC2626; }
 
 /* ── 고급 옵션 ── */
 .advancedToggle {
@@ -276,7 +276,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -338,8 +338,8 @@
   transition: color 0.2s;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos    { color: #3EFF9B; }
-.kpiValueNeg    { color: #FF6B6B; }
+.kpiValuePos    { color: #059669; }
+.kpiValueNeg    { color: #DC2626; }
 
 /* ── 시즌 종료 시나리오 3카드 ── */
 .scenarioGrid {
@@ -357,9 +357,9 @@
   padding: 14px 14px;
   text-align: center;
 }
-.scenarioCons { border-left: 3px solid #FF8C3E; }
-.scenarioBase { border-left: 3px solid var(--accent); background: rgba(200,255,62,0.04); }
-.scenarioOpt  { border-left: 3px solid #3EFF9B; }
+.scenarioCons { border-left: 3px solid #EA580C; }
+.scenarioBase { border-left: 3px solid var(--accent); background: rgba(14,165,233,0.14); }
+.scenarioOpt  { border-left: 3px solid #059669; }
 .scenarioLabel {
   font-size: 11px;
   color: var(--muted);
@@ -431,7 +431,7 @@
   margin-top: 12px;
   box-sizing: border-box;
 }
-.targetInput:focus { border-color: rgba(200,255,62,0.5); }
+.targetInput:focus { border-color: rgba(14,165,233,0.5); }
 .targetInput::-webkit-outer-spin-button,
 .targetInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .targetInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -446,9 +446,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 10px;
 }
-.fbEasy   { background: rgba(62,255,155,0.15); color: #3EFF9B; }
-.fbMid    { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.fbHard   { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.fbEasy   { background: rgba(16,185,129,0.15); color: #059669; }
+.fbMid    { background: rgba(234,88,12,0.15); color: #EA580C; }
+.fbHard   { background: rgba(220,38,38,0.15); color: #DC2626; }
 .fbImpossible {
   background: rgba(255,70,70,0.18);
   color: #FF4646;
@@ -469,8 +469,8 @@
   letter-spacing: -1px;
   margin-bottom: 4px;
 }
-.fbValue.posVal { color: #3EFF9B; }
-.fbValue.negVal { color: #FF6B6B; }
+.fbValue.posVal { color: #059669; }
+.fbValue.negVal { color: #DC2626; }
 .fbSub {
   font-size: 13px;
   color: var(--muted);
@@ -502,9 +502,9 @@
   font-weight: 700;
   color: var(--text);
 }
-.scWin  { color: #3EFF9B; }
-.scDraw { color: #FFD700; }
-.scLoss { color: #FF6B6B; }
+.scWin  { color: #059669; }
+.scDraw { color: #CA8A04; }
+.scLoss { color: #DC2626; }
 .scPts  { color: var(--accent); }
 
 /* ── 시뮬레이션 슬라이더 ── */
@@ -549,13 +549,13 @@
   appearance: none;
   width: 18px;
   height: 18px;
-  background: #3EFF9B;
+  background: #059669;
   border-radius: 50%;
   cursor: pointer;
   border: none;
 }
 .simWinSlider::-moz-range-thumb {
-  width: 18px; height: 18px; background: #3EFF9B;
+  width: 18px; height: 18px; background: #059669;
   border-radius: 50%; cursor: pointer; border: none;
 }
 .simLossSlider::-webkit-slider-thumb {
@@ -563,13 +563,13 @@
   appearance: none;
   width: 18px;
   height: 18px;
-  background: #FF6B6B;
+  background: #DC2626;
   border-radius: 50%;
   cursor: pointer;
   border: none;
 }
 .simLossSlider::-moz-range-thumb {
-  width: 18px; height: 18px; background: #FF6B6B;
+  width: 18px; height: 18px; background: #DC2626;
   border-radius: 50%; cursor: pointer; border: none;
 }
 
@@ -592,8 +592,8 @@
   letter-spacing: -0.5px;
   transition: color 0.2s;
 }
-.simResultPts.reachedTarget { color: #3EFF9B; }
-.simResultPts.missedTarget { color: #FF6B6B; }
+.simResultPts.reachedTarget { color: #059669; }
+.simResultPts.missedTarget { color: #DC2626; }
 .simHint {
   font-size: 12px;
   color: var(--muted);
@@ -648,7 +648,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .rivalRemoveBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .rivalRemoveBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
 }
 
 .addRivalBtn {
@@ -715,8 +715,8 @@
   font-weight: 800;
 }
 .compareTable .ourRow td:first-child { color: var(--accent); }
-.gapPos { color: #3EFF9B !important; }
-.gapNeg { color: #FF6B6B !important; }
+.gapPos { color: #059669 !important; }
+.gapNeg { color: #DC2626 !important; }
 
 /* ── 추격 분석 카드 ── */
 .overtakeCard {
@@ -728,8 +728,8 @@
   flex-direction: column;
   gap: 6px;
 }
-.overtakeCardLead { border-left: 3px solid #3EFF9B; }
-.overtakeCardChase { border-left: 3px solid #FF8C3E; }
+.overtakeCardLead { border-left: 3px solid #059669; }
+.overtakeCardChase { border-left: 3px solid #EA580C; }
 .overtakeCardImpossible { border-left: 3px solid #FF4646; }
 
 .overtakeTitle {
@@ -767,7 +767,7 @@
   font-weight: 800;
   text-align: center;
 }
-.rankGold   { color: #FFD700; }
+.rankGold   { color: #CA8A04; }
 .rankSilver { color: #C0C0C0; }
 .rankBronze { color: #CD7F32; }
 .rankOther  { color: var(--muted); }
@@ -783,7 +783,7 @@
   font-weight: 800;
   color: var(--accent);
 }
-.rankRow.ourRank { border-color: var(--accent); background: rgba(200,255,62,0.05); }
+.rankRow.ourRank { border-color: var(--accent); background: rgba(14,165,233,0.14); }
 
 /* ── 결과 텍스트 복사 ── */
 .copyBtn {

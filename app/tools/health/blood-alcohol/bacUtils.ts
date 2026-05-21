@@ -135,13 +135,13 @@ export function calcTomorrowMorning(input: TomorrowInput): TomorrowResult {
   let statusLabel: string
   let statusColor: string
   if (morningBAC >= BAC_THRESHOLDS.REVOKE) {
-    status = 'revoke'; statusLabel = '🚨 면허취소 수준 — 절대 운전 금지'; statusColor = '#FF3E3E'
+    status = 'revoke'; statusLabel = '🚨 면허취소 수준 — 절대 운전 금지'; statusColor = '#B91C1C'
   } else if (morningBAC >= BAC_THRESHOLDS.GENERAL_SUSPEND) {
-    status = 'suspend'; statusLabel = '❌ 면허정지 수준 — 운전 불가'; statusColor = '#FF6B6B'
+    status = 'suspend'; statusLabel = '❌ 면허정지 수준 — 운전 불가'; statusColor = '#DC2626'
   } else if (morningBAC > 0) {
-    status = 'detected'; statusLabel = '⚠️ 측정 시 양성 가능 — 단속 위험'; statusColor = '#FF8C3E'
+    status = 'detected'; statusLabel = '⚠️ 측정 시 양성 가능 — 단속 위험'; statusColor = '#EA580C'
   } else {
-    status = 'safe'; statusLabel = '✅ 알코올 완전 분해'; statusColor = '#3EFF9B'
+    status = 'safe'; statusLabel = '✅ 알코올 완전 분해'; statusColor = '#059669'
   }
 
   const suspendClearMin = input.peakBAC > BAC_THRESHOLDS.GENERAL_SUSPEND

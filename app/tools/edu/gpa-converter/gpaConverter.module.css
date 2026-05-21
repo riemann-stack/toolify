@@ -1,0 +1,434 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  .card { padding: 14px 14px; border-radius: 12px; }
+}
+.cardLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.cardHint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── 만점 선택 ── */
+.scaleRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.scaleBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 6px;
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  transition: all 0.12s;
+}
+.scaleBtn small {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) {
+  .scaleBtn:hover { border-color: var(--border-hover); }
+}
+.scaleBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.scaleBtnActive small { color: var(--accent); opacity: 0.85; }
+
+/* ── 입력 ── */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gpaInput {
+  flex: 1;
+  min-width: 100px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.gpaInput::-webkit-outer-spin-button,
+.gpaInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.gpaInput:focus { border-color: var(--accent); }
+.inputUnit {
+  font-size: 16px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+}
+.percentBadge {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.percentBadge strong {
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+}
+.warn {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #DC2626;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 환산 방식 ── */
+.methodRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (max-width: 600px) { .methodRow { grid-template-columns: 1fr; } }
+.methodBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.12s;
+}
+@media (hover: hover) {
+  .methodBtn:hover { border-color: var(--border-hover); }
+}
+.methodBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.methodName {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.methodBtnActive .methodName { color: var(--accent); }
+.methodDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── 히어로 ── */
+.hero {
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
+  border-radius: 14px;
+  padding: 22px 24px;
+  text-align: center;
+}
+.heroLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroRow {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-top: 12px;
+}
+@media (max-width: 480px) {
+  .heroRow { grid-template-columns: 1fr; gap: 8px; }
+  .heroDivider { display: none; }
+}
+.heroDivider {
+  width: 1px;
+  height: 60px;
+  background: var(--border);
+}
+.heroBlock { min-width: 0; }
+.heroSub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(36px, 9vw, 52px);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
+}
+.heroUk {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin-top: 4px;
+}
+.heroNote {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroNote strong {
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── 비교 그리드 ── */
+.compareGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (max-width: 540px) { .compareGrid { grid-template-columns: 1fr; } }
+.compareCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-width: 0;
+}
+.compareCardActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.compareHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.compareHead strong {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+.compareCardActive .compareHead strong { color: var(--accent); }
+.letterBadge {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--muted);
+  background: var(--bg2);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.compareCardActive .letterBadge { color: var(--accent); }
+.compareUs {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.compareUs small {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.compareUk {
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 역산 ── */
+.reverseRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.reverseInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 480px) { .reverseInputs { grid-template-columns: 1fr; } }
+.miniLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+.select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+  min-height: 48px;
+}
+.select:focus { border-color: var(--accent); }
+.reverseResult {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.reverseResult span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.reverseResult strong {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.reverseResult small {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.note {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+
+/* ── 한국 대학 ── */
+.uniGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+@media (max-width: 540px) { .uniGrid { grid-template-columns: 1fr; } }
+.uniRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.uniName {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.uniScale {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.uniScale45 { background: rgba(14, 165, 233, 0.10); color: var(--accent); }
+.uniScale43 { background: rgba(8, 145, 178, 0.10); color: #0891B2; }
+.uniNote {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.5;
+}
+
+/* ── 표 ── */
+.tableWrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.table th {
+  padding: 8px 10px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  background: var(--bg3);
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+.table th:first-child { text-align: left; }
+.table td {
+  padding: 8px 10px;
+  text-align: right;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.table td:first-child { text-align: left; }
+.table tr:last-child td { border-bottom: none; }
+.letterCell { color: var(--accent) !important; font-weight: 700; }

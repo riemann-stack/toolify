@@ -152,7 +152,7 @@ export default function KnitGaugePage() {
                 ['7', 'Super Bulky',  '7–12',  '8.0–12.0',  '대형 담요·러그'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
@@ -174,7 +174,7 @@ export default function KnitGaugePage() {
           KS K 0050 의류 치수 기반 일반 가이드. 본 도구의 [📏 사이즈별] 탭에서 칩을 클릭하면 자동 적용됩니다.
         </p>
         {/* 여성 */}
-        <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, margin: '14px 0 6px' }}>여성</p>
+        <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>여성</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
             <thead>
@@ -207,7 +207,7 @@ export default function KnitGaugePage() {
         </div>
 
         {/* 남성 */}
-        <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, margin: '14px 0 6px' }}>남성</p>
+        <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>남성</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
             <thead>
@@ -238,7 +238,7 @@ export default function KnitGaugePage() {
         </div>
 
         {/* 키즈 */}
-        <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, margin: '14px 0 6px' }}>키즈</p>
+        <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>키즈</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
             <thead>

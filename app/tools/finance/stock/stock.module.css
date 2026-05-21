@@ -3,8 +3,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
@@ -12,11 +12,11 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.disclaimer strong { color: #FF6B6B; }
+.disclaimer strong { color: #DC2626; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -24,11 +24,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -36,7 +36,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 /* ─── 탭 (5개) ─── */
 .tabs {
@@ -64,10 +64,10 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveReverse   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveDCA       { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveRecovery  { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveCompare   { background: rgba(255,107,107,0.12); color: #FF6B6B; font-weight: 700; }
+.tabActiveReverse   { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveDCA       { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveRecovery  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveCompare   { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -217,11 +217,11 @@
   border-width: 1px;
   border-style: solid;
 }
-.heroAccent { background: var(--bg2); border-color: rgba(200,255,62,0.30); }
-.heroGold   { background: rgba(255,215,0,0.04); border-color: rgba(255,215,0,0.30); }
-.heroCyan   { background: rgba(62,200,255,0.04); border-color: rgba(62,200,255,0.30); }
-.heroOrange { background: rgba(255,140,62,0.04); border-color: rgba(255,140,62,0.30); }
-.heroRed    { background: rgba(255,107,107,0.04); border-color: rgba(255,107,107,0.30); }
+.heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
+.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
+.heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
+.heroRed    { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.30); }
 
 .heroLabel {
   font-size: 12px;
@@ -240,10 +240,10 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumAccent { color: var(--accent); }
-.heroNumGold   { color: #FFD700; }
-.heroNumCyan   { color: #3EC8FF; }
-.heroNumOrange { color: #FF8C3E; }
-.heroNumRed    { color: #FF6B6B; }
+.heroNumGold   { color: #CA8A04; }
+.heroNumCyan   { color: #0891B2; }
+.heroNumOrange { color: #EA580C; }
+.heroNumRed    { color: #DC2626; }
 .heroSub  { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
 
@@ -251,7 +251,7 @@
   display: inline-block;
   margin-top: 12px;
   background: var(--accent-dim);
-  border: 1px solid rgba(200,255,62,0.30);
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 999px;
   padding: 5px 14px;
   font-size: 12.5px;
@@ -277,8 +277,8 @@
 .statLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase; font-family: 'Noto Sans KR', sans-serif; }
 .statValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px; color: var(--text); font-variant-numeric: tabular-nums; }
 .statValueAccent { color: var(--accent); }
-.statValueGreen  { color: #3EFF9B; }
-.statValueRed    { color: #FF6B6B; }
+.statValueGreen  { color: #059669; }
+.statValueRed    { color: #DC2626; }
 
 /* ─── Before vs After 표 ─── */
 .compareTable {
@@ -484,11 +484,11 @@
   border-color: var(--accent);
 }
 .recoveryRowCurrent {
-  background: rgba(255,140,62,0.06);
-  border-color: rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border-color: rgba(234,88,12,0.30);
 }
-.deltaPos { color: #3EFF9B; }
-.deltaNeg { color: #FF6B6B; }
+.deltaPos { color: #059669; }
+.deltaNeg { color: #DC2626; }
 .deltaZero { color: var(--muted); }
 
 @media (max-width: 600px) {
@@ -516,12 +516,12 @@
   position: relative;
 }
 .compareCardWinner {
-  border-color: rgba(200,255,62,0.40);
-  background: rgba(200,255,62,0.04);
+  border-color: rgba(14,165,233,0.40);
+  background: rgba(14,165,233,0.14);
 }
 .compareCardLoser {
-  border-color: rgba(255,107,107,0.30);
-  background: rgba(255,107,107,0.03);
+  border-color: rgba(220,38,38,0.30);
+  background: rgba(220,38,38,0.14);
 }
 .winnerBadge {
   position: absolute;
@@ -608,8 +608,8 @@
 
 /* ─── 리스크 안내 카드 ─── */
 .riskCard {
-  background: rgba(255,107,107,0.04);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
@@ -617,7 +617,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.riskCard strong { color: #FF6B6B; }
+.riskCard strong { color: #DC2626; }
 .riskCard ul { margin: 8px 0 0; padding-left: 18px; }
 .riskCard li { margin-bottom: 4px; color: var(--muted); }
 

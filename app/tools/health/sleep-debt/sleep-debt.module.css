@@ -31,7 +31,7 @@
 
 /* ── 메인 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(184,133,218,0.10), rgba(62,200,255,0.04));
+  background: linear-gradient(140deg, rgba(184,133,218,0.10), rgba(8,145,178,0.14));
   border: 1px solid rgba(184,133,218,0.30);
   border-radius: 16px;
   padding: 24px;
@@ -159,7 +159,7 @@
   .periodBtn:hover { border-color: var(--accent); }
 }
 .periodActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -223,7 +223,7 @@
   .modeBtn:hover { border-color: var(--accent); }
 }
 .modeActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -263,8 +263,8 @@
 }
 .timeInput:focus { border-color: var(--accent); }
 .autoCalc {
-  background: rgba(200,255,62,0.08);
-  border: 1px solid rgba(200,255,62,0.30);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 16px;
@@ -326,7 +326,7 @@
   .qualityBtn:hover { border-color: var(--accent); }
 }
 .qualityActive {
-  background: rgba(200,255,62,0.10);
+  background: rgba(14,165,233,0.18);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -335,7 +335,7 @@
 .addBtn {
   width: 100%;
   background: var(--accent);
-  color: #0a0a0a;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -418,8 +418,8 @@
 
 /* ── 회복 카드 ── */
 .recoveryCard {
-  background: linear-gradient(140deg, rgba(62,255,155,0.06), rgba(62,200,255,0.04));
-  border: 1px solid rgba(62,255,155,0.25);
+  background: linear-gradient(140deg, rgba(16,185,129,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(16,185,129,0.25);
   border-radius: 14px;
   padding: 18px 20px;
 }
@@ -453,7 +453,7 @@
 }
 .recoveryResult strong {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #3EFF9B;
+  color: #059669;
   font-size: 28px;
   font-weight: 800;
   display: block;
@@ -467,8 +467,8 @@
   margin-top: 4px;
 }
 .recoveryWarn {
-  background: rgba(255,184,62,0.06);
-  border-left: 2px solid rgba(255,184,62,0.5);
+  background: rgba(217,119,6,0.14);
+  border-left: 2px solid rgba(217,119,6,0.5);
   border-radius: 6px;
   padding: 10px 12px;
   margin-top: 14px;
@@ -509,8 +509,8 @@
   margin-left: 4px;
 }
 .recoveryWarnBox {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 12.5px;
@@ -534,7 +534,7 @@
   letter-spacing: 0;
 }
 @media (hover: hover) {
-  .clearBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .clearBtn:hover { color: #DC2626; border-color: #DC2626; }
 }
 .emptyMsg {
   text-align: center;
@@ -596,7 +596,7 @@
   padding: 0;
 }
 @media (hover: hover) {
-  .entryDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .entryDel:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 /* ── 팁 카드 ── */

@@ -38,7 +38,7 @@ export default function CosmicCalendarPage() {
             코스믹 캘린더란?
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>코스믹 캘린더(Cosmic Calendar)</strong>는 천문학자 <strong style={{ color: '#C485E0' }}>칼 세이건</strong>이 그의 책
+            <strong style={{ color: 'var(--text)' }}>코스믹 캘린더(Cosmic Calendar)</strong>는 천문학자 <strong style={{ color: '#9333EA' }}>칼 세이건</strong>이 그의 책
             &ldquo;에덴의 용(The Dragons of Eden, 1977)&rdquo;에서 제안한 개념입니다.
             138억 년의 우주 역사를 1년(365일)으로 압축해, 인간이 직관적으로 이해하기 어려운 우주의 시간 스케일을 체감하게 합니다.
           </div>
@@ -56,8 +56,8 @@ export default function CosmicCalendarPage() {
             <div><span style={{ color: 'var(--muted)' }}>1년</span> = 138억 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1일</span> ≈ 3,778만 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1시간</span> ≈ 157만 년</div>
-            <div><span style={{ color: 'var(--muted)' }}>1분</span> ≈ <strong style={{ color: '#3EFFD0' }}>26,200년</strong></div>
-            <div><span style={{ color: 'var(--muted)' }}>1초</span> ≈ <strong style={{ color: '#3EFFD0' }}>437년</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>1분</span> ≈ <strong style={{ color: '#0D9488' }}>26,200년</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>1초</span> ≈ <strong style={{ color: '#0D9488' }}>437년</strong></div>
           </div>
         </div>
 
@@ -80,20 +80,20 @@ export default function CosmicCalendarPage() {
                   { d: '1월 1일',           e: '💥 빅뱅 (우주 탄생)',         r: '138억 년 전',  c: '#9B59B6' },
                   { d: '1월 22일',          e: '🌌 최초의 은하 형성',         r: '134억 년 전',  c: '#9B59B6' },
                   { d: '3월 16일',          e: '🌠 우리 은하수 형성',         r: '135억 년 전',  c: '#9B59B6' },
-                  { d: '8월 31일',          e: '☀️ 태양계 형성',              r: '46억 년 전',   c: '#FFD700' },
-                  { d: '9월 2일',           e: '🌍 지구 형성',                r: '45.4억 년 전', c: '#3EC8FF' },
-                  { d: '9월 21일',          e: '🦠 최초의 생명',              r: '38억 년 전',   c: '#3EFF9B' },
-                  { d: '12월 17일',         e: '🦑 캄브리아기 대폭발',        r: '5.4억 년 전',  c: '#3EFF9B' },
-                  { d: '12월 25일',         e: '🦕 공룡 등장',                r: '2.3억 년 전',  c: '#3EFF9B' },
-                  { d: '12월 30일',         e: '☄️ 공룡 멸종 / 영장류',       r: '6,600만 년 전',c: '#3EFF9B' },
-                  { d: '12월 31일 22:24',   e: '🧍 인류 조상',                r: '400만 년 전',  c: '#FF8C3E' },
-                  { d: '12월 31일 23:48',   e: '👤 현생 인류',                r: '30만 년 전',   c: '#FF8C3E' },
-                  { d: '12월 31일 23:59:32',e: '🌾 농업 혁명',                r: '12,000년 전',  c: '#FF6B6B' },
-                  { d: '12월 31일 23:59:46',e: '📜 문자 발명',                r: '5,500년 전',   c: '#FF6B6B' },
-                  { d: '12월 31일 23:59:59.4',e: '⚙️ 산업혁명',               r: '250년 전',     c: '#FF6B6B' },
+                  { d: '8월 31일',          e: '☀️ 태양계 형성',              r: '46억 년 전',   c: '#CA8A04' },
+                  { d: '9월 2일',           e: '🌍 지구 형성',                r: '45.4억 년 전', c: '#0891B2' },
+                  { d: '9월 21일',          e: '🦠 최초의 생명',              r: '38억 년 전',   c: '#059669' },
+                  { d: '12월 17일',         e: '🦑 캄브리아기 대폭발',        r: '5.4억 년 전',  c: '#059669' },
+                  { d: '12월 25일',         e: '🦕 공룡 등장',                r: '2.3억 년 전',  c: '#059669' },
+                  { d: '12월 30일',         e: '☄️ 공룡 멸종 / 영장류',       r: '6,600만 년 전',c: '#059669' },
+                  { d: '12월 31일 22:24',   e: '🧍 인류 조상',                r: '400만 년 전',  c: '#EA580C' },
+                  { d: '12월 31일 23:48',   e: '👤 현생 인류',                r: '30만 년 전',   c: '#EA580C' },
+                  { d: '12월 31일 23:59:32',e: '🌾 농업 혁명',                r: '12,000년 전',  c: '#DC2626' },
+                  { d: '12월 31일 23:59:46',e: '📜 문자 발명',                r: '5,500년 전',   c: '#DC2626' },
+                  { d: '12월 31일 23:59:59.4',e: '⚙️ 산업혁명',               r: '250년 전',     c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#3EFFD0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>
                       <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: r.c, marginRight: 8, verticalAlign: 'middle' }} />
                       {r.e}
@@ -112,8 +112,8 @@ export default function CosmicCalendarPage() {
             12월 31일의 충격 — 인류의 시간
           </h2>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.30)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.30)',
             borderRadius: 14,
             padding: '18px 22px',
             fontSize: 13.5,
@@ -121,11 +121,11 @@ export default function CosmicCalendarPage() {
             lineHeight: 2,
           }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>인류는 우주 달력의 마지막 <strong style={{ color: '#FF8C8C' }}>1시간 36분</strong>에 등장했습니다.</li>
-              <li>현생 인류(호모 사피엔스)는 마지막 <strong style={{ color: '#FF8C8C' }}>12분</strong>.</li>
-              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: '#FF8C8C' }}>14초</strong>.</li>
-              <li>산업혁명 이후는 <strong style={{ color: '#FF8C8C' }}>0.6초</strong>.</li>
-              <li>인터넷 시대는 <strong style={{ color: '#FF8C8C' }}>0.07초</strong>.</li>
+              <li>인류는 우주 달력의 마지막 <strong style={{ color: '#DC2626' }}>1시간 36분</strong>에 등장했습니다.</li>
+              <li>현생 인류(호모 사피엔스)는 마지막 <strong style={{ color: '#DC2626' }}>12분</strong>.</li>
+              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: '#DC2626' }}>14초</strong>.</li>
+              <li>산업혁명 이후는 <strong style={{ color: '#DC2626' }}>0.6초</strong>.</li>
+              <li>인터넷 시대는 <strong style={{ color: '#DC2626' }}>0.07초</strong>.</li>
             </ul>
             <p style={{ marginTop: 12, fontSize: 13, color: 'var(--muted)', fontStyle: 'italic' }}>
               인류의 모든 문명·과학·예술은 우주 1년 중 마지막 30초에 만들어졌습니다.
@@ -141,8 +141,8 @@ export default function CosmicCalendarPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { t: '🗓️ 1년 압축',       c: '#9B59B6', items: ['인류 등장: 12월 31일 23:48', '인류 문명: 마지막 14초', '산업혁명: 마지막 0.6초'] },
-              { t: '🕐 24시간 압축',    c: '#3EFFD0', items: ['인류 등장: 23:59:58', '인류 문명: 마지막 0.075초', '산업혁명: 마지막 0.0016초'] },
-              { t: '📐 1km 압축',       c: '#FFD700', items: ['1m = 1,380만 년', '인류 등장: 999.978m', '인류 문명: 마지막 0.9mm'] },
+              { t: '🕐 24시간 압축',    c: '#0D9488', items: ['인류 등장: 23:59:58', '인류 문명: 마지막 0.075초', '산업혁명: 마지막 0.0016초'] },
+              { t: '📐 1km 압축',       c: '#CA8A04', items: ['1m = 1,380만 년', '인류 등장: 999.978m', '인류 문명: 마지막 0.9mm'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -162,10 +162,10 @@ export default function CosmicCalendarPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '초기 우주 (1월~3월)',        c: '#9B59B6', d: '빅뱅, 원자 형성, 최초의 별·은하 등장' },
-              { t: '별·행성의 시대 (3월~8월)',    c: '#FFD700', d: '별이 폭발하며 무거운 원소 생성, 우주의 화학적 다양성 확대' },
-              { t: '태양계와 지구 (9월)',         c: '#3EC8FF', d: '태양 형성, 지구·달 형성, 생명이 등장' },
-              { t: '생명의 진화 (10월~12월)',     c: '#3EFF9B', d: '단세포 → 다세포 → 동식물, 캄브리아기 폭발 → 공룡 → 포유류' },
-              { t: '인류의 등장 (12월 31일)',     c: '#FF6B6B', d: '단 하루 안에 모든 인류 진화·문명 발생' },
+              { t: '별·행성의 시대 (3월~8월)',    c: '#CA8A04', d: '별이 폭발하며 무거운 원소 생성, 우주의 화학적 다양성 확대' },
+              { t: '태양계와 지구 (9월)',         c: '#0891B2', d: '태양 형성, 지구·달 형성, 생명이 등장' },
+              { t: '생명의 진화 (10월~12월)',     c: '#059669', d: '단세포 → 다세포 → 동식물, 캄브리아기 폭발 → 공룡 → 포유류' },
+              { t: '인류의 등장 (12월 31일)',     c: '#DC2626', d: '단 하루 안에 모든 인류 진화·문명 발생' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -217,7 +217,7 @@ export default function CosmicCalendarPage() {
               { t: '📲 SNS 콘텐츠', d: '"내 30년 인생 = 0.07초" 같은 충격적 사실 공유' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#3EFFD0', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}

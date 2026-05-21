@@ -39,9 +39,9 @@ export default function CharCountPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '글자수 (Length)',     c: 'var(--accent)', d: '문자 1개를 1로 셉니다. 한글 "안녕" = 2글자. JavaScript의 string.length와 동일.' },
-              { t: 'UTF-8 바이트',        c: '#3EFF9B',       d: '웹 표준 인코딩. 한글 1자 = 3바이트, 영문/숫자 = 1바이트, 이모지 = 4바이트.' },
-              { t: 'EUC-KR 바이트',       c: '#FFD700',       d: '한국 SMS·구형 시스템. 한글 1자 = 2바이트, 영문/숫자 = 1바이트.' },
-              { t: 'X(트위터) 가중치',     c: '#3EC8FF',       d: '한글·이모지 1자 = 가중치 2. 280 weight 한도. 한글만으로는 약 140자.' },
+              { t: 'UTF-8 바이트',        c: '#059669',       d: '웹 표준 인코딩. 한글 1자 = 3바이트, 영문/숫자 = 1바이트, 이모지 = 4바이트.' },
+              { t: 'EUC-KR 바이트',       c: '#CA8A04',       d: '한국 SMS·구형 시스템. 한글 1자 = 2바이트, 영문/숫자 = 1바이트.' },
+              { t: 'X(트위터) 가중치',     c: '#0891B2',       d: '한글·이모지 1자 = 가중치 2. 280 weight 한도. 한글만으로는 약 140자.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -93,8 +93,8 @@ export default function CharCountPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { t: 'SMS (단문)',  b: '90바이트',  ko: '한글 약 45자',     en: '영문 90자',  c: 'var(--accent)' },
-              { t: 'LMS (장문)',  b: '2,000바이트', ko: '한글 약 1,000자',  en: '영문 2,000자', c: '#3EFF9B' },
-              { t: 'MMS (멀티)', b: '2,000바이트 + 이미지', ko: '본문 약 1,000자', en: '제목 30바이트', c: '#FFD700' },
+              { t: 'LMS (장문)',  b: '2,000바이트', ko: '한글 약 1,000자',  en: '영문 2,000자', c: '#059669' },
+              { t: 'MMS (멀티)', b: '2,000바이트 + 이미지', ko: '본문 약 1,000자', en: '제목 30바이트', c: '#CA8A04' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -105,8 +105,8 @@ export default function CharCountPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,140,62,0.05)',
-            border: '1px solid rgba(255,140,62,0.30)',
+            background: 'rgba(234,88,12,0.05)',
+            border: '1px solid rgba(234,88,12,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -114,7 +114,7 @@ export default function CharCountPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#FF8C3E' }}>주의:</strong> 통신사 정책상 1바이트라도 초과하면 LMS·MMS로 자동 전환되어 발송 단가가 올라갑니다.
+            ⚠️ <strong style={{ color: '#EA580C' }}>주의:</strong> 통신사 정책상 1바이트라도 초과하면 LMS·MMS로 자동 전환되어 발송 단가가 올라갑니다.
             마케팅 문자는 SMS(45자) 안에 핵심을 담으세요.
           </div>
         </div>
@@ -127,10 +127,10 @@ export default function CharCountPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: 'HTML <title>',    range: '50~60자',  c: 'var(--accent)', d: '구글 검색결과 모바일 최대 50자, 데스크탑 60자 표시. 초과 시 "..." 잘림.' },
-              { t: 'meta description',range: '120~160자', c: '#3EFF9B',       d: '검색결과 스니펫. 모바일 120자, 데스크탑 160자 표시.' },
-              { t: 'Open Graph title', range: '40~60자',  c: '#3EC8FF',       d: '카카오톡·페이스북 공유 카드 제목.' },
-              { t: 'Open Graph description', range: '80~120자', c: '#FFD700', d: '공유 카드 설명. 너무 길면 줄임.' },
-              { t: '이메일 제목',        range: '50자 (모바일)', c: '#FF8C3E', d: '받은편지함에서 짤리지 않는 안전 길이. 데스크탑은 78자.' },
+              { t: 'meta description',range: '120~160자', c: '#059669',       d: '검색결과 스니펫. 모바일 120자, 데스크탑 160자 표시.' },
+              { t: 'Open Graph title', range: '40~60자',  c: '#0891B2',       d: '카카오톡·페이스북 공유 카드 제목.' },
+              { t: 'Open Graph description', range: '80~120자', c: '#CA8A04', d: '공유 카드 설명. 너무 길면 줄임.' },
+              { t: '이메일 제목',        range: '50자 (모바일)', c: '#EA580C', d: '받은편지함에서 짤리지 않는 안전 길이. 데스크탑은 78자.' },
               { t: 'URL slug',          range: '50~70자',  c: '#9B59B6',       d: '검색엔진과 공유 시 가독성 균형.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
@@ -207,7 +207,7 @@ export default function CharCountPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 12px' }}>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 4 }}>{r.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--text)' }}>📖 묵독 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.r}</strong></p>
-                <p style={{ fontSize: 12, color: 'var(--text)' }}>🎙️ 발화 <strong style={{ color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.s}</strong></p>
+                <p style={{ fontSize: 12, color: 'var(--text)' }}>🎙️ 발화 <strong style={{ color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.s}</strong></p>
               </div>
             ))}
           </div>

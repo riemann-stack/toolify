@@ -76,11 +76,11 @@ export default function PaintPage() {
               <tbody>
                 {[
                   { t: '수성 페인트',         a: '9~10㎡',  u: '실내 벽·천장',           c: 'var(--accent)' },
-                  { t: '유성 페인트',         a: '11~13㎡', u: '나무·금속',              c: '#FF8C3E' },
-                  { t: '에나멜',              a: '13~15㎡', u: '문·창틀·가구',          c: '#FFD700' },
-                  { t: '외부용',              a: '7~9㎡',   u: '외벽·옥상',              c: '#3EC8FF' },
+                  { t: '유성 페인트',         a: '11~13㎡', u: '나무·금속',              c: '#EA580C' },
+                  { t: '에나멜',              a: '13~15㎡', u: '문·창틀·가구',          c: '#CA8A04' },
+                  { t: '외부용',              a: '7~9㎡',   u: '외벽·옥상',              c: '#0891B2' },
                   { t: '프라이머',            a: '8~10㎡',  u: '밑칠 (도장 전 처리)',   c: '#E89757' },
-                  { t: '친환경 (저VOC)',      a: '9~10㎡',  u: '아이방·민감자',          c: '#3EFF9B' },
+                  { t: '친환경 (저VOC)',      a: '9~10㎡',  u: '아이방·민감자',          c: '#059669' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.t}</td>
@@ -139,9 +139,9 @@ export default function PaintPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
             {[
-              { s: '1L',  c: '#FFD700', t: '작은 면적·터치업·견본' },
-              { s: '2L',  c: '#3EC8FF', t: '1방 부분 도장' },
-              { s: '4L',  c: '#3EFF9B', t: '1방 전체 도장 (인기)' },
+              { s: '1L',  c: '#CA8A04', t: '작은 면적·터치업·견본' },
+              { s: '2L',  c: '#0891B2', t: '1방 부분 도장' },
+              { s: '4L',  c: '#059669', t: '1방 전체 도장 (인기)' },
               { s: '18L', c: 'var(--accent)', t: '집 전체 도장 (대용량, 약 10~15% 저렴)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px', textAlign: 'center' }}>
@@ -162,10 +162,10 @@ export default function PaintPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { i: '🧱', t: '벽지 위 도장',     d: '1L당 면적 약 10% 감소',   color: '#FF8C3E' },
-              { i: '🏗️', t: '시멘트 벽',        d: '첫 회 흡수율 매우 높음, 프라이머 필수', color: '#FF6B6B' },
+              { i: '🧱', t: '벽지 위 도장',     d: '1L당 면적 약 10% 감소',   color: '#EA580C' },
+              { i: '🏗️', t: '시멘트 벽',        d: '첫 회 흡수율 매우 높음, 프라이머 필수', color: '#DC2626' },
               { i: '🪵', t: '나무 표면',        d: '흡수율 높음, 1.5배 가량 더 필요', color: '#E89757' },
-              { i: '🔩', t: '금속·플라스틱',    d: '흡수율 거의 없음, 1L당 면적 1.2배', color: '#3EC8FF' },
+              { i: '🔩', t: '금속·플라스틱',    d: '흡수율 거의 없음, 1L당 면적 1.2배', color: '#0891B2' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
@@ -216,8 +216,8 @@ export default function PaintPage() {
                 <li>페인트는 도배보다 셀프 진입 쉬움</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>24평 기준 약 80~120만원</li>
                 <li>시간: 1~2일 (빠르게)</li>

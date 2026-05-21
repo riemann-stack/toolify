@@ -265,7 +265,7 @@ export default function LoanClient() {
             const preset = LOAN_PRESETS.find(p => p.id === presetId)
             const ref = preset?.rateRefId ? KOREA_LOAN_RATES.find(k => k.id === preset.rateRefId) : null
             return ref ? (
-              <p style={{ fontSize: 11.5, color: '#3EC8FF', marginTop: 6 }}>
+              <p style={{ fontSize: 11.5, color: '#0891B2', marginTop: 6 }}>
                 💡 {ref.name} 평균 <strong>{ref.avg}%</strong> ({ref.min}~{ref.max}%)
               </p>
             ) : null
@@ -440,10 +440,10 @@ export default function LoanClient() {
           {prepayResult && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(255,215,0,0.40)', background: 'rgba(255,215,0,0.06)' }}>
+                style={{ borderColor: 'rgba(202,138,4,0.40)', background: 'rgba(202,138,4,0.06)' }}>
                 <div className={styles.heroLabel}>순절감액</div>
                 <div className={styles.heroNum}
-                  style={{ color: prepayResult.netSaving > 0 ? '#FFD700' : '#FF6B6B' }}>
+                  style={{ color: prepayResult.netSaving > 0 ? '#CA8A04' : '#DC2626' }}>
                   {prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}
                 </div>
                 <div className={styles.heroSub}>
@@ -459,7 +459,7 @@ export default function LoanClient() {
                   <div className={styles.detailRow}><span>중도상환 후 총 이자</span><span>{formatEok(prepayResult.newTotalInterest)}</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>줄어드는 이자</span><span>−{formatEok(prepayResult.interestSaved)}</span></div>
                   <div className={styles.detailRow}><span>중도상환수수료</span><span>+{won(prepayResult.prepaymentFee)}</span></div>
-                  <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>순절감액</span><span style={{ color: prepayResult.netSaving > 0 ? '#FFD700' : '#FF6B6B' }}>{prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}</span></div>
+                  <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>순절감액</span><span style={{ color: prepayResult.netSaving > 0 ? '#CA8A04' : '#DC2626' }}>{prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}</span></div>
                   {prepaymentMode === 'reduce-period' && prepayResult.monthsShortened > 0 && (
                     <div className={styles.detailRow}><span>단축되는 기간</span><span>{prepayResult.monthsShortened}개월 ({(prepayResult.monthsShortened / 12).toFixed(1)}년)</span></div>
                   )}
@@ -553,12 +553,12 @@ export default function LoanClient() {
             <>
               <div className={styles.hero}
                 style={{
-                  borderColor: refiResult.isWorthwhile ? 'rgba(62,255,155,0.40)' : 'rgba(255,107,107,0.40)',
-                  background: refiResult.isWorthwhile ? 'rgba(62,255,155,0.06)' : 'rgba(255,107,107,0.06)',
+                  borderColor: refiResult.isWorthwhile ? 'rgba(16,185,129,0.40)' : 'rgba(220,38,38,0.40)',
+                  background: refiResult.isWorthwhile ? 'rgba(16,185,129,0.06)' : 'rgba(220,38,38,0.06)',
                 }}>
                 <div className={styles.heroLabel}>{refiResult.isWorthwhile ? '✨ 갈아타기 절감' : '⚠️ 갈아타기 손해'}</div>
                 <div className={styles.heroNum}
-                  style={{ color: refiResult.isWorthwhile ? '#3EFF9B' : '#FF6B6B' }}>
+                  style={{ color: refiResult.isWorthwhile ? '#059669' : '#DC2626' }}>
                   {refiResult.totalSaving > 0 ? '−' : '+'}{formatEok(Math.abs(refiResult.totalSaving))}
                 </div>
                 <div className={styles.heroSub}>
@@ -577,7 +577,7 @@ export default function LoanClient() {
                   <div className={styles.detailRow}><span>부대비용 합계</span><span>{formatEok(refiResult.totalCostFees)}</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}>
                     <span>총 절감액</span>
-                    <span style={{ color: refiResult.isWorthwhile ? '#3EFF9B' : '#FF6B6B' }}>
+                    <span style={{ color: refiResult.isWorthwhile ? '#059669' : '#DC2626' }}>
                       {refiResult.totalSaving > 0 ? '−' : '+'}{formatEok(Math.abs(refiResult.totalSaving))}
                     </span>
                   </div>
@@ -625,7 +625,7 @@ export default function LoanClient() {
                     </span>
                     <span>{s.newRate.toFixed(2)}%</span>
                     <span>{won(s.monthlyPayment)}<br /><small style={{ color: 'var(--muted)', fontWeight: 400 }}>{s.monthlyDiff > 0 ? '+' : ''}{won(s.monthlyDiff)}/월</small></span>
-                    <span style={{ color: s.totalInterestDiff > 0 ? '#FF6B6B' : s.totalInterestDiff < 0 ? '#3EFF9B' : 'var(--muted)' }}>
+                    <span style={{ color: s.totalInterestDiff > 0 ? '#DC2626' : s.totalInterestDiff < 0 ? '#059669' : 'var(--muted)' }}>
                       {s.totalInterestDiff > 0 ? '+' : ''}{formatEok(s.totalInterestDiff)}
                     </span>
                   </div>
@@ -675,7 +675,7 @@ export default function LoanClient() {
             <div className={styles.hero}
               style={{ borderColor: 'rgba(155,89,182,0.40)', background: 'rgba(155,89,182,0.06)' }}>
               <div className={styles.heroLabel}>감당 가능 대출 원금</div>
-              <div className={styles.heroNum} style={{ color: '#C485E0' }}>
+              <div className={styles.heroNum} style={{ color: '#9333EA' }}>
                 {formatEok(reverseResult.principal)}
               </div>
               <div className={styles.heroSub}>

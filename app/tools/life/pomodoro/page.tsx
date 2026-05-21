@@ -39,9 +39,9 @@ export default function PomodoroPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { step: '1', title: '25분 집중', desc: '한 가지 작업에만 집중합니다. 방해 요소를 모두 차단하세요.', color: '#C8FF3E' },
-              { step: '2', title: '5분 휴식',  desc: '짧게 스트레칭하거나 물을 마십니다. 스마트폰은 내려놓으세요.', color: '#3EC8FF' },
-              { step: '3', title: '4번 반복',  desc: '25분 집중 + 5분 휴식을 4번 반복합니다.', color: '#FF8C3E' },
+              { step: '1', title: '25분 집중', desc: '한 가지 작업에만 집중합니다. 방해 요소를 모두 차단하세요.', color: '#0EA5E9' },
+              { step: '2', title: '5분 휴식',  desc: '짧게 스트레칭하거나 물을 마십니다. 스마트폰은 내려놓으세요.', color: '#0891B2' },
+              { step: '3', title: '4번 반복',  desc: '25분 집중 + 5분 휴식을 4번 반복합니다.', color: '#EA580C' },
               { step: '4', title: '15~30분 긴 휴식', desc: '4번의 뽀모도로를 완료하면 긴 휴식을 취합니다.', color: '#FF6BD9' },
             ].map(s => (
               <div key={s.step} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
@@ -86,9 +86,9 @@ export default function PomodoroPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#C8FF3E', fontFamily: 'Inter' }}>{r.f}분</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter' }}>{r.s}분</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter' }}>{r.l}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0EA5E9', fontFamily: 'Inter' }}>{r.f}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter' }}>{r.s}분</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter' }}>{r.l}분</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
                   </tr>
                 ))}

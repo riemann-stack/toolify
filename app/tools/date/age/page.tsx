@@ -59,7 +59,7 @@ export default function AgePage() {
               {
                 title: '만 나이',
                 tag: '법령·행정 표준',
-                color: '#C8FF3E',
+                color: '#0EA5E9',
                 rows: [
                   { k: '계산 방법', v: '생일 기준 — 생일 전 1살 적음' },
                   { k: '적용 범위', v: '법령·행정·계약 (2023.6~)' },
@@ -71,7 +71,7 @@ export default function AgePage() {
               {
                 title: '세는 나이',
                 tag: '한국 전통',
-                color: '#FFD700',
+                color: '#CA8A04',
                 rows: [
                   { k: '계산 방법', v: '태어나자마자 1세, 1월 1일 +1살' },
                   { k: '적용 범위', v: '일상 대화' },
@@ -82,7 +82,7 @@ export default function AgePage() {
               {
                 title: '연 나이',
                 tag: '병역·청보법 일부',
-                color: '#3EC8FF',
+                color: '#0891B2',
                 rows: [
                   { k: '계산 방법', v: '현재 연도 − 출생 연도' },
                   { k: '적용 범위', v: '병역법·청소년 보호법 일부' },
@@ -92,7 +92,7 @@ export default function AgePage() {
               },
             ].map((card, i) => (
               <div key={i} style={{
-                background: card.accent ? 'rgba(200,255,62,0.05)' : 'var(--bg2)',
+                background: card.accent ? 'rgba(14,165,233,0.05)' : 'var(--bg2)',
                 border: `1px solid ${card.accent ? card.color + '60' : 'var(--border)'}`,
                 borderTop: `3px solid ${card.color}`,
                 borderRadius: 12,
@@ -204,7 +204,7 @@ export default function AgePage() {
               <div key={z.n} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'grid', gridTemplateColumns: '32px 1fr auto', gap: '8px', alignItems: 'center', fontSize: '12.5px' }}>
                 <span style={{ fontSize: '22px' }}>{z.e}</span>
                 <span><strong style={{ color: 'var(--text)' }}>{z.n}</strong> · <span style={{ color: 'var(--muted)' }}>{z.r}</span></span>
-                <span style={{ color: '#3EC8FF', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>{z.x}</span>
+                <span style={{ color: '#0891B2', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>{z.x}</span>
               </div>
             ))}
           </div>

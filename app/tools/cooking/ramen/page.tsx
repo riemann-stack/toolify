@@ -78,7 +78,7 @@ export default function RamenPage() {
             ⚠️ 라면 2개에 단순 ×2가 안 되는 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            「550ml × 2 = 1,100ml」 넣으면 <strong style={{ color: '#FF6B6B' }}>국물이 싱거워집니다</strong>. 이유:
+            「550ml × 2 = 1,100ml」 넣으면 <strong style={{ color: '#DC2626' }}>국물이 싱거워집니다</strong>. 이유:
           </p>
           <ul style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18, marginBottom: 16 }}>
             <li>냄비 표면적 증가 → 증발량 증가</li>
@@ -92,7 +92,7 @@ export default function RamenPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>개수</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontWeight: 700 }}>단순 ×N (X)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>단순 ×N (X)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>권장 (✓)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>배수</th>
                 </tr>
@@ -107,7 +107,7 @@ export default function RamenPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', textDecoration: 'line-through', opacity: 0.7 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', textDecoration: 'line-through', opacity: 0.7 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
                   </tr>
@@ -128,9 +128,9 @@ export default function RamenPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { emoji: '⚫', name: '짜파게티', color: '#FFD700', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
-              { emoji: '🔥', name: '불닭볶음면', color: '#FF6B6B', steps: ['600ml로 끓이기 (5분)', '8큰술 남기고 따라냄', '액상소스 + 후레이크 + 김 비비기'] },
-              { emoji: '❄️', name: '비빔면', color: '#3EC8FF', steps: ['600ml로 면만 익히기 (3분)', '물 전부 따라내고 찬물에 헹굼', '비빔장 + 비비기'] },
+              { emoji: '⚫', name: '짜파게티', color: '#CA8A04', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
+              { emoji: '🔥', name: '불닭볶음면', color: '#DC2626', steps: ['600ml로 끓이기 (5분)', '8큰술 남기고 따라냄', '액상소스 + 후레이크 + 김 비비기'] },
+              { emoji: '❄️', name: '비빔면', color: '#0891B2', steps: ['600ml로 면만 익히기 (3분)', '물 전부 따라내고 찬물에 헹굼', '비빔장 + 비비기'] },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: s.color, fontWeight: 700, marginBottom: 10, fontFamily: 'Noto Sans KR, sans-serif' }}>
@@ -154,7 +154,7 @@ export default function RamenPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>토핑</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontWeight: 700 }}>물양 보정</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700 }}>물양 보정</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>칼로리</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>투입 타이밍</th>
                 </tr>
@@ -172,7 +172,7 @@ export default function RamenPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}{row[1] !== '0' ? '' : ''}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}{row[1] !== '0' ? '' : ''}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
@@ -246,7 +246,7 @@ export default function RamenPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: i === 1 ? '#FF6B6B' : 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: i === 1 ? '#DC2626' : 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -350,8 +350,8 @@ export default function RamenPage() {
         </div>
 
         {/* 9. 면책 */}
-        <div style={{ background: 'rgba(255,140,62,0.04)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 10 }}>🍜 면책</p>
+        <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '16px 20px' }}>
+          <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>🍜 면책</p>
           <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 도구의 권장 물양은 <strong style={{ color: 'var(--text)' }}>일반 가이드</strong>입니다. 정확한 양은 다음에 따라 다를 수 있음:
           </p>

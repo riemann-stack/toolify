@@ -45,7 +45,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #C8FF3E; color: #0D0D0D; }
+.tabActive { background: #0EA5E9; color: #ffffff; }
 
 /* 정규식 입력 */
 .patternRow {
@@ -57,7 +57,7 @@
   padding: 8px 12px;
   gap: 8px;
 }
-.patternRow:focus-within { border-color: #C8FF3E; }
+.patternRow:focus-within { border-color: #0EA5E9; }
 .patternSlash {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-weight: 800;
@@ -78,8 +78,8 @@
 }
 
 .errorBox {
-  background: rgba(255, 62, 140, 0.08);
-  border: 1px solid #FF3E8C;
+  background: rgba(219, 39, 119, 0.08);
+  border: 1px solid #DB2777;
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13px;
@@ -108,18 +108,18 @@
   user-select: none;
   min-height: 42px;
 }@media (hover: hover) {
-  .flagChip:hover { border-color: #C8FF3E; }
+  .flagChip:hover { border-color: #0EA5E9; }
 }
-.flagChip input { accent-color: #C8FF3E; cursor: pointer; }
+.flagChip input { accent-color: #0EA5E9; cursor: pointer; }
 .flagChipActive {
-  background: rgba(200, 255, 62, 0.10);
-  border-color: #C8FF3E;
+  background: rgba(14, 165, 233, 0.10);
+  border-color: #0EA5E9;
 }
 .flagLetter {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   width: 16px;
   text-align: center;
 }
@@ -145,7 +145,7 @@
   box-sizing: border-box;
   line-height: 1.6;
 }
-.textarea:focus { border-color: #C8FF3E; }
+.textarea:focus { border-color: #0EA5E9; }
 
 .warnText {
   background: rgba(255, 138, 62, 0.08);
@@ -168,14 +168,14 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
-  color: #C8FF3E;
+  color: #0EA5E9;
 }
 .slowText {
-  color: #FF3E8C !important;
+  color: #DB2777 !important;
   font-weight: 700;
 }
 .warnInline {
-  color: #FFB83E;
+  color: #D97706;
   font-weight: 600;
 }
 
@@ -273,7 +273,7 @@
 .groupKey {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  color: #FFB83E;
+  color: #D97706;
   background: var(--bg2);
   padding: 2px 6px;
   border-radius: 4px;
@@ -317,12 +317,12 @@
   font-weight: 600;
   min-height: 44px;
 }@media (hover: hover) {
-  .unitBtn:hover { border-color: #C8FF3E; }
+  .unitBtn:hover { border-color: #0EA5E9; }
 }
 .unitBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 
 /* 도움말 */
@@ -371,7 +371,7 @@
 .splitIdx {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  color: #FFB83E;
+  color: #D97706;
   font-size: 12px;
   min-width: 40px;
 }
@@ -403,12 +403,12 @@
   font-weight: 600;
   min-height: 32px;
 }@media (hover: hover) {
-  .langBtn:hover { color: var(--text); border-color: #C8FF3E; }
+  .langBtn:hover { color: var(--text); border-color: #0EA5E9; }
 }
 .langBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 .codeBlock {
   background: var(--bg3);
@@ -443,12 +443,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }@media (hover: hover) {
-  .categoryBtn:hover { color: var(--text); border-color: #C8FF3E; }
+  .categoryBtn:hover { color: var(--text); border-color: #0EA5E9; }
 }
 .categoryBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 
 /* 패턴 카드 그리드 */
@@ -492,7 +492,7 @@
   border-radius: 6px;
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-size: 11.5px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   word-break: break-all;
   margin: 0;
 }
@@ -513,7 +513,7 @@
 }
 .patternWarn {
   font-size: 11px;
-  color: #FFB83E;
+  color: #D97706;
   margin: 0;
   line-height: 1.5;
   background: rgba(255, 138, 62, 0.06);
@@ -524,17 +524,17 @@
   appearance: none;
   -webkit-appearance: none;
   background: var(--bg3);
-  border: 1px solid #C8FF3E;
+  border: 1px solid #0EA5E9;
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 12px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   margin-top: 4px;
 }@media (hover: hover) {
-  .applyBtn:hover { background: #C8FF3E; color: #0D0D0D; }
+  .applyBtn:hover { background: #0EA5E9; color: #ffffff; }
 }
 
 /* 치트시트 표 */
@@ -566,7 +566,7 @@
 .codeMono {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-weight: 700;
-  color: #C8FF3E;
+  color: #0EA5E9;
   background: var(--bg3);
   padding: 3px 7px;
   border-radius: 4px;
@@ -593,7 +593,7 @@
 }
 .warnTitle {
   font-size: 15px;
-  color: #FFB83E;
+  color: #D97706;
   font-weight: 700;
   margin: 0 0 10px;
 }
@@ -611,14 +611,14 @@
 }
 
 .tipBox {
-  background: rgba(200, 255, 62, 0.06);
-  border: 1px solid rgba(200, 255, 62, 0.40);
+  background: rgba(14, 165, 233, 0.06);
+  border: 1px solid rgba(14, 165, 233, 0.40);
   border-radius: 14px;
   padding: 18px 22px;
 }
 .tipTitle {
   font-size: 15px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   font-weight: 700;
   margin: 0 0 10px;
 }

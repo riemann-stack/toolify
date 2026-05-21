@@ -120,9 +120,9 @@ export default function AuctionClient() {
 
   /* 도넛 차트 데이터 (탭 4) */
   const donutData = [
-    { id: 'price', label: '낙찰가', value: price, color: '#3EFFD0' },
-    { id: 'tax', label: '세금·법무', value: itemCosts.filter((c) => c.category === 'tax' || c.category === 'legal').reduce((s, c) => s + c.value, 0), color: '#3EC8FF' },
-    { id: 'auction', label: '명도·체납·수리', value: itemCosts.filter((c) => c.category === 'auction').reduce((s, c) => s + c.value, 0), color: '#FF8C3E' },
+    { id: 'price', label: '낙찰가', value: price, color: '#0D9488' },
+    { id: 'tax', label: '세금·법무', value: itemCosts.filter((c) => c.category === 'tax' || c.category === 'legal').reduce((s, c) => s + c.value, 0), color: '#0891B2' },
+    { id: 'auction', label: '명도·체납·수리', value: itemCosts.filter((c) => c.category === 'auction').reduce((s, c) => s + c.value, 0), color: '#EA580C' },
     { id: 'extra', label: '기타', value: itemCosts.filter((c) => c.category === 'extra').reduce((s, c) => s + c.value, 0), color: '#9B59B6' },
   ]
 
@@ -462,7 +462,7 @@ export default function AuctionClient() {
               <strong>🚨 현금 부족 경고</strong>
               <p>
                 자기자본 <strong>{fmtMan(loanResult.ownEquity)}</strong>이 필요한데 보유 현금은{' '}
-                <strong>{fmtMan(cashOwnN)}</strong> — <strong style={{ color: '#FF3E8C' }}>{fmtMan(cashShortage)} 부족</strong>합니다.
+                <strong>{fmtMan(cashOwnN)}</strong> — <strong style={{ color: '#DB2777' }}>{fmtMan(cashShortage)} 부족</strong>합니다.
                 <br />→ 추가 자금 마련 / 대출 한도 상향 / 낙찰가 조정 필요
               </p>
             </div>
@@ -485,7 +485,7 @@ export default function AuctionClient() {
                   <tr className={s.cellSubtitle}><td colSpan={2}>자기자본</td></tr>
                   <tr><td>자기자본 필요</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(loanResult.ownEquity)}</td></tr>
                   <tr><td>보유 현금</td><td className={s.cellMono}>{fmtMan(cashOwnN)}</td></tr>
-                  <tr><td>{cashShortage > 0 ? '❌ 부족' : '✅ 잉여'}</td><td className={s.cellMono} style={{ color: cashShortage > 0 ? '#FF3E8C' : 'var(--accent)' }}>{cashShortage > 0 ? `-${fmtMan(cashShortage)}` : `+${fmtMan(cashOwnN - loanResult.ownEquity)}`}</td></tr>
+                  <tr><td>{cashShortage > 0 ? '❌ 부족' : '✅ 잉여'}</td><td className={s.cellMono} style={{ color: cashShortage > 0 ? '#DB2777' : 'var(--accent)' }}>{cashShortage > 0 ? `-${fmtMan(cashShortage)}` : `+${fmtMan(cashOwnN - loanResult.ownEquity)}`}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -540,7 +540,7 @@ export default function AuctionClient() {
                       <strong className={s.cellAccent}>{fmtMan(sc.total)}</strong>
                     </div>
                     {sc.diff !== 0 && (
-                      <p className={s.scenarioDiff} style={{ color: sc.diff > 0 ? '#FF3E8C' : '#3EFF9B' }}>
+                      <p className={s.scenarioDiff} style={{ color: sc.diff > 0 ? '#DB2777' : '#059669' }}>
                         {sc.diff > 0 ? '▲' : '▼'} {fmtMan(Math.abs(sc.diff))} ({sc.diff > 0 ? '+' : ''}{((sc.diff / baseTotal) * 100).toFixed(1)}%)
                       </p>
                     )}

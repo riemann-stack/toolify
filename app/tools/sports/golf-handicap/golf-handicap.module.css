@@ -8,7 +8,7 @@
   border-radius: 12px; padding: 4px;
 }
 .tabs4 .tab { padding: 10px 4px; font-size: 12px; }
-.tabs4 .tabActive { background: var(--bg3) !important; color: var(--accent) !important; border: 1px solid rgba(200,255,62,0.3); font-weight: 700 !important; }
+.tabs4 .tabActive { background: var(--bg3) !important; color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); font-weight: 700 !important; }
 @media (max-width: 480px) {
   .tabs4 { grid-template-columns: repeat(2, 1fr); }
   .tabs4 .tab { font-size: 11px; }
@@ -32,8 +32,8 @@
 .statValue { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
 .bestRound {
   font-size: 12px; color: var(--muted); margin: 12px 0 0;
-  padding: 8px 10px; background: rgba(255,215,0,0.06); border-radius: 8px;
-  border-left: 3px solid #FFD700;
+  padding: 8px 10px; background: rgba(202,138,4,0.14); border-radius: 8px;
+  border-left: 3px solid #CA8A04;
 }
 .encourageHint {
   font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 10px 0 0;
@@ -45,7 +45,7 @@
 /* ── 입력 폼 큰 버튼 ── */
 .bigSaveBtn {
   width: 100%; margin-top: 14px;
-  background: var(--accent); color: #0D0D0D; border: none;
+  background: var(--accent); color: #ffffff; border: none;
   padding: 14px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
@@ -53,7 +53,7 @@
   .bigSaveBtn:hover { opacity: 0.88; }
 }
 .smallSaveBtn {
-  background: var(--accent); color: #0D0D0D; border: none;
+  background: var(--accent); color: #ffffff; border: none;
   padding: 10px 14px; border-radius: 10px;
   font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; min-height: 44px; white-space: nowrap;
@@ -82,7 +82,7 @@
   width: 28px; height: 28px; font-size: 14px; color: var(--muted);
   cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }@media (hover: hover) {
-  .smallDelBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .smallDelBtn:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 /* ── 라운드 목록 표 ── */
@@ -147,14 +147,14 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .roundInput::-webkit-inner-spin-button, .roundInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.roundInput:focus { border-color: rgba(200,255,62,0.4); }
+.roundInput:focus { border-color: rgba(14,165,233,0.4); }
 .roundInputLabel { font-size: 10px; color: var(--muted); display: block; margin-bottom: 3px; letter-spacing: 0.04em; }
 .roundDelete {
   background: transparent; border: none; color: var(--muted); cursor: pointer;
   font-size: 20px; line-height: 1; padding: 6px 8px; border-radius: 6px;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .roundDelete:hover { color: #FF6B6B; background: rgba(255,107,107,0.1); }
+  .roundDelete:hover { color: #DC2626; background: rgba(220,38,38,0.1); }
 }
 
 .roundMeta {
@@ -165,11 +165,11 @@
 .roundDiff {
   font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 800;
   text-align: right; padding: 4px 10px; border-radius: 6px;
-  background: rgba(200,255,62,0.1);
+  background: rgba(14,165,233,0.1);
 }
-.diffGood { color: #3EFF9B; background: rgba(62,255,155,0.1); }
-.diffMid  { color: var(--accent); background: rgba(200,255,62,0.1); }
-.diffBad  { color: #FF6B6B; background: rgba(255,107,107,0.1); }
+.diffGood { color: #059669; background: rgba(16,185,129,0.1); }
+.diffMid  { color: var(--accent); background: rgba(14,165,233,0.1); }
+.diffBad  { color: #DC2626; background: rgba(220,38,38,0.1); }
 
 .holeToggle {
   display: flex; gap: 4px; background: var(--bg2);
@@ -202,7 +202,7 @@
 
 /* ── 히어로 결과 ── */
 .hero {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px; padding: 24px 26px;
   display: flex; justify-content: space-between; align-items: center; gap: 12px;
   animation: golfFadeUp 0.25s ease;
@@ -219,11 +219,11 @@
   font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.04em;
 }
-.gradeScratch { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid rgba(255,215,0,0.4); }
-.gradeLow     { background: rgba(62,255,155,0.15); color: #3EFF9B; border: 1px solid rgba(62,255,155,0.4); }
-.gradeMid     { background: rgba(200,255,62,0.15); color: var(--accent); border: 1px solid rgba(200,255,62,0.4); }
-.gradeHigh    { background: rgba(255,140,62,0.15); color: #FF8C3E; border: 1px solid rgba(255,140,62,0.4); }
-.gradeMax     { background: rgba(255,107,107,0.15); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.4); }
+.gradeScratch { background: rgba(202,138,4,0.15); color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.gradeLow     { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
+.gradeMid     { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
+.gradeHigh    { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
+.gradeMax     { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
 
 /* ── 입력 필드 ── */
 .inputRow { display: flex; align-items: center; gap: 10px; }
@@ -234,7 +234,7 @@
   -moz-appearance: textfield; appearance: textfield;
 }
 .bigInput::-webkit-inner-spin-button, .bigInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.bigInput:focus { border-color: rgba(200,255,62,0.4); }
+.bigInput:focus { border-color: rgba(14,165,233,0.4); }
 .inputUnit { font-size: 14px; color: var(--muted); flex-shrink: 0; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -249,7 +249,7 @@
 }@media (hover: hover) {
   .presetBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.presetActive { background: rgba(200,255,62,0.15) !important; border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.presetActive { background: rgba(14,165,233,0.15) !important; border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
 
 /* ── 모드 토글 ── */
 .modeRow { display: flex; gap: 6px; margin-bottom: 12px; }
@@ -261,7 +261,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.modeActive { background: rgba(200,255,62,0.15) !important; border-color: rgba(200,255,62,0.4) !important; color: var(--accent) !important; }
+.modeActive { background: rgba(14,165,233,0.15) !important; border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
 
 /* ── 결과 카드 그리드 ── */
 .resultGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; animation: golfFadeUp 0.25s ease; }
@@ -292,15 +292,15 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700;
   padding: 1px 6px; border-radius: 4px; min-width: 20px;
 }
-.pointEagle  { background: rgba(255,215,0,0.15); color: #FFD700; }
-.pointBirdie { background: rgba(62,255,155,0.15); color: #3EFF9B; }
-.pointPar    { background: rgba(200,255,62,0.15); color: var(--accent); }
-.pointBogey  { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.pointBad    { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.pointEagle  { background: rgba(202,138,4,0.15); color: #CA8A04; }
+.pointBirdie { background: rgba(16,185,129,0.15); color: #059669; }
+.pointPar    { background: rgba(14,165,233,0.15); color: var(--accent); }
+.pointBogey  { background: rgba(234,88,12,0.15); color: #EA580C; }
+.pointBad    { background: rgba(220,38,38,0.15); color: #DC2626; }
 .pointZero   { background: var(--bg2); color: var(--muted); }
 
 .stableTotal {
-  background: var(--bg2); border: 1px solid rgba(200,255,62,0.3);
+  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
   border-radius: 12px; padding: 18px 20px; margin-top: 12px;
   display: flex; justify-content: space-between; align-items: center;
   animation: golfFadeUp 0.25s ease;
@@ -310,7 +310,7 @@
 
 /* ── 안내 박스 ── */
 .infoBox {
-  background: rgba(200,255,62,0.06); border: 1px solid rgba(200,255,62,0.2);
+  background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.2);
   border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
 }
 

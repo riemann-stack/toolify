@@ -272,8 +272,8 @@ export default function BakingRecipePage() {
       {/* 7. 안전 / 면책 */}
       <h2 style={sectionTitle}>⚠️ 안전 · 면책</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

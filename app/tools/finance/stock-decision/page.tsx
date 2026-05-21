@@ -105,10 +105,10 @@ export default function StockDecisionPage() {
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {[
-            { color: '#3EFF9B', name: '🟢 비교적 이성적', desc: '본인 판단 신뢰. 다만 과신 위험 — 5초 더 생각.' },
+            { color: '#059669', name: '🟢 비교적 이성적', desc: '본인 판단 신뢰. 다만 과신 위험 — 5초 더 생각.' },
             { color: '#FFD93E', name: '🟡 균형 (보류 권장)', desc: '판단·감정 비슷. 1~2일 보류 후 재점검.' },
-            { color: '#FF8C3E', name: '🟠 감정 ↑ (신중)', desc: '분할 진행·소액 테스트로 영향 줄이기.' },
-            { color: '#FF6B6B', name: '🔴 강한 감정 신호', desc: '24~48시간 보류 강력 권장. 정말 같은 결정인지 재검토.' },
+            { color: '#EA580C', name: '🟠 감정 ↑ (신중)', desc: '분할 진행·소액 테스트로 영향 줄이기.' },
+            { color: '#DC2626', name: '🔴 강한 감정 신호', desc: '24~48시간 보류 강력 권장. 정말 같은 결정인지 재검토.' },
           ].map((b, i) => (
             <div key={i} style={{ background: 'var(--bg3)', border: `1px solid ${b.color}55`, borderLeft: `3px solid ${b.color}`, borderRadius: '8px', padding: '10px 14px' }}>
               <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '4px' }}>{b.name}</p>
@@ -177,7 +177,7 @@ export default function StockDecisionPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q2. 이 도구로 종목 추천도 받을 수 있나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>아니요 — 절대 X.</strong> 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>·본인 거래 증권사 안내에서 직접 확인.
+          <strong style={{ color: '#DC2626' }}>아니요 — 절대 X.</strong> 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>·본인 거래 증권사 안내에서 직접 확인.
         </div>
       </details>
 
@@ -232,8 +232,8 @@ export default function StockDecisionPage() {
       {/* 7. 면책 */}
       <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

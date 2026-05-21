@@ -342,7 +342,7 @@ export default function CurtainBlindClient() {
                     <button key={opt.id} type="button" className={`${styles.lengthBtn} ${lengthOpt === opt.id ? styles.lengthActive : ''}`} onClick={() => setLengthOpt(opt.id)}>
                       <svg className={styles.lengthSvg} width="40" height="80" viewBox="0 0 40 80" aria-hidden="true">
                         {/* 창문 */}
-                        <rect x="8" y="14" width="24" height="22" fill="rgba(62,200,255,0.15)" stroke="#3EC8FF" strokeWidth="1" />
+                        <rect x="8" y="14" width="24" height="22" fill="rgba(8,145,178,0.15)" stroke="#0891B2" strokeWidth="1" />
                         {/* 커튼 */}
                         <line x1="6" y1="12" x2="6" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
                         <line x1="34" y1="12" x2="34" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
@@ -521,10 +521,10 @@ export default function CurtainBlindClient() {
                     <text x={VBW - 25} y={VBH - 14} textAnchor="end" fill="var(--muted)" fontSize="9" fontFamily="monospace">바닥</text>
 
                     {/* 창문 */}
-                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="rgba(62,200,255,0.10)" stroke="#3EC8FF" strokeWidth="2" />
+                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="rgba(8,145,178,0.10)" stroke="#0891B2" strokeWidth="2" />
                     {/* 창문 격자 (4분할) */}
-                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="#3EC8FF" strokeWidth="0.8" opacity="0.5" />
-                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="#3EC8FF" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
 
                     {/* 제품별 시각화 */}
                     {productId === 'curtain' && result.type === 'curtain' && (() => {
@@ -550,7 +550,7 @@ export default function CurtainBlindClient() {
                         }
                         panels.push(
                           <g key={i}>
-                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="rgba(200,255,62,0.12)" stroke="var(--accent)" strokeWidth="1" rx="1" />
+                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="rgba(14,165,233,0.12)" stroke="var(--accent)" strokeWidth="1" rx="1" />
                             {lines}
                           </g>
                         )
@@ -558,9 +558,9 @@ export default function CurtainBlindClient() {
                       return (
                         <>
                           {/* 봉 */}
-                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#FFD700" strokeWidth="2.5" />
-                          <circle cx={rodX1} cy={rodY} r="3" fill="#FFD700" />
-                          <circle cx={rodX2} cy={rodY} r="3" fill="#FFD700" />
+                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#CA8A04" strokeWidth="2.5" />
+                          <circle cx={rodX1} cy={rodY} r="3" fill="#CA8A04" />
+                          <circle cx={rodX2} cy={rodY} r="3" fill="#CA8A04" />
                           {/* 커튼 패널 */}
                           {panels}
                         </>
@@ -576,10 +576,10 @@ export default function CurtainBlindClient() {
                       const slats = []
                       const slatCount = productId === 'blind' ? 8 : productId === 'roman' ? 4 : 0
                       for (let i = 1; i < slatCount; i++) {
-                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? '#9B59B6' : '#3EC8FF'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
+                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? '#9B59B6' : '#0891B2'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
                       }
-                      const fillColor = productId === 'blind' ? 'rgba(62,200,255,0.18)' : productId === 'roll' ? 'rgba(255,215,0,0.18)' : 'rgba(155,89,182,0.18)'
-                      const strokeColor = productId === 'blind' ? '#3EC8FF' : productId === 'roll' ? '#FFD700' : '#9B59B6'
+                      const fillColor = productId === 'blind' ? 'rgba(8,145,178,0.18)' : productId === 'roll' ? 'rgba(202,138,4,0.18)' : 'rgba(155,89,182,0.18)'
+                      const strokeColor = productId === 'blind' ? '#0891B2' : productId === 'roll' ? '#CA8A04' : '#9B59B6'
                       return (
                         <>
                           <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="1.5" />
@@ -596,11 +596,11 @@ export default function CurtainBlindClient() {
                       const verts = []
                       for (let i = 0; i <= 8; i++) {
                         const x = winX + offsetX + (w / 8) * i
-                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="#FF6B6B" strokeWidth="1.5" opacity="0.6" />)
+                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="#DC2626" strokeWidth="1.5" opacity="0.6" />)
                       }
                       return (
                         <>
-                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(255,107,107,0.10)" stroke="#FF6B6B" strokeWidth="1" />
+                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(220,38,38,0.10)" stroke="#DC2626" strokeWidth="1" />
                           {verts}
                         </>
                       )
@@ -609,13 +609,13 @@ export default function CurtainBlindClient() {
                     {/* 라벨 — 항상 마지막에 그려서 패널 위에 보이도록 (z-order) */}
                     {/* 봉 라벨 — 커튼 모드일 때만 위쪽에 분리 배치 */}
                     {isCurtain && (
-                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#FFD700" fontSize="11" fontFamily="monospace" fontWeight="700">
+                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#CA8A04" fontSize="11" fontFamily="monospace" fontWeight="700">
                         봉 {fmt(result.rodLength)}cm
                       </text>
                     )}
                     {/* 창문 너비 라벨 — 커튼 모드일 땐 창문 안쪽 상단 (봉·끝마개와 안 겹침) / 그 외엔 창문 위쪽 */}
                     {isCurtain ? (
-                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="#3EC8FF" fontSize="10" fontFamily="monospace" fontWeight="700">
+                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace" fontWeight="700">
                         창문 {winW}cm
                       </text>
                     ) : (
@@ -625,7 +625,7 @@ export default function CurtainBlindClient() {
                     )}
                     {/* 창문 높이 라벨 — 커튼 모드일 땐 커튼 바깥 우측, 그 외엔 창문 바로 옆 */}
                     <text x={heightLabelX} y={winY + drawWinH / 2 + 3} textAnchor="start"
-                      fill={isCurtain ? '#3EC8FF' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
+                      fill={isCurtain ? '#0891B2' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
                       fontWeight={isCurtain ? '700' : '400'}>
                       {winH}cm
                     </text>
@@ -682,8 +682,8 @@ export default function CurtainBlindClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>롤스크린 vs 로만쉐이드</span></div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #FFD700', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#FFD700', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #CA8A04', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#CA8A04', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>
@@ -691,7 +691,7 @@ export default function CurtainBlindClient() {
                 </ul>
               </div>
               <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, marginBottom: 6 }}>🧵 로만쉐이드</p>
+                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>🧵 로만쉐이드</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>가로 주름이 잡히며 올라감</li>
                   <li>커튼처럼 부드러운 느낌</li>

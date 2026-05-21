@@ -3,16 +3,16 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
-.disclaimer a { color: #FF8C8C; text-decoration: underline; }
+.disclaimer strong { color: #DC2626; }
+.disclaimer a { color: #DC2626; text-decoration: underline; }
 
 /* ── 탭 (4개, 컬러별) ── */
 .tabs {
@@ -42,9 +42,9 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabEmployee.tabActive  { background: var(--accent-dim);     color: var(--accent); font-weight: 700; }
-.tabEmployer.tabActive  { background: rgba(255,140,62,0.12); color: #FF8C3E;       font-weight: 700; }
-.tabPartTime.tabActive  { background: rgba(62,255,155,0.12); color: #3EFF9B;       font-weight: 700; }
-.tabFreelance.tabActive { background: rgba(155,89,182,0.14); color: #C485E0;       font-weight: 700; }
+.tabEmployer.tabActive  { background: rgba(234,88,12,0.18); color: #EA580C;       font-weight: 700; }
+.tabPartTime.tabActive  { background: rgba(16,185,129,0.18); color: #059669;       font-weight: 700; }
+.tabFreelance.tabActive { background: rgba(155,89,182,0.14); color: #9333EA;       font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -186,7 +186,7 @@
 }@media (hover: hover) {
   .choiceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.choiceActive { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.choiceActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
@@ -198,8 +198,8 @@
   animation: fadeUp 0.3s ease;
 }
 .heroEmployee  { border-color: var(--accent); }
-.heroEmployer  { border-color: rgba(255,140,62,0.50); }
-.heroPartTime  { border-color: rgba(62,255,155,0.50); }
+.heroEmployer  { border-color: rgba(234,88,12,0.50); }
+.heroPartTime  { border-color: rgba(16,185,129,0.50); }
 .heroFreelance { border-color: rgba(155,89,182,0.50); }
 
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
@@ -210,10 +210,10 @@
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroEmployee  .heroNum { color: #FF6B6B; }
-.heroEmployer  .heroNum { color: #FF8C3E; }
-.heroPartTime  .heroNum { color: #3EFF9B; }
-.heroFreelance .heroNum { color: #C485E0; }
+.heroEmployee  .heroNum { color: #DC2626; }
+.heroEmployer  .heroNum { color: #EA580C; }
+.heroPartTime  .heroNum { color: #059669; }
+.heroFreelance .heroNum { color: #9333EA; }
 .heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
 .heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
@@ -255,16 +255,16 @@
 .itemTable td:last-child { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; white-space: nowrap; }
 
 /* 보험별 left-border 색상 */
-.itemTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
-.itemTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #FF6B6B; padding-left: 14px; }
-.itemTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #FF8C3E; padding-left: 14px; }
-.itemTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #3EC8FF; padding-left: 14px; }
-.itemTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #FFD700; padding-left: 14px; }
+.itemTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #0EA5E9; padding-left: 14px; }
+.itemTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #DC2626; padding-left: 14px; }
+.itemTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #EA580C; padding-left: 14px; }
+.itemTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #0891B2; padding-left: 14px; }
+.itemTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #CA8A04; padding-left: 14px; }
 
 .itemTable tr.totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .itemTable tr.totalRow td:first-child { color: var(--accent); }
@@ -291,23 +291,23 @@
 }
 .dualTable td:first-child { color: var(--text); font-weight: 600; }
 .dualTable .colEmployee {
-  background: rgba(200,255,62,0.04);
+  background: rgba(14,165,233,0.14);
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .dualTable .colEmployer {
-  background: rgba(255,140,62,0.04);
+  background: rgba(234,88,12,0.14);
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
 }
 .dualTable td.zero { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 500; opacity: 0.7; }
-.dualTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #C8FF3E; padding-left: 14px; }
-.dualTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #FF6B6B; padding-left: 14px; }
-.dualTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #FF8C3E; padding-left: 14px; }
-.dualTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #3EC8FF; padding-left: 14px; }
-.dualTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #FFD700; padding-left: 14px; }
+.dualTable tr.rowPension td:first-child   { box-shadow: inset 3px 0 0 0 #0EA5E9; padding-left: 14px; }
+.dualTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #DC2626; padding-left: 14px; }
+.dualTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #EA580C; padding-left: 14px; }
+.dualTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #0891B2; padding-left: 14px; }
+.dualTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #CA8A04; padding-left: 14px; }
 .dualTable tr.totalRow td {
   border-top: 2px solid var(--border);
   border-bottom: none;
@@ -316,11 +316,11 @@
 }
 .dualTable tr.totalRow td:first-child { color: var(--text); }
 .dualTable tr.totalRow .colEmployee  { background: var(--accent-dim); color: var(--accent); }
-.dualTable tr.totalRow .colEmployer  { background: rgba(255,140,62,0.14); color: #FF8C3E; }
+.dualTable tr.totalRow .colEmployer  { background: rgba(234,88,12,0.14); color: #EA580C; }
 
 /* ── 안내 카드 (2026 변경, 두루누리, 위장도급) ── */
 .noticeCard {
-  background: rgba(200,255,62,0.06);
+  background: rgba(14,165,233,0.14);
   border: 1px solid var(--accent);
   border-radius: 12px;
   padding: 14px 18px;
@@ -345,8 +345,8 @@
 .noticeCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .duruCard {
-  background: rgba(62,255,155,0.06);
-  border: 1px solid #3EFF9B;
+  background: rgba(16,185,129,0.14);
+  border: 1px solid #059669;
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
@@ -355,8 +355,8 @@
 }
 .duruBadge {
   display: inline-block;
-  background: rgba(62,255,155,0.12);
-  color: #3EFF9B;
+  background: rgba(16,185,129,0.18);
+  color: #059669;
   font-size: 10.5px;
   padding: 3px 10px;
   border-radius: 999px;
@@ -365,25 +365,25 @@
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.duruCard strong { color: #3EFF9B; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.duruCard strong { color: #059669; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .duruCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 .disguisedCard {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disguisedCard strong { color: #FF8C8C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.disguisedCard strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 .disguisedCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 /* 국민연금 상하한 안내 */
 .pensionCapNote {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 12px;
@@ -391,7 +391,7 @@
   line-height: 1.75;
   margin-top: 8px;
 }
-.pensionCapNote strong { color: #3EC8FF; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.pensionCapNote strong { color: #0891B2; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── 시나리오 비교 카드 (탭 3, 탭 4) ── */
 .scenarioGrid {
@@ -414,10 +414,10 @@
   border-radius: 14px;
   padding: 16px 18px;
 }
-.scenarioCardA { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.scenarioCardB { border-color: #3EFF9B;       background: rgba(62,255,155,0.04); }
-.scenarioCardC { border-color: #FF8C3E;       background: rgba(255,140,62,0.04); }
-.scenarioCardP { border-color: #C485E0;       background: rgba(155,89,182,0.05); }
+.scenarioCardA { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.scenarioCardB { border-color: #059669;       background: rgba(16,185,129,0.14); }
+.scenarioCardC { border-color: #EA580C;       background: rgba(234,88,12,0.14); }
+.scenarioCardP { border-color: #9333EA;       background: rgba(155,89,182,0.05); }
 
 .scenarioTitle {
   font-size: 11px;
@@ -428,9 +428,9 @@
   margin-bottom: 4px;
 }
 .scenarioCardA .scenarioTitle { color: var(--accent); }
-.scenarioCardB .scenarioTitle { color: #3EFF9B; }
-.scenarioCardC .scenarioTitle { color: #FF8C3E; }
-.scenarioCardP .scenarioTitle { color: #C485E0; }
+.scenarioCardB .scenarioTitle { color: #059669; }
+.scenarioCardC .scenarioTitle { color: #EA580C; }
+.scenarioCardP .scenarioTitle { color: #9333EA; }
 
 .scenarioName {
   font-family: 'Noto Sans KR', sans-serif;
@@ -465,9 +465,9 @@
   color: var(--text);
 }
 .scenarioCardA .scenarioBig strong { color: var(--accent); }
-.scenarioCardB .scenarioBig strong { color: #3EFF9B; }
-.scenarioCardC .scenarioBig strong { color: #FF8C3E; }
-.scenarioCardP .scenarioBig strong { color: #C485E0; }
+.scenarioCardB .scenarioBig strong { color: #059669; }
+.scenarioCardC .scenarioBig strong { color: #EA580C; }
+.scenarioCardP .scenarioBig strong { color: #9333EA; }
 
 /* ── 차이 분석 ── */
 .diffCard {
@@ -486,20 +486,20 @@
 }
 .diffRow:last-child { border-bottom: none; }
 .diffRow strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.diffPositive { color: #3EFF9B; }
-.diffWarn     { color: #FF8C3E; }
+.diffPositive { color: #059669; }
+.diffWarn     { color: #EA580C; }
 
 /* ── 혜택 리스트 ── */
 .benefitCard {
-  background: rgba(62,200,255,0.05);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 12px;
   padding: 14px 18px;
 }
 .benefitTitle {
   font-size: 13px;
   font-weight: 700;
-  color: #3EC8FF;
+  color: #0891B2;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -531,14 +531,14 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 6px;
 }
-.statusYes  { background: rgba(62,255,155,0.14); color: #3EFF9B; }
-.statusNo   { background: rgba(255,107,107,0.12); color: #FF8C8C; }
-.statusOnly { background: rgba(255,217,62,0.14);  color: #FFD93E; }
+.statusYes  { background: rgba(16,185,129,0.14); color: #059669; }
+.statusNo   { background: rgba(220,38,38,0.18); color: #DC2626; }
+.statusOnly { background: rgba(202,138,4,0.14);  color: #CA8A04; }
 
 /* 회사 총 인건비 박스 */
 .companyCostCard {
-  background: rgba(255,140,62,0.06);
-  border: 1px solid rgba(255,140,62,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -554,12 +554,12 @@
 .companyCostRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .companyCostRow.totalRow {
   border-bottom: none;
-  border-top: 2px solid rgba(255,140,62,0.3);
+  border-top: 2px solid rgba(234,88,12,0.3);
   margin-top: 6px;
   padding-top: 12px;
   font-size: 14px;
 }
-.companyCostRow.totalRow strong { color: #FF8C3E; font-size: 18px; }
+.companyCostRow.totalRow strong { color: #EA580C; font-size: 18px; }
 
 /* ── 결과 복사 ── */
 .copyBtn {

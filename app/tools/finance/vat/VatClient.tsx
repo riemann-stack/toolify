@@ -374,7 +374,7 @@ export default function VatClient() {
                 <tbody>
                   {quoteResult.items.map((it, i) => (
                     <tr key={i}>
-                      <td>{it.name || '(품목명 없음)'}{!it.isTaxable && <span style={{ marginLeft: 6, fontSize: 10.5, color: '#3EC8FF' }}>면세</span>}</td>
+                      <td>{it.name || '(품목명 없음)'}{!it.isTaxable && <span style={{ marginLeft: 6, fontSize: 10.5, color: '#0891B2' }}>면세</span>}</td>
                       <td>{it.quantity}</td>
                       <td>{formatKRW(it.unitPrice)}</td>
                       <td>{formatKRW(it.lineSupply)}</td>
@@ -445,7 +445,7 @@ export default function VatClient() {
                 <div className={`${styles.compareCard} ${styles.compareCardLoser}`}>
                   <p className={styles.compareCardTitle}>B. 부가세 포함</p>
                   <p className={styles.compareCardDesc}>&ldquo;{formatEok(exclVsIncl.amount)} 부가세 포함&rdquo;</p>
-                  <p className={styles.compareCardMain} style={{ color: '#FF6B6B' }}>
+                  <p className={styles.compareCardMain} style={{ color: '#DC2626' }}>
                     {formatKRW(exclVsIncl.inclusive.received)}원
                   </p>
                   <p className={styles.compareCardLabel}>본인 실수입 (공급가액)</p>
@@ -582,8 +582,8 @@ export default function VatClient() {
 
               <div className={styles.infoBox}>
                 <strong>💡 3.3% 원천세 vs 10% 부가세 — 완전히 다른 세금:</strong><br />
-                <strong style={{ color: '#3EC8FF' }}>3.3% 원천세</strong>는 사업자 등록 X 프리랜서에게 발주처가 차감 후 입금 (종합소득세 신고 시 정산).
-                <strong style={{ color: '#FF8C3E' }}>10% 부가세</strong>는 사업자 등록자에게 별도 청구되는 본인 돈이 아닌 신고·납부 의무 금액 (분기별·반기별 신고).
+                <strong style={{ color: '#0891B2' }}>3.3% 원천세</strong>는 사업자 등록 X 프리랜서에게 발주처가 차감 후 입금 (종합소득세 신고 시 정산).
+                <strong style={{ color: '#EA580C' }}>10% 부가세</strong>는 사업자 등록자에게 별도 청구되는 본인 돈이 아닌 신고·납부 의무 금액 (분기별·반기별 신고).
               </div>
             </>
           )}
@@ -788,7 +788,7 @@ export default function VatClient() {
                   {gsResult.tone === 'simplified' && <div className={styles.winnerBadge}>★ 추천</div>}
                   <p className={styles.compareCardTitle}>간이과세</p>
                   <p className={styles.compareCardDesc}>{gsResult.simplified.industry.name} (실효 {(gsResult.simplified.effectiveRate * 100).toFixed(1)}%)</p>
-                  <p className={styles.compareCardMain} style={{ color: gsResult.tone === 'unavailable' ? 'var(--muted)' : '#C485E0' }}>
+                  <p className={styles.compareCardMain} style={{ color: gsResult.tone === 'unavailable' ? 'var(--muted)' : '#9333EA' }}>
                     {gsResult.simplified.available ? `${formatKRW(gsResult.simplified.vatPayable)}원` : '자격 없음'}
                   </p>
                   <p className={styles.compareCardLabel}>{gsResult.simplified.available ? '연간 납부세액' : '연 매출 1억 400만 초과'}</p>

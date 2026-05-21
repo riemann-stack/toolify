@@ -50,7 +50,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -118,7 +118,7 @@
 }@media (hover: hover) {
   .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChipActive { background: var(--accent); color: #0D0D0D; border-color: var(--accent); }
+.quickChipActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
 /* 슬라이더 */
 .sliderRow {
@@ -218,7 +218,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeBtnActive { background: var(--accent); color: #0D0D0D; }
+.modeBtnActive { background: var(--accent); color: #ffffff; }
 
 /* 시각화 */
 .vizWrap {
@@ -237,7 +237,7 @@
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, rgba(200, 255, 62, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
   border-radius: 14px;
   padding: 24px 22px;
@@ -396,13 +396,13 @@
 }
 
 .warnCard {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.3);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.3);
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #FFB83E; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 빈 상태 */
@@ -419,8 +419,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.25);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -429,7 +429,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

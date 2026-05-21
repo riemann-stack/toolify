@@ -139,13 +139,13 @@ export function diagnoseRatio(W: number, L: number, H: number): RatioCheck {
   /* 정육면체 검사 */
   const isCube = Math.abs(ratio.w - ratio.l) < 0.05 && Math.abs(ratio.l - ratio.h) < 0.05
   if (isCube) {
-    return { ratio, diagnosis: 'D', label: '정육면체 위험', color: '#FF3E8C', desc: '모드가 한 점에 중첩 — 부밍·먹먹함 매우 심함. 가구 배치·트랩으로 보완 필수.' }
+    return { ratio, diagnosis: 'D', label: '정육면체 위험', color: '#DB2777', desc: '모드가 한 점에 중첩 — 부밍·먹먹함 매우 심함. 가구 배치·트랩으로 보완 필수.' }
   }
 
   /* 두 축이 같은 위험 */
   const twoSame = Math.abs(ratio.w - ratio.l) < 0.05 || Math.abs(ratio.l - ratio.h) < 0.05 || Math.abs(ratio.w - ratio.h) < 0.05
   if (twoSame) {
-    return { ratio, diagnosis: 'C', label: '두 축 동일', color: '#FFB83E', desc: '두 축이 같은 길이 — 모드 중첩 위험. 일부 주파수 부밍 가능.' }
+    return { ratio, diagnosis: 'C', label: '두 축 동일', color: '#D97706', desc: '두 축이 같은 길이 — 모드 중첩 위험. 일부 주파수 부밍 가능.' }
   }
 
   /* 황금비 거리 (Sepmeyer 1:1.14:1.39 기준) */
@@ -155,11 +155,11 @@ export function diagnoseRatio(W: number, L: number, H: number): RatioCheck {
     (sortedR[0] - target[0]) ** 2 + (sortedR[1] - target[1]) ** 2 + (sortedR[2] - target[2]) ** 2,
   )
 
-  if (dist < 0.10) return { ratio, diagnosis: 'S', label: '황금비 (Sepmeyer)', color: '#3EFFD0', desc: '이상적인 음향 비율 — 모드 분포 균일.' }
-  if (dist < 0.25) return { ratio, diagnosis: 'A', label: '우수',                  color: '#3EFF9B', desc: '권장 비율에 매우 가까움. 일반 부밍 적음.' }
-  if (dist < 0.50) return { ratio, diagnosis: 'B', label: '양호',                  color: '#3EC8FF', desc: '평균적인 음향. 트랩으로 부밍 보완.' }
-  if (dist < 1.00) return { ratio, diagnosis: 'C', label: '주의',                  color: '#FFB83E', desc: '비율이 좋지 않음. 베이스 트랩 권장.' }
-  return { ratio, diagnosis: 'D', label: '불리한 비율',                            color: '#FF3E8C', desc: '음향적으로 매우 불리. 트랩·EQ 보정 필수.' }
+  if (dist < 0.10) return { ratio, diagnosis: 'S', label: '황금비 (Sepmeyer)', color: '#0D9488', desc: '이상적인 음향 비율 — 모드 분포 균일.' }
+  if (dist < 0.25) return { ratio, diagnosis: 'A', label: '우수',                  color: '#059669', desc: '권장 비율에 매우 가까움. 일반 부밍 적음.' }
+  if (dist < 0.50) return { ratio, diagnosis: 'B', label: '양호',                  color: '#0891B2', desc: '평균적인 음향. 트랩으로 부밍 보완.' }
+  if (dist < 1.00) return { ratio, diagnosis: 'C', label: '주의',                  color: '#D97706', desc: '비율이 좋지 않음. 베이스 트랩 권장.' }
+  return { ratio, diagnosis: 'D', label: '불리한 비율',                            color: '#DB2777', desc: '음향적으로 매우 불리. 트랩·EQ 보정 필수.' }
 }
 
 /* ─────────────────────────────────────────────
@@ -256,7 +256,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 5~10만원/개',
     proPrice: '완제품 10~30만원/개',
     desc: '가장 강력. 모든 축 모드의 압력 최대 지점이 코너에 모여 있음.',
-    color: '#FF3E8C',
+    color: '#DB2777',
   },
   {
     id: 'wall',
@@ -268,7 +268,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 3~7만원/개',
     proPrice: '완제품 5~15만원/개',
     desc: '중·고음 흡수 + 일부 저음. 1차 반사음 제거에 효과.',
-    color: '#FFB83E',
+    color: '#D97706',
   },
   {
     id: 'membrane',
@@ -280,7 +280,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 8~15만원/개',
     proPrice: '완제품 15~40만원/개',
     desc: '저주파 전용. 특정 주파수 대역 흡수 — 설계 정확도 중요.',
-    color: '#3EC8FF',
+    color: '#0891B2',
   },
   {
     id: 'helmholtz',
@@ -292,7 +292,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 10~20만원/개',
     proPrice: '완제품 20~50만원/개',
     desc: '특정 주파수만 정확히 흡수. 주파수 튜닝 가능 (병 모양 원리).',
-    color: '#3EFFD0',
+    color: '#0D9488',
   },
 ]
 
@@ -304,9 +304,9 @@ export const fmt = (n: number, digits = 1) =>
   n.toLocaleString('ko-KR', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
 export const MODE_COLORS = {
-  axial: '#FF3E8C',
-  tangential: '#FFB83E',
-  oblique: '#3EFFD0',
+  axial: '#DB2777',
+  tangential: '#D97706',
+  oblique: '#0D9488',
 }
 
 export const MODE_LABELS = {

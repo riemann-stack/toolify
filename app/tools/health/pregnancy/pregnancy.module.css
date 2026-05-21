@@ -76,7 +76,7 @@
 .heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
 /* 태아 크기 */
-.fetalCard { background: var(--bg2); border: 1px solid rgba(200,255,62,0.2); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+.fetalCard { background: var(--bg2); border: 1px solid rgba(14,165,233,0.2); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
 .fetalEmoji { font-size: 42px; flex-shrink: 0; }
 .fetalTitle { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 4px; }
 .fetalSub { font-size: 11px; color: var(--muted); opacity: 0.7; }
@@ -85,7 +85,7 @@
 .progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .progressPct { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); }
 .progressBar { width: 100%; height: 10px; background: var(--bg3); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
-.progressFill { height: 100%; background: linear-gradient(90deg, #3EC8FF, #FF6BD9); border-radius: 99px; transition: width 0.5s ease; }
+.progressFill { height: 100%; background: linear-gradient(90deg, #0891B2, #FF6BD9); border-radius: 99px; transition: width 0.5s ease; }
 .trimesterRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .trimesterItem { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
 .trimesterActive { background: rgba(255,107,217,0.06); font-weight: 600; }
@@ -116,8 +116,8 @@
 /* 면책 조항 */
 .disclaimer {
   display: flex; align-items: flex-start; gap: 10px;
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px; padding: 14px 16px;
   font-size: 13px; color: var(--muted); line-height: 1.7;
 }
@@ -159,15 +159,15 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveTests    { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
+.tabActiveTests    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 .tabActiveFetal    { background: rgba(255,208,225,0.15); color: #FFD0E1; font-weight: 700; }
-.tabActiveChecklist{ background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveReverse  { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveChecklist{ background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveReverse  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 위급 경고 박스 */
 .emergencyBox {
-  background: rgba(255,107,107,0.10);
-  border: 2px solid #FF6B6B;
+  background: rgba(220,38,38,0.18);
+  border: 2px solid #DC2626;
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -175,7 +175,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.emergencyBox strong { color: #FF6B6B; font-weight: 800; }
+.emergencyBox strong { color: #DC2626; font-weight: 800; }
 .emergencyBox ul { padding-left: 18px; margin: 6px 0 0; }
 .emergencyBox li { margin-bottom: 3px; font-size: 12.5px; }
 
@@ -307,7 +307,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .testRowUpcoming { border-left-color: var(--border); }
-.testRowCurrent  { border-left-color: #FFD700; background: rgba(255,215,0,0.06); }
+.testRowCurrent  { border-left-color: #CA8A04; background: rgba(202,138,4,0.14); }
 .testRowPast     { border-left-color: var(--muted); opacity: 0.55; }
 .testName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; }
 .testRowPast .testName { text-decoration: line-through; color: var(--muted); }
@@ -328,7 +328,7 @@
   text-align: right;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.testStatusCurrent { color: #FFD700; font-weight: 700; }
+.testStatusCurrent { color: #CA8A04; font-weight: 700; }
 
 /* 태아 크기 카드 (큰) */
 .fetalBig {
@@ -418,9 +418,9 @@
   text-transform: uppercase;
   margin-bottom: 6px;
 }
-.guideTitleGood { color: #3EFF9B; }
-.guideTitleBad  { color: #FF6B6B; }
-.guideTitleTip  { color: #3EC8FF; }
+.guideTitleGood { color: #059669; }
+.guideTitleBad  { color: #DC2626; }
+.guideTitleTip  { color: #0891B2; }
 .guideList { padding-left: 16px; margin: 0; }
 .guideList li { font-size: 12px; color: var(--muted); line-height: 1.7; }
 
@@ -462,7 +462,7 @@
 }
 .progressBarBigFill {
   height: 100%;
-  background: linear-gradient(to right, #FFD700, #3EFF9B, #FF8C3E);
+  background: linear-gradient(to right, #CA8A04, #059669, #EA580C);
   transition: width 0.3s;
 }
 
@@ -575,14 +575,14 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
 /* 정보 박스 (다른 도구와 동일) */
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -590,11 +590,11 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -602,4 +602,4 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }

@@ -84,9 +84,9 @@ export default function TravelTipPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '🔴 필수', d: '🇺🇸 미국·🇨🇦 캐나다 — 안 주면 큰 결례. 식당 15-20% 표준.', c: '#FF3E8C' },
-            { t: '🟡 선택', d: '🇪🇺 유럽·🇹🇭 동남아·🇦🇪 두바이 — 매너지만 강제 X. 5-15%.', c: '#FFB83E' },
-            { t: '🟢 거의 없음', d: '🇹🇼 대만 — 일부 고급 식당만 봉사료 자동.', c: '#3EFFD0' },
+            { t: '🔴 필수', d: '🇺🇸 미국·🇨🇦 캐나다 — 안 주면 큰 결례. 식당 15-20% 표준.', c: '#DB2777' },
+            { t: '🟡 선택', d: '🇪🇺 유럽·🇹🇭 동남아·🇦🇪 두바이 — 매너지만 강제 X. 5-15%.', c: '#D97706' },
+            { t: '🟢 거의 없음', d: '🇹🇼 대만 — 일부 고급 식당만 봉사료 자동.', c: '#0D9488' },
             { t: '⚫ 주면 X', d: '🇯🇵 일본·🇨🇳 중국 — 팁 X, 무례할 수 있음.', c: '#9B9B9B' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
@@ -163,11 +163,11 @@ export default function TravelTipPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '🇺🇸 미국 신혼·출장', d: '식당 15-20% 필수. 우버 15-20%. 호텔 룸 $2~5/박.', c: '#3EC8FF' },
-            { t: '🇯🇵 일본 가족여행', d: '🚫 팁 X. 료칸은 心付け(¥1~3K) 봉투. 답례 문화.', c: '#FFB83E' },
-            { t: '🇹🇭 태국 휴양', d: '식당 5-10%. ⭐ 마사지 50~100바트가 표준.', c: '#3EFFD0' },
-            { t: '🇵🇭 동남아 골프', d: '캐디 200~500페소. 식당 10%. 마사지 100페소.', c: '#FF8C3E' },
-            { t: '🇮🇩 발리 풀빌라', d: '식당 5-10%. 마사지 Rp 30K. 기사 Rp 50K/일.', c: '#FF3E8C' },
+            { t: '🇺🇸 미국 신혼·출장', d: '식당 15-20% 필수. 우버 15-20%. 호텔 룸 $2~5/박.', c: '#0891B2' },
+            { t: '🇯🇵 일본 가족여행', d: '🚫 팁 X. 료칸은 心付け(¥1~3K) 봉투. 답례 문화.', c: '#D97706' },
+            { t: '🇹🇭 태국 휴양', d: '식당 5-10%. ⭐ 마사지 50~100바트가 표준.', c: '#0D9488' },
+            { t: '🇵🇭 동남아 골프', d: '캐디 200~500페소. 식당 10%. 마사지 100페소.', c: '#EA580C' },
+            { t: '🇮🇩 발리 풀빌라', d: '식당 5-10%. 마사지 Rp 30K. 기사 Rp 50K/일.', c: '#DB2777' },
             { t: '🇪🇺 유럽 자유여행', d: '식당 5-10% (Service Compris 확인). 호텔 €1~2.', c: '#9B59B6' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>

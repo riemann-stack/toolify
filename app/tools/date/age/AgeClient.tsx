@@ -313,7 +313,7 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.ddayHeroNum}>D-{next.daysUntil}</div>
         <div className={s.ddayHeroSub}>
           <strong>만 {next.age}세 생일</strong> — {fmtDateKo(next.date)}
-          {next.isWeekend && <span style={{ color: '#FFD700' }}> · 주말</span>}
+          {next.isWeekend && <span style={{ color: '#CA8A04' }}> · 주말</span>}
         </div>
 
         <div className={s.countdownLive}>
@@ -368,10 +368,10 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
   // 인류 문명 12000년 / 인류 등장 30만 년 / 사용자 인생
   const cosmicItems = [
     { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: '#9B59B6' },
-    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: '#FF8C3E' },
-    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#FFD700' },
-    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: '#3EFF9B' },
-    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: '#3EFFD0' },
+    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: '#EA580C' },
+    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#CA8A04' },
+    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: '#059669' },
+    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: '#0D9488' },
   ]
   const max = cosmicItems[0].sec
   const itemsWithPct = cosmicItems.map(it => ({
@@ -460,7 +460,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
           ))}
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: '#3EFFD0' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
+          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: '#0D9488' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
         </p>
       </div>
     </>
@@ -608,7 +608,7 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {traditionalToShow.map(n => (
               <div key={n.age} className={s.traditionalCard}
-                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px rgba(200,255,62,0.10)' } : undefined}>
+                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px rgba(14,165,233,0.10)' } : undefined}>
                 <div className={s.traditionalHanja}>{n.korean.split('·')[0]}</div>
                 <div className={s.traditionalName}>만 {n.age}세 {n.age === currentAge ? '· 현재' : ''}</div>
                 <div className={s.traditionalMeaning}>{n.meaning}</div>

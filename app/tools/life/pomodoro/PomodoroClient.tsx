@@ -434,7 +434,7 @@ export default function PomodoroClient() {
                 const h = (d.focusCount / maxBar) * 90 + 4
                 return (
                   <div key={i} className={styles.barCol}>
-                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? '#C8FF3E' : 'var(--bg3)' }} />
+                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? '#0EA5E9' : 'var(--bg3)' }} />
                     <div className={styles.barLabel}>{DOW_KO[dt.getDay()]}</div>
                     <div className={styles.barLabel}>{d.focusCount}</div>
                   </div>
@@ -659,7 +659,7 @@ export default function PomodoroClient() {
                 { step: '4', title: '긴 휴식', desc: '4사이클(2시간) 후 15~30분 긴 휴식. 산책·낮잠 등 뇌를 식혀주세요.' },
               ].map(s => (
                 <div key={s.step} className={styles.guideCard}>
-                  <span className={styles.guideEmoji} style={{ color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{s.step}</span>
+                  <span className={styles.guideEmoji} style={{ color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{s.step}</span>
                   <div>
                     <div className={styles.guideTitle}>{s.title}</div>
                     <div className={styles.guideDesc}>{s.desc}</div>

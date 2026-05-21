@@ -300,7 +300,7 @@ function PlayTab() {
               win={stats.stayWin}
               lose={stats.stayLose}
               rate={stayRate}
-              color="#3EC8FF"
+              color="#0891B2"
               theory={33.3}
             />
           </div>
@@ -558,12 +558,12 @@ function SimTab() {
               losses={validN - result.stayWin}
               rate={stayRate}
               theory={result.stayTheory}
-              color="#3EC8FF"
+              color="#0891B2"
             />
           </div>
 
           {result.validTrials < result.n && (
-            <p className={styles.interpret} style={{ background: 'rgba(255,140,62,0.08)', borderColor: 'rgba(255,140,62,0.3)' }}>
+            <p className={styles.interpret} style={{ background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.3)' }}>
               ⚠️ 변형 규칙으로 인해 {result.n - result.validTrials}회는 무효 처리됨 (예: 진행자가 자동차를 우연히 공개). 유효 시행 {validN.toLocaleString()}회 기준 결과.
             </p>
           )}
@@ -582,9 +582,9 @@ function SimTab() {
             />
             <div className={styles.graphLegend}>
               <span><span className={styles.legDot} style={{ background: 'var(--accent)' }} /> 바꾸기 실제</span>
-              <span><span className={styles.legDot} style={{ background: '#3EC8FF' }} /> 유지 실제</span>
-              <span><span className={styles.legDash} style={{ background: 'rgba(255,107,107,0.8)' }} /> 이론 {result.switchTheory.toFixed(1)}%</span>
-              <span><span className={styles.legDash} style={{ background: 'rgba(62,200,255,0.8)' }} /> 이론 {result.stayTheory.toFixed(1)}%</span>
+              <span><span className={styles.legDot} style={{ background: '#0891B2' }} /> 유지 실제</span>
+              <span><span className={styles.legDash} style={{ background: 'rgba(220,38,38,0.8)' }} /> 이론 {result.switchTheory.toFixed(1)}%</span>
+              <span><span className={styles.legDash} style={{ background: 'rgba(8,145,178,0.8)' }} /> 이론 {result.stayTheory.toFixed(1)}%</span>
             </div>
           </div>
 
@@ -695,13 +695,13 @@ function ConvergenceGraph({
 
       {/* 이론값 선 */}
       <line x1={padL} x2={W - padR} y1={toY(switchTheory)} y2={toY(switchTheory)}
-        stroke="rgba(255,107,107,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
+        stroke="rgba(220,38,38,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
       <line x1={padL} x2={W - padR} y1={toY(stayTheory)} y2={toY(stayTheory)}
-        stroke="rgba(62,200,255,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
+        stroke="rgba(8,145,178,0.6)" strokeDasharray="4 4" strokeWidth={1.5} />
 
       {/* 실제 곡선 */}
       <path d={pathFrom(curveSwitch)} fill="none" stroke="var(--accent)" strokeWidth={2.5} strokeLinejoin="round" />
-      <path d={pathFrom(curveStay)}   fill="none" stroke="#3EC8FF"     strokeWidth={2.5} strokeLinejoin="round" />
+      <path d={pathFrom(curveStay)}   fill="none" stroke="#0891B2"     strokeWidth={2.5} strokeLinejoin="round" />
 
       {/* 마지막 포인트 */}
       {curveSwitch.length > 0 && (
@@ -712,11 +712,11 @@ function ConvergenceGraph({
       {curveStay.length > 0 && (
         <circle cx={toX(curveStay[curveStay.length - 1].x)}
           cy={toY(curveStay[curveStay.length - 1].y)}
-          r={4} fill="#3EC8FF" />
+          r={4} fill="#0891B2" />
       )}
 
-      <text x={W - padR - 4} y={toY(switchTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(255,107,107,0.8)' }}>{switchTheory.toFixed(0)}%</text>
-      <text x={W - padR - 4} y={toY(stayTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(62,200,255,0.8)' }}>{stayTheory.toFixed(0)}%</text>
+      <text x={W - padR - 4} y={toY(switchTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(220,38,38,0.8)' }}>{switchTheory.toFixed(0)}%</text>
+      <text x={W - padR - 4} y={toY(stayTheory) - 4} textAnchor="end" className={styles.graphTag} style={{ fill: 'rgba(8,145,178,0.8)' }}>{stayTheory.toFixed(0)}%</text>
     </svg>
   )
 }
@@ -737,7 +737,7 @@ function WhyTab() {
         </p>
         <div className={styles.pieRow}>
           <Pie value={1/3} label="1/3" sub="자동차" color="var(--accent)" />
-          <Pie value={2/3} label="2/3" sub="염소" color="#FF8C3E" />
+          <Pie value={2/3} label="2/3" sub="염소" color="#EA580C" />
         </div>
       </div>
 
@@ -751,8 +751,8 @@ function WhyTab() {
         <div className={styles.branchGrid}>
           {[
             { init: '자동차', p: '1/3', switch: '🐐', stay: '🚗', initColor: 'var(--accent)' },
-            { init: '염소 A',  p: '1/3', switch: '🚗', stay: '🐐', initColor: '#FF8C3E' },
-            { init: '염소 B',  p: '1/3', switch: '🚗', stay: '🐐', initColor: '#FF8C3E' },
+            { init: '염소 A',  p: '1/3', switch: '🚗', stay: '🐐', initColor: '#EA580C' },
+            { init: '염소 B',  p: '1/3', switch: '🚗', stay: '🐐', initColor: '#EA580C' },
           ].map((b, i) => (
             <div key={i} className={styles.branchCard}>
               <div className={styles.branchHead} style={{ borderColor: b.initColor, color: b.initColor }}>

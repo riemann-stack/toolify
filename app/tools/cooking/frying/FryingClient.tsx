@@ -568,7 +568,7 @@ function TimerRing({ secondsLeft, total, done }: { secondsLeft: number; total: n
   const c = Math.PI * 2 * r
   const pct = total > 0 ? Math.max(0, Math.min(1, secondsLeft / total)) : 0
   const dashOffset = c * (1 - pct)
-  const color = done ? '#3EFF9B' : 'var(--accent)'
+  const color = done ? '#059669' : 'var(--accent)'
 
   return (
     <div className={styles.timerRing}>

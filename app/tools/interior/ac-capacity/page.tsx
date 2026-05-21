@@ -107,7 +107,7 @@ export default function AcCapacityPage() {
                 ['동·서향', '+10%'],
                 ['북향 (햇빛 약함)', '-5%'],
               ]},
-              { t: '🏢 층수', c: '#3EC8FF', items: [
+              { t: '🏢 층수', c: '#0891B2', items: [
                 ['저층 (1~3층)', '표준'],
                 ['중층 (4~10층)', '+5%'],
                 ['고층 (11층+)', '+10%'],
@@ -121,7 +121,7 @@ export default function AcCapacityPage() {
                 ['베란다 확장', '+10%'],
                 ['통유리', '+20%'],
               ]},
-              { t: '📏 천장 높이', c: '#FF8C3E', items: [
+              { t: '📏 천장 높이', c: '#EA580C', items: [
                 ['2.4m 표준', '×1.0'],
                 ['2.9m (+0.5m)', '+12.5%'],
                 ['3.4m (+1m)', '+25%'],
@@ -176,16 +176,16 @@ export default function AcCapacityPage() {
             ⚖️ 평형이 너무 크거나 작으면 안 좋은 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#FF8C3E', fontWeight: 700, marginBottom: 8 }}>🔻 너무 작은 평형</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔻 너무 작은 평형</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>충분히 시원해지지 않음</li>
                 <li>풀가동으로 전기료 ↑</li>
                 <li>압축기 과부하로 수명 ↓</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF6B6B', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>🔺 너무 큰 평형</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>🔺 너무 큰 평형</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>단가 비쌈</li>
                 <li>빠르게 시원해지지만 자주 꺼짐</li>
@@ -195,8 +195,8 @@ export default function AcCapacityPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.3)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.3)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,
@@ -224,8 +224,8 @@ export default function AcCapacityPage() {
                 <li><strong>거실·장시간 사용·여름 내내 가동</strong> 추천</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF6B6B', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>정속형 에어컨</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>정속형 에어컨</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>압축기 ON/OFF만 가능</li>
                 <li>설정 온도 도달 시 꺼졌다 켜졌다</li>
@@ -244,10 +244,10 @@ export default function AcCapacityPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { i: '🌱', t: '5월', d: '검색량 증가 시작',     c: '#3EFF9B' },
+              { i: '🌱', t: '5월', d: '검색량 증가 시작',     c: '#059669' },
               { i: '🌞', t: '6~7월', d: '최고 검색·구매 시즌', c: 'var(--accent)' },
-              { i: '☀️', t: '8월', d: '구매 마무리',           c: '#FF8C3E' },
-              { i: '🍃', t: '9월',  d: '잔여 시즌 할인',        c: '#3EC8FF' },
+              { i: '☀️', t: '8월', d: '구매 마무리',           c: '#EA580C' },
+              { i: '🍃', t: '9월',  d: '잔여 시즌 할인',        c: '#0891B2' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
@@ -257,8 +257,8 @@ export default function AcCapacityPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,140,62,0.06)',
-            border: '1px solid rgba(255,140,62,0.25)',
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -266,7 +266,7 @@ export default function AcCapacityPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            🌡️ <strong style={{ color: '#FF8C3E' }}>외부 기온 35°C 이상 시 평형 +1단계 권장</strong> — 한국 여름 평균 28~33°C, 폭염 시 35~38°C
+            🌡️ <strong style={{ color: '#EA580C' }}>외부 기온 35°C 이상 시 평형 +1단계 권장</strong> — 한국 여름 평균 28~33°C, 폭염 시 35~38°C
           </div>
         </div>
 

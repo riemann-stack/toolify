@@ -255,7 +255,7 @@ export default function MicrowaveClient() {
               <strong>{fmtSec(convertedSec)}</strong>
             </p>
             <p className={s.heroSub}>
-              차이 <strong style={{ color: diff > 0 ? '#FF8C3E' : 'var(--accent)' }}>
+              차이 <strong style={{ color: diff > 0 ? '#EA580C' : 'var(--accent)' }}>
                 {diff > 0 ? '+' : ''}{Math.round(diff)}초
               </strong>
               {' · '}{myW > refW ? '⬇️ 더 짧게' : myW < refW ? '⬆️ 더 길게' : '동일'}
@@ -293,7 +293,7 @@ export default function MicrowaveClient() {
                         className={s.barFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: isMine ? 'var(--accent)' : isRef ? '#3EC8FF' : 'rgba(232,151,87,0.5)',
+                          background: isMine ? 'var(--accent)' : isRef ? '#0891B2' : 'rgba(234,88,12,0.5)',
                         }}
                       >
                         <span className={s.barValue}>{fmtSec(c.sec)}</span>
@@ -522,7 +522,7 @@ export default function MicrowaveClient() {
                     <circle cx={100} cy={100} r={r} stroke="var(--bg3)" strokeWidth="14" fill="none" />
                     <circle
                       cx={100} cy={100} r={r}
-                      stroke={isLast10 ? '#FF3E8C' : 'var(--accent)'}
+                      stroke={isLast10 ? '#DB2777' : 'var(--accent)'}
                       strokeWidth="14"
                       fill="none"
                       strokeLinecap="round"
@@ -533,7 +533,7 @@ export default function MicrowaveClient() {
                     />
                     <text
                       x={100} y={106}
-                      fill={isLast10 ? '#FF3E8C' : 'var(--text)'}
+                      fill={isLast10 ? '#DB2777' : 'var(--text)'}
                       fontSize="36"
                       fontWeight="800"
                       textAnchor="middle"
@@ -597,9 +597,9 @@ export default function MicrowaveClient() {
         <>
           {VESSELS.map((v) => {
             const titles = {
-              safe: { emoji: '✅', label: '사용 가능 용기', color: '#3EFFD0' },
-              caution: { emoji: '⚠️', label: '주의 용기', color: '#FFB83E' },
-              forbidden: { emoji: '❌', label: '절대 금지', color: '#FF3E8C' },
+              safe: { emoji: '✅', label: '사용 가능 용기', color: '#0D9488' },
+              caution: { emoji: '⚠️', label: '주의 용기', color: '#D97706' },
+              forbidden: { emoji: '❌', label: '절대 금지', color: '#DB2777' },
             }[v.category]
             return (
               <div key={v.category} className={s.card}>

@@ -42,7 +42,7 @@ export default function WeightLossPage() {
             지방 1kg을 소모하려면 약 <strong style={{ color: 'var(--text)' }}>7,700kcal</strong>의 누적 적자가 필요합니다 (Wishnofsky, 1958).
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 22px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>감량 소요 기간 공식</p>
               <div style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2.2, background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px' }}>
                 <p>총 필요 칼로리 적자 = 목표 감량(kg) × <span style={{ color: 'var(--accent)' }}>7,700</span>kcal</p>
@@ -68,8 +68,8 @@ export default function WeightLossPage() {
             국제 영양학(ACSM·미국 스포츠의학회) 표준은 <strong style={{ color: 'var(--text)' }}>주당 체중의 0.5~1% 감량</strong>입니다.
             70kg 기준 주당 0.35~0.7kg, 하루 적자 385~770kcal에 해당합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: '#3EFF9B', marginBottom: '6px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px', textAlign: 'center' }}>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>
               주당 체중의 0.5~1% 감량이 요요 방지에 효과적
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
@@ -91,10 +91,10 @@ export default function WeightLossPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
-              { range: 'BMI 18.5 미만', name: '저체중 ⚠️', color: '#3EC8FF', desc: '권장하지 않음 — 골밀도·면역력·호르몬 위험' },
-              { range: 'BMI 18.5~22.9', name: '정상 (한국 권장)', color: '#3EFF9B', desc: '건강한 목표 범위' },
-              { range: 'BMI 23.0~24.9', name: '과체중 (한국)', color: '#FFD700', desc: '한국 기준 건강 위험 시작' },
-              { range: 'BMI 25.0+', name: '비만', color: '#FF8C3E', desc: '대사질환 위험 ↑' },
+              { range: 'BMI 18.5 미만', name: '저체중 ⚠️', color: '#0891B2', desc: '권장하지 않음 — 골밀도·면역력·호르몬 위험' },
+              { range: 'BMI 18.5~22.9', name: '정상 (한국 권장)', color: '#059669', desc: '건강한 목표 범위' },
+              { range: 'BMI 23.0~24.9', name: '과체중 (한국)', color: '#CA8A04', desc: '한국 기준 건강 위험 시작' },
+              { range: 'BMI 25.0+', name: '비만', color: '#EA580C', desc: '대사질환 위험 ↑' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}40`, borderRadius: 10, padding: '10px 13px' }}>
                 <p style={{ fontSize: 12.5, fontWeight: 700, color: b.color, marginBottom: 3 }}>{b.range}</p>
@@ -126,11 +126,11 @@ export default function WeightLossPage() {
               </thead>
               <tbody>
                 {[
-                  ['300kcal',   '약 0.27kg', '약 1.2kg', '매우 안전', '#3EFF9B'],
-                  ['500kcal',   '약 0.45kg', '약 2.0kg', '안전 권장', '#3EFF9B'],
-                  ['700kcal',   '약 0.64kg', '약 2.7kg', '적극 감량', '#FFD700'],
-                  ['1,000kcal', '약 0.91kg', '약 3.9kg', '주의 필요', '#FF8C3E'],
-                  ['1,500kcal', '약 1.36kg', '약 5.9kg', '위험',      '#FF6B6B'],
+                  ['300kcal',   '약 0.27kg', '약 1.2kg', '매우 안전', '#059669'],
+                  ['500kcal',   '약 0.45kg', '약 2.0kg', '안전 권장', '#059669'],
+                  ['700kcal',   '약 0.64kg', '약 2.7kg', '적극 감량', '#CA8A04'],
+                  ['1,000kcal', '약 0.91kg', '약 3.9kg', '주의 필요', '#EA580C'],
+                  ['1,500kcal', '약 1.36kg', '약 5.9kg', '위험',      '#DC2626'],
                 ].map(([deficit, weekly, monthly, level, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{deficit}</td>
@@ -176,8 +176,8 @@ export default function WeightLossPage() {
             정체기와 유지기 — 다이어트 흔한 함정 
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FF8C3E', marginBottom: '6px' }}>📊 정체기 (Plateau) — 왜?</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>📊 정체기 (Plateau) — 왜?</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 대사 적응 (BMR 감소)</li>
                 <li>· 활동량 감소 (무의식적)</li>
@@ -185,8 +185,8 @@ export default function WeightLossPage() {
                 <li>· 호르몬 변화 (렙틴↓·그렐린↑)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>💛 유지기 — 단순 휴식이 아닌 전략</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>💛 유지기 — 단순 휴식이 아닌 전략</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· BMR 회복 (정상 칼로리)</li>
                 <li>· 호르몬 정상화 (렙틴·코르티솔)</li>
@@ -210,9 +210,9 @@ export default function WeightLossPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { name: '식단만 (100%)', icon: '🥗', color: '#FFD700', desc: '빠르지만 근손실 ↑·정체기 빠름' },
-              { name: '운동만 (100%)', icon: '🏃', color: '#FF8C3E', desc: '너무 많은 운동 시간 필요·부상 위험 ↑' },
-              { name: '균형 (식단 60% + 운동 40%) ★', icon: '⚖️', color: '#3EFF9B', desc: '근육 유지 + 심혈관 건강 + 지속 가능' },
+              { name: '식단만 (100%)', icon: '🥗', color: '#CA8A04', desc: '빠르지만 근손실 ↑·정체기 빠름' },
+              { name: '운동만 (100%)', icon: '🏃', color: '#EA580C', desc: '너무 많은 운동 시간 필요·부상 위험 ↑' },
+              { name: '균형 (식단 60% + 운동 40%) ★', icon: '⚖️', color: '#059669', desc: '근육 유지 + 심혈관 건강 + 지속 가능' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}40`, borderRadius: 10, padding: '11px 14px', display: 'grid', gridTemplateColumns: '32px 1fr', gap: 10, alignItems: 'center' }}>
                 <span style={{ fontSize: 22 }}>{m.icon}</span>
@@ -322,8 +322,8 @@ export default function WeightLossPage() {
 
         {/* ── 면책 매우 강조 ── */}
         <section>
-          <div style={{ background: 'rgba(255,107,107,0.05)', border: '2px solid #FF6B6B', borderRadius: 12, padding: '18px 22px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 800, color: '#FF6B6B', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(220,38,38,0.05)', border: '2px solid #DC2626', borderRadius: 12, padding: '18px 22px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 800, color: '#DC2626', marginBottom: '12px' }}>
               ⚠️ 본 도구는 건강 정보 참고용입니다 — 의학적 진단·치료 도구가 아닙니다
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
@@ -334,8 +334,8 @@ export default function WeightLossPage() {
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
               <strong style={{ color: 'var(--text)' }}>체중 강박·다이어트 강박·식이 장애 우려 시</strong>
-              <br />· 한국 정신건강 위기상담: <strong style={{ color: '#FF6B6B' }}>1577-0199</strong> (24시간)
-              <br />· 보건복지부 자살예방상담: <strong style={{ color: '#FF6B6B' }}>1393</strong> (24시간)
+              <br />· 한국 정신건강 위기상담: <strong style={{ color: '#DC2626' }}>1577-0199</strong> (24시간)
+              <br />· 보건복지부 자살예방상담: <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
               <br />· 한국섭식장애협회 / 가까운 정신건강복지센터
               <br /><br />건강한 다이어트의 핵심: <strong style={{ color: 'var(--text)' }}>&lsquo;빠르게&rsquo;가 아닌 &lsquo;꾸준히&rsquo;. &lsquo;마름&rsquo;이 아닌 &lsquo;건강함&rsquo;.</strong>
             </p>

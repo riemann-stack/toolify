@@ -214,9 +214,9 @@ export default function GripSizePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { type: '얇은 오버그립', thickness: '0.5mm', desc: '윌슨 프로 · 가장 흔함', color: '#3EC8FF' },
-              { type: '쿠션 오버그립', thickness: '0.6~0.8mm', desc: '바볼랏 VS 오리지널', color: '#FFB83E' },
-              { type: '두꺼운 타월그립', thickness: '~1.5mm', desc: '땀 많은 손·여름용', color: '#FF8C3E' },
+              { type: '얇은 오버그립', thickness: '0.5mm', desc: '윌슨 프로 · 가장 흔함', color: '#0891B2' },
+              { type: '쿠션 오버그립', thickness: '0.6~0.8mm', desc: '바볼랏 VS 오리지널', color: '#D97706' },
+              { type: '두꺼운 타월그립', thickness: '~1.5mm', desc: '땀 많은 손·여름용', color: '#EA580C' },
             ].map((o, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${o.color}44`, borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ fontSize: 13, color: o.color, fontWeight: 700, marginBottom: 4 }}>{o.type}</p>

@@ -111,9 +111,9 @@ export default function RebarPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: 'SD300', d: '항복 300 MPa · 저층·소형', c: '#9B9B9B', p: '×0.95' },
-            { t: 'SD400', d: '항복 400 MPa · 한국 일반 표준', c: '#3EFFD0', p: '×1.00' },
-            { t: 'SD500', d: '항복 500 MPa · 대형·고층·교량', c: '#FFB83E', p: '×1.10' },
-            { t: 'SD600', d: '항복 600 MPa · 초고층·내진·플랜트', c: '#FF3E8C', p: '×1.20' },
+            { t: 'SD400', d: '항복 400 MPa · 한국 일반 표준', c: '#0D9488', p: '×1.00' },
+            { t: 'SD500', d: '항복 500 MPa · 대형·고층·교량', c: '#D97706', p: '×1.10' },
+            { t: 'SD600', d: '항복 600 MPa · 초고층·내진·플랜트', c: '#DB2777', p: '×1.20' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, system-ui, sans-serif' }}>{g.t}</p>
@@ -154,9 +154,9 @@ export default function RebarPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
             { t: '🚐 1톤 (포터)', d: '6m 철근 적재 OK, 적재함 위로 살짝 돌출 가능. 결박 필수.', c: 'var(--accent)' },
-            { t: '🛻 5톤 카고', d: '12m 철근 표준 운반차. 적재 결박 강하게.', c: '#3EC8FF' },
-            { t: '🚜 11톤', d: '13.7m·대형 현장. 크레인·지게차 하역 권장.', c: '#FF8C3E' },
-            { t: '⚠️ 굵은 철근', d: 'D29 이상은 1m당 5kg 이상 — 인력 하역 위험, 크레인 권장.', c: '#FF3E8C' },
+            { t: '🛻 5톤 카고', d: '12m 철근 표준 운반차. 적재 결박 강하게.', c: '#0891B2' },
+            { t: '🚜 11톤', d: '13.7m·대형 현장. 크레인·지게차 하역 권장.', c: '#EA580C' },
+            { t: '⚠️ 굵은 철근', d: 'D29 이상은 1m당 5kg 이상 — 인력 하역 위험, 크레인 권장.', c: '#DB2777' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>

@@ -62,7 +62,7 @@ export default function CompoundPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>거치식 복리 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '15px', color: 'var(--text)', marginBottom: '8px', letterSpacing: '0.5px' }}>
                 FV = PV × (1 + r)ⁿ
@@ -75,27 +75,27 @@ export default function CompoundPage() {
               </div>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#3EC8FF', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>적립식 복리 공식 (월 납입)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>적립식 복리 공식 (월 납입)</p>
               <p style={{ fontFamily: 'monospace', fontSize: '15px', color: 'var(--text)', marginBottom: '8px', letterSpacing: '0.5px' }}>
                 FV = PMT × [(1 + r)ⁿ - 1] ÷ r
               </p>
               <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
-                <span style={{ color: '#3EC8FF' }}>PMT</span> = 매월 납입금(Payment) &nbsp;|&nbsp;
-                <span style={{ color: '#3EC8FF' }}>r</span> = 월 이자율(연 수익률 ÷ 12)<br />
-                <span style={{ color: '#3EC8FF' }}>n</span> = 총 납입 횟수(월 수)
+                <span style={{ color: '#0891B2' }}>PMT</span> = 매월 납입금(Payment) &nbsp;|&nbsp;
+                <span style={{ color: '#0891B2' }}>r</span> = 월 이자율(연 수익률 ÷ 12)<br />
+                <span style={{ color: '#0891B2' }}>n</span> = 총 납입 횟수(월 수)
               </div>
             </div>
 
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#C485E0', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>실질 수익률 — Fisher 공식</p>
+              <p style={{ fontSize: '12px', color: '#9333EA', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>실질 수익률 — Fisher 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '15px', color: 'var(--text)', marginBottom: '8px', letterSpacing: '0.5px' }}>
                 r_real = (1 + r_nominal) / (1 + π) − 1
               </p>
               <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
-                <span style={{ color: '#C485E0' }}>r_real</span> = 실질 수익률 &nbsp;|&nbsp;
-                <span style={{ color: '#C485E0' }}>r_nominal</span> = 명목 수익률 &nbsp;|&nbsp;
-                <span style={{ color: '#C485E0' }}>π</span> = 인플레이션
+                <span style={{ color: '#9333EA' }}>r_real</span> = 실질 수익률 &nbsp;|&nbsp;
+                <span style={{ color: '#9333EA' }}>r_nominal</span> = 명목 수익률 &nbsp;|&nbsp;
+                <span style={{ color: '#9333EA' }}>π</span> = 인플레이션
               </div>
             </div>
 
@@ -117,7 +117,7 @@ export default function CompoundPage() {
             복잡한 계산 없이 투자 목표를 직관적으로 파악하는 데 유용한 법칙입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px', textAlign: 'center', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px', textAlign: 'center', marginBottom: '16px' }}>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', marginBottom: '6px', letterSpacing: '1px' }}>
               2배 기간 ≈ 72 ÷ 연 수익률(%)
             </p>
@@ -167,7 +167,7 @@ export default function CompoundPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             대부분의 사람은 「얼마를 적립할까」가 아니라 「언제까지 얼마를 모으고 싶다」로 생각합니다.
-            본 도구의 <strong style={{ color: '#FFD700' }}>목표 역산</strong> 탭은 목표 금액·기간·수익률을 고정하고
+            본 도구의 <strong style={{ color: '#CA8A04' }}>목표 역산</strong> 탭은 목표 금액·기간·수익률을 고정하고
             필요한 월 적립액을 <strong style={{ color: 'var(--text) ' }}>이진 탐색(Binary Search)</strong>으로 계산합니다.
           </p>
 
@@ -178,7 +178,7 @@ export default function CompoundPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>목표</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>기간</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>수익률</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontWeight: 700 }}>월 적립액 (초기 0)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>월 적립액 (초기 0)</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,7 +194,7 @@ export default function CompoundPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -211,7 +211,7 @@ export default function CompoundPage() {
             🇰🇷 한국 6대 절세 계좌 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국에서 복리 투자 수익에 대한 일반 과세는 <strong style={{ color: '#FF6B6B' }}>15.4%</strong>(이자·배당소득세 14% + 지방소득세 1.4%)입니다.
+            한국에서 복리 투자 수익에 대한 일반 과세는 <strong style={{ color: '#DC2626' }}>15.4%</strong>(이자·배당소득세 14% + 지방소득세 1.4%)입니다.
             절세 계좌를 활용하면 세금을 크게 줄일 수 있으니 자신의 상황에 맞는 계좌를 선택해 운용하세요.
           </p>
 
@@ -236,7 +236,7 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 11.5, lineHeight: 1.6 }}>{row[3]}</td>
                   </tr>
@@ -256,7 +256,7 @@ export default function CompoundPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             화폐 가치는 시간이 지나면 떨어집니다. 한국은행 목표 인플레이션은 2.0%, 최근 10년 평균은 약 2.5%이고,
-            미국 장기 평균도 2.5~3% 수준입니다. <strong style={{ color: '#3EC8FF' }}>실질 수익률 = 명목 수익률 − 인플레이션</strong>으로
+            미국 장기 평균도 2.5~3% 수준입니다. <strong style={{ color: '#0891B2' }}>실질 수익률 = 명목 수익률 − 인플레이션</strong>으로
             장기 투자 의사결정을 해야 합니다.
           </p>
 
@@ -266,7 +266,7 @@ export default function CompoundPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>30년 후 명목 자산</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>인플레이션</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontWeight: 700 }}>실질 가치 (오늘 구매력)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>실질 가치 (오늘 구매력)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>구매력 손실</th>
                 </tr>
               </thead>
@@ -280,9 +280,9 @@ export default function CompoundPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -305,10 +305,10 @@ export default function CompoundPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
-              { name: '보수적 4%',  color: '#3EC8FF', desc: '예금·국채·채권 중심 장기 평균', warn: '낮은 변동성' },
+              { name: '보수적 4%',  color: '#0891B2', desc: '예금·국채·채권 중심 장기 평균', warn: '낮은 변동성' },
               { name: '기준 7%',    color: 'var(--accent)', desc: 'S&P500 100년 평균(인플레이션 반영 후 약 7%)', warn: '연구용 표준' },
-              { name: '낙관적 10%', color: '#FFD700', desc: 'S&P500 명목 평균 · 주식형 펀드 장기', warn: '연 -30%~+40% 변동' },
-              { name: '공격적 13%', color: '#FF8C3E', desc: '성장주·테크주 (역사적 예외값)', warn: '⚠ 단기 -50%도 가능' },
+              { name: '낙관적 10%', color: '#CA8A04', desc: 'S&P500 명목 평균 · 주식형 펀드 장기', warn: '연 -30%~+40% 변동' },
+              { name: '공격적 13%', color: '#EA580C', desc: '성장주·테크주 (역사적 예외값)', warn: '⚠ 단기 -50%도 가능' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 6 }}>{s.name}</p>

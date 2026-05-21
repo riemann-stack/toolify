@@ -82,7 +82,7 @@ export default function CostRatePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
                   </tr>
                 ))}
               </tbody>
@@ -97,16 +97,16 @@ export default function CostRatePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { app: '🟢 배달의민족', color: '#3EFF9B', items: [
+              { app: '🟢 배달의민족', color: '#059669', items: [
                 ['오픈서비스', '6.8% + 결제 3%'],
                 ['배민 1', '6.8% + 결제 3% (배민이 배달)'],
                 ['광고', '울트라콜 (월 정액 88,000원)'],
               ]},
-              { app: '🔴 쿠팡이츠', color: '#FF6B6B', items: [
+              { app: '🔴 쿠팡이츠', color: '#DC2626', items: [
                 ['스마트배달', '9.8% + 결제 3%'],
                 ['일반', '5% + 결제 3% (직접 배달)'],
               ]},
-              { app: '🟡 요기요', color: '#FFD700', items: [
+              { app: '🟡 요기요', color: '#CA8A04', items: [
                 ['요기요 배달', '12.5% + 결제 3%'],
                 ['사장님 배달', '4.7% + 결제 3%'],
               ]},
@@ -135,8 +135,8 @@ export default function CostRatePage() {
             배달 시 추가 비용 체크리스트
           </h2>
           <div style={{
-            background: 'rgba(255,140,62,0.05)',
-            border: '1px solid rgba(255,140,62,0.25)',
+            background: 'rgba(234,88,12,0.05)',
+            border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: '12px',
             padding: '16px 20px',
             fontSize: '13.5px',
@@ -160,8 +160,8 @@ export default function CostRatePage() {
             🎯 가격 책정 심리 — 100원 단위 vs 1,000원 단위
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>심리 가격 (예: 11,900원)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>심리 가격 (예: 11,900원)</p>
               <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>12,000원과 100원 차이지만 <strong>&ldquo;1만원대&rdquo;</strong>로 인식</li>
                 <li>매출 5~10% 차이 가능성</li>

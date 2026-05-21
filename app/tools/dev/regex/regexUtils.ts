@@ -61,7 +61,7 @@ export const PATTERNS: PatternDef[] = [
   { id: 'gen-url',   category: 'general', name: 'URL (http/https)', pattern: '^https?:\\/\\/[^\\s/$.?#].[^\\s]*$', flags: '', desc: '기본적인 HTTP/HTTPS URL', example: 'https://youtil.kr/tools' },
   { id: 'gen-ipv4',  category: 'general', name: 'IPv4 주소', pattern: '^(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})$', flags: '', desc: '0.0.0.0 ~ 255.255.255.255', example: '192.168.0.1' },
   { id: 'gen-ipv6',  category: 'general', name: 'IPv6 주소 (단순화)', pattern: '^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$', flags: '', desc: '8개 16진수 그룹 (압축 표기 제외)', example: '2001:0db8:85a3:0000:0000:8a2e:0370:7334' },
-  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: '#3EC8FF' },
+  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: '#0891B2' },
   { id: 'gen-pwd',   category: 'general', name: '강한 비밀번호 (8+, 영숫특)', pattern: '^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$', flags: '', desc: '영문·숫자·특수문자 각 1개+ & 8자 이상', example: 'Hello123!' },
   { id: 'gen-uuid',  category: 'general', name: 'UUID v4', pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', flags: 'i', desc: 'RFC 4122 v4 UUID', example: '550e8400-e29b-41d4-a716-446655440000' },
   { id: 'gen-slug',  category: 'general', name: 'URL 슬러그', pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', flags: '', desc: '소문자·숫자·하이픈만 (블로그 URL용)', example: 'hello-world-2026' },
@@ -346,7 +346,7 @@ export function tokenizeForHighlight(text: string, matches: MatchResult[]): Toke
 }
 
 /* 5색 로테이션 */
-export const HIGHLIGHT_COLORS = ['#C8FF3E', '#3EFFD0', '#3EC8FF', '#FFB83E', '#FF8C3E']
+export const HIGHLIGHT_COLORS = ['#0EA5E9', '#0D9488', '#0891B2', '#D97706', '#EA580C']
 export const colorForMatch = (idx: number) => HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length]
 
 /* ─────────────────────────────────────────────

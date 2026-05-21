@@ -56,10 +56,10 @@ const ENVIRONMENTS: { id: EnvId; name: string; mult: number; icon: string; cls: 
 
 // UV 등급
 const UV_LEVELS: { range: [number, number]; level: string; color: string; icon: string; advice: string; heroCls: string; quickCls: string }[] = [
-  { range: [0, 2],   level: '낮음',     color: '#3EFF9B', icon: '🟢', advice: '특별한 보호 불필요. 야외 활동 무리 없음.',                heroCls: s.heroLow,     quickCls: s.uvQuickLow },
-  { range: [3, 5],   level: '보통',     color: '#FFD700', icon: '🟡', advice: '오전 10시~오후 4시 차단제·모자 권장.',                  heroCls: s.heroMid,     quickCls: s.uvQuickMid },
-  { range: [6, 7],   level: '높음',     color: '#FF8C3E', icon: '🟠', advice: '차단제·모자·긴 옷 필수. 그늘 활용.',                    heroCls: s.heroHigh,    quickCls: s.uvQuickHigh },
-  { range: [8, 10],  level: '매우 높음', color: '#FF6B6B', icon: '🔴', advice: '오전 10시~오후 4시 야외 활동 자제. 추가 보호 필수.',     heroCls: s.heroVHigh,   quickCls: s.uvQuickVHigh },
+  { range: [0, 2],   level: '낮음',     color: '#059669', icon: '🟢', advice: '특별한 보호 불필요. 야외 활동 무리 없음.',                heroCls: s.heroLow,     quickCls: s.uvQuickLow },
+  { range: [3, 5],   level: '보통',     color: '#CA8A04', icon: '🟡', advice: '오전 10시~오후 4시 차단제·모자 권장.',                  heroCls: s.heroMid,     quickCls: s.uvQuickMid },
+  { range: [6, 7],   level: '높음',     color: '#EA580C', icon: '🟠', advice: '차단제·모자·긴 옷 필수. 그늘 활용.',                    heroCls: s.heroHigh,    quickCls: s.uvQuickHigh },
+  { range: [8, 10],  level: '매우 높음', color: '#DC2626', icon: '🔴', advice: '오전 10시~오후 4시 야외 활동 자제. 추가 보호 필수.',     heroCls: s.heroVHigh,   quickCls: s.uvQuickVHigh },
   { range: [11, 20], level: '위험',     color: '#9B59B6', icon: '🟣', advice: '가능한 외출 자제. 모든 보호 수단 필수.',                heroCls: s.heroExtreme, quickCls: s.uvQuickExtreme },
 ]
 function findUvLevel(uvi: number) {
@@ -465,7 +465,7 @@ export default function UvProtectionClient() {
                 </>
               ) : reapplyCountdown.isDue ? (
                 <>
-                  <p className={s.reapplyValue} style={{ color: '#FF8C3E' }}>재도포 필요!<small>지금</small></p>
+                  <p className={s.reapplyValue} style={{ color: '#EA580C' }}>재도포 필요!<small>지금</small></p>
                   <button className={s.reapplyBtn} onClick={() => setReapplyStartedAt(Date.now())} type="button">
                     🔄 다시 도포
                   </button>
@@ -579,13 +579,13 @@ export default function UvProtectionClient() {
                   <tr><td>차단제 없음</td><td>0%</td><td>100%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>—</td></tr>
                   <tr><td>SPF 15</td><td>93.3%</td><td>6.7%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일상 산책</td></tr>
                   <tr><td>SPF 30</td><td>96.7%</td><td>3.3%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일반 외출</td></tr>
-                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: '#3EFF9B', fontWeight: 700 }}>한국 표준</td></tr>
+                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: '#059669', fontWeight: 700 }}>한국 표준</td></tr>
                   <tr><td>SPF 70+</td><td>98.6%</td><td>1.4%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>야외 장시간</td></tr>
                 </tbody>
               </table>
             </div>
-            <div style={{ background: 'rgba(255,140,62,0.05)', border: '1px solid rgba(255,140,62,0.25)', borderRadius: 10, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-              ⚠️ <strong style={{ color: '#FF8C3E' }}>SPF는 &quot;햇빛에 X배 더 오래 머물 수 있다&quot;는 의미가 아닙니다.</strong>
+            <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 10, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+              ⚠️ <strong style={{ color: '#EA580C' }}>SPF는 &quot;햇빛에 X배 더 오래 머물 수 있다&quot;는 의미가 아닙니다.</strong>
               도포량·땀·수영·시간 경과에 따라 실제 효과는 표시 SPF의 50% 수준일 수 있습니다.
             </div>
           </div>
@@ -659,7 +659,7 @@ export default function UvProtectionClient() {
           <div className={s.guideCard}>
             <p className={s.guideTitle}>📊 실제 SPF vs 라벨 SPF</p>
             <p style={{ fontSize: 13, color: 'var(--text)', marginBottom: 8, lineHeight: 1.85 }}>
-              실제 일상 사용 시 라벨 SPF의 <strong style={{ color: '#3EC8FF' }}>약 50% 정도 효과</strong>입니다:
+              실제 일상 사용 시 라벨 SPF의 <strong style={{ color: '#0891B2' }}>약 50% 정도 효과</strong>입니다:
             </p>
             <ul>
               <li>도포량 부족 (실제 0.5~1mg/cm² vs 권장 2mg/cm²)</li>
@@ -668,7 +668,7 @@ export default function UvProtectionClient() {
               <li>수영·물 접촉</li>
             </ul>
             <p style={{ fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-              따라서 <strong style={{ color: '#3EC8FF' }}>라벨 SPF 50 → 실제 SPF 25 정도 효과</strong>이며,
+              따라서 <strong style={{ color: '#0891B2' }}>라벨 SPF 50 → 실제 SPF 25 정도 효과</strong>이며,
               충분한 도포량과 2시간마다의 재도포가 매우 중요합니다.
             </p>
           </div>
@@ -681,10 +681,10 @@ export default function UvProtectionClient() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8 }}>
               {[
-                { s: '봄 (3~5월)',   r: '5~8',  level: '보통~높음',   c: '#FF8C3E' },
-                { s: '여름 (6~8월)', r: '8~11', level: '매우 높음~위험', c: '#FF6B6B' },
-                { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#FFD700' },
-                { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#3EFF9B' },
+                { s: '봄 (3~5월)',   r: '5~8',  level: '보통~높음',   c: '#EA580C' },
+                { s: '여름 (6~8월)', r: '8~11', level: '매우 높음~위험', c: '#DC2626' },
+                { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#CA8A04' },
+                { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#059669' },
               ].map((r, i) => (
                 <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
                   <p style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
@@ -698,8 +698,8 @@ export default function UvProtectionClient() {
       )}
 
       {/* 공식 자료 출처 (모든 탭 공통 푸터) */}
-      <div style={{ background: 'rgba(62,200,255,0.05)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
-        <p style={{ fontWeight: 700, color: '#3EC8FF', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>📚 공식 자료 출처</p>
+      <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
+        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>📚 공식 자료 출처</p>
         한국 기상청 자외선지수 · 미국 EPA UV Index Scale · WHO Global Solar UV Index · 대한피부과학회.
         피부 이상 증상 또는 일광화상 시 즉시 피부과 전문의 상담을 받으세요.
       </div>

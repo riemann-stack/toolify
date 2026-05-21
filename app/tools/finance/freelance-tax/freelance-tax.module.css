@@ -36,7 +36,7 @@
 .tabActive {
   background: var(--bg3);
   color: var(--text);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.05);
 }
 
 .panel {
@@ -68,15 +68,15 @@
 .note strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 .warn {
   font-size: 12px;
-  color: #FFB83E;
-  background: rgba(255, 184, 62, 0.08);
-  border: 1px solid rgba(255, 184, 62, 0.3);
+  color: #D97706;
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px solid rgba(217, 119, 6, 0.3);
   border-radius: 8px;
   padding: 10px 12px;
   margin-top: 10px;
   line-height: 1.6;
 }
-.warn strong { color: #FFB83E; }
+.warn strong { color: #D97706; }
 .smallNote { color: var(--muted); font-size: 11px; font-weight: 400; }
 .intro {
   font-size: 13px;
@@ -176,7 +176,7 @@
   .pill:hover { color: var(--text); }
 }
 .pillActive {
-  background: rgba(200, 255, 62, 0.08);
+  background: rgba(14, 165, 233, 0.08);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -260,8 +260,8 @@
 
 /* 결과 메인 */
 .resultMain {
-  background: linear-gradient(135deg, rgba(200,255,62,0.06) 0%, rgba(62,200,255,0.04) 100%);
-  border: 1px solid rgba(200,255,62,0.25);
+  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(8,145,178,0.14) 100%);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px;
   padding: 24px 20px;
   text-align: center;
@@ -282,8 +282,8 @@
   line-height: 1;
   margin: 0 0 8px;
 }
-.refundPos { color: #3EFF9B; }
-.refundNeg { color: #FF8C8C; }
+.refundPos { color: #059669; }
+.refundNeg { color: #DC2626; }
 .resultSub {
   font-size: 13px;
   color: var(--muted);
@@ -330,12 +330,12 @@
   font-size: 13px;
 }
 .flowRowSum {
-  background: rgba(200, 255, 62, 0.04);
-  border-color: rgba(200, 255, 62, 0.25);
+  background: rgba(14, 165, 233, 0.04);
+  border-color: rgba(14, 165, 233, 0.25);
 }
 .flowRowTotal {
-  background: rgba(255, 140, 140, 0.04);
-  border-color: rgba(255, 140, 140, 0.25);
+  background: rgba(220, 38, 38, 0.04);
+  border-color: rgba(220, 38, 38, 0.25);
   font-weight: 700;
 }
 .flowLabel { color: var(--text); }
@@ -344,7 +344,7 @@
   font-weight: 700;
   color: var(--text);
 }
-.flowValueMinus { color: #FF8C8C; }
+.flowValueMinus { color: #DC2626; }
 .flowRowSum .flowValue { color: var(--accent); }
 
 /* 시나리오 비교 */
@@ -364,11 +364,11 @@
   gap: 4px;
 }
 .scenarioCardCurrent {
-  background: rgba(62, 200, 255, 0.05);
-  border-color: rgba(62, 200, 255, 0.3);
+  background: rgba(8, 145, 178, 0.05);
+  border-color: rgba(8, 145, 178, 0.3);
 }
 .scenarioCardBest {
-  background: linear-gradient(135deg, rgba(200, 255, 62, 0.08) 0%, rgba(62, 255, 155, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
   border-color: var(--accent);
 }
 .bestBadge, .currentBadge {
@@ -382,8 +382,8 @@
   border-radius: 99px;
   letter-spacing: 0.08em;
 }
-.bestBadge { background: var(--accent); color: #0B0B0B; }
-.currentBadge { background: rgba(62, 200, 255, 0.2); color: #3EC8FF; }
+.bestBadge { background: var(--accent); color: #ffffff; }
+.currentBadge { background: rgba(8, 145, 178, 0.2); color: #0891B2; }
 .scenarioLabel {
   font-size: 14px;
   font-weight: 700;
@@ -413,8 +413,8 @@
   margin: 4px 0 0;
   font-family: 'Inter', system-ui, sans-serif;
 }
-.diffPos { color: #3EFF9B; }
-.diffNeg { color: #FF8C8C; }
+.diffPos { color: #059669; }
+.diffNeg { color: #DC2626; }
 .scenarioMini {
   display: flex;
   justify-content: space-between;
@@ -456,7 +456,7 @@
 }
 .bracketBarActive {
   border-color: var(--accent);
-  background: rgba(200, 255, 62, 0.05);
+  background: rgba(14, 165, 233, 0.05);
 }
 .bracketLabel {
   font-size: 11px;
@@ -467,12 +467,12 @@
 .bracketTrack {
   position: relative;
   height: 22px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(15,23,42,0.04);
   border-radius: 4px;
 }
 .bracketFill {
   height: 100%;
-  background: linear-gradient(90deg, rgba(200,255,62,0.3), rgba(255,140,62,0.5));
+  background: linear-gradient(90deg, rgba(14,165,233,0.3), rgba(234,88,12,0.5));
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -480,7 +480,7 @@
   padding-right: 6px;
 }
 .bracketBarActive .bracketFill {
-  background: linear-gradient(90deg, var(--accent), #FF8C3E);
+  background: linear-gradient(90deg, var(--accent), #EA580C);
 }
 .bracketRate {
   font-family: 'Inter', system-ui, sans-serif;
@@ -553,7 +553,7 @@
   flex-wrap: wrap;
 }
 .simSaving {
-  color: #3EFF9B;
+  color: #059669;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
@@ -594,7 +594,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 800;
-  color: #3EFF9B;
+  color: #059669;
   white-space: nowrap;
   flex-shrink: 0;
   align-self: center;
@@ -602,8 +602,8 @@
 
 /* D-day */
 .ddayCard {
-  background: linear-gradient(135deg, rgba(200,255,62,0.08) 0%, rgba(62,200,255,0.04) 100%);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(8,145,178,0.14) 100%);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 16px;
   padding: 28px 20px;
   text-align: center;
@@ -666,7 +666,7 @@
   width: 32px;
   height: 32px;
   background: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -722,8 +722,8 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.04);
-  border: 1px solid rgba(255, 184, 62, 0.18);
+  background: rgba(217, 119, 6, 0.04);
+  border: 1px solid rgba(217, 119, 6, 0.18);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -732,7 +732,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

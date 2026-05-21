@@ -122,7 +122,7 @@ export default function NutsPage() {
       {/* 2. 브라질너트 셀레늄 */}
       <h2 style={sectionTitle}>🚨 브라질너트 셀레늄 주의</h2>
       <div style={{ background: 'rgba(255,50,50,0.06)', border: '2px solid rgba(255,80,80,0.4)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
-        <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '8px' }}>
+        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>
           브라질너트 1알 = 셀레늄 약 68~137μg
         </p>
         <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
@@ -178,9 +178,9 @@ export default function NutsPage() {
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { group: '핵과류 (Tree nuts)', color: '#FF8C3E', list: '아몬드 · 캐슈넛 · 피스타치오 · 호두 · 피칸 · 헤이즐넛 · 마카다미아 · 브라질너트 · 잣', note: '하나에 알레르기가 있으면 다른 핵과류도 주의 (교차 반응 흔함)' },
-          { group: '콩과 (Legume)', color: '#3EC8FF', list: '땅콩', note: '식물학적으로 견과류 X — 별도 알레르기 그룹. 한국 영유아 알레르기 흔함.' },
-          { group: '씨앗류 (Seeds)', color: '#C8FF3E', list: '해바라기씨 · 호박씨', note: '핵과류 알레르기와 별개. 단, 가공 시 교차 오염 가능.' },
+          { group: '핵과류 (Tree nuts)', color: '#EA580C', list: '아몬드 · 캐슈넛 · 피스타치오 · 호두 · 피칸 · 헤이즐넛 · 마카다미아 · 브라질너트 · 잣', note: '하나에 알레르기가 있으면 다른 핵과류도 주의 (교차 반응 흔함)' },
+          { group: '콩과 (Legume)', color: '#0891B2', list: '땅콩', note: '식물학적으로 견과류 X — 별도 알레르기 그룹. 한국 영유아 알레르기 흔함.' },
+          { group: '씨앗류 (Seeds)', color: '#0EA5E9', list: '해바라기씨 · 호박씨', note: '핵과류 알레르기와 별개. 단, 가공 시 교차 오염 가능.' },
         ].map((g, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: g.color, fontWeight: 700, marginBottom: '6px' }}>{g.group}</p>
@@ -189,10 +189,10 @@ export default function NutsPage() {
           </div>
         ))}
       </div>
-      <div style={{ ...card, marginTop: 14, background: 'rgba(255,107,107,0.05)', border: '1px solid rgba(255,107,107,0.3)' }}>
-        <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '6px' }}>🚨 아나필락시스 (응급)</p>
+      <div style={{ ...card, marginTop: 14, background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.3)' }}>
+        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '6px' }}>🚨 아나필락시스 (응급)</p>
         <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          호흡 곤란 · 의식 저하 · 전신 두드러기 → 즉시 <strong style={{ color: '#FF6B6B' }}>119 호출</strong>, 에피펜(있으면) 즉시 사용. 본 도구는 진단 X — 의심 시 알레르기 전문의 진료.
+          호흡 곤란 · 의식 저하 · 전신 두드러기 → 즉시 <strong style={{ color: '#DC2626' }}>119 호출</strong>, 에피펜(있으면) 즉시 사용. 본 도구는 진단 X — 의심 시 알레르기 전문의 진료.
         </p>
       </div>
 
@@ -238,16 +238,16 @@ export default function NutsPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>🟤 땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: '#3EFF9B' }}>★★★★★</td></tr>
-            <tr><td style={cell}>🌻 해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: '#3EFF9B' }}>★★★★</td></tr>
-            <tr><td style={cell}>🎃 호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: '#C8FF3E' }}>★★★★</td></tr>
-            <tr><td style={cell}>🥜 아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: '#C8FF3E' }}>★★★</td></tr>
-            <tr><td style={cell}>🧠 호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: '#FFB83E' }}>★★★</td></tr>
-            <tr><td style={cell}>🌙 캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: '#FFB83E' }}>★★★</td></tr>
-            <tr><td style={cell}>⚠️ 브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: '#FFB83E' }}>★★ (소량만)</td></tr>
-            <tr><td style={cell}>💚 피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: '#FFB83E' }}>★★</td></tr>
-            <tr><td style={cell}>⚪ 마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: '#FF8C8C' }}>★</td></tr>
-            <tr><td style={cell}>🌲 잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: '#FF8C8C' }}>★</td></tr>
+            <tr><td style={cell}>🟤 땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: '#059669' }}>★★★★★</td></tr>
+            <tr><td style={cell}>🌻 해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: '#059669' }}>★★★★</td></tr>
+            <tr><td style={cell}>🎃 호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★★</td></tr>
+            <tr><td style={cell}>🥜 아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★</td></tr>
+            <tr><td style={cell}>🧠 호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
+            <tr><td style={cell}>🌙 캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
+            <tr><td style={cell}>⚠️ 브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: '#D97706' }}>★★ (소량만)</td></tr>
+            <tr><td style={cell}>💚 피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: '#D97706' }}>★★</td></tr>
+            <tr><td style={cell}>⚪ 마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
+            <tr><td style={cell}>🌲 잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
           </tbody>
         </table>
       </div>
@@ -259,12 +259,12 @@ export default function NutsPage() {
       <h2 style={sectionTitle}>🔥 무염 vs 가염 vs 가공 견과류</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
-          { n: '🌱 무염 건조',     c: '#3EFF9B', d: '가장 건강. 원래 영양소 그대로 보존. 건강 목적이면 이 선택이 기본.' },
-          { n: '🧂 가염',          c: '#3EC8FF', d: '나트륨 추가 (28g당 약 150mg). 고혈압·신장 질환 있으면 주의.' },
-          { n: '🔥 볶음',          c: '#FFB83E', d: '일부 항산화 성분 감소, 칼로리 소폭 증가(+5%). 풍미는 향상.' },
-          { n: '🛢 오일 코팅',     c: '#FF8C3E', d: '불필요한 지방 추가(+10%). 기름 종류에 따라 트랜스지방 우려.' },
-          { n: '🍫 초콜릿·시즈닝', c: '#FF6B6B', d: '설탕·트랜스지방·나트륨 급증(+60%). 건강 효과 크게 감소 — 간식 분류.' },
-          { n: '🍯 꿀 코팅',       c: '#FFB83E', d: '당분 추가(+20%). 혈당 상승 빠름, 당뇨 주의.' },
+          { n: '🌱 무염 건조',     c: '#059669', d: '가장 건강. 원래 영양소 그대로 보존. 건강 목적이면 이 선택이 기본.' },
+          { n: '🧂 가염',          c: '#0891B2', d: '나트륨 추가 (28g당 약 150mg). 고혈압·신장 질환 있으면 주의.' },
+          { n: '🔥 볶음',          c: '#D97706', d: '일부 항산화 성분 감소, 칼로리 소폭 증가(+5%). 풍미는 향상.' },
+          { n: '🛢 오일 코팅',     c: '#EA580C', d: '불필요한 지방 추가(+10%). 기름 종류에 따라 트랜스지방 우려.' },
+          { n: '🍫 초콜릿·시즈닝', c: '#DC2626', d: '설탕·트랜스지방·나트륨 급증(+60%). 건강 효과 크게 감소 — 간식 분류.' },
+          { n: '🍯 꿀 코팅',       c: '#D97706', d: '당분 추가(+20%). 혈당 상승 빠름, 당뇨 주의.' },
         ].map((s, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderLeft: `3px solid ${s.c}`, borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '13px', color: s.c, fontWeight: 700, marginBottom: '4px' }}>{s.n}</p>
@@ -371,7 +371,7 @@ export default function NutsPage() {
         <div style={faqAnswer}>
           <strong style={{ color: 'var(--text)' }}>반드시 의료진 진단.</strong> 증상은 가벼움(입 가려움·두드러기) → 중간(부종·복통·구토) → 심함(호흡 곤란·아나필락시스).
           <br /><br />
-          🚨 <strong style={{ color: '#FF6B6B' }}>아나필락시스(응급)</strong>: 호흡 곤란·의식 저하·전신 두드러기 → 즉시 119 호출, 에피펜(있으면) 즉시 사용.
+          🚨 <strong style={{ color: '#DC2626' }}>아나필락시스(응급)</strong>: 호흡 곤란·의식 저하·전신 두드러기 → 즉시 119 호출, 에피펜(있으면) 즉시 사용.
           <br /><br />
           진단: 알레르기 전문의·소아과 → 피부 단자 시험·혈액 IgE 검사·경구 유발 시험(전문의 감독). 본 도구 결과로 자가 판단 X.
         </div>
@@ -402,8 +402,8 @@ export default function NutsPage() {
       {/* 10. 의료 면책 */}
       <h2 style={sectionTitle}>⚠️ 의료 면책</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

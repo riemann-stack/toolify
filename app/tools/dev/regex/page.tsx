@@ -157,8 +157,8 @@ export default function RegexPage() {
           그룹은 <strong>괄호 ()</strong>로 감싸 만듭니다. 매치된 부분을 따로 추출하거나 치환에 참조할 수 있어요.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #C8FF3E', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#C8FF3E' }}>1. 인덱스 캡처 그룹 (...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #0EA5E9', borderRadius: 8, padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#0EA5E9' }}>1. 인덱스 캡처 그룹 (...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               번호로 참조 (<code style={codeStyle}>$1</code>, <code style={codeStyle}>$2</code>, ...). 위치 순서대로 자동 번호.
             </p>
@@ -170,8 +170,8 @@ $2 = "example.com"
 치환 패턴 "$2/$1" → "example.com/hello"`}
             </pre>
           </div>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #3EFFD0', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#3EFFD0' }}>2. 이름 캡처 그룹 (?&lt;name&gt;...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #0D9488', borderRadius: 8, padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#0D9488' }}>2. 이름 캡처 그룹 (?&lt;name&gt;...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               이름으로 참조 (<code style={codeStyle}>{`$<user>`}</code>). 가독성 ↑, ES2018+ 표준.
             </p>
@@ -182,8 +182,8 @@ groups.user   = "hello"
 groups.domain = "example.com"`}
             </pre>
           </div>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #FFB83E', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#FFB83E' }}>3. 비캡처 그룹 (?:...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #D97706', borderRadius: 8, padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#D97706' }}>3. 비캡처 그룹 (?:...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               그룹화만 하고 캡처는 하지 않음. <strong>성능 ↑·번호 절약</strong>.
             </p>
@@ -220,7 +220,7 @@ $1 = "example" (도메인만 캡처)
                 ['y', 'Sticky',           'lastIndex 위치에서만 매치 시도',              '토큰화·파싱'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: '#C8FF3E', fontWeight: 700 }}>{row[0]}</code></td>
+                  <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: '#0EA5E9', fontWeight: 700 }}>{row[0]}</code></td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>{row[3]}</td>
@@ -238,8 +238,8 @@ $1 = "example" (도메인만 캡처)
           잘못된 정규식은 <strong>지수적 시간 복잡도</strong>로 브라우저·서버를 멈출 수 있습니다.
           본 도구는 <strong>입력 100KB · 매치 1만 개 · 실행 시간 측정</strong> 3중 안전망을 제공합니다.
         </p>
-        <div style={{ background: 'rgba(255, 62, 140, 0.06)', border: '1px solid #FF3E8C', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
-          <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
+        <div style={{ background: 'rgba(219, 39, 119, 0.06)', border: '1px solid #DB2777', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
+          <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
             <li><code style={codeStyle}>{`(a+)+$`}</code> + <code style={codeStyle}>aaaaaaaaaaaaa!</code> — 매치 시도 2^N</li>
             <li><code style={codeStyle}>{`(a|aa)+$`}</code> — 분기 백트래킹 폭발</li>
@@ -247,8 +247,8 @@ $1 = "example" (도메인만 캡처)
             <li><code style={codeStyle}>{`(\\w+\\s?)+$`}</code> — 긴 입력 시 멈춤</li>
           </ul>
         </div>
-        <div style={{ background: 'rgba(200, 255, 62, 0.06)', border: '1px solid #C8FF3E', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: '#C8FF3E', fontWeight: 700, margin: '0 0 8px' }}>✅ 안전한 대체 패턴</p>
+        <div style={{ background: 'rgba(14, 165, 233, 0.06)', border: '1px solid #0EA5E9', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: '#0EA5E9', fontWeight: 700, margin: '0 0 8px' }}>✅ 안전한 대체 패턴</p>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
             <li>중첩 양화 한정자 피하기 — <code style={codeStyle}>{`(a+)+`}</code> → <code style={codeStyle}>{`a+`}</code></li>
             <li>분기는 가능한 한 명확하게 — <code style={codeStyle}>{`(?:foo|bar)`}</code></li>

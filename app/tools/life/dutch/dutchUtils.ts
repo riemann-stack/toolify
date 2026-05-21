@@ -17,13 +17,13 @@ export type RoundingOption = {
 }
 
 export const ROUNDING_OPTIONS: RoundingOption[] = [
-  { id: 'exact',      name: '정확히 (1원 단위)',     divisor: 1,    mode: 'none' },
-  { id: 'round-100',  name: '100원 반올림',          divisor: 100,  mode: 'round' },
-  { id: 'ceil-100',   name: '100원 올림',            divisor: 100,  mode: 'ceil' },
-  { id: 'floor-100',  name: '100원 내림',            divisor: 100,  mode: 'floor' },
-  { id: 'round-1000', name: '1,000원 반올림',        divisor: 1000, mode: 'round' },
-  { id: 'ceil-1000',  name: '1,000원 올림 (잔돈 공금)', divisor: 1000, mode: 'ceil' },
-  { id: 'floor-1000', name: '1,000원 내림',          divisor: 1000, mode: 'floor' },
+  { id: 'exact',      name: '1원 단위',       divisor: 1,    mode: 'none' },
+  { id: 'round-100',  name: '100원 반올림',   divisor: 100,  mode: 'round' },
+  { id: 'ceil-100',   name: '100원 올림',     divisor: 100,  mode: 'ceil' },
+  { id: 'floor-100',  name: '100원 내림',     divisor: 100,  mode: 'floor' },
+  { id: 'round-1000', name: '1,000원 반올림', divisor: 1000, mode: 'round' },
+  { id: 'ceil-1000',  name: '1,000원 올림',   divisor: 1000, mode: 'ceil' },
+  { id: 'floor-1000', name: '1,000원 내림',   divisor: 1000, mode: 'floor' },
 ]
 
 export function applyRounding(value: number, id: RoundingId): number {

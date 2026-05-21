@@ -46,10 +46,10 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { type: '퍼블릭 주중',  color: '#3EFF9B', green: '8~12만',   cart: '8~10만',  caddie: '12~14만' },
-                  { type: '퍼블릭 주말',  color: '#C8FF3E', green: '12~16만',  cart: '8~10만',  caddie: '12~14만' },
-                  { type: '세미퍼블릭',   color: '#3EC8FF', green: '14~20만',  cart: '10~12만', caddie: '13~15만' },
-                  { type: '회원제(비회원)', color: '#FFD700', green: '20~30만',  cart: '10~12만', caddie: '14~16만' },
+                  { type: '퍼블릭 주중',  color: '#059669', green: '8~12만',   cart: '8~10만',  caddie: '12~14만' },
+                  { type: '퍼블릭 주말',  color: '#0EA5E9', green: '12~16만',  cart: '8~10만',  caddie: '12~14만' },
+                  { type: '세미퍼블릭',   color: '#0891B2', green: '14~20만',  cart: '10~12만', caddie: '13~15만' },
+                  { type: '회원제(비회원)', color: '#CA8A04', green: '20~30만',  cart: '10~12만', caddie: '14~16만' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: row.color }}>{row.type}</td>
@@ -73,8 +73,8 @@ export default function GolfCostPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#C8FF3E', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 13만(인당) · 카트비 4만(팀) · 캐디피 12만(팀) · 식사 1.5만(인당) · 자차 카풀
               </p>
@@ -84,13 +84,13 @@ export default function GolfCostPage() {
                 캐디피 12만 + 팁 4만 = 16만 (팀 부담)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 8만 (자차 카풀, 팀 분담)<br/>
-                <span style={{ color: '#C8FF3E' }}>팀 합계 = 86만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 21.5만원</strong>
+                <span style={{ color: '#0EA5E9' }}>팀 합계 = 86만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 21.5만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 한국 평균 주말 라운딩의 표준 가격대입니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EC8FF', marginBottom: '8px' }}>예시 2 — 세미퍼블릭 주중 4인 (노캐디)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>예시 2 — 세미퍼블릭 주중 4인 (노캐디)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 16만(인당) · 카트비 5만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
               </p>
@@ -100,13 +100,13 @@ export default function GolfCostPage() {
                 캐디피 0 (노캐디)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 4만 × 4 = 16만 (KTX 왕복 인당)<br/>
-                <span style={{ color: '#3EC8FF' }}>팀 합계 = 91만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 22.8만원</strong>
+                <span style={{ color: '#0891B2' }}>팀 합계 = 91만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 22.8만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 캐디피 16만을 아꼈지만, 그린피 차이로 비용이 비슷해질 수 있습니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,215,0,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FFD700', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#CA8A04', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 25만(인당) · 카트비 4만(팀) · 캐디피 14만(팀) + 팁 6만 · 식사 2만 · 자차
               </p>
@@ -116,7 +116,7 @@ export default function GolfCostPage() {
                 캐디피 14만 + 팁 6만 = 20만<br/>
                 식사 2만 × 4 = 8만<br/>
                 교통비 8만 (자차 카풀)<br/>
-                <span style={{ color: '#FFD700' }}>팀 합계 = 140만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 35만원</strong>
+                <span style={{ color: '#CA8A04' }}>팀 합계 = 140만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 35만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 회원 동반(그린피 할인) 여부에 따라 1인당 10~15만원이 줄어들 수 있습니다.</p>
             </div>
@@ -130,7 +130,7 @@ export default function GolfCostPage() {
             🧾 캐디피 정산 완전 가이드
           </h2>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>1. 캐디피는 보통 &ldquo;팀 부담&rdquo;</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               한국 골프장의 캐디피는 1팀(보통 4인) 기준 12~16만원이 표준입니다. 골프장에 직접 지불하는 것이 아니라 라운드 종료 후
@@ -138,24 +138,24 @@ export default function GolfCostPage() {
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#3EFF9B', marginBottom: '10px' }}>2. N빵 vs 한 명이 선결제</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: '#059669', marginBottom: '10px' }}>2. N빵 vs 한 명이 선결제</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               4인 1팀이면 캐디피 12만 ÷ 4 = <strong style={{ color: 'var(--text)' }}>1인당 3만원</strong>씩 N빵하는 것이 일반적입니다.
               한 명이 먼저 캐디에게 지불하고 나머지는 그 사람에게 카카오페이·이체로 정산합니다. 더치페이 계산기를 활용하면 식사·카트비까지 한 번에 정리할 수 있습니다.
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#FF8C3E', marginBottom: '10px' }}>3. 팁(촌지) 관행</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: '#EA580C', marginBottom: '10px' }}>3. 팁(촌지) 관행</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               만족스러운 라운드였다면 캐디피의 <strong style={{ color: 'var(--text)' }}>10~30%(2~5만원)</strong> 정도를 팁으로 추가 지급합니다.
               팁은 의무는 아니지만, 첫 라운드·접대 자리·회원 동반 시에는 관행적으로 챙기는 경우가 많습니다. 노캐디(캐디 미동반) 라운드는 캐디피와 팁 모두 발생하지 않습니다.
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#3EC8FF', marginBottom: '10px' }}>4. 노캐디·드라이빙 캐디·마샬 캐디</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>4. 노캐디·드라이빙 캐디·마샬 캐디</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               <strong style={{ color: 'var(--text)' }}>노캐디</strong>: 캐디 없이 직접 진행. 캐디피 0원, 시간 단축.<br/>
               <strong style={{ color: 'var(--text)' }}>드라이빙 캐디</strong>: 카트만 운전, 클럽 추천 없음. 보통 6~8만원.<br/>

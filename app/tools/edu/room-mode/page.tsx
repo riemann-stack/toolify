@@ -89,9 +89,9 @@ export default function RoomModePage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🔴 축방향 (Axial)', d: '한 축의 평행 벽 2개 사이. 가장 강한 모드. 가로·세로·높이 각 5차까지.', c: '#FF3E8C' },
-            { t: '🟡 접선 (Tangential)', d: '4개 벽 사이. 중간 강도. 축방향의 약 70%.', c: '#FFB83E' },
-            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드. 축방향의 약 40%.', c: '#3EFFD0' },
+            { t: '🔴 축방향 (Axial)', d: '한 축의 평행 벽 2개 사이. 가장 강한 모드. 가로·세로·높이 각 5차까지.', c: '#DB2777' },
+            { t: '🟡 접선 (Tangential)', d: '4개 벽 사이. 중간 강도. 축방향의 약 70%.', c: '#D97706' },
+            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드. 축방향의 약 40%.', c: '#0D9488' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -163,10 +163,10 @@ export default function RoomModePage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🔺 코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 60Hz~ 효과.', c: '#FF3E8C' },
-            { t: '🟧 벽 트랩', d: '1차 반사 지점에 부착. 100Hz~ 중·고음 흡수.', c: '#FFB83E' },
-            { t: '🟨 멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 주파수 대역 흡수.', c: '#3EC8FF' },
-            { t: '🔊 헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#3EFFD0' },
+            { t: '🔺 코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 60Hz~ 효과.', c: '#DB2777' },
+            { t: '🟧 벽 트랩', d: '1차 반사 지점에 부착. 100Hz~ 중·고음 흡수.', c: '#D97706' },
+            { t: '🟨 멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 주파수 대역 흡수.', c: '#0891B2' },
+            { t: '🔊 헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0D9488' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>

@@ -34,7 +34,7 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     hexLen: 32,
     safety: 'integrity',
     badgeLabel: '🟡 무결성 전용',
-    badgeColor: '#FFB83E',
+    badgeColor: '#D97706',
     description: '1992년 발표, 2004년 충돌 공격 발견. 빠르지만 보안 부적합.',
     useCases: '체크섬, 캐시 버스팅, 중복 검출',
     speed: '매우 빠름',
@@ -46,7 +46,7 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     hexLen: 40,
     safety: 'integrity',
     badgeLabel: '🟡 무결성 전용',
-    badgeColor: '#FFB83E',
+    badgeColor: '#D97706',
     description: '1995년 발표, 2017년 SHAttered 충돌 시연. 디지털 서명 부적합.',
     useCases: 'Git 커밋 ID, 레거시 호환, HMAC-SHA1',
     speed: '빠름',
@@ -58,7 +58,7 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     hexLen: 64,
     safety: 'safe',
     badgeLabel: '🟢 안전 (권장)',
-    badgeColor: '#3EFFD0',
+    badgeColor: '#0D9488',
     description: 'SHA-2 계열. 현재 가장 널리 쓰이는 안전한 해시. NIST 표준.',
     useCases: 'HTTPS, 블록체인, JWT, SRI, 디지털 서명',
     speed: '빠름',
@@ -70,7 +70,7 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     hexLen: 128,
     safety: 'safe',
     badgeLabel: '🟢 안전',
-    badgeColor: '#3EFFD0',
+    badgeColor: '#0D9488',
     description: 'SHA-2 계열 512bit. 64bit 시스템에서 SHA-256보다 빠름.',
     useCases: '고보안 디지털 서명, 금융, 정부 표준',
     speed: '64bit 시스템에서 SHA-256보다 빠름',
@@ -78,10 +78,10 @@ export const ALGORITHMS: AlgorithmMeta[] = [
 ]
 
 export const HMAC_ALGORITHMS: AlgorithmMeta[] = [
-  { id: 'sha1', name: 'HMAC-SHA1', bits: 160, hexLen: 40, safety: 'integrity', badgeLabel: '🟡 레거시', badgeColor: '#FFB83E', description: 'AWS Signature V2 등 레거시.', useCases: '레거시 API', speed: '빠름' },
-  { id: 'sha256', name: 'HMAC-SHA256', bits: 256, hexLen: 64, safety: 'safe', badgeLabel: '🟢 표준', badgeColor: '#3EFFD0', description: '가장 널리 쓰이는 HMAC. JWT HS256, AWS V4, 웹훅 표준.', useCases: 'GitHub/Slack 웹훅, JWT, AWS', speed: '빠름' },
-  { id: 'sha384', name: 'HMAC-SHA384', bits: 384, hexLen: 96, safety: 'safe', badgeLabel: '🟢 안전', badgeColor: '#3EFFD0', description: 'JWT HS384, 고보안 토큰.', useCases: 'JWT HS384, 고보안 인증', speed: '빠름' },
-  { id: 'sha512', name: 'HMAC-SHA512', bits: 512, hexLen: 128, safety: 'safe', badgeLabel: '🟢 고보안', badgeColor: '#3EFFD0', description: '최강 보안 HMAC. JWT HS512.', useCases: 'JWT HS512, 금융·정부', speed: '64bit 시스템 빠름' },
+  { id: 'sha1', name: 'HMAC-SHA1', bits: 160, hexLen: 40, safety: 'integrity', badgeLabel: '🟡 레거시', badgeColor: '#D97706', description: 'AWS Signature V2 등 레거시.', useCases: '레거시 API', speed: '빠름' },
+  { id: 'sha256', name: 'HMAC-SHA256', bits: 256, hexLen: 64, safety: 'safe', badgeLabel: '🟢 표준', badgeColor: '#0D9488', description: '가장 널리 쓰이는 HMAC. JWT HS256, AWS V4, 웹훅 표준.', useCases: 'GitHub/Slack 웹훅, JWT, AWS', speed: '빠름' },
+  { id: 'sha384', name: 'HMAC-SHA384', bits: 384, hexLen: 96, safety: 'safe', badgeLabel: '🟢 안전', badgeColor: '#0D9488', description: 'JWT HS384, 고보안 토큰.', useCases: 'JWT HS384, 고보안 인증', speed: '빠름' },
+  { id: 'sha512', name: 'HMAC-SHA512', bits: 512, hexLen: 128, safety: 'safe', badgeLabel: '🟢 고보안', badgeColor: '#0D9488', description: '최강 보안 HMAC. JWT HS512.', useCases: 'JWT HS512, 금융·정부', speed: '64bit 시스템 빠름' },
 ]
 
 export const getAlgorithm = (id: AlgorithmId): AlgorithmMeta =>

@@ -50,21 +50,21 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['🍶 소주잔',         '50ml',    '16%',   '6.3g',   '#C8FF3E'],
-                  ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  '#3EFF9B'],
-                  ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  '#3EFF9B'],
-                  ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   '#FF8C3E'],
-                  ['🥃 양주 1온스',     '45ml',    '40%',   '14.2g',  '#FF8C3E'],
+                  ['🍶 소주잔',         '50ml',    '16%',   '6.3g',   '#0EA5E9'],
+                  ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  '#059669'],
+                  ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  '#059669'],
+                  ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   '#EA580C'],
+                  ['🥃 양주 1온스',     '45ml',    '40%',   '14.2g',  '#EA580C'],
                   ['🍷 와인잔',         '150ml',   '13%',   '15.4g',  '#C83EFF'],
-                  ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   '#FF8C3E'],
-                  ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#FF3E8C'],
-                  ['🥤 종이컵',         '180ml',   '—',     '—',      '#3EC8FF'],
-                  ['🍹 하이볼잔',       '300ml',   '~7%',   '16.6g',  '#3EC8FF'],
-                  ['🍶 소주 1병',       '360ml',   '16%',   '45.5g',  '#C8FF3E'],
-                  ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  '#3EFF9B'],
-                  ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  '#FF8C3E'],
+                  ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   '#EA580C'],
+                  ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#DB2777'],
+                  ['🥤 종이컵',         '180ml',   '—',     '—',      '#0891B2'],
+                  ['🍹 하이볼잔',       '300ml',   '~7%',   '16.6g',  '#0891B2'],
+                  ['🍶 소주 1병',       '360ml',   '16%',   '45.5g',  '#0EA5E9'],
+                  ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  '#059669'],
+                  ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  '#EA580C'],
                   ['🍷 와인 1병',       '750ml',   '13%',   '77.0g',  '#C83EFF'],
-                  ['🥃 위스키 1병',     '700ml',   '40%',   '221.0g', '#FF8C3E'],
+                  ['🥃 위스키 1병',     '700ml',   '40%',   '221.0g', '#EA580C'],
                 ].map(([name, vol, abv, alc, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 600 }}>{name}</td>
@@ -182,14 +182,14 @@ export default function AlcoholPage() {
                 detail: '소주 3병 + 맥주 6캔',
                 perPerson: '1인당 약 61g (7.7 표준잔)',
                 risk: '🟠 남성 권장 192% / 여성 384% (큰 폭 초과)',
-                color: '#FF8C3E',
+                color: '#EA580C',
               },
               {
                 title: '시나리오 C — 4명, 회식 진한 술자리',
                 detail: '소주 5병 + 맥주 10캔 + 위스키 200ml',
                 perPerson: '1인당 약 117g (14.6 표준잔)',
                 risk: '🔴 위험 음주 — 절대 운전 X · 다음날 출근 운전도 단속 가능',
-                color: '#FF6B6B',
+                color: '#DC2626',
               },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}25`, borderRadius: '12px', padding: '16px 18px' }}>
@@ -248,9 +248,9 @@ export default function AlcoholPage() {
             📊 표준 음주량 & 보건복지부 저위험 음주 권고
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국은 <strong style={{ color: 'var(--text)' }}>1표준잔 = 알코올 8g</strong> 기준 (WHO는 10g). 보건복지부 권고는 아래와 같으나, <strong style={{ color: '#FF8C3E' }}>WHO(2023)는 &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo;</strong>고 발표했습니다.
+            한국은 <strong style={{ color: 'var(--text)' }}>1표준잔 = 알코올 8g</strong> 기준 (WHO는 10g). 보건복지부 권고는 아래와 같으나, <strong style={{ color: '#EA580C' }}>WHO(2023)는 &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo;</strong>고 발표했습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>한국 보건복지부 저위험 음주 권고 기준</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               {[
@@ -327,8 +327,8 @@ export default function AlcoholPage() {
         </section>
 
         {/* ── 8. 책임 있는 음주 (강화) ── */}
-        <section style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '14px', fontWeight: 700, color: '#FF6B6B', marginBottom: '12px' }}>⚠️ 책임 있는 음주 안내</p>
+        <section style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: '#DC2626', marginBottom: '12px' }}>⚠️ 책임 있는 음주 안내</p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 계산기는 <strong style={{ color: 'var(--text)' }}>음주를 권장하지 않으며</strong>, 본인 음주량 인지·관리 보조 도구입니다. 계산 결과는 체내 알코올 분해 속도나 취기 정도를 보장하지 않습니다.
           </p>
@@ -350,7 +350,7 @@ export default function AlcoholPage() {
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
                   <span style={{ color: 'var(--muted)' }}>{c.label}</span>
-                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#FF8C3E' }}>{c.tel}</span>
+                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: '#EA580C' }}>{c.tel}</span>
                 </div>
               ))}
             </div>

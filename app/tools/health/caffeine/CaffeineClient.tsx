@@ -301,19 +301,19 @@ export default function CaffeineClient() {
   /* ─── 상태 ─── */
   const sleepImpact = (() => {
     if (bedtimeMs === null) return null
-    if (bedtimeBodyMg < 30) return { label: '😴 영향 거의 없음', color: '#3EFF9B' }
-    if (bedtimeBodyMg < 50) return { label: '😌 가벼운 영향 가능', color: '#3EC8FF' }
-    if (bedtimeBodyMg < 100) return { label: '😬 입면 지연 가능', color: '#FFB83E' }
-    if (bedtimeBodyMg < 200) return { label: '😵 수면 질 큰 영향', color: '#FF8C3E' }
-    return { label: '🚨 깊은 수면 차단 수준', color: '#FF6B6B' }
+    if (bedtimeBodyMg < 30) return { label: '😴 영향 거의 없음', color: '#059669' }
+    if (bedtimeBodyMg < 50) return { label: '😌 가벼운 영향 가능', color: '#0891B2' }
+    if (bedtimeBodyMg < 100) return { label: '😬 입면 지연 가능', color: '#D97706' }
+    if (bedtimeBodyMg < 200) return { label: '😵 수면 질 큰 영향', color: '#EA580C' }
+    return { label: '🚨 깊은 수면 차단 수준', color: '#DC2626' }
   })()
 
   const dailyPct = Math.min(100, (todayTotalMg / dailyLimit) * 100)
   const dailyStatus =
-    dailyPct < 60 ? { label: '✅ 여유', color: '#3EFF9B' }
-    : dailyPct < 90 ? { label: '⚠️ 권장량 근접', color: '#FFB83E' }
-    : dailyPct < 100 ? { label: '🟠 권장량 거의 도달', color: '#FF8C3E' }
-    : { label: '🚨 권장량 초과', color: '#FF6B6B' }
+    dailyPct < 60 ? { label: '✅ 여유', color: '#059669' }
+    : dailyPct < 90 ? { label: '⚠️ 권장량 근접', color: '#D97706' }
+    : dailyPct < 100 ? { label: '🟠 권장량 거의 도달', color: '#EA580C' }
+    : { label: '🚨 권장량 초과', color: '#DC2626' }
 
   /* ─── 차트 SVG ─── */
   const W = 600, H = 220, PL = 44, PR = 16, PT = 16, PB = 32
@@ -607,15 +607,15 @@ export default function CaffeineClient() {
             {[30, 100, 200].filter(t => t < maxMg).map(t => (
               <g key={t}>
                 <line x1={PL} x2={W - PR} y1={yFromMg(t)} y2={yFromMg(t)}
-                  stroke={t === 30 ? '#3EFF9B' : t === 100 ? '#FFB83E' : '#FF6B6B'}
+                  stroke={t === 30 ? '#059669' : t === 100 ? '#D97706' : '#DC2626'}
                   strokeWidth="1" strokeDasharray="3 4" opacity="0.6" />
                 <text x={W - PR - 4} y={yFromMg(t) - 3}
-                  fill={t === 30 ? '#3EFF9B' : t === 100 ? '#FFB83E' : '#FF6B6B'}
+                  fill={t === 30 ? '#059669' : t === 100 ? '#D97706' : '#DC2626'}
                   fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{t}mg</text>
               </g>
             ))}
             {/* 영역·곡선 */}
-            <path d={areaPath} fill="rgba(200,255,62,0.10)" />
+            <path d={areaPath} fill="rgba(14,165,233,0.10)" />
             <path d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2" />
             {/* 현재 시각 */}
             <line x1={nowX} x2={nowX} y1={PT} y2={H - PB}
@@ -633,9 +633,9 @@ export default function CaffeineClient() {
           </svg>
           <div className={s.chartLegend}>
             <span><span className={s.dot} style={{ background: 'var(--accent)' }} />체내 카페인</span>
-            <span><span className={s.dot} style={{ background: '#3EFF9B' }} />수면 안전 (30mg)</span>
-            <span><span className={s.dot} style={{ background: '#FFB83E' }} />경고 (100mg)</span>
-            <span><span className={s.dot} style={{ background: '#FF6B6B' }} />수면 차단 (200mg)</span>
+            <span><span className={s.dot} style={{ background: '#059669' }} />수면 안전 (30mg)</span>
+            <span><span className={s.dot} style={{ background: '#D97706' }} />경고 (100mg)</span>
+            <span><span className={s.dot} style={{ background: '#DC2626' }} />수면 차단 (200mg)</span>
           </div>
         </div>
       )}

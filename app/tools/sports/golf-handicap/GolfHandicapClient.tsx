@@ -218,7 +218,7 @@ function HandicapIndexTab({
         </div>
 
         {rounds.length > 0 && rounds.length < 3 && (
-          <p style={{ fontSize: '12px', color: '#FF8C3E', marginTop: '10px', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', color: '#EA580C', marginTop: '10px', textAlign: 'center' }}>
             핸디캡 지수 계산에는 최소 3라운드가 필요합니다. ({3 - rounds.length}라운드 더 입력)
           </p>
         )}
@@ -228,7 +228,7 @@ function HandicapIndexTab({
         <button
           onClick={() => onSetIndex(handicapIndex)}
           style={{
-            background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.3)',
+            background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)',
             borderRadius: '10px', padding: '12px', color: 'var(--accent)',
             fontSize: '13px', fontFamily: 'Noto Sans KR', cursor: 'pointer',
             fontWeight: 500,
@@ -508,7 +508,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
               <div className={s.resultCard}>
                 <div className={s.resultTitle}>파 대비</div>
                 <div className={s.resultNum} style={{
-                  color: netScore < parN ? '#3EFF9B' : netScore > parN ? '#FF6B6B' : 'var(--accent)',
+                  color: netScore < parN ? '#059669' : netScore > parN ? '#DC2626' : 'var(--accent)',
                 }}>
                   {netScore === parN ? '이븐' : netScore < parN ? `${parN - netScore}↓` : `${netScore - parN}↑`}
                 </div>
@@ -764,7 +764,7 @@ function RecordsTab() {
               <div>
                 <span className={s.statLabel}>변화</span>
                 <span className={s.statValue} style={{
-                  color: (stats.change ?? 0) <= 0 ? '#3EFF9B' : '#FF8C3E',
+                  color: (stats.change ?? 0) <= 0 ? '#059669' : '#EA580C',
                 }}>
                   {stats.change !== null ? `${stats.change > 0 ? '+' : ''}${stats.change.toFixed(1)}` : '—'}
                 </span>
@@ -958,7 +958,7 @@ function RecordsTab() {
                 📊 CSV
               </button>
               <button type="button" onClick={handleClearAll}
-                className={s.smallActionBtn} style={{ color: '#FF6B6B' }}>
+                className={s.smallActionBtn} style={{ color: '#DC2626' }}>
                 전체 삭제
               </button>
             </div>
@@ -982,7 +982,7 @@ function RecordsTab() {
                     <tr key={r.id}>
                       <td style={{ fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>
                         {r.date}
-                        {r.is9Holes && <span style={{ marginLeft: 4, color: '#FF8C3E', fontSize: 10 }}>9H</span>}
+                        {r.is9Holes && <span style={{ marginLeft: 4, color: '#EA580C', fontSize: 10 }}>9H</span>}
                       </td>
                       <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
                       <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>

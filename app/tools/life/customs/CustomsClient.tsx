@@ -131,7 +131,7 @@ export default function CustomsClient() {
                 >
                   <span className={s.itemEmoji}>{it.emoji}</span>
                   <span className={s.itemLabel}>{it.shortLabel}</span>
-                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? '#3EFFD0' : 'var(--accent)' }}>
+                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? '#0D9488' : 'var(--accent)' }}>
                     {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                   </span>
                 </button>
@@ -180,11 +180,11 @@ export default function CustomsClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero} style={{ borderColor: result.isDutyFree ? 'rgba(62, 255, 208, 0.4)' : 'rgba(255, 62, 140, 0.4)' }}>
+          <div className={s.hero} style={{ borderColor: result.isDutyFree ? 'rgba(13, 148, 136, 0.4)' : 'rgba(219, 39, 119, 0.4)' }}>
             <p className={s.heroLabel}>
               {country.flag} {country.shortName} · {item.emoji} {item.label}
             </p>
-            <p className={s.heroValue} style={{ color: result.isDutyFree ? '#3EFFD0' : '#FF3E8C' }}>
+            <p className={s.heroValue} style={{ color: result.isDutyFree ? '#0D9488' : '#DB2777' }}>
               {result.isDutyFree ? '✅ 면세' : '❌ 과세'}
             </p>
             <p className={s.heroSub}>
@@ -194,7 +194,7 @@ export default function CustomsClient() {
               <br />
               {result.isDutyFree
                 ? <>면세 한도 <strong>${result.dutyFreeLimit}</strong>까지 여유 <strong style={{ color: 'var(--accent)' }}>${(result.dutyFreeLimit - result.totalUsd).toFixed(2)}</strong></>
-                : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: '#FF3E8C' }}>${(result.totalUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
+                : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: '#DB2777' }}>${(result.totalUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
               }
             </p>
           </div>
@@ -212,7 +212,7 @@ export default function CustomsClient() {
               <strong>{fmtKrw(result.finalKrw)}</strong>
             </p>
             <p className={s.heroSub}>
-              세금 합계 <strong style={{ color: result.totalTax > 0 ? '#FF3E8C' : 'var(--accent)' }}>
+              세금 합계 <strong style={{ color: result.totalTax > 0 ? '#DB2777' : 'var(--accent)' }}>
                 {result.totalTax > 0 ? `+${fmtKrw(result.totalTax)}` : '0원'}
               </strong>
               {' · '}한국 백화점 추정가 <strong>{fmtKrw(result.domesticEstimate)}</strong>
@@ -290,7 +290,7 @@ export default function CustomsClient() {
                   {ITEMS.slice().sort((a, b) => a.dutyRate - b.dutyRate).map((it) => (
                     <tr key={it.id} onClick={() => { setItemId(it.id); setTab('calc') }} style={{ cursor: 'pointer' }}>
                       <td>{it.emoji} {it.label}</td>
-                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? '#3EFFD0' : it.dutyRate >= 15 ? '#FF3E8C' : 'var(--accent)' }}>
+                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? '#0D9488' : it.dutyRate >= 15 ? '#DB2777' : 'var(--accent)' }}>
                         {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                       </td>
                       <td className={s.cellMono}>{it.isListed ? '✅' : '❌'}</td>
@@ -393,7 +393,7 @@ export default function CustomsClient() {
                     <span>{item.emoji} {item.shortLabel}</span>
                     <span>{fmtCurrency(sc.productPrice + sc.shippingFee, country.currencyUnit, 0)}</span>
                   </div>
-                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? '#3EFFD0' : '#FF3E8C' }}>
+                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? '#0D9488' : '#DB2777' }}>
                     {r.isDutyFree ? '✅ 면세' : `❌ 과세 +${fmtKrw(r.totalTax)}`} → {fmtKrw(r.finalKrw)}
                   </p>
                   <div className={s.scenarioNotes}>

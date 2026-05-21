@@ -707,7 +707,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.infoCard}>
-            ☀️ <strong>남향·통유리·고층</strong> 시 일반 추천보다 <strong style={{ color: '#FF8C3E' }}>+1단계 큰 평형</strong> 권장.
+            ☀️ <strong>남향·통유리·고층</strong> 시 일반 추천보다 <strong style={{ color: '#EA580C' }}>+1단계 큰 평형</strong> 권장.
             예: 일반 15평형 → 남향·고층 18평형
           </div>
 

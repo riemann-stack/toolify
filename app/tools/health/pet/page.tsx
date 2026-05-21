@@ -74,11 +74,11 @@ export default function PetPage() {
               </thead>
               <tbody>
                 {[
-                  ['1세',  '15세', '키튼',       '#3EC8FF'],
-                  ['2세',  '24세', '성묘',        '#3EFF9B'],
-                  ['7세',  '44세', '시니어',      '#C8FF3E'],
-                  ['11세', '60세', '슈퍼시니어',  '#FF8C3E'],
-                  ['15세', '76세', '고령',        '#FF6B6B'],
+                  ['1세',  '15세', '키튼',       '#0891B2'],
+                  ['2세',  '24세', '성묘',        '#059669'],
+                  ['7세',  '44세', '시니어',      '#0EA5E9'],
+                  ['11세', '60세', '슈퍼시니어',  '#EA580C'],
+                  ['15세', '76세', '고령',        '#DC2626'],
                   ['20세', '96세', '초고령',      '#FF4444'],
                 ].map(([age, human, stage, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -102,7 +102,7 @@ export default function PetPage() {
             {[
               { title: '문제 1 — 초기 성장 속도 무시', color: '#FFB347', desc: '강아지 1세는 사람 나이로 약 15세(사춘기), 2세는 24세에 해당합니다. ×7 공식으로 계산하면 각각 7세, 14세가 되어 실제보다 훨씬 어린 나이가 됩니다.' },
               { title: '문제 2 — 품종 크기 차이 무시', color: '#C084FC', desc: '소형견(치와와, 말티즈)은 15~20년 이상 살지만, 대형견(그레이트데인)의 평균 수명은 7~10년입니다. 같은 ×7을 적용하면 노령 판단 기준이 완전히 달라집니다.' },
-              { title: '2019년 UC샌디에이고 연구', color: '#3EFF9B', desc: '개의 DNA 메틸화 패턴을 분석한 결과, 인간과 개의 노화는 로그함수적으로 일치하며, 특히 초기 성장기에 개의 노화 속도가 훨씬 빠름이 밝혀졌습니다.' },
+              { title: '2019년 UC샌디에이고 연구', color: '#059669', desc: '개의 DNA 메틸화 패턴을 분석한 결과, 인간과 개의 노화는 로그함수적으로 일치하며, 특히 초기 성장기에 개의 노화 속도가 훨씬 빠름이 밝혀졌습니다.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '12px', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: item.color, marginBottom: '6px' }}>{item.title}</p>
@@ -121,7 +121,7 @@ export default function PetPage() {
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px' }}>RER = 70 × 체중(kg)⁰·⁷⁵</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>완전한 안정 상태에서 생명 유지에 필요한 최소 칼로리입니다. 체중의 0.75 거듭제곱을 사용해 소형견과 대형견의 체표면적 차이를 반영합니다.</p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', marginBottom: '8px' }}>DER — 일일 에너지 요구량 (Daily Energy Requirement)</p>
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '10px' }}>DER = RER × 생활계수</p>
               <div style={{ overflowX: 'auto' }}>
@@ -275,8 +275,8 @@ export default function PetPage() {
                 <li>· 단점: 수분 부족 (약 10%)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#3EC8FF', marginBottom: '6px' }}>🥫 습식 (Wet · Pâté)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🥫 습식 (Wet · Pâté)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>70~120kcal/100g</strong></li>
                 <li>· 장점: 수분 70~80%·기호성 ↑</li>
@@ -294,12 +294,12 @@ export default function PetPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
             {[
-              { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#3EC8FF', items: ['기본 백신 (디스템퍼·파보·홍역) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
-              { pet: '🐶 강아지', stage: '성견 (1~7세)', color: '#3EFF9B', items: ['연 1회 건강검진 및 혈액검사', '치석 스케일링 (1~2년마다)', '심장사상충·외부기생충 예방 지속'] },
-              { pet: '🐶 강아지', stage: '노령견 (7세~)', color: '#FF8C3E', items: ['반기 1회 건강검진으로 빈도 증가', '관절 건강 및 관절염 모니터링', '신장·간 기능 혈액검사 주기 점검'] },
-              { pet: '🐱 고양이', stage: '키튼 (~1세)', color: '#3EC8FF', items: ['종합백신 (FVRCP) 접종 시리즈', '중성화 수술 시기 상담 (5~7개월)', '내·외부 기생충 예방'] },
-              { pet: '🐱 고양이', stage: '성묘 (1~7세)', color: '#3EFF9B', items: ['연 1회 건강검진 및 혈액검사', '구강 건강·치석 관리', '체중 모니터링 및 비만 예방'] },
-              { pet: '🐱 고양이', stage: '시니어·슈퍼시니어 (7세~)', color: '#FF8C3E', items: ['갑상선 기능 항진증 검사', '신장 기능 (BUN·크레아티닌) 정기 확인', '혈압 측정 및 인지 기능 저하 관찰'] },
+              { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#0891B2', items: ['기본 백신 (디스템퍼·파보·홍역) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
+              { pet: '🐶 강아지', stage: '성견 (1~7세)', color: '#059669', items: ['연 1회 건강검진 및 혈액검사', '치석 스케일링 (1~2년마다)', '심장사상충·외부기생충 예방 지속'] },
+              { pet: '🐶 강아지', stage: '노령견 (7세~)', color: '#EA580C', items: ['반기 1회 건강검진으로 빈도 증가', '관절 건강 및 관절염 모니터링', '신장·간 기능 혈액검사 주기 점검'] },
+              { pet: '🐱 고양이', stage: '키튼 (~1세)', color: '#0891B2', items: ['종합백신 (FVRCP) 접종 시리즈', '중성화 수술 시기 상담 (5~7개월)', '내·외부 기생충 예방'] },
+              { pet: '🐱 고양이', stage: '성묘 (1~7세)', color: '#059669', items: ['연 1회 건강검진 및 혈액검사', '구강 건강·치석 관리', '체중 모니터링 및 비만 예방'] },
+              { pet: '🐱 고양이', stage: '시니어·슈퍼시니어 (7세~)', color: '#EA580C', items: ['갑상선 기능 항진증 검사', '신장 기능 (BUN·크레아티닌) 정기 확인', '혈압 측정 및 인지 기능 저하 관찰'] },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>{item.pet}</p>

@@ -3,19 +3,19 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -23,11 +23,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -35,7 +35,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 /* 탭 */
 .tabs {
@@ -63,11 +63,11 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActivePrepay   { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveRefi     { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActiveRate     { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveReverse  { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
-.tabActiveCompare  { background: rgba(255,107,157,0.10); color: #FF6B9D; font-weight: 700; }
+.tabActivePrepay   { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveRefi     { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActiveRate     { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveReverse  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
+.tabActiveCompare  { background: rgba(225,29,72,0.18); color: #E11D48; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -251,8 +251,8 @@
   position: relative;
 }
 .compareCardAccent {
-  border-color: rgba(200,255,62,0.40);
-  background: rgba(200,255,62,0.04);
+  border-color: rgba(14,165,233,0.40);
+  background: rgba(14,165,233,0.14);
 }
 .compareTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .compareDesc { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
@@ -279,11 +279,11 @@
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.compareInterest span:last-child { color: #FF6B6B; }
+.compareInterest span:last-child { color: #DC2626; }
 .savingBadge {
   margin-top: 10px;
   background: var(--accent-dim);
-  border: 1px solid rgba(200,255,62,0.40);
+  border: 1px solid rgba(14,165,233,0.40);
   border-radius: 8px;
   padding: 6px 10px;
   font-size: 12px;
@@ -337,7 +337,7 @@
   align-items: center;
 }
 .scheduleRow:last-child { border-bottom: none; }@media (hover: hover) {
-  .scheduleRow:hover { background: rgba(200,255,62,0.04); }
+  .scheduleRow:hover { background: rgba(14,165,233,0.14); }
 }
 .scheduleRow span { text-align: right; color: var(--text); }
 .scheduleRow span:first-child {
@@ -345,13 +345,13 @@
   color: var(--muted);
   font-weight: 700;
 }
-.scheduleRow span:nth-child(3) { color: #FF8C3E; }      /* 이자 */
-.scheduleRow span:nth-child(5) { color: #3EC8FF; }      /* 잔액 */
+.scheduleRow span:nth-child(3) { color: #EA580C; }      /* 이자 */
+.scheduleRow span:nth-child(5) { color: #0891B2; }      /* 잔액 */
 
 /* 마일스톤 (12·24·36·60개월) 강조 */
 .scheduleRowMilestone {
-  background: rgba(200,255,62,0.06);
-  border-bottom: 1px solid rgba(200,255,62,0.30);
+  background: rgba(14,165,233,0.14);
+  border-bottom: 1px solid rgba(14,165,233,0.30);
 }
 
 /* ─── 컴팩트 비교 카드 (3개 가로 한 번에) ─── */
@@ -384,7 +384,7 @@
 }
 .compareMini strong {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #FF6B6B;
+  color: #DC2626;
   font-weight: 700;
 }
 .savingBadgeCompact {
@@ -471,8 +471,8 @@
   }
   .scheduleRow:hover { background: var(--bg2); }
   .scheduleRowMilestone {
-    border-color: rgba(200,255,62,0.40);
-    background: rgba(200,255,62,0.04);
+    border-color: rgba(14,165,233,0.40);
+    background: rgba(14,165,233,0.14);
   }
   .scheduleRow span {
     display: grid;
@@ -678,8 +678,8 @@
   text-align: right;
   color: var(--text);
 }
-.deltaPositive { color: #FF6B6B; }
-.deltaNegative { color: #3EFF9B; }
+.deltaPositive { color: #DC2626; }
+.deltaNegative { color: #059669; }
 .deltaZero { color: var(--muted); }
 
 /* DSR 결과 */

@@ -95,6 +95,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/date/server-time':     ['서버시간', '네이비즘', '한국시간', 'ntp', '티켓팅'],
   '/tools/date/lunar':           ['음력', '양력', '음력변환'],
   '/tools/date/jet-lag':         ['시차', '제트래그', '해외여행'],
+  '/tools/date/timezone':        ['시간대', '타임존', '시간변환', 'UTC', 'KST', 'EST', 'PST', 'BST', '서머타임', 'DST', '뉴욕시간', 'LA시간', '런던시간', '시드니시간', '인도시간', '회의시간'],
   '/tools/date/military':        ['군대', '군복무', '전역', '말년'],
   '/tools/date/life-time':       ['수명', '인생시간', '남은시간'],
 
@@ -104,6 +105,10 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/unit/size':            ['옷사이즈', '신발사이즈', '치수'],
   '/tools/unit/fuel-economy':    ['연비', 'mpg', 'km/l'],
   '/tools/unit/tire-pressure':   ['타이어공기압', 'psi', '공기압'],
+  '/tools/unit/hardness':        ['경도', 'hrc', 'hrb', 'hv', 'hb', '로크웰', '비커스', '브리넬', '칼경도', '강재', '나이프', '칼덕', 'astm', '인장강도'],
+  '/tools/unit/viscosity':       ['점도', 'viscosity', 'cp', 'cst', 'sus', 'sae', 'iso vg', '엔진오일', '0w-20', '5w-30', '윤활유', '유압유', '동점도', '절대점도'],
+  '/tools/unit/brewing':         ['brix', 'plato', 'sg', '비중', '당도', 'baume', '보메', 'oechsle', '왹슬레', 'abv', 'proof', '도수', '자가양조', '홈브루잉', '와인', '잼', '치즈', 'ph', '산도'],
+  '/tools/unit/radiation':       ['방사선', 'sievert', '시버트', 'msv', 'usv', 'gray', 'rad', 'bq', '베크렐', 'curie', '큐리', '방사능', 'ct', '엑스레이', 'x-ray', 'sar', 'emf', '전자파', '후쿠시마'],
   '/tools/unit/battery':         ['배터리용량', 'mah', '보조배터리'],
 
   // 개발자
@@ -118,6 +123,11 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/dev/number-base':      ['진법', '2진법', '16진법', 'hex', 'binary'],
   '/tools/dev/css-converter':    ['css단위', 'px', 'rem', 'em', 'clamp'],
   '/tools/dev/network-test':     ['핑', 'ping', '인터넷속도', '회선', '티켓팅'],
+  '/tools/dev/token-counter':    ['토큰', 'token', 'gpt', 'claude', 'gemini', 'ai비용', 'api비용', 'tokenizer', 'tiktoken', '프롬프트', '컨텍스트'],
+  '/tools/dev/og-preview':       ['og', 'opengraph', '오픈그래프', '메타태그', '카카오톡', '카톡', '미리보기', '썸네일', 'twitter card', 'facebook', 'linkedin', 'slack', 'og:image'],
+
+  // 교육
+  '/tools/edu/gpa-converter':    ['학점', 'gpa', '학점환산', '4.5', '4.3', 'wes', '유학', '평점', 'a+', '평어', '백분위'],
 
   // 인테리어
   '/tools/interior/wallpaper':   ['벽지', '도배', '도배지'],
@@ -164,13 +174,14 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/art/exposure':         ['노출', '조리개', '셔터스피드', 'iso'],
 
   // 금융 추가
-  '/tools/finance/savings':      ['적금', '예금', '적금이자'],
+  '/tools/finance/savings':      ['저축', '월저축', '저축률', '재무진단', '6항아리', '청년도약', 'isa', '연금저축'],
   '/tools/finance/severance':    ['퇴직금', '퇴직', '평균임금'],
   '/tools/finance/freelance-tax':['프리랜서', '3.3', '종합소득세', '사업소득'],
   '/tools/finance/auction':      ['경매', '부동산경매', '낙찰가'],
   '/tools/finance/rent-jeonse':  ['전월세', '전세월세', '전세전환', '월세전환'],
   '/tools/finance/stock-decision': ['주식매수', '주식매도', '손익', '익절', '손절'],
   '/tools/finance/gold-converter': ['금시세', '돈', '한돈', '금변환', '금값'],
+  '/tools/finance/historical-money': ['화폐사', '화폐가치', '환', '구원', '옛날돈', '인플레이션', '구매력', '화폐개혁', '1953', '1962', 'cpi', '소비자물가지수'],
 }
 
 // ── 카테고리 인덱스 ────────────────────────────────────────────

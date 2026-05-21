@@ -51,7 +51,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
   .ingBtn:hover {
-  border-color: rgba(200,255,62,0.4);
+  border-color: rgba(14,165,233,0.4);
   color: var(--text);
 }
 }
@@ -65,12 +65,12 @@
   background: var(--accent);
   border-color: var(--accent);
 }
-.ingActive .ingName { color: #0D0D0D; font-weight: 700; }
+.ingActive .ingName { color: #ffffff; font-weight: 700; }
 .ingBadge {
   position: absolute;
   top: 6px; right: 6px;
   width: 16px; height: 16px;
-  background: #0D0D0D;
+  background: var(--bg2);
   color: var(--accent);
   border-radius: 50%;
   font-size: 10px;
@@ -102,21 +102,21 @@
 }
 .condActive {
   background: var(--accent-dim);
-  border-color: rgba(200,255,62,0.5);
+  border-color: rgba(14,165,233,0.5);
   color: var(--accent);
   font-weight: 700;
 }
 
 /* state color variants */
-.stateFresh.condActive { background: rgba(62,255,155,0.12); border-color: rgba(62,255,155,0.5); color: #3EFF9B; }
-.stateFridge.condActive { background: rgba(62,200,255,0.12); border-color: rgba(62,200,255,0.5); color: #3EC8FF; }
+.stateFresh.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
+.stateFridge.condActive { background: rgba(8,145,178,0.18); border-color: rgba(8,145,178,0.5); color: #0891B2; }
 .stateFrozen.condActive { background: rgba(155,89,182,0.12); border-color: rgba(155,89,182,0.5); color: #B885DA; }
 
 /* temperature buttons */
-.tempBtn.temp160.condActive { background: rgba(62,200,255,0.12); border-color: rgba(62,200,255,0.5); color: #3EC8FF; }
-.tempBtn.temp170.condActive { background: rgba(62,255,155,0.12); border-color: rgba(62,255,155,0.5); color: #3EFF9B; }
-.tempBtn.temp180.condActive { background: var(--accent-dim); border-color: rgba(200,255,62,0.5); color: var(--accent); }
-.tempBtn.temp190.condActive { background: rgba(255,140,62,0.12); border-color: rgba(255,140,62,0.5); color: #FF8C3E; }
+.tempBtn.temp160.condActive { background: rgba(8,145,178,0.18); border-color: rgba(8,145,178,0.5); color: #0891B2; }
+.tempBtn.temp170.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
+.tempBtn.temp180.condActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.5); color: var(--accent); }
+.tempBtn.temp190.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: #EA580C; }
 
 .recBadge {
   display: inline-block;
@@ -129,28 +129,28 @@
   font-weight: 700;
 }
 .tempRecBorder {
-  border-color: rgba(200,255,62,0.6) !important;
+  border-color: rgba(14,165,233,0.6) !important;
 }
 
 /* quantity */
-.qtySmall.condActive { background: rgba(62,255,155,0.12); border-color: rgba(62,255,155,0.5); color: #3EFF9B; }
-.qtyLarge.condActive { background: rgba(255,140,62,0.12); border-color: rgba(255,140,62,0.5); color: #FF8C3E; }
+.qtySmall.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
+.qtyLarge.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: #EA580C; }
 
 .warnNote {
   margin-top: 10px;
   padding: 10px 12px;
-  background: rgba(255,140,62,0.08);
-  border: 1px solid rgba(255,140,62,0.25);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.25);
   border-radius: 10px;
   font-size: 12px;
-  color: #FF8C3E;
+  color: #EA580C;
   line-height: 1.6;
 }
 .infoNote {
   margin-top: 10px;
   padding: 10px 12px;
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.2);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.2);
   border-radius: 10px;
   font-size: 12px;
   color: var(--muted);
@@ -178,7 +178,7 @@
   width: 90px;
 }
 .customTempInput:focus {
-  border-color: rgba(200,255,62,0.5);
+  border-color: rgba(14,165,233,0.5);
 }
 
 /* ── OPTIONS checkbox ── */
@@ -200,14 +200,14 @@
   font-size: 13px;
   color: var(--text);
 }@media (hover: hover) {
-  .optItem:hover { border-color: rgba(200,255,62,0.3); }
+  .optItem:hover { border-color: rgba(14,165,233,0.3); }
 }
 .optItem input { accent-color: var(--accent); width: 16px; height: 16px; }
 
 /* ── RESULT CARD ── */
 .result {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.25);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 14px;
   padding: 22px 24px;
   animation: fadeUp 0.3s ease;
@@ -228,8 +228,8 @@
 
 .tempBadge {
   display: inline-block;
-  background: rgba(200,255,62,0.12);
-  border: 1px solid rgba(200,255,62,0.4);
+  background: rgba(14,165,233,0.18);
+  border: 1px solid rgba(14,165,233,0.4);
   color: var(--accent);
   padding: 4px 12px;
   border-radius: 99px;
@@ -272,8 +272,8 @@
 .timeNote { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 .totalBox {
-  background: rgba(200,255,62,0.06);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 10px;
   padding: 14px 18px;
   text-align: center;
@@ -349,7 +349,7 @@
 
 /* tip box */
 .tipBox {
-  background: rgba(200,255,62,0.05);
+  background: rgba(14,165,233,0.14);
   border-left: 3px solid var(--accent);
   border-radius: 8px;
   padding: 12px 16px;
@@ -362,8 +362,8 @@
 
 /* warn (interior) */
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.3);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.3);
   border-radius: 10px;
   padding: 12px 16px;
   margin-bottom: 12px;
@@ -371,19 +371,19 @@
   color: var(--text);
   line-height: 1.7;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 /* airfryer */
 .airBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 10px;
   padding: 14px 18px;
   margin-bottom: 12px;
 }
 .airHead {
   font-size: 12px;
-  color: #3EC8FF;
+  color: #0891B2;
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: 0.05em;
@@ -407,7 +407,7 @@
 .startBtn {
   width: 100%;
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   padding: 14px;
@@ -424,20 +424,20 @@
 /* ── TIMER ── */
 .timerCard {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.3);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 24px 24px;
   text-align: center;
   transition: border-color 0.3s;
 }
 .timerCardDone {
-  border-color: #3EFF9B;
-  background: rgba(62,255,155,0.05);
+  border-color: #059669;
+  background: rgba(16,185,129,0.14);
   animation: flash 0.5s 2;
 }
 @keyframes flash {
-  0%, 100% { background: rgba(62,255,155,0.05); }
-  50% { background: rgba(62,255,155,0.2); }
+  0%, 100% { background: rgba(16,185,129,0.14); }
+  50% { background: rgba(16,185,129,0.2); }
 }
 .timerTitle {
   font-size: 13px;
@@ -445,7 +445,7 @@
   margin-bottom: 14px;
 }
 .timerTitleDone {
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 700;
   font-size: 15px;
 }
@@ -467,7 +467,7 @@
   color: var(--accent);
   letter-spacing: -1px;
 }
-.timerCenterDone { color: #3EFF9B; }
+.timerCenterDone { color: #059669; }
 .timerBtns {
   display: flex;
   gap: 8px;
@@ -489,11 +489,11 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .timerBtn:hover { border-color: rgba(200,255,62,0.4); }
+  .timerBtn:hover { border-color: rgba(14,165,233,0.4); }
 }
 .timerBtnPrimary {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
 }@media (hover: hover) {
   .timerBtnPrimary:hover { filter: brightness(1.05); }
@@ -502,14 +502,14 @@
 .timerDoneMsg {
   margin-top: 14px;
   font-size: 13px;
-  color: #3EFF9B;
+  color: #059669;
   line-height: 1.7;
 }
 
 /* disclaimer */
 .disclaimer {
-  background: rgba(255,140,62,0.05);
-  border: 1px solid rgba(255,140,62,0.2);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.2);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12px;

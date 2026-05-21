@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -184,15 +184,15 @@
   font-weight: 700;
   margin-top: 4px;
 }
-.typeFree    { border-color: rgba(62,255,155,0.40); }
-.typePartial { border-color: rgba(255,215,0,0.40); }
-.typePaid    { border-color: rgba(255,107,107,0.40); }
-.typeFree.typeActive    { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
-.typePartial.typeActive { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.typePaid.typeActive    { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.typeFree    .typeBadge { background: rgba(62,255,155,0.18);  color: #3EFF9B; }
-.typePartial .typeBadge { background: rgba(255,215,0,0.18);   color: #FFD700; }
-.typePaid    .typeBadge { background: rgba(255,107,107,0.18); color: #FF6B6B; }
+.typeFree    { border-color: rgba(16,185,129,0.40); }
+.typePartial { border-color: rgba(202,138,4,0.40); }
+.typePaid    { border-color: rgba(220,38,38,0.40); }
+.typeFree.typeActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.typePartial.typeActive { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.typePaid.typeActive    { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.typeFree    .typeBadge { background: rgba(16,185,129,0.18);  color: #059669; }
+.typePartial .typeBadge { background: rgba(202,138,4,0.18);   color: #CA8A04; }
+.typePaid    .typeBadge { background: rgba(220,38,38,0.18); color: #DC2626; }
 
 /* ── 카드사 프리셋 ── */
 .cardBrandRow {
@@ -215,22 +215,22 @@
 }@media (hover: hover) {
   .cardBrandBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.cbShinhan  { border-color: rgba(62,200,255,0.40); }
-.cbSamsung  { border-color: rgba(255,215,0,0.40); }
-.cbKbk      { border-color: rgba(200,255,62,0.40); }
-.cbHyundai  { border-color: rgba(255,107,107,0.40); }
+.cbShinhan  { border-color: rgba(8,145,178,0.40); }
+.cbSamsung  { border-color: rgba(202,138,4,0.40); }
+.cbKbk      { border-color: rgba(14,165,233,0.40); }
+.cbHyundai  { border-color: rgba(220,38,38,0.40); }
 .cbLotte    { border-color: rgba(155,89,182,0.40); }
-.cbWoori    { border-color: rgba(62,255,155,0.40); }
-.cbNh       { border-color: rgba(255,140,62,0.40); }
+.cbWoori    { border-color: rgba(16,185,129,0.40); }
+.cbNh       { border-color: rgba(234,88,12,0.40); }
 .cbHana     { border-color: var(--accent); }
 .cbCustom   { border-color: var(--border); }
-.cbShinhan.cbActive  { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
-.cbSamsung.cbActive  { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.cbKbk.cbActive      { background: rgba(200,255,62,0.10); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.cbHyundai.cbActive  { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.cbLotte.cbActive    { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
-.cbWoori.cbActive    { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
-.cbNh.cbActive       { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
+.cbShinhan.cbActive  { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.cbSamsung.cbActive  { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.cbKbk.cbActive      { background: rgba(14,165,233,0.18); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.cbHyundai.cbActive  { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.cbLotte.cbActive    { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.cbWoori.cbActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.cbNh.cbActive       { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 .cbHana.cbActive     { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .cbCustom.cbActive   { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
@@ -264,7 +264,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 24px;
-  color: #FF6B6B;
+  color: #DC2626;
 }
 .heroInterest small {
   font-family: 'Noto Sans KR', sans-serif;
@@ -301,17 +301,17 @@
 .analysisTable .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .analysisTable .totalRow td:first-child { color: var(--accent); }
 .analysisTable .totalRow td:last-child  { color: var(--accent); font-size: 15px; }
 .analysisTable .interestRow td {
-  background: rgba(255,107,107,0.06);
+  background: rgba(220,38,38,0.14);
   border-bottom: none;
 }
-.analysisTable .interestRow td:first-child { color: #FF6B6B; }
-.analysisTable .interestRow td:last-child  { color: #FF6B6B; font-size: 14px; }
+.analysisTable .interestRow td:first-child { color: #DC2626; }
+.analysisTable .interestRow td:last-child  { color: #DC2626; font-size: 14px; }
 
 /* ── 비교 막대 그래프 ── */
 .barCompare {
@@ -347,9 +347,9 @@
   transition: width 0.3s ease;
 }
 .barFillCash    { background: var(--accent); }
-.barFillFree    { background: #3EFF9B; }
+.barFillFree    { background: #059669; }
 .barFillPaid    {
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) calc(var(--principal-pct, 50%) * 1%), #FF6B6B calc(var(--principal-pct, 50%) * 1%), #FF6B6B 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) calc(var(--principal-pct, 50%) * 1%), #DC2626 calc(var(--principal-pct, 50%) * 1%), #DC2626 100%);
 }
 .barValue {
   font-family: 'Inter', system-ui, sans-serif;
@@ -421,7 +421,7 @@
 .scheduleTable td:first-child { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .scheduleTable .colPay      { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .scheduleTable .colPrincipal{ color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.scheduleTable .colInterest { color: #FF6B6B; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleTable .colInterest { color: #DC2626; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .scheduleTable .colBalance  { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── 비교 카드 (탭 2) — 3개 가로 ── */
@@ -442,9 +442,9 @@
   flex-direction: column;
   gap: 6px;
 }
-.compareCard.cmpCash    { border-color: var(--accent);   background: rgba(200,255,62,0.04); }
-.compareCard.cmpFree    { border-color: #3EFF9B;         background: rgba(62,255,155,0.04); }
-.compareCard.cmpPaid    { border-color: #FF6B6B;         background: rgba(255,107,107,0.04); }
+.compareCard.cmpCash    { border-color: var(--accent);   background: rgba(14,165,233,0.14); }
+.compareCard.cmpFree    { border-color: #059669;         background: rgba(16,185,129,0.14); }
+.compareCard.cmpPaid    { border-color: #DC2626;         background: rgba(220,38,38,0.14); }
 .compareTitle {
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -454,8 +454,8 @@
   margin-bottom: 4px;
 }
 .compareCard.cmpCash .compareTitle { color: var(--accent); }
-.compareCard.cmpFree .compareTitle { color: #3EFF9B; }
-.compareCard.cmpPaid .compareTitle { color: #FF6B6B; }
+.compareCard.cmpFree .compareTitle { color: #059669; }
+.compareCard.cmpPaid .compareTitle { color: #DC2626; }
 .compareScenarioName {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
@@ -471,8 +471,8 @@
   letter-spacing: -1px;
 }
 .compareCard.cmpCash .compareTotalValue { color: var(--accent); }
-.compareCard.cmpFree .compareTotalValue { color: #3EFF9B; }
-.compareCard.cmpPaid .compareTotalValue { color: #FF6B6B; }
+.compareCard.cmpFree .compareTotalValue { color: #059669; }
+.compareCard.cmpPaid .compareTotalValue { color: #DC2626; }
 .compareDetail {
   font-size: 12px;
   color: var(--muted);
@@ -498,13 +498,13 @@
 }
 .diffRow:last-child { border-bottom: none; }
 .diffRow strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.diffPositive { color: #3EFF9B; }
-.diffNegative { color: #FF6B6B; }
+.diffPositive { color: #059669; }
+.diffNegative { color: #DC2626; }
 
 /* ── 기회비용 카드 ── */
 .opportunityCard {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 14px;
   padding: 18px 20px;
 }
@@ -512,7 +512,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: #3EC8FF;
+  color: #0891B2;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -535,7 +535,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.opportunityResult strong { color: #3EC8FF; }
+.opportunityResult strong { color: #0891B2; }
 
 /* ── 개월수별 비교 표 (탭 3) ── */
 .compareTable {
@@ -567,11 +567,11 @@
   color: var(--text);
   white-space: nowrap;
 }
-.rowSafe   { background: rgba(62,255,155,0.06); }
-.rowMid    { background: rgba(255,140,62,0.05); }
-.rowDanger { background: rgba(255,107,107,0.08); }
-.rowDanger td { color: #FF6B6B !important; }
-.rowDanger td:first-child { color: #FF6B6B !important; }
+.rowSafe   { background: rgba(16,185,129,0.14); }
+.rowMid    { background: rgba(234,88,12,0.14); }
+.rowDanger { background: rgba(220,38,38,0.14); }
+.rowDanger td { color: #DC2626 !important; }
+.rowDanger td:first-child { color: #DC2626 !important; }
 
 /* ── 그래프 (탭 3) ── */
 .graphWrap {
@@ -605,15 +605,15 @@
 .recoText strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .warnCard {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnCard strong { color: #FF6B6B; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warnCard strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* ── 결과 복사 ── */
 .copyBtn {

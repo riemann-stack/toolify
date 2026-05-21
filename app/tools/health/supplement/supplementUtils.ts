@@ -36,22 +36,22 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
   if (total < OMEGA3_GUIDELINES.minDaily) {
     status = 'under'
     statusLabel = '🟡 권장 미달'
-    statusColor = '#FFD700'
+    statusColor = '#CA8A04'
     interpretation = `${total}mg은 권장 (250~500mg)에 못 미칩니다. 식사 (등푸른 생선) 보충 또는 용량 증가 고려.`
   } else if (total <= OMEGA3_GUIDELINES.idealMax) {
     status = 'meet'
     statusLabel = '🟢 적정'
-    statusColor = '#3EFF9B'
+    statusColor = '#059669'
     interpretation = `${total}mg은 일반 권장 범위 (250~500mg) 안. 안전.`
   } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
     status = 'over'
     statusLabel = '🟡 약간 초과 (안전 범위)'
-    statusColor = '#FF8C3E'
+    statusColor = '#EA580C'
     interpretation = `${total}mg은 일반 권장보다 높지만 상한 (3,000mg) 안. 심혈관 치료 목적이면 의사 상담.`
   } else {
     status = 'exceed'
     statusLabel = '🔴 상한 초과'
-    statusColor = '#FF6B6B'
+    statusColor = '#DC2626'
     interpretation = `${total}mg은 FDA 상한 (3,000mg) 초과! 출혈 위험 ↑. 즉시 용량 조정·의사 상담.`
   }
 
@@ -365,19 +365,19 @@ export function gaugeStatus(total: number, rda?: number, ul?: number): {
   const ulPct = ul ? (total / ul) * 100 : 0
 
   if (ul && total > ul) {
-    return { status: 'exceed', rdaPct, ulPct, color: '#FF6B6B', label: '🚨 상한 초과 (즉시 점검)' }
+    return { status: 'exceed', rdaPct, ulPct, color: '#DC2626', label: '🚨 상한 초과 (즉시 점검)' }
   }
   if (ul && total > ul * 0.8) {
-    return { status: 'caution', rdaPct, ulPct, color: '#FF8C3E', label: '🟠 상한 임박 (주의)' }
+    return { status: 'caution', rdaPct, ulPct, color: '#EA580C', label: '🟠 상한 임박 (주의)' }
   }
   if (rda && total > rda * 2) {
-    return { status: 'high', rdaPct, ulPct, color: '#FFD700', label: '🟡 권장 초과 (200%+)' }
+    return { status: 'high', rdaPct, ulPct, color: '#CA8A04', label: '🟡 권장 초과 (200%+)' }
   }
   if (rda && total >= rda * 0.8) {
-    return { status: 'ok', rdaPct, ulPct, color: '#3EFF9B', label: '🟢 적정' }
+    return { status: 'ok', rdaPct, ulPct, color: '#059669', label: '🟢 적정' }
   }
   if (rda) {
-    return { status: 'low', rdaPct, ulPct, color: '#3EC8FF', label: '🔵 권장 미달' }
+    return { status: 'low', rdaPct, ulPct, color: '#0891B2', label: '🔵 권장 미달' }
   }
   return { status: 'ok', rdaPct: 0, ulPct: 0, color: 'var(--muted)', label: '기준 없음' }
 }

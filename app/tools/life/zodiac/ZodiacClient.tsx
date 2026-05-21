@@ -168,7 +168,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--text)' }}>음력 생년월일</strong>이라면{' '}
-              <Link href="/tools/date/lunar" style={{ color: '#3EC8FF', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
+              <Link href="/tools/date/lunar" style={{ color: '#0891B2', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
               먼저 양력 변환 후 입력하세요. 음력 설날 전후 출생자는 띠가 1년 차이날 수 있습니다.
             </div>
           </div>
@@ -237,12 +237,12 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               <div className={styles.card}>
                 <label className={styles.cardLabel}>{profile.star.emoji} {profile.star.name} — 강점·주의점</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 6 }}>
-                  <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#3EFF9B', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
+                  <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 10, padding: '10px 12px' }}>
+                    <p style={{ fontSize: 12, color: '#059669', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
                     <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.strengths.join(' · ')}</p>
                   </div>
-                  <div style={{ background: 'rgba(255,140,62,0.04)', border: '1px solid rgba(255,140,62,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#FF8C3E', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
+                  <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '10px 12px' }}>
+                    <p style={{ fontSize: 12, color: '#EA580C', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
                     <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.cautions.join(' · ')}</p>
                   </div>
                 </div>
@@ -376,7 +376,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               }`}>
                 <div className={styles.compatScoreLabel}>종합 궁합 (재미용)</div>
                 <div className={styles.compatScoreNum}
-                  style={{ color: compatResult.zodiacEval.score >= 4 ? '#3EFF9B' : compatResult.zodiacEval.score === 3 ? '#FFD700' : '#FF6B6B' }}>
+                  style={{ color: compatResult.zodiacEval.score >= 4 ? '#059669' : compatResult.zodiacEval.score === 3 ? '#CA8A04' : '#DC2626' }}>
                   {compatResult.overall.toFixed(1)} / 5.0
                 </div>
                 <div className={styles.starRow}>
@@ -513,7 +513,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                               const aZ = getZodiacByYear(a.year)
                               const bZ = getZodiacByYear(b.year)
                               const ev = evalZodiacPair(aZ.name, bZ.name)
-                              const color = ev.score >= 4 ? '#3EFF9B' : ev.score === 3 ? '#FFD700' : '#FF6B6B'
+                              const color = ev.score >= 4 ? '#059669' : ev.score === 3 ? '#CA8A04' : '#DC2626'
                               const icon = ev.score >= 4 ? '🟢' : ev.score === 3 ? '🟡' : '🔴'
                               return (
                                 <td key={b.id} style={{ color, fontSize: 11 }}>

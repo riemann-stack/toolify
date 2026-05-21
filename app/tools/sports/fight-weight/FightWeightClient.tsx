@@ -637,10 +637,10 @@ export default function FightWeightClient() {
 
           {/* 체급 변경 권장 */}
           {recommendNextClass && (
-            <div className={styles.healthWarn} style={{ background: 'rgba(255,140,62,0.06)', borderColor: 'rgba(255,140,62,0.4)', color: '#FFE0C8' }}>
+            <div className={styles.healthWarn} style={{ background: 'rgba(234,88,12,0.06)', borderColor: 'rgba(234,88,12,0.4)', color: '#FFE0C8' }}>
               <span className={styles.warnIcon}>🔶</span>
               <div>
-                <p><strong style={{ color: '#FF8C3E' }}>{daysToWeighIn}일 이내 {needToLose.toFixed(2)}kg 감량은 권장되지 않습니다.</strong></p>
+                <p><strong style={{ color: '#EA580C' }}>{daysToWeighIn}일 이내 {needToLose.toFixed(2)}kg 감량은 권장되지 않습니다.</strong></p>
                 <p style={{ marginTop: 6 }}>
                   한 단계 위 체급 — <strong style={{ color: 'var(--text)' }}>{recommendNextClass.name} ({recommendNextClass.limit === Infinity ? '무제한' : `${recommendNextClass.limit}kg 이하`})</strong> 또는 계체일을 늦추는 것을 고려해보세요.
                 </p>

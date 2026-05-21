@@ -49,11 +49,11 @@ export function calcMembership(input: MembershipInput): MembershipResult {
   if (!isFinite(breakevenYears) || breakevenYears > input.holdingYears * 1.2) {
     recommendation = 'nonmember'
     recoLabel = '🔴 비회원 권장'
-    recoColor = '#FF6B6B'
+    recoColor = '#DC2626'
   } else if (breakevenYears < input.holdingYears * 0.5) {
     recommendation = 'member'
     recoLabel = '🟢 회원 권장'
-    recoColor = '#3EFF9B'
+    recoColor = '#059669'
   } else {
     recommendation = 'neutral'
     recoLabel = '🟡 중립 (조건 따라)'

@@ -40,14 +40,14 @@ export interface FocalPreset {
 }
 
 export const POPULAR_FOCALS: FocalPreset[] = [
-  { fl: 14,  label: '14mm', category: '초광각',  color: '#FF3E8C' },
-  { fl: 24,  label: '24mm', category: '광각',    color: '#FF8C3E' },
-  { fl: 35,  label: '35mm', category: '광각',    color: '#FFB83E' },
-  { fl: 50,  label: '50mm', category: '표준',    color: '#3EFFD0' },
-  { fl: 85,  label: '85mm', category: '단망원',  color: '#3EC8FF' },
+  { fl: 14,  label: '14mm', category: '초광각',  color: '#DB2777' },
+  { fl: 24,  label: '24mm', category: '광각',    color: '#EA580C' },
+  { fl: 35,  label: '35mm', category: '광각',    color: '#D97706' },
+  { fl: 50,  label: '50mm', category: '표준',    color: '#0D9488' },
+  { fl: 85,  label: '85mm', category: '단망원',  color: '#0891B2' },
   { fl: 135, label: '135mm', category: '망원',   color: '#9B59B6' },
-  { fl: 200, label: '200mm', category: '망원',   color: '#C485E0' },
-  { fl: 400, label: '400mm', category: '초망원', color: '#FF3E8C' },
+  { fl: 200, label: '200mm', category: '망원',   color: '#9333EA' },
+  { fl: 400, label: '400mm', category: '초망원', color: '#DB2777' },
 ]
 
 /* ─────────────────────────────────────────────

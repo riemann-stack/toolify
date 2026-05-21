@@ -25,7 +25,7 @@
   .tab:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   color: var(--accent);
   font-weight: 700;
 }
@@ -109,7 +109,7 @@
   .segBtn:hover { color: var(--text); }
 }
 .segBtnActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -154,10 +154,10 @@
   border-radius: 999px;
   letter-spacing: -0.01em;
 }
-.tempVal[data-zone="cold"]    { color: #3EC8FF; background: rgba(62,200,255,0.12); }
-.tempVal[data-zone="optimal"] { color: #3EFF9B; background: rgba(62,255,155,0.12); }
-.tempVal[data-zone="warm"]    { color: #C8FF3E; background: rgba(200,255,62,0.12); }
-.tempVal[data-zone="hot"]     { color: #FF8C3E; background: rgba(255,140,62,0.12); }
+.tempVal[data-zone="cold"]    { color: #0891B2; background: rgba(8,145,178,0.18); }
+.tempVal[data-zone="optimal"] { color: #059669; background: rgba(16,185,129,0.18); }
+.tempVal[data-zone="warm"]    { color: #0EA5E9; background: rgba(14,165,233,0.18); }
+.tempVal[data-zone="hot"]     { color: #EA580C; background: rgba(234,88,12,0.18); }
 
 .tempSlider {
   width: 100%;
@@ -165,7 +165,7 @@
   appearance: none;
   height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #3EC8FF 0%, #3EFF9B 30%, #C8FF3E 60%, #FF8C3E 100%);
+  background: linear-gradient(90deg, #0891B2 0%, #059669 30%, #0EA5E9 60%, #EA580C 100%);
   outline: none;
   cursor: pointer;
 }
@@ -260,15 +260,15 @@
   transition: all .15s;
   text-align: left;
 }@media (hover: hover) {
-  .chkItem:hover { border-color: rgba(200,255,62,0.3); }
+  .chkItem:hover { border-color: rgba(14,165,233,0.3); }
 }
 .chkChecked {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .chkDanger {
-  background: rgba(255,107,107,0.08) !important;
-  border-color: #FF6B6B !important;
+  background: rgba(220,38,38,0.14) !important;
+  border-color: #DC2626 !important;
 }
 .chkBox {
   display: inline-flex;
@@ -287,11 +287,11 @@
 .chkChecked .chkBox {
   background: var(--accent);
   border-color: var(--accent);
-  color: #0B0B0B;
+  color: #ffffff;
 }
 .chkDanger .chkBox {
-  background: #FF6B6B !important;
-  border-color: #FF6B6B !important;
+  background: #DC2626 !important;
+  border-color: #DC2626 !important;
   color: #fff !important;
 }
 .chkLabel { flex: 1; }
@@ -305,10 +305,10 @@
   border-radius: 14px;
   margin-bottom: 16px;
 }
-.stageInitial     { border-color: #FF6B6B; }
-.stageUnstable    { border-color: #FF8C3E; }
-.stageStabilizing { border-color: #C8FF3E; }
-.stageStable      { border-color: #3EFF9B; }
+.stageInitial     { border-color: #DC2626; }
+.stageUnstable    { border-color: #EA580C; }
+.stageStabilizing { border-color: #0EA5E9; }
+.stageStable      { border-color: #059669; }
 
 .statusHead {
   display: flex;
@@ -324,10 +324,10 @@
   color: var(--text);
   margin: 0 0 2px;
 }
-.stageInitial .statusLabel     { color: #FF6B6B; }
-.stageUnstable .statusLabel    { color: #FF8C3E; }
-.stageStabilizing .statusLabel { color: #C8FF3E; }
-.stageStable .statusLabel      { color: #3EFF9B; }
+.stageInitial .statusLabel     { color: #DC2626; }
+.stageUnstable .statusLabel    { color: #EA580C; }
+.stageStabilizing .statusLabel { color: #0EA5E9; }
+.stageStable .statusLabel      { color: #059669; }
 .statusDesc {
   font-size: 12px;
   color: var(--muted);
@@ -349,7 +349,7 @@
 }
 .statusBarFill {
   height: 100%;
-  background: linear-gradient(90deg, #FF6B6B 0%, #FF8C3E 33%, #C8FF3E 66%, #3EFF9B 100%);
+  background: linear-gradient(90deg, #DC2626 0%, #EA580C 33%, #0EA5E9 66%, #059669 100%);
   transition: width .3s;
 }
 .statusDays {
@@ -408,9 +408,9 @@
   border-radius: 12px;
   margin-bottom: 12px;
 }
-.bake_ok    { background: rgba(62,255,155,0.06); border: 1px solid rgba(62,255,155,0.3); }
-.bake_maybe { background: rgba(255,140,62,0.06); border: 1px solid rgba(255,140,62,0.3); }
-.bake_no    { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.3); }
+.bake_ok    { background: rgba(16,185,129,0.14); border: 1px solid rgba(16,185,129,0.3); }
+.bake_maybe { background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.3); }
+.bake_no    { background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.3); }
 .bakeLabel {
   font-size: 12px;
   color: var(--muted);
@@ -423,9 +423,9 @@
   font-weight: 800;
   margin: 0 0 6px;
 }
-.bake_ok .bakeStatus    { color: #3EFF9B; }
-.bake_maybe .bakeStatus { color: #FF8C3E; }
-.bake_no .bakeStatus    { color: #FF6B6B; }
+.bake_ok .bakeStatus    { color: #059669; }
+.bake_maybe .bakeStatus { color: #EA580C; }
+.bake_no .bakeStatus    { color: #DC2626; }
 .bakeHint {
   font-size: 12px;
   color: var(--muted);
@@ -522,10 +522,10 @@
   transition: all .15s;
   text-align: center;
 }@media (hover: hover) {
-  .condBtn:hover { border-color: rgba(200,255,62,0.3); }
+  .condBtn:hover { border-color: rgba(14,165,233,0.3); }
 }
 .condBtnActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .condEmoji { font-size: 22px; }
@@ -542,8 +542,8 @@
 
 /* ── 피크 히어로 ───────────────── */
 .peakHero {
-  background: linear-gradient(135deg, rgba(200,255,62,0.08) 0%, rgba(62,255,155,0.04) 100%);
-  border: 1px solid rgba(200,255,62,0.25);
+  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(16,185,129,0.14) 100%);
+  border: 1px solid rgba(14,165,233,0.25);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -621,15 +621,15 @@
 /* ── 사용 타이밍 카드 ─────── */
 .useCard {
   padding: 18px 22px;
-  background: rgba(62,255,155,0.06);
-  border: 1px solid rgba(62,255,155,0.3);
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.3);
   border-radius: 12px;
   margin-bottom: 16px;
 }
 .useLabel {
   font-size: 13px;
   font-weight: 700;
-  color: #3EFF9B;
+  color: #059669;
   margin: 0 0 6px;
 }
 .useDesc {
@@ -688,7 +688,7 @@
   font-weight: 700 !important;
 }
 .compActive {
-  background: rgba(200,255,62,0.06);
+  background: rgba(14,165,233,0.14);
 }
 .compActive td { color: var(--accent) !important; font-weight: 800 !important; }
 

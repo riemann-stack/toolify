@@ -158,10 +158,10 @@ export default function KimjangPage() {
           <h2 style={sectionTitle}>한국 김장 시기 · 지역별 차이</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { region: '🗻 강원·경기 북부', date: '11월 중순', color: '#3EC8FF', tips: '일찍 추워서 짧게 절임. 담백한 맛' },
-              { region: '🏙️ 서울·인천', date: '11월 말 ~ 12월 초', color: '#3EFF9B', tips: '표준 시기. 도매시장 가격 변동 큼' },
-              { region: '🌾 충청·전북', date: '11월 말', color: '#FFB83E', tips: '양념 풍성. 젓갈·갈치속젓 활용' },
-              { region: '🍊 전남·경남', date: '12월 초~중', color: '#FF8C3E', tips: '늦김장. 양념 많고 진함' },
+              { region: '🗻 강원·경기 북부', date: '11월 중순', color: '#0891B2', tips: '일찍 추워서 짧게 절임. 담백한 맛' },
+              { region: '🏙️ 서울·인천', date: '11월 말 ~ 12월 초', color: '#059669', tips: '표준 시기. 도매시장 가격 변동 큼' },
+              { region: '🌾 충청·전북', date: '11월 말', color: '#D97706', tips: '양념 풍성. 젓갈·갈치속젓 활용' },
+              { region: '🍊 전남·경남', date: '12월 초~중', color: '#EA580C', tips: '늦김장. 양념 많고 진함' },
               { region: '🌊 제주', date: '12월 중', color: '#B885DA', tips: '겨울도 따뜻. 단기 보관용' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>

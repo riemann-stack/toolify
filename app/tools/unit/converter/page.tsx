@@ -44,7 +44,7 @@ export default function ConverterPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>입력</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#C485E0', fontWeight: 700 }}>결과</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#9333EA', fontWeight: 700 }}>결과</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,7 +83,7 @@ export default function ConverterPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -105,7 +105,7 @@ export default function ConverterPage() {
               { name: '🧴 부피', items: ['홉(合) = 180ml', '되(升) = 1.8L', '말(斗) = 18L', '컵 = 200ml (한국 표준)', '소주잔 ≈ 50ml · 종이컵 ≈ 180ml'] },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-                <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#C485E0', marginBottom: '6px' }}>{c.name}</p>
+                <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>{c.name}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                   {c.items.map((it, j) => <li key={j}>· {it}</li>)}
                 </ul>
@@ -175,7 +175,7 @@ export default function ConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -215,7 +215,7 @@ export default function ConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -244,7 +244,7 @@ export default function ConverterPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>분야</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>대표 기울기</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#C485E0', fontWeight: 700 }}>각도 환산</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#9333EA', fontWeight: 700 }}>각도 환산</th>
                 </tr>
               </thead>
               <tbody>
@@ -264,7 +264,7 @@ export default function ConverterPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#C485E0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>

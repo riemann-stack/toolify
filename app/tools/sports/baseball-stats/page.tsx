@@ -72,12 +72,12 @@ export default function BaseballStatsPage() {
               </thead>
               <tbody>
                 {[
-                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: '#FFD700', who: '이정후·트라웃 시즌급' },
-                  { ops: '0.900~1.000',  lv: '✅ 올스타급',     cls: '#C8FF3E', who: 'KBO 상위 5%' },
-                  { ops: '0.800~0.900',  lv: '주전급',          cls: '#3EFF9B', who: 'KBO 상위 20%' },
+                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: '#CA8A04', who: '이정후·트라웃 시즌급' },
+                  { ops: '0.900~1.000',  lv: '✅ 올스타급',     cls: '#0EA5E9', who: 'KBO 상위 5%' },
+                  { ops: '0.800~0.900',  lv: '주전급',          cls: '#059669', who: 'KBO 상위 20%' },
                   { ops: '0.700~0.800',  lv: '평균',            cls: '#B8B8B0', who: '리그 평균 수준' },
-                  { ops: '0.600~0.700',  lv: '🔶 평균 이하',    cls: '#FF8C3E', who: '백업 후보' },
-                  { ops: '0.600 미만',   lv: '❌ 교체 권장',    cls: '#FF6B6B', who: '마이너급' },
+                  { ops: '0.600~0.700',  lv: '🔶 평균 이하',    cls: '#EA580C', who: '백업 후보' },
+                  { ops: '0.600 미만',   lv: '❌ 교체 권장',    cls: '#DC2626', who: '마이너급' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.ops}</td>
@@ -121,10 +121,10 @@ export default function BaseballStatsPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: '#FFD700' },
-              { name: 'BABIP', kor: '인플레이 타율', formula: '(H − HR) ÷ (AB − K − HR + SF)', tip: '인플레이 타구의 타율. 0.300 평균, 0.350+ 운빨 의심, 0.250- 불운.', color: '#3EC8FF' },
-              { name: 'wOBA', kor: '가중 출루율', formula: '타격 행위별 가중치 통합', tip: '출루율보다 정확한 타자 가치 측정. 0.370+ 엘리트급.', color: '#C8FF3E' },
-              { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: '#FF8C3E' },
+              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: '#CA8A04' },
+              { name: 'BABIP', kor: '인플레이 타율', formula: '(H − HR) ÷ (AB − K − HR + SF)', tip: '인플레이 타구의 타율. 0.300 평균, 0.350+ 운빨 의심, 0.250- 불운.', color: '#0891B2' },
+              { name: 'wOBA', kor: '가중 출루율', formula: '타격 행위별 가중치 통합', tip: '출루율보다 정확한 타자 가치 측정. 0.370+ 엘리트급.', color: '#0EA5E9' },
+              { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: '#EA580C' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: s.color, marginBottom: 6, fontFamily: 'Inter, system-ui, sans-serif' }}>{s.name} <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>— {s.kor}</span></p>
@@ -150,8 +150,8 @@ export default function BaseballStatsPage() {
                 <li>최고 OPS — <strong>이승엽 1.124 (2003)</strong></li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '16px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 10 }}>투수</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '16px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 10 }}>투수</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>최저 ERA — <strong>선동열 0.78 (1993)</strong></li>
                 <li>최다 탈삼진 — <strong>최동원 223개 (1984)</strong></li>

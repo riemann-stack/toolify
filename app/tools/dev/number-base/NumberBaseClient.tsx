@@ -338,10 +338,10 @@ export default function NumberBaseClient() {
     <div className={s.wrap}>
       {/* 면책 */}
       <div className={s.disclaimer || ''} style={{
-        background: 'rgba(255,140,62,0.05)', border: '1px solid rgba(255,140,62,0.25)', borderRadius: 12,
+        background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 12,
         padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7,
       }}>
-        <strong style={{ color: '#FF8C3E' }}>참고:</strong> 정수 변환을 지원합니다. 부동소수점(IEEE 754) 변환은 별도 도구를 권장하며,
+        <strong style={{ color: '#EA580C' }}>참고:</strong> 정수 변환을 지원합니다. 부동소수점(IEEE 754) 변환은 별도 도구를 권장하며,
         실제 시스템 구현 시 비트 폭·엔디안·부호 처리에 따라 결과가 다를 수 있습니다. 본 도구는 32-bit 정밀도로 동작합니다.
       </div>
 
@@ -388,7 +388,7 @@ export default function NumberBaseClient() {
               style={{ resize: 'none', minHeight: 'unset', height: 'auto', padding: '12px 16px', fontSize: 18 }}
             />
             {!isInputValid && (
-              <p style={{ fontSize: 12, color: '#FF6B6B', marginTop: 6 }}>⚠️ {fromBase}진수에서 사용할 수 없는 문자가 포함되어 있습니다.</p>
+              <p style={{ fontSize: 12, color: '#DC2626', marginTop: 6 }}>⚠️ {fromBase}진수에서 사용할 수 없는 문자가 포함되어 있습니다.</p>
             )}
 
             <div className={s.subActionRow} style={{ marginTop: 10 }}>
@@ -483,9 +483,9 @@ export default function NumberBaseClient() {
                         ].map((row, i) => (
                           <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                             <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row.l}</td>
-                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#FF8C3E', fontWeight: 600 }}>{row.hex}</td>
+                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#EA580C', fontWeight: 600 }}>{row.hex}</td>
                             <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontWeight: 600, fontSize: 11 }}>{row.bin}</td>
-                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#FFD700', fontWeight: 600 }}>{row.oct}</td>
+                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#CA8A04', fontWeight: 600 }}>{row.oct}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -496,8 +496,8 @@ export default function NumberBaseClient() {
 
               {/* 색상 연결 */}
               {isRgbCandidate && decimalValue !== null && (
-                <div className={s.meaningCard} style={{ background: 'rgba(255,140,62,0.05)', borderLeftColor: '#FF8C3E' }}>
-                  🎨 <strong style={{ color: '#FF8C3E' }}>색상 코드:</strong>
+                <div className={s.meaningCard} style={{ background: 'rgba(234,88,12,0.05)', borderLeftColor: '#EA580C' }}>
+                  🎨 <strong style={{ color: '#EA580C' }}>색상 코드:</strong>
                   &nbsp;<code style={{ background: 'var(--bg3)', padding: '2px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
                     #{decimalValue.toString(16).toUpperCase().padStart(6, '0').slice(-6)}
                   </code>
@@ -507,7 +507,7 @@ export default function NumberBaseClient() {
                     background: '#' + decimalValue.toString(16).padStart(6, '0').slice(-6),
                     border: '1px solid var(--border)', verticalAlign: 'middle', marginLeft: 4,
                   }} />
-                  &nbsp;&nbsp;<a href="/tools/art/color" style={{ color: '#FF8C3E', textDecoration: 'underline', fontSize: 12 }}>색상 코드 변환기에서 보기 →</a>
+                  &nbsp;&nbsp;<a href="/tools/art/color" style={{ color: '#EA580C', textDecoration: 'underline', fontSize: 12 }}>색상 코드 변환기에서 보기 →</a>
                 </div>
               )}
             </>
@@ -564,8 +564,8 @@ export default function NumberBaseClient() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginTop: 14 }}>
               <tbody>
                 <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 100 }}>2진수</td><td style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{groupBinary(padBits(bitValue, bitWidth))}</td></tr>
-                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>10진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#3EC8FF' }}>{bitValue.toLocaleString('ko-KR')}</td></tr>
-                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#FF8C3E' }}>0x{bitValue.toString(16).toUpperCase()}</td></tr>
+                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>10진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#0891B2' }}>{bitValue.toLocaleString('ko-KR')}</td></tr>
+                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#EA580C' }}>0x{bitValue.toString(16).toUpperCase()}</td></tr>
                 <tr>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>ON / OFF</td>
                   <td style={{ fontFamily: 'var(--font-mono)' }}>
@@ -592,16 +592,16 @@ export default function NumberBaseClient() {
               placeholder="-1"
             />
             {tcParse && 'error' in tcParse && (
-              <p style={{ fontSize: 12, color: '#FF6B6B', marginTop: 8 }}>⚠️ {tcParse.error}</p>
+              <p style={{ fontSize: 12, color: '#DC2626', marginTop: 8 }}>⚠️ {tcParse.error}</p>
             )}
             {tcParse && !('error' in tcParse) && (
               <div style={{ marginTop: 12 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <tbody>
-                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 140 }}>부호 있는 (signed)</td><td style={{ fontFamily: 'var(--font-mono)', color: tcParse.value < 0 ? '#FF6B6B' : 'var(--accent)' }}>{tcParse.value}</td></tr>
+                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 140 }}>부호 있는 (signed)</td><td style={{ fontFamily: 'var(--font-mono)', color: tcParse.value < 0 ? '#DC2626' : 'var(--accent)' }}>{tcParse.value}</td></tr>
                     <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>2의 보수 ({bitWidth}-bit)</td><td style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{groupBinary(tcParse.twosComp)}</td></tr>
-                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>부호 없는 해석 (unsigned)</td><td style={{ fontFamily: 'var(--font-mono)', color: '#3EC8FF' }}>{tcParse.asUnsigned.toLocaleString('ko-KR')}</td></tr>
-                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#FF8C3E' }}>0x{tcParse.hex}</td></tr>
+                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>부호 없는 해석 (unsigned)</td><td style={{ fontFamily: 'var(--font-mono)', color: '#0891B2' }}>{tcParse.asUnsigned.toLocaleString('ko-KR')}</td></tr>
+                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#EA580C' }}>0x{tcParse.hex}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -710,9 +710,9 @@ export default function NumberBaseClient() {
                         <td style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700 }}>
                           {c.char === ' ' ? '␣' : c.char}
                         </td>
-                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{c.decimal}</td>
-                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#FF8C3E', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>0x{c.hex}</td>
-                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#FFD700', fontFamily: 'var(--font-mono)' }}>{c.octal}</td>
+                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#0891B2', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{c.decimal}</td>
+                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#EA580C', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>0x{c.hex}</td>
+                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#CA8A04', fontFamily: 'var(--font-mono)' }}>{c.octal}</td>
                         <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 11 }}>{c.binary}</td>
                       </tr>
                     ))}
@@ -904,9 +904,9 @@ export default function NumberBaseClient() {
             }}>
               <div><span style={{ color: 'var(--muted)' }}># 자리값 (오른쪽이 0번째)</span></div>
               <div><span style={{ color: 'var(--accent)' }}>2진수</span>:  1, 2, 4, 8, 16, 32, ... (2의 거듭제곱)</div>
-              <div><span style={{ color: '#FFD700' }}>8진수</span>:  1, 8, 64, 512, ... (8의 거듭제곱)</div>
-              <div><span style={{ color: '#3EC8FF' }}>10진수</span>: 1, 10, 100, 1000, ...</div>
-              <div><span style={{ color: '#FF8C3E' }}>16진수</span>: 1, 16, 256, 4096, ... (16의 거듭제곱)</div>
+              <div><span style={{ color: '#CA8A04' }}>8진수</span>:  1, 8, 64, 512, ... (8의 거듭제곱)</div>
+              <div><span style={{ color: '#0891B2' }}>10진수</span>: 1, 10, 100, 1000, ...</div>
+              <div><span style={{ color: '#EA580C' }}>16진수</span>: 1, 16, 256, 4096, ... (16의 거듭제곱)</div>
               <div></div>
               <div><span style={{ color: 'var(--muted)' }}># 진법 간 단축 변환</span></div>
               <div>2진수 4자리 = 16진수 1자리 (1111 = F)</div>

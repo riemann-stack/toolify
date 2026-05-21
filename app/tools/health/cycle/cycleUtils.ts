@@ -6,9 +6,9 @@
 export type Phase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal'
 
 export const PHASE_META: Record<Phase, { label: string; emoji: string; color: string; bgColor: string }> = {
-  menstrual:  { label: '생리기', emoji: '🩸', color: '#FF8C8C', bgColor: 'rgba(255, 140, 140, 0.18)' },
+  menstrual:  { label: '생리기', emoji: '🩸', color: '#DC2626', bgColor: 'rgba(220, 38, 38, 0.18)' },
   follicular: { label: '난포기', emoji: '🌱', color: '#FFD93E', bgColor: 'rgba(255, 217, 62, 0.18)' },
-  ovulation:  { label: '배란기', emoji: '🥚', color: '#3EFF9B', bgColor: 'rgba(62, 255, 155, 0.20)' },
+  ovulation:  { label: '배란기', emoji: '🥚', color: '#059669', bgColor: 'rgba(16, 185, 129, 0.20)' },
   luteal:     { label: '황체기', emoji: '🌙', color: '#B885DA', bgColor: 'rgba(184, 133, 218, 0.18)' },
 }
 

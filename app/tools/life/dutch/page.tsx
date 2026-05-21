@@ -5,13 +5,14 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/life/dutch',
-  title: '더치페이 계산기 — 술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
+  title: '더치페이 계산기 — N빵·술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
   description:
-    '한 명이 선결제했을 때 가장 적은 송금 횟수로 정산. 술값 분리, 개인별 메뉴, 카톡 공유 + 8가지 상황 프리셋.',
+    '회식·여행 정산을 가장 적은 송금 횟수로. 음주자만 술값 분담, 메뉴별 개인 정산, Greedy 최소 송금 알고리즘 + 카카오톡 메시지 자동 생성.',
   keywords: [
     '더치페이 계산기', 'N빵 계산기', '회식비 계산기', '1인당 금액 계산',
     '술값 분리', '회식 정산', '모임비 정산', '선결제자 정산',
     '최소 송금 횟수', '카카오톡 정산', '여행 경비 정산', '팀 회식비',
+    '잔돈 처리', '음주자 분담', '공동 메뉴 정산',
   ],
 })
 
@@ -23,7 +24,7 @@ export default function DutchPage() {
         🍻 더치페이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        한 명이 선결제했을 때 <strong style={{ color: 'var(--text)' }}>가장 적은 송금 횟수</strong>로 정산. 8가지 상황 프리셋 포함.
+        회식·여행 정산을 <strong style={{ color: 'var(--text)' }}>가장 적은 송금 횟수</strong>로. 술값 분리·개인 메뉴·카톡 공유.
       </p>
 
       <DutchClient />
@@ -36,9 +37,9 @@ export default function DutchPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>5가지 정산 모드</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { icon: '🍻', name: '간단 N빵', desc: '총액 ÷ 인원 = 1인당. 7가지 절삭 + 5가지 잔여 처리 (공금/결제자/첫 사람/무작위/1원 단위 균등).' },
+              { icon: '🍻', name: '간단 N빵', desc: '총액 ÷ 인원 = 1인당. 7가지 1원 단위 처리(1원/100원/1,000원 × 반올림/올림/내림) + 5가지 잔여 금액 처리.' },
               { icon: '🍺', name: '술값 분리', desc: '비음주자는 음식값만, 음주자는 음식값+술값. 회식에서 가장 많이 쓰이는 공정한 방식.' },
-              { icon: '🍱', name: '개인별 정산', desc: '각자 본인 메뉴를 직접 부담 + 공동 메뉴는 분담률(0/0.5/1/1.5/2)로 차등 분배. 최대 20명.' },
+              { icon: '🍱', name: '개인별 정산', desc: '각자 본인 메뉴는 직접 부담, 공동 메뉴는 전원 균등 분담, 공동 술값은 음주자만 분배. 최대 20명.' },
               { icon: '💸', name: '선결제자 정산', desc: '여러 명이 나눠 결제했을 때 누가 누구에게 얼마를 보낼지 — Greedy 알고리즘으로 최소 송금 횟수.' },
               { icon: '💬', name: '카톡 공유', desc: '4가지 정산 결과를 카카오톡 형식 메시지로 자동 생성. 받을 사람·계좌번호도 한 번에 안내.' },
             ].map((m, i) => (
@@ -50,17 +51,17 @@ export default function DutchPage() {
           </div>
         </section>
 
-        {/* 2. 7가지 절삭 옵션 */}
+        {/* 2. 7가지 1원 단위 처리 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>7가지 1원 단위 절삭 옵션</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>7가지 1원 단위 처리</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             18,750원 같은 어정쩡한 금액을 자릿수에 맞춰 깔끔하게 정리합니다. 모임 성격에 따라 적합한 옵션이 다릅니다.
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>· <strong style={{ color: 'var(--text)' }}>정확히 (1원 단위)</strong> — 여행 정산 등 정밀 계산</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>1원 단위</strong> — 여행 정산 등 정밀 계산</li>
             <li>· <strong style={{ color: 'var(--text)' }}>100원 반올림 / 올림 / 내림</strong> — 일반 회식·카페</li>
             <li>· <strong style={{ color: 'var(--text)' }}>1,000원 반올림</strong> — 깔끔한 송금</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>1,000원 올림 (잔돈 공금)</strong> — 술자리·팀 회식 (잔돈을 다음 모임 공금으로)</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>1,000원 올림</strong> — 술자리·팀 회식 (잔돈을 다음 모임 공금으로)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>1,000원 내림</strong> — 결제자가 차액 부담 시</li>
           </ul>
         </section>
@@ -100,7 +101,7 @@ export default function DutchPage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
             예: 총 200,000원 / 술값 80,000원 / 6명 (음주 4명, 비음주 2명) → 비음주 20,000원, 음주 40,000원.
-            음주자가 1인당 <strong style={{ color: '#FF8C3E' }}>20,000원 더 부담</strong>합니다.
+            음주자가 1인당 <strong style={{ color: '#EA580C' }}>20,000원 더 부담</strong>합니다.
           </p>
         </section>
 
@@ -117,8 +118,8 @@ export default function DutchPage() {
             <li>두 금액 중 작은 쪽만큼 송금 처리</li>
             <li>잔액 0인 사람 제외, 1~3 반복</li>
           </ol>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px', background: 'rgba(255,215,0,0.06)', border: '1px solid rgba(255,215,0,0.30)', borderRadius: 10, padding: '11px 14px' }}>
-            💡 <strong style={{ color: '#FFD700' }}>예시</strong> — A 30,000 / B 0 / C 60,000 결제, 각자 30,000 부담 →
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px', background: 'rgba(202,138,4,0.06)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 10, padding: '11px 14px' }}>
+            💡 <strong style={{ color: '#CA8A04' }}>예시</strong> — A 30,000 / B 0 / C 60,000 결제, 각자 30,000 부담 →
             <br />· B → A: 0원 (둘 다 잔액 0)
             <br />· B → C: 30,000원 (1건)
             <br />단순 계산이면 B가 A·C에게 각각 송금(2건)이지만 알고리즘이 1건으로 압축합니다.
@@ -130,40 +131,41 @@ export default function DutchPage() {
 
         {/* 6. 개인별 정산 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>개인별 정산 — 본인 메뉴 + 공동 메뉴 분담률</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>개인별 정산 — 메뉴별 가격 차이가 클 때</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             메뉴별 가격 차이가 큰 모임에 적합 (한 명은 스테이크, 한 명은 샐러드). 각자의 부담은 —
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Inter, system-ui, sans-serif' }}>
             본인 부담 = 본인 메뉴 합계
-            <br />+ 공동 메뉴 합계 × (본인 분담률 ÷ 전체 분담률 합)
+            <br />+ 공동 메뉴 합계 ÷ 전체 인원
             <br />+ 공동 술값 ÷ 음주자 수 (음주자만)
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>분담률</strong> — 0(안 먹음) / 0.5(조금) / 1(보통) / 1.5(많이) / 2(엄청). 공동 메뉴 한 접시를 누가 얼마나 먹었는지에 따라 차등 분배합니다.
+            <strong style={{ color: 'var(--text)' }}>예</strong> — 3명이 각자 스테이크(35,000) / 파스타(22,000) / 샐러드(18,000)를 시키고 공동 와인(30,000원)을 마셨다면, 각자 본인 메뉴 + 와인 10,000원씩 부담. 메뉴별로 정확히 본인이 먹은 만큼만 내므로 가장 공정합니다.
           </p>
         </section>
 
-        {/* 7. 시나리오 추천 */}
+        {/* 7. 1인당 적정 예산 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 상황별 추천 설정</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>모임별 1인당 적정 예산</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            모임 성격에 따라 적절한 1인당 예산·절삭·잔여 처리가 다릅니다. 시나리오를 클릭하면 자동 세팅됩니다.
+            모임 성격별 평균 1인당 예산 — 2025년 서울·수도권 평균치 참고용입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
-              { icon: '🍱', name: '점심 회식 (12,000원)', desc: '100원 반올림 + 잔돈 공금' },
-              { icon: '🍻', name: '저녁 회식 (30,000원)', desc: '1,000원 올림 + 잔돈 공금' },
-              { icon: '☕', name: '카페 모임 (6,000원)',  desc: '100원 올림 + 잔돈 공금' },
-              { icon: '🍺', name: '술자리 (35,000원)',   desc: '1,000원 올림 + 잔돈 공금' },
-              { icon: '🥂', name: '팀 회식 (50,000원)',  desc: '1,000원 올림 + 결제자 잔돈' },
-              { icon: '✈️', name: '여행 정산',          desc: '정확히 1원 단위 + 균등 분배' },
-              { icon: '👨‍👩‍👧', name: '가족 외식 (25,000원)', desc: '1,000원 반올림 + 잔돈 공금' },
-              { icon: '🎂', name: '생일 모임 (30,000원)', desc: '1,000원 올림 + 잔돈 공금' },
+              { icon: '🍱', name: '점심 회식', amount: '12,000~18,000원', desc: '구내식당·일반 식당 정찬' },
+              { icon: '☕', name: '카페 모임',  amount: '6,000~10,000원',  desc: '음료 + 디저트 1' },
+              { icon: '🍻', name: '저녁 회식', amount: '30,000~50,000원', desc: '고기·삼겹·치킨 + 술 1차' },
+              { icon: '🍺', name: '2차 술자리', amount: '15,000~30,000원', desc: '맥주집·호프·이자카야' },
+              { icon: '🥂', name: '팀 회식',   amount: '50,000~80,000원', desc: '소고기·횟집·코스 요리' },
+              { icon: '🎂', name: '생일 모임', amount: '30,000~60,000원', desc: '레스토랑 + 케이크·선물' },
+              { icon: '👨‍👩‍👧', name: '가족 외식', amount: '20,000~40,000원', desc: '한식·중식·패밀리 레스토랑' },
+              { icon: '✈️', name: '여행 1일',  amount: '50,000~100,000원', desc: '식비·교통·입장료 평균' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13.5px', color: 'var(--text)', fontWeight: 700, marginBottom: '3px' }}>{s.icon} {s.name}</p>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{s.desc}</p>
+                <p style={{ fontSize: '12.5px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif', margin: '0 0 3px' }}>{s.amount}</p>
+                <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -215,7 +217,7 @@ export default function DutchPage() {
               },
               {
                 q: '여행 경비 정산도 가능한가요?',
-                a: '<strong>네, 본 도구가 가장 강력한 영역입니다.</strong> ① 시나리오에서 [✈️ 여행 정산] 선택 → 정확히 1원 단위 + 1원 단위 균등 분배가 자동 적용됩니다. ② 일정별로 결제자가 다르다면 [선결제자 정산] 탭에서 각자 결제액·부담액을 입력해 최소 송금으로 정리할 수 있습니다. ③ 메뉴별 가격이 크게 다르면 [개인별 정산] 탭에서 본인 메뉴 + 공동 메뉴 분담률로 차등 분배할 수 있습니다.',
+                a: '<strong>네, 본 도구가 가장 강력한 영역입니다.</strong> ① [간단 N빵]에서 <strong>1원 단위 + 균등 분배</strong>를 선택하면 잔돈까지 정확히 나뉩니다. ② 일정별로 결제자가 다르다면 [선결제자 정산] 탭에서 각자 결제액·부담액을 입력해 최소 송금으로 정리할 수 있습니다. ③ 메뉴별 가격이 크게 다르면 [개인별 정산] 탭에서 본인 메뉴 + 공동 메뉴 균등 분담으로 정산할 수 있습니다.',
               },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

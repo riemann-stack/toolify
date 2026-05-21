@@ -293,18 +293,18 @@ export default function LightingClient() {
     return (
       <svg className={styles.layoutSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
         {/* 방 */}
-        <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(232,151,87,0.05)" stroke="#fff" strokeWidth={1.5} />
+        <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="#fff" strokeWidth={1.5} />
         <text x={x0 + drawW / 2} y={y0 - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">{w.toFixed(1)}m</text>
         <text x={x0 - 8} y={y0 + drawH / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="monospace">{l.toFixed(1)}m</text>
         {/* 조명 빛 영역 */}
         {positions.map((p, i) => (
-          <circle key={`g-${i}`} cx={p.x} cy={p.y} r={Math.min(drawW, drawH) * 0.18} fill="rgba(232,151,87,0.18)" />
+          <circle key={`g-${i}`} cx={p.x} cy={p.y} r={Math.min(drawW, drawH) * 0.18} fill="rgba(234,88,12,0.18)" />
         ))}
         {/* 조명 점 */}
         {positions.map((p, i) => (
           <g key={`l-${i}`}>
-            <circle cx={p.x} cy={p.y} r={5} fill="#FFD700" stroke="#fff" strokeWidth={1} />
-            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#FFD700" strokeWidth={0.6} opacity={0.5} />
+            <circle cx={p.x} cy={p.y} r={5} fill="#CA8A04" stroke="#fff" strokeWidth={1} />
+            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#CA8A04" strokeWidth={0.6} opacity={0.5} />
           </g>
         ))}
         {/* 조명 개수 라벨 */}
@@ -612,7 +612,7 @@ export default function LightingClient() {
 
           {/* 연간 전기료 비교 */}
           <div className={styles.savingCard}>
-            <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#3EFF9B' }}>
+            <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#059669' }}>
               <span>💚 연간 전기료 비교</span>
               <span className={styles.cardLabelHint}>1일 5시간 사용 · {KRW_PER_KWH}원/kWh</span>
             </div>

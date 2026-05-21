@@ -611,16 +611,16 @@ export default function BloodAlcoholClient() {
               })}
               {/* 기준선 */}
               <line x1={padL} x2={chartW - padR} y1={y003} y2={y003}
-                stroke="#FF8C3E" strokeWidth="1.5" strokeDasharray="4 4" />
+                stroke="#EA580C" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y003 - 4}
-                fill="#FF8C3E" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
+                fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
               >
                 0.03 면허정지
               </text>
               <line x1={padL} x2={chartW - padR} y1={y008} y2={y008}
-                stroke="#FF6B6B" strokeWidth="1.5" strokeDasharray="4 4" />
+                stroke="#DC2626" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y008 - 4}
-                fill="#FF6B6B" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
+                fill="#DC2626" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
               >
                 0.08 면허취소
               </text>
@@ -637,8 +637,8 @@ export default function BloodAlcoholClient() {
             </svg>
             <div className={s.graphLegend}>
               <span><span className={s.legendDot} style={{ background: 'var(--accent)' }}></span>BAC 곡선</span>
-              <span><span className={s.legendDot} style={{ background: '#FF8C3E' }}></span>면허정지 0.03</span>
-              <span><span className={s.legendDot} style={{ background: '#FF6B6B' }}></span>면허취소 0.08</span>
+              <span><span className={s.legendDot} style={{ background: '#EA580C' }}></span>면허정지 0.03</span>
+              <span><span className={s.legendDot} style={{ background: '#DC2626' }}></span>면허취소 0.08</span>
               <span><span className={s.legendDot} style={{ background: 'rgba(255,255,255,0.5)' }}></span>현재 시각</span>
             </div>
           </div>
@@ -704,8 +704,8 @@ export default function BloodAlcoholClient() {
           <div>• <strong>카카오 T 대리 · 티맵 대리</strong> 앱으로 즉시 호출</div>
           <div>• <strong>전국 대리운전 대표번호</strong> 이용 또는 지역 대리운전</div>
           <div>• <strong>택시·지하철·버스</strong> 등 대중교통 이용</div>
-          <div style={{ color: '#3EC8FF', fontWeight: 600, marginTop: '6px' }}>
-            💡 가장 안전한 방법은 <strong style={{ color: '#3EC8FF' }}>술자리 시작 전에 미리 대리운전을 예약</strong>하는 것입니다.
+          <div style={{ color: '#0891B2', fontWeight: 600, marginTop: '6px' }}>
+            💡 가장 안전한 방법은 <strong style={{ color: '#0891B2' }}>술자리 시작 전에 미리 대리운전을 예약</strong>하는 것입니다.
           </div>
         </div>
       </div>
@@ -858,10 +858,10 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM }: {
             <span className={s.timelineLabel}>⭐ 권장 안전 운전 시각 (1시간 여유)</span>
           </div>
           <div className={s.timelineRow}
-            style={{ background: result.status === 'safe' ? 'rgba(62,255,155,0.06)' : 'rgba(255,107,107,0.06)',
-              borderColor: result.status === 'safe' ? 'rgba(62,255,155,0.30)' : 'rgba(255,107,107,0.30)' }}>
+            style={{ background: result.status === 'safe' ? 'rgba(16,185,129,0.06)' : 'rgba(220,38,38,0.06)',
+              borderColor: result.status === 'safe' ? 'rgba(16,185,129,0.30)' : 'rgba(220,38,38,0.30)' }}>
             <span className={s.timelineTime}
-              style={{ color: result.status === 'safe' ? '#3EFF9B' : '#FF6B6B' }}>
+              style={{ color: result.status === 'safe' ? '#059669' : '#DC2626' }}>
               {fmtTimeMin(result.morningMin)}
             </span>
             <span className={s.timelineLabel} style={{ fontWeight: 700 }}>
@@ -1039,9 +1039,9 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
       {/* 결과 */}
       {result.peakBAC > 0 && (
         <>
-          <div className={s.tomorrowHero} style={{ borderColor: 'rgba(255,107,107,0.40)', background: 'rgba(255,107,107,0.04)' }}>
+          <div className={s.tomorrowHero} style={{ borderColor: 'rgba(220,38,38,0.40)', background: 'rgba(220,38,38,0.04)' }}>
             <div className={s.tomorrowHeroLabel}>최고 BAC ({result.totalAlcoholGrams.toFixed(1)}g 알코올 = 표준잔 {standardDrinks.toFixed(1)})</div>
-            <div className={s.tomorrowHeroNum} style={{ color: '#FF6B6B' }}>
+            <div className={s.tomorrowHeroNum} style={{ color: '#DC2626' }}>
               {fmtBAC(result.peakBAC)}
             </div>
             <div className={s.tomorrowHeroSub}>
@@ -1055,8 +1055,8 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 200, display: 'block', background: 'var(--bg3)', borderRadius: 8 }}>
               {[0.03, 0.08].map(t => (
                 <g key={t}>
-                  <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#FF6B6B' : '#FF8C3E'} fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
+                  <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#DC2626' : '#EA580C'} strokeWidth="1.5" strokeDasharray="4 4" />
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
                 </g>
               ))}
               {/* 자리별 영역 */}
@@ -1064,7 +1064,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
                 <rect key={ses.id} x={xs(ses.startMin)} y={P / 2}
                   width={Math.max(2, xs(ses.endMin) - xs(ses.startMin))}
                   height={H - P * 1.5}
-                  fill="rgba(200,255,62,0.04)" stroke="rgba(200,255,62,0.2)" strokeWidth="1" />
+                  fill="rgba(14,165,233,0.04)" stroke="rgba(14,165,233,0.2)" strokeWidth="1" />
               ))}
               {/* BAC 곡선 */}
               {result.curve.length > 1 && (
@@ -1154,14 +1154,14 @@ function GuideTab() {
               </tr>
             </thead>
             <tbody>
-              <tr><td>0.00~0.02</td><td style={{ color: '#3EFF9B' }}>정상</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>거의 영향 없음</td></tr>
-              <tr><td>0.02~0.03</td><td style={{ color: '#FFD700' }}>영업용 정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>약간 어지러움·기분 상승</td></tr>
-              <tr><td style={{ color: '#FF8C3E' }}>0.03~0.05</td><td style={{ color: '#FF8C3E' }}>일반 정지 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>판단력 약간 ↓</td></tr>
-              <tr><td>0.05~0.08</td><td style={{ color: '#FF8C3E' }}>정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>운동 능력 ↓·반응 속도 ↓</td></tr>
-              <tr><td style={{ color: '#FF6B6B' }}>0.08~0.10</td><td style={{ color: '#FF6B6B' }}>취소 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>명확한 인지 장애</td></tr>
-              <tr><td>0.10~0.20</td><td style={{ color: '#FF6B6B' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>균형 잃음·언어 둔화</td></tr>
-              <tr><td>0.20~0.30</td><td style={{ color: '#FF6B6B' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>의식 혼탁·구토</td></tr>
-              <tr><td>0.30~0.40</td><td style={{ color: '#FF3E3E' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#FF6B6B', fontWeight: 700 }}>의식 상실 위험 ⚠️</td></tr>
+              <tr><td>0.00~0.02</td><td style={{ color: '#059669' }}>정상</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>거의 영향 없음</td></tr>
+              <tr><td>0.02~0.03</td><td style={{ color: '#CA8A04' }}>영업용 정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>약간 어지러움·기분 상승</td></tr>
+              <tr><td style={{ color: '#EA580C' }}>0.03~0.05</td><td style={{ color: '#EA580C' }}>일반 정지 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>판단력 약간 ↓</td></tr>
+              <tr><td>0.05~0.08</td><td style={{ color: '#EA580C' }}>정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>운동 능력 ↓·반응 속도 ↓</td></tr>
+              <tr><td style={{ color: '#DC2626' }}>0.08~0.10</td><td style={{ color: '#DC2626' }}>취소 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>명확한 인지 장애</td></tr>
+              <tr><td>0.10~0.20</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>균형 잃음·언어 둔화</td></tr>
+              <tr><td>0.20~0.30</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>의식 혼탁·구토</td></tr>
+              <tr><td>0.30~0.40</td><td style={{ color: '#FF3E3E' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#DC2626', fontWeight: 700 }}>의식 상실 위험 ⚠️</td></tr>
               <tr><td style={{ color: '#FF3E3E' }}>0.40+</td><td style={{ color: '#FF3E3E' }}>응급</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#FF3E3E', fontWeight: 700 }}>사망 가능성 🚨</td></tr>
             </tbody>
           </table>
@@ -1183,7 +1183,7 @@ function GuideTab() {
             </thead>
             <tbody>
               <tr><td>일반 면허</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>자가용</td></tr>
-              <tr><td>영업용 (택시·버스·화물)</td><td style={{ color: '#FF8C3E' }}>0.02</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>직업 운전자</td></tr>
+              <tr><td>영업용 (택시·버스·화물)</td><td style={{ color: '#EA580C' }}>0.02</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>직업 운전자</td></tr>
               <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>2021년부터 처벌 (3만원 범칙금)</td></tr>
               <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>도로교통법 (10~20만원)</td></tr>
             </tbody>
@@ -1214,10 +1214,10 @@ function GuideTab() {
             {DRUG_ALCOHOL_RISKS.filter(d => selectedDrugs.includes(d.id)).map(d => (
               <div key={d.id} className={s.warnBox}
                 style={{
-                  background: d.risk === 'high' ? 'rgba(255,107,107,0.06)' : 'rgba(255,140,62,0.06)',
-                  borderColor: d.risk === 'high' ? 'rgba(255,107,107,0.40)' : 'rgba(255,140,62,0.40)',
+                  background: d.risk === 'high' ? 'rgba(220,38,38,0.06)' : 'rgba(234,88,12,0.06)',
+                  borderColor: d.risk === 'high' ? 'rgba(220,38,38,0.40)' : 'rgba(234,88,12,0.40)',
                 }}>
-                <strong style={{ color: d.risk === 'high' ? '#FF6B6B' : '#FF8C3E' }}>
+                <strong style={{ color: d.risk === 'high' ? '#DC2626' : '#EA580C' }}>
                   {d.risk === 'high' ? '🚨' : '⚠️'} {d.name} + 알코올
                 </strong>{' '}
                 — {d.desc}

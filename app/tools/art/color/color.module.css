@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -43,11 +43,11 @@
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 
 /* 탭별 색조 */
-.tabActiveA11y     { background: rgba(255,107,107,0.12);  color: #FF6B6B; font-weight: 700; }
-.tabActivePalette  { background: rgba(155,89,182,0.12);   color: #C485E0; font-weight: 700; }
-.tabActiveCss      { background: rgba(255,215,0,0.10);    color: #FFD700; font-weight: 700; }
-.tabActiveGradient { background: rgba(62,200,255,0.10);   color: #3EC8FF; font-weight: 700; }
-.tabActiveExtract  { background: rgba(62,255,155,0.10);   color: #3EFF9B; font-weight: 700; }
+.tabActiveA11y     { background: rgba(220,38,38,0.18);  color: #DC2626; font-weight: 700; }
+.tabActivePalette  { background: rgba(155,89,182,0.12);   color: #9333EA; font-weight: 700; }
+.tabActiveCss      { background: rgba(202,138,4,0.18);    color: #CA8A04; font-weight: 700; }
+.tabActiveGradient { background: rgba(8,145,178,0.18);   color: #0891B2; font-weight: 700; }
+.tabActiveExtract  { background: rgba(16,185,129,0.18);   color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -121,7 +121,7 @@
   cursor: pointer; padding: 0; background: none;
 }
 .colorPicker::-webkit-color-swatch-wrapper { padding: 0; }
-.colorPicker::-webkit-color-swatch { border-radius: 12px; border: 2px solid rgba(255,255,255,0.18); }
+.colorPicker::-webkit-color-swatch { border-radius: 12px; border: 2px solid rgba(15,23,42,0.08); }
 
 /* 직접 입력 */
 .hexInput {
@@ -199,7 +199,7 @@
   padding: 8px 14px;
   transition: background 0.12s;
 }@media (hover: hover) {
-  .formatRow:hover { background: rgba(200,255,62,0.04); }
+  .formatRow:hover { background: rgba(14,165,233,0.14); }
 }
 .formatLabel {
   font-family: 'Inter', system-ui, sans-serif;
@@ -263,7 +263,7 @@
 }@media (hover: hover) {
   .presetItem:hover { transform: scale(1.08); }
 }
-.presetActive { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(200,255,62,0.18); }
+.presetActive { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(14,165,233,0.18); }
 
 /* 히스토리 */
 .historyRow {
@@ -330,7 +330,7 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 /* 토글 */
@@ -393,7 +393,7 @@
   cursor: pointer; padding: 0; background: none;
 }
 .a11yPicker::-webkit-color-swatch-wrapper { padding: 0; }
-.a11yPicker::-webkit-color-swatch { border-radius: 8px; border: 2px solid rgba(255,255,255,0.18); }
+.a11yPicker::-webkit-color-swatch { border-radius: 8px; border: 2px solid rgba(15,23,42,0.08); }
 .a11yHexInput {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -448,9 +448,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.gradeAAA { color: #3EFF9B; }
-.gradeAA  { color: #C8FF3E; }
-.gradeFail { color: #FF6B6B; }
+.gradeAAA { color: #059669; }
+.gradeAA  { color: #0EA5E9; }
+.gradeFail { color: #DC2626; }
 
 .gradeTable {
   display: flex;
@@ -470,8 +470,8 @@
 }
 .gradeName  { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .gradeReq   { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
-.gradePass  { background: rgba(62,255,155,0.12); color: #3EFF9B; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
-.gradeFailChip { background: rgba(255,107,107,0.12); color: #FF6B6B; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
+.gradePass  { background: rgba(16,185,129,0.18); color: #059669; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
+.gradeFailChip { background: rgba(220,38,38,0.18); color: #DC2626; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 
 .suggestRow {
   display: grid;
@@ -533,8 +533,8 @@
   line-height: 1.5;
   margin-bottom: 6px;
 }
-.cbDistinct { font-size: 11px; color: #3EFF9B; }
-.cbWarning  { font-size: 11px; color: #FF6B6B; }
+.cbDistinct { font-size: 11px; color: #059669; }
+.cbWarning  { font-size: 11px; color: #DC2626; }
 
 /* ─────── 팔레트 탭 ─────── */
 .paletteTypeGrid {
@@ -560,7 +560,7 @@
   .paletteTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .paletteTypeBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
-.paletteTypeActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.paletteTypeActive { background: rgba(155,89,182,0.10); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 .paletteResult {
   display: flex;
@@ -654,7 +654,7 @@
 }@media (hover: hover) {
   .exportBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.exportActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.exportActive { background: rgba(155,89,182,0.10); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 /* ─────── CSS·Tailwind 탭 ─────── */
 .tailwindMatchList {
@@ -804,30 +804,30 @@
   text-align: right;
 }
 .gradStopRemove {
-  background: rgba(255,107,107,0.10);
-  border: 1px solid rgba(255,107,107,0.40);
-  color: #FF6B6B;
+  background: rgba(220,38,38,0.18);
+  border: 1px solid rgba(220,38,38,0.40);
+  color: #DC2626;
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
-  .gradStopRemove:hover { background: rgba(255,107,107,0.18); }
+  .gradStopRemove:hover { background: rgba(220,38,38,0.18); }
 }
 
 .gradAddBtn {
-  background: rgba(62,200,255,0.10);
-  border: 1px dashed #3EC8FF;
+  background: rgba(8,145,178,0.18);
+  border: 1px dashed #0891B2;
   border-radius: 10px;
   padding: 9px;
   font-size: 12px;
-  color: #3EC8FF;
+  color: #0891B2;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
   width: 100%;
 }@media (hover: hover) {
-  .gradAddBtn:hover { background: rgba(62,200,255,0.18); }
+  .gradAddBtn:hover { background: rgba(8,145,178,0.18); }
 }
 
 .gradTypeRow {
@@ -847,7 +847,7 @@
 }@media (hover: hover) {
   .gradTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.gradTypeActive { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.gradTypeActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 .gradAngleRow {
   display: grid;
@@ -855,8 +855,8 @@
   gap: 12px;
   align-items: center;
 }
-.gradAngleSlider { width: 100%; accent-color: #3EC8FF; }
-.gradAngleValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #3EC8FF; text-align: right; font-size: 14px; }
+.gradAngleSlider { width: 100%; accent-color: #0891B2; }
+.gradAngleValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #0891B2; text-align: right; font-size: 14px; }
 
 .gradStepsRow {
   display: grid;
@@ -915,9 +915,9 @@
   transition: all 0.15s;
   background: var(--bg3);
 }@media (hover: hover) {
-  .dropArea:hover { border-color: #3EFF9B; color: #3EFF9B; }
+  .dropArea:hover { border-color: #059669; color: #059669; }
 }
-.dropAreaActive { border-color: #3EFF9B; background: rgba(62,255,155,0.08); }
+.dropAreaActive { border-color: #059669; background: rgba(16,185,129,0.14); }
 .dropAreaIcon { font-size: 36px; margin-bottom: 8px; }
 .dropAreaText { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .dropAreaHint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }

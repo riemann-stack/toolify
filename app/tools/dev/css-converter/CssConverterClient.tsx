@@ -516,7 +516,7 @@ function LetterSpacingTab() {
                       <td className={s.valCell}>{r.val}</td>
                       <td>
                         <span className={s.codeCell}>{decl}</span>
-                        {r.recommend && <span style={{ marginLeft: 6, color: '#3EFF9B', fontSize: 11 }}>✅</span>}
+                        {r.recommend && <span style={{ marginLeft: 6, color: '#059669', fontSize: 11 }}>✅</span>}
                       </td>
                       <td style={{ textAlign: 'right' }}>
                         <button

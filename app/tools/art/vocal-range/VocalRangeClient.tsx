@@ -316,7 +316,7 @@ export default function VocalRangeClient() {
                     {midiToNote(Math.round(chartData.minMidi)).name}
                   </text>
                   <polyline points={chartData.points} fill="none"
-                    stroke="#C485E0" strokeWidth="2" strokeLinejoin="round" />
+                    stroke="#9333EA" strokeWidth="2" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>
@@ -379,7 +379,7 @@ export default function VocalRangeClient() {
             {measuredLowMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>현재 최저</span>
-                <span className={styles.stepValueNote} style={{ color: '#3EFF9B' }}>
+                <span className={styles.stepValueNote} style={{ color: '#059669' }}>
                   {midiToNote(measuredLowMidi).name} ({midiToNote(measuredLowMidi).korean})
                 </span>
               </div>
@@ -447,7 +447,7 @@ export default function VocalRangeClient() {
             {falsettoHighMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>가성 최고</span>
-                <span className={styles.stepValueNote} style={{ color: '#FFD700' }}>
+                <span className={styles.stepValueNote} style={{ color: '#CA8A04' }}>
                   {midiToNote(falsettoHighMidi).name} ({midiToNote(falsettoHighMidi).korean})
                 </span>
               </div>
@@ -508,7 +508,7 @@ export default function VocalRangeClient() {
                   {lowNote.korean} ~ {highNote.korean}
                 </div>
                 {falsettoNote && (
-                  <div className={styles.heroKorean} style={{ color: '#FFD700' }}>
+                  <div className={styles.heroKorean} style={{ color: '#CA8A04' }}>
                     가성 최고: {falsettoNote.name} ({falsettoNote.korean})
                   </div>
                 )}
@@ -550,8 +550,8 @@ export default function VocalRangeClient() {
                   </div>
                 </div>
                 <div className={styles.pianoLegend}>
-                  <span><i style={{ background: 'rgba(62,255,155,0.55)' }} />진성 음역</span>
-                  {falsettoNote && <span><i style={{ background: 'rgba(255,215,0,0.55)' }} />가성 음역</span>}
+                  <span><i style={{ background: 'rgba(16,185,129,0.55)' }} />진성 음역</span>
+                  {falsettoNote && <span><i style={{ background: 'rgba(202,138,4,0.55)' }} />가성 음역</span>}
                   <span><i style={{ background: 'rgba(255,107,217,0.85)' }} />현재 음 (실시간)</span>
                 </div>
               </div>

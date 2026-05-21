@@ -216,7 +216,7 @@ export default function PipeClient() {
           <div className={s.warnCard}>
             <strong>⚠️ 주의 — 호칭 ≠ 외경</strong>
             <p>
-              {size}는 <strong style={{ color: '#FFB83E' }}>모든 재질에서 같은 호칭</strong>이지만,
+              {size}는 <strong style={{ color: '#D97706' }}>모든 재질에서 같은 호칭</strong>이지만,
               실제 외경은 재질별로 <strong>최대 5~6mm까지 차이</strong>가 납니다.
               <br />이종 재질 연결에는 반드시 <strong>이종 어댑터·이종조인</strong>이 필요합니다.
               <br />→ 재질 비교 탭에서 차이를 확인해 보세요.

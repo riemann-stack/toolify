@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #3EC8FF; }
+.disclaimer strong { color: #0891B2; }
 
 /* ── 탭 ── */
 .tabs {
@@ -42,11 +42,11 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveWeight { background: rgba(255,215,0,0.10);   color: #FFD700; font-weight: 700; }
-.tabActiveRoul   { background: rgba(255,107,107,0.10); color: #FF6B6B; font-weight: 700; }
-.tabActiveTeam   { background: rgba(62,200,255,0.10);  color: #3EC8FF; font-weight: 700; }
-.tabActiveOrder  { background: rgba(155,89,182,0.10);  color: #C485E0; font-weight: 700; }
-.tabActiveFair   { background: rgba(62,255,155,0.10);  color: #3EFF9B; font-weight: 700; }
+.tabActiveWeight { background: rgba(202,138,4,0.18);   color: #CA8A04; font-weight: 700; }
+.tabActiveRoul   { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
+.tabActiveTeam   { background: rgba(8,145,178,0.18);  color: #0891B2; font-weight: 700; }
+.tabActiveOrder  { background: rgba(155,89,182,0.10);  color: #9333EA; font-weight: 700; }
+.tabActiveFair   { background: rgba(16,185,129,0.18);  color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -182,7 +182,7 @@
   flex-wrap: wrap;
 }
 .metaRow strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
-.dupWarn { color: #FFD700; }
+.dupWarn { color: #CA8A04; }
 
 /* 토글 */
 .toggleLabel {
@@ -275,7 +275,7 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(200,255,62,0.18); }
+  .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
 .miniBtn {
@@ -290,8 +290,8 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(255,107,107,0.10); }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 
@@ -314,8 +314,8 @@
 
 /* ── 결과 카드 ── */
 .resultCard {
-  background: linear-gradient(140deg, rgba(200,255,62,0.06), rgba(62,200,255,0.04));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 22px 22px;
   text-align: center;
@@ -383,11 +383,11 @@
 @media (max-width: 540px) {
   .weightRow { grid-template-columns: 1fr 80px 50px 26px; gap: 4px; }
 }
-.weightSlider { accent-color: #FFD700; }
+.weightSlider { accent-color: #CA8A04; }
 .weightPct {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #FFD700;
+  color: #CA8A04;
   text-align: right;
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
@@ -401,7 +401,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
+  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.30); }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -417,7 +417,7 @@
   margin-top: 8px;
   width: 100%;
 }@media (hover: hover) {
-  .addItemBtn:hover { color: #FFD700; border-color: #FFD700; }
+  .addItemBtn:hover { color: #CA8A04; border-color: #CA8A04; }
 }
 
 /* 확률 막대 */
@@ -448,7 +448,7 @@
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  color: #FFD700;
+  color: #CA8A04;
 }
 
 /* ─── 룰렛 탭 ─── */
@@ -476,7 +476,7 @@
   height: 0;
   border-left: 14px solid transparent;
   border-right: 14px solid transparent;
-  border-top: 22px solid #FF6B6B;
+  border-top: 22px solid #DC2626;
   margin-top: -8px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.40));
   z-index: 2;
@@ -495,8 +495,8 @@
 }
 
 .rouletteResult {
-  background: linear-gradient(140deg, rgba(255,107,107,0.10), rgba(155,89,182,0.05));
-  border: 1px solid rgba(255,107,107,0.40);
+  background: linear-gradient(140deg, rgba(220,38,38,0.18), rgba(155,89,182,0.05));
+  border: 1px solid rgba(220,38,38,0.40);
   border-radius: 14px;
   padding: 18px 22px;
   text-align: center;
@@ -506,7 +506,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 800;
   font-size: clamp(28px, 7vw, 44px);
-  color: #FF6B6B;
+  color: #DC2626;
 }
 
 /* ─── 팀 나누기 ─── */
@@ -519,7 +519,7 @@
 .teamCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #3EC8FF;
+  border-left: 4px solid #0891B2;
   border-radius: 10px;
   padding: 10px 12px;
   min-width: 0;
@@ -557,7 +557,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.teamLeader { font-weight: 700; color: #FFD700; }
+.teamLeader { font-weight: 700; color: #CA8A04; }
 .teamLeader::before { content: '⭐ '; }
 
 .subgroupBox {
@@ -601,7 +601,7 @@
   line-height: 1.2;
 }
 .seatCellEmpty { color: var(--muted); opacity: 0.5; }
-.seatCellFixed { background: rgba(155,89,182,0.10); border-color: rgba(155,89,182,0.40); color: #C485E0; }
+.seatCellFixed { background: rgba(155,89,182,0.10); border-color: rgba(155,89,182,0.40); color: #9333EA; }
 
 /* 발표 순서 */
 .orderList {
@@ -623,7 +623,7 @@
 .orderRank {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #C485E0;
+  color: #9333EA;
   font-size: 14px;
 }
 .orderRowFixed {
@@ -646,7 +646,7 @@
 }@media (hover: hover) {
   .orderModeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.orderModeActive { background: rgba(155,89,182,0.10); color: #C485E0; border-color: #C485E0; font-weight: 700; }
+.orderModeActive { background: rgba(155,89,182,0.10); color: #9333EA; border-color: #9333EA; font-weight: 700; }
 
 /* ─── 공정성 탭 ─── */
 .fairTable {
@@ -671,16 +671,16 @@
 }
 .fairName { color: var(--text); font-weight: 600; }
 .fairExpected { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.fairActual { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #3EFF9B; text-align: right; font-variant-numeric: tabular-nums; }
+.fairActual { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #059669; text-align: right; font-variant-numeric: tabular-nums; }
 .fairDeviation {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.devSmall { color: #3EFF9B; }
-.devMid   { color: #FFD700; }
-.devLarge { color: #FF6B6B; }
+.devSmall { color: #059669; }
+.devMid   { color: #CA8A04; }
+.devLarge { color: #DC2626; }
 
 .fairBars {
   display: flex;
@@ -702,7 +702,7 @@
   overflow: hidden;
   position: relative;
 }
-.fairBarFill { height: 100%; background: #3EFF9B; border-radius: 999px; transition: width 0.4s; }
+.fairBarFill { height: 100%; background: #059669; border-radius: 999px; transition: width 0.4s; }
 .fairBarMark {
   position: absolute;
   top: -3px;
@@ -713,8 +713,8 @@
 }
 
 .fairExplain {
-  background: rgba(62,255,155,0.06);
-  border: 1px solid rgba(62,255,155,0.30);
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.30);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12.5px;
@@ -722,7 +722,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.fairExplain strong { color: #3EFF9B; }
+.fairExplain strong { color: #059669; }
 
 /* ─── 저장된 명단 ─── */
 .savedRow {
@@ -773,7 +773,7 @@
 }@media (hover: hover) {
   .simBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.simActive { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.simActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 
 /* ─── 칩 입력 ─── */
 .chipBox {
@@ -826,7 +826,7 @@
   justify-content: center;
 }
 @media (hover: hover) {
-  .chipDel:hover { background: rgba(255,107,107,0.18); color: #FF6B6B; }
+  .chipDel:hover { background: rgba(220,38,38,0.18); color: #DC2626; }
 }
 .chipInput {
   flex: 1;

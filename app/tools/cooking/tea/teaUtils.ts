@@ -266,9 +266,9 @@ export function tanninRisk(tea: TeaMeta, actualSec: number, strength: Strength, 
 }
 
 export function tanninZoneColor(risk: number): string {
-  if (risk < 40) return '#3EFFD0'
-  if (risk < 70) return '#FFB83E'
-  return '#FF3E8C'
+  if (risk < 40) return '#0D9488'
+  if (risk < 70) return '#D97706'
+  return '#DB2777'
 }
 
 export function tanninLabel(risk: number): string {
@@ -291,7 +291,7 @@ export interface SteepStep {
   color: string
 }
 
-const STEP_COLORS = ['#3EFFD0', '#3EC8FF', '#FFB83E', '#FF8C3E', '#FF3E8C', '#9B59B6', '#C485E0', '#3EFF9B']
+const STEP_COLORS = ['#0D9488', '#0891B2', '#D97706', '#EA580C', '#DB2777', '#9B59B6', '#9333EA', '#059669']
 
 export function buildSteepSchedule(tea: TeaMeta): SteepStep[] {
   const steps: SteepStep[] = []

@@ -58,7 +58,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'medical',
     emoji: '🏥',
     title: '의료·건강',
-    color: '#FF3E8C',
+    color: '#DB2777',
     tools: 'BMI · BMR · 다이어트 · 임신 주수 · 반려동물 나이 · 혈중알코올농도 · 영양제 상호작용 · 자외선 차단 · 생리 주기 추적',
     warnings: [
       '본 도구는 의학적 진단·치료·처방을 대체하지 않으며, 의사·약사·영양사 등 의료 전문가의 자문을 대신할 수 없습니다.',
@@ -74,7 +74,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'tax',
     emoji: '💴',
     title: '세무·재무',
-    color: '#3EC8FF',
+    color: '#0891B2',
     tools: '연봉 실수령액 · 4대보험료 · 상속세 · 양도소득세 · 부동산 취득세 · 퇴직금 · 부가가치세 · 종합소득세 (해당 시) · 자동차 비용',
     warnings: [
       '세금 계산 결과는 2026년 기준 공식 요율을 적용하나, 비과세 항목·부양가족·세액공제·감면·중과세·이월결손금 등 개인 상황을 완전히 반영하지 못합니다.',
@@ -90,7 +90,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'finance',
     emoji: '📈',
     title: '금융·투자',
-    color: '#3EFFD0',
+    color: '#0D9488',
     tools: '주식 평단가·손익 · 배당금 · 복리 · 적금·예금 · 공모주 청약 환급 · 종목 매수 결정 · 대출 이자 · 부동산 계산기 · 경매',
     warnings: [
       '본 서비스는 일반 금융 계산만 제공하며 「자본시장법」 제9조에 따른 투자권유·자문·매매중개·집합투자업에 해당하지 않습니다.',
@@ -107,7 +107,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'legal',
     emoji: '⚖️',
     title: '법률·민원',
-    color: '#FFB83E',
+    color: '#D97706',
     tools: '군 복무 D-day · 역사 시대 환산 · 한자·생활 단위 · 기타 법령 인용 도구',
     warnings: [
       '본 도구의 법률·법령 정보는 2026년 시점 공개 자료를 인용한 일반 정보입니다.',
@@ -122,7 +122,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'food',
     emoji: '🍳',
     title: '식품·요리',
-    color: '#FF8C3E',
+    color: '#EA580C',
     tools: '식품 보관 기간 · 해동 시간 · 발효 일정 · 베이커 퍼센트 · 염도(절임·김치) · 시럽·당도 · 튀김 온도 · 차·커피 추출',
     warnings: [
       '식품 보관·해동 시간은 일반 권장치이며, 식품의 초기 신선도·냉장고 온도·포장 상태에 따라 실제 안전 기간이 크게 달라집니다.',
@@ -173,7 +173,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'sports',
     emoji: '🏃',
     title: '운동·스포츠',
-    color: '#3EFFD0',
+    color: '#0D9488',
     tools: '러닝 페이스 · 마라톤 예측 · 1RM · 인터벌 트레이닝 · 골프 핸디캡·비거리·비용 · 야구·축구 통계 · 격투기 체급',
     warnings: [
       '1RM(1회 최대 중량) 추정은 Epley·Brzycki 등 공식 기반이며, 실제 시도 전 자격 트레이너 지도와 워밍업이 필수입니다.',
@@ -189,7 +189,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'art',
     emoji: '🎨',
     title: '예술·창작·공예',
-    color: '#C485E0',
+    color: '#9333EA',
     tools: '물감·잉크 혼합 · 색상 변환 · 사진 노출·화각 · 황금비율 · 뜨개질 게이지 · 글자수 · 더미 텍스트',
     warnings: [
       '본 도구의 색 시뮬레이션은 디지털 RGB 공간의 근사이며, 실제 물감·잉크의 안료 농도·매체(수성/유성)·건조 후 변색을 완전히 반영하지 않습니다. 정확한 색은 반드시 소량 테스트 후 작업하세요.',
@@ -207,7 +207,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'dev',
     emoji: '🖥️',
     title: '개발자·인코딩·암호',
-    color: '#C8FF3E',
+    color: '#0EA5E9',
     tools: 'Base64 · JSON · CSS 변환 · 진법 변환 · 해시 생성기 · 정규식 테스트기 · YAML ↔ JSON 변환 · URL 인코더/디코더 · cURL 변환기 · HTTP 상태 코드 검색기',
     warnings: [
       '본 도구의 해시 알고리즘 중 MD5·SHA-1은 충돌 공격이 알려져 비밀번호 해싱·디지털 서명·SSL 인증서 용도로 사용 금지. 파일 무결성 확인 용도로만 사용하세요.',

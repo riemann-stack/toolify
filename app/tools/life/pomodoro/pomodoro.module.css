@@ -36,7 +36,7 @@
 .ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }@media (hover: hover) {
   .ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #0D0D0D; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
+.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #ffffff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
   .mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
 }
 
@@ -77,7 +77,7 @@
 .presetTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
 .presetTime { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
 .presetDesc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.presetBadge { position: absolute; top: 8px; right: 8px; font-size: 10px; background: var(--accent); color: #0D0D0D; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.presetBadge { position: absolute; top: 8px; right: 8px; font-size: 10px; background: var(--accent); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 
 /* ── 알림음 ── */
 .soundList { display: flex; flex-direction: column; gap: 6px; }

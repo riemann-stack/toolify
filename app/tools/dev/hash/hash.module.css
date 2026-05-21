@@ -45,7 +45,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #C8FF3E; color: #0D0D0D; }
+.tabActive { background: #0EA5E9; color: #ffffff; }
 
 /* textarea / input */
 .textarea {
@@ -63,7 +63,7 @@
   box-sizing: border-box;
   line-height: 1.5;
 }
-.textarea:focus { border-color: #C8FF3E; }
+.textarea:focus { border-color: #0EA5E9; }
 .input {
   width: 100%;
   background: var(--bg3);
@@ -77,7 +77,7 @@
   box-sizing: border-box;
   min-height: 44px;
 }
-.input:focus { border-color: #C8FF3E; }
+.input:focus { border-color: #0EA5E9; }
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -143,12 +143,12 @@
   font-weight: 600;
   min-height: 32px;
 }@media (hover: hover) {
-  .optBtn:hover { color: var(--text); border-color: #C8FF3E; }
+  .optBtn:hover { color: var(--text); border-color: #0EA5E9; }
 }
 .optBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 
 .smBtn {
@@ -166,7 +166,7 @@
   min-height: 30px;
   white-space: nowrap;
 }@media (hover: hover) {
-  .smBtn:hover { color: #C8FF3E; border-color: #C8FF3E; }
+  .smBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
 }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -177,8 +177,8 @@
   border-radius: 12px;
   padding: 16px 18px;
 }
-.cardSafe { border-left: 3px solid #3EFFD0; }
-.cardIntegrity { border-left: 3px solid #FFB83E; }
+.cardSafe { border-left: 3px solid #0D9488; }
+.cardIntegrity { border-left: 3px solid #D97706; }
 
 .resultHeader {
   display: flex;
@@ -236,7 +236,7 @@
 /* 영웅 카드 (HMAC) */
 .heroCard {
   background: linear-gradient(135deg, var(--bg2), var(--bg3));
-  border: 1px solid #C8FF3E;
+  border: 1px solid #0EA5E9;
   border-radius: 14px;
   padding: 22px;
   display: grid;
@@ -261,7 +261,7 @@
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
   font-size: 14px;
   font-weight: 700;
-  color: #C8FF3E;
+  color: #0EA5E9;
   word-break: break-all;
   background: var(--bg3);
   padding: 10px 14px;
@@ -277,13 +277,13 @@
 .copyBigBtn {
   appearance: none;
   -webkit-appearance: none;
-  background: #C8FF3E;
+  background: #0EA5E9;
   border: none;
   border-radius: 8px;
   padding: 14px 20px;
   font-size: 13px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
@@ -295,13 +295,13 @@
 .primaryBtn {
   appearance: none;
   -webkit-appearance: none;
-  background: #C8FF3E;
+  background: #0EA5E9;
   border: none;
   border-radius: 10px;
   padding: 14px 18px;
   font-size: 14px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   width: 100%;
@@ -337,12 +337,12 @@
   gap: 4px;
   text-align: left;
 }@media (hover: hover) {
-  .algBtn:hover { border-color: #C8FF3E; }
+  .algBtn:hover { border-color: #0EA5E9; }
 }
 .algBtnActive {
-  background: #C8FF3E;
-  color: #0D0D0D;
-  border-color: #C8FF3E;
+  background: #0EA5E9;
+  color: #ffffff;
+  border-color: #0EA5E9;
 }
 .algBtnBadge {
   font-size: 10.5px;
@@ -350,7 +350,7 @@
   font-weight: 600;
   opacity: 0.85;
 }
-.algBtnActive .algBtnBadge { color: #0D0D0D; }
+.algBtnActive .algBtnBadge { color: #ffffff; }
 
 /* 시나리오 프리셋 */
 .presetGrid {
@@ -373,7 +373,7 @@
   flex-direction: column;
   gap: 4px;
 }@media (hover: hover) {
-  .presetCard:hover { border-color: #C8FF3E; background: var(--bg2); }
+  .presetCard:hover { border-color: #0EA5E9; background: var(--bg2); }
 }
 .presetTitle {
   font-size: 14px;
@@ -383,7 +383,7 @@
 }
 .presetSpec {
   font-size: 12px;
-  color: #C8FF3E;
+  color: #0EA5E9;
   margin: 0 0 6px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -425,8 +425,8 @@
   transition: all 0.2s;
 }@media (hover: hover) {
   .dropZone:hover, .dropZoneActive {
-  border-color: #C8FF3E;
-  background: rgba(200, 255, 62, 0.04);
+  border-color: #0EA5E9;
+  background: rgba(14, 165, 233, 0.04);
 }
 }
 .dropZoneIcon {
@@ -492,7 +492,7 @@
 }
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #C8FF3E, #3EFFD0);
+  background: linear-gradient(90deg, #0EA5E9, #0D9488);
   transition: width 0.2s ease;
 }
 .progressText {
@@ -519,14 +519,14 @@
   margin: 10px 0;
 }
 .verifyOk {
-  background: rgba(62, 255, 208, 0.10);
-  border: 1px solid #3EFFD0;
-  color: #3EFFD0;
+  background: rgba(13, 148, 136, 0.10);
+  border: 1px solid #0D9488;
+  color: #0D9488;
 }
 .verifyFail {
-  background: rgba(255, 62, 140, 0.10);
-  border: 1px solid #FF3E8C;
-  color: #FF3E8C;
+  background: rgba(219, 39, 119, 0.10);
+  border: 1px solid #DB2777;
+  color: #DB2777;
 }
 
 /* 작은 해시 표 */
@@ -641,14 +641,14 @@
 }
 
 .dangerBox {
-  background: rgba(255, 62, 140, 0.06);
-  border: 2px solid #FF3E8C;
+  background: rgba(219, 39, 119, 0.06);
+  border: 2px solid #DB2777;
   border-radius: 14px;
   padding: 18px 22px;
 }
 .dangerTitle {
   font-size: 16px;
-  color: #FF3E8C;
+  color: #DB2777;
   font-weight: 800;
   margin: 0 0 10px;
 }

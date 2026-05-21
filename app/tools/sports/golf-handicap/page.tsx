@@ -32,7 +32,7 @@ export default function GolfHandicapPage() {
             WHS 핵심 공식
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Score Differential</p>
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
                 스코어 디퍼런셜 = (그로스 스코어 − 코스 레이팅) × 113 ÷ 슬로프 레이팅
@@ -42,8 +42,8 @@ export default function GolfHandicapPage() {
               </p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
-              <p style={{ fontSize: '12px', color: '#3EFF9B', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Handicap Index</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Handicap Index</p>
               <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
                 핸디캡 지수 = 최근 20라운드 중 최저 N개 평균 × 0.96
               </p>
@@ -60,21 +60,21 @@ export default function GolfHandicapPage() {
             계산 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EFF9B', marginBottom: '8px' }}>예시 1 — 입문자 (5라운드)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>예시 1 — 입문자 (5라운드)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 코스레이팅 72.0 / 슬로프 113 동일 코스에서 108, 103, 99, 105, 101타 기록
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
                 디퍼런셜 = (그로스 − 72.0) × 113 ÷ 113 = 그로스 − 72<br/>
                 108 → 36.0 · 103 → 31.0 · 99 → 27.0 · 105 → 33.0 · 101 → 29.0<br/>
-                <span style={{ color: '#3EFF9B' }}>5라운드 → 최저 1개 사용: 27.0</span><br/>
+                <span style={{ color: '#059669' }}>5라운드 → 최저 1개 사용: 27.0</span><br/>
                 핸디캡 지수 = 27.0 × 0.96 = <strong style={{ color: 'var(--accent)' }}>25.9</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 하이 핸디캐퍼 등급. 꾸준히 라운드를 쌓으면 최저 N개가 늘어나 지수가 안정화됩니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>예시 2 — 중급자 (20라운드)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 20라운드 디퍼런셜 중 최저 8개 평균이 10.5라고 가정
@@ -82,10 +82,10 @@ export default function GolfHandicapPage() {
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
                 핸디캡 지수 = 10.5 × 0.96 = <strong style={{ color: 'var(--accent)' }}>10.1</strong><br/>
                 <br/>
-                <span style={{ color: '#C8FF3E' }}>오늘 코스</span> 슬로프 128 / CR 72.5 / 파 72<br/>
+                <span style={{ color: '#0EA5E9' }}>오늘 코스</span> 슬로프 128 / CR 72.5 / 파 72<br/>
                 코스 핸디캡 = 10.1 × (128 ÷ 113) + (72.5 − 72) = 11.4 + 0.5 ≈ <strong style={{ color: 'var(--accent)' }}>12</strong><br/>
                 <br/>
-                <span style={{ color: '#3EC8FF' }}>그로스 85타 쳤다면</span><br/>
+                <span style={{ color: '#0891B2' }}>그로스 85타 쳤다면</span><br/>
                 네트 스코어 = 85 − 12 = <strong style={{ color: 'var(--accent)' }}>73 (+1)</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 미드 핸디캐퍼 등급. 플레잉 핸디캡은 코스 핸디캡 × 0.95 = 11.</p>
@@ -144,12 +144,12 @@ export default function GolfHandicapPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '12px' }}>
             {[
-              { range: '55~95',   level: '매우 쉬움',  color: '#3EFF9B', sub: '짧은 파3 위주 숏코스' },
-              { range: '95~110',  level: '쉬운 코스',  color: '#C8FF3E', sub: '넓은 페어웨이, 적은 벙커' },
-              { range: '110~125', level: '보통 코스',  color: '#3EC8FF', sub: '한국 주요 골프장 평균 구간' },
-              { range: '125~140', level: '어려운 코스', color: '#FF8C3E', sub: '좁은 페어웨이, 많은 해저드' },
-              { range: '140~155', level: '최상급 난이도', color: '#FF6B6B', sub: '대회 세팅·프로 토너먼트 코스' },
-              { range: '113',     level: '표준 기준값', color: '#FFD700', sub: '공식 기준점, 평균 난이도' },
+              { range: '55~95',   level: '매우 쉬움',  color: '#059669', sub: '짧은 파3 위주 숏코스' },
+              { range: '95~110',  level: '쉬운 코스',  color: '#0EA5E9', sub: '넓은 페어웨이, 적은 벙커' },
+              { range: '110~125', level: '보통 코스',  color: '#0891B2', sub: '한국 주요 골프장 평균 구간' },
+              { range: '125~140', level: '어려운 코스', color: '#EA580C', sub: '좁은 페어웨이, 많은 해저드' },
+              { range: '140~155', level: '최상급 난이도', color: '#DC2626', sub: '대회 세팅·프로 토너먼트 코스' },
+              { range: '113',     level: '표준 기준값', color: '#CA8A04', sub: '공식 기준점, 평균 난이도' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '10px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 700, color: item.color, marginBottom: '4px' }}>{item.range}</p>
@@ -158,9 +158,9 @@ export default function GolfHandicapPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              <strong style={{ color: '#3EC8FF' }}>한국 주요 골프장 평균</strong>: 약 118~128 수준.
+              <strong style={{ color: '#0891B2' }}>한국 주요 골프장 평균</strong>: 약 118~128 수준.
               스코어카드, 클럽하우스 안내판, 또는 한국골프장경영협회(KGBA) 홈페이지에서 정확한 값을 확인할 수 있습니다.
             </p>
           </div>
@@ -173,11 +173,11 @@ export default function GolfHandicapPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
             {[
-              { range: '≤ 0',    name: '스크래치',     color: '#FFD700', sub: '프로 수준' },
-              { range: '0~9',    name: '로우 핸디캐퍼',  color: '#3EFF9B', sub: '상급자' },
-              { range: '10~18',  name: '미드 핸디캐퍼',  color: '#C8FF3E', sub: '중급자' },
-              { range: '19~28',  name: '하이 핸디캐퍼',  color: '#FF8C3E', sub: '입문~초급' },
-              { range: '29~54',  name: '맥스 핸디캐퍼',  color: '#FF6B6B', sub: '초보자' },
+              { range: '≤ 0',    name: '스크래치',     color: '#CA8A04', sub: '프로 수준' },
+              { range: '0~9',    name: '로우 핸디캐퍼',  color: '#059669', sub: '상급자' },
+              { range: '10~18',  name: '미드 핸디캐퍼',  color: '#0EA5E9', sub: '중급자' },
+              { range: '19~28',  name: '하이 핸디캐퍼',  color: '#EA580C', sub: '입문~초급' },
+              { range: '29~54',  name: '맥스 핸디캐퍼',  color: '#DC2626', sub: '초보자' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}30`, borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: g.color, marginBottom: '6px' }}>{g.range}</p>
@@ -319,11 +319,11 @@ export default function GolfHandicapPage() {
             📌 한국 공식 핸디캡 인증
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구는 WHS 표준 공식을 정확히 적용하지만 <strong style={{ color: '#FF8C3E' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
+            본 도구는 WHS 표준 공식을 정확히 적용하지만 <strong style={{ color: '#EA580C' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EFF9B', marginBottom: '8px' }}>🟢 본 도구 (비공식)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>🟢 본 도구 (비공식)</p>
               <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>WHS 표준 공식 정확 적용</li>
                 <li>본인 실력 추정·발전 참고</li>
@@ -331,8 +331,8 @@ export default function GolfHandicapPage() {
                 <li>무료, 즉시 사용</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF8C3E', marginBottom: '8px' }}>🟠 공식 인증 (KGA)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>🟠 공식 인증 (KGA)</p>
               <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>대한골프협회(KGA) 발급</li>
                 <li>회원 골프 클럽 통해 신청</li>

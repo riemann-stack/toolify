@@ -63,16 +63,16 @@ export default function WirePage() {
 
       {/* 매우 강조된 안전 안내 */}
       <div style={{
-        background: 'rgba(255, 62, 140, 0.08)',
-        border: '1px solid rgba(255, 62, 140, 0.4)',
-        borderLeft: '4px solid #FF3E8C',
+        background: 'rgba(219, 39, 119, 0.08)',
+        border: '1px solid rgba(219, 39, 119, 0.4)',
+        borderLeft: '4px solid #DB2777',
         borderRadius: '10px',
         padding: '14px 18px',
         marginBottom: '32px',
         fontSize: '13px',
         lineHeight: 1.75,
       }}>
-        <strong style={{ display: 'block', color: '#FF3E8C', marginBottom: 6 }}>🚨 안전 우선 안내</strong>
+        <strong style={{ display: 'block', color: '#DB2777', marginBottom: 6 }}>🚨 안전 우선 안내</strong>
         <span style={{ color: 'var(--text)' }}>
           전기 자가시공은 <strong>전기공사업법상 일반인 불가</strong>입니다.
           이 도구는 <strong>학습·견적 검토용 참고치</strong>이며,
@@ -182,8 +182,8 @@ export default function WirePage() {
               분전반 메인·간선용.
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #FF3E8C', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#FF3E8C', fontWeight: 700, margin: '0 0 6px' }}>누전차단기 (ELCB·RCBO)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>누전차단기 (ELCB·RCBO)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               누전·감전 방지.<br />
               사람을 감전사로부터 보호.<br />

@@ -197,9 +197,9 @@
   border: 1px solid;
 }
 .badgeHot {
-  color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.3);
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
 }
 .badgeNew {
   color: var(--cat-color, var(--accent));

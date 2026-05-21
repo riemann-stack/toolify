@@ -62,7 +62,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'Syne, SF Mono, Consolas, monospace',
   fontSize: '12.5px',
-  color: '#C8FF3E',
+  color: '#0EA5E9',
 }
 
 export default function UrlEncodePage() {
@@ -139,7 +139,7 @@ export default function UrlEncodePage() {
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>escape</code></td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>영숫자 + @*+-./_</td>
-                <td style={{ padding: '8px 10px', color: '#FF3E8C', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
+                <td style={{ padding: '8px 10px', color: '#DB2777', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
               </tr>
             </tbody>
           </table>
@@ -178,7 +178,7 @@ export default function UrlEncodePage() {
                   <td style={{ padding: '8px 10px', fontSize: 22, fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: 'var(--text)' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: 'var(--muted)', fontSize: 12 }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: '#C8FF3E', fontWeight: 700 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: '#0EA5E9', fontWeight: 700 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>

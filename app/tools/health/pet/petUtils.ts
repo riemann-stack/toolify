@@ -144,14 +144,14 @@ const DOG_IDEAL_WEIGHT: Record<DogSize, { min: number; max: number; name: string
 
 export function evaluateBody(species: Species, weight: number, size: DogSize): BodyEvaluation {
   if (species === 'cat') {
-    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: '#3EC8FF',
+    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: '#0891B2',
       message: '평균보다 가벼운 편입니다. 식욕·활동·치아 점검을 권장합니다.' }
-    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: '#3EFF9B',
+    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: '#059669',
       message: '일반적인 고양이 정상 체중 범위입니다 (3.0~5.5kg).',
       range: { min: 3.0, max: 5.5, sizeName: '고양이' } }
-    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#FFD700',
+    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#CA8A04',
       message: '관절·심장 부담이 늘어납니다. 사료량 10~15% 감량 + 놀이 시간 ↑ 권장.' }
-    return                     { status: 'obese',       label: '비만', color: '#FF6B6B',
+    return                     { status: 'obese',       label: '비만', color: '#DC2626',
       message: '비만은 당뇨·관절염 위험이 큽니다. 수의사 상담 후 감량 계획을 권장합니다.' }
   }
 
@@ -161,18 +161,18 @@ export function evaluateBody(species: Species, weight: number, size: DogSize): B
   const ratio = weight / idealMid
 
   if (ratio < 0.85)
-    return { status: 'underweight', label: '저체중', color: '#3EC8FF',
+    return { status: 'underweight', label: '저체중', color: '#0891B2',
       message: '평균보다 가벼운 편입니다. 영양·기생충·치아 점검을 권장합니다.',
       range: { ...range, sizeName: range.name } }
   if (ratio < 1.15)
-    return { status: 'ideal', label: '적정 체중', color: '#3EFF9B',
+    return { status: 'ideal', label: '적정 체중', color: '#059669',
       message: `${range.name}견 정상 체중 범위 (${range.min}~${range.max}kg).`,
       range: { ...range, sizeName: range.name } }
   if (ratio < 1.30)
-    return { status: 'overweight', label: '과체중', color: '#FFD700',
+    return { status: 'overweight', label: '과체중', color: '#CA8A04',
       message: '관절 부담이 늘어납니다. 사료량 10~15% 감량을 권장합니다.',
       range: { ...range, sizeName: range.name } }
-  return     { status: 'obese', label: '비만', color: '#FF6B6B',
+  return     { status: 'obese', label: '비만', color: '#DC2626',
       message: '비만견은 수명 1.5~2년 단축 보고가 있습니다. 수의사 감량 계획을 권장합니다.',
       range: { ...range, sizeName: range.name } }
 }

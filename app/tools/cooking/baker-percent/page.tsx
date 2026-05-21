@@ -87,7 +87,7 @@ export default function BakerPercentPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.y}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.f}</td>
@@ -121,10 +121,10 @@ export default function BakerPercentPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { r: '50~60%', t: '저수분',     c: '#3EFF9B', d: '베이글·비스킷·페이스트리. 다루기 쉬움.' },
+              { r: '50~60%', t: '저수분',     c: '#059669', d: '베이글·비스킷·페이스트리. 다루기 쉬움.' },
               { r: '60~70%', t: '표준',       c: 'var(--accent)', d: '식빵·단과자빵·일반 발효빵.' },
-              { r: '70~80%', t: '고수분',     c: '#FF8C3E', d: '치아바타·캄파뉴·일부 사워도우. 큰 기공.' },
-              { r: '80%+',   t: '매우 고수분', c: '#FF6B6B', d: '포카치아·하이드라 사워도우. 다루기 어려움.' },
+              { r: '70~80%', t: '고수분',     c: '#EA580C', d: '치아바타·캄파뉴·일부 사워도우. 큰 기공.' },
+              { r: '80%+',   t: '매우 고수분', c: '#DC2626', d: '포카치아·하이드라 사워도우. 다루기 어려움.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 4 }}>{g.r}</p>
@@ -134,8 +134,8 @@ export default function BakerPercentPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(62,200,255,0.05)',
-            border: '1px solid rgba(62,200,255,0.30)',
+            background: 'rgba(8,145,178,0.05)',
+            border: '1px solid rgba(8,145,178,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,
@@ -143,7 +143,7 @@ export default function BakerPercentPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 고수분일수록 <strong style={{ color: '#3EC8FF' }}>큰 기공·촉촉한 식감</strong>이지만,
+            💡 고수분일수록 <strong style={{ color: '#0891B2' }}>큰 기공·촉촉한 식감</strong>이지만,
             반죽이 끈적해 다루기 어려워지고 발효 시간이 길어질 수 있습니다.
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function BakerPercentPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FFD93E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FFD93E', fontWeight: 700, marginBottom: 8 }}>🧂 소금 (밀가루 대비)</p>
+              <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, marginBottom: 8 }}>🧂 소금 (밀가루 대비)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li><strong>1.8~2.2%</strong>: 일반적인 제빵 범위</li>
                 <li>1% 이하: 맛 밋밋, 발효 조절 어려움</li>
@@ -163,7 +163,7 @@ export default function BakerPercentPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #9B59B6', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#C485E0', fontWeight: 700, marginBottom: 8 }}>🧫 이스트 (인스턴트 드라이 기준)</p>
+              <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>🧫 이스트 (인스턴트 드라이 기준)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>0.3~0.5%: 장시간 저온발효 (12시간+)</li>
                 <li><strong>0.5~1%</strong>: 일반 표준</li>
@@ -196,7 +196,7 @@ export default function BakerPercentPage() {
                   { t: '천연발효종 (르방)', r: '별도 계산', v: '약 100~150g' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#C485E0', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: '#9333EA', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.v}</td>
                   </tr>
@@ -222,14 +222,14 @@ export default function BakerPercentPage() {
               { n: '풀리시 (Sponge)', d: '50~60% 수분율 · 짧은 발효' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#C485E0', fontWeight: 700, marginBottom: 6 }}>{c.n}</p>
+                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>{c.n}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
           </div>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.30)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,

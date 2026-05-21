@@ -313,9 +313,9 @@ export interface GradeInfo {
 
 export const GRADE_INFO: GradeInfo[] = [
   { grade: '4.8',  tensile: '400 MPa', yield: '320 MPa', use: '일반 강·가구·전기',           color: '#9B9B9B' },
-  { grade: '8.8',  tensile: '800 MPa', yield: '640 MPa', use: '범용 기계·자동차 일반부',     color: '#3EFFD0' },
-  { grade: '10.9', tensile: '1000 MPa',yield: '900 MPa', use: '엔진·서스펜션·구조물',         color: '#FFB83E' },
-  { grade: '12.9', tensile: '1200 MPa',yield: '1080 MPa',use: '고강도 구조·항공·공구',        color: '#FF3E8C' },
+  { grade: '8.8',  tensile: '800 MPa', yield: '640 MPa', use: '범용 기계·자동차 일반부',     color: '#0D9488' },
+  { grade: '10.9', tensile: '1000 MPa',yield: '900 MPa', use: '엔진·서스펜션·구조물',         color: '#D97706' },
+  { grade: '12.9', tensile: '1200 MPa',yield: '1080 MPa',use: '고강도 구조·항공·공구',        color: '#DB2777' },
 ]
 
 /* 숫자 포맷 */

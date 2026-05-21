@@ -376,7 +376,7 @@ function CharyeLayoutSvg() {
     <svg viewBox="0 0 500 280" className={s.charyeSvg} preserveAspectRatio="xMidYMid meet">
       {/* 상 외곽 (격자) */}
       <rect x="20" y="20" width="460" height="240" rx="8"
-        fill="rgba(255,184,62,0.04)" stroke="#FFB83E" strokeWidth="2" />
+        fill="rgba(217,119,6,0.04)" stroke="#D97706" strokeWidth="2" />
 
       {/* 5개 가로 행 (북=위, 남=아래) */}
       {[0, 1, 2, 3, 4].map(i => (
@@ -384,12 +384,12 @@ function CharyeLayoutSvg() {
           x1="20" x2="480"
           y1={20 + (i + 1) * 48}
           y2={20 + (i + 1) * 48}
-          stroke="#FFB83E" strokeWidth="1" opacity="0.4" strokeDasharray="3 3"
+          stroke="#D97706" strokeWidth="1" opacity="0.4" strokeDasharray="3 3"
         />
       ))}
 
       {/* 신위 (북쪽) 표시 */}
-      <text x="250" y="14" textAnchor="middle" fill="#FFB83E" fontSize="11"
+      <text x="250" y="14" textAnchor="middle" fill="#D97706" fontSize="11"
         fontFamily="Noto Sans KR, sans-serif" fontWeight="700">↑ 신위 (북)</text>
 
       {/* 1열: 메·갱 */}
@@ -404,11 +404,11 @@ function CharyeLayoutSvg() {
       <text x="380" y="96" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">편·꿀</text>
 
       {/* 3열: 적·전 (어동육서) */}
-      <text x="60" y="144" fill="#3EC8FF" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">어 (동)</text>
+      <text x="60" y="144" fill="#0891B2" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">어 (동)</text>
       <text x="120" y="144" fill="#fff" fontSize="10" fontFamily="Noto Sans KR, sans-serif">조기·동태전</text>
       <text x="250" y="144" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">동그랑땡·전</text>
       <text x="370" y="144" fill="#fff" fontSize="10" fontFamily="Noto Sans KR, sans-serif">갈비찜·산적</text>
-      <text x="430" y="144" fill="#FF8C3E" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">육 (서)</text>
+      <text x="430" y="144" fill="#EA580C" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">육 (서)</text>
 
       {/* 4열: 탕 (육탕·소탕·어탕) */}
       <text x="140" y="192" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">육탕</text>
@@ -416,17 +416,17 @@ function CharyeLayoutSvg() {
       <text x="360" y="192" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">어탕</text>
 
       {/* 5열: 포·나물·과일 (조율이시·홍동백서) */}
-      <text x="50" y="240" fill="#3EFF9B" fontSize="9" fontFamily="Noto Sans KR, sans-serif">대추</text>
-      <text x="100" y="240" fill="#3EFF9B" fontSize="9" fontFamily="Noto Sans KR, sans-serif">밤</text>
-      <text x="150" y="240" fill="#3EFF9B" fontSize="9" fontFamily="Noto Sans KR, sans-serif">배</text>
-      <text x="200" y="240" fill="#3EFF9B" fontSize="9" fontFamily="Noto Sans KR, sans-serif">감</text>
+      <text x="50" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">대추</text>
+      <text x="100" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">밤</text>
+      <text x="150" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">배</text>
+      <text x="200" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">감</text>
       <text x="245" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">시금치</text>
       <text x="300" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">도라지</text>
       <text x="355" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">고사리</text>
       <text x="410" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">한과·식혜</text>
 
       {/* 5열 라벨 */}
-      <text x="30" y="265" fill="#FFB83E" fontSize="10" fontFamily="Noto Sans KR, sans-serif">조율이시 + 홍동백서</text>
+      <text x="30" y="265" fill="#D97706" fontSize="10" fontFamily="Noto Sans KR, sans-serif">조율이시 + 홍동백서</text>
     </svg>
   )
 }

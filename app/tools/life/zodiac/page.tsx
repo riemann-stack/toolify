@@ -109,17 +109,17 @@ export default function ZodiacPage() {
               </thead>
               <tbody>
                 {[
-                  ['♈ 양자리',    '3/21 ~ 4/19',  '불',   '#FF6B6B'],
-                  ['♉ 황소자리',  '4/20 ~ 5/20',  '지',   '#C8FF3E'],
-                  ['♊ 쌍둥이자리','5/21 ~ 6/21',  '공기', '#3EC8FF'],
+                  ['♈ 양자리',    '3/21 ~ 4/19',  '불',   '#DC2626'],
+                  ['♉ 황소자리',  '4/20 ~ 5/20',  '지',   '#0EA5E9'],
+                  ['♊ 쌍둥이자리','5/21 ~ 6/21',  '공기', '#0891B2'],
                   ['♋ 게자리',    '6/22 ~ 7/22',  '물',   '#6B8BFF'],
-                  ['♌ 사자자리',  '7/23 ~ 8/22',  '불',   '#FF6B6B'],
-                  ['♍ 처녀자리',  '8/23 ~ 9/22',  '지',   '#C8FF3E'],
-                  ['♎ 천칭자리',  '9/23 ~ 10/23', '공기', '#3EC8FF'],
+                  ['♌ 사자자리',  '7/23 ~ 8/22',  '불',   '#DC2626'],
+                  ['♍ 처녀자리',  '8/23 ~ 9/22',  '지',   '#0EA5E9'],
+                  ['♎ 천칭자리',  '9/23 ~ 10/23', '공기', '#0891B2'],
                   ['♏ 전갈자리',  '10/24 ~ 11/22','물',   '#6B8BFF'],
-                  ['♐ 사수자리',  '11/23 ~ 12/21','불',   '#FF6B6B'],
-                  ['♑ 염소자리',  '12/22 ~ 1/19', '지',   '#C8FF3E'],
-                  ['♒ 물병자리',  '1/20 ~ 2/18',  '공기', '#3EC8FF'],
+                  ['♐ 사수자리',  '11/23 ~ 12/21','불',   '#DC2626'],
+                  ['♑ 염소자리',  '12/22 ~ 1/19', '지',   '#0EA5E9'],
+                  ['♒ 물병자리',  '1/20 ~ 2/18',  '공기', '#0891B2'],
                   ['♓ 물고기자리','2/19 ~ 3/20',  '물',   '#6B8BFF'],
                 ].map(([sign, period, element, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -217,8 +217,8 @@ export default function ZodiacPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--accent)', fontWeight: 700 }}>{r.z}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r.p}</td>
-                    <td style={{ padding: '9px 10px', color: '#3EFF9B' }}>{r.b}</td>
-                    <td style={{ padding: '9px 10px', color: '#FF8C3E' }}>{r.a}</td>
+                    <td style={{ padding: '9px 10px', color: '#059669' }}>{r.b}</td>
+                    <td style={{ padding: '9px 10px', color: '#EA580C' }}>{r.a}</td>
                   </tr>
                 ))}
               </tbody>
@@ -233,9 +233,9 @@ export default function ZodiacPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { el: '🔥 불', signs: '♈ 양 · ♌ 사자 · ♐ 사수', traits: '열정·리더십·직관', c: '#FF6B6B' },
-              { el: '🌿 지', signs: '♉ 황소 · ♍ 처녀 · ♑ 염소', traits: '현실적·안정·끈기', c: '#C8FF3E' },
-              { el: '💨 공기', signs: '♊ 쌍둥이 · ♎ 천칭 · ♒ 물병', traits: '소통·지성·자유', c: '#3EC8FF' },
+              { el: '🔥 불', signs: '♈ 양 · ♌ 사자 · ♐ 사수', traits: '열정·리더십·직관', c: '#DC2626' },
+              { el: '🌿 지', signs: '♉ 황소 · ♍ 처녀 · ♑ 염소', traits: '현실적·안정·끈기', c: '#0EA5E9' },
+              { el: '💨 공기', signs: '♊ 쌍둥이 · ♎ 천칭 · ♒ 물병', traits: '소통·지성·자유', c: '#0891B2' },
               { el: '💧 물', signs: '♋ 게 · ♏ 전갈 · ♓ 물고기', traits: '감성·직관·공감', c: '#6B8BFF' },
             ].map((e, i) => (
               <div key={i} style={{
@@ -263,8 +263,8 @@ export default function ZodiacPage() {
             본 도구의 「두 사람 궁합」 탭에서 자동 계산.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(62,255,155,0.04)', border: '1px solid rgba(62,255,155,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>🟢 삼합 (5점) — 환상적 시너지</p>
+            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>🟢 삼합 (5점) — 환상적 시너지</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>신자진: 원숭이·쥐·용</li>
                 <li>사유축: 뱀·닭·소</li>
@@ -272,7 +272,7 @@ export default function ZodiacPage() {
                 <li>해묘미: 돼지·토끼·양</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(200,255,62,0.04)', border: '1px solid rgba(200,255,62,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.30)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🟡 육합 (4점) — 안정적</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>자축: 쥐·소</li>
@@ -283,8 +283,8 @@ export default function ZodiacPage() {
                 <li>오미: 말·양</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 8 }}>🔴 충 (1점) — 충돌·도전</p>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>🔴 충 (1점) — 충돌·도전</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>자오: 쥐·말</li>
                 <li>축미: 소·양</li>
@@ -317,11 +317,11 @@ export default function ZodiacPage() {
               </thead>
               <tbody>
                 {[
-                  ['같은 원소', '🟢 5점', '자연스러운 공감과 이해', '#3EFF9B'],
-                  ['🔥 불 + 💨 공기', '🟢 5점', '공기가 불을 살리는 시너지 — 활력·영감', '#3EFF9B'],
-                  ['🌿 지 + 💧 물', '🟢 5점', '물과 흙의 시너지 — 안정·성장', '#3EFF9B'],
-                  ['🔥 불 + 💧 물', '🔴 2점', '가치관 차이 큼, 타협 필요', '#FF6B6B'],
-                  ['🌿 지 + 💨 공기', '🔴 2점', '현실 vs 자유 거리감', '#FF6B6B'],
+                  ['같은 원소', '🟢 5점', '자연스러운 공감과 이해', '#059669'],
+                  ['🔥 불 + 💨 공기', '🟢 5점', '공기가 불을 살리는 시너지 — 활력·영감', '#059669'],
+                  ['🌿 지 + 💧 물', '🟢 5점', '물과 흙의 시너지 — 안정·성장', '#059669'],
+                  ['🔥 불 + 💧 물', '🔴 2점', '가치관 차이 큼, 타협 필요', '#DC2626'],
+                  ['🌿 지 + 💨 공기', '🔴 2점', '현실 vs 자유 거리감', '#DC2626'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
@@ -384,7 +384,7 @@ export default function ZodiacPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📅 양력 vs 음력 띠 차이
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '16px 18px' }}>
             <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85 }}>
               <li>한국에서는 일반적으로 <strong>양력 1월 1일</strong>을 기준으로 띠를 사용</li>
               <li>전통 사주명리는 <strong>음력 설날 (양력 1월 21일~2월 20일 사이)</strong>을 기준</li>
@@ -430,15 +430,15 @@ export default function ZodiacPage() {
 
         {/* ── 면책 강화 ── */}
         <div style={{
-          background: 'rgba(255, 140, 62, 0.04)',
-          border: '1px solid rgba(255, 140, 62, 0.30)',
+          background: 'rgba(234, 88, 12, 0.04)',
+          border: '1px solid rgba(234, 88, 12, 0.30)',
           borderRadius: '12px',
           padding: '18px 20px',
           fontSize: '12.5px',
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#FF8C3E', marginBottom: 10 }}>⚠️ 면책 조항</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#EA580C', marginBottom: 10 }}>⚠️ 면책 조항</p>
           <p style={{ marginBottom: 8 }}>
             본 띠·별자리 계산기는 <strong style={{ color: 'var(--text)' }}>재미용·교육용 도구</strong>입니다.
           </p>
@@ -457,9 +457,9 @@ export default function ZodiacPage() {
           </ul>
           <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>도움이 필요하면:</p>
           <ul style={{ paddingLeft: 18 }}>
-            <li>한국 결혼관계 상담: <strong style={{ color: '#FF8C3E' }}>1644-2255</strong></li>
-            <li>청소년·가족 상담: <strong style={{ color: '#FF8C3E' }}>1388</strong></li>
-            <li>정신건강 위기상담: <strong style={{ color: '#FF8C3E' }}>1577-0199</strong></li>
+            <li>한국 결혼관계 상담: <strong style={{ color: '#EA580C' }}>1644-2255</strong></li>
+            <li>청소년·가족 상담: <strong style={{ color: '#EA580C' }}>1388</strong></li>
+            <li>정신건강 위기상담: <strong style={{ color: '#EA580C' }}>1577-0199</strong></li>
             <li>사주·점성 자문: 본 도구 영역 X</li>
           </ul>
         </div>

@@ -480,10 +480,10 @@ function RhythmTestTab() {
     if (actual == null) return null
     const errPct = Math.abs(actual - targetBpm) / targetBpm * 100
     let stars = 0, title = '', color = '#999'
-    if (errPct <= 1)       { stars = 3; title = '완벽! 프로 수준입니다';          color = '#FFD700' }
-    else if (errPct <= 3)  { stars = 2; title = '훌륭해요! 리듬감이 뛰어납니다'; color = '#C8FF3E' }
-    else if (errPct <= 5)  { stars = 1; title = '좋아요! 조금 더 연습하면 완벽'; color = '#C8FF3E' }
-    else if (errPct <= 10) { stars = 0; title = '연습이 필요해요 💪';             color = '#FF8C3E' }
+    if (errPct <= 1)       { stars = 3; title = '완벽! 프로 수준입니다';          color = '#CA8A04' }
+    else if (errPct <= 3)  { stars = 2; title = '훌륭해요! 리듬감이 뛰어납니다'; color = '#0EA5E9' }
+    else if (errPct <= 5)  { stars = 1; title = '좋아요! 조금 더 연습하면 완벽'; color = '#0EA5E9' }
+    else if (errPct <= 10) { stars = 0; title = '연습이 필요해요 💪';             color = '#EA580C' }
     else                   { stars = 0; title = '메트로놈으로 연습해보세요 🎵';  color = '#FF4D4D' }
     return { actual, errPct, stars, title, color }
   }, [phase, taps, targetBpm])

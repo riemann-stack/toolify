@@ -69,7 +69,7 @@
 }
 .voltBtnActive {
   background: var(--accent-dim) !important;
-  border-color: rgba(200,255,62,0.5) !important;
+  border-color: rgba(14,165,233,0.5) !important;
   color: var(--accent) !important;
   font-weight: 700 !important;
 }
@@ -106,7 +106,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
   .presetBtn:hover {
-  color: var(--accent); border-color: rgba(200,255,62,0.4);
+  color: var(--accent); border-color: rgba(14,165,233,0.4);
 }
 }
 
@@ -159,11 +159,11 @@
   font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
   flex-shrink: 0; min-width: 50px;
 }@media (hover: hover) {
-  .copyBtn:hover { color: var(--accent); border-color: rgba(200,255,62,0.4); }
+  .copyBtn:hover { color: var(--accent); border-color: rgba(14,165,233,0.4); }
 }
 .copyBtnDone {
   color: var(--accent) !important;
-  border-color: rgba(200,255,62,0.4) !important;
+  border-color: rgba(14,165,233,0.4) !important;
 }
 
 /* ── 항공 판정 박스 ── */
@@ -173,23 +173,23 @@
   border: 1px solid var(--border);
 }
 .flightSafe {
-  background: rgba(62,255,155,0.08);
-  border-color: rgba(62,255,155,0.4);
+  background: rgba(16,185,129,0.14);
+  border-color: rgba(16,185,129,0.4);
 }
 .flightWarn {
-  background: rgba(255,140,62,0.08);
-  border-color: rgba(255,140,62,0.4);
+  background: rgba(234,88,12,0.14);
+  border-color: rgba(234,88,12,0.4);
 }
 .flightBanned {
-  background: rgba(255,107,107,0.08);
-  border-color: rgba(255,107,107,0.4);
+  background: rgba(220,38,38,0.14);
+  border-color: rgba(220,38,38,0.4);
 }
 .flightTitle {
   font-size: 16px; font-weight: 800;
 }
-.flightSafe .flightTitle { color: #3EFF9B; }
-.flightWarn .flightTitle { color: #FF8C3E; }
-.flightBanned .flightTitle { color: #FF6B6B; }
+.flightSafe .flightTitle { color: #059669; }
+.flightWarn .flightTitle { color: #EA580C; }
+.flightBanned .flightTitle { color: #DC2626; }
 
 .flightDesc {
   font-size: 12px; color: var(--muted); line-height: 1.7;
@@ -199,9 +199,9 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 28px; font-weight: 800;
   letter-spacing: -1px;
 }
-.flightSafe .flightWh { color: #3EFF9B; }
-.flightWarn .flightWh { color: #FF8C3E; }
-.flightBanned .flightWh { color: #FF6B6B; }
+.flightSafe .flightWh { color: #059669; }
+.flightWarn .flightWh { color: #EA580C; }
+.flightBanned .flightWh { color: #DC2626; }
 
 /* ── 공식 박스 ── */
 .formulaBox {
@@ -222,12 +222,12 @@
 
 /* ── 항공 규정 안내 ── */
 .ruleBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.25);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.25);
   border-radius: 12px; padding: 14px 16px;
 }
 .ruleTitle {
-  font-size: 13px; color: #3EC8FF; font-weight: 700;
+  font-size: 13px; color: #0891B2; font-weight: 700;
   margin-bottom: 8px;
 }
 .ruleList {
@@ -261,9 +261,9 @@
   .refTable tr:hover { background: var(--bg3); }
 }
 .refMah { color: var(--accent); font-weight: 800; }
-.refSafe { color: #3EFF9B; }
-.refWarn { color: #FF8C3E; }
-.refBanned { color: #FF6B6B; }
+.refSafe { color: #059669; }
+.refWarn { color: #EA580C; }
+.refBanned { color: #DC2626; }
 
 /* ── 모바일 ── */
 @media (max-width: 600px) {

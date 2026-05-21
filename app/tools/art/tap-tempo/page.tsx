@@ -37,7 +37,7 @@ export default function TapTempoPage() {
             이 계산기는 탭한 간격의 <strong style={{ color: 'var(--text)' }}>평균값</strong>으로 BPM을 계산합니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>BPM 계산 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
               BPM = 60,000 ÷ 평균 간격(ms)
@@ -96,15 +96,15 @@ export default function TapTempoPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { genre: '느린 발라드',    bpm: '60~75',    color: '#3EC8FF', desc: '감성 발라드, R&B 슬로잼' },
-              { genre: '팝 발라드',      bpm: '76~95',    color: '#3EC8FF', desc: '한국 발라드 표준 템포' },
-              { genre: '댄스팝',         bpm: '96~115',   color: '#C8FF3E', desc: '미드템포 팝, K-POP 발라드' },
-              { genre: '일반 팝·록',     bpm: '116~128',  color: '#C8FF3E', desc: '아이돌 댄스곡, 밴드 록' },
-              { genre: 'EDM·하우스',     bpm: '122~132',  color: '#FF8C3E', desc: '클럽 하우스, 빅룸 EDM' },
-              { genre: '디스코·펑크',    bpm: '110~130',  color: '#FF8C3E', desc: '레트로 디스코, 재즈 펑크' },
-              { genre: '힙합·트랩',      bpm: '130~170',  color: '#FF3E8C', desc: '트랩(하프타임 체감 65~85)' },
-              { genre: '드럼앤베이스',   bpm: '170~180',  color: '#FF3E8C', desc: 'DnB, 정글 빠른 비트' },
-              { genre: '하드스타일·스피드코어', bpm: '150~',  color: '#B03EFF', desc: '하드댄스, 스피드코어' },
+              { genre: '느린 발라드',    bpm: '60~75',    color: '#0891B2', desc: '감성 발라드, R&B 슬로잼' },
+              { genre: '팝 발라드',      bpm: '76~95',    color: '#0891B2', desc: '한국 발라드 표준 템포' },
+              { genre: '댄스팝',         bpm: '96~115',   color: '#0EA5E9', desc: '미드템포 팝, K-POP 발라드' },
+              { genre: '일반 팝·록',     bpm: '116~128',  color: '#0EA5E9', desc: '아이돌 댄스곡, 밴드 록' },
+              { genre: 'EDM·하우스',     bpm: '122~132',  color: '#EA580C', desc: '클럽 하우스, 빅룸 EDM' },
+              { genre: '디스코·펑크',    bpm: '110~130',  color: '#EA580C', desc: '레트로 디스코, 재즈 펑크' },
+              { genre: '힙합·트랩',      bpm: '130~170',  color: '#DB2777', desc: '트랩(하프타임 체감 65~85)' },
+              { genre: '드럼앤베이스',   bpm: '170~180',  color: '#DB2777', desc: 'DnB, 정글 빠른 비트' },
+              { genre: '하드스타일·스피드코어', bpm: '150~',  color: '#9333EA', desc: '하드댄스, 스피드코어' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: item.color, fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>{item.genre}</p>

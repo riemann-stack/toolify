@@ -455,7 +455,7 @@ export default function SeveranceClient() {
                   <div key={m.years} className={s.milestoneCard}>
                     <p className={s.milestoneYear}>{m.years}년</p>
                     <p className={s.milestoneDate}>{fmtDate(m.target)}</p>
-                    <p className={s.milestoneOffset} style={{ color: m.offset > 0 ? '#FF8C3E' : 'var(--accent)' }}>
+                    <p className={s.milestoneOffset} style={{ color: m.offset > 0 ? '#EA580C' : 'var(--accent)' }}>
                       {m.offset > 0 ? `${m.offset}일 더 근무 필요` : m.offset === 0 ? '✅ 도달' : `이미 ${-m.offset}일 초과`}
                     </p>
                   </div>
@@ -488,7 +488,7 @@ export default function SeveranceClient() {
                         <td>{fmtDate(addDays(endDate, off))}</td>
                         <td className={s.cellMono}>{target.days}일</td>
                         <td className={`${s.cellMono} ${off === 0 ? s.cellAccent : ''}`}>{target.severance > 0 ? fmtMan(target.severance) : '—'}</td>
-                        <td className={s.cellMono} style={{ color: diff > 0 ? 'var(--accent)' : diff < 0 ? '#FF3E8C' : 'var(--muted)' }}>
+                        <td className={s.cellMono} style={{ color: diff > 0 ? 'var(--accent)' : diff < 0 ? '#DB2777' : 'var(--muted)' }}>
                           {off === 0 ? '기준' : (diff > 0 ? '+' : '') + fmtMan(diff)}
                         </td>
                       </tr>
@@ -585,9 +585,9 @@ export default function SeveranceClient() {
             <span className={s.cardLabel}>입금·공제 구성</span>
             <DonutChart
               data={[
-                { id: 'sev',    label: '퇴직금 실수령', value: tax.netSeverance, color: '#3EFFD0' },
-                { id: 'sal',    label: '마지막 월급',   value: lastSalaryN, color: '#3EC8FF' },
-                { id: 'leave',  label: '연차수당',     value: extraLeaveN, color: '#FFB83E' },
+                { id: 'sev',    label: '퇴직금 실수령', value: tax.netSeverance, color: '#0D9488' },
+                { id: 'sal',    label: '마지막 월급',   value: lastSalaryN, color: '#0891B2' },
+                { id: 'leave',  label: '연차수당',     value: extraLeaveN, color: '#D97706' },
               ].filter((d) => d.value > 0)}
               total={tax.netSeverance + lastSalaryN + extraLeaveN}
             />
@@ -595,12 +595,12 @@ export default function SeveranceClient() {
               <table className={s.detailTable}>
                 <tbody>
                   <tr><td>퇴직금 (세전)</td><td className={s.cellMono}>{fmtMan(severanceMan)}</td></tr>
-                  <tr><td>퇴직소득세 + 지방소득세</td><td className={s.cellMono} style={{ color: '#FF3E8C' }}>−{fmtMan(tax.totalTax)}</td></tr>
+                  <tr><td>퇴직소득세 + 지방소득세</td><td className={s.cellMono} style={{ color: '#DB2777' }}>−{fmtMan(tax.totalTax)}</td></tr>
                   <tr><td>퇴직금 실수령</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(tax.netSeverance)}</td></tr>
                   <tr><td>마지막 월급</td><td className={s.cellMono}>{fmtMan(lastSalaryN)}</td></tr>
                   <tr><td>미사용 연차수당</td><td className={s.cellMono}>{fmtMan(extraLeaveN)}</td></tr>
-                  {insN !== 0 && <tr><td>4대보험 정산</td><td className={s.cellMono} style={{ color: insN > 0 ? '#FF3E8C' : 'var(--accent)' }}>{insN > 0 ? '−' : '+'}{fmtMan(Math.abs(insN))}</td></tr>}
-                  {othN > 0 && <tr><td>기타 공제</td><td className={s.cellMono} style={{ color: '#FF3E8C' }}>−{fmtMan(othN)}</td></tr>}
+                  {insN !== 0 && <tr><td>4대보험 정산</td><td className={s.cellMono} style={{ color: insN > 0 ? '#DB2777' : 'var(--accent)' }}>{insN > 0 ? '−' : '+'}{fmtMan(Math.abs(insN))}</td></tr>}
+                  {othN > 0 && <tr><td>기타 공제</td><td className={s.cellMono} style={{ color: '#DB2777' }}>−{fmtMan(othN)}</td></tr>}
                   <tr className={s.cellTotal}>
                     <td><strong>총 입금 예상</strong></td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}><strong>{fmtMan(totalDeposit)}</strong></td>
@@ -650,9 +650,9 @@ export default function SeveranceClient() {
 function SeveranceBarChart({ pre, tax, net }: { pre: number; tax: number; net: number }) {
   const maxVal = Math.max(pre, 1)
   const items = [
-    { label: '세전 퇴직금', value: pre, color: '#3EC8FF' },
-    { label: '세금 (퇴직+지방)', value: tax, color: '#FF3E8C' },
-    { label: '실수령액', value: net, color: '#3EFFD0' },
+    { label: '세전 퇴직금', value: pre, color: '#0891B2' },
+    { label: '세금 (퇴직+지방)', value: tax, color: '#DB2777' },
+    { label: '실수령액', value: net, color: '#0D9488' },
   ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -742,8 +742,8 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
           {/* 강조 점 */}
           {highlightP && highlightP.severance > 0 && (
             <g>
-              <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="#FF3E8C" stroke="#000" strokeWidth="1" />
-              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#FF3E8C" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
+              <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="#DB2777" stroke="#000" strokeWidth="1" />
+              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#DB2777" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
                 {fmtMan(highlightP.severance)}
               </text>
             </g>

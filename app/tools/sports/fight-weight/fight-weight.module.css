@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 종목 선택 (가로 스크롤 가능) ── */
 .sportScroller {
@@ -38,17 +38,17 @@
 }@media (hover: hover) {
   .sportBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.sportBoxing  { border-color: rgba(255,107,107,0.45); }
-.sportUFC     { border-color: rgba(255,215,0,0.45); }
-.sportONE     { border-color: rgba(62,255,155,0.45); }
-.sportKick    { border-color: rgba(62,200,255,0.45); }
-.sportJudo    { border-color: rgba(200,255,62,0.45); }
+.sportBoxing  { border-color: rgba(220,38,38,0.45); }
+.sportUFC     { border-color: rgba(202,138,4,0.45); }
+.sportONE     { border-color: rgba(16,185,129,0.45); }
+.sportKick    { border-color: rgba(8,145,178,0.45); }
+.sportJudo    { border-color: rgba(14,165,233,0.45); }
 .sportTKD     { border-color: rgba(155,89,182,0.45); }
-.sportMuay    { border-color: rgba(255,140,62,0.45); }
+.sportMuay    { border-color: rgba(234,88,12,0.45); }
 .sportWrest   { border-color: rgba(255,107,213,0.45); }
 .sportBtn.sportActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -229,19 +229,19 @@
   padding-right: 32px;
   box-sizing: border-box;
 }
-.classSelect:focus { border-color: rgba(200,255,62,0.5); }
+.classSelect:focus { border-color: rgba(14,165,233,0.5); }
 .classSelect option { background: #1a1a1a; color: var(--text); }
 
 /* ── 추천 카드 ── */
 .recommendCard {
-  background: rgba(62,255,155,0.06);
-  border: 1px solid rgba(62,255,155,0.25);
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.25);
   border-radius: 14px;
   padding: 16px 20px;
 }
 .recommendLead {
   font-size: 12px;
-  color: #3EFF9B;
+  color: #059669;
   font-weight: 700;
   margin-bottom: 8px;
   letter-spacing: 0.04em;
@@ -256,7 +256,7 @@
 /* ── HERO (감량 필요량) ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(200,255,62,0.35);
+  border: 1px solid rgba(14,165,233,0.35);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -275,7 +275,7 @@
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroNumLoss { color: #3EFF9B; }
+.heroNumLoss { color: #059669; }
 .heroUnit {
   font-size: 18px;
   color: var(--muted);
@@ -323,9 +323,9 @@
   letter-spacing: -0.5px;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos    { color: #3EFF9B; }
-.kpiValueWarn   { color: #FF8C3E; }
-.kpiValueDanger { color: #FF6B6B; }
+.kpiValuePos    { color: #059669; }
+.kpiValueWarn   { color: #EA580C; }
+.kpiValueDanger { color: #DC2626; }
 
 /* ── 위험도 배지 ── */
 .riskBadge {
@@ -337,9 +337,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 8px;
 }
-.riskSafe    { background: rgba(62,255,155,0.15);  color: #3EFF9B; }
-.riskCaution { background: rgba(255,140,62,0.15);  color: #FF8C3E; }
-.riskDanger  { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.riskSafe    { background: rgba(16,185,129,0.15);  color: #059669; }
+.riskCaution { background: rgba(234,88,12,0.15);  color: #EA580C; }
+.riskDanger  { background: rgba(220,38,38,0.15); color: #DC2626; }
 .riskSevere  {
   background: rgba(255,70,70,0.18);
   color: #FF4646;
@@ -370,14 +370,14 @@
   font-weight: 700;
 }
 .scheduleTable td:nth-child(2) { color: var(--accent); }
-.scheduleTable .phaseFat td   { background: rgba(255,140,62,0.06); }
-.scheduleTable .phaseWater td { background: rgba(62,200,255,0.08); }
-.scheduleTable .phaseRehy td  { background: rgba(62,255,155,0.06); }
+.scheduleTable .phaseFat td   { background: rgba(234,88,12,0.14); }
+.scheduleTable .phaseWater td { background: rgba(8,145,178,0.14); }
+.scheduleTable .phaseRehy td  { background: rgba(16,185,129,0.14); }
 .scheduleTable .dDay td       {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.4);
-  border-bottom: 2px solid rgba(200,255,62,0.4);
+  border-top: 2px solid rgba(14,165,233,0.4);
+  border-bottom: 2px solid rgba(14,165,233,0.4);
 }
 .scheduleTable .dDay td:first-child  { color: var(--accent); }
 .scheduleTable .dDay td:nth-child(2) { color: var(--accent); }
@@ -391,9 +391,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }
-.chipFat   { background: rgba(255,140,62,0.15); color: #FF8C3E; }
-.chipWater { background: rgba(62,200,255,0.15); color: #3EC8FF; }
-.chipRehy  { background: rgba(62,255,155,0.15); color: #3EFF9B; }
+.chipFat   { background: rgba(234,88,12,0.15); color: #EA580C; }
+.chipWater { background: rgba(8,145,178,0.15); color: #0891B2; }
+.chipRehy  { background: rgba(16,185,129,0.15); color: #059669; }
 .chipDday  { background: var(--accent-dim);     color: var(--accent); }
 
 /* ── 건강 경고 ── */
@@ -409,7 +409,7 @@
   gap: 12px;
   align-items: flex-start;
 }
-.healthWarn strong { color: #FF6B6B; font-weight: 700; }
+.healthWarn strong { color: #DC2626; font-weight: 700; }
 .healthWarn ul { margin: 8px 0 0 0; padding-left: 18px; }
 .healthWarn li { margin: 3px 0; }
 .warnIcon { font-size: 22px; flex-shrink: 0; }
@@ -470,7 +470,7 @@
   color: var(--muted);
 }
 .clickableRow { cursor: pointer; transition: background 0.12s; }@media (hover: hover) {
-  .clickableRow:hover { background: rgba(200,255,62,0.04); }
+  .clickableRow:hover { background: rgba(14,165,233,0.14); }
 }
 .clickableRow td:first-child::before { content: '→ '; opacity: 0; transition: opacity 0.12s; color: var(--accent); }@media (hover: hover) {
   .clickableRow:hover td:first-child::before { opacity: 1; }

@@ -67,11 +67,11 @@ export interface Co2Threshold {
 }
 
 export const CO2_THRESHOLDS: Co2Threshold[] = [
-  { max: 600,  level: 'excellent', label: '쾌적',     color: '#3EFF9B', desc: '실외 신선 공기 수준 (400~600 ppm)' },
-  { max: 800,  level: 'good',      label: '양호',     color: '#3EC8FF', desc: '일반 거주 환경 (600~800 ppm)' },
-  { max: 1000, level: 'moderate',  label: '보통',     color: '#FFD700', desc: '환기 권장 (800~1,000 ppm)' },
-  { max: 1500, level: 'poor',      label: '미흡',     color: '#FF8C3E', desc: '집중력 저하 가능 (1,000~1,500 ppm)' },
-  { max: 2500, level: 'bad',       label: '나쁨',     color: '#FF6B6B', desc: '두통·졸음 가능 (1,500~2,500 ppm)' },
+  { max: 600,  level: 'excellent', label: '쾌적',     color: '#059669', desc: '실외 신선 공기 수준 (400~600 ppm)' },
+  { max: 800,  level: 'good',      label: '양호',     color: '#0891B2', desc: '일반 거주 환경 (600~800 ppm)' },
+  { max: 1000, level: 'moderate',  label: '보통',     color: '#CA8A04', desc: '환기 권장 (800~1,000 ppm)' },
+  { max: 1500, level: 'poor',      label: '미흡',     color: '#EA580C', desc: '집중력 저하 가능 (1,000~1,500 ppm)' },
+  { max: 2500, level: 'bad',       label: '나쁨',     color: '#DC2626', desc: '두통·졸음 가능 (1,500~2,500 ppm)' },
   { max: 99999, level: 'severe',   label: '매우 나쁨', color: '#CC4444', desc: '즉시 환기 필요 (2,500 ppm 이상)' },
 ]
 
@@ -109,13 +109,13 @@ export interface DustLevel {
 }
 
 export const DUST_LEVELS: DustLevel[] = [
-  { id: 'good',      name: '좋음',     color: '#3EFF9B',
+  { id: 'good',      name: '좋음',     color: '#059669',
     recommendation: '자유롭게 환기 가능 (10~15분)' },
-  { id: 'moderate',  name: '보통',     color: '#FFD700',
+  { id: 'moderate',  name: '보통',     color: '#CA8A04',
     recommendation: '일반 환기 가능 (10분 이내)' },
-  { id: 'bad',       name: '나쁨',     color: '#FF8C3E',
+  { id: 'bad',       name: '나쁨',     color: '#EA580C',
     recommendation: '5~10분 짧은 환기 + 공기청정기 가동' },
-  { id: 'very-bad',  name: '매우 나쁨', color: '#FF6B6B',
+  { id: 'very-bad',  name: '매우 나쁨', color: '#DC2626',
     recommendation: '5분 이내 짧은 환기 + 즉시 공기청정기' },
 ]
 
@@ -199,15 +199,15 @@ export function evaluateCurrentPerformance(
 
   let efficiency: PerformanceResult['efficiency'] = 'adequate'
   let efficiencyLabel = '🟢 적정'
-  let efficiencyColor = '#3EFF9B'
+  let efficiencyColor = '#059669'
   if (currentAch < targetAch * 0.7) {
     efficiency = 'low'
     efficiencyLabel = '🟠 부족'
-    efficiencyColor = '#FF8C3E'
+    efficiencyColor = '#EA580C'
   } else if (currentAch > targetAch * 1.5) {
     efficiency = 'high'
     efficiencyLabel = '🔵 충분'
-    efficiencyColor = '#3EC8FF'
+    efficiencyColor = '#0891B2'
   }
 
   return {

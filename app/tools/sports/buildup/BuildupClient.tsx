@@ -467,7 +467,7 @@ export default function BuildupClient() {
                           <td>{warmupNumKm.toFixed(1)}km</td>
                           <td className={s.cellPace}>{fmtPace(startSec)}/km</td>
                           <td className={s.cellCum}>{fmtHMS(warmSec)}</td>
-                          <td><span className={s.intensityChip} style={{ background: '#3EFF9B22', color: '#3EFF9B', borderColor: '#3EFF9B66' }}>웜업 · E</span></td>
+                          <td><span className={s.intensityChip} style={{ background: '#05966922', color: '#059669', borderColor: '#05966966' }}>웜업 · E</span></td>
                         </tr>
                       )}
                       {result.segments.map((seg) => {
@@ -496,7 +496,7 @@ export default function BuildupClient() {
                           <td>{cooldownNumKm.toFixed(1)}km</td>
                           <td className={s.cellPace}>{fmtPace(startSec)}/km</td>
                           <td className={s.cellCum}>{fmtHMS(sessionSec)}</td>
-                          <td><span className={s.intensityChip} style={{ background: '#3EFF9B22', color: '#3EFF9B', borderColor: '#3EFF9B66' }}>쿨다운 · E</span></td>
+                          <td><span className={s.intensityChip} style={{ background: '#05966922', color: '#059669', borderColor: '#05966966' }}>쿨다운 · E</span></td>
                         </tr>
                       )}
                     </tbody>

@@ -160,9 +160,9 @@ export default function BoltWrenchPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         {[
           { t: '🚲 자전거', c: 'var(--accent)', d: '알렌이 핵심. 2~8mm 알렌세트 + 8/10/13/15mm 콤비스패너 + 토크렌치(카본).' },
-          { t: '🪑 가구·DIY', c: '#FF8C3E', d: '이케아·한샘 표준 알렌 3/4/5/6mm + 10/13/14mm 스패너 + 드라이버.' },
-          { t: '🚗 자동차', c: '#3EC8FF', d: '3/8" 라쳇 + 8~22mm 소켓 풀세트 + 토크렌치 20~110Nm + 잭/잭스탠드.' },
-          { t: '🏭 산업', c: '#FF3E8C', d: '1/2" 라쳇 + 6~32mm 임팩트 소켓 + 100~500Nm 토크렌치 + 슬러그 스패너.' },
+          { t: '🪑 가구·DIY', c: '#EA580C', d: '이케아·한샘 표준 알렌 3/4/5/6mm + 10/13/14mm 스패너 + 드라이버.' },
+          { t: '🚗 자동차', c: '#0891B2', d: '3/8" 라쳇 + 8~22mm 소켓 풀세트 + 토크렌치 20~110Nm + 잭/잭스탠드.' },
+          { t: '🏭 산업', c: '#DB2777', d: '1/2" 라쳇 + 6~32mm 임팩트 소켓 + 100~500Nm 토크렌치 + 슬러그 스패너.' },
         ].map((g, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
             <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>

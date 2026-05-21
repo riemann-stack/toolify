@@ -63,7 +63,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'Syne, SF Mono, Consolas, monospace',
   fontSize: '12.5px',
-  color: '#C8FF3E',
+  color: '#0EA5E9',
 }
 
 export default function YamlJsonPage() {
@@ -123,8 +123,8 @@ export default function YamlJsonPage() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>항목</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#3EC8FF', fontSize: 11 }}>YAML</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#3EFFD0', fontSize: 11 }}>JSON</th>
+                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#0891B2', fontSize: 11 }}>YAML</th>
+                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#0D9488', fontSize: 11 }}>JSON</th>
               </tr>
             </thead>
             <tbody>

@@ -146,7 +146,7 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#FF8C8C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
+            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
             <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
             <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
             <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
@@ -162,8 +162,8 @@ export default function IpoDepositPage() {
       {/* 4. 청약 한도·중복청약 */}
       <h2 style={sectionTitle}>🚫 청약 한도·중복청약 금지 가이드</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-        <div style={{ background: 'var(--bg2)', border: '1px solid #FFB83E44', borderRadius: '12px', padding: '16px 18px' }}>
-          <p style={{ fontSize: '13px', color: '#FFB83E', fontWeight: 700, marginBottom: '8px' }}>📏 청약 한도</p>
+        <div style={{ background: 'var(--bg2)', border: '1px solid #D9770644', borderRadius: '12px', padding: '16px 18px' }}>
+          <p style={{ fontSize: '13px', color: '#D97706', fontWeight: 700, marginBottom: '8px' }}>📏 청약 한도</p>
           <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 18, margin: 0 }}>
             <li>증권사·종목별 다름 (보통 5,000~50,000주)</li>
             <li>일반 청약 / 우대 / 직원 한도 별개</li>
@@ -171,8 +171,8 @@ export default function IpoDepositPage() {
             <li>본 도구의 한도 입력으로 자동 경고</li>
           </ul>
         </div>
-        <div style={{ background: 'var(--bg2)', border: '1px solid #FF6B6B44', borderRadius: '12px', padding: '16px 18px' }}>
-          <p style={{ fontSize: '13px', color: '#FF6B6B', fontWeight: 700, marginBottom: '8px' }}>🚫 중복청약 금지 (2021년 이후)</p>
+        <div style={{ background: 'var(--bg2)', border: '1px solid #DC262644', borderRadius: '12px', padding: '16px 18px' }}>
+          <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>🚫 중복청약 금지 (2021년 이후)</p>
           <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 18, margin: 0 }}>
             <li>한 종목당 한 증권사만 가능</li>
             <li>위반 시 배정 취소 + 자금 묶임</li>
@@ -202,7 +202,7 @@ export default function IpoDepositPage() {
           <tbody>
             <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
             <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
-            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
+            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#059669', fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
             <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
             <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
           </tbody>
@@ -281,7 +281,7 @@ export default function IpoDepositPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q6. 중복청약 금지는 가족 명의로 우회 가능한가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#FF6B6B' }}>비추천 — 위험.</strong> 2021년 이후 한 종목당 1 증권사 원칙. 가족 명의 차용은:
+          <strong style={{ color: '#DC2626' }}>비추천 — 위험.</strong> 2021년 이후 한 종목당 1 증권사 원칙. 가족 명의 차용은:
           <ul style={{ paddingLeft: 18, marginTop: 8 }}>
             <li>적발 시 배정 취소 + 자금 묶임</li>
             <li>증여세·상속세 이슈 (자금 출처 추적 가능)</li>
@@ -339,8 +339,8 @@ export default function IpoDepositPage() {
       {/* 8. 면책 */}
       <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
       <div style={{
-        background: 'rgba(255, 184, 62, 0.06)',
-        border: '1px solid rgba(255, 184, 62, 0.25)',
+        background: 'rgba(217, 119, 6, 0.06)',
+        border: '1px solid rgba(217, 119, 6, 0.25)',
         borderRadius: '12px',
         padding: '18px 22px',
         fontSize: '14px',

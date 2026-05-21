@@ -34,9 +34,9 @@ export default function LaundryDryPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { n: '①', title: '습도',   desc: '가장 큰 영향 요인. 습도 90% vs 40%는 건조 시간 <strong>약 3배 차이</strong>가 납니다. 공기 중 수증기가 많으면 옷의 수분이 증발할 공간이 없습니다.', color: 'var(--accent)' },
-              { n: '②', title: '온도',   desc: '온도가 <strong>10°C 올라갈 때마다</strong> 증발 속도가 약 <strong>20% 향상</strong>됩니다. 다만 습도가 낮을 때만 효과가 크며, 고습도에선 온도 효과가 제한적입니다.', color: '#FF8C3E' },
-              { n: '③', title: '바람',   desc: '바람은 옷 표면의 포화층을 쓸어내 건조를 가속합니다. 강풍 시 무풍 대비 건조 시간이 <strong>절반 이하</strong>로 줄어듭니다.', color: '#3EC8FF' },
-              { n: '④', title: '소재',   desc: '울·데님은 섬유가 두껍고 흡수율이 높아 오래 걸립니다. 합성섬유는 친수성이 낮아 면보다 30% 빠르게 건조됩니다.', color: '#3EFF9B' },
+              { n: '②', title: '온도',   desc: '온도가 <strong>10°C 올라갈 때마다</strong> 증발 속도가 약 <strong>20% 향상</strong>됩니다. 다만 습도가 낮을 때만 효과가 크며, 고습도에선 온도 효과가 제한적입니다.', color: '#EA580C' },
+              { n: '③', title: '바람',   desc: '바람은 옷 표면의 포화층을 쓸어내 건조를 가속합니다. 강풍 시 무풍 대비 건조 시간이 <strong>절반 이하</strong>로 줄어듭니다.', color: '#0891B2' },
+              { n: '④', title: '소재',   desc: '울·데님은 섬유가 두껍고 흡수율이 높아 오래 걸립니다. 합성섬유는 친수성이 낮아 면보다 30% 빠르게 건조됩니다.', color: '#059669' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: item.color, fontWeight: 700, marginBottom: '6px' }}>{item.n} {item.title}</p>
@@ -76,7 +76,7 @@ export default function LaundryDryPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.item}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row.mat}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.surf}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.surf}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.full}</td>
                   </tr>
                 ))}
@@ -111,9 +111,9 @@ export default function LaundryDryPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.env}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#FF8C3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.summer}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.summer}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.spring}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#3EC8FF', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.winter}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.winter}</td>
                   </tr>
                 ))}
               </tbody>
@@ -127,8 +127,8 @@ export default function LaundryDryPage() {
             장마철·겨울 실내 건조 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#3EC8FF', fontWeight: 700, marginBottom: '10px' }}>🌧️ 장마철 (습도 80~90%)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '10px' }}>🌧️ 장마철 (습도 80~90%)</p>
               <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 <li>제습기 필수 (없으면 에어컨 제습 모드)</li>
                 <li>선풍기로 바람 직접 쐬기</li>
@@ -136,8 +136,8 @@ export default function LaundryDryPage() {
                 <li>건조 시간 최소 <strong style={{ color: 'var(--text)' }}>1.5~2배</strong> 예상</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '10px' }}>❄️ 겨울 실내 건조</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '10px' }}>❄️ 겨울 실내 건조</p>
               <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 <li>난방 건조한 공기 활용 가능하지만 정전기 주의</li>
                 <li>가습기 사용 중이면 건조 효과 상쇄</li>
@@ -174,7 +174,7 @@ export default function LaundryDryPage() {
                 }}>{item.n}</span>
                 <span style={{ fontSize: '20px', flexShrink: 0 }}>{item.icon}</span>
                 <span style={{ flex: 1, fontSize: '13px', color: 'var(--text)', fontWeight: 500 }}>{item.title}</span>
-                <span style={{ fontSize: '12px', color: '#3EFF9B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{item.save}</span>
+                <span style={{ fontSize: '12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{item.save}</span>
               </div>
             ))}
           </div>
@@ -270,8 +270,8 @@ export default function LaundryDryPage() {
             한국 가정에서 흔한 욕실 건조법. 작은 공간 + 환풍기 효율로 시간 25% 단축 효과. 단, 곰팡이 주의가 필수입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,255,155,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#3EFF9B', fontWeight: 700, marginBottom: '10px' }}>✅ 장점</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '10px' }}>✅ 장점</p>
               <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 <li>작은 공간 + 환풍기 효율 ↑ (-25%)</li>
                 <li>거실·방 공간 절약</li>
@@ -279,8 +279,8 @@ export default function LaundryDryPage() {
                 <li>환풍기 30W로 매우 저렴 (5시간 약 30원)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,140,62,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#FF8C3E', fontWeight: 700, marginBottom: '10px' }}>⚠️ 주의</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
+              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '10px' }}>⚠️ 주의</p>
               <ul style={{ margin: 0, padding: '0 0 0 18px', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 <li>욕실 곰팡이 발생 위험 ↑</li>
                 <li>사용 후 24시간+ 환풍기 가동 (환기)</li>

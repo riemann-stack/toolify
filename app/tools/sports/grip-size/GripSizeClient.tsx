@@ -304,7 +304,7 @@ export default function GripSizeClient() {
         </div>
 
         {/* 골프 */}
-        <div className={s.resultCard} style={{ '--accent': '#3EFF9B' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--accent': '#059669' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>⛳ 골프</span>
             <span className={s.resultBadge}>{effectiveGlove}호</span>
@@ -318,7 +318,7 @@ export default function GripSizeClient() {
         </div>
 
         {/* 배드민턴 */}
-        <div className={s.resultCard} style={{ '--accent': '#3EC8FF' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--accent': '#0891B2' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>🏸 배드민턴</span>
             <span className={s.resultBadge}>{badminton.id}</span>
@@ -454,7 +454,7 @@ function HandMeasureSvg({ palmCm, fullCm }: { palmCm: number; fullCm: number }) 
            L 248 165
            Q 248 200 240 215
            Q 230 225 200 230 Z"
-        fill="rgba(200, 255, 62, 0.08)"
+        fill="rgba(14, 165, 233, 0.08)"
         stroke="var(--accent)"
         strokeWidth="2"
       />
@@ -464,7 +464,7 @@ function HandMeasureSvg({ palmCm, fullCm }: { palmCm: number; fullCm: number }) 
       <text x="155" y="262" fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Noto Sans KR, sans-serif">손목</text>
 
       {/* 약지(ring finger) 강조 + 화살표 */}
-      <line x1="210" y1="45" x2="210" y2="258" stroke="#3EFF9B" strokeWidth="2.5" strokeDasharray="6 4" opacity="0.9" />
+      <line x1="210" y1="45" x2="210" y2="258" stroke="#059669" strokeWidth="2.5" strokeDasharray="6 4" opacity="0.9" />
 
       {/* 손바닥 두 번째 주름 점 */}
       <circle cx="210" cy="178" r="4" fill="#FFD93E" stroke="#000" strokeWidth="1" />
@@ -477,30 +477,30 @@ function HandMeasureSvg({ palmCm, fullCm }: { palmCm: number; fullCm: number }) 
       {/* ① 측정 라벨 */}
       <g transform="translate(110, 110)">
         <rect x="-4" y="-12" width="56" height="24" rx="4" fill="rgba(0,0,0,0.7)" />
-        <text x="0" y="2" fill="#3EFF9B" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">① 테니스</text>
+        <text x="0" y="2" fill="#059669" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">① 테니스</text>
         <text x="0" y="14" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">손바닥+약지</text>
       </g>
-      <path d="M 165 117 L 200 120" stroke="#3EFF9B" strokeWidth="1.5" markerEnd="url(#arrow)" />
+      <path d="M 165 117 L 200 120" stroke="#059669" strokeWidth="1.5" markerEnd="url(#arrow)" />
 
       {/* 손목→중지 끝 (전체 손길이) */}
-      <circle cx="180" cy="258" r="3.5" fill="#3EC8FF" stroke="#000" strokeWidth="1" />
-      <circle cx="183" cy="55" r="3.5" fill="#3EC8FF" stroke="#000" strokeWidth="1" />
-      <line x1="180" y1="258" x2="183" y2="55" stroke="#3EC8FF" strokeWidth="1.8" strokeDasharray="4 3" opacity="0.7" />
+      <circle cx="180" cy="258" r="3.5" fill="#0891B2" stroke="#000" strokeWidth="1" />
+      <circle cx="183" cy="55" r="3.5" fill="#0891B2" stroke="#000" strokeWidth="1" />
+      <line x1="180" y1="258" x2="183" y2="55" stroke="#0891B2" strokeWidth="1.8" strokeDasharray="4 3" opacity="0.7" />
 
       <g transform="translate(60, 200)">
         <rect x="-4" y="-12" width="62" height="24" rx="4" fill="rgba(0,0,0,0.7)" />
-        <text x="0" y="2" fill="#3EC8FF" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">② 골프</text>
+        <text x="0" y="2" fill="#0891B2" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">② 골프</text>
         <text x="0" y="14" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">손목~중지 끝</text>
       </g>
-      <path d="M 122 207 L 175 200" stroke="#3EC8FF" strokeWidth="1.5" markerEnd="url(#arrowB)" />
+      <path d="M 122 207 L 175 200" stroke="#0891B2" strokeWidth="1.5" markerEnd="url(#arrowB)" />
 
       {/* 화살표 마커 */}
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#3EFF9B" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669" />
         </marker>
         <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#3EC8FF" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2" />
         </marker>
       </defs>
     </svg>
@@ -521,7 +521,7 @@ function PencilTestSvg({ result }: { result: 'snug' | 'fit' | 'gap' | null }) {
       {[0, 1, 2, 3].map(i => (
         <g key={i}>
           <rect x={155 + i * 23} y="40" width="18" height="50" rx="4"
-            fill="rgba(200, 255, 62, 0.18)" stroke="var(--accent)" strokeWidth="1.5" />
+            fill="rgba(14, 165, 233, 0.18)" stroke="var(--accent)" strokeWidth="1.5" />
         </g>
       ))}
 
@@ -530,9 +530,9 @@ function PencilTestSvg({ result }: { result: 'snug' | 'fit' | 'gap' | null }) {
 
       {/* 검지 (테스트용) */}
       <rect x="275" y="65" width="16" height="48" rx="4"
-        fill="rgba(62, 200, 255, 0.30)" stroke="#3EC8FF" strokeWidth="2" />
-      <text x="283" y="55" fill="#3EC8FF" fontSize="10" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">검지</text>
-      <path d="M 283 122 Q 283 140 240 140" stroke="#3EC8FF" strokeWidth="1.5" fill="none" strokeDasharray="3 3" markerEnd="url(#arrowC)" />
+        fill="rgba(8, 145, 178, 0.30)" stroke="#0891B2" strokeWidth="2" />
+      <text x="283" y="55" fill="#0891B2" fontSize="10" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">검지</text>
+      <path d="M 283 122 Q 283 140 240 140" stroke="#0891B2" strokeWidth="1.5" fill="none" strokeDasharray="3 3" markerEnd="url(#arrowC)" />
 
       {/* 안내 텍스트 */}
       <text x="200" y="180" textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="Noto Sans KR, sans-serif">
@@ -541,7 +541,7 @@ function PencilTestSvg({ result }: { result: 'snug' | 'fit' | 'gap' | null }) {
 
       <defs>
         <marker id="arrowC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#3EC8FF" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2" />
         </marker>
       </defs>
     </svg>

@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: linear-gradient(135deg, rgba(200,255,62,0.06) 0%, rgba(255,140,62,0.04) 100%);
+  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(234,88,12,0.14) 100%);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 20px;
@@ -83,7 +83,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #0D0D0D; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* ── 필드 ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -128,7 +128,7 @@
 }
 .dirBtnActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
 }
 
@@ -165,13 +165,13 @@
   color: var(--muted);
 }
 .checkItemRisk {
-  background: rgba(255, 107, 107, 0.06);
-  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(220, 38, 38, 0.06);
+  border-color: rgba(220, 38, 38, 0.4);
 }
-.checkItemRisk .checkBiasTag { background: rgba(255, 107, 107, 0.12); color: #FF8C8C; border-color: transparent; }
+.checkItemRisk .checkBiasTag { background: rgba(220, 38, 38, 0.12); color: #DC2626; border-color: transparent; }
 .checkItemGood {
-  background: rgba(62, 255, 155, 0.05);
-  border-color: rgba(62, 255, 155, 0.35);
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.35);
 }
 
 /* ── 결과 카드 ── */
@@ -215,9 +215,9 @@
 .biasChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .biasChip {
   font-size: 11px;
-  background: rgba(255, 107, 107, 0.12);
-  color: #FF8C8C;
-  border: 1px solid rgba(255, 107, 107, 0.3);
+  background: rgba(220, 38, 38, 0.12);
+  color: #DC2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
   border-radius: 99px;
   padding: 4px 10px;
 }
@@ -231,10 +231,10 @@
 }
 
 /* 결과 밴드 컬러 */
-.band_green   { background: rgba(62, 255, 155, 0.06); border-color: rgba(62, 255, 155, 0.4); }
+.band_green   { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.4); }
 .band_yellow  { background: rgba(255, 217, 62, 0.06); border-color: rgba(255, 217, 62, 0.4); }
-.band_orange  { background: rgba(255, 140, 62, 0.06); border-color: rgba(255, 140, 62, 0.4); }
-.band_red     { background: rgba(255, 107, 107, 0.06); border-color: rgba(255, 107, 107, 0.4); }
+.band_orange  { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.4); }
+.band_red     { background: rgba(220, 38, 38, 0.06); border-color: rgba(220, 38, 38, 0.4); }
 
 /* ── 버튼 ── */
 .runBtn {
@@ -247,7 +247,7 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
@@ -365,7 +365,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .optRemove:hover { color: #FF8C8C; }
+  .optRemove:hover { color: #DC2626; }
 }
 .optAddRow { display: flex; gap: 6px; }
 .optAddBtn {
@@ -378,7 +378,7 @@
   border-radius: 8px;
   font-size: 18px;
   font-weight: 700;
-  color: #0D0D0D;
+  color: #ffffff;
   cursor: pointer;
 }
 .optAddBtn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -428,7 +428,7 @@
   backface-visibility: hidden;
 }
 .coinHeads {
-  background: radial-gradient(circle at 30% 30%, #FFD93E 0%, #C8A52E 100%);
+  background: radial-gradient(circle at 30% 30%, #CA8A04 0%, #C8A52E 100%);
   color: #4A3500;
 }
 .coinTails {
@@ -478,15 +478,15 @@
 }
 .cubeChosen {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   transform: translateY(-8px) scale(1.1);
-  box-shadow: 0 0 20px rgba(200,255,62,0.5);
+  box-shadow: 0 0 20px rgba(14,165,233,0.5);
   animation: cubeGlow 1.2s ease-in-out infinite alternate;
 }
 @keyframes cubeGlow {
-  from { box-shadow: 0 0 12px rgba(200,255,62,0.4); }
-  to   { box-shadow: 0 0 28px rgba(200,255,62,0.7); }
+  from { box-shadow: 0 0 12px rgba(14,165,233,0.4); }
+  to   { box-shadow: 0 0 28px rgba(14,165,233,0.7); }
 }
 
 .chin {
@@ -556,7 +556,7 @@
   position: absolute;
   font-size: 12px;
   font-weight: 800;
-  color: #0D0D0D;
+  color: #ffffff;
   font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap;
   pointer-events: none;
@@ -580,10 +580,10 @@
   width: 22px;
   height: 22px;
   background: #1a1a1a;
-  border: 2px solid #FF6B6B;
+  border: 2px solid #DC2626;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(255,107,107,0.6), inset 0 0 4px rgba(0,0,0,0.6);
+  box-shadow: 0 0 10px rgba(220,38,38,0.6), inset 0 0 4px rgba(0,0,0,0.6);
   z-index: 5;
 }
 .dart {
@@ -648,7 +648,7 @@
 }
 .catCubeChosen {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
   transform: scale(0.92);
   animation: catSlap 0.4s ease-out;
@@ -723,7 +723,7 @@
   height: 220px;
   border-radius: 50%;
   border: 4px solid var(--accent);
-  box-shadow: 0 0 24px rgba(200,255,62,0.25), inset 0 0 0 2px rgba(0,0,0,0.4);
+  box-shadow: 0 0 24px rgba(14,165,233,0.25), inset 0 0 0 2px rgba(0,0,0,0.4);
 }
 .rouletteSpin {
   animation: rouletteIdleSpin 0.8s linear infinite;
@@ -738,14 +738,14 @@
   left: 50%;
   width: 1.5px;
   height: 50%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(15,23,42,0.35);
   transform-origin: 0 0;
 }
 .rouletteLabel {
   position: absolute;
   font-size: 13px;
   font-weight: 800;
-  color: #0D0D0D;
+  color: #ffffff;
   font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap;
   pointer-events: none;
@@ -762,15 +762,15 @@
   border: 3px solid var(--accent);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(200,255,62,0.4);
+  box-shadow: 0 0 10px rgba(14,165,233,0.4);
   z-index: 5;
 }
 
 /* ── 결과 카드 (무작위) ── */
 .pickedCard {
   margin-top: 12px;
-  background: linear-gradient(135deg, rgba(200,255,62,0.1) 0%, rgba(62,200,255,0.05) 100%);
-  border: 1px solid rgba(200,255,62,0.4);
+  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(8,145,178,0.14) 100%);
+  border: 1px solid rgba(14,165,233,0.4);
   border-radius: 14px;
   padding: 20px;
   text-align: center;
@@ -802,13 +802,13 @@
 }
 
 .warnCard {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.3);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.3);
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #FFB83E; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* ── 5개 모드 종합 ── */
@@ -844,7 +844,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }@media (hover: hover) {
-  .summaryReset:hover { border-color: #FF8C8C; color: #FF8C8C; }
+  .summaryReset:hover { border-color: #DC2626; color: #DC2626; }
 }
 
 .modeResultList {
@@ -865,7 +865,7 @@
   font-size: 13px;
 }
 .modeResultRowDone {
-  border-color: rgba(200,255,62,0.3);
+  border-color: rgba(14,165,233,0.3);
   background: var(--bg3);
 }
 .modeResultEmoji { font-size: 18px; }
@@ -980,8 +980,8 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255, 184, 62, 0.06);
-  border: 1px solid rgba(255, 184, 62, 0.25);
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
   border-radius: 12px;
   padding: 14px 18px;
   font-size: 13px;
@@ -990,7 +990,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #FFB83E;
+  color: #D97706;
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }

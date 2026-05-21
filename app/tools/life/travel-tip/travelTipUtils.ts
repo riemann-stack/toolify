@@ -311,9 +311,9 @@ export const getCountry = (id: string) => COUNTRIES.find((c) => c.id === id)!
    ───────────────────────────────────────────── */
 
 export const CATEGORY_META: Record<TipCategory, { label: string; emoji: string; color: string; desc: string }> = {
-  mandatory: { label: '필수',     emoji: '🔴', color: '#FF3E8C', desc: '팁 사실상 의무 — 안 주면 큰 결례' },
-  optional:  { label: '선택',     emoji: '🟡', color: '#FFB83E', desc: '주는 것이 매너지만 강제 X' },
-  rare:      { label: '거의 없음', emoji: '🟢', color: '#3EFFD0', desc: '일부만 — 굳이 안 줘도 OK' },
+  mandatory: { label: '필수',     emoji: '🔴', color: '#DB2777', desc: '팁 사실상 의무 — 안 주면 큰 결례' },
+  optional:  { label: '선택',     emoji: '🟡', color: '#D97706', desc: '주는 것이 매너지만 강제 X' },
+  rare:      { label: '거의 없음', emoji: '🟢', color: '#0D9488', desc: '일부만 — 굳이 안 줘도 OK' },
   no:        { label: '주면 X',   emoji: '⚫', color: '#9B9B9B', desc: '🚫 팁 문화 없음, 무례할 수 있음' },
 }
 

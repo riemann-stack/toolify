@@ -71,7 +71,7 @@ export default function LadderPage() {
             참가자·결과를 입력하는 즉시 사다리에 반영됩니다. 결과 공개 전에도 사다리 모양·가로줄을 미리 확인할 수 있고, <strong style={{ color: 'var(--text)' }}>[🔀 순서 섞기]</strong> 버튼으로 참가자·결과 입력 순서를 무작위로 섞고 새 가로줄을 생성할 수 있습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 10, padding: '11px 14px' }}>
-            💡 <strong style={{ color: '#C485E0' }}>왜 셔플이 중요한가?</strong> — 입력 순서대로 배치되면 첫 번째 참가자는 첫 번째 결과 근처에 도착할 가능성이 살짝 더 큽니다(가로줄이 적게 만나서). 셔플하면 입력 순서의 영향이 사라져 더 공정합니다.
+            💡 <strong style={{ color: '#9333EA' }}>왜 셔플이 중요한가?</strong> — 입력 순서대로 배치되면 첫 번째 참가자는 첫 번째 결과 근처에 도착할 가능성이 살짝 더 큽니다(가로줄이 적게 만나서). 셔플하면 입력 순서의 영향이 사라져 더 공정합니다.
           </p>
         </section>
 
@@ -148,7 +148,7 @@ export default function LadderPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#FFD700', marginBottom: '6px' }}>🎲 랜덤 추첨기 (별도 도구)</p>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>🎲 랜덤 추첨기 (별도 도구)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 1명 또는 N명 선택</li>
                 <li>· 가중치·룰렛 가능</li>

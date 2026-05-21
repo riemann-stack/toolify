@@ -136,7 +136,7 @@ export default function SleepDebtPage() {
                 <tr><td style={cell}>유아 (1~2세)</td><td style={cell}><strong>11~14h</strong></td><td style={cell}>낮잠 1~2회</td></tr>
                 <tr><td style={cell}>학령전 (3~5세)</td><td style={cell}><strong>10~13h</strong></td><td style={cell}>낮잠 점차 ↓</td></tr>
                 <tr><td style={cell}>학령기 (6~13세)</td><td style={cell}><strong>9~11h</strong></td><td style={cell}>학습·성장 영향</td></tr>
-                <tr><td style={cell}>청소년 (14~17세)</td><td style={cell}><strong style={{ color: '#FFB83E' }}>8~10h</strong></td><td style={cell}>한국 평균 6.3h — 심각 부족</td></tr>
+                <tr><td style={cell}>청소년 (14~17세)</td><td style={cell}><strong style={{ color: '#D97706' }}>8~10h</strong></td><td style={cell}>한국 평균 6.3h — 심각 부족</td></tr>
                 <tr><td style={cell}>젊은 성인 (18~25세)</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>7~9h</strong></td><td style={cell}>대학생 평균 6.5h</td></tr>
                 <tr><td style={cell}>성인 (26~64세)</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>7~9h</strong></td><td style={cell}>대부분 사람이 「7시간 미만」으로 부족</td></tr>
                 <tr><td style={cell}>고령자 (65세+)</td><td style={cell}><strong>7~8h</strong></td><td style={cell}>분절 수면 흔함</td></tr>
@@ -153,11 +153,11 @@ export default function SleepDebtPage() {
           <h2 style={sectionTitle}>수면 부족 누적 영향 — 시간별</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { hrs: '1시간 부족 / 1일', color: '#3EFF9B', desc: '집중력 ~10% ↓, 짜증 ↑, 다음날 회복 가능' },
-              { hrs: '7시간 부채 / 7일', color: '#FFB83E', desc: '주의력 BAC 0.05 수준 (음주운전급), 면역 ↓' },
-              { hrs: '14시간 부채 / 2주', color: '#FF8C3E', desc: '인슐린 저항성 ↑, 식욕 호르몬 망가짐, 체중 ↑' },
-              { hrs: '30시간 부채 / 1개월', color: '#FF6B6B', desc: '명확한 인지 손상, 우울·불안 ↑, 심혈관 위험 ↑' },
-              { hrs: '24시간 깨어있음', color: '#FF6B6B', desc: 'BAC 0.10 = 면허취소 수준의 판단력 손상' },
+              { hrs: '1시간 부족 / 1일', color: '#059669', desc: '집중력 ~10% ↓, 짜증 ↑, 다음날 회복 가능' },
+              { hrs: '7시간 부채 / 7일', color: '#D97706', desc: '주의력 BAC 0.05 수준 (음주운전급), 면역 ↓' },
+              { hrs: '14시간 부채 / 2주', color: '#EA580C', desc: '인슐린 저항성 ↑, 식욕 호르몬 망가짐, 체중 ↑' },
+              { hrs: '30시간 부채 / 1개월', color: '#DC2626', desc: '명확한 인지 손상, 우울·불안 ↑, 심혈관 위험 ↑' },
+              { hrs: '24시간 깨어있음', color: '#DC2626', desc: 'BAC 0.10 = 면허취소 수준의 판단력 손상' },
               { hrs: '4h × 6일', color: '#FF3E3E', desc: '치매 위험 단백질(베타-아밀로이드) 축적 가속' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
@@ -183,32 +183,32 @@ export default function SleepDebtPage() {
               <tbody>
                 <tr>
                   <td style={cell}>매일 +1h × 7~10일</td>
-                  <td style={cell}><strong style={{ color: '#3EFF9B' }}>⭐⭐⭐⭐⭐</strong></td>
+                  <td style={cell}><strong style={{ color: '#059669' }}>⭐⭐⭐⭐⭐</strong></td>
                   <td style={cell}>최고. 생체리듬 유지 + 점진적 회복</td>
                 </tr>
                 <tr>
                   <td style={cell}>20~30분 낮잠 (오후 1~3시)</td>
-                  <td style={cell}><strong style={{ color: '#3EFF9B' }}>⭐⭐⭐⭐</strong></td>
+                  <td style={cell}><strong style={{ color: '#059669' }}>⭐⭐⭐⭐</strong></td>
                   <td style={cell}>부채 일부 상쇄 + 인지 ↑. 30분 초과 시 야간 수면 방해</td>
                 </tr>
                 <tr>
                   <td style={cell}>수면 환경 개선 (18~20℃·어둠·조용)</td>
-                  <td style={cell}><strong style={{ color: '#3EFF9B' }}>⭐⭐⭐⭐</strong></td>
+                  <td style={cell}><strong style={{ color: '#059669' }}>⭐⭐⭐⭐</strong></td>
                   <td style={cell}>수면 효율 ↑ — 같은 시간이라도 깊이 ↑</td>
                 </tr>
                 <tr>
                   <td style={cell}>주말 +2~3h 늦잠</td>
-                  <td style={cell}><strong style={{ color: '#FFB83E' }}>⭐⭐</strong></td>
+                  <td style={cell}><strong style={{ color: '#D97706' }}>⭐⭐</strong></td>
                   <td style={cell}>일부 효과, 다만 다음 주 생체리듬 깨짐 (사회적 시차)</td>
                 </tr>
                 <tr>
                   <td style={cell}>한 번에 12h+ 몰아 자기</td>
-                  <td style={cell}><strong style={{ color: '#FF6B6B' }}>⭐</strong></td>
+                  <td style={cell}><strong style={{ color: '#DC2626' }}>⭐</strong></td>
                   <td style={cell}>회복 효율 30%, 두통·멍한 느낌 (잠 관성)</td>
                 </tr>
                 <tr>
                   <td style={cell}>카페인으로 버티기</td>
-                  <td style={cell}><strong style={{ color: '#FF6B6B' }}>❌</strong></td>
+                  <td style={cell}><strong style={{ color: '#DC2626' }}>❌</strong></td>
                   <td style={cell}>부채는 그대로. 다음날 더 큰 부채로 돌아옴</td>
                 </tr>
               </tbody>
@@ -226,7 +226,7 @@ export default function SleepDebtPage() {
               <strong style={{ color: 'var(--text)' }}>단기(1~2주)는 회복 가능</strong>합니다.
               매일 +1시간씩 일주일이면 7시간 부채 회복 가능.
               <br /><br />
-              그러나 <strong style={{ color: '#FF8C3E' }}>1개월 이상 만성 부채</strong>는 일부 영구 손상이 보고됩니다(Sleep Walker 2017, Belenky et al. 2003).
+              그러나 <strong style={{ color: '#EA580C' }}>1개월 이상 만성 부채</strong>는 일부 영구 손상이 보고됩니다(Sleep Walker 2017, Belenky et al. 2003).
               인지 기능은 회복돼도 본인이 느끼지 못하는 「만성 적응」 상태가 되며, 노화·치매 위험이 누적됩니다.
             </div>
           </details>
@@ -234,7 +234,7 @@ export default function SleepDebtPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q2. 주말에 몰아 자면 부채 0이 되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#FF6B6B' }}>아닙니다.</strong>
+              <strong style={{ color: '#DC2626' }}>아닙니다.</strong>
               연구상 회복 효율은 30~50% — 7시간 부채를 14시간 몰아 자도 약 3~5시간만 회복.
               <br /><br />
               게다가 주말 늦잠은 <strong style={{ color: 'var(--text)' }}>사회적 시차(social jet lag)</strong>를 만들어
@@ -260,7 +260,7 @@ export default function SleepDebtPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q4. 낮잠은 부채 회복에 도움이 되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>20~30분 낮잠은 효과적</strong>입니다.
+              <strong style={{ color: '#059669' }}>20~30분 낮잠은 효과적</strong>입니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>10~20분: 가벼운 회복 + 인지·기분 ↑</li>
                 <li>20~30분: 부채 일부 상쇄 (특히 오후 1~3시)</li>
@@ -274,7 +274,7 @@ export default function SleepDebtPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q5. 본 도구의 데이터는 어디 저장되나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#3EFF9B' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
+              <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>✅ youtil 서버 전송 X</li>
                 <li>✅ 익명 사용 (이름·이메일 X)</li>
@@ -288,7 +288,7 @@ export default function SleepDebtPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q6. 한국 평균 수면 시간은?</summary>
             <div style={faqAnswer}>
-              OECD 수면 통계상 <strong style={{ color: '#FF6B6B' }}>한국이 OECD 최하위권</strong>입니다.
+              OECD 수면 통계상 <strong style={{ color: '#DC2626' }}>한국이 OECD 최하위권</strong>입니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>한국 성인 평균: <strong style={{ color: 'var(--text)' }}>약 7시간 41분</strong> (OECD 평균 8시간 22분 대비 41분 부족)</li>
                 <li>한국 청소년: <strong style={{ color: 'var(--text)' }}>약 6.3시간</strong> (권장 8~10h 대비 2~4h 부족)</li>
@@ -319,8 +319,8 @@ export default function SleepDebtPage() {
         <section>
           <h2 style={sectionTitle}>⚠️ 의료 면책</h2>
           <div style={{
-            background: 'rgba(255, 184, 62, 0.06)',
-            border: '1px solid rgba(255, 184, 62, 0.25)',
+            background: 'rgba(217, 119, 6, 0.06)',
+            border: '1px solid rgba(217, 119, 6, 0.25)',
             borderRadius: '12px',
             padding: '18px 22px',
             fontSize: '14px',

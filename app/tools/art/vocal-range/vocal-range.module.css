@@ -2,19 +2,19 @@
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .disclaimer {
-  background: rgba(200,62,255,0.06);
-  border: 1px solid rgba(200,62,255,0.30);
+  background: rgba(147,51,234,0.06);
+  border: 1px solid rgba(147,51,234,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #C485E0; }
+.disclaimer strong { color: #9333EA; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -22,7 +22,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 /* 탭 */
 .tabs {
@@ -49,9 +49,9 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveMeasure{ background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveResult { background: rgba(255,215,0,0.12); color: #FFD700; font-weight: 700; }
-.tabActiveLog    { background: rgba(155,89,182,0.10); color: #C485E0; font-weight: 700; }
+.tabActiveMeasure{ background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveResult { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveLog    { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -74,7 +74,7 @@
 
 /* 시작 버튼 */
 .startBtn {
-  background: linear-gradient(135deg, #C83EFF, #FF6BD9);
+  background: linear-gradient(135deg, #9333EA, #FF6BD9);
   border: none;
   color: #fff;
   border-radius: 14px;
@@ -85,7 +85,7 @@
   cursor: pointer;
   width: 100%;
   letter-spacing: 0.04em;
-  box-shadow: 0 4px 20px rgba(200,62,255,0.25);
+  box-shadow: 0 4px 20px rgba(147,51,234,0.25);
   transition: transform 0.12s;
 }@media (hover: hover) {
   .startBtn:hover { transform: translateY(-1px); }
@@ -93,9 +93,9 @@
 .startBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .stopBtn {
-  background: rgba(255,107,107,0.10);
-  border: 1px solid #FF6B6B;
-  color: #FF6B6B;
+  background: rgba(220,38,38,0.18);
+  border: 1px solid #DC2626;
+  color: #DC2626;
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 13px;
@@ -104,13 +104,13 @@
   cursor: pointer;
   width: 100%;
 }@media (hover: hover) {
-  .stopBtn:hover { background: rgba(255,107,107,0.18); }
+  .stopBtn:hover { background: rgba(220,38,38,0.18); }
 }
 
 /* 현재 음 카드 */
 .noteCard {
-  background: linear-gradient(140deg, rgba(200,62,255,0.10), rgba(255,107,217,0.04));
-  border: 1px solid rgba(200,62,255,0.30);
+  background: linear-gradient(140deg, rgba(147,51,234,0.10), rgba(255,107,217,0.04));
+  border: 1px solid rgba(147,51,234,0.30);
   border-radius: 16px;
   padding: 32px 22px 26px;
   text-align: center;
@@ -126,7 +126,7 @@
   font-size: clamp(60px, 16vw, 110px);
   line-height: 1;
   letter-spacing: -3px;
-  color: #C485E0;
+  color: #9333EA;
   font-variant-numeric: tabular-nums;
 }
 .noteKorean {
@@ -151,7 +151,7 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.centsAccurate { color: #3EFF9B; }
+.centsAccurate { color: #059669; }
 
 /* 볼륨 게이지 */
 .volumeWrap {
@@ -167,7 +167,7 @@
 }
 .volumeFill {
   height: 100%;
-  background: linear-gradient(to right, #3EFF9B, #FFD700, #FF8C3E, #FF6B6B);
+  background: linear-gradient(to right, #059669, #CA8A04, #EA580C, #DC2626);
   transition: width 0.05s linear;
 }
 .volumeLabel {
@@ -210,7 +210,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 3px solid #3EFF9B;
+  border-left: 3px solid #059669;
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 12.5px;
@@ -253,8 +253,8 @@
   border-radius: 12px;
   padding: 14px 18px;
 }
-.stepCardActive { border-left-color: #FF8C3E; background: rgba(255,140,62,0.04); }
-.stepCardDone   { border-left-color: #3EFF9B; opacity: 0.8; }
+.stepCardActive { border-left-color: #EA580C; background: rgba(234,88,12,0.14); }
+.stepCardDone   { border-left-color: #059669; opacity: 0.8; }
 .stepHeader {
   display: flex;
   justify-content: space-between;
@@ -274,8 +274,8 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.stepStatusActive { color: #FF8C3E; }
-.stepStatusDone   { color: #3EFF9B; }
+.stepStatusActive { color: #EA580C; }
+.stepStatusDone   { color: #059669; }
 .stepTitle {
   font-size: 14px;
   font-weight: 700;
@@ -306,15 +306,15 @@
 .stepValueNote {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #FF8C3E;
+  color: #EA580C;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
 
 /* 결과 히어로 */
 .hero {
-  background: linear-gradient(140deg, rgba(255,215,0,0.10), rgba(200,62,255,0.05));
-  border: 1px solid rgba(255,215,0,0.30);
+  background: linear-gradient(140deg, rgba(202,138,4,0.18), rgba(147,51,234,0.05));
+  border: 1px solid rgba(202,138,4,0.30);
   border-radius: 16px;
   padding: 28px 22px;
   text-align: center;
@@ -333,7 +333,7 @@
   font-size: clamp(36px, 9vw, 56px);
   letter-spacing: -2px;
   line-height: 1.1;
-  color: #FFD700;
+  color: #CA8A04;
   font-variant-numeric: tabular-nums;
 }
 .heroOctaves {
@@ -395,10 +395,10 @@
   pointer-events: none;
 }
 .pianoKeyHilite {
-  background: rgba(62,255,155,0.55) !important;
+  background: rgba(16,185,129,0.55) !important;
 }
 .pianoKeyHiliteFalsetto {
-  background: rgba(255,215,0,0.55) !important;
+  background: rgba(202,138,4,0.55) !important;
 }
 .pianoKeyCurrent {
   background: rgba(255,107,217,0.85) !important;
@@ -470,9 +470,9 @@
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
-.songShiftZero  { color: #3EFF9B; }
-.songShiftSmall { color: #FFD700; }
-.songShiftLarge { color: #FF8C3E; }
+.songShiftZero  { color: #059669; }
+.songShiftSmall { color: #CA8A04; }
+.songShiftLarge { color: #EA580C; }
 .songDifficulty {
   font-size: 10.5px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -481,10 +481,10 @@
   border-radius: 4px;
   padding: 2px 6px;
 }
-.diffEasy { background: rgba(62,255,155,0.12); color: #3EFF9B; }
-.diffMid  { background: rgba(255,215,0,0.12);  color: #FFD700; }
-.diffHard { background: rgba(255,140,62,0.12); color: #FF8C3E; }
-.diffVeryHard { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+.diffEasy { background: rgba(16,185,129,0.18); color: #059669; }
+.diffMid  { background: rgba(202,138,4,0.18);  color: #CA8A04; }
+.diffHard { background: rgba(234,88,12,0.18); color: #EA580C; }
+.diffVeryHard { background: rgba(220,38,38,0.18); color: #DC2626; }
 
 /* 옵션 그리드 */
 .optionRow  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
@@ -542,8 +542,8 @@
 
 /* 가이드 */
 .guideBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 12.5px;
@@ -551,7 +551,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.guideBox strong { color: #3EC8FF; }
+.guideBox strong { color: #0891B2; }
 .guideBox ul { padding-left: 18px; margin: 6px 0 0; }
 .guideBox li { margin-bottom: 3px; }
 
@@ -587,7 +587,7 @@
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.historyClass { color: #C485E0; font-size: 11px; font-weight: 700; }
+.historyClass { color: #9333EA; font-size: 11px; font-weight: 700; }
 .miniBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -600,4 +600,4 @@
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #FF6B6B; border-color: rgba(255,107,107,0.30); }
+.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }

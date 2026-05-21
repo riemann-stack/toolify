@@ -124,7 +124,7 @@ export default function GoldConverterPage() {
                   ['10K',  '41.7%', '417',          '저가 보석·체인. 변색 가능성 ↑'],
                 ].map(([k, ratio, mark, note], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#FFD700', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{k}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{k}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{ratio}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{mark}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{note}</td>
@@ -161,9 +161,9 @@ export default function GoldConverterPage() {
                 ].map(([item, krx, bar, bank], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EFF9B' }}>{krx}</td>
-                    <td style={{ padding: '10px 12px', color: '#FFD700' }}>{bar}</td>
-                    <td style={{ padding: '10px 12px', color: '#3EC8FF' }}>{bank}</td>
+                    <td style={{ padding: '10px 12px', color: '#059669' }}>{krx}</td>
+                    <td style={{ padding: '10px 12px', color: '#CA8A04' }}>{bar}</td>
+                    <td style={{ padding: '10px 12px', color: '#0891B2' }}>{bank}</td>
                   </tr>
                 ))}
               </tbody>

@@ -666,7 +666,7 @@ export default function WallpaperClient() {
                 return (
                   <svg className={styles.floorPlanSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     {/* 방 둘레 */}
-                    <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(232,151,87,0.05)" stroke="#fff" strokeWidth={2} />
+                    <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="#fff" strokeWidth={2} />
                     {/* 시공 라인 (둘레 점선) */}
                     <rect x={x0 + 4} y={y0 + 4} width={drawW - 8} height={drawH - 8} fill="none" stroke="var(--accent)" strokeWidth={1} strokeDasharray="5 4" opacity={0.7} />
                     {/* 가로 치수 */}
@@ -682,12 +682,12 @@ export default function WallpaperClient() {
                         y1={y0}
                         x2={x0 + drawW * 0.7}
                         y2={y0}
-                        stroke="#3EC8FF"
+                        stroke="#0891B2"
                         strokeWidth={5}
                       />
                     )}
                     {winCount > 0 && (
-                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="#3EC8FF" fontSize="10" fontFamily="monospace">창</text>
+                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace">창</text>
                     )}
                     {/* 문 (아래) */}
                     {doorCount > 0 && doorW > 0 && (
@@ -696,12 +696,12 @@ export default function WallpaperClient() {
                         y1={y0 + drawH}
                         x2={x0 + drawW * 0.85}
                         y2={y0 + drawH}
-                        stroke="#FF8C3E"
+                        stroke="#EA580C"
                         strokeWidth={5}
                       />
                     )}
                     {doorCount > 0 && (
-                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="#FF8C3E" fontSize="10" fontFamily="monospace">문</text>
+                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="monospace">문</text>
                     )}
                   </svg>
                 )

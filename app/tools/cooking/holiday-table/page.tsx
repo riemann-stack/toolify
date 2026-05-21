@@ -101,19 +101,19 @@ export default function HolidayTablePage() {
               </thead>
               <tbody>
                 <tr>
-                  <td style={cell}><strong style={{ color: '#FFB83E' }}>차례</strong></td>
+                  <td style={cell}><strong style={{ color: '#D97706' }}>차례</strong></td>
                   <td style={cell}>설날·추석 (양대 명절)</td>
                   <td style={cell}>4대조 이상 조상 통합</td>
                   <td style={cell}>간소한 5열 차림. 송편·떡국 필수</td>
                 </tr>
                 <tr>
-                  <td style={cell}><strong style={{ color: '#FF6B6B' }}>제사 (기제사)</strong></td>
+                  <td style={cell}><strong style={{ color: '#DC2626' }}>제사 (기제사)</strong></td>
                   <td style={cell}>고인 기일 매년</td>
                   <td style={cell}>특정 조상 (4대까지)</td>
                   <td style={cell}>정식 5열 차례상. 메·갱·5탕 모두</td>
                 </tr>
                 <tr>
-                  <td style={cell}><strong style={{ color: '#3EFF9B' }}>명절 식사</strong></td>
+                  <td style={cell}><strong style={{ color: '#059669' }}>명절 식사</strong></td>
                   <td style={cell}>차례 직후 또는 별도</td>
                   <td style={cell}>가족 모임</td>
                   <td style={cell}>실용적 메뉴 — 떡국·갈비·잡채 등</td>
@@ -131,10 +131,10 @@ export default function HolidayTablePage() {
           <h2 style={sectionTitle}>5열 차례상 — 4대 배치 원칙</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { name: '어동육서 (魚東肉西)',  color: '#3EC8FF', desc: '동쪽에 어물(생선), 서쪽에 육류. 생선 머리는 동쪽, 꼬리는 서쪽 향함' },
-              { name: '두동미서 (頭東尾西)',  color: '#3EFF9B', desc: '머리는 동쪽, 꼬리는 서쪽. 어물 배치의 세부 원칙' },
-              { name: '홍동백서 (紅東白西)',  color: '#FF6B6B', desc: '동쪽에 붉은 과일(대추·사과), 서쪽에 흰 과일(배·곶감)' },
-              { name: '조율이시 (棗栗梨柿)',  color: '#FFB83E', desc: '대추→밤→배→감(곶감) 순서로 좌→우 배치. 5열 과일 핵심' },
+              { name: '어동육서 (魚東肉西)',  color: '#0891B2', desc: '동쪽에 어물(생선), 서쪽에 육류. 생선 머리는 동쪽, 꼬리는 서쪽 향함' },
+              { name: '두동미서 (頭東尾西)',  color: '#059669', desc: '머리는 동쪽, 꼬리는 서쪽. 어물 배치의 세부 원칙' },
+              { name: '홍동백서 (紅東白西)',  color: '#DC2626', desc: '동쪽에 붉은 과일(대추·사과), 서쪽에 흰 과일(배·곶감)' },
+              { name: '조율이시 (棗栗梨柿)',  color: '#D97706', desc: '대추→밤→배→감(곶감) 순서로 좌→우 배치. 5열 과일 핵심' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ fontSize: 14, color: b.color, fontWeight: 700, marginBottom: 6 }}>{b.name}</p>
@@ -190,7 +190,7 @@ export default function HolidayTablePage() {
           <h2 style={sectionTitle}>가격 데이터 — KAMIS 실시간 시세 연동</h2>
           <div style={card}>
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8, margin: '0 0 10px' }}>
-              본 도구는 <strong style={{ color: '#FFB83E' }}>KAMIS(한국농수산식품유통공사)</strong> OpenAPI를 통해
+              본 도구는 <strong style={{ color: '#D97706' }}>KAMIS(한국농수산식품유통공사)</strong> OpenAPI를 통해
               명절 핵심 농산물의 서울 소매 시세를 실시간 조회합니다.
             </p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
@@ -229,7 +229,7 @@ export default function HolidayTablePage() {
                 <li>제사 — <strong>메·갱</strong> (밥·국), <strong>청주</strong></li>
                 <li>3종 모두 — <strong>3색 과일</strong> (조율이시), <strong>3색 나물</strong> (시금치·도라지·고사리)</li>
               </ul>
-              <strong style={{ color: '#FF8C3E' }}>주의</strong>: 최근 성균관에서도 「간소 차림 표준안」을 권장 — 가짓수보다 정성이 중요.
+              <strong style={{ color: '#EA580C' }}>주의</strong>: 최근 성균관에서도 「간소 차림 표준안」을 권장 — 가짓수보다 정성이 중요.
             </div>
           </details>
 

@@ -43,7 +43,7 @@ export default async function BpmPage({
             BPM(Beats Per Minute)은 1분당 박자 수를 나타냅니다. 딜레이 타임(ms)은 60,000을 BPM으로 나누어 구하며,
             음표의 종류에 따라 추가로 나눕니다. 점음표(dotted)는 ×1.5, 셋잇단음표(triplet)는 ×⅔를 곱합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center', marginBottom: '12px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>4분음표 딜레이 계산식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
               딜레이(ms) = 60,000 ÷ BPM
@@ -83,11 +83,11 @@ export default async function BpmPage({
               </thead>
               <tbody>
                 {[
-                  ['발라드·슬로우', '60~70 BPM', '857~1000ms', '429~500ms', '214~250ms', '#3EC8FF'],
-                  ['팝·R&B',        '80~100 BPM', '600~750ms',  '300~375ms', '150~188ms', '#3EFF9B'],
-                  ['댄스·팝',       '120 BPM',    '500ms',      '250ms',     '125ms',     '#C8FF3E'],
-                  ['UK 하우스',     '128~130 BPM','461~469ms',  '231~234ms', '115~117ms', '#FF8C3E'],
-                  ['드럼앤베이스',  '160~180 BPM','333~375ms',  '167~188ms', '83~94ms',   '#FF3E8C'],
+                  ['발라드·슬로우', '60~70 BPM', '857~1000ms', '429~500ms', '214~250ms', '#0891B2'],
+                  ['팝·R&B',        '80~100 BPM', '600~750ms',  '300~375ms', '150~188ms', '#059669'],
+                  ['댄스·팝',       '120 BPM',    '500ms',      '250ms',     '125ms',     '#0EA5E9'],
+                  ['UK 하우스',     '128~130 BPM','461~469ms',  '231~234ms', '115~117ms', '#EA580C'],
+                  ['드럼앤베이스',  '160~180 BPM','333~375ms',  '167~188ms', '83~94ms',   '#DB2777'],
                 ].map(([genre, bpmRange, q, e, s, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{genre}</td>
@@ -109,9 +109,9 @@ export default async function BpmPage({
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { icon: '⏱️', color: '#C8FF3E', title: '딜레이 타임 (Delay Time)', content: '딜레이 플러그인의 "Time" 또는 "Delay Time" 파라미터에 계산된 ms 값을 직접 입력합니다. 4분음표는 비트와 딱 맞는 리듬감을 주고, 8분음표나 셋잇단음표는 더 촘촘하고 그루비한 느낌을 만듭니다.' },
-              { icon: '🌊', color: '#3EC8FF', title: '리버브 프리딜레이 (Pre-Delay)', content: '리버브의 Pre-Delay는 원음과 잔향 사이의 시간차입니다. 보통 16분음표나 32분음표 값을 사용합니다. BPM 120 기준으로 16분음표(125ms)를 프리딜레이에 적용하면 자연스럽고 리드미컬한 공간감을 얻을 수 있습니다.' },
-              { icon: '🎚️', color: '#FF8C3E', title: '템포 싱크 vs 수동 입력', content: '대부분의 DAW(Ableton, Logic, FL Studio 등)는 딜레이 플러그인에 "Sync" 버튼이 있어 BPM에 자동 연동됩니다. 그러나 외부 하드웨어 이펙터나 빈티지 플러그인, 혹은 미묘한 timing offset이 필요한 경우에는 ms 값을 직접 입력해야 합니다.' },
+              { icon: '⏱️', color: '#0EA5E9', title: '딜레이 타임 (Delay Time)', content: '딜레이 플러그인의 "Time" 또는 "Delay Time" 파라미터에 계산된 ms 값을 직접 입력합니다. 4분음표는 비트와 딱 맞는 리듬감을 주고, 8분음표나 셋잇단음표는 더 촘촘하고 그루비한 느낌을 만듭니다.' },
+              { icon: '🌊', color: '#0891B2', title: '리버브 프리딜레이 (Pre-Delay)', content: '리버브의 Pre-Delay는 원음과 잔향 사이의 시간차입니다. 보통 16분음표나 32분음표 값을 사용합니다. BPM 120 기준으로 16분음표(125ms)를 프리딜레이에 적용하면 자연스럽고 리드미컬한 공간감을 얻을 수 있습니다.' },
+              { icon: '🎚️', color: '#EA580C', title: '템포 싱크 vs 수동 입력', content: '대부분의 DAW(Ableton, Logic, FL Studio 등)는 딜레이 플러그인에 "Sync" 버튼이 있어 BPM에 자동 연동됩니다. 그러나 외부 하드웨어 이펙터나 빈티지 플러그인, 혹은 미묘한 timing offset이 필요한 경우에는 ms 값을 직접 입력해야 합니다.' },
             ].map((tip, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${tip.color}30`, borderRadius: '12px', padding: '16px 20px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{tip.icon}</span>

@@ -231,7 +231,7 @@ export default function HikingTimePage() {
               <div style={faqAnswer}>
                 일반적으로 <strong style={{ color: 'var(--text)' }}>+30%</strong>. 헤드랜턴으로도 시야가 제한되어 길 찾기·균형 잡기·돌멩이 회피가 모두 느려집니다.
                 <br /><br />
-                또한 <strong style={{ color: '#FF6B6B' }}>위험도가 압도적으로 높음</strong>:
+                또한 <strong style={{ color: '#DC2626' }}>위험도가 압도적으로 높음</strong>:
                 <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
                   <li>길 잃을 확률 ↑↑</li>
                   <li>저체온증 위험 (산은 해 진 뒤 급격히 냉각)</li>
@@ -269,7 +269,7 @@ export default function HikingTimePage() {
                   <li>방한복 + 보온병 → 배낭 무게 ↑</li>
                   <li>해 짧음 → 일몰 16:30~17:30</li>
                 </ul>
-                겨울 산행은 일반 시간 ×1.30 + 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style={{ color: '#FF6B6B' }}>경험 없는 초보는 동계 산행 자제 권장.</strong>
+                겨울 산행은 일반 시간 ×1.30 + 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style={{ color: '#DC2626' }}>경험 없는 초보는 동계 산행 자제 권장.</strong>
               </div>
             </div>
 
@@ -282,9 +282,9 @@ export default function HikingTimePage() {
                 <br /><br />
                 본 도구는 입력값 기준 자동 계산:
                 <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li>✓ <strong style={{ color: '#3EFF9B' }}>안전</strong>: 일몰 1시간 전 도착</li>
-                  <li>⚠️ <strong style={{ color: '#FFB83E' }}>주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li>
-                  <li>🚨 <strong style={{ color: '#FF6B6B' }}>위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li>
+                  <li>✓ <strong style={{ color: '#059669' }}>안전</strong>: 일몰 1시간 전 도착</li>
+                  <li>⚠️ <strong style={{ color: '#D97706' }}>주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li>
+                  <li>🚨 <strong style={{ color: '#DC2626' }}>위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li>
                 </ul>
               </div>
             </div>

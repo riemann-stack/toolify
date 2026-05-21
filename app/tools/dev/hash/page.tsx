@@ -71,14 +71,14 @@ export default function HashPage() {
 
       {/* 강한 면책 */}
       <div style={{
-        background: 'rgba(255, 62, 140, 0.06)',
-        border: '2px solid #FF3E8C',
+        background: 'rgba(219, 39, 119, 0.06)',
+        border: '2px solid #DB2777',
         borderRadius: '14px',
         padding: '14px 18px',
         marginBottom: '32px',
       }}>
         <p style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
-          🚨 <strong style={{ color: '#FF3E8C' }}>중요</strong> — <strong>MD5와 SHA-1은 충돌 공격이 발견</strong>되어 비밀번호 해싱·디지털 서명·SSL 인증서에 사용 금지입니다.
+          🚨 <strong style={{ color: '#DB2777' }}>중요</strong> — <strong>MD5와 SHA-1은 충돌 공격이 발견</strong>되어 비밀번호 해싱·디지털 서명·SSL 인증서에 사용 금지입니다.
           <strong> 파일 무결성 확인(체크섬) 용도로만</strong> 사용하세요.
           비밀번호는 반드시 <strong>bcrypt·scrypt·Argon2</strong>(서버 측)를 사용하세요.
           본 도구는 모든 계산이 브라우저에서 수행되며, 입력 데이터는 외부로 전송되지 않습니다.
@@ -127,7 +127,7 @@ export default function HashPage() {
                 ['SHA-512', '512bit / 128자', '🟢 안전 (64bit 시스템 빠름)',    '금융, 정부, 고보안 서명'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[3]}</td>
@@ -144,14 +144,14 @@ export default function HashPage() {
       {/* 3. 안전성 등급 — 빨간 박스 */}
       <h2 style={sectionTitle}>🚨 안전성 등급 — 무엇에 써야 / 쓰지 말아야</h2>
       <div style={{
-        background: 'rgba(255, 62, 140, 0.06)',
-        border: '2px solid #FF3E8C',
+        background: 'rgba(219, 39, 119, 0.06)',
+        border: '2px solid #DB2777',
         borderRadius: '14px',
         padding: '18px 22px',
         marginBottom: '14px',
       }}>
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
-          ❌ <strong style={{ color: '#FF3E8C' }}>MD5 · SHA-1을 절대 사용하면 안 되는 곳</strong>
+          ❌ <strong style={{ color: '#DB2777' }}>MD5 · SHA-1을 절대 사용하면 안 되는 곳</strong>
         </p>
         <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>비밀번호 해싱</strong> — 무지개 표(rainbow table)로 즉시 깨짐. 반드시 <strong>bcrypt·scrypt·Argon2</strong>(KDF, 서버 측)</li>
@@ -166,7 +166,7 @@ export default function HashPage() {
       </div>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
-          ✅ <strong style={{ color: '#3EFFD0' }}>MD5 · SHA-1을 사용해도 되는 곳 (무결성 전용)</strong>
+          ✅ <strong style={{ color: '#0D9488' }}>MD5 · SHA-1을 사용해도 되는 곳 (무결성 전용)</strong>
         </p>
         <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>파일 체크섬</strong> — Linux ISO·소프트웨어 다운로드 무결성 (충돌 위험 ↔ 손상 검출은 OK)</li>
@@ -204,7 +204,7 @@ export default function HashPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 12.5 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 12.5 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
                 </tr>
               ))}
@@ -239,7 +239,7 @@ export default function HashPage() {
                 ['SHA-512', 'shasum -a 512 file',                      'certutil -hashfile FILE SHA512'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#C8FF3E', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[2]}</td>
                 </tr>

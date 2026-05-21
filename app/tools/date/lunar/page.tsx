@@ -43,7 +43,7 @@ export default function LunarPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--accent)', fontWeight: 700 }}>양력 (태양력)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#3EC8FF', fontWeight: 700 }}>음력 (태음력)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>음력 (태음력)</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,15 +117,15 @@ export default function LunarPage() {
             동아시아 전통 연도 표기. 천간 10개와 지지 12개를 순차로 조합해 60년마다 한 번 순환합니다 — 그래서 만 60세 환갑(還甲)은 「자기 출생 간지로 돌아오는」 의미.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(200,255,62,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>천간 (10)</p>
               <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
                 甲(갑) · 乙(을) · 丙(병) · 丁(정) · 戊(무)<br/>
                 己(기) · 庚(경) · 辛(신) · 壬(임) · 癸(계)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
               <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
                 子(자·쥐) · 丑(축·소) · 寅(인·범) · 卯(묘·토끼)<br/>
                 辰(진·용) · 巳(사·뱀) · 午(오·말) · 未(미·양)<br/>

@@ -350,7 +350,7 @@ export default function FoodStorageClient() {
                       </span>
                       <span className={s.urgentItemDday} style={{
                         color: calc.status === 'expired' ? '#FF4646' :
-                               calc.status === 'urgent'  ? '#FF6B6B' : '#FF8C3E',
+                               calc.status === 'urgent'  ? '#DC2626' : '#EA580C',
                       }}>
                         {calc.status === 'expired'
                           ? `D+${Math.abs(calc.remainingDays)} 초과`

@@ -33,15 +33,15 @@ export default function MilitaryPage() {
 
         {/* ── 1. 면책 ── */}
         <div style={{
-          background: 'rgba(255,107,107,0.06)',
-          border: '1px solid rgba(255,107,107,0.25)',
+          background: 'rgba(220,38,38,0.06)',
+          border: '1px solid rgba(220,38,38,0.25)',
           borderRadius: '12px',
           padding: '14px 18px',
           fontSize: '13px',
           color: 'var(--text)',
           lineHeight: 1.8,
         }}>
-          <strong style={{ color: '#FF8C8C' }}>⚠️ 안내</strong> — 복무기간은 제도 변경, 복무 형태, 개인별 사유에 따라 달라질 수 있습니다.
+          <strong style={{ color: '#DC2626' }}>⚠️ 안내</strong> — 복무기간은 제도 변경, 복무 형태, 개인별 사유에 따라 달라질 수 있습니다.
           포상휴가·징계·병가·연장복무 등으로 실제 전역일이 달라질 수 있으니 정확한 전역일은
           <strong style={{ color: 'var(--text)' }}> 병무청 또는 소속 부대</strong>에 확인하세요. 참고: 2026년 기준 병무청 병역이행안내.
         </div>
@@ -65,13 +65,13 @@ export default function MilitaryPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '육군·해병대 현역', p: '18개월', d: '약 548일', c: '#3EFF9B', note: '신병교육 5주 → 자대 배치' },
-                  { t: '상근예비역',       p: '18개월', d: '약 548일', c: '#3EFF9B', note: '거주지 인근 부대 출퇴근' },
-                  { t: '해군 현역',         p: '20개월', d: '약 610일', c: '#C8FF3E', note: '함정·해상 작전' },
-                  { t: '공군 현역',         p: '21개월', d: '약 640일', c: '#FFD700', note: '기지·방공 작전' },
-                  { t: '사회복무요원',      p: '21개월', d: '약 640일', c: '#FFD700', note: '복지·행정기관 출퇴근' },
-                  { t: '산업기능요원(보충역)', p: '23개월', d: '약 700일', c: '#FF8C3E', note: '지정업체 생산직' },
-                  { t: '산업기능요원(현역)',   p: '34개월', d: '약 1,034일', c: '#FF6B6B', note: '지정업체 생산직' },
+                  { t: '육군·해병대 현역', p: '18개월', d: '약 548일', c: '#059669', note: '신병교육 5주 → 자대 배치' },
+                  { t: '상근예비역',       p: '18개월', d: '약 548일', c: '#059669', note: '거주지 인근 부대 출퇴근' },
+                  { t: '해군 현역',         p: '20개월', d: '약 610일', c: '#0EA5E9', note: '함정·해상 작전' },
+                  { t: '공군 현역',         p: '21개월', d: '약 640일', c: '#CA8A04', note: '기지·방공 작전' },
+                  { t: '사회복무요원',      p: '21개월', d: '약 640일', c: '#CA8A04', note: '복지·행정기관 출퇴근' },
+                  { t: '산업기능요원(보충역)', p: '23개월', d: '약 700일', c: '#EA580C', note: '지정업체 생산직' },
+                  { t: '산업기능요원(현역)',   p: '34개월', d: '약 1,034일', c: '#DC2626', note: '지정업체 생산직' },
                   { t: '전문연구요원',      p: '36개월', d: '약 1,095일', c: '#9B59B6', note: '박사학위·연구소' },
                   { t: '대체복무요원',      p: '36개월', d: '약 1,095일', c: '#9B59B6', note: '교정시설 합숙' },
                 ].map((r, i) => (
@@ -97,12 +97,12 @@ export default function MilitaryPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { i: '🎒', t: '입대 30일',         d: '자대 배치 일반적 (육군 기준)', color: '#3EC8FF' },
-              { i: '🥇', t: '입대 100일',        d: '일병 진급 (이병 → 일병)',     color: '#C8FF3E' },
+              { i: '🎒', t: '입대 30일',         d: '자대 배치 일반적 (육군 기준)', color: '#0891B2' },
+              { i: '🥇', t: '입대 100일',        d: '일병 진급 (이병 → 일병)',     color: '#0EA5E9' },
               { i: '⏱️', t: '복무 50% (반환점)', d: '상병 진급 시점 근처',          color: 'var(--accent)' },
-              { i: '🎯', t: '복무 75%',          d: '병장 진급 시점',                color: '#3EFF9B' },
-              { i: '🔥', t: '전역 D-100',        d: '"말년" 시작',                    color: '#FF8C3E' },
-              { i: '👑', t: '전역 D-30',         d: '"왕고" 시기',                    color: '#FF6B6B' },
+              { i: '🎯', t: '복무 75%',          d: '병장 진급 시점',                color: '#059669' },
+              { i: '🔥', t: '전역 D-100',        d: '"말년" 시작',                    color: '#EA580C' },
+              { i: '👑', t: '전역 D-30',         d: '"왕고" 시기',                    color: '#DC2626' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${m.color}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{m.i}</p>
@@ -119,32 +119,32 @@ export default function MilitaryPage() {
             휴가 종류와 전역일 영향
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFF9B', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EFF9B', fontWeight: 700, marginBottom: 6 }}>📈 포상휴가 (전역 단축)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 6 }}>📈 포상휴가 (전역 단축)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>우수 표창·전투력 측정 우수 등</li>
                 <li>일반적으로 1~7일씩 단축</li>
                 <li>실제 전역일이 앞당겨짐</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EC8FF', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#3EC8FF', fontWeight: 700, marginBottom: 6 }}>= 특별휴가 (영향 없음)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>= 특별휴가 (영향 없음)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>청원휴가·위로휴가</li>
                 <li>복무 인정 휴가</li>
                 <li>전역일에 영향 없음</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF8C3E', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF8C3E', fontWeight: 700, marginBottom: 6 }}>⚠️ 병가 연장</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>⚠️ 병가 연장</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일반적으로 복무 산입</li>
                 <li>정도에 따라 연장 가능성</li>
                 <li>장기 입원 시 케이스별 판정</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FF6B6B', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 6 }}>📉 군기교육대 (영창 폐지)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 6 }}>📉 군기교육대 (영창 폐지)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>7일 이내: 복무 인정</li>
                 <li>그 이상: 복무 연장</li>
@@ -173,10 +173,10 @@ export default function MilitaryPage() {
               </thead>
               <tbody>
                 {[
-                  { r: '이병',   t: '입대 직후',          d: '0~2개월',   c: '#3EC8FF',     note: '신병교육·자대 적응' },
-                  { r: '일병',   t: '입대 후 2개월',      d: '2~8개월',   c: '#C8FF3E',     note: '입대 100일 ≈ 일병 진급 무렵' },
+                  { r: '이병',   t: '입대 직후',          d: '0~2개월',   c: '#0891B2',     note: '신병교육·자대 적응' },
+                  { r: '일병',   t: '입대 후 2개월',      d: '2~8개월',   c: '#0EA5E9',     note: '입대 100일 ≈ 일병 진급 무렵' },
                   { r: '상병',   t: '일병 후 6개월',      d: '8~14개월',  c: 'var(--accent)', note: '복무 절반(반환점) 근처' },
-                  { r: '병장',   t: '상병 후 6개월',      d: '14~18개월', c: '#FF8C3E',     note: '말년 D-100 시작과 비슷한 시기' },
+                  { r: '병장',   t: '상병 후 6개월',      d: '14~18개월', c: '#EA580C',     note: '말년 D-100 시작과 비슷한 시기' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>

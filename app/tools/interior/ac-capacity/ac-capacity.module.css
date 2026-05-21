@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.25);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #FF8C8C; }
+.disclaimer strong { color: #DC2626; }
 
 /* ── 탭 ── */
 .tabs {
@@ -99,10 +99,10 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(200,255,62,0.40); }
-.modeMeter { border-color: rgba(62,200,255,0.40); }
+.modePyung { border-color: rgba(14,165,233,0.40); }
+.modeMeter { border-color: rgba(8,145,178,0.40); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(62,200,255,0.10); color: #3EC8FF;       border-color: #3EC8FF;     font-weight: 700; }
+.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
 
 .pyungSelect {
   width: 100%;
@@ -237,22 +237,22 @@
   font-weight: 700;
   margin-top: 2px;
 }
-.spLiving    { border-color: rgba(200,255,62,0.40); }
+.spLiving    { border-color: rgba(14,165,233,0.40); }
 .spBedroom   { border-color: rgba(155,89,182,0.40); }
 .spSmallRoom { border-color: rgba(155,89,182,0.30); }
-.spKitchen   { border-color: rgba(255,107,107,0.40); }
-.spOffice    { border-color: rgba(62,200,255,0.40); }
-.spWorkplace { border-color: rgba(255,215,0,0.40); }
-.spShop      { border-color: rgba(255,215,0,0.40); }
-.spStudio    { border-color: rgba(62,255,155,0.40); }
+.spKitchen   { border-color: rgba(220,38,38,0.40); }
+.spOffice    { border-color: rgba(8,145,178,0.40); }
+.spWorkplace { border-color: rgba(202,138,4,0.40); }
+.spShop      { border-color: rgba(202,138,4,0.40); }
+.spStudio    { border-color: rgba(16,185,129,0.40); }
 .spLiving.spActive    { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .spBedroom.spActive,
-.spSmallRoom.spActive { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
-.spKitchen.spActive   { background: rgba(255,107,107,0.10); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.spOffice.spActive    { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.spSmallRoom.spActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.spKitchen.spActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.spOffice.spActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 .spWorkplace.spActive,
-.spShop.spActive      { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.spStudio.spActive    { background: rgba(62,255,155,0.10); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.spShop.spActive      { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.spStudio.spActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 
 /* ── 향 4개 ── */
 .directionGrid {
@@ -282,13 +282,13 @@
 .dirBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .dirBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.dirSouth     { border-color: rgba(255,215,0,0.40); }
-.dirEastWest  { border-color: rgba(255,140,62,0.40); }
-.dirNorth     { border-color: rgba(62,200,255,0.40); }
+.dirSouth     { border-color: rgba(202,138,4,0.40); }
+.dirEastWest  { border-color: rgba(234,88,12,0.40); }
+.dirNorth     { border-color: rgba(8,145,178,0.40); }
 .dirUnknown   { border-color: var(--border); }
-.dirSouth.dirActive    { background: rgba(255,215,0,0.10);  color: #FFD700; border-color: #FFD700; font-weight: 700; }
-.dirEastWest.dirActive { background: rgba(255,140,62,0.10); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.dirNorth.dirActive    { background: rgba(62,200,255,0.10); color: #3EC8FF; border-color: #3EC8FF; font-weight: 700; }
+.dirSouth.dirActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.dirEastWest.dirActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.dirNorth.dirActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 .dirUnknown.dirActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ── 층수 ── */
@@ -319,16 +319,16 @@
 .floorBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .floorBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.flLow      { border-color: rgba(62,255,155,0.40); }
-.flMid      { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.flHigh     { border-color: rgba(255,140,62,0.40); }
-.flTop      { border-color: rgba(255,107,107,0.40); }
+.flLow      { border-color: rgba(16,185,129,0.40); }
+.flMid      { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.flHigh     { border-color: rgba(234,88,12,0.40); }
+.flTop      { border-color: rgba(220,38,38,0.40); }
 .flBasement { border-color: rgba(155,89,182,0.40); }
-.flLow.flActive      { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.flLow.flActive      { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 .flMid.flActive      { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.flHigh.flActive     { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.flTop.flActive      { background: rgba(255,107,107,0.12); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
-.flBasement.flActive { background: rgba(155,89,182,0.12); color: #C485E0; border-color: #9B59B6; font-weight: 700; }
+.flHigh.flActive     { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.flTop.flActive      { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.flBasement.flActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 /* ── 단열 ── */
 .insulationGrid {
@@ -357,15 +357,15 @@
 .insBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .insBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.insNew      { border-color: rgba(62,255,155,0.40); }
-.insNormal   { border-color: var(--accent); background: rgba(200,255,62,0.04); }
-.insOld      { border-color: rgba(255,140,62,0.40); }
-.insExpanded { border-color: rgba(255,107,107,0.40); }
+.insNew      { border-color: rgba(16,185,129,0.40); }
+.insNormal   { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.insOld      { border-color: rgba(234,88,12,0.40); }
+.insExpanded { border-color: rgba(220,38,38,0.40); }
 .insGlass    { border-color: rgba(255,70,70,0.40); }
-.insNew.insActive      { background: rgba(62,255,155,0.12); color: #3EFF9B; border-color: #3EFF9B; font-weight: 700; }
+.insNew.insActive      { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 .insNormal.insActive   { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.insOld.insActive      { background: rgba(255,140,62,0.12); color: #FF8C3E; border-color: #FF8C3E; font-weight: 700; }
-.insExpanded.insActive { background: rgba(255,107,107,0.12); color: #FF6B6B; border-color: #FF6B6B; font-weight: 700; }
+.insOld.insActive      { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.insExpanded.insActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .insGlass.insActive    { background: rgba(255,70,70,0.15);  color: #FF4646; border-color: #FF4646; font-weight: 700; }
 
 /* ── 인원 슬라이더·발열 가전 ── */
@@ -435,7 +435,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(232,151,87,0.40);
+  border: 1px solid rgba(234,88,12,0.40);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -481,17 +481,17 @@
   transition: all 0.2s;
 }
 .optConservative {
-  border-color: rgba(255,255,255,0.15);
+  border-color: rgba(15,23,42,0.08);
   opacity: 0.85;
 }
 .optRecommended {
   border-color: var(--accent);
-  background: rgba(200,255,62,0.06);
+  background: rgba(14,165,233,0.14);
   transform: scale(1.04);
   position: relative;
 }
 .optBigger {
-  border-color: rgba(62,200,255,0.40);
+  border-color: rgba(8,145,178,0.40);
 }
 .optionLabel {
   font-size: 11px;
@@ -500,7 +500,7 @@
   text-transform: uppercase;
 }
 .optRecommended .optionLabel { color: var(--accent); font-weight: 700; }
-.optBigger .optionLabel { color: #3EC8FF; }
+.optBigger .optionLabel { color: #0891B2; }
 .optionPyeong {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
@@ -510,7 +510,7 @@
   line-height: 1;
 }
 .optRecommended .optionPyeong { color: var(--accent); font-size: 32px; }
-.optBigger .optionPyeong { color: #3EC8FF; }
+.optBigger .optionPyeong { color: #0891B2; }
 .optionPyeongUnit { font-size: 14px; color: var(--muted); margin-left: 2px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
 .optionDesc {
   font-size: 11.5px;
@@ -528,7 +528,7 @@
   margin-top: 4px;
 }
 .badgeRec { background: var(--accent-dim); color: var(--accent); }
-.badgeAlt { background: rgba(255,255,255,0.06); color: var(--muted); }
+.badgeAlt { background: rgba(15,23,42,0.04); color: var(--muted); }
 
 /* ── 부하 분석 표 ── */
 .loadTable {
@@ -548,13 +548,13 @@
   color: var(--text);
   white-space: nowrap;
 }
-.loadTable .factorUp td:last-child   { color: #FF8C3E; }
-.loadTable .factorDown td:last-child { color: #3EFF9B; }
-.loadTable .addRow td:last-child     { color: #3EC8FF; }
+.loadTable .factorUp td:last-child   { color: #EA580C; }
+.loadTable .factorDown td:last-child { color: #059669; }
+.loadTable .addRow td:last-child     { color: #0891B2; }
 .loadTable .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(200,255,62,0.3);
+  border-top: 2px solid rgba(14,165,233,0.3);
   border-bottom: none;
 }
 .loadTable .totalRow td:first-child { color: var(--accent); }
@@ -562,8 +562,8 @@
 
 /* ── BTU·kW 카드 ── */
 .btuCard {
-  background: rgba(200,255,62,0.05);
-  border: 1px solid rgba(200,255,62,0.3);
+  background: rgba(14,165,233,0.14);
+  border: 1px solid rgba(14,165,233,0.3);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -601,8 +601,8 @@
 
 /* ── 전기료 비교 ── */
 .savingCard {
-  background: rgba(232,151,87,0.05);
-  border: 1px solid rgba(232,151,87,0.3);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.3);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -634,7 +634,7 @@
   height: 100%;
   border-radius: 999px;
 }
-.savingBarFillFixed { background: #FF6B6B; }
+.savingBarFillFixed { background: #DC2626; }
 .savingBarFillInverter { background: var(--accent); }
 .savingBarVal {
   font-family: 'Inter', system-ui, sans-serif;
@@ -777,14 +777,14 @@
   padding: 14px 16px;
 }
 .invInverter { border-left: 3px solid var(--accent); }
-.invFixed    { border-left: 3px solid #FF6B6B; }
+.invFixed    { border-left: 3px solid #DC2626; }
 .invTitle {
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 6px;
 }
 .invInverter .invTitle { color: var(--accent); }
-.invFixed .invTitle    { color: #FF6B6B; }
+.invFixed .invTitle    { color: #DC2626; }
 .invBody {
   font-size: 12.5px;
   color: var(--muted);

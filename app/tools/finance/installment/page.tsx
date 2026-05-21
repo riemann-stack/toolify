@@ -58,7 +58,7 @@ export default function CardInstallmentPage() {
             • 월 이자율 = 19.9 ÷ 12 ÷ 100 = <strong>1.658%</strong><br />
             • 월 납부액 ≈ <strong>90,258원</strong><br />
             • 총 납부액 = <strong>1,083,096원</strong><br />
-            • 총 이자 = <strong style={{ color: '#FF6B6B' }}>83,096원</strong> (원금의 8.3%)
+            • 총 이자 = <strong style={{ color: '#DC2626' }}>83,096원</strong> (원금의 8.3%)
           </div>
         </div>
 
@@ -89,7 +89,7 @@ export default function CardInstallmentPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#FF6B6B', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
                   </tr>
                 ))}
@@ -108,9 +108,9 @@ export default function CardInstallmentPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🟢 무이자 할부', c: '#3EFF9B', items: ['이자 0원', '카드사·가맹점이 부담', '가전·가구·여행 시즌 자주 제공', '보통 2~12개월 (24개월까지)', '사용자에게 가장 유리'] },
-              { t: '🟡 부분 무이자', c: '#FFD700', items: ['일부 회차만 무이자', '예: 6개월 중 4회차까지 무이자', '후반에 이자 발생', '24개월 무이자 광고 다수가 부분 무이자'] },
-              { t: '🔴 유이자 할부', c: '#FF6B6B', items: ['연 14~20% 수수료', '시중 대출 금리보다 높음', '24개월+ 시 원금의 20% 이자', '가능하면 피하기'] },
+              { t: '🟢 무이자 할부', c: '#059669', items: ['이자 0원', '카드사·가맹점이 부담', '가전·가구·여행 시즌 자주 제공', '보통 2~12개월 (24개월까지)', '사용자에게 가장 유리'] },
+              { t: '🟡 부분 무이자', c: '#CA8A04', items: ['일부 회차만 무이자', '예: 6개월 중 4회차까지 무이자', '후반에 이자 발생', '24개월 무이자 광고 다수가 부분 무이자'] },
+              { t: '🔴 유이자 할부', c: '#DC2626', items: ['연 14~20% 수수료', '시중 대출 금리보다 높음', '24개월+ 시 원금의 20% 이자', '가능하면 피하기'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -137,8 +137,8 @@ export default function CardInstallmentPage() {
                 <li>캐시백 카드 추가 활용 시</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #3EFF9B', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#3EFF9B', fontWeight: 700, marginBottom: 8 }}>✅ 무이자 할부 우세</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 무이자 할부 우세</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일시불 할인 없음 또는 1~3% 미만</li>
                 <li>무이자 <strong>12개월 이상</strong> 가능</li>
@@ -148,8 +148,8 @@ export default function CardInstallmentPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(62,200,255,0.05)',
-            border: '1px solid rgba(62,200,255,0.3)',
+            background: 'rgba(8,145,178,0.05)',
+            border: '1px solid rgba(8,145,178,0.3)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,
@@ -157,7 +157,7 @@ export default function CardInstallmentPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#3EC8FF' }}>계산 팁:</strong> 일시불 할인 5% &gt; 무이자 12개월 + 파킹통장 운용 (대부분 경우).
+            💡 <strong style={{ color: '#0891B2' }}>계산 팁:</strong> 일시불 할인 5% &gt; 무이자 12개월 + 파킹통장 운용 (대부분 경우).
             일시불 할인 3% 이하 &lt; 무이자 12개월 + 파킹통장 운용.
           </div>
         </div>
@@ -174,8 +174,8 @@ export default function CardInstallmentPage() {
               { t: '가맹점 부담 무이자', d: '일시불보다 가격이 더 높게 책정된 경우 있음. 일시불 할인 가능 여부 먼저 문의' },
               { t: '카드 등급별 차이', d: 'VIP·우수 회원은 더 긴 무이자 가능. 일반 회원은 6개월 한정인 경우 다수' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'rgba(255,107,107,0.04)', border: '1px solid rgba(255,107,107,0.25)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#FF6B6B', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+              <div key={i} style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
@@ -189,9 +189,9 @@ export default function CardInstallmentPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '100만원 이하', c: '#3EFF9B', d: '일시불 권장 (현금 여유 시) · 무이자 6개월 권장 (현금 분산 시)' },
+              { t: '100만원 이하', c: '#059669', d: '일시불 권장 (현금 여유 시) · 무이자 6개월 권장 (현금 분산 시)' },
               { t: '100~300만원',  c: 'var(--accent)', d: '무이자 12개월 권장 · 유이자 시 6개월 이내' },
-              { t: '300만원 초과', c: '#FF8C3E', d: '무이자 12~24개월 우선 · 유이자 회피 · 일시불 + 캐시백 병행' },
+              { t: '300만원 초과', c: '#EA580C', d: '무이자 12~24개월 우선 · 유이자 회피 · 일시불 + 캐시백 병행' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: c.c, fontWeight: 700, marginBottom: 8 }}>{c.t}</p>
@@ -200,8 +200,8 @@ export default function CardInstallmentPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(255,107,107,0.05)',
-            border: '1px solid rgba(255,107,107,0.25)',
+            background: 'rgba(220,38,38,0.05)',
+            border: '1px solid rgba(220,38,38,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 12.5,
@@ -209,7 +209,7 @@ export default function CardInstallmentPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#FF6B6B' }}>위험 신호:</strong> 24개월 이상 유이자 할부는 총 이자가 원금의 <strong>20%+</strong>,
+            ⚠️ <strong style={{ color: '#DC2626' }}>위험 신호:</strong> 24개월 이상 유이자 할부는 총 이자가 원금의 <strong>20%+</strong>,
             36개월은 <strong>30%+</strong>. 가급적 단축하거나 일시불을 고려하세요.
           </div>
         </div>
@@ -233,8 +233,8 @@ export default function CardInstallmentPage() {
             ))}
           </div>
           <div style={{
-            background: 'rgba(200,255,62,0.05)',
-            border: '1px solid rgba(200,255,62,0.3)',
+            background: 'rgba(14,165,233,0.05)',
+            border: '1px solid rgba(14,165,233,0.3)',
             borderRadius: 12,
             padding: '12px 16px',
             fontSize: 13,

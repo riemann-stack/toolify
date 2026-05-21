@@ -2,19 +2,19 @@
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
 .disclaimer {
-  background: rgba(232,151,87,0.08);
-  border: 1px solid rgba(232,151,87,0.30);
+  background: rgba(234,88,12,0.14);
+  border: 1px solid rgba(234,88,12,0.30);
   border-radius: 12px;
   padding: 13px 16px;
   font-size: 12.5px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #E89757; }
+.disclaimer strong { color: #EA580C; }
 
 .warnBox {
-  background: rgba(255,107,107,0.06);
-  border: 1px solid rgba(255,107,107,0.30);
+  background: rgba(220,38,38,0.14);
+  border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -22,11 +22,11 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.warnBox strong { color: #FF6B6B; }
+.warnBox strong { color: #DC2626; }
 
 .infoBox {
-  background: rgba(62,200,255,0.06);
-  border: 1px solid rgba(62,200,255,0.30);
+  background: rgba(8,145,178,0.14);
+  border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -34,7 +34,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #3EC8FF; }
+.infoBox strong { color: #0891B2; }
 
 /* 탭 */
 .tabs {
@@ -61,11 +61,11 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: rgba(232,151,87,0.15); color: #E89757; font-weight: 700; }
-.tabActiveCadr   { background: rgba(62,200,255,0.10); color: #3EC8FF; font-weight: 700; }
-.tabActivePerf   { background: rgba(255,140,62,0.12); color: #FF8C3E; font-weight: 700; }
-.tabActiveWindow { background: rgba(62,255,155,0.10); color: #3EFF9B; font-weight: 700; }
-.tabActiveCo2    { background: rgba(255,107,107,0.10); color: #FF6B6B; font-weight: 700; }
+.tabActive       { background: rgba(234,88,12,0.15); color: #EA580C; font-weight: 700; }
+.tabActiveCadr   { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActivePerf   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
+.tabActiveWindow { background: rgba(16,185,129,0.18); color: #059669; font-weight: 700; }
+.tabActiveCo2    { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
 
 /* 카드 */
 .card {
@@ -108,7 +108,7 @@
   width: 100%;
   box-sizing: border-box;
 }
-.numInput:focus { border-color: #E89757; }
+.numInput:focus { border-color: #EA580C; }
 .numInput::-webkit-inner-spin-button,
 .numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .numInput { -moz-appearance: textfield; appearance: textfield; }
@@ -136,12 +136,12 @@
   .spaceCard:hover { border-color: var(--border-hover); transform: translateY(-1px); }
 }
 .spaceCardActive {
-  background: rgba(232,151,87,0.12);
-  border-color: #E89757;
+  background: rgba(234,88,12,0.18);
+  border-color: #EA580C;
 }
 .spaceCardIcon { font-size: 22px; line-height: 1; margin-bottom: 4px; display: block; }
 .spaceCardName { font-size: 12px; color: var(--text); font-weight: 700; }
-.spaceCardActive .spaceCardName { color: #E89757; }
+.spaceCardActive .spaceCardName { color: #EA580C; }
 .spaceCardAch { font-size: 10.5px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
 /* 옵션 그리드 */
@@ -166,7 +166,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: rgba(232,151,87,0.15); color: #E89757; border-color: #E89757; font-weight: 700; }
+.optionActive { background: rgba(234,88,12,0.15); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 
 /* 슬라이더 */
 .slider {
@@ -182,14 +182,14 @@
   -webkit-appearance: none; appearance: none;
   width: 22px; height: 22px;
   border-radius: 50%;
-  background: #E89757;
+  background: #EA580C;
   cursor: pointer;
   border: 2px solid var(--bg);
 }
 .slider::-moz-range-thumb {
   width: 22px; height: 22px;
   border-radius: 50%;
-  background: #E89757;
+  background: #EA580C;
   cursor: pointer;
   border: 2px solid var(--bg);
 }
@@ -197,7 +197,7 @@
 .sliderVal {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #E89757;
+  color: #EA580C;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
   min-width: 70px;
@@ -256,12 +256,12 @@
 .detailRow span:last-child {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  color: #E89757;
+  color: #EA580C;
   font-variant-numeric: tabular-nums;
 }
 .detailRowAccent {
-  background: rgba(232,151,87,0.10);
-  border-color: rgba(232,151,87,0.40);
+  background: rgba(234,88,12,0.18);
+  border-color: rgba(234,88,12,0.40);
   font-weight: 700;
 }
 
@@ -307,9 +307,9 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #E89757; color: #E89757; }
+  .copyBtn:hover { border-color: #EA580C; color: #EA580C; }
 }
-.copied { background: rgba(232,151,87,0.15); color: #E89757; border-color: #E89757; font-weight: 700; }
+.copied { background: rgba(234,88,12,0.15); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 
 .resultActions {
   display: grid;

@@ -49,10 +49,10 @@ export default function ColorPage() {
               </thead>
               <tbody>
                 {[
-                  ['HEX',    '#3EC8FF',                'HTML/CSS 표준, 디자인 툴 공통'],
-                  ['HEXA',   '#3EC8FF80',              '알파 포함 — 8자리 HEX (50% 투명)'],
+                  ['HEX',    '#0891B2',                'HTML/CSS 표준, 디자인 툴 공통'],
+                  ['HEXA',   '#0891B280',              '알파 포함 — 8자리 HEX (50% 투명)'],
                   ['RGB',    'rgb(62, 200, 255)',      'CSS, JavaScript, 이미지 처리'],
-                  ['RGBA',   'rgba(62, 200, 255, 0.5)','반투명 색상 — 그림자·오버레이'],
+                  ['RGBA',   'rgba(8, 145, 178, 0.5)','반투명 색상 — 그림자·오버레이'],
                   ['HSL',    'hsl(195, 100%, 62%)',    '색상 직관 조작 — 명도 조절 쉬움'],
                   ['HSV',    'hsv(195, 76%, 100%)',    'Photoshop·Figma 등 디자인 툴 표준'],
                   ['CMYK',   'cmyk(76%, 22%, 0%, 0%)', '인쇄 전용 — 명함·브로슈어'],
@@ -132,9 +132,9 @@ export default function ColorPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: '14px', background: 'rgba(255,107,107,0.06)', border: '1px solid rgba(255,107,107,0.30)', borderRadius: '10px', padding: '12px 16px' }}>
+          <div style={{ marginTop: '14px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.8 }}>
-              <strong style={{ color: '#FF6B6B' }}>디자인 가이드:</strong> 색상만으로 정보 전달 X (텍스트·아이콘 병행) · 빨강·녹색 조합 주의 · 명도 차이도 함께 활용 · 흑백 변환에서도 구분 가능한지 검증.
+              <strong style={{ color: '#DC2626' }}>디자인 가이드:</strong> 색상만으로 정보 전달 X (텍스트·아이콘 병행) · 빨강·녹색 조합 주의 · 명도 차이도 함께 활용 · 흑백 변환에서도 구분 가능한지 검증.
             </p>
           </div>
         </section>
@@ -248,7 +248,7 @@ export default function ColorPage() {
             {[
               {
                 q: 'RGBA와 HEXA의 차이는?',
-                a: '둘 다 알파(투명도)를 포함하지만 표기법이 다릅니다. <strong>RGBA</strong>는 0~1 소수(<code>rgba(62,200,255,0.5)</code>), <strong>HEXA</strong>는 8자리 HEX(<code>#3EC8FF80</code>)로 표기합니다. 80은 16진수로 128, 즉 50% 투명도입니다. 현대 CSS는 둘 다 지원하며, HEXA는 간결해 디자인 시스템에서 자주 사용됩니다.',
+                a: '둘 다 알파(투명도)를 포함하지만 표기법이 다릅니다. <strong>RGBA</strong>는 0~1 소수(<code>rgba(8,145,178,0.5)</code>), <strong>HEXA</strong>는 8자리 HEX(<code>#0891B280</code>)로 표기합니다. 80은 16진수로 128, 즉 50% 투명도입니다. 현대 CSS는 둘 다 지원하며, HEXA는 간결해 디자인 시스템에서 자주 사용됩니다.',
               },
               {
                 q: 'WCAG 대비비 기준은 어떻게 정해졌나요?',

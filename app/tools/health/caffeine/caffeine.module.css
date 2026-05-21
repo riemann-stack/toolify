@@ -32,8 +32,8 @@
 
 /* ── 메인 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(200,255,62,0.10), rgba(62,200,255,0.04));
-  border: 1px solid rgba(200,255,62,0.30);
+  background: linear-gradient(140deg, rgba(14,165,233,0.18), rgba(8,145,178,0.14));
+  border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 24px;
   text-align: center;
@@ -60,7 +60,7 @@
   letter-spacing: -2px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 30px rgba(200,255,62,0.20);
+  text-shadow: 0 0 30px rgba(14,165,233,0.20);
 }
 .heroUnit {
   font-size: clamp(20px, 5vw, 32px);
@@ -127,7 +127,7 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 .optionActive {
-  background: rgba(200,255,62,0.08);
+  background: rgba(14,165,233,0.14);
   border-color: var(--accent);
 }
 .optionActive .optionTitle { color: var(--accent); }
@@ -224,7 +224,7 @@
 .catTabActive {
   background: var(--accent);
   border-color: var(--accent);
-  color: #0a0a0a;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -248,7 +248,7 @@
   min-width: 0;
 }
 @media (hover: hover) {
-  .presetBtn:hover { border-color: var(--accent); background: rgba(200,255,62,0.04); }
+  .presetBtn:hover { border-color: var(--accent); background: rgba(14,165,233,0.14); }
 }
 .presetIcon { font-size: 20px; flex-shrink: 0; }
 .presetText { min-width: 0; flex: 1; }
@@ -296,7 +296,7 @@
 .customInput:focus, .customMg:focus { border-color: var(--accent); }
 .customAddBtn {
   background: var(--accent);
-  color: #0a0a0a;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 0 16px;
@@ -325,7 +325,7 @@
   letter-spacing: 0;
 }
 @media (hover: hover) {
-  .clearBtn:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .clearBtn:hover { color: #DC2626; border-color: #DC2626; }
 }
 .emptyMsg {
   text-align: center;
@@ -395,12 +395,12 @@
   padding: 0;
 }
 @media (hover: hover) {
-  .entryDel:hover { color: #FF6B6B; border-color: #FF6B6B; }
+  .entryDel:hover { color: #DC2626; border-color: #DC2626; }
 }
 
 /* ── 수면 영향 ── */
 .sleepCard {
-  background: linear-gradient(140deg, rgba(184,133,218,0.06), rgba(62,200,255,0.04));
+  background: linear-gradient(140deg, rgba(184,133,218,0.06), rgba(8,145,178,0.14));
   border: 1px solid rgba(184,133,218,0.25);
   border-radius: 14px;
   padding: 18px 20px;

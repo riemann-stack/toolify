@@ -305,7 +305,7 @@ export default function RamenClient() {
                       </div>
                     </div>
                   ))}
-                  <div className={styles.timelineRow} style={{ background: 'rgba(200,255,62,0.06)', borderColor: 'rgba(200,255,62,0.3)' }}>
+                  <div className={styles.timelineRow} style={{ background: 'rgba(14,165,233,0.06)', borderColor: 'rgba(14,165,233,0.3)' }}>
                     <span className={styles.timelineTime}>0:00</span>
                     <span className={styles.timelineEmoji}>🍜</span>
                     <div>
@@ -386,12 +386,12 @@ export default function RamenClient() {
                 </thead>
                 <tbody>
                   {TOPPINGS.map(t => (
-                    <tr key={t.id} style={toppings.includes(t.id) ? { background: 'rgba(200,255,62,0.06)' } : {}}>
+                    <tr key={t.id} style={toppings.includes(t.id) ? { background: 'rgba(14,165,233,0.06)' } : {}}>
                       <td>{t.emoji} {t.name}</td>
-                      <td style={{ color: t.waterDelta > 0 ? '#FF8C3E' : t.waterDelta < 0 ? '#3EC8FF' : 'var(--muted)' }}>
+                      <td style={{ color: t.waterDelta > 0 ? '#EA580C' : t.waterDelta < 0 ? '#0891B2' : 'var(--muted)' }}>
                         {t.waterDelta === 0 ? '0' : t.waterDelta > 0 ? `+${t.waterDelta}` : t.waterDelta}ml
                       </td>
-                      <td style={{ color: '#FF8C3E' }}>+{t.kcal}</td>
+                      <td style={{ color: '#EA580C' }}>+{t.kcal}</td>
                       <td>{t.protein ?? 0}g</td>
                       <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 11.5 }}>{t.timeAt}</td>
                     </tr>
@@ -476,9 +476,9 @@ export default function RamenClient() {
           <div className={styles.adviceBox}>
             <strong>💡 짜장·볶음·비빔면 조리법 (일반 라면과 다름):</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
-              <li><strong style={{ color: '#FFD700' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
-              <li><strong style={{ color: '#FFD700' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
-              <li><strong style={{ color: '#FFD700' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
+              <li><strong style={{ color: '#CA8A04' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
+              <li><strong style={{ color: '#CA8A04' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
+              <li><strong style={{ color: '#CA8A04' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
             </ul>
           </div>
         </>
@@ -520,14 +520,14 @@ export default function RamenClient() {
                   <tr>
                     <td>🔥 칼로리</td>
                     <td>{RAMEN_NUTRITION_DEFAULT.kcal} kcal</td>
-                    <td style={result.totalKcal > 1500 ? { color: '#FF6B6B' } : {}}>{result.totalKcal.toLocaleString()} kcal</td>
+                    <td style={result.totalKcal > 1500 ? { color: '#DC2626' } : {}}>{result.totalKcal.toLocaleString()} kcal</td>
                     <td>{Math.round(result.totalKcal / 2000 * 100)}% (성인)</td>
                   </tr>
                   <tr>
                     <td>🧂 나트륨</td>
                     <td>{RAMEN_NUTRITION_DEFAULT.sodium.toLocaleString()} mg</td>
                     <td className={styles.warnCell}>{result.totalSodium.toLocaleString()} mg</td>
-                    <td style={result.totalSodium > WHO_DAILY_SODIUM ? { color: '#FF6B6B' } : { color: '#FF8C3E' }}>
+                    <td style={result.totalSodium > WHO_DAILY_SODIUM ? { color: '#DC2626' } : { color: '#EA580C' }}>
                       {Math.round(result.totalSodium / WHO_DAILY_SODIUM * 100)}% ⚠️
                     </td>
                   </tr>

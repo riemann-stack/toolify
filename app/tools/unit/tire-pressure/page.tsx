@@ -106,8 +106,8 @@ export default function TirePressurePage() {
             공기압 부족·과다의 영향 (연비·마모·안전)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'rgba(255,140,62,0.08)', border: '1px solid rgba(255,140,62,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '14px', color: '#FF8C3E', fontWeight: 800, marginBottom: '8px' }}>🔻 공기압 부족</p>
+            <div style={{ background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
+              <p style={{ fontSize: '14px', color: '#EA580C', fontWeight: 800, marginBottom: '8px' }}>🔻 공기압 부족</p>
               <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: '4px', listStyle: 'none' }}>
                 <li>• <strong style={{ color: 'var(--text)' }}>연비 약 3% 감소</strong> (10% 부족 시)</li>
                 <li>• 타이어 측면(숄더) 마모 가속</li>
@@ -116,8 +116,8 @@ export default function TirePressurePage() {
                 <li>• 타이어 발열 증가 → 수명 단축</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '14px', color: '#FF6B6B', fontWeight: 800, marginBottom: '8px' }}>🔺 공기압 과다</p>
+            <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
+              <p style={{ fontSize: '14px', color: '#DC2626', fontWeight: 800, marginBottom: '8px' }}>🔺 공기압 과다</p>
               <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: '4px', listStyle: 'none' }}>
                 <li>• 승차감 저하 (노면 진동 직접 전달)</li>
                 <li>• 타이어 중앙 마모 가속</li>

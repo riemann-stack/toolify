@@ -121,7 +121,7 @@ export default function TermsPage() {
           </p>
           <div style={{
             background: 'rgba(255,138,62,0.06)',
-            border: '1px solid rgba(255,140,62,0.40)',
+            border: '1px solid rgba(234,88,12,0.40)',
             borderRadius: '12px',
             padding: '14px 18px',
             marginTop: '12px',
@@ -167,7 +167,7 @@ export default function TermsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{
               background: 'var(--bg2)',
-              border: '1px solid rgba(200,255,62,0.2)',
+              border: '1px solid rgba(14,165,233,0.2)',
               borderRadius: '12px',
               padding: '16px 20px',
             }}>

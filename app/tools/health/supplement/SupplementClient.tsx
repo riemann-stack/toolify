@@ -672,8 +672,8 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
                 key={a.ing.name}
                 className={s.hintCard}
                 style={{
-                  background: a.status === 'exceed' ? 'rgba(255,70,70,0.06)' : 'rgba(255,140,62,0.06)',
-                  border: a.status === 'exceed' ? '1px solid rgba(255,70,70,0.3)' : '1px solid rgba(255,140,62,0.3)',
+                  background: a.status === 'exceed' ? 'rgba(255,70,70,0.06)' : 'rgba(234,88,12,0.06)',
+                  border: a.status === 'exceed' ? '1px solid rgba(255,70,70,0.3)' : '1px solid rgba(234,88,12,0.3)',
                 }}
               >
                 <div className={s.hintHead}>
@@ -1016,7 +1016,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
             active: ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]),
           }))].map((c, i) => (
             <div key={i} className={`${s.hintCard} ${s.synergyCard}`}
-              style={c.active ? { background: 'rgba(62,255,155,0.06)', borderColor: 'rgba(62,255,155,0.40)' } : { opacity: 0.6 }}>
+              style={c.active ? { background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.40)' } : { opacity: 0.6 }}>
               <div className={s.hintHead}>{c.active ? '✅' : '○'} {c.title}</div>
               <div className={s.hintBody}>{c.desc}</div>
             </div>
@@ -1032,7 +1032,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
             const active = ingredientSet.has(c.a) && ingredientSet.has(c.b)
             return (
               <div key={i} className={`${s.hintCard} ${s.cautionCard}`}
-                style={active ? { background: 'rgba(255,140,62,0.08)', borderColor: 'rgba(255,140,62,0.50)' } : { opacity: 0.6 }}>
+                style={active ? { background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.50)' } : { opacity: 0.6 }}>
                 <div className={s.hintHead}>{active ? '⚡' : '○'} {c.a} + {c.b}</div>
                 <div className={s.hintBody}>
                   <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />

@@ -228,8 +228,8 @@ export default function RoomModeClient() {
               onListenerChange={setListener}
             />
             <div className={s.legend}>
-              <span><span className={s.legendBox} style={{ background: 'rgba(255, 62, 140, 0.5)' }}/>음압 최대 (벽)</span>
-              <span><span className={s.legendBox} style={{ background: 'rgba(62, 255, 208, 0.4)' }}/>모드 노드 (좋음)</span>
+              <span><span className={s.legendBox} style={{ background: 'rgba(219, 39, 119, 0.5)' }}/>음압 최대 (벽)</span>
+              <span><span className={s.legendBox} style={{ background: 'rgba(13, 148, 136, 0.4)' }}/>모드 노드 (좋음)</span>
               <span>🔊 스피커</span>
               <span>🪑 청취자</span>
               <span style={{ borderTop: '1px dashed var(--accent)', paddingTop: 2 }}>38% 라인</span>
@@ -304,7 +304,7 @@ export default function RoomModeClient() {
                 <tbody>
                   <tr><td>본인 방 (H:W:L)</td><td className={s.cellMono}>1 : {fmt(Wn / Hn, 2)} : {fmt(Ln / Hn, 2)}</td></tr>
                   <tr><td>Sepmeyer 황금비</td><td className={s.cellMono}>1 : 1.14 : 1.39</td></tr>
-                  <tr><td>Bolt Area 안전 여부</td><td className={s.cellMono} style={{ color: inBoltArea(Wn / Hn, Ln / Hn) ? 'var(--accent)' : '#FF3E8C' }}>
+                  <tr><td>Bolt Area 안전 여부</td><td className={s.cellMono} style={{ color: inBoltArea(Wn / Hn, Ln / Hn) ? 'var(--accent)' : '#DB2777' }}>
                     {inBoltArea(Wn / Hn, Ln / Hn) ? '✅ 안전 영역' : '❌ 위험 영역'}
                   </td></tr>
                 </tbody>
@@ -338,7 +338,7 @@ export default function RoomModeClient() {
                         className={s.bonelloFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: b.count === 0 ? '#444' : (isWorse ? '#FF3E8C' : '#3EFFD0'),
+                          background: b.count === 0 ? '#444' : (isWorse ? '#DB2777' : '#0D9488'),
                         }}
                       >
                         <span className={s.bonelloVal}>{b.count}</span>
@@ -349,8 +349,8 @@ export default function RoomModeClient() {
               })}
             </div>
             <p className={s.helpText}>
-              ✅ <strong style={{ color: '#3EFFD0' }}>균등 증가</strong>가 좋음 — 모든 대역에 모드가 분포<br />
-              ❌ <strong style={{ color: '#FF3E8C' }}>몰림·갭</strong>이 나쁨 — 특정 대역만 몰리면 부밍
+              ✅ <strong style={{ color: '#0D9488' }}>균등 증가</strong>가 좋음 — 모든 대역에 모드가 분포<br />
+              ❌ <strong style={{ color: '#DB2777' }}>몰림·갭</strong>이 나쁨 — 특정 대역만 몰리면 부밍
             </p>
           </div>
         </>
@@ -476,8 +476,8 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
         {/* 슈로더 라인 */}
         {schroeder >= fMin && schroeder <= fMax && (
           <g>
-            <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#FFB83E" strokeWidth="1.5" strokeDasharray="3,2" />
-            <text x={xScale(schroeder)} y={padT - 2} fill="#FFB83E" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">슈로더</text>
+            <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#D97706" strokeWidth="1.5" strokeDasharray="3,2" />
+            <text x={xScale(schroeder)} y={padT - 2} fill="#D97706" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">슈로더</text>
           </g>
         )}
         {/* 모드 막대 */}
@@ -600,8 +600,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onPointerDown={(e) => { e.preventDefault(); setDrag('listener') }}
           style={{ cursor: 'pointer' }}
         >
-          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="rgba(62, 200, 255, 0.25)" />
-          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={12} fill="#3EC8FF" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="rgba(8, 145, 178, 0.25)" />
+          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={12} fill="#0891B2" stroke="#000" strokeWidth="1.5" />
           <text x={pad + listener.x * w} y={pad + listener.y * h + 4} fontSize="14" textAnchor="middle">🪑</text>
         </g>
 
@@ -610,7 +610,7 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onPointerDown={(e) => { e.preventDefault(); setDrag('sL') }}
           style={{ cursor: 'pointer' }}
         >
-          <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="#FF8C3E" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerL.x * w} y={pad + speakerL.y * h + 4} fontSize="13" textAnchor="middle">L</text>
         </g>
 
@@ -619,14 +619,14 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onPointerDown={(e) => { e.preventDefault(); setDrag('sR') }}
           style={{ cursor: 'pointer' }}
         >
-          <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="#FF8C3E" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerR.x * w} y={pad + speakerR.y * h + 4} fontSize="13" textAnchor="middle">R</text>
         </g>
 
         {/* 스피커-청취자 정삼각형 가이드 */}
-        <line x1={pad + speakerL.x * w} y1={pad + speakerL.y * h} x2={pad + listener.x * w} y2={pad + listener.y * h} stroke="rgba(255, 140, 62, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
-        <line x1={pad + speakerR.x * w} y1={pad + speakerR.y * h} x2={pad + listener.x * w} y2={pad + listener.y * h} stroke="rgba(255, 140, 62, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
-        <line x1={pad + speakerL.x * w} y1={pad + speakerL.y * h} x2={pad + speakerR.x * w} y2={pad + speakerR.y * h} stroke="rgba(255, 140, 62, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
+        <line x1={pad + speakerL.x * w} y1={pad + speakerL.y * h} x2={pad + listener.x * w} y2={pad + listener.y * h} stroke="rgba(234, 88, 12, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
+        <line x1={pad + speakerR.x * w} y1={pad + speakerR.y * h} x2={pad + listener.x * w} y2={pad + listener.y * h} stroke="rgba(234, 88, 12, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
+        <line x1={pad + speakerL.x * w} y1={pad + speakerL.y * h} x2={pad + speakerR.x * w} y2={pad + speakerR.y * h} stroke="rgba(234, 88, 12, 0.4)" strokeWidth="1" strokeDasharray="3,3" />
       </svg>
     </div>
   )
@@ -675,13 +675,13 @@ function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
           </g>
         ))}
         {/* 안전 영역 */}
-        <polygon points={safePoly} fill="rgba(62, 255, 208, 0.18)" stroke="#3EFFD0" strokeWidth="1.5" />
+        <polygon points={safePoly} fill="rgba(13, 148, 136, 0.18)" stroke="#0D9488" strokeWidth="1.5" />
         {/* 황금비 점 (Sepmeyer) */}
-        <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="#FFB83E" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#FFB83E" fontSize="9" fontFamily="Inter, system-ui, sans-serif">Sepmeyer ⭐</text>
+        <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="#D97706" stroke="#000" strokeWidth="0.5" />
+        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#D97706" fontSize="9" fontFamily="Inter, system-ui, sans-serif">Sepmeyer ⭐</text>
         {/* 정육면체 (위험) */}
-        <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="#FF3E8C" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#FF3E8C" fontSize="9" fontFamily="Inter, system-ui, sans-serif">정육면체 ⚠️</text>
+        <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="#DB2777" stroke="#000" strokeWidth="0.5" />
+        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#DB2777" fontSize="9" fontFamily="Inter, system-ui, sans-serif">정육면체 ⚠️</text>
         {/* 본인 방 */}
         {wlRatio >= xMin && wlRatio <= xMax && llRatio >= yMin && llRatio <= yMax && (
           <g>

@@ -16,7 +16,7 @@ export interface Category {
 
 export const categories: Category[] = [
   {
-    id: 'finance', icon: '💰', name: '금융·재테크', color: '#3EFF9B',
+    id: 'finance', icon: '💰', name: '금융·재테크', color: '#059669',
     tools: [
       { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '세금·4대보험 떼고 통장에 진짜 꽂히는 그 월급. 2026년 최신 기준 자동 + 인상률·시급 환산.', badge: 'hot' },
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확하게.' },
@@ -27,6 +27,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 계산기', desc: '관계별 공제·10년 합산·배우자 공제 반영 정확한 세액 + 분산 증여 시뮬레이션.' },
       { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', desc: '유류·보험·세금·소모품·감가 합한 연간 진짜 비용. 차종·전기차 손익분기 비교.', badge: 'hot' },
       { href: '/tools/finance/car-tax',  icon: '🧾', name: '자동차 세금 종합 계산기', desc: '취득세·자동차세·유류세·공채·환경부담금까지 — 자동차 관련 모든 세금 한 화면에. 친환경차·다자녀·장애인 감면 + 5/10년 누적 시뮬.', badge: 'new' },
+      { href: '/tools/finance/historical-money', icon: '💴', name: '한국 화폐가치 환산기', desc: '1960년 50환, 1980년 1만원의 현재 가치는? 圓·환·원 화폐사 + 1945~2026 구매력 환산. 짜장면·집값·월급 시대별 비교.', badge: 'new' },
       { href: '/tools/finance/real-estate', icon: '🏘️', name: '부동산 수익률 계산기', desc: '매매가·임대·대출 레버리지 반영한 자기자본 수익률. 진짜 남는 돈을 확인.' },
       { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기', desc: '84점 만점(무주택 32 + 부양가족 35 + 통장 17) 자동 + 최근 평균 당첨 가점 비교 + 가점 향상 시뮬 + 5가지 특공 자가진단 (2025 기준).', badge: 'new' },
       { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·배달 수수료·포장재 반영한 실질 원가율과 마진. 메뉴 가격 결정에 바로.' },
@@ -34,7 +35,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기', desc: '국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. 알바·프리랜서 비교까지.' },
       { href: '/tools/finance/ipo-deposit', icon: '💰', name: '공모주 증거금 계산기', desc: '증거금 ↔ 예상 주수 양방향 + 5사6입·청약 한도 자동. 청약일 D-day 메모.', badge: 'new' },
       { href: '/tools/finance/stock-decision', icon: '🐭', name: '주식 매수·매도 계산기', desc: '팔까 살까 고민될 때, 행동경제학 진단과 5가지 무작위 결정으로 미련 없이.', badge: 'new' },
-      { href: '/tools/finance/savings', icon: '💰', name: '월 저축 계산기', desc: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA 절세 시뮬.', badge: 'new' },
+      { href: '/tools/finance/savings', icon: '💰', name: '저축액 계산기', desc: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA 절세 시뮬.', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 비용 계산기', desc: '낙찰가 + 취득세·명도·체납·수리·대출까지 진짜 들어가는 비용을 시나리오별로.', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일과 3개월 급여로 퇴직금·퇴직소득세·실수령 자동. DB/DC/IRP 4모드.', badge: 'new' },
       { href: '/tools/finance/freelance-tax', icon: '💼', name: '프리랜서 종합소득세 계산기', desc: '업종별 단순경비율·8단계 누진세 자동 + 노란우산·연금 절세 시나리오 5종 비교.', badge: 'new' },
@@ -43,7 +44,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'health', icon: '🏃', name: '건강·웰빙', color: '#3EC8FF',
+    id: 'health', icon: '🏃', name: '건강·웰빙', color: '#0891B2',
     tools: [
       { href: '/tools/health/bmi',           icon: '⚖️', name: 'BMI 계산기',                 desc: '키·몸무게로 비만도와 정상 체중 범위. 허리둘레·체지방률 추정까지 한 화면에.' },
       { href: '/tools/health/bmr',           icon: '🔥', name: '기초대사량 계산기',          desc: '기초대사량과 하루 총 소비 칼로리 + 운동일/휴식일별 목표 칼로리 자동.' },
@@ -59,7 +60,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'cooking', icon: '🍳', name: '요리·식품', color: '#FFB83E',
+    id: 'cooking', icon: '🍳', name: '요리·식품', color: '#D97706',
     tools: [
       { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '인분만 바꾸면 모든 재료가 비례 자동. 큰술↔g↔ml 환산과 장보기 리스트까지.' },
       { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',    desc: '냉장·전자레인지·찬물·실온 4가지 해동법 비교 + 식품별 위험도와 시작·완료 시각.' },
@@ -82,7 +83,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'life', icon: '🎲', name: '생활·재미', color: '#FF8C3E',
+    id: 'life', icon: '🎲', name: '생활·재미', color: '#EA580C',
     tools: [
       { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기', desc: '8가지 생성 모드 + 번호 분석 + 가상 추첨으로 1등 체감. 당첨금 세후까지.', badge: 'hot' },
       { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기', desc: '룰렛 회전으로 점심·벌칙부터 팀 나누기·자리 배치까지. 모바일에서도 빠른 칩 입력.' },
@@ -103,7 +104,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'sports', icon: '⛳', name: '스포츠', color: '#FFD93E',
+    id: 'sports', icon: '⛳', name: '스포츠', color: '#CA8A04',
     tools: [
       { href: '/tools/sports/fight-weight',    icon: '🥊', name: '격투기 체급 계산기',     desc: '복싱·UFC·MMA 체급별 감량 계획과 D-day 일정 + 위험도 자동 경고.' },
       { href: '/tools/sports/baseball-stats',  icon: '⚾', name: '야구 타율 계산기',   desc: '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교.' },
@@ -123,7 +124,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'interior', icon: '🏠', name: '주거·인테리어', color: '#E89757',
+    id: 'interior', icon: '🏠', name: '주거·인테리어', color: '#EA580C',
     tools: [
       { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피 한 번에 — 도배·페인트·에어컨 평형 계산의 기본.', badge: 'hot' },
       { href: '/tools/interior/ventilation',   icon: '💨', name: '환기량 계산기',     desc: '공간 부피·인원으로 필요 환기량 + 공기청정기 CADR 매칭과 창문 환기 시간.', badge: 'new' },
@@ -143,7 +144,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'unit', icon: '📐', name: '단위·변환', color: '#B03EFF',
+    id: 'unit', icon: '📐', name: '단위·변환', color: '#7C3AED',
     tools: [
       { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',         desc: '길이·면적·무게·부피·온도·시간·속도·압력·토크·에너지·데이터 11종 + 자·근·돈·평·홉.', badge: 'hot' },
       { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',          desc: '아파트 평형·전용·공급·계약면적 환산 + 평형별 방 크기 가이드.' },
@@ -151,10 +152,14 @@ export const categories: Category[] = [
       { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',         desc: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정.' },
       { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 변환기',           desc: 'km/L·L/100km·mpg 변환 + 전기차 전비와 연료별 100km 비용 비교.' },
       { href: '/tools/unit/tire-pressure', icon: '🛞', name: '타이어 공기압 변환기',       desc: 'psi·kPa·bar 변환 + 차량별 권장 공기압과 계절별 관리.' },
+      { href: '/tools/unit/hardness',      icon: '🛠️', name: '경도(Hardness) 변환기',  desc: 'HRC·HRB·HV·HB·인장강도 동시 환산 (ASTM E140 강철 표). 칼 강재·공구·금속 가공 — 칼덕·메이커·엔지니어용.', badge: 'new' },
+      { href: '/tools/unit/viscosity',     icon: '🛢️', name: '점도(Viscosity) 변환기', desc: 'cP·cSt·SUS·Pa·s 동시 환산 + SAE J300 엔진오일(0W-20·5W-30 등)·ISO VG 산업 윤활유 등급 매칭. 자동차 DIY·산업 정비용.', badge: 'new' },
+      { href: '/tools/unit/brewing',       icon: '🍺', name: '양조 도수·당도 변환기',   desc: 'Brix·Plato·SG·Baumé·Oechsle 5종 동시 환산 + OG/FG 기반 ABV·Proof + pH/TA 참고. 자가양조·홈와인·잼·치즈 메이커용.', badge: 'new' },
+      { href: '/tools/unit/radiation',     icon: '☢️', name: '방사선·전자파 변환기',   desc: 'Sv·rem·Gy·rad·Bq·Ci 동시 환산 + μSv/h ↔ mSv/년 + CT·치과·항공 일상 노출 비교 + SAR·EMF 별도 섹션.', badge: 'new' },
     ],
   },
   {
-    id: 'date', icon: '📅', name: '날짜·시간', color: '#FF3E8C',
+    id: 'date', icon: '📅', name: '날짜·시간', color: '#DB2777',
     tools: [
       { href: '/tools/date/server-time', icon: '⏱️', name: '실시간 서버 시간', desc: '수강신청·티켓팅을 위한 NTP 동기화 KST를 밀리초로. 카운트다운·알림음 포함.', badge: 'new' },
       { href: '/tools/date/age',         icon: '🎂', name: '나이 계산기', desc: '만 나이·D-day·1만일 기념·생일 카운트다운 + 인생 시간 통계까지 한 화면에.' },
@@ -163,11 +168,12 @@ export const categories: Category[] = [
       { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·불기·조선왕·간지·일본·중국 연호 동시 변환 + 단군~현재 통합 연표.' },
       { href: '/tools/date/lunar',       icon: '🌙', name: '양력 음력 변환기',         desc: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동.' },
       { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드.' },
+      { href: '/tools/date/timezone',    icon: '🌐', name: '시간대(타임존) 변환기',     desc: 'UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란·네팔(+5:45) 동시 변환. DST 자동, 회의 슬롯 추천.', badge: 'new' },
       { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간을 행동 가치로 환산해 보여줍니다.', badge: 'hot' },
     ],
   },
   {
-    id: 'art', icon: '🎨', name: '예술·창작', color: '#C485E0',
+    id: 'art', icon: '🎨', name: '예술·창작', color: '#9333EA',
     tools: [
       /* 🎵 음악 */
       { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기', desc: '마이크로 실시간 음정 감지로 내 최저·최고음 측정 + 한국 노래 30+곡 키 매칭.', badge: 'new' },
@@ -191,7 +197,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'edu', icon: '🔬', name: '교육·학습', color: '#3EFFD0',
+    id: 'edu', icon: '🔬', name: '교육·학습', color: '#0D9488',
     tools: [
       { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 계산기', desc: '8개 행성에서 내 몸무게·나이·하루 길이가 어떻게 달라지는지 시각화.', badge: 'hot' },
       { href: '/tools/edu/cosmic-calendar',   icon: '🌌', name: '코스믹 캘린더',     desc: '138억 년 우주 역사를 1년 달력으로 압축한 인터랙티브 타임라인.' },
@@ -201,10 +207,11 @@ export const categories: Category[] = [
       { href: '/tools/edu/review-interval',    icon: '🧠', name: '복습 간격 계산기',     desc: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일 자동 + 학습 항목 관리.', badge: 'hot' },
       { href: '/tools/edu/cognitive-test',     icon: '🧠', name: '인지 능력 테스트',     desc: '반응속도·스트룹·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정.' },
       { href: '/tools/edu/fermi-estimate',     icon: '🧮', name: '페르미 추정 계산기',   desc: '막막한 문제를 변수로 쪼개고 시나리오로 비교해 대략 답을 추정하는 사고력 훈련.' },
+      { href: '/tools/edu/gpa-converter',       icon: '🎓', name: '학점(GPA) 환산기',     desc: '한국 4.5·4.3 ↔ 미국 4.0 ↔ 영국 학위 등급. WES·비례·평어 3방식 동시 비교 + 한국 대학별 만점 가이드.', badge: 'new' },
     ],
   },
   {
-    id: 'dev', icon: '🖥️', name: '개발자', color: '#C8FF3E',
+    id: 'dev', icon: '🖥️', name: '개발자', color: '#0EA5E9',
     tools: [
       { href: '/tools/dev/base64',    icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드.' },
       { href: '/tools/dev/tech-stack', icon: '🛠️', name: '기술 스택 추천기', desc: '프로젝트 시나리오로 Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천.', badge: 'new' },
@@ -218,6 +225,8 @@ export const categories: Category[] = [
       { href: '/tools/dev/curl', icon: '🌀', name: 'cURL 변환기', desc: 'cURL 명령어를 fetch·axios·Python·Node·Go 5 언어로 즉시 변환. 한국 API 12개 예시.', badge: 'new' },
       { href: '/tools/dev/http-status', icon: '🌐', name: 'HTTP 상태 코드 검색기', desc: 'HTTP 65+ 상태 코드 한국어 설명·발생 시기·해결 힌트. CORS·JWT·Lambda 시나리오.', badge: 'new' },
       { href: '/tools/dev/network-test', icon: '🌐', name: '인터넷 회선 진단', desc: '핑·지터·실패율·다운로드 + 인터파크·예스24·멜론·KBO 응답으로 티켓팅 적합도 판정.', badge: 'new' },
+      { href: '/tools/dev/token-counter', icon: '🪙', name: 'AI 토큰 카운터', desc: 'GPT·Claude·Gemini 토큰 수와 컨텍스트 사용량 동시 추정 + 입력·출력 단가 반영 API 비용. 한국어 비효율 인사이트.', badge: 'new' },
+      { href: '/tools/dev/og-preview', icon: '🖼️', name: 'OG 미리보기 시뮬레이터', desc: '카카오톡·페이스북·X·LinkedIn·Slack에서 공유될 때의 카드를 한 화면에. 메타태그 검증 + 코드 생성 + 카카오톡 캐시 가이드.', badge: 'new' },
     ],
   },
 ]

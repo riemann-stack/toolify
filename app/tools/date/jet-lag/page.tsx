@@ -100,8 +100,8 @@ export default function JetLagPage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이동 방향별 완전 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div style={{ background: 'rgba(62,200,255,0.06)', border: '1px solid rgba(62,200,255,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#3EC8FF', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
+            <div style={{ background: 'rgba(8,145,178,0.06)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '출국 전: 매일 1~2시간씩 취침 늦추기',
@@ -111,8 +111,8 @@ export default function JetLagPage() {
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
             </div>
-            <div style={{ background: 'rgba(255,140,62,0.06)', border: '1px solid rgba(255,140,62,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FF8C3E', marginBottom: '10px' }}>→ 동쪽 이동 (호주·하와이)</p>
+            <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '10px' }}>→ 동쪽 이동 (호주·하와이)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '출국 전: 매일 1~2시간씩 취침 앞당기기',

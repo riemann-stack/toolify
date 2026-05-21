@@ -55,9 +55,9 @@
 }
 .tabActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
 }@media (hover: hover) {
-  .tabActive:hover { background: var(--accent); color: #0D0D0D; }
+  .tabActive:hover { background: var(--accent); color: #ffffff; }
 }
 @media (max-width: 640px) {
   .tabs {
@@ -127,10 +127,10 @@
 }
 .unitBtnActive {
   background: var(--accent);
-  color: #0D0D0D;
+  color: #ffffff;
   border-color: var(--accent);
 }@media (hover: hover) {
-  .unitBtnActive:hover { color: #0D0D0D; }
+  .unitBtnActive:hover { color: #ffffff; }
 }
 
 /* ── 프리셋 버튼 ── */
@@ -250,7 +250,7 @@
 }
 .resultTable tr:last-child td { border-bottom: none; }
 .resultRowRecommend {
-  background: rgba(200, 255, 62, 0.06);
+  background: rgba(14, 165, 233, 0.06);
   border-left: 3px solid var(--accent);
 }
 .codeCell {
@@ -294,7 +294,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.copyBtnDone { color: #3EFF9B; border-color: #3EFF9B; }
+.copyBtnDone { color: #059669; border-color: #059669; }
 
 /* ── 코드 블록 ── */
 .codeBlock {
@@ -339,18 +339,18 @@
   margin-top: 10px;
 }
 .hintRecommend {
-  background: rgba(62, 255, 155, 0.06);
-  border: 1px solid rgba(62, 255, 155, 0.3);
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   color: var(--text);
 }
 .hintWarn {
-  background: rgba(255, 140, 62, 0.06);
-  border: 1px solid rgba(255, 140, 62, 0.3);
+  background: rgba(234, 88, 12, 0.06);
+  border: 1px solid rgba(234, 88, 12, 0.3);
   color: var(--text);
 }
 .hintTip {
-  background: rgba(62, 200, 255, 0.06);
-  border: 1px solid rgba(62, 200, 255, 0.3);
+  background: rgba(8, 145, 178, 0.06);
+  border: 1px solid rgba(8, 145, 178, 0.3);
   color: var(--text);
 }
 
@@ -382,14 +382,14 @@
   font-weight: 600;
 }
 .badgeOk {
-  background: rgba(62, 255, 155, 0.15);
-  color: #3EFF9B;
-  border: 1px solid rgba(62, 255, 155, 0.3);
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 .badgeNo {
-  background: rgba(255, 107, 107, 0.15);
-  color: #FF6B6B;
-  border: 1px solid rgba(255, 107, 107, 0.3);
+  background: rgba(220, 38, 38, 0.15);
+  color: #DC2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 /* ── aspect-ratio 미리보기 ── */
