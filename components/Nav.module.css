@@ -668,12 +668,13 @@
 
 /* ── 본문 ── */
 .drawerInner {
-  flex: 1 1 auto;
+  flex: 1 1 0;                    /* basis 0 — 남는 공간만 차지해 내부 스크롤 보장 */
   min-height: 0;                  /* flex 자식 overflow 작동에 필수 */
+  height: 0;                      /* iOS Safari 스크롤 영역 강제 확정 */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: 12px 16px 32px;
+  padding: 12px 16px 40px;
   display: flex;
   flex-direction: column;
   gap: 6px;
