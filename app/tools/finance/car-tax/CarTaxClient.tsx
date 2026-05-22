@@ -24,7 +24,9 @@ export default function CarTaxClient() {
 
   /* 운행 */
   const [monthlyKm, setMonthlyKm] = useState(1500)
-  const [efficiencyKmL, setEfficiencyKmL] = useState(12)
+  const [effStr, setEffStr] = useState('12')  // 연비 — 자유 입력(빈칸 허용)
+  const effNum = parseFloat(effStr)
+  const efficiencyKmL = Number.isFinite(effNum) && effNum > 0 ? effNum : 1
 
   /* 옵션 */
   const [prepay, setPrepay] = useState(true)
@@ -56,7 +58,7 @@ export default function CarTaxClient() {
       if (typeof j.yearsSinceReg === 'number') setYearsSinceReg(j.yearsSinceReg)
       if (j.regionId) setRegionId(j.regionId)
       if (typeof j.monthlyKm === 'number') setMonthlyKm(j.monthlyKm)
-      if (typeof j.efficiencyKmL === 'number') setEfficiencyKmL(j.efficiencyKmL)
+      if (typeof j.efficiencyKmL === 'number') setEffStr(String(j.efficiencyKmL))
       if (typeof j.prepay === 'boolean') setPrepay(j.prepay)
       if (j.exemption) setExemption(j.exemption)
       if (typeof j.yearsToHold === 'number') setYearsToHold(j.yearsToHold)
@@ -102,20 +104,16 @@ export default function CarTaxClient() {
         <div className={s.field}>
           <label>차량 가격 (출고가)</label>
           <div className={s.priceRow}>
-            <input type="number" inputMode="decimal"
+            <input type="text" inputMode="numeric"
               className={s.numInput}
-              value={carPrice} step={1_000_000}
-              onChange={e => setCarPrice(parseInt(e.target.value) || 0)} />
+              placeholder="30,000,000"
+              value={carPrice ? carPrice.toLocaleString('ko-KR') : ''}
+              onChange={e => {
+                const digits = e.target.value.replace(/[^\d]/g, '')
+                setCarPrice(digits ? parseInt(digits, 10) : 0)
+              }} />
             <span className={s.unit}>원</span>
-            <span className={s.priceLabel}>{fmtMan(carPrice)}</span>
-          </div>
-          <div className={s.quickRow}>
-            {[15_000_000, 25_000_000, 35_000_000, 50_000_000, 80_000_000].map(p => (
-              <button key={p} type="button" className={s.chip}
-                onClick={() => setCarPrice(p)}>
-                {fmtMan(p)}
-              </button>
-            ))}
+            {carPrice > 0 && <span className={s.priceLabel}>{fmtMan(carPrice)}</span>}
           </div>
         </div>
 
@@ -156,7 +154,7 @@ export default function CarTaxClient() {
 
         <div className={s.grid2} style={{ marginTop: 14 }}>
           <div className={s.field}>
-            <label>등록 후 경과 년수</label>
+            <label>경과 년수</label>
             <input type="number" inputMode="numeric"
               className={s.numInput}
               value={yearsSinceReg} min={0} max={20} step={1}
@@ -167,7 +165,7 @@ export default function CarTaxClient() {
             </div>
           </div>
           <div className={s.field}>
-            <label>거주 지역 (공채 매입 비율)</label>
+            <label>거주 지역</label>
             <select className={s.select}
               value={regionId}
               onChange={e => setRegionId(e.target.value as RegionId)}>
@@ -197,11 +195,12 @@ export default function CarTaxClient() {
           </div>
           <div className={s.field}>
             <label>연비 ({fuelType === 'electric' ? 'km/kWh' : 'km/L'})</label>
-            <input type="number" inputMode="decimal"
+            <input type="text" inputMode="decimal"
               className={s.numInput}
-              value={efficiencyKmL} min={1} max={30} step={0.1}
+              placeholder="12"
+              value={fuelType === 'electric' ? '' : effStr}
               disabled={fuelType === 'electric'}
-              onChange={e => setEfficiencyKmL(parseFloat(e.target.value) || 1)} />
+              onChange={e => setEffStr(e.target.value.replace(/[^\d.]/g, ''))} />
           </div>
         </div>
         <p className={s.fieldHint}>

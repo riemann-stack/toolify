@@ -281,19 +281,25 @@ export default function HousingScoreClient() {
           </label>
         )}
 
-        <div className={s.subLabel} style={{ marginTop: 10 }}>자녀 수 (미성년 또는 만 30세 미만 미혼)</div>
-        <div className={s.numRow}>
-          <button type="button" onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}>−</button>
-          <span>{childrenCount}</span>
-          <button type="button" onClick={() => setChildrenCount(Math.min(10, childrenCount + 1))}>+</button>
+        <div className={s.fieldRow} style={{ marginTop: 10, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+          <div className={s.field}>
+            <div className={s.subLabel} style={{ marginBottom: 4 }}>자녀 수 <small style={{ fontWeight: 400 }}>(미성년·만30세미만 미혼)</small></div>
+            <div className={s.numRow}>
+              <button type="button" onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}>−</button>
+              <span>{childrenCount}</span>
+              <button type="button" onClick={() => setChildrenCount(Math.min(10, childrenCount + 1))}>+</button>
+            </div>
+          </div>
+          <div className={s.field}>
+            <div className={s.subLabel} style={{ marginBottom: 4 }}>동거 직계존속 <small style={{ fontWeight: 400 }}>(부모·조부모)</small></div>
+            <div className={s.numRow}>
+              <button type="button" onClick={() => setParentsCount(Math.max(0, parentsCount - 1))}>−</button>
+              <span>{parentsCount}</span>
+              <button type="button" onClick={() => setParentsCount(Math.min(4, parentsCount + 1))}>+</button>
+            </div>
+          </div>
         </div>
 
-        <div className={s.subLabel} style={{ marginTop: 12 }}>동거 직계존속 (부모·조부모)</div>
-        <div className={s.numRow}>
-          <button type="button" onClick={() => setParentsCount(Math.max(0, parentsCount - 1))}>−</button>
-          <span>{parentsCount}</span>
-          <button type="button" onClick={() => setParentsCount(Math.min(4, parentsCount + 1))}>+</button>
-        </div>
         {parentsCount > 0 && (
           <label className={s.toggleLabel} style={{ marginTop: 8 }}>
             <input

@@ -87,8 +87,8 @@ export default function RoomAreaPage() {
             <p>1평 = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>3.3058㎡</strong> (공식 환산값, 일본식 척관법 6자×6자 기준)</p>
             <p style={{ color: 'var(--muted)', fontSize: 13 }}>1평 ≈ 3.3㎡ (간이 환산)</p>
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 380 }}>
+          <div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['평수', '면적 (㎡)'].map((h, i) => (
@@ -122,17 +122,16 @@ export default function RoomAreaPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 아파트 천장 높이 표준
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {[
               { i: '🏢', t: '일반 아파트',         h: '2.3~2.4m', color: '#0891B2' },
               { i: '🏬', t: '신축 아파트',         h: '2.4~2.5m', color: 'var(--accent)' },
               { i: '🏛️', t: '고급 아파트·단독',    h: '2.5~3.0m', color: '#059669' },
               { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: '#CA8A04' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
-                <p style={{ fontSize: 14, color: s.color, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{s.h}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                <span style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 600 }}>{s.i} {s.t}</span>
+                <span style={{ fontSize: 14, color: s.color, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, whiteSpace: 'nowrap' }}>{s.h}</span>
               </div>
             ))}
           </div>
@@ -146,7 +145,8 @@ export default function RoomAreaPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            💡 <strong style={{ color: '#E89757' }}>천장 높이 0.1m 차이가 면적에 미치는 영향</strong> — 둘레 16m × 0.1m = <strong style={{ color: 'var(--accent)' }}>1.6㎡</strong> 추가 (벽 면적 기준)
+            💡 <strong style={{ color: '#E89757' }}>천장 높이 0.1m 차이가 면적에 미치는 영향</strong><br />
+            둘레 16m × 0.1m = <strong style={{ color: 'var(--accent)' }}>1.6㎡</strong> 추가 (벽 면적 기준)
           </div>
         </div>
 
@@ -165,8 +165,7 @@ export default function RoomAreaPage() {
               { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#CA8A04' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
-                <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
+                <p style={{ fontSize: 13.5, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.i} {s.t}</p>
                 <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
               </div>
             ))}
@@ -308,9 +307,6 @@ export default function RoomAreaPage() {
               </Link>
             ))}
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, textAlign: 'center', fontStyle: 'italic' }}>
-            🚧 곧 출시 예정: 바닥재 소요량·타일 소요량·에어컨 평형·조명 밝기 계산기
-          </p>
         </div>
 
       </div>

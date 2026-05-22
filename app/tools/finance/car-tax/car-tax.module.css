@@ -45,7 +45,7 @@
 .fieldHint strong { color: var(--text); }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-@media (max-width: 540px) { .grid2 { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .grid2 { gap: 8px; } }
 
 /* 가격 입력 + 단위 + 만원 미리보기 */
 .priceRow {
@@ -148,7 +148,7 @@
 }
 
 /* 감면 옵션 */
-.exemptionList { display: flex; flex-direction: column; gap: 5px; }
+.exemptionList { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .exemptionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -161,6 +161,7 @@
   flex-direction: column;
   gap: 2px;
   transition: all 0.15s;
+  min-width: 0;
 }
 .exemptionBtn strong {
   font-size: 13px;

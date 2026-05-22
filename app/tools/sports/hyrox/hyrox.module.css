@@ -1,0 +1,171 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* 탭 */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+}
+.tabBtn {
+  flex: 1 1 0;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 6px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: 0;
+}
+.tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+.cardLabel {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase; font-weight: 600; margin-bottom: 12px;
+}
+.cardHint { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+/* 레벨 선택 */
+.segRow { display: flex; gap: 4px; background: var(--bg3); border-radius: 10px; padding: 3px; }
+.segBtn {
+  flex: 1 1 0; background: transparent; border: none; border-radius: 8px;
+  padding: 9px 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 12.5px;
+  font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; min-width: 0;
+}
+.segActive { background: var(--bg2); color: var(--accent); box-shadow: 0 1px 3px rgba(15,23,42,0.08); }
+
+/* 입력 행 */
+.inputRow { display: flex; align-items: center; gap: 8px; }
+.numInput {
+  flex: 1; min-width: 0;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-family: 'Inter', system-ui, sans-serif; font-size: 16px;
+  font-weight: 700; color: var(--text); text-align: right; outline: none;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.numInput::-webkit-outer-spin-button, .numInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.numInput:focus { border-color: var(--accent); }
+.unit { font-size: 13px; color: var(--muted); font-weight: 700; flex-shrink: 0; }
+
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 5px; display: block; }
+
+/* 스테이션 시간 입력 그리드 */
+.stationGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stationItem {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 9px 11px; display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.stationName {
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--text);
+  display: flex; align-items: baseline; gap: 5px; min-width: 0;
+}
+.stationSpec { font-size: 10.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.stationInputRow { display: flex; align-items: center; gap: 6px; }
+.stationInput {
+  flex: 1; min-width: 0;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 9px; font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
+  font-weight: 700; color: var(--text); text-align: right; outline: none;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.stationInput::-webkit-outer-spin-button, .stationInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stationInput:focus { border-color: var(--accent); }
+.stationUnit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+
+/* 히어로 */
+.hero {
+  background: linear-gradient(135deg, rgba(202,138,4,0.12), rgba(202,138,4,0.03));
+  border: 1px solid #CA8A04;
+  border-radius: 16px;
+  padding: 20px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 12px; color: #CA8A04; font-weight: 700; margin-bottom: 6px; }
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(30px, 8vw, 44px);
+  font-weight: 800; color: #CA8A04; letter-spacing: -1px; line-height: 1.05;
+}
+.heroSub { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+.heroSub strong { color: var(--text); }
+
+/* 비중 바 */
+.shareBar {
+  display: flex; height: 26px; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--border); margin-top: 4px;
+}
+.shareSeg {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800; color: #fff;
+  white-space: nowrap; overflow: hidden;
+}
+.shareRun  { background: #CA8A04; }
+.shareStation { background: #0EA5E9; }
+.shareRox  { background: #94A3B8; }
+.shareLegend {
+  display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--muted);
+}
+.shareLegend span { display: inline-flex; align-items: center; gap: 5px; }
+.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* 분할표 */
+.splitTable { width: 100%; border-collapse: collapse; font-size: 13px; font-family: 'Noto Sans KR', sans-serif; }
+.splitTable th {
+  text-align: left; padding: 8px 10px; color: var(--muted); font-weight: 600; font-size: 11px;
+  border-bottom: 1px solid var(--border);
+}
+.splitTable th:last-child, .splitTable td:last-child { text-align: right; }
+.splitTable td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
+.splitTable tr:last-child td { border-bottom: none; }
+.splitRun td { color: var(--muted); }
+.splitVal { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+.splitCum { font-family: 'Inter', system-ui, sans-serif; color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* 중량표 */
+.tableWrap { overflow-x: auto; }
+.wTable { width: 100%; border-collapse: collapse; font-size: 12.5px; font-family: 'Noto Sans KR', sans-serif; min-width: 420px; }
+.wTable th {
+  padding: 9px 8px; color: var(--muted); font-weight: 600; font-size: 11px;
+  border-bottom: 1px solid var(--border); text-align: center;
+}
+.wTable th:first-child { text-align: left; }
+.wTable td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: center; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); }
+.wTable td:first-child { text-align: left; font-family: 'Noto Sans KR', sans-serif; color: var(--text); font-weight: 600; }
+.wTable tr:last-child td { border-bottom: none; }
+.wProMale { color: #DC2626; }
+
+.note {
+  font-size: 12px; color: var(--muted); line-height: 1.7; margin: 12px 0 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.note strong { color: var(--text); }
+
+/* 역산 결과 */
+.revResult {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; text-align: center; margin-top: 4px;
+}
+.revPace {
+  font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800;
+  color: var(--accent); letter-spacing: -1px;
+}
+.revPaceUnit { font-size: 15px; color: var(--muted); font-weight: 700; }
+.revBreak { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+.revWarn { color: #DC2626; font-weight: 700; }

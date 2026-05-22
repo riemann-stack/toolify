@@ -2,22 +2,20 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from './dday.module.css'
 import {
   calcDday, calcProgress, calcWeekdays, calcBusinessDays, calcWeekendCount,
   holidaysBetween, calcYMDDiff, addDays, calcPace, nextRecurrence,
-  loadDdays, saveDdays, exportDdays, importDdays, newId, fmtDate, fmtDateKo,
+  loadDdays, saveDdays, newId, fmtDate, fmtDateKo,
   type DdayItem, type AddDaysMode,
 } from './ddayUtils'
 import {
-  DDAY_CATEGORIES, RECURRENCE_OPTIONS, SEASONAL_PRESETS, isHoliday,
+  DDAY_CATEGORIES, RECURRENCE_OPTIONS, isHoliday,
   type RecurrenceId,
 } from './koreanHolidays'
 
 type Tab = 'list' | 'quick' | 'pace' | 'diff' | 'biz'
-type SortMode = 'soonest' | 'farthest' | 'category' | 'pinned'
-type FilterMode = 'all' | 'upcoming' | 'past' | 'pinned'
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function DdayClient() {
@@ -46,9 +44,9 @@ export default function DdayClient() {
       <div className={s.tabs}>
         {([
           ['list',  '내 D-day'],
-          ['quick', '빠른 계산기'],
-          ['pace',  '페이스 계산'],
-          ['diff',  '두 날짜 사이'],
+          ['quick', '바로 계산'],
+          ['pace',  '하루 목표 계산'],
+          ['diff',  '두 날짜 차이'],
           ['biz',   '영업일·N일 후'],
         ] as [Tab, string][]).map(([key, label]) => {
           const cls =
@@ -80,10 +78,6 @@ function ListTab({ now }: { now: Date }) {
   const [loaded, setLoaded] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [sortMode, setSortMode] = useState<SortMode>('soonest')
-  const [filterCat, setFilterCat] = useState<string>('all')
-  const [filterMode, setFilterMode] = useState<FilterMode>('all')
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   // 초기 로드 (한 번만)
   useEffect(() => {
@@ -117,104 +111,22 @@ function ListTab({ now }: { now: Date }) {
     setItems(prev => prev.map(p => p.id === id ? { ...p, isCompleted: !p.isCompleted } : p))
   }
 
-  /* 시즌 프리셋 빠른 추가 */
-  const addPreset = (preset: typeof SEASONAL_PRESETS[number]) => {
-    const exists = items.some(it => it.title === preset.name && it.targetDate === preset.date)
-    if (exists) { alert('이미 추가된 D-day 입니다'); return }
-    upsertItem({
-      id: newId(),
-      title: preset.name,
-      emoji: preset.emoji,
-      category: preset.category,
-      targetDate: preset.date,
-      recurrence: 'none',
-      isPinned: false,
-      isCompleted: false,
-      createdAt: new Date().toISOString(),
-    })
-  }
-
-  /* 백업 */
-  const handleExport = () => {
-    const json = exportDdays(items)
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `youtil-ddays-${fmtDate(new Date())}.json`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-  const handleImport = (file: File) => {
-    const reader = new FileReader()
-    reader.onload = e => {
-      const text = e.target?.result as string
-      const parsed = importDdays(text)
-      if (!parsed) { alert('잘못된 백업 파일입니다'); return }
-      const merge = confirm(`${parsed.length}개의 D-day를 가져옵니다. 기존 데이터에 추가할까요? (취소 시 교체)`)
-      if (!merge) {
-        setItems(parsed)
-        return
-      }
-      setItems(prev => {
-        const existingIds = new Set(prev.map(p => p.id))
-        const merged = [...prev, ...parsed.filter(p => !existingIds.has(p.id))]
-        return merged
-      })
-    }
-    reader.readAsText(file)
-  }
-  const handleClearAll = () => {
-    if (!confirm('모든 D-day를 삭제하시겠습니까? 되돌릴 수 없습니다.')) return
-    setItems([])
-  }
-
-  /* 정렬·필터 */
-  const filtered = useMemo(() => {
-    let xs = items.slice()
-    if (filterCat !== 'all') xs = xs.filter(it => it.category === filterCat)
-    if (filterMode === 'upcoming') xs = xs.filter(it => calcDday(it.targetDate, now).diff >= 0)
-    if (filterMode === 'past')     xs = xs.filter(it => calcDday(it.targetDate, now).diff < 0)
-    if (filterMode === 'pinned')   xs = xs.filter(it => it.isPinned)
-
+  /* 정렬 — 핀 우선 + 가까운 순 (고정) */
+  const sorted = useMemo(() => {
+    const xs = items.slice()
     xs.sort((a, b) => {
       if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1
       if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1
-
       const ad = calcDday(a.targetDate, now)
       const bd = calcDday(b.targetDate, now)
-      if (sortMode === 'soonest') {
-        if (ad.isPast !== bd.isPast) return ad.isPast ? 1 : -1
-        return ad.days - bd.days
-      }
-      if (sortMode === 'farthest') {
-        if (ad.isPast !== bd.isPast) return ad.isPast ? 1 : -1
-        return bd.days - ad.days
-      }
-      if (sortMode === 'category') {
-        return a.category.localeCompare(b.category)
-      }
+      if (ad.isPast !== bd.isPast) return ad.isPast ? 1 : -1
       return ad.days - bd.days
     })
     return xs
-  }, [items, filterCat, filterMode, sortMode, now])
+  }, [items, now])
 
   return (
     <>
-      <div className={s.card}>
-        <label className={s.cardLabel}>
-          빠른 추가 — 시즌 프리셋
-          <span className={s.cardLabelHint}>한국 주요 일정</span>
-        </label>
-        <div className={s.presetRow}>
-          {SEASONAL_PRESETS.map((p, i) => (
-            <button key={i} className={s.presetChip} onClick={() => addPreset(p)}>
-              {p.emoji} {p.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {!showForm && !editingId && (
         <button className={s.bigCta} onClick={() => setShowForm(true)}>
           + 새 D-day 추가
@@ -229,62 +141,16 @@ function ListTab({ now }: { now: Date }) {
         />
       )}
 
-      {items.length > 0 && (
-        <>
-          <div className={s.card}>
-            <label className={s.cardLabel}>정렬</label>
-            <div className={s.filterRow}>
-              {([
-                ['soonest',  '🎯 가까운 순'],
-                ['farthest', '⏳ 먼 순'],
-                ['category', '🏷️ 카테고리'],
-                ['pinned',   '📌 핀 우선'],
-              ] as [SortMode, string][]).map(([k, l]) => (
-                <button key={k} className={`${s.filterBtn} ${sortMode === k ? s.filterActive : ''}`}
-                  onClick={() => setSortMode(k)}>{l}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className={s.card}>
-            <label className={s.cardLabel}>필터</label>
-            <div className={s.filterRow} style={{ marginBottom: 8 }}>
-              {([
-                ['all',      '전체'],
-                ['upcoming', '미래만'],
-                ['past',     '지남'],
-                ['pinned',   '📌 핀 만'],
-              ] as [FilterMode, string][]).map(([k, l]) => (
-                <button key={k} className={`${s.filterBtn} ${filterMode === k ? s.filterActive : ''}`}
-                  onClick={() => setFilterMode(k)}>{l}</button>
-              ))}
-            </div>
-            <div className={s.catGrid}>
-              <button className={`${s.catBtn} ${filterCat === 'all' ? s.catActive : ''}`}
-                onClick={() => setFilterCat('all')}>
-                <small>📋</small>전체
-              </button>
-              {DDAY_CATEGORIES.map(c => (
-                <button key={c.id} className={`${s.catBtn} ${filterCat === c.id ? s.catActive : ''}`}
-                  onClick={() => setFilterCat(c.id)}>
-                  <small>{c.emoji}</small>{c.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
       {items.length === 0 && loaded && (
         <div className={s.empty}>
           <div className={s.emptyTitle}>📭 아직 저장된 D-day가 없어요</div>
-          <p>위 시즌 프리셋이나 [+ 새 D-day 추가] 로 첫 일정을 등록해 보세요.</p>
+          <p>[+ 새 D-day 추가] 로 첫 일정을 등록해 보세요.</p>
         </div>
       )}
 
-      {filtered.length > 0 && (
+      {sorted.length > 0 && (
         <div className={s.ddayGrid}>
-          {filtered.map(it => (
+          {sorted.map(it => (
             <DdayCard key={it.id} item={it} now={now}
               onPin={() => togglePin(it.id)}
               onEdit={() => setEditingId(it.id)}
@@ -292,22 +158,6 @@ function ListTab({ now }: { now: Date }) {
               onComplete={() => toggleComplete(it.id)}
             />
           ))}
-        </div>
-      )}
-
-      {items.length > 0 && (
-        <div className={s.card}>
-          <label className={s.cardLabel}>
-            데이터 백업
-            <span className={s.cardLabelHint}>{items.length}개 저장됨</span>
-          </label>
-          <div className={s.backupRow}>
-            <button className={s.backupBtn} onClick={handleExport}>📥 백업 다운로드</button>
-            <button className={s.backupBtn} onClick={() => fileInputRef.current?.click()}>📤 가져오기</button>
-            <button className={`${s.backupBtn} ${s.backupDanger}`} onClick={handleClearAll}>🗑️ 전체 삭제</button>
-            <input ref={fileInputRef} type="file" accept=".json,application/json" hidden
-              onChange={e => { const f = e.target.files?.[0]; if (f) handleImport(f) }} />
-          </div>
         </div>
       )}
     </>
@@ -414,40 +264,24 @@ function DdayEditForm({ editing, onSave, onCancel }: {
   const [title, setTitle] = useState(editing?.title ?? '')
   const [emoji, setEmoji] = useState(editing?.emoji ?? '')
   const [targetDate, setTargetDate] = useState(editing?.targetDate ?? '')
-  const [startDate, setStartDate] = useState(editing?.startDate ?? '')
-  const [category, setCategory] = useState(editing?.category ?? 'other')
   const [recurrence, setRecurrence] = useState<RecurrenceId>(editing?.recurrence ?? 'none')
-  const [notes, setNotes] = useState(editing?.notes ?? '')
-
-  const [showAdvanced, setShowAdvanced] = useState(!!editing?.startDate || !!editing?.goal || !!editing?.notes)
-  const [hasGoal, setHasGoal] = useState(!!editing?.goal)
-  const [goalTotal, setGoalTotal] = useState(editing?.goal?.totalAmount ? String(editing.goal.totalAmount) : '')
-  const [goalDone, setGoalDone] = useState(editing?.goal?.completedAmount ? String(editing.goal.completedAmount) : '')
-  const [goalUnit, setGoalUnit] = useState(editing?.goal?.unit ?? '페이지')
 
   const handleSave = () => {
     if (!title.trim()) { alert('제목을 입력해 주세요'); return }
     if (!targetDate) { alert('목표 날짜를 선택해 주세요'); return }
 
-    const cat = DDAY_CATEGORIES.find(c => c.id === category)
-    const goal = hasGoal && goalTotal ? {
-      totalAmount: Number(goalTotal),
-      completedAmount: Number(goalDone || 0),
-      unit: goalUnit.trim() || '단위',
-    } : undefined
-
     onSave({
       id: editing?.id ?? newId(),
       title: title.trim(),
-      emoji: emoji.trim() || cat?.emoji || '📌',
-      category,
+      emoji: emoji.trim() || '📌',
+      category: editing?.category ?? 'other',
       targetDate,
-      startDate: startDate || undefined,
+      startDate: editing?.startDate,
       recurrence,
       isPinned: editing?.isPinned ?? false,
       isCompleted: editing?.isCompleted ?? false,
-      goal,
-      notes: notes.trim() || undefined,
+      goal: editing?.goal,
+      notes: editing?.notes,
       createdAt: editing?.createdAt ?? new Date().toISOString(),
     })
   }
@@ -475,18 +309,6 @@ function DdayEditForm({ editing, onSave, onCancel }: {
       </div>
 
       <div>
-        <span className={s.inlineLabel}>카테고리</span>
-        <div className={s.catGrid}>
-          {DDAY_CATEGORIES.map(c => (
-            <button key={c.id} className={`${s.catBtn} ${category === c.id ? s.catActive : ''}`}
-              onClick={() => setCategory(c.id)}>
-              <small>{c.emoji}</small>{c.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
         <span className={s.inlineLabel}>반복</span>
         <div className={s.recurRow}>
           {RECURRENCE_OPTIONS.map(r => (
@@ -497,44 +319,6 @@ function DdayEditForm({ editing, onSave, onCancel }: {
           ))}
         </div>
       </div>
-
-      <button className={s.editAdvancedToggle} onClick={() => setShowAdvanced(v => !v)}>
-        {showAdvanced ? '— 고급 옵션 닫기' : '+ 고급 옵션 (시작일·페이스·메모)'}
-      </button>
-
-      {showAdvanced && (
-        <div className={s.editAdvanced}>
-          <div>
-            <span className={s.inlineLabel}>시작일 (진행률 계산용)</span>
-            <input className={s.dateInput} type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-          </div>
-
-          <div>
-            <span className={s.inlineLabel}>
-              <input type="checkbox" checked={hasGoal} onChange={e => setHasGoal(e.target.checked)}
-                style={{ marginRight: 6, accentColor: 'var(--accent)' }} />
-              페이스 계산 (총량·진행 사항)
-            </span>
-            {hasGoal && (
-              <div className={s.fieldRow3} style={{ marginTop: 6 }}>
-                <input className={s.numInput} type="number" placeholder="총량 (예: 600)"
-                  value={goalTotal} onChange={e => setGoalTotal(e.target.value)} />
-                <input className={s.numInput} type="number" placeholder="완료 (예: 200)"
-                  value={goalDone} onChange={e => setGoalDone(e.target.value)} />
-                <input className={s.textInput} type="text" placeholder="단위 (페이지·만원...)"
-                  value={goalUnit} onChange={e => setGoalUnit(e.target.value)} maxLength={10} />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <span className={s.inlineLabel}>메모 (선택)</span>
-            <textarea className={s.textInput} rows={2} placeholder="간단한 메모"
-              value={notes} onChange={e => setNotes(e.target.value)} maxLength={200}
-              style={{ fontFamily: 'Noto Sans KR, sans-serif', resize: 'vertical' }} />
-          </div>
-        </div>
-      )}
 
       <div className={s.btnRow}>
         <button className={s.actionBtn} onClick={handleSave}>
@@ -550,13 +334,12 @@ function DdayEditForm({ editing, onSave, onCancel }: {
 function QuickTab({ now }: { now: Date }) {
   const [title, setTitle] = useState('')
   const [target, setTarget] = useState('')
-  const [start, setStart] = useState('')
 
   if (!target) {
     return (
       <>
         <div className={s.card}>
-          <label className={s.cardLabel}>빠른 계산</label>
+          <label className={s.cardLabel}>바로 계산</label>
           <div className={s.fieldRow}>
             <div>
               <span className={s.inlineLabel}>제목 (선택)</span>
@@ -568,10 +351,6 @@ function QuickTab({ now }: { now: Date }) {
               <input className={s.dateInput} type="date" value={target} onChange={e => setTarget(e.target.value)} />
             </div>
           </div>
-          <div style={{ marginTop: 10 }}>
-            <span className={s.inlineLabel}>시작일 (선택, 진행률용)</span>
-            <input className={s.dateInput} type="date" value={start} onChange={e => setStart(e.target.value)} />
-          </div>
         </div>
         <div className={s.empty}>목표 날짜를 선택하면 결과가 표시됩니다</div>
       </>
@@ -580,7 +359,6 @@ function QuickTab({ now }: { now: Date }) {
 
   const dday = calcDday(target, now)
   const targetDate = new Date(target)
-  const progress = start ? calcProgress(start, target, now) : null
   const targetMs = new Date(target).setHours(0, 0, 0, 0)
   const liveMs = Math.abs(targetMs - now.getTime())
   const liveDays  = Math.floor(liveMs / (1000 * 60 * 60 * 24))
@@ -609,7 +387,7 @@ function QuickTab({ now }: { now: Date }) {
   return (
     <>
       <div className={s.card}>
-        <label className={s.cardLabel}>빠른 계산 입력</label>
+        <label className={s.cardLabel}>바로 계산 입력</label>
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>제목 (선택)</span>
@@ -620,10 +398,6 @@ function QuickTab({ now }: { now: Date }) {
             <span className={s.inlineLabel}>목표 날짜 *</span>
             <input className={s.dateInput} type="date" value={target} onChange={e => setTarget(e.target.value)} />
           </div>
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <span className={s.inlineLabel}>시작일 (선택, 진행률용)</span>
-          <input className={s.dateInput} type="date" value={start} onChange={e => setStart(e.target.value)} />
         </div>
       </div>
 
@@ -670,31 +444,9 @@ function QuickTab({ now }: { now: Date }) {
               <div className={s.statLabel}>주말</div>
               <div className={s.statSub}>일요일 카운트</div>
             </div>
-            {progress && (
-              <div className={s.statBox}>
-                <div className={s.statNum}>{progress.percent.toFixed(0)}%</div>
-                <div className={s.statLabel}>진행률</div>
-                <div className={s.statSub}>{progress.elapsedDays}/{progress.totalDays}일</div>
-              </div>
-            )}
           </>
         )}
       </div>
-
-      {progress && (
-        <div className={s.card}>
-          <label className={s.cardLabel}>
-            진행률
-            <span className={s.cardLabelHint}>{progress.elapsedDays}일 / {progress.totalDays}일</span>
-          </label>
-          <div className={s.ddayProgress} style={{ height: 14 }}>
-            <div className={s.ddayProgressBar} style={{ width: `${progress.percent}%` }} />
-          </div>
-          <p style={{ textAlign: 'center', marginTop: 8, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22 }}>
-            {progress.percent.toFixed(1)}%
-          </p>
-        </div>
-      )}
 
       {holidayList.length > 0 && (
         <div className={s.card}>
@@ -710,29 +462,11 @@ function QuickTab({ now }: { now: Date }) {
 
 /* ═════════════════════════════════════════ 탭 3 — 페이스 ═════════════════════════════════════════ */
 function PaceTab({ now }: { now: Date }) {
-  const PRESETS = [
-    { id: 'study',   icon: '📚', name: '시험 공부', unit: '페이지', total: 600,  done: 200 },
-    { id: 'words',   icon: '🎓', name: '단어 암기', unit: '단어',   total: 2000, done: 500 },
-    { id: 'run',     icon: '🏃', name: '마라톤',    unit: 'km',     total: 200,  done: 80 },
-    { id: 'writing', icon: '✍️', name: '글쓰기',    unit: '글',     total: 30,   done: 10 },
-    { id: 'save',    icon: '💰', name: '저축',      unit: '만원',   total: 1000, done: 300 },
-    { id: 'diet',    icon: '🥗', name: '다이어트',  unit: 'kg',     total: 10,   done: 3 },
-    { id: 'workout', icon: '💪', name: '운동',      unit: '회',     total: 100,  done: 30 },
-  ]
-
-  const [presetId, setPresetId] = useState('study')
   const [target, setTarget] = useState('')
   const [start, setStart] = useState('')
   const [unit, setUnit] = useState('페이지')
   const [total, setTotal] = useState('600')
   const [done, setDone] = useState('200')
-
-  const applyPreset = (p: typeof PRESETS[number]) => {
-    setPresetId(p.id)
-    setUnit(p.unit)
-    setTotal(String(p.total))
-    setDone(String(p.done))
-  }
 
   const totalN = Number(total) || 0
   const doneN  = Number(done) || 0
@@ -743,20 +477,10 @@ function PaceTab({ now }: { now: Date }) {
   return (
     <>
       <div className={s.card}>
-        <label className={s.cardLabel}>목표 종류 (프리셋)</label>
-        <div className={s.paceGoalGrid}>
-          {PRESETS.map(p => (
-            <button key={p.id}
-              className={`${s.paceGoalBtn} ${presetId === p.id ? s.paceGoalActive : ''}`}
-              onClick={() => applyPreset(p)}>
-              <small>{p.icon}</small>{p.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={s.card}>
-        <label className={s.cardLabel}>목표 입력</label>
+        <label className={s.cardLabel}>
+          목표 입력
+          <span className={s.cardLabelHint}>목표 날짜까지 하루에 얼마씩</span>
+        </label>
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>시작일 (선택)</span>
@@ -768,16 +492,28 @@ function PaceTab({ now }: { now: Date }) {
           </div>
         </div>
         <div className={s.fieldRow3} style={{ marginTop: 10 }}>
-          <input className={s.numInput} type="number" placeholder="총량 (예: 600)"
-            value={total} onChange={e => setTotal(e.target.value)} />
-          <input className={s.numInput} type="number" placeholder="현재 완료량"
-            value={done} onChange={e => setDone(e.target.value)} />
-          <input className={s.textInput} type="text" placeholder="단위"
-            value={unit} onChange={e => setUnit(e.target.value)} maxLength={10} />
+          <div>
+            <span className={s.inlineLabel}>전체 목표량</span>
+            <input className={s.numInput} type="number" inputMode="numeric" placeholder="예: 600"
+              value={total} onChange={e => setTotal(e.target.value)} />
+          </div>
+          <div>
+            <span className={s.inlineLabel}>현재까지 완료</span>
+            <input className={s.numInput} type="number" inputMode="numeric" placeholder="예: 200"
+              value={done} onChange={e => setDone(e.target.value)} />
+          </div>
+          <div>
+            <span className={s.inlineLabel}>단위</span>
+            <input className={s.textInput} type="text" placeholder="페이지·km·만원"
+              value={unit} onChange={e => setUnit(e.target.value)} maxLength={10} />
+          </div>
         </div>
+        <p className={s.holidayList} style={{ marginTop: 8 }}>
+          예) 책 600페이지 중 200페이지를 읽었고 목표 날짜까지 남았다면 → 전체 목표량 600, 현재까지 완료 200, 단위 「페이지」.
+        </p>
       </div>
 
-      {!pace && <div className={s.empty}>목표 날짜와 총량을 입력하면 페이스가 계산됩니다</div>}
+      {!pace && <div className={s.empty}>목표 날짜와 전체 목표량을 입력하면 하루 목표가 계산됩니다</div>}
 
       {pace && pace.remainingDays <= 0 && (
         <div className={s.empty}>이미 목표 날짜가 지났습니다. 새로운 목표 날짜를 선택해 보세요.</div>
@@ -919,7 +655,7 @@ function DiffTab() {
       </div>
 
       <div className={s.diffHero}>
-        <div className={s.heroLabel}>두 날짜 사이</div>
+        <div className={s.heroLabel}>두 날짜 차이</div>
         <div className={s.diffHeroNum}>{totalDays.toLocaleString()}일</div>
         <div className={s.heroSub}>{fmtDateKo(aD, false)} → {fmtDateKo(bD, false)}{swapped && ' (반대 입력 자동 보정)'}</div>
       </div>

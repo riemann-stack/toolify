@@ -367,58 +367,34 @@ export default function RoomAreaClient() {
             </div>
           </div>
 
-          {/* 결과 — 히어로 */}
-          <div className={styles.hero}>
-            <p className={styles.heroLead}>이 공간의 핵심 면적</p>
-            <div className={styles.heroDual}>
-              <div>
-                <p className={styles.heroDualLabel}>바닥 면적</p>
-                <p className={`${styles.heroDualNum} ${styles.heroFloor}`}>{fmt(t1.floorArea)}<span className={styles.heroDualUnit}>㎡</span></p>
-                <p className={styles.heroSub}>{fmt(t1.floorPyeong, 1)}평</p>
-              </div>
-              <span className={styles.heroDualSep}>｜</span>
-              <div>
-                <p className={styles.heroDualLabel}>벽 면적 (실제 시공)</p>
-                <p className={`${styles.heroDualNum} ${styles.heroWall}`}>{fmt(t1.netWallArea)}<span className={styles.heroDualUnit}>㎡</span></p>
-                <p className={styles.heroSub}>창문·문 차감 후</p>
-              </div>
-            </div>
-          </div>
-
           {/* 6개 면적 카드 */}
           <div className={styles.areaGrid}>
             <div className={`${styles.areaCard} ${styles.areaWallTotal}`}>
-              <span className={styles.areaIcon}>🪟</span>
               <p className={styles.areaTitle}>벽 면적 (전체)</p>
               <p className={styles.areaValue}>{fmt(t1.totalWallArea)}<span className={styles.areaUnit}>㎡</span></p>
               <p className={styles.areaSub}>둘레 × 천장 높이</p>
             </div>
             <div className={`${styles.areaCard} ${styles.areaWallNet}`}>
-              <span className={styles.areaIcon}>🚪</span>
               <p className={styles.areaTitle}>벽 면적 (실제 시공)</p>
               <p className={styles.areaValue}>{fmt(t1.netWallArea)}<span className={styles.areaUnit}>㎡</span></p>
               <p className={styles.areaSub}>창·문 차감 (<span className={styles.areaSubAccent}>{fmt(t1.wallPyeong, 1)}평</span>)</p>
             </div>
             <div className={`${styles.areaCard} ${styles.areaFloor}`}>
-              <span className={styles.areaIcon}>⬜</span>
               <p className={styles.areaTitle}>바닥 면적</p>
               <p className={styles.areaValue}>{fmt(t1.floorArea)}<span className={styles.areaUnit}>㎡</span></p>
               <p className={styles.areaSub}>가로 × 세로 (<span className={styles.areaSubAccent}>{fmt(t1.floorPyeong, 1)}평</span>)</p>
             </div>
             <div className={`${styles.areaCard} ${styles.areaCeiling}`}>
-              <span className={styles.areaIcon}>⬛</span>
               <p className={styles.areaTitle}>천장 면적</p>
               <p className={styles.areaValue}>{fmt(t1.ceilingArea)}<span className={styles.areaUnit}>㎡</span></p>
               <p className={styles.areaSub}>바닥과 동일</p>
             </div>
             <div className={`${styles.areaCard} ${styles.areaVolume}`}>
-              <span className={styles.areaIcon}>📦</span>
               <p className={styles.areaTitle}>공간 부피</p>
               <p className={styles.areaValue}>{fmt(t1.volume, 1)}<span className={styles.areaUnit}>㎥</span></p>
               <p className={styles.areaSub}>가로 × 세로 × 높이</p>
             </div>
             <div className={`${styles.areaCard} ${styles.areaSurface}`}>
-              <span className={styles.areaIcon}>🏠</span>
               <p className={styles.areaTitle}>총 표면적</p>
               <p className={styles.areaValue}>{fmt(t1.totalSurface)}<span className={styles.areaUnit}>㎡</span></p>
               <p className={styles.areaSub}>벽 + 바닥 + 천장</p>
@@ -463,29 +439,29 @@ export default function RoomAreaClient() {
                       fill="rgba(14,165,233,0.08)" stroke="#0EA5E9" strokeWidth={2} />
                     {/* 면적 라벨 */}
                     <text x={x0 + w / 2} y={y0 + d / 2 - 4} textAnchor="middle"
-                      fill="#0EA5E9" fontSize="14" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+                      fill="#0EA5E9" fontSize="18" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
                       {fmt(t1.floorArea)}㎡
                     </text>
-                    <text x={x0 + w / 2} y={y0 + d / 2 + 14} textAnchor="middle"
-                      fill="var(--muted)" fontSize="11" fontFamily="Noto Sans KR">
+                    <text x={x0 + w / 2} y={y0 + d / 2 + 16} textAnchor="middle"
+                      fill="var(--muted)" fontSize="13" fontFamily="Noto Sans KR">
                       ({fmt(t1.floorPyeong, 1)}평)
                     </text>
                     {/* 가로 치수 */}
                     <line x1={x0} y1={y0 + d + 14} x2={x0 + w} y2={y0 + d + 14} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0} y1={y0 + d + 10} x2={x0} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w} y1={y0 + d + 10} x2={x0 + w} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif">
                       {W.toFixed(1)}m
                     </text>
                     {/* 세로 치수 */}
                     <line x1={x0 + w + 14} y1={y0} x2={x0 + w + 14} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0} x2={x0 + w + 18} y2={y0} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0 + d} x2={x0 + w + 18} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif">
                       {L.toFixed(1)}m
                     </text>
                     {/* 라벨 */}
-                    <text x={x0 + 6} y={y0 + 14} fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR">평면도 (위에서 본 모습)</text>
+                    <text x={x0 + 6} y={y0 + 14} fill="var(--muted)" fontSize="11.5" fontFamily="Noto Sans KR">평면도 (위에서 본 모습)</text>
                   </svg>
                 )
               })()}
@@ -515,33 +491,33 @@ export default function RoomAreaClient() {
                       <path key={i} d={pathPolygon(...face.points)}
                         fill={face.fill} stroke={face.stroke} strokeWidth={1.5} />
                     ))}
-                    {/* 면적 라벨 */}
-                    <text x={floorC.x} y={floorC.y + 4} textAnchor="middle" fill="#0EA5E9" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    {/* 면적 라벨 — 바닥은 아래로, 정면은 위로 오프셋해 겹침 방지 */}
+                    <text x={floorC.x} y={floorC.y + 16} textAnchor="middle" fill="#0EA5E9" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       바닥 {fmt(t1.floorArea)}㎡
                     </text>
-                    <text x={frontC.x} y={frontC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={frontC.x} y={frontC.y - 8} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       정면 {fmt(tab1Dims.width * heightM)}㎡
                     </text>
-                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       우측 {fmt(tab1Dims.length * heightM)}㎡
                     </text>
-                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
                       천장
                     </text>
                     {/* 치수선 — 가로 */}
-                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 16} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
                       {tab1Dims.width.toFixed(1)}m
                     </text>
                     {/* 치수선 — 세로 (깊이) */}
-                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
                       {tab1Dims.length.toFixed(1)}m
                     </text>
                     {/* 치수선 — 높이 */}
-                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
                       {heightM}m
                     </text>
                     {/* 라벨 */}
-                    <text x={6} y={14} fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR">3D 박스 (캐비넷 투영)</text>
+                    <text x={6} y={14} fill="var(--muted)" fontSize="11.5" fontFamily="Noto Sans KR">3D 박스 (캐비넷 투영)</text>
                   </svg>
                 )
               })()}
@@ -576,23 +552,23 @@ export default function RoomAreaClient() {
                 <span className={styles.usageBtn}>자세히 →</span>
               </Link>
 
-              <div className={`${styles.usageCard} ${styles.usageAirCon}`}>
+              <Link href="/tools/interior/ac-capacity" className={`${styles.usageCard} ${styles.usageAirCon}`}>
                 <span className={styles.usageIcon}>❄️</span>
                 <div className={styles.usageBody}>
                   <span className={styles.usageTitle}>에어컨 평형</span>
                   <span className={styles.usageDesc}>바닥 {fmt(t1.floorArea)}㎡ ({fmt(t1.floorPyeong, 1)}평) → 약 <strong>{airConP}평형</strong> 권장</span>
                 </div>
-                <span className={styles.usageSoon}>🚧 출시 예정</span>
-              </div>
+                <span className={styles.usageBtn}>자세히 →</span>
+              </Link>
 
-              <div className={`${styles.usageCard} ${styles.usageLighting}`}>
+              <Link href="/tools/interior/lighting" className={`${styles.usageCard} ${styles.usageLighting}`}>
                 <span className={styles.usageIcon}>💡</span>
                 <div className={styles.usageBody}>
                   <span className={styles.usageTitle}>조명 밝기</span>
                   <span className={styles.usageDesc}>거실 기준 약 <strong>{lumen.low.toLocaleString()}~{lumen.high.toLocaleString()} 루멘</strong> 권장</span>
                 </div>
-                <span className={styles.usageSoon}>🚧 출시 예정</span>
-              </div>
+                <span className={styles.usageBtn}>자세히 →</span>
+              </Link>
             </div>
           </div>
         </>

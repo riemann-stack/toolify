@@ -9,7 +9,6 @@ import styles from './battery.module.css'
 function calcWh(mAh: number, voltage: number): number {
   return (mAh * voltage) / 1000
 }
-
 function calcMah(wh: number, voltage: number): number {
   if (voltage <= 0) return 0
   return (wh / voltage) * 1000
@@ -67,37 +66,9 @@ const VOLTAGE_PRESETS: { v: number; label: string }[] = [
 const MAH_PRESETS = [5000, 10000, 20000, 27000, 30000]
 
 // ──────────────────────────────────────
-// Component
+// Component — 변환 + 비행기 반입 통합
 // ──────────────────────────────────────
 export default function BatteryClient() {
-  const [tab, setTab] = useState<'convert' | 'flight'>('convert')
-
-  return (
-    <div className={styles.wrap}>
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${tab === 'convert' ? styles.tabActive : ''}`}
-          onClick={() => setTab('convert')}
-        >
-          🔋 mAh ↔ Wh 변환
-        </button>
-        <button
-          className={`${styles.tab} ${tab === 'flight' ? styles.tabActive : ''}`}
-          onClick={() => setTab('flight')}
-        >
-          ✈️ 비행기 반입 체크
-        </button>
-      </div>
-
-      {tab === 'convert' ? <ConvertTab /> : <FlightTab />}
-    </div>
-  )
-}
-
-// ──────────────────────────────────────
-// 탭 1 — mAh ↔ Wh 변환
-// ──────────────────────────────────────
-function ConvertTab() {
   const [value, setValue] = useState<string>('10000')
   const [unit, setUnit] = useState<CapUnit>('mAh')
   const [voltage, setVoltage] = useState<number>(3.7)
@@ -109,7 +80,6 @@ function ConvertTab() {
   const isCustom = customV !== '' && !isNaN(numCustom) && numCustom > 0
   const effectiveV = isCustom ? numCustom : voltage
 
-  // 단위에 따라 mAh/Wh 베이스 환산
   const result = useMemo(() => {
     let mAh = 0
     let wh = 0
@@ -123,17 +93,17 @@ function ConvertTab() {
       wh = numValue
       mAh = calcMah(wh, effectiveV)
     }
-    return {
-      mAh,
-      ah: mAh / 1000,
-      wh,
-      whAt37: calcWh(mAh, 3.7),
-      whAt5:  calcWh(mAh, 5),
-      kwh:    wh / 1000,
-    }
+    return { mAh, ah: mAh / 1000, wh, kwh: wh / 1000 }
   }, [numValue, unit, effectiveV])
 
   const flight = flightStatus(result.wh)
+
+  // 다른 전압 기준 Wh — 현재 전압과 중복되는 값은 제외 (3.7V·5V 기본 참조)
+  const altVolts = useMemo(() => {
+    return [3.7, 5]
+      .filter(v => Math.abs(v - effectiveV) > 0.001)
+      .map(v => ({ v, wh: calcWh(result.mAh, v) }))
+  }, [result.mAh, effectiveV])
 
   function handleCopy(key: string, val: number) {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -143,16 +113,29 @@ function ConvertTab() {
     }
   }
 
-  function applyPreset(mAh: number) {
-    setValue(mAh.toString())
-    setUnit('mAh')
-  }
+  const refRows = [5000, 10000, 20000, 27000, 30000, 40000, 50000].map(m => {
+    const w = calcWh(m, 3.7)
+    const f = flightStatus(w)
+    let mark = '✅'
+    if (f.status === 'warning') mark = '🔶'
+    else if (f.status === 'banned') mark = '❌'
+    if (m === 27000) mark = '✅ (한계)'
+    return { mAh: m, whAt37: w, status: f.status, mark }
+  })
+
+  // 변환값 셀 (mAh·Ah·Wh·kWh) — 핵심 4종 컴팩트 그리드
+  const cells = [
+    { key: 'mAh', label: 'mAh', sub: '밀리암페어시', val: result.mAh },
+    { key: 'Ah',  label: 'Ah',  sub: '암페어시',     val: result.ah },
+    { key: 'Wh',  label: 'Wh',  sub: `${formatNumber(effectiveV)}V 기준`, val: result.wh },
+    { key: 'kWh', label: 'kWh', sub: '킬로와트시',   val: result.kwh },
+  ]
 
   return (
-    <>
+    <div className={styles.wrap}>
+      {/* 용량 입력 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>용량 입력</span>
-
         <div className={styles.inputRow}>
           <input
             type="number"
@@ -172,16 +155,16 @@ function ConvertTab() {
             <option value="Wh">Wh</option>
           </select>
         </div>
-
         <div className={styles.presetRow}>
           {MAH_PRESETS.map(m => (
-            <button key={m} className={styles.presetBtn} onClick={() => applyPreset(m)}>
+            <button key={m} className={styles.presetBtn} onClick={() => { setValue(m.toString()); setUnit('mAh') }}>
               {m.toLocaleString()}mAh
             </button>
           ))}
         </div>
       </div>
 
+      {/* 전압 선택 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>전압(V) 선택</span>
         <div className={styles.voltGrid}>
@@ -208,40 +191,7 @@ function ConvertTab() {
         </div>
       </div>
 
-      {/* 결과 */}
-      <div className={styles.resultCard}>
-        <div className={styles.resultHeader}>
-          <div className={styles.resultHeaderLabel}>결과 (전압 {formatNumber(effectiveV)}V 기준)</div>
-          <div className={styles.resultHeaderValue}>
-            {formatNumber(result.wh)} Wh · {formatNumber(result.mAh)} mAh
-          </div>
-        </div>
-
-        {[
-          { key: 'mAh',    label: 'mAh',    sub: '밀리암페어시',   val: result.mAh },
-          { key: 'Ah',     label: 'Ah',     sub: '암페어시',       val: result.ah },
-          { key: 'Wh',     label: 'Wh',     sub: `${formatNumber(effectiveV)}V 기준`, val: result.wh },
-          { key: 'Wh37',   label: 'Wh',     sub: '3.7V 기준',      val: result.whAt37 },
-          { key: 'Wh5',    label: 'Wh',     sub: '5V 기준',        val: result.whAt5 },
-          { key: 'kWh',    label: 'kWh',    sub: '킬로와트시',      val: result.kwh },
-        ].map(r => (
-          <div key={r.key} className={styles.resultRow}>
-            <div>
-              <div className={styles.resultLabel}>{r.label}</div>
-              <div className={styles.resultLabelSub}>{r.sub}</div>
-            </div>
-            <div className={styles.resultValue}>{formatNumber(r.val)}</div>
-            <button
-              className={`${styles.copyBtn} ${copied === r.key ? styles.copyBtnDone : ''}`}
-              onClick={() => handleCopy(r.key, r.val)}
-            >
-              {copied === r.key ? '✓' : '복사'}
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* 비행기 반입 자동 표시 */}
+      {/* 비행기 반입 판정 — 핵심 결과 */}
       <div
         className={`${styles.flightCard} ${
           flight.status === 'safe' ? styles.flightSafe :
@@ -252,87 +202,41 @@ function ConvertTab() {
         <div className={styles.flightTitle}>{flight.label}</div>
         <div className={styles.flightDesc}>{flight.desc}</div>
       </div>
-    </>
-  )
-}
 
-// ──────────────────────────────────────
-// 탭 2 — 비행기 반입 체크
-// ──────────────────────────────────────
-function FlightTab() {
-  const [mah, setMah] = useState<string>('20000')
-  const [voltage, setVoltage] = useState<string>('3.7')
-
-  const numMah = parseFloat(mah) || 0
-  const numV = parseFloat(voltage) || 3.7
-  const wh = calcWh(numMah, numV)
-  const flight = flightStatus(wh)
-
-  const refRows: { mAh: number; whAt37: number; status: FlightStatus; mark: string }[] =
-    [5000, 10000, 20000, 27000, 30000, 40000, 50000].map(m => {
-      const w = calcWh(m, 3.7)
-      const f = flightStatus(w)
-      let mark = '✅'
-      if (f.status === 'warning') mark = '🔶'
-      else if (f.status === 'banned') mark = '❌'
-      if (m === 27000) mark = '✅ (한계)'
-      return { mAh: m, whAt37: w, status: f.status, mark }
-    })
-
-  return (
-    <>
+      {/* 변환값 — 컴팩트 그리드 (탭하면 복사) */}
       <div className={styles.card}>
-        <span className={styles.cardLabel}>보조배터리 정보 입력</span>
-
-        <div className={styles.inputRow} style={{ marginBottom: 10 }}>
-          <input
-            type="number"
-            className={`${styles.input} ${mah && numMah > 0 ? styles.inputFilled : ''}`}
-            value={mah}
-            onChange={e => setMah(e.target.value)}
-            placeholder="20000"
-            step="any"
-          />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--accent)', fontSize: 13, fontWeight: 700 }}>
-            mAh
-          </div>
+        <span className={styles.cardLabel}>
+          변환값
+          <span className={styles.cardLabelHint}>셀을 탭하면 복사</span>
+        </span>
+        <div className={styles.convGrid}>
+          {cells.map(c => (
+            <button key={c.key} className={styles.convCell} onClick={() => handleCopy(c.key, c.val)}>
+              <span className={styles.convCellLabel}>{c.label}<small>{c.sub}</small></span>
+              <span className={styles.convCellValue}>
+                {copied === c.key ? '✓ 복사됨' : formatNumber(c.val)}
+              </span>
+            </button>
+          ))}
         </div>
-
-        <div className={styles.inputRow}>
-          <input
-            type="number"
-            className={`${styles.input} ${voltage && numV > 0 ? styles.inputFilled : ''}`}
-            value={voltage}
-            onChange={e => setVoltage(e.target.value)}
-            placeholder="3.7"
-            step="0.1"
-          />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--accent)', fontSize: 13, fontWeight: 700 }}>
-            V (전압)
+        {altVolts.length > 0 && (
+          <div className={styles.altVolts}>
+            <span className={styles.altVoltsLabel}>다른 전압 Wh</span>
+            {altVolts.map(a => (
+              <button key={a.v} className={styles.altChip} onClick={() => handleCopy(`alt${a.v}`, a.wh)}>
+                {formatNumber(a.v)}V&nbsp;·&nbsp;<strong>{copied === `alt${a.v}` ? '✓' : formatNumber(a.wh)}</strong>Wh
+              </button>
+            ))}
           </div>
-        </div>
+        )}
       </div>
 
-      {/* 판정 결과 */}
-      <div
-        className={`${styles.flightCard} ${
-          flight.status === 'safe' ? styles.flightSafe :
-          flight.status === 'warning' ? styles.flightWarn : styles.flightBanned
-        }`}
-      >
-        <div className={styles.flightWh}>{formatNumber(wh)} Wh</div>
-        <div className={styles.flightTitle}>{flight.label}</div>
-        <div className={styles.flightDesc}>{flight.desc}</div>
-      </div>
-
-      {/* 환산 공식 */}
+      {/* Wh 환산 공식 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>Wh 환산 공식</span>
         <div className={styles.formulaBox}>
           Wh = (<span>mAh</span> × <span>V</span>) / 1000
-          <div className={styles.formulaSub}>
-            예: 10,000mAh × 3.7V = 37Wh
-          </div>
+          <div className={styles.formulaSub}>예: 10,000mAh × 3.7V = 37Wh</div>
         </div>
       </div>
 
@@ -375,6 +279,6 @@ function FlightTab() {
           </table>
         </div>
       </div>
-    </>
+    </div>
   )
 }

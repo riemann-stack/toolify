@@ -72,16 +72,21 @@
 .dateInput, .textInput, .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 14px;
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 16px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
 }
-.dateInput:focus, .textInput:focus, .numInput:focus { border-color: var(--accent); }
+.dateInput::-webkit-date-and-time-value { text-align: left; }
+.dateInput:focus, .textInput:focus, .numInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
 .numInput { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
 .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

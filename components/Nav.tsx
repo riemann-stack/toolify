@@ -411,6 +411,7 @@ export default function Nav() {
                   <Link key={tool.href} href={tool.href}
                     className={`${styles.searchResultItem} ${idx === highlightIdx ? styles.searchResultItemActive : ''}`}
                     onMouseEnter={() => setHighlightIdx(idx)}
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => { setSearchOpen(false); setQuery('') }}>
                     <span className={styles.searchResultIcon}>{tool.icon}</span>
                     <span className={styles.searchResultBody}>
@@ -441,6 +442,7 @@ export default function Nav() {
                   <div className={styles.searchQuickList}>
                     {favoriteTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                        onMouseDown={(e) => e.preventDefault()}
                         onClick={() => { setSearchOpen(false); setQuery('') }}>
                         <span>{t.icon}</span>
                         <span>{t.name}</span>
@@ -456,6 +458,7 @@ export default function Nav() {
                   <div className={styles.searchQuickList}>
                     {recentTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                        onMouseDown={(e) => e.preventDefault()}
                         onClick={() => { setSearchOpen(false); setQuery('') }}>
                         <span>{t.icon}</span>
                         <span>{t.name}</span>
@@ -469,6 +472,7 @@ export default function Nav() {
               <div className={styles.searchQuickList}>
                 {POPULAR_TOOLS.map((t) => (
                   <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => { setSearchOpen(false); setQuery('') }}>
                     <span>{t.icon}</span>
                     <span>{t.name}</span>

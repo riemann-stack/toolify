@@ -5,14 +5,50 @@
 import { useEffect, useMemo, useState } from 'react'
 import styles from './dutch.module.css'
 import {
-  ROUNDING_OPTIONS, REMAINDER_OPTIONS,
-  RoundingId, RemainderId,
+  ROUNDING_OPTIONS,
+  RoundingId,
   calcSimpleSplit, calcDrinkSplit, calcPerPersonSplit,
   calcPrepaidSplit, generateShareMessage,
   PerPersonParticipant, PrepaidParticipant, PersonItem,
   parseAmount, fmtAmount, newId,
   loadHistory, saveHistory, SavedSplit,
 } from './dutchUtils'
+
+/* 인원 조절 — +/− 버튼 + 직접 입력 */
+function Stepper({ value, onChange, min = 1, max = 50, color }: {
+  value: number
+  onChange: (v: number) => void
+  min?: number
+  max?: number
+  color?: string
+}) {
+  return (
+    <div className={styles.stepper}>
+      <button type="button" className={styles.stepperBtn}
+        onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}>−</button>
+      <input className={styles.stepperInput} type="text" inputMode="numeric"
+        style={color ? { color } : undefined}
+        value={value}
+        onChange={e => {
+          const v = parseInt(e.target.value.replace(/[^\d]/g, ''), 10)
+          onChange(Number.isFinite(v) ? Math.max(min, Math.min(max, v)) : min)
+        }} />
+      <button type="button" className={styles.stepperBtn}
+        onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}>+</button>
+    </div>
+  )
+}
+
+/* 1원 단위 처리 드롭다운 */
+function RoundingSelect({ value, onChange }: { value: RoundingId; onChange: (v: RoundingId) => void }) {
+  return (
+    <select className={styles.select} value={value} onChange={e => onChange(e.target.value as RoundingId)}>
+      {ROUNDING_OPTIONS.map(o => (
+        <option key={o.id} value={o.id}>{o.name}</option>
+      ))}
+    </select>
+  )
+}
 
 type Tab = 'simple' | 'drink' | 'person' | 'prepaid' | 'share'
 
@@ -40,21 +76,20 @@ export default function DutchClient() {
   /* ─────── 1. 간단 N빵 ─────── */
   const [sTotal,    setSTotal]    = useState('')
   const [sPeople,   setSPeople]   = useState(4)
-  const [sRounding, setSRounding] = useState<RoundingId>('round-100')
-  const [sRemain,   setSRemain]   = useState<RemainderId>('common-fund')
+  const [sRounding, setSRounding] = useState<RoundingId>('exact')
 
   const simpleResult = useMemo(() => {
     const total = parseAmount(sTotal)
     if (total <= 0 || sPeople <= 0) return null
-    return calcSimpleSplit({ totalAmount: total, peopleCount: sPeople, rounding: sRounding, remainder: sRemain })
-  }, [sTotal, sPeople, sRounding, sRemain])
+    return calcSimpleSplit({ totalAmount: total, peopleCount: sPeople, rounding: sRounding, remainder: 'common-fund' })
+  }, [sTotal, sPeople, sRounding])
 
   /* ─────── 2. 술값 분리 ─────── */
   const [dTotal,    setDTotal]    = useState('')
   const [dDrink,    setDDrink]    = useState('')
   const [dPeople,   setDPeople]   = useState(4)
   const [dDrinkers, setDDrinkers] = useState(2)
-  const [dRounding, setDRounding] = useState<RoundingId>('round-100')
+  const [dRounding, setDRounding] = useState<RoundingId>('exact')
 
   const drinkResult = useMemo(() => {
     const total = parseAmount(dTotal)
@@ -74,7 +109,7 @@ export default function DutchClient() {
   ])
   const [sharedItems, setSharedItems] = useState<PersonItem[]>([])
   const [sharedDrinks, setSharedDrinks] = useState('')
-  const [pRounding, setPRounding] = useState<RoundingId>('round-100')
+  const [pRounding, setPRounding] = useState<RoundingId>('exact')
 
   const personResult = useMemo(
     () => calcPerPersonSplit({
@@ -225,11 +260,6 @@ export default function DutchClient() {
       setTimeout(() => setCopied(false), 1600)
     } catch { /* */ }
   }
-  const openKakao = (text: string) => {
-    if (!text) return
-    copy(text)
-    window.open('https://accounts.kakao.com/login', '_blank')
-  }
 
   /* ─────── 히스토리 ─────── */
   const [history, setHistory] = useState<SavedSplit[]>([])
@@ -299,55 +329,25 @@ export default function DutchClient() {
       {tab === 'simple' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>총 금액</label>
-            <div className={styles.inputRow}>
-              <input className={styles.amountInput} type="text" inputMode="numeric"
-                placeholder="150,000"
-                value={sTotal}
-                onChange={e => setSTotal(fmtAmount(parseAmount(e.target.value)))} />
-              <span className={styles.unit}>원</span>
+            <div className={styles.row2}>
+              <div className={styles.field}>
+                <label className={styles.subLabel}>총 금액</label>
+                <div className={styles.inputRow}>
+                  <input className={styles.amountInput} type="text" inputMode="numeric"
+                    placeholder="150,000"
+                    value={sTotal}
+                    onChange={e => setSTotal(fmtAmount(parseAmount(e.target.value)))} />
+                  <span className={styles.unit}>원</span>
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label className={styles.subLabel}>인원 수</label>
+                <Stepper value={sPeople} onChange={setSPeople} min={1} max={50} />
+              </div>
             </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>인원 수</label>
-            <div className={styles.peopleRow}>
-              <button className={styles.peopleBtn}
-                onClick={() => setSPeople(Math.max(1, sPeople - 1))}
-                disabled={sPeople <= 1}>−</button>
-              <div className={styles.peopleNum}>{sPeople}명</div>
-              <button className={styles.peopleBtn}
-                onClick={() => setSPeople(Math.min(50, sPeople + 1))}
-                disabled={sPeople >= 50}>+</button>
-            </div>
-            <div className={styles.quickRow}>
-              {[2, 3, 4, 5, 6, 7].map(n => (
-                <button key={n}
-                  className={`${styles.quickBtn} ${sPeople === n ? styles.quickActive : ''}`}
-                  onClick={() => setSPeople(n)}>{n}명</button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>1원 단위 처리</label>
-            <div className={styles.optionRow}>
-              {ROUNDING_OPTIONS.map(o => (
-                <button key={o.id}
-                  className={`${styles.optionBtn} ${sRounding === o.id ? styles.optionActive : ''}`}
-                  onClick={() => setSRounding(o.id)}>{o.name}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>잔여 금액 처리</label>
-            <div className={styles.optionRow}>
-              {REMAINDER_OPTIONS.map(o => (
-                <button key={o.id}
-                  className={`${styles.optionBtn} ${sRemain === o.id ? styles.optionActive : ''}`}
-                  onClick={() => setSRemain(o.id)} title={o.desc}>{o.name}</button>
-              ))}
+            <div className={styles.roundRow}>
+              <label className={styles.subLabel} style={{ marginBottom: 0 }}>1원 단위 처리</label>
+              <RoundingSelect value={sRounding} onChange={setSRounding} />
             </div>
           </div>
 
@@ -367,13 +367,6 @@ export default function DutchClient() {
                   )}
                 </div>
               </div>
-
-              {Math.abs(simpleResult.remainder) > 0 && (
-                <div className={styles.remainderHint}>
-                  💡 <strong>{REMAINDER_OPTIONS.find(o => o.id === sRemain)?.name}</strong> —
-                  {' '}{REMAINDER_OPTIONS.find(o => o.id === sRemain)?.desc}
-                </div>
-              )}
 
               <div className={styles.card}>
                 <label className={styles.cardLabel}>상세</label>
@@ -399,7 +392,7 @@ export default function DutchClient() {
           ) : (
             <div className={styles.empty}>
               <div className={styles.emptyTitle}>총 금액과 인원을 입력하세요</div>
-              상황 선택 또는 직접 입력으로 시작합니다
+              1인당 금액이 바로 계산됩니다
             </div>
           )}
         </>
@@ -434,31 +427,19 @@ export default function DutchClient() {
 
             <div className={styles.card}>
               <label className={styles.cardLabel}>전체 인원</label>
-              <div className={styles.peopleRow}>
-                <button className={styles.peopleBtn} onClick={() => setDPeople(Math.max(1, dPeople - 1))}>−</button>
-                <div className={styles.peopleNum}>{dPeople}명</div>
-                <button className={styles.peopleBtn} onClick={() => setDPeople(Math.min(50, dPeople + 1))}>+</button>
-              </div>
+              <Stepper value={dPeople} onChange={v => { setDPeople(v); if (dDrinkers > v) setDDrinkers(v) }} min={1} max={50} />
             </div>
 
             <div className={styles.card}>
               <label className={styles.cardLabel}>음주자</label>
-              <div className={styles.peopleRow}>
-                <button className={styles.peopleBtn} onClick={() => setDDrinkers(Math.max(0, dDrinkers - 1))}>−</button>
-                <div className={styles.peopleNum} style={{ color: '#EA580C' }}>{dDrinkers}명</div>
-                <button className={styles.peopleBtn} onClick={() => setDDrinkers(Math.min(dPeople, dDrinkers + 1))}>+</button>
-              </div>
+              <Stepper value={dDrinkers} onChange={setDDrinkers} min={0} max={dPeople} color="#EA580C" />
             </div>
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>1원 단위 처리</label>
-            <div className={styles.optionRow}>
-              {ROUNDING_OPTIONS.map(o => (
-                <button key={o.id}
-                  className={`${styles.optionBtn} ${dRounding === o.id ? styles.optionActive : ''}`}
-                  onClick={() => setDRounding(o.id)}>{o.name}</button>
-              ))}
+            <div className={styles.roundRow}>
+              <label className={styles.subLabel} style={{ marginBottom: 0 }}>1원 단위 처리</label>
+              <RoundingSelect value={dRounding} onChange={setDRounding} />
             </div>
           </div>
 
@@ -593,13 +574,9 @@ export default function DutchClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>1원 단위 처리</label>
-            <div className={styles.optionRow}>
-              {ROUNDING_OPTIONS.map(o => (
-                <button key={o.id}
-                  className={`${styles.optionBtn} ${pRounding === o.id ? styles.optionActive : ''}`}
-                  onClick={() => setPRounding(o.id)}>{o.name}</button>
-              ))}
+            <div className={styles.roundRow}>
+              <label className={styles.subLabel} style={{ marginBottom: 0 }}>1원 단위 처리</label>
+              <RoundingSelect value={pRounding} onChange={setPRounding} />
             </div>
           </div>
 
@@ -836,9 +813,6 @@ export default function DutchClient() {
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(shareMessage)}>
                   {copied ? '✓ 복사됨' : '📋 메시지 복사'}
-                </button>
-                <button className={styles.copyBtn} onClick={() => openKakao(shareMessage)}>
-                  💬 카카오톡 열기
                 </button>
                 <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
               </div>

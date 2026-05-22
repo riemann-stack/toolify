@@ -113,6 +113,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/formation',       icon: '⚽', name: '축구 포메이션 생성기', desc: '5·7·9·11인제 22+ 포메이션 + 명단 칩 입력으로 그라운드 위에 시각화. PNG 다운로드.', badge: 'new' },
       { href: '/tools/sports/pace',            icon: '🏃', name: '러닝 페이스 계산기',     desc: '페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 5km·10km·하프·풀 스플릿.' },
       { href: '/tools/sports/race-predictor',  icon: '🏅', name: '마라톤 기록 계산기', desc: '5km·10km·하프 기록으로 풀코스 예상 시간 + 기온·고도·연령 자동 보정.', badge: 'hot' },
+      { href: '/tools/sports/hyrox',           icon: '🏋️', name: '하이록스(HYROX) 계산기', desc: '8km 런 + 8개 스테이션 + 록스존으로 완주 시간 예측 + 목표 페이스 역산 + Open/Pro 부문별 중량표.', badge: 'new' },
       { href: '/tools/sports/hiking-time',     icon: '🥾', name: '등산 시간 계산기',   desc: '한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. 일몰 전 하산 자동 진단.', badge: 'new' },
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '5RM·8RM 기록으로 진짜 최대 무게 추정 + RPE 보정과 워밍업 5세트 자동.' },
       { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 정확한 인터벌 페이스 + 4~16주 풀 트레이닝 스케줄.' },

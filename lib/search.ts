@@ -65,6 +65,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/sports/buildup':       ['빌드업', '러닝', '인터벌', '러닝빌드업'],
   '/tools/sports/race-predictor':['vdot', '레이스예측', '마라톤', '풀코스', '하프'],
   '/tools/sports/interval-training': ['인터벌', '인터벌트레이닝', '스피드'],
+  '/tools/sports/hyrox':         ['하이록스', 'HYROX', '하이룩스', '완주시간', '월볼', '썰매밀기', '스키에르그', '크로스핏레이스'],
   '/tools/sports/one-rm':        ['1rm', '원알엠', '근력', '벤치프레스', '데드리프트', '스쿼트'],
   '/tools/sports/formation':     ['포메이션', '축구', '442', '433'],
   '/tools/sports/football-points': ['승점', '리그순위', '축구승점'],

@@ -103,6 +103,81 @@
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 @media (max-width: 480px) { .fieldRow, .fieldRow3 { grid-template-columns: 1fr; } }
 
+/* 총 금액 + 인원 한 줄 (모바일 포함 유지) */
+.row2 {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+.field { min-width: 0; }
+
+/* 1원 단위 처리 — 라벨 + 드롭다운 한 줄 */
+.roundRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.select {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.select:focus { border-color: var(--accent); }
+
+/* 인원 스테퍼 (+/− + 직접 입력) */
+.stepper {
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 0;
+}
+.stepperBtn {
+  flex-shrink: 0;
+  width: 40px;
+  align-self: stretch;
+  background: transparent;
+  border: none;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+@media (hover: hover) { .stepperBtn:hover:not(:disabled) { color: var(--accent); } }
+.stepperBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+.stepperInput {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  padding: 11px 0;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.stepperInput::-webkit-outer-spin-button,
+.stepperInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
 /* 술값 분리 — 4 입력 2×2 그리드 (모바일 포함 유지) */
 .drinkGrid {
   display: grid;
@@ -110,6 +185,7 @@
   gap: 8px;
   margin-bottom: 4px;
 }
+.drinkGrid > .card { min-width: 0; }
 
 /* 인원 조절 */
 .peopleRow {
