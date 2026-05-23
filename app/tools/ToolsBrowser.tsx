@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { categories } from '@/lib/tools'
 import { searchTools, categoryOf } from '@/lib/search'
@@ -9,6 +9,11 @@ import styles from './tools.module.css'
 
 export default function ToolsBrowser() {
   const [q, setQ] = useState('')
+  // ?q= 검색어로 진입 시 자동 채움 (사이트맵 SearchAction · 공유 링크 대응)
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get('q')
+    if (param) setQ(param)
+  }, [])
   const query = q.trim()
   const results = useMemo(() => (query ? searchTools(query, 60) : []), [query])
 

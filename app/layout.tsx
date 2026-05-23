@@ -3,6 +3,7 @@ import Script from 'next/script'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import SiteJsonLd from '@/components/SiteJsonLd'
 
 // 모바일 뷰포트 + 다크 테마 시각화 (status bar / 모바일 브라우저 UI)
 export const viewport: Viewport = {
@@ -86,6 +87,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body>
+        <SiteJsonLd />
         <Nav />
         <main>{children}</main>
         <Footer />
