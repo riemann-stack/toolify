@@ -540,3 +540,55 @@
   border-radius: 8px;
   border-left: 3px solid var(--border);
 }
+
+/* ── 노출 시각 미리보기 ── */
+.previewBox {
+  position: relative;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.previewScene {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #1e3a5f 0%, #3b5e82 45%, #6b4a6e 100%);
+  transition: filter 0.15s ease;
+}
+.previewBg { position: absolute; inset: 0; transition: filter 0.15s ease; }
+.previewLight {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  opacity: 0.85;
+  transform: translate(-50%, -50%);
+}
+.previewSubject {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  font-size: 48px;
+  line-height: 1;
+  transition: filter 0.15s ease;
+}
+.previewGrain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+.previewLegend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 12px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.previewLegend b { color: var(--text); font-weight: 700; margin-left: 4px; }
+@media (min-width: 560px) { .previewLegend { grid-template-columns: repeat(4, 1fr); } }

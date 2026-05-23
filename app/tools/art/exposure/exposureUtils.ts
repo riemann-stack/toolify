@@ -44,8 +44,8 @@ export const APERTURES: ApertureValue[] = [
 ]
 
 /* ─────────────────────────────────────────────
-   셔터스피드 (1 stop 단계)
-   value = 초 단위 (1/250 = 0.004)
+   셔터스피드 (1/3 stop 단계 — 실카메라 일치)
+   각 인덱스 = 0.333 stop, value = 초 단위 (1/250 = 0.004)
    ───────────────────────────────────────────── */
 export interface ShutterValue {
   value: number
@@ -53,29 +53,65 @@ export interface ShutterValue {
 }
 
 export const SHUTTERS: ShutterValue[] = [
-  { value: 30,       label: '30 s'    },
-  { value: 15,       label: '15 s'    },
-  { value: 8,        label: '8 s'     },
-  { value: 4,        label: '4 s'     },
-  { value: 2,        label: '2 s'     },
-  { value: 1,        label: '1 s'     },
-  { value: 1/2,      label: '1/2'     },
-  { value: 1/4,      label: '1/4'     },
-  { value: 1/8,      label: '1/8'     },
-  { value: 1/15,     label: '1/15'    },
-  { value: 1/30,     label: '1/30'    },
-  { value: 1/60,     label: '1/60'    },
-  { value: 1/125,    label: '1/125'   },
-  { value: 1/250,    label: '1/250'   },
-  { value: 1/500,    label: '1/500'   },
-  { value: 1/1000,   label: '1/1000'  },
-  { value: 1/2000,   label: '1/2000'  },
-  { value: 1/4000,   label: '1/4000'  },
-  { value: 1/8000,   label: '1/8000'  },
+  { value: 30,     label: '30s'    },
+  { value: 25,     label: '25s'    },
+  { value: 20,     label: '20s'    },
+  { value: 15,     label: '15s'    },
+  { value: 13,     label: '13s'    },
+  { value: 10,     label: '10s'    },
+  { value: 8,      label: '8s'     },
+  { value: 6,      label: '6s'     },
+  { value: 5,      label: '5s'     },
+  { value: 4,      label: '4s'     },
+  { value: 3.2,    label: '3.2s'   },
+  { value: 2.5,    label: '2.5s'   },
+  { value: 2,      label: '2s'     },
+  { value: 1.6,    label: '1.6s'   },
+  { value: 1.3,    label: '1.3s'   },
+  { value: 1,      label: '1s'     },
+  { value: 0.8,    label: '0.8s'   },
+  { value: 0.6,    label: '0.6s'   },
+  { value: 1/2,    label: '1/2'    },
+  { value: 0.4,    label: '0.4s'   },
+  { value: 1/3,    label: '1/3'    },
+  { value: 1/4,    label: '1/4'    },
+  { value: 1/5,    label: '1/5'    },
+  { value: 1/6,    label: '1/6'    },
+  { value: 1/8,    label: '1/8'    },
+  { value: 1/10,   label: '1/10'   },
+  { value: 1/13,   label: '1/13'   },
+  { value: 1/15,   label: '1/15'   },
+  { value: 1/20,   label: '1/20'   },
+  { value: 1/25,   label: '1/25'   },
+  { value: 1/30,   label: '1/30'   },
+  { value: 1/40,   label: '1/40'   },
+  { value: 1/50,   label: '1/50'   },
+  { value: 1/60,   label: '1/60'   },
+  { value: 1/80,   label: '1/80'   },
+  { value: 1/100,  label: '1/100'  },
+  { value: 1/125,  label: '1/125'  },
+  { value: 1/160,  label: '1/160'  },
+  { value: 1/200,  label: '1/200'  },
+  { value: 1/250,  label: '1/250'  },
+  { value: 1/320,  label: '1/320'  },
+  { value: 1/400,  label: '1/400'  },
+  { value: 1/500,  label: '1/500'  },
+  { value: 1/640,  label: '1/640'  },
+  { value: 1/800,  label: '1/800'  },
+  { value: 1/1000, label: '1/1000' },
+  { value: 1/1250, label: '1/1250' },
+  { value: 1/1600, label: '1/1600' },
+  { value: 1/2000, label: '1/2000' },
+  { value: 1/2500, label: '1/2500' },
+  { value: 1/3200, label: '1/3200' },
+  { value: 1/4000, label: '1/4000' },
+  { value: 1/5000, label: '1/5000' },
+  { value: 1/6400, label: '1/6400' },
+  { value: 1/8000, label: '1/8000' },
 ]
 
 /* ─────────────────────────────────────────────
-   ISO (1 stop 단계)
+   ISO (1/3 stop 단계 — 실카메라 일치)
    ───────────────────────────────────────────── */
 export interface IsoValue {
   value: number
@@ -84,15 +120,35 @@ export interface IsoValue {
 
 export const ISOS: IsoValue[] = [
   { value: 50,    label: 'ISO 50'    },
+  { value: 64,    label: 'ISO 64'    },
+  { value: 80,    label: 'ISO 80'    },
   { value: 100,   label: 'ISO 100'   },
+  { value: 125,   label: 'ISO 125'   },
+  { value: 160,   label: 'ISO 160'   },
   { value: 200,   label: 'ISO 200'   },
+  { value: 250,   label: 'ISO 250'   },
+  { value: 320,   label: 'ISO 320'   },
   { value: 400,   label: 'ISO 400'   },
+  { value: 500,   label: 'ISO 500'   },
+  { value: 640,   label: 'ISO 640'   },
   { value: 800,   label: 'ISO 800'   },
+  { value: 1000,  label: 'ISO 1000'  },
+  { value: 1250,  label: 'ISO 1250'  },
   { value: 1600,  label: 'ISO 1600'  },
+  { value: 2000,  label: 'ISO 2000'  },
+  { value: 2500,  label: 'ISO 2500'  },
   { value: 3200,  label: 'ISO 3200'  },
+  { value: 4000,  label: 'ISO 4000'  },
+  { value: 5000,  label: 'ISO 5000'  },
   { value: 6400,  label: 'ISO 6400'  },
+  { value: 8000,  label: 'ISO 8000'  },
+  { value: 10000, label: 'ISO 10000' },
   { value: 12800, label: 'ISO 12800' },
+  { value: 16000, label: 'ISO 16000' },
+  { value: 20000, label: 'ISO 20000' },
   { value: 25600, label: 'ISO 25600' },
+  { value: 32000, label: 'ISO 32000' },
+  { value: 40000, label: 'ISO 40000' },
   { value: 51200, label: 'ISO 51200' },
 ]
 
@@ -322,9 +378,9 @@ export function generateEquivalents(currentAptIdx: number, currentShIdx: number,
 
   const candidates: EquivalentExposure[] = []
   /* 다양한 (aptIdx, shIdx, isoIdx) 조합 시도 */
-  for (let dAt = -6; dAt <= 6; dAt += 3) {
-    for (let dSh = -3; dSh <= 3; dSh += 1) {
-      for (let dIso = -3; dIso <= 3; dIso += 1) {
+  for (let dAt = -9; dAt <= 9; dAt += 3) {
+    for (let dSh = -9; dSh <= 9; dSh += 3) {
+      for (let dIso = -9; dIso <= 9; dIso += 3) {
         if (dAt === 0 && dSh === 0 && dIso === 0) continue
         const aIdx = currentAptIdx + dAt
         const sIdx = currentShIdx + dSh

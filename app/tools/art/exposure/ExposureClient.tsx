@@ -15,15 +15,15 @@ type AxisId = 'aperture' | 'shutter' | 'iso'
 
 type Tab = 'expo' | 'nd' | 'scene' | 'tradeoff'
 
-const STORAGE_KEY = 'youtil_exposure_v1'
+const STORAGE_KEY = 'youtil_exposure_v2'  // v2: 1/3 stop ISO·셔터로 인덱스 체계 변경
 
 export default function ExposureClient() {
   const [tab, setTab] = useState<Tab>('expo')
 
-  /* 3축 슬라이더 인덱스 */
-  const [aptIdx, setAptIdx] = useState<number>(11)   // f/4
-  const [shIdx, setShIdx] = useState<number>(13)     // 1/250
-  const [isoIdx, setIsoIdx] = useState<number>(2)    // ISO 200
+  /* 3축 슬라이더 인덱스 (기본 f/4 · 1/250 · ISO 200) */
+  const [aptIdx, setAptIdx] = useState<number>(() => nearestApertureIdx(4))
+  const [shIdx, setShIdx] = useState<number>(() => nearestShutterIdx(1 / 250))
+  const [isoIdx, setIsoIdx] = useState<number>(() => nearestIsoIdx(200))
 
   /* 독립 잠금 — 각 축 토글 (최대 2개) */
   const [aptLocked, setAptLocked] = useState(false)
@@ -72,7 +72,7 @@ export default function ExposureClient() {
   const ev = calcEV(apt.value, sh.value, iso.value)
 
   /* 베이스라인 (초기 셋팅 f/4·1/250·ISO 200) 대비 stop 변화 */
-  const baselineEV = calcEV(APERTURES[11].value, SHUTTERS[13].value, ISOS[2].value)
+  const baselineEV = calcEV(4, 1 / 250, 200)
   const stopFromBaseline = ev - baselineEV
 
   /* 등가 노출 5종 */
@@ -92,45 +92,37 @@ export default function ExposureClient() {
    *  - shutter  인덱스 +1 = 1 stop 어두워짐 (빠른 셔터)
    *  - iso      인덱스 +1 = 1 stop 밝아짐
    */
+  /* 세 축 모두 1/3 stop 단계 → 보정은 동일 인덱스 양만큼 정확히 상쇄 (반올림·배수 불필요) */
   const onApertureChange = (newIdx: number) => {
-    if (aptLocked) return
-    if (newIdx === aptIdx) return
-    const stopDarker = (newIdx - aptIdx) / 3  // + = 어두워짐
+    if (aptLocked || newIdx === aptIdx) return
+    const d = newIdx - aptIdx  // +d = 어두워짐
     setAptIdx(newIdx)
     if (shLocked && !isoLocked) {
-      // ISO 보정: 어두워지면 ISO ↑ (인덱스 ↑)
-      setIsoIdx(Math.round(clampIdx(isoIdx + stopDarker, ISOS.length)))
+      setIsoIdx(clampIdx(isoIdx + d, ISOS.length))      // 어두워지면 ISO ↑
     } else if (isoLocked && !shLocked) {
-      // 셔터 보정: 어두워지면 셔터 느리게 (인덱스 ↓)
-      setShIdx(Math.round(clampIdx(shIdx - stopDarker, SHUTTERS.length)))
+      setShIdx(clampIdx(shIdx - d, SHUTTERS.length))    // 어두워지면 셔터 느리게(↓)
     }
-    // 0개 또는 2개 잠금: 보정 없음 → EV 변화
   }
 
   const onShutterChange = (newIdx: number) => {
-    if (shLocked) return
-    if (newIdx === shIdx) return
-    const stopDarker = newIdx - shIdx  // 인덱스 ↑ = 빠름 = 어두워짐
+    if (shLocked || newIdx === shIdx) return
+    const d = newIdx - shIdx  // 인덱스 ↑ = 빠름 = 어두워짐
     setShIdx(newIdx)
     if (aptLocked && !isoLocked) {
-      setIsoIdx(Math.round(clampIdx(isoIdx + stopDarker, ISOS.length)))
+      setIsoIdx(clampIdx(isoIdx + d, ISOS.length))      // 어두워지면 ISO ↑
     } else if (isoLocked && !aptLocked) {
-      // 조리개 보정: 어두워지면 조리개 열기 (인덱스 ↓, 1stop = 3인덱스)
-      setAptIdx(Math.round(clampIdx(aptIdx - stopDarker * 3, APERTURES.length)))
+      setAptIdx(clampIdx(aptIdx - d, APERTURES.length)) // 어두워지면 조리개 열기(↓)
     }
   }
 
   const onIsoChange = (newIdx: number) => {
-    if (isoLocked) return
-    if (newIdx === isoIdx) return
-    const stopBrighter = newIdx - isoIdx  // 인덱스 ↑ = ISO ↑ = 밝아짐
+    if (isoLocked || newIdx === isoIdx) return
+    const d = newIdx - isoIdx  // 인덱스 ↑ = ISO ↑ = 밝아짐
     setIsoIdx(newIdx)
     if (aptLocked && !shLocked) {
-      // 셔터 보정: 밝아지면 셔터 빠르게 (인덱스 ↑)
-      setShIdx(Math.round(clampIdx(shIdx + stopBrighter, SHUTTERS.length)))
+      setShIdx(clampIdx(shIdx + d, SHUTTERS.length))    // 밝아지면 셔터 빠르게(↑)
     } else if (shLocked && !aptLocked) {
-      // 조리개 보정: 밝아지면 조리개 닫기 (인덱스 ↑)
-      setAptIdx(Math.round(clampIdx(aptIdx + stopBrighter * 3, APERTURES.length)))
+      setAptIdx(clampIdx(aptIdx + d, APERTURES.length)) // 밝아지면 조리개 닫기(↑)
     }
   }
 
@@ -149,6 +141,16 @@ export default function ExposureClient() {
   const dof = dofRating(apt.value)
   const blur = blurRating(sh.value)
   const noise = noiseRating(iso.value)
+
+  /* 시각 미리보기 파라미터 (근사 시뮬레이션) */
+  const previewBrightness = Math.max(0.3, Math.min(2.2, Math.pow(2, -stopFromBaseline * 0.7)))
+  const bokehBlur = Math.max(0, Math.min(22, Math.round(20 / apt.value)))     // 조리개 넓을수록(작은 f) 배경 흐림 ↑
+  const motionBlur =
+    sh.value >= 1 / 2   ? 16 :
+    sh.value >= 1 / 15  ? 9  :
+    sh.value >= 1 / 60  ? 4  :
+    sh.value >= 1 / 250 ? 1.5 : 0                                              // 셔터 느릴수록 모션 블러 ↑
+  const grainOpacity = ((noise.level - 1) / 4) * 0.55                          // ISO 높을수록 노이즈 ↑
 
   /* ND 필터 계산 */
   const nd = ND_FILTERS.find((f) => f.id === ndId) ?? ND_FILTERS[2]
@@ -318,6 +320,30 @@ export default function ExposureClient() {
             <div className={s.heroRight}>
               <p className={s.heroEvDesc}>{describeEV(ev)}</p>
             </div>
+          </div>
+
+          {/* 노출 시각 미리보기 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>👁️ 노출 미리보기 (시뮬레이션)</span>
+            <div className={s.previewBox}>
+              <div className={s.previewScene} style={{ filter: `brightness(${previewBrightness.toFixed(2)})` }}>
+                <div className={s.previewBg} style={{ filter: `blur(${bokehBlur}px)` }}>
+                  <span className={s.previewLight} style={{ left: '18%', top: '32%', background: '#fde68a' }} />
+                  <span className={s.previewLight} style={{ left: '64%', top: '24%', background: '#fca5a5' }} />
+                  <span className={s.previewLight} style={{ left: '80%', top: '60%', background: '#93c5fd' }} />
+                  <span className={s.previewLight} style={{ left: '38%', top: '66%', background: '#86efac' }} />
+                </div>
+                <div className={s.previewSubject} style={{ filter: motionBlur > 0 ? `blur(${motionBlur}px)` : 'none' }}>🚶</div>
+              </div>
+              <div className={s.previewGrain} style={{ opacity: grainOpacity.toFixed(2) }} />
+            </div>
+            <div className={s.previewLegend}>
+              <span>☀️ 밝기 <b>{stopFromBaseline <= -0.1 ? '밝음' : stopFromBaseline >= 0.1 ? '어두움' : '적정'}</b></span>
+              <span>{dof.emoji} 심도 <b>{dof.label}</b></span>
+              <span>{blur.emoji} 흔들림 <b>{blur.label}</b></span>
+              <span>{noise.emoji} 노이즈 <b>{noise.label}</b></span>
+            </div>
+            <p className={s.lockHint}>※ 입력값 기반 근사 시뮬레이션 — 밝기·배경 흐림(심도)·움직임 블러·노이즈를 시각화. 실제 촬영 결과와 다를 수 있습니다.</p>
           </div>
 
           {/* 등가 노출 5종 */}

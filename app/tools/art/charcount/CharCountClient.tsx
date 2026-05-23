@@ -1,7 +1,9 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from '../../dev/dev.module.css'
+
+const STORAGE_KEY = 'youtil_charcount_v1'
 
 // ─────────────────────────────────────────────
 // 한글 분석
@@ -147,11 +149,30 @@ function twitterWeight(text: string): number {
 export default function CharCountClient() {
   const [tab, setTab] = useState<'count' | 'platforms' | 'tools'>('count')
   const [text, setText] = useState('')
+  const [targetLimit, setTargetLimit] = useState('')
 
   // tools tab
   const [findStr, setFindStr] = useState('')
   const [replaceStr, setReplaceStr] = useState('')
   const [findCaseSensitive, setFindCaseSensitive] = useState(false)
+
+  // 자동 저장 — 새로고침해도 입력·목표 글자수 유지
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const j = JSON.parse(raw)
+        if (typeof j.text === 'string') setText(j.text)
+        if (typeof j.targetLimit === 'string') setTargetLimit(j.targetLimit)
+      }
+    } catch {}
+    setHydrated(true)
+  }, [])
+  useEffect(() => {
+    if (!hydrated) return
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ text, targetLimit })) } catch {}
+  }, [hydrated, text, targetLimit])
 
   // ─────────────────────────────────────────────
   // 통계 계산
@@ -198,6 +219,9 @@ export default function CharCountClient() {
     const speakingMin = len / 150
     const englishWPM = words / 200
 
+    // 원고지 매수 (200자 원고지 기준, 공백 포함)
+    const manuscript200 = len === 0 ? 0 : Math.ceil(len / 200)
+
     // 추출 카운트
     const hashtags = (text.match(/#[^\s#]+/g) || []).length
     const mentions = (text.match(/@[^\s@]+/g) || []).length
@@ -209,7 +233,7 @@ export default function CharCountClient() {
       len, lenNoSpace, words, lines, paragraphs, sentences,
       hangul, hangulSyll, hangulJamo, latin, digit, space, special, cjk, emoji,
       utf8, utf16, eucKr, tw,
-      readingMin, speakingMin, englishWPM,
+      readingMin, speakingMin, englishWPM, manuscript200,
       hashtags, mentions, urls, emails, numbers,
     }
   }, [text])
@@ -237,6 +261,7 @@ export default function CharCountClient() {
   // 도구 — 변환 결과
   const conversions = useMemo(() => {
     if (!text) return null
+    const lines = text.split('\n')
     return {
       upper: text.toUpperCase(),
       lower: text.toLowerCase(),
@@ -246,6 +271,11 @@ export default function CharCountClient() {
       camel: text.toLowerCase().replace(/\s+(.)/g, (_, c) => c.toUpperCase()),
       reverse: [...text].reverse().join(''),
       trim: text.trim().replace(/\s+/g, ' '),
+      // 정리 도구
+      removeBlankLines: lines.filter(l => l.trim() !== '').join('\n'),
+      collapseBlankLines: text.replace(/\n{3,}/g, '\n\n'),
+      dedupeLines: [...new Set(lines)].join('\n'),
+      sortLines: lines.slice().sort((a, b) => a.localeCompare(b, 'ko')).join('\n'),
     }
   }, [text])
 
@@ -302,6 +332,43 @@ export default function CharCountClient() {
           onChange={e => setText(e.target.value)}
           rows={tab === 'count' ? 6 : 8}
         />
+
+        {/* 목표 글자수 — 실시간 카운트다운 */}
+        {(() => {
+          const targetN = parseInt(targetLimit, 10)
+          const hasTarget = Number.isFinite(targetN) && targetN > 0
+          const over = hasTarget && stats.len > targetN
+          const pct = hasTarget ? Math.min((stats.len / targetN) * 100, 100) : 0
+          return (
+            <div style={{ marginTop: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>목표 글자수</span>
+                <input
+                  type="number" inputMode="numeric" min={0} placeholder="예: 500"
+                  value={targetLimit}
+                  onChange={e => setTargetLimit(e.target.value.replace(/[^\d]/g, ''))}
+                  style={{
+                    width: 110, background: 'var(--bg3)', border: '1px solid var(--border)',
+                    borderRadius: 8, padding: '7px 10px', fontFamily: 'var(--font-mono)',
+                    fontSize: 14, color: 'var(--text)', textAlign: 'right',
+                  }}
+                />
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>자 (공백 포함)</span>
+                {hasTarget && (
+                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? '#DC2626' : 'var(--accent)' }}>
+                    {over ? `초과 ${fmt(stats.len - targetN)}자` : `남은 ${fmt(targetN - stats.len)}자`}
+                    <span style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 12, marginLeft: 6 }}>{fmt(stats.len)} / {fmt(targetN)}</span>
+                  </span>
+                )}
+              </div>
+              {hasTarget && (
+                <div className={s.progressBar} style={{ marginTop: 8 }}>
+                  <div className={`${s.progressFill} ${over ? s.progressOver : ''}`} style={{ width: `${pct}%` }} />
+                </div>
+              )}
+            </div>
+          )
+        })()}
       </div>
 
       {/* ─── TAB 1: 실시간 통계 ─── */}
@@ -352,16 +419,18 @@ export default function CharCountClient() {
             </div>
           </div>
 
-          {/* 읽기·말하기 시간 + 추출 */}
+          {/* 원고지·읽기·말하기 시간 + 추출 */}
           <div className={s.statsGrid4}>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>📄 원고지(200자)</p> <p className={s.miniStatValue}>{fmt(stats.manuscript200)}매</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>📖 묵독 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.readingMin)}</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>🎙️ 발화 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.speakingMin)}</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>#해시태그</p>        <p className={s.miniStatValue}>{fmt(stats.hashtags)}</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>🔗 URL</p>           <p className={s.miniStatValue}>{fmt(stats.urls)}</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>@멘션</p>            <p className={s.miniStatValue}>{fmt(stats.mentions)}</p></div>
           </div>
 
           <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.7 }}>
-            ※ 묵독 약 300자/분 · 발화 약 150자/분 (한국어 표준 기준 추정)
+            ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (한국어 표준 기준 추정)
           </p>
         </>
       )}
@@ -421,6 +490,21 @@ export default function CharCountClient() {
                 <button className={s.subActionBtn} onClick={() => applyConversion(conversions.camel)}>camelCase</button>
                 <button className={s.subActionBtn} onClick={() => applyConversion(conversions.reverse)}>역순</button>
                 <button className={s.subActionBtn} onClick={() => applyConversion(conversions.trim)}>공백 정리</button>
+              </div>
+            </div>
+          )}
+
+          {/* 줄 정리 도구 */}
+          {conversions && (
+            <div className={s.card}>
+              <div className={s.cardTop}>
+                <label className={s.cardLabel}>줄 정리 (클릭 시 입력 텍스트에 적용)</label>
+              </div>
+              <div className={s.subActionRow}>
+                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.removeBlankLines)}>빈 줄 모두 제거</button>
+                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.collapseBlankLines)}>연속 빈 줄 1개로</button>
+                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.dedupeLines)}>중복 줄 제거</button>
+                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.sortLines)}>줄 가나다 정렬</button>
               </div>
             </div>
           )}

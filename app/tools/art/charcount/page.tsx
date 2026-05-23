@@ -6,9 +6,9 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/charcount',
-  title: '글자수 세기 — 공백 포함·제외·바이트·SNS 글자수 제한 비교',
-  description: '공백 포함·제외 실시간 카운트. SNS·자소서·논문 글자 수 체크와 바이트 분석.',
-  keywords: ['글자수세기', '글자수계산기', '자수세기', '단어수세기', 'UTF-8바이트', 'SMS바이트계산', '트위터가중치', '자기소개서글자수', '플랫폼글자수제한', 'meta description 길이'],
+  title: '글자수 세기 — 공백 포함·제외·원고지 매수·목표 글자수·SNS 제한',
+  description: '공백 포함·제외 실시간 카운트 + 목표 글자수 카운트다운 + 원고지 매수. 자소서·SNS·논문 글자 수 체크와 바이트 분석, 자동 저장.',
+  keywords: ['글자수세기', '글자수계산기', '자수세기', '단어수세기', '원고지매수', '원고지계산', '목표글자수', 'UTF-8바이트', 'SMS바이트계산', '트위터가중치', '자기소개서글자수', '플랫폼글자수제한', 'meta description 길이'],
 })
 
 export default function CharCountPage() {
