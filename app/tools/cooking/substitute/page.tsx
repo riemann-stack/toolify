@@ -386,7 +386,6 @@ export default function SubstitutePage() {
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',     desc: '인분 변경 시 재료 비율 조정' },
               { href: '/tools/cooking/serving', icon: '🍽️', name: '1인분 분량 계산기',       desc: '쌀·고기·파스타 분량' },
-              { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',       desc: 'g·ml·컵·큰술 즉시 변환' },
               { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',   desc: '식품 안전 가이드' },
               { href: '/tools/cooking/ramen',   icon: '🍜', name: '라면 물양 계산기',        desc: '한국 15종 라면 물양' },
               { href: '/tools/cooking/baker-percent', icon: '🥖', name: '베이커 퍼센트',     desc: '제빵 배합비' },

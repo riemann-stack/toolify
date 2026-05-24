@@ -223,7 +223,6 @@ export default function SourdoughPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',    desc: '르방 양에 맞춰 재료 비율 자동 계산' },
-              { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',      desc: 'g·컵·큰술·oz 즉시 변환' },
               { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',          desc: '베이킹 날까지 카운트다운' },
               { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',       desc: '반죽 휴지 시간 관리' },
             ].map(t => (

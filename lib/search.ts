@@ -106,7 +106,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/unit/area':            ['평수', '평', '제곱미터', '평계산'],
   '/tools/unit/size':            ['옷사이즈', '신발사이즈', '치수'],
   '/tools/unit/fuel-economy':    ['연비', 'mpg', 'km/l'],
-  '/tools/unit/tire-pressure':   ['타이어공기압', 'psi', '공기압'],
+  '/tools/unit/tire-pressure':   ['타이어공기압', 'psi', '공기압', '타이어계산기', '타이어규격', '205/55R16', '타이어외경', '인치업', '트레드마모', '타이어교체시기', 'DOT제조일자', '제조주차'],
   '/tools/unit/hardness':        ['경도', 'hrc', 'hrb', 'hv', 'hb', '로크웰', '비커스', '브리넬', '칼경도', '강재', '나이프', '칼덕', 'astm', '인장강도'],
   '/tools/unit/viscosity':       ['점도', 'viscosity', 'cp', 'cst', 'sus', 'sae', 'iso vg', '엔진오일', '0w-20', '5w-30', '윤활유', '유압유', '동점도', '절대점도'],
   '/tools/unit/brewing':         ['brix', 'plato', 'sg', '비중', '당도', 'baume', '보메', 'oechsle', '왹슬레', 'abv', 'proof', '도수', '자가양조', '홈브루잉', '와인', '잼', '치즈', 'ph', '산도'],

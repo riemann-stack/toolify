@@ -307,11 +307,6 @@ export default function BakingRecipePage() {
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>1인분 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>인분 환산</div>
         </Link>
-        <Link href="/tools/cooking/unit" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
-          <div style={{ fontSize: '22px', marginBottom: '6px' }}>📏</div>
-          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>요리 단위 변환기</div>
-          <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>g·ml·컵·큰술</div>
-        </Link>
         <Link href="/tools/cooking/thawing" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>🧊</div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>해동 시간 계산기</div>

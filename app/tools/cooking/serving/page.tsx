@@ -362,7 +362,6 @@ export default function ServingPage() {
               <li><Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교</Link>로 마트 가격 분석</li>
               <li><Link href="/tools/cooking/substitute" style={{ color: 'var(--accent)' }}>식재료 대체 비율</Link>로 부족 시 대체</li>
               <li><Link href="/tools/cooking/recipe" style={{ color: 'var(--accent)' }}>레시피 비율</Link>로 정확 비율 환산</li>
-              <li><Link href="/tools/cooking/unit" style={{ color: 'var(--accent)' }}>요리 단위 변환</Link>으로 g·컵·큰술 변환</li>
               <li><Link href="/tools/cooking/thawing" style={{ color: 'var(--accent)' }}>냉동·해동 시간</Link>으로 안전 해동</li>
               <li>요리 시작!</li>
             </ol>
@@ -472,7 +471,6 @@ export default function ServingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',         icon: '📐', name: '레시피 비율 계산기',         desc: '인분 환산·비율 조정' },
-              { href: '/tools/cooking/unit',           icon: '🥄', name: '요리 단위 변환기',           desc: 'g·컵·큰술 변환' },
               { href: '/tools/cooking/substitute',     icon: '🔄', name: '식재료 대체 비율',           desc: '부족 시 대체재' },
               { href: '/tools/cooking/thawing',        icon: '🧊', name: '해동 시간 계산기',      desc: '고기·냉동 안전 해동' },
               { href: '/tools/life/unit-price',        icon: '🏷️', name: '단가 비교 계산기',           desc: '마트 가격 분석' },

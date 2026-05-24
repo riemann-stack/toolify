@@ -360,7 +360,6 @@ export default function ThawingPage() {
               { href: '/tools/cooking/ramen', icon: '🍜', name: '라면 물양 계산기', desc: '한국 15종 라면 권장 물양' },
               { href: '/tools/cooking/nuts', icon: '🌰', name: '견과류 섭취량 계산기', desc: '견과류별 하루 권장량' },
               { href: '/tools/date/dday', icon: '📅', name: 'D-day 계산기', desc: '해동 알림·유통기한 관리' },
-              { href: '/tools/cooking/unit', icon: '🥄', name: '요리 단위 변환기', desc: '컵·큰술·oz 즉시 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

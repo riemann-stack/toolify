@@ -280,7 +280,6 @@ export default function FryingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '튀김 반죽 비율 자동 계산' },
-              { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환기',   desc: '기름량·재료량 변환' },
               { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',   desc: '튀김 시간 관리' },
               { href: '/tools/life/dutch',      icon: '🍻', name: '더치페이 계산기',   desc: '홈파티 비용 정산' },
             ].map(t => (

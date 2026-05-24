@@ -6,9 +6,13 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/unit/tire-pressure',
-  title: '타이어 공기압 변환기 psi ↔ kPa ↔ bar — 권장 공기압 체크',
-  description: 'psi·kPa·bar 변환 + 차량별 권장 공기압과 계절별 관리 가이드. 안전 운행과 연비 향상에.',
-  keywords: ['타이어공기압변환', 'psi kPa 변환', '타이어공기압', '자전거공기압', '권장공기압', 'bar psi 변환'],
+  title: '타이어 계산기 — 공기압(psi·kPa·bar)·규격 해석·인치업·교체시기',
+  description: 'psi·kPa·bar 공기압 변환과 권장 공기압 체크 + 205/55R16 규격 해석·외경 계산·인치업 조합·속도계 오차 + 트레드 마모·DOT 제조주차·교체시기 가이드.',
+  keywords: [
+    '타이어공기압변환', 'psi kPa 변환', '타이어공기압', '자전거공기압', '권장공기압', 'bar psi 변환',
+    '타이어 규격 보는법', '205/55R16 의미', '타이어 외경 계산', '인치업 계산', '타이어 외경 차이 속도계',
+    '트레드 깊이 마모한계', '타이어 교체시기', 'DOT 제조일자 보는법', '타이어 제조주차',
+  ],
 })
 
 export default function TirePressurePage() {
@@ -16,10 +20,10 @@ export default function TirePressurePage() {
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🛞 타이어 공기압 변환기
+        🛞 타이어 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        psi·kPa·bar 변환 + 차량별 <strong style={{ color: 'var(--text)' }}>권장 공기압</strong>과 계절별 관리.
+        공기압(psi·kPa·bar) 변환·체크 + <strong style={{ color: 'var(--text)' }}>규격 해석·인치업</strong>·트레드 마모·DOT 제조주차까지 한 번에.
       </p>
 
       <TirePressureClient />
@@ -98,6 +102,11 @@ export default function TirePressurePage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            👥 <strong style={{ color: 'var(--text)' }}>탑승인원·적재 보정</strong> — 1~3명 일상 주행은 표준 공기압 그대로,
+            <strong style={{ color: 'var(--text)' }}> 5인 만차·트렁크 가득·고속 장거리</strong>는 후륜 위주로 <strong style={{ color: 'var(--accent)' }}>약 +2~4 psi</strong> 높입니다.
+            도어 스티커에 &lsquo;표준&rsquo;과 &lsquo;만차(full load)&rsquo; 공기압, 전륜/후륜이 따로 표기돼 있으면 상황에 맞는 값을 우선하세요.
+          </p>
         </div>
 
         {/* ── 3. 공기압 부족·과다의 영향 ── */}
@@ -138,7 +147,7 @@ export default function TirePressurePage() {
             계절별 공기압 변화 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
-            기체는 온도에 따라 부피가 변하므로, 공기압도 외부 기온에 영향을 받습니다. 일반적으로 <strong style={{ color: 'var(--accent)' }}>기온 10°C 변화 시 약 1 psi(≈ 7 kPa)</strong> 변동합니다.
+            기체는 온도에 따라 부피가 변하므로, 공기압도 외부 기온에 영향을 받습니다. 일반적으로 <strong style={{ color: 'var(--accent)' }}>기온 10°C 변화 시 약 1~2 psi(≈ 7~14 kPa)</strong> 변동합니다(기온이 내려가면 공기압도 내려감).
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
@@ -219,6 +228,75 @@ export default function TirePressurePage() {
           </div>
         </div>
 
+        {/* ── 6b. 타이어 규격 해석 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            타이어 규격 보는 법 (예: 205/55R16)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            타이어 옆면(사이드월)의 숫자는 크기를 나타냅니다. 위 <strong style={{ color: 'var(--text)' }}>규격 해석</strong> 탭에 입력하면 외경·사이드월·인치업 조합이 자동 계산됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['표기', '의미', '예시 (205/55R16)'].map((h, i) => (
+                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { t: '205', m: '단면폭 (트레드 폭, mm)', e: '205 mm' },
+                  { t: '55', m: '편평비 (단면 높이 ÷ 폭, %)', e: '55% → 사이드월 112.8mm' },
+                  { t: 'R', m: '래디얼 구조 (Radial)', e: '일반 승용 표준' },
+                  { t: '16', m: '휠(림) 지름 (인치)', e: '16″ = 406.4mm' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r.m}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px' }}>{r.e}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
+            📐 <strong style={{ color: 'var(--text)' }}>외경 공식</strong>: 휠지름(mm) + 2 × (단면폭 × 편평비 ÷ 100) = 16×25.4 + 2×(205×0.55) = <strong style={{ color: 'var(--accent)' }}>약 631.9mm</strong>.
+            <br />
+            🔧 <strong style={{ color: 'var(--text)' }}>인치업</strong>은 휠을 키우고 편평비를 낮춰 외경을 유지하는 것입니다(예: 205/55R16 → 215/50R17, 외경 +2.4%). 외경 차이가 크면 <strong style={{ color: 'var(--text)' }}>속도계 오차</strong>가 생기므로 <strong style={{ color: 'var(--accent)' }}>±3% 이내</strong>를 권장합니다(외경이 커지면 실제 속도가 계기판보다 빠름).
+          </p>
+        </div>
+
+        {/* ── 6c. 교체 시기·마모·DOT ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            타이어 교체 시기 — 트레드 마모 · 주행거리 · DOT 제조주차
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+            {[
+              { t: '🛞 트레드(홈) 깊이', v: '마모한계 1.6mm', d: '신품 약 7~8mm. 3mm부터 빗길 제동력 저하 → 교체 준비. 1.6mm는 법정 한계(△ 마모표시).' },
+              { t: '📏 주행거리', v: '약 4~5만 km', d: '운전 습관·노면에 따라 차이. 5만 km 초과 시 마모·상태 집중 점검.' },
+              { t: '📅 사용 연수', v: '6년 검토 · 10년 교체', d: '마모가 적어도 고무가 경화·균열. 제조 6년부터 검토, 10년이면 교체.' },
+            ].map((c, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.t}</p>
+                <p style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 800, marginBottom: '4px' }}>{c.v}</p>
+                <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.d}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ background: 'rgba(8,145,178,0.10)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '14px 16px' }}>
+            <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>🔢 DOT 제조주차 읽는 법</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+              타이어 옆면 <strong style={{ color: 'var(--text)' }}>DOT</strong> 코드의 <strong style={{ color: 'var(--text)' }}>마지막 4자리</strong>가 제조 시기입니다.
+              앞 2자리 = <strong style={{ color: 'var(--text)' }}>주차(week)</strong>, 뒤 2자리 = <strong style={{ color: 'var(--text)' }}>연도</strong>.
+              <br />
+              예: <strong style={{ color: 'var(--accent)' }}>2419</strong> → <strong style={{ color: 'var(--text)' }}>2019년 24주차</strong>(약 6월 중순) 제조. 위 <strong style={{ color: 'var(--text)' }}>교체·마모</strong> 탭에 입력하면 경과 연수와 교체 권장 여부가 표시됩니다.
+            </p>
+          </div>
+        </div>
+
         {/* ── 7. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
@@ -245,6 +323,22 @@ export default function TirePressurePage() {
               {
                 q: '질소 충전이 정말 효과가 있나요?',
                 a: '이론적으로 질소는 분자가 커서 누설이 약간 적고 온도 변화에 둔감합니다. 다만 <strong>일반 공기도 78%가 질소</strong>이므로 차이는 크지 않으며, 일반 운전자에게는 비용 대비 효과가 미미합니다. 항공기·F1 등 극한 환경에서 의미가 있습니다.',
+              },
+              {
+                q: '205/55R16은 무슨 뜻인가요?',
+                a: '<strong>205</strong> = 단면폭 205mm, <strong>55</strong> = 편평비 55%(사이드월 높이 ÷ 폭), <strong>R</strong> = 래디얼 구조, <strong>16</strong> = 휠 지름 16인치. 외경은 16×25.4 + 2×(205×0.55) = 약 <strong>631.9mm</strong>입니다. 위 <strong>규격 해석</strong> 탭에 입력하면 외경·사이드월·인치업 조합이 자동 계산됩니다.',
+              },
+              {
+                q: '인치업하면 외경은 어떻게 맞추나요?',
+                a: '휠 지름을 키우면(예 16″→17″) 편평비를 낮추고 폭을 약간 넓혀 <strong>외경을 비슷하게 유지</strong>합니다. 예: 205/55R16 → 215/50R17. 외경 차이가 커지면 속도계 오차·간섭·승차감 변화가 생기므로 <strong>±3% 이내</strong>를 권장하며, 휠 폭·옵셋(ET)·하중지수도 함께 확인해야 합니다.',
+              },
+              {
+                q: 'DOT 제조일자(예: 2419)는 어떻게 읽나요?',
+                a: '타이어 옆면 DOT 코드 <strong>마지막 4자리</strong>가 제조 시기입니다. 앞 2자리 = 주차, 뒤 2자리 = 연도. <strong>2419 → 2019년 24주차</strong> 제조. 제조 6년이 지나면 마모와 무관하게 고무 경화로 교체를 검토하고, 10년이면 교체하세요.',
+              },
+              {
+                q: '트레드 깊이는 동전으로 어떻게 확인하나요?',
+                a: '한국 <strong>100원 동전</strong>을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하로 교체 시기입니다. 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체해야 합니다(법정 한계 1.6mm).',
               },
             ].map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

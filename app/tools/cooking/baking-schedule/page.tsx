@@ -241,7 +241,6 @@ export default function BakingSchedulePage() {
               { href: '/tools/cooking/baker-percent',    icon: '🥖', name: '베이커 퍼센트 계산기',    desc: '제빵 배합비·수분율·르방 자동' },
               { href: '/tools/cooking/sourdough',        icon: '🍞', name: '사워도우 스타터 계산기',  desc: '르방 안정화·피크 시간 예측' },
               { href: '/tools/cooking/recipe',           icon: '📐', name: '레시피 비율 계산기',       desc: '인분 수에 맞춰 재료 환산' },
-              { href: '/tools/cooking/unit',             icon: '🥄', name: '요리 단위 변환기',         desc: '컵·큰술·g 정확 환산' },
               { href: '/tools/cooking/thawing',          icon: '🧊', name: '해동 시간 계산기',    desc: '식품 두께·무게 기반 해동' },
               { href: '/tools/cooking/serving',          icon: '🍽️', name: '1인분 분량 계산기',         desc: '재료별 인분 분량' },
             ].map((tool, i) => (

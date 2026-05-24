@@ -9,7 +9,6 @@ import {
   BROTH_STRENGTH,
   NOODLE_TEXTURE,
   TOPPINGS,
-  RAMEN_NUTRITION_DEFAULT,
   WHO_DAILY_SODIUM,
   calcRamen,
   formatTime,
@@ -505,27 +504,27 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>📊 라면 1봉 평균 영양 (참고)</div>
+            <div className={styles.cardLabel}>📊 {result.ramenInfo.name} 영양 (제조사 표기 · {result.ramenInfo.servingG}g 기준)</div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.nutritionTable}>
                 <thead>
                   <tr>
                     <th>항목</th>
                     <th>1봉</th>
-                    <th>오늘 합계</th>
+                    <th>합계 ({count}개+토핑)</th>
                     <th>WHO/권장 대비</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>🔥 칼로리</td>
-                    <td>{RAMEN_NUTRITION_DEFAULT.kcal} kcal</td>
+                    <td>{result.ramenInfo.kcal} kcal</td>
                     <td style={result.totalKcal > 1500 ? { color: '#DC2626' } : {}}>{result.totalKcal.toLocaleString()} kcal</td>
                     <td>{Math.round(result.totalKcal / 2000 * 100)}% (성인)</td>
                   </tr>
                   <tr>
                     <td>🧂 나트륨</td>
-                    <td>{RAMEN_NUTRITION_DEFAULT.sodium.toLocaleString()} mg</td>
+                    <td>{result.ramenInfo.sodium.toLocaleString()} mg</td>
                     <td className={styles.warnCell}>{result.totalSodium.toLocaleString()} mg</td>
                     <td style={result.totalSodium > WHO_DAILY_SODIUM ? { color: '#DC2626' } : { color: '#EA580C' }}>
                       {Math.round(result.totalSodium / WHO_DAILY_SODIUM * 100)}% ⚠️
@@ -533,24 +532,27 @@ export default function RamenClient() {
                   </tr>
                   <tr>
                     <td>💪 단백질</td>
-                    <td>{RAMEN_NUTRITION_DEFAULT.protein} g</td>
+                    <td>{result.ramenInfo.protein} g</td>
                     <td>{result.totalProtein} g</td>
                     <td>{Math.round(result.totalProtein / 50 * 100)}%</td>
                   </tr>
                   <tr>
                     <td>🍳 지방</td>
-                    <td>{RAMEN_NUTRITION_DEFAULT.fat} g</td>
-                    <td>{(RAMEN_NUTRITION_DEFAULT.fat * count)} g</td>
-                    <td>{Math.round(RAMEN_NUTRITION_DEFAULT.fat * count / 65 * 100)}%</td>
+                    <td>{result.ramenInfo.fat} g</td>
+                    <td>{result.totalFat} g</td>
+                    <td>{Math.round(result.totalFat / 65 * 100)}%</td>
                   </tr>
                   <tr>
                     <td>🍞 탄수화물</td>
-                    <td>{RAMEN_NUTRITION_DEFAULT.carb} g</td>
-                    <td>{(RAMEN_NUTRITION_DEFAULT.carb * count)} g</td>
-                    <td>{Math.round(RAMEN_NUTRITION_DEFAULT.carb * count / 300 * 100)}%</td>
+                    <td>{result.ramenInfo.carb} g</td>
+                    <td>{result.totalCarb} g</td>
+                    <td>{Math.round(result.totalCarb / 300 * 100)}%</td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+            <div className={styles.cardLabelHint} style={{ marginTop: 6 }}>
+              ※ 나트륨 합계는 제품 표기 기준(토핑 제외)이며, 국물을 남기면 실제 섭취량은 줄어듭니다.
             </div>
           </div>
 

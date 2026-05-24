@@ -1,71 +1,108 @@
 /* ──────────────────────────────────────────────────────
    cooking/ramen/ramenUtils.ts
-   라면 물양 — 한국 15종 라면별·국물 농도·토핑·시간
-   ※ 본 도구의 권장 물양은 일반 가이드입니다. 정확한 양은
-   라면 브랜드·생산 시기·냄비·화력·고도·습도·취향에 따라 달라집니다.
+   라면 물양 — 한국 인기 18종 라면별·국물 농도·토핑·시간
+   ※ 권장 물양·시간은 제조사 봉지 표기를 기준으로 한 일반 가이드입니다.
+     정확한 값은 브랜드·생산 시기(리뉴얼)·냄비·화력·고도·습도·취향에 따라 달라집니다.
+   ※ 영양정보(kcal·나트륨·단백질·지방·탄수)는 제조사 표기(봉지/용기 1개) 기준이며
+     제품 리뉴얼 시 변동될 수 있습니다. 정확한 값은 제품 포장 또는
+     식품안전나라(식약처)에서 확인하세요.
    ────────────────────────────────────────────────────── */
 
-/* ─── 라면 데이터 (한국 인기 15종) ─── */
+/* ─── 라면 데이터 (한국 인기 18종) ─── */
 export interface RamenType {
   id: string
   name: string
   brand: string
-  baseWater: number       // 1개 기준 ml
+  baseWater: number       // 1개 기준 ml (제조사 봉지 표기)
   type: 'broth' | 'jjajang' | 'stir' | 'cold' | 'cup'
   category: string        // 매운국물·구수한국물·짜장 등
-  cookTime: number        // 초 (분 × 60)
+  cookTime: number        // 초 (분 × 60, 제조사 표기)
   waterDrainMl?: number   // 짜장·볶음·비빔 시 따라낸 후 남기는 물 (ml)
   emoji: string
   desc?: string
+  // 영양 (봉지/용기 1개, 제조사 표기 기준)
+  servingG: number        // 중량 g
+  kcal: number
+  sodium: number          // mg
+  protein: number         // g
+  fat: number             // g
+  carb: number            // g
 }
 
 export const RAMEN_TYPES: RamenType[] = [
   // 매운 국물
   { id: 'shin',          name: '신라면',          brand: '농심',   baseWater: 550,
     type: 'broth',  category: '매운국물', cookTime: 4*60+30, emoji: '🌶️',
-    desc: '한국 대표 매운 국물라면' },
+    desc: '한국 대표 매운 국물라면',
+    servingG: 120, kcal: 500, sodium: 1790, protein: 10, fat: 16, carb: 79 },
   { id: 'jin',           name: '진라면 (매운맛)', brand: '오뚜기', baseWater: 550,
-    type: 'broth',  category: '매운국물', cookTime: 4*60+30, emoji: '🌶️' },
-  { id: 'jjamppong',     name: '짬뽕라면',        brand: '농심',   baseWater: 550,
-    type: 'broth',  category: '해물매운', cookTime: 5*60,    emoji: '🦐' },
+    type: 'broth',  category: '매운국물', cookTime: 4*60+30, emoji: '🌶️',
+    servingG: 120, kcal: 500, sodium: 1860, protein: 10, fat: 14, carb: 80 },
+  { id: 'yeol',          name: '열라면',          brand: '농심',   baseWater: 550,
+    type: 'broth',  category: '매운국물', cookTime: 4*60+30, emoji: '🥵',
+    desc: '신라면보다 매운 매운맛 강조 라면',
+    servingG: 120, kcal: 510, sodium: 1790, protein: 10, fat: 16, carb: 80 },
+  { id: 'jjamppong',     name: '오징어짬뽕',      brand: '농심',   baseWater: 550,
+    type: 'broth',  category: '해물매운', cookTime: 5*60,    emoji: '🦑',
+    servingG: 124, kcal: 500, sodium: 1860, protein: 11, fat: 16, carb: 78 },
+  { id: 'jinjjambbong',  name: '진짬뽕',          brand: '오뚜기', baseWater: 600,
+    type: 'broth',  category: '해물매운', cookTime: 4*60+30, emoji: '🦐',
+    desc: '굵은 면·불맛 해물짬뽕',
+    servingG: 130, kcal: 555, sodium: 1730, protein: 12, fat: 19, carb: 84 },
   { id: 'shin-black',    name: '신라면 블랙',     brand: '농심',   baseWater: 550,
-    type: 'broth',  category: '진한국물', cookTime: 4*60+30, emoji: '⚫' },
+    type: 'broth',  category: '진한국물', cookTime: 4*60+30, emoji: '⚫',
+    servingG: 134, kcal: 540, sodium: 1750, protein: 13, fat: 16, carb: 80 },
   { id: 'neoguri',       name: '너구리',          brand: '농심',   baseWater: 550,
-    type: 'broth',  category: '해물국물', cookTime: 5*60,    emoji: '🦑' },
+    type: 'broth',  category: '해물국물', cookTime: 5*60,    emoji: '🦑',
+    servingG: 120, kcal: 505, sodium: 1690, protein: 9, fat: 16, carb: 80 },
 
   // 구수한 국물
   { id: 'ansung',        name: '안성탕면',        brand: '농심',   baseWater: 550,
-    type: 'broth',  category: '구수한국물', cookTime: 4*60+30, emoji: '🍲' },
+    type: 'broth',  category: '구수한국물', cookTime: 4*60+30, emoji: '🍲',
+    servingG: 125, kcal: 525, sodium: 1850, protein: 11, fat: 16, carb: 82 },
+  { id: 'mupama',        name: '무파마탕면',      brand: '농심',   baseWater: 550,
+    type: 'broth',  category: '얼큰국물', cookTime: 4*60+30, emoji: '🧅',
+    desc: '무·파·마늘 베이스 얼큰한 국물',
+    servingG: 122, kcal: 505, sodium: 1720, protein: 10, fat: 15, carb: 83 },
   { id: 'samyang',       name: '삼양라면',        brand: '삼양',   baseWater: 550,
-    type: 'broth',  category: '구수한국물', cookTime: 4*60+30, emoji: '🍜' },
+    type: 'broth',  category: '구수한국물', cookTime: 4*60+30, emoji: '🍜',
+    servingG: 120, kcal: 505, sodium: 1640, protein: 10, fat: 15, carb: 80 },
   { id: 'sari',          name: '사리곰탕',        brand: '농심',   baseWater: 550,
-    type: 'broth',  category: '맑은국물', cookTime: 4*60+30, emoji: '🥣' },
+    type: 'broth',  category: '맑은국물', cookTime: 4*60+30, emoji: '🥣',
+    servingG: 110, kcal: 500, sodium: 1430, protein: 9, fat: 16, carb: 78 },
 
   // 짜장·볶음 (물 빼기)
   { id: 'jjapaghetti',   name: '짜파게티',        brand: '농심',   baseWater: 600,
     type: 'jjajang', category: '짜장', cookTime: 5*60, waterDrainMl: 120, emoji: '⚫',
-    desc: '끓인 후 물 8큰술(약 120ml) 남기고 따라낸 뒤 분말스프 + 올리브유' },
+    desc: '끓인 후 물 8큰술(약 120ml) 남기고 따라낸 뒤 분말스프 + 올리브유',
+    servingG: 140, kcal: 600, sodium: 1110, protein: 9, fat: 20, carb: 90 },
   { id: 'chapagetti-black', name: '짜파게티 블랙', brand: '농심', baseWater: 600,
-    type: 'jjajang', category: '짜장', cookTime: 5*60, waterDrainMl: 120, emoji: '⚫' },
+    type: 'jjajang', category: '짜장', cookTime: 5*60, waterDrainMl: 120, emoji: '⚫',
+    servingG: 143, kcal: 620, sodium: 1200, protein: 11, fat: 22, carb: 90 },
 
   // 볶음
   { id: 'buldak',        name: '불닭볶음면',      brand: '삼양',   baseWater: 600,
     type: 'stir',   category: '볶음매운', cookTime: 5*60, waterDrainMl: 120, emoji: '🔥',
-    desc: '물 8큰술(120ml) 남기고 따라낸 뒤 액상소스 + 후레이크 + 김' },
+    desc: '물 8큰술(120ml) 남기고 따라낸 뒤 액상소스 + 후레이크 + 김',
+    servingG: 140, kcal: 530, sodium: 1280, protein: 12, fat: 16, carb: 85 },
 
   // 비빔 (찬물 헹굼)
   { id: 'bibim',         name: '팔도 비빔면',     brand: '팔도',   baseWater: 600,
     type: 'cold',   category: '비빔', cookTime: 3*60, waterDrainMl: 0, emoji: '❄️',
-    desc: '면만 익힌 뒤 찬물에 헹궈 비빔장' },
+    desc: '면만 익힌 뒤 찬물에 헹궈 비빔장',
+    servingG: 130, kcal: 530, sodium: 1430, protein: 9, fat: 13, carb: 92 },
 
   // 컵라면
   { id: 'cup-large',     name: '큰컵 (왕뚜껑·신컵)', brand: '범용', baseWater: 460,
     type: 'cup',    category: '컵라면', cookTime: 4*60, emoji: '🥤',
-    desc: '뚜껑 안쪽 선까지 끓는 물' },
+    desc: '뚜껑 안쪽 선까지 끓는 물',
+    servingG: 110, kcal: 475, sodium: 1500, protein: 9, fat: 15, carb: 75 },
   { id: 'cup-small',     name: '작은컵 (육개장·새우탕)', brand: '범용', baseWater: 320,
-    type: 'cup',    category: '컵라면', cookTime: 3*60, emoji: '🍢' },
+    type: 'cup',    category: '컵라면', cookTime: 3*60, emoji: '🍢',
+    servingG: 65, kcal: 300, sodium: 1000, protein: 5, fat: 12, carb: 45 },
   { id: 'cup-noodle',    name: '컵누들 (저칼로리)', brand: '농심', baseWater: 350,
-    type: 'cup',    category: '컵라면', cookTime: 3*60, emoji: '🥢' },
+    type: 'cup',    category: '컵라면', cookTime: 3*60, emoji: '🥢',
+    servingG: 38, kcal: 165, sodium: 900, protein: 4, fat: 1, carb: 36 },
 ]
 
 /* ─── 다개수 보정 (단순 ×N X) ─── */
@@ -121,7 +158,15 @@ export const NOODLE_TEXTURE: NoodleTexture[] = [
   { id: 'very-soft', name: '매우 푹',   timeDelta: +90, desc: '죽처럼' },
 ]
 
-/* ─── 토핑 ─── */
+/* ─── 토핑 ───
+   waterDelta(ml) 기준: 끓이는 동안 재료가 흡수·증발시키는 물을 보충/차감.
+     · 전분류(떡·면사리·만두)는 끓이며 물을 흡수 → 보충(+)
+     · 두부·순두부는 자체 수분을 방출 → 차감(−)
+     · 계란·치즈·김치·대파 등은 물 흡수가 거의 없음 → 0
+   timeOffsetSec 기준: '면 투입 시점(0초)'을 기준으로 한 상대 투입 시각.
+     · 음수(−) = 면보다 먼저 넣어 더 끓임(냉동 만두·떡·콩나물 등 익는 데 오래)
+     · 양수(+) = 면보다 늦게 넣음(계란·치즈·대파 등 — 풀어지거나 익히면 안 되는 것)
+   kcal·protein은 식품 일반 평균(USDA·식약처 참고)이며 제품·분량에 따라 차이가 큼. */
 export interface Topping {
   id: string
   name: string
@@ -180,12 +225,13 @@ export function getPotRec(count: number): PotSize {
 }
 
 /* ─── 영양 (라면 1봉 평균) ─── */
+/** 라면 1봉 평균(참고용 폴백) — 실제 계산은 제품별 영양값(RamenType)을 사용합니다. */
 export const RAMEN_NUTRITION_DEFAULT = {
-  kcal: 500,
-  sodium: 1800,   // mg
-  protein: 11,
-  fat: 17,
-  carb: 78,
+  kcal: 505,
+  sodium: 1700,   // mg
+  protein: 10,
+  fat: 16,
+  carb: 81,
 }
 
 export const WHO_DAILY_SODIUM = 2000   // mg
@@ -213,6 +259,14 @@ export interface RamenResult {
   totalKcal: number
   totalSodium: number
   totalProtein: number
+  totalFat: number
+  totalCarb: number
+  /** 선택한 라면 N개 합계(토핑 제외) — '라면만' 영양 표시용 */
+  baseKcal: number
+  baseSodium: number
+  baseProtein: number
+  baseFat: number
+  baseCarb: number
   toppingTimeline: { topping: string; emoji: string; addAt: string; offsetSec: number; note?: string }[]
   warnings: string[]
   isStirOrCold: boolean
@@ -249,12 +303,17 @@ export function calcRamen(input: RamenInput): RamenResult | null {
   // 5. 냄비
   const pot = getPotRec(input.count)
 
-  // 6. 영양
-  const totalKcal = RAMEN_NUTRITION_DEFAULT.kcal * input.count
-    + toppingDetails.reduce((s, t) => s + t.kcal, 0)
-  const totalSodium = RAMEN_NUTRITION_DEFAULT.sodium * input.count
-  const totalProtein = RAMEN_NUTRITION_DEFAULT.protein * input.count
-    + toppingDetails.reduce((s, t) => s + (t.protein ?? 0), 0)
+  // 6. 영양 — 제품별 표기값(RamenType) × 개수 + 토핑
+  const baseKcal = ramen.kcal * input.count
+  const baseSodium = ramen.sodium * input.count
+  const baseProtein = ramen.protein * input.count
+  const baseFat = ramen.fat * input.count
+  const baseCarb = ramen.carb * input.count
+  const totalKcal = baseKcal + toppingDetails.reduce((s, t) => s + t.kcal, 0)
+  const totalSodium = baseSodium  // 토핑 나트륨은 변동이 커 제품 기준만 반영
+  const totalProtein = baseProtein + toppingDetails.reduce((s, t) => s + (t.protein ?? 0), 0)
+  const totalFat = baseFat
+  const totalCarb = baseCarb
 
   // 7. 토핑 타임라인
   const toppingTimeline = toppingDetails
@@ -292,7 +351,8 @@ export function calcRamen(input: RamenInput): RamenResult | null {
     potDiameter: pot.diameter, potLiters: pot.liters, potDesc: pot.desc,
     ramenInfo: ramen,
     multiplier: adjust.multiplier,
-    totalKcal, totalSodium, totalProtein,
+    totalKcal, totalSodium, totalProtein, totalFat, totalCarb,
+    baseKcal, baseSodium, baseProtein, baseFat, baseCarb,
     toppingTimeline,
     warnings,
     isStirOrCold: ramen.type !== 'broth' && ramen.type !== 'cup',

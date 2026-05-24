@@ -70,27 +70,36 @@ function formatSigned(n: number, digits: number = 1): string {
 // ──────────────────────────────────────
 // Component
 // ──────────────────────────────────────
+type MainTab = 'convert' | 'check' | 'size' | 'wear'
+
 export default function TirePressureClient() {
-  const [tab, setTab] = useState<'convert' | 'check'>('convert')
+  const [tab, setTab] = useState<MainTab>('convert')
+
+  const TABS: { id: MainTab; label: string }[] = [
+    { id: 'convert', label: '🛞 단위 변환' },
+    { id: 'check',   label: '✅ 공기압 체크' },
+    { id: 'size',    label: '📐 규격 해석' },
+    { id: 'wear',    label: '🔧 교체·마모' },
+  ]
 
   return (
     <div className={styles.wrap}>
       <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${tab === 'convert' ? styles.tabActive : ''}`}
-          onClick={() => setTab('convert')}
-        >
-          🛞 단위 변환
-        </button>
-        <button
-          className={`${styles.tab} ${tab === 'check' ? styles.tabActive : ''}`}
-          onClick={() => setTab('check')}
-        >
-          ✅ 권장 공기압 체크
-        </button>
+        {TABS.map(t => (
+          <button
+            key={t.id}
+            className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
+            onClick={() => setTab(t.id)}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
-      {tab === 'convert' ? <ConvertTab /> : <CheckTab />}
+      {tab === 'convert' && <ConvertTab />}
+      {tab === 'check' && <CheckTab />}
+      {tab === 'size' && <SizeTab />}
+      {tab === 'wear' && <WearTab />}
     </div>
   )
 }
@@ -379,16 +388,289 @@ function CheckTab() {
         </p>
       </div>
 
-      {/* 계절별 보정 */}
-      <div className={styles.seasonBox}>
-        <p className={styles.seasonTitle}>🌡️ 계절별 공기압 변화 가이드</p>
+      {/* 탑승인원·적재 보정 */}
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>탑승인원·적재별 공기압 보정</span>
         <ul className={styles.seasonList}>
-          <li>• <strong>기온 10°C 변화 시 공기압 약 1 psi(≈ 7 kPa) 변화</strong></li>
-          <li>• <strong>여름 → 겨울</strong> (예: 30°C → 0°C): 약 3 psi 자연 감소 → 보충 필요</li>
-          <li>• <strong>겨울 → 여름</strong> (예: 0°C → 30°C): 약 3 psi 자연 증가</li>
-          <li>• 측정은 <strong>주행 전 차가운 상태</strong>에서 (주행 후 측정 시 +3~5 psi 더 높게 나옴)</li>
+          <li>• <strong>1~3명 일상 주행</strong>: 도어 스티커의 표준(기본) 공기압 그대로</li>
+          <li>• <strong>5인 만차·트렁크 가득·고속 장거리</strong>: 후륜 위주 <strong>+2~4 psi</strong> (스티커의 &lsquo;만차/고하중(full load)&rsquo; 칸 참조)</li>
+          <li>• <strong>짐 많은 SUV·승합·캠핑</strong>: 제조사 만차 기준까지 상향, 후륜을 전륜보다 높게</li>
+          <li>• 도어 스티커에 <strong>전륜/후륜·표준/만차</strong>가 따로 적혀 있으면 그 값을 우선</li>
+        </ul>
+      </div>
+
+      {/* 냉간/온간 + 계절 보정 */}
+      <div className={styles.seasonBox}>
+        <p className={styles.seasonTitle}>🌡️ 냉간·온간 & 계절별 보정 가이드</p>
+        <ul className={styles.seasonList}>
+          <li>• 측정은 <strong>주행 전 “냉간(cold)” 상태</strong>에서 — 주행 후에는 마찰열로 <strong>+3~4 psi</strong> 더 높게 측정됩니다(2~3시간 주차 후 권장).</li>
+          <li>• <strong>기온 10°C 변화 시 공기압 약 1~2 psi(≈ 7~14 kPa) 변동</strong></li>
+          <li>• <strong>겨울 (기온 ↓ → 공기압 ↓)</strong>: 여름→겨울(예 30°C→0°C) 약 3 psi 자연 감소 → 보충 필요</li>
+          <li>• <strong>여름 (기온 ↑ → 공기압 ↑)</strong>: 겨울→여름(예 0°C→30°C) 약 3 psi 자연 증가</li>
           <li>• 한 달에 1~2번 정기 점검 권장 (자연 누설로 월 1~2 psi 감소)</li>
         </ul>
+      </div>
+
+      {/* TPMS 경고등 기준 */}
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>🚨 TPMS 경고등 점등 기준</span>
+        <ul className={styles.seasonList}>
+          <li>• TPMS(타이어 공기압 경고장치)는 보통 <strong>권장값의 약 25% 이하(≈ −25%)</strong>로 떨어지면 점등됩니다.</li>
+          <li>• 예: 권장 33 psi → 약 <strong>25 psi</strong> 부근에서 경고등 ON</li>
+          <li>• 경고등이 켜지면 안전한 곳에 정차 후 즉시 공기압 점검·보충</li>
+          <li>• 보충해도 다시 켜지면 <strong>펑크·휠 림 손상·센서 고장</strong> 의심 → 정비소 점검</li>
+          <li>• 겨울철 기온 급강하 시 일시 점등될 수 있음(적정값 보충하면 해제)</li>
+        </ul>
+      </div>
+    </>
+  )
+}
+
+// ──────────────────────────────────────
+// 탭 3 — 규격 해석 / 인치업
+// ──────────────────────────────────────
+interface TireSize { width: number; aspect: number; wheel: number }
+
+function parseTireSize(input: string): TireSize | null {
+  const m = input.replace(/\s/g, '').toUpperCase().match(/^(\d{3})\/(\d{2})Z?R?(\d{2}(?:\.\d)?)$/)
+  if (!m) return null
+  const width = parseInt(m[1], 10)
+  const aspect = parseInt(m[2], 10)
+  const wheel = parseFloat(m[3])
+  if (width < 100 || width > 405 || aspect < 20 || aspect > 90 || wheel < 8 || wheel > 26) return null
+  return { width, aspect, wheel }
+}
+function sidewallMm(s: TireSize): number { return (s.width * s.aspect) / 100 }
+function outerDiaMm(s: TireSize): number { return s.wheel * 25.4 + 2 * sidewallMm(s) }
+function sizeLabel(s: TireSize): string { return `${s.width}/${s.aspect}R${s.wheel}` }
+
+function inchUpOptions(base: TireSize): { size: TireSize; outer: number; diff: number }[] {
+  const baseOuter = outerDiaMm(base)
+  const seen = new Set<string>()
+  const out: { size: TireSize; outer: number; diff: number }[] = []
+  for (const dw of [1, 2]) {
+    const wheel = base.wheel + dw
+    for (const widthDelta of [0, 10, 20, 30]) {
+      const width = base.width + widthDelta
+      if (width > 355) continue
+      const ideal = ((baseOuter - wheel * 25.4) / (2 * width)) * 100
+      const aspect = Math.round(ideal / 5) * 5
+      if (aspect < 25 || aspect > 70) continue
+      const size: TireSize = { width, aspect, wheel }
+      const key = sizeLabel(size)
+      if (seen.has(key)) continue
+      seen.add(key)
+      const outer = outerDiaMm(size)
+      const diff = ((outer - baseOuter) / baseOuter) * 100
+      if (Math.abs(diff) <= 3) out.push({ size, outer, diff })
+    }
+  }
+  return out.sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff)).slice(0, 6)
+}
+
+function SizeTab() {
+  const [input, setInput] = useState('205/55R16')
+  const [compare, setCompare] = useState('')
+  const base = useMemo(() => parseTireSize(input), [input])
+  const cmp = useMemo(() => parseTireSize(compare), [compare])
+
+  const baseOuter = base ? outerDiaMm(base) : 0
+  const cmpOuter = cmp ? outerDiaMm(cmp) : 0
+  const diffPct = base && cmp ? ((cmpOuter - baseOuter) / baseOuter) * 100 : 0
+  const realAt100 = base && cmp ? 100 * (cmpOuter / baseOuter) : 0
+  const options = base ? inchUpOptions(base) : []
+
+  return (
+    <>
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>타이어 규격 입력 (예: 205/55R16)</span>
+        <input
+          className={`${styles.input} ${base ? styles.inputFilled : ''}`}
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="205/55R16"
+        />
+        <div className={styles.presetRow}>
+          {['205/55R16', '225/45R17', '235/55R18', '195/65R15', '245/40R19'].map(p => (
+            <button key={p} className={styles.presetBtn} onClick={() => setInput(p)}>{p}</button>
+          ))}
+        </div>
+      </div>
+
+      {base ? (
+        <>
+          <div className={styles.resultCard}>
+            <div className={styles.resultHeader}>
+              <div className={styles.resultHeaderLabel}>{sizeLabel(base)} 해석</div>
+              <div className={styles.resultHeaderValue}>외경 {outerDiaMm(base).toFixed(0)} mm</div>
+            </div>
+            {[
+              { l: '단면폭 (트레드 폭)', v: `${base.width} mm` },
+              { l: '편평비 (높이÷폭)', v: `${base.aspect} %` },
+              { l: '사이드월 높이', v: `${sidewallMm(base).toFixed(1)} mm` },
+              { l: '휠(림) 지름', v: `${base.wheel}″ (${(base.wheel * 25.4).toFixed(0)} mm)` },
+              { l: '타이어 외경', v: `${outerDiaMm(base).toFixed(1)} mm (${(outerDiaMm(base) / 10).toFixed(1)} cm)` },
+              { l: '1회전 거리(둘레)', v: `${((Math.PI * outerDiaMm(base)) / 1000).toFixed(3)} m` },
+            ].map((r, i) => (
+              <div key={i} className={styles.resultRow}>
+                <div><div className={styles.resultLabel}>{r.l}</div></div>
+                <div className={styles.resultValue}>{r.v}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.card}>
+            <span className={styles.cardLabel}>교체 사이즈 비교 (외경 차이 → 속도계 오차)</span>
+            <input
+              className={`${styles.input} ${cmp ? styles.inputFilled : ''}`}
+              value={compare}
+              onChange={e => setCompare(e.target.value)}
+              placeholder="비교할 사이즈 (예: 215/50R17)"
+            />
+            {cmp && (
+              <div className={`${styles.statusCard} ${Math.abs(diffPct) <= 3 ? styles.statusOk : styles.statusWarn}`} style={{ marginTop: 12 }}>
+                <div className={styles.statusTitle}>
+                  외경 차이 {formatSigned(diffPct, 1)}% {Math.abs(diffPct) <= 3 ? '✅ 호환 권장 범위' : '⚠️ 3% 초과 — 비권장'}
+                </div>
+                <div className={styles.statusDesc}>
+                  계기판 <strong>100 km/h</strong>일 때 실제 약 <strong>{realAt100.toFixed(1)} km/h</strong>
+                  {diffPct > 0.05 ? ' (실제가 더 빠름)' : diffPct < -0.05 ? ' (실제가 더 느림)' : ''}.
+                  외경 차이는 ±3% 이내를 권장합니다.
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.card}>
+            <span className={styles.cardLabel}>인치업 조합 (외경 ±3% 유지)</span>
+            {options.length > 0 ? (
+              <div style={{ overflowX: 'auto' }}>
+                <table className={styles.refTable}>
+                  <thead><tr><th>사이즈</th><th>휠</th><th>외경</th><th>차이</th></tr></thead>
+                  <tbody>
+                    {options.map((o, i) => (
+                      <tr key={i}>
+                        <td className={styles.refValue}>{sizeLabel(o.size)}</td>
+                        <td>{o.size.wheel}″</td>
+                        <td>{o.outer.toFixed(0)}mm</td>
+                        <td className={styles.refLabel}>{formatSigned(o.diff, 1)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : <p style={{ fontSize: 12, color: 'var(--muted)' }}>유효한 인치업 조합을 찾지 못했습니다.</p>}
+            <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10, opacity: 0.85 }}>
+              ⚠️ 인치업은 휠 지름을 키우고 편평비를 낮춰 외경을 유지하는 조합입니다. 실제 장착은 휠 폭·옵셋(ET)·펜더 간섭·하중지수(LI)·속도기호를 함께 확인하고 전문점 상담을 권장합니다.
+            </p>
+          </div>
+        </>
+      ) : (
+        <div className={styles.card}>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>형식에 맞게 입력하세요 — 예: <strong>205/55R16</strong> (단면폭/편평비R휠인치)</p>
+        </div>
+      )}
+    </>
+  )
+}
+
+// ──────────────────────────────────────
+// 탭 4 — 교체·마모 (트레드 / 주행·연식 / DOT)
+// ──────────────────────────────────────
+function treadJudge(mm: number): { status: Status; title: string; desc: string } {
+  if (mm >= 7) return { status: 'ok', title: '✅ 신품 수준', desc: '트레드가 충분합니다. 정기 점검만 유지하세요.' }
+  if (mm >= 4) return { status: 'ok', title: '🟢 양호', desc: '아직 여유가 있습니다. 4mm 이하부터 빗길 제동력이 떨어지기 시작합니다.' }
+  if (mm > 1.6) return { status: 'warnLow', title: '🔶 교체 준비', desc: '3mm 부근부터 교체를 준비하세요. 빗길 수막현상 위험이 커집니다.' }
+  return { status: 'alertLow', title: '🚨 마모 한계 — 즉시 교체', desc: '법정 마모한계 1.6mm 이하입니다. 즉시 교체하세요(미달 시 정비불량).' }
+}
+
+function WearTab() {
+  const [tread, setTread] = useState('5')
+  const [km, setKm] = useState('40000')
+  const [years, setYears] = useState('4')
+  const [dot, setDot] = useState('2419')
+
+  const treadMm = parseFloat(tread) || 0
+  const tj = treadJudge(treadMm)
+  const kmN = parseFloat(km) || 0
+  const yrN = parseFloat(years) || 0
+  const nowYear = new Date().getFullYear()
+
+  const dotDigits = dot.replace(/\D/g, '').slice(-4)
+  let dotInfo: { week: number; year: number; age: number } | null = null
+  if (dotDigits.length === 4) {
+    const week = parseInt(dotDigits.slice(0, 2), 10)
+    const year = 2000 + parseInt(dotDigits.slice(2), 10)
+    if (week >= 1 && week <= 53) dotInfo = { week, year, age: Math.max(0, nowYear - year) }
+  }
+
+  const kmStatus = kmN >= 50000 ? '교체 권장 (5만 km 초과)' : kmN >= 30000 ? '점검 강화' : '양호'
+  const ageStatus = yrN >= 6 ? '교체 권장 (6년 경과)' : yrN >= 4 ? '점검 강화' : '양호'
+
+  return (
+    <>
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>트레드(홈) 깊이</span>
+        <div className={styles.dualInputBox}>
+          <input type="number" className={styles.dualField} value={tread} onChange={e => setTread(e.target.value)} step="0.5" placeholder="5" />
+          <span className={styles.dualUnit}>mm</span>
+        </div>
+      </div>
+      <div className={`${styles.statusCard} ${statusClass(tj.status)}`}>
+        <div className={styles.statusTitle}>{tj.title}</div>
+        <div className={styles.statusDesc}>{tj.desc}</div>
+      </div>
+      <div className={styles.seasonBox}>
+        <p className={styles.seasonTitle}>🪙 트레드 깊이 간단 측정 (한국 100원 동전)</p>
+        <ul className={styles.seasonList}>
+          <li>• 100원 동전을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하 — 교체 시기입니다.</li>
+          <li>• 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체.</li>
+          <li>• 법정 마모한계 <strong>1.6mm</strong>(승용). 빗길 안전은 <strong>3mm</strong>부터 챙기는 것이 좋습니다.</li>
+        </ul>
+      </div>
+
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>주행거리 · 사용 연수</span>
+        <div className={styles.dualInput}>
+          <div className={styles.dualCell}>
+            <div className={styles.dualLabel}>장착 후 주행거리</div>
+            <div className={styles.dualInputBox}>
+              <input type="number" className={styles.dualField} value={km} onChange={e => setKm(e.target.value)} step="1000" />
+              <span className={styles.dualUnit}>km</span>
+            </div>
+          </div>
+          <div className={styles.dualCell}>
+            <div className={styles.dualLabel}>사용 연수</div>
+            <div className={styles.dualInputBox}>
+              <input type="number" className={styles.dualField} value={years} onChange={e => setYears(e.target.value)} step="1" />
+              <span className={styles.dualUnit}>년</span>
+            </div>
+          </div>
+        </div>
+        <ul className={styles.seasonList} style={{ marginTop: 12 }}>
+          <li>• 주행거리 기준: <strong>{kmStatus}</strong> — 일반 승용 타이어 수명 약 <strong>4~5만 km</strong>.</li>
+          <li>• 사용 연수 기준: <strong>{ageStatus}</strong> — 마모와 무관하게 고무 경화로 <strong>4~6년</strong>이면 점검·교체 검토.</li>
+        </ul>
+      </div>
+
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>제조주차(DOT) 해석 — 끝 4자리</span>
+        <div className={styles.dualInputBox}>
+          <input className={styles.dualField} value={dot} onChange={e => setDot(e.target.value)} placeholder="2419" maxLength={4} />
+          <span className={styles.dualUnit}>DOT</span>
+        </div>
+        {dotInfo ? (
+          <div className={`${styles.statusCard} ${dotInfo.age >= 10 ? styles.statusAlert : dotInfo.age >= 6 ? styles.statusWarn : styles.statusOk}`} style={{ marginTop: 12 }}>
+            <div className={styles.statusTitle}>{dotInfo.year}년 {dotInfo.week}주차 제조 · 약 {dotInfo.age}년 경과</div>
+            <div className={styles.statusDesc}>
+              {dotInfo.age >= 10 ? '🚨 제조 10년 이상 — 마모와 무관하게 즉시 교체 권장.'
+                : dotInfo.age >= 6 ? '🔶 제조 6년 이상 — 고무 경화 진행, 교체 검토.'
+                : '✅ 비교적 최근 제조. 마모·상태 위주로 점검.'}
+            </div>
+          </div>
+        ) : (
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>DOT 끝 4자리를 입력하세요. 예) <strong>2419</strong> → 2019년 24주차. (타이어 옆면 &lsquo;DOT … 2419&rsquo; 형식)</p>
+        )}
       </div>
     </>
   )

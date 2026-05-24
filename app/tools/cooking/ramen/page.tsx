@@ -2,18 +2,23 @@ import Link from 'next/link'
 import RamenClient from './RamenClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import { RAMEN_TYPES, formatTime } from './ramenUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/ramen',
-  title: '라면 물양 계산기 — 1~4개·국물 농도·토핑·시간 한 번에 | Youtil',
-  description: '라면 개수·국물 농도·토핑별 권장 물양과 조리 시간. 신라면·짜파게티·불닭·비빔면 등 한국 라면 전부.',
+  title: '라면 물양 계산기 — 18종 제품별 물양·조리시간·칼로리·나트륨 | Youtil',
+  description: '신라면·짜파게티·불닭·진짬뽕·열라면 등 한국 라면 18종 제품별 권장 물양·조리 시간·칼로리·나트륨(제조사 표기 기준). 개수·국물 농도·토핑까지 자동 보정.',
   keywords: [
     '라면 물양', '라면 물 ml', '라면 2개 물양', '라면 3개 물양', '라면 4개 물양',
-    '신라면 물양', '진라면 물양', '안성탕면 물양', '너구리 물양',
-    '짜파게티 물양', '불닭볶음면 물양', '비빔면 물양', '컵라면 물양',
+    '신라면 물양', '진라면 물양', '안성탕면 물양', '너구리 물양', '진짬뽕 물양',
+    '짜파게티 물양', '불닭볶음면 물양', '비빔면 물양', '컵라면 물양', '열라면 무파마탕면',
     '라면 끓이는 법', '라면 토핑', '라면 칼로리', '라면 나트륨',
+    '신라면 칼로리', '짜파게티 칼로리', '불닭볶음면 칼로리', '라면 칼로리 비교', '라면 나트륨 순위',
   ],
 })
+
+/* 영양 정렬용(나트륨 내림차순) — 데이터(RAMEN_TYPES)에서 자동 생성 */
+const RAMEN_BY_SODIUM = [...RAMEN_TYPES].sort((a, b) => b.sodium - a.sodium)
 
 export default function RamenPage() {
   return (
@@ -31,45 +36,46 @@ export default function RamenPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* 1. 1개 기준 권장 물양 */}
+        {/* 1. 제품별 물양·시간·영양 종합표 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            🍜 라면 1개 기준 권장 물양
+            🍜 라면 종류별 물양·조리시간·칼로리·나트륨 (제품 표기 기준)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국 인기 라면 종류별 1개 기준 권장 물양과 조리 시간입니다. 본 도구는 다개수·국물 농도·토핑까지 자동 보정합니다.
+            한국 인기 라면 <strong style={{ color: 'var(--text)' }}>{RAMEN_TYPES.length}종</strong>의 1개(1봉/1용기) 기준 권장 물양·조리 시간과
+            제조사 표기 영양정보입니다. 본 도구는 여기에 <strong style={{ color: 'var(--text)' }}>개수·국물 농도·토핑·면 익힘</strong>까지 자동 보정합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>라면</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>권장 물양</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>조리 시간</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>물양</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>시간</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>칼로리</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 500, whiteSpace: 'nowrap' }}>나트륨</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['🌶️ 신라면·진라면·안성탕면', '550 ml', '4분 30초', '일반 국물'],
-                  ['🦑 너구리·짬뽕라면',         '550 ml', '5분',     '해물 국물'],
-                  ['⚫ 짜파게티·짜장면',         '600 ml', '5분',     '8큰술(120ml) 남기고 따라냄'],
-                  ['🔥 불닭볶음면',              '600 ml', '5분',     '8큰술 남기고 따라냄'],
-                  ['❄️ 팔도 비빔면',             '600 ml', '3분',     '찬물 헹굼'],
-                  ['🥤 큰컵 (왕뚜껑·신컵)',      '460 ml', '4분',     '뚜껑 안쪽 선까지'],
-                  ['🍢 작은컵 (육개장·새우탕)',  '320 ml', '3분',     '컵라면 표준'],
-                  ['🥢 컵누들 (저칼로리)',       '350 ml', '3분',     '얇은 면'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 11.5 }}>{row[3]}</td>
+                {RAMEN_TYPES.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                      {r.emoji} {r.name} <span style={{ color: 'var(--muted)', fontWeight: 400, fontSize: 11 }}>{r.brand}</span>
+                    </td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                      {r.baseWater}ml{r.waterDrainMl ? '*' : ''}
+                    </td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{formatTime(r.cookTime)}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.kcal}kcal</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? '#DC2626' : '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            * 짜파게티·불닭볶음면은 끓인 뒤 물 8큰술(약 120ml)만 남기고 따라냅니다. 영양정보는 제조사 봉지/용기 표기(1개) 기준이며 리뉴얼 시 달라질 수 있습니다.
+          </p>
         </div>
 
         {/* 2. 다개수 보정 — 단순 ×N 안 되는 이유 */}
@@ -149,6 +155,15 @@ export default function RamenPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🥢 토핑 추가 시 물양 보정
           </h2>
+          <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+            <strong style={{ color: 'var(--text)' }}>물양 보정 기준</strong> — 끓이는 동안 재료가 흡수·증발시키는 물을 더하거나 빼서 국물 농도를 유지합니다.
+            전분류(떡·만두·면사리)는 물을 흡수하므로 <strong style={{ color: '#EA580C' }}>보충(+)</strong>, 순두부처럼 자체 수분이 많은 재료는
+            <strong style={{ color: '#0891B2' }}> 차감(−)</strong>, 계란·치즈·대파처럼 물 흡수가 거의 없는 재료는 <strong>0</strong>입니다.
+            <br />
+            <strong style={{ color: 'var(--text)' }}>투입 타이밍 기준</strong> — 재료가 익는 데 필요한 시간을 면 투입 시점에 맞춰 환산했습니다.
+            냉동 만두·떡은 면보다 <strong>먼저</strong>, 계란·치즈·대파는 풀어지지 않도록 <strong>나중에</strong> 넣습니다.
+            (칼로리·단백질은 USDA·식약처 일반 평균으로 제품·분량에 따라 차이가 있습니다.)
+          </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
@@ -221,40 +236,42 @@ export default function RamenPage() {
           </p>
         </div>
 
-        {/* 6. 영양 정보 */}
+        {/* 6. 칼로리·나트륨 비교 (제품별 순위) */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            💪 라면 영양 정보 (1봉 평균)
+            💪 라면 칼로리·나트륨 비교 (나트륨 많은 순)
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            제조사 표기 기준 1봉/1용기 영양정보입니다. <strong style={{ color: '#DC2626' }}>나트륨 1,800mg = WHO 일일 권장(2,000mg)의 90%</strong> —
+            국물을 남기면 실제 섭취 나트륨은 절반 수준으로 줄어듭니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>항목</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>1봉</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>WHO/권장 대비</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>라면</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700, whiteSpace: 'nowrap' }}>나트륨</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>WHO 대비</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>칼로리</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>단백질</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['🔥 칼로리',  '500 kcal',     '약 25% (성인 2,000kcal)'],
-                  ['🧂 나트륨',  '1,800 mg',     '⚠️ 90% (WHO 2,000mg)'],
-                  ['💪 단백질',  '11 g',         '22% (50g)'],
-                  ['🍳 지방',    '17 g',         '26% (65g)'],
-                  ['🍞 탄수화물', '78 g',        '30% (300g)'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: i === 1 ? '#DC2626' : 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
+                {RAMEN_BY_SODIUM.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.emoji} {r.name}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? '#DC2626' : '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{Math.round(r.sodium / 2000 * 100)}%</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.kcal}kcal</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.protein}g</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ⚠️ 라면 1봉 = 나트륨 1,800mg = WHO 일일 권장량의 90%. 라면 2개 + 토핑 = 한 끼 권장(700kcal)의 1.5배.
-            라면은 가끔의 즐거움 — <strong style={{ color: 'var(--text)' }}>일주일 1~2회 권장</strong>.
+            ⚠️ 짜장·볶음류(짜파게티·불닭)는 국물이 없어 나트륨이 상대적으로 낮습니다. 라면 2개 + 토핑 = 한 끼 권장(700kcal)의 약 1.5배.
+            라면은 가끔의 즐거움 — <strong style={{ color: 'var(--text)' }}>일주일 1~2회 권장</strong>. 정확한 값은 제품 포장·식품안전나라(식약처)에서 확인하세요.
           </p>
         </div>
 
@@ -376,7 +393,6 @@ export default function RamenPage() {
               { href: '/tools/health/bmr',      icon: '💪', name: 'BMR 계산기',          desc: '1일 권장 칼로리' },
               { href: '/tools/health/bmi',      icon: '📊', name: 'BMI 계산기',          desc: '체질량 지수' },
               { href: '/tools/cooking/thawing', icon: '🧊', name: '냉동·해동 시간',     desc: '식품 안전 가이드' },
-              { href: '/tools/cooking/unit',    icon: '🥄', name: '요리 단위 변환',     desc: '컵·큰술·g 환산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
