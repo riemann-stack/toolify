@@ -69,6 +69,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        {/* Google AdSense — 사이트 소유권 확인 (전 페이지) */}
+        <meta name="google-adsense-account" content="ca-pub-9104888603507576" />
+
         {/* 폰트 CDN preconnect — fonts.googleapis CSS + fonts.gstatic 폰트 파일 모두 단축 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

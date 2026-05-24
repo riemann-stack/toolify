@@ -1,4 +1,1 @@
-# Youtil ads.txt
-# 애드센스 승인 후 아래 라인을 게시자 ID로 갱신하세요.
-# 형식: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-# placeholder
+google.com, pub-9104888603507576, DIRECT, f08c47fec0942fa0
