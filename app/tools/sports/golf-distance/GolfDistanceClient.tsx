@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './golf-distance.module.css'
 import {
   GENDER_AGE_LABEL, SENIOR_FACTOR, LIE_LABEL,
@@ -272,6 +273,18 @@ export default function GolfDistanceClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/golf-cost', label: '골프 비용 정산' },
+          { href: '/tools/sports/golf-handicap', label: '골프 핸디캡' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' }
+        ]}
+      >
+        비거리는 평균 통계 기반 <strong>참고용 추정</strong>이며, 개인의 스윙 스피드·타구 질·클럽 스펙·날씨·고도·잔디 상태에 따라 큰 차이가 납니다. 정확한 비거리는 실제 라운드·런치 모니터 측정으로 확인하세요.
+      </Disclaimer>
+
       {/* 탭 (4개) */}
       <div className={s.tabs4}>
         {([

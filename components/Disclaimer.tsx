@@ -10,12 +10,21 @@ import type { ReactNode } from 'react'
 
 export type DisclaimerVariant = 'default' | 'medical' | 'finance' | 'legal' | 'safety'
 
+export interface SourceLink {
+  /** 출처 이름 (예: '국세청 홈택스') */
+  label: string
+  /** 공식 출처 URL — 외부 링크. 안정적인 1차 공식 출처 권장 */
+  href: string
+}
+
 interface Props {
   variant?: DisclaimerVariant
   /** 도구별 추가 고지 (예: "환경 보정은 평균 통계") */
   children?: ReactNode
   /** 관련 도구 링크 (선택) */
   related?: { href: string; label: string }[]
+  /** 공식 기준 출처 (선택) — YMYL 도구에 근거 명기·링크 */
+  sources?: SourceLink[]
 }
 
 const VARIANT_CONFIG: Record<DisclaimerVariant, { title: string; baseLines: string[] }> = {
@@ -64,7 +73,7 @@ const VARIANT_EMOJI: Record<DisclaimerVariant, string> = {
   safety: '⚠️',
 }
 
-export default function Disclaimer({ variant = 'default', children, related }: Props) {
+export default function Disclaimer({ variant = 'default', children, related, sources }: Props) {
   const cfg = VARIANT_CONFIG[variant]
   const emoji = VARIANT_EMOJI[variant]
 
@@ -85,6 +94,17 @@ export default function Disclaimer({ variant = 'default', children, related }: P
           ))}
           {children && <li className={styles.custom}>{children}</li>}
         </ul>
+        {sources && sources.length > 0 && (
+          <div className={styles.sources}>
+            <span className={styles.sourcesLabel}>근거 자료</span>
+            {sources.map((sc, i) => (
+              <span key={sc.href}>
+                <a href={sc.href} className={styles.sourceLink} target="_blank" rel="noopener noreferrer">{sc.label} ↗</a>
+                {i < sources.length - 1 && <span className={styles.dot}> · </span>}
+              </span>
+            ))}
+          </div>
+        )}
         {related && related.length > 0 && (
           <div className={styles.related}>
             관련 도구:{' '}

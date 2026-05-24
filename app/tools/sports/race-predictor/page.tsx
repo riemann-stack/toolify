@@ -258,7 +258,7 @@ export default function RacePredictorPage() {
       </div>
 
       {/* 8. FAQ — accordion */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 5km 기록으로 풀 마라톤을 예측해도 정확한가요?</summary>
@@ -349,7 +349,7 @@ export default function RacePredictorPage() {
       </div>
 
       {/* 10. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/sports/interval-training" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>🏃‍♂️</div>

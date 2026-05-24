@@ -169,6 +169,10 @@ export default function VatClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+          { label: '국세청 부가가치세', href: 'https://www.nts.go.kr' },
+        ]}
       >
         일반 정보 제공 도구입니다.
       </Disclaimer>

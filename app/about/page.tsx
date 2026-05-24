@@ -82,7 +82,7 @@ export default function AboutPage() {
           제공 도구 — {totalTools}가지
         </h2>
         <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '20px' }}>
-          금융·건강·생활·단위·날짜·개발자까지, 6개 카테고리에 걸쳐 실생활에 꼭 필요한 도구들을 제공합니다.
+          금융·건강·요리·생활·단위·날짜·개발자까지, {categories.length}개 카테고리에 걸쳐 실생활에 꼭 필요한 도구들을 제공합니다.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {categories.map(cat => (

@@ -242,7 +242,7 @@ export default function CaffeinePage() {
 
         {/* 6. FAQ */}
         <section>
-          <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 디카페인 커피는 정말 카페인이 없나요?</summary>
@@ -340,7 +340,7 @@ export default function CaffeinePage() {
 
         {/* 8. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             <Link href="/tools/cooking/brew" style={{ ...card, display: 'block', textDecoration: 'none' }}>
               <div style={{ fontSize: '22px', marginBottom: '6px' }}>☕</div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './substitute.module.css'
 
 // ──────────────────────────────────────
@@ -570,6 +571,18 @@ export default function SubstituteClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/baking-recipe', label: '제과 레시피 계산기' },
+          { href: '/tools/cooking/serving', label: '인분 계산기' }
+        ]}
+      >
+        대체 비율은 일반 가이드이며 <strong>식감·풍미·부풀기 등 결과가 원재료와 다를 수 있습니다</strong>(특히 제과·제빵). 알레르기·식이제한이 있는 경우 제품 라벨과 성분을 직접 확인하세요.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>🔍 대체 검색</button>

@@ -31,19 +31,53 @@ const sectionTitle: React.CSSProperties = {
   marginBottom: '14px',
   letterSpacing: '-0.01em',
 }
-const faqQuestion: React.CSSProperties = {
-  fontFamily: 'Noto Sans KR, sans-serif',
-  fontSize: '15px',
-  fontWeight: 700,
-  color: 'var(--text)',
-  marginBottom: '8px',
-}
 const faqAnswer: React.CSSProperties = {
   fontSize: '14px',
   color: 'var(--muted)',
   lineHeight: 1.8,
   margin: 0,
 }
+const card: React.CSSProperties = {
+  background: 'var(--bg2)',
+  border: '1px solid var(--border)',
+  borderRadius: '12px',
+  padding: '16px 20px',
+}
+
+const FAQ: { q: string; a: string }[] = [
+  {
+    q: 'Naismith vs Tobler 공식 차이는?',
+    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(-2.86%)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 등산교실</strong> 표준이 가장 현실적.',
+  },
+  {
+    q: '한국 산에서 평균 페이스는?',
+    a: '일반 체력 기준 <strong style="color:var(--text)">평균 2.5~3km/h</strong>. 한국 산은 가파른 편이라 국제 표준(5km/h)보다 느립니다.<ul style="padding-left:20px;margin:8px 0"><li><strong>오르막</strong>: 100m 표고차 = 30분 (한국 등산교실 표준)</li><li><strong>내리막</strong>: 100m 표고차 = 15분</li><li><strong>평지</strong>: 1km = 24분 (2.5km/h)</li></ul>트레일러닝 수준이면 1.5배 빠름, 초보는 1.25배 느림.',
+  },
+  {
+    q: '체력 등급은 어떻게 정하나요?',
+    a: '월 산행 빈도와 운동 습관 기준:<ul style="padding-left:20px;margin:8px 0"><li><strong>초보</strong>: 월 1회 이하 / 일상 운동 거의 없음</li><li><strong>일반</strong>: 월 2~4회 / 주 2~3회 가벼운 운동</li><li><strong>상급</strong>: 월 5회+ / 주 4~5회 운동·훈련</li><li><strong>전문</strong>: 트레일러닝·산악인 / 거의 매일 훈련</li></ul>자가 진단이 어려우면 일단 “일반” 선택 후 첫 산행 시간 비교해 조정.',
+  },
+  {
+    q: '오르막 100m가 평지 1km보다 오래 걸리는 이유?',
+    a: '<strong style="color:var(--text)">물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 중력에 거슬러 올라가야 하므로 같은 거리라도 평지보다 5~10배 에너지 소모.<br/><br/>Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 표준은 더 보수적이어서 100m 오르막 = 평지 1.25km 수준.<br/><br/>한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.',
+  },
+  {
+    q: '야간 산행은 얼마나 더 걸리나?',
+    a: '일반적으로 <strong style="color:var(--text)">+30%</strong>. 헤드랜턴으로도 시야가 제한되어 길 찾기·균형 잡기·돌멩이 회피가 모두 느려집니다.<br/><br/>또한 <strong style="color:#DC2626">위험도가 압도적으로 높음</strong>:<ul style="padding-left:20px;margin:8px 0"><li>길 잃을 확률 ↑↑</li><li>저체온증 위험 (산은 해 진 뒤 급격히 냉각)</li><li>구조 요청 시 발견 어려움</li></ul>야간 산행은 <strong style="color:var(--text)">경험자만</strong>. 초보는 일몰 1시간 전 하산 필수.',
+  },
+  {
+    q: '어린이·노약자 동반 시 보정은?',
+    a: '<ul style="padding-left:20px;margin:8px 0"><li><strong>어린이 (초등 이하)</strong>: ×1.30 (30% 추가). 페이스도 느리고 휴식·간식·화장실 자주 필요</li><li><strong>노약자 (60세+ 또는 회복기)</strong>: ×1.20 (20% 추가). 무릎·심장 부담</li></ul>추가 권장:<ul style="padding-left:20px;margin:8px 0"><li>코스: 초급 (북한산 사모바위·관악산 등) 권장</li><li>거리·표고차 절반으로 시작</li><li>중간 휴식 50분 → 30분으로 단축</li><li>물·간식 평소보다 1.5배</li></ul>',
+  },
+  {
+    q: '겨울 산행 추가 시간은?',
+    a: '<strong style="color:var(--text)">+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.<ul style="padding-left:20px;margin:8px 0"><li>아이젠·스패츠 착용 필요 → 페이스 ↓</li><li>눈길 미끄럼 → 균형 잡기 시간 ↑</li><li>적설 시 발 빠짐 (러셀 필요)</li><li>방한복 + 보온병 → 배낭 무게 ↑</li><li>해 짧음 → 일몰 16:30~17:30</li></ul>겨울 산행은 일반 시간 ×1.30 + 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style="color:#DC2626">경험 없는 초보는 동계 산행 자제 권장.</strong>',
+  },
+  {
+    q: '회귀 시간(턴어라운드)이란?',
+    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 시점 17:30 → 정상 도달 시점 13:30 (왕복 4시간 가정). 13:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:#059669">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:#D97706">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:#DC2626">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
+  },
+]
 
 export default function HikingTimePage() {
   return (
@@ -174,134 +208,36 @@ export default function HikingTimePage() {
 
         {/* 4. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-
-            <div>
-              <p style={faqQuestion}>Q1. Naismith vs Tobler 공식 차이는?</p>
-              <div style={faqAnswer}>
-                <strong style={{ color: 'var(--text)' }}>Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.
-                <br /><br />
-                <strong style={{ color: 'var(--text)' }}>Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(-2.86%)에서 발생.
-                <br /><br />
-                한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style={{ color: 'var(--accent)' }}>한국 등산교실</strong> 표준이 가장 현실적.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q2. 한국 산에서 평균 페이스는?</p>
-              <div style={faqAnswer}>
-                일반 체력 기준 <strong style={{ color: 'var(--text)' }}>평균 2.5~3km/h</strong>. 한국 산은 가파른 편이라 국제 표준(5km/h)보다 느립니다.
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong>오르막</strong>: 100m 표고차 = 30분 (한국 등산교실 표준)</li>
-                  <li><strong>내리막</strong>: 100m 표고차 = 15분</li>
-                  <li><strong>평지</strong>: 1km = 24분 (2.5km/h)</li>
-                </ul>
-                트레일러닝 수준이면 1.5배 빠름, 초보는 1.25배 느림.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q3. 체력 등급은 어떻게 정하나요?</p>
-              <div style={faqAnswer}>
-                월 산행 빈도와 운동 습관 기준:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong>초보</strong>: 월 1회 이하 / 일상 운동 거의 없음</li>
-                  <li><strong>일반</strong>: 월 2~4회 / 주 2~3회 가벼운 운동</li>
-                  <li><strong>상급</strong>: 월 5회+ / 주 4~5회 운동·훈련</li>
-                  <li><strong>전문</strong>: 트레일러닝·산악인 / 거의 매일 훈련</li>
-                </ul>
-                자가 진단이 어려우면 일단 &quot;일반&quot; 선택 후 첫 산행 시간 비교해 조정.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q4. 오르막 100m가 평지 1km보다 오래 걸리는 이유?</p>
-              <div style={faqAnswer}>
-                <strong style={{ color: 'var(--text)' }}>물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 중력에 거슬러 올라가야 하므로 같은 거리라도 평지보다 5~10배 에너지 소모.
-                <br /><br />
-                Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 표준은 더 보수적이어서 100m 오르막 = 평지 1.25km 수준.
-                <br /><br />
-                한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q5. 야간 산행은 얼마나 더 걸리나?</p>
-              <div style={faqAnswer}>
-                일반적으로 <strong style={{ color: 'var(--text)' }}>+30%</strong>. 헤드랜턴으로도 시야가 제한되어 길 찾기·균형 잡기·돌멩이 회피가 모두 느려집니다.
-                <br /><br />
-                또한 <strong style={{ color: '#DC2626' }}>위험도가 압도적으로 높음</strong>:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li>길 잃을 확률 ↑↑</li>
-                  <li>저체온증 위험 (산은 해 진 뒤 급격히 냉각)</li>
-                  <li>구조 요청 시 발견 어려움</li>
-                </ul>
-                야간 산행은 <strong style={{ color: 'var(--text)' }}>경험자만</strong>. 초보는 일몰 1시간 전 하산 필수.
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q6. 어린이·노약자 동반 시 보정은?</p>
-              <div style={faqAnswer}>
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li><strong>어린이 (초등 이하)</strong>: ×1.30 (30% 추가). 페이스도 느리고 휴식·간식·화장실 자주 필요</li>
-                  <li><strong>노약자 (60세+ 또는 회복기)</strong>: ×1.20 (20% 추가). 무릎·심장 부담</li>
-                </ul>
-                추가 권장:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li>코스: 초급 (북한산 사모바위·관악산 등) 권장</li>
-                  <li>거리·표고차 절반으로 시작</li>
-                  <li>중간 휴식 50분 → 30분으로 단축</li>
-                  <li>물·간식 평소보다 1.5배</li>
-                </ul>
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q7. 겨울 산행 추가 시간은?</p>
-              <div style={faqAnswer}>
-                <strong style={{ color: 'var(--text)' }}>+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li>아이젠·스패츠 착용 필요 → 페이스 ↓</li>
-                  <li>눈길 미끄럼 → 균형 잡기 시간 ↑</li>
-                  <li>적설 시 발 빠짐 (러셀 필요)</li>
-                  <li>방한복 + 보온병 → 배낭 무게 ↑</li>
-                  <li>해 짧음 → 일몰 16:30~17:30</li>
-                </ul>
-                겨울 산행은 일반 시간 ×1.30 + 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style={{ color: '#DC2626' }}>경험 없는 초보는 동계 산행 자제 권장.</strong>
-              </div>
-            </div>
-
-            <div>
-              <p style={faqQuestion}>Q8. 회귀 시간(턴어라운드)이란?</p>
-              <div style={faqAnswer}>
-                <strong style={{ color: 'var(--text)' }}>&quot;정상 도달 못 하면 하산해야 하는 시점&quot;</strong>. 산악 등반의 핵심 안전 개념.
-                <br /><br />
-                예: 일몰 18:30 → 하산 시점 17:30 → 정상 도달 시점 13:30 (왕복 4시간 가정). 13:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.
-                <br /><br />
-                본 도구는 입력값 기준 자동 계산:
-                <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
-                  <li>✓ <strong style={{ color: '#059669' }}>안전</strong>: 일몰 1시간 전 도착</li>
-                  <li>⚠️ <strong style={{ color: '#D97706' }}>주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li>
-                  <li>🚨 <strong style={{ color: '#DC2626' }}>위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li>
-                </ul>
-              </div>
-            </div>
-
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {FAQ.map((f, i) => (
+              <details key={i} style={{ ...card, padding: '12px 16px' }}>
+                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />
+              </details>
+            ))}
           </div>
         </section>
 
         {/* 5. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>관련 도구</h2>
-          <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
-            <li><Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent)' }}>마라톤 기록 계산기</Link> — Riegel·VDOT·Cameron 3공식</li>
-            <li><Link href="/tools/sports/pace" style={{ color: 'var(--accent)' }}>러닝 페이스 계산기</Link> — 페이스↔시간 변환</li>
-            <li><Link href="/tools/sports/interval-training" style={{ color: 'var(--accent)' }}>인터벌 훈련 계산기</Link> — VDOT 기반 훈련</li>
-            <li><Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}>1RM 계산기</Link> — 근력 운동</li>
-            <li><Link href="/tools/health/bmr" style={{ color: 'var(--accent)' }}>기초대사량 계산기</Link> — 등산 칼로리 추정</li>
-          </ul>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+            {[
+              { href: '/tools/sports/race-predictor', icon: '🏃', name: '마라톤 기록 계산기', desc: 'Riegel·VDOT 3공식' },
+              { href: '/tools/sports/pace', icon: '⏱️', name: '러닝 페이스 계산기', desc: '페이스↔시간 변환' },
+              { href: '/tools/sports/interval-training', icon: '🔁', name: '인터벌 훈련 계산기', desc: 'VDOT 기반 훈련' },
+              { href: '/tools/health/bmr', icon: '🔥', name: '기초대사량 계산기', desc: '등산 칼로리 추정' },
+            ].map(t => (
+              <Link key={t.href} href={t.href} style={{ ...card, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+                <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
       </div>

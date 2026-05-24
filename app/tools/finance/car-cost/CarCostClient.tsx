@@ -238,6 +238,10 @@ export default function CarCostClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '한국석유공사 오피넷', href: 'https://www.opinet.co.kr' },
+          { label: '보험개발원', href: 'https://www.kidi.or.kr' },
+        ]}
       >
         본 계산기는 일반 정보 제공 도구
       </Disclaimer>
@@ -1095,17 +1099,6 @@ export default function CarCostClient() {
         </>
       )}
 
-      {/* 면책 (모든 탭 공통) */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        ⚖️ 입력값 기준 예상 유지비입니다. 실제 비용은 차량 상태·운전 습관·정비 주기·보험 조건에 따라 달라질 수 있습니다. 리스·장기렌트 견적은 캐피탈 회사 직접 문의, 보험·정비는 전문가 상담 권장.
-      </Disclaimer>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 /* ──────────────────────────────────────────────────────
    unit/converter/converterUtils.ts
-   9개 카테고리 단위 변환기 — 한국 전통·생활 단위 포함
+   14개 분야 단위 변환기 — 한국 전통·생활 단위 포함
    ────────────────────────────────────────────────────── */
 
 export type CategoryId = 'length' | 'area' | 'weight' | 'volume' | 'temperature' | 'time' | 'speed' | 'pressure' | 'torque' | 'energy' | 'data' | 'brix' | 'concentration' | 'angle'

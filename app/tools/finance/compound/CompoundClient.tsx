@@ -152,6 +152,10 @@ export default function CompoundClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '금융감독원 금융상품한눈에', href: 'https://finlife.fss.or.kr' },
+          { label: '금융감독원 파인', href: 'https://fine.fss.or.kr' },
+        ]}
       >
         투자 자문 도구가 아닙니다.
       </Disclaimer>

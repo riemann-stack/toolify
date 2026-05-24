@@ -220,6 +220,10 @@ export default function LoanClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '금융감독원 파인', href: 'https://fine.fss.or.kr' },
+          { label: '금융위원회', href: 'https://www.fsc.go.kr' },
+        ]}
       >
         참고용 추정 도구
       </Disclaimer>

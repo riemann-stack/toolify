@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './room-area.module.css'
 import {
   projectCabinet, autoScale, getVisibleFaces, pathPolygon,
@@ -261,6 +262,17 @@ export default function RoomAreaClient() {
   /* ────────────────────────────── 렌더 ────────────────────────────── */
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/flooring', label: '바닥재 계산' }
+        ]}
+      >
+        면적·평수 계산은 입력한 치수 기준 <strong>참고용</strong>입니다. 복잡한 형태(돌출·복도·사선벽)나 시공 여유분은 반영되지 않으므로, 자재 발주 전 <strong>실측 + 여유분(보통 5~10%)</strong>을 함께 확인하세요.
+      </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
         <button type="button" className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>

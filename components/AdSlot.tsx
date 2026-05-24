@@ -1,6 +1,11 @@
 // components/AdSlot.tsx
 // 광고 슬롯 자리표시자. 애드센스 승인 후 프로덕션 분기에 ins 태그를 삽입할 예정.
 // position 으로 의미적 라벨을 부여해, 추후 GA·heatmap 분석이나 A/B 테스트에 사용 가능.
+// 광고 제외 경로(lib/ads)에서는 렌더링하지 않습니다.
+'use client'
+
+import { usePathname } from 'next/navigation'
+import { isAdExcluded } from '@/lib/ads'
 
 type AdSlotPosition = 'in-article' | 'sidebar' | 'footer' | 'between-tools'
 
@@ -14,6 +19,11 @@ interface AdSlotProps {
 }
 
 export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProps) {
+  const pathname = usePathname()
+
+  // 광고 제외 경로(주류·도박·민감 건강): 슬롯 자체를 렌더링하지 않음
+  if (isAdExcluded(pathname)) return null
+
   // 개발 환경: 시각적 자리표시자
   if (process.env.NODE_ENV === 'development') {
     return (

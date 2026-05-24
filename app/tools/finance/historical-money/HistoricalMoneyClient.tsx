@@ -79,6 +79,10 @@ export default function HistoricalMoneyClient() {
           { href: '/tools/finance/salary',   label: '연봉 실수령액' },
           { href: '/tools/finance/savings',  label: '저축액 계산기' },
         ]}
+        sources={[
+          { label: '통계청 KOSIS', href: 'https://kosis.kr' },
+          { label: '한국은행 경제통계시스템', href: 'https://ecos.bok.or.kr' },
+        ]}
       >
         구매력 환산은 통계청 KOSIS 소비자물가지수(2020=100) 기반 <strong>추정치</strong>입니다. 1965년 이전은 한국은행·역사 자료 기반 추정이라 오차가 클 수 있으며, 품목별 인플레이션(식료품·집값·임금)은 평균과 다를 수 있습니다. 화폐개혁 환산(100圓=1환, 10환=1원)만 정확합니다.
       </Disclaimer>

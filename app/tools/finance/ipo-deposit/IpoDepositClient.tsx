@@ -172,6 +172,22 @@ export default function IpoDepositClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+        sources={[
+          { label: '한국거래소 KRX', href: 'https://www.krx.co.kr' },
+          { label: '금융감독원 전자공시 DART', href: 'https://dart.fss.or.kr' },
+        ]}
+      >
+        본 도구는 일반 가이드입니다. 비례경쟁률은 청약 마감 직전까지 급변 — 마감 전 보수적 여유분 권장 균등배정은 추첨 — 0주 가능, 본 도구의 &ldquo;균등 기대&rdquo;는 사용자 가정값 5사6입 결과는 증권사·종목별 다를 수 있음
+      </Disclaimer>
+
       {/* ── 탭 ── */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         <button className={`${s.tab} ${tab === 'deposit' ? s.tabActive : ''}`} onClick={() => setTab('deposit')}>💰 비례 → 증거금</button>
@@ -603,17 +619,6 @@ export default function IpoDepositClient() {
         </>
       )}
 
-      {/* ── 면책 ── */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다. 비례경쟁률은 청약 마감 직전까지 급변 — 마감 전 보수적 여유분 권장 균등배정은 추첨 — 0주 가능, 본 도구의 &ldquo;균등 기대&rdquo;는 사용자 가정값 5사6입 결과는 증권사·종목별 다를 수 있음
-      </Disclaimer>
     </div>
   )
 }

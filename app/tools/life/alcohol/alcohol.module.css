@@ -74,7 +74,9 @@
 .cocktailDesc { font-size: 11px; color: var(--muted); line-height: 1.4; }
 
 /* ── 재료 행 ── */
-.itemList { display: flex; flex-direction: column; gap: 8px; }
+.itemList { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 360px) { .itemList { grid-template-columns: 1fr; } }
+.itemList > .card { min-width: 0; }
 .itemHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .nameInput { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 14px; color: var(--text); outline: none; font-family: 'Noto Sans KR', sans-serif; transition: border-color 0.2s; }
 .nameInput:focus { border-color: rgba(14,165,233,0.5); }
@@ -83,10 +85,10 @@
   .removeBtn:hover { border-color: #DC2626; color: #DC2626; }
 }
 .itemInputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.fieldGroup { display: flex; flex-direction: column; gap: 6px; }
+.fieldGroup { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fieldLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-.inputRow { display: flex; align-items: center; gap: 6px; }
-.numInput { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; -moz-appearance: textfield; appearance: textfield; }
+.inputRow { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.numInput { flex: 1; min-width: 0; width: 100%; box-sizing: border-box; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 16px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; -moz-appearance: textfield; appearance: textfield; }
 .numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
 .numInput:focus { border-color: rgba(14,165,233,0.5); }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
@@ -134,9 +136,9 @@
 .sexBtnActive { background: var(--bg2); color: var(--accent); font-weight: 600; }
 
 /* ── 슬라이더 ── */
-.sliderRow { display: flex; align-items: center; gap: 12px; }
-.slider { flex: 1; accent-color: var(--accent); }
-.sliderValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); min-width: 50px; text-align: right; }
+.sliderRow { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.slider { flex: 1; min-width: 0; accent-color: var(--accent); }
+.sliderValue { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--accent); min-width: 40px; text-align: right; flex-shrink: 0; }
 
 /* ── 빈 상태 ── */
 .empty { padding: 28px; text-align: center; font-size: 13px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }

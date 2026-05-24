@@ -67,6 +67,17 @@ export default function TechStackClient() {
 
   return (
     <div className={styles.wrap}>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/dev/json',          label: 'JSON 포맷터' },
+          { href: '/tools/dev/regex',         label: '정규식 테스트기' },
+          { href: '/tools/dev/css-converter', label: 'CSS 변환기' },
+        ]}
+      >
+        본 추천은 일반 가이드 — 정확한 선택은 팀 상황·요구사항·기존 자산에 따라 달라집니다. 2026년 5월 기준 데이터이며 기술 트렌드는 빠르게 변하므로 정기 확인. 비용은 추정치이니 정확한 가격은 각 서비스 공식 사이트 확인. 한국 특화 통합(카카오·토스 등)은 별도 사업자등록·심사 필요.
+      </Disclaimer>
+
       <div className={styles.tabs}>
         {TABS.map((t) => (
           <button key={t.k}
@@ -90,17 +101,6 @@ export default function TechStackClient() {
         />
       )}
       {tab === 'guide' && <GuideTab />}
-
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/dev/json',          label: 'JSON 포맷터' },
-          { href: '/tools/dev/regex',         label: '정규식 테스트기' },
-          { href: '/tools/dev/css-converter', label: 'CSS 변환기' },
-        ]}
-      >
-        본 추천은 일반 가이드 — 정확한 선택은 팀 상황·요구사항·기존 자산에 따라 달라집니다. 2026년 5월 기준 데이터이며 기술 트렌드는 빠르게 변하므로 정기 확인. 비용은 추정치이니 정확한 가격은 각 서비스 공식 사이트 확인. 한국 특화 통합(카카오·토스 등)은 별도 사업자등록·심사 필요.
-      </Disclaimer>
     </div>
   )
 }

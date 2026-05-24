@@ -289,6 +289,18 @@ export default function BuildupClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 페이스·거리 추천은 평균값 — 컨디션·날씨·지형에 따라 조정 안전성 체크는 일반 가이드 — 본인 한계 보장 X 통증·피로 시 즉시 휴식. 부상 의심 시 정형외과·재활의학과
+      </Disclaimer>
+
       {/* ── 탭 ── */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         <button className={`${s.tab} ${tab === 'design' ? s.tabActive : ''}`} onClick={() => setTab('design')}>📈 빌드업 설계</button>
@@ -743,17 +755,6 @@ export default function BuildupClient() {
         </>
       )}
 
-      {/* ── 면책 ── */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다 페이스·거리 추천은 평균값 — 컨디션·날씨·지형에 따라 조정 안전성 체크는 일반 가이드 — 본인 한계 보장 X 통증·피로 시 즉시 휴식. 부상 의심 시 정형외과·재활의학과
-      </Disclaimer>
     </div>
   )
 }

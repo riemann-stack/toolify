@@ -265,6 +265,10 @@ export default function RealEstateClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '국토교통부 실거래가', href: 'https://rt.molit.go.kr' },
+          { label: '한국부동산원', href: 'https://www.reb.or.kr' },
+        ]}
       >
         본 계산기는 단순 시뮬레이션이며 투자 권유가 아닙니다.
       </Disclaimer>
@@ -930,17 +934,6 @@ export default function RealEstateClient() {
         {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
       </button>
 
-      {/* 면책 — 하단 재차 강조 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        다시 한 번 안내
-      </Disclaimer>
     </div>
   )
 }

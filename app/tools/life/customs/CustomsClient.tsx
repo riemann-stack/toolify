@@ -77,6 +77,18 @@ export default function CustomsClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -410,18 +422,6 @@ export default function CustomsClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/life/travel-budget', label: '여행 예산' },
-          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
-          { href: '/tools/life/dutch', label: '더치페이 계산기' }
-        ]}
-      >
-        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/unit/size" className={s.crossLink}>

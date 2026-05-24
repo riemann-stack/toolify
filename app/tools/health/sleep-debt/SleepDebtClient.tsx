@@ -329,6 +329,10 @@ export default function SleepDebtClient() {
           { href: '/tools/health/blood-alcohol', label: '혈중알코올 계산기' },
           { href: '/tools/life/pomodoro',        label: '뽀모도로 타이머' },
         ]}
+        sources={[
+          { label: '대한수면연구학회', href: 'https://www.sleepnet.or.kr' },
+          { label: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr' },
+        ]}
       >
         본 도구는 일반 안내용입니다. 만성 불면·과수면·코골이·수면무호흡 의심 시 수면 클리닉 진단 권장.
       </Disclaimer>

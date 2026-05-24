@@ -175,9 +175,9 @@ export default function OgPreviewPage() {
           </div>
         </section>
 
-        {/* 5. 함께 보면 좋은 도구 */}
+        {/* 5. 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/dev/json',          icon: '📋', name: 'JSON 포맷터',           desc: 'API 응답·메타데이터 정리' },

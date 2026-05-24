@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './pace.module.css'
 
 type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill'
@@ -239,6 +240,18 @@ export default function PaceClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/interval-training', label: '인터벌 훈련' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        페이스·기록은 입력값 기준 <strong>참고용 추정</strong>이며 컨디션·날씨·코스·고도에 따라 달라집니다. 무리한 페이스는 부상·탈수 위험이 있으니 본인 체력에 맞게 조정하고, 더위(25°C↑)·어지러움 시 즉시 중단하세요.
+      </Disclaimer>
+
       {/* 모드 탭 */}
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}

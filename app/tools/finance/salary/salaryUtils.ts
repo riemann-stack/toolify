@@ -185,43 +185,6 @@ export function reverseCalcSalary(input: ReverseInput): ReverseResult | null {
   }
 }
 
-/* ─── 인상 시뮬레이션 ─── */
-export interface RaiseSimResult {
-  percent: number
-  newYearly: number
-  newNetMonthly: number
-  monthlyIncreaseGross: number
-  monthlyIncreaseNet: number
-  yearlyIncreaseNet: number
-  netRaisePercent: number
-  extraTax: number
-}
-
-export function simulateRaise(
-  currentYearly: number, raisePercent: number,
-  dependents: number, childrenCount: number, nonTaxableMonthly: number,
-): RaiseSimResult {
-  const newYearly = Math.round(currentYearly * (1 + raisePercent / 100))
-  const baseInput = { dependents, childrenCount, nonTaxableMonthly, isInsured: true as const }
-  const cur = calcSalary({ grossYearly: currentYearly, ...baseInput })
-  const aft = calcSalary({ grossYearly: newYearly, ...baseInput })
-  const monthlyIncreaseNet = aft.netMonthly - cur.netMonthly
-  const netRaisePercent = cur.netMonthly > 0
-    ? ((aft.netMonthly - cur.netMonthly) / cur.netMonthly) * 100 : 0
-  return {
-    percent: raisePercent,
-    newYearly,
-    newNetMonthly: aft.netMonthly,
-    monthlyIncreaseGross: aft.grossMonthly - cur.grossMonthly,
-    monthlyIncreaseNet,
-    yearlyIncreaseNet: monthlyIncreaseNet * 12,
-    netRaisePercent: Math.round(netRaisePercent * 10) / 10,
-    extraTax: (aft.totalDeduction - cur.totalDeduction) * 12,
-  }
-}
-
-export const RAISE_OPTIONS = [3, 5, 7, 10, 15, 20, 30, 50]
-
 /* ─── 시급 계산 ─── */
 export interface HourlyInput {
   yearly: number

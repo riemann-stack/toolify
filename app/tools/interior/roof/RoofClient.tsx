@@ -94,6 +94,18 @@ export default function RoofClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 면적 계산: 표준 형태 기준. 복잡한 형태(혼합·돌출·천창)는 실측 권장. 도면 vs 실측 ±5~10% 차이 가능 자재 단가: 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적 본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong>
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs2}`}>
         <button className={`${s.tab} ${tab === 'area' ? s.tabActive : ''}`} onClick={() => setTab('area')}>📐 면적 계산</button>
@@ -423,17 +435,6 @@ export default function RoofClient() {
         </>
       )}
 
-      {/* ── 면책 ── */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
-          { href: '/tools/interior/room-area', label: '방 면적 계산' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다 면적 계산: 표준 형태 기준. 복잡한 형태(혼합·돌출·천창)는 실측 권장. 도면 vs 실측 ±5~10% 차이 가능 자재 단가: 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적 본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong>
-      </Disclaimer>
     </div>
   )
 }

@@ -229,7 +229,7 @@ export default function GripSizePage() {
 
         {/* 5. FAQ */}
         <section>
-          <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 그립 사이즈를 잘 모르겠으면 큰 걸로 가야 하나요, 작은 걸로 가야 하나요?</summary>
@@ -306,7 +306,7 @@ export default function GripSizePage() {
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             <Link href="/tools/sports/golf-distance" style={{ ...card, display: 'block', textDecoration: 'none' }}>
               <div style={{ fontSize: '22px', marginBottom: '6px' }}>🎯</div>

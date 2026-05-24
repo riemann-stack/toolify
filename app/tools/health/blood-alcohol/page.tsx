@@ -5,13 +5,13 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
-  title: '혈중알코올 계산기 — BAC·운전 가능 시각·다음날 아침·면허정지 해소 | Youtil',
-  description: '지금 운전 가능 시각과 다음날 아침 출근 BAC 추정. 1·2·3차 누적, ALDH2 분해 속도, 약물 상호작용까지 Widmark 기반.',
+  title: '혈중알코올 잔존량 추정기 — 음주 후 운전 위험 확인용',
+  description: '음주 후 체내 알코올이 얼마나 남아있는지 Widmark 공식으로 추정. 1·2·3차 누적·다음날 아침·ALDH2 분해 속도 반영. BAC가 낮게 추정되더라도 음주 후 운전은 절대 금지입니다.',
   keywords: [
-    '혈중알코올계산기', '음주후운전가능시간', 'BAC계산기', '혈중알코올농도계산',
-    '음주운전기준', '알코올소멸시간', '음주측정계산기',
-    '다음날아침음주측정', '숙취운전', '면허정지시각', '여러자리음주',
-    'ALDH2알코올분해', '윤창호법처벌', '자전거음주운전', '카카오T대리',
+    '혈중알코올계산기', '혈중알코올농도', 'BAC추정', '알코올잔존량',
+    '음주운전기준', '알코올분해시간', '음주측정',
+    '다음날아침음주측정', '숙취운전위험', '여러자리음주',
+    'ALDH2알코올분해', '윤창호법', '자전거음주운전',
   ],
 })
 
@@ -20,22 +20,11 @@ export default function BloodAlcoholPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍺 혈중알코올 계산기
+        🍺 혈중알코올 잔존량 추정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        지금 운전 가능 시각과 <strong style={{ color: 'var(--text)' }}>다음날 아침 출근 BAC</strong>. 1·2·3차 누적과 ALDH2 분해 속도까지.
+        음주 후 체내 알코올이 얼마나 <strong style={{ color: 'var(--text)' }}>남아있는지 추정</strong> — 다음날 아침·여러 자리 누적·ALDH2 분해 속도 반영. <strong style={{ color: 'var(--text)' }}>운전 위험 확인용</strong>.
       </p>
-
-      {/* 상단 법적 면책 */}
-      <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: '14px', padding: '18px 20px', marginBottom: '32px' }}>
-        <p style={{ fontSize: '14px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>⚠️ 법적 면책 조항</p>
-        <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-          본 계산기는 <strong style={{ color: 'var(--text)' }}>음주 예방 교육 목적의 참고용 도구</strong>입니다.
-          계산 결과는 개인의 신체 상태, 음식 섭취량, 건강 상태 등에 따라 실제와 크게 다를 수 있습니다.
-          결과와 관계없이 <strong style={{ color: '#DC2626' }}>음주 후에는 절대 운전하지 마시고</strong> 대리운전 또는 대중교통을 이용하세요.
-          음주운전은 형사처벌 대상이며, 본 계산기는 법적 판단 근거가 되지 않습니다.
-        </p>
-      </div>
 
       <BloodAlcoholClient />
 
@@ -118,7 +107,7 @@ export default function BloodAlcoholPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음주량</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>알코올(g)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>최고 BAC</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>0.03 해소</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>0.03 미만</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,14 +169,14 @@ export default function BloodAlcoholPage() {
             <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>📌 예시: 70kg 남성, 식후, 소주 1병 (45g), 음주 종료 23:00</p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               <li>최고 BAC: <strong style={{ color: '#DC2626' }}>0.095</strong> (면허취소 수준)</li>
-              <li>면허취소 해소 (0.08): 익일 <strong>00:00</strong></li>
-              <li>면허정지 해소 (0.03): 익일 <strong>03:22</strong></li>
-              <li>완전 소멸: 익일 <strong>05:22</strong></li>
+              <li>면허취소 기준(0.08) 미만 추정: 익일 <strong>00:00</strong></li>
+              <li>면허정지 기준(0.03) 미만 추정: 익일 <strong>03:22</strong></li>
+              <li>알코올 잔존 추정 종료: 익일 <strong>05:22</strong></li>
               <li>익일 08:00 BAC: <strong style={{ color: '#EA580C' }}>약 0.022</strong> (정지 미만이지만 측정 시 양성 가능)</li>
             </ul>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ⚠️ 0.03 미만이라도 측정 시 양성 → 단속 가능. 안전 여유: 완전 소멸 후 1~2시간.
+            ⚠️ 0.03 미만이라도 측정 시 양성 → 단속 가능. <strong style={{ color: '#DC2626' }}>계산값과 관계없이 음주 후 운전은 금지</strong>입니다.
           </p>
         </div>
 
@@ -301,7 +290,7 @@ export default function BloodAlcoholPage() {
               { q: '음주 후 잠을 자면 더 빨리 깨나요?', a: '수면 자체가 알코올 분해를 빠르게 하지는 않습니다. 시간당 0.015 g/dL 감소율은 수면 중에도 동일하게 적용됩니다. 다만 수면 후에도 BAC가 여전히 높을 수 있으며, 아침에 운전하기 전 반드시 충분한 시간이 경과했는지 확인해야 합니다. 전날 과음한 경우 숙취 운전으로 단속되는 사례가 매우 많습니다.' },
               { q: "'숙취'가 없으면 술이 다 깬 건가요?", a: '아닙니다. 숙취 증상(두통, 구역질, 피로감)과 BAC는 별개입니다. 숙취가 없어도 혈중알코올이 단속 기준치 이상 남아있을 수 있습니다. 특히 대량 음주 후 다음 날 아침에는 여전히 단속 기준(0.03%)을 초과하는 경우가 많으므로, 반드시 시간 경과를 확인하고 불확실하면 대중교통을 이용하세요.' },
               { q: '음주 측정 거부 시 처벌은?', a: '음주 측정 거부는 그 자체로 형사처벌 대상입니다. 면허 취소(5년 결격)와 1~5년 징역 또는 500만~2000만원 벌금이 부과될 수 있습니다. 측정 거부는 사실상 BAC 0.2% 이상 음주와 동일한 처벌을 받으며, "측정하지 않으면 불리하지 않다"는 생각은 잘못된 통념입니다.' },
-              { q: '어제 12시까지 술 마셨는데 오늘 아침 8시에 운전해도 되나요?', a: '음주량과 신체 조건에 따라 다릅니다. 70kg 남성 + 소주 1병(45g) 가정: 음주 종료 자정 → 면허정지 해소 04:22, 8시 BAC 약 0.02. 그러나 소주 2병+ 또는 ALDH2 결손 또는 공복 음주 시 8시에도 0.03 초과 가능. 안전 권장: 완전 소멸 + 1~2시간 여유. 불확실하면 택시·지하철. 본 도구의 「🌅 다음날 아침」 탭에서 정확 체크.' },
+              { q: '어제 12시까지 술 마셨는데 오늘 아침 운전 위험이 남아있나요?', a: '음주량과 신체 조건에 따라 다릅니다. 70kg 남성 + 소주 1병(45g) 가정: 음주 종료 자정 → 면허정지 기준(0.03) 미만 추정 04:22, 8시 BAC 약 0.02로 추정됩니다. 그러나 소주 2병+ 또는 ALDH2 결손 또는 공복 음주 시 8시에도 0.03 초과 가능. <strong>BAC가 낮게 추정되더라도, 그리고 계산값과 관계없이 음주 후 운전은 금지</strong>입니다 — 불확실하면 택시·지하철·대리운전. 본 도구의 「🌅 다음날 아침」 탭은 위험을 참고용으로 추정할 뿐입니다.' },
               { q: '1차·2차·3차 여러 자리 마셨는데 BAC 어떻게 계산하나요?', a: '본 도구의 「🔢 여러 자리 누적」 탭에서 자리별 시작·종료 시각과 음주 종류를 입력하면 누적 BAC 자동 계산 + 곡선 시각화. ⚠️ 1차 소주 1병 + 2차 맥주 + 3차 양주 = 표준잔 14.5잔 (알코올 116g) = WHO 위험 음주 4배. 본인뿐 아니라 다른 사람에게도 위험.' },
               { q: '자전거나 전동킥보드는 음주운전 단속 안 되나요?', a: '처벌 대상입니다. 2021년 도로교통법 개정: 자전거 음주운전 3만원 범칙금 (BAC 0.03+), 전동킥보드 10~20만원 범칙금 + 면허취소. 사고 발생 시 추가 처벌. 「자전거니까 괜찮아」 잘못된 통념. 특히 도심 자전거·킥보드는 보행자 사고 위험 큼.' },
               { q: '술이 빨리 깨는 방법이 있나요?', a: '의학적으로 「빨리 깨는 방법」 존재 X. 알코올 분해는 간이 시간당 약 0.015 g/dL로 일정. 다음은 효과 X 또는 미미: 커피·카페인 (각성만 ↑, BAC 그대로) / 차가운 물·샤워 (정신 차림만) / 운동 (효과 미미·심혈관 부담) / 콩나물국·해장국 (위장 보호만). 유일한 방법은 시간. 본 도구의 시간별 BAC 곡선으로 정확 확인.' },
@@ -338,7 +327,7 @@ export default function BloodAlcoholPage() {
           </p>
         </div>
 
-        {/* 면책 강화 */}
+        {/* 음주운전 처벌·위험 정리 (참고 정보) */}
         <div style={{
           background: 'rgba(220, 38, 38, 0.06)',
           border: '2px solid rgba(220, 38, 38, 0.40)',
@@ -348,15 +337,15 @@ export default function BloodAlcoholPage() {
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 법적 면책 (강화)</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 음주운전 처벌·위험 정리</p>
           <p style={{ marginBottom: 8 }}>
-            본 혈중알코올 계산기는 <strong style={{ color: 'var(--text)' }}>음주 예방 교육 참고용 도구</strong>이며, 법적 면책·판단 근거가 되지 않습니다.
+            본 도구는 체내 알코올 잔존량을 <strong style={{ color: 'var(--text)' }}>참고용으로 추정</strong>할 뿐이며, 법적 판단 근거가 되지 않습니다. 다음을 꼭 기억하세요.
           </p>
           <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
             <li>±20~30% 오차 가능 (Widmark 공식 한계)</li>
             <li>음주 측정기 결과와 다를 수 있음</li>
             <li>「0.03 미만 = 안 마신 것」 X</li>
-            <li>본 도구 결과 ≠ 운전 가능 보장</li>
+            <li><strong style={{ color: '#DC2626' }}>BAC가 낮게 추정되더라도 음주 후 운전은 금지</strong></li>
             <li>음주 후 운전 절대 X (자가용·자전거·전동킥보드 모두)</li>
             <li>다음날 아침에도 BAC 남아 있을 수 있음</li>
           </ul>

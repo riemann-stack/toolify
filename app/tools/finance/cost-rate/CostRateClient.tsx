@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './cost-rate.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -367,6 +368,17 @@ export default function CostRateClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/vat', label: '부가세 계산기' },
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' }
+        ]}
+      >
+        원가율·마진·손익분기는 입력값 기준 <strong>참고용 계산</strong>입니다. 실제 수익은 배달·결제 수수료, 부가세·소득세, 임대료·인건비 등 고정비에 따라 달라지니, 사업 의사결정 전 세무사·전문가와 함께 확인하세요.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">

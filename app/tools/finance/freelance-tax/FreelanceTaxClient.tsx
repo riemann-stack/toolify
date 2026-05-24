@@ -68,6 +68,22 @@ export default function FreelanceTaxClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 통합 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/4-insurance', label: '4대보험 계산기' },
+          { href: '/tools/finance/salary',      label: '연봉 실수령액' },
+          { href: '/tools/finance/severance',   label: '퇴직금 계산기' },
+        ]}
+        sources={[
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+          { label: '국세청', href: 'https://www.nts.go.kr' },
+        ]}
+      >
+        2026년 종합소득세율·국세청 단순경비율 기준 — 매년 세법 개정 시 차이 가능. 실제 신고는 <a href="https://www.hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 모의계산 또는 세무사 확인. 부동산 양도·금융소득 등 복합 종합과세 케이스는 미반영. 부가가치세는 별도 세금(분기·반기 신고)이며 본 계산기 범위 외.
+      </Disclaimer>
+
       {/* ── 탭 ── */}
       <div className={styles.tabs}>
         {TABS.map((t) => (
@@ -91,17 +107,6 @@ export default function FreelanceTaxClient() {
       {/* ══════════ TAB 4: 신고 가이드 ══════════ */}
       {tab === 'guide' && <GuideTab />}
 
-      {/* 통합 면책 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/4-insurance', label: '4대보험 계산기' },
-          { href: '/tools/finance/salary',      label: '연봉 실수령액' },
-          { href: '/tools/finance/severance',   label: '퇴직금 계산기' },
-        ]}
-      >
-        2026년 종합소득세율·국세청 단순경비율 기준 — 매년 세법 개정 시 차이 가능. 실제 신고는 <a href="https://www.hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 모의계산 또는 세무사 확인. 부동산 양도·금융소득 등 복합 종합과세 케이스는 미반영. 부가가치세는 별도 세금(분기·반기 신고)이며 본 계산기 범위 외.
-      </Disclaimer>
     </div>
   )
 }

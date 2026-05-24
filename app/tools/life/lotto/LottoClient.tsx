@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './lotto.module.css'
 import {
   GENERATION_MODES, NUMBER_RANGES, ODDS_FIRST_PRIZE, PRICE_PER_GAME,
@@ -19,7 +20,18 @@ export default function LottoClient() {
 
   return (
     <div className={s.wrap}>
-      {/* 사행성 안내는 페이지 하단 통합 면책 컴포넌트로 일원화됨 */}
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/random', label: '랜덤 뽑기' },
+          { href: '/tools/life/ladder', label: '사다리 타기' },
+          { href: '/tools/life/monty-hall', label: '몬티홀 시뮬' }
+        ]}
+      >
+        로또 번호 생성은 <strong>재미·참고용</strong>이며 당첨을 보장하지 않습니다. 모든 번호 조합의 당첨 확률은 동일하며, 분석·패턴은 통계적 흥미일 뿐 예측력이 없습니다. 복권 구매는 <strong>여유 자금 범위에서</strong> 하시고 과도한 구매·도박 중독에 주의하세요. 도박문제 상담 ☎ <strong>1336</strong>.
+      </Disclaimer>
+
       <div className={s.tabs}>
         {([
           ['generate',  '번호 생성'],

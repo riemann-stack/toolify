@@ -82,6 +82,18 @@ export default function BoltWrenchClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용 안내 표시 사이즈·토크는 KS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 고강도·안전부품·고급 차량은 반드시 <strong>제조사 매뉴얼·도면</strong>을 따르세요. 옛 JIS 사이즈는 1990년대 이전 일본·한국 산 부품에 주로 잔존합니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -666,17 +678,6 @@ export default function BoltWrenchClient() {
         </>
       )}
 
-      {/* 면책 (모든 탭 공통) */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
-          { href: '/tools/interior/room-area', label: '방 면적 계산' }
-        ]}
-      >
-        사용 안내 표시 사이즈·토크는 KS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 고강도·안전부품·고급 차량은 반드시 <strong>제조사 매뉴얼·도면</strong>을 따르세요. 옛 JIS 사이즈는 1990년대 이전 일본·한국 산 부품에 주로 잔존합니다.
-      </Disclaimer>
     </div>
   )
 }

@@ -214,6 +214,17 @@ export default function FryingClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' }
+        ]}
+      >
+        튀김 시간·온도는 재료 두께·기름 양·화력에 따라 달라지는 <strong>참고용 가이드</strong>입니다. <strong>기름 과열은 화재 위험</strong>이 크니 조리 중 자리를 비우지 마시고, 기름에 불이 붙으면 물을 붓지 말고 뚜껑을 덮어 산소를 차단하세요. 어린이·반려동물 접근에 주의하세요.
+      </Disclaimer>
 
       {/* ── 1. 재료 선택 ── */}
       <div className={styles.card}>
@@ -546,16 +557,6 @@ export default function FryingClient() {
         </div>
       )}
 
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        식품 안전 주의:
-      </Disclaimer>
     </div>
   )
 }

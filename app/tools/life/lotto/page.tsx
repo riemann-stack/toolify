@@ -23,9 +23,16 @@ export default function LottoPage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎰 로또 번호 생성기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         8가지 생성 모드 + 번호 통계 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>까지.
       </p>
+
+      {/* 통합 면책 — 사이트 전체 동일 디자인 (상단 배치) */}
+      <div style={{ marginBottom: '16px' }}>
+        <Disclaimer variant="safety">
+          본 도구는 <strong>로또 번호 생성·분석·시뮬레이션을 위한 재미·교육용 시뮬레이터</strong>입니다. 수학적으로 어떤 6개 번호 조합도 1등 확률은 1/8,145,060로 동일하며, 어떤 생성 모드·분석·필터도 당첨 확률에 영향을 주지 않습니다. 로또는 사행성 게임이므로 <strong>본인의 경제 능력 안에서만 구매</strong>하시기 바랍니다. 도박 의존 우려가 있다면 <strong>한국도박문제예방치유원 1336</strong>(24시간 무료) 또는 kcgp.or.kr에서 도움받으실 수 있습니다.
+        </Disclaimer>
+      </div>
 
       <LottoClient />
 
@@ -301,11 +308,6 @@ export default function LottoPage() {
         </section>
 
       </div>
-
-      {/* 통합 면책 — 사이트 전체 동일 디자인 */}
-      <Disclaimer variant="safety">
-        본 도구는 <strong>로또 번호 생성·분석·시뮬레이션을 위한 재미·교육용 시뮬레이터</strong>입니다. 수학적으로 어떤 6개 번호 조합도 1등 확률은 1/8,145,060로 동일하며, 어떤 생성 모드·분석·필터도 당첨 확률에 영향을 주지 않습니다. 로또는 사행성 게임이므로 <strong>본인의 경제 능력 안에서만 구매</strong>하시기 바랍니다. 도박 의존 우려가 있다면 <strong>한국도박문제예방치유원 1336</strong>(24시간 무료) 또는 kcgp.or.kr에서 도움받으실 수 있습니다.
-      </Disclaimer>
     </div>
   )
 }

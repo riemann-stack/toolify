@@ -187,9 +187,9 @@ export default function GpaConverterPage() {
           </div>
         </section>
 
-        {/* 5. 함께 보면 좋은 도구 */}
+        {/* 5. 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/edu/review-interval',  icon: '🧠', name: '복습 간격 계산기',     desc: '에빙하우스·SM-2 다음 복습일' },

@@ -210,6 +210,18 @@ export default function GolfCostClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        ⛳ 입력값 기반 예상 비용입니다. 실제 비용은 골프장·시즌·요일·코스 컨디션·식음료 메뉴에 따라 크게 달라질 수 있습니다.
+      </Disclaimer>
+
       {/* 탭 네비 */}
       <div className={s.tabs3}>
         {([
@@ -707,18 +719,6 @@ export default function GolfCostClient() {
           />
         </div>
       )}
-
-      {/* 면책 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        ⛳ 입력값 기반 예상 비용입니다. 실제 비용은 골프장·시즌·요일·코스 컨디션·식음료 메뉴에 따라 크게 달라질 수 있습니다.
-      </Disclaimer>
       </>)}
     </div>
   )
@@ -1048,17 +1048,6 @@ function CoursesTab({
           위에서 골프장 이름을 입력하고 저장해 보세요. 모든 데이터는 본인의 브라우저에만 저장됩니다 (서버 전송 X).
         </div>
       )}
-
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        🔒 모든 데이터는 본인의 브라우저(localStorage)에만 저장. 서버 전송 X · 다른 사이트 접근 X. 브라우저 데이터 삭제 시 사라집니다.
-      </Disclaimer>
     </>
   )
 }

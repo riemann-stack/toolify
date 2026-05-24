@@ -131,6 +131,22 @@ export default function AuctionClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+        sources={[
+          { label: '대법원 법원경매정보', href: 'https://www.courtauction.go.kr' },
+          { label: '국토교통부 실거래가', href: 'https://rt.molit.go.kr' },
+        ]}
+      >
+        사용 안내 세율·LTV·DSR은 매년 변동됩니다 — <strong>국세청·국토부·금감원 최신 공시</strong> 우선. 경매 부대비용은 <strong>물건별로 매우 다릅니다</strong> (특히 명도·수리·체납). <strong>유치권·법정지상권</strong> 같은 법적 분쟁은 변호사·법무사 상담 필수.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -657,18 +673,6 @@ export default function AuctionClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        사용 안내 세율·LTV·DSR은 매년 변동됩니다 — <strong>국세청·국토부·금감원 최신 공시</strong> 우선. 경매 부대비용은 <strong>물건별로 매우 다릅니다</strong> (특히 명도·수리·체납). <strong>유치권·법정지상권</strong> 같은 법적 분쟁은 변호사·법무사 상담 필수.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/real-estate" className={s.crossLink}>

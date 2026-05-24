@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react'
 import Link from 'next/link'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './alcohol.module.css'
 import {
   KOREAN_GLASS_PRESETS, DILUTION_OPTIONS, KOREAN_COCKTAIL_PRESETS,
@@ -139,7 +140,7 @@ function MixTab() {
                   onClick={() => setItems(prev => prev.filter(x => x.id !== it.id))}>×</button>
               )}
             </div>
-            <div className={styles.itemInputs}>
+            <div className={styles.itemInputs} style={{ gridTemplateColumns: '1fr', gap: 8 }}>
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel}>용량</label>
                 <div className={styles.inputRow}>
@@ -713,6 +714,10 @@ export default function AlcoholClient() {
 
   return (
     <div className={styles.wrap}>
+      <Disclaimer variant="safety">
+        본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 한국알코올중독상담센터 <strong>1899-0975</strong>, 정신건강 위기상담 <strong>1577-0199</strong>, 카카오 T 대리 <strong>1577-1577</strong>.
+      </Disclaimer>
+
       <div className={styles.tabs}>
         {TABS.map(t => (
           <button key={t.id}
@@ -799,10 +804,6 @@ export default function AlcoholClient() {
         </details>
       </div>
 
-      {/* 면책 */}
-      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '12px 16px', background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 10, lineHeight: 1.7 }}>
-        ⚠️ 본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 한국알코올중독상담센터 <strong style={{ color: '#EA580C' }}>1899-0975</strong>, 정신건강 위기상담 <strong style={{ color: '#EA580C' }}>1577-0199</strong>, 카카오 T 대리 <strong style={{ color: '#EA580C' }}>1577-1577</strong>.
-      </p>
     </div>
   )
 }

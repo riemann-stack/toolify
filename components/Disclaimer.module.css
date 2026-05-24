@@ -108,3 +108,27 @@
   .relatedLink:hover { text-decoration: underline; }
 }
 .dot { color: var(--muted); opacity: 0.5; }
+
+/* 근거 자료 (공식 출처 링크) */
+.sources {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.sourcesLabel {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--text);
+  margin-right: 8px;
+}
+.sourceLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+@media (hover: hover) {
+  .sourceLink:hover { text-decoration: underline; }
+}

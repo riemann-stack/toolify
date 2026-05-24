@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './size.module.css'
 
 // ──────────────────────────────────────
@@ -238,6 +239,18 @@ export default function SizeClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/unit/converter', label: '단위 변환기' },
+          { href: '/tools/unit/area', label: '면적 변환' },
+          { href: '/tools/life/packing', label: '여행 짐 체크리스트' },
+        ]}
+      >
+        의류·신발 사이즈는 <strong>브랜드·국가·제품마다 편차가 큽니다</strong>. 본 변환은 일반 기준표에 따른 <strong>참고용 근사치</strong>이며, 구매 전 해당 브랜드의 실측 사이즈표를 함께 확인하세요.
+      </Disclaimer>
+
       {/* 카테고리 선택 (2단) */}
       <div className={styles.categoryGroup}>
         <div className={styles.categoryRow}>

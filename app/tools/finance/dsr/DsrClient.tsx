@@ -102,6 +102,10 @@ export default function DsrClient() {
           { href: '/tools/finance/housing-score', label: '청약 가점 계산기' },
           { href: '/tools/finance/real-estate', label: '부동산 수익률' },
         ]}
+        sources={[
+          { label: '금융위원회', href: 'https://www.fsc.go.kr' },
+          { label: '여신금융협회 공시', href: 'https://www.crefia.or.kr' },
+        ]}
       >
         DSR 한도(40%)·LTV 한도·스트레스 가산금리는 정부 정책·규제지역·주택수·은행에 따라 수시로 바뀝니다. 본 계산은 입력값 기준 <strong>추정치</strong>이며, 실제 한도·금리는 반드시 해당 은행·금융위 발표를 확인하세요.
       </Disclaimer>

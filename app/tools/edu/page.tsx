@@ -1,4 +1,4 @@
-import CategoryView, { type ComingSoonItem } from '@/components/CategoryView'
+import CategoryView from '@/components/CategoryView'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
@@ -8,21 +8,11 @@ export const metadata = buildMetadata({
   keywords: ['교육도구', '학습계산기', '과학시각화', '학생과제', '교사수업', '과학실험'],
 })
 
-const COMING_SOON: ComingSoonItem[] = [
-  { icon: '🌟', name: '빛의 속도 체감 시각화',  desc: '빛이 달·태양·별까지 가는 시간 비교' },
-  { icon: '🧪', name: '화학 농도 계산기',       desc: 'mol·M·% 농도·희석 계산' },
-  { icon: '🧬', name: 'pH 계산기',              desc: '산·염기·완충용액 pH 계산' },
-  { icon: '🔭', name: '진자 시뮬레이션',        desc: '단진자 주기·중력 가속도 실험' },
-  { icon: '🧮', name: '수학 함수 그래프',       desc: '이차함수·삼각함수 시각화' },
-  { icon: '🌍', name: '판구조 시뮬레이션',      desc: '대륙 이동·지진 시각화' },
-]
-
 export default function EduCategoryPage() {
   return (
     <CategoryView
       catId="edu"
       description="우주·물리·인지·기억·페르미 추정까지 — 학습을 시각으로 이해하는 인터랙티브 도구."
-      comingSoon={COMING_SOON}
     />
   )
 }

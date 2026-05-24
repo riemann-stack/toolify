@@ -89,6 +89,18 @@ export default function RebarClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 표시 단위중량은 <strong>KS D 3504 표준치</strong>이며, 제조사·롯트별 ±5% 오차 가능. 가격은 사용자 입력 또는 일반 참고치 — <strong>한국철강협회·시세 우선</strong>. 구조 설계·배근 도면은 반드시 <strong>구조기술사·건축사 책임</strong>입니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -590,18 +602,6 @@ export default function RebarClient() {
           </div>
         </>
       )}
-
-      {/* 면책 (모든 탭 공통) */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
-          { href: '/tools/interior/room-area', label: '방 면적 계산' }
-        ]}
-      >
-        사용·시공 안내 표시 단위중량은 <strong>KS D 3504 표준치</strong>이며, 제조사·롯트별 ±5% 오차 가능. 가격은 사용자 입력 또는 일반 참고치 — <strong>한국철강협회·시세 우선</strong>. 구조 설계·배근 도면은 반드시 <strong>구조기술사·건축사 책임</strong>입니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/wire" className={s.crossLink}>

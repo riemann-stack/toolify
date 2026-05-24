@@ -156,6 +156,22 @@ export default function SeveranceClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+        sources={[
+          { label: '고용노동부', href: 'https://www.moel.go.kr' },
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+        ]}
+      >
+        사용 안내 이 계산기는 <strong>입력값 기준 모의계산</strong>이며, 실제 퇴직금은 임금 항목·해석·회사 정산에 따라 달라질 수 있습니다. 평균임금·통상임금 판단은 노무사 영역입니다. 퇴직소득세는 <strong>2023년 개정 세법</strong> 기준이며, 매년 변동될 수 있습니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -623,18 +639,6 @@ export default function SeveranceClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        사용 안내 이 계산기는 <strong>입력값 기준 모의계산</strong>이며, 실제 퇴직금은 임금 항목·해석·회사 정산에 따라 달라질 수 있습니다. 평균임금·통상임금 판단은 노무사 영역입니다. 퇴직소득세는 <strong>2023년 개정 세법</strong> 기준이며, 매년 변동될 수 있습니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/savings" className={s.crossLink}>

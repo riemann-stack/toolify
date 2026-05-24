@@ -311,7 +311,7 @@ export default function InheritancePage() {
       </p>
 
       {/* 11. FAQ (accordion - salary style) */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문 (FAQ)</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
           {
@@ -375,7 +375,7 @@ export default function InheritancePage() {
       </div>
 
       {/* 12. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/finance/compound" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>📈</div>

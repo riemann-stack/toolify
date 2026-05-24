@@ -4,6 +4,7 @@ import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import SiteJsonLd from '@/components/SiteJsonLd'
+import AutoAds from '@/components/AutoAds'
 
 // 모바일 뷰포트 + 다크 테마 시각화 (status bar / 모바일 브라우저 UI)
 export const viewport: Viewport = {
@@ -87,6 +88,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body>
+        <AutoAds />
         <SiteJsonLd />
         <Nav />
         <main>{children}</main>

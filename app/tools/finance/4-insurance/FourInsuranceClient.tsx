@@ -327,6 +327,11 @@ export default function FourInsuranceClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '국민연금공단', href: 'https://www.nps.or.kr' },
+          { label: '국민건강보험공단', href: 'https://www.nhis.or.kr' },
+          { label: '근로복지공단', href: 'https://www.comwel.or.kr' },
+        ]}
       >
         참고용 추정값입니다.
       </Disclaimer>

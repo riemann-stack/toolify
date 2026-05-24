@@ -351,6 +351,10 @@ export default function StockClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '한국거래소 KRX', href: 'https://www.krx.co.kr' },
+          { label: '금융감독원 전자공시 DART', href: 'https://dart.fss.or.kr' },
+        ]}
       >
         투자 자문 도구가 아닙니다.
       </Disclaimer>

@@ -308,7 +308,7 @@ export default function NutsPage() {
       </p>
 
       {/* 9. FAQ — accordion */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 견과류는 하루에 얼마나 먹어야 하나요?</summary>
@@ -419,7 +419,7 @@ export default function NutsPage() {
       </div>
 
       {/* 11. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/health/bmr" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>🔥</div>

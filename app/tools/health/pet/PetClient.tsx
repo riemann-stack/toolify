@@ -129,6 +129,10 @@ const PetDisclaimer = () => (
       { href: '/tools/health/bmr',         label: '기초대사량' },
       { href: '/tools/health/weightloss',  label: '체중감량 계산기' },
     ]}
+    sources={[
+      { label: '대한수의사회', href: 'https://www.kvma.or.kr' },
+      { label: '농림축산식품부', href: 'https://www.mafra.go.kr' },
+    ]}
   >
     ⚠️ 본 계산기는 수의영양학 기반 참고용 도구입니다. 의료 진단·약물 용량·영양제 추천 X. 개별 반려동물의 건강 상태·질병 유무에 따라 실제 필요량은 다를 수 있으니 정확한 영양 관리는 수의사와 상담하세요.
   </Disclaimer>
@@ -140,6 +144,7 @@ export default function PetClient() {
   const [tab, setTab] = useState<'dog' | 'cat'>('dog')
   return (
     <div className={styles.wrap}>
+      <PetDisclaimer />
       <nav className={styles.tabs}>
         <button
           className={`${styles.tab}${tab === 'dog' ? ' ' + styles.tabDogActive : ''}`}
@@ -325,9 +330,7 @@ function DogTab() {
 
       <button className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
         {copied ? '✓ 복사 완료' : '📋 결과 복사'}
-      </button>
-      <PetDisclaimer />
-    </div>
+      </button>    </div>
   )
 }
 
@@ -549,8 +552,6 @@ function CatTab() {
 
       <button className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
         {copied ? '✓ 복사 완료' : '📋 결과 복사'}
-      </button>
-      <PetDisclaimer />
-    </div>
+      </button>    </div>
   )
 }

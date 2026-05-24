@@ -121,6 +121,18 @@ export default function BakingRecipeClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음
+      </Disclaimer>
+
       <div className={s.diffNotice}>
         <strong>💡 어떤 도구가 맞나요?</strong>
         <div className={s.diffRow}>
@@ -189,16 +201,6 @@ export default function BakingRecipeClient() {
         />
       )}
 
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음
-      </Disclaimer>
     </div>
   )
 }

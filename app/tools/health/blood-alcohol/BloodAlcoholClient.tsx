@@ -229,14 +229,17 @@ export default function BloodAlcoholClient() {
   return (
     <div className={s.wrap}>
       <Disclaimer
-        variant="medical"
+        variant="safety"
         related={[
-          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/life/alcohol', label: '알코올 도수 계산기' },
           { href: '/tools/health/bmr', label: '기초대사량' },
-          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+        sources={[
+          { label: '도로교통공단', href: 'https://www.koroad.or.kr' },
+          { label: '경찰청', href: 'https://www.police.go.kr' },
         ]}
       >
-        참고용 도구입니다
+        본 도구는 Widmark 공식 기반 <strong>참고용 추정</strong>이며, 개인 신체·식사·건강 상태에 따라 실제와 ±20~30% 이상 차이날 수 있습니다. <strong>BAC가 낮게 추정되더라도, 그리고 계산값과 관계없이 음주 후에는 운전하지 마세요</strong>(자가용·자전거·전동킥보드 모두). 음주운전은 형사처벌 대상이며 본 결과는 법적 판단 근거가 아닙니다. 대리운전·대중교통을 이용하세요.
       </Disclaimer>
 
       {/* 4개 탭 */}
@@ -439,7 +442,7 @@ export default function BloodAlcoholClient() {
             <div className={`${s.thresholdCard} ${s.thresholdSuspend}`}>
               <div className={s.thresholdLeft}>
                 <div className={s.thresholdLabel}>면허정지 기준 이하 (0.03)</div>
-                <div className={`${s.thresholdName} ${s.thresholdNameSuspend}`}>🚫 면허정지 해소</div>
+                <div className={`${s.thresholdName} ${s.thresholdNameSuspend}`}>🚫 0.03 미만 추정 시점</div>
               </div>
               <div className={s.thresholdRight}>
                 {peakBAC <= 0.03 ? (
@@ -456,7 +459,7 @@ export default function BloodAlcoholClient() {
             <div className={`${s.thresholdCard} ${s.thresholdRevoke}`}>
               <div className={s.thresholdLeft}>
                 <div className={s.thresholdLabel}>면허취소 기준 이하 (0.08)</div>
-                <div className={`${s.thresholdName} ${s.thresholdNameRevoke}`}>❌ 면허취소 해소</div>
+                <div className={`${s.thresholdName} ${s.thresholdNameRevoke}`}>❌ 0.08 미만 추정 시점</div>
               </div>
               <div className={s.thresholdRight}>
                 {peakBAC <= 0.08 ? (
@@ -497,7 +500,7 @@ export default function BloodAlcoholClient() {
               <div className={s.liveGrid}>
                 {peakBAC > 0.03 && (
                   <div className={`${s.liveBox} ${remainSuspendMs === 0 ? s.liveBoxDone : s.liveBoxWarn}`}>
-                    <div className={s.liveLabel}>🚫 면허정지 해소까지</div>
+                    <div className={s.liveLabel}>🚫 0.03 미만 추정까지</div>
                     <div className={s.liveTime}>
                       {remainSuspendMs === 0 ? '✓ 통과' : fmtRemain(remainSuspendMs)}
                     </div>
@@ -505,7 +508,7 @@ export default function BloodAlcoholClient() {
                 )}
                 {peakBAC > 0.08 && (
                   <div className={`${s.liveBox} ${remainRevokeMs === 0 ? s.liveBoxDone : s.liveBoxDanger}`}>
-                    <div className={s.liveLabel}>❌ 면허취소 해소까지</div>
+                    <div className={s.liveLabel}>❌ 0.08 미만 추정까지</div>
                     <div className={s.liveTime}>
                       {remainRevokeMs === 0 ? '✓ 통과' : fmtRemain(remainRevokeMs)}
                     </div>
@@ -521,7 +524,7 @@ export default function BloodAlcoholClient() {
             )}
             <p className={s.liveCaveat}>
               ⚠️ 위 카운트다운은 종료 시각 <strong>{pad2(endH)}:{pad2(endM)}</strong> 기준이며,
-              ALDH2 결손·수면 부족·식사량 등으로 ±20~30% 오차 가능 — <strong>최소 1~2시간 안전 여유</strong> 두기.
+              ALDH2 결손·수면 부족·식사량 등으로 ±20~30% 오차 가능 — <strong>계산값과 관계없이 음주 후 운전은 금지</strong>입니다.
             </p>
           </div>
 
@@ -551,8 +554,8 @@ export default function BloodAlcoholClient() {
                 <div className={s.hangoverItem}>
                   <span className={s.hangoverPhase}>6~12h</span>
                   <div>
-                    <strong>BAC 0 도달·간 회복 시작</strong> — 운전은 가능하지만 집중력 70~80%.
-                    중요 회의·면접·시험은 피하기
+                    <strong>BAC 0 도달 추정·간 회복 시작</strong> — BAC가 0으로 추정돼도 집중력은 70~80%로 저하된 상태.
+                    중요 회의·면접·시험은 피하고, 음주 후 운전은 금지
                   </div>
                 </div>
                 <div className={s.hangoverItem}>
@@ -710,17 +713,6 @@ export default function BloodAlcoholClient() {
         </div>
       </div>
 
-      <Disclaimer
-        variant="medical"
-        related={[
-          { href: '/tools/health/bmi', label: 'BMI 계산기' },
-          { href: '/tools/health/bmr', label: '기초대사량' },
-          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
-        ]}
-      >
-        음주운전은 범죄입니다
-      </Disclaimer>
-
       </>}
 
       {/* ──────── TAB 2: 다음날 아침 ──────── */}
@@ -840,13 +832,13 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM }: {
           {peakBAC > BAC_THRESHOLDS.REVOKE && (
             <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
               <span className={s.timelineTime}>{fmtTimeMin(result.revokeClearMin)}</span>
-              <span className={s.timelineLabel}>❌ 면허취소 해소 (0.08 미만)</span>
+              <span className={s.timelineLabel}>❌ 0.08 미만 추정 시점</span>
             </div>
           )}
           {peakBAC > BAC_THRESHOLDS.GENERAL_SUSPEND && (
             <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
               <span className={s.timelineTime}>{fmtTimeMin(result.suspendClearMin)}</span>
-              <span className={s.timelineLabel}>🚫 면허정지 해소 (0.03 미만)</span>
+              <span className={s.timelineLabel}>🚫 0.03 미만 추정 시점</span>
             </div>
           )}
           <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
@@ -884,7 +876,7 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM }: {
 
       <div className={s.warnBox}>
         <strong>⚠️ 한국 음주운전 단속 최다 케이스:</strong> 새벽 2~3시까지 음주 → 다음날 8시 운전 시 BAC 0.05~0.08 초과 가능성 큼.
-        「술이 깬 것 같다」는 주관적 판단 ≠ 실제 BAC. 본 도구 결과 ±20~30% 오차 가능 — 안전 여유 두기.
+        「술이 깬 것 같다」는 주관적 판단 ≠ 실제 BAC. 본 도구 결과 ±20~30% 오차 가능 — 계산값과 관계없이 음주 후 운전은 금지.
       </div>
     </>
   )
@@ -979,7 +971,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
   return (
     <>
       <div className={s.infoBox}>
-        💡 <strong>1차·2차·3차 누적 음주</strong> 시뮬. 자리별 시작·종료 시각과 음주 항목을 입력하면 BAC 곡선·면허정지 해소 시각 자동 계산.
+        💡 <strong>1차·2차·3차 누적 음주</strong> 시뮬. 자리별 시작·종료 시각과 음주 항목을 입력하면 BAC 곡선·0.03 미만 추정 시각 자동 계산.
       </div>
 
       {/* 자리 입력 */}
@@ -1106,7 +1098,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             <div className={s.timelineList} style={{ marginTop: 12 }}>
               <div className={`${s.timelineRow} ${s.timelineRowDanger}`}>
                 <span className={s.timelineTime}>{fmtTimeMin(result.suspendClearMin)}</span>
-                <span className={s.timelineLabel}>면허정지 해소 (0.03 미만)</span>
+                <span className={s.timelineLabel}>0.03 미만 추정 시점</span>
               </div>
               <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
                 <span className={s.timelineTime}>{fmtTimeMin(result.zeroMin)}</span>

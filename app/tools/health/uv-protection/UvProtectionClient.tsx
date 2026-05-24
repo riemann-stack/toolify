@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './uv-protection.module.css'
 
 // ─────────────────────────────────────────────
@@ -233,17 +234,16 @@ export default function UvProtectionClient() {
   return (
     <div className={s.wrap}>
       {/* 의료 도구 강조 면책 */}
-      <div className={s.medicalDisclaimer}>
-        <strong>ℹ️ 이 도구는 참고용 추정 도구입니다.</strong> UV 지수·피부 타입·SPF 기반 일광화상 위험 시간 <strong>추정치</strong>를 제공하며,
-        다음 요인에 따라 실제 위험은 달라질 수 있습니다:
-        <ul>
-          <li>개인 피부 상태·민감도·복용 약물</li>
-          <li>지역·고도·계절·시간대·구름 양·반사면</li>
-          <li>차단제 도포량·균등성·재도포 빈도</li>
-        </ul>
-        <strong>표시된 시간은 &lsquo;안전 시간&rsquo;이 아닌 &lsquo;화상 위험 추정 시간&rsquo;</strong>입니다.
-        피부 이상 증상(붉어짐·통증·물집)이 있다면 즉시 그늘로 이동하고, 필요 시 피부과 전문의 상담을 받으세요.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/caffeine', label: '카페인 잔존량' },
+          { href: '/tools/health/sleep-debt', label: '수면 부채' },
+          { href: '/tools/health/bmi', label: 'BMI 계산기' }
+        ]}
+      >
+        이 도구는 UV 지수·피부 타입·SPF 기반 일광화상 위험 시간 <strong>추정치</strong>입니다. 개인 피부 상태·복용 약물, 지역·고도·시간대·구름·반사면, 차단제 도포량·재도포 빈도에 따라 실제 위험은 달라집니다. <strong>표시 시간은 ‘안전 시간’이 아닌 ‘화상 위험 추정 시간’</strong>이며, 피부 이상(붉어짐·통증·물집) 시 즉시 그늘로 이동하고 필요 시 피부과 전문의와 상담하세요.
+      </Disclaimer>
 
       {/* 탭 */}
       <div className={s.tabs}>

@@ -30,7 +30,7 @@ export default function ToolsBrowser() {
             className={styles.searchInput}
             type="search"
             inputMode="search"
-            placeholder="도구 검색 — 연봉, BMI, 로또, ㅇㅂ…"
+            placeholder="필요한 도구를 검색하세요."
             value={q}
             onChange={(e) => setQ(e.target.value)}
             aria-label="도구 검색"

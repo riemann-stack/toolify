@@ -78,6 +78,22 @@ export default function GoldConverterClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/vat',      label: '부가세 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' },
+          { href: '/tools/unit/converter',   label: '단위 변환기' },
+        ]}
+        sources={[
+          { label: '한국거래소 KRX 금시장', href: 'https://www.krx.co.kr' },
+          { label: '한국금거래소', href: 'https://www.koreagoldx.co.kr' },
+        ]}
+      >
+        금 시세는 사용자 직접 입력이며 외부 API 의존 X (실시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국조폐공사</a>·은행 확인). 부가세·수수료·세공비·스프레드는 매장별 차이가 크니 실거래는 매장 확인. <strong>본 도구는 단위·가격 계산용 — 투자 권유 X.</strong>
+      </Disclaimer>
+
       <div className={styles.tabs}>
         {TABS.map((t) => (
           <button key={t.k}
@@ -104,16 +120,6 @@ export default function GoldConverterClient() {
       )}
       {tab === 'guide' && <GuideTab />}
 
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/vat',      label: '부가세 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' },
-          { href: '/tools/unit/converter',   label: '단위 변환기' },
-        ]}
-      >
-        금 시세는 사용자 직접 입력이며 외부 API 의존 X (실시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국조폐공사</a>·은행 확인). 부가세·수수료·세공비·스프레드는 매장별 차이가 크니 실거래는 매장 확인. <strong>본 도구는 단위·가격 계산용 — 투자 권유 X.</strong>
-      </Disclaimer>
     </div>
   )
 }

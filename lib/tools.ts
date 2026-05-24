@@ -35,7 +35,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/installment', icon: '💳', name: '카드 할부 계산기', desc: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로.' },
       { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기', desc: '국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. 알바·프리랜서 비교까지.' },
       { href: '/tools/finance/ipo-deposit', icon: '💰', name: '공모주 증거금 계산기', desc: '증거금 ↔ 예상 주수 양방향 + 5사6입·청약 한도 자동. 청약일 D-day 메모.', badge: 'new' },
-      { href: '/tools/finance/stock-decision', icon: '🐭', name: '주식 매수·매도 계산기', desc: '팔까 살까 고민될 때, 행동경제학 진단과 5가지 무작위 결정으로 미련 없이.', badge: 'new' },
+      { href: '/tools/finance/stock-decision', icon: '🧠', name: '주식 매도·매수 심리 진단', desc: '팔까 살까 망설일 때, 행동경제학 7대 편향 자가진단으로 내 결정에 끼어든 감정을 점검. 투자 권유·종목 추천 X.', badge: 'new' },
       { href: '/tools/finance/savings', icon: '💰', name: '저축액 계산기', desc: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA 절세 시뮬.', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 비용 계산기', desc: '낙찰가 + 취득세·명도·체납·수리·대출까지 진짜 들어가는 비용을 시나리오별로.', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일과 3개월 급여로 퇴직금·퇴직소득세·실수령 자동. DB/DC/IRP 4모드.', badge: 'new' },
@@ -210,6 +210,8 @@ export const categories: Category[] = [
       { href: '/tools/edu/cognitive-test',     icon: '🧠', name: '인지 능력 테스트',     desc: '반응속도·스트룹·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정.' },
       { href: '/tools/edu/fermi-estimate',     icon: '🧮', name: '페르미 추정 계산기',   desc: '막막한 문제를 변수로 쪼개고 시나리오로 비교해 대략 답을 추정하는 사고력 훈련.' },
       { href: '/tools/edu/gpa-converter',       icon: '🎓', name: '학점(GPA) 환산기',     desc: '한국 4.5·4.3 ↔ 미국 4.0 ↔ 영국 학위 등급. WES·비례·평어 3방식 동시 비교 + 한국 대학별 만점 가이드.', badge: 'new' },
+      { href: '/tools/edu/sci-units',           icon: '🔬', name: '과학 단위 변환기',     desc: 'SI 접두어·과학적/공학적 표기 상호 변환 + 옹스트롬·광년·eV 등 과학 스케일 단위 환산 + 주요 물리 상수표.', badge: 'new' },
+      { href: '/tools/edu/sig-figs',            icon: '📏', name: '유효숫자·오차 계산기', desc: '측정값 유효숫자 자동 판별·반올림 + 절대·상대·백분율오차 + 두 측정값의 오차 전파(±·×·÷·거듭제곱). 실험 보고서용.', badge: 'new' },
     ],
   },
   {

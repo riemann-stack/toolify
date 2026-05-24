@@ -108,6 +108,18 @@ export default function ScaleClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/chord', label: '코드 구성음' },
+          { href: '/tools/art/capo', label: '카포 차트' },
+          { href: '/tools/art/frequency', label: '음 주파수' }
+        ]}
+      >
+        사용 안내 음악 이론 표기는 학파·교재마다 약간 다를 수 있습니다. 다이어토닉 코드는 <strong>자연 7도 기준</strong>이며, 응용 화성학에서 추가 코드가 가능합니다. 기타 지판은 표준 튜닝(EADGBE) 기본 + 다른 튜닝 옵션.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -442,18 +454,6 @@ export default function ScaleClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/art/color', label: '색상 변환' },
-          { href: '/tools/art/gradient-generator', label: '그라디언트' },
-          { href: '/tools/art/golden-ratio', label: '황금 비율' }
-        ]}
-      >
-        사용 안내 음악 이론 표기는 학파·교재마다 약간 다를 수 있습니다. 다이어토닉 코드는 <strong>자연 7도 기준</strong>이며, 응용 화성학에서 추가 코드가 가능합니다. 기타 지판은 표준 튜닝(EADGBE) 기본 + 다른 튜닝 옵션.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/art/chord" className={s.crossLink}>

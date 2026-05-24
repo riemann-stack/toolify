@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './thawing.module.css'
 import {
   FOOD_TIPS,
@@ -209,6 +210,18 @@ function ThawTab() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/food-storage', label: '식품 보관 기간' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        해동 시간은 식재료 두께·형태·냉장고 성능에 따라 달라지는 <strong>참고용 추정</strong>입니다. 식중독 예방을 위해 <strong>상온 해동은 피하고 냉장(0~4℃)·찬물·전자레인지 해동</strong>을 이용하세요. 한 번 해동한 식품은 재냉동하지 말고, 해동 후에는 가급적 빨리 조리하세요.
+      </Disclaimer>
+
       {/* ★ 한국 인기 프리셋 (NEW) */}
       <div className={s.card}>
         <span className={s.cardLabel}>🇰🇷 한국 인기 냉동 식품 (빠른 입력)</span>

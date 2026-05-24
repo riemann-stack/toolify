@@ -153,7 +153,12 @@ export default function ContactPage() {
           <dd style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>youtil.kr</dd>
 
           <dt style={{ color: 'var(--muted)' }}>운영 형태</dt>
-          <dd style={{ color: 'var(--text)' }}>개인 운영 (비영리 무료 서비스)</dd>
+          <dd style={{ color: 'var(--text)' }}>
+            개인 운영 무료 웹서비스
+            <span style={{ display: 'block', color: 'var(--muted)', fontSize: '12px', marginTop: '4px', lineHeight: 1.6 }}>
+              운영 비용은 Google AdSense 등의 광고 수익으로 충당될 수 있습니다.
+            </span>
+          </dd>
 
           <dt style={{ color: 'var(--muted)' }}>운영 시작</dt>
           <dd style={{ color: 'var(--text)' }}>2026년</dd>

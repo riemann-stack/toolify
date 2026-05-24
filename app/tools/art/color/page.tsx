@@ -282,7 +282,7 @@ export default function ColorPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>관련 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트 생성기', desc: '문단·버튼·카드·JSON 더미 데이터' },

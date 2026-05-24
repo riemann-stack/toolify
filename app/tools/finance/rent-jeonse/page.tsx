@@ -239,9 +239,9 @@ export default function RentJeonsePage() {
           </div>
         </section>
 
-        {/* 7. 함께 보면 좋은 도구 — 최신 포맷 */}
+        {/* 7. 함께 쓰면 좋은 도구 — 최신 포맷 */}
         <section>
-          <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/finance/loan',          icon: '💳', name: '대출이자 계산기',         desc: '전세자금대출 원리금균등·금리 시뮬' },

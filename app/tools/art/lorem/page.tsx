@@ -210,7 +210,7 @@ export default function LoremPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>관련 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/art/charcount',     icon: '🔡', name: '글자수 세기',          desc: '공백 포함·제외 실시간 카운트' },

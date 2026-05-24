@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './sourdough.module.css'
 
 // ── 타입 ──────────────────────────────────
@@ -246,6 +247,18 @@ export default function SourdoughClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/baking-recipe', label: '제과 레시피 계산기' },
+          { href: '/tools/cooking/baking-schedule', label: '베이킹 일정 계산기' },
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' }
+        ]}
+      >
+        발효 시간은 일반 가이드이며 <strong>실내 온도·습도·스타터 활성도</strong>에 따라 크게 달라집니다. 시간보다 <strong>반죽 상태(부피·기포)</strong>로 판단하세요. 스타터·반죽에서 분홍/주황색이나 이상한 냄새가 나면 폐기하세요.
+      </Disclaimer>
+
       {/* ── 탭 ── */}
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'diagnose' ? styles.tabActive : ''}`} onClick={() => setTab('diagnose')}>

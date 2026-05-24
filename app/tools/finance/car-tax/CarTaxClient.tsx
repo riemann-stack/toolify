@@ -93,6 +93,10 @@ export default function CarTaxClient() {
           { href: '/tools/finance/loan',      label: '대출이자 계산기' },
           { href: '/tools/finance/4-insurance', label: '4대보험 계산기' },
         ]}
+        sources={[
+          { label: '위택스(지방세)', href: 'https://www.wetax.go.kr' },
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+        ]}
       >
         2026년 기준 자동차 세제 + 시장 평균 유류세. 친환경차 감면·다자녀 등 제도는 매년 일부 변경 — 등록 직전 정부24·홈택스 확인.
       </Disclaimer>

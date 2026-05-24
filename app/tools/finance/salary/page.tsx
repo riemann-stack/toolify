@@ -2,12 +2,13 @@ import Link from 'next/link'
 import SalaryClient from './SalaryClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import { buildSalaryTable, formatEok } from './salaryUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/salary',
   title: '연봉 실수령액 계산기 2026 — 월급·세후·4대보험·역산·연봉표',
   description:
-    '세금·4대보험 떼고 통장에 진짜 꽂히는 월급. 2026년 최신 기준 4대보험·근로소득세 자동 + 월 실수령 역산·인상률 시뮬·시급 환산·1,800만~2억 연봉표.',
+    '세금·4대보험 떼고 통장에 진짜 꽂히는 월급. 2026년 최신 기준 4대보험·근로소득세 자동 + 월 실수령 역산·체감 시급(야근·출퇴근 포함)·1,800만~2억 연봉표.',
   keywords: [
     '연봉실수령액', '연봉계산기2026', '세후연봉', '실수령액계산',
     '4대보험계산기', '월급실수령액', '연봉실수령액표',
@@ -16,20 +17,10 @@ export const metadata = buildMetadata({
   ],
 })
 
-const won = (n: number) => n.toLocaleString('ko-KR') + '원'
+const won = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원'
 
-const SALARY_TABLE_STATIC = [
-  { label: '2,400만원', gross: 2000000,  ins: 194340,  tax: 84040,    net: 1721620 },
-  { label: '3,000만원', gross: 2500000,  ins: 242920,  tax: 166540,   net: 2090540 },
-  { label: '3,600만원', gross: 3000000,  ins: 291510,  tax: 249040,   net: 2459450 },
-  { label: '4,200만원', gross: 3500000,  ins: 340090,  tax: 375540,   net: 2784370 },
-  { label: '4,800만원', gross: 4000000,  ins: 388690,  tax: 507540,   net: 3103770 },
-  { label: '5,400만원', gross: 4500000,  ins: 437270,  tax: 639540,   net: 3423190 },
-  { label: '6,000만원', gross: 5000000,  ins: 485860,  tax: 832040,   net: 3682100 },
-  { label: '7,000만원', gross: 5833333,  ins: 566820,  tax: 1152860,  net: 4113653 },
-  { label: '8,000만원', gross: 6666666,  ins: 633710,  tax: 1473700,  net: 4559256 },
-  { label: '1억원',     gross: 8333333,  ins: 716500,  tax: 2115360,  net: 5501473 },
-]
+/* 부양가족 1인·비과세 0원 기준 2026년 연봉 실수령액표 (1,800만~2억, 빌드 시 생성) */
+const SALARY_TABLE = buildSalaryTable(1, 0, 0)
 
 export default function SalaryPage() {
   return (
@@ -41,7 +32,7 @@ export default function SalaryPage() {
         💴 연봉 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        세금·4대보험 떼고 통장에 <strong style={{ color: 'var(--text)' }}>진짜 꽂히는 그 월급</strong>. 2026년 최신 기준 자동 적용 + 인상률·시급 환산.
+        세금·4대보험 떼고 통장에 <strong style={{ color: 'var(--text)' }}>진짜 꽂히는 그 월급</strong>. 2026년 최신 기준 자동 적용 + 역산·체감 시급.
       </p>
 
       <SalaryClient />
@@ -49,40 +40,44 @@ export default function SalaryPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* ── 1. 정적 연봉 실수령액표 (기존 유지·SEO 핵심) ── */}
+        {/* ── 1. 연봉 실수령액 표 (SEO 핵심) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            2026년 연봉 실수령액 표
+            연봉 실수령액 표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '8px' }}>
-            부양가족 1인(본인만), 비과세 없는 순수 급여 기준 2026년 실수령액. 국민연금·건강보험·장기요양·고용보험·근로소득세를 모두 반영했습니다.
+            부양가족 1인(본인만)·비과세 없는 순수 급여 기준 <strong style={{ color: 'var(--text)' }}>2026년</strong> 연봉별 실수령액(1,800만~2억). 국민연금·건강보험·장기요양·고용보험·근로소득세를 모두 반영했습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--accent)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span>💡</span>
-            표에 없는 연봉이나 상세한 비과세 항목은 상단 계산기를 사용하세요.
+            표에 없는 연봉, 부양가족·자녀·비과세 조건은 상단 계산기에서 직접 확인하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>연봉</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>월 총급여</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>월 실수령액</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>연봉</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>월 세전</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>월 실수령</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>연 실수령</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>실수령률</th>
                 </tr>
               </thead>
               <tbody>
-                {SALARY_TABLE_STATIC.map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.label}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{Math.round(row.gross / 10000).toLocaleString('ko-KR')}만원</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{won(row.net)}</td>
+                {SALARY_TABLE.map((row, i) => (
+                  <tr key={row.yearly} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatEok(row.yearly)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{won(row.monthlyGross)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{won(row.monthlyNet)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{formatEok(row.yearlyNet)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{row.takeHomeRate.toFixed(1)}%</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            ※ 부양가족 1인 기준, 비과세 미적용. 4대보험·세금 상세는 상단 계산기에서.
+            ※ 부양가족 1인 기준·비과세 미적용·2026년 4대보험 요율 및 근로소득 간이세액표 반영. 부양가족·자녀·비과세 항목을 반영한 정확한 값은 상단 계산기에서 확인하세요.
           </p>
         </section>
 
@@ -312,7 +307,7 @@ export default function SalaryPage() {
         {/* ── 8. 한국 직장인 연봉 분포 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            한국 직장인 연봉 분포 (2024년 기준)
+            한국 직장인 연봉 분포 (2026년 기준 추정)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '14px' }}>
             {[
@@ -367,7 +362,7 @@ export default function SalaryPage() {
               },
               {
                 q: '연봉 인상 시 실수령은 얼마나 늘어나나요?',
-                a: '인상률 그대로 실수령이 늘지 않습니다 (누진 세율 때문). 연봉 5,000만 → 5%(5,250만) 인상 시 월 약 +11만원(실수령률 +3.1%) / 10% 인상 시 월 +26만 / 20% 인상 시 월 +57만. 세전 인상률보다 실수령 인상률이 약 1~3%p 낮음. 특히 8,800만(24% → 35% 구간) 이상에서 차이 ↑. 본 도구의 <strong>[인상 시뮬]</strong> 탭에서 8가지 인상률을 한눈에 비교할 수 있습니다.',
+                a: '인상률 그대로 실수령이 늘지 않습니다 (누진 세율 때문). 연봉 5,000만 → 5%(5,250만) 인상 시 월 약 +11만원(실수령률 +3.1%) / 10% 인상 시 월 +26만 / 20% 인상 시 월 +57만. 세전 인상률보다 실수령 인상률이 약 1~3%p 낮음. 특히 8,800만(24% → 35% 구간) 이상에서 차이가 커집니다. 인상 후 연봉을 <strong>[실수령액] 탭</strong>에 직접 입력하면 늘어나는 월 실수령을 바로 확인할 수 있습니다.',
               },
               {
                 q: '13월 월급(연말정산)은 어떻게 계산되나요?',
@@ -375,7 +370,7 @@ export default function SalaryPage() {
               },
               {
                 q: '체감 시급은 어떻게 계산하나요?',
-                a: '<strong>체감 시급 = 연 실수령 ÷ 연간 총 노동 시간(출퇴근 포함)</strong>. 연봉 4,000만원·왕복 출퇴근 60분·주 5시간 야근 가정 시 — 세전 시급 약 16,000원 / 세후 시급 약 13,900원 / 야근 포함 약 11,800원 / 체감 시급 약 9,500원. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 약 17% 차이날 수 있습니다. 본 도구의 <strong>[시급] 탭</strong>에서 본인 조건으로 비교 가능합니다.',
+                a: '<strong>체감 시급 = 연 실수령 ÷ 연간 총 노동 시간(출퇴근 포함)</strong>. 연봉 4,000만원·왕복 출퇴근 60분·주 5시간 야근 가정 시 — 세전 시급 약 16,000원 / 세후 시급 약 13,900원 / 야근 포함 약 11,800원 / 체감 시급 약 9,500원. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 약 17% 차이날 수 있습니다. 본 도구의 <strong>[실수령액] 탭</strong>에서 &lsquo;체감 시급 보기&rsquo; 옵션을 켜면 본인 조건으로 비교 가능합니다.',
               },
             ].map((faq, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>

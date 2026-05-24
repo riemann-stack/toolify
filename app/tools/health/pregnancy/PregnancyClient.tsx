@@ -161,6 +161,10 @@ export default function PregnancyClient() {
           { href: '/tools/health/bmi', label: 'BMI 계산기' },
           { href: '/tools/health/bmr', label: '기초대사량 계산기' },
         ]}
+        sources={[
+          { label: '대한산부인과학회', href: 'https://www.ksog.org' },
+          { label: '보건복지부', href: 'https://www.mohw.go.kr' },
+        ]}
       >
         정확한 임신 주수는 초음파 검사로만 확인 가능하며, 산전 검사 일정·태아 크기는 일반 가이드라인입니다.
         질 출혈·심한 복통·발열(38℃↑)·심한 두통·태동 감소(2삼분기 이후)·양수 누출 등 응급 신호 시 즉시 산부인과·응급실로,

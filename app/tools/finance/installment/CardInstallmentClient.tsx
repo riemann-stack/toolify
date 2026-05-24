@@ -354,6 +354,10 @@ export default function CardInstallmentClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '여신금융협회 공시', href: 'https://www.crefia.or.kr' },
+          { label: '금융감독원 파인', href: 'https://fine.fss.or.kr' },
+        ]}
       >
         참고용 추정값입니다.
       </Disclaimer>

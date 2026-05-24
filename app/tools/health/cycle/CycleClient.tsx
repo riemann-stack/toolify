@@ -197,6 +197,22 @@ export default function CycleClient() {
         youtil 서버·외부 전송 X · 익명 사용 · <button className={s.wipeLink} onClick={wipeAllData}>한 번 클릭 전체 삭제</button>
       </div>
 
+      {/* ── 면책 (모든 탭 공통) ── */}
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량' },
+          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+        ]}
+        sources={[
+          { label: '대한산부인과학회', href: 'https://www.ksog.org' },
+          { label: '보건복지부', href: 'https://www.mohw.go.kr' },
+        ]}
+      >
+        본 도구는 일반 참고 가이드입니다 본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X</strong> 호르몬 약물·의약품 추천 X · 영양사 처방 X · 특정 브랜드 추천 X 다음 경우 <strong>산부인과 상담</strong>: 주기 변동 ±8일 이상 / 부정출혈·과다 출혈 / 6개월+ 무월경 / 심한 PMS·통증 / 임신 계획·피임
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         <button className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>🌙 주기 캘린더</button>
@@ -683,17 +699,6 @@ export default function CycleClient() {
         </>
       )}
 
-      {/* ── 면책 (모든 탭 공통) ── */}
-      <Disclaimer
-        variant="medical"
-        related={[
-          { href: '/tools/health/bmi', label: 'BMI 계산기' },
-          { href: '/tools/health/bmr', label: '기초대사량' },
-          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
-        ]}
-      >
-        본 도구는 일반 참고 가이드입니다 본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X</strong> 호르몬 약물·의약품 추천 X · 영양사 처방 X · 특정 브랜드 추천 X 다음 경우 <strong>산부인과 상담</strong>: 주기 변동 ±8일 이상 / 부정출혈·과다 출혈 / 6개월+ 무월경 / 심한 PMS·통증 / 임신 계획·피임
-      </Disclaimer>
     </div>
   )
 }

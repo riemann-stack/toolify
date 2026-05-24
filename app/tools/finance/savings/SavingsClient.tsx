@@ -111,6 +111,22 @@ export default function SavingsClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+        sources={[
+          { label: '금융감독원 금융상품한눈에', href: 'https://finlife.fss.or.kr' },
+          { label: '통계청 KOSIS', href: 'https://kosis.kr' },
+        ]}
+      >
+        사용 안내 이 도구는 <strong>자가진단·시뮬레이션 용도</strong>이며 투자·저축 권유가 아닙니다. 표시 권장 저축률은 일반 가이드이며, 본인 상황에 맞춰 조정하세요. 한국 가구 평균은 통계청 가계동향조사 일반 참고치이며, 매년 변동됩니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -626,18 +642,6 @@ export default function SavingsClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        사용 안내 이 도구는 <strong>자가진단·시뮬레이션 용도</strong>이며 투자·저축 권유가 아닙니다. 표시 권장 저축률은 일반 가이드이며, 본인 상황에 맞춰 조정하세요. 한국 가구 평균은 통계청 가계동향조사 일반 참고치이며, 매년 변동됩니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/dividend" className={s.crossLink}>

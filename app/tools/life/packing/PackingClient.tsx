@@ -114,6 +114,18 @@ export default function PackingClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 권장 개수는 일반 가이드 — 개인 취향·세탁 빈도·날씨 변화에 따라 조정. 항공사 수하물 한도는 항공사·노선·등급에 따라 다름 (확인 필수). 비상시 현지 구입 가능 (속옷·양말은 마트·편의점).
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -448,18 +460,6 @@ export default function PackingClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/life/travel-budget', label: '여행 예산' },
-          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
-          { href: '/tools/life/dutch', label: '더치페이 계산기' }
-        ]}
-      >
-        사용 안내 권장 개수는 일반 가이드 — 개인 취향·세탁 빈도·날씨 변화에 따라 조정. 항공사 수하물 한도는 항공사·노선·등급에 따라 다름 (확인 필수). 비상시 현지 구입 가능 (속옷·양말은 마트·편의점).
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-budget" className={s.crossLink}>

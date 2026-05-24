@@ -184,7 +184,7 @@ export default function FreelanceTaxPage() {
 
         {/* 4. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
             <div>
@@ -292,7 +292,7 @@ export default function FreelanceTaxPage() {
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>관련 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2 }}>
             <li><Link href="/tools/finance/salary" style={{ color: 'var(--accent)' }}>연봉 실수령액 계산기</Link> — 본업 근로소득 + 부업 합산 시 본업 실수령</li>
             <li><Link href="/tools/finance/4-insurance" style={{ color: 'var(--accent)' }}>4대보험 계산기</Link> — 국민연금·건강보험 부담액 (전액 소득공제)</li>

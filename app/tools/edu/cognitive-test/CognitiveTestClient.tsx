@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './cognitive-test.module.css'
 
 // ─────────────────────────────────────────────
@@ -444,15 +445,16 @@ export default function CognitiveTestClient() {
   return (
     <div className={s.wrap}>
       {/* 의료 면책 */}
-      <div className={s.medicalDisclaimer}>
-        <strong>ℹ️ 본 도구는 인지 심리학 게임을 시각화한 참고용 도구입니다.</strong> 의학적 진단·평가가 아니며, 실제 인지 능력은 다음에 따라 다릅니다:
-        <ul>
-          <li>수면·피로·스트레스·집중도</li>
-          <li>기기 성능·입력 지연·모니터 주사율 (60Hz vs 144Hz)</li>
-          <li>시간대·주변 환경</li>
-        </ul>
-        <strong>ADHD·인지 장애·치매 등 진단은 신경과·정신건강의학과 전문의</strong>에게 받으세요. 본 결과로 자가 진단하지 마세요.
-      </div>
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/edu/review-interval', label: '복습 간격' },
+          { href: '/tools/edu/fermi-estimate', label: '페르미 추정' },
+          { href: '/tools/edu/sci-units', label: '과학 단위' },
+        ]}
+      >
+        본 도구는 인지 심리학 게임을 시각화한 <strong>참고용</strong>이며 의학적 진단·평가가 아닙니다. 실제 인지 능력은 수면·피로·스트레스·집중도, 기기 성능·입력 지연·모니터 주사율(60Hz vs 144Hz), 시간대·주변 환경에 따라 달라집니다. <strong>ADHD·인지 장애·치매 등 진단은 신경과·정신건강의학과 전문의</strong>에게 받으시고, 본 결과로 자가 진단하지 마세요.
+      </Disclaimer>
 
       {/* 디바이스 안내 */}
       <div className={s.deviceNote}>

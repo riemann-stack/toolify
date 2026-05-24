@@ -106,6 +106,18 @@ export default function BrewClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        사용 안내 권장값은 SCA·일반 가이드, 취향에 따라 자유롭게 조정하세요. 원두 신선도(로스팅 일자)가 비율보다 큰 변수입니다 — 로스팅 후 7~21일이 최적. 정확한 추출에는 <strong>핸디 저울·온도계·타이머</strong>를 권장합니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -682,18 +694,6 @@ export default function BrewClient() {
           </div>
         </>
       )}
-
-      {/* 안내 (모든 탭 공통) */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        사용 안내 권장값은 SCA·일반 가이드, 취향에 따라 자유롭게 조정하세요. 원두 신선도(로스팅 일자)가 비율보다 큰 변수입니다 — 로스팅 후 7~21일이 최적. 정확한 추출에는 <strong>핸디 저울·온도계·타이머</strong>를 권장합니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/recipe" className={s.crossLink}>

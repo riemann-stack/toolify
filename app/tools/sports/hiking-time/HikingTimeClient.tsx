@@ -96,6 +96,22 @@ export default function HikingTimeClient() {
   return (
     <div className={styles.wrap}>
 
+      {/* ════════ 통합 면책 (상단) ════════ */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor',     label: '마라톤 예측' },
+          { href: '/tools/sports/pace',               label: '러닝 페이스' },
+          { href: '/tools/sports/interval-training',  label: '인터벌 훈련' },
+        ]}
+        sources={[
+          { label: '국립공원공단', href: 'https://www.knps.or.kr' },
+          { label: '산림청', href: 'https://www.forest.go.kr' },
+        ]}
+      >
+        개인 페이스·날씨·등산로 상태에 따라 <strong>±20% 차이</strong> 가능. 일몰 1시간 전 하산을 권장하며, 동계·우천·야간 산행은 경험자만 시도하세요. 응급 상황 시 <strong>119</strong> 즉시 신고 (산림청 산림안전 앱으로 GPS 좌표 전송). 국립공원·도립공원은 계절별 입산 시간 제한이 있으니 사전 확인 필수.
+      </Disclaimer>
+
       {/* ════════ 1. 한국 100대 명산 프리셋 ════════ */}
       <section>
         <label className={styles.label}>🏔️ 한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</label>
@@ -442,17 +458,6 @@ export default function HikingTimeClient() {
         </div>
       </section>
 
-      {/* ════════ 통합 면책 ════════ */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor',     label: '마라톤 예측' },
-          { href: '/tools/sports/pace',               label: '러닝 페이스' },
-          { href: '/tools/sports/interval-training',  label: '인터벌 훈련' },
-        ]}
-      >
-        개인 페이스·날씨·등산로 상태에 따라 <strong>±20% 차이</strong> 가능. 일몰 1시간 전 하산을 권장하며, 동계·우천·야간 산행은 경험자만 시도하세요. 응급 상황 시 <strong>119</strong> 즉시 신고 (산림청 산림안전 앱으로 GPS 좌표 전송). 국립공원·도립공원은 계절별 입산 시간 제한이 있으니 사전 확인 필수.
-      </Disclaimer>
     </div>
   )
 }

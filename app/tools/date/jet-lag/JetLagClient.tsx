@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './jet-lag.module.css'
 
 type City = { name: string; tz: string; offset: number }
@@ -133,6 +134,18 @@ export default function JetLagClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/date/timezone', label: '세계 시간 변환' },
+          { href: '/tools/date/age', label: '나이 계산기' },
+          { href: '/tools/health/sleep-debt', label: '수면 부채 계산기' },
+        ]}
+      >
+        시차 적응 일정·광노출·수면 권장은 일반 가이드라인이며 <strong>개인의 컨디션·나이·여행 패턴에 따라 차이</strong>가 큽니다. 수면제·멜라토닌 등 약물 복용은 의사·약사와 상담하세요.
+      </Disclaimer>
+
       {/* ─── 공통 입력 (컴팩트) ─── */}
       <div className={s.card}>
         <span className={s.cardLabel}>여행 기본 정보</span>

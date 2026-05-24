@@ -214,6 +214,17 @@ export default function EggTimerClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
+          { href: '/tools/cooking/frying',    label: '튀김 시간 계산기' },
+        ]}
+      >
+        화구 화력·냄비 두께·물 양에 따라 <strong>±30초 차이</strong> 가능 — 첫 시도는 30초 일찍 꺼내 확인하세요. 노른자가 흐르는 단계는 살모넬라 위험이 있으니 어린이·임산부·면역저하자는 완전 익힘을 권장합니다.
+      </Disclaimer>
 
       {/* ═══ 한국 요리 프리셋 ═══ */}
       <section>
@@ -447,17 +458,6 @@ export default function EggTimerClient() {
         </div>
       </section>
 
-      {/* ═══ 통합 면책 — 사이트 전체 동일 디자인 ═══ */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
-          { href: '/tools/cooking/frying',    label: '튀김 시간 계산기' },
-        ]}
-      >
-        화구 화력·냄비 두께·물 양에 따라 <strong>±30초 차이</strong> 가능 — 첫 시도는 30초 일찍 꺼내 확인하세요. 노른자가 흐르는 단계는 살모넬라 위험이 있으니 어린이·임산부·면역저하자는 완전 익힘을 권장합니다.
-      </Disclaimer>
     </div>
   )
 }

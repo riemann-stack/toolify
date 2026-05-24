@@ -228,7 +228,7 @@ export default function IpoDepositPage() {
       </div>
 
       {/* 7. FAQ — accordion */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 비례경쟁률 500:1이면 1주 받으려면 얼마 넣어야 하나요?</summary>
@@ -359,7 +359,7 @@ export default function IpoDepositPage() {
       </div>
 
       {/* 9. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/finance/compound" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>📈</div>

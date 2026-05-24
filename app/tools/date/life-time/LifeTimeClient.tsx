@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './life-time.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -217,6 +218,17 @@ export default function LifeTimeClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/date/age', label: '나이 계산기' },
+          { href: '/tools/date/dday', label: 'D-day 계산기' },
+          { href: '/tools/health/bmr', label: '기초대사량 계산기' },
+        ]}
+      >
+        본 도구는 평균 기대수명 통계를 바탕으로 한 <strong>참고용 추정</strong>이며, 실제 수명·남은 시간을 예측하지 않습니다. 동기 부여·시간 인식을 돕기 위한 도구로만 활용하세요.
+      </Disclaimer>
 
       {/* 진입 안내 */}
       <div className={styles.intro}>

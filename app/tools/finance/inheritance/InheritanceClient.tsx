@@ -85,6 +85,10 @@ export default function InheritanceClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+          { label: '국세청 상속세', href: 'https://www.nts.go.kr' },
+        ]}
       >
         본 계산기는 단순 참고용입니다.
       </Disclaimer>

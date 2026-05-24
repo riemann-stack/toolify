@@ -43,23 +43,6 @@ export default function SupplementPage() {
         복용 중인 영양제 50종 자동 합산 → <strong style={{ color: 'var(--text)' }}>상한 초과·약물 상호작용</strong> 경고.
       </p>
 
-      {/* 상단 면책 */}
-      <div style={{
-        background: 'rgba(220, 38, 38, 0.06)',
-        border: '1px solid rgba(220, 38, 38, 0.25)',
-        borderRadius: '12px',
-        padding: '14px 18px',
-        marginBottom: '32px',
-        fontSize: '13px',
-        color: 'var(--text)',
-        lineHeight: 1.7,
-      }}>
-        ⚕️ <strong style={{ color: '#DC2626' }}>본 도구는 「성분 정보 정리」 참고용입니다.</strong> 의학적 진단·처방·복용 권유 도구가 아닙니다.
-        처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담.<br />
-        도움: 한국 식약처 식품안전정보 <strong style={{ color: '#DC2626' }}>1577-1255</strong> · 의약품안전사용서비스 <strong style={{ color: '#DC2626' }}>1577-2334</strong><br />
-        <span style={{ color: 'var(--muted)', fontSize: 12 }}>참고: 한국영양학회, 보건복지부 한국인 영양소 섭취 기준 (2026)</span>
-      </div>
-
       <SupplementClient />
 
       <GuideDivider />
@@ -350,50 +333,6 @@ export default function SupplementPage() {
               </details>
             ))}
           </div>
-        </div>
-
-        {/* 11. 면책 강화 */}
-        <div style={{
-          background: 'rgba(220, 38, 38, 0.06)',
-          border: '1px solid rgba(220, 38, 38, 0.30)',
-          borderRadius: '12px',
-          padding: '18px 20px',
-          fontSize: '12.5px',
-          color: 'var(--muted)',
-          lineHeight: 1.85,
-        }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚕️ 면책 조항 (강화)</p>
-          <p style={{ marginBottom: 8 }}>
-            본 영양제 중복 체크 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다.
-            의학적 진단·처방·복용 권유 도구가 아닙니다.
-          </p>
-          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
-            <li>영양제는 식품, 약 X (한국 식약처 분류)</li>
-            <li>효과·안전성은 의약품 수준 평가 X</li>
-            <li>개인의 건강 상태·약물에 따라 영향 다름</li>
-            <li>라벨 표시량 vs 실제 함량 차이 가능</li>
-            <li>정책·기준 변경 가능</li>
-          </ul>
-          <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>다음 경우 반드시 의료 전문가 상담:</p>
-          <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
-            <li>처방약 복용 중</li>
-            <li>임신·수유 중</li>
-            <li>만성질환 (당뇨·간·신장·심혈관·갑상선)</li>
-            <li>65세 이상 / 18세 미만</li>
-            <li>영양제 부작용 의심</li>
-            <li>효과 미흡 또는 의심</li>
-          </ul>
-          <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>도움 받기:</p>
-          <ul style={{ paddingLeft: 18 }}>
-            <li>단골 약사 상담 (가장 빠르고 정확)</li>
-            <li>한국 식약처 식품안전정보: <strong style={{ color: '#DC2626' }}>1577-1255</strong></li>
-            <li>의약품안전사용서비스: <strong style={{ color: '#DC2626' }}>1577-2334</strong></li>
-            <li>한국임상영양학회</li>
-          </ul>
-          <p style={{ marginTop: 10, color: 'var(--text)', fontWeight: 600 }}>
-            ⚠️ &ldquo;많이 먹을수록 좋다&rdquo;는 절대 X. 영양제는 부족분 보충용이며, 균형 잡힌 식단이 우선.
-            영양 상태 정확 평가는 혈액 검사 (병원·건강검진) 권장.
-          </p>
         </div>
 
         {/* 7. 관련 도구 */}

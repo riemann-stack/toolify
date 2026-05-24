@@ -339,6 +339,10 @@ export default function CaffeineClient() {
           { href: '/tools/cooking/brew',         label: '커피 브루잉 계산기' },
           { href: '/tools/life/pomodoro',        label: '뽀모도로 타이머' },
         ]}
+        sources={[
+          { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' },
+          { label: '식품안전나라', href: 'https://www.foodsafetykorea.go.kr' },
+        ]}
       >
         반감기 5시간 (성인 평균) 기반 지수 붕괴 모델. 개인차 ±30%, 일반 안내용입니다.
       </Disclaimer>

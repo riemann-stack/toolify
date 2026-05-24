@@ -41,9 +41,6 @@
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveReverse  { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
-.tabActiveRaise    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
-.tabActiveHourly   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActiveTable    { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -331,55 +328,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── 인상 시뮬 표 ── */
-.raiseTable { display: flex; flex-direction: column; gap: 4px; }
-.raiseRow {
-  display: grid;
-  grid-template-columns: 60px 1fr 1fr 1fr;
-  gap: 8px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 9px 14px;
-  font-size: 12.5px;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.raiseRow.headerRow {
-  background: transparent; border: none;
-  font-size: 10.5px; color: var(--muted);
-  letter-spacing: 0.04em; text-transform: uppercase;
-  font-weight: 700; padding: 3px 14px;
-}
-.raiseCell {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  color: var(--text);
-}
-.raiseCellMain {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-  font-size: 13px;
-}
-.raiseRowHigh {
-  background: rgba(234,88,12,0.14);
-  border-color: rgba(234,88,12,0.30);
-}
-.raiseRowVeryHigh {
-  background: rgba(220,38,38,0.14);
-  border-color: rgba(220,38,38,0.30);
-}
-.raisePct {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  color: #0891B2;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ── 시급 비교 ── */
 .hourlyTable { display: flex; flex-direction: column; gap: 6px; }
 .hourlyRow {
@@ -443,43 +391,6 @@
   font-variant-numeric: tabular-nums;
   min-width: 70px;
   text-align: right;
-}
-
-/* ── 연봉표 ── */
-.salaryTable { display: flex; flex-direction: column; gap: 3px; }
-.salaryRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 70px;
-  gap: 8px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-@media (max-width: 540px) {
-  .salaryRow { grid-template-columns: 1fr 1fr 1fr 60px; gap: 5px; padding: 8px 10px; font-size: 11.5px; }
-  .salaryRow span:nth-child(2) { display: none; }
-  .salaryRow.headerRow span:nth-child(2) { display: none; }
-}
-.salaryRow.headerRow {
-  background: transparent; border: none;
-  font-size: 10.5px; color: var(--muted);
-  letter-spacing: 0.04em; text-transform: uppercase;
-  font-weight: 700; padding: 3px 12px;
-}
-.salaryRow span:first-child { color: var(--accent); font-weight: 700; }
-.salaryRow span:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  color: var(--text);
-}
-.salaryRowHighlight {
-  background: var(--accent-dim);
-  border-color: var(--accent);
 }
 
 /* ── 목표 표 ── */

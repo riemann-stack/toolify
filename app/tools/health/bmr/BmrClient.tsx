@@ -165,6 +165,10 @@ export default function BmrClient() {
           { href: '/tools/health/bmr', label: '기초대사량' },
           { href: '/tools/health/weightloss', label: '체중감량 계산기' }
         ]}
+        sources={[
+          { label: '보건복지부 영양섭취기준', href: 'https://www.mohw.go.kr' },
+          { label: '한국영양학회', href: 'https://www.kns.or.kr' },
+        ]}
       >
         의학적 진단·치료 도구가 아닙니다.
       </Disclaimer>

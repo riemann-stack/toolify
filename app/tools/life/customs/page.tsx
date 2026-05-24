@@ -192,7 +192,7 @@ export default function CustomsPage() {
       </div>
 
       {/* FAQ */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 미국 직구 200달러 넘으면 얼마 세금?</summary>
@@ -335,7 +335,7 @@ export default function CustomsPage() {
       </details>
 
       {/* 크로스링크 */}
-      <h2 style={sectionTitle}>🔗 함께 보면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/unit/size" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🛍️</p>

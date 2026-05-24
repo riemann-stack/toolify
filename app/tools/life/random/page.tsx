@@ -192,7 +192,7 @@ export default function RandomPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {

@@ -4,29 +4,23 @@ import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './salary.module.css'
 import {
-  NON_TAXABLE_ITEMS, RAISE_OPTIONS, MIN_HOURLY_WAGE_2026,
-  calcSalary, reverseCalcSalary, simulateRaise,
+  NON_TAXABLE_ITEMS, MIN_HOURLY_WAGE_2026,
+  calcSalary, reverseCalcSalary,
   calcHourlyWage, getSalaryPercentile,
-  buildSalaryTable, buildNetTargetTable,
+  buildNetTargetTable,
   won, formatEok, parseAmount,
 } from './salaryUtils'
 
-type Tab = 'main' | 'reverse' | 'raise' | 'hourly' | 'table'
+type Tab = 'main' | 'reverse'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
   { id: 'main',    name: '실수령액',  icon: '💴' },
   { id: 'reverse', name: '역산',      icon: '🔄' },
-  { id: 'raise',   name: '인상 시뮬', icon: '📈' },
-  { id: 'hourly',  name: '시급',     icon: '⏰' },
-  { id: 'table',   name: '연봉표',   icon: '📊' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
   main:    styles.tabActive,
   reverse: styles.tabActiveReverse,
-  raise:   styles.tabActiveRaise,
-  hourly:  styles.tabActiveHourly,
-  table:   styles.tabActiveTable,
 }
 
 const PRESETS = [
@@ -90,13 +84,8 @@ export default function SalaryClient() {
     [dependents, childrenCount, nonTaxableMonthly],
   )
 
-  /* 탭 3 — 인상 시뮬 */
-  const raiseResults = useMemo(() => {
-    if (!valid) return []
-    return RAISE_OPTIONS.map(p => simulateRaise(annualGross, p, dependents, childrenCount, nonTaxableMonthly))
-  }, [valid, annualGross, dependents, childrenCount, nonTaxableMonthly])
-
-  /* 탭 4 — 시급 */
+  /* 실수령액 탭 — 체감 시급 옵션 (통합) */
+  const [showHourly, setShowHourly] = useState(false)
   const [weeklyHours, setWeeklyHours] = useState(40)
   const [weeklyOvertime, setWeeklyOvertime] = useState(5)
   const [dailyCommute, setDailyCommute] = useState(60)
@@ -109,12 +98,6 @@ export default function SalaryClient() {
       weeklyHours, weeklyOvertime, dailyCommuteMin: dailyCommute, vacationDays,
     })
   }, [result, annualGross, weeklyHours, weeklyOvertime, dailyCommute, vacationDays])
-
-  /* 탭 5 — 연봉표 */
-  const salaryTable = useMemo(
-    () => buildSalaryTable(dependents, childrenCount, nonTaxableMonthly),
-    [dependents, childrenCount, nonTaxableMonthly],
-  )
 
   /* 복사 */
   const [copied, setCopied] = useState(false)
@@ -170,6 +153,11 @@ export default function SalaryClient() {
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
+        sources={[
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr' },
+          { label: '국민연금공단', href: 'https://www.nps.or.kr' },
+          { label: '국민건강보험공단', href: 'https://www.nhis.or.kr' },
+        ]}
       >
         2026년 4대보험 요율
       </Disclaimer>
@@ -185,26 +173,28 @@ export default function SalaryClient() {
         ))}
       </div>
 
-      {/* 공통 입력 — 연봉 */}
-      <div className={styles.card}>
-        <label className={styles.cardLabel}>세전 연봉 (만원)</label>
-        <div className={styles.inputRow}>
-          <input className={styles.numInput} type="number" inputMode="numeric"
-            placeholder="5000" value={annualMan} onChange={e => setAnnualMan(e.target.value)} />
-          <span className={styles.unit}>만원</span>
+      {/* 세전 연봉 — 실수령액 탭에서만 필요 */}
+      {tab === 'main' && (
+        <div className={styles.card}>
+          <label className={styles.cardLabel}>세전 연봉 (만원)</label>
+          <div className={styles.inputRow}>
+            <input className={styles.numInput} type="number" inputMode="numeric"
+              placeholder="5000" value={annualMan} onChange={e => setAnnualMan(e.target.value)} />
+            <span className={styles.unit}>만원</span>
+          </div>
+          <div className={styles.optionRow5} style={{ marginTop: 8 }}>
+            {PRESETS.map(p => (
+              <button key={p.value}
+                className={`${styles.optionBtn} ${parseAmount(annualMan) * 10_000 === p.value ? styles.optionActive : ''}`}
+                onClick={() => setAnnualMan(String(p.value / 10_000))}>
+                {p.label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className={styles.optionRow5} style={{ marginTop: 8 }}>
-          {PRESETS.map(p => (
-            <button key={p.value}
-              className={`${styles.optionBtn} ${parseAmount(annualMan) * 10_000 === p.value ? styles.optionActive : ''}`}
-              onClick={() => setAnnualMan(String(p.value / 10_000))}>
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
 
-      {/* 부양가족 + 자녀 */}
+      {/* 부양가족 + 자녀 — 모든 탭 공통(공제 계산에 사용) */}
       <div className={styles.fieldRow}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>부양가족 (본인 포함)</label>
@@ -267,7 +257,7 @@ export default function SalaryClient() {
         </details>
       </div>
 
-      {!valid && (
+      {tab === 'main' && !valid && (
         <div className={styles.empty}>
           <div className={styles.emptyTitle}>세전 연봉을 입력하세요</div>
           유효 범위: 100만원 ~ 50억원
@@ -405,10 +395,110 @@ export default function SalaryClient() {
               </div>
             </div>
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              ⓘ 통계청·국세청 임금근로자 평균 연봉 약 4,332만원, 중위소득 약 3,594만원 (2025년 기준).
+              ⓘ 통계청·국세청 임금근로자 평균 연봉 약 4,300만원, 중위소득 약 3,600만원 (2026년 기준 추정).
               본 위치는 추정값이며 업종·지역·연령에 따라 다릅니다.
             </p>
           </div>
+
+          {/* 체감 시급 (옵션 — 통합) */}
+          <div className={styles.card}>
+            <label className={`${styles.checkItem} ${showHourly ? styles.checkItemActive : ''}`} style={{ margin: 0 }}>
+              <input type="checkbox" checked={showHourly} onChange={e => setShowHourly(e.target.checked)} />
+              <div>
+                <strong>⏰ 체감 시급 보기</strong>
+                <small>야근·출퇴근 시간을 포함한 실질 시급까지 계산</small>
+              </div>
+            </label>
+          </div>
+
+          {showHourly && hourly && (
+            <>
+              <div className={styles.fieldRow}>
+                <div className={styles.card}>
+                  <label className={styles.cardLabel}>주 근무 시간 — {weeklyHours}시간</label>
+                  <div className={styles.sliderRow}>
+                    <input className={styles.slider} type="range" min="20" max="60" step="1"
+                      value={weeklyHours} onChange={e => setWeeklyHours(parseInt(e.target.value, 10))} />
+                    <span className={styles.sliderVal}>{weeklyHours}h</span>
+                  </div>
+                </div>
+                <div className={styles.card}>
+                  <label className={styles.cardLabel}>주 야근 — {weeklyOvertime}시간</label>
+                  <div className={styles.sliderRow}>
+                    <input className={styles.slider} type="range" min="0" max="30" step="1"
+                      value={weeklyOvertime} onChange={e => setWeeklyOvertime(parseInt(e.target.value, 10))} />
+                    <span className={styles.sliderVal}>{weeklyOvertime}h</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.fieldRow}>
+                <div className={styles.card}>
+                  <label className={styles.cardLabel}>일일 출퇴근 — {dailyCommute}분</label>
+                  <div className={styles.sliderRow}>
+                    <input className={styles.slider} type="range" min="0" max="180" step="5"
+                      value={dailyCommute} onChange={e => setDailyCommute(parseInt(e.target.value, 10))} />
+                    <span className={styles.sliderVal}>{dailyCommute}분</span>
+                  </div>
+                </div>
+                <div className={styles.card}>
+                  <label className={styles.cardLabel}>연차 사용 — {vacationDays}일</label>
+                  <div className={styles.sliderRow}>
+                    <input className={styles.slider} type="range" min="0" max="30" step="1"
+                      value={vacationDays} onChange={e => setVacationDays(parseInt(e.target.value, 10))} />
+                    <span className={styles.sliderVal}>{vacationDays}일</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.hero}
+                style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
+                <div className={styles.heroLabel}>체감 시급 (출퇴근 포함)</div>
+                <div className={styles.heroNum} style={{ color: '#EA580C' }}>
+                  {won(hourly.perceivedHourlyNet)}
+                </div>
+                <div className={styles.heroSub}>
+                  세전 시급 {won(hourly.baseHourlyGross)} · 세후 {won(hourly.baseHourlyNet)} · 야근 포함 {won(hourly.realHourlyNet)}
+                </div>
+                <div className={styles.heroDesc}>
+                  연간 총 노동 시간(출퇴근 포함): 약 {hourly.yearlyTotalHours.toLocaleString()}시간
+                </div>
+              </div>
+
+              <div className={styles.card}>
+                <label className={styles.cardLabel}>4가지 시급 비교</label>
+                <div className={styles.hourlyTable}>
+                  {[
+                    { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
+                    { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
+                    { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#CA8A04',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
+                    { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
+                  ].map((row, i) => (
+                    <div key={i} className={styles.hourlyRow}>
+                      <div>
+                        <div className={styles.hourlyName}>{row.name}<small>{row.desc}</small></div>
+                        <div className={styles.hourlyBar}>
+                          <div className={styles.hourlyBarFill} style={{ width: `${Math.min(100, row.ratio * 100)}%`, background: row.color }} />
+                        </div>
+                      </div>
+                      <span className={styles.hourlyVal} style={{ color: row.color }}>{won(row.val)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {hourly.perceivedHourlyNet < MIN_HOURLY_WAGE_2026 && (
+                <div className={styles.warnBox}>
+                  ⚠️ <strong>체감 시급이 2026년 최저시급({won(MIN_HOURLY_WAGE_2026)})보다 낮습니다.</strong>
+                  {' '}출퇴근·야근 부담이 큰 직장 환경입니다. 직장 환경 점검을 권장합니다.
+                </div>
+              )}
+
+              <div className={styles.infoBox}>
+                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 17% 차이날 수 있습니다.
+              </div>
+            </>
+          )}
 
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
@@ -497,213 +587,9 @@ export default function SalaryClient() {
                   setAnnualMan(String(reverseResult.grossYearly / 10_000))
                   setTab('main')
                 }}>💴 실수령 탭으로 적용</button>
-                <button className={styles.copyBtn} onClick={() => setTab('table')}>📊 연봉표</button>
               </div>
             </>
           )}
-        </>
-      )}
-
-      {/* ─────────── 탭 3: 인상 시뮬 ─────────── */}
-      {tab === 'raise' && result && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>인상 시뮬레이션</strong> — 세전 인상률보다 실수령 인상률이 약 1~3%p 낮습니다(누진 세율). 8가지 인상률을 한눈에 비교하세요.
-          </div>
-
-          <div className={styles.hero}
-            style={{ borderColor: 'rgba(8,145,178,0.30)', background: 'rgba(8,145,178,0.06)' }}>
-            <div className={styles.heroLabel}>현재 연봉 — 월 실수령 기준</div>
-            <div className={styles.heroNum} style={{ color: '#0891B2' }}>
-              {won(result.netMonthly)}
-            </div>
-            <div className={styles.heroSub}>
-              연봉 {formatEok(annualGross)} · 연 실수령 {formatEok(result.netYearly)}
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>인상률별 비교</label>
-            <div className={styles.raiseTable}>
-              <div className={`${styles.raiseRow} ${styles.headerRow}`}>
-                <span>인상률</span>
-                <span style={{ textAlign: 'right' }}>인상 후 연봉</span>
-                <span style={{ textAlign: 'right' }}>월 실수령</span>
-                <span style={{ textAlign: 'right' }}>월 +/-</span>
-              </div>
-              {raiseResults.map(r => (
-                <div key={r.percent}
-                  className={`${styles.raiseRow} ${
-                    r.percent >= 30 ? styles.raiseRowVeryHigh : r.percent >= 15 ? styles.raiseRowHigh : ''
-                  }`}>
-                  <span className={styles.raisePct}>+{r.percent}%</span>
-                  <span className={styles.raiseCell}>{formatEok(r.newYearly)}</span>
-                  <span className={styles.raiseCellMain}>{won(r.newNetMonthly)}</span>
-                  <span className={styles.raiseCell} style={{ color: 'var(--accent)' }}>
-                    +{won(r.monthlyIncreaseNet)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>해석</label>
-            <div className={styles.deductionTable}>
-              {raiseResults.slice(0, 5).map(r => (
-                <div key={r.percent} className={styles.deductionRow}>
-                  <span>+{r.percent}% 인상 시</span>
-                  <span style={{ color: 'var(--accent)' }}>월 +{won(r.monthlyIncreaseNet)}</span>
-                  <span style={{ color: '#EA580C' }}>실수령 +{r.netRaisePercent}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.infoBox}>
-            💡 <strong>이직 시 협상 가이드</strong> — 동일 직급 이직: +10~15% / 직급 상승 이직: +20~30% / 한국 평균 이직 인상률: 12~18%.
-            세전 인상률보다 실수령 인상률이 1~3%p 낮으니 협상 시 세후 기준도 함께 검토하세요.
-          </div>
-
-          <div className={styles.warnBox}>
-            ⓘ 본 도구는 연봉 인상이 실수령에 미치는 영향만 보여줍니다. 실제 협상 시 직급·역할 변화, 회사 복지·휴가, 출퇴근·근무 환경, 장기 커리어 가치를 함께 고려하세요.
-          </div>
-        </>
-      )}
-
-      {/* ─────────── 탭 4: 시급 ─────────── */}
-      {tab === 'hourly' && result && hourly && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>시급·체감 시급</strong> — 세전 시급은 연봉 ÷ (12 × 209시간). 야근·출퇴근을 포함하면 체감 시급이 크게 낮아집니다.
-          </div>
-
-          <div className={styles.fieldRow}>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>주 근무 시간 — {weeklyHours}시간</label>
-              <div className={styles.sliderRow}>
-                <input className={styles.slider} type="range" min="20" max="60" step="1"
-                  value={weeklyHours} onChange={e => setWeeklyHours(parseInt(e.target.value, 10))} />
-                <span className={styles.sliderVal}>{weeklyHours}h</span>
-              </div>
-            </div>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>주 야근 — {weeklyOvertime}시간</label>
-              <div className={styles.sliderRow}>
-                <input className={styles.slider} type="range" min="0" max="30" step="1"
-                  value={weeklyOvertime} onChange={e => setWeeklyOvertime(parseInt(e.target.value, 10))} />
-                <span className={styles.sliderVal}>{weeklyOvertime}h</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.fieldRow}>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>일일 출퇴근 — {dailyCommute}분</label>
-              <div className={styles.sliderRow}>
-                <input className={styles.slider} type="range" min="0" max="180" step="5"
-                  value={dailyCommute} onChange={e => setDailyCommute(parseInt(e.target.value, 10))} />
-                <span className={styles.sliderVal}>{dailyCommute}분</span>
-              </div>
-            </div>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>연차 사용 — {vacationDays}일</label>
-              <div className={styles.sliderRow}>
-                <input className={styles.slider} type="range" min="0" max="30" step="1"
-                  value={vacationDays} onChange={e => setVacationDays(parseInt(e.target.value, 10))} />
-                <span className={styles.sliderVal}>{vacationDays}일</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.hero}
-            style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
-            <div className={styles.heroLabel}>체감 시급 (출퇴근 포함)</div>
-            <div className={styles.heroNum} style={{ color: '#EA580C' }}>
-              {won(hourly.perceivedHourlyNet)}
-            </div>
-            <div className={styles.heroSub}>
-              세전 시급 {won(hourly.baseHourlyGross)} · 세후 {won(hourly.baseHourlyNet)} · 야근 포함 {won(hourly.realHourlyNet)}
-            </div>
-            <div className={styles.heroDesc}>
-              연간 총 노동 시간(출퇴근 포함): 약 {hourly.yearlyTotalHours.toLocaleString()}시간
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>4가지 시급 비교</label>
-            <div className={styles.hourlyTable}>
-              {[
-                { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
-                { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
-                { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#CA8A04',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
-                { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
-              ].map((row, i) => (
-                <div key={i} className={styles.hourlyRow}>
-                  <div>
-                    <div className={styles.hourlyName}>{row.name}<small>{row.desc}</small></div>
-                    <div className={styles.hourlyBar}>
-                      <div className={styles.hourlyBarFill} style={{ width: `${Math.min(100, row.ratio * 100)}%`, background: row.color }} />
-                    </div>
-                  </div>
-                  <span className={styles.hourlyVal} style={{ color: row.color }}>{won(row.val)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {hourly.perceivedHourlyNet < MIN_HOURLY_WAGE_2026 && (
-            <div className={styles.warnBox}>
-              ⚠️ <strong>체감 시급이 2026년 최저시급({won(MIN_HOURLY_WAGE_2026)})보다 낮습니다.</strong>
-              {' '}출퇴근·야근 부담이 큰 직장 환경입니다. 직장 환경 점검을 권장합니다.
-            </div>
-          )}
-
-          <div className={styles.infoBox}>
-            💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 17% 차이날 수 있습니다.
-          </div>
-        </>
-      )}
-
-      {/* ─────────── 탭 5: 연봉표 ─────────── */}
-      {tab === 'table' && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>2026년 연봉별 실수령액표</strong> — 부양가족 {dependents}명 · 자녀 {childrenCount}명 · 비과세 {won(nonTaxableMonthly)}/월 적용. 상단 입력값에 따라 자동 갱신됩니다.
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>연봉 1,800만 ~ 2억 실수령액표</label>
-            <div className={styles.salaryTable}>
-              <div className={`${styles.salaryRow} ${styles.headerRow}`}>
-                <span>연봉</span>
-                <span style={{ textAlign: 'right' }}>월 세전</span>
-                <span style={{ textAlign: 'right' }}>월 실수령</span>
-                <span style={{ textAlign: 'right' }}>연 실수령</span>
-                <span style={{ textAlign: 'right' }}>실수령률</span>
-              </div>
-              {salaryTable.map(row => {
-                const highlight = annualGross > 0 && Math.abs(row.yearly - annualGross) <= row.yearly * 0.05
-                return (
-                  <div key={row.yearly}
-                    className={`${styles.salaryRow} ${highlight ? styles.salaryRowHighlight : ''}`}>
-                    <span>{formatEok(row.yearly)}</span>
-                    <span>{won(row.monthlyGross)}</span>
-                    <span>{won(row.monthlyNet)}</span>
-                    <span>{formatEok(row.yearlyNet)}</span>
-                    <span>{row.takeHomeRate.toFixed(1)}%</span>
-                  </div>
-                )
-              })}
-            </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-              ⓘ 표의 값은 부양가족·자녀·비과세 입력에 따라 자동 갱신됩니다. 부양가족 1명·자녀 0명·비과세 0원 기본값으로 보려면 상단 입력을 초기화하세요.
-            </p>
-          </div>
-
-          <div className={styles.infoBox}>
-            💡 <strong>참고 — 한국 직장인 연봉 (2024년)</strong> — 평균 약 4,200만 / 중위 약 3,500만 / 신입 평균 약 2,800만 / 대기업 평균 약 7,200만 / 중소기업 평균 약 3,800만. 출처: 통계청·국세청.
-          </div>
         </>
       )}
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './timezone.module.css'
 import {
   CITIES, DEFAULT_SELECTED, City,
@@ -203,6 +204,17 @@ export default function TimezoneClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/date/jet-lag', label: '시차 계산기' },
+          { href: '/tools/date/server-time', label: '실시간 서버 시간' },
+          { href: '/tools/date/age', label: '나이 계산기' },
+        ]}
+      >
+        표준시·오프셋은 IANA 시간대 데이터 기준입니다. <strong>서머타임(DST) 전환 시점·국가별 제도 변경</strong>에 따라 실제와 달라질 수 있으니 중요한 일정은 현지 공식 시각을 함께 확인하세요.
+      </Disclaimer>
 
       {/* ── 기준 시각 입력 ── */}
       <div className={styles.card}>

@@ -126,7 +126,7 @@ export default function GradientGeneratorPage() {
 
         {/* 3. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
             <div>
@@ -234,7 +234,7 @@ background-image:
 
         {/* 4. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>관련 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <ul style={{ ...faqAnswer, paddingLeft: '20px', lineHeight: 2 }}>
             <li><Link href="/tools/art/color" style={{ color: 'var(--accent)' }}>색상 코드 변환기</Link> — HEX·RGB·HSL·OKLCH 단일 색상 변환과 팔레트 생성</li>
             <li><Link href="/tools/art/paint-mix" style={{ color: 'var(--accent)' }}>물감 혼합 계산기</Link> — 실제 안료 혼합 시뮬레이션 (Subtractive)</li>

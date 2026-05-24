@@ -148,6 +148,10 @@ export default function HousingScoreClient() {
           { href: '/tools/finance/loan',         label: '대출이자 계산기' },
           { href: '/tools/finance/real-estate',  label: '부동산 수익률' },
         ]}
+        sources={[
+          { label: '청약홈', href: 'https://www.applyhome.co.kr' },
+          { label: 'LH 청약플러스', href: 'https://apply.lh.or.kr' },
+        ]}
       >
         2025년 기준 주택법 시행규칙. 정부 정책·소득 기준은 매년 변경 — 청약 직전 청약홈·LH·HUG 공식 정보 재확인.
       </Disclaimer>

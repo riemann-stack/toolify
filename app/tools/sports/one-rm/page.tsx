@@ -439,7 +439,7 @@ export default function OneRMPage() {
       </p>
 
       {/* 10. FAQ — accordion 형식 */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 1RM을 직접 측정해야 하나요?</summary>
@@ -535,7 +535,7 @@ export default function OneRMPage() {
       </div>
 
       {/* 12. 관련 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/health/bmi" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>⚖️</div>

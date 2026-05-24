@@ -130,6 +130,8 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 교육
   '/tools/edu/gpa-converter':    ['학점', 'gpa', '학점환산', '4.5', '4.3', 'wes', '유학', '평점', 'a+', '평어', '백분위'],
+  '/tools/edu/sci-units':        ['과학단위', '과학적표기', '공학적표기', 'SI접두어', '나노', '마이크로', '옹스트롬', 'angstrom', 'eV', '전자볼트', '광년', '천문단위', '파섹', '물리상수', '지수변환'],
+  '/tools/edu/sig-figs':         ['유효숫자', '유효숫자계산', '반올림', '오차', '오차전파', '상대오차', '절대오차', '백분율오차', '불확도', '측정오차', '실험보고서', '일반물리실험', '일반화학실험', 'significant figures', 'error propagation'],
 
   // 인테리어
   '/tools/interior/wallpaper':   ['벽지', '도배', '도배지'],
@@ -181,7 +183,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/finance/freelance-tax':['프리랜서', '3.3', '종합소득세', '사업소득'],
   '/tools/finance/auction':      ['경매', '부동산경매', '낙찰가'],
   '/tools/finance/rent-jeonse':  ['전월세', '전세월세', '전세전환', '월세전환'],
-  '/tools/finance/stock-decision': ['주식매수', '주식매도', '손익', '익절', '손절'],
+  '/tools/finance/stock-decision': ['주식매수', '주식매도', '팔까살까', '익절', '손절', '투자심리', '결정장애', '행동경제학'],
   '/tools/finance/gold-converter': ['금시세', '돈', '한돈', '금변환', '금값'],
   '/tools/finance/historical-money': ['화폐사', '화폐가치', '환', '구원', '옛날돈', '인플레이션', '구매력', '화폐개혁', '1953', '1962', 'cpi', '소비자물가지수'],
 }

@@ -231,6 +231,18 @@ export default function ServingClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        본 도구는 일반 장보기 가이드입니다. 분량은 한국 성인 평균 기준 — 개인 식사량·체격·요리 스타일에 따라 다름. 첫 요리는 결과 상한값으로 준비 권장. 본 도구는 정확한 영양 진단·알레르기 진단·특정 브랜드 추천을 제공하지 않습니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${styles.tabs} ${styles.tabs3}`}>
         <button className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>🍽️ 재료별 분량</button>
@@ -623,16 +635,6 @@ export default function ServingClient() {
         </>
       )}
 
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        본 도구는 일반 장보기 가이드입니다. 분량은 한국 성인 평균 기준 — 개인 식사량·체격·요리 스타일에 따라 다름 첫 요리는 결과 상한값으로 준비 권장 본 도구는 정확한 영양 진단·알레르기 진단·특정 브랜드 추천을 제공하지 않음
-      </Disclaimer>
     </div>
   )
 }

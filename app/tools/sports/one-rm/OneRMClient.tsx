@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import s from './one-rm.module.css'
 import {
   generateWarmup, suggestRestForIntensity, rpeAdjustReps, adjustLevels,
@@ -225,6 +226,18 @@ export default function OneRMClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/interval-training', label: '인터벌 훈련' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/vo2max', label: 'VO2max 계산기' }
+        ]}
+      >
+        1RM은 공식 기반 <strong>추정치</strong>이며 개인의 근육 타입·경험·동작에 따라 차이가 큽니다. 실제 고중량 측정은 <strong>워밍업·보조자(스포터)·안전바</strong>를 갖추고 하시고, 통증·관절 이상 시 즉시 중단하세요. 부상 우려 시 정형외과·재활의학과 상담을 권장합니다.
+      </Disclaimer>
+
       <div className={`${s.tabs} ${s.tabs4}`}>
         <button className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>1RM 계산</button>
         <button className={`${s.tab} ${tab === 'training' ? s.tabActive : ''}`} onClick={() => setTab('training')}>훈련 중량</button>

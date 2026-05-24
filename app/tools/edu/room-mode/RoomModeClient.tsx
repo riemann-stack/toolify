@@ -69,6 +69,18 @@ export default function RoomModeClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
+          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
+        ]}
+      >
+        사용 안내 룸 모드는 <strong>직사각형 방 가정</strong> — 비대칭·복도·가구 영향 큼. 표시 주파수는 <strong>이상 모델</strong> — 실제는 ±10Hz 변동. 정확한 측정은 <strong>REW (Room EQ Wizard) + 측정 마이크</strong>를 권장합니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -416,18 +428,6 @@ export default function RoomModeClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
-          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
-          { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
-        ]}
-      >
-        사용 안내 룸 모드는 <strong>직사각형 방 가정</strong> — 비대칭·복도·가구 영향 큼. 표시 주파수는 <strong>이상 모델</strong> — 실제는 ±10Hz 변동. 정확한 측정은 <strong>REW (Room EQ Wizard) + 측정 마이크</strong>를 권장합니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/edu/sound-speed" className={s.crossLink}>

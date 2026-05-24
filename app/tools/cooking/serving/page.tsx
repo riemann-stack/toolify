@@ -371,7 +371,7 @@ export default function ServingPage() {
 
         {/* ── 10. FAQ (accordion + 5 new) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>❓ 자주 묻는 질문</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 파스타 1인분은 몇 그램인가요?</summary>
@@ -468,7 +468,7 @@ export default function ServingPage() {
 
         {/* ── 11. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>🔗 함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',         icon: '📐', name: '레시피 비율 계산기',         desc: '인분 환산·비율 조정' },

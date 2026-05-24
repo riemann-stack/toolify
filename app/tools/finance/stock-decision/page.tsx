@@ -4,9 +4,9 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock-decision',
-  title: '주식 매수·매도 계산기 — 자가진단 + 친칠라/고양이/동전 5가지 무작위 + 다수결 종합',
-  description: '팔까 살까 고민될 때 행동경제학 7개 편향 진단 + 친칠라·고양이·동전·다트·룰렛 5가지 무작위 결정으로 미련 없이.',
-  keywords: ['주식 고민', '주식 결정', '주식 사야할까', '매수 매도 결정', 'Lusha 쥐', 'Orlando 고양이', 'Burton Malkiel 원숭이', 'DALBAR', '행동경제학 투자', 'FOMO', '손실회피', '매몰비용', '결정장애'],
+  title: '주식 매도·매수 심리 진단 — 행동경제학 7대 편향 자가진단',
+  description: '팔까 살까 망설일 때, 행동경제학 7개 편향(FOMO·손실회피·매몰비용 등)으로 내 결정에 끼어든 감정을 점검하는 자가진단 도구. 투자 권유·종목 추천 X.',
+  keywords: ['주식 고민', '주식 결정', '주식 사야할까', '팔까 살까', '매수 매도 심리', '행동경제학 투자', 'FOMO', '손실회피', '매몰비용', '결정장애', '투자 심리'],
 })
 
 const sectionTitle: React.CSSProperties = {
@@ -53,16 +53,16 @@ export default function StockDecisionPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🐭 주식 매수·매도 계산기
+        🧠 주식 매도·매수 심리 진단
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        팔까 살까 고민될 때, 행동경제학 진단과 <strong style={{ color: 'var(--text)' }}>5가지 무작위 결정</strong>으로 미련 없이.
+        팔까 살까 망설일 때, <strong style={{ color: 'var(--text)' }}>행동경제학 7대 편향 자가진단</strong>으로 내 결정에 끼어든 감정을 먼저 점검하세요. <strong style={{ color: 'var(--text)' }}>투자 권유·종목 추천이 아닙니다.</strong>
       </p>
 
       <StockDecisionClient />
 
       {/* 1. 왜 이 도구가 필요한가 */}
-      <h2 style={sectionTitle}>📊 왜 무작위가 인간을 이길 때가 많을까</h2>
+      <h2 style={sectionTitle}>📊 왜 인간은 자기 편향을 이기기 어려운가</h2>
       <div style={card}>
         <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           DALBAR 보고서가 매년 보여주는 충격적 사실 — <strong>일반 투자자는 본인이 산 펀드 자체 수익률보다 절반 이하만 가져갑니다</strong>. 이유는 단순:
@@ -165,7 +165,7 @@ export default function StockDecisionPage() {
       </div>
 
       {/* 6. FAQ — accordion */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 정말 무작위가 인간보다 나은가요?</summary>
@@ -251,7 +251,7 @@ export default function StockDecisionPage() {
       </div>
 
       {/* 8. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/finance/stock" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>📉</div>

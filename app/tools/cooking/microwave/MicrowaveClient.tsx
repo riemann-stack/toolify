@@ -167,6 +167,18 @@ export default function MicrowaveClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/thawing',   label: '해동 시간 계산기' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' },
+          { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
+        ]}
+      >
+        전자레인지 모델·연식·실제 출력에 따라 결과가 다를 수 있습니다. 처음엔 환산 시간의 <strong>80%로 시작 → 부족하면 추가 가열</strong>해 과조리를 방지하세요. <strong>계란 통째·닫힌 용기·알루미늄 호일·금속 테두리 그릇은 절대 금지</strong> (폭발·화재 위험). 가열 후 그릇이 매우 뜨거우니 화상 주의.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -641,16 +653,6 @@ export default function MicrowaveClient() {
         </>
       )}
 
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/thawing',   label: '해동 시간 계산기' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' },
-          { href: '/tools/cooking/ramen',     label: '라면 물양 계산기' },
-        ]}
-      >
-        전자레인지 모델·연식·실제 출력에 따라 결과가 다를 수 있습니다. 처음엔 환산 시간의 <strong>80%로 시작 → 부족하면 추가 가열</strong>해 과조리를 방지하세요. <strong>계란 통째·닫힌 용기·알루미늄 호일·금속 테두리 그릇은 절대 금지</strong> (폭발·화재 위험). 가열 후 그릇이 매우 뜨거우니 화상 주의.
-      </Disclaimer>
     </div>
   )
 }

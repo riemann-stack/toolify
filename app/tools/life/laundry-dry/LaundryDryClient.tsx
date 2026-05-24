@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './laundry-dry.module.css'
 import {
   LAUNDRY_EQUIPMENT, recommendCombos, evaluateCombo,
@@ -283,6 +284,18 @@ export default function LaundryDryClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/packing', label: '여행 짐 체크리스트' },
+          { href: '/tools/life/unit-price', label: '단위당 가격 비교' },
+          { href: '/tools/life/pomodoro', label: '뽀모도로 타이머' }
+        ]}
+      >
+        건조 시간은 옷감·두께·습도·통풍·기온에 따라 크게 달라지는 <strong>참고용 추정</strong>입니다. 실제 건조 상태를 직접 확인하시고, 건조기 등 가전은 제조사 사용 설명서를 따르세요.
+      </Disclaimer>
+
       {/* ── 탭 네비 ── */}
       <div className={styles.tabs}>
         {([

@@ -148,6 +148,17 @@ export default function StockDecisionClient() {
 
   return (
     <div className={s.wrap}>
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/salary', label: '연봉 실수령액' },
+          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/compound', label: '복리 계산기' }
+        ]}
+      >
+        본 도구는 <strong>투자 의사결정 심리 점검용</strong>이며, 특정 종목·증권사 추천 X · 주가 예측 X · 투자 권유 X 입니다. 자가진단·결정 보조 결과 모두 <strong>본인 판단을 돕는 참고용</strong>일 뿐, 그대로 따르라는 권고가 아니며 모든 책임은 본인에게 있습니다. 종목 정보 검색·DB 보유 X, 입력한 종목명은 화면에만 표시되고 서버·localStorage에 저장되지 않습니다.
+      </Disclaimer>
+
       {/* 헤더 마스코트 */}
       <div className={s.mascotHeader}>
         <div className={s.mascotImgWrap}>
@@ -155,8 +166,8 @@ export default function StockDecisionClient() {
             fill sizes="80px" className={s.mascotImg} priority />
         </div>
         <div className={s.mascotText}>
-          <p className={s.mascotTitle}>오늘 결정 못 하시겠어요?</p>
-          <p className={s.mascotSub}>먼저 <strong>자가진단</strong>으로 감정 신호를 점검하고, 그래도 안 되면 무작위 모드.</p>
+          <p className={s.mascotTitle}>매수·매도 결정이 망설여지나요?</p>
+          <p className={s.mascotSub}><strong>자가진단</strong>으로 감정·편향 신호를 먼저 점검하세요. 결정 보조(무작위)는 본심을 끌어내는 보조 장치일 뿐, 결과를 그대로 따르는 게 아닙니다.</p>
         </div>
       </div>
 
@@ -475,18 +486,6 @@ export default function StockDecisionClient() {
           </div>
         </>
       )}
-
-      {/* 면책 */}
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
-        ]}
-      >
-        본 도구는 일반 의사결정 보조입니다 본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 투자 권유 X</strong> 자가진단·무작위 결과 모두 <strong>본인 판단 보조</strong> — 모든 책임은 본인에게 종목 정보 검색·DB 보유 X — 본인이 입력한 종목명은 화면에만 표시·서버 X·localStorage X
-      </Disclaimer>
     </div>
   )
 }

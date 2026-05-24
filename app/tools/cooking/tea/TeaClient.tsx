@@ -74,6 +74,18 @@ export default function TeaClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/brew', label: '커피 브루잉 계산기' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        사용 안내 권장값은 한국·일본·중국 차 협회 일반 가이드입니다. 차 등급·산지·로스팅·개인 취향에 따라 자유롭게 조정하세요. 카페인 함량은 추정치이며, 임산부·수면 민감자는 참고만 하세요.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs2}`}>
         {([
@@ -477,18 +489,6 @@ export default function TeaClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        사용 안내 권장값은 한국·일본·중국 차 협회 일반 가이드입니다. 차 등급·산지·로스팅·개인 취향에 따라 자유롭게 조정하세요. 카페인 함량은 추정치이며, 임산부·수면 민감자는 참고만 하세요.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/cooking/brew" className={s.crossLink}>

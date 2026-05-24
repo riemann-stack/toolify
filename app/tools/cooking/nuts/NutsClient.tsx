@@ -148,6 +148,18 @@ export default function NutsClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="medical"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/health/supplement', label: '영양제 중복 체크' },
+          { href: '/tools/cooking/serving', label: '인분 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다. 영양 정보는 평균값 (USDA·한국영양학회 기준 — 브랜드·지역별 차이). 알레르기 진단·치료, 영양 상담, 의약품·보충제 비교, 특정 브랜드 추천 X. 영유아·임산부·신장/갑상선 환자는 의사·영양사 상담 우선.
+      </Disclaimer>
+
       {/* ── 0. 인기 믹스 프리셋 (NEW) ── */}
       <div className={styles.card}>
         <label className={styles.cardLabel}>🥗 인기 믹스 — 한 번 클릭으로 적용</label>
@@ -471,16 +483,6 @@ export default function NutsClient() {
         </>
       )}
 
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다. 영양 정보는 평균값 (USDA·한국영양학회 기준 — 브랜드·지역별 차이) 알레르기 진단·치료, 영양 상담, 의약품·보충제 비교, 특정 브랜드 추천 X 영유아·임산부·신장/갑상선 환자: 의사·영양사 상담 우선
-      </Disclaimer>
     </div>
   )
 }

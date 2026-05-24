@@ -113,6 +113,18 @@ export default function WireClient() {
         실 시공은 전기기능사·전기공사업 등록 사업자에게 의뢰하세요.
       </div>
 
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 (반드시 읽어주세요) 🚨 <strong>일반인의 옥내·옥외 배선 자가시공은 전기공사업법상 불가능</strong>합니다. 시공은 반드시 <strong>전기기능사·전기공사기능사·전기공사업 등록 사업자</strong>에게 의뢰하세요. 자가시공 시 <strong>감전사·화재·법적 처벌·보험 거부</strong> 위험.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -607,18 +619,6 @@ export default function WireClient() {
           </div>
         </>
       )}
-
-      {/* 면책 (모든 탭 공통) */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
-          { href: '/tools/interior/room-area', label: '방 면적 계산' }
-        ]}
-      >
-        사용·시공 안내 (반드시 읽어주세요) 🚨 <strong>일반인의 옥내·옥외 배선 자가시공은 전기공사업법상 불가능</strong>합니다. 시공은 반드시 <strong>전기기능사·전기공사기능사·전기공사업 등록 사업자</strong>에게 의뢰하세요. 자가시공 시 <strong>감전사·화재·법적 처벌·보험 거부</strong> 위험.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/lighting" className={s.crossLink}>

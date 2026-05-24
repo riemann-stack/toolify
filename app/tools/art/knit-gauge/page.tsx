@@ -287,7 +287,7 @@ export default function KnitGaugePage() {
       </div>
 
       {/* FAQ */}
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 게이지 스와치가 꼭 필요한가요?</summary>
@@ -396,7 +396,7 @@ export default function KnitGaugePage() {
       </details>
 
       {/* 크로스링크 */}
-      <h2 style={sectionTitle}>🔗 함께 보면 좋은 도구</h2>
+      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/art/paint-mix" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🎨</p>

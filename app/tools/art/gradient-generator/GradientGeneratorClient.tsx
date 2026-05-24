@@ -245,6 +245,18 @@ export default function GradientGeneratorClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 / 가이드 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/gradient-generator', label: '그라디언트' },
+          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+        ]}
+      >
+        사용 가이드 <strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장 <strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력 <strong>Conic</strong>은 Figma 미지원 (Linear/Radial 권장)
+      </Disclaimer>
+
       {/* ── 탭 ── */}
       <div className={styles.tabs}>
         {([
@@ -684,18 +696,6 @@ export default function GradientGeneratorClient() {
           <PresetGroup title="🌐 글로벌 트렌드" subtitle={`${GLOBAL_PRESETS.length}종 · 부드러운·Retro·UI·파스텔`} presets={GLOBAL_PRESETS} onApply={(p) => setCfg({ ...cfg, ...presetToConfig(p) })} />
         </div>
       )}
-
-      {/* 면책 / 가이드 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/art/color', label: '색상 변환' },
-          { href: '/tools/art/gradient-generator', label: '그라디언트' },
-          { href: '/tools/art/golden-ratio', label: '황금 비율' }
-        ]}
-      >
-        사용 가이드 <strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장 <strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력 <strong>Conic</strong>은 Figma 미지원 (Linear/Radial 권장)
-      </Disclaimer>
     </div>
   )
 }

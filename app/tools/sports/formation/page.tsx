@@ -294,7 +294,7 @@ export default function FormationPage() {
 
         {/* 9. FAQ */}
         <section>
-          <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
+          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 포메이션 표기 「4-3-3」은 어떻게 읽나요?</summary>
@@ -369,7 +369,7 @@ export default function FormationPage() {
 
         {/* 7. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>🔗 함께 쓰면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             <Link href="/tools/life/random" style={{ ...card, display: 'block', textDecoration: 'none' }}>
               <div style={{ fontSize: '22px', marginBottom: '6px' }}>🎲</div>

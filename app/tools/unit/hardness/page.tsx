@@ -165,9 +165,9 @@ export default function HardnessPage() {
           </div>
         </section>
 
-        {/* 5. 함께 보면 좋은 도구 */}
+        {/* 5. 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/unit/converter',     icon: '🔄', name: '단위 변환기',          desc: '길이·무게·부피 일반 단위' },

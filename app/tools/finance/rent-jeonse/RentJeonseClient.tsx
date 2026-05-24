@@ -67,6 +67,22 @@ export default function RentJeonseClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        related={[
+          { href: '/tools/finance/loan',         label: '대출이자 계산기' },
+          { href: '/tools/finance/real-estate',  label: '부동산 투자 수익률' },
+          { href: '/tools/finance/savings',      label: '저축액 계산기' },
+        ]}
+        sources={[
+          { label: '국토교통부 실거래가', href: 'https://rt.molit.go.kr' },
+          { label: '주택도시보증공사 HUG', href: 'https://www.khug.or.kr' },
+        ]}
+      >
+        실제 계약은 공인중개사·법무사·HUG 사이트에서 확인 필수. 2026년 금리·세법 기준이며 매년 변동 가능. 전세사기 위험 점수는 일반 가이드이므로 정확한 평가는 등기부·실거래가 확인 필요. 임대료 5% 인상은 계약갱신청구권 행사 시만 적용되며 신규 계약은 시세대로.
+      </Disclaimer>
+
       <div className={styles.tabs}>
         {TABS.map((t) => (
           <button key={t.k}
@@ -81,16 +97,6 @@ export default function RentJeonseClient() {
       {tab === 'sim'     && <SimTab inputs={inputs} results={results} breakeven={breakeven} />}
       {tab === 'guide'   && <GuideTab inputs={inputs} />}
 
-      <Disclaimer
-        variant="finance"
-        related={[
-          { href: '/tools/finance/loan',         label: '대출이자 계산기' },
-          { href: '/tools/finance/real-estate',  label: '부동산 투자 수익률' },
-          { href: '/tools/finance/savings',      label: '저축액 계산기' },
-        ]}
-      >
-        실제 계약은 공인중개사·법무사·HUG 사이트에서 확인 필수. 2026년 금리·세법 기준이며 매년 변동 가능. 전세사기 위험 점수는 일반 가이드이므로 정확한 평가는 등기부·실거래가 확인 필요. 임대료 5% 인상은 계약갱신청구권 행사 시만 적용되며 신규 계약은 시세대로.
-      </Disclaimer>
     </div>
   )
 }

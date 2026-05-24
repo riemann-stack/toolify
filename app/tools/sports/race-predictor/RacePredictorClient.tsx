@@ -282,6 +282,18 @@ export default function RacePredictorClient() {
 
   return (
     <div className={styles.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        본 도구는 일반 가이드입니다 3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장 환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능) 25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119
+      </Disclaimer>
+
       {/* ── 탭 헤더 ── */}
       <div className={`${styles.tabs} ${styles.tabs4}`}>
         {([
@@ -842,17 +854,6 @@ export default function RacePredictorClient() {
         </div>
       )}
 
-      {/* 면책 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        본 도구는 일반 가이드입니다 3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장 환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능) 25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119
-      </Disclaimer>
     </div>
   )
 }

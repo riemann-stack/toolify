@@ -269,6 +269,10 @@ export default function BmiClient() {
           { href: '/tools/health/bmr', label: '기초대사량' },
           { href: '/tools/health/weightloss', label: '체중감량 계산기' }
         ]}
+        sources={[
+          { label: '대한비만학회', href: 'https://www.kosso.or.kr' },
+          { label: 'WHO', href: 'https://www.who.int' },
+        ]}
       >
         의학적 진단 도구가 아닙니다.
       </Disclaimer>

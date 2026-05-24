@@ -151,6 +151,18 @@ export default function TravelBudgetClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 안내 */}
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
+          { href: '/tools/life/dutch', label: '더치페이 계산기' }
+        ]}
+      >
+        사용 안내 평균 데이터는 일반 참고치 — 시기·환율·개인 취향에 따라 큰 차이. 항공권은 시즌·항공사·예매 시점에 따라 변동 큼 (스카이스캐너·구글 항공권 비교 권장). 환율은 사용자 입력 (실시간 X) — 환율 별도 확인 필요.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -636,18 +648,6 @@ export default function TravelBudgetClient() {
           </div>
         </>
       )}
-
-      {/* 안내 */}
-      <Disclaimer
-        variant="default"
-        related={[
-          { href: '/tools/life/travel-budget', label: '여행 예산' },
-          { href: '/tools/life/lotto', label: '로또 번호 생성기' },
-          { href: '/tools/life/dutch', label: '더치페이 계산기' }
-        ]}
-      >
-        사용 안내 평균 데이터는 일반 참고치 — 시기·환율·개인 취향에 따라 큰 차이. 항공권은 시즌·항공사·예매 시점에 따라 변동 큼 (스카이스캐너·구글 항공권 비교 권장). 환율은 사용자 입력 (실시간 X) — 환율 별도 확인 필요.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-tip" className={s.crossLink}>

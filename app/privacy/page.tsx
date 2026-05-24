@@ -6,7 +6,7 @@ export const metadata = buildMetadata({
   description: 'Youtil 개인정보처리방침입니다.',
 })
 
-const LAST_UPDATED  = '2026년 4월 12일'
+const LAST_UPDATED  = '2026년 5월 24일'
 const SITE_NAME     = 'Youtil'
 const SITE_URL      = 'https://youtil.kr'
 const CONTACT_EMAIL = 'contact@youtil.kr'
@@ -48,8 +48,15 @@ export default function PrivacyPage() {
             <li>접속 IP 주소</li>
             <li>접속 일시 및 서비스 이용 기록</li>
             <li>브라우저 종류 및 OS 정보</li>
-            <li>쿠키 및 방문 기록 (Google Analytics, Google AdSense)</li>
+            <li>쿠키(Cookie) 및 방문 기록 (Google Analytics, Google AdSense)</li>
+            <li>웹 비콘(Web Beacon)·픽셀 태그 등 추적 기술</li>
+            <li>광고 식별자 및 기타 기기 식별자</li>
           </ul>
+          <p style={{ marginTop: '12px' }}>
+            위 정보는 Google Analytics·Google AdSense 등 제3자 서비스가 쿠키, 웹 비콘, IP 주소,
+            기타 식별자를 통해 자동으로 수집·처리할 수 있습니다. {SITE_NAME}은 이러한 정보를
+            이용자 개인을 직접 식별하는 용도로 수집하지 않습니다.
+          </p>
         </section>
 
         {/* 3 */}
@@ -70,8 +77,10 @@ export default function PrivacyPage() {
             4. 쿠키(Cookie) 정책
           </h2>
           <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}은 Google Analytics 및 Google AdSense를 통해 쿠키를 사용합니다.
-            쿠키는 이용자의 브라우저에 저장되는 소량의 데이터로, 서비스 이용 패턴 분석 및
+            {SITE_NAME}은 Google Analytics 및 Google AdSense를 통해 쿠키와 더불어
+            <strong style={{ color: 'var(--text)' }}> 웹 비콘(Web Beacon)·픽셀 태그·IP 주소·광고 식별자 등 기타 식별자</strong>를
+            사용할 수 있습니다. 쿠키는 이용자의 브라우저에 저장되는 소량의 데이터이며, 웹 비콘은
+            페이지·광고의 열람 여부를 측정하는 기술입니다. 이들은 서비스 이용 패턴 분석 및
             맞춤형 광고 제공에 활용됩니다.
           </p>
           <p style={{ marginBottom: '12px' }}>
@@ -228,6 +237,62 @@ export default function PrivacyPage() {
                 <div style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.5 }}>{item.desc}</div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* 11 — 신규: 입력값(건강·재무 등 민감정보) 처리 */}
+        <section>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+            11. 계산기 입력값(건강·재무 등 민감정보) 처리
+          </h2>
+          <p style={{ marginBottom: '12px' }}>
+            {SITE_NAME}의 계산기·도구에 입력하시는 값(예: 체중·키·생리주기 등 건강 정보,
+            소득·대출·자산 등 재무 정보)은 <strong style={{ color: 'var(--text)' }}>민감한 정보로 취급</strong>되며,
+            아래 원칙에 따라 처리됩니다.
+          </p>
+          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>서버로 전송되지 않습니다.</strong>{' '}
+              모든 계산은 이용자의 브라우저 내부(클라이언트)에서만 이루어지며, 입력값이 {SITE_NAME}의
+              서버나 외부로 전송·저장되지 않습니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
+              방문·이용 통계만 수집하며, 이용자가 입력한 구체적 수치는 분석 이벤트에 담기지 않습니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>URL 주소(파라미터)에 입력값을 저장하지 않습니다.</strong>{' '}
+              입력값이 주소창에 노출되거나 링크 공유를 통해 외부로 새어 나가지 않습니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>광고 타기팅에 입력값을 사용하지 않습니다.</strong>{' '}
+              건강·재무 입력값은 Google AdSense를 포함한 어떤 광고의 타기팅·맞춤화에도 활용되지 않습니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>일부 도구는 편의를 위해 입력값을 본인 브라우저에만 저장</strong>합니다.{' '}
+              (예: 생리주기 기록 등은 브라우저의 로컬 저장소(localStorage)에 저장되며, 다른 기기와
+              동기화되지 않고 서버로 전송되지 않습니다.)
+            </li>
+          </ul>
+
+          <div style={{
+            background: 'var(--bg2)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
+            padding: '16px 20px',
+            marginTop: '16px',
+          }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '8px' }}>
+              브라우저에 저장된 데이터 삭제 방법
+            </p>
+            <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+              <li>각 도구 내 「전체 삭제」·「초기화」 버튼이 있는 경우 클릭하면 즉시 삭제됩니다.</li>
+              <li>
+                브라우저 설정에서 직접 삭제할 수도 있습니다 —{' '}
+                <span style={{ color: 'var(--text)' }}>설정 → 개인정보 및 보안 → 인터넷 사용 기록(쿠키·사이트 데이터) 삭제</span>.
+              </li>
+              <li>해당 사이트 데이터만 지우려면 주소창의 자물쇠(🔒) 아이콘 → 사이트 설정 → 데이터 삭제를 이용하세요.</li>
+            </ul>
           </div>
         </section>
 

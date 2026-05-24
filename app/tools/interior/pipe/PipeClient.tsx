@@ -79,6 +79,18 @@ export default function PipeClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/room-area', label: '방 면적 계산' }
+        ]}
+      >
+        사용·시공 안내 표시 치수는 KS·JIS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 실제 제품은 제조사 도면·시방서 우선. <strong>가스·고압·플랜트·소방 배관은 자격자 시공 의무</strong> (도시가스법·고압가스안전관리법 등). <strong>음용수 배관</strong>은 KC·위생 인증(KS·KCs) 자재만 사용해야 합니다.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
@@ -510,18 +522,6 @@ export default function PipeClient() {
           </div>
         </>
       )}
-
-      {/* 면책 (모든 탭 공통) */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
-          { href: '/tools/interior/room-area', label: '방 면적 계산' }
-        ]}
-      >
-        사용·시공 안내 표시 치수는 KS·JIS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 실제 제품은 제조사 도면·시방서 우선. <strong>가스·고압·플랜트·소방 배관은 자격자 시공 의무</strong> (도시가스법·고압가스안전관리법 등). <strong>음용수 배관</strong>은 KC·위생 인증(KS·KCs) 자재만 사용해야 합니다.
-      </Disclaimer>
 
       {/* 크로스링크 */}
       <Link href="/tools/interior/screw" className={s.crossLink}>

@@ -604,6 +604,18 @@ export default function GolfHandicapClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/pace', label: '러닝 페이스' },
+          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
+        ]}
+      >
+        WHS(세계 핸디캡 시스템) 기준 <strong>비공식 산출</strong>이며, 공식 핸디캡 인덱스는 대한골프협회(KGA)·소속 클럽을 통해 확인하세요.
+      </Disclaimer>
+
       <div className={s.tabs4}>
         <button className={`${s.tab} ${tab === 'index' ? s.tabActive : ''}`} onClick={() => setTab('index')}>
           📊 핸디캡 지수
@@ -1007,17 +1019,6 @@ function RecordsTab() {
           위에서 첫 라운드를 추가해 보세요. WHS 핸디캡은 20라운드 누적 시 안정화됩니다.
         </div>
       )}
-
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        비공식 산출
-      </Disclaimer>
     </div>
   )
 }

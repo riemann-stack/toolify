@@ -211,7 +211,7 @@ export default function SavingsPage() {
 
       {/* 관련 도구 — 최신 도구들과 동일 포맷 */}
       <section style={{ marginTop: '40px' }}>
-        <h2 style={sectionTitle}>함께 보면 좋은 도구</h2>
+        <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
           {[
             { href: '/tools/finance/salary',      icon: '💴', name: '연봉 실수령액 계산기',  desc: '4대보험·세금 + 월 실수령' },

@@ -301,23 +301,23 @@ export default function FoodStorageClient() {
 
   return (
     <div className={s.wrap}>
+      {/* 면책 */}
+      <Disclaimer
+        variant="safety"
+        related={[
+          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/thawing', label: '해동 시간 계산기' },
+          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
+        ]}
+      >
+        보관 기간은 일반 가이드(상온·냉장·냉동)이며 실제 온도·포장·신선도에 따라 달라집니다. <strong>색·냄새·곰팡이 등 이상이 보이면 기간과 무관하게 폐기</strong>하세요. 냉장 0~4℃·냉동 -18℃ 유지가 중요하며, 영유아·임산부·면역저하자는 더 보수적으로 판단하세요.
+      </Disclaimer>
+
       {/* 탭 */}
       <div className={s.tabs}>
         <button className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>📋 식재료 등록</button>
         <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>📖 보관 가이드</button>
       </div>
-
-      {/* 면책 조항 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
-          { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
-          { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
-        ]}
-      >
-        참고
-      </Disclaimer>
 
       {/* ── 탭 1: 등록 ── */}
       {tab === 'register' && (

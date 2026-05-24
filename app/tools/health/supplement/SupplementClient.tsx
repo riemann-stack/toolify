@@ -281,8 +281,12 @@ export default function SupplementClient() {
           { href: '/tools/health/bmr', label: '기초대사량' },
           { href: '/tools/health/weightloss', label: '체중감량 계산기' }
         ]}
+        sources={[
+          { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' },
+          { label: '한국영양학회', href: 'https://www.kns.or.kr' },
+        ]}
       >
-        본 도구는 「성분 정보 정리」 참고용입니다.
+        본 도구는 「성분 정보 정리」 참고용이며 의학적 진단·처방·복용 권유 도구가 아닙니다. 처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사와 상담하세요. 도움: 식약처 식품안전정보 <strong>1577-1255</strong> · 의약품안전사용서비스 <strong>1577-2334</strong>. (참고: 한국영양학회·보건복지부 한국인 영양소 섭취 기준)
       </Disclaimer>
 
       <div className={s.tabs}>
@@ -1044,16 +1048,6 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
         </div>
       </div>
 
-      <Disclaimer
-        variant="medical"
-        related={[
-          { href: '/tools/health/bmi', label: 'BMI 계산기' },
-          { href: '/tools/health/bmr', label: '기초대사량' },
-          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
-        ]}
-      >
-        처방약 복용 중·임신·수유·만성질환
-      </Disclaimer>
     </>
   )
 }
