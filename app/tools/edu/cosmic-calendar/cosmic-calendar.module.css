@@ -205,18 +205,186 @@
 }
 .unitCard strong { color: #9333EA; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
-/* ── 가로 타임라인 (탭 1) ── */
-.yearTimelineWrap {
-  background: rgba(0,0,0,0.20);
-  border-radius: 14px;
-  padding: 24px 16px 30px;
-  overflow-x: auto;
+/* ── 인터랙티브 타임라인 (탭 1·2) ── */
+.tlStage {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 18% 22%, rgba(155,89,182,0.15), transparent 55%),
+    radial-gradient(ellipse at 82% 70%, rgba(62,91,255,0.13), transparent 60%),
+    linear-gradient(180deg, #0a0a2e 0%, #1a0a3e 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 18px 14px;
+  overflow: visible;            /* 팝업이 잘리지 않도록 */
 }
-.yearTimelineSvg {
+.tlHint {
+  text-align: center;
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+/* 점이 위로 띄우는 팝업 공간 확보 */
+.tl {
+  position: relative;
+  padding: 64px 10px 8px;
+}
+.tlBar {
+  position: relative;
+  height: 40px;
+}
+.tlLine {
+  position: absolute;
+  left: 0; right: 0; top: 14px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #9B59B6 0%, #0891B2 50%, #059669 78%, #0D9488 100%);
+}
+
+/* 강조 구간 (인류는 여기부터) */
+.tlBand {
+  position: absolute;
+  top: 9px;
+  height: 14px;
+  border-radius: 4px;
+}
+.tlBandLabel {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 눈금 */
+.tlTick {
+  position: absolute;
+  top: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tlTickMark {
+  width: 1px;
+  height: 10px;
+  background: rgba(255,255,255,0.35);
+}
+.tlTickLabel {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Inter', system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+/* 점 */
+.tlPointWrap {
+  position: absolute;
+  top: 16px;                 /* 선 중앙 */
+  transform: translateX(-50%);
+}
+.tlDot {
+  position: relative;
   display: block;
-  height: auto;
-  min-width: 720px;
-  max-width: 100%;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #0a0a2e;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.tlDot:hover { transform: scale(1.25); }
+.tlPointActive .tlDot { transform: scale(1.3); }
+.tlDotCount {
+  position: absolute;
+  top: -7px; right: -7px;
+  min-width: 15px; height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0a0a2e;
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 15px;
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* 팝업 */
+.tlPop {
+  position: absolute;
+  bottom: 28px;
+  width: 230px;
+  background: #12123a;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 20;
+}
+.tlPopCenter { left: 50%; transform: translateX(-50%); }
+.tlPopStart  { left: -10px; }
+.tlPopEnd    { right: -10px; }
+
+.tlPointActive .tlPop { opacity: 1; visibility: visible; pointer-events: auto; }
+.tlPointActive { z-index: 25; }
+@media (hover: hover) {
+  .tlPointWrap:hover { z-index: 25; }
+  .tlPointWrap:hover .tlPop { opacity: 1; visibility: visible; pointer-events: auto; }
+}
+
+.tlPopHead {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.tlPopScroll {
+  max-height: 168px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tlPopRow {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.tlPopRow + .tlPopRow { margin-top: 0; }
+.tlPopIcon { font-size: 17px; flex-shrink: 0; line-height: 1.3; }
+.tlPopText { min-width: 0; }
+.tlPopName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+.tlPopMeta {
+  font-size: 11px;
+  color: #0D9488;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.tlPopDesc {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.6;
+  margin-top: 5px;
 }
 
 /* ── 12월 카드 그리드 ── */
