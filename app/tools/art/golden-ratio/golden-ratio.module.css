@@ -33,20 +33,25 @@
 
 /* ── 입력 필드 ── */
 .inputGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.fieldGroup { display: flex; flex-direction: column; gap: 6px; }
+.fieldGroup { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fieldLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-.inputRow { display: flex; align-items: center; gap: 6px; }
-.numInput {
-  flex: 1; min-width: 0;
+.inputRow {
+  display: flex; align-items: center; gap: 6px; min-width: 0; box-sizing: border-box;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 12px; font-size: 20px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
-  color: var(--text); outline: none; transition: border-color 0.2s;
+  padding: 0 12px; transition: border-color 0.2s;
+}
+.inputRow:focus-within { border-color: rgba(14,165,233,0.5); }
+.inputRow:has(input:disabled) { opacity: 0.55; background: var(--bg2); }
+.numInput {
+  flex: 1; min-width: 0; width: 100%;
+  background: transparent; border: none;
+  padding: 11px 0; font-size: 20px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); outline: none;
   -moz-appearance: textfield; appearance: textfield;
 }
-.numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.numInput:focus { border-color: rgba(14,165,233,0.5); }
+.numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
-.numInput:disabled { opacity: 0.55; background: var(--bg2); }
+.numInput:disabled { color: var(--muted); }
 .unit { font-size: 13px; color: var(--muted); flex-shrink: 0; }
 
 /* ── 선택형 (셀렉트/라디오) ── */

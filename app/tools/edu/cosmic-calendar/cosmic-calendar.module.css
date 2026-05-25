@@ -316,7 +316,7 @@
 .eventCard.borderCivilization { border-left-color: #DC2626; }
 .eventCard.borderNow          { border-left-color: #0D9488; }
 
-.eventIcon { font-size: 28px; flex-shrink: 0; }
+.eventDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
 .eventBody { flex: 1; min-width: 0; }
 .eventName { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
 .eventDate {

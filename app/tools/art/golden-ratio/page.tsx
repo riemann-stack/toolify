@@ -5,15 +5,15 @@ import { GuideDivider } from "@/components/ToolSection"
 
 export const metadata = buildMetadata({
   path: '/tools/art/golden-ratio',
-  title: '황금 비율 계산기 — 피보나치 나선·비율 비교·디자인 계산',
-  description: 'φ = 1.618 가로·세로 계산 + 황금 직사각형·나선 시각화와 16:9·A4·인스타·유튜브 비율 비교.',
-  keywords: ['황금비율계산기', '황금비계산기', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선', '비율비교', '백은비율', '16:9 비율'],
+  title: '황금 비율 계산기 — 1:1.618 가로세로·황금분할·피보나치 나선',
+  description: '황금 비율 φ=1.618로 긴 변·짧은 변·전체 길이 자동 계산 + 가로세로 비율(W:H)과 황금비 차이 비교 + 황금 직사각형·나선 시각화. 16:9·A4·인스타·유튜브 비율 비교까지.',
+  keywords: ['황금비율계산기', '황금비계산기', '황금분할', '1:1.618', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선', '황금사각형', '비율비교', '백은비율', '16:9 비율', '이미지 비율 계산'],
 })
 
 export default function GoldenRatioPage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🌀 황금 비율 계산기
       </h1>
@@ -231,15 +231,15 @@ export default function GoldenRatioPage() {
           </div>
         </div>
 
-        {/* ── 6. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/color',   icon: '🎨', name: '색상 코드 변환기',  desc: 'HEX·RGB·HSL 즉시 변환' },
-              { href: '/tools/unit/length', icon: '📏', name: '길이 변환기',       desc: 'cm·m·inch·ft 단위 변환' },
+              { href: '/tools/art/color',     icon: '🎨', name: '색상 코드 변환기',  desc: 'HEX·RGB·HSL 즉시 변환' },
+              { href: '/tools/unit/converter', icon: '📏', name: '단위 변환기',       desc: '길이·면적 등 14종 변환' },
               { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '인분 수 비율 자동 계산' },
-              { href: '/tools/art/lorem',   icon: '📝', name: '더미 텍스트 생성기', desc: '레이아웃 검증용 더미' },
+              { href: '/tools/art/lorem',     icon: '📝', name: '더미 텍스트 생성기', desc: '레이아웃 검증용 더미' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

@@ -1,6 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import s from './grip-size.module.css'
 import {
@@ -422,128 +423,38 @@ export default function GripSizeClient() {
   )
 }
 
-/* ─── 손 측정 SVG 가이드 ─── */
+/* ─── 손 측정 가이드 이미지 ───
+ * 이미지 파일 위치: public/images/grip-size/hand-ruler.png
+ */
 function HandMeasureSvg({ palmCm, fullCm }: { palmCm: number; fullCm: number }) {
   void palmCm; void fullCm
   return (
-    <svg viewBox="0 0 400 280" className={s.handSvg} preserveAspectRatio="xMidYMid meet">
-      {/* 손 외곽 (오른손 손바닥) */}
-      <path
-        d="M 200 260
-           L 200 230
-           Q 165 225 155 215
-           Q 145 200 145 170
-           L 145 100
-           Q 145 80 158 78
-           Q 168 80 168 100
-           L 168 145
-           L 170 145
-           L 170 70
-           Q 170 55 183 55
-           Q 195 57 195 70
-           L 195 145
-           L 197 145
-           L 197 60
-           Q 197 45 210 45
-           Q 222 47 222 60
-           L 222 145
-           L 224 145
-           L 224 75
-           Q 224 62 237 62
-           Q 248 65 248 78
-           L 248 165
-           Q 248 200 240 215
-           Q 230 225 200 230 Z"
-        fill="rgba(14, 165, 233, 0.08)"
-        stroke="var(--accent)"
-        strokeWidth="2"
+    <div className={s.handImgWrap} style={{ aspectRatio: '400 / 280' }}>
+      <Image
+        src="/images/grip-size/hand-ruler.png"
+        alt="자로 손 크기 측정법 — 손바닥+약지 길이(테니스)와 손목~중지 끝 길이(골프) 측정 위치 안내"
+        fill
+        sizes="(max-width: 480px) 100vw, 440px"
+        className={s.handImg}
       />
-
-      {/* 손목 라인 */}
-      <line x1="160" y1="258" x2="248" y2="258" stroke="#fff" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.6" />
-      <text x="155" y="262" fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Noto Sans KR, sans-serif">손목</text>
-
-      {/* 약지(ring finger) 강조 + 화살표 */}
-      <line x1="210" y1="45" x2="210" y2="258" stroke="#059669" strokeWidth="2.5" strokeDasharray="6 4" opacity="0.9" />
-
-      {/* 손바닥 두 번째 주름 점 */}
-      <circle cx="210" cy="178" r="4" fill="#FFD93E" stroke="#000" strokeWidth="1" />
-      <text x="218" y="180" fill="#FFD93E" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">2번째 주름</text>
-
-      {/* 약지 끝 점 */}
-      <circle cx="210" cy="45" r="4" fill="#FFD93E" stroke="#000" strokeWidth="1" />
-      <text x="218" y="48" fill="#FFD93E" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">약지 끝</text>
-
-      {/* ① 측정 라벨 */}
-      <g transform="translate(110, 110)">
-        <rect x="-4" y="-12" width="56" height="24" rx="4" fill="rgba(0,0,0,0.7)" />
-        <text x="0" y="2" fill="#059669" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">① 테니스</text>
-        <text x="0" y="14" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">손바닥+약지</text>
-      </g>
-      <path d="M 165 117 L 200 120" stroke="#059669" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-      {/* 손목→중지 끝 (전체 손길이) */}
-      <circle cx="180" cy="258" r="3.5" fill="#0891B2" stroke="#000" strokeWidth="1" />
-      <circle cx="183" cy="55" r="3.5" fill="#0891B2" stroke="#000" strokeWidth="1" />
-      <line x1="180" y1="258" x2="183" y2="55" stroke="#0891B2" strokeWidth="1.8" strokeDasharray="4 3" opacity="0.7" />
-
-      <g transform="translate(60, 200)">
-        <rect x="-4" y="-12" width="62" height="24" rx="4" fill="rgba(0,0,0,0.7)" />
-        <text x="0" y="2" fill="#0891B2" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">② 골프</text>
-        <text x="0" y="14" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">손목~중지 끝</text>
-      </g>
-      <path d="M 122 207 L 175 200" stroke="#0891B2" strokeWidth="1.5" markerEnd="url(#arrowB)" />
-
-      {/* 화살표 마커 */}
-      <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669" />
-        </marker>
-        <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2" />
-        </marker>
-      </defs>
-    </svg>
+    </div>
   )
 }
 
-/* ─── 펜슬 테스트 SVG ─── */
+/* ─── 펜슬 테스트 가이드 이미지 ───
+ * 이미지 파일 위치: public/images/grip-size/hand-pencil.png
+ */
 function PencilTestSvg({ result }: { result: 'snug' | 'fit' | 'gap' | null }) {
   void result
   return (
-    <svg viewBox="0 0 400 200" className={s.handSvg} preserveAspectRatio="xMidYMid meet">
-      {/* 그립 (8각형 모양 라켓 손잡이) */}
-      <rect x="160" y="60" width="80" height="100" rx="6"
-        fill="rgba(255, 217, 62, 0.20)" stroke="#FFD93E" strokeWidth="2" />
-      <text x="200" y="115" fill="#FFD93E" fontSize="11" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">라켓 그립</text>
-
-      {/* 손가락 (그립을 감싼) */}
-      {[0, 1, 2, 3].map(i => (
-        <g key={i}>
-          <rect x={155 + i * 23} y="40" width="18" height="50" rx="4"
-            fill="rgba(14, 165, 233, 0.18)" stroke="var(--accent)" strokeWidth="1.5" />
-        </g>
-      ))}
-
-      {/* 손가락 끝 ~ 손바닥 사이 공간 */}
-      <line x1="160" y1="90" x2="240" y2="90" stroke="#fff" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-
-      {/* 검지 (테스트용) */}
-      <rect x="275" y="65" width="16" height="48" rx="4"
-        fill="rgba(8, 145, 178, 0.30)" stroke="#0891B2" strokeWidth="2" />
-      <text x="283" y="55" fill="#0891B2" fontSize="10" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">검지</text>
-      <path d="M 283 122 Q 283 140 240 140" stroke="#0891B2" strokeWidth="1.5" fill="none" strokeDasharray="3 3" markerEnd="url(#arrowC)" />
-
-      {/* 안내 텍스트 */}
-      <text x="200" y="180" textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="Noto Sans KR, sans-serif">
-        손가락 끝 ↔ 손바닥 빈 공간에 검지가 딱 들어가면 OK
-      </text>
-
-      <defs>
-        <marker id="arrowC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2" />
-        </marker>
-      </defs>
-    </svg>
+    <div className={s.handImgWrap} style={{ aspectRatio: '400 / 200' }}>
+      <Image
+        src="/images/grip-size/hand-pencil.png"
+        alt="펜슬 테스트 — 라켓을 잡은 손가락 끝과 손바닥 사이 공간에 반대 손 검지를 넣어 그립 크기를 확인하는 방법"
+        fill
+        sizes="(max-width: 480px) 100vw, 440px"
+        className={s.handImg}
+      />
+    </div>
   )
 }

@@ -128,14 +128,14 @@ async function measureExternal(url: string): Promise<ProxyResult> {
   }
 }
 
-/* 한국 인기 티켓팅·신청 사이트 프리셋 */
+/* 한국 인기 티켓팅·예매 사이트 프리셋 */
 const SITE_PRESETS = [
   { url: 'https://ticket.interpark.com', label: '🎤 인터파크 티켓' },
   { url: 'https://ticket.yes24.com',     label: '📚 예스24 티켓' },
   { url: 'https://www.melon.com/ticket', label: '🎵 멜론티켓' },
   { url: 'https://www.ticketlink.co.kr', label: '🎟️ 티켓링크' },
-  { url: 'https://tickets.koreabaseball.com', label: '⚾ KBO 티켓' },
-  { url: 'https://www.kbball.co.kr',     label: '🏀 KBL 티켓' },
+  { url: 'https://www.korail.com',       label: '🚄 KTX 코레일' },
+  { url: 'https://etk.srail.kr',         label: '🚅 SRT' },
 ] as const
 
 export default function ServerTimeClient() {
@@ -381,7 +381,7 @@ export default function ServerTimeClient() {
 
       {/* ─── 외부 사이트 트래킹 ─── */}
       <div className={s.externalCard}>
-        <div className={s.cardLabel}>🌐 외부 사이트 서버 시간 트래킹 (실험적)</div>
+        <div className={s.cardLabel}>🌐 외부 사이트 서버 시간 트래킹</div>
 
         <p className={s.extNote}>
           티켓팅·신청 사이트의 <strong>HTTP <code>Date</code> 헤더</strong>를 프록시로 측정합니다.

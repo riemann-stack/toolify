@@ -109,7 +109,7 @@ export default function CosmicCalendarPage() {
         {/* ── 3. 12월 31일 충격 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            12월 31일의 충격 — 인류의 시간
+            12월 31일 - 인류 등장
           </h2>
           <div style={{
             background: 'rgba(220,38,38,0.05)',
@@ -157,7 +157,7 @@ export default function CosmicCalendarPage() {
         {/* ── 5. 138억 년 핵심 시기 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            우주 138억 년의 핵심 시기
+            핵심 사건
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
@@ -209,16 +209,20 @@ export default function CosmicCalendarPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 시간 이해의 의미
           </h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 16 }}>
+            코스믹 캘린더는 단순한 숫자 놀이가 아니라, <strong style={{ color: 'var(--text)' }}>인간이 자기 자신을 바라보는 거울</strong>입니다.
+            138억 년을 1년으로 줄여 놓으면, 평범한 일상도 전혀 다른 무게로 다가옵니다.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🤔 철학적 사색', d: '인간 중심 사고에서 벗어나는 관점, 종교·철학적 출발점' },
-              { t: '🌱 환경 책임감', d: '우리가 머무는 시간이 짧음을 자각, 환경 보호의 시간적 책임' },
-              { t: '🎓 과학 교육',  d: '학교 천문학·진화론 수업, 박물관 전시, 다큐멘터리 자료' },
-              { t: '📲 SNS 콘텐츠', d: '"내 30년 인생 = 0.07초" 같은 충격적 사실 공유' },
+              { t: '찰나를 사는 존재', d: '평균 수명 80년은 우주 달력에서 0.2초도 되지 않습니다. 그 척도 앞에서 오늘의 경쟁·불안·조급함을 한 걸음 떨어져 바라보게 됩니다.' },
+              { t: '별의 먼지로 된 몸', d: '우리 몸의 탄소·산소·철은 수십억 년 전 별이 폭발하며 만들어진 원소입니다. 우리는 비유가 아니라 문자 그대로 우주의 일부입니다.' },
+              { t: '우주가 스스로를 보는 눈', d: '138억 년 만에 처음으로 물질이 의식을 갖고 자신의 기원을 묻기 시작했습니다. 그 드문 능력이 바로 지금의 인간입니다.' },
+              { t: '남은 찰나에 대한 책임', d: '모든 인류 역사가 마지막 몇 초라면, 우리가 지구에 남기는 흔적(기후·생태)은 그 찰나가 다음 세대에게 보내는 신호입니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
+                <p style={{ fontSize: 13.5, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.8 }}>{c.d}</p>
               </div>
             ))}
           </div>

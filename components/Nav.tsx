@@ -412,7 +412,7 @@ export default function Nav() {
                     className={`${styles.searchResultItem} ${idx === highlightIdx ? styles.searchResultItemActive : ''}`}
                     onMouseEnter={() => setHighlightIdx(idx)}
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => { setSearchOpen(false); setQuery('') }}>
+                    onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
                     <span className={styles.searchResultIcon}>{tool.icon}</span>
                     <span className={styles.searchResultBody}>
                       <span className={styles.searchResultName}>{tool.name}</span>
@@ -443,7 +443,7 @@ export default function Nav() {
                     {favoriteTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setSearchOpen(false); setQuery('') }}>
+                        onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
                         <span>{t.icon}</span>
                         <span>{t.name}</span>
                       </Link>
@@ -459,7 +459,7 @@ export default function Nav() {
                     {recentTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setSearchOpen(false); setQuery('') }}>
+                        onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
                         <span>{t.icon}</span>
                         <span>{t.name}</span>
                       </Link>
@@ -473,7 +473,7 @@ export default function Nav() {
                 {POPULAR_TOOLS.map((t) => (
                   <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => { setSearchOpen(false); setQuery('') }}>
+                    onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
                     <span>{t.icon}</span>
                     <span>{t.name}</span>
                   </Link>
@@ -527,7 +527,7 @@ export default function Nav() {
                             key={tool.href}
                             href={tool.href}
                             className={styles.drawerSearchItem}
-                            onClick={() => setMobileOpen(false)}
+                            onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
                           >
                             <span className={styles.drawerSearchIcon}>{tool.icon}</span>
                             <span className={styles.drawerSearchBody}>
@@ -562,7 +562,7 @@ export default function Nav() {
                             key={tool.href}
                             href={tool.href}
                             className={styles.drawerSearchItem}
-                            onClick={() => setMobileOpen(false)}
+                            onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
                           >
                             <span className={styles.drawerSearchIcon}>{tool.icon}</span>
                             <span className={styles.drawerSearchBody}>

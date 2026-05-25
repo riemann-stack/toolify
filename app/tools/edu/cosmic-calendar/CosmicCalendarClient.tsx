@@ -112,6 +112,16 @@ function ageToCosmic(ageYears: number) {
 
 const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
 
+// 타임라인용 짧은 라벨 (이모지 없이)
+const SHORT_LABELS: Record<string, string> = {
+  bigbang: '빅뱅', firstStars: '첫 별', milkyWay: '은하수', solarSystem: '태양계',
+  earth: '지구', firstLife: '첫 생명', cambrian: '캄브리아', dinosaurs: '공룡',
+  humanAncestor: '인류 조상', genusHomo: '호모 속', fire: '불 사용', homoSapiens: '현생 인류',
+  language: '언어·예술', agriculture: '농업', writing: '문자', pyramids: '피라미드',
+  romanEmpire: '로마', jesus: '서기 1년', goryeo: '고려', industrial: '산업혁명',
+  electricity: '전기', moonLanding: '달 착륙', internet: '인터넷', now: '현재',
+}
+
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
@@ -194,54 +204,30 @@ export default function CosmicCalendarClient() {
   // 가로 타임라인 SVG
   // ─────────────────────────────────────────────
   const yearTimelineSvg = useMemo(() => {
-    const W = 760
-    const H = 180
-    const padL = 40
-    const padR = 40
+    const W = 760, H = 150
+    const padL = 38, padR = 44
     const innerW = W - padL - padR
-    const lineY = 100
-    const monthsToShow = MONTHS.map((m, i) => ({
-      label: m,
-      pct: i / 11,
-      x: padL + (i / 11) * innerW,
-    }))
-    // 주요 사건 (humanAncestor는 우측 끝의 "현재"와 시각적으로 같은 위치이므로 제외)
-    const keyEvents = [
-      { id: 'bigbang',       label: '빅뱅' },
-      { id: 'firstStars',    label: '첫 별' },
-      { id: 'milkyWay',      label: '은하수' },
-      { id: 'solarSystem',   label: '태양계' },
-      { id: 'firstLife',     label: '생명' },
-      { id: 'cambrian',      label: '캄브리아' },
-      { id: 'dinosaurs',     label: '공룡' },
-    ]
-    const keyEventsWithPos = keyEvents.map(k => {
-      const evt = EVENTS.find(e => e.id === k.id)!
-      const monthIdx = (evt.month - 1)
-      const dayOffset = (evt.day - 1) / 31
-      const pct = (monthIdx + dayOffset) / 12
-      return {
-        ...k,
-        evt,
-        x: padL + pct * innerW,
-        color: CATEGORIES[evt.category].color,
-      }
-    })
+    const lineY = 92
+    const xOfPct = (pct: number) => padL + pct * innerW
 
-    /* 4단 라벨 배치 — 가까운 이웃과 겹치지 않게 위·아래로 멀리/가까이 분산.
-       sorted index 기준으로 직전 라벨과 60px 미만이면 다음 단으로 밀어냄. */
-    const sorted = [...keyEventsWithPos].sort((a, b) => a.x - b.x)
-    type Tier = 0 | 1 | 2 | 3
-    const tierMap = new Map<string, Tier>()
-    // 마지막으로 각 tier 가 사용된 x
-    const lastUsedX: Record<Tier, number> = { 0: -Infinity, 1: -Infinity, 2: -Infinity, 3: -Infinity }
-    const TIER_ORDER: Tier[] = [0, 1, 2, 3] // above-near, below-near, above-far, below-far
-    const MIN_GAP = 70
-    sorted.forEach(ev => {
-      // 같은 tier 가 충분히 떨어진 곳을 우선 선택
-      const tier = TIER_ORDER.find(t => ev.x - lastUsedX[t] >= MIN_GAP) ?? 3
-      tierMap.set(ev.id, tier)
-      lastUsedX[tier] = ev.x
+    // 월 눈금 (라벨은 아래)
+    const months = MONTHS.map((m, i) => ({ label: m, x: xOfPct(i / 12) }))
+
+    // 핵심 마일스톤 (이모지 없이) + 우측 끝 '현재·인류'
+    const milestones = ['bigbang', 'solarSystem', 'firstLife', 'dinosaurs'].map(id => {
+      const e = EVENTS.find(x => x.id === id)!
+      const pct = ((e.month - 1) + (e.day - 1) / 31) / 12
+      return { id, label: SHORT_LABELS[id], x: xOfPct(pct), color: CATEGORIES[e.category].color }
+    })
+    milestones.push({ id: 'now', label: '현재·인류', x: W - padR, color: '#0D9488' })
+
+    // 위쪽 2단 라벨 — 직전과 가까우면 위로 한 단 더
+    const MIN_GAP = 66
+    let lastX = -Infinity, hi = false
+    const placed = milestones.map(m => {
+      hi = (m.x - lastX < MIN_GAP) ? !hi : false
+      lastX = m.x
+      return { ...m, tier: hi ? 1 : 0 }
     })
 
     return (
@@ -249,201 +235,132 @@ export default function CosmicCalendarClient() {
         <defs>
           <linearGradient id="cosmicLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#9B59B6" />
-            <stop offset="40%"  stopColor="#CA8A04" />
-            <stop offset="65%"  stopColor="#0891B2" />
-            <stop offset="85%"  stopColor="#059669" />
+            <stop offset="50%"  stopColor="#0891B2" />
+            <stop offset="78%"  stopColor="#059669" />
             <stop offset="100%" stopColor="#0D9488" />
           </linearGradient>
         </defs>
 
-        {/* 메인 가로선 */}
-        <line x1={padL} y1={lineY} x2={W - padR} y2={lineY} stroke="url(#cosmicLineGrad)" strokeWidth="3" />
+        <line x1={padL} y1={lineY} x2={W - padR} y2={lineY} stroke="url(#cosmicLineGrad)" strokeWidth="4" strokeLinecap="round" />
 
-        {/* 월 라벨 */}
-        {monthsToShow.map((m, i) => (
+        {/* 월 눈금 + 라벨 (아래) */}
+        {months.map((m, i) => (
           <g key={i}>
-            <line x1={m.x} y1={lineY - 6} x2={m.x} y2={lineY + 6} stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
-            <text x={m.x} y={lineY + 22} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.6)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
-              {m.label}
-            </text>
+            <line x1={m.x} y1={lineY - 5} x2={m.x} y2={lineY + 5} stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+            <text x={m.x} y={lineY + 21} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{m.label}</text>
           </g>
         ))}
 
-        {/* 사건 마커 — 4단 라벨 배치 */}
-        {keyEventsWithPos.map(ev => {
-          const tier = tierMap.get(ev.id) ?? 0
-          // tier 0: above-near, 1: below-near, 2: above-far, 3: below-far
-          const above = tier === 0 || tier === 2
-          const far   = tier === 2 || tier === 3
-          const tickEnd  = far ? 36 : 22
-          const labelOff = far ? 46 : 32
-          const lineYStart = above ? lineY - 8           : lineY + 8
-          const lineYEnd   = above ? lineY - tickEnd     : lineY + (tickEnd + 6)
-          const labelY     = above ? lineY - labelOff    : lineY + (labelOff + 8)
+        {/* 마일스톤 (위) */}
+        {placed.map(m => {
+          const tickEnd = m.tier === 1 ? 40 : 24
+          const labelY  = m.tier === 1 ? lineY - 48 : lineY - 32
+          const isNow = m.id === 'now'
           return (
-            <g key={ev.id}>
-              <line x1={ev.x} y1={lineYStart} x2={ev.x} y2={lineYEnd} stroke={ev.color} strokeWidth="1" strokeDasharray="2 2" opacity="0.7" />
-              <circle cx={ev.x} cy={lineY} r="5" fill={ev.color} stroke="#0a0a2e" strokeWidth="1.5" />
-              <text x={ev.x} y={labelY} textAnchor="middle" fontSize="10" fill={ev.color} fontFamily="Noto Sans KR, sans-serif" fontWeight={700}>
-                {ev.evt.icon} {ev.label}
-              </text>
+            <g key={m.id}>
+              <line x1={m.x} y1={lineY - 8} x2={m.x} y2={lineY - tickEnd} stroke={m.color} strokeWidth="1" strokeDasharray="2 2" opacity="0.55" />
+              <circle cx={m.x} cy={lineY} r={isNow ? 7 : 5} fill={m.color} stroke="#0a0a2e" strokeWidth={isNow ? 2 : 1.5} />
+              <text x={m.x} y={labelY} textAnchor={isNow ? 'end' : 'middle'} fontSize={isNow ? 11.5 : 11} fill={m.color} fontFamily="Noto Sans KR, sans-serif" fontWeight={isNow ? 800 : 700}>{m.label}</text>
             </g>
           )
         })}
-
-        {/* "현재 (= 인류)" 마커 — 우측 끝 */}
-        <circle cx={W - padR} cy={lineY} r="7" fill="#0D9488" stroke="#0a0a2e" strokeWidth="2" />
-        <text x={W - padR - 4} y={lineY - 16} textAnchor="end" fontSize="11" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
-          🧍 현재
-        </text>
       </svg>
     )
   }, [])
 
   // ─────────────────────────────────────────────
-  // 24시간 시계 SVG (탭 2)
+  // 12월 31일 가로 타임라인 SVG (탭 2)
   // ─────────────────────────────────────────────
-  const dec31ClockSvg = useMemo(() => {
-    const size = 400              // 320 → 400 (라벨이 원 밖으로 충분히 나갈 공간 확보)
-    const cx = size / 2
-    const cy = size / 2
-    const r = 140
-    const centerR = 4
+  const dec31TimelineSvg = useMemo(() => {
+    const W = 760, H = 170
+    const padL = 40, padR = 48
+    const innerW = W - padL - padR
+    const lineY = 96
 
-    // 줌 레벨에 따른 angle 계산
-    function timeToAngle(h: number, m: number, sec: number): number {
-      // 24h: 0~24시간 → 0~360°
-      // lastHour: 23:00~24:00 → 0~360°
-      // last30s: 23:59:30~24:00:00 → 0~360°
-      const totalSeconds = h * 3600 + m * 60 + sec
-      let ratio = 0
-      if (zoomLevel === '24h') {
-        ratio = totalSeconds / (24 * 3600)
-      } else if (zoomLevel === 'lastHour') {
-        ratio = (totalSeconds - 23 * 3600) / 3600
-      } else {
-        ratio = (totalSeconds - (23 * 3600 + 59 * 60 + 30)) / 30
-      }
-      ratio = Math.max(0, Math.min(1, ratio))
-      // 12시 방향(상단)에서 시작해 시계방향
-      return ratio * 2 * Math.PI - Math.PI / 2
-    }
+    const secOf = (e: Event) => (e.hour ?? 0) * 3600 + (e.minute ?? 0) * 60 + (e.second ?? 0)
 
-    // 시간 라벨
-    type Tick = { hourLabel: string; angle: number }
-    let ticks: Tick[] = []
+    // 줌별 범위·눈금
+    let startSec: number, endSec: number
+    let ticks: { label: string; sec: number }[]
     if (zoomLevel === '24h') {
-      ticks = [0, 3, 6, 9, 12, 15, 18, 21].map(h => ({ hourLabel: `${h}:00`, angle: (h / 24) * 2 * Math.PI - Math.PI / 2 }))
+      startSec = 0; endSec = 24 * 3600
+      ticks = [0, 6, 12, 18, 24].map(h => ({ label: `${h}시`, sec: h * 3600 }))
     } else if (zoomLevel === 'lastHour') {
-      ticks = [0, 15, 30, 45].map(m => ({ hourLabel: `23:${m.toString().padStart(2, '0')}`, angle: (m / 60) * 2 * Math.PI - Math.PI / 2 }))
+      startSec = 23 * 3600; endSec = 24 * 3600
+      ticks = [0, 15, 30, 45, 60].map(m => ({ label: m === 60 ? '24:00' : `23:${m.toString().padStart(2, '0')}`, sec: 23 * 3600 + m * 60 }))
     } else {
-      ticks = [0, 7.5, 15, 22.5].map(s => ({ hourLabel: `+${s}s`, angle: (s / 30) * 2 * Math.PI - Math.PI / 2 }))
+      startSec = 23 * 3600 + 59 * 60 + 30; endSec = 24 * 3600
+      ticks = [0, 10, 20, 30].map(d => ({ label: d === 30 ? '24:00' : `+${d}초`, sec: startSec + d }))
     }
+    const xOf = (sec: number) => padL + ((sec - startSec) / (endSec - startSec)) * innerW
 
-    /* ─── 줌별로 표시할 사건 큐레이션 (24h·lastHour 에서는 너무 많이 모이므로 주요 사건만) ─── */
-    let displayed: typeof dec31Filtered
-    if (zoomLevel === '24h') {
-      const majors = new Set(['humanAncestor', 'fire', 'homoSapiens', 'agriculture', 'romanEmpire', 'industrial', 'internet'])
-      displayed = dec31Filtered.filter(e => majors.has(e.id))
-    } else if (zoomLevel === 'lastHour') {
-      const majors = new Set([
-        'fire', 'homoSapiens', 'language',
-        'agriculture', 'writing', 'pyramids', 'jesus',
-        'industrial', 'moonLanding', 'internet',
-      ])
-      displayed = dec31Filtered.filter(e => majors.has(e.id))
-    } else {
-      displayed = dec31Filtered // last30s — 11개 이미 잘 분포
+    // 줌별 표시 사건 큐레이션 — 라벨이 겹치지 않게 '잘 퍼진' 사건만 (전체는 아래 리스트)
+    const labelIds: Record<typeof zoomLevel, string[]> = {
+      '24h': ['humanAncestor'],
+      'lastHour': ['fire', 'homoSapiens', 'language'],
+      'last30s': ['agriculture', 'writing', 'jesus', 'internet'],
     }
+    const labelSet = new Set(labelIds[zoomLevel])
+    const displayed = dec31Filtered.filter(e => labelSet.has(e.id))
 
-    /* ─── 각도 기반 클러스터 감지 + 단계별 외곽 배치 ─── */
-    type Positioned = { evt: typeof displayed[number]; angle: number; tier: number }
-    const ANGLE_THRESHOLD = 0.07 // ~4° — 이 안에 모이면 같은 클러스터
-    const sorted: Positioned[] = displayed
-      .map(e => ({ evt: e, angle: timeToAngle(e.hour ?? 0, e.minute ?? 0, e.second ?? 0), tier: 0 }))
-      .sort((a, b) => a.angle - b.angle)
-    let prevAngle = -Infinity
-    let curTier = 0
-    sorted.forEach(p => {
-      if (p.angle - prevAngle < ANGLE_THRESHOLD) curTier += 1
-      else curTier = 0
-      p.tier = curTier
-      prevAngle = p.angle
-    })
+    // 라벨 배치: x 정렬 후 위/아래 + 충돌 시 단 올림
+    const MIN_GAP = 70
+    const slots = [['A', 0], ['B', 0], ['A', 1], ['B', 1], ['A', 2], ['B', 2]] as const
+    const lastBySlot: Record<string, number> = {}
+    const placed = displayed
+      .map(e => ({ e, x: xOf(secOf(e)), color: CATEGORIES[e.category].color }))
+      .sort((a, b) => a.x - b.x)
+      .map(p => {
+        let pick: readonly [string, number] = slots[slots.length - 1]
+        for (const sl of slots) {
+          if (p.x - (lastBySlot[`${sl[0]}${sl[1]}`] ?? -Infinity) >= MIN_GAP) { pick = sl; break }
+        }
+        lastBySlot[`${pick[0]}${pick[1]}`] = p.x
+        return { ...p, above: pick[0] === 'A', tier: pick[1] }
+      })
 
     return (
-      <svg viewBox={`0 0 ${size} ${size}`} className={s.clockSvg} width={size} height={size} aria-hidden="true">
-        <defs>
-          <radialGradient id="clockBg" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(13,148,136,0.15)" />
-            <stop offset="100%" stopColor="rgba(155,89,182,0.05)" />
-          </radialGradient>
-        </defs>
+      <svg viewBox={`0 0 ${W} ${H}`} className={s.yearTimelineSvg} aria-hidden="true">
+        {/* 메인 가로선 (지나온 시간) */}
+        <line x1={padL} y1={lineY} x2={W - padR} y2={lineY} stroke="rgba(13,148,136,0.45)" strokeWidth="4" strokeLinecap="round" />
 
-        {/* 배경 원 */}
-        <circle cx={cx} cy={cy} r={r + 8} fill="url(#clockBg)" />
-        <circle cx={cx} cy={cy} r={r}     fill="none" stroke="rgba(255,255,255,0.20)" strokeWidth="1.5" />
+        {/* 24h: '인류는 여기부터' 구간 강조 */}
+        {zoomLevel === '24h' && (() => {
+          const zx = xOf(22 * 3600)
+          return (
+            <g>
+              <rect x={zx} y={lineY - 9} width={(W - padR) - zx} height={18} fill="rgba(234,88,12,0.22)" rx="3" />
+              <text x={(zx + (W - padR)) / 2} y={lineY - 15} textAnchor="middle" fontSize="10" fill="#EA580C" fontFamily="Noto Sans KR, sans-serif" fontWeight={700}>인류는 여기부터</text>
+            </g>
+          )
+        })()}
 
-        {/* 줌 레벨에 따른 강조 호 (last hour 또는 last 30s) */}
-        {zoomLevel === '24h' && (
-          <path
-            d={describeArc(cx, cy, r - 4, ((23 * 3600) / (24 * 3600)) * 360 - 90, 270)}
-            fill="none" stroke="#0D9488" strokeWidth="3" opacity="0.75"
-          />
-        )}
-
-        {/* 시간 눈금 */}
+        {/* 시간 눈금 + 라벨 (아래) */}
         {ticks.map((t, i) => {
-          const x1 = cx + (r - 6) * Math.cos(t.angle)
-          const y1 = cy + (r - 6) * Math.sin(t.angle)
-          const x2 = cx + r * Math.cos(t.angle)
-          const y2 = cy + r * Math.sin(t.angle)
-          const lx = cx + (r + 16) * Math.cos(t.angle)
-          const ly = cy + (r + 16) * Math.sin(t.angle)
+          const x = xOf(t.sec)
           return (
             <g key={i}>
-              <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-              <text x={lx} y={ly + 4} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
-                {t.hourLabel}
-              </text>
+              <line x1={x} y1={lineY - 5} x2={x} y2={lineY + 5} stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+              <text x={x} y={lineY + 21} textAnchor="middle" fontSize="10" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{t.label}</text>
             </g>
           )
         })}
 
-        {/* 사건 마커 — 클러스터 단별 외곽 배치 */}
-        {sorted.map(({ evt: e, angle, tier }) => {
-          const mr = r - 6
-          const x = cx + mr * Math.cos(angle)
-          const y = cy + mr * Math.sin(angle)
-          // tier 별 라벨 거리 (cap 3단). 4번째부터는 점만 표시
-          const showEmoji = tier <= 2
-          const lr = r + 28 + tier * 22
-          const lx = cx + lr * Math.cos(angle)
-          const ly = cy + lr * Math.sin(angle)
-          const color = CATEGORIES[e.category].color
+        {/* 사건 마커 (위/아래 교차) */}
+        {placed.map(p => {
+          const base = 16 + p.tier * 20
+          const lineStart = p.above ? lineY - 8 : lineY + 8
+          const lineEnd   = p.above ? lineY - (base - 6) : lineY + (base - 6)
+          const labelY    = p.above ? lineY - base : lineY + base + 9
+          const label = SHORT_LABELS[p.e.id] ?? p.e.name
           return (
-            <g key={e.id}>
-              <circle cx={x} cy={y} r="4" fill={color} stroke="#0a0a2e" strokeWidth="1.5" />
-              {showEmoji && (
-                <>
-                  <line x1={x} y1={y} x2={lx} y2={ly} stroke={color} strokeWidth="0.5" opacity="0.5" strokeDasharray="2 2" />
-                  <text x={lx} y={ly + 4} textAnchor="middle" fontSize="14" fill={color} fontFamily="Noto Sans KR, sans-serif" fontWeight={700}>
-                    {e.icon}
-                  </text>
-                </>
-              )}
+            <g key={p.e.id}>
+              <line x1={p.x} y1={lineStart} x2={p.x} y2={lineEnd} stroke={p.color} strokeWidth="1" strokeDasharray="2 2" opacity="0.55" />
+              <circle cx={p.x} cy={lineY} r="4.5" fill={p.color} stroke="#0a0a2e" strokeWidth="1.5" />
+              <text x={p.x} y={labelY} textAnchor="middle" fontSize="10.5" fill={p.color} fontFamily="Noto Sans KR, sans-serif" fontWeight={700}>{label}</text>
             </g>
           )
         })}
-
-        {/* 중앙 */}
-        <circle cx={cx} cy={cy} r={centerR} fill="#0D9488" />
-        <text x={cx} y={cy - r * 0.55} textAnchor="middle" fontSize="11" fill="rgba(255,255,255,0.55)" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} letterSpacing="0.06em">
-          12월 31일
-        </text>
-        <text x={cx} y={cy + r * 0.55} textAnchor="middle" fontSize="13" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
-          {zoomLevel === '24h' ? '24h' : zoomLevel === 'lastHour' ? '23~24시' : '마지막 30초'}
-        </text>
       </svg>
     )
   }, [zoomLevel, dec31Filtered])
@@ -515,7 +432,7 @@ export default function CosmicCalendarClient() {
     if (tab === 'search' && age > 0) {
       const cosmicMin = round(myLife.cosmicMinutes, 3)
       text = [
-        `🌌 우주 1년에서 ${userName ? userName + '님의' : '나의'} 시간`,
+        `우주 1년에서 ${userName ? userName + '님의' : '나의'} 시간`,
         ``,
         `${age}년 인생 = ${round(myLife.cosmicSeconds, 3)}초 (= ${cosmicMin}분)`,
         `인류 문명 12,000년 = 약 27.5초`,
@@ -571,7 +488,7 @@ export default function CosmicCalendarClient() {
       <div className={s.cosmicNow}>
         <p className={s.cosmicNowLabel}>오늘의 코스믹 시간</p>
         <p className={s.cosmicNowDate}>12월 31일 23:59:59.999...초</p>
-        <p className={s.cosmicNowSub}>매 순간이 우주 138억 년 중 단 한 번뿐입니다 ✨</p>
+        <p className={s.cosmicNowSub}>매 순간이 우주 138억 년 중 단 한 번뿐입니다</p>
       </div>
 
       {/* 우주 단위 환산 */}
@@ -594,7 +511,7 @@ export default function CosmicCalendarClient() {
         <>
           <div className={s.spaceBg}>
             <p style={{ textAlign: 'center', color: '#0D9488', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 12 }}>
-              🌌 우주 138억 년 = 1년
+              우주 138억 년 = 1년
             </p>
             <div className={s.yearTimelineWrap}>
               {yearTimelineSvg}
@@ -606,7 +523,7 @@ export default function CosmicCalendarClient() {
 
           {/* 12월 31일 강조 카드 */}
           <div className={s.dec31Banner}>
-            <p className={s.dec31BannerTitle}>🚨 12월 31일 — 인류의 시간</p>
+            <p className={s.dec31BannerTitle}>12월 31일 - 인류 등장</p>
             <p className={s.dec31BannerText}>
               인류 조상은 <strong>22:24</strong>에 등장, 현생 인류는 <strong>23:48</strong>, 농업·문명·과학·인터넷 모두 마지막 <strong>30초</strong> 안에 일어났습니다.
             </p>
@@ -635,7 +552,7 @@ export default function CosmicCalendarClient() {
                       <div className={s.monthEvents}>
                         {events.slice(0, 4).map(e => (
                           <div key={e.id} className={s.monthEventItem}>
-                            <span>{e.icon}</span>
+                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: CATEGORIES[e.category].color, flexShrink: 0, display: 'inline-block' }} />
                             <span>{e.name.length > 12 ? e.name.slice(0, 12) + '…' : e.name}</span>
                           </div>
                         ))}
@@ -677,7 +594,7 @@ export default function CosmicCalendarClient() {
 
           <div className={s.spaceBg}>
             <div className={s.clockWrap}>
-              {dec31ClockSvg}
+              {dec31TimelineSvg}
             </div>
           </div>
 
@@ -695,7 +612,7 @@ export default function CosmicCalendarClient() {
                   const cat = CATEGORIES[e.category]
                   return (
                     <div key={e.id} className={`${s.eventCard} ${cat.borderCls}`}>
-                      <span className={s.eventIcon}>{e.icon}</span>
+                      <span className={s.eventDot} style={{ background: cat.color }} />
                       <div className={s.eventBody}>
                         <p className={s.eventName}>{e.name}</p>
                         <p className={s.eventDate}>{e.cosmicDate}</p>
@@ -711,7 +628,7 @@ export default function CosmicCalendarClient() {
 
           {/* 충격 카드 */}
           <div className={s.shockCard}>
-            <p className={s.shockTitle}>🤯 충격적 사실</p>
+            <p className={s.shockTitle}>한눈에 보는 충격적 사실</p>
             <div className={s.shockList}>
               <div>· 문자 발명 이후 인류 모든 역사 = 약 <strong>14초</strong></div>
               <div>· 산업혁명 이후 = 약 <strong>0.6초</strong></div>
@@ -753,7 +670,7 @@ export default function CosmicCalendarClient() {
           {/* 사건 검색 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>🔍 사건 검색</span>
+              <span>사건 검색</span>
               <span className={s.cardLabelHint}>이름·키워드</span>
             </div>
             <input
@@ -771,7 +688,7 @@ export default function CosmicCalendarClient() {
                 const cat = CATEGORIES[e.category]
                 return (
                   <div key={e.id} className={`${s.eventCard} ${cat.borderCls}`}>
-                    <span className={s.eventIcon}>{e.icon}</span>
+                    <span className={s.eventDot} style={{ background: cat.color }} />
                     <div className={s.eventBody}>
                       <p className={s.eventName}>{e.name}</p>
                       <p className={s.eventDate}>코스믹: {e.cosmicDate}</p>
@@ -844,7 +761,7 @@ export default function CosmicCalendarClient() {
 
               {/* 공유 카드 */}
               <div className={s.shareCard}>
-                <p className={s.shareTitle}>🌌 우주 1년에서 {userName ? userName + '님의' : '나의'} 시간</p>
+                <p className={s.shareTitle}>우주 1년에서 {userName ? userName + '님의' : '나의'} 시간</p>
                 <p className={s.shareSubtitle}>{age}년 인생 = ?</p>
                 <div className={s.shareBig}>
                   <p className={s.shareBigNum}>{round(myLife.cosmicSeconds, 3)}</p>
@@ -916,7 +833,7 @@ export default function CosmicCalendarClient() {
 
           {/* 충격 카드 (모드별) */}
           <div className={s.shockCard}>
-            <p className={s.shockTitle}>💥 충격 포인트</p>
+            <p className={s.shockTitle}>핵심 포인트</p>
             <div className={s.shockList}>
               {compressionMode === '1year' && (
                 <>
@@ -963,16 +880,3 @@ export default function CosmicCalendarClient() {
   )
 }
 
-// ─────────────────────────────────────────────
-// SVG 호 그리기 헬퍼
-// ─────────────────────────────────────────────
-function polarToCartesian(cx: number, cy: number, r: number, deg: number) {
-  const rad = (deg - 90) * Math.PI / 180.0
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }
-}
-function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
-  const start = polarToCartesian(cx, cy, r, endDeg)
-  const end = polarToCartesian(cx, cy, r, startDeg)
-  const largeArc = endDeg - startDeg <= 180 ? '0' : '1'
-  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`
-}

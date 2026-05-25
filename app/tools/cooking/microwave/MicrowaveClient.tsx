@@ -22,6 +22,9 @@ export default function MicrowaveClient() {
   /* refW·myW: PowerW 외 직접 입력도 허용하므로 number로 확장 */
   const [refW, setRefW] = useState<number>(700)
   const [myW, setMyW] = useState<number>(900)
+  /* 출력 직접 입력 모드 (드롭다운 '직접 입력' 선택 시에만 입력칸 노출) */
+  const [refCustom, setRefCustom] = useState(false)
+  const [myCustom, setMyCustom] = useState(false)
   const [refMin, setRefMin] = useState('2')
   const [refSec, setRefSecState] = useState('30')
 
@@ -46,8 +49,8 @@ export default function MicrowaveClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (j.refW) setRefW(j.refW)
-      if (j.myW) setMyW(j.myW)
+      if (j.refW) { setRefW(j.refW); setRefCustom(!(POWER_OPTIONS as readonly number[]).includes(j.refW)) }
+      if (j.myW) { setMyW(j.myW); setMyCustom(!(POWER_OPTIONS as readonly number[]).includes(j.myW)) }
       if (j.refMin) setRefMin(j.refMin)
       if (j.refSec) setRefSecState(j.refSec)
       if (j.foodId) setFoodId(j.foodId)
@@ -208,20 +211,26 @@ export default function MicrowaveClient() {
                 <div className={s.compactWInput}>
                   <select
                     className={s.compactSelect}
-                    value={(POWER_OPTIONS as readonly number[]).includes(refW) ? String(refW) : 'custom'}
-                    onChange={(e) => { if (e.target.value !== 'custom') setRefW(Number(e.target.value)) }}
+                    value={refCustom ? 'custom' : String(refW)}
+                    onChange={(e) => {
+                      if (e.target.value === 'custom') setRefCustom(true)
+                      else { setRefCustom(false); setRefW(Number(e.target.value)) }
+                    }}
                   >
                     {POWER_OPTIONS.map((w) => <option key={w} value={w}>{w}W</option>)}
                     <option value="custom">직접 입력</option>
                   </select>
-                  <input
-                    type="number"
-                    className={s.compactNum}
-                    value={refW}
-                    onChange={(e) => setRefW(Number(e.target.value) || 0)}
-                    min={300} max={2000} step={50}
-                    aria-label="기준 W 직접 입력"
-                  />
+                  {refCustom && (
+                    <input
+                      type="number"
+                      className={s.compactNum}
+                      value={refW}
+                      onChange={(e) => setRefW(Number(e.target.value) || 0)}
+                      min={300} max={2000} step={50}
+                      placeholder="W 입력"
+                      aria-label="기준 W 직접 입력"
+                    />
+                  )}
                 </div>
               </div>
               <div className={s.compactField}>
@@ -241,20 +250,26 @@ export default function MicrowaveClient() {
                 <div className={s.compactWInput}>
                   <select
                     className={s.compactSelect}
-                    value={(POWER_OPTIONS as readonly number[]).includes(myW) ? String(myW) : 'custom'}
-                    onChange={(e) => { if (e.target.value !== 'custom') setMyW(Number(e.target.value)) }}
+                    value={myCustom ? 'custom' : String(myW)}
+                    onChange={(e) => {
+                      if (e.target.value === 'custom') setMyCustom(true)
+                      else { setMyCustom(false); setMyW(Number(e.target.value)) }
+                    }}
                   >
                     {POWER_OPTIONS.map((w) => <option key={w} value={w}>{w}W</option>)}
                     <option value="custom">직접 입력</option>
                   </select>
-                  <input
-                    type="number"
-                    className={s.compactNum}
-                    value={myW}
-                    onChange={(e) => setMyW(Number(e.target.value) || 0)}
-                    min={300} max={2000} step={50}
-                    aria-label="변환 W 직접 입력"
-                  />
+                  {myCustom && (
+                    <input
+                      type="number"
+                      className={s.compactNum}
+                      value={myW}
+                      onChange={(e) => setMyW(Number(e.target.value) || 0)}
+                      min={300} max={2000} step={50}
+                      placeholder="W 입력"
+                      aria-label="변환 W 직접 입력"
+                    />
+                  )}
                 </div>
               </div>
             </div>
