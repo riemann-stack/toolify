@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from './cosmic-calendar.module.css'
 
 // ─────────────────────────────────────────────
@@ -337,6 +337,17 @@ export default function CosmicCalendarClient() {
   // 줌 변경 시 열린 팝업 닫기
   const changeZoom = (z: typeof zoomLevel) => { setZoomLevel(z); setActivePoint(null) }
 
+  // 메인 탭 전환 시 열려 있던 타임라인 팝업 닫기
+  const changeTab = (t: typeof tab) => { setTab(t); setActivePoint(null) }
+
+  // ESC 키로 열린 팝업 닫기
+  useEffect(() => {
+    if (!activePoint) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setActivePoint(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [activePoint])
+
   // ─────────────────────────────────────────────
   // 압축 모드 데이터 (탭 4)
   // ─────────────────────────────────────────────
@@ -472,10 +483,10 @@ export default function CosmicCalendarClient() {
 
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'year'    ? s.tabActive : ''}`} onClick={() => setTab('year')}>연간 타임라인</button>
-        <button className={`${s.tabBtn} ${tab === 'dec31'   ? s.tabActive : ''}`} onClick={() => setTab('dec31')}>12월 31일</button>
-        <button className={`${s.tabBtn} ${tab === 'search'  ? s.tabActive : ''}`} onClick={() => setTab('search')}>사건 검색·내 생일</button>
-        <button className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => setTab('compare')}>비교 모드</button>
+        <button className={`${s.tabBtn} ${tab === 'year'    ? s.tabActive : ''}`} onClick={() => changeTab('year')}>연간 타임라인</button>
+        <button className={`${s.tabBtn} ${tab === 'dec31'   ? s.tabActive : ''}`} onClick={() => changeTab('dec31')}>12월 31일</button>
+        <button className={`${s.tabBtn} ${tab === 'search'  ? s.tabActive : ''}`} onClick={() => changeTab('search')}>사건 검색·내 생일</button>
+        <button className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => changeTab('compare')}>비교 모드</button>
       </div>
 
       {/* ──────────── TAB 1: 연간 타임라인 ──────────── */}
@@ -504,7 +515,7 @@ export default function CosmicCalendarClient() {
             <p className={s.dec31BannerText}>
               인류 조상은 <strong>22:24</strong>에 등장, 현생 인류는 <strong>23:48</strong>, 농업·문명·과학·인터넷 모두 마지막 <strong>30초</strong> 안에 일어났습니다.
             </p>
-            <button className={s.dec31BannerBtn} onClick={() => setTab('dec31')} type="button">
+            <button className={s.dec31BannerBtn} onClick={() => changeTab('dec31')} type="button">
               12월 31일 확대 보기 →
             </button>
           </div>

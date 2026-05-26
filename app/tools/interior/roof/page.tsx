@@ -52,7 +52,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -168,7 +167,7 @@ export default function RoofPage() {
         {[
           { len: '0~30cm', use: '최소 (모던 주택·창고)', color: '#0891B2' },
           { len: '60~90cm', use: '표준 (단독주택)', color: '#059669' },
-          { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#FFD93E' },
+          { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#CA8A04' },
           { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#EA580C' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
@@ -182,9 +181,9 @@ export default function RoofPage() {
       </p>
 
       {/* 4. 자재 일반 단가 */}
-      <h2 style={sectionTitle}>💰 지붕재·방수재 일반 단가 가이드 (2026 기준 참고)</h2>
+      <h2 style={sectionTitle}>💰 지붕재·방수재 일반 단가 가이드</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        ⚠️ 일반 가격 범위 — 실제 가격은 자재·지역·시즌·구매처별 ±30% 변동 가능. 정확한 가격은 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>·실제 견적 확인.
+        ⚠️ <strong style={{ color: 'var(--text)' }}>2026년 기준</strong> 일반 가격 범위입니다. 정확한 가격은 자재·지역·시즌·구매처별로 ±30% 변동될 수 있으니 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>·실제 시공사 견적으로 확인하세요.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -208,22 +207,29 @@ export default function RoofPage() {
         </table>
       </div>
 
-      {/* 5. 셀프 시공 vs 전문 시공 */}
-      <h2 style={sectionTitle}>🛠️ 셀프 시공 vs 전문 시공 가이드</h2>
-      <div style={{ background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
-        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '10px' }}>⚠️ 지붕 작업은 고소작업 — 전문가 시공 강력 권장</p>
-        <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
-          <li><strong>낙상 위험</strong>: 한국 산재 사망사고의 주요 원인 중 하나</li>
-          <li><strong>방수 시공</strong>: 잘못하면 누수 → 구조물 손상·곰팡이</li>
-          <li><strong>자재·도구</strong>: 안전벨트·헬멧·미끄럼 방지 신발 필수</li>
-          <li><strong>날씨</strong>: 폭우·강풍·고온일 시 절대 작업 X</li>
-          <li><strong>구조 안전</strong>: 적설량·풍하중 등은 구조기사 영역</li>
-          <li>2층 이상·복잡한 형태는 반드시 전문 시공사 견적</li>
-        </ul>
-        <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '14px', lineHeight: 1.7, marginBottom: 0 }}>
-          📞 응급: <strong style={{ color: '#D97706' }}>119</strong> · 한국건설기술연구원 · 대한건축사협회 · 가까운 건축사사무소
-        </p>
+      {/* 5. 지붕 시공 실무 가이드 */}
+      <h2 style={sectionTitle}>🛠️ 지붕 시공 실무 가이드 (경험자 노하우)</h2>
+      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+        실제 지붕 공사에서 자재 물량만큼 중요한 것이 <strong style={{ color: 'var(--text)' }}>시공 순서와 접합부 디테일</strong>입니다. 현장에서 자주 놓치는 포인트를 정리했습니다.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {[
+          { t: '⏱️ 작업 시기', d: '봄·가을의 건조하고 바람 적은 날이 최적입니다. 장마철·혹서기·한겨울은 피하고 아침 이슬이 마른 뒤 시작하세요. 슁글은 기온이 너무 낮으면 깨지기 쉽고, 너무 높으면 밟은 자국이 남습니다.' },
+          { t: '📐 실측·물량 산출', d: '도면보다 현장 실측이 우선입니다 — 처마·물매·돌출부까지 반영하면 도면 대비 ±5~10% 차이가 납니다. 슁글·기와는 같은 로트(생산번호)로 한 번에 주문해 색상 편차를 막고, 부족분 추가 주문은 색이 달라지므로 로스율을 넉넉히 잡습니다.' },
+          { t: '🧱 시공 순서', d: '① 기존 마감재 철거 → ② 합판(OSB) 데크 점검·썩은 부분 교체 → ③ 방수시트(루핑)를 처마 쪽부터 위로 10cm 이상 겹쳐 깔기 → ④ 드립 엣지(처마·박공 끝 물끊기) → ⑤ 마감재를 처마(하단)부터 용마루 방향으로 → ⑥ 용마루·후레싱 마감 → ⑦ 물받이(거터) 설치.' },
+          { t: '💧 누수는 자재보다 접합부', d: '누수 대부분은 자재가 아니라 접합부에서 생깁니다. 굴뚝·천창·환기구 주변, 골(밸리), 벽과 만나는 부위는 반드시 후레싱(금속 물막이)으로 처리하세요. 못은 슁글의 접착선 위 정해진 위치에만 박고(과타 금지), 못 머리가 노출되면 실런트로 마감합니다.' },
+          { t: '🌬️ 환기·결로 관리', d: '처마 흡기구 + 용마루 배기구로 지붕 속 공기가 흐르게 해야 여름 열기와 겨울 결로를 막습니다. 환기가 막히면 단열재가 젖고 데크가 썩습니다.' },
+          { t: '🗑️ 철거·폐기물 비용', d: '기존 슁글·기와 철거물은 양이 많아(㎡당 약 10~20kg) 처리·운반비가 별도로 큽니다. 견적 받을 때 "철거·폐기물 처리 포함 여부"를 꼭 확인하세요.' },
+        ].map((g, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{g.t}</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>{g.d}</p>
+          </div>
+        ))}
       </div>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '14px' }}>
+        🪜 지붕은 고소작업입니다 — 2층 이상·급경사·복잡한 형태는 비계·안전로프를 갖춘 <strong style={{ color: 'var(--text)' }}>전문 시공</strong>을 권장합니다. 안전·책임 관련 안내는 아래 <strong style={{ color: 'var(--text)' }}>면책 조항</strong>을 참고하세요.
+      </p>
 
       {/* FAQ */}
       <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>

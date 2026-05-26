@@ -3,8 +3,9 @@ import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './pet.module.css'
 import {
-  Activity, DogSize,
+  Activity,
   calculateAll, BodyEvaluation, LifeProgress,
+  DOG_BREEDS, DOG_SIZE_GROUPS, sizeOfBreed,
 } from './petUtils'
 
 // ─── 타입 ───────────────────────────────────────────────────────────────────
@@ -17,23 +18,6 @@ type FoodMode = 'dry' | 'wet' | 'mix'
 const DOG_STAGES = ['퍼피', '청년견', '중년견', '노령견']
 const CAT_STAGES = ['키튼', '성묘', '시니어', '슈퍼시니어']
 const STAGE_COLORS = ['#0891B2', '#059669', '#0EA5E9', '#EA580C']
-
-function LifeStageBar({ stages, current }: { stages: string[]; current: string }) {
-  const idx = stages.indexOf(current)
-  return (
-    <div className={styles.stageBar}>
-      {stages.map((s, i) => (
-        <div key={i} className={styles.stageSegment}
-          style={i === idx ? {
-            background: STAGE_COLORS[i], color: '#000',
-            borderColor: STAGE_COLORS[i], fontWeight: 700,
-          } : {}}>
-          {s}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 function CalCard({ title, num, unit, sub, treat = false }: {
   title: string; num: number; unit: string; sub: string; treat?: boolean
@@ -160,22 +144,18 @@ export default function PetClient() {
 
 // ─── 강아지 탭 ───────────────────────────────────────────────────────────────
 
-const DOG_SIZES: { id: DogSize; icon: string; name: string; desc: string }[] = [
-  { id: 'tiny',   icon: '🐩', name: '초소형', desc: '5kg 미만' },
-  { id: 'small',  icon: '🐕', name: '소형',   desc: '5~10kg'  },
-  { id: 'medium', icon: '🐕‍🦺', name: '중형',   desc: '10~25kg' },
-  { id: 'large',  icon: '🦮', name: '대형',   desc: '25kg~'   },
-]
-
 function DogTab() {
-  const [ageYrs,   setAgeYrs]   = useState(3)
-  const [ageMos,   setAgeMos]   = useState(0)
-  const [weight,   setWeight]   = useState(10)
-  const [size,     setSize]     = useState<DogSize>('medium')
-  const [neutered, setNeutered] = useState(true)
-  const [activity, setActivity] = useState<Activity>('normal')
-  const [calDen,   setCalDen]   = useState(350)
-  const [copied,   setCopied]   = useState(false)
+  const [ageYrs,    setAgeYrs]    = useState(3)
+  const [ageMos,    setAgeMos]    = useState(0)
+  const [weightStr, setWeightStr] = useState('10')
+  const [breedId,   setBreedId]   = useState('beagle')
+  const [neutered,  setNeutered]  = useState(true)
+  const [activity,  setActivity]  = useState<Activity>('normal')
+  const [calDen,    setCalDen]    = useState(350)
+  const [copied,    setCopied]    = useState(false)
+
+  const weight = parseFloat(weightStr) || 0
+  const size = sizeOfBreed(breedId)
 
   // ★ 단일 useMemo로 모든 결과 계산 — 의존성 변경 시 즉시 리렌더
   const result = useMemo(
@@ -219,31 +199,26 @@ function DogTab() {
         <span className={styles.cardLabel}>체중</span>
         <div className={styles.weightRow}>
           <input type="number" min={0.5} max={80} step={0.5} className={styles.weightInput}
-            value={weight}
-            onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v)) setWeight(Math.max(0.5, Math.min(80, v))) }} />
+            value={weightStr}
+            onChange={e => setWeightStr(e.target.value)}
+            onBlur={() => { const v = parseFloat(weightStr); setWeightStr(isNaN(v) ? '' : String(Math.max(0.5, Math.min(80, v)))) }} />
           <span className={styles.weightUnit}>kg</span>
-        </div>
-        <input type="range" min={0.5} max={80} step={0.5} className={styles.slider}
-          value={weight} onChange={e => setWeight(parseFloat(e.target.value))} />
-        <div className={styles.sliderLabels}>
-          <span>0.5</span><span>20</span><span>40</span><span>60</span><span>80kg</span>
         </div>
       </div>
 
-      {/* 품종 크기 */}
+      {/* 품종 */}
       <div className={styles.card}>
-        <span className={styles.cardLabel}>품종 크기</span>
-        <div className={styles.sizeGrid}>
-          {DOG_SIZES.map(s => (
-            <button key={s.id}
-              className={`${styles.sizeBtn}${size === s.id ? ' ' + styles.petBtnActive : ''}`}
-              onClick={() => setSize(s.id)}>
-              <span className={styles.sizeBtnIcon}>{s.icon}</span>
-              <span className={styles.sizeBtnText}>{s.name}</span>
-              <span className={styles.sizeBtnDesc}>{s.desc}</span>
-            </button>
+        <span className={styles.cardLabel}>품종</span>
+        <select className={styles.breedSelect} value={breedId} onChange={e => setBreedId(e.target.value)}>
+          {DOG_SIZE_GROUPS.map(g => (
+            <optgroup key={g.size} label={g.label}>
+              {DOG_BREEDS.filter(b => b.size === g.size).map(b => (
+                <option key={b.id} value={b.id}>{b.name}</option>
+              ))}
+            </optgroup>
           ))}
-        </div>
+        </select>
+        <div className={styles.breedHint}>선택한 품종의 크기 기준으로 나이·적정 체중·수명을 계산합니다.</div>
       </div>
 
       {/* 중성화 + 활동량 */}
@@ -271,29 +246,23 @@ function DogTab() {
       </div>
 
       {/* 결과 */}
-      <LifeStageBar stages={DOG_STAGES} current={result.stage} />
-
       <div className={styles.heroCard}>
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
             <span className={styles.heroNum}>{result.humanAge}</span>
             <span className={styles.heroUnit}>세</span>
           </div>
-          <div className={styles.heroSub}>사람 나이 환산 (품종 크기 보정)</div>
+          <div className={styles.heroSub}>사람 나이 환산</div>
         </div>
         <div className={styles.heroRight}>
           <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{result.stage}</div>
-          <div className={styles.heroFactor}>생활계수 ×{result.derFactor}</div>
-          <div className={styles.factorBadge}>
-            <b>×{result.derFactor}</b> = {result.derFactorLabel}
-          </div>
         </div>
       </div>
 
-      {/* NEW: 체중 평가 */}
+      {/* 체중 평가 */}
       <BodyConditionCard body={result.body} weight={weight} />
 
-      {/* NEW: 수명 진행률 */}
+      {/* 수명 진행률 */}
       <LifeProgressCard life={result.life} color="#FFB347" />
 
       {/* 사료 칼로리 밀도 */}
@@ -339,7 +308,7 @@ function DogTab() {
 function CatTab() {
   const [ageYrs,    setAgeYrs]    = useState(3)
   const [ageMos,    setAgeMos]    = useState(0)
-  const [weight,    setWeight]    = useState(4)
+  const [weightStr, setWeightStr] = useState('4')
   const [neutered,  setNeutered]  = useState(true)
   const [env,       setEnv]       = useState<CatEnv>('indoor')
   const [activity,  setActivity]  = useState<Activity>('normal')
@@ -347,6 +316,8 @@ function CatTab() {
   const [dryDen,    setDryDen]    = useState(350)
   const [wetDen,    setWetDen]    = useState(90)
   const [copied,    setCopied]    = useState(false)
+
+  const weight = parseFloat(weightStr) || 0
 
   // ★ 환경(env) → 활동(activity) 보정: 실외/겸용은 활동 한 단계 ↑로 환산
   // 단, 사용자가 명시적으로 활동을 설정한 경우엔 그대로 적용 (env는 보조)
@@ -402,8 +373,9 @@ function CatTab() {
         <span className={styles.cardLabel}>체중</span>
         <div className={styles.weightRow}>
           <input type="number" min={0.5} max={15} step={0.1} className={styles.weightInput}
-            value={weight}
-            onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v)) setWeight(Math.max(0.5, Math.min(15, v))) }} />
+            value={weightStr}
+            onChange={e => setWeightStr(e.target.value)}
+            onBlur={() => { const v = parseFloat(weightStr); setWeightStr(isNaN(v) ? '' : String(Math.max(0.5, Math.min(15, v)))) }} />
           <span className={styles.weightUnit}>kg</span>
         </div>
       </div>
@@ -452,8 +424,6 @@ function CatTab() {
       </div>
 
       {/* 결과 */}
-      <LifeStageBar stages={CAT_STAGES} current={result.stage} />
-
       <div className={styles.heroCard}>
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
@@ -464,17 +434,13 @@ function CatTab() {
         </div>
         <div className={styles.heroRight}>
           <div className={styles.heroStage} style={{ color: STAGE_COLORS[stageIdx] }}>{result.stage}</div>
-          <div className={styles.heroFactor}>생활계수 ×{result.derFactor}</div>
-          <div className={styles.factorBadge}>
-            <b>×{result.derFactor}</b> = {result.derFactorLabel}
-          </div>
         </div>
       </div>
 
-      {/* NEW: 체중 평가 */}
+      {/* 체중 평가 */}
       <BodyConditionCard body={result.body} weight={weight} />
 
-      {/* NEW: 수명 진행률 */}
+      {/* 수명 진행률 */}
       <LifeProgressCard life={result.life} color="#C084FC" />
 
       {/* 사료 모드 */}

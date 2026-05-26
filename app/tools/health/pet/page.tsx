@@ -189,9 +189,9 @@ export default function PetPage() {
           </div>
         </section>
 
-        {/* ── 5. 적정 체중 평가 (NEW) ── */}
+        {/* ── 5. 적정 체중 평가 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 입력한 체중을 품종 크기 기준 정상 범위와 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 자동 평가합니다.
           </p>
@@ -220,9 +220,9 @@ export default function PetPage() {
           </p>
         </section>
 
-        {/* ── 6. 평균 수명 가이드 (NEW) ── */}
+        {/* ── 6. 평균 수명 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평균 수명 가이드 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평균 수명 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 품종 크기·생활 환경별 평균 수명과 진행률을 자동 계산합니다.
           </p>
@@ -238,12 +238,12 @@ export default function PetPage() {
               </thead>
               <tbody>
                 {[
-                  ['🐶 초소형견', '14년', '18년+', '가장 오래 삽니다 (치와와·말티즈)'],
-                  ['🐶 소형견',   '13년', '16년',  '치와와 출신은 18년+ 사례도 있음'],
-                  ['🐶 중형견',   '12년', '15년',  ''],
-                  ['🐶 대형견',   '10년', '13년',  '대형견은 노화 속도가 빠름'],
-                  ['🐱 실내 고양이', '15년', '20년+', '실내·중성화 고양이는 18~20세 사례도 흔함'],
-                  ['🐱 실외 고양이', '7년',  '10년',  '사고·질병 위험으로 평균 수명 ↓'],
+                  ['초소형견', '14년', '18년+', '가장 오래 삽니다 (치와와·말티즈)'],
+                  ['소형견',   '13년', '16년',  '치와와 출신은 18년+ 사례도 있음'],
+                  ['중형견',   '12년', '15년',  ''],
+                  ['대형견',   '10년', '13년',  '대형견은 노화 속도가 빠름'],
+                  ['실내 고양이', '15년', '20년+', '실내·중성화 고양이는 18~20세 사례도 흔함'],
+                  ['실외 고양이', '7년',  '10년',  '사고·질병 위험으로 평균 수명 ↓'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
@@ -260,15 +260,15 @@ export default function PetPage() {
           </p>
         </section>
 
-        {/* ── 7. 건식 vs 습식 vs 혼합 (NEW) ── */}
+        {/* ── 7. 건식 vs 습식 vs 혼합 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>건식 vs 습식 사료 — 칼로리 밀도 차이 (NEW)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>건식 vs 습식 사료 — 칼로리 밀도 차이</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>같은 일일 칼로리도 사료 종류에 따라 그램 수가 크게 다릅니다.</strong> 건식은 100g당 약 350~380kcal, 습식은 약 70~120kcal로 4배 정도 차이.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '6px' }}>🥣 건식 (Dry · Kibble)</p>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '6px' }}>건식 (Dry · Kibble)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>350~400kcal/100g</strong></li>
                 <li>· 장점: 보관 편함·치석 ↓·가성비</li>
@@ -276,7 +276,7 @@ export default function PetPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🥫 습식 (Wet · Pâté)</p>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>습식 (Wet · Pâté)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>70~120kcal/100g</strong></li>
                 <li>· 장점: 수분 70~80%·기호성 ↑</li>

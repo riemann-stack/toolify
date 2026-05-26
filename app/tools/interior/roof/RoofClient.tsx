@@ -15,7 +15,6 @@ import {
 
 type TabKey = 'area' | 'material'
 
-const SIZE_QUICK = [4, 6, 8, 10, 12, 15, 20]
 const ANGLE_QUICK = [15, 20, 25, 30, 35, 40]
 const MOEMAE_QUICK = [3, 4, 5, 6]
 const EAVES_QUICK_CM = [0, 30, 45, 60, 90]
@@ -139,21 +138,11 @@ export default function RoofClient() {
                 <label className={s.fieldLabel}>가로 (정면)</label>
                 <input type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
                   value={L} onChange={(e) => setL(e.target.value)} />
-                <div className={s.quickRow}>
-                  {SIZE_QUICK.map((v) => (
-                    <button key={v} className={s.quickChip} onClick={() => setL(String(v))}>{v}m</button>
-                  ))}
-                </div>
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>세로 (측면)</label>
                 <input type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
                   value={W} onChange={(e) => setW(e.target.value)} />
-                <div className={s.quickRow}>
-                  {SIZE_QUICK.map((v) => (
-                    <button key={v} className={s.quickChip} onClick={() => setW(String(v))}>{v}m</button>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

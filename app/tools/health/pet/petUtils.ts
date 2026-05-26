@@ -13,6 +13,63 @@ export function rer(weightKg: number): number {
   return 70 * Math.pow(weightKg, 0.75)
 }
 
+/* ─── 강아지 품종 → 크기 매핑 (드롭다운용, 이모지 없음) ─── */
+export interface DogBreed { id: string; name: string; size: DogSize }
+
+export const DOG_BREEDS: DogBreed[] = [
+  // 초소형 (~5kg)
+  { id: 'chihuahua',  name: '치와와',                       size: 'tiny' },
+  { id: 'pomeranian', name: '포메라니안',                   size: 'tiny' },
+  { id: 'toypoodle',  name: '토이푸들',                     size: 'tiny' },
+  { id: 'maltese',    name: '말티즈',                       size: 'tiny' },
+  { id: 'yorkshire',  name: '요크셔테리어',                 size: 'tiny' },
+  { id: 'minipin',    name: '미니어처 핀셔',                size: 'tiny' },
+  { id: 'etc_tiny',   name: '기타·믹스 (초소형, ~5kg)',     size: 'tiny' },
+  // 소형 (5~10kg)
+  { id: 'shihtzu',    name: '시츄',                         size: 'small' },
+  { id: 'dachshund',  name: '닥스훈트',                     size: 'small' },
+  { id: 'bichon',     name: '비숑 프리제',                  size: 'small' },
+  { id: 'pug',        name: '퍼그',                         size: 'small' },
+  { id: 'schnauzer',  name: '미니어처 슈나우저',            size: 'small' },
+  { id: 'cavalier',   name: '카발리에 킹 찰스 스패니얼',    size: 'small' },
+  { id: 'papillon',   name: '파피용',                       size: 'small' },
+  { id: 'boston',     name: '보스턴 테리어',                size: 'small' },
+  { id: 'etc_small',  name: '기타·믹스 (소형, 5~10kg)',     size: 'small' },
+  // 중형 (10~25kg)
+  { id: 'beagle',     name: '비글',                         size: 'medium' },
+  { id: 'cocker',     name: '코커 스패니얼',                size: 'medium' },
+  { id: 'border',     name: '보더 콜리',                    size: 'medium' },
+  { id: 'shiba',      name: '시바견',                       size: 'medium' },
+  { id: 'jindo',      name: '진돗개',                       size: 'medium' },
+  { id: 'corgi',      name: '웰시 코기',                    size: 'medium' },
+  { id: 'stdpoodle',  name: '스탠더드 푸들',                size: 'medium' },
+  { id: 'bulldog',    name: '불독',                         size: 'medium' },
+  { id: 'jackrussell',name: '잭 러셀 테리어',               size: 'medium' },
+  { id: 'etc_medium', name: '기타·믹스 (중형, 10~25kg)',    size: 'medium' },
+  // 대형 (25kg~)
+  { id: 'golden',     name: '골든 리트리버',                size: 'large' },
+  { id: 'labrador',   name: '래브라도 리트리버',            size: 'large' },
+  { id: 'shepherd',   name: '저먼 셰퍼드',                  size: 'large' },
+  { id: 'husky',      name: '시베리안 허스키',              size: 'large' },
+  { id: 'doberman',   name: '도베르만',                     size: 'large' },
+  { id: 'rottweiler', name: '로트와일러',                   size: 'large' },
+  { id: 'samoyed',    name: '사모예드',                     size: 'large' },
+  { id: 'malamute',   name: '알래스칸 말라뮤트',            size: 'large' },
+  { id: 'greatdane',  name: '그레이트 데인',                size: 'large' },
+  { id: 'etc_large',  name: '기타·믹스 (대형, 25kg~)',      size: 'large' },
+]
+
+export const DOG_SIZE_GROUPS: { size: DogSize; label: string }[] = [
+  { size: 'tiny',   label: '초소형견 (~5kg)' },
+  { size: 'small',  label: '소형견 (5~10kg)' },
+  { size: 'medium', label: '중형견 (10~25kg)' },
+  { size: 'large',  label: '대형견 (25kg~)' },
+]
+
+export function sizeOfBreed(id: string): DogSize {
+  return DOG_BREEDS.find(b => b.id === id)?.size ?? 'medium'
+}
+
 /* ─── 사람 나이 환산 ─── */
 export function dogHumanAge(yrs: number, mos: number, size: DogSize): number {
   const a = yrs + mos / 12
