@@ -13,20 +13,26 @@ export const revalidate = 3600  // 1h 캐시
  *  실측 코드는 https://www.kamis.or.kr/customer/reference/openapi_list.do 참조
  *  unitFactor: p_convert_kg_yn=Y 사용 시 dpr1은 kg당 가격이므로,
  *              kg → 도구 단위(포기/개/g/단)로 환산하는 계수 */
-const KAMIS_MAP: Record<string, { itemCode: string; kindCode: string; unitFactor: number; defaultPrice: number; defaultDate: string; unit: string }> = {
-  baechu:    { itemCode: '211', kindCode: '01', unitFactor: 3,    defaultPrice: 5500, defaultDate: '2025-11', unit: '포기' },  // 1포기 ≈ 3kg
-  mu:        { itemCode: '231', kindCode: '01', unitFactor: 1,    defaultPrice: 2200, defaultDate: '2025-11', unit: '개' },    // 1개 ≈ 1kg
-  jjokpa:    { itemCode: '245', kindCode: '00', unitFactor: 1,    defaultPrice: 4000, defaultDate: '2025-11', unit: '단' },
-  gochugaru: { itemCode: '244', kindCode: '00', unitFactor: 0.001,defaultPrice: 55,   defaultDate: '2025-11', unit: 'g' },     // kg → g
-  maneul:    { itemCode: '258', kindCode: '00', unitFactor: 0.001,defaultPrice: 25,   defaultDate: '2025-11', unit: 'g' },
-  saenggang: { itemCode: '241', kindCode: '00', unitFactor: 0.001,defaultPrice: 22,   defaultDate: '2025-11', unit: 'g' },
+const KAMIS_MAP: Record<string, { itemCode: string; kindCode: string; unitFactor: number; defaultPrice: number; unit: string }> = {
+  baechu:    { itemCode: '211', kindCode: '01', unitFactor: 3,    defaultPrice: 5500, unit: '포기' },  // 1포기 ≈ 3kg
+  mu:        { itemCode: '231', kindCode: '01', unitFactor: 1,    defaultPrice: 2200, unit: '개' },    // 1개 ≈ 1kg
+  jjokpa:    { itemCode: '245', kindCode: '00', unitFactor: 1,    defaultPrice: 4000, unit: '단' },
+  gochugaru: { itemCode: '244', kindCode: '00', unitFactor: 0.001,defaultPrice: 55,   unit: 'g' },     // kg → g
+  maneul:    { itemCode: '258', kindCode: '00', unitFactor: 0.001,defaultPrice: 25,   unit: 'g' },
+  saenggang: { itemCode: '241', kindCode: '00', unitFactor: 0.001,defaultPrice: 22,   unit: 'g' },
   // 🎑 명절 상차림용
-  sagua:     { itemCode: '411', kindCode: '06', unitFactor: 0.25, defaultPrice: 2500, defaultDate: '2025-10', unit: '개' },    // 부사 1개 ≈ 250g
-  bae:       { itemCode: '412', kindCode: '02', unitFactor: 0.55, defaultPrice: 4500, defaultDate: '2025-10', unit: '개' },    // 신고배 1개 ≈ 550g
-  gam:       { itemCode: '413', kindCode: '06', unitFactor: 0.20, defaultPrice: 1500, defaultDate: '2025-10', unit: '개' },    // 단감 1개 ≈ 200g
-  sigeumchi: { itemCode: '226', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, defaultDate: '2025-10', unit: '단' },
-  hobak:     { itemCode: '224', kindCode: '00', unitFactor: 0.30, defaultPrice: 2000, defaultDate: '2025-10', unit: '개' },    // 애호박 1개 ≈ 300g
-  daepa:     { itemCode: '246', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, defaultDate: '2025-10', unit: '단' },
+  sagua:     { itemCode: '411', kindCode: '06', unitFactor: 0.25, defaultPrice: 2500, unit: '개' },    // 부사 1개 ≈ 250g
+  bae:       { itemCode: '412', kindCode: '02', unitFactor: 0.55, defaultPrice: 4500, unit: '개' },    // 신고배 1개 ≈ 550g
+  gam:       { itemCode: '413', kindCode: '06', unitFactor: 0.20, defaultPrice: 1500, unit: '개' },    // 단감 1개 ≈ 200g
+  sigeumchi: { itemCode: '226', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, unit: '단' },
+  hobak:     { itemCode: '224', kindCode: '00', unitFactor: 0.30, defaultPrice: 2000, unit: '개' },    // 애호박 1개 ≈ 300g
+  daepa:     { itemCode: '246', kindCode: '00', unitFactor: 1,    defaultPrice: 3500, unit: '단' },
+}
+
+/** 폴백 표기용 현재 연·월 (YYYY-MM). 고정 날짜가 시간이 지나며 낡아 보이는 문제 방지. */
+function currentMonth(): string {
+  const d = new Date()
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`
 }
 
 interface PriceResult {
@@ -86,7 +92,7 @@ async function fetchKamisCategory(categoryCode: string, regday: string): Promise
   url.searchParams.set('p_returntype', 'json')
 
   try {
-    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(4000) })
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(8000) })
     if (!res.ok) {
       console.error('[kamis] HTTP', res.status, categoryCode, regday)
       return []
@@ -131,8 +137,79 @@ function matchItem(items: KamisItem[], itemCode: string, kindCode: string): Kami
   })
 }
 
+/** KAMIS 연결 진단 — /api/produce-price?debug=1
+ *  키/ID는 응답에 노출하지 않고(REDACTED), HTTP 상태·소요시간·원본 응답 일부만 반환.
+ *  Vercel 배포 환경에서 직접 호출해 "키는 맞는데 왜 안 되는지"를 확인할 수 있습니다. */
+async function debugKamis(): Promise<Record<string, unknown>> {
+  const apiKey = process.env.KAMIS_API_KEY
+  const apiId = process.env.KAMIS_API_ID
+  const regday = kamisDate(1)
+
+  const url = new URL('https://www.kamis.or.kr/service/price/xml.do')
+  url.searchParams.set('action', 'dailyPriceByCategoryList')
+  url.searchParams.set('p_product_cls_code', '01')
+  url.searchParams.set('p_country_code', '1101')
+  url.searchParams.set('p_regday', regday)
+  url.searchParams.set('p_convert_kg_yn', 'Y')
+  url.searchParams.set('p_item_category_code', '200')
+  url.searchParams.set('p_cert_key', apiKey ?? '')
+  url.searchParams.set('p_cert_id', apiId ?? '')
+  url.searchParams.set('p_returntype', 'json')
+
+  let redacted = url.toString()
+  if (apiKey) redacted = redacted.split(encodeURIComponent(apiKey)).join('<KEY>').split(apiKey).join('<KEY>')
+  if (apiId) redacted = redacted.split(encodeURIComponent(apiId)).join('<ID>').split(apiId).join('<ID>')
+
+  const diag: Record<string, unknown> = {
+    env: {
+      KAMIS_API_KEY_present: !!apiKey,
+      KAMIS_API_ID_present: !!apiId,
+      keyLength: apiKey?.length ?? 0,
+      idLength: apiId?.length ?? 0,
+    },
+    regday,
+    requestUrl: redacted,
+  }
+
+  if (!apiKey || !apiId) {
+    diag.note = '환경변수(KAMIS_API_KEY / KAMIS_API_ID)가 비어 있습니다. Vercel → Settings → Environment Variables 에서 Production 스코프에 설정했는지, 재배포했는지 확인하세요.'
+    return diag
+  }
+
+  try {
+    const t0 = Date.now()
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(8000) })
+    diag.httpStatus = res.status
+    diag.elapsedMs = Date.now() - t0
+    const text = await res.text()
+    diag.bodyPreview = text.slice(0, 1200)
+    diag.hint =
+      'bodyPreview에 가격 데이터(dpr1 등)가 보이면 정상. "001" 등 짧은 코드나 인증 에러가 보이면 cert_key/cert_id 불일치(둘이 바뀌었는지 확인). 빈 배열이면 해당 날짜 데이터 없음(주말·공휴일).'
+  } catch (e) {
+    diag.error = String(e)
+    diag.hint =
+      '타임아웃/네트워크 오류 — KAMIS가 해외·클라우드(Vercel) IP를 차단·제한할 수 있습니다. 이 경우 키가 맞아도 호출이 실패하며 폴백(추정가)으로 표시됩니다.'
+  }
+  return diag
+}
+
 export async function GET(req: Request): Promise<Response> {
-  const itemsParam = new URL(req.url).searchParams.get('items') ?? ''
+  const sp = new URL(req.url).searchParams
+
+  // 진단 모드
+  if (sp.get('debug') === '1') {
+    const diag = await debugKamis()
+    return new Response(JSON.stringify({ ok: true, debug: diag }, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+  }
+
+  const itemsParam = sp.get('items') ?? ''
   const ids = itemsParam.split(',').map((s) => s.trim()).filter(Boolean)
   if (ids.length === 0) return json({ ok: false, error: 'items 파라미터 필요' }, 400)
 
@@ -170,7 +247,7 @@ export async function GET(req: Request): Promise<Response> {
       id,
       price: m.defaultPrice,
       unit: m.unit,
-      date: m.defaultDate,
+      date: currentMonth(),
       source: 'fallback',
     }
   })

@@ -1,16 +1,24 @@
 // components/AdSlot.tsx
-// 광고 슬롯 자리표시자. 애드센스 승인 후 프로덕션 분기에 ins 태그를 삽입할 예정.
-// position 으로 의미적 라벨을 부여해, 추후 GA·heatmap 분석이나 A/B 테스트에 사용 가능.
-// 광고 제외 경로(lib/ads)에서는 렌더링하지 않습니다.
+// 광고 슬롯. 자동광고(AutoAds)가 페이지에 광고를 직접 게재하므로,
+// 이 컴포넌트는 슬롯 ID(data-ad-slot)가 주어진 경우에만 실제 <ins> 광고를 렌더링합니다.
+// - 슬롯 ID가 없으면 프로덕션에서 아무것도 렌더링하지 않습니다(빈 공백 방지 → 심사 시 "의도 없는 공백" 제거).
+// - 광고 제외 경로(lib/ads)에서는 렌더링하지 않습니다.
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { isAdExcluded } from '@/lib/ads'
+import { useEffect, useRef } from 'react'
+import { isAdExcluded, ADSENSE_CLIENT_ID } from '@/lib/ads'
+
+declare global {
+  interface Window {
+    adsbygoogle?: unknown[]
+  }
+}
 
 type AdSlotPosition = 'in-article' | 'sidebar' | 'footer' | 'between-tools'
 
 interface AdSlotProps {
-  /** 애드센스 슬롯 ID (예: 'ca-pub-XXX/1234567890') — 승인 후 채움 */
+  /** 애드센스 슬롯 ID (data-ad-slot 숫자) — 광고 단위 생성 후 채움. 없으면 프로덕션에서 렌더링 X */
   slotId?: string
   /** 페이지 내 의미적 위치 라벨 */
   position: AdSlotPosition
@@ -20,12 +28,26 @@ interface AdSlotProps {
 
 export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProps) {
   const pathname = usePathname()
+  const excluded = isAdExcluded(pathname)
+  const isProd = process.env.NODE_ENV === 'production'
+  const showIns = isProd && !excluded && !!slotId && !!ADSENSE_CLIENT_ID
+  const pushed = useRef(false)
 
-  // 광고 제외 경로(주류·도박·민감 건강): 슬롯 자체를 렌더링하지 않음
-  if (isAdExcluded(pathname)) return null
+  useEffect(() => {
+    if (!showIns || pushed.current) return
+    try {
+      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+      pushed.current = true
+    } catch {
+      /* adsbygoogle 미로드 시 무시 */
+    }
+  }, [showIns])
+
+  // 광고 제외 경로(주류·도박·민감 건강): 렌더링 안 함
+  if (excluded) return null
 
   // 개발 환경: 시각적 자리표시자
-  if (process.env.NODE_ENV === 'development') {
+  if (!isProd) {
     return (
       <div
         data-ad-slot={position}
@@ -45,19 +67,25 @@ export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProp
           margin: '24px 0',
         }}
       >
-        [Ad Slot — {position}]
+        [Ad Slot — {position}{slotId ? '' : ' · slotId 없음 → 프로덕션 미표시'}]
       </div>
     )
   }
 
-  // 프로덕션: 애드센스 승인 전에는 빈 자리만 차지 (CLS 방지),
-  // 승인 후 이 곳에 <ins className="adsbygoogle" .../> 와 push 스크립트 추가 예정
+  // 프로덕션: 슬롯 ID가 없으면 빈 공백을 만들지 않음.
+  // (자동광고 스크립트가 페이지 적절한 위치에 광고를 직접 게재합니다.)
+  if (!showIns) return null
+
+  // 프로덕션 + 슬롯 ID 보유: 실제 애드센스 디스플레이 광고 단위 렌더링
   return (
-    <div
-      data-ad-slot={position}
-      data-ad-slot-id={slotId}
-      style={{ minHeight, margin: '24px 0' }}
-      aria-hidden="true"
+    <ins
+      className="adsbygoogle"
+      data-ad-client={ADSENSE_CLIENT_ID}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-ad-position={position}
+      style={{ display: 'block', minHeight, margin: '24px 0' }}
     />
   )
 }
