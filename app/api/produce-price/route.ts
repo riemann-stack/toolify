@@ -6,7 +6,10 @@
 //   - 1시간 캐싱 (revalidate)
 // ─────────────────────────────────────────────────────────────
 
-export const runtime = 'edge'
+// KAMIS는 해외·글로벌 IP에서 응답이 막히거나 매우 느립니다(타임아웃).
+// 서울 리전(icn1) Node 런타임에서 호출해 국내 IP로 도달 가능성을 높입니다.
+export const runtime = 'nodejs'
+export const preferredRegion = 'icn1'
 export const revalidate = 3600  // 1h 캐시
 
 /** 김장·명절 도구의 ingredient id → KAMIS 품목/품종 코드 매핑

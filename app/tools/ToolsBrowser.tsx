@@ -10,8 +10,10 @@ import styles from './tools.module.css'
 export default function ToolsBrowser() {
   const [q, setQ] = useState('')
   // ?q= 검색어로 진입 시 자동 채움 (사이트맵 SearchAction · 공유 링크 대응)
+  // SSR 하이드레이션 불일치 방지를 위해 마운트 후 URL을 읽어 1회만 동기화 — 의도된 패턴.
   useEffect(() => {
     const param = new URLSearchParams(window.location.search).get('q')
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (param) setQ(param)
   }, [])
   const query = q.trim()
