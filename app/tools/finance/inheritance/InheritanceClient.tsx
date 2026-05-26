@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 import s from './inheritance.module.css'
 import {
   RELATIONS,
-  ASSET_KINDS,
   TAX_BRACKETS,
   calcGiftTax,
   calcInheritanceTax,
@@ -21,7 +20,6 @@ import {
   parseAmount,
   commaInput,
   type Relation,
-  type AssetKind,
 } from './inheritanceUtils'
 
 type TabKey = 'gift' | 'inherit' | 'heirs' | 'split' | 'compare'
@@ -41,7 +39,6 @@ export default function InheritanceClient() {
   const [giftAmountStr, setGiftAmountStr] = useState('100000000')
   const [giftRelation, setGiftRelation] = useState<Relation>('성인자녀')
   const [prevGiftStr, setPrevGiftStr] = useState('0')
-  const [assetKind, setAssetKind] = useState<AssetKind>('현금')
   const [showGiftDetail, setShowGiftDetail] = useState(false)
 
   // 부동산 / 부담부증여 (NEW)
@@ -90,7 +87,7 @@ export default function InheritanceClient() {
           { label: '국세청 상속세', href: 'https://www.nts.go.kr' },
         ]}
       >
-        본 계산기는 단순 참고용입니다.
+        본 계산기는 일반 정보 제공용 단순 참고 도구이며 세무 신고·자문 도구가 아닙니다. 상속·증여는 가장 복잡한 세무 영역으로 재산 평가·공제 적용·신고 시점·가족관계에 따라 실제 세액이 크게 달라지고, 부동산·부담부증여는 매우 단순한 추정만 제공합니다(자금출처 소명 미반영). 특히 평가가 어려운 재산·부담부증여·다수 상속인 협의분할·사전증여·해외자산·상속세 5억 이상이 예상되면 반드시 세무사·변호사와 상담하세요. 세무 도움: 국세청 126 · 한국세무사회 무료상담 070-5008-1234 · 홈택스 hometax.go.kr.
       </Disclaimer>
 
       <div className={s.tabs}>
@@ -107,7 +104,6 @@ export default function InheritanceClient() {
         amountStr={giftAmountStr} setAmountStr={setGiftAmountStr}
         relation={giftRelation} setRelation={setGiftRelation}
         prevStr={prevGiftStr} setPrevStr={setPrevGiftStr}
-        assetKind={assetKind} setAssetKind={setAssetKind}
         showDetail={showGiftDetail} setShowDetail={setShowGiftDetail}
         propertyMode={propertyMode} setPropertyMode={setPropertyMode}
         propertyValueStr={propertyValueStr} setPropertyValueStr={setPropertyValueStr}
@@ -153,7 +149,6 @@ export default function InheritanceClient() {
         prevGift={parseAmount(prevGiftStr)}
         hasSpouse={hasSpouse}
         childCount={childCount}
-        assetKind={assetKind}
       />}
     </div>
   )
@@ -167,8 +162,6 @@ interface GiftTabProps {
   setRelation: (r: Relation) => void
   prevStr: string
   setPrevStr: (v: string) => void
-  assetKind: AssetKind
-  setAssetKind: (a: AssetKind) => void
   showDetail: boolean
   setShowDetail: (b: boolean) => void
   propertyMode: 'none' | 'simple' | 'burdened'
@@ -272,26 +265,7 @@ function GiftTab(p: GiftTabProps) {
         </div>
       </div>
 
-      {/* 재산 종류 */}
-      <div className={s.card}>
-        <span className={s.cardLabel}>재산 종류</span>
-        <div className={s.pills}>
-          {ASSET_KINDS.map(k => (
-            <button key={k}
-              className={`${s.pill} ${p.assetKind === k ? s.pillActive : ''}`}
-              onClick={() => p.setAssetKind(k)}>
-              {k === '현금' ? '💵 현금·예금' : k === '주식' ? '📈 주식·펀드' : k === '부동산' ? '🏠 부동산' : '📦 기타'}
-            </button>
-          ))}
-        </div>
-        {p.assetKind === '부동산' && (
-          <div className={s.helperText}>
-            🏠 부동산은 시가·공시가격 기준에 따라 평가액이 다름. 아래에서 단순 추정 보기 가능.
-          </div>
-        )}
-      </div>
-
-      {/* 결과 (현금/주식/기타) */}
+      {/* 결과 */}
       <div className={s.hero}>
         <div className={s.heroLead}>예상 증여세 (신고 세액공제 3% 반영)</div>
         <div className={s.heroNum}>{formatShortKRW(result.finalTax)}</div>
@@ -465,7 +439,6 @@ function GiftTab(p: GiftTabProps) {
       {/* 주의 항목 */}
       <WarnList items={[
         prev > 0 && '🔔 10년 내 기존 증여액이 있어 합산되어 계산되었습니다.',
-        p.assetKind === '부동산' && p.propertyMode === 'none' && '🔔 부동산은 시가·공시가 기준에 따라 평가액이 달라집니다 — 위 「부동산 증여」 모드에서 단순 추정 가능.',
         p.relation === '미성년자녀' && '🔔 미성년 자녀는 결혼·출산 공제(혼인 시 1억) 추가 적용 가능.',
         p.relation === '손자녀' && '🔔 세대생략 증여는 30% 가산세 — 부모 살아 계신 경우 세무사 상담 권장.',
       ].filter(Boolean) as string[]} />
@@ -1147,7 +1120,6 @@ interface CompareTabProps {
   prevGift: number
   hasSpouse: boolean
   childCount: number
-  assetKind: AssetKind
 }
 
 function CompareTab(p: CompareTabProps) {
@@ -1209,7 +1181,6 @@ function CompareTab(p: CompareTabProps) {
           {p.giftAmount <= 500_000_000 && <li>금액이 5억 이하라 상속 일괄공제 범위 내 — 상속세 0원 가능.</li>}
           {p.childCount >= 2 && <li>자녀가 {p.childCount}명이라 분산 증여 시 각자 공제 한도(5천만)를 활용해 절세 효과.</li>}
           {p.prevGift > 0 && <li>10년 내 기존 증여액 {formatShortKRW(p.prevGift)}이 합산되어 증여세 부담 ↑.</li>}
-          {p.assetKind === '부동산' && <li>부동산은 평가 기준(시가/공시가)에 따라 결과가 크게 달라짐.</li>}
           {p.giftAmount >= 3_000_000_000 && <li>30억 초과 구간은 양쪽 모두 50% 최고세율 적용.</li>}
         </ul>
       </div>
@@ -1239,7 +1210,6 @@ function CompareTab(p: CompareTabProps) {
 
       <WarnList items={[
         p.prevGift > 0 && '🔔 10년 내 증여 이력이 있어 합산.',
-        p.assetKind === '부동산' && '🔔 부동산은 평가 기준에 따라 세금이 다름 — 단순 추정만 가능.',
         p.hasSpouse && '🔔 배우자 상속공제 적용 시 결과 크게 달라짐 (최대 30억).',
         '🔔 본 비교는 단순 참고 — 실제 세무 의사결정은 세무사 상담 필수.',
       ].filter(Boolean) as string[]} />

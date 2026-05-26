@@ -57,27 +57,10 @@ export default function InheritancePage() {
         관계별 공제·10년 합산·배우자 공제 반영한 정확한 세액 + <strong style={{ color: 'var(--text)' }}>분산 증여 시뮬레이션</strong>.
       </p>
 
-      <div style={{
-        background: 'rgba(220, 38, 38, 0.06)',
-        border: '1px solid rgba(220, 38, 38, 0.25)',
-        borderRadius: '12px',
-        padding: '14px 18px',
-        marginBottom: '32px',
-        fontSize: '13px',
-        color: 'var(--text)',
-        lineHeight: 1.7,
-      }}>
-        ⚖️ <strong style={{ color: '#DC2626' }}>본 계산기는 단순 참고용 정보 도구입니다.</strong><br />
-        실제 상속·증여세는 재산 종류별 평가, 공제 적용 여부, 신고 시점, 사전 증여 이력, 채무 등 복합적 요소에 따라 실제 납부액과 크게 다를 수 있습니다.
-        부동산·부담부증여는 매우 단순한 추정만 제공되며, 정확한 신고는 반드시 세무사와 상담하세요.<br />
-        세무 도움: <strong style={{ color: '#DC2626' }}>한국세무사회 무료 상담 070-5008-1234</strong> · 국세청 126 · 홈택스 hometax.go.kr<br />
-        <span style={{ color: 'var(--muted)' }}>참고: 2026년 기준 상속세 및 증여세법</span>
-      </div>
-
       <InheritanceClient />
 
       {/* 1. 증여세 공제 한도표 (기존 SEO 보존) */}
-      <h2 style={sectionTitle}>📋 증여세 핵심 공제 한도 (2026년 기준)</h2>
+      <h2 style={sectionTitle}>📋 증여세 공제 한도 (2026년 기준)</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         증여 공제는 <strong style={{ color: 'var(--text)' }}>10년간 합산</strong>되어 적용됩니다. 즉, 동일인에게서 받은 증여는 10년 단위로 누적 계산되며, 누적 합계가 공제 한도를 넘는 부분만 과세됩니다.
       </p>
@@ -91,14 +74,14 @@ export default function InheritancePage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>🟡 배우자</td><td style={cell}><strong>6억원</strong></td><td style={cell}>10년간 합산</td></tr>
-            <tr><td style={cell}>🟢 성인 자녀</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>직계비속 (만 19세 이상)</td></tr>
-            <tr><td style={cell}>🔵 미성년 자녀</td><td style={cell}><strong>2천만원</strong></td><td style={cell}>만 19세 미만</td></tr>
-            <tr><td style={cell}>🟠 부모·조부모</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>직계존속 합산</td></tr>
-            <tr><td style={cell}>🟣 손자녀</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>세대생략 30% 가산</td></tr>
-            <tr><td style={cell}>⚪ 며느리·사위</td><td style={cell}><strong>1천만원</strong></td><td style={cell}>인척</td></tr>
-            <tr><td style={cell}>⚪ 기타 친족</td><td style={cell}><strong>1천만원</strong></td><td style={cell}>6촌 혈족·4촌 인척</td></tr>
-            <tr><td style={cell}>⚫ 타인</td><td style={cell}><strong>0원</strong></td><td style={cell}>공제 없음</td></tr>
+            <tr><td style={cell}>배우자</td><td style={cell}><strong>6억원</strong></td><td style={cell}>10년간 합산</td></tr>
+            <tr><td style={cell}>성인 자녀</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>직계비속 (만 19세 이상)</td></tr>
+            <tr><td style={cell}>미성년 자녀</td><td style={cell}><strong>2천만원</strong></td><td style={cell}>만 19세 미만</td></tr>
+            <tr><td style={cell}>부모·조부모</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>직계존속 합산</td></tr>
+            <tr><td style={cell}>손자녀</td><td style={cell}><strong>5천만원</strong></td><td style={cell}>세대생략 30% 가산</td></tr>
+            <tr><td style={cell}>며느리·사위</td><td style={cell}><strong>1천만원</strong></td><td style={cell}>인척</td></tr>
+            <tr><td style={cell}>기타 친족</td><td style={cell}><strong>1천만원</strong></td><td style={cell}>6촌 혈족·4촌 인척</td></tr>
+            <tr><td style={cell}>타인</td><td style={cell}><strong>0원</strong></td><td style={cell}>공제 없음</td></tr>
           </tbody>
         </table>
       </div>
@@ -268,8 +251,8 @@ export default function InheritancePage() {
         </div>
       </div>
 
-      {/* 9. 부동산 증여 주의 (NEW, 단순) */}
-      <h2 style={sectionTitle}>🏠 부동산 증여 주의 (간단)</h2>
+      {/* 9. 부동산 증여 시 주의사항 */}
+      <h2 style={sectionTitle}>🏠 부동산 증여 시 주의사항</h2>
       <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginBottom: 10 }}>
           부동산 증여는 <strong>증여세 외에 다음이 모두 별도 발생</strong>합니다:
@@ -399,44 +382,6 @@ export default function InheritancePage() {
         </Link>
       </div>
 
-      {/* 13. 면책 강화 */}
-      <div style={{
-        background: 'rgba(220, 38, 38, 0.06)',
-        border: '1px solid rgba(220, 38, 38, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 20px',
-        marginTop: '32px',
-        fontSize: '13px',
-        color: 'var(--muted)',
-        lineHeight: 1.85,
-      }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 면책 조항 (강화)</p>
-        <p style={{ marginBottom: 8 }}>본 상속·증여세 계산기는 일반 정보 제공 목적의 단순 참고용 도구입니다. 세무 자문·신고 도구가 아닙니다.</p>
-        <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
-          <li>정확한 신고는 세무사·홈택스 권장</li>
-          <li>상속·증여 분야는 가장 복잡한 세무 영역</li>
-          <li>재산 평가·공제 적용·신고 시점·가족관계에 따라 실제 세액 크게 다름</li>
-          <li>부동산·주식 평가는 시점·방식·조세조약 등 변수 다양</li>
-          <li>부담부증여는 양도세까지 얽혀 매우 복잡 (단순 분리만 제공)</li>
-          <li>자금출처 소명은 별도 영역 (본 도구 미반영)</li>
-          <li>정책 변경 가능</li>
-        </ul>
-        <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>특히 다음 경우 반드시 세무사·변호사 상담:</p>
-        <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
-          <li>부동산·주식 등 평가 어려운 재산</li>
-          <li>부담부증여</li>
-          <li>다수 상속인 + 협의 분할</li>
-          <li>사전증여·해외 자산</li>
-          <li>상속세 5억 이상 예상</li>
-        </ul>
-        <p style={{ marginBottom: 4, color: 'var(--text)', fontWeight: 600 }}>세무 도움 연락처:</p>
-        <ul style={{ paddingLeft: 18 }}>
-          <li>한국 국세청: <strong style={{ color: '#DC2626' }}>126</strong></li>
-          <li>한국세무사회 무료 상담: <strong style={{ color: '#DC2626' }}>070-5008-1234</strong></li>
-          <li>홈택스: <strong style={{ color: '#DC2626' }}>hometax.go.kr</strong></li>
-          <li>거주 지역 세무서 직접 문의</li>
-        </ul>
-      </div>
     </div>
   )
 }

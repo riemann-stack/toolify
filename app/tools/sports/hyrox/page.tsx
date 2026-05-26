@@ -65,14 +65,14 @@ export default function HyroxPage() {
                 </thead>
                 <tbody>
                   {[
-                    ['① 런 + ', '스키에르그 (SkiErg)', '1,000m'],
-                    ['② 런 + ', '썰매 밀기 (Sled Push)', '50m'],
-                    ['③ 런 + ', '썰매 끌기 (Sled Pull)', '50m'],
-                    ['④ 런 + ', '버피 브로드 점프', '80m'],
-                    ['⑤ 런 + ', '로잉 (Rowing)', '1,000m'],
-                    ['⑥ 런 + ', '파머스 캐리', '200m'],
-                    ['⑦ 런 + ', '샌드백 런지', '100m'],
-                    ['⑧ 런 + ', '월 볼 (Wall Balls)', '100/75회'],
+                    ['① 런 ', '스키에르그 (SkiErg)', '1,000m'],
+                    ['② 런 ', '썰매 밀기 (Sled Push)', '50m'],
+                    ['③ 런 ', '썰매 끌기 (Sled Pull)', '50m'],
+                    ['④ 런 ', '버피 브로드 점프', '80m'],
+                    ['⑤ 런 ', '로잉 (Rowing)', '1,000m'],
+                    ['⑥ 런 ', '파머스 캐리', '200m'],
+                    ['⑦ 런 ', '샌드백 런지', '100m'],
+                    ['⑧ 런 ', '월 볼 (Wall Balls)', '100/75회'],
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#CA8A04', fontWeight: 700 }}>1km</span></td>
@@ -91,7 +91,7 @@ export default function HyroxPage() {
 
         {/* 3. 부문 */}
         <section>
-          <h2 style={h2}>부문(Division) 한눈에</h2>
+          <h2 style={h2}>참가 부문 (Division)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { t: 'Open', d: '입문·일반. 표준 중량. 가장 많이 참가하는 부문.', c: '#0EA5E9' },
