@@ -382,12 +382,22 @@ function Recommend({ label, value, meta }: { label: string; value: string; meta?
 function SearchBox({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <div className={styles.searchBox}>
-      <input
-        className={styles.searchInput}
-        placeholder={placeholder}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-      />
+      <span className={styles.searchBoxLabel}>이미 아는 사이즈로 표에서 찾기</span>
+      <div className={styles.searchInputWrap}>
+        <svg className={styles.searchIcon} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          className={styles.searchInput}
+          placeholder={placeholder}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          inputMode="search"
+        />
+        {value && (
+          <button type="button" className={styles.searchClear} onClick={() => onChange('')} aria-label="검색어 지우기">✕</button>
+        )}
+      </div>
     </div>
   )
 }

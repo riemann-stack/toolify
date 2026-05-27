@@ -3,6 +3,7 @@ import MoldingClient from './MoldingClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/molding',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '천장 몰딩·걸레받이·띠몰딩의 길이·개수·비용 자동 + 코너·이음새 처리 가이드.',
   keywords: ['몰딩계산기', '걸레받이길이', '천장몰딩개수', '몰딩소요량', 'MDF몰딩', 'PVC몰딩', '몰딩비용', '몰딩45도절단'],
 })
+
+const FAQ_LD = [
+              {
+                q: '24평 아파트 천장 몰딩에 몇 개가 필요한가요?',
+                a: '24평 아파트 거실·방을 합친 둘레는 보통 약 28~32m 정도입니다. 천장 몰딩만 시공할 경우 둘레 + 10% 로스 + 모서리 여유 ≈ <strong>약 36m</strong>가 필요하며, <strong>2.4m 몰딩 15개</strong> 또는 <strong>3.6m 몰딩 10개</strong> 정도가 적정합니다. 걸레받이까지 함께 시공하면 약 두 배가 필요합니다.',
+              },
+              {
+                q: '걸레받이는 문 폭을 빼야 하나요?',
+                a: '네, <strong>문이 있는 곳은 걸레받이가 끊기므로 문 폭만큼 제외</strong>해야 합니다. 일반 방문 폭은 <strong>약 0.9m</strong>, 현관·중문은 약 1.0m 정도이며, 문이 여러 개 있으면 모두 합산해서 빼주세요. 문틀 자체는 별도 출입문 프레임 몰딩으로 처리됩니다.',
+              },
+              {
+                q: '모서리 절단 시 여유분은 얼마나 잡아야 하나요?',
+                a: '모서리 1개당 <strong>약 5~10cm 여유분</strong>을 권장합니다. 직사각형 방은 모서리 4개이므로 총 20~40cm가 추가로 필요합니다. 마이터 박스 사용 시 5cm로 충분하지만, 마이터 톱 없이 자르면 시행착오로 더 많은 자투리가 발생할 수 있어 <strong>+10cm 정도 잡는 것이 안전</strong>합니다.',
+              },
+              {
+                q: '몰딩은 셀프 시공이 가능한가요?',
+                a: '<strong>PVC·스티렌은 셀프 시공 충분히 가능</strong>합니다. 마이터 박스(만원대)와 본드, 가위로 작업할 수 있습니다. <strong>MDF·우드는 마이터 톱 등 도구가 필요</strong>하고 못 작업도 들어가서 난이도가 있습니다. 석고 몰딩은 곡선 마감·도장 작업까지 필요해 전문 시공을 권장합니다.',
+              },
+              {
+                q: '몰딩 가격은 보통 얼마인가요?',
+                a: '한국 시판 기준으로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다. 24평 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 18~20만원</strong>, 전문 시공비는 m당 5,000원 추가로 약 <strong>총 50만원 내외</strong>가 일반적입니다.',
+              },
+            ]
 
 export default function MoldingPage() {
   return (
@@ -229,29 +253,9 @@ export default function MoldingPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '24평 아파트 천장 몰딩에 몇 개가 필요한가요?',
-                a: '24평 아파트 거실·방을 합친 둘레는 보통 약 28~32m 정도입니다. 천장 몰딩만 시공할 경우 둘레 + 10% 로스 + 모서리 여유 ≈ <strong>약 36m</strong>가 필요하며, <strong>2.4m 몰딩 15개</strong> 또는 <strong>3.6m 몰딩 10개</strong> 정도가 적정합니다. 걸레받이까지 함께 시공하면 약 두 배가 필요합니다.',
-              },
-              {
-                q: '걸레받이는 문 폭을 빼야 하나요?',
-                a: '네, <strong>문이 있는 곳은 걸레받이가 끊기므로 문 폭만큼 제외</strong>해야 합니다. 일반 방문 폭은 <strong>약 0.9m</strong>, 현관·중문은 약 1.0m 정도이며, 문이 여러 개 있으면 모두 합산해서 빼주세요. 문틀 자체는 별도 출입문 프레임 몰딩으로 처리됩니다.',
-              },
-              {
-                q: '모서리 절단 시 여유분은 얼마나 잡아야 하나요?',
-                a: '모서리 1개당 <strong>약 5~10cm 여유분</strong>을 권장합니다. 직사각형 방은 모서리 4개이므로 총 20~40cm가 추가로 필요합니다. 마이터 박스 사용 시 5cm로 충분하지만, 마이터 톱 없이 자르면 시행착오로 더 많은 자투리가 발생할 수 있어 <strong>+10cm 정도 잡는 것이 안전</strong>합니다.',
-              },
-              {
-                q: '몰딩은 셀프 시공이 가능한가요?',
-                a: '<strong>PVC·스티렌은 셀프 시공 충분히 가능</strong>합니다. 마이터 박스(만원대)와 본드, 가위로 작업할 수 있습니다. <strong>MDF·우드는 마이터 톱 등 도구가 필요</strong>하고 못 작업도 들어가서 난이도가 있습니다. 석고 몰딩은 곡선 마감·도장 작업까지 필요해 전문 시공을 권장합니다.',
-              },
-              {
-                q: '몰딩 가격은 보통 얼마인가요?',
-                a: '한국 시판 기준으로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다. 24평 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 18~20만원</strong>, 전문 시공비는 m당 5,000원 추가로 약 <strong>총 50만원 내외</strong>가 일반적입니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

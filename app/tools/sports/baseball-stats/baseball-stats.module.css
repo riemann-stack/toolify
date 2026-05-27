@@ -575,4 +575,29 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
+
+/* 리그 보정 지표 (OPS+ / ERA+) */
+.plusBox {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.plusHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.plusName { font-size: 14px; font-weight: 700; color: var(--text); }
+.plusName small { font-size: 11px; font-weight: 600; color: var(--muted); margin-left: 6px; }
+.plusVal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.plusDesc { font-size: 12.5px; color: var(--muted); line-height: 1.8; margin-top: 8px; }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

@@ -2,6 +2,7 @@ import LoremClient from './LoremClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Link from 'next/link'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
@@ -13,6 +14,29 @@ export const metadata = buildMetadata({
     '버튼 카피', '리뷰 더미', '회원 더미데이터', 'CSV 더미', '테스트 데이터',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: '기존 /tools/art/lorem URL을 그대로 사용해도 되나요?',
+                a: '네. 기존 URL은 그대로 유지되며, 기능만 대폭 확장되었습니다. 외부 링크나 검색 결과에서 들어오시면 새 6탭 인터페이스를 바로 사용할 수 있습니다.',
+              },
+              {
+                q: '왜 단순 Lorem Ipsum이 아니라 한국어 더미가 필요한가요?',
+                a: '한국어는 영문보다 글자 폭이 넓고 자간·줄바꿈 규칙이 다릅니다. Lorem Ipsum으로 보기 좋게 짠 카드도 한국어가 들어가면 깨지는 경우가 많습니다. 본 도구는 <strong>한국어의 실제 자간을 반영한 더미</strong>를 제공해 시안과 실제 사이의 격차를 줄입니다.',
+              },
+              {
+                q: 'JSON 데이터의 이름·이메일·전화번호는 실제 정보인가요?',
+                a: '아닙니다. 모두 사전에 정의된 <strong>가상 풀에서 무작위로 조합</strong>한 데이터입니다. 실제 인물·서비스와는 무관하며, 개인정보 이슈 없이 자유롭게 사용 가능합니다.',
+              },
+              {
+                q: '같은 결과를 다시 만들 수는 없나요? (시드 고정)',
+                a: '현재는 매 클릭마다 새 무작위 데이터가 생성됩니다. 시안에서 특정 데이터가 마음에 들면 즉시 복사해 두시는 것을 권장합니다. <strong>시드 기반 재현 기능은 추후 추가를 검토 중</strong>입니다.',
+              },
+              {
+                q: '한 번에 얼마나 많은 데이터를 생성할 수 있나요?',
+                a: '<strong>문단 1~20개, UI 요소 1~30개, JSON 1~50개, 카드 2~12개</strong>까지 슬라이더로 조정할 수 있습니다. 더 많은 양이 필요하면 여러 번 생성해 결과를 합쳐 사용하세요.',
+              },
+            ]
 
 export default function LoremPage() {
   return (
@@ -172,29 +196,9 @@ export default function LoremPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '기존 /tools/art/lorem URL을 그대로 사용해도 되나요?',
-                a: '네. 기존 URL은 그대로 유지되며, 기능만 대폭 확장되었습니다. 외부 링크나 검색 결과에서 들어오시면 새 6탭 인터페이스를 바로 사용할 수 있습니다.',
-              },
-              {
-                q: '왜 단순 Lorem Ipsum이 아니라 한국어 더미가 필요한가요?',
-                a: '한국어는 영문보다 글자 폭이 넓고 자간·줄바꿈 규칙이 다릅니다. Lorem Ipsum으로 보기 좋게 짠 카드도 한국어가 들어가면 깨지는 경우가 많습니다. 본 도구는 <strong>한국어의 실제 자간을 반영한 더미</strong>를 제공해 시안과 실제 사이의 격차를 줄입니다.',
-              },
-              {
-                q: 'JSON 데이터의 이름·이메일·전화번호는 실제 정보인가요?',
-                a: '아닙니다. 모두 사전에 정의된 <strong>가상 풀에서 무작위로 조합</strong>한 데이터입니다. 실제 인물·서비스와는 무관하며, 개인정보 이슈 없이 자유롭게 사용 가능합니다.',
-              },
-              {
-                q: '같은 결과를 다시 만들 수는 없나요? (시드 고정)',
-                a: '현재는 매 클릭마다 새 무작위 데이터가 생성됩니다. 시안에서 특정 데이터가 마음에 들면 즉시 복사해 두시는 것을 권장합니다. <strong>시드 기반 재현 기능은 추후 추가를 검토 중</strong>입니다.',
-              },
-              {
-                q: '한 번에 얼마나 많은 데이터를 생성할 수 있나요?',
-                a: '<strong>문단 1~20개, UI 요소 1~30개, JSON 1~50개, 카드 2~12개</strong>까지 슬라이더로 조정할 수 있습니다. 더 많은 양이 필요하면 여러 번 생성해 결과를 합쳐 사용하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

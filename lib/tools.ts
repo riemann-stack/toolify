@@ -81,6 +81,7 @@ export const categories: Category[] = [
       { href: '/tools/cooking/egg-timer', icon: '🥚', name: '계란 삶는 시간 계산기', desc: '반숙·완숙·잼노른자 8단계 익힘 + 계란 크기·시작 온도 자동 보정 + 실시간 타이머.', badge: 'new' },
       { href: '/tools/cooking/kimjang', icon: '🥬', name: '김장 양 계산기', desc: '가족 수·소비·기간만 알려주면 배추 포기·양념·비용 자동. KAMIS 실시간 시세 연동.', badge: 'new' },
       { href: '/tools/cooking/holiday-table', icon: '🍱', name: '명절 상차림 계산기', desc: '설날·추석·제사 × 차례상·간소·식사 + 인원 입력 → 50종 품목 수량·비용 자동. KAMIS 실시간 시세 + 5열 차례상 배치.', badge: 'new' },
+      { href: '/tools/cooking/fruit-syrup', icon: '🍯', name: '과일청 담그기 계산기', desc: '매실청·레몬청·유자청 설탕 비율(1:1) + 필요 유리병 크기·숙성 D-day 일정. 제철 과일 캘린더와 보관 궁합까지.', badge: 'new' },
     ],
   },
   {
@@ -118,6 +119,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '5RM·8RM 기록으로 진짜 최대 무게 추정 + RPE 보정과 워밍업 5세트 자동.' },
       { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 정확한 인터벌 페이스 + 4~16주 풀 트레이닝 스케줄.' },
       { href: '/tools/sports/buildup',         icon: '📈', name: '러닝 빌드업 계산기', desc: '거리·페이스·구간·프로파일 → 구간별 페이스표와 워치 포맷 자동 + 안전성 체크.', badge: 'new' },
+      { href: '/tools/sports/lsd',             icon: '🏃', name: 'LSD·이지런 페이스 계산기', desc: '최근 기록으로 이지 페이스 범위·존2 심박 + 회색지대(정크 마일) 경고 + 롱런 보급 플래너.', badge: 'new' },
       { href: '/tools/sports/vo2max',          icon: '🫁', name: 'VO₂ Max 계산기', desc: '쿠퍼·1.5마일·락포트·노르웨이 등 6가지 방법으로 심폐 체력 추정 + 동년배 5단계 등급 + 마라톤 예상 시간 + 강도별 트레이닝 페이스.', badge: 'new' },
       { href: '/tools/sports/golf-handicap',     icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 핸디캡·코스 핸디캡·스태블포드 + 라운드 자동 저장으로 발전 추이까지.' },
       { href: '/tools/sports/golf-cost',         icon: '🏌️', name: '골프 비용 계산기', desc: '그린피·카트·캐디·식사·교통 1인당 정산 + 회원권 손익 분기점.' },

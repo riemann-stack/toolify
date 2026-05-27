@@ -3,6 +3,7 @@ import FermiEstimateClient from './FermiEstimateClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/fermi-estimate',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '막막한 문제를 변수로 쪼개고 시나리오로 비교해 대략 답을 추정하는 사고력 훈련 도구.',
   keywords: ['페르미추정', '페르미문제', '어림값계산', '논리적사고', '시장규모추정', 'TAM SAM SOM', '면접대비', '컨설팅사고법', '비즈니스분석', 'fermi estimation'],
 })
+
+const FAQ_LD = [
+              {
+                q: '페르미 추정의 정확도는 어느 정도인가요?',
+                a: '페르미 추정은 정확한 답을 구하는 것이 목적이 아닙니다. 일반적으로 <strong>실제 값의 1/3~3배 범위</strong>에 들어가면 좋은 추정으로 평가합니다. 예를 들어 실제 값이 100이면 33~300 사이의 추정도 합리적이라고 봅니다. 이는 "자릿수의 정확성(order of magnitude)"으로 표현되며, 페르미 추정의 핵심 가치는 <strong>정확성이 아닌 사고 과정과 의사결정 도움</strong>입니다.',
+              },
+              {
+                q: '페르미 추정에서 가장 중요한 변수는 어떻게 찾나요?',
+                a: '<strong>민감도 분석</strong>을 통해 찾을 수 있습니다. 각 변수를 동일한 비율(예: +20%)로 변경했을 때 결과가 가장 크게 변하는 변수가 가장 민감한 변수입니다. 본 도구의 <strong>시나리오 비교 탭</strong>에서 자동으로 민감도 그래프를 표시합니다. 가장 민감한 변수일수록 추정 정확도에 큰 영향을 주므로, 해당 변수에 대해서는 더 정확한 데이터를 찾는 것이 좋습니다.',
+              },
+              {
+                q: '페르미 추정으로 시장 규모를 정말 추정할 수 있나요?',
+                a: '네, 비즈니스 분석에서 매우 자주 사용되는 방법입니다. 특히 신사업·창업 단계에서 정확한 시장 데이터가 없을 때 <strong>페르미 추정으로 TAM·SAM·SOM을 계산하는 것이 표준</strong>입니다. 다만 의사결정에는 다음을 함께 활용하세요: ① 실제 시장 조사(설문·인터뷰), ② 산업 보고서(KISDI, 한국정보화진흥원 등), ③ 경쟁사 분석. 페르미 추정은 빠른 초기 추정에 적합하며, 구체적 사업 결정에는 정밀 데이터가 필요합니다.',
+              },
+              {
+                q: '변수가 너무 많으면 추정이 더 정확해지나요?',
+                a: '<strong>아닙니다. 변수가 많을수록 오히려 부정확해질 수 있습니다.</strong> 각 변수에 작은 오차가 곱해지면서 누적되기 때문입니다. 페르미 추정의 권장 변수 개수는 <strong>4~7개</strong>입니다. 너무 적으면(1~2개) 단순한 곱셈에 불과하고, 너무 많으면(8개+) 오차가 누적됩니다. 적절한 4~5개 변수로 핵심을 분해하는 것이 가장 효과적입니다. 본 도구의 템플릿은 모두 4~5개 변수 구조로 설계되어 있습니다.',
+              },
+              {
+                q: '추정 결과를 어떻게 검증하나요?',
+                a: '다음 방법으로 검증할 수 있습니다: ① <strong>다른 방식으로 다시 추정</strong>(Top-down vs Bottom-up — 시장 규모를 인구로 추정 vs 매출로 추정), ② <strong>실제 데이터와 비교</strong>(통계청·산업협회 보고서), ③ <strong>시나리오 비교</strong>(보수적·기준·낙관적이 합리적 범위인지), ④ <strong>동료·전문가 의견</strong>(다른 사람도 비슷한 추정을 하는지). 페르미 추정은 항상 검증과 함께해야 정확한 의사결정에 활용 가능합니다.',
+              },
+            ]
 
 export default function FermiEstimatePage() {
   return (
@@ -261,29 +285,9 @@ export default function FermiEstimatePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '페르미 추정의 정확도는 어느 정도인가요?',
-                a: '페르미 추정은 정확한 답을 구하는 것이 목적이 아닙니다. 일반적으로 <strong>실제 값의 1/3~3배 범위</strong>에 들어가면 좋은 추정으로 평가합니다. 예를 들어 실제 값이 100이면 33~300 사이의 추정도 합리적이라고 봅니다. 이는 "자릿수의 정확성(order of magnitude)"으로 표현되며, 페르미 추정의 핵심 가치는 <strong>정확성이 아닌 사고 과정과 의사결정 도움</strong>입니다.',
-              },
-              {
-                q: '페르미 추정에서 가장 중요한 변수는 어떻게 찾나요?',
-                a: '<strong>민감도 분석</strong>을 통해 찾을 수 있습니다. 각 변수를 동일한 비율(예: +20%)로 변경했을 때 결과가 가장 크게 변하는 변수가 가장 민감한 변수입니다. 본 도구의 <strong>시나리오 비교 탭</strong>에서 자동으로 민감도 그래프를 표시합니다. 가장 민감한 변수일수록 추정 정확도에 큰 영향을 주므로, 해당 변수에 대해서는 더 정확한 데이터를 찾는 것이 좋습니다.',
-              },
-              {
-                q: '페르미 추정으로 시장 규모를 정말 추정할 수 있나요?',
-                a: '네, 비즈니스 분석에서 매우 자주 사용되는 방법입니다. 특히 신사업·창업 단계에서 정확한 시장 데이터가 없을 때 <strong>페르미 추정으로 TAM·SAM·SOM을 계산하는 것이 표준</strong>입니다. 다만 의사결정에는 다음을 함께 활용하세요: ① 실제 시장 조사(설문·인터뷰), ② 산업 보고서(KISDI, 한국정보화진흥원 등), ③ 경쟁사 분석. 페르미 추정은 빠른 초기 추정에 적합하며, 구체적 사업 결정에는 정밀 데이터가 필요합니다.',
-              },
-              {
-                q: '변수가 너무 많으면 추정이 더 정확해지나요?',
-                a: '<strong>아닙니다. 변수가 많을수록 오히려 부정확해질 수 있습니다.</strong> 각 변수에 작은 오차가 곱해지면서 누적되기 때문입니다. 페르미 추정의 권장 변수 개수는 <strong>4~7개</strong>입니다. 너무 적으면(1~2개) 단순한 곱셈에 불과하고, 너무 많으면(8개+) 오차가 누적됩니다. 적절한 4~5개 변수로 핵심을 분해하는 것이 가장 효과적입니다. 본 도구의 템플릿은 모두 4~5개 변수 구조로 설계되어 있습니다.',
-              },
-              {
-                q: '추정 결과를 어떻게 검증하나요?',
-                a: '다음 방법으로 검증할 수 있습니다: ① <strong>다른 방식으로 다시 추정</strong>(Top-down vs Bottom-up — 시장 규모를 인구로 추정 vs 매출로 추정), ② <strong>실제 데이터와 비교</strong>(통계청·산업협회 보고서), ③ <strong>시나리오 비교</strong>(보수적·기준·낙관적이 합리적 범위인지), ④ <strong>동료·전문가 의견</strong>(다른 사람도 비슷한 추정을 하는지). 페르미 추정은 항상 검증과 함께해야 정확한 의사결정에 활용 가능합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

@@ -3,6 +3,7 @@ import WallpaperClient from './WallpaperClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/wallpaper',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '벽 면적으로 필요한 벽지 롤 수와 셀프 시공 비용 견적. 풀·도구·인건비까지 포함한 총 예산.',
   keywords: ['도배계산기', '벽지소요량계산', '벽지롤수계산', '셀프도배', '실크벽지', '합지벽지', '도배비용계산', '벽지견적'],
 })
+
+const FAQ_LD = [
+              {
+                q: '24평 아파트 도배에 벽지 몇 롤이 필요한가요?',
+                a: '24평(약 79㎡) 아파트 전체 도배에 실크벽지 약 <strong>18~24롤</strong>이 필요합니다. 방 3개 + 거실 + 주방 기준 천장 도배 제외, 10% 로스율 적용 시 평균 20롤 정도가 표준입니다. 부분 도배라면 5~8롤로 충분합니다.',
+              },
+              {
+                q: '벽지 1롤로 몇 ㎡를 시공할 수 있나요?',
+                a: '한국 표준 실크벽지 1롤은 <strong>폭 106cm × 길이 15.6m로 약 16.5㎡</strong>입니다. 합지벽지는 폭 93cm × 길이 17.5m로 약 16.3㎡입니다. 다만 무늬 맞춤·절단 손실 등으로 실제 시공 가능 면적은 90% 정도(약 14~15㎡)로 보는 것이 안전합니다.',
+              },
+              {
+                q: '로스율 10%는 무엇을 의미하나요?',
+                a: '시공 중 발생하는 손실(절단·무늬 맞춤·실수)을 위한 여유분입니다. 시공 면적의 10%만큼 추가로 벽지를 준비한다는 의미로 <strong>30㎡ 시공이라면 33㎡의 벽지를 구매</strong>해야 합니다. 무늬가 클수록 로스율을 높여야 하며, 일반 가정용은 10%가 표준입니다.',
+              },
+              {
+                q: '셀프 도배가 가능한가요?',
+                a: '가능합니다. 다음을 추천합니다:<br/>① <strong>합지벽지로 시작</strong> (실수 복구 쉬움)<br/>② <strong>방 1개부터 도전</strong> (전체는 부담)<br/>③ <strong>큰 무늬 벽지 피하기</strong> (패턴 맞춤 어려움)<br/>④ 유튜브 시공 영상 학습 후 도전<br/>한 방(7~10평) 셀프 도배는 1일 정도 소요되며 비용은 5~10만원 수준입니다.',
+              },
+              {
+                q: '도배 비용은 평당 얼마인가요?',
+                a: '2024년 기준 한국 평균:<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong><br/>• 일반 시공 (실크): <strong>평당 12,000~18,000원</strong><br/>• 고급 시공 (수입·디자이너): 평당 20,000원 이상<br/>※ 지역·시기·시공사에 따라 차이 있음.',
+              },
+            ]
 
 export default function WallpaperPage() {
   return (
@@ -244,29 +268,9 @@ export default function WallpaperPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '24평 아파트 도배에 벽지 몇 롤이 필요한가요?',
-                a: '24평(약 79㎡) 아파트 전체 도배에 실크벽지 약 <strong>18~24롤</strong>이 필요합니다. 방 3개 + 거실 + 주방 기준 천장 도배 제외, 10% 로스율 적용 시 평균 20롤 정도가 표준입니다. 부분 도배라면 5~8롤로 충분합니다.',
-              },
-              {
-                q: '벽지 1롤로 몇 ㎡를 시공할 수 있나요?',
-                a: '한국 표준 실크벽지 1롤은 <strong>폭 106cm × 길이 15.6m로 약 16.5㎡</strong>입니다. 합지벽지는 폭 93cm × 길이 17.5m로 약 16.3㎡입니다. 다만 무늬 맞춤·절단 손실 등으로 실제 시공 가능 면적은 90% 정도(약 14~15㎡)로 보는 것이 안전합니다.',
-              },
-              {
-                q: '로스율 10%는 무엇을 의미하나요?',
-                a: '시공 중 발생하는 손실(절단·무늬 맞춤·실수)을 위한 여유분입니다. 시공 면적의 10%만큼 추가로 벽지를 준비한다는 의미로 <strong>30㎡ 시공이라면 33㎡의 벽지를 구매</strong>해야 합니다. 무늬가 클수록 로스율을 높여야 하며, 일반 가정용은 10%가 표준입니다.',
-              },
-              {
-                q: '셀프 도배가 가능한가요?',
-                a: '가능합니다. 다음을 추천합니다:<br/>① <strong>합지벽지로 시작</strong> (실수 복구 쉬움)<br/>② <strong>방 1개부터 도전</strong> (전체는 부담)<br/>③ <strong>큰 무늬 벽지 피하기</strong> (패턴 맞춤 어려움)<br/>④ 유튜브 시공 영상 학습 후 도전<br/>한 방(7~10평) 셀프 도배는 1일 정도 소요되며 비용은 5~10만원 수준입니다.',
-              },
-              {
-                q: '도배 비용은 평당 얼마인가요?',
-                a: '2024년 기준 한국 평균:<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong><br/>• 일반 시공 (실크): <strong>평당 12,000~18,000원</strong><br/>• 고급 시공 (수입·디자이너): 평당 20,000원 이상<br/>※ 지역·시기·시공사에 따라 차이 있음.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

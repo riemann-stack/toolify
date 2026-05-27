@@ -3,6 +3,7 @@ import SoundSpeedClient from './SoundSpeedClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sound-speed',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '천둥·번개 거리 + 소리 도달 시간과 빛 vs 소리 비교, 반향·에코·RT60까지 음향 물리 한눈에.',
   keywords: ['음속계산기', '천둥번개거리', '소리도달시간', '음속공식', '광속', '마하', '에코지연', '잔향시간', 'RT60', '소닉붐'],
 })
+
+const FAQ_LD = [
+              {
+                q: '천둥 번개 사이 시간으로 거리를 어떻게 계산하나요?',
+                a: '<strong>거리(km) = 시간(초) × 0.343</strong> (20°C 기준), 또는 간단히 <strong>거리(km) ≈ 시간(초) ÷ 3</strong>입니다. 예를 들어 번개를 본 후 5초 뒤 천둥이 들리면 약 <strong>1.7km 떨어진 곳</strong>입니다. 빛은 거의 즉시 도달하므로 시간 차이는 사실상 소리만의 도달 시간입니다. 30초 이상 차이가 나면 약 10km 이상 떨어진 안전한 거리입니다.',
+              },
+              {
+                q: '왜 번개가 먼저 보이고 천둥이 늦게 들리나요?',
+                a: '<strong>빛과 소리의 속도 차이</strong> 때문입니다. 빛은 1초에 약 30만 km를 가지만, 소리는 1초에 약 343m밖에 못 갑니다. <strong>빛은 소리의 약 87만 배 빠르므로</strong>, 번개와 천둥이 같은 순간 발생해도 빛은 즉시 보이고 소리는 거리에 비례해 늦게 들립니다. 이 원리로 빛-소리 시간 차이를 측정해 번개까지의 거리를 알 수 있습니다.',
+              },
+              {
+                q: '음속은 항상 343 m/s인가요?',
+                a: '아닙니다. <strong>음속은 온도·매질·습도에 따라 달라집니다.</strong> 공기 중 음속 = 331.3 + 0.606 × 기온(°C) — 0°C 약 331 m/s, 20°C 약 343 m/s(표준), 30°C 약 349 m/s. 매질에 따라서도 크게 다릅니다. 물에서는 약 1,482 m/s, 강철에서는 약 5,960 m/s로 공기보다 훨씬 빠릅니다. 진공에서는 매질이 없어 소리가 전달되지 않습니다.',
+              },
+              {
+                q: '음속 돌파(소닉붐)란 무엇인가요?',
+                a: '비행기가 음속(약 1,235 km/h, <strong>1마하</strong>)을 넘는 속도로 비행할 때 발생하는 <strong>충격파</strong>입니다. 비행기가 만든 음파가 비행기보다 느려서 압축되며 강한 충격파를 형성하고, 이 충격파가 지상에 도달하면 큰 폭음으로 들립니다. 1947년 미국의 척 예거(Chuck Yeager)가 X-1 비행기로 인류 최초로 음속을 돌파했습니다. 현재는 F-15·F-16 같은 전투기, 일부 초음속 여객기(콩코드, 퇴역)가 음속을 넘을 수 있습니다.',
+              },
+              {
+                q: '왜 우주에서는 소리가 안 들리나요?',
+                a: '<strong>소리는 매질(공기·물·고체 등)이 있어야 전달</strong>됩니다. 우주는 거의 진공 상태(매우 적은 분자만 존재)이므로 음파가 전달될 매질이 없어 소리가 들리지 않습니다. 반면 빛은 매질 없이도 진공을 통과할 수 있어 우주에서도 별빛을 볼 수 있습니다. 영화에서 우주 폭발 소리가 들리는 장면은 과학적으로 정확하지 않습니다.',
+              },
+            ]
 
 export default function SoundSpeedPage() {
   return (
@@ -307,29 +331,9 @@ export default function SoundSpeedPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '천둥 번개 사이 시간으로 거리를 어떻게 계산하나요?',
-                a: '<strong>거리(km) = 시간(초) × 0.343</strong> (20°C 기준), 또는 간단히 <strong>거리(km) ≈ 시간(초) ÷ 3</strong>입니다. 예를 들어 번개를 본 후 5초 뒤 천둥이 들리면 약 <strong>1.7km 떨어진 곳</strong>입니다. 빛은 거의 즉시 도달하므로 시간 차이는 사실상 소리만의 도달 시간입니다. 30초 이상 차이가 나면 약 10km 이상 떨어진 안전한 거리입니다.',
-              },
-              {
-                q: '왜 번개가 먼저 보이고 천둥이 늦게 들리나요?',
-                a: '<strong>빛과 소리의 속도 차이</strong> 때문입니다. 빛은 1초에 약 30만 km를 가지만, 소리는 1초에 약 343m밖에 못 갑니다. <strong>빛은 소리의 약 87만 배 빠르므로</strong>, 번개와 천둥이 같은 순간 발생해도 빛은 즉시 보이고 소리는 거리에 비례해 늦게 들립니다. 이 원리로 빛-소리 시간 차이를 측정해 번개까지의 거리를 알 수 있습니다.',
-              },
-              {
-                q: '음속은 항상 343 m/s인가요?',
-                a: '아닙니다. <strong>음속은 온도·매질·습도에 따라 달라집니다.</strong> 공기 중 음속 = 331.3 + 0.606 × 기온(°C) — 0°C 약 331 m/s, 20°C 약 343 m/s(표준), 30°C 약 349 m/s. 매질에 따라서도 크게 다릅니다. 물에서는 약 1,482 m/s, 강철에서는 약 5,960 m/s로 공기보다 훨씬 빠릅니다. 진공에서는 매질이 없어 소리가 전달되지 않습니다.',
-              },
-              {
-                q: '음속 돌파(소닉붐)란 무엇인가요?',
-                a: '비행기가 음속(약 1,235 km/h, <strong>1마하</strong>)을 넘는 속도로 비행할 때 발생하는 <strong>충격파</strong>입니다. 비행기가 만든 음파가 비행기보다 느려서 압축되며 강한 충격파를 형성하고, 이 충격파가 지상에 도달하면 큰 폭음으로 들립니다. 1947년 미국의 척 예거(Chuck Yeager)가 X-1 비행기로 인류 최초로 음속을 돌파했습니다. 현재는 F-15·F-16 같은 전투기, 일부 초음속 여객기(콩코드, 퇴역)가 음속을 넘을 수 있습니다.',
-              },
-              {
-                q: '왜 우주에서는 소리가 안 들리나요?',
-                a: '<strong>소리는 매질(공기·물·고체 등)이 있어야 전달</strong>됩니다. 우주는 거의 진공 상태(매우 적은 분자만 존재)이므로 음파가 전달될 매질이 없어 소리가 들리지 않습니다. 반면 빛은 매질 없이도 진공을 통과할 수 있어 우주에서도 별빛을 볼 수 있습니다. 영화에서 우주 폭발 소리가 들리는 장면은 과학적으로 정확하지 않습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

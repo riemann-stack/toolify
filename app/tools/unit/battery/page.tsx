@@ -3,6 +3,7 @@ import BatteryClient from './BatteryClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/battery',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정과 보조배터리·노트북 배터리 가이드.',
   keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입'],
 })
+
+const FAQ_LD = [
+              {
+                q: '보조배터리를 위탁 수하물(체크인)에 넣어도 되나요?',
+                a: '<strong>절대 안 됩니다.</strong> 화재 위험 때문에 모든 항공사·국가에서 보조배터리는 <strong>오직 기내 휴대</strong>만 허용됩니다. 위탁 수하물에서 적발되면 배터리는 폐기되고, 출발이 지연되거나 과태료가 부과될 수 있습니다.',
+              },
+              {
+                q: '100Wh 한도가 표기되지 않은 보조배터리는 어떻게 하나요?',
+                a: '제품에 mAh와 정격 전압(보통 3.7V)이 적혀 있다면 <strong>Wh = (mAh × V) ÷ 1000</strong>으로 직접 환산할 수 있습니다. 표기가 전혀 없거나 불분명한 제품은 <strong>안전상의 이유로 반입이 거부될 수 있으니</strong> 명확히 표기된 제품 사용을 권장합니다.',
+              },
+              {
+                q: '노트북 배터리도 같은 규정이 적용되나요?',
+                a: '예. 일반 노트북은 보통 50~100Wh 범위라 휴대 반입에 문제가 없습니다. 다만 <strong>예비 노트북 배터리(분리형)</strong>는 보조배터리와 동일하게 100Wh 이하만 자유롭게 휴대할 수 있고, 100~160Wh는 사전 승인이 필요합니다.',
+              },
+              {
+                q: '보조배터리 2개 이상 가지고 탈 수 있나요?',
+                a: '<strong>100Wh 이하</strong>는 대부분 항공사에서 개수 제한이 거의 없거나 5개 이내로 허용합니다(아시아나는 5개 명시). <strong>100~160Wh</strong>는 1인당 <strong>최대 2개</strong>까지가 일반적입니다. 여러 개를 가져갈 때는 단자 보호를 위해 절연 테이프나 전용 파우치 사용을 권장합니다.',
+              },
+              {
+                q: '충전 케이블·어댑터도 함께 반입할 수 있나요?',
+                a: '<strong>네, 자유롭게 반입 가능</strong>합니다. USB 케이블, 충전 어댑터, 멀티탭 등은 보조배터리와 함께 휴대 또는 위탁 모두 가능합니다. 다만 <strong>보조배터리 본체</strong>만은 반드시 기내 휴대해야 합니다.',
+              },
+            ]
 
 export default function BatteryPage() {
   return (
@@ -183,29 +207,9 @@ export default function BatteryPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '보조배터리를 위탁 수하물(체크인)에 넣어도 되나요?',
-                a: '<strong>절대 안 됩니다.</strong> 화재 위험 때문에 모든 항공사·국가에서 보조배터리는 <strong>오직 기내 휴대</strong>만 허용됩니다. 위탁 수하물에서 적발되면 배터리는 폐기되고, 출발이 지연되거나 과태료가 부과될 수 있습니다.',
-              },
-              {
-                q: '100Wh 한도가 표기되지 않은 보조배터리는 어떻게 하나요?',
-                a: '제품에 mAh와 정격 전압(보통 3.7V)이 적혀 있다면 <strong>Wh = (mAh × V) ÷ 1000</strong>으로 직접 환산할 수 있습니다. 표기가 전혀 없거나 불분명한 제품은 <strong>안전상의 이유로 반입이 거부될 수 있으니</strong> 명확히 표기된 제품 사용을 권장합니다.',
-              },
-              {
-                q: '노트북 배터리도 같은 규정이 적용되나요?',
-                a: '예. 일반 노트북은 보통 50~100Wh 범위라 휴대 반입에 문제가 없습니다. 다만 <strong>예비 노트북 배터리(분리형)</strong>는 보조배터리와 동일하게 100Wh 이하만 자유롭게 휴대할 수 있고, 100~160Wh는 사전 승인이 필요합니다.',
-              },
-              {
-                q: '보조배터리 2개 이상 가지고 탈 수 있나요?',
-                a: '<strong>100Wh 이하</strong>는 대부분 항공사에서 개수 제한이 거의 없거나 5개 이내로 허용합니다(아시아나는 5개 명시). <strong>100~160Wh</strong>는 1인당 <strong>최대 2개</strong>까지가 일반적입니다. 여러 개를 가져갈 때는 단자 보호를 위해 절연 테이프나 전용 파우치 사용을 권장합니다.',
-              },
-              {
-                q: '충전 케이블·어댑터도 함께 반입할 수 있나요?',
-                a: '<strong>네, 자유롭게 반입 가능</strong>합니다. USB 케이블, 충전 어댑터, 멀티탭 등은 보조배터리와 함께 휴대 또는 위탁 모두 가능합니다. 다만 <strong>보조배터리 본체</strong>만은 반드시 기내 휴대해야 합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

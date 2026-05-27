@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import HousingScoreClient from './HousingScoreClient'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/housing-score',
@@ -71,6 +73,16 @@ const faqAnswer: React.CSSProperties = {
   lineHeight: 1.8,
 }
 
+const FAQ_LD = [
+  { "q":"청약 가점은 어디서 공식 확인하나요?","a":"한국부동산원 청약홈(applyhome.co.kr)에서 본인 인증 후 공식 가점을 조회할 수 있습니다. 청약 신청 시 청약홈에서 자동 계산되며, 본 도구의 결과와 약간 다를 수 있습니다(특수 케이스). 청약 신청 직전 반드시 청약홈에서 재확인하세요." },
+  { "q":"만 30세 이전에 결혼하면 가점이 얼마나 유리한가요?","a":"매우 유리합니다. 예: 만 27세 결혼 시 결혼일부터 무주택 기간 카운트 → 만 42세 시점에 15년 누적 = 무주택 32점 만점. 반면 미혼이라면 만 30세부터 카운트 → 만 45세에야 만점. 3년 차이 = 무주택 6점 차이로 인기 단지 당락을 가를 수 있습니다." },
+  { "q":"1주택자도 청약 가능한가요?","a":"가능하지만 가점은 0점 (무주택 영역)입니다. 1주택 + 처분서약: 무주택자로 간주되어 가점 회복. 단 입주 전 매도 완료 필수. 1주택 + 미서약: 추첨제로만 청약 가능 (민영 분양 한정). 다주택: 가점제 X, 추첨제 우선순위도 후순위. 처분 미이행 시 분양 취소 + 10년 청약 제한이 따르므로 신중히 결정." },
+  { "q":"부모님을 부양가족으로 인정받으려면?","a":"다음 4가지 모두 충족해야 합니다: 만 60세 이상 (모두 만 60세 이상이어야 인정) 3년 이상 동일 세대 등록 (주민등록상 동거) 본인이 세대주 + 부모가 세대원 부모도 무주택 (주택 소유 시 부양가족 X) 주의: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수." },
+  { "q":"가점이 부족한데 어떻게 해야 하나요?","a":"세 가지 전략을 병행하세요: 1순위: 특별공급 자격 확인 — 신혼부부·생애최초·다자녀 자격 있으면 가점 무관 또는 별도 가점제로 경쟁 2순위: 추첨제 단지 노리기 — 민영 분양 중 추첨제 비율이 큰 단지 (강남 등은 추첨제 비율 ↑) 3순위: 가점 누적 후 도전 — 통장 유지 + 무주택 유지로 5~10년 후 만점 도전 가점이 부족한 30대는 특별공급 + 추첨제 비중 큰 단지를 우선 검토하세요." },
+  { "q":"청약통장은 언제 만들어야 하나요?","a":"지금 당장이 정답입니다. 가점은 가입기간만 보므로, 매달 2만 원이라도 자동이체로 일찍 만드는 게 유리. 월 10만 원: 1순위 빠른 충족 + 연말정산 240만 원 공제 (15만 원 환급) 월 50만 원: 가능한 빨리 예치금 충족 → 큰 평수 청약 가능 청약통장 가입 후 15년이면 17점 만점 — 결혼·자녀와 무관한 안정적 가점원." },
+  { "q":"본 도구의 정확도는?","a":"일반적인 케이스 95% 정확하지만, 다음 특수 케이스는 청약홈 공식 조회를 권장: 이혼·재혼·사별 1주택 처분 후 무주택 전환 (처분 시점 산정) 해외 거주 기간이 있는 경우 군 복무로 인한 세대 분리 특수관계인 (장애인 직계존속 동거 등) 본 도구는 예상 가점과 전략 수립용으로 활용하시고, 청약 직전엔 청약홈 공식 조회 필수." }
+]
+
 export default function HousingScorePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
@@ -81,6 +93,8 @@ export default function HousingScorePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         생년월일·결혼일·자녀 수만 입력하면 <strong style={{ color: 'var(--text)' }}>84점 만점 자동 계산</strong> + 최근 인기 단지 커트라인 비교 + 가점 향상 시뮬 + 5가지 특별공급 자가진단.
       </p>
+
+      <UpdatedMeta date="2026년 5월" basis="2026년 주택청약 제도 기준" sources={[{"label":"청약홈","href":"https://www.applyhome.co.kr"},{"label":"국토교통부","href":"https://www.molit.go.kr"}]} />
 
       <HousingScoreClient />
 
@@ -338,6 +352,7 @@ export default function HousingScorePage() {
         {/* 7. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 청약 가점은 어디서 공식 확인하나요?</summary>

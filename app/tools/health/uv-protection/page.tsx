@@ -3,6 +3,7 @@ import UvProtectionClient from './UvProtectionClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '오늘 UV 지수와 내 피부 타입 기준 일광화상 위험 시간 + SPF 차단제 권장과 자외선 차단 가이드.',
   keywords: ['자외선계산기', 'UV지수', '일광화상시간', 'SPF계산', '선크림SPF', '피부타입', 'Fitzpatrick', '자외선차단', '러닝선크림', '해변선크림'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'UV 지수 5는 얼마나 위험한가요?',
+                a: 'UV 지수 5는 한국 기상청 기준 <strong>"보통" 등급</strong>으로 일반적인 봄·가을 수준입니다. 한국인 평균 피부(타입 III)의 경우 <strong>무보호 상태에서 약 30분 정도부터 일광화상 위험</strong>이 있습니다. 차단제(SPF 30 이상)와 모자를 권장하며, 오전 10시~오후 4시 사이는 더 주의가 필요합니다. 구름이 적고 반사면(물·모래·눈)이 있다면 실제 노출량은 더 높을 수 있습니다.',
+              },
+              {
+                q: 'SPF 50과 SPF 30의 실제 차이는 얼마나 되나요?',
+                a: 'UVB 차단율은 SPF 30이 96.7%, SPF 50이 98.0%로 <strong>1.3%p 차이</strong>입니다. "SPF 50이 SPF 30보다 1.7배 더 안전하다"는 표현은 정확하지 않습니다. 다만 야외 장시간 활동, 한국 여름철 강한 자외선, 해변·고지대 환경에서는 SPF 50 이상이 권장됩니다. 가장 중요한 것은 SPF 등급보다 <strong>충분한 도포량과 2시간마다의 재도포</strong>입니다.',
+              },
+              {
+                q: '흐린 날에도 자외선 차단제를 발라야 하나요?',
+                a: '<strong>네, 흐린 날에도 자외선의 약 70~80%는 구름을 통과합니다.</strong> 얇은 구름은 거의 자외선을 차단하지 않으며, 두꺼운 구름이라도 약 30%만 감쇠시킵니다. 특히 봄·가을의 흐린 날에 자외선 차단을 소홀히 해 화상을 입는 경우가 많으므로, 외출 시에는 일년 내내 차단제 사용을 권장합니다.',
+              },
+              {
+                q: '러닝할 때 SPF 30이면 충분할까요?',
+                a: '일상 짧은 러닝(30분 이내)이라면 SPF 30 광범위 차단제로 충분할 수 있습니다. 그러나 1시간 이상 러닝, 한낮 자외선 강한 시간, 여름철에는 <strong>SPF 50 이상을 권장</strong>합니다. 특히 땀으로 차단제 효과가 빠르게 감소하므로 ① 방수(Water Resistant) 표시 제품 선택, ② 1시간마다 재도포, ③ 챙 있는 모자·UV 차단 토시·선글라스 병행이 좋습니다. 러닝 코스에 그늘이 있다면 자외선이 강한 시간대(11~15시)는 피하는 것이 좋습니다.',
+              },
+              {
+                q: '피부 타입은 어떻게 알 수 있나요?',
+                a: 'Fitzpatrick 피부 타입은 햇빛에 대한 피부 반응으로 자가 진단할 수 있습니다: 항상 화상·거의 안 그을림 → 타입 I, 보통 화상·약간 그을림 → 타입 II, 가끔 화상·점진적 그을림 → 타입 III(<strong>한국인 다수</strong>), 드물게 화상·잘 그을림 → 타입 IV(<strong>한국인 다수</strong>), 매우 드물게 화상 → 타입 V, 거의 화상 X → 타입 VI. 한국인은 대부분 타입 III·IV에 해당하며, 정확한 진단은 피부과에서 광생물학적 검사로 가능합니다. 자가 진단이 애매하다면 <strong>보수적으로 한 단계 낮은(더 민감한) 타입을 선택</strong>하는 것이 안전합니다.',
+              },
+            ]
 
 export default function UvProtectionPage() {
   return (
@@ -266,29 +290,9 @@ export default function UvProtectionPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'UV 지수 5는 얼마나 위험한가요?',
-                a: 'UV 지수 5는 한국 기상청 기준 <strong>"보통" 등급</strong>으로 일반적인 봄·가을 수준입니다. 한국인 평균 피부(타입 III)의 경우 <strong>무보호 상태에서 약 30분 정도부터 일광화상 위험</strong>이 있습니다. 차단제(SPF 30 이상)와 모자를 권장하며, 오전 10시~오후 4시 사이는 더 주의가 필요합니다. 구름이 적고 반사면(물·모래·눈)이 있다면 실제 노출량은 더 높을 수 있습니다.',
-              },
-              {
-                q: 'SPF 50과 SPF 30의 실제 차이는 얼마나 되나요?',
-                a: 'UVB 차단율은 SPF 30이 96.7%, SPF 50이 98.0%로 <strong>1.3%p 차이</strong>입니다. "SPF 50이 SPF 30보다 1.7배 더 안전하다"는 표현은 정확하지 않습니다. 다만 야외 장시간 활동, 한국 여름철 강한 자외선, 해변·고지대 환경에서는 SPF 50 이상이 권장됩니다. 가장 중요한 것은 SPF 등급보다 <strong>충분한 도포량과 2시간마다의 재도포</strong>입니다.',
-              },
-              {
-                q: '흐린 날에도 자외선 차단제를 발라야 하나요?',
-                a: '<strong>네, 흐린 날에도 자외선의 약 70~80%는 구름을 통과합니다.</strong> 얇은 구름은 거의 자외선을 차단하지 않으며, 두꺼운 구름이라도 약 30%만 감쇠시킵니다. 특히 봄·가을의 흐린 날에 자외선 차단을 소홀히 해 화상을 입는 경우가 많으므로, 외출 시에는 일년 내내 차단제 사용을 권장합니다.',
-              },
-              {
-                q: '러닝할 때 SPF 30이면 충분할까요?',
-                a: '일상 짧은 러닝(30분 이내)이라면 SPF 30 광범위 차단제로 충분할 수 있습니다. 그러나 1시간 이상 러닝, 한낮 자외선 강한 시간, 여름철에는 <strong>SPF 50 이상을 권장</strong>합니다. 특히 땀으로 차단제 효과가 빠르게 감소하므로 ① 방수(Water Resistant) 표시 제품 선택, ② 1시간마다 재도포, ③ 챙 있는 모자·UV 차단 토시·선글라스 병행이 좋습니다. 러닝 코스에 그늘이 있다면 자외선이 강한 시간대(11~15시)는 피하는 것이 좋습니다.',
-              },
-              {
-                q: '피부 타입은 어떻게 알 수 있나요?',
-                a: 'Fitzpatrick 피부 타입은 햇빛에 대한 피부 반응으로 자가 진단할 수 있습니다: 항상 화상·거의 안 그을림 → 타입 I, 보통 화상·약간 그을림 → 타입 II, 가끔 화상·점진적 그을림 → 타입 III(<strong>한국인 다수</strong>), 드물게 화상·잘 그을림 → 타입 IV(<strong>한국인 다수</strong>), 매우 드물게 화상 → 타입 V, 거의 화상 X → 타입 VI. 한국인은 대부분 타입 III·IV에 해당하며, 정확한 진단은 피부과에서 광생물학적 검사로 가능합니다. 자가 진단이 애매하다면 <strong>보수적으로 한 단계 낮은(더 민감한) 타입을 선택</strong>하는 것이 안전합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

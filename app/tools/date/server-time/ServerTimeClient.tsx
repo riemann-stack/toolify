@@ -128,7 +128,7 @@ async function measureExternal(url: string): Promise<ProxyResult> {
   }
 }
 
-/* 한국 인기 티켓팅·예매 사이트 프리셋 */
+/* 한국 인기 티켓팅·예매·신청 사이트 프리셋 */
 const SITE_PRESETS = [
   { url: 'https://ticket.interpark.com', label: '🎤 인터파크 티켓' },
   { url: 'https://ticket.yes24.com',     label: '📚 예스24 티켓' },
@@ -136,6 +136,13 @@ const SITE_PRESETS = [
   { url: 'https://www.ticketlink.co.kr', label: '🎟️ 티켓링크' },
   { url: 'https://www.korail.com',       label: '🚄 KTX 코레일' },
   { url: 'https://etk.srail.kr',         label: '🚅 SRT' },
+  { url: 'https://dongma.club',          label: '🏃 동마클럽' },
+  { url: 'https://www.snu.ac.kr',        label: '🎓 서울대' },
+  { url: 'https://www.yonsei.ac.kr',     label: '🎓 연세대' },
+  { url: 'https://www.korea.ac.kr',      label: '🎓 고려대' },
+  { url: 'https://www.skku.edu',         label: '🎓 성균관대' },
+  { url: 'https://www.sogang.ac.kr',     label: '🎓 서강대' },
+  { url: 'https://www.hanyang.ac.kr',    label: '🎓 한양대' },
 ] as const
 
 export default function ServerTimeClient() {

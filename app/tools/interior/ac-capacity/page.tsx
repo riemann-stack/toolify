@@ -3,6 +3,7 @@ import AcCapacityClient from './AcCapacityClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ac-capacity',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '면적·향·층수·단열을 반영한 추천 평형 + BTU·W 환산. 인버터·정속형 에너지 효율 비교까지.',
   keywords: ['에어컨평형계산기', '거실에어컨몇평형', '에어컨용량계산', '13평형에어컨', '에어컨BTU환산', 'BTU평형변환', '에어컨W환산', '인버터에어컨'],
 })
+
+const FAQ_LD = [
+              {
+                q: '거실은 몇 평형 에어컨이 적당한가요?',
+                a: '거실 면적과 단열·향에 따라 다릅니다. 일반적으로 <strong>5평 거실은 9~11평형</strong>, 7평 거실은 11~13평형, 10평 거실은 13~15평형이 권장됩니다. 남향·통유리·최상층은 한 단계 큰 평형이 안전합니다. 평형이 너무 크면 자주 꺼져서 습도 조절이 안 되므로 적정 평형을 선택하는 것이 중요합니다.',
+              },
+              {
+                q: '에어컨 BTU와 평형은 어떻게 환산하나요?',
+                a: '한국 <strong>1평형 ≈ 1,980 BTU/h</strong>입니다. 해외 직구나 비즈니스용 에어컨은 BTU로 표시되므로 변환이 필요합니다. 예를 들어 18,000 BTU = 9평형, 24,000 BTU = 12평형 정도입니다. kW로는 1평형 ≈ 0.58 kW이며 한국·일본은 평형, 미국·동남아는 BTU, 유럽은 kW를 주로 사용합니다.',
+              },
+              {
+                q: '평형이 너무 크면 더 시원할까요?',
+                a: '<strong>아니요. 오히려 안 좋을 수 있습니다.</strong> 평형이 너무 크면 빠르게 시원해진 후 자동으로 꺼지고, 다시 더워지면 켜지는 사이클이 짧아집니다. 이 과정에서 습도가 제대로 조절되지 않아 끈끈한 느낌이 들 수 있습니다. 또한 초기 가동 시 전기 사용량이 크고 압축기 부하도 커서 전기료가 오히려 더 나올 수 있습니다. <strong>적정 평형 또는 한 단계 위 정도가 가장 효율적</strong>입니다.',
+              },
+              {
+                q: '인버터 에어컨이 정말 전기료가 적게 나오나요?',
+                a: '네, 일반적으로 <strong>30~40% 절감 효과</strong>가 있습니다. 인버터는 설정 온도 도달 후 압축기를 약하게 유지하면서 미세 조정합니다. 반면 정속형은 ON/OFF만 가능해 매번 풀가동으로 시작하므로 전력 소모가 큽니다. 장시간 사용(하루 8시간 이상, 여름 내내)이라면 인버터가 압도적으로 경제적이며, <strong>초기 가격 차이는 한 시즌 만에 회수</strong>할 수 있습니다.',
+              },
+              {
+                q: '신축 아파트와 노후 아파트는 평형 차이가 큰가요?',
+                a: '네, <strong>약 20% 차이</strong>가 날 수 있습니다. 신축 아파트는 단열재·창호가 우수해 냉방 부하가 적습니다. 반면 20년 이상 된 노후 아파트는 단열재 노후·창호 틈으로 냉기 손실이 커 같은 평수라도 한 단계 큰 평형이 필요할 수 있습니다. 베란다 확장으로 외기 면적이 늘어난 거실도 +10% 정도 큰 평형이 권장됩니다.',
+              },
+            ]
 
 export default function AcCapacityPage() {
   return (
@@ -278,29 +302,9 @@ export default function AcCapacityPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '거실은 몇 평형 에어컨이 적당한가요?',
-                a: '거실 면적과 단열·향에 따라 다릅니다. 일반적으로 <strong>5평 거실은 9~11평형</strong>, 7평 거실은 11~13평형, 10평 거실은 13~15평형이 권장됩니다. 남향·통유리·최상층은 한 단계 큰 평형이 안전합니다. 평형이 너무 크면 자주 꺼져서 습도 조절이 안 되므로 적정 평형을 선택하는 것이 중요합니다.',
-              },
-              {
-                q: '에어컨 BTU와 평형은 어떻게 환산하나요?',
-                a: '한국 <strong>1평형 ≈ 1,980 BTU/h</strong>입니다. 해외 직구나 비즈니스용 에어컨은 BTU로 표시되므로 변환이 필요합니다. 예를 들어 18,000 BTU = 9평형, 24,000 BTU = 12평형 정도입니다. kW로는 1평형 ≈ 0.58 kW이며 한국·일본은 평형, 미국·동남아는 BTU, 유럽은 kW를 주로 사용합니다.',
-              },
-              {
-                q: '평형이 너무 크면 더 시원할까요?',
-                a: '<strong>아니요. 오히려 안 좋을 수 있습니다.</strong> 평형이 너무 크면 빠르게 시원해진 후 자동으로 꺼지고, 다시 더워지면 켜지는 사이클이 짧아집니다. 이 과정에서 습도가 제대로 조절되지 않아 끈끈한 느낌이 들 수 있습니다. 또한 초기 가동 시 전기 사용량이 크고 압축기 부하도 커서 전기료가 오히려 더 나올 수 있습니다. <strong>적정 평형 또는 한 단계 위 정도가 가장 효율적</strong>입니다.',
-              },
-              {
-                q: '인버터 에어컨이 정말 전기료가 적게 나오나요?',
-                a: '네, 일반적으로 <strong>30~40% 절감 효과</strong>가 있습니다. 인버터는 설정 온도 도달 후 압축기를 약하게 유지하면서 미세 조정합니다. 반면 정속형은 ON/OFF만 가능해 매번 풀가동으로 시작하므로 전력 소모가 큽니다. 장시간 사용(하루 8시간 이상, 여름 내내)이라면 인버터가 압도적으로 경제적이며, <strong>초기 가격 차이는 한 시즌 만에 회수</strong>할 수 있습니다.',
-              },
-              {
-                q: '신축 아파트와 노후 아파트는 평형 차이가 큰가요?',
-                a: '네, <strong>약 20% 차이</strong>가 날 수 있습니다. 신축 아파트는 단열재·창호가 우수해 냉방 부하가 적습니다. 반면 20년 이상 된 노후 아파트는 단열재 노후·창호 틈으로 냉기 손실이 커 같은 평수라도 한 단계 큰 평형이 필요할 수 있습니다. 베란다 확장으로 외기 면적이 늘어난 거실도 +10% 정도 큰 평형이 권장됩니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

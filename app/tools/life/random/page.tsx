@@ -2,6 +2,7 @@ import RandomClient from './RandomClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/life/random',
@@ -22,6 +23,33 @@ const sectionTitle: React.CSSProperties = {
   marginBottom: '14px',
   letterSpacing: '-0.5px',
 }
+
+const FAQ_LD = [
+              {
+                q: '본 추첨기는 정말 공정한가요?',
+                a: '본 도구는 JavaScript의 <code>Math.random()</code>을 사용합니다. 이는 <strong>의사난수(pseudo-random)</strong>로 완벽한 무작위는 아니지만 실용적인 추첨에는 충분히 공정합니다. <strong>[공정성] 탭</strong>에서 1,000~100,000회 시뮬레이션으로 직접 확인 가능. 법적·계약적 효력이 있는 추첨에는 공증 절차를 권장합니다.',
+              },
+              {
+                q: '룰렛에서 가중치는 어떻게 작동하나요?',
+                a: '룰렛 탭의 <strong>「⚖️ 가중치 조정」</strong> 토글을 켜면 각 항목 옆에 1~10 슬라이더가 나타납니다. 가중치가 큰 항목은 부채꼴 크기가 커지고, 회전 시 멈출 확률도 비례해 높아집니다. 토글을 끄면 모두 동일 확률(균등).',
+              },
+              {
+                q: '명단 입력은 어떻게 하면 가장 빠른가요?',
+                a: '<strong>이름 한 개씩 Enter</strong>로 칩이 추가됩니다. 여러 이름을 한 번에 넣고 싶다면 <strong>&quot;김민수, 이지은, 박서준&quot;</strong>처럼 쉼표나 줄바꿈으로 구분해서 붙여넣으면 자동 분리됩니다. 템플릿 카드를 클릭하면 음식·이름·번호·옵션이 한 번에 채워집니다.',
+              },
+              {
+                q: '팀 나누기는 어떻게 균형을 맞추나요?',
+                a: '① 명단 셔플 (Fisher-Yates 무작위), ② 리더 우선 배치 (지정 시), ③ 함께 묶을 그룹 처리 (가장 작은 팀에 통째로), ④ 나머지를 가장 작은 팀에 순환 배치, ⑤ <strong>떨어뜨릴 그룹은 같은 그룹 멤버가 있는 팀 자동 회피</strong>. 결과는 좌우 2열로 한눈에 비교할 수 있게 표시.',
+              },
+              {
+                q: '자리 배치 4×6에서 이름이 잘려요',
+                a: '본 도구는 <strong>열 수에 따라 폰트가 자동 조정</strong>됩니다 (열 2개 → 16px / 열 4개 → 14px / 열 6개 → 12px / 열 8개 이상 → 8~10px). 그래도 긴 이름은 일부 잘릴 수 있으니 셀에 마우스 올리면 툴팁으로 전체 이름을 확인할 수 있습니다.',
+              },
+              {
+                q: '룰렛 결과를 미리 조작할 수 있나요?',
+                a: '아닙니다. ① 가중치에 따라 결과 추첨 (Math.random), ② <strong>결과 항목이 12시 방향에 멈추도록 회전 각도 계산</strong>, ③ 4초 회전 애니메이션. 회전은 결정된 결과를 시각화한 것이며, 사용자가 결과를 조작할 수 없습니다. 룰렛 돌리기 버튼을 다시 누르면 새 결과.',
+              },
+            ]
 
 export default function RandomPage() {
   return (
@@ -193,33 +221,9 @@ export default function RandomPage() {
         {/* 8. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '본 추첨기는 정말 공정한가요?',
-                a: '본 도구는 JavaScript의 <code>Math.random()</code>을 사용합니다. 이는 <strong>의사난수(pseudo-random)</strong>로 완벽한 무작위는 아니지만 실용적인 추첨에는 충분히 공정합니다. <strong>[공정성] 탭</strong>에서 1,000~100,000회 시뮬레이션으로 직접 확인 가능. 법적·계약적 효력이 있는 추첨에는 공증 절차를 권장합니다.',
-              },
-              {
-                q: '룰렛에서 가중치는 어떻게 작동하나요?',
-                a: '룰렛 탭의 <strong>「⚖️ 가중치 조정」</strong> 토글을 켜면 각 항목 옆에 1~10 슬라이더가 나타납니다. 가중치가 큰 항목은 부채꼴 크기가 커지고, 회전 시 멈출 확률도 비례해 높아집니다. 토글을 끄면 모두 동일 확률(균등).',
-              },
-              {
-                q: '명단 입력은 어떻게 하면 가장 빠른가요?',
-                a: '<strong>이름 한 개씩 Enter</strong>로 칩이 추가됩니다. 여러 이름을 한 번에 넣고 싶다면 <strong>&quot;김민수, 이지은, 박서준&quot;</strong>처럼 쉼표나 줄바꿈으로 구분해서 붙여넣으면 자동 분리됩니다. 템플릿 카드를 클릭하면 음식·이름·번호·옵션이 한 번에 채워집니다.',
-              },
-              {
-                q: '팀 나누기는 어떻게 균형을 맞추나요?',
-                a: '① 명단 셔플 (Fisher-Yates 무작위), ② 리더 우선 배치 (지정 시), ③ 함께 묶을 그룹 처리 (가장 작은 팀에 통째로), ④ 나머지를 가장 작은 팀에 순환 배치, ⑤ <strong>떨어뜨릴 그룹은 같은 그룹 멤버가 있는 팀 자동 회피</strong>. 결과는 좌우 2열로 한눈에 비교할 수 있게 표시.',
-              },
-              {
-                q: '자리 배치 4×6에서 이름이 잘려요',
-                a: '본 도구는 <strong>열 수에 따라 폰트가 자동 조정</strong>됩니다 (열 2개 → 16px / 열 4개 → 14px / 열 6개 → 12px / 열 8개 이상 → 8~10px). 그래도 긴 이름은 일부 잘릴 수 있으니 셀에 마우스 올리면 툴팁으로 전체 이름을 확인할 수 있습니다.',
-              },
-              {
-                q: '룰렛 결과를 미리 조작할 수 있나요?',
-                a: '아닙니다. ① 가중치에 따라 결과 추첨 (Math.random), ② <strong>결과 항목이 12시 방향에 멈추도록 회전 각도 계산</strong>, ③ 4초 회전 애니메이션. 회전은 결정된 결과를 시각화한 것이며, 사용자가 결과를 조작할 수 없습니다. 룰렛 돌리기 버튼을 다시 누르면 새 결과.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

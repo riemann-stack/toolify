@@ -2,6 +2,7 @@ import DutchClient from './DutchClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/life/dutch',
@@ -15,6 +16,29 @@ export const metadata = buildMetadata({
     '잔돈 처리', '음주자 분담', '공동 메뉴 정산',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: '술을 안 마신 사람도 술값을 내야 하나요?',
+                a: '<strong>모임 문화에 따라 다릅니다.</strong> 본 도구의 <strong>[술값 분리]</strong> 탭을 사용하면 음식값은 전원이 나누고 술값은 음주자들끼리만 나누는 방식으로 정산할 수 있어 형평성 논란을 줄일 수 있습니다. 한국 회식에서는 술값 분리가 표준에 가깝고, 가족·친구 모임에서는 균등 N빵이 더 일반적입니다. 모임 시작 전에 합의해두는 것이 가장 좋습니다.',
+              },
+              {
+                q: '잔돈은 어떻게 처리하는 게 좋을까요?',
+                a: '본 도구는 <strong>5가지 잔여 처리</strong>를 지원합니다 — ① <strong>공금으로</strong>(가장 일반적, 다음 회식 사용), ② <strong>결제자가 받기</strong>(결제 수고비 명분), ③ <strong>첫 사람 부담</strong>(부족분 처리), ④ <strong>무작위 1명</strong>(게임처럼), ⑤ <strong>1원 단위 균등</strong>(여행 정산 최적). 회식에서는 <strong>1,000원 올림 + 잔돈 공금</strong>이 가장 깔끔하고, 여행에서는 <strong>정확히 1원 단위 + 균등 분배</strong>가 공정합니다.',
+              },
+              {
+                q: '여러 명이 나눠 결제했을 때 송금 횟수를 줄일 수 있나요?',
+                a: '<strong>네, [선결제자 정산] 탭을 사용하세요.</strong> Greedy 알고리즘으로 가장 많이 받을 사람과 가장 많이 낼 사람을 매칭해 송금 횟수를 최소화합니다. 예를 들어 5명이 나눠 결제하고 균등 부담일 때 단순 계산이면 최대 4건의 송금이 필요하지만 알고리즘은 평균 2~3건으로 압축합니다. 토스·카카오페이로 한 번에 보낼 수 있어 편리합니다.',
+              },
+              {
+                q: '찬조자(부담 0원)는 어떻게 처리되나요?',
+                a: '선결제자 정산 탭에서 각 참가자별 <strong>💝 찬조자</strong> 체크박스를 켜면 그 사람은 결제만 하고 부담은 0원으로 처리됩니다. 상사가 회식비 일부를 협찬하거나 생일 주인공의 부모님이 미리 결제한 경우 등에 사용합니다. 찬조자가 결제한 금액은 다른 참가자들의 부담에서 자동 차감되어 균등 분배됩니다.',
+              },
+              {
+                q: '여행 경비 정산도 가능한가요?',
+                a: '<strong>네, 본 도구가 가장 강력한 영역입니다.</strong> ① [간단 N빵]에서 <strong>1원 단위 + 균등 분배</strong>를 선택하면 잔돈까지 정확히 나뉩니다. ② 일정별로 결제자가 다르다면 [선결제자 정산] 탭에서 각자 결제액·부담액을 입력해 최소 송금으로 정리할 수 있습니다. ③ 메뉴별 가격이 크게 다르면 [개인별 정산] 탭에서 본인 메뉴 + 공동 메뉴 균등 분담으로 정산할 수 있습니다.',
+              },
+            ]
 
 export default function DutchPage() {
   return (
@@ -197,29 +221,9 @@ export default function DutchPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '술을 안 마신 사람도 술값을 내야 하나요?',
-                a: '<strong>모임 문화에 따라 다릅니다.</strong> 본 도구의 <strong>[술값 분리]</strong> 탭을 사용하면 음식값은 전원이 나누고 술값은 음주자들끼리만 나누는 방식으로 정산할 수 있어 형평성 논란을 줄일 수 있습니다. 한국 회식에서는 술값 분리가 표준에 가깝고, 가족·친구 모임에서는 균등 N빵이 더 일반적입니다. 모임 시작 전에 합의해두는 것이 가장 좋습니다.',
-              },
-              {
-                q: '잔돈은 어떻게 처리하는 게 좋을까요?',
-                a: '본 도구는 <strong>5가지 잔여 처리</strong>를 지원합니다 — ① <strong>공금으로</strong>(가장 일반적, 다음 회식 사용), ② <strong>결제자가 받기</strong>(결제 수고비 명분), ③ <strong>첫 사람 부담</strong>(부족분 처리), ④ <strong>무작위 1명</strong>(게임처럼), ⑤ <strong>1원 단위 균등</strong>(여행 정산 최적). 회식에서는 <strong>1,000원 올림 + 잔돈 공금</strong>이 가장 깔끔하고, 여행에서는 <strong>정확히 1원 단위 + 균등 분배</strong>가 공정합니다.',
-              },
-              {
-                q: '여러 명이 나눠 결제했을 때 송금 횟수를 줄일 수 있나요?',
-                a: '<strong>네, [선결제자 정산] 탭을 사용하세요.</strong> Greedy 알고리즘으로 가장 많이 받을 사람과 가장 많이 낼 사람을 매칭해 송금 횟수를 최소화합니다. 예를 들어 5명이 나눠 결제하고 균등 부담일 때 단순 계산이면 최대 4건의 송금이 필요하지만 알고리즘은 평균 2~3건으로 압축합니다. 토스·카카오페이로 한 번에 보낼 수 있어 편리합니다.',
-              },
-              {
-                q: '찬조자(부담 0원)는 어떻게 처리되나요?',
-                a: '선결제자 정산 탭에서 각 참가자별 <strong>💝 찬조자</strong> 체크박스를 켜면 그 사람은 결제만 하고 부담은 0원으로 처리됩니다. 상사가 회식비 일부를 협찬하거나 생일 주인공의 부모님이 미리 결제한 경우 등에 사용합니다. 찬조자가 결제한 금액은 다른 참가자들의 부담에서 자동 차감되어 균등 분배됩니다.',
-              },
-              {
-                q: '여행 경비 정산도 가능한가요?',
-                a: '<strong>네, 본 도구가 가장 강력한 영역입니다.</strong> ① [간단 N빵]에서 <strong>1원 단위 + 균등 분배</strong>를 선택하면 잔돈까지 정확히 나뉩니다. ② 일정별로 결제자가 다르다면 [선결제자 정산] 탭에서 각자 결제액·부담액을 입력해 최소 송금으로 정리할 수 있습니다. ③ 메뉴별 가격이 크게 다르면 [개인별 정산] 탭에서 본인 메뉴 + 공동 메뉴 균등 분담으로 정산할 수 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

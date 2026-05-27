@@ -2,6 +2,7 @@ import Link from 'next/link'
 import TechStackClient from './TechStackClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/tech-stack',
@@ -42,6 +43,45 @@ const faqAnswer: React.CSSProperties = {
   lineHeight: 1.8,
   margin: 0,
 }
+
+const FAQ_LD = [
+              {
+                q: 'Next.js vs Remix, 뭐가 좋나요?',
+                a: '<strong>Next.js</strong> — 한국 채용 시장 1순위. App Router·Server Components·Turbopack. Vercel 배포 0-config. 생태계 최대.<br/><br/><strong>Remix (React Router 7)</strong> — 웹 표준(Form·Loader) 중심. 더 명시적이고 진보적 향상. 생태계 작음. 한국 채용 미미.<br/><br/><strong>결론</strong> — 한국 취업·신규 프로젝트는 Next.js. 학습·웹 표준 가치 중시는 Remix. 둘 다 최고 수준이지만 채용·생태 격차는 압도적으로 Next.js 우위.',
+              },
+              {
+                q: 'Supabase vs Firebase, 어느 게 낫나요?',
+                a: '· <strong>Supabase</strong> — Postgres 기반(관계형). RLS로 권한 강력. 오픈소스(자체 호스팅 가능). SQL 친화. <em>웹 위주 추천</em>.<br/>· <strong>Firebase</strong> — NoSQL(Firestore). Google 락인. 모바일 SDK 우수. Phone Auth 강력. <em>모바일 위주 추천</em>.<br/><br/><strong>결론</strong> — 웹 + 관계형 데이터(주문·결제·소셜) → Supabase. 모바일 + 단순 문서 → Firebase. 가격은 비슷하지만 Supabase가 락인 적어 장기적으로 유리.',
+              },
+              {
+                q: 'React Native vs Flutter, 어느 쪽?',
+                a: '· <strong>React Native (Expo)</strong> — JS/React 경험 활용. 웹·앱 코드 일부 공유. EAS Build로 클라우드 빌드. 한국 채용 풍부.<br/>· <strong>Flutter</strong> — 픽셀 단위 동일 UI. 60fps 보장. Dart 학습 필요. Material·Cupertino 둘 다 지원.<br/><br/><strong>결론</strong> — 웹 개발 경험 있으면 React Native(Expo). UI 일관성·게임풍 인터랙션 → Flutter. 둘 다 한국에서 채용 활발하지만 React Native 비중이 더 큼.',
+              },
+              {
+                q: 'MVP에 모놀리스 vs 마이크로서비스?',
+                a: '<strong>MVP는 100% 모놀리스로 시작.</strong> 마이크로서비스는 다음 조건일 때만 —<br/>· 팀 50명+ (서비스별 책임 팀 분리)<br/>· 일부 모듈만 트래픽 폭증 (스케일 분리 필요)<br/>· 기술 스택 다양 (Python ML + Node API)<br/><br/>초기에 분리하면 네트워크 오버헤드·배포 복잡도·디버깅 지옥이 시간을 다 잡아먹음. 모놀리스로 시작 → 트래픽·팀 성장 시 점진적 분리가 정답.',
+              },
+              {
+                q: 'Vercel vs AWS, 뭐가 저렴한가요?',
+                a: '<strong>1만 사용자까지는 Vercel이 압도적으로 저렴 + 빠름.</strong> 무료 티어로 시작 → Pro $20/월. 0-config 배포·Preview·Edge·Image 자동 최적화.<br/><br/><strong>10만+ 사용자</strong>는 트래픽·함수 호출량 따라 비용 ↑. 이때 AWS(CloudFront + Lambda 또는 ECS) 직접 구성이 더 저렴할 수 있음. 단 운영 부담 큼.<br/><br/><strong>한국 대기업·금융</strong>은 AWS Seoul 또는 NCloud. 자체 인증·보안 요구사항 충족. 채용도 AWS 강세.',
+              },
+              {
+                q: '한국 결제는 토스페이먼츠가 표준인가요?',
+                a: '<strong>2026년 신규 SaaS 80%+가 토스페이먼츠 채택.</strong> 이유 —<br/>· 개발자 문서 우수 (한국 PG 중 압도적)<br/>· SDK·콜백 깔끔<br/>· 카드·계좌·간편결제(카카오·네이버페이) 통합<br/>· 수수료 2.7~3.3% (경쟁사 대비 합리적)<br/><br/><strong>예외</strong> — 대기업·금융권은 여전히 KG이니시스 다수(관행) / 멀티 PG 필요 시 포트원(구 아임포트) / 글로벌 + 한국 동시는 Stripe + 토스 병행.',
+              },
+              {
+                q: '초보가 백엔드를 빠르게 배우려면?',
+                a: 'JS/TS 기반이라면 <strong>Next.js + Supabase</strong> 조합이 가장 부드러운 시작.<br/>· 주 1~2 — Next.js Route Handlers + Supabase Auth<br/>· 주 3~4 — Postgres SQL 기초 + RLS 정책<br/>· 주 5~6 — 트랜잭션·인덱스·백그라운드 작업<br/>· 월 2~3 — 캐싱(Redis)·큐(Inngest)<br/><br/>Python 친숙하면 <strong>FastAPI + Supabase</strong>도 좋음. 프론트는 그대로 Next.js + API만 분리.<br/><br/><strong>피해야 할 함정</strong> — 초보가 Spring·NestJS 시작 → 보일러플레이트로 시간 다 보냄. 단순 도구(Next.js API)로 빠르게 결과물 → 점진적 학습.',
+              },
+              {
+                q: 'Astro는 언제 안 좋나요?',
+                a: 'Astro는 <strong>콘텐츠 우선 사이트에 최적</strong>이지만 다음에는 부적합 —<br/>· <strong>실시간 협업·대시보드</strong> — SPA 인터랙션이 핵심, Next.js·Vite 권장<br/>· <strong>SaaS 풀스택</strong> — Auth·DB·결제 통합은 Next.js가 압도<br/>· <strong>복잡한 폼·다단계 워크플로우</strong> — React Hook Form 등 React 생태계 친화 도구<br/>· <strong>실시간 채팅·알림</strong> — WebSocket 기반 SPA 권장<br/><br/>Astro 강점은 블로그·문서·마케팅·포트폴리오. 동적 인터랙션 80%+면 Next.js로.',
+              },
+              {
+                q: '본 도구의 추천을 그대로 따라도 되나요?',
+                a: '추천은 <strong>일반적인 가이드라인</strong>입니다. 본 도구는 35+ 스택을 7축 점수로 비교한 추천 엔진이지만, 실제 의사결정에는 다음을 같이 고려해야 합니다 —<br/>· 팀이 이미 익숙한 스택 (학습 비용)<br/>· 외부 클라이언트·기존 시스템 호환성<br/>· 특정 라이브러리 의존도 (예: 결제 PG 협약)<br/>· 회사 보안·컴플라이언스 정책<br/><br/>추천 결과를 시작점으로 두고, 「대안 후보」와 「7축 점수」를 함께 보며 본인 상황에 맞게 조정하세요.',
+              },
+            ]
 
 export default function TechStackPage() {
   return (
@@ -155,45 +195,9 @@ export default function TechStackPage() {
         {/* 3. FAQ — 아코디언 */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'Next.js vs Remix, 뭐가 좋나요?',
-                a: '<strong>Next.js</strong> — 한국 채용 시장 1순위. App Router·Server Components·Turbopack. Vercel 배포 0-config. 생태계 최대.<br/><br/><strong>Remix (React Router 7)</strong> — 웹 표준(Form·Loader) 중심. 더 명시적이고 진보적 향상. 생태계 작음. 한국 채용 미미.<br/><br/><strong>결론</strong> — 한국 취업·신규 프로젝트는 Next.js. 학습·웹 표준 가치 중시는 Remix. 둘 다 최고 수준이지만 채용·생태 격차는 압도적으로 Next.js 우위.',
-              },
-              {
-                q: 'Supabase vs Firebase, 어느 게 낫나요?',
-                a: '· <strong>Supabase</strong> — Postgres 기반(관계형). RLS로 권한 강력. 오픈소스(자체 호스팅 가능). SQL 친화. <em>웹 위주 추천</em>.<br/>· <strong>Firebase</strong> — NoSQL(Firestore). Google 락인. 모바일 SDK 우수. Phone Auth 강력. <em>모바일 위주 추천</em>.<br/><br/><strong>결론</strong> — 웹 + 관계형 데이터(주문·결제·소셜) → Supabase. 모바일 + 단순 문서 → Firebase. 가격은 비슷하지만 Supabase가 락인 적어 장기적으로 유리.',
-              },
-              {
-                q: 'React Native vs Flutter, 어느 쪽?',
-                a: '· <strong>React Native (Expo)</strong> — JS/React 경험 활용. 웹·앱 코드 일부 공유. EAS Build로 클라우드 빌드. 한국 채용 풍부.<br/>· <strong>Flutter</strong> — 픽셀 단위 동일 UI. 60fps 보장. Dart 학습 필요. Material·Cupertino 둘 다 지원.<br/><br/><strong>결론</strong> — 웹 개발 경험 있으면 React Native(Expo). UI 일관성·게임풍 인터랙션 → Flutter. 둘 다 한국에서 채용 활발하지만 React Native 비중이 더 큼.',
-              },
-              {
-                q: 'MVP에 모놀리스 vs 마이크로서비스?',
-                a: '<strong>MVP는 100% 모놀리스로 시작.</strong> 마이크로서비스는 다음 조건일 때만 —<br/>· 팀 50명+ (서비스별 책임 팀 분리)<br/>· 일부 모듈만 트래픽 폭증 (스케일 분리 필요)<br/>· 기술 스택 다양 (Python ML + Node API)<br/><br/>초기에 분리하면 네트워크 오버헤드·배포 복잡도·디버깅 지옥이 시간을 다 잡아먹음. 모놀리스로 시작 → 트래픽·팀 성장 시 점진적 분리가 정답.',
-              },
-              {
-                q: 'Vercel vs AWS, 뭐가 저렴한가요?',
-                a: '<strong>1만 사용자까지는 Vercel이 압도적으로 저렴 + 빠름.</strong> 무료 티어로 시작 → Pro $20/월. 0-config 배포·Preview·Edge·Image 자동 최적화.<br/><br/><strong>10만+ 사용자</strong>는 트래픽·함수 호출량 따라 비용 ↑. 이때 AWS(CloudFront + Lambda 또는 ECS) 직접 구성이 더 저렴할 수 있음. 단 운영 부담 큼.<br/><br/><strong>한국 대기업·금융</strong>은 AWS Seoul 또는 NCloud. 자체 인증·보안 요구사항 충족. 채용도 AWS 강세.',
-              },
-              {
-                q: '한국 결제는 토스페이먼츠가 표준인가요?',
-                a: '<strong>2026년 신규 SaaS 80%+가 토스페이먼츠 채택.</strong> 이유 —<br/>· 개발자 문서 우수 (한국 PG 중 압도적)<br/>· SDK·콜백 깔끔<br/>· 카드·계좌·간편결제(카카오·네이버페이) 통합<br/>· 수수료 2.7~3.3% (경쟁사 대비 합리적)<br/><br/><strong>예외</strong> — 대기업·금융권은 여전히 KG이니시스 다수(관행) / 멀티 PG 필요 시 포트원(구 아임포트) / 글로벌 + 한국 동시는 Stripe + 토스 병행.',
-              },
-              {
-                q: '초보가 백엔드를 빠르게 배우려면?',
-                a: 'JS/TS 기반이라면 <strong>Next.js + Supabase</strong> 조합이 가장 부드러운 시작.<br/>· 주 1~2 — Next.js Route Handlers + Supabase Auth<br/>· 주 3~4 — Postgres SQL 기초 + RLS 정책<br/>· 주 5~6 — 트랜잭션·인덱스·백그라운드 작업<br/>· 월 2~3 — 캐싱(Redis)·큐(Inngest)<br/><br/>Python 친숙하면 <strong>FastAPI + Supabase</strong>도 좋음. 프론트는 그대로 Next.js + API만 분리.<br/><br/><strong>피해야 할 함정</strong> — 초보가 Spring·NestJS 시작 → 보일러플레이트로 시간 다 보냄. 단순 도구(Next.js API)로 빠르게 결과물 → 점진적 학습.',
-              },
-              {
-                q: 'Astro는 언제 안 좋나요?',
-                a: 'Astro는 <strong>콘텐츠 우선 사이트에 최적</strong>이지만 다음에는 부적합 —<br/>· <strong>실시간 협업·대시보드</strong> — SPA 인터랙션이 핵심, Next.js·Vite 권장<br/>· <strong>SaaS 풀스택</strong> — Auth·DB·결제 통합은 Next.js가 압도<br/>· <strong>복잡한 폼·다단계 워크플로우</strong> — React Hook Form 등 React 생태계 친화 도구<br/>· <strong>실시간 채팅·알림</strong> — WebSocket 기반 SPA 권장<br/><br/>Astro 강점은 블로그·문서·마케팅·포트폴리오. 동적 인터랙션 80%+면 Next.js로.',
-              },
-              {
-                q: '본 도구의 추천을 그대로 따라도 되나요?',
-                a: '추천은 <strong>일반적인 가이드라인</strong>입니다. 본 도구는 35+ 스택을 7축 점수로 비교한 추천 엔진이지만, 실제 의사결정에는 다음을 같이 고려해야 합니다 —<br/>· 팀이 이미 익숙한 스택 (학습 비용)<br/>· 외부 클라이언트·기존 시스템 호환성<br/>· 특정 라이브러리 의존도 (예: 결제 PG 협약)<br/>· 회사 보안·컴플라이언스 정책<br/><br/>추천 결과를 시작점으로 두고, 「대안 후보」와 「7축 점수」를 함께 보며 본인 상황에 맞게 조정하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

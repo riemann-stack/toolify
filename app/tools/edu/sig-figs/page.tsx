@@ -3,6 +3,7 @@ import SigFigsClient from './SigFigsClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sig-figs',
@@ -18,6 +19,14 @@ export const metadata = buildMetadata({
 
 const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+
+const FAQ_LD = [
+              { q: '1500의 유효숫자는 몇 개인가요?', a: '소수점이 없는 정수의 후행 0은 <strong>모호</strong>합니다. 1500은 표기만으로 2개(1,5)인지 4개(1,5,0,0)인지 알 수 없어요. 명확히 하려면 과학적 표기로 씁니다 — <strong>1.5×10³</strong>(2개), <strong>1.50×10³</strong>(3개), <strong>1.500×10³</strong>(4개). 본 계산기는 이런 경우 모호함을 경고합니다.' },
+              { q: '0.04560은 유효숫자가 몇 개죠?', a: '<strong>4개</strong>입니다. 앞쪽 선행 0(0.0…)은 자릿수만 나타내므로 무효이고, 4·5·6과 <strong>맨 끝 0</strong>이 유효합니다. 소수점 뒤의 후행 0은 일부러 적은 것이므로 유효숫자에 포함됩니다.' },
+              { q: '계산 결과는 유효숫자를 어떻게 맞추나요?', a: '<strong>곱셈·나눗셈</strong>은 유효숫자가 가장 적은 값에 맞추고, <strong>덧셈·뺄셈</strong>은 소수점 자리수가 가장 적은 값에 맞춥니다. 최종 답을 먼저 다 계산한 뒤 마지막에 한 번만 반올림하는 것이 좋습니다(중간 반올림 누적 오차 방지).' },
+              { q: '오차 전파에서 제곱합과 단순 합은 언제 쓰나요?', a: '측정 오차들이 <strong>서로 독립인 무작위 오차</strong>일 때는 제곱합 √(δA²+δB²)(표준 불확도)을 씁니다. 통계를 모르거나 최악의 경우 상한을 보수적으로 잡고 싶을 때는 절대값을 그냥 더하는 <strong>단순 합(최대 오차)</strong>을 씁니다. 본 도구는 둘 다 보여줍니다.' },
+              { q: '불확도는 유효숫자 몇 개로 적나요?', a: '관례상 불확도(δ)는 <strong>1~2개 유효숫자</strong>로 반올림하고, 측정값을 그 불확도와 <strong>같은 소수 자리</strong>에 맞춥니다. 예: 9.8123 ± 0.0456 → <strong>9.81 ± 0.05</strong> 또는 9.812 ± 0.046. 본 계산기는 2자리 기준으로 정리해 보여줍니다.' },
+            ]
 
 export default function SigFigsPage() {
   return (
@@ -119,14 +128,9 @@ export default function SigFigsPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {[
-              { q: '1500의 유효숫자는 몇 개인가요?', a: '소수점이 없는 정수의 후행 0은 <strong>모호</strong>합니다. 1500은 표기만으로 2개(1,5)인지 4개(1,5,0,0)인지 알 수 없어요. 명확히 하려면 과학적 표기로 씁니다 — <strong>1.5×10³</strong>(2개), <strong>1.50×10³</strong>(3개), <strong>1.500×10³</strong>(4개). 본 계산기는 이런 경우 모호함을 경고합니다.' },
-              { q: '0.04560은 유효숫자가 몇 개죠?', a: '<strong>4개</strong>입니다. 앞쪽 선행 0(0.0…)은 자릿수만 나타내므로 무효이고, 4·5·6과 <strong>맨 끝 0</strong>이 유효합니다. 소수점 뒤의 후행 0은 일부러 적은 것이므로 유효숫자에 포함됩니다.' },
-              { q: '계산 결과는 유효숫자를 어떻게 맞추나요?', a: '<strong>곱셈·나눗셈</strong>은 유효숫자가 가장 적은 값에 맞추고, <strong>덧셈·뺄셈</strong>은 소수점 자리수가 가장 적은 값에 맞춥니다. 최종 답을 먼저 다 계산한 뒤 마지막에 한 번만 반올림하는 것이 좋습니다(중간 반올림 누적 오차 방지).' },
-              { q: '오차 전파에서 제곱합과 단순 합은 언제 쓰나요?', a: '측정 오차들이 <strong>서로 독립인 무작위 오차</strong>일 때는 제곱합 √(δA²+δB²)(표준 불확도)을 씁니다. 통계를 모르거나 최악의 경우 상한을 보수적으로 잡고 싶을 때는 절대값을 그냥 더하는 <strong>단순 합(최대 오차)</strong>을 씁니다. 본 도구는 둘 다 보여줍니다.' },
-              { q: '불확도는 유효숫자 몇 개로 적나요?', a: '관례상 불확도(δ)는 <strong>1~2개 유효숫자</strong>로 반올림하고, 측정값을 그 불확도와 <strong>같은 소수 자리</strong>에 맞춥니다. 예: 9.8123 ± 0.0456 → <strong>9.81 ± 0.05</strong> 또는 9.812 ± 0.046. 본 계산기는 2자리 기준으로 정리해 보여줍니다.' },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ ...card, padding: '12px 16px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />

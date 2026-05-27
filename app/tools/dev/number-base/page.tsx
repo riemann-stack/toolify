@@ -3,6 +3,7 @@ import NumberBaseClient from './NumberBaseClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/number-base',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '2·8·10·16진 변환 + 비트 시각화 + 2의 보수·ASCII·비트 연산. 임베디드·암호학 학습에.',
   keywords: ['진법변환기', '2진수', '8진수', '10진수', '16진수', '진법변환', '비트연산', 'ASCII', '2의보수', 'binary', 'hex', '진법계산', '비트마스크'],
 })
+
+const FAQ_LD = [
+              {
+                q: '왜 16진수를 자주 사용하나요?',
+                a: '2진수는 길어서 사람이 읽기 어렵지만, 16진수는 짧고 직관적이기 때문입니다. <strong>8비트(1바이트)는 16진수 2자리</strong>로 표현되며, 메모리 주소·색상 코드·암호화 키 등에 표준입니다. 또한 16진수와 2진수는 <strong>4비트 단위로 직접 변환</strong>되어 (1111 = F) 비트 패턴 분석에 매우 편리합니다. <code>0xFF</code>가 <code>11111111</code>보다 훨씬 읽기 쉽습니다.',
+              },
+              {
+                q: '2의 보수는 왜 사용하나요?',
+                a: '컴퓨터에서 음수를 표현하는 가장 효율적인 방법이기 때문입니다. ① <strong>0이 단 하나</strong>(+0과 −0이 구분 X), ② <strong>덧셈·뺄셈을 같은 회로로 처리</strong>(a − b = a + (−b)), ③ <strong>비트 반전 후 +1</strong>로 간단히 변환. 거의 모든 현대 CPU·프로그래밍 언어에서 표준으로 사용합니다. 부호+절대값 방식이나 1의 보수 방식은 0의 표현이 두 가지가 되거나 회로가 복잡해 거의 쓰이지 않습니다.',
+              },
+              {
+                q: 'ASCII와 유니코드의 차이는 무엇인가요?',
+                a: 'ASCII는 7비트로 영어·숫자·기본 기호 128개를 표현하는 표준입니다(1963년 제정). <strong>유니코드는 전 세계 모든 문자</strong>를 표현하기 위해 ASCII를 확장한 표준이며, 약 14만 개 이상의 문자(한글·한자·이모지 포함)를 정의합니다. ASCII 0~127번은 유니코드와 완전히 동일하므로 ASCII 호환성이 보장됩니다. 한글은 <code>U+AC00 ~ U+D7A3</code> 범위에 11,172개가 정의되어 있습니다.',
+              },
+              {
+                q: '비트 연산은 언제 사용하나요?',
+                a: '비트 연산은 다음 상황에 자주 사용됩니다: ① <strong>플래그 관리</strong>(여러 옵션을 한 변수에 OR로 설정·AND로 확인), ② <strong>마스킹</strong>(특정 비트만 추출), ③ <strong>빠른 곱셈·나눗셈</strong>(x &lt;&lt; 1 = x×2), ④ 권한 시스템(Linux 파일 권한 0o755), ⑤ <strong>암호화·해시</strong>(XOR 활용), ⑥ <strong>그래픽 처리</strong>(RGB 채널 분리). 비트 연산은 일반 산술 연산보다 훨씬 빠르므로 성능 최적화에도 사용됩니다.',
+              },
+              {
+                q: '16진수에서 A~F는 무엇을 의미하나요?',
+                a: '16진수는 0~15까지 16개 숫자를 사용하는 진법이지만, 한 자리에 두 자리 숫자(10~15)를 넣을 수 없어 알파벳을 빌려 사용합니다: <strong>A=10, B=11, C=12, D=13, E=14, F=15</strong>. 예를 들어 <code>0xFF = 15 × 16 + 15 = 255</code>입니다. 관습상 대문자(A~F)와 소문자(a~f) 모두 허용되며 같은 값을 의미합니다. CSS 색상은 대문자가 일반적이고, Python·Rust 등은 소문자를 선호합니다.',
+              },
+            ]
 
 export default function NumberBasePage() {
   return (
@@ -309,29 +333,9 @@ export default function NumberBasePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '왜 16진수를 자주 사용하나요?',
-                a: '2진수는 길어서 사람이 읽기 어렵지만, 16진수는 짧고 직관적이기 때문입니다. <strong>8비트(1바이트)는 16진수 2자리</strong>로 표현되며, 메모리 주소·색상 코드·암호화 키 등에 표준입니다. 또한 16진수와 2진수는 <strong>4비트 단위로 직접 변환</strong>되어 (1111 = F) 비트 패턴 분석에 매우 편리합니다. <code>0xFF</code>가 <code>11111111</code>보다 훨씬 읽기 쉽습니다.',
-              },
-              {
-                q: '2의 보수는 왜 사용하나요?',
-                a: '컴퓨터에서 음수를 표현하는 가장 효율적인 방법이기 때문입니다. ① <strong>0이 단 하나</strong>(+0과 −0이 구분 X), ② <strong>덧셈·뺄셈을 같은 회로로 처리</strong>(a − b = a + (−b)), ③ <strong>비트 반전 후 +1</strong>로 간단히 변환. 거의 모든 현대 CPU·프로그래밍 언어에서 표준으로 사용합니다. 부호+절대값 방식이나 1의 보수 방식은 0의 표현이 두 가지가 되거나 회로가 복잡해 거의 쓰이지 않습니다.',
-              },
-              {
-                q: 'ASCII와 유니코드의 차이는 무엇인가요?',
-                a: 'ASCII는 7비트로 영어·숫자·기본 기호 128개를 표현하는 표준입니다(1963년 제정). <strong>유니코드는 전 세계 모든 문자</strong>를 표현하기 위해 ASCII를 확장한 표준이며, 약 14만 개 이상의 문자(한글·한자·이모지 포함)를 정의합니다. ASCII 0~127번은 유니코드와 완전히 동일하므로 ASCII 호환성이 보장됩니다. 한글은 <code>U+AC00 ~ U+D7A3</code> 범위에 11,172개가 정의되어 있습니다.',
-              },
-              {
-                q: '비트 연산은 언제 사용하나요?',
-                a: '비트 연산은 다음 상황에 자주 사용됩니다: ① <strong>플래그 관리</strong>(여러 옵션을 한 변수에 OR로 설정·AND로 확인), ② <strong>마스킹</strong>(특정 비트만 추출), ③ <strong>빠른 곱셈·나눗셈</strong>(x &lt;&lt; 1 = x×2), ④ 권한 시스템(Linux 파일 권한 0o755), ⑤ <strong>암호화·해시</strong>(XOR 활용), ⑥ <strong>그래픽 처리</strong>(RGB 채널 분리). 비트 연산은 일반 산술 연산보다 훨씬 빠르므로 성능 최적화에도 사용됩니다.',
-              },
-              {
-                q: '16진수에서 A~F는 무엇을 의미하나요?',
-                a: '16진수는 0~15까지 16개 숫자를 사용하는 진법이지만, 한 자리에 두 자리 숫자(10~15)를 넣을 수 없어 알파벳을 빌려 사용합니다: <strong>A=10, B=11, C=12, D=13, E=14, F=15</strong>. 예를 들어 <code>0xFF = 15 × 16 + 15 = 255</code>입니다. 관습상 대문자(A~F)와 소문자(a~f) 모두 허용되며 같은 값을 의미합니다. CSS 색상은 대문자가 일반적이고, Python·Rust 등은 소문자를 선호합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

@@ -3,6 +3,7 @@ import FlooringClient from './FlooringClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/flooring',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '장판·강화마루·강마루·원목·데코타일 박스 수와 비용 견적. 셀프 시공 가능 여부도 안내.',
   keywords: ['바닥재계산기', '마루박스수', '강화마루소요량', '강마루계산', '장판소요량', '데코타일계산', '헤링본바닥재', '바닥재비용'],
 })
+
+const FAQ_LD = [
+              {
+                q: '강화마루와 강마루 차이가 뭐예요?',
+                a: '<strong>강화마루</strong>는 HDF(고밀도 섬유판)에 멜라민 필름을 압착한 합성 마루로 가격이 저렴하고 스크래치에 강합니다. <strong>강마루</strong>는 합판 위에 천연 무늬목을 붙인 형태로 더 부드럽고 따뜻한 질감이며 난방에도 적합합니다. 가격은 강마루가 1.5~2배 비싸지만 거주감과 내구성에서 우수해 아파트 거실·아이방에서 가장 많이 선택됩니다.',
+              },
+              {
+                q: '바닥재 1박스는 몇 평인가요?',
+                a: '한국 시판 기준으로 <strong>강화마루 1박스 ≈ 2.4㎡ ≈ 0.73평</strong>, 강마루 1박스 ≈ 2.6㎡ ≈ 0.79평, 원목마루 1박스 ≈ 2.0㎡ ≈ 0.61평, 데코타일 1박스 ≈ 3.3㎡ ≈ 1평 정도입니다. 브랜드·시리즈마다 ±10% 차이가 있으므로 실제 구매 전 박스 표기 면적을 반드시 확인하세요.',
+              },
+              {
+                q: '헤링본 시공은 왜 자재가 더 많이 필요한가요?',
+                a: '헤링본은 <strong>V자 패턴으로 반복</strong>되어 짧은 자재가 많이 발생하고, 가장자리 절단 시 자투리가 평행 시공보다 2~3배 많이 나옵니다. 그래서 평행 대비 <strong>+10% 추가 자재</strong>(쉐브론은 +15%)를 권장합니다. 또한 시공 난이도가 높아 인건비도 평행 대비 <strong>+50% 정도 더 나옵니다</strong>. 디자인 효과는 좋지만 비용·자재 모두 여유 있게 잡으세요.',
+              },
+              {
+                q: '장판은 셀프 시공이 가능한가요?',
+                a: '네, <strong>장판은 셀프 시공 난이도가 가장 낮습니다</strong>. 폭 1.8m 또는 2.0m 롤 형태로 절단 후 본드 또는 양면테이프로 고정하면 됩니다. 단, 정확한 실측·재단·이음매 처리가 중요하며, 5평 이상은 두 사람이 작업하는 것이 안전합니다. 강마루·원목마루는 단차·접착 정밀도가 필요해 전문 시공을 권장합니다.',
+              },
+              {
+                q: '바닥재 위에 다른 바닥재를 덧시공할 수 있나요?',
+                a: '<strong>조건부로 가능합니다.</strong> 기존 바닥이 평탄하고(단차 3mm 이내) 들뜸·곰팡이가 없으면 데코타일·장판은 덧시공 가능합니다. 강화·강마루는 두께(8~12mm) 때문에 문턱·문 하단·콘센트 위치에 영향이 갈 수 있어 주의가 필요합니다. 가장 깨끗한 결과는 <strong>기존 바닥 철거 후 시공</strong>이지만, 비용 절감을 위해 덧시공도 많이 선택합니다.',
+              },
+            ]
 
 export default function FlooringPage() {
   return (
@@ -290,29 +314,9 @@ export default function FlooringPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '강화마루와 강마루 차이가 뭐예요?',
-                a: '<strong>강화마루</strong>는 HDF(고밀도 섬유판)에 멜라민 필름을 압착한 합성 마루로 가격이 저렴하고 스크래치에 강합니다. <strong>강마루</strong>는 합판 위에 천연 무늬목을 붙인 형태로 더 부드럽고 따뜻한 질감이며 난방에도 적합합니다. 가격은 강마루가 1.5~2배 비싸지만 거주감과 내구성에서 우수해 아파트 거실·아이방에서 가장 많이 선택됩니다.',
-              },
-              {
-                q: '바닥재 1박스는 몇 평인가요?',
-                a: '한국 시판 기준으로 <strong>강화마루 1박스 ≈ 2.4㎡ ≈ 0.73평</strong>, 강마루 1박스 ≈ 2.6㎡ ≈ 0.79평, 원목마루 1박스 ≈ 2.0㎡ ≈ 0.61평, 데코타일 1박스 ≈ 3.3㎡ ≈ 1평 정도입니다. 브랜드·시리즈마다 ±10% 차이가 있으므로 실제 구매 전 박스 표기 면적을 반드시 확인하세요.',
-              },
-              {
-                q: '헤링본 시공은 왜 자재가 더 많이 필요한가요?',
-                a: '헤링본은 <strong>V자 패턴으로 반복</strong>되어 짧은 자재가 많이 발생하고, 가장자리 절단 시 자투리가 평행 시공보다 2~3배 많이 나옵니다. 그래서 평행 대비 <strong>+10% 추가 자재</strong>(쉐브론은 +15%)를 권장합니다. 또한 시공 난이도가 높아 인건비도 평행 대비 <strong>+50% 정도 더 나옵니다</strong>. 디자인 효과는 좋지만 비용·자재 모두 여유 있게 잡으세요.',
-              },
-              {
-                q: '장판은 셀프 시공이 가능한가요?',
-                a: '네, <strong>장판은 셀프 시공 난이도가 가장 낮습니다</strong>. 폭 1.8m 또는 2.0m 롤 형태로 절단 후 본드 또는 양면테이프로 고정하면 됩니다. 단, 정확한 실측·재단·이음매 처리가 중요하며, 5평 이상은 두 사람이 작업하는 것이 안전합니다. 강마루·원목마루는 단차·접착 정밀도가 필요해 전문 시공을 권장합니다.',
-              },
-              {
-                q: '바닥재 위에 다른 바닥재를 덧시공할 수 있나요?',
-                a: '<strong>조건부로 가능합니다.</strong> 기존 바닥이 평탄하고(단차 3mm 이내) 들뜸·곰팡이가 없으면 데코타일·장판은 덧시공 가능합니다. 강화·강마루는 두께(8~12mm) 때문에 문턱·문 하단·콘센트 위치에 영향이 갈 수 있어 주의가 필요합니다. 가장 깨끗한 결과는 <strong>기존 바닥 철거 후 시공</strong>이지만, 비용 절감을 위해 덧시공도 많이 선택합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

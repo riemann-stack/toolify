@@ -3,6 +3,7 @@ import CosmicCalendarClient from './CosmicCalendarClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/cosmic-calendar',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '138억 년 우주 역사를 1년 달력으로 압축한 인터랙티브 타임라인. 빅뱅부터 인류까지 시간의 스케일을 직관적으로.',
   keywords: ['코스믹캘린더', '우주달력', '우주역사', '빅뱅', '칼세이건', '우주시간', '인류역사', '우주시각화', '138억년', '우주1년'],
 })
+
+const FAQ_LD = [
+              {
+                q: '코스믹 캘린더는 누가 만들었나요?',
+                a: '미국 천문학자 <strong>칼 세이건(Carl Sagan, 1934-1996)</strong>이 1977년 책 "에덴의 용"에서 처음 제안했습니다. 이후 그의 다큐멘터리 <strong>"코스모스(Cosmos, 1980)"</strong>에서 시각화되어 전 세계적으로 알려진 개념이 되었습니다. 138억 년의 우주 역사를 1년으로 압축해 일반인이 이해할 수 있도록 한 천재적 발상입니다.',
+              },
+              {
+                q: '코스믹 캘린더에서 1초는 실제 몇 년인가요?',
+                a: '코스믹 캘린더에서 1초는 실제 <strong>약 437.5년</strong>에 해당합니다. 따라서 인류 문명 12,000년은 코스믹 캘린더로 약 27.5초이며, 산업혁명 이후 250년은 약 0.57초, 인터넷 시대 30년은 약 0.07초에 불과합니다. <strong>당신의 30년 인생도 코스믹 캘린더로는 약 0.07초</strong>입니다.',
+              },
+              {
+                q: '인류는 코스믹 캘린더의 어디에 위치하나요?',
+                a: '현생 인류(호모 사피엔스)는 <strong>12월 31일 23시 48분경</strong> 등장했습니다. 마지막 12분에 모든 인류 역사가 압축되어 있다는 뜻입니다. 특히 문자·문명·과학·인터넷 모든 것이 마지막 14초 안에 발생했습니다. 이는 우주 138억 년 중 인류 문명이 차지하는 비율이 <strong>0.0001% 미만</strong>이라는 의미입니다.',
+              },
+              {
+                q: '빅뱅 이후 첫 별은 언제 만들어졌나요?',
+                a: '빅뱅 이후 약 2억 년 후에 최초의 별들이 핵융합을 시작했습니다. 코스믹 캘린더로는 <strong>1월 10일</strong> 정도입니다. 그 이전(빅뱅 ~ 38만 년)은 우주가 너무 뜨거워 빛이 자유롭게 다닐 수 없는 "암흑 시대"였습니다. 약 38만 년 후 우주가 충분히 식어 최초의 원자(수소·헬륨)가 형성되었고, 이후 중력으로 모여 첫 별들이 빛나기 시작했습니다.',
+              },
+              {
+                q: '코스믹 캘린더의 사건 시점은 정확한가요?',
+                a: '현재 과학계의 추정치를 기반으로 하며, <strong>새로운 발견에 따라 조정될 수 있습니다</strong>. 우주 나이는 한때 100억 년으로 추정되었으나 현재는 약 137~138억 년으로 정착되었습니다. 지구 나이도 정확한 측정 기술로 45.4억 년이 정설입니다. 본 도구는 NASA, ESA(유럽 우주국), 국제 천문학 연합(IAU) 등의 공식 데이터를 참조했습니다.',
+              },
+            ]
 
 export default function CosmicCalendarPage() {
   return (
@@ -236,29 +260,9 @@ export default function CosmicCalendarPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '코스믹 캘린더는 누가 만들었나요?',
-                a: '미국 천문학자 <strong>칼 세이건(Carl Sagan, 1934-1996)</strong>이 1977년 책 "에덴의 용"에서 처음 제안했습니다. 이후 그의 다큐멘터리 <strong>"코스모스(Cosmos, 1980)"</strong>에서 시각화되어 전 세계적으로 알려진 개념이 되었습니다. 138억 년의 우주 역사를 1년으로 압축해 일반인이 이해할 수 있도록 한 천재적 발상입니다.',
-              },
-              {
-                q: '코스믹 캘린더에서 1초는 실제 몇 년인가요?',
-                a: '코스믹 캘린더에서 1초는 실제 <strong>약 437.5년</strong>에 해당합니다. 따라서 인류 문명 12,000년은 코스믹 캘린더로 약 27.5초이며, 산업혁명 이후 250년은 약 0.57초, 인터넷 시대 30년은 약 0.07초에 불과합니다. <strong>당신의 30년 인생도 코스믹 캘린더로는 약 0.07초</strong>입니다.',
-              },
-              {
-                q: '인류는 코스믹 캘린더의 어디에 위치하나요?',
-                a: '현생 인류(호모 사피엔스)는 <strong>12월 31일 23시 48분경</strong> 등장했습니다. 마지막 12분에 모든 인류 역사가 압축되어 있다는 뜻입니다. 특히 문자·문명·과학·인터넷 모든 것이 마지막 14초 안에 발생했습니다. 이는 우주 138억 년 중 인류 문명이 차지하는 비율이 <strong>0.0001% 미만</strong>이라는 의미입니다.',
-              },
-              {
-                q: '빅뱅 이후 첫 별은 언제 만들어졌나요?',
-                a: '빅뱅 이후 약 2억 년 후에 최초의 별들이 핵융합을 시작했습니다. 코스믹 캘린더로는 <strong>1월 10일</strong> 정도입니다. 그 이전(빅뱅 ~ 38만 년)은 우주가 너무 뜨거워 빛이 자유롭게 다닐 수 없는 "암흑 시대"였습니다. 약 38만 년 후 우주가 충분히 식어 최초의 원자(수소·헬륨)가 형성되었고, 이후 중력으로 모여 첫 별들이 빛나기 시작했습니다.',
-              },
-              {
-                q: '코스믹 캘린더의 사건 시점은 정확한가요?',
-                a: '현재 과학계의 추정치를 기반으로 하며, <strong>새로운 발견에 따라 조정될 수 있습니다</strong>. 우주 나이는 한때 100억 년으로 추정되었으나 현재는 약 137~138억 년으로 정착되었습니다. 지구 나이도 정확한 측정 기술로 45.4억 년이 정설입니다. 본 도구는 NASA, ESA(유럽 우주국), 국제 천문학 연합(IAU) 등의 공식 데이터를 참조했습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

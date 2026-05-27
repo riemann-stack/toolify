@@ -3,6 +3,7 @@ import SciUnitsClient from './SciUnitsClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sci-units',
@@ -18,6 +19,14 @@ export const metadata = buildMetadata({
 
 const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+
+const FAQ_LD = [
+              { q: '과학적 표기와 공학적 표기의 차이는?', a: '둘 다 가수 × 10ⁿ 형태지만, <strong>과학적 표기</strong>는 가수를 1 이상 10 미만으로 두고(예: 1.5×10⁻⁶), <strong>공학적 표기</strong>는 지수를 항상 3의 배수로 맞춥니다(예: 15×10⁻⁶ → 보통 1.5×10⁻⁶ µ 단위와 대응). 공학적 표기는 SI 접두어(k·M·µ·n)와 바로 짝지어집니다.' },
+              { q: '옹스트롬(Å)과 나노미터(nm)는 어떻게 변환하나요?', a: '<strong>1 Å = 0.1 nm = 10⁻¹⁰ m</strong>입니다. 즉 10 Å = 1 nm. 결정학·반도체·분광학에서 원자 단위 길이를 표현할 때 Å를 쓰고, 빛 파장은 nm를 주로 씁니다(가시광선 약 380~750 nm = 3,800~7,500 Å).' },
+              { q: 'eV를 줄(J)로 바꾸면?', a: '<strong>1 eV = 1.602176634 × 10⁻¹⁹ J</strong>입니다. 1 eV는 전자 하나가 1V 전위차를 지날 때 얻는 에너지로 정의됩니다. keV(10³)·MeV(10⁶)·GeV(10⁹)·TeV(10¹²)는 각각 X선·핵반응·입자가속기·LHC 스케일 에너지에 쓰입니다.' },
+              { q: '이 도구는 일반 단위 변환기와 무엇이 다른가요?', a: '일반 <a href="/tools/unit/converter" style="color:#0D9488;text-decoration:underline">단위 변환기</a>는 평·근·인치 같은 생활 단위 중심입니다. 본 도구는 <strong>지수 표기 변환 + 옹스트롬·광년·eV 같은 과학·천문 스케일 단위 + 물리 상수</strong>에 특화되어 있습니다.' },
+              { q: '물리 상수 값은 믿을 수 있나요?', a: 'CODATA 권장값 및 2019년 SI 재정의 기준입니다. c(빛의 속도)·h(플랑크)·e(기본 전하)·k_B(볼츠만)·N_A(아보가드로)는 <strong>정의 상수(정확값)</strong>이고, G(만유인력)·전자 질량 등은 측정값이라 불확도가 있습니다.' },
+            ]
 
 export default function SciUnitsPage() {
   return (
@@ -118,14 +127,9 @@ export default function SciUnitsPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {[
-              { q: '과학적 표기와 공학적 표기의 차이는?', a: '둘 다 가수 × 10ⁿ 형태지만, <strong>과학적 표기</strong>는 가수를 1 이상 10 미만으로 두고(예: 1.5×10⁻⁶), <strong>공학적 표기</strong>는 지수를 항상 3의 배수로 맞춥니다(예: 15×10⁻⁶ → 보통 1.5×10⁻⁶ µ 단위와 대응). 공학적 표기는 SI 접두어(k·M·µ·n)와 바로 짝지어집니다.' },
-              { q: '옹스트롬(Å)과 나노미터(nm)는 어떻게 변환하나요?', a: '<strong>1 Å = 0.1 nm = 10⁻¹⁰ m</strong>입니다. 즉 10 Å = 1 nm. 결정학·반도체·분광학에서 원자 단위 길이를 표현할 때 Å를 쓰고, 빛 파장은 nm를 주로 씁니다(가시광선 약 380~750 nm = 3,800~7,500 Å).' },
-              { q: 'eV를 줄(J)로 바꾸면?', a: '<strong>1 eV = 1.602176634 × 10⁻¹⁹ J</strong>입니다. 1 eV는 전자 하나가 1V 전위차를 지날 때 얻는 에너지로 정의됩니다. keV(10³)·MeV(10⁶)·GeV(10⁹)·TeV(10¹²)는 각각 X선·핵반응·입자가속기·LHC 스케일 에너지에 쓰입니다.' },
-              { q: '이 도구는 일반 단위 변환기와 무엇이 다른가요?', a: '일반 <a href="/tools/unit/converter" style="color:#0D9488;text-decoration:underline">단위 변환기</a>는 평·근·인치 같은 생활 단위 중심입니다. 본 도구는 <strong>지수 표기 변환 + 옹스트롬·광년·eV 같은 과학·천문 스케일 단위 + 물리 상수</strong>에 특화되어 있습니다.' },
-              { q: '물리 상수 값은 믿을 수 있나요?', a: 'CODATA 권장값 및 2019년 SI 재정의 기준입니다. c(빛의 속도)·h(플랑크)·e(기본 전하)·k_B(볼츠만)·N_A(아보가드로)는 <strong>정의 상수(정확값)</strong>이고, G(만유인력)·전자 질량 등은 측정값이라 불확도가 있습니다.' },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ ...card, padding: '12px 16px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />

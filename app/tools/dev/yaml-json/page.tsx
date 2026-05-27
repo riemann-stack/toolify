@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import YamlJsonClient from './YamlJsonClient'
 import { buildMetadata } from '@/lib/seo'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/yaml-json',
@@ -65,6 +66,19 @@ const codeStyle: React.CSSProperties = {
   fontSize: '12.5px',
   color: '#0EA5E9',
 }
+
+const FAQ_LD = [
+  { "q":"YAML과 JSON 어떤 차이가 있나요?","a":"둘 다 같은 데이터 구조(객체·배열·문자열·숫자·boolean·null)를 표현하지만 문법과 용도가 다릅니다. • YAML: 들여쓰기 기반·주석 지원·앵커/별칭·멀티 도큐먼트 — 사람이 편집하는 설정 파일에 적합 (K8s·CI·Spring) • JSON: 중괄호·대괄호 기반·문자열 필수 따옴표·주석 미지원 — 기계가 처리하는 API·데이터 교환에 표준 모든 JSON은 유효한 YAML이지만 (YAML은 JSON 슈퍼셋), 그 반대는 아닙니다." },
+  { "q":"주석은 왜 사라지나요?","a":"JSON 표준이 주석을 지원하지 않기 때문입니다 (RFC 8259). 모든 JSON 파서는 주석을 거부하므로, YAML → JSON 변환 시 주석이 자동 제거됩니다. 역변환(JSON → YAML) 시 원본 주석은 복원할 수 없어요. 주석 보존이 필요한 경우: • 원본 YAML을 그대로 사용 (변환하지 않기) • JSONC (JSON with Comments) 사용 — VSCode 설정·tsconfig.json에서 사용 • JSON5 — 주석·후행 콤마·작은따옴표 허용 (별도 파서 필요) 본 도구는 변환 시 주석 발견을 ⚠️ 오렌지 박스로 안내합니다." },
+  { "q":"YAML 들여쓰기는 탭 vs 공백?","a":"YAML은 탭 문자를 허용하지 않습니다 (공백만 사용). 탭을 쓰면 파싱 오류가 발생해요. • 표준: 2 spaces (DevOps·K8s·Docker), 4 spaces (Java/Spring 일부) • 한 파일 내 통일 필수 — 2/4 혼용은 들여쓰기 오류 에디터 설정: • VS Code: , • IntelliJ: Settings → Editor → Code Style → YAML → Tab and Indents 본 도구는 입력 타입 무관(탭/공백) 파싱하지만, 출력은 공백 2/4만 사용 (YAML 표준 준수)." },
+  { "q":"K8s 매니페스트의 ---는 무엇인가요?","a":"YAML 멀티 도큐먼트 구분자입니다. 한 파일에 여러 YAML 도큐먼트를 담을 때 사용해요. K8s에서는 Deployment + Service + ConfigMap을 한 파일에 묶을 때 자주 씁니다: 본 도구는 JSON 배열로 변환: [{``}, {``}]. 멀티 도큐먼트 발견 시 ⚠️ 자동 안내합니다." },
+  { "q":"yes/no가 자동으로 boolean이 되는데 어떻게?","a":"YAML 1.1의 악명 높은 함정입니다. yes·no·on·off·true·false 모두 자동으로 boolean으로 해석돼요. 실제 사고 사례: • 노르웨이 ISO 코드 NO → false로 해석되어 데이터 깨짐 • Docker 환경 변수 SETTING: yes → true로 해석 해결: • YAML 1.2 사용 — boolean은 true/false만 (yes/no는 문자열) • 따옴표로 감싸기 — 본 도구는 JSON_SCHEMA (YAML 1.2 호환)을 기본 사용 → yes/no를 문자열로 유지합니다. CORE_SCHEMA(1.1) 옵션은 호환성 위해 미제공." },
+  { "q":"앵커(&)와 별칭(*)이 무엇인가요?","a":"YAML의 참조 메커니즘입니다. 같은 데이터를 여러 곳에서 재사용해 중복을 줄여요. 예시: {`defaults: &defaults timeout: 30 retries: 3 prod: JSON 변환 시: 앵커가 펼쳐져 모든 곳에 데이터가 복사됩니다 (참조 관계 손실). 역변환 시 자동 앵커 생성은 본 도구에서 끔(noRefs: true)으로 두어 깔끔한 YAML 출력을 보장합니다." },
+  { "q":"application.yml과 application.yaml 차이?","a":"완전히 동일합니다. 단순히 파일 확장자만 다를 뿐 내용·문법·동작 모두 같아요. • .yml: 옛 표기 (YAML 1.0 시대), Windows 8.3 파일 시스템 호환 목적 • .yaml: 공식 권장 확장자 (yaml.org·YAML 스펙) Spring Boot 우선순위: 같은 디렉토리에 두 개 다 있으면 application.yaml이 우선 적용 (Spring Boot 2.5+). 새 프로젝트에는 .yaml 권장. 본 도구의 다운로드 파일명은 .yaml 사용." },
+  { "q":"변환 결과가 원본보다 길어요","a":"YAML → JSON: 일반적으로 JSON이 약 10~30% 길어집니다. 이유: • 키마다 따옴표 ( → ) • 중괄호·대괄호 추가 • 콤마 구분자 추가 • 들여쓰기 (compact 모드는 한 줄로 줄임) JSON → YAML: 일반적으로 YAML이 짧아집니다 (괄호·따옴표 제거). 파일 크기가 중요하면 JSON Compact 모드(한 줄)를 사용하세요. 옵션 패널의 \"JSON 출력: Compact\"." },
+  { "q":"한국어·이모지가 깨져요","a":"본 도구는 UTF-8 인코딩을 사용해 한국어·이모지·중국어·일본어 모두 정상 처리됩니다. 깨짐이 발생하면 다음을 확인하세요: 1. 원본 파일 인코딩 — UTF-8 (BOM 없음) 권장. EUC-KR·CP949 변환 후 사용 2. 다운로드 후 열 때 — 메모장 대신 VS Code·Notepad++ 사용 3. Windows 명령 프롬프트 — chcp 65001로 UTF-8 설정 4. 특수 문자 — 따옴표로 감싸기 () 본 도구의 다운로드 파일은 항상 UTF-8 BOM 없이 저장됩니다." },
+  { "q":"본 도구는 입력 데이터를 서버에 보내나요?","a":"아니요. 모든 처리가 브라우저(클라이언트)에서 수행됩니다. • 변환·검증·트리 미리보기 모두 js-yaml(MIT 라이선스, ~50KB) 라이브러리로 브라우저 내 처리 • 입력 데이터는 localStorage에만 저장 (재방문 편의), 외부 전송 없음 • Network 탭으로 확인 가능 — 변환 시 어떤 fetch/XHR도 발생하지 않음 • 다운로드는 Blob URL로 브라우저 내 처리 다만: 공용 PC·공유 기기에서 K8s 시크릿·Spring 비밀번호 등을 다룰 때는 사용 후 브라우저 캐시·localStorage를 정리하세요. 개발자 도구 → Application → Local Storage에서 youtil_yaml_json_v1 키 삭제 가능." }
+]
 
 export default function YamlJsonPage() {
   return (
@@ -203,6 +217,7 @@ export default function YamlJsonPage() {
 
       {/* FAQ */}
       <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+      <FaqJsonLd items={FAQ_LD} />
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. YAML과 JSON 어떤 차이가 있나요?</summary>

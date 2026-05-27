@@ -2,6 +2,7 @@ import Link from 'next/link'
 import GripSizeClient from './GripSizeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/grip-size',
@@ -69,6 +70,15 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"그립 사이즈를 잘 모르겠으면 큰 걸로 가야 하나요, 작은 걸로 가야 하나요?","a":"의심스러우면 작은 쪽으로 가세요. 그 후 오버그립 1~2겹으로 미세 조정이 가능합니다. 반대로 너무 큰 그립을 산 경우, 손잡이를 깎거나 갈아내는 방법밖에 없어 사실상 불가능합니다. 테니스라면 L2~L3, 골프라면 표준, 배드민턴이라면 G5에서 출발하세요." },
+  { "q":"테니스에서 L1과 L2 중 고민될 때 어떻게 선택?","a":"스타일과 부상 이력으로 결정합니다. L1 추천: 손목 스냅 활용·톱스핀 위주·검지를 그립에서 떼는 동양식 그립 L2 추천: 발리·서브가 중요·테니스 엘보 이력 있음·플랫샷 위주 잘 모르겠으면 L2로 시작 + 오버그립으로 보정이 안전합니다." },
+  { "q":"골프 그립을 미드사이즈로 바꾸면 정말 슬라이스가 줄어드나요?","a":"일부 골퍼에게 효과적입니다. 미드사이즈 그립은 손목 회전을 약간 제한하여, 다운스윙에서 손목이 과하게 닫히는(closed) 골퍼의 슬라이스를 줄여줄 수 있습니다. 반대로 손목 회전이 부족해서 슬라이스가 나는 골퍼는 미드사이즈로 가면 더 악화됩니다. 티칭프로에게 스윙 진단을 받은 후 결정하는 게 안전합니다." },
+  { "q":"배드민턴에서 G4 + 오버그립 2겹과 G3 단독은 동일한가요?","a":"거의 비슷하지만 미세하게 다릅니다. 오버그립 2겹은 G3와 비슷한 둘레가 되지만, 오버그립은 표면 마찰력 ↑ (땀 잡기 좋음) G3 단독은 오각형 모서리 감 ↑ (그립 위치 인식 좋음) 오버그립은 마모되면 교체 — 한국에서 G4 + 오버그립이 압도적 다수" },
+  { "q":"평생 같은 그립 사이즈를 써도 되나요?","a":"일반적으로 OK이지만, 다음 경우 재측정하세요: 10대~20대 초반: 손이 아직 자라는 중 — 매년 측정 관절염·손목 통증 시작: 한 단계 굵게 (압력 분산 효과) 체중·근육 큰 변화: 손 크기는 거의 안 변하지만 그립 감이 달라질 수 있음 고령: 손가락 굴곡 감소 → 약간 굵게 권장" },
+  { "q":"본 도구의 추천은 얼마나 정확한가요?","a":"출발점으로 충분합니다. 평균 손 크기 데이터를 기반으로 약 80% 사용자에게 적합한 권장. 그러나: 손가락 비율·관절 두께 등 개인차 큼 스타일(스핀 vs 플랫·정타 vs 손목 활용)에 따라 ±1단계 차이 가능 땀 양·기온 등도 영향 매장 시타와 함께 최종 결정을 권장합니다." }
+]
 
 export default function GripSizePage() {
   return (
@@ -230,6 +240,7 @@ export default function GripSizePage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 그립 사이즈를 잘 모르겠으면 큰 걸로 가야 하나요, 작은 걸로 가야 하나요?</summary>

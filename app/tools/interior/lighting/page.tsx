@@ -3,6 +3,7 @@ import LightingClient from './LightingClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '공간별 권장 루멘과 조명 개수 + W↔lm 환산·색온도 가이드로 침실·거실·주방 조명 설계 완성.',
   keywords: ['조명밝기계산기', '방조명루멘', '거실조명개수', 'W루멘환산', '조명개수계산', 'LED루멘', '색온도가이드', '루멘계산'],
 })
+
+const FAQ_LD = [
+              {
+                q: '거실에는 몇 와트 LED 조명이 필요한가요?',
+                a: '거실 면적과 천장 높이에 따라 다릅니다. 일반적으로 <strong>5평(16.5㎡) 거실은 LED 30~50W (3,000~5,000 lm)</strong>가 적정합니다. 10평 거실은 LED 50~75W가 권장되며, 메인 조명 1개 + 보조 조명 2~3개 조합이 좋습니다. 한국 KS 기준 거실 권장 밝기는 200~400 lux이며, 너무 밝으면 눈이 피로하고 너무 어두우면 활동에 지장이 있습니다.',
+              },
+              {
+                q: '백열전구 60W는 LED 몇 W와 같은 밝기인가요?',
+                a: '백열전구 60W는 약 <strong>720 루멘</strong>이며, LED로는 약 <strong>7~8W</strong>에 해당합니다. LED는 같은 밝기를 내는 데 백열전구의 약 1/8 전력만 사용해 매우 효율적입니다. 예를 들어 60W 백열전구를 7W LED로 교체하면 연간 전기료를 약 <strong>80% 절감</strong>할 수 있고 수명도 25~40배 깁니다.',
+              },
+              {
+                q: '침실은 왜 다른 공간보다 어둡게 권장되나요?',
+                a: '침실은 휴식과 수면을 위한 공간이라 <strong>100~200 lux의 낮은 밝기</strong>가 권장됩니다. 너무 밝으면 멜라토닌 분비가 억제되어 수면에 방해됩니다. 특히 자기 전 1~2시간 전부터는 색온도가 낮은 <strong>전구색(2700K)</strong> 조명을 사용하면 자연스러운 수면 유도에 도움이 됩니다.',
+              },
+              {
+                q: '색온도 3000K, 4000K, 6500K 중 어떤 걸 선택해야 하나요?',
+                a: '공간 용도에 따라 선택합니다.<br/>• <strong>2700~3000K(전구색)</strong>: 침실·다이닝·휴식 공간 — 따뜻하고 편안<br/>• <strong>3500~4000K(주백색)</strong>: 거실·복도·욕실 — 자연스러운 일상<br/>• <strong>5000~6500K(주광색)</strong>: 서재·주방·작업실 — 집중력·정밀 작업<br/>한 공간에 색온도 조절 가능한 LED를 사용하면 시간대별로 변경할 수 있어 유용합니다.',
+              },
+              {
+                q: '간접 조명은 메인 조명보다 더 밝게 해야 하나요?',
+                a: '네. <strong>간접 조명은 빛이 벽이나 천장에 반사되어 사용</strong>되므로 직접 조명에 비해 약 50% 더 많은 루멘이 필요합니다. 예를 들어 거실 4,950 lm이 필요한 경우 간접 조명만으로는 약 <strong>7,400 lm</strong>이 필요합니다. 가장 좋은 방법은 메인(직접) + 보조(간접) 혼합 조명을 구성해 균일한 밝기와 분위기를 동시에 얻는 것입니다.',
+              },
+            ]
 
 export default function LightingPage() {
   return (
@@ -248,29 +272,9 @@ export default function LightingPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '거실에는 몇 와트 LED 조명이 필요한가요?',
-                a: '거실 면적과 천장 높이에 따라 다릅니다. 일반적으로 <strong>5평(16.5㎡) 거실은 LED 30~50W (3,000~5,000 lm)</strong>가 적정합니다. 10평 거실은 LED 50~75W가 권장되며, 메인 조명 1개 + 보조 조명 2~3개 조합이 좋습니다. 한국 KS 기준 거실 권장 밝기는 200~400 lux이며, 너무 밝으면 눈이 피로하고 너무 어두우면 활동에 지장이 있습니다.',
-              },
-              {
-                q: '백열전구 60W는 LED 몇 W와 같은 밝기인가요?',
-                a: '백열전구 60W는 약 <strong>720 루멘</strong>이며, LED로는 약 <strong>7~8W</strong>에 해당합니다. LED는 같은 밝기를 내는 데 백열전구의 약 1/8 전력만 사용해 매우 효율적입니다. 예를 들어 60W 백열전구를 7W LED로 교체하면 연간 전기료를 약 <strong>80% 절감</strong>할 수 있고 수명도 25~40배 깁니다.',
-              },
-              {
-                q: '침실은 왜 다른 공간보다 어둡게 권장되나요?',
-                a: '침실은 휴식과 수면을 위한 공간이라 <strong>100~200 lux의 낮은 밝기</strong>가 권장됩니다. 너무 밝으면 멜라토닌 분비가 억제되어 수면에 방해됩니다. 특히 자기 전 1~2시간 전부터는 색온도가 낮은 <strong>전구색(2700K)</strong> 조명을 사용하면 자연스러운 수면 유도에 도움이 됩니다.',
-              },
-              {
-                q: '색온도 3000K, 4000K, 6500K 중 어떤 걸 선택해야 하나요?',
-                a: '공간 용도에 따라 선택합니다.<br/>• <strong>2700~3000K(전구색)</strong>: 침실·다이닝·휴식 공간 — 따뜻하고 편안<br/>• <strong>3500~4000K(주백색)</strong>: 거실·복도·욕실 — 자연스러운 일상<br/>• <strong>5000~6500K(주광색)</strong>: 서재·주방·작업실 — 집중력·정밀 작업<br/>한 공간에 색온도 조절 가능한 LED를 사용하면 시간대별로 변경할 수 있어 유용합니다.',
-              },
-              {
-                q: '간접 조명은 메인 조명보다 더 밝게 해야 하나요?',
-                a: '네. <strong>간접 조명은 빛이 벽이나 천장에 반사되어 사용</strong>되므로 직접 조명에 비해 약 50% 더 많은 루멘이 필요합니다. 예를 들어 거실 4,950 lm이 필요한 경우 간접 조명만으로는 약 <strong>7,400 lm</strong>이 필요합니다. 가장 좋은 방법은 메인(직접) + 보조(간접) 혼합 조명을 구성해 균일한 밝기와 분위기를 동시에 얻는 것입니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

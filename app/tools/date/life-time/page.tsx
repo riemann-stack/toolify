@@ -3,6 +3,7 @@ import LifeTimeClient from './LifeTimeClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/date/life-time',
@@ -11,6 +12,29 @@ export const metadata = buildMetadata({
     '기대수명 기준 살아온 시간·앞으로의 시간을 행동 가치(독서·운동·여행)로 환산해 시간의 무게를 시각화.',
   keywords: ['생애시간계산기', '메멘토모리', '인생진행률', '기대수명계산', '시간가치환산', '인생시계', '하루의가치'],
 })
+
+const FAQ_LD = [
+              {
+                q: '이 계산기가 실제 수명을 예측하나요?',
+                a: '<strong>아니요.</strong> 본 도구는 한국인 평균 기대수명을 기준으로 시간을 환산해 보여주는 참고용 도구입니다. 실제 수명은 유전·생활습관·환경에 따라 크게 달라집니다. 본 도구는 시간 인식과 동기부여를 위한 가이드일 뿐 의학적 예측이 아닙니다.',
+              },
+              {
+                q: '메멘토 모리가 무엇인가요?',
+                a: '라틴어로 <strong>"죽음을 기억하라"</strong>는 뜻이며 고대 로마 시대부터 시간의 유한성을 인식하고 현재를 더 충실히 살기 위한 철학적 개념으로 사용되어 왔습니다. 본 도구는 이 전통을 따르되, 무거움보다 동기부여에 초점을 맞춥니다.',
+              },
+              {
+                q: '매일 30분이 정말 큰 차이를 만드나요?',
+                a: '네. 매일 30분을 5년간 지속하면 약 <strong>912시간</strong>이 누적됩니다. 이는 한 분야의 중급자 수준에 충분한 시간이며, 매일 1시간씩 10년이면 약 3,650시간으로 한 분야의 전문가급 시간입니다. <strong>"복리의 힘"</strong>은 시간에도 적용됩니다.',
+              },
+              {
+                q: '기대수명을 직접 입력할 수 있나요?',
+                a: '네. 한국 남성·여성 평균 외에도 본인이 원하는 값을 직접 입력할 수 있습니다. 예를 들어 100세를 입력하면 100세 시대를 가정한 시간 환산 결과를 볼 수 있습니다. 다만 이 값은 모두 가정일 뿐이며 실제 예측은 아닙니다.',
+              },
+              {
+                q: '이 도구가 무겁게 느껴진다면 어떻게 해야 하나요?',
+                a: '<strong>"성장 모드"</strong>를 선택하시면 살아온 시간의 성취와 앞으로 가능한 시간에 초점을 맞춘 부드러운 톤으로 결과를 볼 수 있습니다. 도구 사용이 부담스럽다면 언제든 닫으셔도 좋습니다. 심리적 어려움이 지속되면 <strong>자살예방상담전화 1393</strong>에서 24시간 무료 상담을 받으실 수 있습니다.',
+              },
+            ]
 
 export default function LifeTimePage() {
   return (
@@ -197,29 +221,9 @@ export default function LifeTimePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '이 계산기가 실제 수명을 예측하나요?',
-                a: '<strong>아니요.</strong> 본 도구는 한국인 평균 기대수명을 기준으로 시간을 환산해 보여주는 참고용 도구입니다. 실제 수명은 유전·생활습관·환경에 따라 크게 달라집니다. 본 도구는 시간 인식과 동기부여를 위한 가이드일 뿐 의학적 예측이 아닙니다.',
-              },
-              {
-                q: '메멘토 모리가 무엇인가요?',
-                a: '라틴어로 <strong>"죽음을 기억하라"</strong>는 뜻이며 고대 로마 시대부터 시간의 유한성을 인식하고 현재를 더 충실히 살기 위한 철학적 개념으로 사용되어 왔습니다. 본 도구는 이 전통을 따르되, 무거움보다 동기부여에 초점을 맞춥니다.',
-              },
-              {
-                q: '매일 30분이 정말 큰 차이를 만드나요?',
-                a: '네. 매일 30분을 5년간 지속하면 약 <strong>912시간</strong>이 누적됩니다. 이는 한 분야의 중급자 수준에 충분한 시간이며, 매일 1시간씩 10년이면 약 3,650시간으로 한 분야의 전문가급 시간입니다. <strong>"복리의 힘"</strong>은 시간에도 적용됩니다.',
-              },
-              {
-                q: '기대수명을 직접 입력할 수 있나요?',
-                a: '네. 한국 남성·여성 평균 외에도 본인이 원하는 값을 직접 입력할 수 있습니다. 예를 들어 100세를 입력하면 100세 시대를 가정한 시간 환산 결과를 볼 수 있습니다. 다만 이 값은 모두 가정일 뿐이며 실제 예측은 아닙니다.',
-              },
-              {
-                q: '이 도구가 무겁게 느껴진다면 어떻게 해야 하나요?',
-                a: '<strong>"성장 모드"</strong>를 선택하시면 살아온 시간의 성취와 앞으로 가능한 시간에 초점을 맞춘 부드러운 톤으로 결과를 볼 수 있습니다. 도구 사용이 부담스럽다면 언제든 닫으셔도 좋습니다. 심리적 어려움이 지속되면 <strong>자살예방상담전화 1393</strong>에서 24시간 무료 상담을 받으실 수 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

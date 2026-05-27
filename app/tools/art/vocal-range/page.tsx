@@ -2,6 +2,7 @@ import Link from 'next/link'
 import VocalRangeClient from './VocalRangeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/vocal-range',
@@ -14,6 +15,37 @@ export const metadata = buildMetadata({
     '노래방 키 추천', '내 음역대', '음정 감지', 'pitch detection',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: '본 도구의 정확도는 어느 정도인가요?',
+                a: '<strong>참고용·재미용 도구</strong>입니다. ±2~3반음 정도의 오차가 있을 수 있으며, 마이크 품질·주변 소음·발성 안정성에 크게 영향을 받습니다. 정확한 음역대 평가는 보컬 트레이너의 청각 평가와 전문 장비(예: VoceVista) 측정을 권장합니다. 본 도구는 트레이닝 효과를 <strong>상대적으로 추적</strong>(같은 환경에서 반복 측정)하는 데 더 유용합니다.',
+              },
+              {
+                q: '마이크 권한이 안 잡혀요.',
+                a: '브라우저별 확인 — <strong>Chrome/Edge</strong>: 주소창 자물쇠 아이콘 → 마이크 [허용] / <strong>Safari (iOS/Mac)</strong>: 시스템 환경설정 → 보안 및 개인정보보호 → 마이크 / <strong>Firefox</strong>: 주소창 마이크 아이콘 클릭. 권한 거부 후 다시 허용 시에는 페이지를 새로고침해야 합니다. <strong>HTTPS 환경</strong>이 아니면 (예: localhost는 OK) 마이크 권한이 거부됩니다.',
+              },
+              {
+                q: '진성과 가성의 차이는?',
+                a: '<strong>진성(흉성)</strong>은 성대 전체가 진동하는 발성으로 가슴에서 울림이 느껴지며 굵고 안정적인 소리가 납니다. <strong>가성(두성)</strong>은 성대 가장자리만 진동하는 발성으로 머리에서 울림이 느껴지며 가볍고 부드러운 소리가 납니다. 본 도구는 두 발성의 자동 구분이 어려우므로 <strong>측정 단계를 분리</strong>해 사용자가 직접 진성·가성 최고음을 따로 기록합니다.',
+              },
+              {
+                q: '측정 결과가 매번 다른 이유?',
+                a: '여러 요인이 있습니다 — ① <strong>워밍업 상태</strong>(아침 vs 저녁), ② <strong>발성 안정성</strong>(긴장·피로), ③ <strong>마이크 위치·환경 소음</strong>, ④ <strong>측정 알고리즘 한계</strong>(±2~3반음). 같은 환경·같은 시간대(예: 매일 저녁 워밍업 후)에 반복 측정하면 변화 추적이 더 정확합니다.',
+              },
+              {
+                q: '음역대를 정말 늘릴 수 있나요?',
+                a: '<strong>네, 가능합니다.</strong> 보컬 트레이닝 연구에 따르면 꾸준한 훈련으로 6개월~1년에 2~5반음 확장이 일반적입니다. 다만 — ① 유전·신체적 한계 존재, ② 무리한 훈련은 성대 손상 위험, ③ 전문 트레이너 지도가 가장 효과적. 본 도구의 [측정 기록]으로 변화를 추적하면 동기부여에 도움이 됩니다.',
+              },
+              {
+                q: '내 음성 데이터가 서버로 전송되나요?',
+                a: '<strong>아니요, 절대 전송되지 않습니다.</strong> 모든 마이크 입력은 브라우저 내 Web Audio API + pitchy 라이브러리로 처리되며, 주파수·MIDI 값만 추출됩니다. 측정 기록도 사용자 브라우저 localStorage에만 저장되며 서버에 전송되지 않습니다. 마이크 권한은 [정지] 버튼으로 즉시 해제할 수 있습니다.',
+              },
+              {
+                q: '노래방에서 키 +1, -1은 무엇을 의미하나요?',
+                a: '노래방 키 ±1은 <strong>1반음(semitone)</strong>을 의미합니다. +1 = 한 음 올림(C → C#), -1 = 한 음 내림(C → B). 본 도구의 [노래 매칭]은 ±6 키 범위에서 사용자 음역에 맞는 키를 자동 계산합니다. 일반적으로 ±1~2 키 조정은 자연스럽지만 ±5 이상은 곡 분위기가 크게 달라질 수 있습니다.',
+              },
+            ]
 
 export default function VocalRangePage() {
   return (
@@ -164,37 +196,9 @@ export default function VocalRangePage() {
         {/* 8. FAQ */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '본 도구의 정확도는 어느 정도인가요?',
-                a: '<strong>참고용·재미용 도구</strong>입니다. ±2~3반음 정도의 오차가 있을 수 있으며, 마이크 품질·주변 소음·발성 안정성에 크게 영향을 받습니다. 정확한 음역대 평가는 보컬 트레이너의 청각 평가와 전문 장비(예: VoceVista) 측정을 권장합니다. 본 도구는 트레이닝 효과를 <strong>상대적으로 추적</strong>(같은 환경에서 반복 측정)하는 데 더 유용합니다.',
-              },
-              {
-                q: '마이크 권한이 안 잡혀요.',
-                a: '브라우저별 확인 — <strong>Chrome/Edge</strong>: 주소창 자물쇠 아이콘 → 마이크 [허용] / <strong>Safari (iOS/Mac)</strong>: 시스템 환경설정 → 보안 및 개인정보보호 → 마이크 / <strong>Firefox</strong>: 주소창 마이크 아이콘 클릭. 권한 거부 후 다시 허용 시에는 페이지를 새로고침해야 합니다. <strong>HTTPS 환경</strong>이 아니면 (예: localhost는 OK) 마이크 권한이 거부됩니다.',
-              },
-              {
-                q: '진성과 가성의 차이는?',
-                a: '<strong>진성(흉성)</strong>은 성대 전체가 진동하는 발성으로 가슴에서 울림이 느껴지며 굵고 안정적인 소리가 납니다. <strong>가성(두성)</strong>은 성대 가장자리만 진동하는 발성으로 머리에서 울림이 느껴지며 가볍고 부드러운 소리가 납니다. 본 도구는 두 발성의 자동 구분이 어려우므로 <strong>측정 단계를 분리</strong>해 사용자가 직접 진성·가성 최고음을 따로 기록합니다.',
-              },
-              {
-                q: '측정 결과가 매번 다른 이유?',
-                a: '여러 요인이 있습니다 — ① <strong>워밍업 상태</strong>(아침 vs 저녁), ② <strong>발성 안정성</strong>(긴장·피로), ③ <strong>마이크 위치·환경 소음</strong>, ④ <strong>측정 알고리즘 한계</strong>(±2~3반음). 같은 환경·같은 시간대(예: 매일 저녁 워밍업 후)에 반복 측정하면 변화 추적이 더 정확합니다.',
-              },
-              {
-                q: '음역대를 정말 늘릴 수 있나요?',
-                a: '<strong>네, 가능합니다.</strong> 보컬 트레이닝 연구에 따르면 꾸준한 훈련으로 6개월~1년에 2~5반음 확장이 일반적입니다. 다만 — ① 유전·신체적 한계 존재, ② 무리한 훈련은 성대 손상 위험, ③ 전문 트레이너 지도가 가장 효과적. 본 도구의 [측정 기록]으로 변화를 추적하면 동기부여에 도움이 됩니다.',
-              },
-              {
-                q: '내 음성 데이터가 서버로 전송되나요?',
-                a: '<strong>아니요, 절대 전송되지 않습니다.</strong> 모든 마이크 입력은 브라우저 내 Web Audio API + pitchy 라이브러리로 처리되며, 주파수·MIDI 값만 추출됩니다. 측정 기록도 사용자 브라우저 localStorage에만 저장되며 서버에 전송되지 않습니다. 마이크 권한은 [정지] 버튼으로 즉시 해제할 수 있습니다.',
-              },
-              {
-                q: '노래방에서 키 +1, -1은 무엇을 의미하나요?',
-                a: '노래방 키 ±1은 <strong>1반음(semitone)</strong>을 의미합니다. +1 = 한 음 올림(C → C#), -1 = 한 음 내림(C → B). 본 도구의 [노래 매칭]은 ±6 키 범위에서 사용자 음역에 맞는 키를 자동 계산합니다. 일반적으로 ±1~2 키 조정은 자연스럽지만 ±5 이상은 곡 분위기가 크게 달라질 수 있습니다.',
-              },
-            ].map((faq, i) => (
+            {FAQ_LD.map((faq, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {faq.q}

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ScaleClient from './ScaleClient'
 import { buildMetadata } from '@/lib/seo'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/scale',
@@ -47,6 +48,19 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"Major와 Minor 스케일의 차이는?","a":"핵심 차이는 3도입니다. Major는 장3도(M3, 4반음)로 밝고, Minor는 단3도(m3, 3반음)로 슬픔. C major: C-D-E-F-G-A-B (3도 = E) C minor: C-D-E♭-F-G-A♭-B♭ (3도 = E♭) 또한 Minor는 6·7도도 ♭로 더 어두운 느낌. 같은 키라도 Major/Minor가 곡의 정서를 결정합니다." },
+  { "q":"Pentatonic 스케일은 왜 쉬운가요?","a":"4도와 7도를 제거해 5음으로 만든 스케일입니다. 제거된 4·7도가 가장 불협화음이 되기 쉬운 음정이라, 어떤 음을 쳐도 자연스럽게 들립니다. • Major Pentatonic: 1·2·3·5·6 (한국 민요·동요) • Minor Pentatonic: 1·♭3·4·5·♭7 (록·블루스 솔로 표준) 그래서 록·블루스 즉흥 연주 입문에 가장 먼저 추천됩니다 — \"틀린 음이 없는\" 스케일." },
+  { "q":"Blues 스케일에 ♭5가 있는 이유?","a":"Blues 스케일은 Minor Pentatonic(1·♭3·4·5·♭7)에 ♭5(블루노트)를 추가한 6음 스케일입니다. ♭5는 Major도 Minor도 아닌 \"긁히는\" 불협화음이지만, 블루스의 정서적 핵심이에요. 스쳐 지나가는 경과음으로 사용하면 즉시 블루지한 느낌이 납니다. BB King·Eric Clapton 등 블루스 마스터들이 ♭5를 절묘하게 활용해요." },
+  { "q":"Dorian과 Natural Minor 차이는?","a":"한 음 차이입니다. 6도가 다릅니다. • Natural Minor: 1·2·♭3·4·5·♭6·♭7 (어두운 6도) • Dorian: 1·2·♭3·4·5·6·♭7 (밝은 6도) 이 한 음 차이로 Dorian은 더 밝고 재즈적으로 느껴집니다. 재즈·소울·록 모달 작곡에 매우 자주 쓰여요. (예: Miles Davis \"So What\", Pink Floyd 일부)" },
+  { "q":"다이어토닉 코드란 무엇인가요?","a":"스케일 안의 음만 사용해 만든 7개의 자연 7화음입니다. C major 키의 다이어토닉 코드: I (Cmaj7) - ii (Dm7) - iii (Em7) - IV (Fmaj7) - V (G7) - vi (Am7) - viiø (Bm7♭5) 모든 곡의 코드 진행은 대부분 이 7개 코드 안에서 움직입니다. 이 코드들의 기능(Tonic·Subdominant·Dominant)을 이해하면 작곡·편곡이 훨씬 쉬워져요." },
+  { "q":"I-V-vi-IV 진행이 인기 있는 이유?","a":"가장 자연스럽고 정서적으로 만족스러운 진행입니다. 안정(I) → 긴장(V) → 부드러움(vi) → 전이(IV)의 흐름이 뇌의 보상 회로를 자극해요. C major: C - G - Am - F • Let It Be (Beatles) · Don&apos;t Stop Believin&apos; (Journey) • 4 Chord Songs라는 이름으로 유튜브에 수백 곡이 같은 진행임을 보여주는 영상도 유명. K-Pop·OST에도 가장 흔히 쓰여, \"팝의 황금 진행\"이라 불려요." },
+  { "q":"기타 1박스 운지법이 뭔가요?","a":"한 손 모양으로 5프렛 범위 안의 모든 스케일 음을 외우는 운지법입니다. Minor Pentatonic은 5개 박스로 지판 전체를 커버하며, 1박스(5포지션)가 가장 인기. • A minor pentatonic 1박스: 5프렛부터 시작 (A=5프렛) • 6번줄 5·8 → 5번줄 5·7 → 4번줄 5·7 → 3번줄 5·7 → 2번줄 5·8 → 1번줄 5·8 이 박스 안에서 즉흥 연주가 록·블루스 솔로의 시작이에요. 기타 지판 탭에서 색칠된 음을 보고 패턴을 익히세요." },
+  { "q":"같은 키에서 모드를 어떻게 바꾸나요?","a":"모드는 두 가지 방법으로 사용합니다: 1. 모드 차용 (Modal Borrowing): 같은 키에서 다른 모드의 코드를 빌려옴. C major 곡에 C minor의 ♭III·♭VI·♭VII을 잠깐 사용 — Beatles \"Eleanor Rigby\". 2. 모달 작곡 (Modal Composition): 한 모드를 끝까지 유지. Dorian으로 시작하면 끝까지 Dorian 음만 사용. 재즈에서 흔함 — \"So What\". 모드 비교 탭에서 같은 키의 7 모드를 들어보면 분위기 차이를 직관적으로 느낄 수 있어요." },
+  { "q":"Harmonic Minor의 7도가 왜 중요?","a":"Natural Minor의 7도가 ♭7(단7도)인데, Harmonic Minor는 7(장7도)로 반음 올립니다. 이로 인해: 1. V도가 메이저 코드가 됨 (Am 키에서 Em → E) — Dominant 7th 가능 2. 리딩 톤(Leading tone)이 생겨 토닉으로 해결 강함 3. ♭6 → 7이 1.5음(증2도) 점프로 이국적 느낌 그래서 클래식·중동·메탈·플라멩코에서 자주 쓰여요. 화성적으로 가장 강력한 단음계입니다." },
+  { "q":"스케일 외운 후 즉흥 연주는 어떻게?","a":"순서대로 시도하세요: 1. Minor Pentatonic 1박스를 손에 익을 때까지 반복 2. 백킹 트랙 (YouTube에 무료 다수)에 맞춰 한 박스 안에서 자유 연주 3. 루트 음(빨강)을 강박에 두고 시작·종결 4. 3·5도를 강조해 안정감 만들기 5. ♭5 블루노트를 경과음으로 살짝 추가 6. 다른 박스로 확장해 지판 전체 커버 처음엔 어색하지만 매일 5~10분만 반복하면 1~2주 안에 즉흥 연주가 됩니다." }
+]
 
 export default function ScalePage() {
   return (
@@ -186,6 +200,7 @@ export default function ScalePage() {
 
       {/* FAQ */}
       <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+      <FaqJsonLd items={FAQ_LD} />
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. Major와 Minor 스케일의 차이는?</summary>

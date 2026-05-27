@@ -3,6 +3,7 @@ import BaseballStatsClient from './BaseballStatsClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
@@ -11,6 +12,29 @@ export const metadata = buildMetadata({
     '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교로 내 기록이 어느 수준인지 한눈에.',
   keywords: ['야구타율계산기', 'OPS계산기', '출루율계산기', '장타율계산기', 'ERA계산기', 'WHIP계산기', 'KBO기록', '야구통계계산기'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'OPS와 wOBA 중 어느 게 더 정확한가요?',
+                a: 'wOBA가 이론적으로 더 정확합니다. OPS는 출루율과 장타율을 단순 합산하지만, wOBA는 각 타격 행위(볼넷·1루타·홈런 등)에 다른 가중치를 부여합니다. 다만 OPS는 계산이 간단하고 직관적이라 일반 팬들에게 더 널리 쓰이며, 본 계산기도 두 지표를 모두 제공합니다.',
+              },
+              {
+                q: '타율 3할의 의미는 무엇인가요?',
+                a: '타율 0.300(3할)은 100번 타석에 30번 안타를 친다는 의미로 KBO·MLB 모두에서 우수 타자의 기준선으로 통합니다. KBO 전체 타자 중 약 10~15%만이 3할을 달성합니다. 4할(0.400)은 단축시즌 외에는 사실상 불가능에 가까운 기록입니다.',
+              },
+              {
+                q: 'ERA와 FIP 중 어느 것을 봐야 하나요?',
+                a: 'ERA는 실제 자책점 기반이라 직관적이지만 수비력에 영향을 받습니다. <strong>FIP는 투수가 직접 컨트롤하는 요소(삼진·볼넷·홈런)만으로 계산</strong>해 투수의 진짜 실력을 더 정확히 보여줍니다. ERA보다 FIP가 낮으면 운이 좋았다는 신호, ERA보다 FIP가 높으면 운이 나빴다는 신호입니다.',
+              },
+              {
+                q: '투수 이닝에서 5.1, 5.2는 무슨 의미인가요?',
+                a: '<strong>5.1 = 5와 1/3 이닝</strong>(5이닝 + 아웃 1개 더), <strong>5.2 = 5와 2/3 이닝</strong>입니다. 야구는 한 이닝 = 3아웃이므로 1/3·2/3 이닝 단위로 표기합니다. 본 계산기는 자동으로 정확한 분수로 변환해 ERA를 계산합니다.',
+              },
+              {
+                q: '사회인 야구에서도 같은 공식을 쓰나요?',
+                a: '네, 타율·OPS 등 기본 공식은 동일합니다. 다만 사회인 야구는 게임 수가 적고 타석 수도 부족해 프로 기준의 평가는 적절하지 않습니다. 본인 팀 평균과 비교하거나 자신의 시즌별 발전을 추적하는 용도로 활용하세요.',
+              },
+            ]
 
 export default function BaseballStatsPage() {
   return (
@@ -191,29 +215,9 @@ export default function BaseballStatsPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'OPS와 wOBA 중 어느 게 더 정확한가요?',
-                a: 'wOBA가 이론적으로 더 정확합니다. OPS는 출루율과 장타율을 단순 합산하지만, wOBA는 각 타격 행위(볼넷·1루타·홈런 등)에 다른 가중치를 부여합니다. 다만 OPS는 계산이 간단하고 직관적이라 일반 팬들에게 더 널리 쓰이며, 본 계산기도 두 지표를 모두 제공합니다.',
-              },
-              {
-                q: '타율 3할의 의미는 무엇인가요?',
-                a: '타율 0.300(3할)은 100번 타석에 30번 안타를 친다는 의미로 KBO·MLB 모두에서 우수 타자의 기준선으로 통합니다. KBO 전체 타자 중 약 10~15%만이 3할을 달성합니다. 4할(0.400)은 단축시즌 외에는 사실상 불가능에 가까운 기록입니다.',
-              },
-              {
-                q: 'ERA와 FIP 중 어느 것을 봐야 하나요?',
-                a: 'ERA는 실제 자책점 기반이라 직관적이지만 수비력에 영향을 받습니다. <strong>FIP는 투수가 직접 컨트롤하는 요소(삼진·볼넷·홈런)만으로 계산</strong>해 투수의 진짜 실력을 더 정확히 보여줍니다. ERA보다 FIP가 낮으면 운이 좋았다는 신호, ERA보다 FIP가 높으면 운이 나빴다는 신호입니다.',
-              },
-              {
-                q: '투수 이닝에서 5.1, 5.2는 무슨 의미인가요?',
-                a: '<strong>5.1 = 5와 1/3 이닝</strong>(5이닝 + 아웃 1개 더), <strong>5.2 = 5와 2/3 이닝</strong>입니다. 야구는 한 이닝 = 3아웃이므로 1/3·2/3 이닝 단위로 표기합니다. 본 계산기는 자동으로 정확한 분수로 변환해 ERA를 계산합니다.',
-              },
-              {
-                q: '사회인 야구에서도 같은 공식을 쓰나요?',
-                a: '네, 타율·OPS 등 기본 공식은 동일합니다. 다만 사회인 야구는 게임 수가 적고 타석 수도 부족해 프로 기준의 평가는 적절하지 않습니다. 본인 팀 평균과 비교하거나 자신의 시즌별 발전을 추적하는 용도로 활용하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

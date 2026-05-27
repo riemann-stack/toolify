@@ -2,7 +2,9 @@ import Link from 'next/link'
 import DsrClient from './DsrClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dsr',
@@ -19,6 +21,33 @@ export const metadata = buildMetadata({
 const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
 
+const FAQ_LD = [
+              {
+                q: 'DSR과 DTI는 어떻게 다른가요?',
+                a: '<strong>DSR</strong>은 「모든 대출」의 연간 원리금을, <strong>DTI</strong>는 「주택담보대출 원리금 + 기타 대출은 이자만」을 따집니다. 즉 DSR이 더 엄격합니다. 현재 한국의 대출 규제는 DSR 중심이며, DSR 40%(은행권)가 핵심 기준입니다.',
+              },
+              {
+                q: '스트레스 DSR이 적용되면 한도가 얼마나 줄어드나요?',
+                a: '같은 조건에서 변동형 + 3단계(가산 약 +1.5%p) 기준 대략 <strong>5~10% 정도 한도가 감소</strong>합니다. 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.',
+              },
+              {
+                q: '왜 LTV는 충분한데 대출이 안 나오나요?',
+                a: '소득 대비 부담(DSR)에서 막혔기 때문입니다. 집값이 비싸 LTV 여유가 있어도, 연소득이 적거나 기존 대출이 많으면 DSR 40%를 먼저 초과합니다. 본 계산기는 「최종 한도」 옆에 LTV/DSR 중 어디에 묶였는지 표시합니다.',
+              },
+              {
+                q: '신용대출도 DSR에 포함되나요?',
+                a: '네. <strong>신용대출·마이너스통장·자동차할부·카드론·학자금 등 거의 모든 대출</strong>의 연간 원리금이 합산됩니다. 신용대출은 만기를 짧게(보통 5~10년) 산정해 DSR 부담이 의외로 큽니다. 주담대 한도를 늘리려면 기존 대출부터 정리하는 게 효과적입니다.',
+              },
+              {
+                q: '계산기의 기본값(DSR 40%·LTV 70%·스트레스 1.5%p)을 믿어도 되나요?',
+                a: '<strong>참고용 일반 기준</strong>일 뿐입니다. LTV는 규제지역·주택 수·생애최초 여부에 따라, 스트레스 금리는 시행 단계·금리유형·기준금리에 따라 계속 바뀝니다. 정확한 본인 적용값은 거래 은행이나 금융위·은행연합회 공시로 확인하고, 계산기의 [규제 기준값 수정]에서 직접 넣어 보세요.',
+              },
+              {
+                q: '전세자금대출도 DSR에 들어가나요?',
+                a: '전세자금대출은 원칙적으로 <strong>이자만 DSR에 반영</strong>되며(원금 제외), 일부는 DSR 산정에서 제외되기도 합니다. 정책에 따라 달라지므로 본 계산기에서는 「기존 대출 연 상환액」 칸에 본인 상황에 맞는 금액을 직접 넣어 계산하세요.',
+              },
+            ]
+
 export default function DsrPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
@@ -30,6 +59,8 @@ export default function DsrPage() {
         연소득·기존 대출·집값·금리를 <strong style={{ color: 'var(--text)' }}>한 번만 입력</strong>하면 DSR·LTV·스트레스 DSR을 동시에 계산하고,
         세 기준 중 가장 빡빡한 쪽으로 <strong style={{ color: 'var(--text)' }}>실제 최대 대출 한도</strong>를 알려드려요.
       </p>
+
+      <UpdatedMeta date="2026년 5월" basis="2026년 DSR 규제 기준" sources={[{"label":"금융감독원","href":"https://www.fss.or.kr"}]} />
 
       <DsrClient />
 
@@ -147,33 +178,9 @@ export default function DsrPage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {[
-              {
-                q: 'DSR과 DTI는 어떻게 다른가요?',
-                a: '<strong>DSR</strong>은 「모든 대출」의 연간 원리금을, <strong>DTI</strong>는 「주택담보대출 원리금 + 기타 대출은 이자만」을 따집니다. 즉 DSR이 더 엄격합니다. 현재 한국의 대출 규제는 DSR 중심이며, DSR 40%(은행권)가 핵심 기준입니다.',
-              },
-              {
-                q: '스트레스 DSR이 적용되면 한도가 얼마나 줄어드나요?',
-                a: '같은 조건에서 변동형 + 3단계(가산 약 +1.5%p) 기준 대략 <strong>5~10% 정도 한도가 감소</strong>합니다. 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.',
-              },
-              {
-                q: '왜 LTV는 충분한데 대출이 안 나오나요?',
-                a: '소득 대비 부담(DSR)에서 막혔기 때문입니다. 집값이 비싸 LTV 여유가 있어도, 연소득이 적거나 기존 대출이 많으면 DSR 40%를 먼저 초과합니다. 본 계산기는 「최종 한도」 옆에 LTV/DSR 중 어디에 묶였는지 표시합니다.',
-              },
-              {
-                q: '신용대출도 DSR에 포함되나요?',
-                a: '네. <strong>신용대출·마이너스통장·자동차할부·카드론·학자금 등 거의 모든 대출</strong>의 연간 원리금이 합산됩니다. 신용대출은 만기를 짧게(보통 5~10년) 산정해 DSR 부담이 의외로 큽니다. 주담대 한도를 늘리려면 기존 대출부터 정리하는 게 효과적입니다.',
-              },
-              {
-                q: '계산기의 기본값(DSR 40%·LTV 70%·스트레스 1.5%p)을 믿어도 되나요?',
-                a: '<strong>참고용 일반 기준</strong>일 뿐입니다. LTV는 규제지역·주택 수·생애최초 여부에 따라, 스트레스 금리는 시행 단계·금리유형·기준금리에 따라 계속 바뀝니다. 정확한 본인 적용값은 거래 은행이나 금융위·은행연합회 공시로 확인하고, 계산기의 [규제 기준값 수정]에서 직접 넣어 보세요.',
-              },
-              {
-                q: '전세자금대출도 DSR에 들어가나요?',
-                a: '전세자금대출은 원칙적으로 <strong>이자만 DSR에 반영</strong>되며(원금 제외), 일부는 DSR 산정에서 제외되기도 합니다. 정책에 따라 달라지므로 본 계산기에서는 「기존 대출 연 상환액」 칸에 본인 상황에 맞는 금액을 직접 넣어 계산하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ ...card, padding: '12px 16px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />

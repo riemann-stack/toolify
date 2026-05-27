@@ -2,6 +2,7 @@ import Link from 'next/link'
 import SourdoughClient from './SourdoughClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/sourdough',
@@ -9,6 +10,19 @@ export const metadata = buildMetadata({
   description: '스타터 안정화 진단 + 피크 시간 예측 + 급이 일정 자동 스케줄러로 사워도우 르방 관리를 체계적으로.',
   keywords: ['사워도우스타터계산기', '르방피크시간', '사워도우안정화', '르방계산기', '사워도우급이', '르방스타터', '천연발효빵계산기'],
 })
+
+const FAQ_LD = [
+              { q: '사워도우 스타터가 안정화됐는지 어떻게 알 수 있나요?',
+                a: '3가지 조건을 모두 충족하면 안정화로 봅니다. ① 급이 후 매번 비슷한 시간에 2배 이상 팽창, ② 피크 후 규칙적으로 꺼짐, ③ 이 패턴이 2~3회 이상 반복됨. 냄새는 시큼하지만 상쾌해야 하며, 아세톤이나 구린 냄새는 없어야 합니다.' },
+              { q: '왜 초반(2~3일차)에 폭발적으로 부풀다가 조용해지나요?',
+                a: '초반의 활발한 반응은 주로 류코노스톡(Leuconostoc) 같은 비효모성 세균들의 반응입니다. 이들이 산성 환경을 만들면 자연도태되고, 내산성이 강한 야생 효모와 젖산균이 자리잡으면서 일시적으로 조용해집니다. 이 "조용한 시기"가 오히려 안정화 진행 중이라는 신호입니다.' },
+              { q: '냉장 보관 중인 스타터는 얼마나 오래 살수 있나요?',
+                a: '건강한 스타터는 냉장 보관 시 1~2주, 길게는 몇 달도 유지됩니다. 냉장에서 꺼낸 후 1~2회 급이로 활성화시키면 사용 가능합니다. 물 위에 뜨는 회색/검은 액체(후치, hooch)는 알코올로 버리고 아래 스타터만 사용하면 됩니다.' },
+              { q: '통밀이나 호밀을 섞으면 왜 더 빨리 활성화되나요?',
+                a: '통밀과 호밀에는 겨(bran)가 포함되어 있어 야생 효모와 영양분이 풍부합니다. 특히 호밀은 펜토산 성분이 발효를 촉진해 백밀 단독보다 훨씬 빠르게 활성화됩니다. 처음 스타터를 만들 때 호밀 10~20%를 섞으면 안정화가 빨라집니다.' },
+              { q: '사워도우를 베이킹에 사용할 때 가장 좋은 타이밍은?',
+                a: '피크 직전~피크 직후 1시간 이내가 최적입니다. 스타터를 물에 넣었을 때 뜨는지 확인하는 플로트 테스트와 함께, 표면에 많은 기포가 보이고 전체가 둥글게 부풀어 있을 때 사용하세요. 피크를 완전히 지나 꺼지기 시작하면 활성이 떨어져 빵이 잘 부풀지 않을 수 있습니다.' },
+            ]
 
 export default function SourdoughPage() {
   return (
@@ -193,19 +207,9 @@ export default function SourdoughPage() {
         {/* ── 7. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { q: '사워도우 스타터가 안정화됐는지 어떻게 알 수 있나요?',
-                a: '3가지 조건을 모두 충족하면 안정화로 봅니다. ① 급이 후 매번 비슷한 시간에 2배 이상 팽창, ② 피크 후 규칙적으로 꺼짐, ③ 이 패턴이 2~3회 이상 반복됨. 냄새는 시큼하지만 상쾌해야 하며, 아세톤이나 구린 냄새는 없어야 합니다.' },
-              { q: '왜 초반(2~3일차)에 폭발적으로 부풀다가 조용해지나요?',
-                a: '초반의 활발한 반응은 주로 류코노스톡(Leuconostoc) 같은 비효모성 세균들의 반응입니다. 이들이 산성 환경을 만들면 자연도태되고, 내산성이 강한 야생 효모와 젖산균이 자리잡으면서 일시적으로 조용해집니다. 이 "조용한 시기"가 오히려 안정화 진행 중이라는 신호입니다.' },
-              { q: '냉장 보관 중인 스타터는 얼마나 오래 살수 있나요?',
-                a: '건강한 스타터는 냉장 보관 시 1~2주, 길게는 몇 달도 유지됩니다. 냉장에서 꺼낸 후 1~2회 급이로 활성화시키면 사용 가능합니다. 물 위에 뜨는 회색/검은 액체(후치, hooch)는 알코올로 버리고 아래 스타터만 사용하면 됩니다.' },
-              { q: '통밀이나 호밀을 섞으면 왜 더 빨리 활성화되나요?',
-                a: '통밀과 호밀에는 겨(bran)가 포함되어 있어 야생 효모와 영양분이 풍부합니다. 특히 호밀은 펜토산 성분이 발효를 촉진해 백밀 단독보다 훨씬 빠르게 활성화됩니다. 처음 스타터를 만들 때 호밀 10~20%를 섞으면 안정화가 빨라집니다.' },
-              { q: '사워도우를 베이킹에 사용할 때 가장 좋은 타이밍은?',
-                a: '피크 직전~피크 직후 1시간 이내가 최적입니다. 스타터를 물에 넣었을 때 뜨는지 확인하는 플로트 테스트와 함께, 표면에 많은 기포가 보이고 전체가 둥글게 부풀어 있을 때 사용하세요. 피크를 완전히 지나 꺼지기 시작하면 활성이 떨어져 빵이 잘 부풀지 않을 수 있습니다.' },
-            ].map((faq, i) => (
+            {FAQ_LD.map((faq, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '0', overflow: 'hidden' }}>
                 <summary style={{ cursor: 'pointer', padding: '16px 20px', fontSize: '14px', fontWeight: 500, color: 'var(--text)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
                   <span>Q. {faq.q}</span>

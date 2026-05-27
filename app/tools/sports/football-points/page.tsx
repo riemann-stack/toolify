@@ -3,6 +3,7 @@ import FootballPointsClient from './FootballPointsClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/football-points',
@@ -11,6 +12,29 @@ export const metadata = buildMetadata({
     '남은 경기 시나리오로 목표 승점 달성 가능성 + 라이벌 추격 자동 계산. 득실차·승무패 조합까지.',
   keywords: ['축구승점계산기', 'K리그승점', 'EPL승점', '승점계산', '리그순위계산기', '우승가능성계산', '축구시뮬레이션'],
 })
+
+const FAQ_LD = [
+              {
+                q: '승점이 같을 때 순위는 어떻게 정해지나요?',
+                a: '대부분 리그는 1차 <strong>득실차</strong>, 2차 <strong>다득점</strong> 순으로 결정합니다. EPL과 K리그는 이 방식이지만, 라리가는 <strong>head-to-head(상대 전적)</strong>를 먼저 적용합니다. 분데스리가도 득실차 → 다득점 순서입니다. 리그마다 다르므로 해당 리그 규정을 확인하세요.',
+              },
+              {
+                q: '우승 확정은 언제 가능한가요?',
+                a: '수학적으로 라이벌 팀이 남은 경기 모두 승리해도 나의 현재 승점을 따라잡지 못할 때 우승이 확정됩니다. 예를 들어 5경기 남은 시점에서 라이벌과의 격차가 16점 이상이면, 라이벌이 5승(15점)을 거둬도 따라잡을 수 없어 <strong>우승 확정</strong>입니다.',
+              },
+              {
+                q: '잔류는 몇 점 정도면 안전한가요?',
+                a: '리그마다 다르지만 <strong>EPL은 40점</strong>이 “안전 승점”으로 통합니다. K리그1은 35점, 분데스리가는 35~38점이 통상적인 잔류 기준입니다. 다만 시즌 양상에 따라 30점 안팎에서 강등이 결정되는 경우도 있어 가능한 한 빨리 잔류 승점을 확보하는 것이 안전합니다.',
+              },
+              {
+                q: '득실차는 왜 중요한가요?',
+                a: '승점이 동률일 때 순위를 가르는 핵심 지표이기 때문입니다. 시즌 막판 우승·강등권 다툼에서 <strong>득실차 1점 차이로 순위가 갈리는 사례</strong>가 자주 있습니다. 이 때문에 강팀들은 약팀 상대로 골 차이를 벌리려 하고, 강등권 팀들은 패배해도 실점을 줄이려 노력합니다.',
+              },
+              {
+                q: '챔피언스리그 진출권은 몇 위까지인가요?',
+                a: 'EPL·라리가·분데스리가는 <strong>1~4위</strong>, 세리에A는 1~4위(2024–25 시즌부터 1~5위로 확대 가능), 리그앙은 1~3위까지 챔피언스리그 본선·플레이오프 진출권을 가집니다. K리그1은 1위가 챔피언스리그 엘리트, 2~3위가 챔피언스리그 투(아시아 대회) 출전권을 받습니다.',
+              },
+            ]
 
 export default function FootballPointsPage() {
   return (
@@ -187,29 +211,9 @@ export default function FootballPointsPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '승점이 같을 때 순위는 어떻게 정해지나요?',
-                a: '대부분 리그는 1차 <strong>득실차</strong>, 2차 <strong>다득점</strong> 순으로 결정합니다. EPL과 K리그는 이 방식이지만, 라리가는 <strong>head-to-head(상대 전적)</strong>를 먼저 적용합니다. 분데스리가도 득실차 → 다득점 순서입니다. 리그마다 다르므로 해당 리그 규정을 확인하세요.',
-              },
-              {
-                q: '우승 확정은 언제 가능한가요?',
-                a: '수학적으로 라이벌 팀이 남은 경기 모두 승리해도 나의 현재 승점을 따라잡지 못할 때 우승이 확정됩니다. 예를 들어 5경기 남은 시점에서 라이벌과의 격차가 16점 이상이면, 라이벌이 5승(15점)을 거둬도 따라잡을 수 없어 <strong>우승 확정</strong>입니다.',
-              },
-              {
-                q: '잔류는 몇 점 정도면 안전한가요?',
-                a: '리그마다 다르지만 <strong>EPL은 40점</strong>이 “안전 승점”으로 통합니다. K리그1은 35점, 분데스리가는 35~38점이 통상적인 잔류 기준입니다. 다만 시즌 양상에 따라 30점 안팎에서 강등이 결정되는 경우도 있어 가능한 한 빨리 잔류 승점을 확보하는 것이 안전합니다.',
-              },
-              {
-                q: '득실차는 왜 중요한가요?',
-                a: '승점이 동률일 때 순위를 가르는 핵심 지표이기 때문입니다. 시즌 막판 우승·강등권 다툼에서 <strong>득실차 1점 차이로 순위가 갈리는 사례</strong>가 자주 있습니다. 이 때문에 강팀들은 약팀 상대로 골 차이를 벌리려 하고, 강등권 팀들은 패배해도 실점을 줄이려 노력합니다.',
-              },
-              {
-                q: '챔피언스리그 진출권은 몇 위까지인가요?',
-                a: 'EPL·라리가·분데스리가는 <strong>1~4위</strong>, 세리에A는 1~4위(2024–25 시즌부터 1~5위로 확대 가능), 리그앙은 1~3위까지 챔피언스리그 본선·플레이오프 진출권을 가집니다. K리그1은 1위가 챔피언스리그 엘리트, 2~3위가 챔피언스리그 투(아시아 대회) 출전권을 받습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

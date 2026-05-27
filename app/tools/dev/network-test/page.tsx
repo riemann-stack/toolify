@@ -2,6 +2,7 @@ import Link from 'next/link'
 import NetworkTestClient from './NetworkTestClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/network-test',
@@ -69,6 +70,15 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"측정값이 speedtest.net과 다릅니다. 왜인가요?","a":"speedtest.net 등 일반 속도 측정 사이트는 가장 가까운 자체 서버로 측정합니다 (광케이블 거리 최소화). 본 도구는 실제 티켓팅 경로에 가까운 환경(Vercel KR Edge)으로 측정하므로 실용적 결과가 나옵니다. 핑은 자동 비슷, 다운로드 속도는 본 도구가 더 보수적일 수 있습니다." },
+  { "q":"ping 명령어와 결과가 다른데요?","a":"ping 명령어는 ICMP 패킷을 사용합니다 (네트워크 계층). 브라우저는 보안상 ICMP 사용 불가 — HTTP 요청으로 측정하므로 일반적으로 ping보다 10~30ms 높게 나옵니다 (TLS·HTTP 처리 오버헤드). 실제 티켓팅은 HTTP로 동작하므로 본 도구가 더 현실적입니다." },
+  { "q":"사이트별 응답 시간이 실제 티켓팅 속도인가요?","a":"완전 같진 않습니다. 브라우저 → youtil Edge (서울) → 사이트로 측정 — 중간에 Edge를 한 번 거칩니다. 그러나 youtil Edge가 한국 내부망이라 거의 직접 연결과 비슷한 결과 — 상대적 비교(어떤 사이트가 더 빠른지)는 신뢰할 수 있습니다. 절대값은 실제 티켓팅 시 본인 브라우저에서 측정한 것보다 약간 높게 나옵니다." },
+  { "q":"지터가 큰데 핑은 낮습니다. 사용해도 되나요?","a":"티켓팅에는 적합하지 않습니다. 평균 핑 30ms·지터 50ms = 어떤 요청은 90ms+ — 운 나쁘면 매진. 원인 점검: Wi-Fi 2.4GHz → 5GHz 전환 라우터 근처 전자레인지·블루투스 끄기 (2.4GHz 간섭) 같은 Wi-Fi에서 다른 기기 트래픽 ↓ 가능하면 유선 LAN" },
+  { "q":"5G인데 핑이 100ms 넘게 나옵니다.","a":"5G도 기지국 거리·시간대·5G 모드로 큰 차이가 납니다. 5G NSA(Non-Standalone) vs 5G SA(Standalone) — SA가 핑 더 낮음 실내 5G는 신호 약함 (특히 지하·고층) 혼잡한 시간대 (저녁 8~11시)는 LTE보다 느려질 수 있음 실내에서 5G 핑이 LTE보다 나쁘면 일시적으로 4G/LTE 우선 모드로 전환 검토." },
+  { "q":"본 도구는 데이터를 저장하나요?","a":"저장하지 않습니다. 모든 측정값은 본인 브라우저 메모리에만 존재. 페이지 새로고침 시 사라집니다. 측정 시 youtil Edge 서버(/api/time, /api/speedtest, /api/proxy-time)로 요청이 가지만 IP·결과 모두 로그 X." }
+]
 
 export default function NetworkTestPage() {
   return (
@@ -185,6 +195,7 @@ export default function NetworkTestPage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 측정값이 speedtest.net과 다릅니다. 왜인가요?</summary>

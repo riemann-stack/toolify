@@ -2,6 +2,7 @@ import Link from 'next/link'
 import OgPreviewClient from './OgPreviewClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/og-preview',
@@ -25,6 +26,41 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '16px',
 }
+
+const FAQ_LD = [
+              {
+                q: '메타태그를 수정했는데 카카오톡 카드가 그대로예요.',
+                a: '카카오톡은 URL당 약 <strong>48시간 캐시</strong>가 적용됩니다. <a href="https://developers.kakao.com/tool/clear/og" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">카카오 개발자 도구</a>의 "공유 디버거" 또는 "캐시 삭제" 메뉴에 URL을 넣고 캐시를 갱신하세요. Facebook은 <a href="https://developers.facebook.com/tools/debug/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Sharing Debugger</a>, X는 <a href="https://cards-dev.twitter.com/validator" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Card Validator</a>(deprecated 됐으나 일부 동작), LinkedIn은 <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Post Inspector</a>를 사용합니다.',
+              },
+              {
+                q: 'og:image는 어느 크기·비율이 가장 안전한가요?',
+                a: '<strong>1200×630px (2:1)</strong>이 가장 보편적입니다. Facebook 권장 1.91:1, 카카오톡 2:1, X 2:1(summary_large_image) — 1200×630 한 장이면 모든 플랫폼에서 잘립니다 없이 표시됩니다. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
+              },
+              {
+                q: 'URL 입력 모드에서 "페이지를 불러올 수 없다"고 나옵니다.',
+                a: '대상 서버가 봇/스크래퍼를 차단했거나(쿠팡·일부 쇼핑몰), Cloudflare 등 WAF가 우리 요청을 막은 경우입니다. <strong>HTML 붙여넣기 모드</strong>로 전환해 브라우저 페이지 소스(Cmd+U / Ctrl+U)의 <code style="color: var(--text)">&lt;head&gt;</code> 부분을 복사해 붙여넣으면 동일하게 동작합니다.',
+              },
+              {
+                q: 'twitter:card는 꼭 따로 넣어야 하나요?',
+                a: 'X(Twitter)는 <code style="color: var(--text)">twitter:*</code> 태그를 우선 사용하며, 없으면 <code style="color: var(--text)">og:*</code>로 폴백합니다. 다만 <strong>twitter:card 선언이 없으면 카드 표시 자체가 안 되는</strong> 경우가 있으므로 <code style="color: var(--text)">&lt;meta name="twitter:card" content="summary_large_image"&gt;</code> 한 줄은 필수에 가깝습니다. summary_large_image는 큰 이미지 카드, summary는 작은 정사각 썸네일 카드.',
+              },
+              {
+                q: 'og:image에 동적 이미지(서버에서 생성)를 써도 되나요?',
+                a: '됩니다. Next.js의 <code style="color: var(--text)">opengraph-image.tsx</code>, Vercel OG, Cloudflare Workers의 OG 이미지 생성 등이 흔합니다. 단 <strong>응답 속도 &lt; 3초</strong>, <strong>Cache-Control 적용</strong>, <strong>안정적인 도메인</strong> 사용은 필수. 카카오톡은 응답이 느리면 캐시 갱신을 포기하고 빈 카드를 보여줍니다.',
+              },
+              {
+                q: '같은 페이지를 SNS별로 다르게 보이게 할 수 있나요?',
+                a: '가능합니다. <code style="color: var(--text)">og:*</code>는 공통 폴백으로 두고, <code style="color: var(--text)">twitter:title</code>·<code style="color: var(--text)">twitter:description</code>·<code style="color: var(--text)">twitter:image</code>를 별도 지정하면 X에서만 다른 카드가 표시됩니다. Slack은 <code style="color: var(--text)">og:site_name</code>이 큰 영향을 미치므로 브랜드명 명시 권장. LinkedIn은 <code style="color: var(--text)">og:type=article</code>일 때 더 풍부한 카드를 보여줍니다.',
+              },
+              {
+                q: '검색엔진(SEO)에는 OG 태그가 영향을 미치나요?',
+                a: '직접적인 검색 순위 영향은 없지만, <strong>간접 효과는 큽니다</strong>. SNS 공유 → 카드가 매력적 → 클릭률 ↑ → 트래픽 ↑ → 백링크 자연 발생. Google은 <code style="color: var(--text)">title</code>·<code style="color: var(--text)">meta description</code>을 우선 보지만, 일부 검색 결과(Discover 등)에서는 <code style="color: var(--text)">og:image</code>를 썸네일로 사용하므로 둘 다 정성껏 작성하세요.',
+              },
+              {
+                q: '검색이 안 되는 사이트에서도 메타태그가 보이나요?',
+                a: '검색 노출 여부와 OG는 무관합니다. <code style="color: var(--text)">robots.txt</code>나 <code style="color: var(--text)">noindex</code> 메타로 검색은 차단해도, SNS 공유 카드는 정상 표시됩니다. 반대로 검색은 잘 되는데 OG 카드가 비어 있는 경우도 많으니 — <strong>이 도구로 한 번 확인</strong>하시는 게 좋아요.',
+              },
+            ]
 
 export default function OgPreviewPage() {
   return (
@@ -127,41 +163,9 @@ export default function OgPreviewPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '메타태그를 수정했는데 카카오톡 카드가 그대로예요.',
-                a: '카카오톡은 URL당 약 <strong>48시간 캐시</strong>가 적용됩니다. <a href="https://developers.kakao.com/tool/clear/og" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">카카오 개발자 도구</a>의 "공유 디버거" 또는 "캐시 삭제" 메뉴에 URL을 넣고 캐시를 갱신하세요. Facebook은 <a href="https://developers.facebook.com/tools/debug/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Sharing Debugger</a>, X는 <a href="https://cards-dev.twitter.com/validator" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Card Validator</a>(deprecated 됐으나 일부 동작), LinkedIn은 <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Post Inspector</a>를 사용합니다.',
-              },
-              {
-                q: 'og:image는 어느 크기·비율이 가장 안전한가요?',
-                a: '<strong>1200×630px (2:1)</strong>이 가장 보편적입니다. Facebook 권장 1.91:1, 카카오톡 2:1, X 2:1(summary_large_image) — 1200×630 한 장이면 모든 플랫폼에서 잘립니다 없이 표시됩니다. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
-              },
-              {
-                q: 'URL 입력 모드에서 "페이지를 불러올 수 없다"고 나옵니다.',
-                a: '대상 서버가 봇/스크래퍼를 차단했거나(쿠팡·일부 쇼핑몰), Cloudflare 등 WAF가 우리 요청을 막은 경우입니다. <strong>HTML 붙여넣기 모드</strong>로 전환해 브라우저 페이지 소스(Cmd+U / Ctrl+U)의 <code style="color: var(--text)">&lt;head&gt;</code> 부분을 복사해 붙여넣으면 동일하게 동작합니다.',
-              },
-              {
-                q: 'twitter:card는 꼭 따로 넣어야 하나요?',
-                a: 'X(Twitter)는 <code style="color: var(--text)">twitter:*</code> 태그를 우선 사용하며, 없으면 <code style="color: var(--text)">og:*</code>로 폴백합니다. 다만 <strong>twitter:card 선언이 없으면 카드 표시 자체가 안 되는</strong> 경우가 있으므로 <code style="color: var(--text)">&lt;meta name="twitter:card" content="summary_large_image"&gt;</code> 한 줄은 필수에 가깝습니다. summary_large_image는 큰 이미지 카드, summary는 작은 정사각 썸네일 카드.',
-              },
-              {
-                q: 'og:image에 동적 이미지(서버에서 생성)를 써도 되나요?',
-                a: '됩니다. Next.js의 <code style="color: var(--text)">opengraph-image.tsx</code>, Vercel OG, Cloudflare Workers의 OG 이미지 생성 등이 흔합니다. 단 <strong>응답 속도 &lt; 3초</strong>, <strong>Cache-Control 적용</strong>, <strong>안정적인 도메인</strong> 사용은 필수. 카카오톡은 응답이 느리면 캐시 갱신을 포기하고 빈 카드를 보여줍니다.',
-              },
-              {
-                q: '같은 페이지를 SNS별로 다르게 보이게 할 수 있나요?',
-                a: '가능합니다. <code style="color: var(--text)">og:*</code>는 공통 폴백으로 두고, <code style="color: var(--text)">twitter:title</code>·<code style="color: var(--text)">twitter:description</code>·<code style="color: var(--text)">twitter:image</code>를 별도 지정하면 X에서만 다른 카드가 표시됩니다. Slack은 <code style="color: var(--text)">og:site_name</code>이 큰 영향을 미치므로 브랜드명 명시 권장. LinkedIn은 <code style="color: var(--text)">og:type=article</code>일 때 더 풍부한 카드를 보여줍니다.',
-              },
-              {
-                q: '검색엔진(SEO)에는 OG 태그가 영향을 미치나요?',
-                a: '직접적인 검색 순위 영향은 없지만, <strong>간접 효과는 큽니다</strong>. SNS 공유 → 카드가 매력적 → 클릭률 ↑ → 트래픽 ↑ → 백링크 자연 발생. Google은 <code style="color: var(--text)">title</code>·<code style="color: var(--text)">meta description</code>을 우선 보지만, 일부 검색 결과(Discover 등)에서는 <code style="color: var(--text)">og:image</code>를 썸네일로 사용하므로 둘 다 정성껏 작성하세요.',
-              },
-              {
-                q: '검색이 안 되는 사이트에서도 메타태그가 보이나요?',
-                a: '검색 노출 여부와 OG는 무관합니다. <code style="color: var(--text)">robots.txt</code>나 <code style="color: var(--text)">noindex</code> 메타로 검색은 차단해도, SNS 공유 카드는 정상 표시됩니다. 반대로 검색은 잘 되는데 OG 카드가 비어 있는 경우도 많으니 — <strong>이 도구로 한 번 확인</strong>하시는 게 좋아요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

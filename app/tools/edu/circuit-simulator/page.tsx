@@ -3,6 +3,7 @@ import CircuitSimulatorClient from './CircuitSimulatorClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/circuit-simulator',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '직렬·병렬 회로 전압·전류·저항·전력 시각화 + 단계별 풀이와 시험 빈출 7문제로 옴의 법칙 완전 정복.',
   keywords: ['옴의법칙', '전기회로계산기', '회로시뮬레이터', '직렬병렬', '키르히호프법칙', 'LED저항계산', '전기전자', '회로분석', '중3물리', '고1물리', '전력계산'],
 })
+
+const FAQ_LD = [
+              {
+                q: '직렬과 병렬 회로의 차이점은 무엇인가요?',
+                a: '<strong>직렬은 저항이 한 줄로 연결</strong>되어 모든 저항에 같은 전류가 흐르며 전압이 분배됩니다. <strong>병렬은 저항이 나란히 연결</strong>되어 모든 저항에 같은 전압이 걸리며 전류가 분배됩니다. 직렬에서는 합성 저항이 커지고(R₁+R₂+...) 병렬에서는 합성 저항이 작아집니다(1/R=1/R₁+1/R₂+...). 가정용 콘센트는 병렬로 연결되어 한 가전이 꺼져도 다른 가전이 작동합니다.',
+              },
+              {
+                q: '옴의 법칙은 모든 경우에 적용되나요?',
+                a: '옴의 법칙(V=IR)은 <strong>저항이 일정한 선형 도체에서 정확히 성립</strong>합니다. 그러나 다이오드·LED·트랜지스터 같은 비선형 소자, 온도에 따라 저항이 변하는 경우, 매우 큰 전압·전류에서 발생하는 비선형 효과 등에서는 적용되지 않습니다. 일반 저항은 거의 옴의 법칙을 따르므로 본 시뮬레이터에서 정확한 결과를 얻을 수 있습니다.',
+              },
+              {
+                q: 'LED에 저항이 왜 필요한가요?',
+                a: 'LED는 자체 저항이 매우 낮아 전압이 일정 수준을 넘으면 전류가 급격히 증가해 즉시 손상됩니다. 따라서 적절한 저항을 직렬로 연결해 <strong>전류를 제한</strong>해야 합니다. 5V 전원에 빨간 LED(Vf=2V, IF=20mA)를 사용하려면 최소 150Ω(권장 220Ω) 저항이 필요합니다. 본 도구의 LED 회로 프리셋과 옴의 법칙 빠른 계산 탭에서 자동 계산해줍니다.',
+              },
+              {
+                q: '저항의 정격(W)을 초과하면 어떻게 되나요?',
+                a: '저항이 소비하는 전력이 정격(예: 1/4W = 0.25W)을 초과하면 <strong>저항이 발열로 손상</strong>됩니다. 저항값이 변형되거나 외부 코팅이 그을릴 수 있고, 심한 경우 화재 위험이 있습니다. 본 시뮬레이터는 각 저항의 전력 소비를 계산하고 정격 초과 시 ⚠️ 경고를 표시해 안전한 회로 설계를 도와줍니다. 일반적으로 안전 마진을 위해 <strong>계산된 전력의 2배 이상 정격</strong> 저항 사용을 권장합니다.',
+              },
+              {
+                q: '한국 중3·고1 물리 시험에 자주 나오는 회로 패턴은?',
+                a: '한국 중3·고1 물리 시험 빈출 패턴: ① 단순 직렬(전체 전류·각 저항 전압), ② 단순 병렬(전체 전류·합성 저항), ③ 직렬-병렬 혼합 (R₁ + (R₂//R₃)), ④ 분압 회로(특정 저항 양단 전압), ⑤ 전력 계산(P=VI=I²R=V²/R), ⑥ 키르히호프 법칙 적용. 본 시뮬레이터의 <strong>시험 빈출 패턴 탭</strong>에서 실제 시험 스타일 7문제를 풀어볼 수 있습니다.',
+              },
+            ]
 
 export default function CircuitSimulatorPage() {
   return (
@@ -287,29 +311,9 @@ export default function CircuitSimulatorPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '직렬과 병렬 회로의 차이점은 무엇인가요?',
-                a: '<strong>직렬은 저항이 한 줄로 연결</strong>되어 모든 저항에 같은 전류가 흐르며 전압이 분배됩니다. <strong>병렬은 저항이 나란히 연결</strong>되어 모든 저항에 같은 전압이 걸리며 전류가 분배됩니다. 직렬에서는 합성 저항이 커지고(R₁+R₂+...) 병렬에서는 합성 저항이 작아집니다(1/R=1/R₁+1/R₂+...). 가정용 콘센트는 병렬로 연결되어 한 가전이 꺼져도 다른 가전이 작동합니다.',
-              },
-              {
-                q: '옴의 법칙은 모든 경우에 적용되나요?',
-                a: '옴의 법칙(V=IR)은 <strong>저항이 일정한 선형 도체에서 정확히 성립</strong>합니다. 그러나 다이오드·LED·트랜지스터 같은 비선형 소자, 온도에 따라 저항이 변하는 경우, 매우 큰 전압·전류에서 발생하는 비선형 효과 등에서는 적용되지 않습니다. 일반 저항은 거의 옴의 법칙을 따르므로 본 시뮬레이터에서 정확한 결과를 얻을 수 있습니다.',
-              },
-              {
-                q: 'LED에 저항이 왜 필요한가요?',
-                a: 'LED는 자체 저항이 매우 낮아 전압이 일정 수준을 넘으면 전류가 급격히 증가해 즉시 손상됩니다. 따라서 적절한 저항을 직렬로 연결해 <strong>전류를 제한</strong>해야 합니다. 5V 전원에 빨간 LED(Vf=2V, IF=20mA)를 사용하려면 최소 150Ω(권장 220Ω) 저항이 필요합니다. 본 도구의 LED 회로 프리셋과 옴의 법칙 빠른 계산 탭에서 자동 계산해줍니다.',
-              },
-              {
-                q: '저항의 정격(W)을 초과하면 어떻게 되나요?',
-                a: '저항이 소비하는 전력이 정격(예: 1/4W = 0.25W)을 초과하면 <strong>저항이 발열로 손상</strong>됩니다. 저항값이 변형되거나 외부 코팅이 그을릴 수 있고, 심한 경우 화재 위험이 있습니다. 본 시뮬레이터는 각 저항의 전력 소비를 계산하고 정격 초과 시 ⚠️ 경고를 표시해 안전한 회로 설계를 도와줍니다. 일반적으로 안전 마진을 위해 <strong>계산된 전력의 2배 이상 정격</strong> 저항 사용을 권장합니다.',
-              },
-              {
-                q: '한국 중3·고1 물리 시험에 자주 나오는 회로 패턴은?',
-                a: '한국 중3·고1 물리 시험 빈출 패턴: ① 단순 직렬(전체 전류·각 저항 전압), ② 단순 병렬(전체 전류·합성 저항), ③ 직렬-병렬 혼합 (R₁ + (R₂//R₃)), ④ 분압 회로(특정 저항 양단 전압), ⑤ 전력 계산(P=VI=I²R=V²/R), ⑥ 키르히호프 법칙 적용. 본 시뮬레이터의 <strong>시험 빈출 패턴 탭</strong>에서 실제 시험 스타일 7문제를 풀어볼 수 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

@@ -2,6 +2,7 @@ import RecipeClient from './RecipeClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/recipe',
@@ -14,6 +15,33 @@ export const metadata = buildMetadata({
     '인분 변환', '한식 인분', '레시피 스케일링', '재료 환산', '음식 비율',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: '비율 계산 시 주의할 점은?',
+                a: '<strong>양념류(소금·간장·고추장 등)는 단순 배율로 늘리면 너무 짤 수 있습니다.</strong> 특히 4인분 이상으로 늘릴 때는 계산된 양의 80~90%부터 시작해 간을 보면서 조절하세요. 마늘·고추 같은 향신료도 배율 그대로 늘리면 향이 과해질 수 있습니다. 본 도구의 "양념 자동 보정" 옵션을 활성화하면 양념·향신료에만 85% 보정이 자동 적용됩니다.',
+              },
+              {
+                q: '큰술과 그램(g)을 어떻게 변환하나요?',
+                a: '재료에 따라 다릅니다. 같은 1큰술도 재료마다 무게가 크게 달라집니다 — <code>밀가루 1큰술 ≈ 8.3g</code>, <code>설탕 1큰술 ≈ 12.8g</code>, <code>버터 1큰술 ≈ 14g</code>, <code>간장 1큰술 ≈ 17g</code> (밀도 1.16), <code>꿀 1큰술 ≈ 21g</code> (밀도 1.42). 본 도구의 <strong>[단위 환산]</strong> 탭에서 재료 이름을 입력하면 자동으로 정확한 변환값을 보여줍니다.',
+              },
+              {
+                q: '오븐 온도나 조리 시간도 비례해서 늘려야 하나요?',
+                a: '아닙니다. <strong>오븐 온도는 인분 수와 무관하게 동일</strong>하게 유지하고, 조리 시간은 재료의 두께·양에 따라 조금씩 늘어날 수 있지만 단순 배율로 늘리지 않습니다. 예: 2인분 닭볶음탕 → 4인분 시간 5~10분 추가 정도. 베이킹의 경우 틀 크기·반죽 높이가 시간에 큰 영향을 주므로 별도 조정이 필요합니다.',
+              },
+              {
+                q: '베이킹 레시피도 사용할 수 있나요?',
+                a: '네, 베이킹에도 사용할 수 있습니다. 단, 베이킹은 비율이 매우 중요해 약간의 오차도 결과에 영향을 줍니다 — <strong>"0.5 단위 반올림" 옵션은 끄고</strong> 정확한 값 사용 권장, <strong>"양념 자동 보정" 옵션은 끄기</strong> (베이킹은 보정 X), 부피보다 <strong>무게(g) 단위</strong> 권장. 더 정확한 베이킹 비율은 <a href="/tools/cooking/baker-percent" style="color: var(--accent); font-weight: 600;">베이커 퍼센트 계산기</a>를 활용하세요.',
+              },
+              {
+                q: '저장된 레시피는 어디에 보관되나요?',
+                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 회원가입·로그인 불필요, 빠른 접근, 사생활 보호. 단, 같은 브라우저·기기에서만 접근 가능하며 캐시 삭제·시크릿 모드 시 사라집니다. 다른 기기에서 사용하거나 영구 보관하려면 <strong>[백업 다운로드]</strong> 기능으로 JSON 파일을 정기적으로 저장하시기를 권장합니다.',
+              },
+              {
+                q: '"꼬집"이나 "줌" 같은 어림 단위는 정확한가요?',
+                a: '본 도구는 <strong>1꼬집 ≈ 0.5g, 1줌 ≈ 10g</strong>으로 평균값을 사용합니다. 실제로는 손 크기·재료에 따라 ±50% 차이날 수 있어, 어림 단위는 첫 시도 시 적게 넣고 간을 보며 추가하는 것이 안전합니다. 정확한 베이킹은 어림 단위를 피하고 g 단위로 입력하세요.',
+              },
+            ]
 
 export default function RecipePage() {
   return (
@@ -200,33 +228,9 @@ export default function RecipePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '비율 계산 시 주의할 점은?',
-                a: '<strong>양념류(소금·간장·고추장 등)는 단순 배율로 늘리면 너무 짤 수 있습니다.</strong> 특히 4인분 이상으로 늘릴 때는 계산된 양의 80~90%부터 시작해 간을 보면서 조절하세요. 마늘·고추 같은 향신료도 배율 그대로 늘리면 향이 과해질 수 있습니다. 본 도구의 "양념 자동 보정" 옵션을 활성화하면 양념·향신료에만 85% 보정이 자동 적용됩니다.',
-              },
-              {
-                q: '큰술과 그램(g)을 어떻게 변환하나요?',
-                a: '재료에 따라 다릅니다. 같은 1큰술도 재료마다 무게가 크게 달라집니다 — <code>밀가루 1큰술 ≈ 8.3g</code>, <code>설탕 1큰술 ≈ 12.8g</code>, <code>버터 1큰술 ≈ 14g</code>, <code>간장 1큰술 ≈ 17g</code> (밀도 1.16), <code>꿀 1큰술 ≈ 21g</code> (밀도 1.42). 본 도구의 <strong>[단위 환산]</strong> 탭에서 재료 이름을 입력하면 자동으로 정확한 변환값을 보여줍니다.',
-              },
-              {
-                q: '오븐 온도나 조리 시간도 비례해서 늘려야 하나요?',
-                a: '아닙니다. <strong>오븐 온도는 인분 수와 무관하게 동일</strong>하게 유지하고, 조리 시간은 재료의 두께·양에 따라 조금씩 늘어날 수 있지만 단순 배율로 늘리지 않습니다. 예: 2인분 닭볶음탕 → 4인분 시간 5~10분 추가 정도. 베이킹의 경우 틀 크기·반죽 높이가 시간에 큰 영향을 주므로 별도 조정이 필요합니다.',
-              },
-              {
-                q: '베이킹 레시피도 사용할 수 있나요?',
-                a: '네, 베이킹에도 사용할 수 있습니다. 단, 베이킹은 비율이 매우 중요해 약간의 오차도 결과에 영향을 줍니다 — <strong>"0.5 단위 반올림" 옵션은 끄고</strong> 정확한 값 사용 권장, <strong>"양념 자동 보정" 옵션은 끄기</strong> (베이킹은 보정 X), 부피보다 <strong>무게(g) 단위</strong> 권장. 더 정확한 베이킹 비율은 <a href="/tools/cooking/baker-percent" style="color: var(--accent); font-weight: 600;">베이커 퍼센트 계산기</a>를 활용하세요.',
-              },
-              {
-                q: '저장된 레시피는 어디에 보관되나요?',
-                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 회원가입·로그인 불필요, 빠른 접근, 사생활 보호. 단, 같은 브라우저·기기에서만 접근 가능하며 캐시 삭제·시크릿 모드 시 사라집니다. 다른 기기에서 사용하거나 영구 보관하려면 <strong>[백업 다운로드]</strong> 기능으로 JSON 파일을 정기적으로 저장하시기를 권장합니다.',
-              },
-              {
-                q: '"꼬집"이나 "줌" 같은 어림 단위는 정확한가요?',
-                a: '본 도구는 <strong>1꼬집 ≈ 0.5g, 1줌 ≈ 10g</strong>으로 평균값을 사용합니다. 실제로는 손 크기·재료에 따라 ±50% 차이날 수 있어, 어림 단위는 첫 시도 시 적게 넣고 간을 보며 추가하는 것이 안전합니다. 정확한 베이킹은 어림 단위를 피하고 g 단위로 입력하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

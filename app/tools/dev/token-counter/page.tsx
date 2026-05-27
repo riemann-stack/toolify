@@ -2,6 +2,7 @@ import Link from 'next/link'
 import TokenCounterClient from './TokenCounterClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/token-counter',
@@ -23,6 +24,41 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '16px',
 }
+
+const FAQ_LD = [
+              {
+                q: '이 도구의 토큰 수는 얼마나 정확한가요?',
+                a: '문자 분류(한글/CJK/영문/숫자/공백/구두점) 기반 휴리스틱으로 계산하므로 <strong>실제 토크나이저와 ±10~20% 오차</strong>가 있을 수 있습니다. 한국어 비중이 높을수록 오차가 커집니다. 정확한 수치가 필요하면 OpenAI의 tokenizer.openai.com, Anthropic의 count_tokens API, Google AI Studio를 사용하세요. 본 도구는 <strong>모델 간 상대 비교와 비용 견적</strong>에 최적화돼 있습니다.',
+              },
+              {
+                q: 'tiktoken 같은 정확한 토크나이저를 쓰지 않는 이유는?',
+                a: 'tiktoken WASM은 ~1.5MB로 페이지 무게를 크게 늘립니다. 또한 Claude·Gemini 토크나이저는 공개돼 있지 않아 어차피 추정뿐입니다. 본 도구는 모바일에서도 즉시 동작하는 가벼움을 우선했습니다. 정확도가 결정적인 작업은 공식 도구를 권장합니다.',
+              },
+              {
+                q: '왜 한국어가 영어보다 토큰을 더 많이 쓰나요?',
+                a: 'LLM 토크나이저는 영어 코퍼스에 최적화돼 있어 "the", "ing" 같은 흔한 영문 패턴은 1토큰으로 압축되지만, 한글 음절은 보통 1~2개 서브워드로 쪼개집니다. 같은 의미의 한국어 텍스트는 영문 대비 <strong>약 50~100% 더 많은 토큰</strong>을 소비. 모델별로는 GPT-4o의 o200k_base가 한국어를 가장 효율적으로 처리하고, Claude가 가장 비효율적인 편입니다.',
+              },
+              {
+                q: '시스템 프롬프트도 매번 비용으로 청구되나요?',
+                a: '예. <strong>입력 토큰</strong>으로 매 호출마다 청구됩니다. 다만 OpenAI·Anthropic·Gemini 모두 <strong>프롬프트 캐싱</strong>을 제공해 반복되는 시스템 프롬프트는 50~90% 할인된 단가가 적용됩니다(최소 토큰 수·캐시 유지 시간 등 조건 있음). 긴 시스템 프롬프트를 자주 호출한다면 캐싱 활용이 핵심.',
+              },
+              {
+                q: '출력 토큰이 입력 토큰보다 훨씬 비싼 이유는?',
+                a: '생성은 자기회귀(autoregressive)로 토큰 하나하나를 순차 디코딩해야 해서 GPU 시간이 더 듭니다. 모델 가격이 보통 <strong>입력:출력 = 1:3~5</strong>로 책정되는 이유. "답변을 짧게" 또는 구조화된 JSON 스키마로 응답 길이를 제한하면 비용을 크게 절감할 수 있습니다.',
+              },
+              {
+                q: '컨텍스트 한도를 넘으면 어떻게 되나요?',
+                a: 'API는 <strong>에러를 반환</strong>합니다(보통 400 Bad Request, context_length_exceeded). ChatGPT·Claude 웹 인터페이스는 자동으로 가장 오래된 메시지를 잘라내(truncate) 진행. 의식하지 못한 채 이전 맥락이 사라질 수 있으니 긴 대화에서는 주기적으로 요약·정리 권장.',
+              },
+              {
+                q: 'API 비용을 효과적으로 줄이려면?',
+                a: '<strong>1) 모델 선택</strong> — 분류·요약은 mini/Haiku/Flash, 복잡한 추론만 GPT-4o/Opus. <strong>2) 출력 제한</strong> — max_tokens 설정 + "300자 이내" 같은 지시. <strong>3) 프롬프트 캐싱</strong> — 반복 시스템 프롬프트 활용. <strong>4) 영문 프롬프트</strong> — 시스템·context는 영문으로. <strong>5) 배치 API</strong> — OpenAI/Anthropic의 batch는 50% 할인.',
+              },
+              {
+                q: '환율은 어떻게 계산되나요?',
+                a: '₩ 환산은 <strong>1 USD = 1,380원</strong>으로 단순 계산합니다. 실제 카드 청구는 결제 시점 환율 + 카드사 수수료가 추가되므로 실제 청구액은 표시 금액보다 약 1~3% 높을 수 있습니다.',
+              },
+            ]
 
 export default function TokenCounterPage() {
   return (
@@ -146,41 +182,9 @@ export default function TokenCounterPage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '이 도구의 토큰 수는 얼마나 정확한가요?',
-                a: '문자 분류(한글/CJK/영문/숫자/공백/구두점) 기반 휴리스틱으로 계산하므로 <strong>실제 토크나이저와 ±10~20% 오차</strong>가 있을 수 있습니다. 한국어 비중이 높을수록 오차가 커집니다. 정확한 수치가 필요하면 OpenAI의 tokenizer.openai.com, Anthropic의 count_tokens API, Google AI Studio를 사용하세요. 본 도구는 <strong>모델 간 상대 비교와 비용 견적</strong>에 최적화돼 있습니다.',
-              },
-              {
-                q: 'tiktoken 같은 정확한 토크나이저를 쓰지 않는 이유는?',
-                a: 'tiktoken WASM은 ~1.5MB로 페이지 무게를 크게 늘립니다. 또한 Claude·Gemini 토크나이저는 공개돼 있지 않아 어차피 추정뿐입니다. 본 도구는 모바일에서도 즉시 동작하는 가벼움을 우선했습니다. 정확도가 결정적인 작업은 공식 도구를 권장합니다.',
-              },
-              {
-                q: '왜 한국어가 영어보다 토큰을 더 많이 쓰나요?',
-                a: 'LLM 토크나이저는 영어 코퍼스에 최적화돼 있어 "the", "ing" 같은 흔한 영문 패턴은 1토큰으로 압축되지만, 한글 음절은 보통 1~2개 서브워드로 쪼개집니다. 같은 의미의 한국어 텍스트는 영문 대비 <strong>약 50~100% 더 많은 토큰</strong>을 소비. 모델별로는 GPT-4o의 o200k_base가 한국어를 가장 효율적으로 처리하고, Claude가 가장 비효율적인 편입니다.',
-              },
-              {
-                q: '시스템 프롬프트도 매번 비용으로 청구되나요?',
-                a: '예. <strong>입력 토큰</strong>으로 매 호출마다 청구됩니다. 다만 OpenAI·Anthropic·Gemini 모두 <strong>프롬프트 캐싱</strong>을 제공해 반복되는 시스템 프롬프트는 50~90% 할인된 단가가 적용됩니다(최소 토큰 수·캐시 유지 시간 등 조건 있음). 긴 시스템 프롬프트를 자주 호출한다면 캐싱 활용이 핵심.',
-              },
-              {
-                q: '출력 토큰이 입력 토큰보다 훨씬 비싼 이유는?',
-                a: '생성은 자기회귀(autoregressive)로 토큰 하나하나를 순차 디코딩해야 해서 GPU 시간이 더 듭니다. 모델 가격이 보통 <strong>입력:출력 = 1:3~5</strong>로 책정되는 이유. "답변을 짧게" 또는 구조화된 JSON 스키마로 응답 길이를 제한하면 비용을 크게 절감할 수 있습니다.',
-              },
-              {
-                q: '컨텍스트 한도를 넘으면 어떻게 되나요?',
-                a: 'API는 <strong>에러를 반환</strong>합니다(보통 400 Bad Request, context_length_exceeded). ChatGPT·Claude 웹 인터페이스는 자동으로 가장 오래된 메시지를 잘라내(truncate) 진행. 의식하지 못한 채 이전 맥락이 사라질 수 있으니 긴 대화에서는 주기적으로 요약·정리 권장.',
-              },
-              {
-                q: 'API 비용을 효과적으로 줄이려면?',
-                a: '<strong>1) 모델 선택</strong> — 분류·요약은 mini/Haiku/Flash, 복잡한 추론만 GPT-4o/Opus. <strong>2) 출력 제한</strong> — max_tokens 설정 + "300자 이내" 같은 지시. <strong>3) 프롬프트 캐싱</strong> — 반복 시스템 프롬프트 활용. <strong>4) 영문 프롬프트</strong> — 시스템·context는 영문으로. <strong>5) 배치 API</strong> — OpenAI/Anthropic의 batch는 50% 할인.',
-              },
-              {
-                q: '환율은 어떻게 계산되나요?',
-                a: '₩ 환산은 <strong>1 USD = 1,380원</strong>으로 단순 계산합니다. 실제 카드 청구는 결제 시점 환율 + 카드사 수수료가 추가되므로 실제 청구액은 표시 금액보다 약 1~3% 높을 수 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

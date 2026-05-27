@@ -2,6 +2,7 @@ import Link from 'next/link'
 import GoldenRatioClient from './GoldenRatioClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/golden-ratio',
@@ -9,6 +10,19 @@ export const metadata = buildMetadata({
   description: '황금 비율 φ=1.618로 긴 변·짧은 변·전체 길이 자동 계산 + 가로세로 비율(W:H)과 황금비 차이 비교 + 황금 직사각형·나선 시각화. 16:9·A4·인스타·유튜브 비율 비교까지.',
   keywords: ['황금비율계산기', '황금비계산기', '황금분할', '1:1.618', '피보나치계산기', '디자인비율계산기', '황금비율', '황금나선', '황금사각형', '비율비교', '백은비율', '16:9 비율', '이미지 비율 계산'],
 })
+
+const FAQ_LD = [
+              { q: '황금 비율과 황금 분할의 차이는?',
+                a: '같은 개념의 다른 표현입니다. &ldquo;황금 비율(Golden Ratio)&rdquo;은 비율 자체인 φ = 1.618...을 가리키고, &ldquo;황금 분할(Golden Section)&rdquo;은 선분을 이 비율로 나누는 작업을 뜻합니다. 실무에서는 구분 없이 혼용하는 경우가 많습니다.' },
+              { q: '황금 비율이 아름답게 느껴지는 이유는?',
+                a: '인간의 시지각이 자연에서 반복적으로 학습한 비율이라는 진화적 설명과, 수학적으로 자기 유사성(fractal)이 있어 시선의 흐름을 안정적으로 유도한다는 인지심리학적 설명이 공존합니다. 다만 모든 사람이 황금 비율만을 아름답다고 느끼는 것은 아니며, 실험 결과는 문화·개인차에 따라 다릅니다.' },
+              { q: '유튜브 썸네일에 황금 비율을 어떻게 적용하나요?',
+                a: '유튜브 썸네일 규격은 1280×720px(16:9)로 정해져 있어 이미지 규격 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px을 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 [비율 변환] 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
+              { q: '황금 비율과 백은 비율(√2:1)의 차이는?',
+                a: '백은 비율(Silver Ratio)은 √2 ≈ 1.414로, A4 용지(297×210mm)에 적용된 비율입니다. 반을 접어도 같은 비율이 유지되는 실용적 특성이 있어 종이 규격(A/B 시리즈)에 사용됩니다. 황금 비율은 미적·디자인적 비율, 백은 비율은 실용적·기능적 비율이라고 보면 구분하기 쉽습니다.' },
+              { q: '피보나치 수열이 황금 비율과 연관된 이유는?',
+                a: '피보나치 수열의 점화식 F(n+1) = F(n) + F(n-1)을 비율 F(n+1)/F(n) = R로 정리하면 R² - R - 1 = 0이라는 이차방정식이 됩니다. 이 방정식의 양의 해가 정확히 (1+√5)/2, 즉 φ입니다. 그래서 피보나치 수열의 인접 비율은 필연적으로 φ에 수렴합니다.' },
+            ]
 
 export default function GoldenRatioPage() {
   return (
@@ -205,19 +219,9 @@ export default function GoldenRatioPage() {
         {/* ── 6. FAQ (accordion) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              { q: '황금 비율과 황금 분할의 차이는?',
-                a: '같은 개념의 다른 표현입니다. &ldquo;황금 비율(Golden Ratio)&rdquo;은 비율 자체인 φ = 1.618...을 가리키고, &ldquo;황금 분할(Golden Section)&rdquo;은 선분을 이 비율로 나누는 작업을 뜻합니다. 실무에서는 구분 없이 혼용하는 경우가 많습니다.' },
-              { q: '황금 비율이 아름답게 느껴지는 이유는?',
-                a: '인간의 시지각이 자연에서 반복적으로 학습한 비율이라는 진화적 설명과, 수학적으로 자기 유사성(fractal)이 있어 시선의 흐름을 안정적으로 유도한다는 인지심리학적 설명이 공존합니다. 다만 모든 사람이 황금 비율만을 아름답다고 느끼는 것은 아니며, 실험 결과는 문화·개인차에 따라 다릅니다.' },
-              { q: '유튜브 썸네일에 황금 비율을 어떻게 적용하나요?',
-                a: '유튜브 썸네일 규격은 1280×720px(16:9)로 정해져 있어 이미지 규격 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px을 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 [비율 변환] 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
-              { q: '황금 비율과 백은 비율(√2:1)의 차이는?',
-                a: '백은 비율(Silver Ratio)은 √2 ≈ 1.414로, A4 용지(297×210mm)에 적용된 비율입니다. 반을 접어도 같은 비율이 유지되는 실용적 특성이 있어 종이 규격(A/B 시리즈)에 사용됩니다. 황금 비율은 미적·디자인적 비율, 백은 비율은 실용적·기능적 비율이라고 보면 구분하기 쉽습니다.' },
-              { q: '피보나치 수열이 황금 비율과 연관된 이유는?',
-                a: '피보나치 수열의 점화식 F(n+1) = F(n) + F(n-1)을 비율 F(n+1)/F(n) = R로 정리하면 R² - R - 1 = 0이라는 이차방정식이 됩니다. 이 방정식의 양의 해가 정확히 (1+√5)/2, 즉 φ입니다. 그래서 피보나치 수열의 인접 비율은 필연적으로 φ에 수렴합니다.' },
-            ].map((faq, i) => (
+            {FAQ_LD.map((faq, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {faq.q}

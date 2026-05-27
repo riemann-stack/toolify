@@ -3,6 +3,7 @@ import JsonClient from './JsonClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/json',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: 'JSON 정렬·압축·검증·트리 뷰 + TypeScript 인터페이스 자동 생성 + YAML·CSV 변환과 키 정렬·이스케이프·에러 위치.',
   keywords: ['JSON포맷터', 'JSON정렬', 'JSON압축', 'JSON트리뷰어', 'JSON유효성검사', 'JSON to TypeScript', 'JSON to YAML', 'JSON to CSV', 'JSON정렬키', 'JSON에러위치'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'JSON에 주석을 쓰면 왜 오류가 나나요?',
+                a: 'JSON 표준(RFC 8259)은 <strong>주석을 허용하지 않습니다.</strong> Douglas Crockford는 "주석을 허용하면 사람들이 파싱 지시문을 적기 시작해 호환성이 깨질 수 있어 의도적으로 뺐다"고 밝혔습니다. 주석이 필요하면 <strong>JSON5</strong>(트레일링 컴마·주석·작은따옴표 허용)나 <strong>JSONC</strong>(VSCode·tsconfig.json에서 사용)를 사용하세요.',
+              },
+              {
+                q: 'API 응답 JSON에서 TypeScript 타입을 자동 생성할 수 있나요?',
+                a: '네, 본 도구의 <strong>변환 탭 → TypeScript 인터페이스</strong>를 사용하세요. JSON을 붙여넣으면 자동으로 인터페이스를 생성합니다. 중첩 객체는 별도 인터페이스로 분리되어 재사용 가능하며, 키는 알파벳 순으로 정렬됩니다. <strong>옵셔널 필드(?)는 null 값일 때 자동 표시</strong>되며, 추가 검증·튜닝은 수동으로 진행하면 됩니다.',
+              },
+              {
+                q: 'JSON Beautify(정렬)와 Minify(압축) 차이는?',
+                a: '<strong>Beautify</strong>는 들여쓰기와 줄바꿈을 추가해 가독성을 높이는 작업으로, 디버깅이나 코드 리뷰 시 사용합니다. <strong>Minify</strong>는 모든 공백과 줄바꿈을 제거해 크기를 줄이는 작업으로, 네트워크 전송이나 저장 공간 절약이 필요할 때 사용합니다. API 응답은 보통 Minify로 전송하고, 분석할 때만 Beautify로 변환합니다. 일반적으로 <strong>Minify 시 20~40% 크기 감소</strong>됩니다.',
+              },
+              {
+                q: 'JSON 파싱 오류 위치를 어떻게 찾나요?',
+                a: 'JavaScript 표준 오류 메시지에는 보통 <code>at position N</code> 또는 <code>at line N column N</code> 형식으로 위치가 포함됩니다. 본 도구는 이를 자동으로 분석해 <strong>해당 라인의 텍스트와 컬럼 위치(^표시)</strong>를 보여줍니다. 자주 발생하는 원인은 ① trailing comma, ② 작은따옴표, ③ 키에 따옴표 누락, ④ 이스케이프되지 않은 특수문자입니다.',
+              },
+              {
+                q: '두 JSON의 차이점을 비교하는 방법은?',
+                a: '두 JSON을 비교하기 전 <strong>키 알파벳 정렬</strong>을 적용하면 순서 차이로 인한 가짜 diff를 제거할 수 있습니다. 본 도구의 <strong>변환 → 키 정렬</strong>로 정규화한 후, GitHub의 diff·VSCode의 비교 도구·jq 같은 CLI 도구로 의미적 차이만 확인하세요. 큰 JSON은 <code>jq -S</code>(키 정렬) + <code>diff</code> 조합이 효율적입니다.',
+              },
+            ]
 
 export default function JsonPage() {
   return (
@@ -227,29 +251,9 @@ export default function JsonPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'JSON에 주석을 쓰면 왜 오류가 나나요?',
-                a: 'JSON 표준(RFC 8259)은 <strong>주석을 허용하지 않습니다.</strong> Douglas Crockford는 "주석을 허용하면 사람들이 파싱 지시문을 적기 시작해 호환성이 깨질 수 있어 의도적으로 뺐다"고 밝혔습니다. 주석이 필요하면 <strong>JSON5</strong>(트레일링 컴마·주석·작은따옴표 허용)나 <strong>JSONC</strong>(VSCode·tsconfig.json에서 사용)를 사용하세요.',
-              },
-              {
-                q: 'API 응답 JSON에서 TypeScript 타입을 자동 생성할 수 있나요?',
-                a: '네, 본 도구의 <strong>변환 탭 → TypeScript 인터페이스</strong>를 사용하세요. JSON을 붙여넣으면 자동으로 인터페이스를 생성합니다. 중첩 객체는 별도 인터페이스로 분리되어 재사용 가능하며, 키는 알파벳 순으로 정렬됩니다. <strong>옵셔널 필드(?)는 null 값일 때 자동 표시</strong>되며, 추가 검증·튜닝은 수동으로 진행하면 됩니다.',
-              },
-              {
-                q: 'JSON Beautify(정렬)와 Minify(압축) 차이는?',
-                a: '<strong>Beautify</strong>는 들여쓰기와 줄바꿈을 추가해 가독성을 높이는 작업으로, 디버깅이나 코드 리뷰 시 사용합니다. <strong>Minify</strong>는 모든 공백과 줄바꿈을 제거해 크기를 줄이는 작업으로, 네트워크 전송이나 저장 공간 절약이 필요할 때 사용합니다. API 응답은 보통 Minify로 전송하고, 분석할 때만 Beautify로 변환합니다. 일반적으로 <strong>Minify 시 20~40% 크기 감소</strong>됩니다.',
-              },
-              {
-                q: 'JSON 파싱 오류 위치를 어떻게 찾나요?',
-                a: 'JavaScript 표준 오류 메시지에는 보통 <code>at position N</code> 또는 <code>at line N column N</code> 형식으로 위치가 포함됩니다. 본 도구는 이를 자동으로 분석해 <strong>해당 라인의 텍스트와 컬럼 위치(^표시)</strong>를 보여줍니다. 자주 발생하는 원인은 ① trailing comma, ② 작은따옴표, ③ 키에 따옴표 누락, ④ 이스케이프되지 않은 특수문자입니다.',
-              },
-              {
-                q: '두 JSON의 차이점을 비교하는 방법은?',
-                a: '두 JSON을 비교하기 전 <strong>키 알파벳 정렬</strong>을 적용하면 순서 차이로 인한 가짜 diff를 제거할 수 있습니다. 본 도구의 <strong>변환 → 키 정렬</strong>로 정규화한 후, GitHub의 diff·VSCode의 비교 도구·jq 같은 CLI 도구로 의미적 차이만 확인하세요. 큰 JSON은 <code>jq -S</code>(키 정렬) + <code>diff</code> 조합이 효율적입니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

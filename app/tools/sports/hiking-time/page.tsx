@@ -2,6 +2,7 @@ import Link from 'next/link'
 import HikingTimeClient from './HikingTimeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
@@ -209,6 +210,7 @@ export default function HikingTimePage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {FAQ.map((f, i) => (
               <details key={i} style={{ ...card, padding: '12px 16px' }}>

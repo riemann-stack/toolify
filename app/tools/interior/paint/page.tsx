@@ -3,6 +3,7 @@ import PaintClient from './PaintClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/paint',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '벽·천장 면적과 칠할 횟수로 필요한 페인트량과 구매 조합. 페인트 종류별 도포 면적 자동.',
   keywords: ['페인트계산기', '페인트소요량', '페인트양계산', '셀프페인트', '수성페인트', '벽페인트', '천장페인트', '페인트견적'],
 })
+
+const FAQ_LD = [
+              {
+                q: '24평 아파트 벽 페인트 시공에 페인트 몇 통이 필요한가요?',
+                a: '24평 아파트 벽 전체를 2회 도장 시 약 <strong>18~22L</strong>가 필요합니다. 한국 표준 4L 통으로 약 5통 또는 18L 통 1개로 충분합니다. 천장까지 함께 도장한다면 25~30L로 늘어납니다. 벽지 제거 후 시공할지 벽지 위 도장할지에 따라 약간의 차이가 있습니다.',
+              },
+              {
+                q: '페인트는 몇 회 도장해야 하나요?',
+                a: '일반적으로 <strong>2회 도장이 한국 표준</strong>입니다. 1회 도장은 색이 균일하지 않거나 비치는 부분이 생길 수 있고, 3회는 진한 색 위에 옅은 색을 칠하거나 완전히 다른 색으로 변경할 때 필요합니다. 특히 흰색이나 매우 옅은 색은 3회 도장이 권장됩니다.',
+              },
+              {
+                q: '페인트 1L로 몇 ㎡를 칠할 수 있나요?',
+                a: '한국 표준 수성 페인트는 <strong>1L당 약 9~10㎡(1회 도장 기준)</strong>를 칠할 수 있습니다. 유성 페인트는 11~13㎡, 에나멜은 13~15㎡로 더 넓은 면적을 칠할 수 있습니다. 다만 표면 상태(매끄러움·흡수율)에 따라 실제 도장 면적은 ±15% 정도 차이 날 수 있어 여유분(10%)을 포함해 구매하는 것이 안전합니다.',
+              },
+              {
+                q: '셀프 페인트 vs 도배, 어느 게 더 쉬운가요?',
+                a: '<strong>페인트가 일반적으로 더 쉽습니다.</strong> 페인트는 롤러로 균일하게 칠하면 되고, 실수해도 다시 덧칠할 수 있어 초보자에게 친화적입니다. 다만 마스킹·바닥 보호 등 사전 작업이 중요합니다. 도배는 무늬 맞춤·기포 제거 등 기술이 필요해 더 까다롭습니다.',
+              },
+              {
+                q: '페인트 시공 시 환기는 얼마나 해야 하나요?',
+                a: '<strong>수성 페인트</strong>는 시공 중과 시공 후 24시간 환기가 권장됩니다. <strong>유성 페인트</strong>는 시너 냄새가 강해 시공 중 강제 환기 + 시공 후 48~72시간 환기가 필요합니다. 친환경 저VOC 페인트도 안전을 위해 12시간 이상 환기를 권장합니다. 특히 임산부·영유아·민감자는 친환경 페인트를 사용하고 충분히 환기 후 입실하세요.',
+              },
+            ]
 
 export default function PaintPage() {
   return (
@@ -236,29 +260,9 @@ export default function PaintPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '24평 아파트 벽 페인트 시공에 페인트 몇 통이 필요한가요?',
-                a: '24평 아파트 벽 전체를 2회 도장 시 약 <strong>18~22L</strong>가 필요합니다. 한국 표준 4L 통으로 약 5통 또는 18L 통 1개로 충분합니다. 천장까지 함께 도장한다면 25~30L로 늘어납니다. 벽지 제거 후 시공할지 벽지 위 도장할지에 따라 약간의 차이가 있습니다.',
-              },
-              {
-                q: '페인트는 몇 회 도장해야 하나요?',
-                a: '일반적으로 <strong>2회 도장이 한국 표준</strong>입니다. 1회 도장은 색이 균일하지 않거나 비치는 부분이 생길 수 있고, 3회는 진한 색 위에 옅은 색을 칠하거나 완전히 다른 색으로 변경할 때 필요합니다. 특히 흰색이나 매우 옅은 색은 3회 도장이 권장됩니다.',
-              },
-              {
-                q: '페인트 1L로 몇 ㎡를 칠할 수 있나요?',
-                a: '한국 표준 수성 페인트는 <strong>1L당 약 9~10㎡(1회 도장 기준)</strong>를 칠할 수 있습니다. 유성 페인트는 11~13㎡, 에나멜은 13~15㎡로 더 넓은 면적을 칠할 수 있습니다. 다만 표면 상태(매끄러움·흡수율)에 따라 실제 도장 면적은 ±15% 정도 차이 날 수 있어 여유분(10%)을 포함해 구매하는 것이 안전합니다.',
-              },
-              {
-                q: '셀프 페인트 vs 도배, 어느 게 더 쉬운가요?',
-                a: '<strong>페인트가 일반적으로 더 쉽습니다.</strong> 페인트는 롤러로 균일하게 칠하면 되고, 실수해도 다시 덧칠할 수 있어 초보자에게 친화적입니다. 다만 마스킹·바닥 보호 등 사전 작업이 중요합니다. 도배는 무늬 맞춤·기포 제거 등 기술이 필요해 더 까다롭습니다.',
-              },
-              {
-                q: '페인트 시공 시 환기는 얼마나 해야 하나요?',
-                a: '<strong>수성 페인트</strong>는 시공 중과 시공 후 24시간 환기가 권장됩니다. <strong>유성 페인트</strong>는 시너 냄새가 강해 시공 중 강제 환기 + 시공 후 48~72시간 환기가 필요합니다. 친환경 저VOC 페인트도 안전을 위해 12시간 이상 환기를 권장합니다. 특히 임산부·영유아·민감자는 친환경 페인트를 사용하고 충분히 환기 후 입실하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

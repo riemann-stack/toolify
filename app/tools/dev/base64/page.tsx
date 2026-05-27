@@ -3,6 +3,7 @@ import Base64Client from './Base64Client'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/base64',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드. 한글·바이너리 모두 지원.',
   keywords: ['base64인코더', 'base64디코더', 'base64변환기', 'JWT디코더', '이미지base64', 'datauri생성', 'URL-safe base64', '파일base64변환', 'JWT만료확인', 'hex변환'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'Base64로 인코딩하면 파일 크기가 왜 커지나요?',
+                a: 'Base64는 <strong>3바이트(24비트)를 4문자(6비트 × 4)</strong>로 표현하므로 항상 4/3 = 약 33% 커집니다. 10MB 파일은 약 13.3MB가 되며, 줄바꿈·패딩까지 포함하면 더 늘어날 수 있습니다. 따라서 큰 파일은 Base64 대신 multipart/form-data나 파일 업로드 API를 사용하는 것이 효율적입니다.',
+              },
+              {
+                q: 'JWT 토큰을 디코딩해도 보안에 문제 없나요?',
+                a: '<strong>JWT의 HEADER와 PAYLOAD는 암호화가 아닌 인코딩</strong>이므로 누구나 디코딩할 수 있습니다. 토큰 보유자가 내용을 보는 것은 정상이지만, <strong>PAYLOAD에 민감 정보(비밀번호, 신용카드 등)를 절대 포함하면 안 됩니다.</strong> 토큰의 무결성은 SIGNATURE로 보장되며, 서명 검증은 비밀키가 필요합니다. 본 도구는 디코딩만 수행하며 서명 검증은 하지 않습니다.',
+              },
+              {
+                q: '한글을 Base64로 인코딩하면 깨지는 이유는?',
+                a: '브라우저 기본 <code>btoa()</code>는 ASCII 외 문자를 처리하지 못하는 한계가 있습니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 동일한 방식을 사용해야 깨지지 않습니다. <code>btoa(unescape(encodeURIComponent(text)))</code> 패턴이 표준입니다.',
+              },
+              {
+                q: 'URL-safe Base64는 언제 사용하나요?',
+                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe는 이를 <strong>-, _</strong>로 치환하고 패딩을 생략해 그대로 URL이나 파일명에 사용할 수 있습니다. <strong>JWT, OAuth, URL 파라미터, S3 사전 서명 URL</strong> 등에서 표준입니다.',
+              },
+              {
+                q: '이미지를 Base64 Data URI로 임베드하는 게 좋을까요?',
+                a: '경우에 따라 다릅니다. <strong>5KB 이하 작은 아이콘</strong>은 HTTP 요청 절감·CSS 통합 면에서 유리하지만, <strong>50KB 이상 큰 이미지</strong>는 ① 33% 크기 증가, ② 캐시 분리 불가, ③ 페이지 초기 로딩 지연 등의 단점이 큽니다. 일반적으로 <strong>SVG 아이콘 단일·이메일 템플릿</strong>은 Data URI, <strong>일반 이미지</strong>는 CDN 사용을 권장합니다.',
+              },
+            ]
 
 export default function Base64Page() {
   return (
@@ -274,29 +298,9 @@ export default function Base64Page() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'Base64로 인코딩하면 파일 크기가 왜 커지나요?',
-                a: 'Base64는 <strong>3바이트(24비트)를 4문자(6비트 × 4)</strong>로 표현하므로 항상 4/3 = 약 33% 커집니다. 10MB 파일은 약 13.3MB가 되며, 줄바꿈·패딩까지 포함하면 더 늘어날 수 있습니다. 따라서 큰 파일은 Base64 대신 multipart/form-data나 파일 업로드 API를 사용하는 것이 효율적입니다.',
-              },
-              {
-                q: 'JWT 토큰을 디코딩해도 보안에 문제 없나요?',
-                a: '<strong>JWT의 HEADER와 PAYLOAD는 암호화가 아닌 인코딩</strong>이므로 누구나 디코딩할 수 있습니다. 토큰 보유자가 내용을 보는 것은 정상이지만, <strong>PAYLOAD에 민감 정보(비밀번호, 신용카드 등)를 절대 포함하면 안 됩니다.</strong> 토큰의 무결성은 SIGNATURE로 보장되며, 서명 검증은 비밀키가 필요합니다. 본 도구는 디코딩만 수행하며 서명 검증은 하지 않습니다.',
-              },
-              {
-                q: '한글을 Base64로 인코딩하면 깨지는 이유는?',
-                a: '브라우저 기본 <code>btoa()</code>는 ASCII 외 문자를 처리하지 못하는 한계가 있습니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 동일한 방식을 사용해야 깨지지 않습니다. <code>btoa(unescape(encodeURIComponent(text)))</code> 패턴이 표준입니다.',
-              },
-              {
-                q: 'URL-safe Base64는 언제 사용하나요?',
-                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe는 이를 <strong>-, _</strong>로 치환하고 패딩을 생략해 그대로 URL이나 파일명에 사용할 수 있습니다. <strong>JWT, OAuth, URL 파라미터, S3 사전 서명 URL</strong> 등에서 표준입니다.',
-              },
-              {
-                q: '이미지를 Base64 Data URI로 임베드하는 게 좋을까요?',
-                a: '경우에 따라 다릅니다. <strong>5KB 이하 작은 아이콘</strong>은 HTTP 요청 절감·CSS 통합 면에서 유리하지만, <strong>50KB 이상 큰 이미지</strong>는 ① 33% 크기 증가, ② 캐시 분리 불가, ③ 페이지 초기 로딩 지연 등의 단점이 큽니다. 일반적으로 <strong>SVG 아이콘 단일·이메일 템플릿</strong>은 Data URI, <strong>일반 이미지</strong>는 CDN 사용을 권장합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

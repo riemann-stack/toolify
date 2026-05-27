@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import HashClient from './HashClient'
 import { buildMetadata } from '@/lib/seo'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/hash',
@@ -55,6 +56,19 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"MD5는 안전한가요?","a":"아니요. 보안 용도로는 절대 안 됩니다. 2004년 Wang 등이 MD5 충돌 공격을 발표한 이후 비밀번호 해싱·디지털 서명·SSL 인증서 등 보안 용도로 사용이 금지됐습니다. 단, 파일 무결성(체크섬)·중복 검출·캐시 키 등 비보안 용도로는 여전히 사용 가능합니다. 비밀번호는 반드시 bcrypt·scrypt·Argon2 같은 KDF를 서버 측에서 사용해야 합니다." },
+  { "q":"SHA-1은 사용해도 되나요?","a":"보안 목적으로는 사용 금지입니다. 2017년 Google이 SHAttered 공격으로 SHA-1 충돌을 시연했고, 2020년에는 더 강력한 chosen-prefix 충돌까지 가능해졌습니다. 모든 주요 브라우저(Chrome·Firefox·Safari·Edge)가 SHA-1 SSL 인증서를 차단합니다. 예외: Git 커밋 ID(점진적 SHA-256 전환 중), 레거시 호환, HMAC-SHA1(키가 비밀이면 충돌 공격 무관) 정도만 허용." },
+  { "q":"비밀번호를 SHA-256으로 해싱하면 안 되나요?","a":"안 됩니다. SHA 계열 단순 해싱은 비밀번호에 부적합합니다. 이유: ① 너무 빠름 → GPU로 초당 수십억 시도 가능 → 무지개 표·brute force에 취약. ② 솔트 자동 처리 X → 같은 비밀번호는 같은 해시 → 사용자 간 공유 비밀번호 노출. 올바른 비밀번호 해싱: • bcrypt — 가장 널리 쓰임 (BCrypt.NET, password_hash() in PHP) • scrypt — 메모리도 많이 씀 (ASIC 저항) • Argon2 — 2015 PHC 우승, 현 권장 표준 (Argon2id) 모두 서버 측에서 처리해야 하며, 클라이언트(브라우저)에서 비밀번호 해싱은 의미 없습니다 (서버는 해시도 비밀로 받아야 함)." },
+  { "q":"HMAC과 일반 해시의 차이는?","a":"HMAC(Hash-based MAC)은 비밀키 + 메시지를 함께 해싱해 생성하는 메시지 인증 코드입니다. • 일반 해시 (SHA-256 등): 누구나 메시지만 알면 같은 해시 생성 가능 → 위조 가능 • HMAC-SHA256: 키를 모르면 같은 해시 생성 불가능 → 메시지 위변조 검출 가능 공식: HMAC(key, msg) = H((key⊕opad) ‖ H((key⊕ipad) ‖ msg)) (RFC 2104) GitHub 웹훅, Slack, AWS Signature V4, JWT HS256 모두 HMAC-SHA256 사용. 본 도구의 [🔑 HMAC] 탭에서 4개 시나리오 프리셋 제공." },
+  { "q":"파일 해시가 다른 사이트와 다른 값이 나와요","a":"가장 흔한 원인은 줄바꿈(newline) 차이입니다. Windows(CRLF)와 macOS/Linux(LF)는 같은 텍스트 파일이라도 바이트가 달라 해시가 달라집니다. 그 외 원인: ① 파일이 다운로드 중 손상, ② 메타데이터·BOM 포함 여부, ③ ZIP 압축 해제 시 시간 정보 변경, ④ 다른 알고리즘으로 계산 확인 방법: 같은 OS에서 같은 알고리즘으로 다시 계산해 보세요. 본 도구의 결과는 macOS/Linux의 shasum·md5sum과 100% 일치합니다 (UTF-8 기준)." },
+  { "q":"큰 파일도 해시 가능한가요?","a":"가능합니다. 본 도구는 최대 1~2GB까지 브라우저 메모리 한도 내에서 처리 가능 (기기 RAM 의존). • SHA-1/256/512: Web Crypto API로 한 번에 계산 — 빠름 • MD5: 8MB 청크 단위 스트리밍 처리 (RFC 1321 inline 구현) — 느리지만 매우 큰 파일도 가능 100MB 초과 시 메모리 사용량·시간 경고가 표시됩니다. 수 GB 파일은 CLI(`shasum -a 256 file.iso`) 사용을 권장합니다." },
+  { "q":"SRI 해시(integrity)는 어떻게 만드나요?","a":"SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다. 생성 방법: 본 도구의 [📝 텍스트] 또는 [📁 파일] 탭에서 SHA-384 + Base64 출력을 사용 (또는 SHA-256/512). HTML 사용: <script src=\"...\" integrity=\"sha384-Base64결과\" crossorigin=\"anonymous\"></script> jsDelivr·cdnjs는 자동 생성 SRI를 제공합니다. 자체 호스팅 시 본 도구로 생성 가능." },
+  { "q":"Base64와 hex 형식 어떻게 선택?","a":"hex (16진): 일반적·가독성 ↑·길이 2배. 대부분 CLI·로그·검증용 표준. Base64: 짧음(약 33% 압축)·HTTP 헤더·이메일 친화. SRI integrity= 속성, JWT 등에 사용. Base64URL: +→-, /→_, 패딩(=) 제거. URL·파일명·JWT(헤더·페이로드·서명)에 안전. 용도별 권장: • 파일 체크섬·CLI 비교 → hex • SRI integrity 속성 → Base64 (또는 Base64URL) • JWT 서명 → Base64URL (RFC 7515) • API 헤더 (대부분 GitHub/Slack 등) → hex" },
+  { "q":"본 도구는 입력 데이터를 서버에 보내나요?","a":"아니요. 모든 계산이 브라우저(클라이언트)에서 수행됩니다. • MD5: 순수 JavaScript로 inline 구현 (외부 라이브러리·서버 호출 없음) • SHA-1/256/512: 브라우저 Web Crypto API (네이티브) • HMAC: Web Crypto API • 파일: FileReader로 메모리 내 처리, 업로드 없음 또한 입력 텍스트·Secret Key·파일은 localStorage에도 저장하지 않습니다 (옵션값만 저장). 공용 PC 사용 후 브라우저 탭을 닫으면 모든 데이터가 즉시 사라집니다. 추가 안전을 원하면 시크릿 모드·DevTools로 메모리 정리 권장." },
+  { "q":"해시 충돌(collision)이란 무엇인가요?","a":"서로 다른 두 입력이 같은 해시값을 만드는 현상입니다. 해시 함수는 입력은 무한·출력은 유한이라 이론적으로 충돌은 항상 존재해요. 안전한 해시는 찾기가 사실상 불가능해야 합니다(비둘기 집 원리 + 출력 공간이 매우 큼). • MD5 충돌 (2004): 약 2^18 시도로 충돌 가능 → 디지털 서명 위조 가능 • SHA-1 SHAttered (2017): Google이 100시간 GPU 작업으로 같은 SHA-1 두 PDF 시연 • SHA-256: 2^128 시도 필요 → 우주 수명보다 긺 → 안전 충돌 위험이 있어도 무결성 확인(체크섬)은 OK — 우연한 손상은 충돌과 무관, 의도적 변조 위험만 문제." }
+]
 
 export default function HashPage() {
   return (
@@ -254,6 +268,7 @@ export default function HashPage() {
 
       {/* FAQ */}
       <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+      <FaqJsonLd items={FAQ_LD} />
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. MD5는 안전한가요?</summary>

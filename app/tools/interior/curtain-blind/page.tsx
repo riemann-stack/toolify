@@ -3,6 +3,7 @@ import CurtainBlindClient from './CurtainBlindClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/curtain-blind',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '창문 사이즈로 커튼·블라인드·롤스크린 추천 사이즈 자동. 주름배수·길이·고정 위치까지.',
   keywords: ['커튼사이즈계산', '블라인드사이즈', '커튼길이추천', '커튼주름2배', '블라인드재는법', '롤스크린사이즈', '커튼봉길이', '커튼주문사이즈'],
 })
+
+const FAQ_LD = [
+              {
+                q: '커튼 주름은 몇 배가 좋은가요?',
+                a: '한국 표준은 <strong>2배 주름</strong>입니다. 봉 길이가 200cm라면 커튼 전체 폭은 400cm가 됩니다. 1.5배는 가벼운 자연 주름, 2.5~3배는 호텔 스타일의 매우 풍성한 주름입니다. 일반 가정 거실·침실은 2배가 가장 안정적이고, 시어 커튼은 1.5~2배, 암막 커튼은 2~2.5배를 권장합니다.',
+              },
+              {
+                q: '블라인드는 창문 안쪽과 바깥쪽 중 어디에 다는 게 좋나요?',
+                a: '인테리어 스타일과 빛 차단 정도에 따라 다릅니다. <strong>인사이드 마운트(창문 안쪽)</strong>는 깔끔하지만 좌우 가장자리로 빛이 샙니다. <strong>아웃사이드 마운트(창문 바깥쪽)</strong>는 빛 차단이 우수하고 작은 창을 크게 보이게 합니다. 창문틀 깊이가 6cm 미만이면 인사이드 설치가 어려우니 아웃사이드를 선택하세요.',
+              },
+              {
+                q: '커튼봉은 창문보다 얼마나 길어야 하나요?',
+                a: '일반적으로 <strong>창문 폭 + 좌우 15cm씩 = 총 30cm 더 길게</strong> 합니다. 이렇게 하면 커튼을 활짝 열었을 때 창문이 완전히 보이고 빛이 충분히 들어옵니다. 더 시각적 효과를 원한다면 좌우 20cm씩(총 40cm) 더 길게 할 수도 있습니다.',
+              },
+              {
+                q: '커튼 길이는 어디까지가 일반적인가요?',
+                a: '한국에서 가장 인기 있는 길이는 <strong>"바닥에서 5cm 위"</strong>입니다. 깔끔한 인상을 주고 청소가 편리합니다. 호텔이나 고급 인테리어를 원한다면 "바닥에 닿거나 +15cm 풀링"을 선택할 수 있지만 청소가 어렵고 먼지가 쌓이기 쉽습니다. 창문이 작거나 라디에이터·가구가 있는 경우 "창문 + 10cm" 짧은 길이도 좋습니다.',
+              },
+              {
+                q: '큰 거실 창문은 커튼 패널을 몇 장 해야 하나요?',
+                a: '• 가로 200cm 이하: <strong>양쪽 한 쌍 (좌·우 각 1장)</strong><br/>• 가로 200~350cm: 양쪽 한 쌍 (각 패널 폭 200~350cm)<br/>• 가로 350cm 이상: <strong>3분할 (양쪽 + 중앙) 또는 4분할</strong><br/>패널이 너무 넓으면 무게 때문에 봉이 휘거나 작동이 어려워지므로 1패널당 폭 200cm 이하를 권장합니다.',
+              },
+            ]
 
 export default function CurtainBlindPage() {
   return (
@@ -213,29 +237,9 @@ export default function CurtainBlindPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '커튼 주름은 몇 배가 좋은가요?',
-                a: '한국 표준은 <strong>2배 주름</strong>입니다. 봉 길이가 200cm라면 커튼 전체 폭은 400cm가 됩니다. 1.5배는 가벼운 자연 주름, 2.5~3배는 호텔 스타일의 매우 풍성한 주름입니다. 일반 가정 거실·침실은 2배가 가장 안정적이고, 시어 커튼은 1.5~2배, 암막 커튼은 2~2.5배를 권장합니다.',
-              },
-              {
-                q: '블라인드는 창문 안쪽과 바깥쪽 중 어디에 다는 게 좋나요?',
-                a: '인테리어 스타일과 빛 차단 정도에 따라 다릅니다. <strong>인사이드 마운트(창문 안쪽)</strong>는 깔끔하지만 좌우 가장자리로 빛이 샙니다. <strong>아웃사이드 마운트(창문 바깥쪽)</strong>는 빛 차단이 우수하고 작은 창을 크게 보이게 합니다. 창문틀 깊이가 6cm 미만이면 인사이드 설치가 어려우니 아웃사이드를 선택하세요.',
-              },
-              {
-                q: '커튼봉은 창문보다 얼마나 길어야 하나요?',
-                a: '일반적으로 <strong>창문 폭 + 좌우 15cm씩 = 총 30cm 더 길게</strong> 합니다. 이렇게 하면 커튼을 활짝 열었을 때 창문이 완전히 보이고 빛이 충분히 들어옵니다. 더 시각적 효과를 원한다면 좌우 20cm씩(총 40cm) 더 길게 할 수도 있습니다.',
-              },
-              {
-                q: '커튼 길이는 어디까지가 일반적인가요?',
-                a: '한국에서 가장 인기 있는 길이는 <strong>"바닥에서 5cm 위"</strong>입니다. 깔끔한 인상을 주고 청소가 편리합니다. 호텔이나 고급 인테리어를 원한다면 "바닥에 닿거나 +15cm 풀링"을 선택할 수 있지만 청소가 어렵고 먼지가 쌓이기 쉽습니다. 창문이 작거나 라디에이터·가구가 있는 경우 "창문 + 10cm" 짧은 길이도 좋습니다.',
-              },
-              {
-                q: '큰 거실 창문은 커튼 패널을 몇 장 해야 하나요?',
-                a: '• 가로 200cm 이하: <strong>양쪽 한 쌍 (좌·우 각 1장)</strong><br/>• 가로 200~350cm: 양쪽 한 쌍 (각 패널 폭 200~350cm)<br/>• 가로 350cm 이상: <strong>3분할 (양쪽 + 중앙) 또는 4분할</strong><br/>패널이 너무 넓으면 무게 때문에 봉이 휘거나 작동이 어려워지므로 1패널당 폭 200cm 이하를 권장합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

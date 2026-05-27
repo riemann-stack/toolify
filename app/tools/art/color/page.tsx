@@ -2,6 +2,7 @@ import ColorClient from './ColorClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/color',
@@ -15,6 +16,29 @@ export const metadata = buildMetadata({
     '디자인 토큰', 'LAB 색공간', 'HEXA 알파', '톤 팔레트',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: 'RGBA와 HEXA의 차이는?',
+                a: '둘 다 알파(투명도)를 포함하지만 표기법이 다릅니다. <strong>RGBA</strong>는 0~1 소수(<code>rgba(8,145,178,0.5)</code>), <strong>HEXA</strong>는 8자리 HEX(<code>#0891B280</code>)로 표기합니다. 80은 16진수로 128, 즉 50% 투명도입니다. 현대 CSS는 둘 다 지원하며, HEXA는 간결해 디자인 시스템에서 자주 사용됩니다.',
+              },
+              {
+                q: 'WCAG 대비비 기준은 어떻게 정해졌나요?',
+                a: 'WCAG는 W3C가 만든 국제 표준으로, <strong>시력 20/40 (정상의 절반) 사용자도 읽을 수 있도록</strong> 설정되었습니다. AA 4.5:1은 대부분 사용자, AAA 7:1은 시력이 매우 약한 사용자도 읽을 수 있는 수준입니다. 한국 행정·공공기관 웹 접근성 인증, 미국 ADA, 유럽 EAA 모두 동일 기준을 적용하므로 <strong>처음부터 AA 이상을 목표로</strong> 디자인하는 것이 좋습니다.',
+              },
+              {
+                q: 'OKLCH는 무엇이고 왜 채택해야 하나요?',
+                a: '2020년 제안된 <strong>인간 시각에 균일한 색공간</strong>입니다. L(명도), C(채도), H(색상)으로 구성되며 — HSL의 큰 결점인 "노란색이 파란색보다 훨씬 밝게 보이는 문제"를 해결합니다. 채도 조절 시 명도가 흔들리지 않아 다크 모드 자동 변환에서 정확하며, CSS Color 4 표준에서 권장하고 있습니다. <strong>Tailwind 4·shadcn/ui</strong> 등 최신 디자인 시스템이 채택 중입니다.',
+              },
+              {
+                q: '한 색상에서 어떤 팔레트를 만들어야 할까요?',
+                a: '용도에 따라 다릅니다 — 브랜드 메인 컬러는 <strong>Tailwind 11단계(50~950)</strong>, 강조·대비가 필요하면 <strong>보색 또는 분할 보색</strong>, 부드러운 디자인은 <strong>유사색(±30°)</strong>, 다양한 카테고리 구분에는 <strong>삼각·사각 배색</strong>, 다크 모드용에는 <strong>단색 명도 단계</strong>가 적합합니다. 대부분의 디자인 시스템은 Primary 11단계 + Neutral 11단계 + Semantic 4종(Success/Warning/Error/Info)을 기본 구성으로 채택합니다.',
+              },
+              {
+                q: '이미지에서 색상 추출은 정확한가요?',
+                a: '본 도구는 <strong>픽셀 빈도 기반 단순 양자화 알고리즘</strong>을 사용합니다. 가볍고 빠르지만 미묘한 색상 차이를 무시하거나, 작지만 중요한 강조색을 놓칠 수 있고, 그라디언트 이미지에서는 부정확할 수 있습니다. 정밀한 추출이 필요하면 <strong>Adobe Color, Coolors</strong> 같은 전문 도구를 권장합니다. 본 도구의 결과는 빠른 팔레트 영감용으로 활용하세요.',
+              },
+            ]
 
 export default function ColorPage() {
   return (
@@ -244,29 +268,9 @@ export default function ColorPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'RGBA와 HEXA의 차이는?',
-                a: '둘 다 알파(투명도)를 포함하지만 표기법이 다릅니다. <strong>RGBA</strong>는 0~1 소수(<code>rgba(8,145,178,0.5)</code>), <strong>HEXA</strong>는 8자리 HEX(<code>#0891B280</code>)로 표기합니다. 80은 16진수로 128, 즉 50% 투명도입니다. 현대 CSS는 둘 다 지원하며, HEXA는 간결해 디자인 시스템에서 자주 사용됩니다.',
-              },
-              {
-                q: 'WCAG 대비비 기준은 어떻게 정해졌나요?',
-                a: 'WCAG는 W3C가 만든 국제 표준으로, <strong>시력 20/40 (정상의 절반) 사용자도 읽을 수 있도록</strong> 설정되었습니다. AA 4.5:1은 대부분 사용자, AAA 7:1은 시력이 매우 약한 사용자도 읽을 수 있는 수준입니다. 한국 행정·공공기관 웹 접근성 인증, 미국 ADA, 유럽 EAA 모두 동일 기준을 적용하므로 <strong>처음부터 AA 이상을 목표로</strong> 디자인하는 것이 좋습니다.',
-              },
-              {
-                q: 'OKLCH는 무엇이고 왜 채택해야 하나요?',
-                a: '2020년 제안된 <strong>인간 시각에 균일한 색공간</strong>입니다. L(명도), C(채도), H(색상)으로 구성되며 — HSL의 큰 결점인 "노란색이 파란색보다 훨씬 밝게 보이는 문제"를 해결합니다. 채도 조절 시 명도가 흔들리지 않아 다크 모드 자동 변환에서 정확하며, CSS Color 4 표준에서 권장하고 있습니다. <strong>Tailwind 4·shadcn/ui</strong> 등 최신 디자인 시스템이 채택 중입니다.',
-              },
-              {
-                q: '한 색상에서 어떤 팔레트를 만들어야 할까요?',
-                a: '용도에 따라 다릅니다 — 브랜드 메인 컬러는 <strong>Tailwind 11단계(50~950)</strong>, 강조·대비가 필요하면 <strong>보색 또는 분할 보색</strong>, 부드러운 디자인은 <strong>유사색(±30°)</strong>, 다양한 카테고리 구분에는 <strong>삼각·사각 배색</strong>, 다크 모드용에는 <strong>단색 명도 단계</strong>가 적합합니다. 대부분의 디자인 시스템은 Primary 11단계 + Neutral 11단계 + Semantic 4종(Success/Warning/Error/Info)을 기본 구성으로 채택합니다.',
-              },
-              {
-                q: '이미지에서 색상 추출은 정확한가요?',
-                a: '본 도구는 <strong>픽셀 빈도 기반 단순 양자화 알고리즘</strong>을 사용합니다. 가볍고 빠르지만 미묘한 색상 차이를 무시하거나, 작지만 중요한 강조색을 놓칠 수 있고, 그라디언트 이미지에서는 부정확할 수 있습니다. 정밀한 추출이 필요하면 <strong>Adobe Color, Coolors</strong> 같은 전문 도구를 권장합니다. 본 도구의 결과는 빠른 팔레트 영감용으로 활용하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

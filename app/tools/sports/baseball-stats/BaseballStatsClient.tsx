@@ -34,6 +34,50 @@ function eraLevel(era: number): { label: string; cls: string } {
   return { label: '❌ 마이너급', cls: styles.lvBackup }
 }
 
+/* WAR 가치 해석 기준표 (참고용) */
+const WAR_TIERS: Array<{ range: string; label: string; color: string }> = [
+  { range: '7.0+',     label: 'MVP 유력 — 시즌을 지배하는 괴물', color: '#7C3AED' },
+  { range: '6.0~6.9',  label: '리그 MVP 경쟁 후보', color: '#9333EA' },
+  { range: '5.0~5.9',  label: '골든글러브 경쟁 후보', color: '#059669' },
+  { range: '4.0~4.9',  label: '실력으로 인정받는 리그 올스타급', color: '#0891B2' },
+  { range: '3.0~3.9',  label: '팀의 간판급 주전', color: '#0EA5E9' },
+  { range: '2.0~2.9',  label: '팀의 평균적인 주전 (밥값)', color: '#CA8A04' },
+  { range: '1.0~1.9',  label: '준주전·플래툰 백업', color: '#EA580C' },
+  { range: '0 이하',    label: '백업·대체선수 수준', color: '#DC2626' },
+]
+
+function WarGuide() {
+  return (
+    <details className={styles.card} style={{ cursor: 'default' }}>
+      <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, listStyle: 'revert' }}>
+        WAR로 보는 가치 기준표 — OPS·ERA만으론 부족할 때
+      </summary>
+      <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: '12px 0 14px' }}>
+        OPS 0.900, ERA 3점대가 “어느 정도 선수”인지는 그해 리그 환경(타고투저·투고타저)과 포지션 평균에 따라 가치가 크게 달라집니다.
+        그래서 현장에서는 보통 <strong style={{ color: 'var(--text)' }}>WAR</strong>(대체선수 대비 승리 기여)로 가늠합니다.
+        WAR는 타격·주루·수비·포지션 보정·출전량까지 모두 반영하는 종합 지표라 이 계산기의 기본 기록만으로는 정확히 산출할 수 없어,
+        아래 <strong style={{ color: 'var(--text)' }}>해석 기준표</strong>로 대신 안내합니다. 위의 OPS+·ERA+는 리그 환경을 보정한 값이니 WAR 감각을 잡는 데 함께 참고하세요.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {WAR_TIERS.map((t) => (
+          <div key={t.range} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
+            <span style={{
+              flexShrink: 0, minWidth: 64, textAlign: 'center', fontWeight: 800,
+              fontFamily: 'Inter, system-ui, sans-serif', color: t.color,
+              background: `${t.color}1a`, borderRadius: 8, padding: '4px 8px',
+            }}>{t.range}</span>
+            <span style={{ color: 'var(--text)' }}>{t.label}</span>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 14 }}>
+        보통 시즌 종료 WAR 3점 후반~4점대 선수를 “실력으로 인정받는 리그 올스타급”으로 봅니다.
+        타율·홈런 같은 클래식 기록은 그 뒤에 따라오는 평가 옵션에 가깝습니다.
+      </p>
+    </details>
+  )
+}
+
 /* ─────────────────────────────────────────────────────────
  * 투구 이닝 파서: 5.1 → 5.333..., 5.2 → 5.667...
  * ───────────────────────────────────────────────────────── */
@@ -203,6 +247,29 @@ export default function BaseballStatsClient() {
   /* OPS 수준 */
   const opsLv = opsLevel(calc.ops)
   const eraLv = eraLevel(pcalc.era)
+
+  /* ───── 리그 보정 지표 (OPS+ / ERA+) ─────
+   * 타고투저·투고타저 메타를 보정해 "리그 평균=100" 척도로 환산.
+   * OPS+ = 100 × (OBP/리그OBP + SLG/리그SLG − 1)
+   * ERA+ = 100 × (리그ERA ÷ ERA)   ※ 구장 보정은 생략한 간이값
+   */
+  const lgOBP = league.avgAVG + 0.063
+  const lgSLG = Math.max(0.001, league.avgOPS - lgOBP)
+  const opsPlus = (lgOBP > 0 && lgSLG > 0 && calc.ops > 0)
+    ? Math.round(100 * (calc.obp / lgOBP + calc.slg / lgSLG - 1))
+    : 0
+  const eraPlus = pcalc.era > 0 ? Math.round(100 * (league.avgERA / pcalc.era)) : 0
+
+  function plusLevel(v: number): { label: string; color: string } {
+    if (v >= 150) return { label: 'MVP·리그 최정상', color: '#7C3AED' }
+    if (v >= 130) return { label: '올스타급', color: '#059669' }
+    if (v >= 115) return { label: '간판 주전', color: '#0891B2' }
+    if (v >= 95)  return { label: '평균 주전', color: '#CA8A04' }
+    if (v >= 80)  return { label: '평균 이하', color: '#EA580C' }
+    return { label: '백업·교체', color: '#DC2626' }
+  }
+  const opsPlusLv = plusLevel(opsPlus)
+  const eraPlusLv = plusLevel(eraPlus)
 
   /* 리그 평균 비교 — 막대 그래프 max 값 */
   const compareMax = {
@@ -441,6 +508,21 @@ export default function BaseballStatsClient() {
               <span><span className={`${styles.legendDot} ${styles.legendDotMine}`} />내 기록</span>
               <span><span className={`${styles.legendDot} ${styles.legendDotLeague}`} />리그 평균</span>
             </div>
+
+            {/* OPS+ — 리그 보정 지표 */}
+            <div className={styles.plusBox}>
+              <div className={styles.plusHead}>
+                <span className={styles.plusName}>OPS+ <small>리그 평균 = 100</small></span>
+                <span className={styles.plusVal} style={{ color: opsPlusLv.color }}>
+                  {opsPlus}
+                  <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{opsPlusLv.label}</small>
+                </span>
+              </div>
+              <p className={styles.plusDesc}>
+                같은 OPS 0.900이라도 <strong>타고투저</strong>인 해엔 흔하고 <strong>투고타저</strong>인 해엔 귀합니다.
+                OPS+는 그해 {league.name} 환경을 보정해 100을 평균으로 환산한 값이라, 리그·시즌이 달라도 타격 가치를 같은 잣대로 비교할 수 있습니다.
+              </p>
+            </div>
           </div>
 
           {/* 타격 분포 파이 */}
@@ -537,6 +619,8 @@ export default function BaseballStatsClient() {
               </table>
             </div>
           </div>
+
+          <WarGuide />
         </>
       )}
 
@@ -639,7 +723,24 @@ export default function BaseballStatsClient() {
                 </>
               )}
             </p>
+
+            {/* ERA+ — 리그 보정 지표 */}
+            <div className={styles.plusBox}>
+              <div className={styles.plusHead}>
+                <span className={styles.plusName}>ERA+ <small>리그 평균 = 100</small></span>
+                <span className={styles.plusVal} style={{ color: eraPlusLv.color }}>
+                  {eraPlus}
+                  <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{eraPlusLv.label}</small>
+                </span>
+              </div>
+              <p className={styles.plusDesc}>
+                ERA 3점대의 가치는 그해 리그 환경에 따라 천차만별입니다. ERA+는 {league.name} 평균 ERA를 100으로 놓고 보정한 값으로,
+                100보다 크면 평균보다 잘 던진 것입니다. (구장 보정은 생략한 간이값)
+              </p>
+            </div>
           </div>
+
+          <WarGuide />
         </>
       )}
 

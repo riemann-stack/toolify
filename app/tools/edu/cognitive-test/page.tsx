@@ -3,6 +3,7 @@ import CognitiveTestClient from './CognitiveTestClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/cognitive-test',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '반응속도·스트룹 효과·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정하는 인지 능력 자가 진단.',
   keywords: ['인지능력테스트', '반응속도테스트', '스트룹효과', '이중과제', '집중력테스트', '인지심리학', '두뇌게임', 'reaction time test', 'stroop test'],
 })
+
+const FAQ_LD = [
+              {
+                q: '평균 반응속도가 250ms인데 정상인가요?',
+                a: '네, <strong>일반적인 건강한 성인 범위</strong> 안에 있습니다. 성인의 단순 반응속도는 보통 200~300ms 사이로, 250ms는 평균~빠른 수준입니다. 반응속도는 수면·피로·집중도·카페인·기기 성능에 따라 매번 다릅니다. 한 번의 결과로 인지 능력을 판단하지 말고, 여러 번 측정해 평균을 보거나 자신의 평소 기록과 비교하는 것이 좋습니다.',
+              },
+              {
+                q: '스트룹 효과가 잘 안 나오는데 인지 능력이 좋은 건가요?',
+                a: '스트룹 간섭이 작다는 건 글자 의미 자동 처리를 잘 억제한다는 의미로, <strong>선택적 주의력과 실행 기능이 좋다</strong>고 해석될 수 있습니다. 그러나 본 도구는 <strong>게임형 참고 지표이지 임상 검사가 아니므로</strong> "인지 능력이 우수하다"고 단정하기는 어렵습니다. 또한 한국어 글자에 익숙한 정도, 색깔 구분 능력 등에 따라 결과가 다를 수 있습니다.',
+              },
+              {
+                q: '이중 과제 결과가 안 좋은데 ADHD인가요?',
+                a: '<strong>본 도구의 결과로 ADHD를 자가 진단하지 마세요.</strong> ADHD는 신경과·정신건강의학과 전문의의 종합 평가로만 진단됩니다 — DSM-5 기준 면접 평가, 표준화된 임상 검사(K-WAIS-IV, Conners 평가척도), 발달력·일상 기능 평가, 신경학적 검사 등. 이중 과제 결과가 떨어지는 건 <strong>수면 부족·피로·집중 부족 등 일시적 요인</strong>일 가능성이 훨씬 높습니다. 지속적인 집중력·주의력 문제로 일상에 어려움이 있다면 전문의 상담을 받으세요.',
+              },
+              {
+                q: '모바일과 데스크탑 결과가 다른 이유는?',
+                a: '입력 방식과 화면 응답성이 달라 결과 차이가 발생합니다. <strong>모바일 터치는 인식 지연 약 20~50ms 추가</strong>되며, 모바일 화면 주사율은 보통 60Hz(일부 120Hz)입니다. 반면 데스크탑 마우스는 가장 빠른 입력이며, 모니터 주사율도 144Hz·240Hz 가능합니다. 따라서 <strong>모바일 결과는 데스크탑보다 20~50ms 느릴 수 있으며</strong>, 정확한 측정·자기 기록 갱신은 동일 환경에서 비교하는 것이 좋습니다.',
+              },
+              {
+                q: '매일 테스트하면 인지 능력이 향상되나요?',
+                a: '본 도구를 반복하면 <strong>도구 자체에 익숙해져서 결과가 좋아질 수 있지만</strong>, 이것이 일반적인 인지 능력 향상으로 이어진다는 과학적 증거는 약합니다. "두뇌 트레이닝 게임이 인지 능력을 향상시키는가?"는 인지 심리학에서 활발히 연구된 주제로, 대부분의 메타 분석은 <strong>"특정 게임 능력만 향상되고 일반 인지 능력 전이는 제한적"</strong>이라고 결론짓습니다. 진정한 인지 건강은 <strong>충분한 수면·규칙적 운동·사회적 상호작용·평생 학습</strong>이 가장 효과적이라는 것이 일관된 연구 결과입니다.',
+              },
+            ]
 
 export default function CognitiveTestPage() {
   return (
@@ -300,29 +324,9 @@ export default function CognitiveTestPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '평균 반응속도가 250ms인데 정상인가요?',
-                a: '네, <strong>일반적인 건강한 성인 범위</strong> 안에 있습니다. 성인의 단순 반응속도는 보통 200~300ms 사이로, 250ms는 평균~빠른 수준입니다. 반응속도는 수면·피로·집중도·카페인·기기 성능에 따라 매번 다릅니다. 한 번의 결과로 인지 능력을 판단하지 말고, 여러 번 측정해 평균을 보거나 자신의 평소 기록과 비교하는 것이 좋습니다.',
-              },
-              {
-                q: '스트룹 효과가 잘 안 나오는데 인지 능력이 좋은 건가요?',
-                a: '스트룹 간섭이 작다는 건 글자 의미 자동 처리를 잘 억제한다는 의미로, <strong>선택적 주의력과 실행 기능이 좋다</strong>고 해석될 수 있습니다. 그러나 본 도구는 <strong>게임형 참고 지표이지 임상 검사가 아니므로</strong> "인지 능력이 우수하다"고 단정하기는 어렵습니다. 또한 한국어 글자에 익숙한 정도, 색깔 구분 능력 등에 따라 결과가 다를 수 있습니다.',
-              },
-              {
-                q: '이중 과제 결과가 안 좋은데 ADHD인가요?',
-                a: '<strong>본 도구의 결과로 ADHD를 자가 진단하지 마세요.</strong> ADHD는 신경과·정신건강의학과 전문의의 종합 평가로만 진단됩니다 — DSM-5 기준 면접 평가, 표준화된 임상 검사(K-WAIS-IV, Conners 평가척도), 발달력·일상 기능 평가, 신경학적 검사 등. 이중 과제 결과가 떨어지는 건 <strong>수면 부족·피로·집중 부족 등 일시적 요인</strong>일 가능성이 훨씬 높습니다. 지속적인 집중력·주의력 문제로 일상에 어려움이 있다면 전문의 상담을 받으세요.',
-              },
-              {
-                q: '모바일과 데스크탑 결과가 다른 이유는?',
-                a: '입력 방식과 화면 응답성이 달라 결과 차이가 발생합니다. <strong>모바일 터치는 인식 지연 약 20~50ms 추가</strong>되며, 모바일 화면 주사율은 보통 60Hz(일부 120Hz)입니다. 반면 데스크탑 마우스는 가장 빠른 입력이며, 모니터 주사율도 144Hz·240Hz 가능합니다. 따라서 <strong>모바일 결과는 데스크탑보다 20~50ms 느릴 수 있으며</strong>, 정확한 측정·자기 기록 갱신은 동일 환경에서 비교하는 것이 좋습니다.',
-              },
-              {
-                q: '매일 테스트하면 인지 능력이 향상되나요?',
-                a: '본 도구를 반복하면 <strong>도구 자체에 익숙해져서 결과가 좋아질 수 있지만</strong>, 이것이 일반적인 인지 능력 향상으로 이어진다는 과학적 증거는 약합니다. "두뇌 트레이닝 게임이 인지 능력을 향상시키는가?"는 인지 심리학에서 활발히 연구된 주제로, 대부분의 메타 분석은 <strong>"특정 게임 능력만 향상되고 일반 인지 능력 전이는 제한적"</strong>이라고 결론짓습니다. 진정한 인지 건강은 <strong>충분한 수면·규칙적 운동·사회적 상호작용·평생 학습</strong>이 가장 효과적이라는 것이 일관된 연구 결과입니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

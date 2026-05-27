@@ -3,6 +3,7 @@ import ReviewIntervalClient from './ReviewIntervalClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/review-interval',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일 자동 계산 + 학습 항목 관리로 효율 학습법 완성.',
   keywords: ['복습간격계산기', '망각곡선', '에빙하우스', 'SM-2알고리즘', '복습주기', '학습일정', '간격반복학습', '시험공부계획', 'Spaced Repetition', 'Anki'],
 })
+
+const FAQ_LD = [
+              {
+                q: '복습은 언제 하는 것이 가장 효과적인가요?',
+                a: '<strong>"잊을 만 할 때"</strong> 복습하는 것이 가장 효과적입니다. 너무 자주 복습하면 시간 낭비, 너무 늦으면 다시 학습해야 합니다. 에빙하우스 망각곡선에 따라 일반적으로 ① 학습 다음 날(기억 33%), ② 3일 후(20%), ③ 7일 후(15%), ④ 14일 후(10%) 이렇게 점진적으로 간격을 늘리는 것이 권장됩니다. 본 도구의 SM-2 알고리즘이 개인의 기억 점수에 따라 자동 조정해줍니다.',
+              },
+              {
+                q: 'SM-2 알고리즘이 무엇인가요?',
+                a: '<strong>SuperMemo 2(SM-2)</strong>는 1985년 Piotr Wozniak이 만든 간격 반복 학습 알고리즘입니다. 각 학습 항목의 난이도(EF, Easiness Factor)를 사용자의 기억 점수(0~5)에 따라 자동 조정하며, 다음 복습 간격을 계산합니다. <strong>Anki·Mnemosyne</strong> 등 대부분의 SRS(Spaced Repetition System) 도구의 기반이며, 의대생·언어 학습자가 가장 많이 사용하는 검증된 알고리즘입니다.',
+              },
+              {
+                q: '망각곡선은 정말 정확한가요?',
+                a: '에빙하우스의 원래 실험은 자기 자신을 대상으로 무의미한 음절을 외운 결과입니다. <strong>개인차·학습 내용·수면·집중도에 따라 실제 망각 속도는 크게 다를 수 있습니다.</strong> 그러나 "시간이 지날수록 기억이 지수적으로 감소"하는 일반 패턴은 검증되었으며, 간격 반복 학습은 수많은 후속 연구로 효과가 입증되었습니다. 본 도구는 이 일반 원리를 단순화한 참고용 도구입니다.',
+              },
+              {
+                q: '매일 새로 학습하면 복습이 너무 많아지지 않나요?',
+                a: '네, 간격 반복 학습의 단점입니다. 처음에는 매일 학습량 = 복습량이 늘어나지만, 간격이 점점 길어지면서 안정화됩니다. 30일 동안 매일 30개 신규 학습 시: ① 1주차 신규 30 + 복습 30 = 60개, ② 2주차 신규 30 + 복습 60 = 90개, ③ <strong>3주차 이후 신규 30 + 복습 약 100개로 안정</strong>. 본 도구의 <strong>탭 4 (시험일 역산)</strong>에서 일별 학습량을 미리 계산할 수 있습니다.',
+              },
+              {
+                q: '본 도구의 데이터는 어디에 저장되나요?',
+                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 장점: ① 회원가입·로그인 불필요, ② 빠른 접근, ③ 사생활 보호(서버에 데이터 X). 단점: ① 같은 브라우저·같은 기기에서만 접근, ② 캐시 삭제·시크릿 모드 시 사라짐, ③ 다른 기기 사용 시 백업·가져오기 필요. <strong>탭 3에서 [백업 다운로드]</strong> 기능으로 정기적으로 JSON 파일을 저장하시기를 권장합니다.',
+              },
+            ]
 
 export default function ReviewIntervalPage() {
   return (
@@ -235,29 +259,9 @@ export default function ReviewIntervalPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '복습은 언제 하는 것이 가장 효과적인가요?',
-                a: '<strong>"잊을 만 할 때"</strong> 복습하는 것이 가장 효과적입니다. 너무 자주 복습하면 시간 낭비, 너무 늦으면 다시 학습해야 합니다. 에빙하우스 망각곡선에 따라 일반적으로 ① 학습 다음 날(기억 33%), ② 3일 후(20%), ③ 7일 후(15%), ④ 14일 후(10%) 이렇게 점진적으로 간격을 늘리는 것이 권장됩니다. 본 도구의 SM-2 알고리즘이 개인의 기억 점수에 따라 자동 조정해줍니다.',
-              },
-              {
-                q: 'SM-2 알고리즘이 무엇인가요?',
-                a: '<strong>SuperMemo 2(SM-2)</strong>는 1985년 Piotr Wozniak이 만든 간격 반복 학습 알고리즘입니다. 각 학습 항목의 난이도(EF, Easiness Factor)를 사용자의 기억 점수(0~5)에 따라 자동 조정하며, 다음 복습 간격을 계산합니다. <strong>Anki·Mnemosyne</strong> 등 대부분의 SRS(Spaced Repetition System) 도구의 기반이며, 의대생·언어 학습자가 가장 많이 사용하는 검증된 알고리즘입니다.',
-              },
-              {
-                q: '망각곡선은 정말 정확한가요?',
-                a: '에빙하우스의 원래 실험은 자기 자신을 대상으로 무의미한 음절을 외운 결과입니다. <strong>개인차·학습 내용·수면·집중도에 따라 실제 망각 속도는 크게 다를 수 있습니다.</strong> 그러나 "시간이 지날수록 기억이 지수적으로 감소"하는 일반 패턴은 검증되었으며, 간격 반복 학습은 수많은 후속 연구로 효과가 입증되었습니다. 본 도구는 이 일반 원리를 단순화한 참고용 도구입니다.',
-              },
-              {
-                q: '매일 새로 학습하면 복습이 너무 많아지지 않나요?',
-                a: '네, 간격 반복 학습의 단점입니다. 처음에는 매일 학습량 = 복습량이 늘어나지만, 간격이 점점 길어지면서 안정화됩니다. 30일 동안 매일 30개 신규 학습 시: ① 1주차 신규 30 + 복습 30 = 60개, ② 2주차 신규 30 + 복습 60 = 90개, ③ <strong>3주차 이후 신규 30 + 복습 약 100개로 안정</strong>. 본 도구의 <strong>탭 4 (시험일 역산)</strong>에서 일별 학습량을 미리 계산할 수 있습니다.',
-              },
-              {
-                q: '본 도구의 데이터는 어디에 저장되나요?',
-                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 장점: ① 회원가입·로그인 불필요, ② 빠른 접근, ③ 사생활 보호(서버에 데이터 X). 단점: ① 같은 브라우저·같은 기기에서만 접근, ② 캐시 삭제·시크릿 모드 시 사라짐, ③ 다른 기기 사용 시 백업·가져오기 필요. <strong>탭 3에서 [백업 다운로드]</strong> 기능으로 정기적으로 JSON 파일을 저장하시기를 권장합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

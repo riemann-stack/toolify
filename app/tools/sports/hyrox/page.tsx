@@ -3,6 +3,7 @@ import HyroxClient from './HyroxClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hyrox',
@@ -18,6 +19,29 @@ export const metadata = buildMetadata({
 
 const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+
+const FAQ_LD = [
+              {
+                q: '하이록스 완주 시간은 보통 얼마나 걸리나요?',
+                a: '개인전(Open) 기준 대략 <strong>엘리트 55~65분, 상급 70~80분, 중급 85~95분, 입문 100~120분</strong>입니다. 완주 자체가 목표라면 시간 제한은 사실상 없으며, 처음에는 90분~2시간을 잡고 페이싱하는 경우가 많습니다.',
+              },
+              {
+                q: '이 계산기의 예상 시간은 정확한가요?',
+                a: '스테이션 시간은 <strong>개인 편차가 매우 커서</strong> 레벨 기본값은 일반 참고 추정치입니다. 가장 정확하게 쓰려면 본인의 연습 기록(스키에르그·로잉·월볼 등)을 직접 입력하세요. 런 페이스도 「스테이션 직후의 지친 다리」 기준으로 평소보다 보수적으로 잡는 것이 현실적입니다.',
+              },
+              {
+                q: 'Open과 Pro의 차이는 무엇인가요?',
+                a: '운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 거리·횟수(런 8km, 월볼 100회 등)는 동일합니다. 입문이라면 Open으로 시작하는 것이 일반적입니다.',
+              },
+              {
+                q: '록스존(RoxZone)이 뭔가요?',
+                a: '런과 스테이션 사이를 <strong>이동·전환하는 구간</strong>으로, 그 시간도 전부 기록에 포함됩니다. 전환이 8번 있어 합치면 수 분에 달하므로, 동선과 장비 세팅을 미리 익혀 두면 의외로 큰 시간을 아낄 수 있습니다.',
+              },
+              {
+                q: '런과 스테이션 중 어디에 더 집중해야 하나요?',
+                a: '완주 시간에서 <strong>달리기가 차지하는 비중이 가장 큽니다</strong>(엘리트일수록 더 큼). 본 계산기의 「시간 비중」 막대로 본인 비중을 확인하고, 런 비중이 크면 컴파운드 러닝을, 스테이션 비중이 크면 근지구력·테크닉을 보강하세요.',
+              },
+            ]
 
 export default function HyroxPage() {
   return (
@@ -130,29 +154,9 @@ export default function HyroxPage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {[
-              {
-                q: '하이록스 완주 시간은 보통 얼마나 걸리나요?',
-                a: '개인전(Open) 기준 대략 <strong>엘리트 55~65분, 상급 70~80분, 중급 85~95분, 입문 100~120분</strong>입니다. 완주 자체가 목표라면 시간 제한은 사실상 없으며, 처음에는 90분~2시간을 잡고 페이싱하는 경우가 많습니다.',
-              },
-              {
-                q: '이 계산기의 예상 시간은 정확한가요?',
-                a: '스테이션 시간은 <strong>개인 편차가 매우 커서</strong> 레벨 기본값은 일반 참고 추정치입니다. 가장 정확하게 쓰려면 본인의 연습 기록(스키에르그·로잉·월볼 등)을 직접 입력하세요. 런 페이스도 「스테이션 직후의 지친 다리」 기준으로 평소보다 보수적으로 잡는 것이 현실적입니다.',
-              },
-              {
-                q: 'Open과 Pro의 차이는 무엇인가요?',
-                a: '운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 거리·횟수(런 8km, 월볼 100회 등)는 동일합니다. 입문이라면 Open으로 시작하는 것이 일반적입니다.',
-              },
-              {
-                q: '록스존(RoxZone)이 뭔가요?',
-                a: '런과 스테이션 사이를 <strong>이동·전환하는 구간</strong>으로, 그 시간도 전부 기록에 포함됩니다. 전환이 8번 있어 합치면 수 분에 달하므로, 동선과 장비 세팅을 미리 익혀 두면 의외로 큰 시간을 아낄 수 있습니다.',
-              },
-              {
-                q: '런과 스테이션 중 어디에 더 집중해야 하나요?',
-                a: '완주 시간에서 <strong>달리기가 차지하는 비중이 가장 큽니다</strong>(엘리트일수록 더 큼). 본 계산기의 「시간 비중」 막대로 본인 비중을 확인하고, 런 비중이 크면 컴파운드 러닝을, 스테이션 비중이 크면 근지구력·테크닉을 보강하세요.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ ...card, padding: '12px 16px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />

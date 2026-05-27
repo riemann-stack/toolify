@@ -2,6 +2,7 @@ import Link from 'next/link'
 import HardnessClient from './HardnessClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/hardness',
@@ -25,6 +26,41 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '16px',
 }
+
+const FAQ_LD = [
+              {
+                q: '경도가 높을수록 좋은 칼인가요?',
+                a: '아닙니다. 경도가 올라가면 <strong>날 유지력은 증가하지만 인성(충격 견딤)은 감소</strong>합니다. 60 HRC 부엌칼은 갈기 쉽고 떨어뜨려도 안 부서지지만, 65 HRC 칼은 날이 오래 가는 대신 뼈에 부딪히면 이 빠질 수 있어요. 용도에 맞춰 선택 — 일반 주방은 56~60, EDC·하이엔드는 60~62, 면도·정밀은 65+ 권장.',
+              },
+              {
+                q: 'HRC와 HRB는 왜 따로 있나요?',
+                a: 'Rockwell 경도계는 압자(indenter)와 하중을 바꿔 여러 스케일을 측정합니다. <strong>HRC는 다이아 원뿔 + 150kgf</strong>로 단단한 강철에, <strong>HRB는 1/16" 강구 + 100kgf</strong>로 연강·황동에 적합. 무른 금속에 HRC를 쓰면 압자가 너무 깊이 들어가 부정확하고, 단단한 강철에 HRB를 쓰면 강구가 변형되어 측정 자체가 안 됩니다. 두 스케일이 만나는 경계가 HRC 20 ≈ HRB 100.',
+              },
+              {
+                q: '카바이드(텅스텐 카바이드)는 왜 변환이 안 되나요?',
+                a: '카바이드는 <strong>HV 1500~2500</strong> 범위로 ASTM E140 표 끝(HV 940 ≈ HRC 68)을 한참 벗어나며, Rockwell C로 정확히 측정 불가능합니다. 카바이드는 자체적으로 <strong>HRA(다이아 원뿔 + 60kgf)</strong> 스케일을 쓰며 HRA 85~95 범위가 일반적. 본 도구는 강철 전용이라 카바이드는 별도 표가 필요해요.',
+              },
+              {
+                q: 'Shore 경도와 비교할 수 있나요?',
+                a: '<strong>직접 변환은 불가</strong>합니다. Shore A/D는 고무·플라스틱용 측정 원리(반발식 vs 압입식)와 압자가 완전히 달라, 강철의 HRC/HV/HB와 1:1 매핑할 수 없어요. 참고로 Shore D 80은 단단한 폴리카보네이트 수준이며 강철과 같은 영역이 아닙니다. 칼·공구는 HRC/HV, 고무·플라스틱은 Shore A/D로 별개 관리.',
+              },
+              {
+                q: 'HRC 60과 HV 700 중 어느 게 더 정확한 측정인가요?',
+                a: 'HV(비커스)가 측정 원리상 더 정밀합니다 — 압자가 작아 박판·코팅·열영향부(HAZ) 등 미세 영역을 잴 수 있고, 단일 척도로 연강(HV 50)부터 카바이드(HV 2000+)까지 연속 측정 가능. 다만 HRC는 측정이 빠르고 장비가 저렴해 산업 현장에서 더 흔히 쓰입니다. 정밀 R&D는 HV, 양산 품질관리는 HRC가 일반적.',
+              },
+              {
+                q: '인장강도(MPa)는 어떻게 추정되나요?',
+                a: '강철의 경우 <strong>UTS(MPa) ≈ 3.45 × HB</strong> 또는 <strong>UTS ≈ 3.2 × HV</strong> 근사가 자주 쓰입니다. 본 도구는 ASTM E140 표의 직접 값을 보간해 사용하므로 두 근사의 평균 수준이에요. 실측치는 시편의 합금 성분·압연 방향·시험 온도 등에 따라 ±10% 오차가 흔하므로, 설계 적용 전에는 인장시험이 필수입니다.',
+              },
+              {
+                q: '같은 강재인데 HRC 표기가 다른 이유가 뭔가요?',
+                a: '<strong>열처리(quenching·tempering)</strong>가 다르기 때문입니다. 같은 VG-10이라도 담금질 후 템퍼링 온도를 조정해 60 HRC ~ 62 HRC 범위로 자유롭게 조절 가능. 카탈로그의 HRC는 제조사의 표준 처리 결과이며, 다른 처리를 적용하면 다른 값이 나옵니다. 또한 표면 경화(carburizing·nitriding) 처리 시 표면만 HRC 60+이고 내부는 25 수준일 수 있어요.',
+              },
+              {
+                q: '집에서 경도를 측정할 수 있나요?',
+                a: '정확한 측정은 어렵지만 간이 비교는 가능합니다. <strong>줄(file) 테스트</strong>가 가장 흔한 방법 — 표준 줄(HRC 65~67)로 시편을 긁어 흔적이 안 남으면 시편이 ≥줄 경도, 쉽게 깎이면 ≤줄 경도. 칼덕은 <strong>경도 측정 파일 세트</strong>(40·50·55·60·65 HRC 표준 줄)를 구매해 비교하기도 해요. 정확한 수치는 휴대용 Rockwell 경도계(중고 50만원~) 또는 전문 실험실 의뢰가 필요합니다.',
+              },
+            ]
 
 export default function HardnessPage() {
   return (
@@ -117,41 +153,9 @@ export default function HardnessPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '경도가 높을수록 좋은 칼인가요?',
-                a: '아닙니다. 경도가 올라가면 <strong>날 유지력은 증가하지만 인성(충격 견딤)은 감소</strong>합니다. 60 HRC 부엌칼은 갈기 쉽고 떨어뜨려도 안 부서지지만, 65 HRC 칼은 날이 오래 가는 대신 뼈에 부딪히면 이 빠질 수 있어요. 용도에 맞춰 선택 — 일반 주방은 56~60, EDC·하이엔드는 60~62, 면도·정밀은 65+ 권장.',
-              },
-              {
-                q: 'HRC와 HRB는 왜 따로 있나요?',
-                a: 'Rockwell 경도계는 압자(indenter)와 하중을 바꿔 여러 스케일을 측정합니다. <strong>HRC는 다이아 원뿔 + 150kgf</strong>로 단단한 강철에, <strong>HRB는 1/16" 강구 + 100kgf</strong>로 연강·황동에 적합. 무른 금속에 HRC를 쓰면 압자가 너무 깊이 들어가 부정확하고, 단단한 강철에 HRB를 쓰면 강구가 변형되어 측정 자체가 안 됩니다. 두 스케일이 만나는 경계가 HRC 20 ≈ HRB 100.',
-              },
-              {
-                q: '카바이드(텅스텐 카바이드)는 왜 변환이 안 되나요?',
-                a: '카바이드는 <strong>HV 1500~2500</strong> 범위로 ASTM E140 표 끝(HV 940 ≈ HRC 68)을 한참 벗어나며, Rockwell C로 정확히 측정 불가능합니다. 카바이드는 자체적으로 <strong>HRA(다이아 원뿔 + 60kgf)</strong> 스케일을 쓰며 HRA 85~95 범위가 일반적. 본 도구는 강철 전용이라 카바이드는 별도 표가 필요해요.',
-              },
-              {
-                q: 'Shore 경도와 비교할 수 있나요?',
-                a: '<strong>직접 변환은 불가</strong>합니다. Shore A/D는 고무·플라스틱용 측정 원리(반발식 vs 압입식)와 압자가 완전히 달라, 강철의 HRC/HV/HB와 1:1 매핑할 수 없어요. 참고로 Shore D 80은 단단한 폴리카보네이트 수준이며 강철과 같은 영역이 아닙니다. 칼·공구는 HRC/HV, 고무·플라스틱은 Shore A/D로 별개 관리.',
-              },
-              {
-                q: 'HRC 60과 HV 700 중 어느 게 더 정확한 측정인가요?',
-                a: 'HV(비커스)가 측정 원리상 더 정밀합니다 — 압자가 작아 박판·코팅·열영향부(HAZ) 등 미세 영역을 잴 수 있고, 단일 척도로 연강(HV 50)부터 카바이드(HV 2000+)까지 연속 측정 가능. 다만 HRC는 측정이 빠르고 장비가 저렴해 산업 현장에서 더 흔히 쓰입니다. 정밀 R&D는 HV, 양산 품질관리는 HRC가 일반적.',
-              },
-              {
-                q: '인장강도(MPa)는 어떻게 추정되나요?',
-                a: '강철의 경우 <strong>UTS(MPa) ≈ 3.45 × HB</strong> 또는 <strong>UTS ≈ 3.2 × HV</strong> 근사가 자주 쓰입니다. 본 도구는 ASTM E140 표의 직접 값을 보간해 사용하므로 두 근사의 평균 수준이에요. 실측치는 시편의 합금 성분·압연 방향·시험 온도 등에 따라 ±10% 오차가 흔하므로, 설계 적용 전에는 인장시험이 필수입니다.',
-              },
-              {
-                q: '같은 강재인데 HRC 표기가 다른 이유가 뭔가요?',
-                a: '<strong>열처리(quenching·tempering)</strong>가 다르기 때문입니다. 같은 VG-10이라도 담금질 후 템퍼링 온도를 조정해 60 HRC ~ 62 HRC 범위로 자유롭게 조절 가능. 카탈로그의 HRC는 제조사의 표준 처리 결과이며, 다른 처리를 적용하면 다른 값이 나옵니다. 또한 표면 경화(carburizing·nitriding) 처리 시 표면만 HRC 60+이고 내부는 25 수준일 수 있어요.',
-              },
-              {
-                q: '집에서 경도를 측정할 수 있나요?',
-                a: '정확한 측정은 어렵지만 간이 비교는 가능합니다. <strong>줄(file) 테스트</strong>가 가장 흔한 방법 — 표준 줄(HRC 65~67)로 시편을 긁어 흔적이 안 남으면 시편이 ≥줄 경도, 쉽게 깎이면 ≤줄 경도. 칼덕은 <strong>경도 측정 파일 세트</strong>(40·50·55·60·65 HRC 표준 줄)를 구매해 비교하기도 해요. 정확한 수치는 휴대용 Rockwell 경도계(중고 50만원~) 또는 전문 실험실 의뢰가 필요합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

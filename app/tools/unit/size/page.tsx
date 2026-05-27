@@ -2,6 +2,7 @@ import Link from 'next/link'
 import SizeClient from './SizeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/size',
@@ -9,6 +10,25 @@ export const metadata = buildMetadata({
   description: 'US·EU·UK 의류·신발·속옷·반지 사이즈를 한국 사이즈로 + 브랜드별 차이 가이드와 해외 직구 사이즈 정확하게.',
   keywords: ['해외직구사이즈변환기', '신발사이즈변환', '의류사이즈US', '반지사이즈변환', '모자사이즈', '장갑사이즈', '벨트사이즈', '브라사이즈US', '아마존사이즈'],
 })
+
+const FAQ_LD = [
+              { q: '미국 신발 사이즈 9.5는 한국으로 몇 mm인가요?',
+                a: '미국 남성 기준 US 9.5는 한국 270mm에 해당합니다. 여성 기준은 US 9.5가 한국 265mm 정도입니다. 남성과 여성 기준이 다르므로 구매 시 성별 구분을 확인하세요.' },
+              { q: '유럽 사이즈 EU 42는 한국 몇 mm인가요?',
+                a: '남성 기준 EU 42는 한국 260mm(US 8.5)에 해당합니다. 유럽 사이즈는 브랜드에 따라 0.5~1 사이즈 정도 차이가 있을 수 있으므로 해당 브랜드의 공식 사이즈 가이드를 함께 확인하세요.' },
+              { q: '아마존에서 US M 사이즈를 주문하면 한국 M이랑 같나요?',
+                a: '미국 의류 M 사이즈는 한국 L(100) 사이즈와 비슷한 경우가 많습니다. 미국 의류는 한국보다 전반적으로 여유롭게 제작되므로, 한 사이즈 작게 주문하거나 해당 상품의 실제 측정값(measurements)을 확인하는 것이 좋습니다.' },
+              { q: '반지 사이즈를 모를 때 어떻게 측정하나요?',
+                a: '종이를 손가락에 감아 표시 후 자로 길이(둘레)를 측정합니다. 둘레가 50mm면 한국 11호, US 6호 정도입니다. 기존 반지의 안쪽 지름을 자로 재는 방법도 정확합니다 — 안지름 16mm = 한국 11호. 손가락이 부어 있을 수 있어 저녁 시간대 측정을 권장합니다.' },
+              { q: '미국 모자 사이즈 7과 7 1/4는 한국으로?',
+                a: '미국 모자 7 = 한국 56cm = 한국 M 사이즈, 7 1/4 = 한국 57cm = 한국 M/L 사이즈입니다. 미국은 인치 단위(머리 둘레 ÷ π ≈ 3.14)를 사용하기 때문에 7인치 = 약 17.8cm × π = 56cm로 환산됩니다.' },
+              { q: '미국 브라 사이즈 34B는 한국 몇인가요?',
+                a: '미국 34B = 한국 75B입니다. 미국은 밑가슴 인치 + 컵, 한국은 밑가슴 cm + 컵으로 표기합니다. 75B = 밑가슴 75cm + B컵을 의미합니다. 컵 사이즈는 미국 DD = 한국 E처럼 일부 다르니 변환표를 확인하세요.' },
+              { q: '청바지 인치 사이즈는 어떻게 변환하나요?',
+                a: '청바지 인치는 허리 둘레를 인치로 표기한 것으로, 30인치 = 약 76cm = 한국 30 사이즈입니다. 인심(다리 길이)도 함께 표기되는 경우가 많아 "30/32"는 허리 30인치, 인심 32인치를 의미합니다. 인치 = cm × 0.394 또는 cm = 인치 × 2.54로 환산하세요.' },
+              { q: '해외 직구 시 사이즈 실패를 줄이려면?',
+                a: '① 브랜드 공식 측정값(measurements) 확인 ② 무료 반품 가능 사이트 우선 이용 (아마존·자라) ③ 사이즈 후기 검색 ("이 사이즈는 작게/크게 나옴") ④ 의심스러우면 한 사이즈 크게 주문 ⑤ 본인 사이즈를 cm로 정확히 측정해 두기 — 이 5가지를 지키면 실패 확률이 크게 줄어듭니다.' },
+            ]
 
 export default function SizePage() {
   return (
@@ -246,25 +266,9 @@ export default function SizePage() {
         {/* ── 6. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { q: '미국 신발 사이즈 9.5는 한국으로 몇 mm인가요?',
-                a: '미국 남성 기준 US 9.5는 한국 270mm에 해당합니다. 여성 기준은 US 9.5가 한국 265mm 정도입니다. 남성과 여성 기준이 다르므로 구매 시 성별 구분을 확인하세요.' },
-              { q: '유럽 사이즈 EU 42는 한국 몇 mm인가요?',
-                a: '남성 기준 EU 42는 한국 260mm(US 8.5)에 해당합니다. 유럽 사이즈는 브랜드에 따라 0.5~1 사이즈 정도 차이가 있을 수 있으므로 해당 브랜드의 공식 사이즈 가이드를 함께 확인하세요.' },
-              { q: '아마존에서 US M 사이즈를 주문하면 한국 M이랑 같나요?',
-                a: '미국 의류 M 사이즈는 한국 L(100) 사이즈와 비슷한 경우가 많습니다. 미국 의류는 한국보다 전반적으로 여유롭게 제작되므로, 한 사이즈 작게 주문하거나 해당 상품의 실제 측정값(measurements)을 확인하는 것이 좋습니다.' },
-              { q: '반지 사이즈를 모를 때 어떻게 측정하나요?',
-                a: '종이를 손가락에 감아 표시 후 자로 길이(둘레)를 측정합니다. 둘레가 50mm면 한국 11호, US 6호 정도입니다. 기존 반지의 안쪽 지름을 자로 재는 방법도 정확합니다 — 안지름 16mm = 한국 11호. 손가락이 부어 있을 수 있어 저녁 시간대 측정을 권장합니다.' },
-              { q: '미국 모자 사이즈 7과 7 1/4는 한국으로?',
-                a: '미국 모자 7 = 한국 56cm = 한국 M 사이즈, 7 1/4 = 한국 57cm = 한국 M/L 사이즈입니다. 미국은 인치 단위(머리 둘레 ÷ π ≈ 3.14)를 사용하기 때문에 7인치 = 약 17.8cm × π = 56cm로 환산됩니다.' },
-              { q: '미국 브라 사이즈 34B는 한국 몇인가요?',
-                a: '미국 34B = 한국 75B입니다. 미국은 밑가슴 인치 + 컵, 한국은 밑가슴 cm + 컵으로 표기합니다. 75B = 밑가슴 75cm + B컵을 의미합니다. 컵 사이즈는 미국 DD = 한국 E처럼 일부 다르니 변환표를 확인하세요.' },
-              { q: '청바지 인치 사이즈는 어떻게 변환하나요?',
-                a: '청바지 인치는 허리 둘레를 인치로 표기한 것으로, 30인치 = 약 76cm = 한국 30 사이즈입니다. 인심(다리 길이)도 함께 표기되는 경우가 많아 "30/32"는 허리 30인치, 인심 32인치를 의미합니다. 인치 = cm × 0.394 또는 cm = 인치 × 2.54로 환산하세요.' },
-              { q: '해외 직구 시 사이즈 실패를 줄이려면?',
-                a: '① 브랜드 공식 측정값(measurements) 확인 ② 무료 반품 가능 사이트 우선 이용 (아마존·자라) ③ 사이즈 후기 검색 ("이 사이즈는 작게/크게 나옴") ④ 의심스러우면 한 사이즈 크게 주문 ⑤ 본인 사이즈를 cm로 정확히 측정해 두기 — 이 5가지를 지키면 실패 확률이 크게 줄어듭니다.' },
-            ].map((faq, i) => (
+            {FAQ_LD.map((faq, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {faq.q}
@@ -282,8 +286,8 @@ export default function SizePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/unit/length',     icon: '📏', name: '길이 변환기',     desc: 'cm·인치·m·피트 즉시 변환' },
-              { href: '/tools/unit/weight',     icon: '⚖️', name: '무게 변환기',     desc: 'kg·lb·oz·근 즉시 변환' },
+              { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',     desc: '길이·무게·온도 통합 변환' },
+              { href: '/tools/life/packing',    icon: '🧳', name: '여행 짐 체크리스트', desc: '해외여행 준비물·옷 관리' },
               { href: '/tools/health/bmi',      icon: '💪', name: 'BMI 계산기',     desc: '체형 파악으로 사이즈 가늠' },
               { href: '/tools/life/unit-price', icon: '💰', name: '단가 비교 계산기', desc: '직구 가격·국내 가격 비교' },
             ].map(t => (

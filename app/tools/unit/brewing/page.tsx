@@ -2,6 +2,7 @@ import Link from 'next/link'
 import BrewingClient from './BrewingClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/brewing',
@@ -24,6 +25,41 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '16px',
 }
+
+const FAQ_LD = [
+              {
+                q: 'Brix와 Plato는 정확히 같은가요?',
+                a: '<strong>실용적으로는 같습니다</strong>(차이 < 0.05°). Brix는 식품 업계에서 자당 100%를 기준으로, Plato는 양조 업계에서 맥주 워트의 추출당을 기준으로 정의된 약간 다른 정의지만, 동일한 농도의 동일한 시료는 거의 같은 값이 나옵니다. 양조 카탈로그는 Plato로 표기하고 식품 카탈로그는 Brix로 표기할 뿐입니다.',
+              },
+              {
+                q: '굴절계로 발효 후 Brix를 재면 왜 부정확한가요?',
+                a: '굴절계는 <strong>빛의 굴절률로 당도를 추정</strong>합니다. 발효 후 시료에는 알코올이 들어있는데, 알코올은 굴절률을 자체적으로 올려서 마치 당이 더 있는 것처럼 측정됩니다. 정확한 발효 후 Brix는 <strong>알코올 보정식</strong>(Sean Terrill 공식 등)으로 변환하거나, <strong>비중계로 SG 직접 측정</strong>이 권장됩니다. 본 도구의 OG/FG 입력에 SG를 쓰세요.',
+              },
+              {
+                q: 'OG·FG 입력 시 SG로만 받는 이유는?',
+                a: 'SG는 알코올 유무와 관계없이 정확하고, ABV 공식이 SG 기준이라 그렇습니다. Brix로 측정했다면 본 도구의 5종 환산표에서 Brix→SG 값을 확인해 입력하세요. 단, <strong>발효 후 Brix는 굴절계가 부정확</strong>하니 (위 Q2 참고) 비중계로 SG를 직접 재는 게 가장 정확합니다.',
+              },
+              {
+                q: '와인 머스트 Brix 23은 ABV 몇 %로 발효되나요?',
+                a: '대략 <strong>12.5~14% ABV</strong>로 발효됩니다(0.55~0.60 배수). 정확한 값은 효모 종류(드라이일수록 낮음)·발효 온도(높을수록 잔당 ↓ ABV ↑)·당 잔량(스위트로 만들지 드라이로 만들지)에 따라 ±1% 차이. 일반 가이드: 화이트는 22 Brix 부근, 레드는 24~26 Brix, 디저트 와인은 28~30 Brix로 시작합니다.',
+              },
+              {
+                q: 'pH와 TA(산도)는 왜 같이 측정하나요?',
+                a: 'pH는 <strong>현재 산성의 강도</strong>를(로그 스케일), TA(Titratable Acidity)는 <strong>총 산의 농도</strong>를 측정합니다. 와인을 예로, pH 3.5에 TA 6g/L vs pH 3.5에 TA 9g/L는 완전히 다른 와인 — 후자가 입에서 더 시큼하게 느껴지고 보존성도 더 좋습니다. 직접 변환 공식은 없고, <strong>두 값을 모두 측정·기록</strong>해야 발효 진행과 균형을 알 수 있어요.',
+              },
+              {
+                q: 'Oechsle와 Baumé 중 어느 게 더 정확한가요?',
+                a: '<strong>정확도는 같습니다</strong>(둘 다 SG에서 단순 변환). 차이는 지역·전통: 독일·오스트리아·체코는 °Oe, 프랑스·이탈리아·스페인은 °Bé, 미국·영국·호주는 SG·Brix를 선호합니다. 본 도구는 5종 모두 동시 표시하므로 어느 지역 레시피든 바로 매칭 가능합니다.',
+              },
+              {
+                q: 'US Proof와 UK Proof가 다른 이유는?',
+                a: '<strong>US Proof = ABV × 2</strong>는 1848년 미국 정부가 정한 단순 단위. <strong>UK Proof</strong>는 1816년 기준으로 100°가 57.15% ABV에 해당하는 역사적 단위 — 정확히는 ABV ÷ 0.5715. UK는 1980년대부터 표기를 ABV로 통일했고, US도 라벨에는 ABV/Proof 둘 다 표기하는 경향. 본 도구의 UK Proof는 옛 위스키·럼 라벨 해독용 참고 정도로 보세요.',
+              },
+              {
+                q: '잼은 왜 65 Brix↑이 필요한가요?',
+                a: '<strong>당 함량 65%↑이 미생물 증식을 억제</strong>하는 임계선이기 때문(수분활성도 a<sub>w</sub> ≈ 0.85 이하). 60 Brix는 곰팡이 위험, 65 Brix는 일반 곰팡이·효모 차단, 70 Brix는 모든 균 차단이지만 결정화·끈적임 ↑. 시판 잼은 보통 65~68 Brix. 펙틴 농도와 끓이는 시간으로 조정하며, <strong>굴절계 측정이 가장 정확</strong>(스푼·시각 테스트는 ±5 Brix 오차).',
+              },
+            ]
 
 export default function BrewingPage() {
   return (
@@ -131,41 +167,9 @@ export default function BrewingPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'Brix와 Plato는 정확히 같은가요?',
-                a: '<strong>실용적으로는 같습니다</strong>(차이 < 0.05°). Brix는 식품 업계에서 자당 100%를 기준으로, Plato는 양조 업계에서 맥주 워트의 추출당을 기준으로 정의된 약간 다른 정의지만, 동일한 농도의 동일한 시료는 거의 같은 값이 나옵니다. 양조 카탈로그는 Plato로 표기하고 식품 카탈로그는 Brix로 표기할 뿐입니다.',
-              },
-              {
-                q: '굴절계로 발효 후 Brix를 재면 왜 부정확한가요?',
-                a: '굴절계는 <strong>빛의 굴절률로 당도를 추정</strong>합니다. 발효 후 시료에는 알코올이 들어있는데, 알코올은 굴절률을 자체적으로 올려서 마치 당이 더 있는 것처럼 측정됩니다. 정확한 발효 후 Brix는 <strong>알코올 보정식</strong>(Sean Terrill 공식 등)으로 변환하거나, <strong>비중계로 SG 직접 측정</strong>이 권장됩니다. 본 도구의 OG/FG 입력에 SG를 쓰세요.',
-              },
-              {
-                q: 'OG·FG 입력 시 SG로만 받는 이유는?',
-                a: 'SG는 알코올 유무와 관계없이 정확하고, ABV 공식이 SG 기준이라 그렇습니다. Brix로 측정했다면 본 도구의 5종 환산표에서 Brix→SG 값을 확인해 입력하세요. 단, <strong>발효 후 Brix는 굴절계가 부정확</strong>하니 (위 Q2 참고) 비중계로 SG를 직접 재는 게 가장 정확합니다.',
-              },
-              {
-                q: '와인 머스트 Brix 23은 ABV 몇 %로 발효되나요?',
-                a: '대략 <strong>12.5~14% ABV</strong>로 발효됩니다(0.55~0.60 배수). 정확한 값은 효모 종류(드라이일수록 낮음)·발효 온도(높을수록 잔당 ↓ ABV ↑)·당 잔량(스위트로 만들지 드라이로 만들지)에 따라 ±1% 차이. 일반 가이드: 화이트는 22 Brix 부근, 레드는 24~26 Brix, 디저트 와인은 28~30 Brix로 시작합니다.',
-              },
-              {
-                q: 'pH와 TA(산도)는 왜 같이 측정하나요?',
-                a: 'pH는 <strong>현재 산성의 강도</strong>를(로그 스케일), TA(Titratable Acidity)는 <strong>총 산의 농도</strong>를 측정합니다. 와인을 예로, pH 3.5에 TA 6g/L vs pH 3.5에 TA 9g/L는 완전히 다른 와인 — 후자가 입에서 더 시큼하게 느껴지고 보존성도 더 좋습니다. 직접 변환 공식은 없고, <strong>두 값을 모두 측정·기록</strong>해야 발효 진행과 균형을 알 수 있어요.',
-              },
-              {
-                q: 'Oechsle와 Baumé 중 어느 게 더 정확한가요?',
-                a: '<strong>정확도는 같습니다</strong>(둘 다 SG에서 단순 변환). 차이는 지역·전통: 독일·오스트리아·체코는 °Oe, 프랑스·이탈리아·스페인은 °Bé, 미국·영국·호주는 SG·Brix를 선호합니다. 본 도구는 5종 모두 동시 표시하므로 어느 지역 레시피든 바로 매칭 가능합니다.',
-              },
-              {
-                q: 'US Proof와 UK Proof가 다른 이유는?',
-                a: '<strong>US Proof = ABV × 2</strong>는 1848년 미국 정부가 정한 단순 단위. <strong>UK Proof</strong>는 1816년 기준으로 100°가 57.15% ABV에 해당하는 역사적 단위 — 정확히는 ABV ÷ 0.5715. UK는 1980년대부터 표기를 ABV로 통일했고, US도 라벨에는 ABV/Proof 둘 다 표기하는 경향. 본 도구의 UK Proof는 옛 위스키·럼 라벨 해독용 참고 정도로 보세요.',
-              },
-              {
-                q: '잼은 왜 65 Brix↑이 필요한가요?',
-                a: '<strong>당 함량 65%↑이 미생물 증식을 억제</strong>하는 임계선이기 때문(수분활성도 a<sub>w</sub> ≈ 0.85 이하). 60 Brix는 곰팡이 위험, 65 Brix는 일반 곰팡이·효모 차단, 70 Brix는 모든 균 차단이지만 결정화·끈적임 ↑. 시판 잼은 보통 65~68 Brix. 펙틴 농도와 끓이는 시간으로 조정하며, <strong>굴절계 측정이 가장 정확</strong>(스푼·시각 테스트는 ±5 Brix 오차).',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

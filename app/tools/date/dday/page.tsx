@@ -2,6 +2,7 @@ import DdayClient from './DdayClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/date/dday',
@@ -15,6 +16,33 @@ export const metadata = buildMetadata({
     '수능 디데이', '결혼 디데이',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: 'D-day 데이터는 어디에 저장되나요?',
+                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 회원가입·로그인 불필요, 빠른 접근, 사생활 보호(서버 저장 X). 다만 같은 브라우저·기기에서만 접근 가능하며 캐시 삭제·시크릿 모드 시 사라집니다. 다른 기기 사용 시 [📥 백업 다운로드] 기능으로 JSON 파일을 저장하시기 바랍니다.',
+              },
+              {
+                q: '영업일 계산은 어떤 공휴일이 반영되나요?',
+                a: '<strong>한국 법정 공휴일 2026~2030년</strong> 자동 반영: 신정, 설날 3일, 삼일절, 어린이날, 부처님오신날, 현충일, 광복절, 추석 3일, 개천절, 한글날, 성탄절 + 대체 공휴일. <strong>임시 공휴일·근로자의 날(5/1)</strong>은 별도이며 정부 발표 시 업데이트됩니다. 회사별 공휴일·연차는 본 도구에서 처리하지 않으니 별도 관리하세요.',
+              },
+              {
+                q: '평일과 영업일의 차이는?',
+                a: '<strong>평일</strong>은 월~금, <strong>영업일</strong>은 평일에서 공휴일을 제외한 실제 일하는 날입니다. 예: 5월 5일(어린이날)이 화요일이면 평일이지만 영업일은 아닙니다. 법적·계약상 기한 계산은 보통 영업일 기준, 학습·준비 기간 계산은 평일 기준이 일반적입니다.',
+              },
+              {
+                q: '페이스 계산은 어떤 목표에 적합한가요?',
+                a: '<strong>분할 가능한 모든 목표</strong>에 적용 가능합니다 — 학습(페이지·단어·문제), 운동(km·횟수·체중), 저축(금액), 글쓰기(글 수·단어), 다이어트(kg). 현재 페이스 분석으로 <strong>목표 달성 가능 여부와 추가 노력량</strong>을 파악할 수 있어 장기 목표 관리에 유용합니다.',
+              },
+              {
+                q: '반복 D-day는 어떻게 작동하나요?',
+                a: '반복 D-day는 다음 발생일을 자동 계산합니다. 예: 매년 반복 생일 D-day는 올해 생일이 지나면 자동으로 내년 생일로 갱신됩니다. 매월 반복(월급일·결제일)도 다음 달 자동 갱신됩니다. 반복 옵션: <strong>매년·매월·매주</strong>. 한 번 설정으로 평생 자동 관리됩니다.',
+              },
+              {
+                q: '"날짜 차이 계산기"는 어디로 갔나요?',
+                a: '<strong>본 도구의 [두 날짜 사이] 탭으로 통합</strong>되었습니다. 기존 <code>/tools/date/diff</code> 주소는 자동으로 본 페이지로 redirect 되며, 두 날짜 사이의 일수·평일·영업일·공휴일·년월일 차이를 모두 한곳에서 계산할 수 있습니다.',
+              },
+            ]
 
 export default function DdayPage() {
   return (
@@ -185,33 +213,9 @@ export default function DdayPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'D-day 데이터는 어디에 저장되나요?',
-                a: '사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 회원가입·로그인 불필요, 빠른 접근, 사생활 보호(서버 저장 X). 다만 같은 브라우저·기기에서만 접근 가능하며 캐시 삭제·시크릿 모드 시 사라집니다. 다른 기기 사용 시 [📥 백업 다운로드] 기능으로 JSON 파일을 저장하시기 바랍니다.',
-              },
-              {
-                q: '영업일 계산은 어떤 공휴일이 반영되나요?',
-                a: '<strong>한국 법정 공휴일 2026~2030년</strong> 자동 반영: 신정, 설날 3일, 삼일절, 어린이날, 부처님오신날, 현충일, 광복절, 추석 3일, 개천절, 한글날, 성탄절 + 대체 공휴일. <strong>임시 공휴일·근로자의 날(5/1)</strong>은 별도이며 정부 발표 시 업데이트됩니다. 회사별 공휴일·연차는 본 도구에서 처리하지 않으니 별도 관리하세요.',
-              },
-              {
-                q: '평일과 영업일의 차이는?',
-                a: '<strong>평일</strong>은 월~금, <strong>영업일</strong>은 평일에서 공휴일을 제외한 실제 일하는 날입니다. 예: 5월 5일(어린이날)이 화요일이면 평일이지만 영업일은 아닙니다. 법적·계약상 기한 계산은 보통 영업일 기준, 학습·준비 기간 계산은 평일 기준이 일반적입니다.',
-              },
-              {
-                q: '페이스 계산은 어떤 목표에 적합한가요?',
-                a: '<strong>분할 가능한 모든 목표</strong>에 적용 가능합니다 — 학습(페이지·단어·문제), 운동(km·횟수·체중), 저축(금액), 글쓰기(글 수·단어), 다이어트(kg). 현재 페이스 분석으로 <strong>목표 달성 가능 여부와 추가 노력량</strong>을 파악할 수 있어 장기 목표 관리에 유용합니다.',
-              },
-              {
-                q: '반복 D-day는 어떻게 작동하나요?',
-                a: '반복 D-day는 다음 발생일을 자동 계산합니다. 예: 매년 반복 생일 D-day는 올해 생일이 지나면 자동으로 내년 생일로 갱신됩니다. 매월 반복(월급일·결제일)도 다음 달 자동 갱신됩니다. 반복 옵션: <strong>매년·매월·매주</strong>. 한 번 설정으로 평생 자동 관리됩니다.',
-              },
-              {
-                q: '"날짜 차이 계산기"는 어디로 갔나요?',
-                a: '<strong>본 도구의 [두 날짜 사이] 탭으로 통합</strong>되었습니다. 기존 <code>/tools/date/diff</code> 주소는 자동으로 본 페이지로 redirect 되며, 두 날짜 사이의 일수·평일·영업일·공휴일·년월일 차이를 모두 한곳에서 계산할 수 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

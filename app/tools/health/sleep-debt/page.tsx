@@ -2,6 +2,7 @@ import Link from 'next/link'
 import SleepDebtClient from './SleepDebtClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/health/sleep-debt',
@@ -69,6 +70,16 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"수면 부채는 정말 회복되나요?","a":"단기(1~2주)는 회복 가능합니다. 매일 +1시간씩 일주일이면 7시간 부채 회복 가능. 그러나 1개월 이상 만성 부채는 일부 영구 손상이 보고됩니다(Sleep Walker 2017, Belenky et al. 2003). 인지 기능은 회복돼도 본인이 느끼지 못하는 「만성 적응」 상태가 되며, 노화·치매 위험이 누적됩니다." },
+  { "q":"주말에 몰아 자면 부채 0이 되나요?","a":"아닙니다. 연구상 회복 효율은 30~50% — 7시간 부채를 14시간 몰아 자도 약 3~5시간만 회복. 게다가 주말 늦잠은 사회적 시차(social jet lag)를 만들어 월요일 아침 더 피곤하고 다음 주 부채를 가속합니다. 본 도구는 매일 +1시간 점진 회복을 권장." },
+  { "q":"수면 시간은 충분한데 피곤한 이유는?","a":"수면 「질」이 낮을 수 있습니다. 시간만큼 중요한 요인들: 수면 규칙성 (취침·기상 시각 일관성) — 본 도구 표시 방해 요소 (소음·빛·온도·반려동물·아이) 수면 무호흡·코골이 — 본인 인지 어려움, 가족 관찰 필요 알코올·카페인·과식 — 깊은 수면 차단 스트레스·우울 — 표면적 수면만 가능 지속되면 수면 클리닉 진단 (수면 다원 검사 / PSG) 권장." },
+  { "q":"낮잠은 부채 회복에 도움이 되나요?","a":"20~30분 낮잠은 효과적입니다. 10~20분: 가벼운 회복 + 인지·기분 ↑ 20~30분: 부채 일부 상쇄 (특히 오후 1~3시) 30~60분: 깊은 수면 단계 진입 → 깰 때 멍함 (잠 관성) 60분+: 야간 수면 방해 가능 (지속 X) 본 도구는 낮잠을 별도 기록하지 않지만, 야간 수면이 부족한 날은 직접 입력 모드로 「6h + 낮잠 0.5h = 6.5h」로 합산 가능." },
+  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X ✅ 익명 사용 (이름·이메일 X) ⚠️ 시크릿 모드·다른 기기는 자동 동기화 X ⚠️ 브라우저 데이터 삭제 시 사라짐 민감한 생활 기록인 만큼 본인 책임으로 관리됩니다." },
+  { "q":"한국 평균 수면 시간은?","a":"OECD 수면 통계상 한국이 OECD 최하위권입니다. 한국 성인 평균: 약 7시간 41분 (OECD 평균 8시간 22분 대비 41분 부족) 한국 청소년: 약 6.3시간 (권장 8~10h 대비 2~4h 부족) 주당 부채: 성인 ≈ 5h, 청소년 ≈ 17h 누적 본 도구는 한국인의 만성 수면 부족을 객관적으로 파악하기 위한 첫걸음." },
+  { "q":"수면 클리닉은 언제 가야 하나요?","a":"다음 신호가 있으면 수면 클리닉 진단 권장: 3주 이상 잠들기 어려움 또는 자주 깸 (만성 불면) 심한 코골이 + 가족이 「숨이 멎는 듯」 관찰 (수면 무호흡) 7~8시간 자도 낮에 졸림 + 집중력 ↓ 다리 불편함·움찔거림으로 잠 못 듦 (하지불안증후군) 악몽·잠꼬대·몽유 빈번 본 도구 누적 부채 30h+ 만성 상태 한국 수면학회 등록 클리닉에서 수면 다원 검사(PSG) 가능." }
+]
 
 export default function SleepDebtPage() {
   return (
@@ -219,6 +230,7 @@ export default function SleepDebtPage() {
         {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 수면 부채는 정말 회복되나요?</summary>

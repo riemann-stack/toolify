@@ -2,6 +2,7 @@ import Link from 'next/link'
 import HolidayTableClient from './HolidayTableClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/holiday-table',
@@ -69,6 +70,15 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"4인 가족 설날 차례상 비용은 보통 얼마인가요?","a":"한국농수산식품유통공사(aT)가 매년 발표하는 4인 가족 설날 차례상 비용은 최근 약 28~33만 원 (전통 시장 기준), 대형 마트 36~42만 원 정도로 형성됩니다. 본 도구의 「설날 + 차례상 + 4인」 결과와 거의 일치합니다. 간소 차림으로 가면 15~22만 원까지 줄일 수 있습니다 (가장 최신은 aT·KAMIS 공식 사이트 확인)." },
+  { "q":"차례상에서 빼면 안 되는 음식은?","a":"전통적 필수: 설날 — 떡국 (장수·재산 상징, 흰떡 사용) 추석 — 송편 (햇곡식 의미) 제사 — 메·갱 (밥·국), 청주 3종 모두 — 3색 과일 (조율이시), 3색 나물 (시금치·도라지·고사리) 주의: 최근 성균관에서도 「간소 차림 표준안」을 권장 — 가짓수보다 정성이 중요." },
+  { "q":"명절 비용을 줄이는 가장 효과적인 방법은?","a":"명절 1~2주 전 장보기 — 명절 가까울수록 가격 ↑ (특히 시금치·사과 30% 인상) 농협 하나로마트 명절 행사 — 일반 마트 대비 10~20% 저렴 전통시장 + 농산물 직거래 — 도매상 통하면 30% 절감 간소 차림 선택 — 5열 정석 X. 9~12종 표준 차림으로 30~50% 절감 전 미리 부치기·냉동 — 명절 직전 폭증 가격 회피" },
+  { "q":"차례상에 올리면 안 되는 음식이 있나요?","a":"전통 금기 음식: 복숭아 — 귀신을 쫓는 과일이라고 여겨짐 꽁치·삼치·갈치 — 「치」자 들어가는 생선 고추·마늘 양념 강한 음식 — 산적·나물에 진한 양념 X (간장·참기름 위주) 붉은팥 — 흰콩·녹두 사용 권장 본 도구의 음식 구성은 이 금기를 따릅니다. (지역·가문별 차이 있을 수 있음)" },
+  { "q":"4인 가족 추석 차례상 vs 식사 위주 비용 차이?","a":"본 도구 기준 (4인 가족, 최근 시세): 추석 차례상 (정석): 약 35~45만 원 추석 간소 차림: 약 20~28만 원 추석 식사 위주: 약 15~20만 원 차이의 주된 원인: 차례상은 어동육서·조율이시 등 격식을 위해 다양한 종류를 소량씩 사야 해서 단위당 비용 ↑." },
+  { "q":"본 도구의 데이터는 어디서 가져오나요?","a":"농산물 시세: KAMIS(한국농수산식품유통공사) OpenAPI — 일별 서울 소매가 평균 육류·수산·가공식품: 최근 시장 평균가 (마트·정육점 기준) 하드코딩 인당 권장량: 한식진흥원·성균관 차례상 표준안 + 한국식품과학회 자료 종합 저장: 본인 브라우저(localStorage)에만 — 서버 전송 X" }
+]
 
 export default function HolidayTablePage() {
   return (
@@ -208,6 +218,7 @@ export default function HolidayTablePage() {
         {/* 5. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 4인 가족 설날 차례상 비용은 보통 얼마인가요?</summary>

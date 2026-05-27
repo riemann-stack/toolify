@@ -3,6 +3,7 @@ import FuelEconomyClient from './FuelEconomyClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/fuel-economy',
@@ -10,6 +11,29 @@ export const metadata = buildMetadata({
   description: 'km/L·L/100km·mpg 변환 + 전기차 전비와 연료별 100km 비용 비교로 진짜 가성비 확인.',
   keywords: ['연비변환기', 'km/L mpg', 'L/100km 변환', '미국연비', '전기차전비', 'MPGe', 'mpg km 변환'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'MPGe는 정확히 무엇인가요?',
+                a: '<strong>MPGe(Miles Per Gallon equivalent)</strong>는 미국 EPA가 전기차를 가솔린차와 비교하기 위해 만든 단위입니다. <strong>1갤런 가솔린의 에너지 = 33.7 kWh</strong>로 정의하고, 이 에너지로 갈 수 있는 거리(마일)를 표시합니다. 예: 100 MPGe 전기차는 가솔린 1갤런어치 전기로 100마일을 가는 셈.',
+              },
+              {
+                q: '복합연비, 시내연비, 고속연비는 무슨 차이?',
+                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행을 일정 비율(보통 시내 55% : 고속 45%)로 가중평균한 값입니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요.',
+              },
+              {
+                q: '겨울에 전기차 전비가 떨어지는 이유?',
+                a: '리튬이온 배터리의 화학 반응이 저온에서 둔화되고, <strong>히터 가동에 5~10kWh가 추가 소모</strong>됩니다. 일반적으로 영하 10도 이하에서는 여름 대비 <strong>전비가 30~40% 감소</strong>할 수 있습니다. 가솔린차도 겨울에 5~15% 떨어지지만 EV가 훨씬 민감합니다.',
+              },
+              {
+                q: '연비 1km/L 차이가 1년에 얼마 차이?',
+                a: '연 15,000km, 휘발유 1,800원/L 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>13만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × 1800 ≈ 128,571원. 5년이면 65만원, 10년이면 130만원입니다.',
+              },
+              {
+                q: '하이브리드차는 어떤 단위로 표기하나요?',
+                a: '하이브리드(HEV)는 외부 충전 없이 가솔린만 넣으므로 <strong>일반 km/L 또는 mpg</strong>로 표기합니다. 다만 PHEV(플러그인 하이브리드)는 EV 모드 km/kWh와 가솔린 모드 km/L가 별도로 표시되며, 미국 EPA는 두 모드 결합 MPGe를 함께 공시합니다.',
+              },
+            ]
 
 export default function FuelEconomyPage() {
   return (
@@ -274,29 +298,9 @@ export default function FuelEconomyPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'MPGe는 정확히 무엇인가요?',
-                a: '<strong>MPGe(Miles Per Gallon equivalent)</strong>는 미국 EPA가 전기차를 가솔린차와 비교하기 위해 만든 단위입니다. <strong>1갤런 가솔린의 에너지 = 33.7 kWh</strong>로 정의하고, 이 에너지로 갈 수 있는 거리(마일)를 표시합니다. 예: 100 MPGe 전기차는 가솔린 1갤런어치 전기로 100마일을 가는 셈.',
-              },
-              {
-                q: '복합연비, 시내연비, 고속연비는 무슨 차이?',
-                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행을 일정 비율(보통 시내 55% : 고속 45%)로 가중평균한 값입니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요.',
-              },
-              {
-                q: '겨울에 전기차 전비가 떨어지는 이유?',
-                a: '리튬이온 배터리의 화학 반응이 저온에서 둔화되고, <strong>히터 가동에 5~10kWh가 추가 소모</strong>됩니다. 일반적으로 영하 10도 이하에서는 여름 대비 <strong>전비가 30~40% 감소</strong>할 수 있습니다. 가솔린차도 겨울에 5~15% 떨어지지만 EV가 훨씬 민감합니다.',
-              },
-              {
-                q: '연비 1km/L 차이가 1년에 얼마 차이?',
-                a: '연 15,000km, 휘발유 1,800원/L 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>13만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × 1800 ≈ 128,571원. 5년이면 65만원, 10년이면 130만원입니다.',
-              },
-              {
-                q: '하이브리드차는 어떤 단위로 표기하나요?',
-                a: '하이브리드(HEV)는 외부 충전 없이 가솔린만 넣으므로 <strong>일반 km/L 또는 mpg</strong>로 표기합니다. 다만 PHEV(플러그인 하이브리드)는 EV 모드 km/kWh와 가솔린 모드 km/L가 별도로 표시되며, 미국 EPA는 두 모드 결합 MPGe를 함께 공시합니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import TimezoneClient from './TimezoneClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/date/timezone',
@@ -9,6 +10,45 @@ export const metadata = buildMetadata({
   description: 'UTC·KST·EST·PST·BST·시드니·인도(IST 30분)·이란(30분)·네팔(45분) 등 25개 도시 시간대 일괄 변환. DST(서머타임) 자동 적용, 회의 슬롯 추천.',
   keywords: ['시간대변환기', '타임존변환', 'UTC변환', 'KST', 'EST', 'PST', 'BST', '서머타임', 'DST', '시드니시간', '인도시간', '뉴욕시간', 'LA시간', '런던시간', '국제회의시간'],
 })
+
+const FAQ_LD = [
+              {
+                q: 'DST(서머타임)는 어떻게 자동 감지되나요?',
+                a: '브라우저에 내장된 IANA 시간대 데이터(<strong>tzdata</strong>)를 사용합니다. 입력하신 날짜·시각에 해당 도시가 DST를 적용 중이면 카드에 노란 <strong>DST</strong> 배지가 표시됩니다. 매년 미국 정부와 IANA가 DST 전환 규칙을 업데이트하면 브라우저에 자동 반영됩니다.',
+              },
+              {
+                q: '인도 시간이 30분 단위라는데, 왜 그런가요?',
+                a: '인도는 동서로 약 30°(약 2시간 차이)에 걸친 큰 영토를 가졌지만 통일된 <strong>IST(UTC+5:30)</strong>를 사용합니다. 1947년 독립 이후 정해진 것으로, 인도 중부의 81.75°E 자오선을 기준으로 합니다. 1시간 단위 표준시로 바꾸기엔 사회·경제적 부담이 크다는 판단입니다.<br/><br/>네팔은 인도와 15분 차이를 두기 위해 의도적으로 <strong>+5:45</strong>를 택했고, 이란은 자오선 위치상 자연스럽게 <strong>+3:30</strong>이 되었습니다.',
+              },
+              {
+                q: '서울→뉴욕 시차가 13시간일 때도 있고 14시간일 때도 있어요. 어느 게 맞나요?',
+                a: '둘 다 맞습니다. 미국이 <strong>DST를 시행하는 3월 둘째 일요일~11월 첫째 일요일</strong>에는 시차가 <strong>13시간</strong>(EDT=UTC-4), 그 외 기간엔 <strong>14시간</strong>(EST=UTC-5)입니다. 본 도구는 입력 날짜를 기준으로 자동 적용합니다.',
+              },
+              {
+                q: '회의 슬롯의 "근무시간"은 어떻게 정의되나요?',
+                a: '기본값은 <strong>09:00~18:00</strong>이지만, 직접 6:00~24:00 범위에서 조정 가능합니다. 모든 선택 도시가 근무시간 안에 들면 <strong>🟢 녹색</strong>, 일부가 근무시간 ±2시간(즉 08~20시) 내라면 <strong>🟡 노랑</strong>, 그 외엔 빨강으로 평가합니다.',
+              },
+              {
+                q: '베스트 슬롯 3개는 어떻게 추천되나요?',
+                a: '24시간을 15분 단위(총 96슬롯)로 나누어 각 슬롯을 🟢/🟡/🔴 평가한 뒤, <strong>연속된 같은 색 구간</strong>을 묶어 길이가 긴 순으로 정렬합니다. 🟢 구간이 있으면 🟢 우선, 없으면 🟡 구간을 보여줍니다.',
+              },
+              {
+                q: 'UTC와 GMT의 차이가 뭔가요?',
+                a: '실용적으로는 동일합니다. <strong>GMT</strong>는 그리니치 천문대의 천문 관측 기반(1884년 채택), <strong>UTC</strong>는 원자시계 기반의 현재 국제 표준(1972년 채택)입니다. UTC는 윤초로 평균 태양시(=GMT)와의 차이를 0.9초 이내로 유지합니다.<br/><br/>일상 변환에서는 둘을 같은 것으로 다뤄도 무방하지만, 영국 자체는 <strong>겨울엔 GMT(UTC+0), 여름엔 BST(UTC+1)</strong>를 씁니다.',
+              },
+              {
+                q: '날짜가 바뀌는 도시(+1d, -1d)는 어떻게 표시되나요?',
+                a: '기준 도시의 날짜를 0일로 잡고, 다른 도시의 날짜가 다르면 카드에 <strong style="color:#059669">+1일</strong> 또는 <strong style="color:#DC2626">-1일</strong> 배지가 붙습니다. 예) 서울 5월 21일 23:00 → LA는 5월 21일 07:00(-1일 아님), 뉴욕은 5월 21일 10:00(-1일 아님). 하지만 서울 5월 22일 02:00 → 뉴욕은 5월 21일 13:00 (-1일).',
+              },
+              {
+                q: '"지금" LIVE 모드는 얼마나 자주 갱신되나요?',
+                a: '30초마다 자동 갱신됩니다. 정확한 회의 시작 시각을 알아야 한다면 LIVE를 끄고 직접 시각을 입력하세요. 라이브 토글 중 입력란을 수정하면 자동으로 LIVE가 해제됩니다.',
+              },
+              {
+                q: '선택한 도시 목록이 저장되나요?',
+                a: '네. 기준 도시·선택 도시·근무시간 설정은 <strong>브라우저 로컬 저장소</strong>에 저장되어 다음 방문 시 자동 복원됩니다. 다른 기기·브라우저 간에는 동기화되지 않습니다.',
+              },
+            ]
 
 export default function TimezonePage() {
   return (
@@ -171,45 +211,9 @@ export default function TimezonePage() {
         {/* 6. FAQ */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: 'DST(서머타임)는 어떻게 자동 감지되나요?',
-                a: '브라우저에 내장된 IANA 시간대 데이터(<strong>tzdata</strong>)를 사용합니다. 입력하신 날짜·시각에 해당 도시가 DST를 적용 중이면 카드에 노란 <strong>DST</strong> 배지가 표시됩니다. 매년 미국 정부와 IANA가 DST 전환 규칙을 업데이트하면 브라우저에 자동 반영됩니다.',
-              },
-              {
-                q: '인도 시간이 30분 단위라는데, 왜 그런가요?',
-                a: '인도는 동서로 약 30°(약 2시간 차이)에 걸친 큰 영토를 가졌지만 통일된 <strong>IST(UTC+5:30)</strong>를 사용합니다. 1947년 독립 이후 정해진 것으로, 인도 중부의 81.75°E 자오선을 기준으로 합니다. 1시간 단위 표준시로 바꾸기엔 사회·경제적 부담이 크다는 판단입니다.<br/><br/>네팔은 인도와 15분 차이를 두기 위해 의도적으로 <strong>+5:45</strong>를 택했고, 이란은 자오선 위치상 자연스럽게 <strong>+3:30</strong>이 되었습니다.',
-              },
-              {
-                q: '서울→뉴욕 시차가 13시간일 때도 있고 14시간일 때도 있어요. 어느 게 맞나요?',
-                a: '둘 다 맞습니다. 미국이 <strong>DST를 시행하는 3월 둘째 일요일~11월 첫째 일요일</strong>에는 시차가 <strong>13시간</strong>(EDT=UTC-4), 그 외 기간엔 <strong>14시간</strong>(EST=UTC-5)입니다. 본 도구는 입력 날짜를 기준으로 자동 적용합니다.',
-              },
-              {
-                q: '회의 슬롯의 "근무시간"은 어떻게 정의되나요?',
-                a: '기본값은 <strong>09:00~18:00</strong>이지만, 직접 6:00~24:00 범위에서 조정 가능합니다. 모든 선택 도시가 근무시간 안에 들면 <strong>🟢 녹색</strong>, 일부가 근무시간 ±2시간(즉 08~20시) 내라면 <strong>🟡 노랑</strong>, 그 외엔 빨강으로 평가합니다.',
-              },
-              {
-                q: '베스트 슬롯 3개는 어떻게 추천되나요?',
-                a: '24시간을 15분 단위(총 96슬롯)로 나누어 각 슬롯을 🟢/🟡/🔴 평가한 뒤, <strong>연속된 같은 색 구간</strong>을 묶어 길이가 긴 순으로 정렬합니다. 🟢 구간이 있으면 🟢 우선, 없으면 🟡 구간을 보여줍니다.',
-              },
-              {
-                q: 'UTC와 GMT의 차이가 뭔가요?',
-                a: '실용적으로는 동일합니다. <strong>GMT</strong>는 그리니치 천문대의 천문 관측 기반(1884년 채택), <strong>UTC</strong>는 원자시계 기반의 현재 국제 표준(1972년 채택)입니다. UTC는 윤초로 평균 태양시(=GMT)와의 차이를 0.9초 이내로 유지합니다.<br/><br/>일상 변환에서는 둘을 같은 것으로 다뤄도 무방하지만, 영국 자체는 <strong>겨울엔 GMT(UTC+0), 여름엔 BST(UTC+1)</strong>를 씁니다.',
-              },
-              {
-                q: '날짜가 바뀌는 도시(+1d, -1d)는 어떻게 표시되나요?',
-                a: '기준 도시의 날짜를 0일로 잡고, 다른 도시의 날짜가 다르면 카드에 <strong style="color:#059669">+1일</strong> 또는 <strong style="color:#DC2626">-1일</strong> 배지가 붙습니다. 예) 서울 5월 21일 23:00 → LA는 5월 21일 07:00(-1일 아님), 뉴욕은 5월 21일 10:00(-1일 아님). 하지만 서울 5월 22일 02:00 → 뉴욕은 5월 21일 13:00 (-1일).',
-              },
-              {
-                q: '"지금" LIVE 모드는 얼마나 자주 갱신되나요?',
-                a: '30초마다 자동 갱신됩니다. 정확한 회의 시작 시각을 알아야 한다면 LIVE를 끄고 직접 시각을 입력하세요. 라이브 토글 중 입력란을 수정하면 자동으로 LIVE가 해제됩니다.',
-              },
-              {
-                q: '선택한 도시 목록이 저장되나요?',
-                a: '네. 기준 도시·선택 도시·근무시간 설정은 <strong>브라우저 로컬 저장소</strong>에 저장되어 다음 방문 시 자동 복원됩니다. 다른 기기·브라우저 간에는 동기화되지 않습니다.',
-              },
-            ].map((item, i) => (
+            {FAQ_LD.map((item, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {item.q}

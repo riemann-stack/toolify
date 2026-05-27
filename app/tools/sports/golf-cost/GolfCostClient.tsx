@@ -28,10 +28,10 @@ interface CoursePreset {
 }
 
 const COURSE_PRESETS: Record<Exclude<CourseType, 'custom'>, CoursePreset> = {
-  publicWeekday: { green: 100_000, cart: 40_000,  cartMode: 'team', caddie: 120_000 },
-  publicWeekend: { green: 130_000, cart: 40_000,  cartMode: 'team', caddie: 120_000 },
-  semiPrivate:   { green: 160_000, cart: 48_000,  cartMode: 'team', caddie: 140_000 },
-  private:       { green: 200_000, cart: 0,       cartMode: 'team', caddie: 140_000 },
+  publicWeekday: { green: 100_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  publicWeekend: { green: 130_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  semiPrivate:   { green: 160_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  private:       { green: 200_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
 }
 
 const COURSE_LABELS: { key: CourseType; label: string; cls: string }[] = [
@@ -70,12 +70,12 @@ export default function GolfCostClient() {
   const [greenFee, setGreenFee] = useState(130_000)
 
   // 카트비
-  const [cartFee, setCartFee] = useState(40_000)
+  const [cartFee, setCartFee] = useState(100_000)
   const [cartMode, setCartMode] = useState<CartMode>('team')
 
   // 캐디
   const [caddieEnabled, setCaddieEnabled] = useState(true)
-  const [caddieFee, setCaddieFee] = useState(120_000)
+  const [caddieFee, setCaddieFee] = useState(150_000)
   const [tipAmount, setTipAmount] = useState(0)
 
   // 식사·그늘집

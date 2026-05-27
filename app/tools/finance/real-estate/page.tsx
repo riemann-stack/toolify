@@ -2,7 +2,9 @@ import Link from 'next/link'
 import RealEstateClient from './RealEstateClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/real-estate',
@@ -11,6 +13,29 @@ export const metadata = buildMetadata({
     '매매가·임대·대출 레버리지 반영한 자기자본 수익률. 진짜 남는 돈을 정확히 파악하는 부동산 투자 분석 도구.',
   keywords: ['부동산수익률계산기', '아파트투자수익률', 'ROE계산기', '부동산레버리지', '갭투자수익률', '취득세계산기', '부동산시뮬레이션'],
 })
+
+const FAQ_LD = [
+              {
+                q: '자기자본 수익률(ROE)이란 무엇인가요?',
+                a: '자기자본 수익률은 <strong>실제로 투입한 본인 자금 대비 얻은 수익의 비율</strong>입니다. 매입가 5억 부동산을 1억 5천만원 자기자본 + 3억 5천만원 대출로 매수하고 1억 7천만원의 수익을 얻었다면, ROE = 1억 7천 ÷ 1억 5천 ≈ 113%가 됩니다. 같은 수익이라도 자기자본을 적게 쓰면 ROE는 올라가고, 그만큼 위험도 커집니다.',
+              },
+              {
+                q: '본 계산기의 결과는 양도소득세를 반영한 건가요?',
+                a: '아닙니다. 본 계산기는 <strong>“세전 수익”</strong> 기준으로 계산하며, 양도소득세는 보유 기간(1년·2년·3년 미만 단기), 1주택 여부, 장기보유특별공제, 비과세 한도 등 매우 복잡한 변수에 따라 크게 달라집니다. 실제 세후 수익을 정확히 알려면 세무사 상담이 필수입니다.',
+              },
+              {
+                q: '손익분기 매도가는 무엇인가요?',
+                a: '손익분기 매도가는 모든 비용(취득세·이자·매수·매도 중개수수료·법무비 등)을 회수할 수 있는 <strong>최소 매도 가격</strong>입니다. 이 가격 이하로 매도하면 손실이 발생합니다. 부동산은 거래 비용이 매입가의 5~10%에 달하기 때문에 시세가 그 이상 올라야 비로소 수익이 발생한다는 점을 인지해야 합니다.',
+              },
+              {
+                q: '대출을 많이 받으면 무조건 좋은가요?',
+                a: '아닙니다. 대출은 양날의 검입니다. 가격 상승 시 자기자본 수익률이 크게 오르지만, <strong>가격 하락 시 손실도 동일하게 확대</strong>됩니다. 예를 들어 LTV 80% 대출 후 부동산 가격이 20% 하락하면 자기자본은 100% 손실(원금 전액 소실)될 수 있습니다. 본인의 위험 감내력과 현금 흐름을 고려해 LTV를 선택해야 합니다.',
+              },
+              {
+                q: '임대 수익을 포함한 수익률은 어떻게 계산되나요?',
+                a: '임대 수익은 <strong>(월세 × 임대 개월) − (공실 손실 + 임대인 부담 관리비)</strong>로 계산되어 세전 수익에 더해집니다. 매매 차익이 0이어도 월세 수익만으로 수익을 낼 수 있는 것이 “수익형 부동산”의 핵심입니다. 다만 임대소득세, 건강보험료(피부양자 자격 상실 위험) 등은 별도로 발생하므로 실제 수령액과 차이가 있습니다.',
+              },
+            ]
 
 export default function RealEstatePage() {
   return (
@@ -24,6 +49,8 @@ export default function RealEstatePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
+
+      <UpdatedMeta date="2026년 5월" basis="부동산 정책·시세 참고" sources={[{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"한국부동산원","href":"https://www.reb.or.kr"}]} />
 
       <RealEstateClient />
 
@@ -237,29 +264,9 @@ export default function RealEstatePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '자기자본 수익률(ROE)이란 무엇인가요?',
-                a: '자기자본 수익률은 <strong>실제로 투입한 본인 자금 대비 얻은 수익의 비율</strong>입니다. 매입가 5억 부동산을 1억 5천만원 자기자본 + 3억 5천만원 대출로 매수하고 1억 7천만원의 수익을 얻었다면, ROE = 1억 7천 ÷ 1억 5천 ≈ 113%가 됩니다. 같은 수익이라도 자기자본을 적게 쓰면 ROE는 올라가고, 그만큼 위험도 커집니다.',
-              },
-              {
-                q: '본 계산기의 결과는 양도소득세를 반영한 건가요?',
-                a: '아닙니다. 본 계산기는 <strong>“세전 수익”</strong> 기준으로 계산하며, 양도소득세는 보유 기간(1년·2년·3년 미만 단기), 1주택 여부, 장기보유특별공제, 비과세 한도 등 매우 복잡한 변수에 따라 크게 달라집니다. 실제 세후 수익을 정확히 알려면 세무사 상담이 필수입니다.',
-              },
-              {
-                q: '손익분기 매도가는 무엇인가요?',
-                a: '손익분기 매도가는 모든 비용(취득세·이자·매수·매도 중개수수료·법무비 등)을 회수할 수 있는 <strong>최소 매도 가격</strong>입니다. 이 가격 이하로 매도하면 손실이 발생합니다. 부동산은 거래 비용이 매입가의 5~10%에 달하기 때문에 시세가 그 이상 올라야 비로소 수익이 발생한다는 점을 인지해야 합니다.',
-              },
-              {
-                q: '대출을 많이 받으면 무조건 좋은가요?',
-                a: '아닙니다. 대출은 양날의 검입니다. 가격 상승 시 자기자본 수익률이 크게 오르지만, <strong>가격 하락 시 손실도 동일하게 확대</strong>됩니다. 예를 들어 LTV 80% 대출 후 부동산 가격이 20% 하락하면 자기자본은 100% 손실(원금 전액 소실)될 수 있습니다. 본인의 위험 감내력과 현금 흐름을 고려해 LTV를 선택해야 합니다.',
-              },
-              {
-                q: '임대 수익을 포함한 수익률은 어떻게 계산되나요?',
-                a: '임대 수익은 <strong>(월세 × 임대 개월) − (공실 손실 + 임대인 부담 관리비)</strong>로 계산되어 세전 수익에 더해집니다. 매매 차익이 0이어도 월세 수익만으로 수익을 낼 수 있는 것이 “수익형 부동산”의 핵심입니다. 다만 임대소득세, 건강보험료(피부양자 자격 상실 위험) 등은 별도로 발생하므로 실제 수령액과 차이가 있습니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

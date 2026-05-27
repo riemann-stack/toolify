@@ -2,6 +2,7 @@ import Link from 'next/link'
 import GradientGeneratorClient from './GradientGeneratorClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/gradient-generator',
@@ -58,6 +59,17 @@ const codeBlock: React.CSSProperties = {
   margin: '10px 0',
   lineHeight: 1.6,
 }
+
+const FAQ_LD = [
+  { "q":"RGB와 OKLCH 보간 — 실제로 어떻게 다른가요?","a":"두 색을 단순 RGB로 보간하면 중간이 어두워지거나 채도가 떨어집니다 (특히 빨강↔파랑). OKLCH는 인지적으로 균등한 색공간이라 같은 거리만큼 떨어진 색이 사람 눈에 같은 차이로 느껴집니다. Chrome 111+, Safari 16.4+에서 native syntax 지원. 본 도구는 자동으로 dense stops를 생성해 폴백을 제공합니다." },
+  { "q":"Tailwind에서 mesh gradient를 쓰려면?","a":"Tailwind 4의 arbitrary value 문법으로 직접 CSS를 넣거나 theme.extend.backgroundImage에 등록하는 방식이 있습니다. {`/* 1) arbitrary value (1회용) */ /* 2) tailwind.config.js 등록 (재사용) */ theme: { extend: { backgroundImage: , }, } // 사용: `} 본 도구의 \"Tailwind\" 코드 탭은 arbitrary value 형태로 자동 변환합니다." },
+  { "q":"그라디언트 위에 텍스트 가독성을 어떻게 보장하나요?","a":"그라디언트는 위치마다 색이 다르므로 전 구간 worst-case 대비비를 봐야 합니다. 본 도구의 \"분석·접근성\" 탭은 그라디언트를 12개 지점으로 샘플링해 흰/검 텍스트와의 최저 대비비를 표시합니다. WCAG 기준: 본문 (16px 미만): 4.5:1 이상 (AA) 큰 글자 (18pt+ 또는 14pt+ 굵게): 3:1 이상 UI 컴포넌트·아이콘: 3:1 이상 그라디언트 위에 텍스트를 올릴 때는 어두운 영역 위에 흰 텍스트, 밝은 영역 위에 검정 텍스트를 둘 수 없으므로 text-shadow나 반투명 오버레이로 보강하는 것도 흔한 접근입니다." },
+  { "q":"Figma에서 conic gradient를 어떻게 쓰나요?","a":"Figma는 2026년 5월 기준 conic-gradient를 직접 지원하지 않습니다. 대안: SVG 임포트: 본 도구의 SVG 코드를 다운로드 후 Figma에 import (단, SVG conic은 표준이 아니라 radial로 폴백됨) 이미지로 export: 본 도구의 PNG 다운로드를 Figma에 배치 Linear/Radial로 대체: 디자인 의도가 회전 효과가 아니라면 Linear가 호환성·유지보수 측면에서 우월 Sketch와 Adobe XD도 마찬가지로 conic 미지원입니다." },
+  { "q":"SwiftUI / Flutter에 적용하는 방법은?","a":"본 도구의 \"Swift\", \"Flutter\" 코드 탭이 그대로 복사·사용 가능한 코드를 출력합니다. 단, 두 프레임워크 모두 mesh gradient는 표준 지원이 제한적입니다. SwiftUI: iOS 18 / macOS 15+에서 MeshGradient 지원, 그 미만은 LinearGradient 폴백 권장 Flutter: mesh 표준 위젯이 없어 RadialGradient 4개를 Stack으로 합성 Hex 색상은 SwiftUI에서는 Color(hex: \"#xxxxxx\") extension이, Flutter에서는 Color(0xFFxxxxxx)가 필요합니다." },
+  { "q":"노이즈/그레인 효과는 어떻게 만드나요?","a":"요즘 디자인 트렌드인 그레인 그라디언트는 SVG feTurbulence 필터로 생성한 노이즈 패턴을 그라디언트 위에 오버레이합니다. 본 도구는 노이즈 슬라이더 (0~100%) 조절만으로 자동 생성·미리보기·PNG export까지 지원합니다." },
+  { "q":"WCAG 대비비를 통과하는 그라디언트를 만드는 팁?","a":"전 구간 4.5:1 이상을 통과시키려면 그라디언트의 명도 폭을 좁게 유지해야 합니다. 다음 패턴이 안전합니다: 어두운 그라디언트 + 흰 텍스트: HSL 기준 명도 0~30% 범위에서만 변화 밝은 그라디언트 + 검정 텍스트: HSL 명도 75~95% 범위 중간 명도는 피하기: 명도 40~60%는 흰/검 양쪽 모두 4.5:1 미달 가능 불가피하게 명도 폭이 큰 그라디언트가 필요하면, 텍스트 영역에만 어두운 오버레이 (linear-gradient(rgba(0,0,0,0.4), transparent))를 추가하거나 strong text-shadow 적용이 일반적 우회법입니다." },
+  { "q":"이미지에서 색상을 추출할 때 안전한가요?","a":"네. 본 도구의 \"이미지 → 색상 추출\" 기능은 전적으로 브라우저 내에서만 처리됩니다. 이미지는 서버에 업로드되지 않으며, K-means 클러스터링으로 5개 대표 색상을 추출한 뒤 메모리에서 즉시 폐기됩니다 (URL.revokeObjectURL). 사진의 EXIF 정보나 원본도 외부로 전송되지 않습니다. {/* 4." }
+]
 
 export default function GradientGeneratorPage() {
   return (
@@ -127,6 +139,7 @@ export default function GradientGeneratorPage() {
         {/* 3. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
             <div>

@@ -3,6 +3,7 @@ import CharCountClient from './CharCountClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/charcount',
@@ -10,6 +11,13 @@ export const metadata = buildMetadata({
   description: '공백 포함·제외 실시간 카운트 + 목표 글자수 카운트다운 + 원고지 매수. 자소서·SNS·논문 글자 수 체크와 바이트 분석, 자동 저장.',
   keywords: ['글자수세기', '글자수계산기', '자수세기', '단어수세기', '원고지매수', '원고지계산', '목표글자수', 'UTF-8바이트', 'SMS바이트계산', '트위터가중치', '자기소개서글자수', '플랫폼글자수제한', 'meta description 길이'],
 })
+
+const FAQ_LD = [
+              { q: '공백을 글자수에 포함해야 하나요?', a: '플랫폼·문서 종류에 따라 다릅니다. <strong>SNS·자기소개서</strong>는 보통 공백 포함, <strong>학술 논문 분량 측정</strong>은 공백 제외가 일반적입니다. 본 도구는 두 값을 모두 표시하므로 양식에 맞게 사용하세요.' },
+              { q: '이모지는 몇 글자로 세야 하나요?', a: '단순 카운트 기준으로 이모지 1개 = 1글자입니다. 단 <strong>UTF-8 바이트는 4바이트</strong>이므로 SMS 전송 시에는 더 큰 비중을 차지합니다. X(트위터)는 이모지를 가중치 2로 계산합니다.' },
+              { q: '한글 자모(ㄱㄴㄷ)는 어떻게 세나요?', a: '본 도구는 자모(ㄱ, ㅏ 등)와 완성형 한글(가, 나)을 모두 한글로 카운트하며 별도 통계로 분리해 보여줍니다. 자모만 입력된 경우 일반적인 한글로 인식되지 않을 수 있어 입력 검증이 필요합니다.' },
+              { q: 'X(트위터) 글자수가 280인데 한글로는 왜 140자인가요?', a: 'X는 영문/숫자/일부 라틴 문자를 가중치 1, 한글·중국어·일본어·이모지를 가중치 2로 계산해 <strong>총 280 가중치 한도</strong>를 적용합니다. 한글로만 글을 쓰면 약 140자가 한계입니다.' },
+            ]
 
 export default function CharCountPage() {
   return (
@@ -218,13 +226,9 @@ export default function CharCountPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              { q: '공백을 글자수에 포함해야 하나요?', a: '플랫폼·문서 종류에 따라 다릅니다. <strong>SNS·자기소개서</strong>는 보통 공백 포함, <strong>학술 논문 분량 측정</strong>은 공백 제외가 일반적입니다. 본 도구는 두 값을 모두 표시하므로 양식에 맞게 사용하세요.' },
-              { q: '이모지는 몇 글자로 세야 하나요?', a: '단순 카운트 기준으로 이모지 1개 = 1글자입니다. 단 <strong>UTF-8 바이트는 4바이트</strong>이므로 SMS 전송 시에는 더 큰 비중을 차지합니다. X(트위터)는 이모지를 가중치 2로 계산합니다.' },
-              { q: '한글 자모(ㄱㄴㄷ)는 어떻게 세나요?', a: '본 도구는 자모(ㄱ, ㅏ 등)와 완성형 한글(가, 나)을 모두 한글로 카운트하며 별도 통계로 분리해 보여줍니다. 자모만 입력된 경우 일반적인 한글로 인식되지 않을 수 있어 입력 검증이 필요합니다.' },
-              { q: 'X(트위터) 글자수가 280인데 한글로는 왜 140자인가요?', a: 'X는 영문/숫자/일부 라틴 문자를 가중치 1, 한글·중국어·일본어·이모지를 가중치 2로 계산해 <strong>총 280 가중치 한도</strong>를 적용합니다. 한글로만 글을 쓰면 약 140자가 한계입니다.' },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

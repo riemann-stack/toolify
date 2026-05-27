@@ -3,6 +3,7 @@ import TirePressureClient from './TirePressureClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/tire-pressure',
@@ -14,6 +15,45 @@ export const metadata = buildMetadata({
     '트레드 깊이 마모한계', '타이어 교체시기', 'DOT 제조일자 보는법', '타이어 제조주차',
   ],
 })
+
+const FAQ_LD = [
+              {
+                q: '공기압은 얼마나 자주 점검해야 하나요?',
+                a: '<strong>월 1~2회 정기 점검</strong>이 권장됩니다. 타이어는 멀쩡한 상태에서도 자연 누설로 <strong>월 1~2 psi</strong> 정도 빠집니다. 환절기에는 큰 폭의 변동이 있으므로 추가 점검이 필요합니다.',
+              },
+              {
+                q: 'TPMS 경고등이 켜졌는데 보충해도 다시 켜져요',
+                a: 'TPMS 센서는 일반적으로 <strong>권장값의 약 75%</strong> 이하로 떨어지면 경고합니다. 재충전 후에도 다시 켜진다면 (1) 펑크 의심, (2) 휠 림 손상으로 미세 누설, (3) TPMS 센서 자체 고장 중 하나일 가능성이 높습니다. 정비소에서 누설 점검을 받으세요.',
+              },
+              {
+                q: '주유소 셀프 공기 주입기 정확도가 낮은 것 같아요',
+                a: '주유소 게이지는 ±2~3 psi 오차가 일반적입니다. 정확한 측정은 <strong>휴대용 디지털 공기압 게이지</strong>로 별도 측정을 권장합니다. 1만원대 제품도 ±0.5 psi 수준 정확도를 제공합니다.',
+              },
+              {
+                q: '뒷타이어가 앞타이어보다 공기압이 높은 이유?',
+                a: '대부분의 차량은 엔진이 앞에 있어 앞이 무겁기 때문에 <strong>앞바퀴가 같은 공기압이라도 더 눌립니다.</strong> 매뉴얼에서 “승차 인원이 많거나 짐이 많을 때”는 뒷바퀴 공기압을 더 올리라고 안내합니다(보통 +3~5 psi).',
+              },
+              {
+                q: '질소 충전이 정말 효과가 있나요?',
+                a: '이론적으로 질소는 분자가 커서 누설이 약간 적고 온도 변화에 둔감합니다. 다만 <strong>일반 공기도 78%가 질소</strong>이므로 차이는 크지 않으며, 일반 운전자에게는 비용 대비 효과가 미미합니다. 항공기·F1 등 극한 환경에서 의미가 있습니다.',
+              },
+              {
+                q: '205/55R16은 무슨 뜻인가요?',
+                a: '<strong>205</strong> = 단면폭 205mm, <strong>55</strong> = 편평비 55%(사이드월 높이 ÷ 폭), <strong>R</strong> = 래디얼 구조, <strong>16</strong> = 휠 지름 16인치. 외경은 16×25.4 + 2×(205×0.55) = 약 <strong>631.9mm</strong>입니다. 위 <strong>규격 해석</strong> 탭에 입력하면 외경·사이드월·인치업 조합이 자동 계산됩니다.',
+              },
+              {
+                q: '인치업하면 외경은 어떻게 맞추나요?',
+                a: '휠 지름을 키우면(예 16″→17″) 편평비를 낮추고 폭을 약간 넓혀 <strong>외경을 비슷하게 유지</strong>합니다. 예: 205/55R16 → 215/50R17. 외경 차이가 커지면 속도계 오차·간섭·승차감 변화가 생기므로 <strong>±3% 이내</strong>를 권장하며, 휠 폭·옵셋(ET)·하중지수도 함께 확인해야 합니다.',
+              },
+              {
+                q: 'DOT 제조일자(예: 2419)는 어떻게 읽나요?',
+                a: '타이어 옆면 DOT 코드 <strong>마지막 4자리</strong>가 제조 시기입니다. 앞 2자리 = 주차, 뒤 2자리 = 연도. <strong>2419 → 2019년 24주차</strong> 제조. 제조 6년이 지나면 마모와 무관하게 고무 경화로 교체를 검토하고, 10년이면 교체하세요.',
+              },
+              {
+                q: '트레드 깊이는 동전으로 어떻게 확인하나요?',
+                a: '한국 <strong>100원 동전</strong>을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하로 교체 시기입니다. 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체해야 합니다(법정 한계 1.6mm).',
+              },
+            ]
 
 export default function TirePressurePage() {
   return (
@@ -302,45 +342,9 @@ export default function TirePressurePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '공기압은 얼마나 자주 점검해야 하나요?',
-                a: '<strong>월 1~2회 정기 점검</strong>이 권장됩니다. 타이어는 멀쩡한 상태에서도 자연 누설로 <strong>월 1~2 psi</strong> 정도 빠집니다. 환절기에는 큰 폭의 변동이 있으므로 추가 점검이 필요합니다.',
-              },
-              {
-                q: 'TPMS 경고등이 켜졌는데 보충해도 다시 켜져요',
-                a: 'TPMS 센서는 일반적으로 <strong>권장값의 약 75%</strong> 이하로 떨어지면 경고합니다. 재충전 후에도 다시 켜진다면 (1) 펑크 의심, (2) 휠 림 손상으로 미세 누설, (3) TPMS 센서 자체 고장 중 하나일 가능성이 높습니다. 정비소에서 누설 점검을 받으세요.',
-              },
-              {
-                q: '주유소 셀프 공기 주입기 정확도가 낮은 것 같아요',
-                a: '주유소 게이지는 ±2~3 psi 오차가 일반적입니다. 정확한 측정은 <strong>휴대용 디지털 공기압 게이지</strong>로 별도 측정을 권장합니다. 1만원대 제품도 ±0.5 psi 수준 정확도를 제공합니다.',
-              },
-              {
-                q: '뒷타이어가 앞타이어보다 공기압이 높은 이유?',
-                a: '대부분의 차량은 엔진이 앞에 있어 앞이 무겁기 때문에 <strong>앞바퀴가 같은 공기압이라도 더 눌립니다.</strong> 매뉴얼에서 “승차 인원이 많거나 짐이 많을 때”는 뒷바퀴 공기압을 더 올리라고 안내합니다(보통 +3~5 psi).',
-              },
-              {
-                q: '질소 충전이 정말 효과가 있나요?',
-                a: '이론적으로 질소는 분자가 커서 누설이 약간 적고 온도 변화에 둔감합니다. 다만 <strong>일반 공기도 78%가 질소</strong>이므로 차이는 크지 않으며, 일반 운전자에게는 비용 대비 효과가 미미합니다. 항공기·F1 등 극한 환경에서 의미가 있습니다.',
-              },
-              {
-                q: '205/55R16은 무슨 뜻인가요?',
-                a: '<strong>205</strong> = 단면폭 205mm, <strong>55</strong> = 편평비 55%(사이드월 높이 ÷ 폭), <strong>R</strong> = 래디얼 구조, <strong>16</strong> = 휠 지름 16인치. 외경은 16×25.4 + 2×(205×0.55) = 약 <strong>631.9mm</strong>입니다. 위 <strong>규격 해석</strong> 탭에 입력하면 외경·사이드월·인치업 조합이 자동 계산됩니다.',
-              },
-              {
-                q: '인치업하면 외경은 어떻게 맞추나요?',
-                a: '휠 지름을 키우면(예 16″→17″) 편평비를 낮추고 폭을 약간 넓혀 <strong>외경을 비슷하게 유지</strong>합니다. 예: 205/55R16 → 215/50R17. 외경 차이가 커지면 속도계 오차·간섭·승차감 변화가 생기므로 <strong>±3% 이내</strong>를 권장하며, 휠 폭·옵셋(ET)·하중지수도 함께 확인해야 합니다.',
-              },
-              {
-                q: 'DOT 제조일자(예: 2419)는 어떻게 읽나요?',
-                a: '타이어 옆면 DOT 코드 <strong>마지막 4자리</strong>가 제조 시기입니다. 앞 2자리 = 주차, 뒤 2자리 = 연도. <strong>2419 → 2019년 24주차</strong> 제조. 제조 6년이 지나면 마모와 무관하게 고무 경화로 교체를 검토하고, 10년이면 교체하세요.',
-              },
-              {
-                q: '트레드 깊이는 동전으로 어떻게 확인하나요?',
-                a: '한국 <strong>100원 동전</strong>을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하로 교체 시기입니다. 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체해야 합니다(법정 한계 1.6mm).',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

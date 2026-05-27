@@ -1,0 +1,116 @@
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.cardLabel { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.helperText { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+/* 거리 프리셋 */
+.distRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.distBtn {
+  padding: 10px 4px; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 13px; font-weight: 700; color: var(--text);
+  cursor: pointer; font-family: 'Inter', system-ui, sans-serif; transition: all 0.15s;
+}
+@media (hover: hover) { .distBtn:hover { border-color: var(--border-hover); } }
+.distActive { background: rgba(5,150,105,0.15); border-color: #059669; color: #059669; }
+
+/* 시간 입력 */
+.timeRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.timeField { display: flex; align-items: center; gap: 6px; }
+.timeInput {
+  flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 12px; font-size: 17px; font-weight: 700;
+  color: var(--text); font-family: 'Inter', system-ui, sans-serif; outline: none; text-align: center;
+}
+.timeInput:focus { border-color: #059669; }
+.timeInput::-webkit-inner-spin-button, .timeInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.timeUnit { font-size: 13px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+
+/* 히어로 */
+.hero {
+  background: linear-gradient(135deg, rgba(5,150,105,0.16) 0%, var(--bg2) 70%);
+  border: 1px solid rgba(5,150,105,0.4); border-radius: 16px; padding: 22px; text-align: center;
+}
+.heroLead { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-size: clamp(34px, 9vw, 50px); letter-spacing: -0.02em; color: #059669; line-height: 1.05;
+}
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* 회색지대 경고 */
+.grayCard {
+  background: rgba(202,138,4,0.10); border: 1px solid rgba(202,138,4,0.35);
+  border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--muted); line-height: 1.8;
+}
+.grayCard strong { color: var(--text); }
+
+/* 페이스 표 */
+.paceTable { width: 100%; border-collapse: collapse; }
+.paceTable td { padding: 10px 8px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.paceTable tr:last-child td { border-bottom: none; }
+.pName { color: var(--text); font-weight: 600; white-space: nowrap; }
+.pVal { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; text-align: right; white-space: nowrap; }
+.pNote { color: var(--muted); font-size: 12px; text-align: right; }
+.pHi { background: rgba(5,150,105,0.12); }
+.pHi .pName, .pHi .pVal { color: #059669; }
+
+/* 심박 */
+.hrInputRow { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+.hrField { display: flex; flex-direction: column; gap: 4px; }
+.hrFieldLabel { font-size: 11px; color: var(--muted); }
+.hrInput {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-size: 16px; font-weight: 700; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; outline: none;
+}
+.hrInput:focus { border-color: #059669; }
+.hrInput::-webkit-inner-spin-button, .hrInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.hrResult { margin-top: 12px; text-align: center; }
+.hrBig { font-family: 'Inter', system-ui, sans-serif; font-size: 30px; font-weight: 800; color: #DC2626; }
+.hrUnit { font-size: 14px; color: var(--muted); margin-left: 4px; }
+.hrMeta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.infoBox {
+  margin-top: 12px; background: var(--bg3); border-radius: 10px; padding: 11px 14px;
+  font-size: 12.5px; color: var(--muted); line-height: 1.75;
+}
+.infoBox strong { color: var(--text); }
+
+/* 롱런 */
+.segRow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--bg3); border-radius: 10px; padding: 4px; }
+.segBtn { padding: 8px; border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; border-radius: 7px; font-family: 'Noto Sans KR', sans-serif; }
+.segActive { background: #059669; color: #fff; font-weight: 700; }
+.longInputRow { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.longInput {
+  flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 14px; font-size: 18px; font-weight: 700;
+  color: var(--text); font-family: 'Inter', system-ui, sans-serif; outline: none;
+}
+.longInput:focus { border-color: #059669; }
+.longInput::-webkit-inner-spin-button, .longInput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.longUnit { font-size: 15px; color: var(--muted); font-weight: 700; flex-shrink: 0; }
+.longGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+@media (max-width: 480px) { .longGrid { grid-template-columns: 1fr; } }
+.longBox { background: var(--bg3); border-radius: 10px; padding: 12px 14px; text-align: center; }
+.longLabel { font-size: 11.5px; color: var(--muted); margin-bottom: 5px; }
+.longVal { font-family: 'Inter', system-ui, sans-serif; font-size: 19px; font-weight: 800; color: var(--text); }
+.longFoot { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* 복사·빈상태 */
+.copyBtn {
+  width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; font-size: 13px; color: var(--muted); cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+@media (hover: hover) { .copyBtn:hover { border-color: #059669; color: #059669; } }
+.copied { background: rgba(5,150,105,0.15); color: #059669; border-color: #059669; font-weight: 700; }
+.empty {
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  padding: 24px; text-align: center; font-size: 13px; color: var(--muted); line-height: 1.7;
+}

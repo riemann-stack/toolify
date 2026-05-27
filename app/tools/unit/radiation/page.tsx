@@ -2,6 +2,7 @@ import Link from 'next/link'
 import RadiationClient from './RadiationClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/radiation',
@@ -23,6 +24,41 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '16px',
 }
+
+const FAQ_LD = [
+              {
+                q: '방사능과 방사선의 차이는?',
+                a: '<strong>방사능(Radioactivity)</strong>은 물질의 성질로 "얼마나 방사선을 내는지"를 가리키며 단위는 Bq·Ci. <strong>방사선(Radiation)</strong>은 그 물질에서 나오는 에너지(알파·베타·감마·X-ray 등). 비유하자면 방사능은 "전구의 와트수", 방사선은 "그 전구에서 나오는 빛"입니다. 인체 영향을 평가할 땐 받은 양(선량당량, Sv·rem)이 가장 중요합니다.',
+              },
+              {
+                q: 'CT 1회 방사선이 정말 위험한가요?',
+                a: '<strong>일반적인 CT 1회(7~10 mSv)는 자연 노출 2~3년치에 해당</strong>하지만 단일 의료 노출은 상당히 안전한 범위입니다. ICRP는 진단 영상의 위험을 <strong>10,000명당 추가 암 1명 미만</strong>으로 추정합니다. 반복 촬영(연 50 mSv↑)이나 어린이·임산부는 신중해야 하며, 의사와 상의해 필요성을 확인하세요. 진단 가치 대비 위험이 훨씬 낮은 경우가 대부분입니다.',
+              },
+              {
+                q: '비행기를 자주 타면 방사선 노출이 위험한가요?',
+                a: '<strong>일반 승객은 거의 무시할 수준</strong>입니다. 인천→뉴욕 왕복 1회 ≈ 0.1 mSv (가슴 X-ray 1회 수준). 한 달 1회 장거리 비행해도 연 1.2 mSv 정도로 일반인 인공 한도 안에 들어옵니다. 다만 <strong>승무원·조종사는 직무상 연 1.5~3 mSv</strong>를 추가로 받아 노출 관리 대상이며, 임신 중 승무원은 한도가 더 엄격합니다.',
+              },
+              {
+                q: '치과 X-ray는 안전한가요?',
+                a: '매우 안전합니다. <strong>치과 Bitewing 1장 ≈ 5 μSv (0.005 mSv)</strong>로 자연 노출 반나절치, 비행 1시간 수준. 디지털 센서가 표준화된 현재는 더 낮습니다. 임산부도 납복(lead apron) 차폐를 하면 태아 노출이 미미해 필요 시 시술 가능합니다.',
+              },
+              {
+                q: '바나나에서 방사선이 나온다는 게 사실인가요?',
+                a: '<strong>네, 모든 음식에 자연 방사성 물질이 있습니다.</strong> 바나나는 칼륨-40(K-40)이 풍부해 1개당 약 0.1 μSv를 받습니다. 이를 <strong>BED (Banana Equivalent Dose)</strong>라 부르며 일상 노출을 직관적으로 비유할 때 씁니다. CT 1회 ≈ 7만 개 바나나, 자연 1년 노출 ≈ 3만 개. 단 K-40은 체내 항상성으로 유지되어 바나나를 많이 먹어도 누적되지 않습니다.',
+              },
+              {
+                q: '후쿠시마 처리수 방류는 위험한가요?',
+                a: '<strong>한국 원자력안전위원회·IAEA는 일상에 미치는 영향이 무시할 수준이라고 평가</strong>합니다. 방류 전 ALPS로 처리해 대부분의 핵종이 제거되고, 남은 삼중수소(트리튬)는 자연 농도와 비슷한 수준으로 희석. 한국 주변 해역의 농도 변화 추정치는 <strong>연 0.000001 mSv 미만</strong>으로, 자연 변동(연 ±0.3 mSv) 안에 묻힙니다. 다만 장기 모니터링이 필요하다는 데는 과학계도 동의합니다.',
+              },
+              {
+                q: '휴대폰 SAR이 1.6 W/kg을 넘으면 위험한가요?',
+                a: '<strong>한국·미국·EU 모두 SAR 한도는 안전 마진을 50배 적용한 값</strong>입니다. 즉 실제 인체 영향이 발생하는 수준의 1/50에서 한도를 정한 것. 시판되는 모든 휴대폰은 한도 이하이며, 한도를 살짝 넘어도 즉각 위험은 없습니다. 더 줄이고 싶다면 이어폰·스피커폰 사용, 통화 중 머리에서 1cm 떼기 등이 효과적입니다.',
+              },
+              {
+                q: '송전선 근처에 사는 게 암 위험을 높이나요?',
+                a: 'WHO·IARC는 극저주파(ELF) 자기장을 <strong>2B 등급(가능성 있음)</strong>으로 분류하지만, 대부분 연구에서 일상 노출 수준의 송전선 자기장은 명확한 인과관계가 확인되지 않았습니다. 154 kV 송전선 직하 3 μT는 ICNIRP 한도 200 μT의 1.5%. 다만 만성 노출 영향에 대한 연구는 계속되고 있어 가능하면 일정 거리를 두는 게 권장됩니다.',
+              },
+            ]
 
 export default function RadiationPage() {
   return (
@@ -131,41 +167,9 @@ export default function RadiationPage() {
         {/* 4. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              {
-                q: '방사능과 방사선의 차이는?',
-                a: '<strong>방사능(Radioactivity)</strong>은 물질의 성질로 "얼마나 방사선을 내는지"를 가리키며 단위는 Bq·Ci. <strong>방사선(Radiation)</strong>은 그 물질에서 나오는 에너지(알파·베타·감마·X-ray 등). 비유하자면 방사능은 "전구의 와트수", 방사선은 "그 전구에서 나오는 빛"입니다. 인체 영향을 평가할 땐 받은 양(선량당량, Sv·rem)이 가장 중요합니다.',
-              },
-              {
-                q: 'CT 1회 방사선이 정말 위험한가요?',
-                a: '<strong>일반적인 CT 1회(7~10 mSv)는 자연 노출 2~3년치에 해당</strong>하지만 단일 의료 노출은 상당히 안전한 범위입니다. ICRP는 진단 영상의 위험을 <strong>10,000명당 추가 암 1명 미만</strong>으로 추정합니다. 반복 촬영(연 50 mSv↑)이나 어린이·임산부는 신중해야 하며, 의사와 상의해 필요성을 확인하세요. 진단 가치 대비 위험이 훨씬 낮은 경우가 대부분입니다.',
-              },
-              {
-                q: '비행기를 자주 타면 방사선 노출이 위험한가요?',
-                a: '<strong>일반 승객은 거의 무시할 수준</strong>입니다. 인천→뉴욕 왕복 1회 ≈ 0.1 mSv (가슴 X-ray 1회 수준). 한 달 1회 장거리 비행해도 연 1.2 mSv 정도로 일반인 인공 한도 안에 들어옵니다. 다만 <strong>승무원·조종사는 직무상 연 1.5~3 mSv</strong>를 추가로 받아 노출 관리 대상이며, 임신 중 승무원은 한도가 더 엄격합니다.',
-              },
-              {
-                q: '치과 X-ray는 안전한가요?',
-                a: '매우 안전합니다. <strong>치과 Bitewing 1장 ≈ 5 μSv (0.005 mSv)</strong>로 자연 노출 반나절치, 비행 1시간 수준. 디지털 센서가 표준화된 현재는 더 낮습니다. 임산부도 납복(lead apron) 차폐를 하면 태아 노출이 미미해 필요 시 시술 가능합니다.',
-              },
-              {
-                q: '바나나에서 방사선이 나온다는 게 사실인가요?',
-                a: '<strong>네, 모든 음식에 자연 방사성 물질이 있습니다.</strong> 바나나는 칼륨-40(K-40)이 풍부해 1개당 약 0.1 μSv를 받습니다. 이를 <strong>BED (Banana Equivalent Dose)</strong>라 부르며 일상 노출을 직관적으로 비유할 때 씁니다. CT 1회 ≈ 7만 개 바나나, 자연 1년 노출 ≈ 3만 개. 단 K-40은 체내 항상성으로 유지되어 바나나를 많이 먹어도 누적되지 않습니다.',
-              },
-              {
-                q: '후쿠시마 처리수 방류는 위험한가요?',
-                a: '<strong>한국 원자력안전위원회·IAEA는 일상에 미치는 영향이 무시할 수준이라고 평가</strong>합니다. 방류 전 ALPS로 처리해 대부분의 핵종이 제거되고, 남은 삼중수소(트리튬)는 자연 농도와 비슷한 수준으로 희석. 한국 주변 해역의 농도 변화 추정치는 <strong>연 0.000001 mSv 미만</strong>으로, 자연 변동(연 ±0.3 mSv) 안에 묻힙니다. 다만 장기 모니터링이 필요하다는 데는 과학계도 동의합니다.',
-              },
-              {
-                q: '휴대폰 SAR이 1.6 W/kg을 넘으면 위험한가요?',
-                a: '<strong>한국·미국·EU 모두 SAR 한도는 안전 마진을 50배 적용한 값</strong>입니다. 즉 실제 인체 영향이 발생하는 수준의 1/50에서 한도를 정한 것. 시판되는 모든 휴대폰은 한도 이하이며, 한도를 살짝 넘어도 즉각 위험은 없습니다. 더 줄이고 싶다면 이어폰·스피커폰 사용, 통화 중 머리에서 1cm 떼기 등이 효과적입니다.',
-              },
-              {
-                q: '송전선 근처에 사는 게 암 위험을 높이나요?',
-                a: 'WHO·IARC는 극저주파(ELF) 자기장을 <strong>2B 등급(가능성 있음)</strong>으로 분류하지만, 대부분 연구에서 일상 노출 수준의 송전선 자기장은 명확한 인과관계가 확인되지 않았습니다. 154 kV 송전선 직하 3 μT는 ICNIRP 한도 200 μT의 1.5%. 다만 만성 노출 영향에 대한 연구는 계속되고 있어 가능하면 일정 거리를 두는 게 권장됩니다.',
-              },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

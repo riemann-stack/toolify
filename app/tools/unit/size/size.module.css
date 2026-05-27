@@ -135,21 +135,37 @@
 }
 .measureHint strong { color: var(--text); }
 
-/* ── 검색 ── */
+/* ── 검색 (표 필터) ── */
 .searchBox {
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: 12px; padding: 12px 14px;
 }
+.searchBoxLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  font-weight: 600; margin-bottom: 8px;
+}
+.searchInputWrap { position: relative; }
+.searchIcon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); pointer-events: none;
+}
 .searchInput {
   width: 100%;
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 14px;
+  border-radius: 8px; padding: 10px 36px 10px 36px;
   font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
   color: var(--text); outline: none; box-sizing: border-box;
   transition: border 0.15s;
 }
 .searchInput::placeholder { color: var(--muted); }
 .searchInput:focus { border-color: rgba(14,165,233,0.5); }
+.searchClear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; border: none; background: var(--border);
+  color: var(--text); border-radius: 50%; cursor: pointer;
+  font-size: 11px; line-height: 1; display: flex; align-items: center; justify-content: center;
+}
+@media (hover: hover) { .searchClear:hover { background: var(--border-hover); } }
 
 /* ── 테이블 ── */
 .tableWrap { overflow-x: auto; border-radius: 12px; }

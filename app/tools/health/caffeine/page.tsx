@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CaffeineClient from './CaffeineClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/health/caffeine',
@@ -70,6 +71,16 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"디카페인 커피는 정말 카페인이 없나요?","a":"아니요, 약 5~15mg 정도 남습니다. EU 규정상 디카페인은 카페인 0.1% 이하인데, Tall 사이즈 기준 약 10mg 수준. 임산부나 매우 민감한 사람은 디카페인이라도 늦은 오후 이후엔 자제 권장." },
+  { "q":"콜드브루가 아메리카노보다 카페인이 많은 이유는?","a":"오랜 추출 시간 + 더 많은 원두 사용 때문입니다. 차가운 물은 추출 효율이 낮아 12~24시간 우려내며, 그만큼 원두를 1.5~2배 사용. 결과적으로 Tall 기준 195mg ≈ 아메리카노 그란데(225mg)와 비슷한 수준. 「부드러운 맛 = 약함」 통념과 달리 카페인은 높음." },
+  { "q":"카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?","a":"유명한 2013년 Sleep Medicine 연구에서 취침 6시간 전 400mg 카페인도 수면을 1시간 단축시킨다고 밝혔습니다. 본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 20mg (안전). 하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다." },
+  { "q":"카페인 내성·금단이 진짜 있나요?","a":"둘 다 진짜입니다. 내성: 매일 같은 양 섭취 시 1~2주 내 효과 ↓. 「커피 마셔도 안 깬다」 호소. 금단: 갑자기 끊으면 12~24시간 후 두통·피로·집중력 ↓·짜증 (1~3일 지속). 해결: 2주마다 1~2일 「카페인 휴식일」 또는 양 점진적 감량." },
+  { "q":"&ldquo;커피 낮잠(Coffee Nap)&rdquo;이 효과 있다는 게 진짜?","a":"네, 여러 연구로 확인됐습니다. 방법: 커피 200mg을 빠르게 마시고 즉시 20분 낮잠. 카페인 효과 발현이 약 20~30분 후라 낮잠 후 깰 때 카페인 효과 + 졸음 클리어 모두 작용. 30분 넘게 자면 깊은 수면 단계에 들어가 오히려 더 멍해집니다." },
+  { "q":"임산부 200mg은 어느 정도인가요?","a":"아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다. 주의: 임신 중에는 반감기가 10~15시간으로 매우 길어져 평소 양도 체내에 오래 남습니다. 본 도구 「반감기: 임신·수유 중」 선택 시 자동 반영. 차·콜라·초콜릿·일부 진통제(타이레놀 ER 등)에도 카페인 함유 — 합산 주의." },
+  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X ✅ 36시간 지난 항목은 자동 정리 (오늘+어제 누적까지만 필요) ⚠️ 시크릿 모드·다른 기기는 자동 동기화 X" }
+]
 
 export default function CaffeinePage() {
   return (
@@ -243,6 +254,7 @@ export default function CaffeinePage() {
         {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 디카페인 커피는 정말 카페인이 없나요?</summary>

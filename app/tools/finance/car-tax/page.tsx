@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import CarTaxClient from './CarTaxClient'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/car-tax',
@@ -71,6 +73,15 @@ const faqAnswer: React.CSSProperties = {
   lineHeight: 1.8,
 }
 
+const FAQ_LD = [
+  { "q":"중고차도 취득세를 내나요?","a":"네, 매매가 기준 동일하게 7% (경차 4%)를 매수인이 납부합니다. 단 신차 출고가가 아니라 매매가 기준이라 절대 금액은 줄어듭니다. 예: 5년 된 쏘나타 1,500만 원에 매수 → 취득세 105만 원 + 공채 + 등록비. 연식이 오래되어 자동차세는 이미 상당 % 감면된 상태로 인수." },
+  { "q":"자동차세 연납은 언제 얼마 할인되나요?","a":"1월에 일괄 납부 시 약 9.15% 할인됩니다 (2025년 기준). 1월: 9.15% (최대 할인) 3월: 7.5% 6월: 5% 9월: 2.5% 위택스(wetax.go.kr) 또는 카드사 앱(삼성·신한 등)에서 자동이체 가능. 주의: 연납 정책은 매년 일부 변경 — 최신은 위택스에서 확인." },
+  { "q":"전기차 세금이 정말 일반차보다 많이 절약되나요?","a":"네, 5년 보유 시 약 200~400만 원 절감됩니다. 취득세: 140만원 한도 면제 (4,000만 원 차량 기준 280만→140만) 자동차세: 2000cc 가솔린 약 40만/년 vs 전기차 13만/년 — 연 27만 차이 유류세: 연 1만 8천km 운행 시 휘발유 약 112만 원 vs 전기 0원 5년 합산: 140 + 27×5 + 112×5 = 약 835만 원 절감 단, 전기차 자체 가격이 비싸고 배터리 교체 비용(약 1,000~2,000만)은 고려해야 함." },
+  { "q":"공채를 보유하는 게 이득인가요, 즉시 매도가 이득인가요?","a":"대부분의 경우 즉시 매도가 더 이득입니다. 공채 표면 이자율 2~3% (5년 만기) 시중 예금 금리 3~5% 수준에서 기회비용 ↑ 5년 후 받는 원금·이자보다, 즉시 매도 + 다른 곳 운용이 보통 이득 단, 매도 시 약 10~15% 할인 — 이게 「실비용」으로 잡힘 부동산 매매 시 「국민주택채권」과 비슷한 구조." },
+  { "q":"차량 명의를 부모님으로 하면 절세되나요?","a":"제한적입니다. 부모님이 65세 이상 + 본인 명의 자동차 없음 → 자동차세 50% 감면 (지방세법) 부모님이 장애인·국가유공자 → 본인 명의 1대 전액 면제 단 명의자가 운전·관리해야 하며, 위장 등록 적발 시 세금 추징 + 가산세 보험료는 명의자 기준이라 운전자 한정 특약 잘못 설정 시 사고 시 보상 X 명의 절세는 합법 범위 내에서 신중히." },
+  { "q":"환경개선부담금은 누가 내나요?","a":"경유차 소유자만 납부합니다 (휘발유·LPG·전기차 X). 연 2회 (3월·9월) 부과 차종·배기량·연식별 차등 — 평균 연 8~22만 원 경차·하이브리드 경유차는 50% 감면 저공해차 인증(3종 1·2급) → 일부 감면 본 도구는 경유 차종 선택 시 자동 반영. 노후 경유차는 조기폐차 보조금(50~600만원) 활용 권장." }
+]
+
 export default function CarTaxPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
@@ -81,6 +92,8 @@ export default function CarTaxPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         <strong style={{ color: 'var(--text)' }}>취득세·자동차세·유류세·공채·환경부담금</strong>까지 자동차 관련 모든 세금을 한 화면에. 친환경차·다자녀·장애인 감면 자동 반영 + 5/10년 누적 시뮬.
       </p>
+
+      <UpdatedMeta date="2026년 5월" basis="2026년 자동차세 기준" sources={[{"label":"위택스","href":"https://www.wetax.go.kr"},{"label":"행정안전부","href":"https://www.mois.go.kr"}]} />
 
       <CarTaxClient />
 
@@ -280,6 +293,7 @@ export default function CarTaxPage() {
         {/* 8. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 중고차도 취득세를 내나요?</summary>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import BpmClient from './BpmClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/bpm',
@@ -9,6 +10,19 @@ export const metadata = buildMetadata({
   description: 'BPM만 입력하면 딜레이·리버브 ms 값 자동. 음악 프로듀서·홈레코딩·DJ 필수 도구.',
   keywords: ['BPM딜레이계산기', '딜레이타임계산', '음악제작계산기', 'BPM딜레이', '딜레이ms계산', 'DAW딜레이설정', '음악템포계산기'],
 })
+
+const FAQ_LD = [
+              { q: '점음표(dotted)는 왜 ×1.5인가요?',
+                a: '점음표는 원래 음표 길이에 <strong>절반을 더한 값</strong>입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 딜레이에서 점음표 설정은 Slapback echo나 핑퐁 딜레이에서 리듬감을 극대화할 때 많이 사용합니다.' },
+              { q: '셋잇단음표(triplet)는 ×⅔인 이유는?',
+                a: '셋잇단음표는 <strong>2박자 공간에 3개의 음을 넣는 방식</strong>으로, 1개 음의 길이가 원래 값의 2/3입니다. BPM 120의 4분음표는 500ms이지만 셋잇단 4분음표는 약 333ms입니다. 트리플렛 딜레이는 펑키하고 스윙감 있는 그루브를 만들 때 효과적입니다.' },
+              { q: 'BPM이 소수(예: 128.5)여도 계산되나요?',
+                a: '네, 이 계산기는 소수점 BPM도 지원합니다. 예를 들어 128.5 BPM의 4분음표 딜레이는 <code>60,000 ÷ 128.5 ≈ 467ms</code>입니다. 하드웨어 드럼머신이나 빈티지 신디사이저의 경우 정수가 아닌 BPM이 있을 수 있습니다.' },
+              { q: '딜레이 피드백(Feedback)은 어떻게 설정하나요?',
+                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 <strong>20~40% 설정이 자연스럽고</strong>, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
+              { q: '리버브 프리딜레이와 딜레이 타임의 차이는?',
+                a: '<strong>딜레이 타임</strong>은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. <strong>리버브 프리딜레이</strong>는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 16분음표 이하의 짧은 값(10~125ms)을 사용합니다.' },
+            ]
 
 export default async function BpmPage({
   searchParams,
@@ -127,19 +141,9 @@ export default async function BpmPage({
         {/* ── 4. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              { q: '점음표(dotted)는 왜 ×1.5인가요?',
-                a: '점음표는 원래 음표 길이에 <strong>절반을 더한 값</strong>입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 딜레이에서 점음표 설정은 Slapback echo나 핑퐁 딜레이에서 리듬감을 극대화할 때 많이 사용합니다.' },
-              { q: '셋잇단음표(triplet)는 ×⅔인 이유는?',
-                a: '셋잇단음표는 <strong>2박자 공간에 3개의 음을 넣는 방식</strong>으로, 1개 음의 길이가 원래 값의 2/3입니다. BPM 120의 4분음표는 500ms이지만 셋잇단 4분음표는 약 333ms입니다. 트리플렛 딜레이는 펑키하고 스윙감 있는 그루브를 만들 때 효과적입니다.' },
-              { q: 'BPM이 소수(예: 128.5)여도 계산되나요?',
-                a: '네, 이 계산기는 소수점 BPM도 지원합니다. 예를 들어 128.5 BPM의 4분음표 딜레이는 <code>60,000 ÷ 128.5 ≈ 467ms</code>입니다. 하드웨어 드럼머신이나 빈티지 신디사이저의 경우 정수가 아닌 BPM이 있을 수 있습니다.' },
-              { q: '딜레이 피드백(Feedback)은 어떻게 설정하나요?',
-                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 <strong>20~40% 설정이 자연스럽고</strong>, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
-              { q: '리버브 프리딜레이와 딜레이 타임의 차이는?',
-                a: '<strong>딜레이 타임</strong>은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. <strong>리버브 프리딜레이</strong>는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 16분음표 이하의 짧은 값(10~125ms)을 사용합니다.' },
-            ].map((f, i) => (
+            {FAQ_LD.map((f, i) => (
               <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}

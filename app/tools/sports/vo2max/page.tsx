@@ -2,6 +2,7 @@ import Link from 'next/link'
 import VO2MaxClient from './VO2MaxClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/vo2max',
@@ -69,6 +70,15 @@ const faqAnswer: React.CSSProperties = {
   color: 'var(--muted)',
   lineHeight: 1.8,
 }
+
+const FAQ_LD = [
+  { "q":"어떤 방법이 가장 정확한가요?","a":"가스 분석기 실험실 측정(트레드밀 점진 부하)이 절대 기준입니다 (±2~3% 오차). 본 도구의 6가지 추정 방법 중에선: 러너: 쿠퍼 12분 또는 1.5마일 (전력 달리기 가능 시) 초보·고령: 락포트 1마일 걷기 (관절 부담 X) 실내: 퀸즈칼리지 스텝테스트 측정 자체가 어렵다면: 노르웨이 비운동 추정 (정확도 ±10~15% 오차이지만 운동 X) 안정시 심박 비율법은 가장 간단하지만 오차가 크므로 추세 추적용으로만." },
+  { "q":"VO₂max는 얼마까지 올릴 수 있나요?","a":"유전이 약 50% 영향 + 훈련이 30~40% 영향이라고 알려져 있습니다 (Bouchard 1999). 일반인 기준: 비운동인 → 운동인: 6개월~1년에 +10~20% (예: 38 → 45) 운동인 → 마라톤 입문: 추가 +5~10% (45 → 50) 아마 마스터즈 → 서브3: VO₂max 58+ 필요 엘리트: 남성 75~85, 여성 65~75 (유전·훈련 모두 상위) 킵초게(엘리우드)·잉바이·반드페이는 80~85 수준으로 추정됩니다." },
+  { "q":"나이가 들면 VO₂max는 얼마나 떨어지나요?","a":"비활동인은 10년에 약 10% 감소 (30대 45 → 60대 27). 그러나 꾸준한 유산소 운동으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소). 마스터즈 러너 연구에서: 50대 마라톤 러너의 VO₂max는 비활동 25세 청년과 비슷 (40~45) 70대 마스터즈 챔피언은 평균 30대 수준 유지 가능 (40+) VO₂max는 노화의 가장 강력한 지표지만 동시에 가장 통제 가능한 지표입니다." },
+  { "q":"VO₂max가 낮으면 무엇이 문제인가요?","a":"심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자입니다. Mandsager 2018 (JAMA Cardiology) 12만 명 연구: VO₂max 하위 25% → 상위 25% 대비 사망률 약 5배 흡연·당뇨·고혈압보다 더 강한 위험 인자 VO₂max +1 mL → 사망률 약 9% ↓ VO₂max가 「매우 미흡」 단계라면 의사 상담 후 점진적 유산소 운동 시작 권장." },
+  { "q":"워치(가민·애플)의 VO₂max 표시는 정확한가요?","a":"가민·폴라·애플 워치의 VO₂max는 러닝 중 페이스 + 심박수 비교로 추정합니다. 일반적으로 ±5~10% 오차로 본 도구의 추정 방법과 비슷한 수준입니다. 주의: 꾸준히 달려야 갱신됨 (가민은 7일+ 데이터 필요) 업힐·다운힐·강풍 환경에선 과대/과소 평가 광학 심박 센서 오차 ±5bpm → VO₂max ±3 본 도구 + 워치 + 3~6개월 추세를 함께 보면 가장 신뢰 가능." },
+  { "q":"마라톤 예상 시간은 어떻게 계산되나요?","a":"본 도구는 VO₂max ≈ Daniels VDOT 가정 + Riegel 공식으로 추정합니다. VO₂max 50 → 5K 약 23분 / 10K 약 47분 / 풀 약 3시간 40분 VO₂max 60 → 5K 약 19분 / 10K 약 39분 / 풀 약 3시간 5분 VO₂max 70 → 5K 약 16분 / 10K 약 33분 / 풀 약 2시간 40분 실제 마라톤 시간은 VO₂max만 아니라 젖산 역치 · 러닝 이코노미 · 글리코겐 저장량 · 멘탈이 모두 영향. 추정치는 ±10~15% 변동 가능." }
+]
 
 export default function VO2MaxPage() {
   return (
@@ -299,6 +309,7 @@ export default function VO2MaxPage() {
         {/* 7. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
+          <FaqJsonLd items={FAQ_LD} />
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 어떤 방법이 가장 정확한가요?</summary>
