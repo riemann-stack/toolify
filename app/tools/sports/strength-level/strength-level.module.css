@@ -1,0 +1,203 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* ── 입력 ── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.input:focus { border-color: var(--accent); }
+.link { color: var(--accent); font-weight: 600; text-decoration: none; }
+@media (hover: hover) { .link:hover { text-decoration: underline; } }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+
+.liftInputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 520px) { .liftInputs { grid-template-columns: 1fr; } }
+
+/* ── 세그먼트(성별) ── */
+.segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+}
+.segBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 40px;
+}
+.segActive { background: var(--accent); color: #fff; }
+
+/* ── pill(연령) ── */
+.pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 36px;
+}
+@media (hover: hover) { .pill:hover { border-color: var(--accent); color: var(--text); } }
+.pillActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.helpText {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: 12px 0 0;
+  line-height: 1.7;
+}
+
+/* ── 히어로 ── */
+.hero {
+  background: linear-gradient(135deg, rgba(202,138,4,0.12) 0%, rgba(220,38,38,0.05) 100%);
+  border: 1px solid rgba(202,138,4,0.3);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.heroValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+}
+.heroValue strong { color: var(--accent); }
+.heroSub { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.overallBadge {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 6px 18px;
+  border-radius: 99px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ── 점수 카드 ── */
+.scoreGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.scoreCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scoreName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.scoreValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.scoreBand { font-size: 12px; color: var(--muted); }
+
+/* ── 종목별 레벨 ── */
+.liftList { display: flex; flex-direction: column; gap: 18px; }
+.liftRow { display: flex; flex-direction: column; gap: 8px; }
+.liftHead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.liftName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.liftMeta { font-size: 13px; text-align: right; }
+.liftRatio { color: var(--muted); font-size: 12px; }
+
+.levelBar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.levelSeg { height: 10px; border-radius: 3px; transition: background 0.25s, opacity 0.25s; }
+
+.nextLine { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.nextLine strong { color: var(--text); }
+
+/* ── 복사 버튼 ── */
+.copyBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: border-color 0.18s, background 0.18s;
+}
+@media (hover: hover) { .copyBtn:hover { border-color: var(--accent); } }
+.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── 빈 상태 ── */
+.emptyHint {
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input { font-size: 16px; min-height: 48px; }
+}

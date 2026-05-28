@@ -127,7 +127,7 @@ export const COLLECTIONS: Collection[] = [
     seasonMonths: [1, 3, 4],
     steps: [
       { title: '내 몸 기준 알기', note: '기초대사량과 BMI로 현재 상태와 하루 권장 열량을 먼저 파악하세요.', toolHrefs: ['/tools/health/bmr', '/tools/health/bmi'] },
-      { title: '근력 운동', note: '1RM(최대 중량)을 추정해 무게와 반복수를 안전하게 설계하세요.', toolHrefs: ['/tools/sports/one-rm'] },
+      { title: '근력 운동', note: '1RM(최대 중량)을 추정해 무게와 반복수를 안전하게 설계하고, 3대 측정으로 내 근력 레벨이 어디쯤인지 확인하세요.', toolHrefs: ['/tools/sports/one-rm', '/tools/sports/strength-level'] },
       { title: '러닝·유산소', note: '목표 페이스와 기록을 예측하고, 인터벌 훈련과 심폐능력(VO2max)으로 단계를 높이세요.', toolHrefs: ['/tools/sports/pace', '/tools/sports/race-predictor', '/tools/sports/interval-training', '/tools/sports/vo2max'] },
     ],
   },

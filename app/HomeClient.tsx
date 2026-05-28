@@ -112,6 +112,62 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
               일상에서 자주 쓰는 도구들을 빠르고 간편하게 사용하세요.
             </p>
 
+            {/* 검색창 — 주요 동작이므로 발견 섹션보다 위에 배치 */}
+            <div className={styles.searchWrap}>
+              <input
+                ref={searchInputRef}
+                className={styles.searchInput}
+                type="text"
+                placeholder="필요한 도구를 검색하세요."
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                autoComplete="off"
+              />
+              <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <kbd className={styles.searchKbd} aria-hidden="true">⌘K</kbd>
+
+              {/* 검색 결과 드롭다운 */}
+              {query.trim() && (
+                <div className={styles.searchDropdown}>
+                  {searchHits.length > 0 ? (
+                    searchHits.map(({ tool, category }) => (
+                      <Link
+                        key={tool.href}
+                        href={tool.href}
+                        className={styles.searchItem}
+                        prefetch={false}
+                        // 근본 원인: 결과 클릭 시 포커스된 입력창이 blur되며(모바일은 키보드 닫힘)
+                        // 첫 클릭/탭이 그 동작에 흡수돼 무시됨. onMouseDown preventDefault로
+                        // 포커스 이탈을 막아 첫 클릭이 바로 Link로 전달되게 한다(Nav 검색과 동일).
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => { setTimeout(() => setQuery(''), 0) }}
+                      >
+                        <span className={styles.searchItemIcon}>{tool.icon}</span>
+                        <div className={styles.searchItemBody}>
+                          <div className={styles.searchItemNameRow}>
+                            <span className={styles.searchItemName}>{tool.name}</span>
+                            {category && (
+                              <span
+                                className={styles.searchItemCat}
+                                style={{ color: category.color, borderColor: category.color + '55' }}
+                              >
+                                {category.icon} {category.name}
+                              </span>
+                            )}
+                          </div>
+                          <div className={styles.searchItemDesc}>{tool.desc}</div>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className={styles.searchEmpty}>검색 결과가 없습니다</div>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* 발견한 도구 — 섹션 카드 + 세그먼트 컨트롤 */}
             <section className={styles.randomSection}>
               <div className={styles.discoverHeader}>
@@ -179,62 +235,6 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                 </div>
               )}
             </section>
-
-            {/* 검색창 */}
-            <div className={styles.searchWrap}>
-              <input
-                ref={searchInputRef}
-                className={styles.searchInput}
-                type="text"
-                placeholder="필요한 도구를 검색하세요."
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                autoComplete="off"
-              />
-              <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <kbd className={styles.searchKbd} aria-hidden="true">⌘K</kbd>
-
-              {/* 검색 결과 드롭다운 */}
-              {query.trim() && (
-                <div className={styles.searchDropdown}>
-                  {searchHits.length > 0 ? (
-                    searchHits.map(({ tool, category }) => (
-                      <Link
-                        key={tool.href}
-                        href={tool.href}
-                        className={styles.searchItem}
-                        prefetch={false}
-                        // 근본 원인: 결과 클릭 시 포커스된 입력창이 blur되며(모바일은 키보드 닫힘)
-                        // 첫 클릭/탭이 그 동작에 흡수돼 무시됨. onMouseDown preventDefault로
-                        // 포커스 이탈을 막아 첫 클릭이 바로 Link로 전달되게 한다(Nav 검색과 동일).
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setTimeout(() => setQuery(''), 0) }}
-                      >
-                        <span className={styles.searchItemIcon}>{tool.icon}</span>
-                        <div className={styles.searchItemBody}>
-                          <div className={styles.searchItemNameRow}>
-                            <span className={styles.searchItemName}>{tool.name}</span>
-                            {category && (
-                              <span
-                                className={styles.searchItemCat}
-                                style={{ color: category.color, borderColor: category.color + '55' }}
-                              >
-                                {category.icon} {category.name}
-                              </span>
-                            )}
-                          </div>
-                          <div className={styles.searchItemDesc}>{tool.desc}</div>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className={styles.searchEmpty}>검색 결과가 없습니다</div>
-                  )}
-                </div>
-              )}
-            </div>
 
             {/* 통계 + 전체 도구 보기 버튼 */}
             <div className={styles.statsRow}>

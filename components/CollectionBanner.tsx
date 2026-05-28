@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { COLLECTIONS, collectionToolCount } from '@/lib/collections'
+import s from './CollectionBanner.module.css'
 
 interface CollectionBannerProps {
   /** 서버에서 계산한 오늘의 시즌 추천 slug — 첫 페인트부터 정확 표시되도록.
@@ -22,7 +23,7 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
   const others = COLLECTIONS.filter((c) => c.slug !== featured.slug)
 
   return (
-    <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <section className={s.banner}>
       {/* 대표(시즌 추천) 카드 */}
       <Link
         href={`/collections/${featured.slug}`}
@@ -58,22 +59,19 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
         </div>
       </Link>
 
-      {/* 나머지 컬렉션 카드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
+      {/* 나머지 컬렉션 — 데스크탑 그리드 / 모바일 가로 스크롤 선반 */}
+      <div className={s.others}>
         {others.map((c) => (
           <Link
             key={c.slug}
             href={`/collections/${c.slug}`}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none',
-              background: 'var(--bg2)', border: '1px solid var(--border)',
-              borderLeft: `3px solid ${c.color}`, borderRadius: 12, padding: '14px 16px',
-            }}
+            className={s.otherCard}
+            style={{ borderLeft: `3px solid ${c.color}` }}
           >
-            <span style={{ fontSize: 22, flexShrink: 0 }} aria-hidden>{c.emoji}</span>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{c.short}</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>도구 {collectionToolCount(c)}개</div>
+            <span className={s.otherEmoji} aria-hidden>{c.emoji}</span>
+            <div className={s.otherBody}>
+              <div className={s.otherTitle}>{c.short}</div>
+              <div className={s.otherCount}>도구 {collectionToolCount(c)}개</div>
             </div>
           </Link>
         ))}

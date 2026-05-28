@@ -117,6 +117,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/hyrox',           icon: '🏋️', name: '하이록스(HYROX) 계산기', desc: '8km 런 + 8개 스테이션 + 록스존으로 완주 시간 예측 + 목표 페이스 역산 + Open/Pro 부문별 중량표.', badge: 'new' },
       { href: '/tools/sports/hiking-time',     icon: '🥾', name: '등산 시간 계산기',   desc: '한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. 일몰 전 하산 자동 진단.', badge: 'new' },
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '5RM·8RM 기록으로 진짜 최대 무게 추정 + RPE 보정과 워밍업 5세트 자동.' },
+      { href: '/tools/sports/strength-level',  icon: '💪', name: '스트렝스 레벨 계산기', desc: '3대(스쿼트·벤치·데드) 입력 → 3대 합·윌크스·DOTS 점수 + 체중·성별·연령 보정 레벨(입문~엘리트).', badge: 'new' },
       { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 정확한 인터벌 페이스 + 4~16주 풀 트레이닝 스케줄.' },
       { href: '/tools/sports/buildup',         icon: '📈', name: '러닝 빌드업 계산기', desc: '거리·페이스·구간·프로파일 → 구간별 페이스표와 워치 포맷 자동 + 안전성 체크.', badge: 'new' },
       { href: '/tools/sports/lsd',             icon: '🏃', name: 'LSD·이지런 페이스 계산기', desc: '최근 기록으로 이지 페이스 범위·존2 심박 + 회색지대(정크 마일) 경고 + 롱런 보급 플래너.', badge: 'new' },
