@@ -107,13 +107,7 @@ export default function WireClient() {
 
   return (
     <div className={s.wrap}>
-      {/* 🚨 상단 강조 면책 */}
-      <div className={s.warnBanner}>
-        🚨 <strong>전기 자가시공은 전기공사업법상 불가</strong> — 이 도구는 학습·검토 참고용입니다.
-        실 시공은 전기기능사·전기공사업 등록 사업자에게 의뢰하세요.
-      </div>
-
-      {/* 면책 */}
+      {/* 면책 (표준 아코디언 단일) */}
       <Disclaimer
         variant="safety"
         related={[
@@ -129,7 +123,7 @@ export default function WireClient() {
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
           { id: 'pw',      label: '⚡ 전력→전선' },
-          { id: 'reverse', label: '🔄 역계산' },
+          { id: 'reverse', label: '🔎 전선 용량 조회' },
           { id: 'drop',    label: '📉 전압강하' },
           { id: 'preset',  label: '🏠 가전 프리셋' },
         ] as { id: Tab; label: string }[]).map((t) => (
@@ -144,86 +138,70 @@ export default function WireClient() {
         ))}
       </div>
 
-      {/* ════════ 공통 회로 조건 ════════ */}
+      {/* ════════ 회로 조건 (탭별로 실제 계산에 쓰이는 항목만 노출) ════════ */}
       {tab !== 'preset' && (
         <div className={s.card}>
           <span className={s.cardLabel}>회로 조건</span>
 
           <div className={s.row2}>
+            {/* 전압 — 모든 탭 */}
             <div className={s.field}>
-              <label className={s.fieldLabel}>전압</label>
+              <label className={s.fieldLabel}>전압 · 상</label>
               <div className={s.pillRow}>
                 <button className={`${s.pill} ${voltage === 220 ? s.pillActive : ''}`} onClick={() => setVoltage(220)} type="button">단상 220V</button>
                 <button className={`${s.pill} ${voltage === 380 ? s.pillActive : ''}`} onClick={() => setVoltage(380)} type="button">삼상 380V</button>
               </div>
             </div>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>부하 종류 (역률)</label>
-              <div className={s.pillRow}>
-                {(Object.keys(LOAD_PF) as LoadType[]).map((l) => (
-                  <button
-                    key={l}
-                    className={`${s.pill} ${load === l ? s.pillActive : ''}`}
-                    onClick={() => setLoad(l)}
-                    type="button"
-                  >
-                    {LOAD_PF[l].emoji} {LOAD_PF[l].label} (cosφ {LOAD_PF[l].pf})
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          <div className={s.row2}>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>전선 종류</label>
-              <select className={s.input} value={kind} onChange={(e) => setKind(e.target.value as WireKind)}>
-                {WIRE_KINDS.map((k) => (
-                  <option key={k.id} value={k.id}>{k.emoji} {k.label} ({k.tempC}°C)</option>
-                ))}
-              </select>
-            </div>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>부설 환경</label>
-              <select className={s.input} value={env} onChange={(e) => setEnv(e.target.value as Environment)}>
-                {(Object.keys(ENV_FACTOR) as Environment[]).map((e) => (
-                  <option key={e} value={e}>{ENV_FACTOR[e].label} (×{ENV_FACTOR[e].factor})</option>
-                ))}
-              </select>
-            </div>
-          </div>
+            {/* 전압강하 한도 — 전력→전선 · 전압강하 탭 */}
+            {(tab === 'pw' || tab === 'drop') && (
+              <div className={s.field}>
+                <label className={s.fieldLabel}>적용 (전압강하 한도)</label>
+                <select className={s.input} value={app} onChange={(e) => setApp(e.target.value as Application)}>
+                  {(Object.keys(DROP_LIMIT) as Application[]).map((a) => (
+                    <option key={a} value={a}>{DROP_LIMIT[a].label} ({DROP_LIMIT[a].pct}%)</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-          <div className={s.row2}>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>주위 온도</label>
-              <div className={s.pillRow}>
-                {[30, 40, 50].map((t) => (
-                  <button
-                    key={t}
-                    className={`${s.pill} ${tempC === t ? s.pillActive : ''}`}
-                    onClick={() => setTempC(t as 30 | 40 | 50)}
-                    type="button"
-                  >
-                    {t}°C (×{TEMP_FACTOR[t]})
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>적용 (강하 한도)</label>
-              <div className={s.pillRow}>
-                {(Object.keys(DROP_LIMIT) as Application[]).map((a) => (
-                  <button
-                    key={a}
-                    className={`${s.pill} ${app === a ? s.pillActive : ''}`}
-                    onClick={() => setApp(a)}
-                    type="button"
-                  >
-                    {DROP_LIMIT[a].label} {DROP_LIMIT[a].pct}%
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* 아래 4개는 허용전류 계산에 쓰임 — 전력→전선 · 전선 용량 조회 탭 */}
+            {(tab === 'pw' || tab === 'reverse') && (
+              <>
+                <div className={s.field}>
+                  <label className={s.fieldLabel}>부하 종류</label>
+                  <select className={s.input} value={load} onChange={(e) => setLoad(e.target.value as LoadType)}>
+                    {(Object.keys(LOAD_PF) as LoadType[]).map((l) => (
+                      <option key={l} value={l}>{LOAD_PF[l].label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className={s.field}>
+                  <label className={s.fieldLabel}>전선 종류</label>
+                  <select className={s.input} value={kind} onChange={(e) => setKind(e.target.value as WireKind)}>
+                    {WIRE_KINDS.map((k) => (
+                      <option key={k.id} value={k.id}>{k.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className={s.field}>
+                  <label className={s.fieldLabel}>부설 환경</label>
+                  <select className={s.input} value={env} onChange={(e) => setEnv(e.target.value as Environment)}>
+                    {(Object.keys(ENV_FACTOR) as Environment[]).map((ev) => (
+                      <option key={ev} value={ev}>{ENV_FACTOR[ev].label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className={s.field}>
+                  <label className={s.fieldLabel}>주위 온도</label>
+                  <select className={s.input} value={tempC} onChange={(e) => setTempC(Number(e.target.value) as 30 | 40 | 50)}>
+                    <option value={30}>30°C</option>
+                    <option value={40}>40°C</option>
+                    <option value={50}>50°C</option>
+                  </select>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -233,7 +211,7 @@ export default function WireClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>부하 입력</span>
-            <div className={s.row2}>
+            <div className={s.row2Tight}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>소비전력 (kW)</label>
                 <input
@@ -246,7 +224,7 @@ export default function WireClient() {
                   step={0.1}
                 />
                 <div className={s.pillRow} style={{ marginTop: 8 }}>
-                  {[1, 2, 3.5, 7, 11].map((p) => (
+                  {[1, 2, 3.5, 7].map((p) => (
                     <button key={p} className={s.pill} onClick={() => setPowerKw(String(p))} type="button">
                       {p}kW
                     </button>
@@ -265,7 +243,7 @@ export default function WireClient() {
                   step={1}
                 />
                 <div className={s.pillRow} style={{ marginTop: 8 }}>
-                  {[5, 10, 20, 50, 100].map((m) => (
+                  {[5, 10, 20, 50].map((m) => (
                     <button key={m} className={s.pill} onClick={() => setLengthM(String(m))} type="button">
                       {m}m
                     </button>
@@ -324,12 +302,12 @@ export default function WireClient() {
 
           <div className={s.warnCard}>
             <strong>📌 결과 해석</strong>
-            <p>
-              • <strong>전선 굵기</strong>는 허용전류와 전압강하 중 큰 쪽을 따라 결정됩니다.<br />
-              • <strong>거리가 길수록</strong> 전압강하 때문에 한 단계 굵은 전선이 필요해요.<br />
-              • <strong>차단기는 부하전류 × 1.25 이상</strong>의 가장 작은 표준값을 선택합니다 (KEC 232.4).<br />
-              • 가정용 분기는 별도로 <strong>누전차단기(ELCB·30mA·0.03초)</strong>가 의무입니다.
-            </p>
+            <ul className={s.bullets}>
+              <li><strong>전선 굵기</strong>는 허용전류와 전압강하 중 큰 쪽을 따라 결정됩니다.</li>
+              <li><strong>거리가 길수록</strong> 전압강하 때문에 한 단계 굵은 전선이 필요해요.</li>
+              <li><strong>차단기는 부하전류 × 1.25 이상</strong>의 가장 작은 표준값을 선택합니다 (KEC 232.4).</li>
+              <li>가정용 분기는 별도로 <strong>누전차단기(ELCB·30mA·0.03초)</strong>가 의무입니다.</li>
+            </ul>
           </div>
         </>
       )}

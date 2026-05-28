@@ -184,9 +184,9 @@ export default function PaintMixClient() {
             <span className={s.cardLabel}>🧪 혼합 모델</span>
             <div className={s.modelRow}>
               {([
-                { id: 'subtractive', label: '⚫ Subtractive (물감)' },
-                { id: 'additive',    label: '💡 Additive (빛)' },
-                { id: 'ryb',         label: '🎒 RYB (전통)' },
+                { id: 'subtractive', label: 'Subtractive (물감)' },
+                { id: 'additive',    label: 'Additive (빛)' },
+                { id: 'ryb',         label: 'RYB (전통)' },
               ] as { id: MixModel; label: string }[]).map((m) => (
                 <button
                   key={m.id}
@@ -197,11 +197,6 @@ export default function PaintMixClient() {
                 </button>
               ))}
             </div>
-            <p className={s.hint}>
-              💡 Subtractive(기본) — 물감/잉크처럼 빛을 흡수해 어두워짐. <br />
-              💡 Additive — 모니터/조명처럼 빛이 더해져 밝아짐 (R+G+B = 흰색). <br />
-              💡 RYB — 학교 미술 빨강·노랑·파랑 3원색 모델 (직관적이지만 부정확).
-            </p>
           </div>
 
           {/* 색 슬롯 */}
@@ -521,7 +516,7 @@ export default function PaintMixClient() {
 
           {/* 레시피 그리드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 30+ 인기 색 레시피 (클릭 시 탭 1에 적용)</span>
+            <span className={s.cardLabel}>📚 자주 쓰는 색 레시피 (클릭 시 탭 1에 적용)</span>
             <div className={s.recipeGrid}>
               {RECIPES.map((r, i) => {
                 /* 미리보기 색 계산 */

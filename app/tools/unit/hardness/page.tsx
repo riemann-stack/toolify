@@ -132,7 +132,7 @@ export default function HardnessPage() {
         <section>
           <h2 style={sectionTitle}>🔪 칼 강재(Steel) 경도 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            칼 경도는 <strong style={{ color: 'var(--text)' }}>날 끝 유지력(edge retention)</strong>과 <strong style={{ color: 'var(--text)' }}>인성(toughness)</strong>의 트레이드오프를 결정합니다. 일반적으로 60 HRC를 기준으로 위는 "오래 가지만 잘 부러짐", 아래는 "빨리 무뎌지지만 잘 안 부러짐".
+            칼 경도는 <strong style={{ color: 'var(--text)' }}>날 끝 유지력(edge retention)</strong>과 <strong style={{ color: 'var(--text)' }}>인성(toughness)</strong>의 트레이드오프를 결정합니다. 일반적으로 60 HRC를 기준으로 위는 &ldquo;오래 가지만 잘 부러짐&rdquo;, 아래는 &ldquo;빨리 무뎌지지만 잘 안 부러짐&rdquo;.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[

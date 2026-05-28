@@ -56,10 +56,10 @@ export default function AcCapacityPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* ── 1. 핵심 공식 ── */}
+        {/* ── 1. 계산 공식 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            에어컨 평형 핵심 공식
+            에어컨 평형 계산 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
@@ -261,36 +261,81 @@ export default function AcCapacityPage() {
           </div>
         </div>
 
-        {/* ── 7. 한국 에어컨 시즌·기온 ── */}
+        {/* ── 7. 언제, 몇 도로 틀까 (사용 가이드) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            🗓️ 한국 에어컨 시즌·기온 가이드
+            🌡️ 에어컨 언제, 몇 도로 틀까? — 사용 가이드
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+
+          {/* 권장 설정 온도 — 강조 */}
+          <div style={{
+            background: 'rgba(14,165,233,0.07)', border: '1px solid rgba(14,165,233,0.3)',
+            borderRadius: 14, padding: '18px 20px', marginBottom: 12, textAlign: 'center',
+          }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 4px' }}>권장 실내 설정 온도</p>
+            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px,7vw,40px)', fontWeight: 800, color: 'var(--accent)', margin: 0, letterSpacing: '-0.02em' }}>
+              26 ~ 28°C
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--text)', margin: '6px 0 0', lineHeight: 1.6 }}>
+              실내외 온도차는 <strong>5~8°C 이내</strong>로. 바깥이 33°C면 26~28°C가 적정 — 더 낮추면 냉방병·전기요금만 늘어요.
+            </p>
+          </div>
+
+          {/* 언제 켤까 / 몇 도로 / 습도 / 절전 — 2열 카드 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
-              { i: '🌱', t: '5월', d: '검색량 증가 시작',     c: '#059669' },
-              { i: '🌞', t: '6~7월', d: '최고 검색·구매 시즌', c: 'var(--accent)' },
-              { i: '☀️', t: '8월', d: '구매 마무리',           c: '#EA580C' },
-              { i: '🍃', t: '9월',  d: '잔여 시즌 할인',        c: '#0891B2' },
-            ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
-                <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
+              {
+                t: '언제 켜야 할까',
+                items: [
+                  '실내 온도 28°C 이상으로 올라갈 때',
+                  '습도 60% 이상이라 같은 온도도 더 덥게 느껴질 때',
+                  '열대야(밤 최저 25°C↑) — 취침 30분~1시간 전 미리 가동',
+                  '바깥 30°C↑ + 실내 28°C↑가 일반적인 가동 시점',
+                ],
+              },
+              {
+                t: '상황별 온도',
+                items: [
+                  '주간 활동: 26~28°C + 약~중풍',
+                  '취침: 27~28°C + 무풍/약풍 + 2~3시간 타이머',
+                  '아기·노약자: 27~28°C, 찬바람 직접 X',
+                  '설정 1°C 낮추면 전력 약 7% 증가',
+                ],
+              },
+              {
+                t: '습도가 더 중요할 때',
+                items: [
+                  '쾌적 습도 50~60% — 온도보다 체감을 좌우',
+                  '장마·눅눅할 땐 냉방보다 제습 모드가 효과적',
+                  '제습 시 설정온도를 1~2°C 높여도 시원하게 느껴짐',
+                  '한여름 무더위는 냉방, 눅눅한 장마는 제습',
+                ],
+              },
+              {
+                t: '전기요금 아끼는 운전',
+                items: [
+                  '인버터는 껐다 켜기보다 26~27°C로 계속 켜두기가 절약',
+                  '서큘레이터·선풍기 병행 → 설정 2°C 높여도 같은 체감',
+                  '바람은 위로(찬 공기는 가라앉음)',
+                  '필터 2주마다 청소 · 실외기 직사광·통풍 확보',
+                ],
+              },
+            ].map((b, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+                <p style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>{b.t}</p>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.8 }}>
+                  {b.items.map((it, j) => <li key={j}>{it}</li>)}
+                </ul>
               </div>
             ))}
           </div>
+
           <div style={{
-            background: 'rgba(234,88,12,0.06)',
-            border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            fontSize: 12.5,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.75,
+            background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)',
+            borderRadius: 12, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)',
+            marginTop: 12, lineHeight: 1.75,
           }}>
-            🌡️ <strong style={{ color: '#EA580C' }}>외부 기온 35°C 이상 시 평형 +1단계 권장</strong> — 한국 여름 평균 28~33°C, 폭염 시 35~38°C
+            ⚠️ <strong style={{ color: '#EA580C' }}>냉방병 주의</strong> — 실내외 온도차가 8°C 넘게 큰 곳을 자주 드나들면 자율신경이 피로해져 두통·피로·소화불량이 생깁니다. 온도차를 5~8°C로 유지하고 2시간마다 환기하세요. 폭염(외기 35°C↑)에는 평형도 한 단계 크게 잡는 것이 좋습니다.
           </div>
         </div>
 

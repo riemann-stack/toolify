@@ -90,22 +90,24 @@ export default function RealEstatePage() {
             borderRadius: '12px',
             padding: '18px 20px',
             fontFamily: "'JetBrains Mono', Menlo, monospace",
-            fontSize: '13.5px',
+            fontSize: '12.5px',
             color: 'var(--text)',
             lineHeight: 2.1,
+            whiteSpace: 'nowrap',
+            overflowX: 'auto',
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>세전 수익</span> = (매도가 − 매입가) + 임대 수익 − 총 비용</div>
-            <div><span style={{ color: 'var(--muted)' }}>자기자본 수익률 (ROE)</span> = 세전 수익 ÷ 자기자본 × 100</div>
-            <div><span style={{ color: 'var(--muted)' }}>연환산 수익률</span> = ROE ÷ 보유 개월 × 12</div>
-            <div><span style={{ color: 'var(--muted)' }}>레버리지 효과</span> = 대출 사용 ROE ÷ 현금 투자 ROE</div>
-            <div><span style={{ color: 'var(--muted)' }}>손익분기 매도가</span> = 매입가 + 총 비용 − 임대 수익</div>
+            <div><span style={{ color: 'var(--muted)' }}>세전수익</span>=(매도가−매입가)+임대−비용</div>
+            <div><span style={{ color: 'var(--muted)' }}>ROE</span>=세전수익÷자기자본×100</div>
+            <div><span style={{ color: 'var(--muted)' }}>연환산</span>=ROE÷보유개월×12</div>
+            <div><span style={{ color: 'var(--muted)' }}>레버리지</span>=대출ROE÷현금ROE</div>
+            <div><span style={{ color: 'var(--muted)' }}>손익분기가</span>=매입가+비용−임대수익</div>
           </div>
         </div>
 
-        {/* ── 3. 한국 취득세 자동 계산 기준 (2024) ── */}
+        {/* ── 3. 한국 취득세 자동 계산 기준 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국 취득세 자동 계산 기준 (2024년)
+            한국 취득세 자동 계산 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
             본 계산기는 아래 기준으로 자동 산정합니다. 농어촌특별세(0.2%)·지방교육세(0.4%)는 별도이며 실제 신고 세액과 차이가 있을 수 있습니다.
@@ -138,7 +140,7 @@ export default function RealEstatePage() {
         {/* ── 4. 한국 중개수수료 법정 요율표 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국 중개수수료 법정 요율 (매매 기준 · 2024년)
+            한국 중개수수료 법정 요율 (매매 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>

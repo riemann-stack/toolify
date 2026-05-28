@@ -124,7 +124,6 @@ export default function PipeClient() {
                   onClick={() => setMaterial(m.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{m.emoji}</span>
                   <span className={s.systemLabel}>{m.label}</span>
                   <span className={s.systemDesc}>{m.use}</span>
                 </button>
@@ -182,7 +181,7 @@ export default function PipeClient() {
           {/* 메인 결과 */}
           <div className={s.hero}>
             <p className={s.heroLabel}>
-              {matMeta.emoji} {matMeta.label} · {size}
+              {matMeta.label} · {size}
             </p>
             <p className={s.heroValue}>
               외경 OD <strong>{fmt(dim.od, 2)} mm</strong>
@@ -200,7 +199,7 @@ export default function PipeClient() {
           {/* 상세표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>{size} · {matMeta.label} 상세 사양</span>
-            <div className={s.tableScroll}>
+            <div>
               <table className={s.detailTable}>
                 <thead>
                   <tr><th>항목</th><th>값</th></tr>
@@ -271,7 +270,7 @@ export default function PipeClient() {
                 return (
                   <div key={c.mat.id} className={s.barRow}>
                     <span className={s.barLabel}>
-                      {c.mat.emoji} {c.mat.label.split(' ')[0]}
+                      {c.mat.label.split(' ')[0]}
                     </span>
                     <div className={s.barTrack}>
                       <div
@@ -302,7 +301,7 @@ export default function PipeClient() {
                 <tbody>
                   {compareData.map((c) => (
                     <tr key={c.mat.id}>
-                      <td>{c.mat.emoji} {c.mat.label}</td>
+                      <td>{c.mat.label}</td>
                       <td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(c.dim.od, 2)}</td>
                       <td className={s.cellMono}>{fmt(c.dim.id, 2)}</td>
                       <td className={s.cellMono}>{fmt(c.dim.t, 2)}</td>
@@ -338,7 +337,6 @@ export default function PipeClient() {
                   onClick={() => setFitMaterial(m.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{m.emoji}</span>
                   <span className={s.systemLabel}>{m.label}</span>
                   <span className={s.systemDesc}>{m.std}</span>
                 </button>
@@ -347,7 +345,7 @@ export default function PipeClient() {
           </div>
 
           <div className={s.hero}>
-            <p className={s.heroLabel}>{fitMatMeta.emoji} {fitMatMeta.label} 연결법</p>
+            <p className={s.heroLabel}>{fitMatMeta.label} 연결법</p>
             <p className={s.heroValue}><strong>{fittings.length}가지</strong> 표준 시공법</p>
             <p className={s.heroSub}>{fitMatMeta.desc}</p>
           </div>
@@ -486,7 +484,7 @@ export default function PipeClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>두께 등급 가이드</span>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>🔩 강관 (STPG)</p>
+              <p className={s.gradeTitle}>강관 (STPG)</p>
               <ul>
                 <li><strong>Sch 40</strong> — 일반 압력 배관 표준 (가장 흔함)</li>
                 <li><strong>Sch 80</strong> — 고압·증기·암모니아 (Sch 40보다 두껍고 무거움)</li>
@@ -494,7 +492,7 @@ export default function PipeClient() {
               </ul>
             </div>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>🔵 PVC관</p>
+              <p className={s.gradeTitle}>PVC관</p>
               <ul>
                 <li><strong>VG1</strong> — 수도용 두꺼움 (1.0~1.6 MPa, 음용수)</li>
                 <li><strong>VG2</strong> — 배수용 얇음 (비압력 배수·통기)</li>
@@ -502,7 +500,7 @@ export default function PipeClient() {
               </ul>
             </div>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>🟤 동관</p>
+              <p className={s.gradeTitle}>동관</p>
               <ul>
                 <li><strong>K Type</strong> — 가장 두꺼움 (의료용 가스·고압)</li>
                 <li><strong>L Type</strong> — 중간 (가정용 가스·급수 표준)</li>
@@ -510,7 +508,7 @@ export default function PipeClient() {
               </ul>
             </div>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>⚪ 스테인리스</p>
+              <p className={s.gradeTitle}>스테인리스</p>
               <ul>
                 <li><strong>Su (KS D 3595)</strong> — 위생관, 박벽, 음용수</li>
                 <li><strong>STS (KS D 3596)</strong> — 일반관, 압력</li>

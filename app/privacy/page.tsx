@@ -6,7 +6,7 @@ export const metadata = buildMetadata({
   description: 'Youtil 개인정보처리방침입니다.',
 })
 
-const LAST_UPDATED  = '2026년 5월 24일'
+const LAST_UPDATED  = '2026년 5월 28일'
 const SITE_NAME     = 'Youtil'
 const SITE_URL      = 'https://youtil.kr'
 const CONTACT_EMAIL = 'contact@youtil.kr'
@@ -216,16 +216,17 @@ export default function PrivacyPage() {
           <p>
             {SITE_NAME}은 별도의 서버에 개인정보를 저장하지 않으며, <strong style={{ color: 'var(--text)' }}>건강·재무 등 민감한
             계산 입력값은 이용자의 브라우저 내에서만 처리</strong>됩니다. 다만 일부 도구는 기능 제공을 위해
-            이용자가 직접 입력·선택한 공개 정보(예: 확인할 웹사이트 주소, 조회할 농산물 품목)를 본 사이트
-            서버 또는 외부 공개 서비스로 전송해 결과(서버 시간·시세 등)를 받아옵니다. 이 과정에도
-            개인 식별·민감 정보는 포함되지 않습니다(자세한 내용은 아래 11조 참고).
+            이용자가 직접 입력·선택한 <strong style={{ color: 'var(--text)' }}>공개 정보</strong>(예: 확인할 웹사이트 주소,
+            조회할 농산물 품목)를 본 사이트 서버 또는 외부 공개 서비스로 전송해 결과(서버 시간·시세 등)를
+            받아옵니다. 이 과정에도 건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않습니다
+            (자세한 내용은 아래 11조 참고).
           </p>
 
           {/* 보안 포인트 3개 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '16px' }}>
             {[
               { icon: '🔒', title: 'HTTPS 적용',   desc: '전체 사이트 SSL 암호화' },
-              { icon: '🚫', title: '서버 미저장',   desc: '계산 데이터 외부 미전송' },
+              { icon: '🚫', title: '서버 미저장',   desc: '계산 입력값은 브라우저 내에서 처리' },
               { icon: '👤', title: '비회원 서비스', desc: '개인정보 수집 없음' },
             ].map(item => (
               <div key={item.title} style={{
@@ -255,9 +256,11 @@ export default function PrivacyPage() {
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <li>
-              <strong style={{ color: 'var(--text)' }}>서버로 전송되지 않습니다.</strong>{' '}
-              모든 계산은 이용자의 브라우저 내부(클라이언트)에서만 이루어지며, 입력값이 {SITE_NAME}의
-              서버나 외부로 전송·저장되지 않습니다.
+              <strong style={{ color: 'var(--text)' }}>건강·재무 입력값은 브라우저 내에서만 처리됩니다.</strong>{' '}
+              체중·소득·대출 등 민감한 수치를 다루는 계산은 이용자의 브라우저(클라이언트)에서 이루어지며,
+              {SITE_NAME}의 서버나 외부로 전송·저장되지 않습니다. 단, 아래 마지막 항목과 같이 공개 정보를
+              조회해 결과를 받아오는 일부 도구는 예외이며, 해당 도구에서도 민감 정보 자체는 외부로
+              전송되지 않습니다.
             </li>
             <li>
               <strong style={{ color: 'var(--text)' }}>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
@@ -277,11 +280,13 @@ export default function PrivacyPage() {
               동기화되지 않고 서버로 전송되지 않습니다.)
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>일부 도구는 기능 제공을 위해 외부 데이터를 조회합니다.</strong>{' '}
-              예를 들어 서버 시간 동기화·외부 사이트 시각 확인, 링크 미리보기(OG), 농산물 시세(KAMIS) 조회
-              기능은 이용자가 입력하거나 선택한 <strong style={{ color: 'var(--text)' }}>공개 정보(웹사이트 주소·조회 품목 등)</strong>를
-              본 사이트 서버 또는 해당 외부 서비스로 전송해 결과를 받아옵니다. 이 과정에 건강·재무와 같은
-              개인 식별·민감 정보는 전송되지 않습니다.
+              <strong style={{ color: 'var(--text)' }}>일부 도구는 기능 제공을 위해 공개 정보를 외부로 조회합니다.</strong>{' '}
+              예를 들어 서버 시간 동기화·외부 사이트 시각 확인(/api/proxy-time), 링크 미리보기 OG 태그 조회
+              (/api/og-preview), 농산물 시세(KAMIS) 조회(/api/produce-price) 기능은 이용자가 입력·선택한
+              <strong style={{ color: 'var(--text)' }}> 공개 정보(웹사이트 주소·조회 품목 등)</strong>를 본 사이트 서버
+              또는 해당 외부 서비스로 전송해 결과(서버 시간·메타 정보·시세 등)를 받아옵니다. 이 과정에
+              건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않으며, 조회 요청 자체는 일반적인
+              웹 서버 접속 로그(IP·시각 등) 수준으로만 기록될 수 있습니다.
             </li>
           </ul>
 

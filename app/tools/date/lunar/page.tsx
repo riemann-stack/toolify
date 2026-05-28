@@ -102,9 +102,9 @@ export default function LunarPage() {
           </div>
         </div>
 
-        {/* 2. 한국 명절 음력 → 양력 (2024~2028) */}
+        {/* 2. 한국 명절 음력 → 양력 (2025~2027) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2024~2028)</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2025~2027)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             매년 양력 날짜가 바뀝니다. 설·추석은 한국에서 가장 큰 명절(3일 연휴).
           </p>
@@ -112,30 +112,26 @@ export default function LunarPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>명절 (음력)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2024</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>명절 (음력)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2025</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>2026</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2027</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2028</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['🌅 설날 (1.1)',         '2/10', '1/29', '2/17', '2/6',  '1/26'],
-                  ['🌕 정월 대보름 (1.15)', '2/24', '2/12', '3/3',  '2/20', '2/9'],
-                  ['🌸 부처님오신날 (4.8)', '5/15', '5/5',  '5/24', '5/13', '5/2'],
-                  ['🌿 단오 (5.5)',         '6/10', '5/31', '6/19', '6/9',  '5/28'],
-                  ['🌾 추석 (8.15)',        '9/17', '10/6', '9/25', '9/15', '10/3'],
-                  ['🎋 중양절 (9.9)',       '10/11','10/29','10/19','10/8', '10/26'],
+                  ['🌅 설날 (1.1)',         '1/29', '2/17', '2/6'],
+                  ['🌕 정월 대보름 (1.15)', '2/12', '3/3',  '2/20'],
+                  ['🌸 부처님오신날 (4.8)', '5/5',  '5/24', '5/13'],
+                  ['🌿 단오 (5.5)',         '5/31', '6/19', '6/9'],
+                  ['🌾 추석 (8.15)',        '10/6', '9/25', '9/15'],
+                  ['🎋 중양절 (9.9)',       '10/29','10/19','10/8'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, whiteSpace: 'nowrap' }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[3]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[4]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[5]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[3]}</td>
                   </tr>
                 ))}
               </tbody>

@@ -317,7 +317,6 @@ export default function AcCapacityClient() {
                 <button key={s.id} type="button" className={`${styles.spaceBtn} ${styles[s.cls]} ${spaceId === s.id ? styles.spActive : ''}`} onClick={() => setSpaceId(s.id)}>
                   <span className="icon">{s.icon}</span>
                   {s.name}
-                  <small>{s.hint}</small>
                 </button>
               ))}
             </div>
@@ -333,7 +332,6 @@ export default function AcCapacityClient() {
                 <button key={d.id} type="button" className={`${styles.dirBtn} ${styles[d.cls]} ${directionId === d.id ? styles.dirActive : ''}`} onClick={() => setDirectionId(d.id)}>
                   <span style={{ fontSize: 18 }}>{d.icon}</span>
                   {d.name}
-                  <small>{d.hint}</small>
                 </button>
               ))}
             </div>
@@ -349,7 +347,7 @@ export default function AcCapacityClient() {
                 <button key={f.id} type="button" className={`${styles.floorBtn} ${styles[f.cls]} ${floorId === f.id ? styles.flActive : ''}`} onClick={() => setFloorId(f.id)}>
                   <span style={{ fontSize: 16 }}>{f.icon}</span>
                   {f.name}
-                  <small>{f.hint}</small>
+                  <small>{f.desc}</small>
                 </button>
               ))}
             </div>
@@ -365,7 +363,7 @@ export default function AcCapacityClient() {
                 <button key={i.id} type="button" className={`${styles.insBtn} ${styles[i.cls]} ${insulationId === i.id ? styles.insActive : ''}`} onClick={() => setInsulationId(i.id)}>
                   <span style={{ fontSize: 16 }}>{i.icon}</span>
                   {i.name}
-                  <small>{i.hint}</small>
+                  <small>{i.desc}</small>
                 </button>
               ))}
             </div>
@@ -374,7 +372,7 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>인원 · 발열 가전</span>
-              <span className={styles.cardLabelHint}>1명당 +100W</span>
+              <span className={styles.cardLabelHint}>체감 발열 반영</span>
             </div>
             <span className={styles.subLabel}>거주 인원</span>
             <div className={styles.occupantRow}>
@@ -388,7 +386,6 @@ export default function AcCapacityClient() {
               {APPLIANCES.map(a => (
                 <button key={a.id} type="button" className={`${styles.applianceBtn} ${applianceId === a.id ? styles.applianceActive : ''}`} onClick={() => setApplianceId(a.id)}>
                   {a.name}
-                  <small>{a.hint}</small>
                 </button>
               ))}
             </div>

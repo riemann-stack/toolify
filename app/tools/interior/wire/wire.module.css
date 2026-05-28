@@ -80,13 +80,21 @@
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+/* 드롭다운 — 화살표를 명시해 입력창과 명확히 구분 */
 select.input {
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
 }
 
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+
+/* 부하 입력 — 모바일에서도 2열 유지(공간 절약) */
+.row2Tight { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 /* pill */
 .pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -130,7 +138,7 @@ select.input {
 .heroSub strong { color: var(--text); }
 
 /* 상세표 */
-.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .detailTable th {
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
@@ -142,7 +150,7 @@ select.input {
   background: var(--bg3);
 }
 .detailTable td {
-  padding: 10px 12px;
+  padding: 9px 11px;
   border-bottom: 1px solid var(--border);
   color: var(--text);
 }
@@ -156,11 +164,10 @@ select.input {
 .cellMono { font-family: 'Inter', system-ui, sans-serif; }
 .cellSubtitle {
   background: var(--bg3);
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--muted);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 .cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
 .rowActive { background: rgba(232, 151, 87, 0.08); }
@@ -169,8 +176,9 @@ select.input {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.tableScroll table {
-  min-width: 480px;
+/* 넓은 매트릭스(5열)만 가로 스크롤 — 2열 상세표는 모바일에서 그대로 보이게 */
+.tableScroll .compactTable {
+  min-width: 460px;
 }
 
 .compactTable {
@@ -308,6 +316,11 @@ select.input {
 }
 .warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
+/* 결과 해석 글머리 — dot과 텍스트가 줄바꿈 없이 한 줄에 */
+.bullets { margin: 4px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.8; font-size: 12px; }
+.bullets li { margin-bottom: 4px; }
+.bullets li:last-child { margin-bottom: 0; }
+.bullets strong { display: inline; color: var(--text); margin: 0; font-family: inherit; }
 
 /* 면책 (강조) */
 .disclaimer {

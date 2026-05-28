@@ -27,17 +27,17 @@ function fmtKRW(n: number): string {
   return `${sign}${parts.join(' ')}원`
 }
 
-/* 천단위 콤마 — 입력 표시용 */
-function fmtComma(n: number): string {
-  if (!Number.isFinite(n)) return '0'
-  return Math.round(n).toLocaleString('ko-KR')
-}
-
 /* "12,345,000" 같은 콤마 문자열 → 숫자 */
 function parseNum(s: string): number {
   const cleaned = s.replace(/[^0-9.-]/g, '')
   const v = Number(cleaned)
   return Number.isFinite(v) ? v : 0
+}
+
+/* 입력 표시용: 빈 문자열은 그대로 비워 두고, 그 외엔 천단위 콤마 표시 */
+function displayDigits(s: string): string {
+  if (s === '') return ''
+  return parseNum(s).toLocaleString('ko-KR')
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ function calcAcquisitionTax(price: number, type: HomeType): number {
   return price * 0.04
 }
 
-/* 한국 중개수수료 (매매 기준 누진 — 2024) */
+/* 한국 중개수수료 (매매 기준 누진) */
 function calcBrokerFee(price: number): number {
   if (price <= 0) return 0
   if (price < 50_000_000)    return Math.min(price * 0.006, 250_000)
@@ -303,8 +303,8 @@ export default function RealEstateClient() {
             className={styles.numInput}
             type="text"
             inputMode="numeric"
-            value={fmtComma(price)}
-            onChange={e => setPriceStr(parseNum(e.target.value).toString())}
+            value={displayDigits(priceStr)}
+            onChange={e => setPriceStr(e.target.value.replace(/[^0-9]/g, ''))}
           />
           <span className={styles.unit}>원</span>
         </div>
@@ -318,8 +318,8 @@ export default function RealEstateClient() {
             className={styles.numInput}
             type="text"
             inputMode="numeric"
-            value={fmtComma(salePrice)}
-            onChange={e => setSalePriceStr(parseNum(e.target.value).toString())}
+            value={displayDigits(salePriceStr)}
+            onChange={e => setSalePriceStr(e.target.value.replace(/[^0-9]/g, ''))}
           />
           <span className={styles.unit}>원</span>
         </div>
@@ -420,8 +420,8 @@ export default function RealEstateClient() {
               className={styles.numInput}
               type="text"
               inputMode="numeric"
-              value={fmtComma(parseNum(loanStr))}
-              onChange={e => setLoanStr(parseNum(e.target.value).toString())}
+              value={displayDigits(loanStr)}
+              onChange={e => setLoanStr(e.target.value.replace(/[^0-9]/g, ''))}
             />
             <span className={styles.unit}>원</span>
           </div>
@@ -466,7 +466,7 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>취득세</span>
-          <span className={styles.cardLabelHint}>2024년 기준</span>
+          <span className={styles.cardLabelHint}>주택 종류별 누진</span>
         </div>
 
         <div className={styles.miniToggle}>
@@ -505,8 +505,8 @@ export default function RealEstateClient() {
               className={styles.numInput}
               type="text"
               inputMode="numeric"
-              value={fmtComma(parseNum(acqStr))}
-              onChange={e => setAcqStr(parseNum(e.target.value).toString())}
+              value={displayDigits(acqStr)}
+              onChange={e => setAcqStr(e.target.value.replace(/[^0-9]/g, ''))}
             />
             <span className={styles.unit}>원</span>
           </div>
@@ -528,11 +528,11 @@ export default function RealEstateClient() {
         {brokerMode === 'auto' ? (
           <>
             <div className={styles.autoResult} style={{ marginBottom: 8 }}>
-              <span>매수 중개수수료 (자동)</span>
+              <span>매수 중개수수료</span>
               <strong>{fmtKRW(brokerBuyAuto)}</strong>
             </div>
             <div className={styles.autoResult}>
-              <span>매도 중개수수료 (자동)</span>
+              <span>매도 중개수수료</span>
               <strong>{fmtKRW(brokerSellAuto)}</strong>
             </div>
           </>
@@ -544,8 +544,8 @@ export default function RealEstateClient() {
                 className={styles.smallInput}
                 type="text"
                 inputMode="numeric"
-                value={fmtComma(parseNum(brokerBuyStr))}
-                onChange={e => setBrokerBuyStr(parseNum(e.target.value).toString())}
+                value={displayDigits(brokerBuyStr)}
+                onChange={e => setBrokerBuyStr(e.target.value.replace(/[^0-9]/g, ''))}
               />
               <span className={styles.unit}>원</span>
             </div>
@@ -556,8 +556,8 @@ export default function RealEstateClient() {
                 className={styles.smallInput}
                 type="text"
                 inputMode="numeric"
-                value={fmtComma(parseNum(brokerSellStr))}
-                onChange={e => setBrokerSellStr(parseNum(e.target.value).toString())}
+                value={displayDigits(brokerSellStr)}
+                onChange={e => setBrokerSellStr(e.target.value.replace(/[^0-9]/g, ''))}
               />
               <span className={styles.unit}>원</span>
             </div>
@@ -577,21 +577,21 @@ export default function RealEstateClient() {
 
             <span className={styles.subLabel}>법무비 (등기비)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(legalFeeStr))} onChange={e => setLegalFeeStr(parseNum(e.target.value).toString())} />
+              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(legalFeeStr)} onChange={e => setLegalFeeStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 10 }} />
             <span className={styles.subLabel}>인테리어 비용</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(interiorStr))} onChange={e => setInteriorStr(parseNum(e.target.value).toString())} />
+              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(interiorStr)} onChange={e => setInteriorStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 10 }} />
             <span className={styles.subLabel}>명도비</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(relocateStr))} onChange={e => setRelocateStr(parseNum(e.target.value).toString())} />
+              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(relocateStr)} onChange={e => setRelocateStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
@@ -603,7 +603,7 @@ export default function RealEstateClient() {
             </div>
             {earlyMode === 'manual' ? (
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(earlyStr))} onChange={e => setEarlyStr(parseNum(e.target.value).toString())} />
+                <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(earlyStr)} onChange={e => setEarlyStr(e.target.value.replace(/[^0-9]/g, ''))} />
                 <span className={styles.unit}>원</span>
               </div>
             ) : (
@@ -645,7 +645,7 @@ export default function RealEstateClient() {
                 <div style={{ height: 14 }} />
                 <span className={styles.subLabel}>임대보증금</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(depositStr))} onChange={e => setDepositStr(parseNum(e.target.value).toString())} />
+                  <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(depositStr)} onChange={e => setDepositStr(e.target.value.replace(/[^0-9]/g, ''))} />
                   <span className={styles.unit}>원</span>
                 </div>
                 {inlineKRW(parseNum(depositStr))}
@@ -653,7 +653,7 @@ export default function RealEstateClient() {
                 <div style={{ height: 10 }} />
                 <span className={styles.subLabel}>월세</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(monthlyRentStr))} onChange={e => setMonthlyRentStr(parseNum(e.target.value).toString())} />
+                  <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(monthlyRentStr)} onChange={e => setMonthlyRentStr(e.target.value.replace(/[^0-9]/g, ''))} />
                   <span className={styles.unit}>원/월</span>
                 </div>
 
@@ -698,7 +698,7 @@ export default function RealEstateClient() {
                     <div style={{ height: 10 }} />
                     <span className={styles.subLabel}>월 관리비 (임대인 부담)</span>
                     <div className={styles.inputRow}>
-                      <input className={styles.smallInput} type="text" inputMode="numeric" value={fmtComma(parseNum(maintenanceStr))} onChange={e => setMaintenanceStr(parseNum(e.target.value).toString())} />
+                      <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(maintenanceStr)} onChange={e => setMaintenanceStr(e.target.value.replace(/[^0-9]/g, ''))} />
                       <span className={styles.unit}>원/월</span>
                     </div>
                   </>
@@ -736,8 +736,8 @@ export default function RealEstateClient() {
                   type="text"
                   inputMode="numeric"
                   placeholder="금액"
-                  value={v === '0' ? '' : fmtComma(parseNum(v))}
-                  onChange={e => sv(parseNum(e.target.value).toString())}
+                  value={v === '0' ? '' : displayDigits(v)}
+                  onChange={e => sv(e.target.value.replace(/[^0-9]/g, ''))}
                 />
               </div>
             ))}
@@ -802,9 +802,9 @@ export default function RealEstateClient() {
             <tr className={styles.rowHilight}><td>대출 이자 (총)</td><td>{fmtKRW(totalInterest)}</td></tr>
             <tr><td>매도 중개수수료</td><td>{fmtKRW(brokerSell)}</td></tr>
             {mode === 'detail' && earlyFee > 0 && <tr><td>중도상환 수수료</td><td>{fmtKRW(earlyFee)}</td></tr>}
-            {mode === 'detail' && other1Str !== '0' && <tr><td>{other1Name || '기타 1'}</td><td>{fmtKRW(parseNum(other1Str))}</td></tr>}
-            {mode === 'detail' && other2Str !== '0' && <tr><td>{other2Name || '기타 2'}</td><td>{fmtKRW(parseNum(other2Str))}</td></tr>}
-            {mode === 'detail' && other3Str !== '0' && <tr><td>{other3Name || '기타 3'}</td><td>{fmtKRW(parseNum(other3Str))}</td></tr>}
+            {mode === 'detail' && parseNum(other1Str) > 0 && <tr><td>{other1Name || '기타 1'}</td><td>{fmtKRW(parseNum(other1Str))}</td></tr>}
+            {mode === 'detail' && parseNum(other2Str) > 0 && <tr><td>{other2Name || '기타 2'}</td><td>{fmtKRW(parseNum(other2Str))}</td></tr>}
+            {mode === 'detail' && parseNum(other3Str) > 0 && <tr><td>{other3Name || '기타 3'}</td><td>{fmtKRW(parseNum(other3Str))}</td></tr>}
             <tr className={styles.rowTotal}><td>총 비용</td><td>{fmtKRW(totalCost)}</td></tr>
           </tbody>
         </table>

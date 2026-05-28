@@ -46,6 +46,7 @@ const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','�
 const BRANCHES_HAN = ['자','축','인','묘','진','사','오','미','신','유','술','해']
 const ZODIAC = ['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지']
 const ZODIAC_EMOJI = ['🐭','🐮','🐯','🐰','🐲','🐍','🐴','🐑','🐵','🐔','🐶','🐷']
+const WEEKDAYS = ['일','월','화','수','목','금','토']
 
 /** 해당 음력년의 전체 일수 */
 function lunarYearDays(y: number): number {
@@ -186,8 +187,9 @@ export default function LunarClient() {
         if (!r) return { error: '1900~2100년 범위만 지원합니다.' }
         const gz = yearGanji(r.y)
         const zd = yearZodiac(r.y)
+        const wd = WEEKDAYS[new Date(year, month - 1, safeDay).getDay()]
         return {
-          text: `음력 ${r.y}년 ${r.isLeap ? '윤' : ''}${r.m}월 ${r.d}일`,
+          text: `음력 ${r.y}년 ${r.isLeap ? '윤' : ''}${r.m}월 ${r.d}일 (${wd})`,
           sub: `${r.y} / ${r.isLeap ? '윤' : ''}${r.m} / ${r.d}`,
           ganji: gz,
           zodiac: zd,
@@ -202,8 +204,9 @@ export default function LunarClient() {
         const yyyy = r.y
         const mm = String(r.m).padStart(2, '0')
         const dd = String(r.d).padStart(2, '0')
+        const wd = WEEKDAYS[new Date(Date.UTC(r.y, r.m - 1, r.d)).getUTCDay()]
         return {
-          text: `양력 ${yyyy}년 ${mm}월 ${dd}일`,
+          text: `양력 ${yyyy}년 ${mm}월 ${dd}일 (${wd})`,
           sub: `${yyyy}-${mm}-${dd}`,
           ganji: gz,
           zodiac: zd,

@@ -15,9 +15,6 @@ const HANGUL_JAMO_RANGE = (cp: number) =>
   (cp >= 0x3130 && cp <= 0x318F) ||  // 호환 자모
   (cp >= 0xA960 && cp <= 0xA97F)     // 자모 확장-A
 
-function isHangul(cp: number): boolean {
-  return (cp >= HANGUL_SYL_START && cp <= HANGUL_SYL_END) || HANGUL_JAMO_RANGE(cp)
-}
 function isLatin(cp: number): boolean {
   return (cp >= 0x41 && cp <= 0x5A) || (cp >= 0x61 && cp <= 0x7A)
 }
@@ -159,6 +156,8 @@ export default function CharCountClient() {
   // 자동 저장 — 새로고침해도 입력·목표 글자수 유지
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
+    // localStorage 복원 — 마운트 후 1회, 하이드레이션 안전 패턴(의도됨)
+    /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
@@ -168,6 +167,7 @@ export default function CharCountClient() {
       }
     } catch {}
     setHydrated(true)
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
   useEffect(() => {
     if (!hydrated) return

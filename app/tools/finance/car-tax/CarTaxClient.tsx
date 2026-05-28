@@ -33,8 +33,10 @@ export default function CarTaxClient() {
   const [exemption, setExemption] = useState<Exemption>('none')
   const [yearsToHold, setYearsToHold] = useState(5)
 
-  /* 차종 변경 시 연료타입 자동 조정 */
+  /* 차종 변경 시 연료타입 자동 조정 — carType이 다른 state(fuelType/cc)의 규칙적 제약을
+   *  강제하는 패턴이라 effect로 동기화. 사용자 명시 선택을 덮어쓰지 않게 carType만 의존성으로. */
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (carType === 'ev' && fuelType !== 'electric') {
       setFuelType('electric')
       setCc(0)
@@ -43,10 +45,12 @@ export default function CarTaxClient() {
       setFuelType('hybrid')
     }
     if (carType === 'light' && cc > 1000) setCc(998)
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [carType, fuelType, cc])
 
-  /* localStorage */
+  /* localStorage — 마운트 후 1회 복원, 하이드레이션 안전 패턴(의도됨) */
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
@@ -63,6 +67,7 @@ export default function CarTaxClient() {
       if (j.exemption) setExemption(j.exemption)
       if (typeof j.yearsToHold === 'number') setYearsToHold(j.yearsToHold)
     } catch {}
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
   useEffect(() => {
     try {

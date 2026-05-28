@@ -37,7 +37,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -301,28 +300,25 @@ export default function PipePage() {
 
       {/* 인테리어 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/interior/screw" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔩</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>나사 규격 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            PT 나사·관통홀·인치↔mm
-          </p>
-        </Link>
-        <Link href="/tools/interior/bolt-wrench" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔧</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>볼트·너트 스패너 사이즈</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            ISO/JIS · 알렌·와셔·토크
-          </p>
-        </Link>
-        <Link href="/tools/interior/molding" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📏</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>몰딩 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            천장·걸레받이·문틀 둘레
-          </p>
-        </Link>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        {[
+          { href: '/tools/interior/screw', icon: '🔩', name: '나사 규격 계산기', desc: 'PT 나사·관통홀·인치↔mm' },
+          { href: '/tools/interior/bolt-wrench', icon: '🔧', name: '볼트·너트 스패너 사이즈', desc: 'ISO/JIS · 알렌·와셔·토크' },
+          { href: '/tools/interior/molding', icon: '📏', name: '몰딩 계산기', desc: '천장·걸레받이·문틀 둘레' },
+          { href: '/tools/interior/wire', icon: '⚡', name: '전선 굵기 계산기', desc: '허용전류·차단기·전압강하' },
+        ].map((t) => (
+          <Link key={t.href} href={t.href} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            background: 'var(--bg2)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+          }}>
+            <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )

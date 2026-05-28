@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { categories } from '@/lib/tools'
+import { COLLECTIONS } from '@/lib/collections'
 
 const BASE = 'https://youtil.kr'
 
@@ -23,10 +24,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const categoryPaths = categories.map((c) => `/tools/${c.id}`)
   const categorySet = new Set(categoryPaths)
   const toolPaths = categories.flatMap((c) => c.tools.map((t) => t.href))
+  // 상황별 가이드 컬렉션 랜딩 — 큐레이션 페이지도 검색엔진이 색인하도록 포함
+  const collectionPaths = COLLECTIONS.map((c) => `/collections/${c.slug}`)
+  const collectionSet = new Set(collectionPaths)
 
-  // 정적 + 카테고리 + 전체 도구 (중복 제거)
+  // 정적 + 카테고리 + 컬렉션 + 전체 도구 (중복 제거)
   const seen = new Set<string>()
-  const allPaths = [...STATIC_PATHS, ...categoryPaths, ...toolPaths].filter((p) => {
+  const allPaths = [
+    ...STATIC_PATHS,
+    ...categoryPaths,
+    ...collectionPaths,
+    ...toolPaths,
+  ].filter((p) => {
     if (seen.has(p)) return false
     seen.add(p)
     return true
@@ -36,6 +45,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: path === '/' ? BASE : `${BASE}${path}`,
     lastModified: now,
     changeFrequency: 'weekly',
-    priority: HIGH_PRIORITY.has(path) ? 1 : categorySet.has(path) ? 0.8 : 0.7,
+    priority: HIGH_PRIORITY.has(path)
+      ? 1
+      : categorySet.has(path) || collectionSet.has(path)
+        ? 0.8
+        : 0.7,
   }))
 }

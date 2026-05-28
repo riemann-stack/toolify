@@ -20,11 +20,12 @@
 .distActive { background: rgba(5,150,105,0.15); border-color: #059669; color: #059669; }
 
 /* 시간 입력 */
-.timeRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-.timeField { display: flex; align-items: center; gap: 6px; }
+.timeRow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.timeField { display: flex; align-items: center; gap: 5px; min-width: 0; }
 .timeInput {
-  flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 10px; padding: 11px 12px; font-size: 17px; font-weight: 700;
+  flex: 1; min-width: 0; width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 8px; font-size: 16px; font-weight: 700;
   color: var(--text); font-family: 'Inter', system-ui, sans-serif; outline: none; text-align: center;
 }
 .timeInput:focus { border-color: #059669; }

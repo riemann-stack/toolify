@@ -37,7 +37,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -75,26 +74,6 @@ export default function WirePage() {
         사용 가전 W에 맞는 <strong style={{ color: 'var(--text)' }}>전선 굵기와 차단기</strong> + 전압강하 자동. KEC 2021 기준.
       </p>
 
-      {/* 매우 강조된 안전 안내 */}
-      <div style={{
-        background: 'rgba(219, 39, 119, 0.08)',
-        border: '1px solid rgba(219, 39, 119, 0.4)',
-        borderLeft: '4px solid #DB2777',
-        borderRadius: '10px',
-        padding: '14px 18px',
-        marginBottom: '32px',
-        fontSize: '13px',
-        lineHeight: 1.75,
-      }}>
-        <strong style={{ display: 'block', color: '#DB2777', marginBottom: 6 }}>🚨 안전 우선 안내</strong>
-        <span style={{ color: 'var(--text)' }}>
-          전기 자가시공은 <strong>전기공사업법상 일반인 불가</strong>입니다.
-          이 도구는 <strong>학습·견적 검토용 참고치</strong>이며,
-          실제 시공은 <strong>전기기능사·전기공사기능사·전기공사업 등록 사업자</strong>에게 의뢰해야 합니다.
-          감전·화재 위험이 있으므로 무자격 시공은 법적 처벌·보험 거부 대상입니다.
-        </span>
-      </div>
-
       <WireClient />
 
       {/* 1. 어떻게 사용하나요? */}
@@ -104,7 +83,7 @@ export default function WirePage() {
           <li><strong>전압·부하 종류·전선·환경 선택</strong> — 회로 조건 4가지</li>
           <li><strong>소비전력(kW)과 배선 거리 입력</strong></li>
           <li><strong>결과 확인</strong> — 예상 전류 / 권장 전선 / 차단기 / 전압강하</li>
-          <li>역계산 탭에서 <strong>sq → 허용 W</strong>, 차단기 → 전선도 가능</li>
+          <li><strong>전선 용량 조회</strong> 탭에서 <strong>sq → 허용 W</strong>, 차단기 → 전선도 가능</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
           💡 <strong style={{ color: 'var(--accent)' }}>가전 프리셋 탭</strong>에서 에어컨·EV 충전기·인덕션 등
@@ -323,30 +302,27 @@ export default function WirePage() {
         </p>
       </details>
 
-      {/* 인테리어 도구 크로스링크 */}
+      {/* 인테리어 도구 크로스링크 — 표준 2열 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/interior/lighting" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>💡</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>조명 밝기 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            공간별 권장 루멘·조명 개수
-          </p>
-        </Link>
-        <Link href="/tools/interior/ac-capacity" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>❄️</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>에어컨 평형 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            평형 추천·BTU·W 환산
-          </p>
-        </Link>
-        <Link href="/tools/interior/pipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔧</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>배관 규격 변환기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            A호칭·인치·DN + 6재질
-          </p>
-        </Link>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        {[
+          { href: '/tools/interior/lighting', icon: '💡', name: '조명 밝기 계산기', desc: '공간별 권장 루멘·조명 개수' },
+          { href: '/tools/interior/ac-capacity', icon: '❄️', name: '에어컨 평형 계산기', desc: '평형 추천·BTU·W 환산' },
+          { href: '/tools/interior/pipe', icon: '🔧', name: '배관 규격 변환기', desc: 'A호칭·인치·DN + 6재질' },
+          { href: '/tools/interior/room-area', icon: '📐', name: '방 면적 계산기', desc: '평↔㎡·바닥/벽 면적' },
+        ].map((t) => (
+          <Link key={t.href} href={t.href} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            background: 'var(--bg2)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+          }}>
+            <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )

@@ -24,6 +24,8 @@ export default function HardnessClient() {
   const [input, setInput] = useState('60')
 
   useEffect(() => {
+    // localStorage 복원 — 마운트 후 1회, 하이드레이션 안전 패턴(의도됨)
+    /* eslint-disable react-hooks/set-state-in-effect */
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
@@ -31,6 +33,7 @@ export default function HardnessClient() {
       if (j.scale) setScale(j.scale)
       if (typeof j.input === 'string') setInput(j.input)
     } catch {}
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ scale, input })) } catch {}

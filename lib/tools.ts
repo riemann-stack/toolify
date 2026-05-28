@@ -191,7 +191,7 @@ export const categories: Category[] = [
       { href: '/tools/art/color',     icon: '🎨', name: '색상 코드 변환기', desc: 'HEX·RGB·HSL·OKLCH 변환 + WCAG 대비비 + 팔레트·Tailwind 매칭·이미지 색 추출.', badge: 'hot' },
       { href: '/tools/art/gradient-generator', icon: '🌈', name: 'CSS 그라디언트 생성기', desc: 'Linear·Radial·Conic·Mesh 5종 × OKLCH·LAB 보간 + Tailwind/SwiftUI/Flutter 코드.', badge: 'new' },
       { href: '/tools/art/golden-ratio',  icon: '🌀', name: '황금 비율 계산기',    desc: 'φ = 1.618 가로·세로 + 황금 직사각형·나선 시각화 + 16:9·A4·인스타·유튜브 비교.' },
-      { href: '/tools/art/paint-mix', icon: '🎨', name: '물감 혼합 계산기', desc: '수채·아크릴·유화·잉크 안료 혼합 시뮬 + ml/g 환산 + ΔE 매칭과 30+ 인기 레시피.', badge: 'new' },
+      { href: '/tools/art/paint-mix', icon: '🎨', name: '색상 혼합 계산기', desc: '물감·빛·RYB 색 혼합 시뮬 + ml/g 분량 환산 + ΔE 색 매칭과 자주 쓰는 레시피.', badge: 'new' },
       { href: '/tools/art/knit-gauge', icon: '🧶', name: '뜨개질 게이지 계산기', desc: '10cm² 게이지로 패턴 코·단수 변환 + 한국 사이즈별 코 계산·늘림 균등 분배.', badge: 'new' },
       { href: '/tools/art/exposure',  icon: '📸', name: '사진 노출 계산기',    desc: '조리개·셔터·ISO 3축을 자유롭게 + 옵션 잠금으로 등가 노출 시뮬. ND·Sunny 16 포함.', badge: 'new' },
       { href: '/tools/art/fov',       icon: '📷', name: '카메라 화각 계산기', desc: '풀프레임~스마트폰 7종 센서 × 4-800mm 35mm 환산 + 화각·시야 너비·등가 조리개.', badge: 'new' },

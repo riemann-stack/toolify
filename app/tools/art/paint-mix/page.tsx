@@ -5,7 +5,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/art/paint-mix',
-  title: '물감 혼합 계산기 — 색 섞기 시뮬레이터 + 분량 환산 + 30+ 레시피',
+  title: '색상 혼합 계산기 — 물감·빛·RYB 색 섞기 시뮬 + 분량 환산 + 레시피',
   description: '수채·아크릴·유화·잉크·푸드컬러·레진 안료 혼합 시뮬(Subtractive·Additive·RYB) + ml/g 환산·ΔE 매칭·30+ 인기 레시피.',
   keywords: [
     '물감 혼합', '물감 비율 계산기', '색 만들기', '잉크 섞기', '잉크 혼합 비율',
@@ -45,7 +45,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -77,7 +76,7 @@ export default function PaintMixPage() {
         예술·창작 · 디자인·미술
       </p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🎨 물감 혼합 계산기
+        🎨 색상 혼합 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         수채·아크릴·유화·잉크 안료 혼합 시뮬 + ml/g 환산 + <strong style={{ color: 'var(--text)' }}>ΔE 매칭과 30+ 인기 레시피</strong>.
@@ -123,7 +122,7 @@ export default function PaintMixPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginTop: 14 }}>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #9333EA', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, margin: '0 0 6px' }}>⚫ Subtractive (물감·잉크)</p>
+            <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, margin: '0 0 6px' }}>Subtractive (물감·잉크)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               안료가 빛을 <strong>흡수</strong>하고 남은 빛을 반사. 섞을수록 어두워짐.<br />
               <strong>3원색 = Cyan·Magenta·Yellow (CMY)</strong>, 모두 합치면 검정.
@@ -133,7 +132,7 @@ export default function PaintMixPage() {
             </p>
           </div>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>💡 Additive (빛)</p>
+            <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>Additive (빛)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               빛이 <strong>더해질수록</strong> 밝아짐. <br />
               <strong>3원색 = Red·Green·Blue (RGB)</strong>, 모두 합치면 흰색.
@@ -143,7 +142,7 @@ export default function PaintMixPage() {
             </p>
           </div>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>🎒 RYB (전통)</p>
+            <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>RYB (전통)</p>
             <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               학교 미술의 <strong>빨강·노랑·파랑</strong> 3원색. <br />
               직관적이지만 과학적으론 부정확 (CMY가 더 정확).
@@ -166,13 +165,13 @@ export default function PaintMixPage() {
           색환에서 <strong>마주 보는 두 색</strong>이 보색입니다. 보색은 함께 쓰면 강한 대비를 주고, <strong>섞으면 무채색(회색·갈색)</strong>이 됩니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주색</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>보색</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>혼합 결과 (Subtractive)</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주색</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>보색</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>혼합 결과</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
               </tr>
             </thead>
             <tbody>
@@ -199,55 +198,55 @@ export default function PaintMixPage() {
         </p>
       </div>
 
-      {/* 4. 30+ 레시피 표 */}
-      <h2 style={sectionTitle}>📚 30+ 인기 색 레시피 — 학교 12색 기준</h2>
+      {/* 4. 레시피 표 */}
+      <h2 style={sectionTitle}>📚 자주 쓰는 색 레시피 (12색 기준)</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          한국 작가·취미생이 자주 만드는 30+ 색의 학교 12색 비율입니다. 본 페이지의 [📚 레시피] 탭에서 카드 클릭으로 즉시 적용 가능.
+          한국 작가·취미생이 자주 만드는 색의 12색 물감 비율입니다. 본 페이지의 [📚 레시피] 탭에서 카드 클릭으로 즉시 적용 가능.
         </p>
-        <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 480 }}>
+        <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>분류</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>색 이름</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>비율</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '20%' }}>분류</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '32%' }}>색 이름</th>
+                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>비율</th>
               </tr>
             </thead>
             <tbody>
               {[
-                ['👶 피부톤', '살색 (밝은)', '흰색 8 + 빨강 1 + 노랑 1'],
-                ['🧒 피부톤', '살색 (중간)', '흰색 5 + 주황 2 + 빨강 1'],
-                ['🟫 땅', '황토색', '노랑 4 + 빨강 2 + 검정 1'],
-                ['🐪 땅', '카멜 베이지', '주황 3 + 갈색 1 + 흰색 4'],
-                ['☕ 땅', '모카 브라운', '갈색 5 + 검정 1 + 빨강 1'],
-                ['☁️ 하늘', '하늘색 (밝음)', '흰색 6 + 하늘 3 + 파랑 1'],
-                ['🌫️ 하늘', '청회색', '파랑 3 + 검정 1 + 흰색 4'],
-                ['🌊 하늘', '군청', '파랑 5 + 보라 1 + 검정 1'],
-                ['🫐 하늘', '인디고', '파랑 4 + 검정 2 + 보라 1'],
-                ['🌱 식물', '민트', '초록 1 + 흰색 6 + 하늘 1'],
-                ['🌿 식물', '세이지 그린', '연두 3 + 흰색 3 + 검정 1'],
-                ['🫒 식물', '올리브', '노랑 3 + 초록 2 + 검정 1'],
-                ['💜 꽃', '라벤더', '파랑 2 + 빨강 1 + 흰색 5'],
-                ['🪸 꽃', '코럴 핑크', '빨강 2 + 주황 2 + 흰색 3'],
-                ['🌸 꽃', '더스티 핑크', '분홍 4 + 갈색 1 + 흰색 2'],
-                ['🍷 꽃', '버건디', '빨강 4 + 검정 2 + 보라 1'],
-                ['🌻 꽃', '머스타드', '노랑 5 + 주황 1 + 갈색 1'],
-                ['🪨 회색', '차콜 그레이', '검정 5 + 흰색 1 + 파랑 1'],
-                ['🥈 회색', '실버 그레이', '검정 1 + 흰색 6'],
-                ['🐘 회색', '웜 그레이', '검정 2 + 흰색 5 + 갈색 1'],
+                ['피부톤', '살색 (밝은)', '흰색 8 + 빨강 1 + 노랑 1'],
+                ['피부톤', '살색 (중간)', '흰색 5 + 주황 2 + 빨강 1'],
+                ['땅', '황토색', '노랑 4 + 빨강 2 + 검정 1'],
+                ['땅', '카멜 베이지', '주황 3 + 갈색 1 + 흰색 4'],
+                ['땅', '모카 브라운', '갈색 5 + 검정 1 + 빨강 1'],
+                ['하늘', '하늘색 (밝음)', '흰색 6 + 하늘 3 + 파랑 1'],
+                ['하늘', '청회색', '파랑 3 + 검정 1 + 흰색 4'],
+                ['하늘', '군청', '파랑 5 + 보라 1 + 검정 1'],
+                ['하늘', '인디고', '파랑 4 + 검정 2 + 보라 1'],
+                ['식물', '민트', '초록 1 + 흰색 6 + 하늘 1'],
+                ['식물', '세이지 그린', '연두 3 + 흰색 3 + 검정 1'],
+                ['식물', '올리브', '노랑 3 + 초록 2 + 검정 1'],
+                ['꽃', '라벤더', '파랑 2 + 빨강 1 + 흰색 5'],
+                ['꽃', '코럴 핑크', '빨강 2 + 주황 2 + 흰색 3'],
+                ['꽃', '더스티 핑크', '분홍 4 + 갈색 1 + 흰색 2'],
+                ['꽃', '버건디', '빨강 4 + 검정 2 + 보라 1'],
+                ['꽃', '머스타드', '노랑 5 + 주황 1 + 갈색 1'],
+                ['회색', '차콜 그레이', '검정 5 + 흰색 1 + 파랑 1'],
+                ['회색', '실버 그레이', '검정 1 + 흰색 6'],
+                ['회색', '웜 그레이', '검정 2 + 흰색 5 + 갈색 1'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '7px 8px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
+                  <td style={{ padding: '7px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
+                  <td style={{ padding: '7px 8px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⓘ 본 표는 일부 미리보기이며, 전체 30+ 레시피(테라코타·세이지·코랄·플럼·아이보리 등)는 [📚 레시피] 탭에서 확인 가능합니다.
+          ⓘ 본 표는 일부 미리보기이며, 더 많은 레시피(테라코타·세이지·코랄·플럼·아이보리 등)는 [📚 레시피] 탭에서 확인 가능합니다.
         </p>
       </div>
 
@@ -381,28 +380,25 @@ export default function PaintMixPage() {
 
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/art/color" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🎨</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>색상 코드 변환기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            HEX·RGB·HSL·OKLCH·WCAG 대비비
-          </p>
-        </Link>
-        <Link href="/tools/art/golden-ratio" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🌀</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>황금 비율 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            φ = 1.618 디자인 비율
-          </p>
-        </Link>
-        <Link href="/tools/unit/converter" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>단위 변환기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            ml·g·큰술·당도·농도 환산
-          </p>
-        </Link>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        {[
+          { href: '/tools/art/color', icon: '🎨', name: '색상 코드 변환기', desc: 'HEX·RGB·HSL·OKLCH·WCAG 대비비' },
+          { href: '/tools/art/golden-ratio', icon: '🌀', name: '황금 비율 계산기', desc: 'φ = 1.618 디자인 비율' },
+          { href: '/tools/unit/converter', icon: '📐', name: '단위 변환기', desc: 'ml·g·큰술·당도·농도 환산' },
+          { href: '/tools/art/gradient-generator', icon: '🌈', name: '그라디언트 생성기', desc: 'CSS·OKLCH 보간 그라디언트' },
+        ].map((t) => (
+          <Link key={t.href} href={t.href} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            background: 'var(--bg2)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+          }}>
+            <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )
