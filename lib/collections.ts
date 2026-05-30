@@ -41,7 +41,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#0891B2',
     seasonMonths: [1, 7, 8, 12],
     steps: [
-      { title: '출발 전 준비', note: '환율과 하루 경비로 예산을 잡고, 빠뜨리기 쉬운 준비물과 현지 옷·신발 사이즈를 미리 확인하세요.', toolHrefs: ['/tools/life/travel-budget', '/tools/life/packing', '/tools/unit/size'] },
+      { title: '출발 전 준비', note: '환율과 하루 경비로 예산을 잡고, 빠뜨리기 쉬운 준비물과 현지 옷·신발 사이즈를 확인하세요. 유럽이라면 쉥겐 90/180일 체류 한도도 미리 점검.', toolHrefs: ['/tools/life/travel-budget', '/tools/life/packing', '/tools/unit/size', '/tools/date/schengen'] },
       { title: '현지에서', note: '한국과의 시차를 확인하고, 나라별 팁 문화에 맞춰 계산하고, 일행과 비용은 깔끔하게 나누세요.', toolHrefs: ['/tools/date/timezone', '/tools/life/travel-tip', '/tools/life/dutch'] },
       { title: '돌아올 때', note: '면세 한도를 넘기면 세관 신고 대상입니다. 귀국 후 며칠은 시차 적응이 필요할 수 있어요.', toolHrefs: ['/tools/life/customs', '/tools/date/jet-lag'] },
     ],

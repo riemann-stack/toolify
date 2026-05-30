@@ -11,6 +11,9 @@ import {
   won, formatEok, parseAmount,
 } from './salaryUtils'
 
+/* 공제 표 셀용 — 천단위 콤마만 (원 단위는 카드 라벨에 표기, 큰 금액도 열에 맞게) */
+const wn = (n: number) => Math.round(n).toLocaleString('ko-KR')
+
 type Tab = 'main' | 'reverse'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
@@ -313,67 +316,67 @@ export default function SalaryClient() {
 
           {/* 공제 내역 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>공제 내역 상세</label>
+            <label className={styles.cardLabel}>공제 내역 상세 (단위: 원)</label>
             <div className={styles.deductionTable}>
               <div className={`${styles.deductionRow} ${styles.headerRow}`}>
                 <span>항목</span><span>월</span><span>연</span>
               </div>
               <div className={styles.deductionRow}>
                 <span>세전 월급</span>
-                <span>{won(result.grossMonthly)}</span>
-                <span>{won(result.grossMonthly * 12)}</span>
+                <span>{wn(result.grossMonthly)}</span>
+                <span>{wn(result.grossMonthly * 12)}</span>
               </div>
               {result.nonTaxableMonthly > 0 && (
                 <div className={styles.deductionRow} style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.30)' }}>
                   <span>비과세</span>
-                  <span style={{ color: '#059669' }}>−{won(result.nonTaxableMonthly)}</span>
-                  <span style={{ color: '#059669' }}>−{won(result.nonTaxableMonthly * 12)}</span>
+                  <span style={{ color: '#059669' }}>−{wn(result.nonTaxableMonthly)}</span>
+                  <span style={{ color: '#059669' }}>−{wn(result.nonTaxableMonthly * 12)}</span>
                 </div>
               )}
               <div className={styles.deductionRow}>
                 <span>과세 급여</span>
-                <span>{won(result.taxableMonthly)}</span>
-                <span>{won(result.taxableMonthly * 12)}</span>
+                <span>{wn(result.taxableMonthly)}</span>
+                <span>{wn(result.taxableMonthly * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
                 <span>국민연금</span>
-                <span>{won(result.pension)}</span>
-                <span>{won(result.pension * 12)}</span>
+                <span>{wn(result.pension)}</span>
+                <span>{wn(result.pension * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
                 <span>건강보험</span>
-                <span>{won(result.health)}</span>
-                <span>{won(result.health * 12)}</span>
+                <span>{wn(result.health)}</span>
+                <span>{wn(result.health * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
                 <span>장기요양</span>
-                <span>{won(result.longTermCare)}</span>
-                <span>{won(result.longTermCare * 12)}</span>
+                <span>{wn(result.longTermCare)}</span>
+                <span>{wn(result.longTermCare * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowSection}`}>
                 <span>고용보험</span>
-                <span>{won(result.employment)}</span>
-                <span>{won(result.employment * 12)}</span>
+                <span>{wn(result.employment)}</span>
+                <span>{wn(result.employment * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTax}`}>
                 <span>소득세</span>
-                <span>{won(result.incomeTax)}</span>
-                <span>{won(result.incomeTax * 12)}</span>
+                <span>{wn(result.incomeTax)}</span>
+                <span>{wn(result.incomeTax * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTax}`}>
                 <span>지방소득세</span>
-                <span>{won(result.localTax)}</span>
-                <span>{won(result.localTax * 12)}</span>
+                <span>{wn(result.localTax)}</span>
+                <span>{wn(result.localTax * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTotal}`}>
                 <span>총 공제</span>
-                <span>{won(result.totalDeduction)}</span>
-                <span>{won(result.totalDeduction * 12)}</span>
+                <span>{wn(result.totalDeduction)}</span>
+                <span>{wn(result.totalDeduction * 12)}</span>
               </div>
               <div className={`${styles.deductionRow} ${styles.deductionRowTotal}`}>
                 <span>실수령</span>
-                <span>{won(result.netMonthly)}</span>
-                <span>{won(result.netYearly)}</span>
+                <span>{wn(result.netMonthly)}</span>
+                <span>{wn(result.netYearly)}</span>
               </div>
             </div>
           </div>

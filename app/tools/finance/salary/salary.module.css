@@ -244,8 +244,10 @@
 .deductionTable { display: flex; flex-direction: column; gap: 4px; }
 .deductionRow {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 10px;
+  /* 항목(고정 폭) + 월·연(동일 폭) — 모든 행이 같은 템플릿이라 열·숫자·헤더가 정렬됨 */
+  grid-template-columns: 76px 1fr 1fr;
+  gap: 12px;
+  align-items: baseline;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;

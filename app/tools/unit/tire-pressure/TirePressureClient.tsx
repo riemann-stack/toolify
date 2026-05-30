@@ -477,7 +477,12 @@ function SizeTab() {
   const baseOuter = base ? outerDiaMm(base) : 0
   const cmpOuter = cmp ? outerDiaMm(cmp) : 0
   const diffPct = base && cmp ? ((cmpOuter - baseOuter) / baseOuter) * 100 : 0
-  const realAt100 = base && cmp ? 100 * (cmpOuter / baseOuter) : 0
+  const ratio = base && cmp && baseOuter > 0 ? cmpOuter / baseOuter : 1
+  const realAt100 = base && cmp ? 100 * ratio : 0
+  // 외경 변화의 파생 영향 (계기판/계기는 원래 외경 기준으로 회전수를 환산하므로)
+  // 속도·주행거리는 ratio 비례(= 외경차이%), 표시 연비·엔진 회전수는 1/ratio 비례
+  const fuelDevPct = (1 / ratio - 1) * 100
+  const rideMm = (cmpOuter - baseOuter) / 2   // 지상고(차고) = 반경 변화
   const options = base ? inchUpOptions(base) : []
 
   return (
@@ -528,16 +533,62 @@ function SizeTab() {
               placeholder="비교할 사이즈 (예: 215/50R17)"
             />
             {cmp && (
-              <div className={`${styles.statusCard} ${Math.abs(diffPct) <= 3 ? styles.statusOk : styles.statusWarn}`} style={{ marginTop: 12 }}>
-                <div className={styles.statusTitle}>
-                  외경 차이 {formatSigned(diffPct, 1)}% {Math.abs(diffPct) <= 3 ? '✅ 호환 권장 범위' : '⚠️ 3% 초과 — 비권장'}
+              <>
+                <div className={`${styles.statusCard} ${Math.abs(diffPct) <= 3 ? styles.statusOk : styles.statusWarn}`} style={{ marginTop: 12 }}>
+                  <div className={styles.statusTitle}>
+                    외경 차이 {formatSigned(diffPct, 1)}% {Math.abs(diffPct) <= 3 ? '✅ 호환 권장 범위' : '⚠️ 3% 초과 — 비권장'}
+                  </div>
+                  <div className={styles.statusDesc}>
+                    계기판 <strong>100 km/h</strong>일 때 실제 약 <strong>{realAt100.toFixed(1)} km/h</strong>
+                    {diffPct > 0.05 ? ' (실제가 더 빠름)' : diffPct < -0.05 ? ' (실제가 더 느림)' : ''}.
+                    외경 차이는 ±3% 이내를 권장합니다.
+                  </div>
                 </div>
-                <div className={styles.statusDesc}>
-                  계기판 <strong>100 km/h</strong>일 때 실제 약 <strong>{realAt100.toFixed(1)} km/h</strong>
-                  {diffPct > 0.05 ? ' (실제가 더 빠름)' : diffPct < -0.05 ? ' (실제가 더 느림)' : ''}.
-                  외경 차이는 ±3% 이내를 권장합니다.
+
+                {/* 속도 구간별 — 계기판 표시 → 실제 속도 */}
+                <div style={{ overflowX: 'auto', marginTop: 12 }}>
+                  <table className={styles.refTable}>
+                    <thead><tr><th>계기판 표시</th><th>실제 속도</th></tr></thead>
+                    <tbody>
+                      {[40, 60, 80, 100, 120].map(v => (
+                        <tr key={v}>
+                          <td>{v} km/h</td>
+                          <td className={styles.refValue}>{(v * ratio).toFixed(1)} km/h</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </div>
+
+                {/* 외경 변화의 추가 영향 */}
+                <div className={styles.resultCard} style={{ marginTop: 12 }}>
+                  <div className={styles.resultRow}>
+                    <div><div className={styles.resultLabel}>주행거리계 오차</div></div>
+                    <div className={styles.resultValue}>
+                      {Math.abs(diffPct) < 0.1 ? '거의 없음' : `${formatSigned(diffPct, 1)}% (실제가 더 ${diffPct > 0 ? '김' : '짧음'})`}
+                    </div>
+                  </div>
+                  <div className={styles.resultRow}>
+                    <div><div className={styles.resultLabel}>연비 표시 오차</div></div>
+                    <div className={styles.resultValue}>
+                      {Math.abs(fuelDevPct) < 0.1 ? '거의 없음' : `${formatSigned(fuelDevPct, 1)}% (실제가 더 ${fuelDevPct < 0 ? '좋음' : '나쁨'})`}
+                    </div>
+                  </div>
+                  <div className={styles.resultRow}>
+                    <div><div className={styles.resultLabel}>지상고(차고) 변화</div></div>
+                    <div className={styles.resultValue}>{formatSigned(rideMm, 1)} mm</div>
+                  </div>
+                  <div className={styles.resultRow}>
+                    <div><div className={styles.resultLabel}>엔진 회전수(RPM)</div></div>
+                    <div className={styles.resultValue}>
+                      {Math.abs(fuelDevPct) < 0.1 ? '거의 없음' : `같은 속도에서 ${formatSigned(fuelDevPct, 1)}%`}
+                    </div>
+                  </div>
+                </div>
+                <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8, opacity: 0.85 }}>
+                  외경이 커지면 계기판·주행기록계는 실제보다 <strong>적게</strong> 표시되고(표시 연비는 실제보다 낮게 나와 실제 연비는 더 좋음), 지상고는 올라가며 같은 속도에서 엔진 회전수는 낮아집니다. 양산차 계기판은 보통 안전을 위해 실제보다 약간 높게 표시됩니다.
+                </p>
+              </>
             )}
           </div>
 

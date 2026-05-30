@@ -48,9 +48,8 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x proximity;
-    /* 스크롤바 가림 + 가장자리 여백으로 첫/끝 카드 정렬감 */
-    margin: 0 -24px;
-    padding: 2px 24px 8px;
+    /* 콘텐츠 좌우 여백(24px) 안에서 스크롤 — 배너·카테고리 등 다른 섹션과 정렬 일관 */
+    padding-bottom: 8px;
     scrollbar-width: none;
   }
   .others::-webkit-scrollbar { display: none; }

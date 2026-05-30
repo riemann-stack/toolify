@@ -84,7 +84,7 @@ export default function UvProtectionPage() {
         {/* ── 2. Fitzpatrick 피부 타입 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            Fitzpatrick 피부 타입 (한국인 가이드)
+            Fitzpatrick 피부 타입
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.8 }}>
             피부과학에서 사용하는 6단계 분류 (1975년 Thomas Fitzpatrick 박사 제정).
@@ -127,18 +127,25 @@ export default function UvProtectionPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             UV 지수 5단계 (한국 기상청 기준)
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { r: '0~2',  l: '낮음',     c: '#059669', d: '특별한 보호 불필요' },
-              { r: '3~5',  l: '보통',     c: '#CA8A04', d: '오전 10~오후 4시 차단제 권장' },
-              { r: '6~7',  l: '높음',     c: '#EA580C', d: '차단제·모자·긴 옷 필수' },
-              { r: '8~10', l: '매우 높음', c: '#DC2626', d: '오전 10~오후 4시 야외 자제' },
-              { r: '11+',  l: '위험',     c: '#9B59B6', d: '가능한 외출 자제' },
+              { r: '0~2',  l: '낮음',     c: '#059669', w: 16,  d: '특별한 보호 불필요' },
+              { r: '3~5',  l: '보통',     c: '#CA8A04', w: 40,  d: '오전 10~오후 4시 차단제 권장' },
+              { r: '6~7',  l: '높음',     c: '#EA580C', w: 56,  d: '차단제·모자·긴 옷 필수' },
+              { r: '8~10', l: '매우 높음', c: '#DC2626', w: 80,  d: '오전 10~오후 4시 야외 자제' },
+              { r: '11+',  l: '위험',     c: '#9B59B6', w: 100, d: '가능한 외출 자제' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: g.c, marginBottom: 4 }}>{g.r}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.l}</p>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.65 }}>{g.d}</p>
+              <div key={i}>
+                <div style={{ display: 'grid', gridTemplateColumns: '76px 1fr', gap: 10, alignItems: 'center' }}>
+                  <div style={{ lineHeight: 1.25 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: g.c, whiteSpace: 'nowrap' }}>{g.l}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>UV {g.r}</div>
+                  </div>
+                  <div style={{ height: 16, background: 'var(--bg3)', borderRadius: 99, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${g.w}%`, background: g.c, borderRadius: 99 }} />
+                  </div>
+                </div>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: '5px 0 0', paddingLeft: 86, lineHeight: 1.55 }}>{g.d}</p>
               </div>
             ))}
           </div>
@@ -153,32 +160,30 @@ export default function UvProtectionPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             SPF 차단율 진실
           </h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['SPF', 'UVB 차단율', '통과율'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { s: '없음',    b: '0%',    p: '100%', c: '#DC2626' },
-                  { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: '#CA8A04' },
-                  { s: 'SPF 30',  b: '96.7%', p: '3.3%', c: 'var(--accent)' },
-                  { s: 'SPF 50',  b: '98.0%', p: '2.0%', c: '#059669' },
-                  { s: 'SPF 70+', b: '98.6%', p: '1.4%', c: '#9B59B6' },
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.s === 'SPF 50' ? 'rgba(16,185,129,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
-                    <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.p}</td>
-                  </tr>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', tableLayout: 'fixed' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                {['SPF', 'UVB 차단율', '통과율'].map((h, i) => (
+                  <th key={i} style={{ padding: '10px 8px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { s: '없음',    b: '0%',    p: '100%', c: '#DC2626' },
+                { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: '#CA8A04' },
+                { s: 'SPF 30',  b: '96.7%', p: '3.3%', c: 'var(--accent)' },
+                { s: 'SPF 50',  b: '98.0%', p: '2.0%', c: '#059669' },
+                { s: 'SPF 70+', b: '98.6%', p: '1.4%', c: '#9B59B6' },
+              ].map((r, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.s === 'SPF 50' ? 'rgba(16,185,129,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
+                  <td style={{ padding: '10px 8px', color: r.c, fontWeight: 700 }}>{r.s}</td>
+                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.p}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
             ⚠️ <strong style={{ color: '#EA580C' }}>SPF가 2배라고 보호 시간이 2배 늘어나는 것이 아닙니다.</strong>
             SPF 30과 50의 차단율 차이는 <strong>1.3%p</strong>에 불과합니다. 라벨 SPF 50을 사용해도 <strong>실제 도포 시 효과는 SPF 25 정도</strong>이며,

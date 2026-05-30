@@ -291,7 +291,7 @@ export default function UvProtectionClient() {
               <button className={`${s.uvQuickBtn} ${s.uvQuickExtreme} ${uvIndex >= 11                 ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(11)} type="button">🟣 11+<br /><small>위험</small></button>
             </div>
             <div className={s.uvSourceLink}>
-              📡 현재 UV 지수를 모르세요? <a href="https://www.weather.go.kr/w/theme/daily-life/life-jobs.do" target="_blank" rel="noopener noreferrer">한국 기상청 자외선지수</a>에서 확인하세요.
+              📡 현재 UV 지수를 모르세요? <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer">한국 기상청 생활기상지수(자외선지수)</a>에서 확인하세요.
             </div>
           </div>
 
@@ -355,7 +355,6 @@ export default function UvProtectionClient() {
                 >
                   <div className={s.envIcon}>{e.icon}</div>
                   <p className={s.envName}>{e.name}</p>
-                  <p className={s.envMult}>× {e.mult.toFixed(1)}</p>
                 </button>
               ))}
             </div>

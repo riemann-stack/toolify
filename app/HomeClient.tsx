@@ -293,13 +293,15 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
         <div className={styles.toolsGrid}>
           {popularTools.map(tool => (
             <Link key={tool.href} href={tool.href} className={styles.toolCard}>
-              <div className={styles.toolIconWrap}>{tool.icon}</div>
+              <div className={styles.toolIconCol}>
+                <div className={styles.toolIconWrap}>{tool.icon}</div>
+                {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
+                {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
+              </div>
               <div className={styles.toolInfo}>
                 <div className={styles.toolName}>{tool.name}</div>
                 <div className={styles.toolDesc}>{tool.desc}</div>
               </div>
-              {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
-              {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
             </Link>
           ))}
         </div>

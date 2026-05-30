@@ -60,27 +60,40 @@ function ShareButton() {
   const handleShare = useCallback(async () => {
     if (typeof window === 'undefined') return
     const url = window.location.href
-    const title = document.title
-    const text = `${title} | Youtil`
-    // Web Share API (모바일 친화) → 폴백: 클립보드 복사
-    type NavWithShare = Navigator & { share?: (data: { title: string; text: string; url: string }) => Promise<void> }
+
+    // document.title에는 이미 브랜드가 들어 있음 — 도구 페이지는 템플릿('%s | Youtil')으로 끝에,
+    // 홈·소개 페이지는 제목 자체에 'Youtil…'이 앞에 포함됨. 그대로 다시 ' | Youtil'을 붙이면 중복된다.
+    // ① 끝의 ' | Youtil' 접미사 제거 → ② 맨 앞에 브랜드가 없을 때만 한 번 붙여 브랜드가 정확히 1회만 나오게.
+    const SITE = 'Youtil'
+    const SUFFIX = ` | ${SITE}`
+    let base = document.title
+    if (base.endsWith(SUFFIX)) base = base.slice(0, -SUFFIX.length)
+    const headline = base.startsWith(SITE) ? base : `${SITE} | ${base}`
+
+    // 카카오톡 등 링크 미리보기 카드는 url 필드(+ 페이지 OG 태그)로 만들어지므로 url을 반드시 함께 넘긴다.
+    // text에는 브랜드가 1회만 든 headline을 담아 'Youtil' 중복을 없앤다(이전 버그: text 뒤에 또 '| Youtil').
+    // 주의: url 필드를 넘기면 OS가 붙여넣기 시 'text 공백 url'로 이어 붙이므로, url 앞 구분자는 공백이 된다.
+    //       (구분자에 '|'를 강제하려면 url을 text에 직접 넣어야 하는데, 그러면 카드가 사라지거나 url이 중복됨)
+    type NavWithShare = Navigator & { share?: (data: { title?: string; text?: string; url?: string }) => Promise<void> }
     const nav = navigator as NavWithShare
     if (typeof nav.share === 'function') {
       try {
-        await nav.share({ title, text, url })
+        await nav.share({ title: headline, text: headline, url })
         return
       } catch {
         // 사용자 취소 시 무시 → 클립보드 폴백 안 함
         return
       }
     }
+    // 데스크탑 등 Web Share 미지원 → 클립보드에는 구분자를 직접 제어할 수 있으므로 'Youtil | 제목 | URL' 형태로 복사
+    const clipText = `${headline} | ${url}`
     try {
-      await navigator.clipboard.writeText(url)
+      await navigator.clipboard.writeText(clipText)
       setState('copied')
       setTimeout(() => setState('idle'), 1500)
     } catch {
-      // 마지막 폴백: 사용자에게 URL 표시
-      window.prompt('이 페이지 링크를 복사하세요:', url)
+      // 마지막 폴백: 사용자에게 전체 문구 표시
+      window.prompt('이 페이지 링크를 복사하세요:', clipText)
     }
   }, [])
 

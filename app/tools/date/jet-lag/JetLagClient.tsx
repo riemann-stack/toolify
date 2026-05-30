@@ -172,12 +172,14 @@ export default function JetLagClient() {
           </div>
         </div>
 
-        {/* 이륙 시각 + 비행 시간 + 체류 일수 */}
-        <div className={s.row3} style={{ marginTop: 10 }}>
-          <div>
-            <label className={s.fieldLabel}>이륙 시각 (출발지)</label>
-            <input className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
-          </div>
+        {/* 이륙 시각 — 단독 전체폭 (모바일 가로 오버플로우 방지) */}
+        <div style={{ marginTop: 10 }}>
+          <label className={s.fieldLabel}>이륙 시각 (출발지)</label>
+          <input className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
+        </div>
+
+        {/* 비행 시간 + 체류 일수 — 1줄 */}
+        <div className={s.row2} style={{ marginTop: 10 }}>
           <div>
             <label className={s.fieldLabel}>비행 시간 (h)</label>
             <input
@@ -312,8 +314,10 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
   fromName: string
   toName: string
 }) {
+  const MAX_PRESHIFT = 3 // 출국 전 집에서 현실적으로 미리 당기거나 늦출 수 있는 최대(시간)
   const adjustPerDay = absDiff === 0 ? 0 : Math.min(2, Math.ceil(absDiff / 5))
-  const adjustDays = adjustPerDay === 0 ? 0 : Math.min(5, Math.ceil(absDiff / adjustPerDay))
+  const preShiftTotal = Math.min(absDiff, MAX_PRESHIFT)
+  const adjustDays = adjustPerDay === 0 ? 0 : Math.min(5, Math.ceil(preShiftTotal / adjustPerDay))
   // 동쪽 → 앞당기기(마이너스), 서쪽 → 늦추기(플러스)
   const sign = direction === 'east' ? -1 : direction === 'west' ? 1 : 0
 
@@ -322,7 +326,7 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
 
   const schedule = Array.from({ length: adjustDays + 1 }, (_, i) => {
     const daysOut = adjustDays - i
-    const shiftH = Math.min(i * adjustPerDay, absDiff) * sign
+    const shiftH = Math.min(i * adjustPerDay, preShiftTotal) * sign
     const label = daysOut === 0 ? '출발일' : `D-${daysOut}`
     return {
       label,
@@ -804,16 +808,13 @@ function buildWeekSchedule(direction: 'east' | 'west' | 'none', absDiff: number,
 
   const bedH = parseHHMM(bedtime)
   const wakeH = parseHHMM(waketime)
-  const sign = direction === 'east' ? -1 : 1
 
-  // 시차에 따른 일차별 진행 (절반에서 80% → 7일이면 거의 완전 적응)
-  const progress = absDiff <= 3
-    ? [0.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]
-    : absDiff <= 6
-      ? [0.2, 0.4, 0.6, 0.7, 0.85, 0.95, 1.0]
-      : absDiff <= 9
-        ? [0.15, 0.3, 0.45, 0.6, 0.7, 0.8, 0.9]
-        : [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+  // 생체시계가 하루에 이동 가능한 양 — 동쪽(앞당김)은 더 느림(≈1h), 서쪽(늦춤)은 ≈1.5h
+  const maxDailyShift = direction === 'east' ? 1 : 1.5
+  // 권장 취침이 현지 정상에서 너무 벗어나지 않도록(=한밤중 비현실적 시각 방지) 편차 상한(시간)
+  const DEV_CAP = 3
+  // 도착 직후 방향: 동쪽=현지보다 늦게 졸림(+) → 매일 당겨 정상으로 / 서쪽=일찍 졸림(−) → 매일 늦춰 정상으로
+  const devSign = direction === 'east' ? 1 : -1
 
   const states = absDiff <= 3
     ? ['적응 중', '거의 적응', '완전 적응', '완전 적응', '완전 적응', '완전 적응', '완전 적응']
@@ -834,13 +835,16 @@ function buildWeekSchedule(direction: 'east' | 'west' | 'none', absDiff: number,
   ]
 
   return Array.from({ length: 7 }, (_, i) => {
-    const remaining = absDiff * (1 - progress[i])  // 아직 보정해야 할 시차
-    const shift = (absDiff - remaining) * sign     // 누적 보정량 (음수=앞당김, 양수=늦춤)
+    // 도착 후 i일 경과 → 아직 적응 못 한 시차(시간). 하루 maxDailyShift씩 줄어들어 0으로 수렴.
+    const remaining = Math.max(0, absDiff - i * maxDailyShift)
+    // 권장 취침은 '현지 정상'을 기준으로 남은 미적응만큼만(상한 내) 벗어남 → 1일차 최대, 점차 정상으로 수렴
+    const dev = Math.min(remaining, DEV_CAP) * devSign
+    const adapted = remaining <= 0.5
     return {
       day: `${i + 1}일차`,
       state: states[i],
-      bed: progress[i] >= 1.0 ? '정상' : formatHours(bedH + shift),
-      wake: progress[i] >= 1.0 ? '정상' : formatHours(wakeH + shift),
+      bed: adapted ? '현지 정상' : formatHours(bedH + dev),
+      wake: adapted ? '현지 정상' : formatHours(wakeH + dev),
       tip: tips[i],
     }
   })

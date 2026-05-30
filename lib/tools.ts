@@ -174,6 +174,7 @@ export const categories: Category[] = [
       { href: '/tools/date/lunar',       icon: '🌙', name: '양력 음력 변환기',         desc: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동.' },
       { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드.' },
       { href: '/tools/date/timezone',    icon: '🌐', name: '시간대(타임존) 변환기',     desc: 'UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란·네팔(+5:45) 동시 변환. DST 자동, 회의 슬롯 추천.', badge: 'new' },
+      { href: '/tools/date/schengen',    icon: '🇪🇺', name: '쉥겐 체류일 계산기',         desc: '유럽 무비자 90/180일 규칙 — 출입국 기록으로 남은 체류일·연속 체류·다음 입국 가능일 자동 계산.', badge: 'new' },
       { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간을 행동 가치로 환산해 보여줍니다.', badge: 'hot' },
     ],
   },

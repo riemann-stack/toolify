@@ -73,7 +73,7 @@ export default function SalaryPage() {
         💴 연봉 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        세금·4대보험 떼고 통장에 <strong style={{ color: 'var(--text)' }}>진짜 꽂히는 그 월급</strong>. 2026년 최신 기준 자동 적용 + 역산·체감 시급.
+        <strong style={{ color: 'var(--text)' }}>최신 세법 기준</strong>, 정확한 연봉 실수령액 계산기.
       </p>
 
       <UpdatedMeta date="2026년 5월" basis="2026년 4대보험 요율·근로소득 간이세액표 기준" sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"}]} />

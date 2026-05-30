@@ -328,13 +328,6 @@
 }
 .envIcon { font-size: 22px; }
 .envName { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 4px; }
-.envMult {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
-}
 .envBeach    { border-color: rgba(8,145,178,0.40); }
 .envSnow     { border-color: rgba(220,38,38,0.40); }
 .envHiking   { border-color: rgba(234,88,12,0.40); }
@@ -345,7 +338,7 @@
   border-color: #0891B2;
   font-weight: 700;
 }
-.envActive .envName, .envActive .envMult { color: #0891B2; }
+.envActive .envName { color: #0891B2; }
 
 /* ── 고급 옵션 ── */
 .advancedDetails {

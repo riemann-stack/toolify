@@ -36,8 +36,11 @@
 /* ── 공통 입력 그리드 ── */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+/* 그리드 자식이 콘텐츠 최소폭 때문에 넘치지 않도록 — time/select 가로 오버플로우 방지 */
+.row2 > div, .row3 > div { min-width: 0; }
 @media (max-width: 560px) {
-  .row2, .row3 { grid-template-columns: 1fr; }
+  /* 짝 입력(출발/도착 · 비행/체류 · 취침/기상)은 모바일에서도 2열 한 줄로 유지 */
+  .row2 { grid-template-columns: 1fr 1fr; }
 }
 .fieldLabel {
   display: block;
@@ -64,6 +67,7 @@
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
+  min-width: 0;
 }
 .select:focus { border-color: rgba(14,165,233,0.5); }
 .select option { background: #1a1a1a; color: var(--text); }
@@ -86,6 +90,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
   box-sizing: border-box;
+  min-width: 0;
   outline: none;
 }
 .input:focus { border-color: rgba(14,165,233,0.5); }
