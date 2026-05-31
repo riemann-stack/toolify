@@ -42,6 +42,7 @@ export default function TokenCounterClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const j = JSON.parse(raw)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (typeof j.text === 'string') setText(j.text)
         if (typeof j.bulkCalls === 'number') setBulkCalls(j.bulkCalls)
         if (typeof j.outputRatio === 'number') setOutputRatio(j.outputRatio)

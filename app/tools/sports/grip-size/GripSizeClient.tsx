@@ -56,6 +56,7 @@ export default function GripSizeClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (typeof j.palmCm === 'number') setPalmCm(j.palmCm)
       if (typeof j.fullCm === 'number') setFullCm(j.fullCm)
       if (typeof j.gloveSize === 'number') setGloveSize(j.gloveSize)

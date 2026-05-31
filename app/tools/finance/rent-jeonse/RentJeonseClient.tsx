@@ -50,6 +50,7 @@ export default function RentJeonseClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed = JSON.parse(raw)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInputs((prev) => ({ ...prev, ...parsed }))
       }
     } catch { /* ignore */ }

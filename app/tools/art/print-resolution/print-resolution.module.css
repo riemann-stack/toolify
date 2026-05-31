@@ -1,0 +1,238 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── 모드 토글 ── */
+.modeToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+}
+.modeBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 46px;
+}
+.modeActive { background: var(--accent); color: #fff; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* ── 드롭다운 ── */
+.selectWrap { position: relative; }
+.select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 36px 12px 14px;
+  font-size: 15px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+.select:focus { border-color: var(--accent); }
+.selectArrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ── 입력 필드 ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+.input:focus { border-color: var(--accent); }
+.dim { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+
+/* ── 용도 그리드 ── */
+.ucGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.ucBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 56px;
+}
+.ucActive { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: var(--accent-dim); }
+.ucLabel { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; text-align: center; }
+.ucDpi { font-size: 10.5px; font-weight: 700; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.ucActive .ucDpi { color: var(--accent); }
+
+/* ── 히어로(결과) ── */
+.hero {
+  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(5,150,105,0.05) 100%);
+  border: 1px solid rgba(14,165,233,0.3);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-align: center;
+}
+.heroLead { font-size: 12.5px; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
+.heroValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(26px, 7vw, 36px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.heroValue strong { font-weight: 800; }
+.heroSub { font-size: 13px; color: var(--muted); margin: 8px 0 0; line-height: 1.6; }
+.hintBox {
+  margin-top: 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+}
+.bandBadge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  padding: 5px 16px;
+  border-radius: 99px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 14px;
+}
+
+/* ── 품질별 최대 인쇄 크기 ── */
+.maxList { display: flex; flex-direction: column; gap: 2px; }
+.maxRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.maxRow:last-child { border-bottom: none; }
+.maxDpi {
+  display: flex;
+  align-items: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  white-space: nowrap;
+}
+.maxDot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.maxBand {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: 7px;
+}
+.maxSize {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.helpText { font-size: 11.5px; color: var(--muted); margin: 14px 0 0; line-height: 1.7; }
+.helpText strong { color: var(--text); }
+
+/* ── 용도별 권장 DPI 참고 ── */
+.dpiRefList { display: flex; flex-direction: column; gap: 2px; }
+.dpiRefRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.dpiRefRow:last-child { border-bottom: none; }
+.dpiRefDpi {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  min-width: 44px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.dpiRefLabel { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.dpiRefNote { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .select, .input { font-size: 16px; min-height: 48px; }
+  .ucGrid { gap: 6px; }
+  .ucLabel { font-size: 11px; }
+}

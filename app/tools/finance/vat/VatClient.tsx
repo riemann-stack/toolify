@@ -57,6 +57,7 @@ export default function VatClient() {
   /* ── 탭4 세금계산서 — SSR/Client 일치 위해 빈 값으로 시작 ── */
   const [invoiceDate,    setInvoiceDate]    = useState('')
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInvoiceDate(new Date().toISOString().slice(0, 10))
   }, [])
   const [invoiceClient,  setInvoiceClient]  = useState('')

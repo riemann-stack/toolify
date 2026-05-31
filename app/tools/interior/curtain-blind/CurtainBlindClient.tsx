@@ -236,8 +236,8 @@ export default function CurtainBlindClient() {
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'size' ? styles.tabActive : ''}`}  onClick={() => setTab('size')}>사이즈 계산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'guide' ? styles.tabActive : ''}`} onClick={() => setTab('guide')}>종류별 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'size'} className={`${styles.tabBtn} ${tab === 'size' ? styles.tabActive : ''}`}  onClick={() => setTab('size')}>사이즈 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${styles.tabBtn} ${tab === 'guide' ? styles.tabActive : ''}`} onClick={() => setTab('guide')}>종류별 가이드</button>
       </div>
 
       {/* ────────────── 탭 1: 사이즈 ────────────── */}

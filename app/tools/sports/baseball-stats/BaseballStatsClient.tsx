@@ -393,9 +393,9 @@ export default function BaseballStatsClient() {
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'batter' ? styles.tabActive : ''}`}  onClick={() => setTab('batter')}>타자 기록</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'pitcher' ? styles.tabActive : ''}`} onClick={() => setTab('pitcher')}>투수 기록</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'pace' ? styles.tabActive : ''}`}    onClick={() => setTab('pace')}>시즌 페이스</button>
+        <button type="button" role="tab" aria-selected={tab === 'batter'} className={`${styles.tabBtn} ${tab === 'batter' ? styles.tabActive : ''}`}  onClick={() => setTab('batter')}>타자 기록</button>
+        <button type="button" role="tab" aria-selected={tab === 'pitcher'} className={`${styles.tabBtn} ${tab === 'pitcher' ? styles.tabActive : ''}`} onClick={() => setTab('pitcher')}>투수 기록</button>
+        <button type="button" role="tab" aria-selected={tab === 'pace'} className={`${styles.tabBtn} ${tab === 'pace' ? styles.tabActive : ''}`}    onClick={() => setTab('pace')}>시즌 페이스</button>
       </div>
 
       {/* ─────────────────── 타자 ─────────────────── */}

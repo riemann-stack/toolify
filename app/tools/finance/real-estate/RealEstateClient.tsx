@@ -277,6 +277,8 @@ export default function RealEstateClient() {
       <div className={styles.modeToggle} role="tablist">
         <button
           type="button"
+          role="tab"
+          aria-selected={mode === 'simple'}
           className={`${styles.modeBtn} ${mode === 'simple' ? styles.modeActive : ''}`}
           onClick={() => setMode('simple')}
         >
@@ -284,6 +286,8 @@ export default function RealEstateClient() {
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={mode === 'detail'}
           className={`${styles.modeBtn} ${mode === 'detail' ? styles.modeActive : ''}`}
           onClick={() => setMode('detail')}
         >

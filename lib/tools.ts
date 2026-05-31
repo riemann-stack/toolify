@@ -100,9 +100,11 @@ export const categories: Category[] = [
       { href: '/tools/life/alcohol',       icon: '🍺', name: '알코올 도수 계산기',  desc: '소맥·하이볼 황금비율 + 목표 도수 희석과 같은 알코올량 비교.', badge: 'hot' },
       { href: '/tools/life/drake',         icon: '👽', name: '드레이크 방정식 계산기', desc: '외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 페르미 역설까지.' },
       { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 가장 빠른 건조 조합 + 전기료 비교까지.' },
+      { href: '/tools/life/cleaning',      icon: '🧽', name: '상황별 청소 세제 계산기', desc: '화장실·주방·기름때 상황별 추천 세제·희석량 + 락스+산성=염소가스 등 혼합 금지 안전 가이드.', badge: 'new' },
       { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 시뮬레이터', desc: '바꿔야 유리한 진짜 이유. 3·10·100·1000문 시뮬과 베이즈 추론으로 직관을 깨다.' },
       { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 위험도 계산기', desc: '가스량·냄새·복부팽만 3축 점수로 원인 진단 + 저FODMAP 대체와 증상별 대처.' },
       { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',        desc: '마트·편의점·코스트코 가격을 1ml·1g·1개당 실질 단가로 즉시. 1+1·2+1도 정확히.' },
+      { href: '/tools/life/gift-money',    icon: '🧧', name: '축의금·부의금 계산기', desc: '관계·참석 여부로 결혼식 축의금·장례식 부의금 적정액 추천 + 홀수 관례·봉투 문구·신권 매너까지.', badge: 'new' },
     ],
   },
   {
@@ -118,6 +120,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/hiking-time',     icon: '🥾', name: '등산 시간 계산기',   desc: '한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. 일몰 전 하산 자동 진단.', badge: 'new' },
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '5RM·8RM 기록으로 진짜 최대 무게 추정 + RPE 보정과 워밍업 5세트 자동.' },
       { href: '/tools/sports/strength-level',  icon: '💪', name: '스트렝스 레벨 계산기', desc: '3대(스쿼트·벤치·데드) 입력 → 3대 합·윌크스·DOTS 점수 + 체중·성별·연령 보정 레벨(입문~엘리트).', badge: 'new' },
+      { href: '/tools/sports/climbing-grade',  icon: '🧗', name: '클라이밍 등급 변환기', desc: '볼더링 V↔Font, 루트 YDS↔French↔UIAA 난이도 환산 + 입문~엘리트 밴드·변환표.', badge: 'new' },
       { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 정확한 인터벌 페이스 + 4~16주 풀 트레이닝 스케줄.' },
       { href: '/tools/sports/buildup',         icon: '📈', name: '러닝 빌드업 계산기', desc: '거리·페이스·구간·프로파일 → 구간별 페이스표와 워치 포맷 자동 + 안전성 체크.', badge: 'new' },
       { href: '/tools/sports/lsd',             icon: '🏃', name: 'LSD·이지런 페이스 계산기', desc: '최근 기록으로 이지 페이스 범위·존2 심박 + 회색지대(정크 마일) 경고 + 롱런 보급 플래너.', badge: 'new' },
@@ -197,9 +200,11 @@ export const categories: Category[] = [
       { href: '/tools/art/knit-gauge', icon: '🧶', name: '뜨개질 게이지 계산기', desc: '10cm² 게이지로 패턴 코·단수 변환 + 한국 사이즈별 코 계산·늘림 균등 분배.', badge: 'new' },
       { href: '/tools/art/exposure',  icon: '📸', name: '사진 노출 계산기',    desc: '조리개·셔터·ISO 3축을 자유롭게 + 옵션 잠금으로 등가 노출 시뮬. ND·Sunny 16 포함.', badge: 'new' },
       { href: '/tools/art/fov',       icon: '📷', name: '카메라 화각 계산기', desc: '풀프레임~스마트폰 7종 센서 × 4-800mm 35mm 환산 + 화각·시야 너비·등가 조리개.', badge: 'new' },
+      { href: '/tools/art/print-resolution', icon: '🖨️', name: '인쇄 해상도 계산기', desc: '인쇄 크기·용도(DPI)로 필요한 최소 픽셀·메가픽셀 + 내 이미지로 인쇄 품질 역산과 품질별 최대 크기.', badge: 'new' },
       /* ✍️ 글쓰기·콘텐츠 */
       { href: '/tools/art/charcount', icon: '🔡', name: '글자수 세기',          desc: '공백 포함·제외 실시간 카운트. SNS·자소서·논문 글자 수 체크.', badge: 'hot' },
       { href: '/tools/art/lorem',     icon: '📝', name: '더미 텍스트 생성기', desc: '문단·버튼·카드·리뷰·JSON 더미를 UI 목업에 바로 붙여 쓸 수 있게.' },
+      { href: '/tools/art/morse-code', icon: '📡', name: '모스 부호·NATO 변환기', desc: '한글·영문 모스 부호 양방향 변환 + 소리·빛 재생·SOS + NATO 음성기호(Alfa·Bravo) 철자 변환.', badge: 'new' },
     ],
   },
   {

@@ -72,6 +72,7 @@ export default function FruitSyrupClient() {
   // SSR 안전 — 마운트 후 오늘 날짜로 초기화
   useEffect(() => {
     const t = new Date()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStartDate(`${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`)
   }, [])
 

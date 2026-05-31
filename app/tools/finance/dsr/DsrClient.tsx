@@ -44,6 +44,7 @@ export default function DsrClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const j = JSON.parse(raw)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (j.income) setIncome(j.income)
         if (j.existing) setExisting(j.existing)
         if (j.homePrice) setHomePrice(j.homePrice)

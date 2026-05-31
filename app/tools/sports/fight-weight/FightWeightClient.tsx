@@ -433,9 +433,9 @@ export default function FightWeightClient() {
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>체급 검색</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'plan' ? styles.tabActive : ''}`}   onClick={() => setTab('plan')}>감량 계획</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'tables' ? styles.tabActive : ''}`} onClick={() => setTab('tables')}>체급표</button>
+        <button type="button" role="tab" aria-selected={tab === 'search'} className={`${styles.tabBtn} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>체급 검색</button>
+        <button type="button" role="tab" aria-selected={tab === 'plan'} className={`${styles.tabBtn} ${tab === 'plan' ? styles.tabActive : ''}`}   onClick={() => setTab('plan')}>감량 계획</button>
+        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${styles.tabBtn} ${tab === 'tables' ? styles.tabActive : ''}`} onClick={() => setTab('tables')}>체급표</button>
       </div>
 
       {/* ─────────────────── 탭 1: 체급 검색 ─────────────────── */}

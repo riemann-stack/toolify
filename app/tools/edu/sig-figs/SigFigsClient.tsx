@@ -27,9 +27,9 @@ export default function SigFigsClient() {
       </Disclaimer>
 
       <div className={s.tabs} role="tablist">
-        <button type="button" className={`${s.tabBtn} ${tab === 'sigfig' ? s.tabActive : ''}`} onClick={() => setTab('sigfig')}>유효숫자·반올림</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'error' ? s.tabActive : ''}`} onClick={() => setTab('error')}>오차 계산</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'propagate' ? s.tabActive : ''}`} onClick={() => setTab('propagate')}>오차 전파 ⭐</button>
+        <button type="button" role="tab" aria-selected={tab === 'sigfig'} className={`${s.tabBtn} ${tab === 'sigfig' ? s.tabActive : ''}`} onClick={() => setTab('sigfig')}>유효숫자·반올림</button>
+        <button type="button" role="tab" aria-selected={tab === 'error'} className={`${s.tabBtn} ${tab === 'error' ? s.tabActive : ''}`} onClick={() => setTab('error')}>오차 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'propagate'} className={`${s.tabBtn} ${tab === 'propagate' ? s.tabActive : ''}`} onClick={() => setTab('propagate')}>오차 전파 ⭐</button>
       </div>
 
       {tab === 'sigfig' && <SigFigTab />}

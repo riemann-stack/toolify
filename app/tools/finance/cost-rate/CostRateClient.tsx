@@ -382,10 +382,10 @@ export default function CostRateClient() {
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'main' ? styles.tabActive : ''}`}     onClick={() => setTab('main')}>원가율 계산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'reverse' ? styles.tabActive : ''}`}  onClick={() => setTab('reverse')}>판매가 역산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'increase' ? styles.tabActive : ''}`} onClick={() => setTab('increase')}>가격 인상 시뮬</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'monthly' ? styles.tabActive : ''}`}  onClick={() => setTab('monthly')}>월 수익 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'main'} className={`${styles.tabBtn} ${tab === 'main' ? styles.tabActive : ''}`}     onClick={() => setTab('main')}>원가율 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'reverse'} className={`${styles.tabBtn} ${tab === 'reverse' ? styles.tabActive : ''}`}  onClick={() => setTab('reverse')}>판매가 역산</button>
+        <button type="button" role="tab" aria-selected={tab === 'increase'} className={`${styles.tabBtn} ${tab === 'increase' ? styles.tabActive : ''}`} onClick={() => setTab('increase')}>가격 인상 시뮬</button>
+        <button type="button" role="tab" aria-selected={tab === 'monthly'} className={`${styles.tabBtn} ${tab === 'monthly' ? styles.tabActive : ''}`}  onClick={() => setTab('monthly')}>월 수익 계산</button>
       </div>
 
       {/* ──────────────────────── 공통 입력 (탭 1·2·3) ──────────────────────── */}

@@ -275,8 +275,8 @@ export default function RoomAreaClient() {
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => setTab('detail')}>상세 계산 (방·벽별)</button>
+        <button type="button" role="tab" aria-selected={tab === 'simple'} className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'detail'} className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => setTab('detail')}>상세 계산 (방·벽별)</button>
       </div>
 
       {/* ────────────── 탭 1: 간편 ────────────── */}

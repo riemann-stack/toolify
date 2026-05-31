@@ -330,9 +330,9 @@ export default function LightingClient() {
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'calc' ? styles.tabActive : ''}`}    onClick={() => setTab('calc')}>밝기 계산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'convert' ? styles.tabActive : ''}`} onClick={() => setTab('convert')}>W ↔ 루멘 환산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'guide' ? styles.tabActive : ''}`}   onClick={() => setTab('guide')}>공간별 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${styles.tabBtn} ${tab === 'calc' ? styles.tabActive : ''}`}    onClick={() => setTab('calc')}>밝기 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${styles.tabBtn} ${tab === 'convert' ? styles.tabActive : ''}`} onClick={() => setTab('convert')}>W ↔ 루멘 환산</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${styles.tabBtn} ${tab === 'guide' ? styles.tabActive : ''}`}   onClick={() => setTab('guide')}>공간별 가이드</button>
       </div>
 
       {/* ────────────── 탭 1: 밝기 계산 ────────────── */}

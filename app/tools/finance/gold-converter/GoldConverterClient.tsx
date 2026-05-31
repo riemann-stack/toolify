@@ -57,6 +57,7 @@ export default function GoldConverterClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const s = JSON.parse(raw) as Partial<StoredState>
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (typeof s.weight === 'number') setWeight(s.weight)
         if (s.unit) setUnit(s.unit)
         if (s.karat) setKarat(s.karat)

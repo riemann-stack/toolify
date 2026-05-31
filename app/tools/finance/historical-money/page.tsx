@@ -69,7 +69,7 @@ export default function HistoricalMoneyPage() {
         💴 한국 화폐가치 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        圓·환·원 화폐사 + <strong style={{ color: 'var(--text)' }}>1945~2026 구매력 환산</strong>. "1960년 짜장면 50환은 지금 얼마?"
+        圓·환·원 화폐사 + <strong style={{ color: 'var(--text)' }}>1945~2026 구매력 환산</strong>. &ldquo;1960년 짜장면 50환은 지금 얼마?&rdquo;
       </p>
 
       <HistoricalMoneyClient />

@@ -68,6 +68,7 @@ export default function WeightLossClient() {
   // SSR/Client 일치를 위해 빈 문자열로 초기화 → useEffect에서 클라이언트 시각으로 설정 (hydration 안전)
   const [startDate, setStartDate]         = useState('')
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStartDate(todayISO())
   }, [])
 
@@ -97,6 +98,7 @@ export default function WeightLossClient() {
   /* 탭 2: 목표일 역산 */
   const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTargetDate(addDays(todayISO(), 56))
   }, [])
   const targetDateResult = useMemo(() => {

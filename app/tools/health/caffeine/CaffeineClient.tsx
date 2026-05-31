@@ -162,6 +162,7 @@ export default function CaffeineClient() {
 
   // 초기 로드
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEntries(loadEntries())
   }, [])
   // 저장
@@ -173,6 +174,7 @@ export default function CaffeineClient() {
   useEffect(() => {
     if (timeMode !== 'now') return
     const d = new Date(nowMs)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCustomH(d.getHours())
     setCustomM(d.getMinutes())
   }, [timeMode, nowMs])

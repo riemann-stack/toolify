@@ -49,6 +49,7 @@ export default function RadiationClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (j.doseUnit) setDoseUnit(j.doseUnit)
       if (typeof j.doseInput === 'string') setDoseInput(j.doseInput)
       if (j.absUnit) setAbsUnit(j.absUnit)

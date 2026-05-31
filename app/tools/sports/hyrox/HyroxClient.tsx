@@ -40,6 +40,7 @@ export default function HyroxClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const j = JSON.parse(raw)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (j.level) setLevel(j.level)
         if (j.paceMin) setPaceMin(j.paceMin)
         if (j.paceSec) setPaceSec(j.paceSec)
@@ -108,9 +109,9 @@ export default function HyroxClient() {
       </Disclaimer>
 
       <div className={s.tabs} role="tablist">
-        <button type="button" className={`${s.tabBtn} ${tab === 'predict' ? s.tabActive : ''}`} onClick={() => setTab('predict')}>완주 시간 예측</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'target' ? s.tabActive : ''}`} onClick={() => setTab('target')}>목표 역산</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'weights' ? s.tabActive : ''}`} onClick={() => setTab('weights')}>부문별 중량</button>
+        <button type="button" role="tab" aria-selected={tab === 'predict'} className={`${s.tabBtn} ${tab === 'predict' ? s.tabActive : ''}`} onClick={() => setTab('predict')}>완주 시간 예측</button>
+        <button type="button" role="tab" aria-selected={tab === 'target'} className={`${s.tabBtn} ${tab === 'target' ? s.tabActive : ''}`} onClick={() => setTab('target')}>목표 역산</button>
+        <button type="button" role="tab" aria-selected={tab === 'weights'} className={`${s.tabBtn} ${tab === 'weights' ? s.tabActive : ''}`} onClick={() => setTab('weights')}>부문별 중량</button>
       </div>
 
       {/* ───────── 탭 1·2 공통 입력 ───────── */}

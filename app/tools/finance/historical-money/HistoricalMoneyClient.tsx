@@ -27,6 +27,7 @@ export default function HistoricalMoneyClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (j.direction) setDirection(j.direction)
       if (typeof j.pastYear === 'number') setPastYear(j.pastYear)
       if (typeof j.amount === 'string') setAmount(j.amount)

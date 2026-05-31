@@ -32,6 +32,7 @@ export default function ViscosityClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (j.scale) setScale(j.scale)
       if (typeof j.input === 'string') setInput(j.input)
       if (typeof j.density === 'string') setDensity(j.density)

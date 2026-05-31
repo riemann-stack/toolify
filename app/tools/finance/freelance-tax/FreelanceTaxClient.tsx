@@ -50,6 +50,7 @@ export default function FreelanceTaxClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed = JSON.parse(raw)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInputs((prev) => ({ ...prev, ...parsed }))
       }
     } catch { /* 무시 */ }
@@ -451,6 +452,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
   const [depSim, setDepSim] = useState(inputs.dependents)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setYellowSim(inputs.yellowUmbrella)
     setPensionSim(inputs.pensionSavings)
     setDepSim(inputs.dependents)
@@ -579,6 +581,7 @@ function GuideTab() {
     const deadline = new Date(year, 4, 31, 23, 59, 59)  // 5월 31일
     const ms = deadline.getTime() - now.getTime()
     const daysLeft = Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setToday({ now, deadline, daysLeft })
   }, [])
 

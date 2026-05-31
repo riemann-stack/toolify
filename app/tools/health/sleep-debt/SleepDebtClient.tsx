@@ -204,6 +204,7 @@ export default function SleepDebtClient() {
 
   // 초기 로드
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEntries(loadEntries())
   }, [])
   // 저장

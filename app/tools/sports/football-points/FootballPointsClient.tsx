@@ -307,9 +307,9 @@ export default function FootballPointsClient() {
 
       {/* ── 탭 ── */}
       <div className={styles.tabs} role="tablist">
-        <button type="button" className={`${styles.tabBtn} ${tab === 'main' ? styles.tabActive : ''}`}     onClick={() => setTab('main')}>승점 계산</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'scenario' ? styles.tabActive : ''}`} onClick={() => setTab('scenario')}>시나리오 분석</button>
-        <button type="button" className={`${styles.tabBtn} ${tab === 'rival' ? styles.tabActive : ''}`}    onClick={() => setTab('rival')}>라이벌 비교</button>
+        <button type="button" role="tab" aria-selected={tab === 'main'} className={`${styles.tabBtn} ${tab === 'main' ? styles.tabActive : ''}`}     onClick={() => setTab('main')}>승점 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'scenario'} className={`${styles.tabBtn} ${tab === 'scenario' ? styles.tabActive : ''}`} onClick={() => setTab('scenario')}>시나리오 분석</button>
+        <button type="button" role="tab" aria-selected={tab === 'rival'} className={`${styles.tabBtn} ${tab === 'rival' ? styles.tabActive : ''}`}    onClick={() => setTab('rival')}>라이벌 비교</button>
       </div>
 
       {/* ── 우리 팀 입력 카드 (모든 탭 공통) ── */}

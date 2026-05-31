@@ -50,6 +50,7 @@ export default function VO2MaxClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (j.methodId) setMethodId(j.methodId)
       if (typeof j.age === 'number') setAge(j.age)
       if (j.sex) setSex(j.sex)

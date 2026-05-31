@@ -64,6 +64,7 @@ export default function HousingScoreClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (j.birthDate) setBirthDate(j.birthDate)
       if (j.marriedStatus) setMarriedStatus(j.marriedStatus)
       if (j.marriedDate) setMarriedDate(j.marriedDate)

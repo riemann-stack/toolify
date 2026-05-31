@@ -138,7 +138,7 @@ export default function RadiationPage() {
         <section>
           <h2 style={sectionTitle}>이온화 방사선 vs 비이온화 전자파</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            "방사선"과 "전자파"는 일상에서 혼용되지만 물리적으로 매우 다른 영역입니다. 본 도구의 단위 환산은 <strong style={{ color: 'var(--text)' }}>이온화 방사선</strong>(에너지가 원자에서 전자를 떼어낼 만큼 큰)에만 적용됩니다.
+            &ldquo;방사선&rdquo;과 &ldquo;전자파&rdquo;는 일상에서 혼용되지만 물리적으로 매우 다른 영역입니다. 본 도구의 단위 환산은 <strong style={{ color: 'var(--text)' }}>이온화 방사선</strong>(에너지가 원자에서 전자를 떼어낼 만큼 큰)에만 적용됩니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[

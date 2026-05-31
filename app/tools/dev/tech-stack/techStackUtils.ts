@@ -276,7 +276,7 @@ export const DEFAULT_INPUTS: UserInputs = {
 }
 
 /* ─── 추천 알고리즘 ─── */
-export interface Weights extends StackScores {}
+export type Weights = StackScores
 
 /** 입력에 따라 7축 가중치 결정 */
 export function computeWeights(inputs: UserInputs): Weights {

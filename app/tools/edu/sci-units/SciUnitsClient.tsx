@@ -28,9 +28,9 @@ export default function SciUnitsClient() {
       </Disclaimer>
 
       <div className={s.tabs} role="tablist">
-        <button type="button" className={`${s.tabBtn} ${tab === 'notation' ? s.tabActive : ''}`} onClick={() => setTab('notation')}>접두어·표기 변환</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'units' ? s.tabActive : ''}`} onClick={() => setTab('units')}>과학 스케일 단위</button>
-        <button type="button" className={`${s.tabBtn} ${tab === 'constants' ? s.tabActive : ''}`} onClick={() => setTab('constants')}>물리 상수표</button>
+        <button type="button" role="tab" aria-selected={tab === 'notation'} className={`${s.tabBtn} ${tab === 'notation' ? s.tabActive : ''}`} onClick={() => setTab('notation')}>접두어·표기 변환</button>
+        <button type="button" role="tab" aria-selected={tab === 'units'} className={`${s.tabBtn} ${tab === 'units' ? s.tabActive : ''}`} onClick={() => setTab('units')}>과학 스케일 단위</button>
+        <button type="button" role="tab" aria-selected={tab === 'constants'} className={`${s.tabBtn} ${tab === 'constants' ? s.tabActive : ''}`} onClick={() => setTab('constants')}>물리 상수표</button>
       </div>
 
       {tab === 'notation' && <NotationTab />}
