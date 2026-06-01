@@ -22,14 +22,7 @@ import {
 
 type TabId = 'main' | 'quote' | 'net' | 'invoice' | 'gs'
 
-const QUICK_AMOUNTS = [
-  { label: '11,000원', amount: 11_000, mode: 'remove' as VatMode },
-  { label: '110,000원', amount: 110_000, mode: 'remove' as VatMode },
-  { label: '330,000원', amount: 330_000, mode: 'remove' as VatMode },
-  { label: '1,100,000원', amount: 1_100_000, mode: 'remove' as VatMode },
-]
-
-const NET_PRESETS = [50, 100, 200, 300, 500, 1000]   // 만원
+const NET_PRESETS = [50, 100, 200, 300, 500]   // 만원
 
 export default function VatClient() {
   const [tab, setTab] = useState<TabId>('main')
@@ -204,7 +197,6 @@ export default function VatClient() {
               {[
                 { v: 'add' as VatMode,    label: '부가세 추가',   desc: '공급가액 → 합계' },
                 { v: 'remove' as VatMode, label: '부가세 역산',   desc: '합계 → 공급가액' },
-                { v: 'calc' as VatMode,   label: '부가세만 계산', desc: '공급가액 × 세율' },
               ].map(m => (
                 <button key={m.v}
                   className={`${styles.modeBtn} ${mode === m.v ? styles.modeBtnActive : ''}`}
@@ -216,7 +208,7 @@ export default function VatClient() {
             </div>
           </div>
 
-          <div className={styles.twoCol}>
+          <div className={styles.inputDuo}>
             <div className={styles.card}>
               <div className={styles.cardLabel}>{mode === 'remove' ? '공급대가 (합계)' : '공급가액'}</div>
               <div className={styles.inputRow}>
@@ -224,14 +216,6 @@ export default function VatClient() {
                   placeholder="100000" value={amount}
                   onChange={e => setAmount(e.target.value)} />
                 <span className={styles.unit}>원</span>
-              </div>
-              <div className={styles.chips}>
-                {QUICK_AMOUNTS.map(q => (
-                  <button key={q.amount}
-                    className={styles.chip}
-                    onClick={() => { setAmount(String(q.amount)); setMode(q.mode) }}
-                  >{q.label}</button>
-                ))}
               </div>
             </div>
 
@@ -248,7 +232,7 @@ export default function VatClient() {
                   <button key={r}
                     className={`${styles.chip} ${rate === r ? styles.chipActive : ''}`}
                     onClick={() => setRate(r)}>
-                    {r === '0' ? '면세 (0%)' : `일반 (${r}%)`}
+                    {r === '0' ? '면세' : `일반 ${r}%`}
                   </button>
                 ))}
               </div>
@@ -282,24 +266,14 @@ export default function VatClient() {
               <div className={`${styles.hero} ${styles.heroAccent}`}>
                 <div className={styles.heroLabel}>합계 금액 (공급대가)</div>
                 <div className={`${styles.heroNum} ${styles.heroNumAccent}`}>{formatKRW(mainResult.total)}원</div>
-                <div className={styles.heroSub}>
-                  공급가액 {formatKRW(mainResult.supplyAmount)}원 + 부가세 {formatKRW(mainResult.vat)}원
-                </div>
-              </div>
-
-              <div className={styles.card}>
-                <div className={styles.resultGrid}>
-                  <div className={styles.resultItem}>
-                    <div className={styles.resultLabel}>공급가액</div>
-                    <div className={styles.resultValue}>{formatKRW(mainResult.supplyAmount)}원</div>
+                <div className={styles.resultBreakdown}>
+                  <div className={styles.breakdownRow}>
+                    <span>공급가액</span>
+                    <span>{formatKRW(mainResult.supplyAmount)}원</span>
                   </div>
-                  <div className={styles.resultItem}>
-                    <div className={styles.resultLabel}>부가세 ({rate}%)</div>
-                    <div className={`${styles.resultValue} ${styles.vatValue}`}>{formatKRW(mainResult.vat)}원</div>
-                  </div>
-                  <div className={`${styles.resultItem} ${styles.resultGridFull}`}>
-                    <div className={styles.resultLabel}>합계 (공급대가)</div>
-                    <div className={`${styles.resultValue} ${styles.totalValue}`}>{formatKRW(mainResult.total)}원</div>
+                  <div className={styles.breakdownRow}>
+                    <span>부가세 ({rate}%)</span>
+                    <span className={styles.vatValue}>{formatKRW(mainResult.vat)}원</span>
                   </div>
                 </div>
               </div>
@@ -601,7 +575,7 @@ export default function VatClient() {
           <div className={styles.threeCol}>
             <div className={styles.card}>
               <div className={styles.cardLabel}>작성일자</div>
-              <input className={styles.textInput} type="date"
+              <input className={`${styles.textInput} ${styles.dateInput}`} type="date"
                 value={invoiceDate} onChange={e => setInvoiceDate(e.target.value)} />
             </div>
             <div className={styles.card}>

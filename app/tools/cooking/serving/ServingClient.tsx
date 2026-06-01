@@ -8,7 +8,7 @@ import {
   SERVING_DATA, CAT_LABEL, MEAL_LABEL, APPETITE_LABEL, AGE_LABEL,
   APPETITE_MULT, VARIANT_CHOICES, DIETARY_LABEL,
   AGE_BAND_LABEL, AGE_BAND_FACTOR,
-  loadFamily, saveFamily, familyToEffectivePeople,
+  loadFamily, saveFamily, familyToEffectivePeople, todayKST,
   type Category, type ServingData, type MealType, type Appetite,
   type AgeGroup, type Carb, type DietaryFlag,
   type FamilyMember, type AgeBand,
@@ -19,6 +19,18 @@ type TabKey = 'serving' | 'shopping' | 'family'
 function fmt(v: number): string { return Math.round(v).toLocaleString() }
 function roundTo(v: number, step: number): number { return Math.round(v / step) * step }
 function uid(): string { return Math.random().toString(36).slice(2, 10) }
+
+// 보조 개수 단위 환산 힌트 — 'g (모)' 처럼 괄호 단위 + gramsPerPiece 있을 때 "약 N모"
+function pieceHint(item: ServingData, min: number, max: number): string | null {
+  if (!item.gramsPerPiece) return null
+  const m = item.unit.match(/\(([^)]+)\)/)
+  if (!m) return null
+  const u = m[1]
+  const f = (v: number) => v >= 10 ? String(Math.round(v)) : String(Math.round(v * 10) / 10)
+  const lo = f(min / item.gramsPerPiece)
+  const hi = f(max / item.gramsPerPiece)
+  return lo === hi ? `약 ${lo}${u}` : `약 ${lo}~${hi}${u}`
+}
 
 interface Applied {
   meal: MealType
@@ -173,7 +185,7 @@ export default function ServingClient() {
   // 마크다운 장보기 카드
   const shoppingMarkdown = useMemo(() => {
     if (finalShoppingItems.length === 0) return ''
-    const today = new Date().toISOString().slice(0, 10)
+    const today = todayKST()
     const lines: string[] = []
     lines.push(`# 🛒 ${peopleLabel} 장보기 — ${MEAL_LABEL[mealType]}`)
     lines.push(`📅 ${today}`)
@@ -192,7 +204,9 @@ export default function ServingClient() {
         } else {
           const stockNote = x.inStock > 0 ? ` (보유 ${x.inStock}${u} 빼고)` : ''
           const pkgNote = x.item.marketPackage ? ` · 패키지: ${x.item.marketPackage}` : ''
-          lines.push(`- ${x.item.emoji} ${x.item.name}: ${x.needMin}~${x.needMax}${u}${stockNote}${pkgNote}`)
+          const ph = pieceHint(x.item, x.needMin, x.needMax)
+          const pieceNote = ph ? ` (${ph})` : ''
+          lines.push(`- ${x.item.emoji} ${x.item.name}: ${x.needMin}~${x.needMax}${u}${pieceNote}${stockNote}${pkgNote}`)
         }
       }
       lines.push('')
@@ -244,10 +258,10 @@ export default function ServingClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${styles.tabs} ${styles.tabs3}`}>
-        <button className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>🍽️ 재료별 분량</button>
-        <button className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>🛒 장보기 목록</button>
-        <button className={`${styles.tab} ${tab === 'family' ? styles.tabActive : ''}`} onClick={() => setTab('family')}>👪 내 가족</button>
+      <div className={`${styles.tabs} ${styles.tabs3}`} role="tablist">
+        <button role="tab" aria-selected={tab === 'serving'} className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>🍽️ 재료별 분량</button>
+        <button role="tab" aria-selected={tab === 'shopping'} className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>🛒 장보기 목록</button>
+        <button role="tab" aria-selected={tab === 'family'} className={`${styles.tab} ${tab === 'family' ? styles.tabActive : ''}`} onClick={() => setTab('family')}>👪 내 가족</button>
       </div>
 
       {/* ══════════ TAB 1: 재료별 분량 ══════════ */}
@@ -255,13 +269,13 @@ export default function ServingClient() {
         <>
           {/* 식이 제한 (필터) */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>🥬 식이 제한 (선택 · 자동 필터)</label>
+            <label className={styles.cardLabel}>식이 제한 (선택 · 자동 필터)</label>
             <div className={styles.dietaryRow}>
               {(Object.keys(DIETARY_LABEL) as DietaryFlag[]).map((f) => (
-                <button key={f} type="button"
+                <button key={f} type="button" role="checkbox" aria-checked={dietary.includes(f)}
                   className={`${styles.dietaryChip} ${dietary.includes(f) ? styles.dietaryChipActive : ''}`}
                   onClick={() => toggleDietary(f)}>
-                  {dietary.includes(f) ? '✓' : '☐'} {DIETARY_LABEL[f]}
+                  {DIETARY_LABEL[f]}
                 </button>
               ))}
             </div>
@@ -295,7 +309,7 @@ export default function ServingClient() {
                         const active = selected.includes(it.key)
                         const num = active ? selected.indexOf(it.key) + 1 : 0
                         return (
-                          <button key={it.key} type="button"
+                          <button key={it.key} type="button" aria-pressed={active}
                             className={`${styles.ingBtn} ${active ? styles.ingActive : ''}`}
                             onClick={() => toggle(it.key)}>
                             <span className={styles.ingEmoji}>{it.emoji}</span>
@@ -345,7 +359,7 @@ export default function ServingClient() {
                 </div>
                 <div className={styles.quickRow}>
                   {[1, 2, 3, 4, 6].map((n) => (
-                    <button key={n} type="button"
+                    <button key={n} type="button" aria-pressed={people === n}
                       className={`${styles.quickBtn} ${people === n ? styles.quickActive : ''}`}
                       onClick={() => setPeople(n)}>{n}인</button>
                   ))}
@@ -355,7 +369,7 @@ export default function ServingClient() {
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>연령 구성</div>
                   <div className={styles.condRow}>
                     {(['adultOnly', 'adultChild', 'childOnly'] as AgeGroup[]).map((g) => (
-                      <button key={g} type="button"
+                      <button key={g} type="button" aria-pressed={ageGroup === g}
                         className={`${styles.condBtn} ${ageGroup === g ? styles.condActive : ''}`}
                         onClick={() => setAgeGroup(g)}>{AGE_LABEL[g]}</button>
                     ))}
@@ -373,6 +387,11 @@ export default function ServingClient() {
                       <span className={styles.effPeople}>실질 {peopleEff.toFixed(1)}인분</span>
                     </div>
                   )}
+                  {ageGroup !== 'adultOnly' && (
+                    <p className={styles.cardSub} style={{ marginTop: 8 }}>
+                      기본 모드의 아이는 평균 계수(약 0.6)로 계산합니다. 영아·유아·초등·중·고생 등 <strong>연령별 정확 계산</strong>은 위 <strong>👪 내 가족</strong> 탭을 이용하세요.
+                    </p>
+                  )}
                 </div>
               </>
             )}
@@ -385,7 +404,7 @@ export default function ServingClient() {
               <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사 유형</div>
               <div className={styles.condRow}>
                 {(['main', 'side', 'snack', 'light'] as MealType[]).map((m) => (
-                  <button key={m} type="button"
+                  <button key={m} type="button" aria-pressed={mealType === m}
                     className={`${styles.condBtn} ${mealType === m ? styles.condActive : ''}`}
                     onClick={() => setMealType(m)}>{MEAL_LABEL[m]}</button>
                 ))}
@@ -395,7 +414,7 @@ export default function ServingClient() {
               <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사량</div>
               <div className={styles.condRow}>
                 {(['small', 'normal', 'large'] as Appetite[]).map((a) => (
-                  <button key={a} type="button"
+                  <button key={a} type="button" aria-pressed={appetite === a}
                     className={`${styles.condBtn} ${appetite === a ? styles.condActive : ''}`}
                     onClick={() => setAppetite(a)}>{APPETITE_LABEL[a]}</button>
                 ))}
@@ -404,23 +423,23 @@ export default function ServingClient() {
             <div style={{ marginBottom: availableVariants.length > 0 ? 14 : 0 }}>
               <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>탄수화물(밥/면) 포함</div>
               <div className={styles.condRow}>
-                <button type="button"
+                <button type="button" aria-pressed={carb === 'yes'}
                   className={`${styles.condBtn} ${carb === 'yes' ? styles.condActive : ''}`}
-                  onClick={() => setCarb('yes')}>🍚 포함</button>
-                <button type="button"
+                  onClick={() => setCarb('yes')}>포함</button>
+                <button type="button" aria-pressed={carb === 'no'}
                   className={`${styles.condBtn} ${carb === 'no' ? styles.condActive : ''}`}
-                  onClick={() => setCarb('no')}>🚫 없음</button>
+                  onClick={() => setCarb('no')}>없음</button>
               </div>
             </div>
             {availableVariants.length > 0 && (
               <div>
                 <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>조리 방식 (선택)</div>
                 <div className={styles.condRow}>
-                  <button type="button"
+                  <button type="button" aria-pressed={variant === null}
                     className={`${styles.condBtn} ${variant === null ? styles.condActive : ''}`}
                     onClick={() => setVariant(null)}>자동</button>
                   {availableVariants.map((v) => (
-                    <button key={v} type="button"
+                    <button key={v} type="button" aria-pressed={variant === v}
                       className={`${styles.condBtn} ${variant === v ? styles.condActive : ''}`}
                       onClick={() => setVariant(v)}>{v}</button>
                   ))}
@@ -456,6 +475,11 @@ export default function ServingClient() {
                       <span className={styles.amountMax}>{fmt(calc.max)}</span>
                       <span className={styles.amountUnit}>{item.unit.split(' ')[0]}</span>
                     </div>
+                    {pieceHint(item, calc.min, calc.max) && (
+                      <div style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginTop: 4 }}>
+                        ≈ {pieceHint(item, calc.min, calc.max)}
+                      </div>
+                    )}
                     {item.marketPackage && (
                       <div className={styles.amountPkg}>📦 {item.marketPackage}</div>
                     )}

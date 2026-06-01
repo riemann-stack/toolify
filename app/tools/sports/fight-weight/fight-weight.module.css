@@ -293,6 +293,57 @@
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+/* 현재 체급 이름 (체급 검색 HERO) */
+.heroClassName {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(26px, 6.5vw, 38px);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+/* ── 체급 사다리 (체급 검색) ── */
+.ladder { display: flex; flex-direction: column; gap: 5px; }
+.ladderRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.ladderCurrent {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.ladderName {
+  font-size: 13.5px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.ladderCurrent .ladderName { color: var(--accent); font-weight: 700; }
+.ladderLimit {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ladderTag {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ladderTagCurrent { background: var(--accent); color: #ffffff; }
+.ladderTagOver { background: rgba(220,38,38,0.14); color: #DC2626; }
+.ladderTagOk { background: rgba(16,185,129,0.16); color: #059669; }
 
 /* ── KPI ── */
 .kpiGrid {
@@ -398,18 +449,19 @@
 
 /* ── 건강 경고 ── */
 .healthWarn {
-  background: rgba(255,70,70,0.08);
-  border: 2px solid rgba(255,70,70,0.4);
+  background: rgba(220,38,38,0.08);
+  border: 2px solid rgba(220,38,38,0.45);
   border-radius: 14px;
   padding: 16px 20px;
   font-size: 13px;
-  color: #FFD0D0;
+  color: var(--text);
   line-height: 1.85;
   display: flex;
   gap: 12px;
   align-items: flex-start;
 }
 .healthWarn strong { color: #DC2626; font-weight: 700; }
+.healthWarn li { color: var(--text); }
 .healthWarn ul { margin: 8px 0 0 0; padding-left: 18px; }
 .healthWarn li { margin: 3px 0; }
 .warnIcon { font-size: 22px; flex-shrink: 0; }

@@ -33,10 +33,10 @@ const DEFAULT_INPUTS: CalcInputs = {
 }
 
 const TABS = [
-  { k: 'quick',    l: '🧮 빠른 계산' },
-  { k: 'compare',  l: '📊 시나리오 비교' },
-  { k: 'optimize', l: '💡 절세 시뮬' },
-  { k: 'guide',    l: '📅 신고 가이드' },
+  { k: 'quick',    l: '빠른 계산' },
+  { k: 'compare',  l: '시나리오 비교' },
+  { k: 'optimize', l: '절세 시뮬' },
+  { k: 'guide',    l: '신고 가이드' },
 ] as const
 
 export default function FreelanceTaxClient() {
@@ -170,9 +170,16 @@ function QuickCalcTab({ inputs, result, update }: {
           <span className={styles.amountUnit}>원</span>
         </div>
         <div className={styles.quickChips}>
-          {[20_000_000, 30_000_000, 50_000_000, 70_000_000, 100_000_000, 150_000_000].map((v) => (
+          {[
+            { v: 20_000_000,  l: '2,000만원' },
+            { v: 30_000_000,  l: '3,000만원' },
+            { v: 50_000_000,  l: '5,000만원' },
+            { v: 70_000_000,  l: '7,000만원' },
+            { v: 100_000_000, l: '1억원' },
+            { v: 150_000_000, l: '1.5억원' },
+          ].map(({ v, l }) => (
             <button key={v} className={styles.quickChip} onClick={() => update('revenue', v)}>
-              {fmtKRW(v)}
+              {l}
             </button>
           ))}
         </div>

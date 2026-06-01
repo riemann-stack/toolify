@@ -110,7 +110,7 @@ export default function RacePredictorPage() {
 
       {/* 2. 공식별 추천 거리 */}
       <h2 style={sectionTitle}>📊 공식별 추천 사용 거리</h2>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -147,7 +147,7 @@ export default function RacePredictorPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         본 도구의 <strong style={{ color: 'var(--text)' }}>환경 보정</strong> 체크박스를 켜면 기온·습도·고도 슬라이더로 즉시 보정된 기록을 확인할 수 있습니다. 봄·가을 평시 기록과 한여름 대회 기록은 같은 능력에서도 5~10% 차이 납니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -183,7 +183,7 @@ export default function RacePredictorPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         도구의 <strong style={{ color: 'var(--text)' }}>목표 역산 탭</strong>에서 풀 마라톤 목표 시간을 넣으면, 그 능력에 도달하기 위한 5km·10km·하프 기록을 자동 계산합니다. 본인 현재 기록을 함께 입력하면 격차(VDOT 차)와 예상 향상 기간까지 보여줍니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -212,7 +212,7 @@ export default function RacePredictorPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         WMA(World Masters Athletics) 통계 평균을 기준으로, 본 도구의 연령·성별 보정 옵션은 본인 기록을 동급 능력의 20대 남성 환산 시간으로 비교 표시합니다. 통계 평균이며 개인차 큼 — 꾸준한 훈련 = 연령 극복 가능.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>

@@ -77,7 +77,7 @@ export default function FryingPage() {
             재료별 튀김 시간 빠른 참조표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
-            * 기준: 생재료, 보통 크기, 보통 튀김옷, 180°C
+            * 기준: 생재료, 보통 크기, 보통 튀김옷, 각 재료 권장 온도 (위 계산기와 동일). 조건이 바뀌면 계산기에서 자동 보정됩니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 560 }}>
@@ -92,7 +92,7 @@ export default function FryingPage() {
                 {[
                   { n: '🍟 감자튀김', t: '160→180°C', a: '3~4분',   b: '1~1.5분', p: '2차 필수' },
                   { n: '🍤 새우튀김', t: '170~180°C', a: '1.5~2.5분', b: '없음',   p: '빨리 꺼내기' },
-                  { n: '🥩 돈까스',   t: '160~175°C', a: '4~6분',   b: '선택',   p: '내부 확인 필수' },
+                  { n: '🥩 돈까스',   t: '160~180°C', a: '4~6분',   b: '선택',   p: '내부 확인 필수' },
                   { n: '🍗 치킨',     t: '160~175°C', a: '12~15분', b: '2~3분',  p: '75°C 확인' },
                   { n: '🦑 오징어',   t: '175~185°C', a: '1~2분',   b: '없음',   p: '오래 튀기면 질김' },
                   { n: '🥟 만두',     t: '165~180°C', a: '4~6분',   b: '없음',   p: '과밀 금지' },
@@ -228,7 +228,7 @@ export default function FryingPage() {
               '중간에 젓가락으로 저어주기 (균일 가열)',
               '건져낸 후 기름 망 위에 세워 놓기',
               '소금은 완성 직후 뿌리기',
-              '2차 튀김 전 5분 휴지',
+              '2차 튀김 전 2~3분 휴지',
               '먹기 직전 고온 30초 재가열',
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', gap: '10px', alignItems: 'center' }}>

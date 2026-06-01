@@ -106,7 +106,7 @@ export default function StrengthLevelPage() {
         20대 남성 기준 (체중 대비 1RM 배수)입니다. 도구에서 성별·연령을 선택하면 자동 보정된 값으로 평가되며,
         <Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}> 1RM 계산기</Link>와 동일한 기준을 사용합니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -135,7 +135,7 @@ export default function StrengthLevelPage() {
         두 점수 모두 체중이 다른 사람의 근력을 한 줄로 세우기 위한 <strong style={{ color: 'var(--text)' }}>계수 보정 점수</strong>입니다.
         3대 합(kg)에 체중·성별 기반 계수를 곱해 산출합니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -158,7 +158,7 @@ export default function StrengthLevelPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         대략적인 해석 기준입니다 (남녀 공통, 점수 자체가 성별 보정을 포함). 절대선이 아니라 <strong style={{ color: 'var(--text)' }}>참고 구간</strong>으로 보세요.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -182,7 +182,7 @@ export default function StrengthLevelPage() {
         레벨 기준은 20대 남성을 기준으로, 여성·고연령일수록 같은 레벨에 더 낮은 절대 무게로 도달하도록 보정합니다
         (<Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}>1RM 계산기</Link>와 동일).
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>

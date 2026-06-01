@@ -40,16 +40,17 @@ const PATTERNS: { id: string; label: string }[] = [
 ]
 
 // ── 계산 로직 ─────────────────────────────
+const FLOUR_FACTOR: Record<PFlour, number> = { bread: 1.0, whole: 0.85, rye: 0.7 }
+
 function getPeakHours(
   temp: number,
   ratio: number,
-  flour: PFlour,
+  flourFactor: number,
   cond: Cond
 ): { min: number; max: number; base: number } {
   const BASE = 4
   const tempFactor = Math.pow(2, (24 - temp) / 10)
   const ratioFactor = Math.log2(ratio + 1) * 0.8
-  const flourFactor = { bread: 1.0, whole: 0.85, rye: 0.7 }[flour]
   const condFactor = { peak: 1.0, afterPeak: 1.2, deflated: 1.5, fridge: 2.5 }[cond]
   const hours = BASE * tempFactor * ratioFactor * flourFactor * condFactor
   return { min: Math.max(1, Math.round(hours * 0.8)), max: Math.round(hours * 1.2), base: hours }
@@ -74,8 +75,13 @@ function getDiagnosticScore(checks: Set<string>, day: number, temp: number) {
   score += dayBonus
   if (temp >= 22 && temp <= 26) score += 10
 
-  const stage: 'initial' | 'unstable' | 'stabilizing' | 'stable' =
+  let stage: 'initial' | 'unstable' | 'stabilizing' | 'stable' =
     score < 30 ? 'initial' : score < 55 ? 'unstable' : score < 75 ? 'stabilizing' : 'stable'
+  // 안정화 '완료'는 반복 가능한 피크 신호(repeatable/samePeakTime)가 필수 — FAQ 정의와 일치
+  // (점수만 높고 패턴 반복 확인이 없으면 '안정화 진행 중'으로 유지)
+  if (stage === 'stable' && !checks.has('repeatable') && !checks.has('samePeakTime')) {
+    stage = 'stabilizing'
+  }
   const daysLeft = stage === 'stable' ? 0 : stage === 'stabilizing' ? 2 : stage === 'unstable' ? 5 : 10
   return { score, stage, daysLeft }
 }
@@ -173,13 +179,19 @@ export default function SourdoughClient() {
   const interpretations = useMemo(() => interpretChecks(checks, day), [checks, day])
 
   // 진단 탭의 급이 비율·밀가루 → 피크 시간 추정
-  const diagFlour: PFlour = flour === 'bread' ? 'bread' : flour === 'mixed-rye' || flour === 'mixed-both' ? 'rye' : 'whole'
+  // 통밀/호밀 비율(wholePct)만큼 백밀(1.0)과 통밀/호밀 계수를 블렌딩 — 비율이 높을수록 발효 빨라짐
+  const diagFlourFactor = useMemo(() => {
+    if (flour === 'bread') return 1.0
+    const pure = (flour === 'mixed-rye' || flour === 'mixed-both') ? FLOUR_FACTOR.rye : FLOUR_FACTOR.whole
+    const pct = wholePct / 100
+    return 1.0 * (1 - pct) + pure * pct
+  }, [flour, wholePct])
   const effRatio: number = useMemo(() => {
     if (customRatio && +customRatio > 0) return +customRatio
     return ratio
   }, [customRatio, ratio])
   const diagCond: Cond = diag.stage === 'stable' ? 'peak' : diag.stage === 'stabilizing' ? 'afterPeak' : 'deflated'
-  const diagPeak = useMemo(() => getPeakHours(temp, effRatio, diagFlour, diagCond), [temp, effRatio, diagFlour, diagCond])
+  const diagPeak = useMemo(() => getPeakHours(temp, effRatio, diagFlourFactor, diagCond), [temp, effRatio, diagFlourFactor, diagCond])
 
   // 추천 급이 간격
   const recInterval = useMemo(() => {
@@ -195,7 +207,11 @@ export default function SourdoughClient() {
 
   // 다음 급이 & 피크 시각
   const feedDate = useMemo(() => {
-    const d = new Date(); d.setHours(feedHour, feedMin, 0, 0); return d
+    const ref = new Date()
+    const d = new Date(ref); d.setHours(feedHour, feedMin, 0, 0)
+    // 선택한 급이 시각이 현재보다 미래면 '어제'로 해석 (가장 최근 급이)
+    if (d.getTime() > ref.getTime()) d.setDate(d.getDate() - 1)
+    return d
   }, [feedHour, feedMin])
   const nextFeed = addHours(feedDate, freq === 2 ? 12 : recInterval)
   const peakStart = addHours(feedDate, diagPeak.min)
@@ -204,14 +220,13 @@ export default function SourdoughClient() {
   /* ════ 탭2 상태 ════ */
   const [pRatio, setPRatio] = useState<Ratio>(2)
   const [pCustomRatio, setPCustomRatio] = useState('')
-  const [inoculation, setInoculation] = useState(20)
   const [pFlour, setPFlour] = useState<PFlour>('bread')
   const [pTemp, setPTemp] = useState(24)
   const [pCond, setPCond] = useState<Cond>('peak')
   const [bakeHour, setBakeHour] = useState(7)
 
   const pEffRatio = pCustomRatio && +pCustomRatio > 0 ? +pCustomRatio : pRatio
-  const predict = useMemo(() => getPeakHours(pTemp, pEffRatio, pFlour, pCond), [pTemp, pEffRatio, pFlour, pCond])
+  const predict = useMemo(() => getPeakHours(pTemp, pEffRatio, FLOUR_FACTOR[pFlour], pCond), [pTemp, pEffRatio, pFlour, pCond])
 
   // 그래프용 샘플링
   const graph = useMemo(() => {
@@ -260,11 +275,13 @@ export default function SourdoughClient() {
       </Disclaimer>
 
       {/* ── 탭 ── */}
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'diagnose' ? styles.tabActive : ''}`} onClick={() => setTab('diagnose')}>
+      <div className={styles.tabs} role="tablist" aria-label="사워도우 계산 모드">
+        <button type="button" role="tab" aria-selected={tab === 'diagnose'}
+          className={`${styles.tab} ${tab === 'diagnose' ? styles.tabActive : ''}`} onClick={() => setTab('diagnose')}>
           🔬 안정화 진단
         </button>
-        <button className={`${styles.tab} ${tab === 'predict' ? styles.tabActive : ''}`} onClick={() => setTab('predict')}>
+        <button type="button" role="tab" aria-selected={tab === 'predict'}
+          className={`${styles.tab} ${tab === 'predict' ? styles.tabActive : ''}`} onClick={() => setTab('predict')}>
           📈 피크 시간 예측
         </button>
       </div>
@@ -492,18 +509,6 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>
-                스타터 접종량 <span className={styles.tempVal}>{inoculation}g</span>
-              </label>
-              <input type="range" min={10} max={50} value={inoculation}
-                onChange={e => setInoculation(+e.target.value)}
-                className={styles.plainSlider} />
-              <div className={styles.tempLabels}>
-                <span>10g</span><span>20g</span><span>30g</span><span>40g</span><span>50g</span>
-              </div>
-            </div>
-
-            <div className={styles.field}>
               <label className={styles.label}>밀가루 종류</label>
               <div className={styles.segRow}>
                 {([
@@ -596,7 +601,7 @@ export default function SourdoughClient() {
                     <tr key={t} className={t === pTemp ? styles.compActive : ''}>
                       <td className={styles.compTemp}>{t}°C</td>
                       {[1, 2, 3].map(r => {
-                        const p = getPeakHours(t, r, pFlour, pCond)
+                        const p = getPeakHours(t, r, FLOUR_FACTOR[pFlour], pCond)
                         return <td key={r}>{p.min}~{p.max}h</td>
                       })}
                     </tr>
@@ -663,10 +668,10 @@ function ChkGroup({
         {items.map(it => {
           const checked = checks.has(it.id)
           return (
-            <button key={it.id}
+            <button key={it.id} type="button" role="checkbox" aria-checked={checked}
               onClick={() => onToggle(it.id)}
               className={`${styles.chkItem} ${checked ? styles.chkChecked : ''} ${it.danger && checked ? styles.chkDanger : ''}`}>
-              <span className={styles.chkBox}>{checked ? '✓' : ''}</span>
+              <span className={styles.chkBox} aria-hidden="true">{checked ? '✓' : ''}</span>
               <span className={styles.chkLabel}>{it.label}</span>
             </button>
           )

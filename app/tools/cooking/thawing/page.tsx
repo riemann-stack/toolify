@@ -22,9 +22,9 @@ const FAQ_LD = [
               { q: '전자레인지 해동 후 왜 즉시 조리해야 하나요?', a: '전자레인지 해동은 식품 일부가 부분적으로 조리될 수 있습니다. 이미 가열된 부분은 위험 온도대에 진입하여 세균이 빠르게 증식할 수 있으므로 해동 직후 바로 조리해야 합니다. 다시 냉장 보관하거나 재냉동하면 안 됩니다.' },
               { q: '해동한 고기를 다시 냉동해도 되나요?', a: '원칙적으로 생으로 해동한 식품의 재냉동은 권장하지 않습니다. 해동 과정에서 증식한 세균이 재냉동 시 그대로 보존되며, 해동-재냉동 반복은 품질(맛·식감) 저하와 세균 오염 위험을 동반합니다. 단, 완전히 조리한 후에는 재냉동이 가능합니다(24시간 이내). 실용 팁: 1회분씩 소분 후 냉동 (해동 = 조리 예정).' },
               { q: '냉동 식품에 서리(성에)가 끼면 버려야 하나요?', a: '식품 표면의 서리는 수분이 승화된 것으로 안전에는 문제없습니다. 단, 식품 변색, 이취, 냉동 화상(freezer burn — 건조한 회색빛 부위)이 있다면 품질이 저하된 것입니다. 먹을 수는 있지만 맛·식감이 떨어집니다. 포장이 손상됐거나 해동 후 이상한 냄새가 나면 폐기하세요.' },
-              { q: '닭고기·생선 같은 위험 식품은 어떻게 해동해야 가장 안전한가요?', a: '냉장 해동(4°C) 강력 권장. 닭·생선·해산물·다진 고기는 살모넬라·캠필로박터 등 위험 ↑. 냉장 해동: 24시간 전 냉동고 → 냉장 이동. 닭 1kg ≈ 12~16시간, 갈치 2마리 ≈ 6~8시간. 주의: 닭·생선용 도마·칼 별도 사용, 도마 즉시 세척, 손 30초 이상 세척, 75°C 이상 가열.' },
-              { q: '전자레인지 출력에 따라 해동 시간이 얼마나 다른가요?', a: '1,000g 고기 기준: 700W(구식) ≈ 27분, 900W(한국 표준) ≈ 18분, 1,100W(대형) ≈ 15분, 1,500W(인버터) ≈ 13분. 본인 전자레인지 출력 확인: 본체 라벨 또는 매뉴얼의 「정격 출력 / Output Power」. 한국 가정용은 보통 700~900W. ⚠️ 전자레인지 해동 주의: 일부 익을 가능성, 해동 후 즉시 조리, 5cm+ 두꺼운 식품 비추천, 중간에 뒤집기.' },
-              { q: '명절에 큰 고기 (갈비 5kg) 해동은 얼마나 걸리나요?', a: '5kg 갈비 (두께 5cm) 기준: 냉장 해동 24~36시간, 찬물 해동(밀봉) 4~6시간(1시간마다 물 갈기), 실온 해동 비추천(위험), 전자레인지 비추천(균등 해동 X). 추천: 명절 2~3일 전 냉장으로 이동, 또는 명절 당일 새벽에 찬물 해동 시작, 큰 덩어리는 작게 잘라서(가능 시) 해동 빠름.' },
+              { q: '닭고기·생선 같은 위험 식품은 어떻게 해동해야 가장 안전한가요?', a: '냉장 해동(4°C) 강력 권장. 닭·생선·해산물·다진 고기는 살모넬라·캠필로박터 등 위험 ↑. 냉장 해동: 24시간 전 냉동고 → 냉장 이동. 닭 1kg ≈ 10~13시간, 갈치 500g ≈ 5~7시간. 주의: 닭·생선용 도마·칼 별도 사용, 도마 즉시 세척, 손 30초 이상 세척, 75°C 이상 가열.' },
+              { q: '전자레인지 출력에 따라 해동 시간이 얼마나 다른가요?', a: '1,000g 고기 기준: 700W(구식) ≈ 23분, 900W(한국 표준) ≈ 18분, 1,100W(대형) ≈ 15분, 1,500W(인버터) ≈ 11분. 본인 전자레인지 출력 확인: 본체 라벨 또는 매뉴얼의 「정격 출력 / Output Power」. 한국 가정용은 보통 700~900W. ⚠️ 전자레인지 해동 주의: 일부 익을 가능성, 해동 후 즉시 조리, 5cm+ 두꺼운 식품 비추천, 중간에 뒤집기.' },
+              { q: '명절에 큰 고기 (갈비 5kg) 해동은 얼마나 걸리나요?', a: '5kg 갈비 (두께 5cm) 기준: 냉장 해동 약 2일(44~50시간, 통째), 찬물 해동(밀봉) 6~7시간(1시간마다 물 갈기), 실온 해동 비추천(위험), 전자레인지 비추천(균등 해동 X). 추천: 명절 2~3일 전 냉장으로 이동, 또는 명절 당일 새벽에 찬물 해동 시작, 큰 덩어리는 작게 잘라서(가능 시) 해동 빠름.' },
               { q: '해동된 식품이 안전한지 어떻게 확인하나요?', a: '다음 신호 시 폐기 권장: 이상한 냄새(시큼함·암모니아), 변색(회색·녹색·검은빛), 끈적한 표면, 부풀은 포장, 위험 온도대(4~60°C) 2시간 초과 노출. 안전 확인: 정상 색상·냄새, 키친타올 표면 수분 정상, 손가락 누르면 부드럽게 들어감. ⚠️ 의심스러우면 폐기. 식중독은 회복 비용이 음식값보다 훨씬 큼.' },
               { q: '본 도구는 식품 안전 진단을 해주나요?', a: '아닙니다. 본 도구는 일반 정보 제공용 참고 도구이며, 식품 안전 진단·판정 도구가 아닙니다. 실제 해동 시간은 냉동고 온도·식품 포장·냉장고 성능에 따라 다르며, 면역력 약한 분(임산부·고령자·환자·영유아)은 더 엄격한 기준 적용 권장. 식약처 식품안전정보 1399 / foodsafetykorea.go.kr 참고.' },
             ]
@@ -72,10 +72,10 @@ export default function ThawingPage() {
               </thead>
               <tbody>
                 {[
-                  ['🧊 냉장 해동',   '느림 (8~24h)',  '★★★★★', '모든 식품',    '1~2일 내 조리',   '#0891B2'],
-                  ['💧 흐르는 물',   '빠름 (1~3h)',   '★★★★',  '생선·해산물',  '2시간 이내 · 밀봉', '#0891B2'],
-                  ['🌡️ 실온 해동',   '보통 (2~6h)',   '★★',    '비권장',       '2시간 초과 금지', '#EA580C'],
-                  ['⚡ 전자레인지',  '매우빠름 (5~30분)', '★★★', '얇은 육류',   '즉시 조리 필수',  '#0EA5E9'],
+                  ['🧊 냉장 해동',   '느림 (5~48h)',  '★★★★★', '모든 식품',    '1~2일 내 조리',   '#0891B2'],
+                  ['💧 흐르는 물',   '빠름 (1~7h)',   '★★★★',  '생선·해산물',  '2시간 이내 · 밀봉', '#0891B2'],
+                  ['🌡️ 실온 해동',   '보통 (2~16h)',  '★★',    '비권장',       '2시간 초과 금지', '#EA580C'],
+                  ['⚡ 전자레인지',  '매우빠름 (5~40분)', '★★★', '얇은 육류',   '즉시 조리 필수',  '#0EA5E9'],
                 ].map(([m, sp, saf, food, note, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{m}</td>
@@ -162,19 +162,19 @@ export default function ThawingPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                title: '시나리오 1 — 오늘 저녁 삼겹살 파티 (3인분, 600g)',
+                title: '시나리오 1 — 오늘 저녁 삼겹살 파티 (3인분, 600g · 2cm)',
                 color: '#0891B2',
-                body: '아침 8시에 냉장고로 옮기면 저녁 7시쯤 완전 해동. 급하면 밀봉 후 찬물 흐르는 물 해동으로 1~2시간 소요. 해동 후 키친타올로 물기 제거해 구우세요.',
+                body: '아침 8시에 냉장실로 옮기면 오후 2시쯤(약 6시간) 완전 해동. 급하면 밀봉 후 흐르는 찬물에 약 50분. 해동 후 키친타올로 물기 제거해 구우세요.',
               },
               {
-                title: '시나리오 2 — 급하게 닭볶음탕 (닭 1마리, 1kg)',
+                title: '시나리오 2 — 급하게 닭볶음탕 (닭 1마리, 1kg · 4cm)',
                 color: '#0EA5E9',
-                body: '지퍼백에 밀봉 후 찬물 흐르는 물에 담가 2~3시간 해동. 급하면 전자레인지 해동 모드 후 즉시 조리. 도마·칼은 사용 후 뜨거운 물과 세제로 즉시 세척.',
+                body: '냉장 해동은 약 11시간. 급하면 지퍼백 밀봉 후 흐르는 찬물에 1.5~2시간, 또는 전자레인지 해동(900W 약 19분) 후 즉시 조리. 도마·칼은 사용 후 뜨거운 물과 세제로 즉시 세척.',
               },
               {
-                title: '시나리오 3 — 명절 제수용 생선 (갈치 2마리, 두께 3cm)',
+                title: '시나리오 3 — 명절 제수용 생선 (갈치 500g · 3cm)',
                 color: '#EA580C',
-                body: '전날 밤 냉장실로 이동하면 아침까지 8~12시간에 걸쳐 완전 해동. 해동 후 키친타올로 물기 제거하고 바로 조리. 다시 냉동하지 마세요.',
+                body: '전날 저녁 냉장실로 옮기면 약 5~6시간에 완전 해동. 해동 후 키친타올로 물기 제거하고 바로 조리. 다시 냉동하지 마세요.',
               },
             ].map((sc, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${sc.color}35`, borderRadius: '12px', padding: '16px 20px' }}>
@@ -216,14 +216,14 @@ export default function ThawingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>700W (소형·구식)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 27분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 1.5배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>700W (소형·구식)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 23분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 1.29배</td></tr>
                 <tr style={{ background: 'rgba(8,145,178,0.06)' }}>
                   <td style={{ padding: '10px 12px', color: '#0891B2', fontWeight: 700 }}>900W (한국 표준) ⭐</td>
                   <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 18분</td>
                   <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>일반 가정용 평균</td>
                 </tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,100W (대형)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 15분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.85배</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,500W (인버터)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 13분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.75배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,100W (대형)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 15분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.82배</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>1,500W (인버터)</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 11분</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>표준 0.6배</td></tr>
               </tbody>
             </table>
           </div>
@@ -299,13 +299,13 @@ export default function ThawingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥓 삼겹살 600g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍗 닭볶음탕 1마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>1kg · 4cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 12~16시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍖 갈비 2kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>2kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 18~24시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🐟 갈치 2마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 3cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 6~8시간</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🦐 새우 500g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 1cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>찬물 30분 (밀봉)</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥟 만두 1봉지</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>해동 X (찜·튀김 직접)</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🎁 명절 갈비 5kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>5kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 24~36시간 (2~3일 전 미리)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🥓 삼겹살 600g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>600g · 2cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 5~7시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍗 닭볶음탕 1마리</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>1kg · 4cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 10~13시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🍖 갈비 2kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>2kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 22~26시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🐟 갈치 500g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 3cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 5~7시간</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🦐 새우 500g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>500g · 1cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>찬물 20~30분 (밀봉)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🦑 오징어 400g</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>400g · 1cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>찬물 20~30분 (밀봉)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>🎁 명절 갈비 5kg</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>5kg · 5cm</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>냉장 약 2일(44~50시간) · 2~3일 전 미리</td></tr>
               </tbody>
             </table>
           </div>

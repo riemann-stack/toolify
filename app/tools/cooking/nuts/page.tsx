@@ -53,7 +53,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -92,9 +91,9 @@ export default function NutsPage() {
       <NutsClient />
 
       {/* 1. 빠른 참조표 */}
-      <h2 style={sectionTitle}>📊 12종 견과류 빠른 참조표</h2>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+      <h2 style={sectionTitle}>12종 견과류 빠른 참조표</h2>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 420 }}>
           <thead>
             <tr>
               <th style={headCell}>견과류</th>
@@ -102,23 +101,22 @@ export default function NutsPage() {
               <th style={headCell}>알 수</th>
               <th style={headCell}>칼로리</th>
               <th style={headCell}>핵심 영양소</th>
-              <th style={headCell}>특이사항</th>
             </tr>
           </thead>
           <tbody>
             {[
-              { n: '🥜 아몬드',       s: '28g', c: '약 23알',    k: '164kcal', v: '비타민E',      note: '-' },
-              { n: '🧠 호두',         s: '28g', c: '반쪽 14개',  k: '185kcal', v: '오메가3',      note: '-' },
-              { n: '🌙 캐슈넛',       s: '28g', c: '약 18알',    k: '157kcal', v: '마그네슘',     note: '-' },
-              { n: '⚠️ 브라질너트',   s: '10g', c: '2~3알',      k: '66kcal',  v: '셀레늄',       note: '⚠️ 엄격 제한' },
-              { n: '🟤 땅콩',         s: '28g', c: '약 28알',    k: '161kcal', v: '단백질',       note: '콩과식물' },
-              { n: '🌻 해바라기씨',   s: '28g', c: '—',          k: '165kcal', v: '비타민E',      note: '-' },
-              { n: '🎃 호박씨',       s: '28g', c: '—',          k: '151kcal', v: '아연',         note: '-' },
-              { n: '💚 피스타치오',   s: '28g', c: '약 49알',    k: '159kcal', v: '비타민B6',     note: '알 수 최다' },
-              { n: '🍂 피칸',         s: '28g', c: '약 19알',    k: '196kcal', v: '망간',         note: '-' },
-              { n: '⚪ 마카다미아',   s: '28g', c: '약 10알',    k: '204kcal', v: '단일불포화',   note: '고칼로리' },
-              { n: '🟫 헤이즐넛',     s: '28g', c: '약 21알',    k: '178kcal', v: '비타민E',      note: '-' },
-              { n: '🌲 잣',           s: '28g', c: '—',          k: '191kcal', v: '철분',         note: '-' },
+              { n: '아몬드',       s: '28g', c: '약 23알',    k: '164kcal', v: '비타민E' },
+              { n: '호두',         s: '28g', c: '반쪽 14개',  k: '185kcal', v: '오메가3' },
+              { n: '캐슈넛',       s: '28g', c: '약 18알',    k: '157kcal', v: '마그네슘' },
+              { n: '브라질너트',   s: '10g', c: '2~3알',      k: '66kcal',  v: '셀레늄' },
+              { n: '땅콩',         s: '28g', c: '약 28알',    k: '161kcal', v: '단백질' },
+              { n: '해바라기씨',   s: '28g', c: '—',          k: '165kcal', v: '비타민E' },
+              { n: '호박씨',       s: '28g', c: '—',          k: '151kcal', v: '아연' },
+              { n: '피스타치오',   s: '28g', c: '약 49알',    k: '159kcal', v: '비타민B6' },
+              { n: '피칸',         s: '28g', c: '약 19알',    k: '196kcal', v: '망간' },
+              { n: '마카다미아',   s: '28g', c: '약 10알',    k: '204kcal', v: '단일불포화' },
+              { n: '헤이즐넛',     s: '28g', c: '약 21알',    k: '178kcal', v: '비타민E' },
+              { n: '잣',           s: '28g', c: '—',          k: '191kcal', v: '철분' },
             ].map((r, i) => (
               <tr key={i}>
                 <td style={{ ...cell, fontWeight: 500 }}>{r.n}</td>
@@ -126,12 +124,14 @@ export default function NutsPage() {
                 <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.c}</td>
                 <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
                 <td style={cell}>{r.v}</td>
-                <td style={{ ...cell, color: 'var(--muted)' }}>{r.note}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+        출처: 영양 성분 <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>USDA FoodData Central</a>, 1회 제공량·권장 섭취 기준 <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a>(한국인 영양소 섭취기준). 값은 품종·가공·브랜드에 따라 달라지는 평균치입니다.
+      </p>
 
       {/* 2. 브라질너트 셀레늄 */}
       <h2 style={sectionTitle}>🚨 브라질너트 셀레늄 주의</h2>
@@ -157,12 +157,12 @@ export default function NutsPage() {
       </div>
 
       {/* 3. 견과류 혼합 가이드 (NEW) */}
-      <h2 style={sectionTitle}>🥗 견과류 혼합 가이드 — 인기 믹스 6종</h2>
+      <h2 style={sectionTitle}>견과류 혼합 가이드 — 인기 믹스 6종</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         본 도구의 <strong style={{ color: 'var(--text)' }}>인기 믹스 프리셋</strong>은 한 번의 클릭으로 적용됩니다. 각 믹스는 한국 사용자 식습관과 한국영양학회 권장 비율 참고.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
           <thead>
             <tr>
               <th style={headCell}>믹스</th>
@@ -172,17 +172,17 @@ export default function NutsPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>🔻 다이어트</strong></td><td style={cell}>아몬드 12g + 피스타치오 12g</td><td style={cell}>24g</td><td style={cell}>저칼로리·고섬유·포만감</td></tr>
-            <tr><td style={cell}><strong>💪 근육</strong></td><td style={cell}>땅콩 14g + 호박씨 10g + 아몬드 10g</td><td style={cell}>34g</td><td style={cell}>고단백·운동 후 회복</td></tr>
-            <tr><td style={cell}><strong>🧠 뇌 건강</strong></td><td style={cell}>호두 14g + 아몬드 14g</td><td style={cell}>28g</td><td style={cell}>오메가3·비타민E</td></tr>
-            <tr><td style={cell}><strong>❤️ 심혈관</strong></td><td style={cell}>호두 10g + 아몬드 10g + 피칸 8g</td><td style={cell}>28g</td><td style={cell}>불포화지방·항염증</td></tr>
-            <tr><td style={cell}><strong>⚖️ 균형</strong></td><td style={cell}>아몬드·호두·캐슈넛·호박씨 각 6~8g</td><td style={cell}>30g</td><td style={cell}>종합 영양</td></tr>
-            <tr><td style={cell}><strong>🏃 트레일</strong></td><td style={cell}>아몬드 12g + 캐슈넛 10g + 호박씨 8g</td><td style={cell}>30g</td><td style={cell}>등산·러닝 행동식</td></tr>
+            <tr><td style={cell}><strong>다이어트</strong></td><td style={cell}>아몬드 12g + 피스타치오 12g</td><td style={cell}>24g</td><td style={cell}>저칼로리·고섬유·포만감</td></tr>
+            <tr><td style={cell}><strong>근육</strong></td><td style={cell}>땅콩 14g + 호박씨 10g + 아몬드 10g</td><td style={cell}>34g</td><td style={cell}>고단백·운동 후 회복</td></tr>
+            <tr><td style={cell}><strong>뇌 건강</strong></td><td style={cell}>호두 14g + 아몬드 14g</td><td style={cell}>28g</td><td style={cell}>오메가3·비타민E</td></tr>
+            <tr><td style={cell}><strong>심혈관</strong></td><td style={cell}>호두 10g + 아몬드 10g + 피칸 8g</td><td style={cell}>28g</td><td style={cell}>불포화지방·항염증</td></tr>
+            <tr><td style={cell}><strong>균형</strong></td><td style={cell}>아몬드·호두·캐슈넛·호박씨 각 6~8g</td><td style={cell}>30g</td><td style={cell}>종합 영양</td></tr>
+            <tr><td style={cell}><strong>트레일</strong></td><td style={cell}>아몬드 12g + 캐슈넛 10g + 호박씨 8g</td><td style={cell}>30g</td><td style={cell}>등산·러닝 행동식</td></tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        💡 본 도구의 알레르기 필터를 켜면 해당 그룹 견과류가 포함된 믹스는 자동 비활성화됩니다.
+        본 도구의 알레르기 필터를 켜면 해당 그룹 견과류가 포함된 믹스는 자동 비활성화됩니다.
       </p>
 
       {/* 4. 알레르기 그룹 가이드 (NEW) */}
@@ -212,8 +212,8 @@ export default function NutsPage() {
 
       {/* 5. 영유아·임산부·환자 가이드 (NEW) */}
       <h2 style={sectionTitle}>👶 영유아·임산부·환자 가이드</h2>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
               <th style={headCell}>대상</th>
@@ -237,12 +237,12 @@ export default function NutsPage() {
       </p>
 
       {/* 6. 견과류 가성비 (NEW) */}
-      <h2 style={sectionTitle}>💰 견과류 가성비 (한국 마트 평균 참고)</h2>
+      <h2 style={sectionTitle}>견과류 가성비 (한국 마트 평균 참고)</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        한국 대형 마트·온라인 평균 가격 (참고용 · 실시간 가격 X). 정확한 가격 비교는 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>에서.
+        <strong style={{ color: 'var(--text)' }}>2026년 초</strong> 한국 대형 마트·온라인 평균 가격 기준 (참고용 · 실시간 가격 아님). 정확한 가격 비교는 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>에서.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
           <thead>
             <tr>
               <th style={headCell}>견과류</th>
@@ -252,16 +252,16 @@ export default function NutsPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>🟤 땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: '#059669' }}>★★★★★</td></tr>
-            <tr><td style={cell}>🌻 해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: '#059669' }}>★★★★</td></tr>
-            <tr><td style={cell}>🎃 호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★★</td></tr>
-            <tr><td style={cell}>🥜 아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★</td></tr>
-            <tr><td style={cell}>🧠 호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
-            <tr><td style={cell}>🌙 캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
-            <tr><td style={cell}>⚠️ 브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: '#D97706' }}>★★ (소량만)</td></tr>
-            <tr><td style={cell}>💚 피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: '#D97706' }}>★★</td></tr>
-            <tr><td style={cell}>⚪ 마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
-            <tr><td style={cell}>🌲 잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
+            <tr><td style={cell}>땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: '#059669' }}>★★★★★</td></tr>
+            <tr><td style={cell}>해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: '#059669' }}>★★★★</td></tr>
+            <tr><td style={cell}>호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★★</td></tr>
+            <tr><td style={cell}>아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★</td></tr>
+            <tr><td style={cell}>호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
+            <tr><td style={cell}>캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
+            <tr><td style={cell}>브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: '#D97706' }}>★★ (소량만)</td></tr>
+            <tr><td style={cell}>피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: '#D97706' }}>★★</td></tr>
+            <tr><td style={cell}>마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
+            <tr><td style={cell}>잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
           </tbody>
         </table>
       </div>
@@ -270,15 +270,15 @@ export default function NutsPage() {
       </p>
 
       {/* 7. 가공 상태 비교 */}
-      <h2 style={sectionTitle}>🔥 무염 vs 가염 vs 가공 견과류</h2>
+      <h2 style={sectionTitle}>무염 vs 가염 vs 가공 견과류</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
-          { n: '🌱 무염 건조',     c: '#059669', d: '가장 건강. 원래 영양소 그대로 보존. 건강 목적이면 이 선택이 기본.' },
-          { n: '🧂 가염',          c: '#0891B2', d: '나트륨 추가 (28g당 약 150mg). 고혈압·신장 질환 있으면 주의.' },
-          { n: '🔥 볶음',          c: '#D97706', d: '일부 항산화 성분 감소, 칼로리 소폭 증가(+5%). 풍미는 향상.' },
-          { n: '🛢 오일 코팅',     c: '#EA580C', d: '불필요한 지방 추가(+10%). 기름 종류에 따라 트랜스지방 우려.' },
-          { n: '🍫 초콜릿·시즈닝', c: '#DC2626', d: '설탕·트랜스지방·나트륨 급증(+60%). 건강 효과 크게 감소 — 간식 분류.' },
-          { n: '🍯 꿀 코팅',       c: '#D97706', d: '당분 추가(+20%). 혈당 상승 빠름, 당뇨 주의.' },
+          { n: '무염 건조',     c: '#059669', d: '가장 건강. 원래 영양소 그대로 보존. 건강 목적이면 이 선택이 기본.' },
+          { n: '가염',          c: '#0891B2', d: '나트륨 추가 (28g당 약 150mg). 고혈압·신장 질환 있으면 주의.' },
+          { n: '볶음',          c: '#D97706', d: '일부 항산화 성분 감소, 칼로리 소폭 증가(+5%). 풍미는 향상.' },
+          { n: '오일 코팅',     c: '#EA580C', d: '불필요한 지방 추가(+10%). 기름 종류에 따라 트랜스지방 우려.' },
+          { n: '초콜릿·시즈닝', c: '#DC2626', d: '설탕·트랜스지방·나트륨 급증(+60%). 건강 효과 크게 감소 — 간식 분류.' },
+          { n: '꿀 코팅',       c: '#D97706', d: '당분 추가(+20%). 혈당 상승 빠름, 당뇨 주의.' },
         ].map((s, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderLeft: `3px solid ${s.c}`, borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '13px', color: s.c, fontWeight: 700, marginBottom: '4px' }}>{s.n}</p>
@@ -426,10 +426,10 @@ export default function NutsPage() {
         lineHeight: 1.8,
       }}>
         <ul style={{ paddingLeft: '20px', margin: 0 }}>
-          <li>본 도구는 <strong>일반 영양 가이드</strong>입니다. 영양 정보는 평균값(USDA·한국영양학회 기준).</li>
+          <li>본 도구는 <strong>일반 영양 가이드</strong>입니다. 영양 정보는 평균값(<a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>USDA FoodData Central</a> · <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a> 섭취기준).</li>
           <li>알레르기·기저 질환(신장·갑상선)은 적정량이 다름 → 의사·영양사 상담.</li>
           <li>본 도구는 <strong>정확한 영양 진단·알레르기 진단·특정 브랜드 추천·의약품/보충제 비교</strong>를 제공하지 않습니다.</li>
-          <li>도움 받기: 한국영양학회(kns.or.kr), 식약처 식품안전정보 1399, 응급(아나필락시스) 119.</li>
+          <li>도움 받기: <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a>, <a href="https://www.foodsafetykorea.go.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>식약처 식품안전나라</a>(1399), 응급(아나필락시스) 119.</li>
         </ul>
       </div>
 

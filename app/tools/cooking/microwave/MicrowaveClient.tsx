@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './microwave.module.css'
 import {
   POWER_OPTIONS, FOODS, TEMPS, VESSELS, GOLDEN_TIPS,
   type PowerW, type StartTemp,
   convertTime, portionFactor, getTemp, getFood,
-  fmt, fmtSec, fmtTimer,
+  fmtSec, fmtTimer,
 } from './microwaveUtils'
 
 type Tab = 'convert' | 'food' | 'timer' | 'guide'
@@ -39,6 +38,11 @@ export default function MicrowaveClient() {
   const [timerSec, setTimerSec] = useState('0')
   const [remaining, setRemaining] = useState(0)
   const [running, setRunning] = useState(false)
+  /* 다단계(가열→휴지→추가 가열) 타이머 */
+  const [phases, setPhases] = useState<{ label: string; sec: number }[]>([])
+  const [phaseIdx, setPhaseIdx] = useState(0)
+  const phasesRef = useRef<{ label: string; sec: number }[]>([])
+  const phaseIdxRef = useRef(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const lastTickRef = useRef<number>(0)
@@ -113,6 +117,17 @@ export default function MicrowaveClient() {
       setRemaining((prev) => {
         const next = prev - delta
         if (next <= 0) {
+          const idx = phaseIdxRef.current
+          const ph = phasesRef.current
+          if (idx < ph.length - 1) {
+            // 다음 단계로 전환 (전환 비프 2회)
+            phaseIdxRef.current = idx + 1
+            setPhaseIdx(idx + 1)
+            beep(2, 880, 0.15)
+            lastTickRef.current = Date.now()
+            return ph[idx + 1].sec
+          }
+          // 마지막 단계 종료
           setRunning(false)
           beep(3, 880, 0.2)
           return 0
@@ -148,22 +163,38 @@ export default function MicrowaveClient() {
   const tempMeta = getTemp(startTemp)
   const foodConverted = useMemo(() => {
     if (food.forbidden) return 0
-    const baseConverted = convertTime(food.baseW, food.baseSec, foodMyW)
-    return baseConverted * portionFactor(portionN) * tempMeta.factor
+    // 해동 모드는 고정 ~200W라 출력 W 환산을 적용하지 않음
+    const base = food.defrostMode ? food.baseSec : convertTime(food.baseW, food.baseSec, foodMyW)
+    return base * portionFactor(portionN) * tempMeta.factor
   }, [food, foodMyW, portionN, tempMeta])
   const foodRest = useMemo(() => {
     if (food.forbidden || food.restSec === 0) return 0
-    const baseConverted = convertTime(food.baseW, food.restAdditionalSec, foodMyW)
-    return baseConverted * portionFactor(portionN) * tempMeta.factor
+    const base = food.defrostMode ? food.restAdditionalSec : convertTime(food.baseW, food.restAdditionalSec, foodMyW)
+    return base * portionFactor(portionN) * tempMeta.factor
   }, [food, foodMyW, portionN, tempMeta])
 
-  /* 타이머 시작 */
-  const startTimer = (sec: number) => {
-    setRemaining(sec)
+  /* 타이머 시작 — 다단계 시퀀스 (가열→휴지→추가) */
+  const startSequence = (seq: { label: string; sec: number }[]) => {
+    const valid = seq.filter((p) => p.sec > 0)
+    if (valid.length === 0) return
+    phasesRef.current = valid
+    phaseIdxRef.current = 0
+    setPhases(valid)
+    setPhaseIdx(0)
+    setRemaining(valid[0].sec)
     setRunning(true)
     // 사용자 인터랙션 후 AudioContext 깨우기
     const ctx = getAudio()
     if (ctx && ctx.state === 'suspended') ctx.resume()
+  }
+  const startTimer = (sec: number) => startSequence([{ label: '가열', sec }])
+  const resetTimer = () => {
+    setRemaining(0)
+    setRunning(false)
+    phasesRef.current = []
+    phaseIdxRef.current = 0
+    setPhases([])
+    setPhaseIdx(0)
   }
 
   const timerInputSec = (parseInt(timerMin) || 0) * 60 + (parseInt(timerSec) || 0)
@@ -374,21 +405,27 @@ export default function MicrowaveClient() {
             <>
               <div className={s.card}>
                 <span className={s.cardLabel}>전자레인지·양·온도</span>
-                <div className={s.field}>
-                  <label className={s.fieldLabel}>내 전자레인지 W</label>
-                  <div className={s.pillRow}>
-                    {POWER_OPTIONS.map((w) => (
-                      <button
-                        key={w}
-                        className={`${s.pill} ${foodMyW === w ? s.pillActive : ''}`}
-                        onClick={() => setFoodMyW(w)}
-                        type="button"
-                      >
-                        {w}W
-                      </button>
-                    ))}
+                {food.defrostMode ? (
+                  <div className={s.warnNote} style={{ marginBottom: 12 }}>
+                    🧊 해동은 <strong>해동 모드(약 200W)</strong> 기준입니다. 일반 출력(W) 환산과 무관하니 전자레인지의 해동 버튼을 사용하세요.
                   </div>
-                </div>
+                ) : (
+                  <div className={s.field}>
+                    <label className={s.fieldLabel}>내 전자레인지 W</label>
+                    <div className={s.pillRow}>
+                      {POWER_OPTIONS.map((w) => (
+                        <button
+                          key={w}
+                          className={`${s.pill} ${foodMyW === w ? s.pillActive : ''}`}
+                          onClick={() => setFoodMyW(w)}
+                          type="button"
+                        >
+                          {w}W
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className={s.row2}>
                   <div className={s.field}>
                     <label className={s.fieldLabel}>인분 ({portionN}인분 → 시간 ×{portionFactor(portionN).toFixed(2)})</label>
@@ -434,7 +471,9 @@ export default function MicrowaveClient() {
                   <strong>{fmtSec(foodConverted)}</strong>
                 </p>
                 <p className={s.heroSub}>
-                  표준 {food.baseW}W {fmtSec(food.baseSec)} → 내 {foodMyW}W ({tempMeta.label})
+                  {food.defrostMode
+                    ? <>해동 모드(약 200W) · {portionN}인분 · {tempMeta.label}</>
+                    : <>표준 {food.baseW}W {fmtSec(food.baseSec)} → 내 {foodMyW}W ({tempMeta.label})</>}
                   {food.restSec > 0 && (
                     <><br />⏸️ 휴지 {fmtSec(food.restSec)} → 추가 가열 <strong>{fmtSec(foodRest)}</strong></>
                   )}
@@ -445,11 +484,14 @@ export default function MicrowaveClient() {
                     setTab('timer')
                     setTimerMin(String(Math.floor(foodConverted / 60)))
                     setTimerSec(String(Math.round(foodConverted % 60)))
-                    startTimer(foodConverted)
+                    const seq = [{ label: '가열', sec: foodConverted }]
+                    if (food.restSec > 0) seq.push({ label: '휴지', sec: food.restSec })
+                    if (foodRest > 0) seq.push({ label: '추가 가열', sec: foodRest })
+                    startSequence(seq)
                   }}
                   type="button"
                 >
-                  ⏱️ 타이머 시작
+                  {food.restSec > 0 ? '⏱️ 전체 과정 타이머' : '⏱️ 타이머 시작'}
                 </button>
               </div>
 
@@ -466,11 +508,12 @@ export default function MicrowaveClient() {
                 <div className={s.tableScroll} style={{ marginTop: 12 }}>
                   <table className={s.detailTable}>
                     <tbody>
-                      <tr><td>표준 시간</td><td className={s.cellMono}>{food.baseW}W {fmtSec(food.baseSec)}</td></tr>
+                      <tr><td>표준 시간</td><td className={s.cellMono}>{food.defrostMode ? '해동 모드(약 200W)' : `${food.baseW}W`} {fmtSec(food.baseSec)}</td></tr>
+                      <tr><td>내 가열 시간{food.defrostMode ? '' : ` (${foodMyW}W)`}</td><td className={s.cellMono} style={{ color: 'var(--accent)' }}>{fmtSec(foodConverted)}</td></tr>
                       {food.restSec > 0 && (
                         <>
                           <tr><td>휴지 시간</td><td className={s.cellMono}>{fmtSec(food.restSec)}</td></tr>
-                          <tr><td>휴지 후 추가</td><td className={s.cellMono}>{fmtSec(food.restAdditionalSec)}</td></tr>
+                          <tr><td>내 추가 가열</td><td className={s.cellMono} style={{ color: 'var(--accent)' }}>{fmtSec(foodRest)}</td></tr>
                         </>
                       )}
                       <tr><td>권장 용기</td><td>{food.vessel}</td></tr>
@@ -536,9 +579,11 @@ export default function MicrowaveClient() {
           {/* 큰 타이머 + 도넛 */}
           <div className={s.timerHero}>
             {(() => {
-              const total = remaining > 0 ? remaining : timerInputSec
-              const initial = remaining > 0 || running ? Math.max(timerInputSec, remaining) : timerInputSec
-              const pct = initial > 0 ? (remaining > 0 ? remaining / initial : 1) : 0
+              const isActive = running || remaining > 0
+              const curPhaseSec = phases.length > 0 ? (phases[phaseIdx]?.sec ?? timerInputSec) : timerInputSec
+              const total = isActive ? remaining : timerInputSec
+              const initial = isActive ? curPhaseSec : timerInputSec
+              const pct = initial > 0 ? (isActive ? Math.min(1, remaining / initial) : 1) : 0
               const isLast10 = remaining > 0 && remaining <= 10
               const r = 80
               const circumference = 2 * Math.PI * r
@@ -568,8 +613,10 @@ export default function MicrowaveClient() {
                     >
                       {fmtTimer(total)}
                     </text>
-                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
-                      {running ? '실행 중' : remaining > 0 ? '일시정지' : '대기'}
+                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">
+                      {running
+                        ? (phases.length > 1 ? `${phases[phaseIdx]?.label ?? ''} (${phaseIdx + 1}/${phases.length})` : '실행 중')
+                        : remaining > 0 ? '일시정지' : '대기'}
                     </text>
                   </svg>
                 </div>
@@ -591,7 +638,7 @@ export default function MicrowaveClient() {
                   <button className={s.playBtn} onClick={() => setRunning(true)} type="button">
                     ▶ 계속
                   </button>
-                  <button className={s.resetBtn} onClick={() => { setRemaining(0); setRunning(false) }} type="button">
+                  <button className={s.resetBtn} onClick={resetTimer} type="button">
                     ⏹ 리셋
                   </button>
                 </>
@@ -601,7 +648,7 @@ export default function MicrowaveClient() {
                   <button className={s.pauseBtn} onClick={() => setRunning(false)} type="button">
                     ⏸ 일시정지
                   </button>
-                  <button className={s.resetBtn} onClick={() => { setRemaining(0); setRunning(false) }} type="button">
+                  <button className={s.resetBtn} onClick={resetTimer} type="button">
                     ⏹ 리셋
                   </button>
                 </>
@@ -671,5 +718,3 @@ export default function MicrowaveClient() {
     </div>
   )
 }
-
-void fmt

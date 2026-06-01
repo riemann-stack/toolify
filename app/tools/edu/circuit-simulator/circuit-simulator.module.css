@@ -215,7 +215,7 @@
 /* ── 저항 행 ── */
 .resistorRow {
   display: grid;
-  grid-template-columns: 50px 1fr 90px 28px;
+  grid-template-columns: 50px minmax(0, 1fr) 90px 28px;
   gap: 8px;
   align-items: center;
   background: var(--bg3);
@@ -225,7 +225,7 @@
   padding: 10px 12px;
 }
 @media (max-width: 480px) {
-  .resistorRow { grid-template-columns: 44px 1fr 80px 28px; gap: 6px; }
+  .resistorRow { grid-template-columns: 44px minmax(0, 1fr) 80px 28px; gap: 6px; }
 }
 .resistorLabel {
   font-family: 'Inter', system-ui, sans-serif;
@@ -237,9 +237,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 .resistorValueRow input[type=range] {
   flex: 1;
+  min-width: 0;
   accent-color: #CA8A04;
 }
 .resistorValueDisplay {

@@ -177,10 +177,10 @@ export default function RoomModePage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🔺 코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 60Hz~ 효과.', c: '#DB2777' },
-            { t: '🟧 벽 트랩', d: '1차 반사 지점에 부착. 100Hz~ 중·고음 흡수.', c: '#D97706' },
-            { t: '🟨 멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 주파수 대역 흡수.', c: '#0891B2' },
-            { t: '🔊 헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0D9488' },
+            { t: '코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 60Hz~ 효과.', c: '#DB2777' },
+            { t: '벽 트랩', d: '1차 반사 지점에 부착. 100Hz~ 중·고음 흡수.', c: '#D97706' },
+            { t: '멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 주파수 대역 흡수.', c: '#0891B2' },
+            { t: '헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0D9488' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -189,7 +189,7 @@ export default function RoomModePage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💰 <strong>일반 거실 기본 패키지</strong>: DIY 50~100만원 / 완제품 100~300만원 (코너 트랩 4 + 벽 트랩 4 + 천장 1~2)
+          <strong>일반 거실 기본 패키지</strong>: DIY 50~100만원 / 완제품 100~300만원 (코너 트랩 4 + 벽 트랩 4 + 천장 1~2)
         </p>
       </div>
 

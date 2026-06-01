@@ -1,0 +1,302 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+@media (max-width: 600px) {
+  .wrap { gap: 10px; }
+  .card { padding: 14px 14px; border-radius: 12px; }
+  .cardLabel { margin-bottom: 10px; }
+}
+
+/* 탭 */
+.tabs {
+  display: grid;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
+}
+.tabActive { background: var(--accent); color: #ffffff; }
+
+/* 입력 */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.input:focus { border-color: var(--accent); }
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 30px 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2.5 4.5 L6 8 L9.5 4.5' fill='none' stroke='%23999' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.select:focus { border-color: var(--accent); }
+
+.inputHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.inputHead .cardLabel { margin-bottom: 0; }
+.helperToggle {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.helperToggle[aria-pressed='true'] { color: var(--accent); border-color: var(--accent); }
+@media (hover: hover) {
+  .helperToggle:hover { color: var(--text); border-color: var(--accent); }
+}
+
+.inputUnitRow { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.field .inputUnitRow { margin-top: 0; }
+.unit { font-size: 13px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+
+.presetRow { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.preset {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  min-width: 56px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 38px;
+}
+@media (hover: hover) {
+  .preset:hover { border-color: var(--accent); color: var(--text); }
+}
+
+.echo {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.helperGrid { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+
+/* 히어로 */
+.hero {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.10) 0%, rgba(99, 102, 241, 0.06) 100%);
+  border: 1px solid rgba(14, 165, 233, 0.28);
+  border-radius: 14px;
+  padding: 22px 18px;
+  text-align: center;
+}
+@media (max-width: 600px) { .hero { padding: 18px 14px; border-radius: 12px; } }
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+.heroValue {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(26px, 6vw, 40px);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.heroValue strong {
+  color: var(--accent);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+}
+.heroSub { font-size: 13px; color: var(--muted); margin: 0; }
+.heroSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.estTag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(217, 119, 6, 0.12);
+  color: #D97706;
+  font-size: 10.5px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* 분포 막대 */
+.barOuter { position: relative; height: 66px; margin: 14px 2px 0; }
+.barTrack {
+  position: absolute;
+  top: 26px; left: 0; right: 0;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--bg3) 0%, rgba(14, 165, 233, 0.30) 60%, #0EA5E9 100%);
+}
+.barTick {
+  position: absolute;
+  top: 22px;
+  height: 20px;
+  border-left: 1px dashed var(--border);
+}
+.barMarker { position: absolute; top: 0; }
+.barMarkerDot {
+  position: absolute;
+  top: 21px; left: 0;
+  transform: translateX(-50%);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--bg2);
+  box-shadow: 0 0 0 1.5px var(--accent);
+}
+.barMarkerLabel {
+  position: absolute;
+  top: 47px; left: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.barAxis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* 기준 지표표 */
+.refTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.refTable td {
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  word-break: keep-all;
+}
+.refTable td:first-child { width: 52%; font-size: 12.5px; color: var(--muted); }
+.refTable td:nth-child(2) {
+  text-align: right;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.refTable tr:last-child td { border-bottom: none; }
+
+/* 목표선 */
+.goalRow { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.goal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+}
+.goal strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.goalMark {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--bg2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.goalDone { background: rgba(5, 150, 105, 0.08); }
+.goalDone .goalMark { background: rgba(5, 150, 105, 0.15); color: #059669; }
+.goalDone strong { color: #059669; }
+
+/* 보충 설명 */
+.noteCard {
+  background: rgba(217, 119, 6, 0.05);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.noteCard strong { color: var(--text); }
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input { font-size: 16px; min-height: 48px; }
+}

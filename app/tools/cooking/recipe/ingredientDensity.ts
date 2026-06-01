@@ -135,6 +135,27 @@ export const INGREDIENT_DENSITY: IngredientInfo[] = [
   { name: '양상추',       gPerMl: 1.00, category: 'liquid', shopGroup: 'vegetable' },
   { name: '토마토',       gPerMl: 1.00, category: 'liquid', shopGroup: 'vegetable' },
   { name: '베이컨',       gPerMl: 1.00, category: 'liquid', shopGroup: 'meat' },
+  { name: '당근',         gPerMl: 1.00, category: 'liquid', shopGroup: 'vegetable' },
+  { name: '오이',         gPerMl: 1.00, category: 'liquid', shopGroup: 'vegetable' },
+  { name: '새우',         gPerMl: 1.00, category: 'liquid', shopGroup: 'meat',
+    aliases: ['대하', '칵테일새우', '냉동새우'] },
+  { name: '굴소스',       gPerMl: 1.28, category: 'liquid', isSeasoning: true, shopGroup: 'sauce-spice',
+    aliases: ['오이스터소스'] },
+  { name: '전분',         gPerMl: 0.65, category: 'flour', shopGroup: 'sauce-spice',
+    aliases: ['녹말', '감자전분', '옥수수전분', '전분가루'] },
+
+  // ── 프리셋 식재료 (밀도·장보기 분류 보강)
+  { name: '밥',           gPerMl: 0.60, category: 'grain', shopGroup: 'grain-noodle',
+    aliases: ['공기밥', '쌀밥', '흰밥'] },
+  { name: '떡볶이떡',     gPerMl: 1.00, category: 'grain', shopGroup: 'grain-noodle',
+    aliases: ['떡', '밀떡', '쌀떡', '가래떡'] },
+  { name: '어묵',         gPerMl: 1.00, category: 'liquid', shopGroup: 'meat',
+    aliases: ['오뎅', '사각어묵'] },
+  { name: '맛살',         gPerMl: 1.00, category: 'liquid', shopGroup: 'meat',
+    aliases: ['게맛살'] },
+  { name: '단무지',       gPerMl: 1.00, category: 'liquid', shopGroup: 'canned' },
+  { name: '마른미역',     gPerMl: 0.50, category: 'liquid', shopGroup: 'other',
+    aliases: ['미역', '건미역'] },
 ]
 
 /** 별칭 포함해 재료 데이터 매칭 — 부분 일치 허용 */

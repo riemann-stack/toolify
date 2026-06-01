@@ -4,15 +4,15 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 600px) {
-  .tabs { grid-template-columns: 1fr 1fr; }
+@media (max-width: 480px) {
+  .tabBtn { padding: 10px 4px; font-size: 12px; }
 }
 .tabBtn {
   background: transparent;
@@ -463,27 +463,59 @@
   white-space: nowrap;
 }
 .breakdownTable td:first-child {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   color: var(--muted);
   font-size: 12.5px;
+  white-space: nowrap;
 }
 .breakdownDot {
+  display: inline-block;
+  vertical-align: middle;
   width: 10px;
   height: 10px;
   border-radius: 2px;
-  flex-shrink: 0;
+  margin-right: 8px;
 }
 .breakdownTotalRow td {
-  background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid var(--accent);
   border-bottom: none;
+  padding-top: 11px;
 }
 .breakdownTotalRow td:nth-child(2) { color: var(--accent); font-size: 15px; }
 .breakdownTotalRow td:nth-child(3) { color: var(--accent); }
 .breakdownTotalRow td:first-child { color: var(--accent); }
+
+/* ── 재료별 비용 결과 리스트 ── */
+.ingCostList {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ingCostRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 12.5px;
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.ingCostRow span:last-child {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+.ingCostTotal {
+  border-bottom: none;
+  border-top: 2px solid var(--accent);
+  margin-top: 2px;
+  padding-top: 9px;
+}
+.ingCostTotal span { color: var(--accent) !important; font-weight: 800; }
 
 /* ── 실수령액 강조 ── */
 .netCard {

@@ -129,19 +129,18 @@ export function convertUnit(
     return { value: roundSensible((amount * from.g) / to.g), isApprox: false }
   }
 
-  // 부피 ↔ 무게 (밀도 필요)
+  // 부피 ↔ 무게 (밀도 필요) — 미인식 재료는 물(1.0 g/ml)로 가정
   const info = findIngredient(ingredientName)
+  const density = info?.gPerMl ?? 1.0
   if (from.ml !== undefined && to.g !== undefined) {
-    if (!info) return { value: 0, isApprox: true, reason: '재료 밀도 정보 없음 — 물(1.0) 가정' }
     const ml = amount * from.ml
-    const g = ml * info.gPerMl
-    return { value: roundSensible(g / to.g), isApprox: true }
+    const g = ml * density
+    return { value: roundSensible(g / to.g), isApprox: true, reason: info ? undefined : '재료 밀도 정보 없음 — 물(1.0) 가정' }
   }
   if (from.g !== undefined && to.ml !== undefined) {
-    if (!info) return { value: 0, isApprox: true, reason: '재료 밀도 정보 없음' }
     const g = amount * from.g
-    const ml = g / info.gPerMl
-    return { value: roundSensible(ml / to.ml), isApprox: true }
+    const ml = g / density
+    return { value: roundSensible(ml / to.ml), isApprox: true, reason: info ? undefined : '재료 밀도 정보 없음 — 물(1.0) 가정' }
   }
 
   // 어림 단위 → 무게
@@ -149,17 +148,15 @@ export function convertUnit(
     return { value: roundSensible((amount * from.approxG) / to.g), isApprox: true }
   }
   if (from.approxG !== undefined && to.ml !== undefined) {
-    if (!info) return { value: 0, isApprox: true, reason: '재료 밀도 정보 없음' }
     const g = amount * from.approxG
-    const ml = g / info.gPerMl
+    const ml = g / density
     return { value: roundSensible(ml / to.ml), isApprox: true }
   }
   if (from.g !== undefined && to.approxG !== undefined) {
     return { value: roundSensible((amount * from.g) / to.approxG), isApprox: true }
   }
   if (from.ml !== undefined && to.approxG !== undefined) {
-    if (!info) return { value: 0, isApprox: true, reason: '재료 밀도 정보 없음' }
-    const g = amount * from.ml * info.gPerMl
+    const g = amount * from.ml * density
     return { value: roundSensible(g / to.approxG), isApprox: true }
   }
 

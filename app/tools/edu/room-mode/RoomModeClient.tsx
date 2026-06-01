@@ -84,10 +84,10 @@ export default function RoomModeClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
-          { id: 'modes', label: '📊 모드 분석' },
-          { id: 'plan',  label: '🗺️ 방 평면도' },
-          { id: 'ratio', label: '📐 방 비율 진단' },
-          { id: 'traps', label: '🛡️ 트랩·튜닝' },
+          { id: 'modes', label: '모드 분석' },
+          { id: 'plan',  label: '방 평면도' },
+          { id: 'ratio', label: '방 비율 진단' },
+          { id: 'traps', label: '트랩·튜닝' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -115,7 +115,7 @@ export default function RoomModeClient() {
                 }}
                 type="button"
               >
-                {p.emoji} {p.label}
+                {p.label}
               </button>
             ))}
           </div>
@@ -443,12 +443,13 @@ export default function RoomModeClient() {
 interface BarProps { modes: { freq: number; type: 'axial' | 'tangential' | 'oblique'; strength: number }[]; schroeder: number }
 
 function ModeBarChart({ modes, schroeder }: BarProps) {
-  const W = 700
-  const H = 180
-  const padL = 32
+  /* 모바일에서 가로 스크롤이 생기지 않도록 viewBox를 좁혀 100% 폭에 맞춤 */
+  const W = 480
+  const H = 196
+  const padL = 28
   const padR = 12
-  const padT = 12
-  const padB = 28
+  const padT = 18
+  const padB = 26
   const fMin = 20
   const fMax = 300
   const xScale = (f: number) => padL + ((f - fMin) / (fMax - fMin)) * (W - padL - padR)
@@ -457,52 +458,57 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
   const yScale = (s: number) => yBase - s * (yBase - yMax)
 
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ minWidth: 600, width: '100%' }}>
-        {/* 격자 */}
-        {[20, 50, 100, 150, 200, 250, 300].map((f) => (
-          <g key={f}>
-            <line x1={xScale(f)} y1={padT} x2={xScale(f)} y2={yBase} stroke="var(--border)" strokeWidth="0.5" />
-            <text x={xScale(f)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{f}Hz</text>
-          </g>
-        ))}
-        {/* 강도 라벨 */}
-        {[0.4, 0.7, 1.0].map((s) => (
-          <g key={s}>
-            <line x1={padL} y1={yScale(s)} x2={W - padR} y2={yScale(s)} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,3" />
-            <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{s}</text>
-          </g>
-        ))}
-        {/* 슈로더 라인 */}
-        {schroeder >= fMin && schroeder <= fMax && (
-          <g>
-            <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#D97706" strokeWidth="1.5" strokeDasharray="3,2" />
-            <text x={xScale(schroeder)} y={padT - 2} fill="#D97706" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">슈로더</text>
-          </g>
-        )}
-        {/* 모드 막대 */}
-        {modes.map((m, i) => {
-          if (m.freq < fMin || m.freq > fMax) return null
-          const x = xScale(m.freq)
-          const y = yScale(m.strength)
-          return (
-            <rect
-              key={i}
-              x={x - 1.5}
-              y={y}
-              width={3}
-              height={yBase - y}
-              fill={MODE_COLORS[m.type]}
-              opacity={0.8}
-            >
-              <title>{`${m.freq.toFixed(1)}Hz · ${MODE_LABELS[m.type]}`}</title>
-            </rect>
-          )
-        })}
-        {/* X축 */}
-        <line x1={padL} y1={yBase} x2={W - padR} y2={yBase} stroke="var(--text)" strokeWidth="1" />
-      </svg>
-    </div>
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      width={W}
+      height={H}
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: '100%', height: 'auto', maxWidth: '100%', display: 'block' }}
+    >
+      {/* 격자 */}
+      {[20, 50, 100, 150, 200, 250, 300].map((f) => (
+        <g key={f}>
+          <line x1={xScale(f)} y1={padT} x2={xScale(f)} y2={yBase} stroke="var(--border)" strokeWidth="0.5" />
+          <text x={xScale(f)} y={H - 8} fill="var(--muted)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{f}</text>
+        </g>
+      ))}
+      {/* 강도 라벨 */}
+      {[0.4, 0.7, 1.0].map((s) => (
+        <g key={s}>
+          <line x1={padL} y1={yScale(s)} x2={W - padR} y2={yScale(s)} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,3" />
+          <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{s}</text>
+        </g>
+      ))}
+      {/* 슈로더 라인 */}
+      {schroeder >= fMin && schroeder <= fMax && (
+        <g>
+          <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#D97706" strokeWidth="1.5" strokeDasharray="3,2" />
+          <text x={xScale(schroeder)} y={padT - 6} fill="#D97706" fontSize="12" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">슈로더</text>
+        </g>
+      )}
+      {/* 모드 막대 */}
+      {modes.map((m, i) => {
+        if (m.freq < fMin || m.freq > fMax) return null
+        const x = xScale(m.freq)
+        const y = yScale(m.strength)
+        return (
+          <rect
+            key={i}
+            x={x - 1.5}
+            y={y}
+            width={3}
+            height={yBase - y}
+            fill={MODE_COLORS[m.type]}
+            opacity={0.8}
+          >
+            <title>{`${m.freq.toFixed(1)}Hz · ${MODE_LABELS[m.type]}`}</title>
+          </rect>
+        )
+      })}
+      {/* X축 + 단위 */}
+      <line x1={padL} y1={yBase} x2={W - padR} y2={yBase} stroke="var(--text)" strokeWidth="1" />
+      <text x={W - padR} y={padT + 2} fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">Hz</text>
+    </svg>
   )
 }
 

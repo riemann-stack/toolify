@@ -114,12 +114,12 @@ export default function CardInstallmentPage() {
             카드 할부 수수료율은 카드사별로 고정된 하나의 값이 아니라 <strong style={{ color: 'var(--text)' }}>① 할부 기간(개월)</strong>과 <strong style={{ color: 'var(--text)' }}>② 회원 신용·이용 등급</strong>에 따라 차등 적용됩니다.
             보통 <strong style={{ color: 'var(--text)' }}>기간이 길수록 수수료율이 높아지는</strong> 구조이며, 8개 전업 카드사 모두 비슷한 구간을 사용합니다. 아래는 업계 일반적인 구간 범위입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+          <div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px', tableLayout: 'fixed' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['할부 기간', '일반 등급', '우수 등급'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th key={i} style={{ padding: '9px 6px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -132,9 +132,9 @@ export default function CardInstallmentPage() {
                   { c: '13개월 이상', g: '약 19~19.9%', p: '약 17~19%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '9px 6px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.c}</td>
+                    <td style={{ padding: '9px 6px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.g}</td>
+                    <td style={{ padding: '9px 6px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.p}</td>
                   </tr>
                 ))}
               </tbody>
@@ -170,7 +170,7 @@ export default function CardInstallmentPage() {
         {/* ── 4. 일시불 vs 무이자 결정 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            일시불 할인 vs 무이자 할부 — 어느 쪽이 이득?
+            일시불 할인 vs 무이자 할부
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>

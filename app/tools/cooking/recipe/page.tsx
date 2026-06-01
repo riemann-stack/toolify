@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/cooking/recipe',
   title: '레시피 비율 계산기 — 인분 자동 계산·큰술↔g↔ml 단위 환산',
   description:
-    '인분만 바꾸면 모든 재료가 비례 자동 + 큰술↔g↔ml 환산. 양념 보정, 레시피 저장, 장보기 리스트와 한식·양식·일식 프리셋 14종.',
+    '인분만 바꾸면 모든 재료가 비례 자동 + 큰술↔g↔ml 환산. 양념 보정, 레시피 저장, 장보기 리스트와 한식·양식·일식·중식 프리셋 22종.',
   keywords: [
     '레시피 비율 계산기', '인분 계산', '재료 비율', '큰술 g 환산', '컵 ml 변환',
     '양념 비율', '레시피 저장', '장보기 리스트', '요리 단위 변환', '베이킹 비율',
@@ -98,7 +98,7 @@ export default function RecipePage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>부피 ↔ 무게 환산 (재료별 밀도)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            같은 부피라도 재료에 따라 무게가 크게 다릅니다. 본 도구는 50여 재료의 밀도 데이터로 자동 환산합니다.
+            같은 부피라도 재료에 따라 무게가 크게 다릅니다. 본 도구는 60여 재료의 밀도 데이터로 자동 환산합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -185,18 +185,18 @@ export default function RecipePage() {
 
         {/* 6. 인기 한식 표준 인분 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인기 한국 요리 표준 인분</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인기 레시피 표준 인분</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            본 도구의 14가지 프리셋 (한식·양식·일식·디저트):
+            본 도구의 22가지 프리셋 (한식·양식·일식·중식·디저트·샐러드):
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { name: '🥘 김치찌개 (2인분)',  ing: '신김치 200g, 돼지고기 150g, 두부 100g, 다진마늘 1큰술' },
               { name: '🍲 된장찌개 (2인분)',  ing: '된장 2큰술, 두부 150g, 멸치육수 400ml, 애호박 1/2개' },
               { name: '🥩 소불고기 (2인분)',  ing: '소고기 300g, 양파 1/2개, 간장 3큰술, 참기름 1큰술' },
-              { name: '🌶️ 떡볶이 (2인분)',    ing: '떡 400g, 어묵 100g, 고추장 2큰술, 설탕 2큰술' },
+              { name: '🌶️ 마파두부 (2인분)',  ing: '두부 350g, 다진 돼지고기 100g, 고추장 1큰술, 전분 1큰술' },
               { name: '🍝 크림 파스타 (1인분)', ing: '파스타면 100g, 생크림 150ml, 버터 1큰술, 치즈가루 2큰술' },
-              { name: '🥞 팬케이크 (2인분)',  ing: '박력분 150g, 설탕 30g, 계란 1개, 우유 200ml' },
+              { name: '🥗 닭가슴살 샐러드 (1인분)', ing: '닭가슴살 100g, 양상추 100g, 토마토 1개, 올리브유 1큰술' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px' }}>
                 <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{c.name}</p>

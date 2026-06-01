@@ -100,7 +100,7 @@ export default function FourInsurancePage() {
         {/* ── 2. 2026 변경사항 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            📅 2026년 4대보험 변경사항
+            2026년 4대보험 변경사항
           </h2>
           <div style={{
             background: 'rgba(14,165,233,0.05)',
@@ -146,11 +146,14 @@ export default function FourInsurancePage() {
 
         {/* ── 4. 직원 1명 채용 시 회사 부담 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            직원 1명 채용 시 회사 실제 부담 (월급 300만원, 150인 미만, 사무직)
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+            직원 1명 채용 시 회사 실제 부담
           </h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.6 }}>
+            월급 300만원 · 150인 미만 · 사무직 기준
+          </p>
+          <div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>항목</th>
@@ -164,7 +167,7 @@ export default function FourInsurancePage() {
                   { i: '건강보험 사업주 (3.595%)',     v: '107,850원',       a: false },
                   { i: '장기요양 사업주 (0.4724%)',    v: '14,170원',        a: false },
                   { i: '고용보험 사업주 (실업+추가)',  v: '34,500원',        a: false },
-                  { i: '산재보험 사업주 (사무직 0.07%+0.12%)', v: '약 5,700원', a: false },
+                  { i: '산재보험 사업주 (0.07%+0.12%)', v: '약 5,700원', a: false },
                   { i: '회사 월 총 부담',              v: '약 3,304,720원', a: true },
                   { i: '회사 연 총 부담',              v: '약 39,656,640원', a: true },
                 ].map((r, i) => (
@@ -184,7 +187,7 @@ export default function FourInsurancePage() {
         {/* ── 5. 두루누리 지원 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            💡 두루누리 사회보험료 지원 (소상공인·자영업자 필독)
+            두루누리 사회보험료 지원
           </h2>
           <div style={{
             background: 'rgba(16,185,129,0.06)',

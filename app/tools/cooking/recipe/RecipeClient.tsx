@@ -69,10 +69,11 @@ export default function RecipeClient() {
         })}
       </div>
 
-      {tab === 'scale'    && <ScaleTab />}
-      {tab === 'convert'  && <ConvertTab />}
-      {tab === 'saved'    && <SavedTab />}
-      {tab === 'shopping' && <ShoppingTab />}
+      {/* 모든 탭을 마운트 유지 — 탭 전환 시 입력값 보존 (display 토글) */}
+      <div style={{ display: tab === 'scale' ? 'flex' : 'none', flexDirection: 'column', gap: 12 }}><ScaleTab /></div>
+      <div style={{ display: tab === 'convert' ? 'flex' : 'none', flexDirection: 'column', gap: 12 }}><ConvertTab /></div>
+      <div style={{ display: tab === 'saved' ? 'flex' : 'none', flexDirection: 'column', gap: 12 }}><SavedTab active={tab === 'saved'} /></div>
+      <div style={{ display: tab === 'shopping' ? 'flex' : 'none', flexDirection: 'column', gap: 12 }}><ShoppingTab active={tab === 'shopping'} /></div>
     </div>
   )
 }
@@ -376,10 +377,6 @@ function ScaleTab() {
               <button className={`${s.resultBtn} ${savedConfirm ? s.resultBtnDone : ''}`} onClick={handleSaveToMyRecipes}>
                 {savedConfirm ? '✓ 저장됨' : '💾 내 레시피로 저장'}
               </button>
-              <button className={s.resultBtn}
-                onClick={() => alert('💡 좌측 [내 레시피]에 저장 후 [장보기 리스트] 탭에서 인분과 함께 추가하세요.')}>
-                🛒 장보기로 보내기
-              </button>
             </div>
           </div>
 
@@ -409,6 +406,7 @@ function ConvertTab() {
   const amt = parseFloat(amount) || 0
   const results = amt > 0 ? convertAll(name, amt, unit) : []
   const info = findIngredient(name)
+  const isCountUnit = !!UNITS.find(u => u.key === unit)?.count
 
   const copy = (key: string, text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -469,21 +467,29 @@ function ConvertTab() {
             변환 결과
             <span className={s.cardLabelHint}>{name} {amt}{UNITS.find(u => u.key === unit)?.name}</span>
           </label>
-          <div className={s.convertResultGrid}>
-            {results.map(r => {
-              const key = r.unit
-              const text = `${r.value}${r.name}`
-              return (
-                <button key={key} className={s.convertBox}
-                  onClick={() => copy(key, text)}
-                  title={r.isApprox ? '밀도 기반 추정' : '정확 환산'}>
-                  <div className={s.convertBoxValue}>{r.value}</div>
-                  <div className={s.convertBoxUnit}>{r.name}</div>
-                  <div className={s.convertApprox}>{r.isApprox ? '≈ 추정' : '= 정확'} · {copied === key ? '복사됨!' : '클릭 복사'}</div>
-                </button>
-              )
-            })}
-          </div>
+          {results.length > 0 ? (
+            <div className={s.convertResultGrid}>
+              {results.map(r => {
+                const key = r.unit
+                const text = `${r.value}${r.name}`
+                return (
+                  <button key={key} className={s.convertBox}
+                    onClick={() => copy(key, text)}
+                    title={r.isApprox ? '밀도 기반 추정' : '정확 환산'}>
+                    <div className={s.convertBoxValue}>{r.value}</div>
+                    <div className={s.convertBoxUnit}>{r.name}</div>
+                    <div className={s.convertApprox}>{r.isApprox ? '≈ 추정' : '= 정확'} · {copied === key ? '복사됨!' : '클릭 복사'}</div>
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
+            <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'Noto Sans KR, sans-serif', margin: 0 }}>
+              {isCountUnit
+                ? <>⚠️ <strong style={{ color: 'var(--text)' }}>개·반 개·쪽·단</strong> 같은 개수 단위는 무게·부피로 변환할 수 없습니다. <strong style={{ color: 'var(--text)' }}>g·ml·컵·큰술</strong> 등으로 입력해 주세요.</>
+                : <>변환할 수 있는 결과가 없습니다. 재료명·양·단위를 확인해 주세요.</>}
+            </p>
+          )}
         </div>
       )}
 
@@ -526,7 +532,7 @@ function ConvertTab() {
 }
 
 /* ═════════════════════════════════════════ 탭 3 — 내 레시피 ═════════════════════════════════════════ */
-function SavedTab() {
+function SavedTab({ active }: { active: boolean }) {
   const [recipes, setRecipes] = useState<SavedRecipe[]>([])
   const [loaded, setLoaded] = useState(false)
   const [searchQ, setSearchQ] = useState('')
@@ -542,10 +548,11 @@ function SavedTab() {
   ])
   const fileRef = useRef<HTMLInputElement | null>(null)
 
+  // 탭이 활성화될 때마다 최신 데이터 재로딩 (다른 탭에서 저장한 레시피 반영)
   useEffect(() => {
     setRecipes(loadRecipes())
     setLoaded(true)
-  }, [])
+  }, [active])
   useEffect(() => {
     if (loaded) saveRecipes(recipes)
   }, [recipes, loaded])
@@ -801,7 +808,7 @@ function SavedTab() {
 }
 
 /* ═════════════════════════════════════════ 탭 4 — 장보기 리스트 ═════════════════════════════════════════ */
-function ShoppingTab() {
+function ShoppingTab({ active }: { active: boolean }) {
   const [allRecipes, setAllRecipes] = useState<SavedRecipe[]>([])
   const [loaded, setLoaded] = useState(false)
   const [entries, setEntries] = useState<ShoppingListEntry[]>([])
@@ -810,10 +817,11 @@ function ShoppingTab() {
   const [checked, setChecked] = useState<Set<string>>(new Set())
   const [copied, setCopied] = useState(false)
 
+  // 탭이 활성화될 때마다 내 레시피 목록 재로딩 (드롭다운 최신화)
   useEffect(() => {
     setAllRecipes(loadRecipes())
     setLoaded(true)
-  }, [])
+  }, [active])
 
   const presetSavedAsRecipe: SavedRecipe[] = useMemo(() =>
     RECIPE_PRESETS.map(p => ({
@@ -882,7 +890,7 @@ function ShoppingTab() {
         </label>
         <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
           이번 주 만들 레시피를 추가하면 마트 코너별(채소·육류·유제품 등)로 정리된 합산 장보기 리스트가 생성됩니다.
-          {allRecipes.length === 0 && ' [내 레시피] 탭에 저장된 레시피와 8가지 프리셋 모두 사용 가능합니다.'}
+          {allRecipes.length === 0 && ` [내 레시피] 탭에 저장된 레시피와 ${RECIPE_PRESETS.length}가지 프리셋 모두 사용 가능합니다.`}
         </p>
 
         <div className={s.shopAddRow}>
@@ -952,7 +960,8 @@ function ShoppingTab() {
                     <div key={`${g.group}-${idx}`}
                       className={`${s.shopItem} ${isChecked ? s.shopItemChecked : ''}`}
                       onClick={() => toggleCheck(key)}>
-                      <input type="checkbox" className={s.shopItemCheck} checked={isChecked} onChange={() => toggleCheck(key)} />
+                      <input type="checkbox" className={s.shopItemCheck} checked={isChecked}
+                        onChange={() => toggleCheck(key)} onClick={e => e.stopPropagation()} />
                       <span className={s.shopItemName}>
                         {it.name}
                         {sources && <small>{sources}</small>}

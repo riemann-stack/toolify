@@ -73,6 +73,27 @@
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 30px 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2.5 4.5 L6 8 L9.5 4.5' fill='none' stroke='%23999' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.select:focus { border-color: var(--accent); }
+
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 600px) { .row2 { gap: 8px; } }
 

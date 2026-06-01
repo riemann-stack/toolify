@@ -244,6 +244,40 @@ export const RECIPE_PRESETS: RecipePreset[] = [
     notes: '양파 갈색 날 때까지 충분히 볶기 — 단맛·풍미의 핵심.',
   },
 
+  /* ─── 중식 ─── */
+  {
+    id: 'mapo-tofu', name: '마파두부', emoji: '🌶️', category: 'chinese', basePeople: 2,
+    ingredients: [
+      { name: '두부',         amount: 350, unit: 'g' },
+      { name: '돼지고기',     amount: 100, unit: 'g',    note: '다진 것' },
+      { name: '대파',         amount: 1,   unit: 'piece' },
+      { name: '다진마늘',     amount: 1,   unit: 'tbsp' },
+      { name: '고추장',       amount: 1,   unit: 'tbsp' },
+      { name: '고춧가루',     amount: 1,   unit: 'tbsp' },
+      { name: '간장',         amount: 1,   unit: 'tbsp' },
+      { name: '전분',         amount: 1,   unit: 'tbsp', note: '물 2큰술에 풀기' },
+      { name: '물',           amount: 150, unit: 'ml' },
+      { name: '참기름',       amount: 1,   unit: 'tsp' },
+    ],
+    notes: '두부는 데쳐서 으스러지지 않게. 전분물은 마지막에 넣어 농도 조절.',
+  },
+  {
+    id: 'shrimp-fried-rice', name: '새우볶음밥', emoji: '🍤', category: 'chinese', basePeople: 2,
+    ingredients: [
+      { name: '밥',           amount: 2,   unit: 'piece', note: '식은밥 권장' },
+      { name: '새우',         amount: 120, unit: 'g' },
+      { name: '계란',         amount: 2,   unit: 'piece' },
+      { name: '대파',         amount: 1,   unit: 'piece' },
+      { name: '양파',         amount: 0.5, unit: 'piece' },
+      { name: '당근',         amount: 30,  unit: 'g' },
+      { name: '굴소스',       amount: 1,   unit: 'tbsp' },
+      { name: '간장',         amount: 1,   unit: 'tbsp' },
+      { name: '식용유',       amount: 2,   unit: 'tbsp' },
+      { name: '참기름',       amount: 1,   unit: 'tsp' },
+    ],
+    notes: '찬밥이 고슬고슬하게 볶입니다. 센 불에 빠르게 볶아 불맛을 살리세요.',
+  },
+
   /* ─── 디저트·베이킹 ─── */
   {
     id: 'pancake', name: '팬케이크', emoji: '🥞', category: 'dessert', basePeople: 2,
@@ -278,5 +312,36 @@ export const RECIPE_PRESETS: RecipePreset[] = [
       { name: '설탕',         amount: 20,  unit: 'g' },
     ],
     notes: '생크림·볼·거품기 모두 차갑게 — 잘 휘핑됨.',
+  },
+
+  /* ─── 샐러드 ─── */
+  {
+    id: 'chicken-salad', name: '닭가슴살 샐러드', emoji: '🥗', category: 'salad', basePeople: 1,
+    ingredients: [
+      { name: '닭가슴살',     amount: 100, unit: 'g' },
+      { name: '양상추',       amount: 100, unit: 'g' },
+      { name: '토마토',       amount: 1,   unit: 'piece' },
+      { name: '오이',         amount: 0.5, unit: 'piece' },
+      { name: '양파',         amount: 0.25, unit: 'piece' },
+      { name: '올리브유',     amount: 1,   unit: 'tbsp' },
+      { name: '식초',         amount: 1,   unit: 'tbsp', note: '발사믹' },
+      { name: '소금',         amount: 1,   unit: 'pinch' },
+      { name: '후추',         amount: 1,   unit: 'pinch' },
+    ],
+    notes: '닭가슴살은 삶거나 구워 식혀서 찢기. 드레싱은 먹기 직전에 버무립니다.',
+  },
+  {
+    id: 'potato-salad', name: '감자 샐러드', emoji: '🥔', category: 'salad', basePeople: 2,
+    ingredients: [
+      { name: '감자',         amount: 3,   unit: 'piece' },
+      { name: '계란',         amount: 2,   unit: 'piece' },
+      { name: '오이',         amount: 0.5, unit: 'piece' },
+      { name: '당근',         amount: 30,  unit: 'g' },
+      { name: '마요네즈',     amount: 3,   unit: 'tbsp' },
+      { name: '설탕',         amount: 1,   unit: 'tsp' },
+      { name: '소금',         amount: 1,   unit: 'pinch' },
+      { name: '후추',         amount: 1,   unit: 'pinch' },
+    ],
+    notes: '감자는 푹 삶아 으깨고 한 김 식힌 뒤 마요를 버무려야 묽어지지 않습니다.',
   },
 ]

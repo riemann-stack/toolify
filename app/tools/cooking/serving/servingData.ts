@@ -31,6 +31,8 @@ export interface ServingData {
   marketPackage?: string
   /** 식이 제한 — 어떤 그룹에 안 맞는지 */
   notFor?: DietaryFlag[]
+  /** 보조 개수 단위 1개당 그램 (unit 괄호 단위 환산용 — 예: 두부 1모 ≈ 300g) */
+  gramsPerPiece?: number
 }
 
 export const SERVING_DATA: ServingData[] = [
@@ -64,7 +66,7 @@ export const SERVING_DATA: ServingData[] = [
     withCarbReduction: 0, withoutCarbIncrease: 0, rawToCooked: 2.3,
     prepNote: '건면 기준 (1봉 100~110g)', cookingNote: '전골·부대찌개용. 국물 양에 따라 1봉으로 2인 가능.',
     variantAdjust: { '국물': -10, '볶음': 10 },
-    marketPackage: '5봉 1팩', notFor: ['glutenFree'] },
+    marketPackage: '5봉 1팩', notFor: ['glutenFree'], gramsPerPiece: 110 },
   { key: 'kalguksu', name: '칼국수면', emoji: '🍜', category: 'noodle', unit: 'g',
     basePerPerson: { main: 150, side: 80, snack: 110, light: 110 },
     withCarbReduction: 0, withoutCarbIncrease: 20, rawToCooked: 1.6,
@@ -183,7 +185,7 @@ export const SERVING_DATA: ServingData[] = [
     withCarbReduction: 0, withoutCarbIncrease: 30, rawToCooked: 0.9,
     prepNote: '껍질 포함 (중간 1개 약 150g)', cookingNote: '찜·국·볶음 공통. 1인분 1~1.5개.',
     variantAdjust: { '국물': 10, '볶음': 0, '찜': 0 },
-    marketPackage: '한 망 2~3kg' },
+    marketPackage: '한 망 2~3kg', gramsPerPiece: 150 },
 
   // ── 국·찌개·전골 ─────────────────────────
   { key: 'soupMeat', name: '국거리 고기', emoji: '🍲', category: 'soup', unit: 'g',
@@ -215,7 +217,7 @@ export const SERVING_DATA: ServingData[] = [
     withCarbReduction: 20, withoutCarbIncrease: 0, rawToCooked: 0.9,
     prepNote: '생두부 (1모 300~350g)', cookingNote: '찌개용 두부 1모 = 3~4인분. 단독 반찬은 1~2인분.',
     variantAdjust: { '국물': -10, '볶음': 10 },
-    marketPackage: '1모 300g (찌개용 1~3모)' },
+    marketPackage: '1모 300g (찌개용 1~3모)', gramsPerPiece: 300 },
 ]
 
 // ── 옵션 라벨 ────────────────────────────
@@ -225,10 +227,10 @@ export type AgeGroup = 'adultOnly' | 'adultChild' | 'childOnly'
 export type Carb = 'yes' | 'no'
 
 export const MEAL_LABEL: Record<MealType, string> = {
-  main: '🍽️ 메인 식사',
-  side: '🍶 곁들임 / 사이드',
-  snack: '🍺 안주',
-  light: '🥗 가벼운 식사',
+  main: '메인 식사',
+  side: '곁들임 / 사이드',
+  snack: '안주',
+  light: '가벼운 식사',
 }
 export const APPETITE_MULT: Record<Appetite, number> = {
   small: 0.8, normal: 1.0, large: 1.25,
@@ -247,9 +249,9 @@ export const VARIANT_CHOICES: Partial<Record<Category, string[]>> = {
 }
 
 export const DIETARY_LABEL: Record<DietaryFlag, string> = {
-  vegetarian: '🥬 채식 (고기·생선 X)',
-  vegan: '🌱 비건 (모든 동물성 X)',
-  glutenFree: '🌾 글루텐프리 (밀가루 X)',
+  vegetarian: '채식 (고기·생선 X)',
+  vegan: '비건 (모든 동물성 X)',
+  glutenFree: '글루텐프리 (밀가루 X)',
 }
 
 // ── 가족 구성 ────────────────────────────
@@ -288,6 +290,11 @@ export interface UserFamilySettings {
 
 export const STORAGE_KEY = 'youtil:serving:family-v1'
 
+// 한국 시간(KST, UTC+9 · DST 없음) 기준 오늘 날짜 YYYY-MM-DD
+export function todayKST(): string {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
 export function loadFamily(): UserFamilySettings {
   if (typeof window === 'undefined') return { members: [] }
   try {
@@ -298,7 +305,7 @@ export function loadFamily(): UserFamilySettings {
 export function saveFamily(s: UserFamilySettings): void {
   if (typeof window === 'undefined') return
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...s, updatedAt: new Date().toISOString().slice(0, 10) }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...s, updatedAt: todayKST() }))
   } catch { /* quota */ }
 }
 

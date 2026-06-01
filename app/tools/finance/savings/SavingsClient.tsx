@@ -130,10 +130,10 @@ export default function SavingsClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
-          { id: 'diagnose', label: '🔍 저축 진단' },
-          { id: 'jars',     label: '🏺 6 항아리' },
-          { id: 'goal',     label: '🎯 목표 역산' },
-          { id: 'tax',      label: '🌱 절세 정책' },
+          { id: 'diagnose', label: '저축 진단' },
+          { id: 'jars',     label: '6 항아리' },
+          { id: 'goal',     label: '목표 역산' },
+          { id: 'tax',      label: '절세 정책' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -154,33 +154,27 @@ export default function SavingsClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>가구 구성</label>
-                <div className={s.pillRow}>
+                <select
+                  className={s.select}
+                  value={household}
+                  onChange={(e) => setHousehold(e.target.value as Household)}
+                >
                   {(Object.keys(HOUSEHOLD_AVG_EXPENSE) as Household[]).map((h) => (
-                    <button
-                      key={h}
-                      className={`${s.pill} ${household === h ? s.pillActive : ''}`}
-                      onClick={() => setHousehold(h)}
-                      type="button"
-                    >
-                      {HOUSEHOLD_AVG_EXPENSE[h].label}
-                    </button>
+                    <option key={h} value={h}>{HOUSEHOLD_AVG_EXPENSE[h].label}</option>
                   ))}
-                </div>
+                </select>
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>연령대·상황</label>
-                <div className={s.pillRow}>
+                <select
+                  className={s.select}
+                  value={ageGroup}
+                  onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
+                >
                   {AGE_GROUPS.map((a) => (
-                    <button
-                      key={a.id}
-                      className={`${s.pill} ${ageGroup === a.id ? s.pillActive : ''}`}
-                      onClick={() => setAgeGroup(a.id)}
-                      type="button"
-                    >
-                      {a.label.split(' ')[0]}
-                    </button>
+                    <option key={a.id} value={a.id}>{a.label}</option>
                   ))}
-                </div>
+                </select>
               </div>
             </div>
             <p className={s.helpText}>
@@ -200,8 +194,8 @@ export default function SavingsClient() {
                   onChange={(e) => setIncome(e.target.value)}
                   min={0} max={5000} step={10}
                 />
-                <p className={s.helpText}>
-                  ▶ <Link href="/tools/finance/salary" style={{ color: 'var(--accent)' }}>연봉 실수령액 계산기</Link>로 정확히
+                <p className={s.helpText} style={{ whiteSpace: 'nowrap' }}>
+                  ▶ <Link href="/tools/finance/salary" style={{ color: 'var(--accent)' }}>연봉 실수령액 계산기</Link>
                 </p>
               </div>
               <div className={s.field}>

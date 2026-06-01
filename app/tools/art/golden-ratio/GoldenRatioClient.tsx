@@ -563,7 +563,7 @@ function RatioCompareCard() {
   // 같은 세로(고정 32px) 기준 가로 길이 비교
   const fixedHeight = 32
   // 가장 긴 가로 = 21:9 (2.333) → 최대 픽셀 폭 280
-  const maxWidth = 280
+  const maxWidth = 200
   const maxRatio = 2.333
 
   return (

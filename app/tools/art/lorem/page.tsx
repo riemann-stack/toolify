@@ -68,7 +68,7 @@ export default function LoremPage() {
         {/* 2. 6 tabs guide */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '10px' }}>
             {[
               { icon: '📝', title: '문단', desc: '한글·영문 Lorem Ipsum 5단계 길이(아주 짧게~매우 길게) × 9가지 톤. 1~20문단 슬라이더로 분량 조절.' },
               { icon: '🎨', title: 'UI 요소', desc: '타이틀·서브타이틀·버튼·카드 제목·상품명·리뷰·댓글·알림·에러·빈 상태·온보딩·가격 플랜·FAQ 등 19종.' },
@@ -80,7 +80,7 @@ export default function LoremPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                 <div style={{ fontSize: '22px', marginBottom: '8px' }}>{item.icon}</div>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>{item.title}</p>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</p>
+                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, overflowWrap: 'anywhere' }}>{item.desc}</p>
               </div>
             ))}
           </div>

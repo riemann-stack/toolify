@@ -110,12 +110,12 @@ export default function FightWeightPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { sport: '🥊 복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
-              { sport: '🥋 UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#CA8A04' },
-              { sport: '🌿 ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
-              { sport: '🦵 킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#0891B2' },
-              { sport: '🥋 유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
-              { sport: '🦿 태권도',   cls: '라이트급',   limit: '74.0kg',  color: '#9B59B6' },
+              { sport: '복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
+              { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#CA8A04' },
+              { sport: 'ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
+              { sport: '킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#0891B2' },
+              { sport: '유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
+              { sport: '태권도',   cls: '라이트급',   limit: '74.0kg',  color: '#9B59B6' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.color}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 12, color: c.color, fontWeight: 700, marginBottom: 4 }}>{c.sport}</p>
@@ -178,11 +178,11 @@ export default function FightWeightPage() {
               </thead>
               <tbody>
                 {[
-                  { o: '🥋 UFC',           t: '시합 전날 오전',  r: '약 30~36시간', x: '재수화 자유 → 8~12kg 차이 흔함, 1회 한정 1lb 초과 허용' },
-                  { o: '🌿 ONE Champ',     t: '실측+소변 검사',  r: '제한적',        x: '수분 감량 금지 (2015~), 매주 체중 보고' },
-                  { o: '🥊 복싱 (WBA·WBC)',t: '전날 또는 당일',   r: '24~36시간',    x: '단체별 차이 있음, 재수화 자유' },
-                  { o: '🤼 ADCC·주짓수',   t: '시합 1시간 전',    r: '거의 불가능',   x: '실제 체중과 거의 동일' },
-                  { o: '🥋 유도·레슬링',  t: '당일 새벽',        r: '수 시간',       x: '국제 대회 기준, 짧은 재수화' },
+                  { o: 'UFC',           t: '시합 전날 오전',  r: '약 30~36시간', x: '재수화 자유 → 8~12kg 차이 흔함, 1회 한정 1lb 초과 허용' },
+                  { o: 'ONE Champ',     t: '실측+소변 검사',  r: '제한적',        x: '수분 감량 금지 (2015~), 매주 체중 보고' },
+                  { o: '복싱 (WBA·WBC)',t: '전날 또는 당일',   r: '24~36시간',    x: '단체별 차이 있음, 재수화 자유' },
+                  { o: 'ADCC·주짓수',   t: '시합 1시간 전',    r: '거의 불가능',   x: '실제 체중과 거의 동일' },
+                  { o: '유도·레슬링',  t: '당일 새벽',        r: '수 시간',       x: '국제 대회 기준, 짧은 재수화' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.o}</td>

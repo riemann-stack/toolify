@@ -230,6 +230,21 @@ export default function FightWeightClient() {
     [height, weight, sport.classes, gender]
   )
 
+  // 현재 체급 (체중이 속하는 가장 가벼운 체급) — 체급 검색 탭용
+  const currentClass = useMemo(() => {
+    const c = availableClasses.find(c => c.limit >= weight)
+    return c ?? availableClasses[availableClasses.length - 1]
+  }, [availableClasses, weight])
+
+  // 체급 사다리 (현재 체급 주변 5체급) — 체급 검색 탭용
+  const ladder = useMemo(() => {
+    if (availableClasses.length === 0) return []
+    const idx = availableClasses.indexOf(currentClass)
+    const start = Math.max(0, idx - 3)
+    const end = Math.min(availableClasses.length, idx + 2)
+    return availableClasses.slice(start, end)
+  }, [availableClasses, currentClass])
+
   // 목표 체급 (직접 선택 or 추천 첫 번째)
   const targetClass = useMemo(() => {
     if (targetClassName) return availableClasses.find(c => c.name === targetClassName)
@@ -364,8 +379,8 @@ export default function FightWeightClient() {
     return (
       <div className={styles.card} key={s.id}>
         <div className={styles.cardLabel}>
-          <span>{s.flag} {s.label} 체급표</span>
-          <span className={styles.cardLabelHint}>{s.classes.length}체급 · 행 클릭 시 검색 탭으로 이동</span>
+          <span>{s.label} 체급표</span>
+          <span className={styles.cardLabelHint}>{s.classes.length}체급 · 행 클릭 시 감량 계획으로 이동</span>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>{s.policy}</p>
         <div style={{ overflowX: 'auto' }}>
@@ -381,7 +396,7 @@ export default function FightWeightClient() {
                   onClick={() => {
                     setSportId(s.id)
                     setTargetClassName(c.name)
-                    setTab('search')
+                    setTab('plan')
                     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                 >
@@ -425,7 +440,7 @@ export default function FightWeightClient() {
               className={`${styles.sportBtn} ${styles[s.cls]} ${sportId === s.id ? styles.sportActive : ''}`}
               onClick={() => selectSport(s.id)}
             >
-              {s.flag} {s.label}
+              {s.label}
             </button>
           ))}
         </div>
@@ -444,7 +459,7 @@ export default function FightWeightClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>기본 정보</span>
-              <span className={styles.cardLabelHint}>{sport.flag} {sport.label}</span>
+              <span className={styles.cardLabelHint}>{sport.label}</span>
             </div>
 
             {/* 체중·키·성별 한 줄 (모바일도 3열) */}
@@ -471,26 +486,9 @@ export default function FightWeightClient() {
                 </div>
               </div>
             </div>
-
-            <div style={{ height: 10 }} />
-            <div className={styles.inputCell}>
-              <p className={styles.inputLabel}>계체 예정일 (D-{daysToWeighIn})</p>
-              <input className={styles.dateInput} type="date" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
-            </div>
-
-            <div style={{ height: 14 }} />
-            <p className={styles.inputLabel} style={{ marginBottom: 6 }}>목표 체급 선택</p>
-            <select className={styles.classSelect} value={targetClassName} onChange={e => setTargetClassName(e.target.value)}>
-              <option value="">— 자동 추천 —</option>
-              {availableClasses.map((c, i) => (
-                <option key={i} value={c.name}>
-                  {c.name} ({c.limit === Infinity ? '무제한' : `${c.limit}kg 이하`})
-                </option>
-              ))}
-            </select>
           </div>
 
-          {/* 추천 카드 */}
+          {/* 적정 체급 추천 */}
           {recommended.length > 0 && (
             <div className={styles.recommendCard}>
               <p className={styles.recommendLead}>💡 적정 체급 추천</p>
@@ -500,6 +498,72 @@ export default function FightWeightClient() {
               </p>
             </div>
           )}
+
+          {/* 현재 체급 */}
+          {currentClass && (
+            <div className={styles.hero}>
+              <p className={styles.heroLead}>현재 체급 · {sport.label}{gender === 'female' ? ' (여)' : ''}</p>
+              <p className={styles.heroClassName}>{currentClass.name}</p>
+              <p className={styles.heroSub}>
+                체중 {weight}kg · {currentClass.limit === Infinity ? '무제한급' : `한도 ${currentClass.limit}kg 이하`}
+                {currentClass.limit !== Infinity && weight <= currentClass.limit && ` · 한도까지 ${(currentClass.limit - weight).toFixed(1)}kg`}
+                {currentClass.limit !== Infinity && weight > currentClass.limit && ` · ${(weight - currentClass.limit).toFixed(1)}kg 초과`}
+              </p>
+            </div>
+          )}
+
+          {/* 체급 사다리 */}
+          {ladder.length > 0 && (
+            <div className={styles.card}>
+              <div className={styles.cardLabel}>
+                <span>체급 사다리</span>
+                <span className={styles.cardLabelHint}>내 위치 · {weight}kg</span>
+              </div>
+              <div className={styles.ladder}>
+                {ladder.map((c, i) => {
+                  const isCurrent = c === currentClass
+                  const over = c.limit !== Infinity && weight > c.limit
+                  return (
+                    <div key={i} className={`${styles.ladderRow} ${isCurrent ? styles.ladderCurrent : ''}`}>
+                      <span className={styles.ladderName}>{c.name}{c.forGender === 'female' && ' (여)'}</span>
+                      <span className={styles.ladderLimit}>{c.limit === Infinity ? '무제한' : `${c.limit.toFixed(2)} kg`}</span>
+                      <span className={`${styles.ladderTag} ${isCurrent ? styles.ladderTagCurrent : over ? styles.ladderTagOver : styles.ladderTagOk}`}>
+                        {isCurrent ? '현재' : c.limit === Infinity ? '충족' : over ? `${(weight - c.limit).toFixed(1)}kg 초과` : '충족'}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.6 }}>
+                전체 체급은 <strong style={{ color: 'var(--text)' }}>체급표</strong> 탭에서, 목표 체급까지의 감량 계획은 <strong style={{ color: 'var(--text)' }}>감량 계획</strong> 탭에서 확인하세요.
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ─────────────────── 탭 2: 감량 계획 ─────────────────── */}
+      {tab === 'plan' && (
+        <>
+          {/* 감량 목표 설정 — 목표 체급 + 계체 예정일 */}
+          <div className={styles.card}>
+            <div className={styles.cardLabel}>
+              <span>감량 목표 설정</span>
+              <span className={styles.cardLabelHint}>현재 {weight}kg · {sport.label}</span>
+            </div>
+            <p className={styles.inputLabel} style={{ marginBottom: 6 }}>목표 체급</p>
+            <select className={styles.classSelect} value={targetClassName} onChange={e => setTargetClassName(e.target.value)}>
+              <option value="">— 자동 추천 —</option>
+              {availableClasses.map((c, i) => (
+                <option key={i} value={c.name}>
+                  {c.name} ({c.limit === Infinity ? '무제한' : `${c.limit}kg 이하`})
+                </option>
+              ))}
+            </select>
+            <div style={{ height: 12 }} />
+            <p className={styles.inputLabel} style={{ marginBottom: 6 }}>계체 예정일 (D-{daysToWeighIn})</p>
+            <input className={styles.dateInput} type="date" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
+          </div>
 
           {/* 히어로 — 감량 필요량 */}
           {targetClass && (
@@ -520,7 +584,7 @@ export default function FightWeightClient() {
             </div>
           )}
 
-          {/* KPI */}
+          {/* KPI — 일평균/주간/비율 */}
           {needToLose > 0 && (
             <div className={styles.kpiGrid}>
               <div className={styles.kpiCard}>
@@ -539,12 +603,7 @@ export default function FightWeightClient() {
               </div>
             </div>
           )}
-        </>
-      )}
 
-      {/* ─────────────────── 탭 2: 감량 계획 ─────────────────── */}
-      {tab === 'plan' && (
-        <>
           {/* 위험도 카드 */}
           <div className={styles.card} style={{ textAlign: 'center' }}>
             <span className={`${styles.riskBadge} ${risk.cls}`}>{risk.label}</span>
@@ -637,7 +696,7 @@ export default function FightWeightClient() {
 
           {/* 체급 변경 권장 */}
           {recommendNextClass && (
-            <div className={styles.healthWarn} style={{ background: 'rgba(234,88,12,0.06)', borderColor: 'rgba(234,88,12,0.4)', color: '#FFE0C8' }}>
+            <div className={styles.healthWarn} style={{ background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.45)', color: 'var(--text)' }}>
               <span className={styles.warnIcon}>🔶</span>
               <div>
                 <p><strong style={{ color: '#EA580C' }}>{daysToWeighIn}일 이내 {needToLose.toFixed(2)}kg 감량은 권장되지 않습니다.</strong></p>
@@ -656,19 +715,19 @@ export default function FightWeightClient() {
             </div>
             <div className={styles.policyGrid}>
               <div className={styles.policyCard}>
-                <p className={styles.policyTitle}>🥋 UFC (MMA)</p>
+                <p className={styles.policyTitle}>UFC (MMA)</p>
                 <p className={styles.policyBody}>계체 후 <strong>약 30~36시간</strong> 재수화 자유 → 8~12kg 차이 흔함</p>
               </div>
               <div className={styles.policyCard}>
-                <p className={styles.policyTitle}>🌿 ONE Championship</p>
+                <p className={styles.policyTitle}>ONE Championship</p>
                 <p className={styles.policyBody}>2015년부터 <strong>수분 감량 금지</strong> · 매일 소변 비중 측정 · 차이 적음</p>
               </div>
               <div className={styles.policyCard}>
-                <p className={styles.policyTitle}>🥊 복싱</p>
+                <p className={styles.policyTitle}>복싱</p>
                 <p className={styles.policyBody}>시합 24~36시간 전 계체 · 재수화 자유 · 단체별 차이</p>
               </div>
               <div className={styles.policyCard}>
-                <p className={styles.policyTitle}>🥋 유도·레슬링</p>
+                <p className={styles.policyTitle}>유도·레슬링</p>
                 <p className={styles.policyBody}>시합 당일 새벽 계체 · 재수화 시간 짧음 (수 시간 이내)</p>
               </div>
             </div>

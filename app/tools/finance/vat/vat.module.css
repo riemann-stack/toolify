@@ -95,6 +95,9 @@
 .twoCol   { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 @media (max-width: 540px) { .threeCol { grid-template-columns: 1fr; } .twoCol { grid-template-columns: 1fr; } }
 
+/* 입력 2열 — 모바일에서도 유지 (공급가액 · 부가세율) */
+.inputDuo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+
 /* 입력 */
 .inputRow { display: flex; align-items: center; gap: 8px; }
 .numInput {
@@ -134,6 +137,14 @@
 }
 .textInput:focus { border-color: var(--accent); }
 
+/* iOS Safari date 입력 — 고정 폭 네이티브 위젯이 컨테이너를 넘는 현상 방지 */
+.dateInput {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 38px;
+}
+.dateInput::-webkit-date-and-time-value { text-align: left; margin: 0; }
+
 /* 옵션 */
 .optionRow  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
 .optionRow3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
@@ -160,7 +171,7 @@
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 모드 카드 (탭1 — 메인 — 큰 카드) ─── */
-.modeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.modeGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .modeBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 10px; cursor: pointer; transition: all 0.15s;
@@ -172,7 +183,6 @@
 .modeBtnLabel { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .modeBtnActive .modeBtnLabel { color: var(--accent); }
 .modeBtnDesc { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
-@media (max-width: 540px) { .modeGrid { grid-template-columns: 1fr; } }
 
 /* 칩 */
 .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
@@ -266,6 +276,35 @@
 .resultValue { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
 .vatValue { color: #EA580C; }
 .totalValue { color: var(--accent); font-size: 28px; }
+
+/* ─── 통합 결과 breakdown (히어로 내부) ─── */
+.resultBreakdown {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+.breakdownRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--muted);
+}
+.breakdownRow span:last-child {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.breakdownRow span.vatValue { color: #EA580C; }
 
 .formulaBox {
   background: var(--bg2);

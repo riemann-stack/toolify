@@ -96,7 +96,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         1RM은 직접 측정이 어렵고 부상 위험이 크기 때문에, 서브맥시멀 세트(2~10회)의 수행 기록을 바탕으로 추정하는 것이 일반적입니다. 대표적인 4가지 공식은 각기 다른 데이터셋에서 유도되어 결과가 조금씩 다릅니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -138,7 +138,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         모든 1RM 공식은 <strong style={{ color: 'var(--text)' }}>&ldquo;마지막 한 번도 더 못 드는 상태(AMRAP)&rdquo;</strong>를 가정합니다. 하지만 실제 훈련에서는 1~3회 여유를 두고 끝내는 경우가 많죠. 그대로 공식에 넣으면 1RM이 과소 추정됩니다. <strong style={{ color: 'var(--text)' }}>RPE/RIR 보정</strong>은 이 차이를 메워줍니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -191,7 +191,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         상대적 근력은 절대 무게가 아니라 <strong style={{ color: 'var(--text)' }}>체중·성별·연령에 대한 비율</strong>로 봐야 정확합니다. 본 도구는 20대 남성 기준의 ExRx·Strength Level 데이터에 다음 보정을 적용합니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -232,7 +232,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         본 세트 강도가 80% 이상이면 <strong style={{ color: 'var(--text)' }}>최소 5세트의 점진적 워밍업</strong>이 필요합니다. 갑자기 무거운 무게를 들면 관절·인대가 적응할 시간이 없어 부상 위험이 급증합니다. 본 도구의 &ldquo;훈련 중량&rdquo; 탭에서 본 세트 강도(%1RM)를 선택하면 자동으로 워밍업 세트가 생성됩니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -326,7 +326,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         목표에 따라 1RM 대비 사용 중량과 반복 수를 조절해야 합니다. 근력·근비대·근지구력은 요구 강도가 다르며, 세트 사이 휴식 시간도 달라집니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -369,7 +369,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         본 도구로 추정한 1RM은 다양한 프로그램의 작업 중량 계산에 그대로 쓰입니다. 자신의 경력·목표에 맞는 프로그램을 골라보세요.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -428,7 +428,7 @@ export default function OneRMPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         20kg 올림픽 바벨 기준, 양쪽에 끼울 원판 조합입니다. 실제 헬스장에서 자주 쓰이는 중량만 정리했어요.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>

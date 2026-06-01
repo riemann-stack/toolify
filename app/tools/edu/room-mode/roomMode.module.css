@@ -68,7 +68,11 @@
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-@media (max-width: 600px) { .row3 { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .row3 { gap: 7px; }
+  .row3 .input { padding-left: 9px; padding-right: 9px; }
+  .row3 .fieldLabel { font-size: 11px; white-space: nowrap; }
+}
 
 /* 슬라이더 */
 .slider {

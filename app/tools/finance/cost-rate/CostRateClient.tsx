@@ -8,10 +8,10 @@ import styles from './cost-rate.module.css'
  * 배달앱 프리셋
  * ───────────────────────────────────────────────────────── */
 const DELIVERY_APPS = [
-  { id: 'baemin',   label: '배달의민족 (오픈서비스)', commission: 6.8,  cls: 'appBaemin'  },
-  { id: 'coupang',  label: '쿠팡이츠 (스마트배달)',   commission: 9.8,  cls: 'appCoupang' },
-  { id: 'yogiyo',   label: '요기요 (요기요 배달)',     commission: 12.5, cls: 'appYogiyo'  },
-  { id: 'own',      label: '자체 주문 페이지',          commission: 0,    cls: 'appOwn'     },
+  { id: 'baemin',   label: '배달의민족 (중위)', commission: 6.8, cls: 'appBaemin'  },
+  { id: 'coupang',  label: '쿠팡이츠 (중위)',   commission: 6.8, cls: 'appCoupang' },
+  { id: 'yogiyo',   label: '요기요 (기본)',     commission: 9.7, cls: 'appYogiyo'  },
+  { id: 'own',      label: '자체 주문 페이지',  commission: 0,   cls: 'appOwn'     },
 ] as const
 type AppId = typeof DELIVERY_APPS[number]['id'] | 'custom'
 
@@ -45,10 +45,6 @@ function n(v: string | number, min = 0): number {
 }
 function fmt(v: number): string {
   return Math.round(v).toLocaleString('ko-KR')
-}
-function fmtSign(v: number): string {
-  const r = Math.round(v)
-  return (r >= 0 ? '+' : '') + r.toLocaleString('ko-KR')
 }
 function parseComma(s: string): number {
   const cleaned = s.replace(/[^0-9.-]/g, '')
@@ -84,7 +80,7 @@ function gradeOf(rate: number) {
  * 메인
  * ───────────────────────────────────────────────────────── */
 export default function CostRateClient() {
-  const [tab, setTab] = useState<'main' | 'reverse' | 'increase' | 'monthly'>('main')
+  const [tab, setTab] = useState<'main' | 'reverse' | 'monthly'>('main')
 
   /* ─── 공통: 메뉴 / 채널 / 입력 ─── */
   const [menuName,   setMenuName]   = useState('메뉴 1')
@@ -112,12 +108,7 @@ export default function CostRateClient() {
   /* 탭 2: 역산 */
   const [targetCostRate, setTargetCostRate] = useState(35)
 
-  /* 탭 3: 인상 시뮬레이션 */
-  const [increaseStr, setIncreaseStr] = useState('1000')
-  const [monthlyVolumeStr, setMonthlyVolumeStr] = useState('300')
-  const [elasticityStr, setElasticityStr] = useState('-0.7')
-
-  /* 탭 4: 월 수익 */
+  /* 탭 3: 월 수익 */
   interface MonthlyMenu { id: string; name: string; margin: number; daily: number }
   const [monthlyMenus, setMonthlyMenus] = useState<MonthlyMenu[]>([
     { id: '1', name: '치킨',  margin: 7000, daily: 30 },
@@ -215,11 +206,11 @@ export default function CostRateClient() {
       return { label, net, real: price > 0 ? (ded / price) * 100 : 0, margin: price > 0 ? (net / price) * 100 : 0, cls }
     }
     const rows = [
-      buildRow('🏪 매장',                       0,    'compareStore'),
-      buildRow('🟢 배민 (6.8%)',                6.8,  'compareBaemin'),
-      buildRow('🔴 쿠팡이츠 (9.8%)',           9.8,  'compareCoupang'),
-      buildRow('🟡 요기요 (12.5%)',            12.5, 'compareYogiyo'),
-      buildRow('🌐 자체 (수수료 0%)',          0.0,  'compareOwn'),
+      buildRow('🏪 매장',                  0,   'compareStore'),
+      buildRow('🟢 배민 (6.8%)',           6.8, 'compareBaemin'),
+      buildRow('🔴 쿠팡이츠 (6.8%)',       6.8, 'compareCoupang'),
+      buildRow('🟡 요기요 (9.7%)',         9.7, 'compareYogiyo'),
+      buildRow('🌐 자체 (수수료 0%)',      0.0, 'compareOwn'),
     ]
     const bestIdx = rows.reduce((maxI, r, i, arr) => r.net > arr[maxI].net ? i : maxI, 0)
     return rows.map((r, i) => ({ ...r, isBest: i === bestIdx }))
@@ -239,31 +230,7 @@ export default function CostRateClient() {
     return { exact: need, possible: true }
   }, [ingredient, packaging, deliveryBurden, commissionTotalRate, targetCostRate, useDelivery])
 
-  /* ─────────────────────────────── 탭 3 — 인상 시뮬레이션 ─────────────────────────────── */
-  const increase = parseComma(increaseStr)
-  const monthlyVolume = parseComma(monthlyVolumeStr)
-  const elasticity = n(elasticityStr, -10) // can be negative
-  const elasticityVal = Number(elasticityStr) || 0
-
-  const newPrice = price + increase
-  const newCommission = useDelivery ? newPrice * commissionTotalRate : 0
-  const newDeductions = variableCost + newCommission + deliveryBurden + adCost
-  const newNet = newPrice - newDeductions
-  const newReal = newPrice > 0 ? (newDeductions / newPrice) * 100 : 0
-
-  const monthlyMarginNow = netRevenue * monthlyVolume
-  const monthlyMarginNew = newNet * monthlyVolume
-  const monthlyDelta = monthlyMarginNew - monthlyMarginNow
-  const annualDelta = monthlyDelta * 12
-
-  /* 탄력성 적용 */
-  const priceChangePct = price > 0 ? (increase / price) * 100 : 0
-  const volumeChangePct = priceChangePct * elasticityVal // elasticity는 음수
-  const adjustedVolume = monthlyVolume * (1 + volumeChangePct / 100)
-  const adjustedMarginNew = newNet * Math.max(0, adjustedVolume)
-  const adjustedDelta = adjustedMarginNew - monthlyMarginNow
-
-  /* ─────────────────────────────── 탭 4 — 월 수익 ─────────────────────────────── */
+  /* ─────────────────────────────── 탭 3 — 월 수익 ─────────────────────────────── */
   const businessDays = n(businessDaysStr, 1)
   const fixedCosts = parseComma(rentStr) + parseComma(laborStr) + parseComma(utilityStr)
 
@@ -346,13 +313,6 @@ export default function CostRateClient() {
         `필요 판매가: ${fmt(reverseResult.exact)}원`,
         'youtil.kr/tools/finance/cost-rate',
       ].join('\n')
-    } else if (tab === 'increase') {
-      text = [
-        `── 가격 인상 시뮬레이션 ──`,
-        `${fmt(price)}원 → ${fmt(newPrice)}원 (${fmtSign(increase)})`,
-        `월 ${monthlyVolume}개 기준 추가 이익: ${fmtSign(monthlyDelta)}원/월`,
-        'youtil.kr/tools/finance/cost-rate',
-      ].join('\n')
     } else {
       text = [
         `── 월 수익 분석 ──`,
@@ -384,7 +344,6 @@ export default function CostRateClient() {
       <div className={styles.tabs} role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'main'} className={`${styles.tabBtn} ${tab === 'main' ? styles.tabActive : ''}`}     onClick={() => setTab('main')}>원가율 계산</button>
         <button type="button" role="tab" aria-selected={tab === 'reverse'} className={`${styles.tabBtn} ${tab === 'reverse' ? styles.tabActive : ''}`}  onClick={() => setTab('reverse')}>판매가 역산</button>
-        <button type="button" role="tab" aria-selected={tab === 'increase'} className={`${styles.tabBtn} ${tab === 'increase' ? styles.tabActive : ''}`} onClick={() => setTab('increase')}>가격 인상 시뮬</button>
         <button type="button" role="tab" aria-selected={tab === 'monthly'} className={`${styles.tabBtn} ${tab === 'monthly' ? styles.tabActive : ''}`}  onClick={() => setTab('monthly')}>월 수익 계산</button>
       </div>
 
@@ -433,22 +392,21 @@ export default function CostRateClient() {
                 <span className={styles.unit}>원</span>
               </div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
+              <>
                 <table className={styles.ingredientTable}>
                   <thead>
                     <tr>
                       <th>재료명</th>
-                      <th style={{ width: 70 }}>양</th>
-                      <th style={{ width: 60 }}>단위</th>
-                      <th style={{ width: 80 }}>단가</th>
-                      <th style={{ width: 80, textAlign: 'right' }}>비용</th>
-                      <th style={{ width: 32 }}></th>
+                      <th style={{ width: 54 }}>양</th>
+                      <th style={{ width: 52 }}>단위</th>
+                      <th style={{ width: 66 }}>단가</th>
+                      <th style={{ width: 28 }}></th>
                     </tr>
                   </thead>
                   <tbody>
                     {ingredients.map(it => (
                       <tr key={it.id} className={styles.ingRow}>
-                        <td><input type="text" value={it.name} placeholder="재료" onChange={e => updateIngredient(it.id, { name: e.target.value })} /></td>
+                        <td><input type="text" value={it.name} placeholder="재료명" onChange={e => updateIngredient(it.id, { name: e.target.value })} /></td>
                         <td><input type="number" min={0} value={it.amount} onChange={e => updateIngredient(it.id, { amount: n(e.target.value) })} /></td>
                         <td>
                           <select value={it.unit} onChange={e => updateIngredient(it.id, { unit: e.target.value })}>
@@ -461,21 +419,29 @@ export default function CostRateClient() {
                           </select>
                         </td>
                         <td><input type="number" min={0} value={it.unitPrice} onChange={e => updateIngredient(it.id, { unitPrice: n(e.target.value) })} /></td>
-                        <td className={styles.costCell}>{fmt(n(it.amount) * n(it.unitPrice))}</td>
                         <td><button type="button" className={styles.ingRemove} onClick={() => removeIngredient(it.id)} aria-label="삭제">✕</button></td>
                       </tr>
                     ))}
-                    <tr className={styles.ingTotalRow}>
-                      <td colSpan={4} style={{ color: 'var(--accent)' }}>재료비 합계</td>
-                      <td className={styles.costCell}>{fmt(ingredientFromTable)}</td>
-                      <td></td>
-                    </tr>
                   </tbody>
                 </table>
                 {ingredients.length < 15 && (
                   <button type="button" className={styles.addBtn} onClick={addIngredient}>+ 재료 추가</button>
                 )}
-              </div>
+                {ingredients.some(it => n(it.amount) * n(it.unitPrice) > 0) && (
+                  <div className={styles.ingCostList}>
+                    {ingredients.filter(it => n(it.amount) * n(it.unitPrice) > 0).map(it => (
+                      <div key={it.id} className={styles.ingCostRow}>
+                        <span>{it.name || '(이름 없음)'}</span>
+                        <span>{fmt(n(it.amount) * n(it.unitPrice))}원</span>
+                      </div>
+                    ))}
+                    <div className={`${styles.ingCostRow} ${styles.ingCostTotal}`}>
+                      <span>재료비 합계</span>
+                      <span>{fmt(ingredientFromTable)}원</span>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             {(channel === 'delivery' || channel === 'pickup' || channel === 'all') && (
@@ -501,7 +467,7 @@ export default function CostRateClient() {
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>배달앱 수수료</span>
-                <span className={styles.cardLabelHint}>2024 정책 기준</span>
+                <span className={styles.cardLabelHint}>2026 차등수수료 기준</span>
               </div>
               <div className={styles.appGrid}>
                 {DELIVERY_APPS.map(a => (
@@ -722,120 +688,7 @@ export default function CostRateClient() {
         </>
       )}
 
-      {/* ──────────────────────── 탭 3: 가격 인상 시뮬레이션 ──────────────────────── */}
-      {tab === 'increase' && price > 0 && (
-        <>
-          <div className={styles.card}>
-            <div className={styles.cardLabel}>
-              <span>가격 인상 금액</span>
-              <span className={styles.cardLabelHint}>음수=인하 / 양수=인상</span>
-            </div>
-            <div className={styles.sliderRow}>
-              <input
-                className={`${styles.slider} ${increase > 0 ? styles.sliderUp : increase < 0 ? styles.sliderDown : styles.sliderZero}`}
-                type="range"
-                min={-2000}
-                max={3000}
-                step={100}
-                value={increase}
-                onChange={e => setIncreaseStr(e.target.value)}
-              />
-              <span className={styles.sliderValue} style={{ color: increase > 0 ? 'var(--accent)' : increase < 0 ? '#DC2626' : 'var(--muted)' }}>
-                {fmtSign(increase)}원
-              </span>
-            </div>
-            <div className={styles.pills}>
-              {[-500, -200, 500, 1000, 1500, 2000].map(v => (
-                <button
-                  key={v}
-                  type="button"
-                  className={`${styles.pill} ${v > 0 ? styles.pillUp : styles.pillDown}`}
-                  onClick={() => setIncreaseStr(String(v))}
-                >
-                  {fmtSign(v)}원
-                </button>
-              ))}
-            </div>
-
-            <div style={{ height: 14 }} />
-            <span className={styles.subLabel}>월 판매량 (선택)</span>
-            <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(monthlyVolume)} onChange={e => setMonthlyVolumeStr(parseComma(e.target.value).toString())} />
-              <span className={styles.unit}>개/월</span>
-            </div>
-          </div>
-
-          <div className={styles.compareGrid}>
-            <div className={`${styles.compareCard} ${styles.compareCardCurrent}`}>
-              <p className={styles.compareCardLabel}>현재</p>
-              <div className={styles.compareCardRow}><span>판매가</span><span>{fmt(price)}원</span></div>
-              <div className={styles.compareCardRow}><span>실질 원가율</span><span>{realCostRate.toFixed(1)}%</span></div>
-              <div className={`${styles.compareCardRow} ${styles.bigRow}`}><span>마진 (1개당)</span><span>{fmt(netRevenue)}원</span></div>
-            </div>
-            <div className={`${styles.compareCard} ${styles.compareCardNew}`}>
-              <p className={styles.compareCardLabel}>인상 후 ({fmtSign(increase)}원)</p>
-              <div className={styles.compareCardRow}><span>판매가</span><span>{fmt(newPrice)}원</span></div>
-              <div className={styles.compareCardRow}><span>실질 원가율</span><span>{newReal.toFixed(1)}%</span></div>
-              <div className={`${styles.compareCardRow} ${styles.bigRow}`}><span>마진 (1개당)</span><span>{fmt(newNet)}원</span></div>
-            </div>
-          </div>
-
-          <div className={styles.profitCard}>
-            <p className={styles.profitLead}>월 {fmt(monthlyVolume)}개 판매 가정 시</p>
-            <div className={styles.profitGrid}>
-              <div className={styles.profitCell}>
-                <p className={styles.profitCellLabel}>현재 월 마진</p>
-                <p className={styles.profitCellValue}>{fmt(monthlyMarginNow)}원</p>
-              </div>
-              <div className={styles.profitCell}>
-                <p className={styles.profitCellLabel}>인상 후 월 마진</p>
-                <p className={styles.profitCellValue}>{fmt(monthlyMarginNew)}원</p>
-              </div>
-              <div className={styles.profitCell}>
-                <p className={styles.profitCellLabel}>월 추가 이익</p>
-                <p className={`${styles.profitCellValue} ${monthlyDelta >= 0 ? styles.gain : styles.loss}`}>{fmtSign(monthlyDelta)}원</p>
-              </div>
-            </div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, textAlign: 'center' }}>
-              연간 환산 <strong style={{ color: monthlyDelta >= 0 ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(annualDelta)}원</strong>
-            </p>
-          </div>
-
-          {/* 탄력성 시나리오 */}
-          {increase !== 0 && (
-            <div className={styles.card}>
-              <div className={styles.cardLabel}>
-                <span>가격 탄력성 시나리오</span>
-                <span className={styles.cardLabelHint}>현실 추정치</span>
-              </div>
-              <span className={styles.subLabel}>가격 탄력성 (보통 -0.5 ~ -1.5)</span>
-              <div className={styles.sliderRow}>
-                <input
-                  className={`${styles.slider} ${styles.sliderZero}`}
-                  type="range"
-                  min={-2.0}
-                  max={0}
-                  step={0.1}
-                  value={elasticity}
-                  onChange={e => setElasticityStr(e.target.value)}
-                />
-                <span className={styles.sliderValue}>{elasticityVal.toFixed(1)}</span>
-              </div>
-              <div className={styles.warnBox} style={{ marginTop: 12 }}>
-                가격 변화 <strong>{priceChangePct >= 0 ? '+' : ''}{priceChangePct.toFixed(1)}%</strong> →
-                예상 판매량 변화 <strong style={{ color: volumeChangePct < 0 ? '#DC2626' : '#059669' }}>{volumeChangePct >= 0 ? '+' : ''}{volumeChangePct.toFixed(1)}%</strong> ({fmt(adjustedVolume)}개) →
-                <br />보정된 월 추가 이익: <strong style={{ color: adjustedDelta >= 0 ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtSign(adjustedDelta)}원</strong>
-              </div>
-            </div>
-          )}
-
-          <div className={styles.warnBox}>
-            <strong>⚠️ 가격 인상 위험 안내</strong> — 일반적으로 10~15% 인상 시 매출 약 5~10% 감소를 가정합니다. 직접 경쟁 매장이 가까이 있다면 탄력성이 더 높을 수 있어 단계적(5~10%씩) 인상이 안전합니다.
-          </div>
-        </>
-      )}
-
-      {/* ──────────────────────── 탭 4: 월 수익 계산 ──────────────────────── */}
+      {/* ──────────────────────── 탭 3: 월 수익 계산 ──────────────────────── */}
       {tab === 'monthly' && (
         <>
           <div className={styles.card}>

@@ -95,7 +95,6 @@ export default function CardInstallmentClient() {
   const [freeMonths, setFreeMonths] = useState<string>('4')
   const [cashDiscount, setCashDiscount] = useState<string>('0')
   const [rewardPoints, setRewardPoints] = useState<string>('0')
-  const [shippingFee, setShippingFee] = useState<string>('0')
 
   // ─ TAB 2 ─
   const [cmpAmount, setCmpAmount] = useState<string>('1,000,000')
@@ -144,12 +143,12 @@ export default function CardInstallmentClient() {
   // 해석 문구
   const interpretation = useMemo(() => {
     const amt = parseComma(amount)
-    const totalExtra = calc.totalInterest + parseComma(shippingFee)
+    const totalExtra = calc.totalInterest
     if (totalExtra <= 0) return null
     const cafes = Math.floor(totalExtra / 4000)
     const meals = Math.floor(totalExtra / 10000)
     return { amt, totalExtra, cafes, meals }
-  }, [amount, calc, shippingFee])
+  }, [amount, calc])
 
   // ─────────────────────────────────────────────
   // TAB 2 계산
@@ -445,7 +444,7 @@ export default function CardInstallmentClient() {
                 onClick={() => setInstallType('free')}
                 type="button"
               >
-                <span>🟢 무이자 할부</span>
+                <span>🟢 무이자</span>
                 <span className={s.typeBadge}>0% 이자</span>
               </button>
               <button
@@ -453,7 +452,7 @@ export default function CardInstallmentClient() {
                 onClick={() => setInstallType('partial')}
                 type="button"
               >
-                <span>🟡 부분 무이자</span>
+                <span>🟡 부분무이자</span>
                 <span className={s.typeBadge}>일부 무이자</span>
               </button>
               <button
@@ -461,7 +460,7 @@ export default function CardInstallmentClient() {
                 onClick={() => setInstallType('paid')}
                 type="button"
               >
-                <span>🔴 유이자 할부</span>
+                <span>🔴 유이자</span>
                 <span className={s.typeBadge}>이자 발생</span>
               </button>
             </div>
@@ -526,13 +525,6 @@ export default function CardInstallmentClient() {
                 <span className={s.subLabel}>카드 포인트·캐시백 (원)</span>
                 <div className={s.inputRow}>
                   <input className={s.smallInput} type="text" inputMode="numeric" value={rewardPoints} onChange={e => setRewardPoints(fmtComma(e.target.value))} placeholder="0" />
-                  <span className={s.unit}>원</span>
-                </div>
-              </div>
-              <div>
-                <span className={s.subLabel}>배송비·추가 수수료 (원)</span>
-                <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={shippingFee} onChange={e => setShippingFee(fmtComma(e.target.value))} placeholder="0" />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
@@ -840,8 +832,8 @@ export default function CardInstallmentClient() {
               <div>
                 <span className={s.subLabel}>유이자 vs 무이자</span>
                 <div className={s.typeGrid} style={{ gridTemplateColumns: '1fr 1fr' }}>
-                  <button className={`${s.typeBtn} ${s.typeFree} ${tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(true)} type="button">🟢 무이자</button>
-                  <button className={`${s.typeBtn} ${s.typePaid} ${!tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(false)} type="button">🔴 유이자</button>
+                  <button className={`${s.typeBtn} ${s.typeFree} ${tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(true)} type="button">무이자</button>
+                  <button className={`${s.typeBtn} ${s.typePaid} ${!tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(false)} type="button">유이자</button>
                 </div>
               </div>
               {!tblIsFree && (
@@ -863,15 +855,15 @@ export default function CardInstallmentClient() {
                 <span>개월수별 비교</span>
                 <span className={s.cardLabelHint}>월 부담률 = 월 납부액 / 원금</span>
               </div>
-              <div style={{ overflowX: 'auto' }}>
-                <table className={s.compareTable} style={{ minWidth: 460 }}>
+              <div>
+                <table className={s.compareTable}>
                   <thead>
                     <tr>
                       <th>개월</th>
                       <th>월 납부액</th>
                       <th>총 납부액</th>
                       <th>총 이자</th>
-                      <th>월 부담률</th>
+                      <th>부담률</th>
                     </tr>
                   </thead>
                   <tbody>

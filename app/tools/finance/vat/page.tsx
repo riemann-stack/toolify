@@ -109,18 +109,19 @@ export default function VatPage() {
               </div>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
-              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-                📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 영수증 합계 110,000원 →
-                공급가액 = 110,000 ÷ 1.1 = <strong style={{ color: 'var(--accent)' }}>100,000원</strong>,
-                부가세 = 110,000 − 100,000 = <strong style={{ color: '#EA580C' }}>10,000원</strong>
-              </p>
+              <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '8px' }}>📌 예시</p>
+              <div style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.95 }}>
+                <p>영수증 합계 <strong style={{ color: 'var(--text)' }}>110,000원</strong></p>
+                <p>→ 공급가액 = 110,000 ÷ 1.1 = <strong style={{ color: 'var(--accent)' }}>100,000원</strong></p>
+                <p>→ 부가세 = 110,000 − 100,000 = <strong style={{ color: '#EA580C' }}>10,000원</strong></p>
+              </div>
             </div>
           </div>
         </Section>
 
         {/* ── 2. 과세 유형 비교표 (기존 SEO 보존) ── */}
         <Section>
-          <H2>2026년 부가세 과세 유형 비교</H2>
+          <H2>부가세 과세 유형 비교</H2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             사업자 유형에 따라 부가세 신고 방식과 세율이 다릅니다.
             2024년부터 간이과세 기준 금액이 연 매출 <strong style={{ color: 'var(--text)' }}>1억 400만 원</strong>으로 상향되었습니다.
@@ -156,7 +157,7 @@ export default function VatPage() {
 
           {/* 간이과세 업종별 부가율 */}
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>간이과세자 업종별 부가가치율 (2026년 기준)</p>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>간이과세자 업종별 부가가치율</p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
@@ -196,7 +197,7 @@ export default function VatPage() {
             {[
               {
                 tag: '부가세 추가',
-                tagColor: 'var(--accent)',
+                tagColor: '#0EA5E9',
                 title: '프리랜서 디자이너 A씨 — 용역비 200만 원 청구',
                 content: '부가세 사업자 등록을 한 A씨가 클라이언트에게 200만 원 용역비를 청구할 때: 공급가액 2,000,000원 + 부가세 200,000원 = 세금계산서 합계 2,200,000원. 부가세 200,000원은 다음 분기에 신고·납부합니다.',
               },
@@ -215,7 +216,7 @@ export default function VatPage() {
             ].map((ex, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: '99px', padding: '2px 10px' }}>{ex.tag}</span>
+                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: '99px', padding: '2px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>{ex.tag}</span>
                   <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)' }}>{ex.title}</span>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{ex.content}</p>
@@ -238,22 +239,20 @@ export default function VatPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>실입금 100만원 받으려면</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>청구액</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['프리랜서 (직거래, 3.3%)',           '약 103.4만',   '원천세만 차감'],
-                  ['프리랜서 + 네이버페이 (2.5%)',       '약 106.0만',   '원천세 + 결제 수수료'],
-                  ['프리랜서 + 크몽 (20%)',             '약 129.2만',   '큰 수수료 + 원천세'],
-                  ['사업자 (직거래, 부가세 별도)',       '110만',        '가장 명료'],
-                  ['사업자 + 네이버페이 (부가세 별도)',  '약 112.8만',   '결제 수수료 + 부가세'],
-                  ['사업자 + 크몽 (부가세 별도)',        '약 137.5만',   '큰 수수료 + 부가세'],
+                  ['프리랜서 (직거래, 3.3%)',           '약 103.4만'],
+                  ['프리랜서 + 네이버페이 (2.5%)',       '약 106.0만'],
+                  ['프리랜서 + 크몽 (20%)',             '약 129.2만'],
+                  ['사업자 (직거래, 부가세 별도)',       '110만'],
+                  ['사업자 + 네이버페이 (부가세 별도)',  '약 112.8만'],
+                  ['사업자 + 크몽 (부가세 별도)',        '약 137.5만'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
                   </tr>
                 ))}
               </tbody>

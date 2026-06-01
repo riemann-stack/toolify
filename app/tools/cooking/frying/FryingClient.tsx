@@ -150,6 +150,7 @@ export default function FryingClient() {
   const [timerTotal, setTimerTotal] = useState<number>(0)
   const [timerRunning, setTimerRunning] = useState(false)
   const [timerDone, setTimerDone] = useState(false)
+  const [timerSecond, setTimerSecond] = useState<SecondFry | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const toggleIng = (k: string) => {
@@ -169,9 +170,14 @@ export default function FryingClient() {
   // Recommended oil temp: from first selected (or union range)
   const recTemp = useMemo(() => {
     if (!selectedData.length) return null
-    const min = Math.max(...selectedData.map(d => d.oilTemp.min))
-    const max = Math.min(...selectedData.map(d => d.oilTemp.max))
-    return { min, max }
+    // 교집합: 모든 재료에 공통으로 적합한 온도 구간
+    const interMin = Math.max(...selectedData.map(d => d.oilTemp.min))
+    const interMax = Math.min(...selectedData.map(d => d.oilTemp.max))
+    if (interMin <= interMax) return { min: interMin, max: interMax, conflict: false }
+    // 겹치는 온도가 없음 → 합집합 범위 + 충돌 표시 (재료별로 나눠 튀김 권장)
+    const uniMin = Math.min(...selectedData.map(d => d.oilTemp.min))
+    const uniMax = Math.max(...selectedData.map(d => d.oilTemp.max))
+    return { min: uniMin, max: uniMax, conflict: true }
   }, [selectedData])
 
   const tempOutOfRange = recTemp && (oilTemp < recTemp.min - 5 || oilTemp > recTemp.max + 5)
@@ -194,11 +200,12 @@ export default function FryingClient() {
     }
   }, [timerRunning])
 
-  const startTimerFor = (seconds: number) => {
+  const startTimerFor = (seconds: number, secondFry: SecondFry) => {
     setTimerTotal(seconds)
     setTimerSec(seconds)
     setTimerDone(false)
     setTimerRunning(true)
+    setTimerSecond(secondFry)
     // scroll to timer
     setTimeout(() => {
       document.getElementById('frying-timer')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -230,11 +237,11 @@ export default function FryingClient() {
       <div className={styles.card}>
         <label className={styles.cardLabel}>1. 재료 선택 (복수 선택 가능)</label>
         <div className={styles.ingGrid}>
-          {FRYING_DATA.map((d, idx) => {
+          {FRYING_DATA.map((d) => {
             const active = selected.includes(d.key)
             const badgeNum = active ? selected.indexOf(d.key) + 1 : 0
             return (
-              <button key={d.key} type="button"
+              <button key={d.key} type="button" aria-pressed={active}
                 className={`${styles.ingBtn} ${active ? styles.ingActive : ''}`}
                 onClick={() => toggleIng(d.key)}>
                 <span className={styles.ingEmoji}>{d.emoji}</span>
@@ -262,7 +269,7 @@ export default function FryingClient() {
             { k: 'fridge', label: '❄️ 냉장',   cls: styles.stateFridge },
             { k: 'frozen', label: '🧊 냉동',   cls: styles.stateFrozen },
           ].map(s => (
-            <button key={s.k} type="button"
+            <button key={s.k} type="button" aria-pressed={state === s.k}
               className={`${styles.condBtn} ${s.cls} ${state === s.k ? styles.condActive : ''}`}
               onClick={() => setState(s.k as StateK)}>
               {s.label}
@@ -284,7 +291,7 @@ export default function FryingClient() {
             { k: 'medium', label: '보통' },
             { k: 'thick',  label: '두꺼움' },
           ].map(t => (
-            <button key={t.k} type="button"
+            <button key={t.k} type="button" aria-pressed={thick === t.k}
               className={`${styles.condBtn} ${thick === t.k ? styles.condActive : ''}`}
               onClick={() => setThick(t.k as ThickK)}>
               {t.label}
@@ -302,7 +309,7 @@ export default function FryingClient() {
             { k: 'medium', label: '보통' },
             { k: 'thick',  label: '두꺼움' },
           ].map(b => (
-            <button key={b.k} type="button"
+            <button key={b.k} type="button" aria-pressed={batter === b.k}
               className={`${styles.condBtn} ${batter === b.k ? styles.condActive : ''}`}
               onClick={() => setBatter(b.k as BatterK)}>
               {b.label}
@@ -318,14 +325,16 @@ export default function FryingClient() {
         <label className={styles.cardLabel}>
           5. 기름 온도
           {recTemp && (
-            <span className={styles.recBadge}>권장 {recTemp.min}~{recTemp.max}°C</span>
+            <span className={styles.recBadge}>
+              {recTemp.conflict ? '재료별 권장 온도 상이' : `권장 ${recTemp.min}~${recTemp.max}°C`}
+            </span>
           )}
         </label>
         <div className={styles.condRow}>
           {[160, 170, 180, 190].map(t => {
-            const isRec = recTemp && t >= recTemp.min && t <= recTemp.max
+            const isRec = recTemp && !recTemp.conflict && t >= recTemp.min && t <= recTemp.max
             return (
-              <button key={t} type="button"
+              <button key={t} type="button" aria-pressed={oilTemp === t}
                 className={`${styles.condBtn} ${styles.tempBtn} ${styles['temp' + t]} ${oilTemp === t ? styles.condActive : ''} ${isRec ? styles.tempRecBorder : ''}`}
                 onClick={() => { setOilTemp(t); setCustomTemp('') }}>
                 {t}°C{isRec ? ' 👍' : ''}
@@ -333,6 +342,11 @@ export default function FryingClient() {
             )
           })}
         </div>
+        {recTemp?.conflict && (
+          <div className={styles.warnNote}>
+            ⚠️ 선택한 재료들의 권장 기름 온도가 서로 겹치지 않습니다. 함께 튀기기 어려우니 재료별로 나눠 튀기는 것을 권장합니다.
+          </div>
+        )}
         <div className={styles.customTempRow}>
           <input
             type="number"
@@ -362,7 +376,7 @@ export default function FryingClient() {
             { k: 'medium', label: '보통 (50%)',  cls: '' },
             { k: 'large',  label: '많음 (80%+)', cls: styles.qtyLarge },
           ].map(q => (
-            <button key={q.k} type="button"
+            <button key={q.k} type="button" aria-pressed={qty === q.k}
               className={`${styles.condBtn} ${q.cls} ${qty === q.k ? styles.condActive : ''}`}
               onClick={() => setQty(q.k as QtyK)}>
               {q.label}
@@ -401,8 +415,11 @@ export default function FryingClient() {
           const t1max = d.time1.max * adjustedFactor * tf
           const t2min = d.time2 ? d.time2.min * adjustedFactor * tf : 0
           const t2max = d.time2 ? d.time2.max * adjustedFactor * tf : 0
-          const totMin = t1min + t2min
-          const totMax = t1max + t2max
+          // 2차가 '필수·권장'인 재료만 휴지(2~3분)+2차를 총 시간에 포함. '선택'은 별도 안내, '불필요'는 1차만.
+          const countsSecond = d.secondFry === 'recommended' && !!d.time2
+          const REST_MIN = 120, REST_MAX = 180
+          const totMin = t1min + (countsSecond ? REST_MIN + t2min : 0)
+          const totMax = t1max + (countsSecond ? REST_MAX + t2max : 0)
           const markerLeft = colorMarkerPos(d.targetColor)
           const frozenNote = state === 'frozen' && d.interiorCheck
             ? '냉동 상태에서 바로 튀기면 내부가 덜 익을 수 있습니다. 해동 후 튀김 강력 권장.'
@@ -437,17 +454,27 @@ export default function FryingClient() {
                     </div>
                   ) : (
                     <div className={`${styles.timeValue} ${styles.timeValueAccent}`} style={{ fontSize: 18 }}>
-                      불필요
+                      {d.secondFry === 'optional' ? '생략 가능' : '불필요'}
                     </div>
                   )}
                 </div>
               </div>
 
               <div className={styles.totalBox}>
-                <div className={styles.totalLabel}>총 예상 시간</div>
+                <div className={styles.totalLabel}>총 예상 시간{d.secondFry === 'optional' ? ' (1차 기준)' : ''}</div>
                 <div className={styles.totalValue}>
                   {fmtSec(totMin)} ~ {fmtSec(totMax)}
                 </div>
+                {countsSecond && (
+                  <div className={styles.totalBreak}>
+                    1차 {fmtSec(t1min)}~{fmtSec(t1max)} + 휴지 2~3분 + 2차 {fmtSec(t2min)}~{fmtSec(t2max)}
+                  </div>
+                )}
+                {d.secondFry === 'optional' && (
+                  <div className={styles.totalBreak}>
+                    + 더 바삭하게(선택): 2~3분 휴지 후 2차 {d.time2 ? `${fmtSec(t2min)}~${fmtSec(t2max)}` : '30초~1분'} 추가
+                  </div>
+                )}
               </div>
 
               <div className={styles.adjList}>
@@ -490,8 +517,12 @@ export default function FryingClient() {
               {d.interiorCheck && (
                 <div className={styles.warnBox}>
                   <strong>⚠️ 속 익힘 확인 필수</strong><br />
-                  {d.name === '치킨' || d.name === '돈까스'
-                    ? '내부 온도 75°C 이상 확인. 가장 두꺼운 부분을 잘랐을 때 분홍기·투명 육즙 없어야 합니다.'
+                  {d.name === '치킨'
+                    ? '닭고기 내부 온도 75°C 이상 확인. 가장 두꺼운 부분을 잘랐을 때 분홍기·투명 육즙이 없어야 합니다.'
+                    : d.name === '돈까스'
+                    ? '돼지고기 내부 온도 63°C 이상 확인(3분 휴지). 가장 두꺼운 부분에 분홍기가 없어야 합니다.'
+                    : d.name === '생선튀김'
+                    ? '생선 내부 온도 63°C 이상. 살이 불투명하고 포크로 쉽게 부서지면 익은 것입니다.'
                     : '중심부까지 완전히 익었는지 확인 후 꺼내세요. 덜 익으면 식중독 위험.'}
                   {frozenNote && <><br />{frozenNote}</>}
                 </div>
@@ -519,8 +550,8 @@ export default function FryingClient() {
               {showTimer && (
                 <button type="button"
                   className={styles.startBtn}
-                  onClick={() => startTimerFor(Math.round(t1max))}>
-                  ⏱ {fmtSec(t1max)} 타이머 시작 (1차 최대 시간 기준)
+                  onClick={() => startTimerFor(Math.round(t1max), d.secondFry)}>
+                  ⏱ {fmtSec(t1max)} 타이머 시작 ({d.secondFry === 'unnecessary' ? '최대 튀김 시간 기준' : '1차 최대 시간 기준'})
                 </button>
               )}
             </div>
@@ -532,7 +563,9 @@ export default function FryingClient() {
       {showTimer && timerTotal > 0 && (
         <div id="frying-timer" className={`${styles.timerCard} ${timerDone ? styles.timerCardDone : ''}`}>
           <div className={`${styles.timerTitle} ${timerDone ? styles.timerTitleDone : ''}`}>
-            {timerDone ? '✅ 1차 튀김 완료!' : timerRunning ? '🔥 튀김 진행 중' : '⏸ 일시정지'}
+            {timerDone
+              ? (timerSecond === 'unnecessary' ? '✅ 튀김 완료!' : '✅ 1차 튀김 완료!')
+              : timerRunning ? '🔥 튀김 진행 중' : '⏸ 일시정지'}
           </div>
           <TimerRing
             secondsLeft={timerSec}
@@ -551,7 +584,11 @@ export default function FryingClient() {
           </div>
           {timerDone && (
             <div className={styles.timerDoneMsg}>
-              휴지(2~3분) 후 2차 튀김을 시작하세요. 필요 없으면 그대로 완성!
+              {timerSecond === 'recommended'
+                ? '2~3분 휴지 후 2차 튀김(고온 180~190°C)을 시작하세요. 2차까지 해야 바삭함이 오래 유지됩니다.'
+                : timerSecond === 'optional'
+                ? '기본은 여기서 완성! 더 바삭하게 원하면 2~3분 휴지 후 고온에서 2차 튀김하세요.'
+                : '완성! 키친타월에 올려 기름을 충분히 빼세요.'}
             </div>
           )}
         </div>

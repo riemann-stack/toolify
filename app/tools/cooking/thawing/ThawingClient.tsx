@@ -20,13 +20,14 @@ type FrozenState = 'full' | 'partial'
 type InitialTemp = 'fridge' | 'room' | 'hot'
 type FreezerTemp = 'normal' | 'fast'
 
-const FOODS: { key: FoodKey; icon: string; label: string; thawFactor: number; microFactor: number; storageMin: number; storageMax: number; tip: string }[] = [
-  { key: 'beef_pork', icon: '🥩', label: '소·돼지고기',   thawFactor: 2.5, microFactor: 3.5, storageMin: 3, storageMax: 6,  tip: '공기 최대한 제거·소분 냉동. 해동 후 24시간 내 조리 권장.' },
-  { key: 'chicken',   icon: '🍗', label: '닭·가금류',     thawFactor: 2.0, microFactor: 3.0, storageMin: 2, storageMax: 3,  tip: '살모넬라 주의. 해동수 접촉 도구·도마 즉시 세척.' },
-  { key: 'fish',      icon: '🐟', label: '생선·해산물',   thawFactor: 1.5, microFactor: 2.5, storageMin: 2, storageMax: 3,  tip: '해동 후 물기 제거. 비브리오 주의로 당일 조리 권장.' },
-  { key: 'vegetable', icon: '🥦', label: '채소·과일',     thawFactor: 1.0, microFactor: 2.0, storageMin: 8, storageMax: 12, tip: '블랜칭 후 냉동 시 영양소·색 유지. 해동 없이 바로 조리 가능.' },
-  { key: 'bread',     icon: '🍞', label: '빵·반죽',       thawFactor: 1.8, microFactor: 2.5, storageMin: 2, storageMax: 3,  tip: '슬라이스 후 냉동하면 필요한 양만 해동 가능.' },
-  { key: 'cooked',    icon: '🍱', label: '조리된 음식',   thawFactor: 1.2, microFactor: 2.2, storageMin: 1, storageMax: 3,  tip: '식힌 후 냉동. 해동 후 재가열 시 중심부 74°C 이상 확인.' },
+// thawFactor: 냉동 탭(얼리기) 계수 / fridgeFactor: 냉장 해동 식품 계수 / microFactor: 전자레인지 900W 기준 분/100g
+const FOODS: { key: FoodKey; icon: string; label: string; thawFactor: number; microFactor: number; fridgeFactor: number; storageMin: number; storageMax: number; tip: string }[] = [
+  { key: 'beef_pork', icon: '🥩', label: '소·돼지고기',   thawFactor: 2.5, microFactor: 1.8, fridgeFactor: 1.0,  storageMin: 3, storageMax: 6,  tip: '공기 최대한 제거·소분 냉동. 해동 후 24시간 내 조리 권장.' },
+  { key: 'chicken',   icon: '🍗', label: '닭·가금류',     thawFactor: 2.0, microFactor: 1.7, fridgeFactor: 0.9,  storageMin: 2, storageMax: 3,  tip: '살모넬라 주의. 해동수 접촉 도구·도마 즉시 세척.' },
+  { key: 'fish',      icon: '🐟', label: '생선·해산물',   thawFactor: 1.5, microFactor: 1.4, fridgeFactor: 0.8,  storageMin: 2, storageMax: 3,  tip: '해동 후 물기 제거. 비브리오 주의로 당일 조리 권장.' },
+  { key: 'vegetable', icon: '🥦', label: '채소·과일',     thawFactor: 1.0, microFactor: 1.0, fridgeFactor: 0.5,  storageMin: 8, storageMax: 12, tip: '블랜칭 후 냉동 시 영양소·색 유지. 해동 없이 바로 조리 가능.' },
+  { key: 'bread',     icon: '🍞', label: '빵·반죽',       thawFactor: 1.8, microFactor: 1.2, fridgeFactor: 0.45, storageMin: 2, storageMax: 3,  tip: '슬라이스 후 냉동하면 필요한 양만 해동 가능.' },
+  { key: 'cooked',    icon: '🍱', label: '조리된 음식',   thawFactor: 1.2, microFactor: 1.5, fridgeFactor: 0.7,  storageMin: 1, storageMax: 3,  tip: '식힌 후 냉동. 해동 후 재가열 시 중심부 74°C 이상 확인.' },
 ]
 
 function formatHours(h: number): { value: string; sub: string } {
@@ -37,7 +38,7 @@ function formatHours(h: number): { value: string; sub: string } {
   if (h < 10) {
     const hi = Math.floor(h)
     const mm = Math.round((h - hi) * 60)
-    return { value: mm === 0 ? `${hi}` : `${hi}시 ${mm}분`, sub: '' }
+    return mm === 0 ? { value: `${hi}`, sub: '시간' } : { value: `${hi}시간 ${mm}분`, sub: '' }
   }
   return { value: `${Math.round(h * 10) / 10}`, sub: '시간' }
 }
@@ -46,7 +47,7 @@ function formatMinutes(m: number): { value: string; sub: string } {
   if (m < 60) return { value: `${Math.round(m)}`, sub: '분' }
   const h = Math.floor(m / 60)
   const rest = Math.round(m - h * 60)
-  return { value: rest === 0 ? `${h}` : `${h}시 ${rest}분`, sub: rest === 0 ? '시간' : '' }
+  return rest === 0 ? { value: `${h}`, sub: '시간' } : { value: `${h}시간 ${rest}분`, sub: '' }
 }
 
 function addMinutesToNow(minutes: number): string {
@@ -80,21 +81,26 @@ function ThawTab() {
   const w = parseFloat(weight) || 0
   const frozenFactor = frozen === 'full' ? 1.0 : 0.6
 
-  // 냉장 해동 기준 시간 (시간 단위)
-  // 두께² × 식품계수 × 무게보정(무게^(1/3)/500^(1/3)) × 냉동상태보정
+  // 냉장 해동 기준 시간 (시간) — 질량 주도 모델 (USDA: 냉장 해동 약 10h/kg)
+  // 10.8 × 식품계수 × 두께보정(√(두께/3)) × 무게보정((무게kg)^0.75) × 냉동상태보정
   const fridgeHours = useMemo(() => {
     if (!t || !w) return 0
-    const base = t * t * f.thawFactor / 4
-    const weightAdj = Math.pow(w / 500, 1 / 3)
-    return base * weightAdj * frozenFactor
-  }, [t, w, f.thawFactor, frozenFactor])
+    const thicknessFactor = Math.min(1.7, Math.max(0.5, Math.pow(t / 3, 0.5)))
+    return 10.8 * f.fridgeFactor * thicknessFactor * Math.pow(w / 1000, 0.75) * frozenFactor
+  }, [t, w, f.fridgeFactor, frozenFactor])
 
-  const waterHours = fridgeHours / 5     // 흐르는 물 (약 5배 빠름)
-  const roomHours  = fridgeHours / 3     // 실온 (약 3배 빠름)
+  const waterHours = fridgeHours / 7     // 흐르는 찬물 (냉장 대비 약 7배 빠름)
+  const roomHours  = fridgeHours / 3     // 실온 (약 3배 빠름·비권장)
+  // 전자레인지(900W 기준): 무게×식품계수 × 두께보정 × 냉동상태보정
   const microMinutes = useMemo(() => {
-    if (!w) return 0
-    return (w / 100) * f.microFactor * frozenFactor
-  }, [w, f.microFactor, frozenFactor])
+    if (!w || !t) return 0
+    const thicknessFactor = Math.min(1.5, Math.max(0.7, Math.pow(t / 3, 0.4)))
+    return (w / 100) * f.microFactor * thicknessFactor * frozenFactor
+  }, [w, t, f.microFactor, frozenFactor])
+
+  // 전자레인지 W 보정 — 선택한 출력을 결과(카드·히어로·ETA)에 반영
+  const microPowerObj = MICROWAVE_POWERS.find(p => p.id === microPower) ?? MICROWAVE_POWERS[1]
+  const adjustedMicroMinutes = microMinutes * microPowerObj.factor
 
   const methods: { key: Method; icon: string; name: string; sub: string; time: { value: string; sub: string }; totalMin: number; safety: { label: string; cls: string }; warning: string; cardCls: string; heroCls: string }[] = [
     {
@@ -138,8 +144,8 @@ function ThawTab() {
       icon: '⚡',
       name: '전자레인지 해동',
       sub: '가장 빠르지만 즉시 조리',
-      time: formatMinutes(microMinutes),
-      totalMin: microMinutes,
+      time: formatMinutes(adjustedMicroMinutes),
+      totalMin: adjustedMicroMinutes,
       safety: { label: '★★★ 보통', cls: s.safeCaution },
       warning: '부분 가열 가능성 → 해동 후 즉시 조리 필수.',
       cardCls: s.methodMicro,
@@ -159,7 +165,7 @@ function ThawTab() {
       `• 냉장 해동: ${formatHours(fridgeHours).value}${formatHours(fridgeHours).sub}`,
       `• 흐르는 물: ${formatHours(waterHours).value}${formatHours(waterHours).sub}`,
       `• 실온 해동: ${formatHours(roomHours).value}${formatHours(roomHours).sub} (비권장)`,
-      `• 전자레인지: ${formatMinutes(microMinutes).value}${formatMinutes(microMinutes).sub}`,
+      `• 전자레인지(${microPowerObj.power}W): ${formatMinutes(adjustedMicroMinutes).value}${formatMinutes(adjustedMicroMinutes).sub}`,
       ``,
       `선택: ${selected.name} → 완료 ${addMinutesToNow(selected.totalMin)}`,
     ].join('\n')
@@ -175,20 +181,20 @@ function ThawTab() {
     const expectedHrs = method === 'fridge' ? fridgeHours
       : method === 'water' ? waterHours
       : method === 'room' ? roomHours
-      : microMinutes / 60
+      : adjustedMicroMinutes / 60
     return QUICK_WARNINGS.filter(w => w.matches({
       foodKey: food as UFoodKey,
       method: method as UMethod,
       thicknessCm: t,
       expectedHours: expectedHrs,
     }))
-  }, [food, method, t, fridgeHours, waterHours, roomHours, microMinutes])
+  }, [food, method, t, fridgeHours, waterHours, roomHours, adjustedMicroMinutes])
 
   // 위험도 평가
   const expectedHours = method === 'fridge' ? fridgeHours
     : method === 'water' ? waterHours
     : method === 'room' ? roomHours
-    : microMinutes / 60
+    : adjustedMicroMinutes / 60
   const risk = useMemo(() => evaluateRisk({
     foodKey: food as UFoodKey,
     thicknessCm: t,
@@ -196,10 +202,6 @@ function ThawTab() {
     method: method as UMethod,
     expectedHours,
   }), [food, t, w, method, expectedHours])
-
-  // 전자레인지 W 보정
-  const microPowerObj = MICROWAVE_POWERS.find(p => p.id === microPower) ?? MICROWAVE_POWERS[1]
-  const adjustedMicroMinutes = microMinutes * microPowerObj.factor
 
   // 역산
   const reverseInfo = useMemo(() => {
@@ -795,9 +797,10 @@ export default function ThawingClient() {
         >📖 식품별 가이드</button>
       </div>
 
-      {tab === 'thaw' && <ThawTab />}
-      {tab === 'freeze' && <FreezeTab />}
-      {tab === 'guide' && <GuideTab />}
+      {/* 모든 탭을 마운트 유지 — 탭 전환 시 입력값 보존 (display 토글) */}
+      <div style={{ display: tab === 'thaw' ? 'block' : 'none' }}><ThawTab /></div>
+      <div style={{ display: tab === 'freeze' ? 'block' : 'none' }}><FreezeTab /></div>
+      <div style={{ display: tab === 'guide' ? 'block' : 'none' }}><GuideTab /></div>
 
       <ThermometerBox />
     </div>

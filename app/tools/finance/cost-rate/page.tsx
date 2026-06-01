@@ -75,7 +75,7 @@ export default function CostRatePage() {
             <div><span style={{ color: 'var(--muted)' }}>기본 원가율</span> = 재료비 ÷ 판매가 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>실질 원가율</span> = (재료비 + 포장재 + 배달앱·결제 수수료 + 배달비 부담 + 광고비) ÷ 판매가 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>1개당 마진</span> = 판매가 − 실질 변동비</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 임대료·인건비 같은 고정비는 별도로 손익분기 계산에 반영</div>
+            <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>※ 임대료·인건비 같은 고정비는 별도로 손익분기 계산에 반영</div>
           </div>
         </div>
 
@@ -84,8 +84,8 @@ export default function CostRatePage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             업종별 권장 원가율 가이드
           </h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+          <div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['업종', '권장 원가율', '평균 마진율'].map((h, i) => (
@@ -117,31 +117,36 @@ export default function CostRatePage() {
         {/* ── 3. 배달앱 수수료 비교 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            2024년 배달앱 수수료 비교
+            배달앱 수수료 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { app: '🟢 배달의민족', color: '#059669', items: [
-                ['오픈서비스', '6.8% + 결제 3%'],
-                ['배민 1', '6.8% + 결제 3% (배민이 배달)'],
-                ['광고', '울트라콜 (월 정액 88,000원)'],
+                ['중개수수료', '2.0~7.8% 차등'],
+                ['매출 상위 35%', '7.8%'],
+                ['중위 35~80%', '6.8%'],
+                ['하위 20%', '2.0%'],
+                ['결제 수수료', '약 3%'],
               ]},
               { app: '🔴 쿠팡이츠', color: '#DC2626', items: [
-                ['스마트배달', '9.8% + 결제 3%'],
-                ['일반', '5% + 결제 3% (직접 배달)'],
+                ['중개수수료', '2.0~7.8% (동일)'],
+                ['포장 주문', '2026.4~ 유료화'],
+                ['결제 수수료', '약 3%'],
               ]},
               { app: '🟡 요기요', color: '#CA8A04', items: [
-                ['요기요 배달', '12.5% + 결제 3%'],
-                ['사장님 배달', '4.7% + 결제 3%'],
+                ['중개수수료', '기본 9.7%'],
+                ['주문 많을수록', '최대 4.7%'],
+                ['포장 주문', '7.7%'],
+                ['결제 수수료', '약 3%'],
               ]},
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.color}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.color, fontWeight: 700, marginBottom: 8 }}>{g.app}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {g.items.map(([k, v], j) => (
-                    <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)' }}>
+                    <div key={j} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 12, color: 'var(--muted)' }}>
                       <span>{k}</span>
-                      <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
+                      <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -149,7 +154,7 @@ export default function CostRatePage() {
             ))}
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            ※ 정책은 수시 변경되므로 각 앱 공식 페이지 확인 필수. 결제 수수료는 PG사·카드사에 따라 ±0.5% 차이가 있습니다.
+            ※ 2025년 도입된 <strong style={{ color: 'var(--text)' }}>차등수수료제(3년 한시)</strong>로 배민·쿠팡이츠 중개수수료가 매출 구간별 2.0~7.8%로 적용됩니다. 결제 수수료·배달비·광고비·부가세까지 더한 실질 부담은 매출의 약 <strong style={{ color: 'var(--text)' }}>25~30%</strong>. 정책은 수시 변경되니 각 앱 공식 페이지를 확인하세요.
           </p>
         </div>
 
@@ -168,7 +173,7 @@ export default function CostRatePage() {
             lineHeight: 1.95,
           }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>☑ <strong>배달앱 중개 수수료</strong> — 5~12.5% (앱·정책별)</li>
+              <li>☑ <strong>배달앱 중개 수수료</strong> — 약 2~9.7% (앱·매출 구간별 차등)</li>
               <li>☑ <strong>결제 수수료</strong> — 약 3% (PG·카드사별 ±0.5%)</li>
               <li>☑ <strong>배달비 가게 부담</strong> — 0~3,000원 (정책별)</li>
               <li>☑ <strong>포장재 비용</strong> — 500~1,500원/건</li>
@@ -181,7 +186,7 @@ export default function CostRatePage() {
         {/* ── 5. 가격 책정 심리 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            🎯 가격 책정 심리 — 100원 단위 vs 1,000원 단위
+            가격 책정 심리 — 100원 vs 1,000원 단위
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>

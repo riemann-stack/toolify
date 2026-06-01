@@ -23,7 +23,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -70,7 +69,7 @@ export default function ServingPage() {
             재료별 1인분 기준 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
-            메인 식사, 보통 식사량, 성인 기준
+            메인 식사·보통 식사량·성인 기준의 일반 근사치입니다. 고기류는 밥·면 없이 <strong style={{ color: 'var(--text)' }}>고기 위주</strong>로 먹을 때 기준이며, 밥·면을 곁들이면 그만큼 줄어듭니다. 위 계산기는 인원·연령·식사량·탄수화물 포함 여부를 반영해 더 정확하게 계산합니다.
           </p>
 
           {/* 면류 */}
@@ -254,10 +253,10 @@ export default function ServingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             {[
-              { age: '만 3~5세',   pct: '30~40%', c: '#0891B2' },
-              { age: '만 6~9세',   pct: '50~60%', c: '#059669' },
-              { age: '만 10~13세', pct: '70~80%', c: '#0EA5E9' },
-              { age: '만 14세+',   pct: '거의 성인', c: '#D97706' },
+              { age: '영아 (만 3세 이하)',    pct: '약 25%', c: '#0891B2' },
+              { age: '유아 (만 4~6세)',      pct: '약 40%', c: '#059669' },
+              { age: '초등 (만 7~13세)',     pct: '약 65%', c: '#0EA5E9' },
+              { age: '중·고생 (만 14~17세)',  pct: '약 90%', c: '#D97706' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{g.age}</p>
@@ -268,7 +267,7 @@ export default function ServingPage() {
           <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>💡 계산 예시</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>
-              성인 2명 + 초등생(10세) 1명 = 2 + 0.75 = <strong>2.75인분</strong>으로 계산
+              성인 2명 + 초등생(10세) 1명 = 2 + 0.65 = <strong>2.65인분</strong>으로 계산
             </p>
           </div>
         </div>

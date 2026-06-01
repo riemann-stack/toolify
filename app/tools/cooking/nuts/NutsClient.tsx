@@ -131,7 +131,7 @@ export default function NutsClient() {
       carbs: acc.carbs + n.carbs,
       fiber: acc.fiber + n.fiber,
       grams: acc.grams + n.grams,
-      sodium: acc.sodium + procData.sodiumAdd,
+      sodium: acc.sodium + procData.sodiumAdd * (n.grams / 28),
       selenium: acc.selenium + n.selenium,
     }), { kcal: 0, protein: 0, fat: 0, carbs: 0, fiber: 0, grams: 0, sodium: 0, selenium: 0 })
   }, [selectedNuts, procData])
@@ -145,6 +145,9 @@ export default function NutsClient() {
 
   // 가시 견과 (알레르기 필터)
   const visibleNuts = NUTS_DATA.filter((n) => !isAllergenic(n.allergyGroup))
+
+  // 카드는 선택됐지만(키 존재) 모두 0g이라 집계에서 빠지는 상태 구분
+  const hasSelectedKeys = Object.keys(amounts).length > 0
 
   return (
     <div className={styles.wrap}>
@@ -162,7 +165,7 @@ export default function NutsClient() {
 
       {/* ── 0. 인기 믹스 프리셋 (NEW) ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>🥗 인기 믹스 — 한 번 클릭으로 적용</label>
+        <label className={styles.cardLabel}>인기 믹스 — 한 번 클릭으로 적용</label>
         <div className={styles.presetGrid}>
           {POPULAR_MIXES.map((p) => {
             const blocked = p.items.some((it) => {
@@ -181,7 +184,7 @@ export default function NutsClient() {
                 <span className={styles.presetItems}>
                   {p.items.map((it) => {
                     const nut = NUTS_DATA.find((n) => n.key === it.key)
-                    return nut ? `${nut.icon} ${nut.name} ${it.grams}g` : ''
+                    return nut ? `${nut.name} ${it.grams}g` : ''
                   }).join(' · ')}
                 </span>
               </button>
@@ -192,13 +195,13 @@ export default function NutsClient() {
 
       {/* ── 1. 알레르기 필터 (NEW) ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>🛡️ 알레르기 필터 (선택)</label>
+        <label className={styles.cardLabel}>알레르기 필터 (선택)</label>
         <div className={styles.allergyRow}>
           {(Object.keys(ALLERGY_GROUP_LABEL) as AllergyGroup[]).map((g) => (
-            <button key={g} type="button"
+            <button key={g} type="button" role="checkbox" aria-checked={isAllergenic(g)}
               className={`${styles.allergyChip} ${isAllergenic(g) ? styles.allergyChipActive : ''}`}
               onClick={() => toggleAllergy(g)}>
-              {isAllergenic(g) ? '🚫' : '☐'} {ALLERGY_GROUP_LABEL[g]}
+              {ALLERGY_GROUP_LABEL[g]}
             </button>
           ))}
         </div>
@@ -209,7 +212,7 @@ export default function NutsClient() {
 
       {/* ── 2. 견과류 선택 + 양 입력 (강화) ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>🥜 견과류 선택 + 양 입력 (g)</label>
+        <label className={styles.cardLabel}>견과류 선택 + 양 입력 (g)</label>
         <p className={styles.cardSub}>칩 클릭 → 권장량 기본값 자동 채움. 직접 g 단위로 조정 가능. 권장량 초과 시 자동 경고 표시.</p>
         <div className={styles.nutGrid}>
           {visibleNuts.map((n) => {
@@ -221,9 +224,9 @@ export default function NutsClient() {
                 className={`${styles.nutCard} ${isSelected ? styles.nutCardActive : ''} ${n.danger ? styles.nutCardDanger : ''}`}>
                 <button type="button" className={styles.nutToggle}
                   onClick={() => toggleNut(n.key, defaultGrams)}
-                  aria-label={isSelected ? '제거' : '추가'}>
+                  aria-pressed={isSelected}
+                  aria-label={isSelected ? `${n.name} 제거` : `${n.name} 추가`}>
                   <div className={styles.nutHeadRow}>
-                    <span className={styles.nutIcon}>{n.icon}</span>
                     <span className={styles.nutName}>{n.name}</span>
                   </div>
                   <span className={styles.nutKcal}>{n.caloriePerServing}kcal/{n.servingGrams}g</span>
@@ -244,6 +247,9 @@ export default function NutsClient() {
                         ≈ {Math.round((amounts[n.key] / n.servingGrams) * n.servingCount)}알
                       </span>
                     )}
+                    {amounts[n.key] === 0 && (
+                      <span className={styles.nutCount} style={{ color: 'var(--muted)' }}>0g · 집계 제외</span>
+                    )}
                   </div>
                 )}
                 {/* 즉시 경고 — 권장량 초과 시 */}
@@ -263,10 +269,10 @@ export default function NutsClient() {
 
       {/* ── 3. 가공 상태 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>🔥 가공 상태</label>
+        <label className={styles.cardLabel}>가공 상태</label>
         <div className={styles.condRow}>
           {PROC_DATA.map((p) => (
-            <button key={p.key} type="button"
+            <button key={p.key} type="button" aria-pressed={proc === p.key}
               className={`${styles.condBtn} ${p.heavy ? styles.condWarn : ''} ${proc === p.key ? styles.condActive : ''}`}
               onClick={() => setProc(p.key)}>
               {p.label}
@@ -283,7 +289,7 @@ export default function NutsClient() {
 
       {/* ── 4. 개인 정보 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>👤 개인 정보 (선택)</label>
+        <label className={styles.cardLabel}>개인 정보 (선택)</label>
 
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>체중 (kg)</div>
@@ -300,11 +306,11 @@ export default function NutsClient() {
           <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>목표</div>
           <div className={styles.condRow}>
             {[
-              { k: 'diet',     label: '🔻 다이어트' },
-              { k: 'maintain', label: '⚖️ 체중 유지' },
-              { k: 'gain',     label: '💪 근육 증가' },
+              { k: 'diet',     label: '다이어트' },
+              { k: 'maintain', label: '체중 유지' },
+              { k: 'gain',     label: '근육 증가' },
             ].map((g) => (
-              <button key={g.k} type="button"
+              <button key={g.k} type="button" aria-pressed={goal === g.k}
                 className={`${styles.condBtn} ${goal === g.k ? styles.condActive : ''}`}
                 onClick={() => setGoal(g.k as GoalK)}>
                 {g.label}
@@ -328,7 +334,11 @@ export default function NutsClient() {
 
       {/* ── 결과 ── */}
       {selectedNuts.length === 0 ? (
-        <div className={styles.empty}>견과류를 하나 이상 선택하세요</div>
+        <div className={styles.empty}>
+          {hasSelectedKeys
+            ? '선택한 견과류의 양(g)을 1g 이상 입력하세요'
+            : '견과류를 하나 이상 선택하세요'}
+        </div>
       ) : (
         <>
           {/* 합산 카드 */}
@@ -417,7 +427,6 @@ export default function NutsClient() {
               <div key={n.key} className={styles.result}>
                 <div className={styles.resultHead}>
                   <span className={styles.resultColorDot} style={{ background: n.color }} />
-                  <span className={styles.resultEmoji}>{n.icon}</span>
                   <div>
                     <div className={styles.resultName}>{n.name}</div>
                     <div className={styles.resultAllergyTag}>알레르기 그룹: {ALLERGY_GROUP_LABEL[n.allergyGroup]}</div>

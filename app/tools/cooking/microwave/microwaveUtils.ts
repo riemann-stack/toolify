@@ -72,12 +72,12 @@ export interface FoodPreset {
   baseSec: number        // 표준 시간 (초)
   restSec: number        // 휴지 시간 (초)
   restAdditionalSec: number  // 휴지 후 추가 가열
-  defaultTemp: StartTemp
   container: string
   warning?: string       // 강한 경고 (계란 등)
   tip: string
   vessel: string
   forbidden?: boolean    // 절대 X
+  defrostMode?: boolean  // 해동 모드 (고정 ~200W, 출력 W 환산 미적용)
 }
 
 export const FOODS: FoodPreset[] = [
@@ -87,7 +87,6 @@ export const FOODS: FoodPreset[] = [
     label: '냉동밥 (햇반·즉석밥)',
     shortLabel: '냉동밥',
     baseW: 700, baseSec: 120, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'frozen',
     container: '용기 그대로 OK',
     tip: '뚜껑 살짝 열거나 비닐 일부 제거. 데운 후 한 번 섞으면 균일.',
     vessel: '햇반 전용 용기 (PP 5번)',
@@ -98,7 +97,6 @@ export const FOODS: FoodPreset[] = [
     label: '냉동만두',
     shortLabel: '냉동만두',
     baseW: 700, baseSec: 90, restSec: 30, restAdditionalSec: 60,
-    defaultTemp: 'frozen',
     container: '내열 접시 + 키친타올',
     tip: '1.5분 가열 → 30초 휴지(균일 가열) → 1분 추가. 휴지가 핵심.',
     vessel: '도자기·내열유리',
@@ -109,7 +107,6 @@ export const FOODS: FoodPreset[] = [
     label: '냉동피자',
     shortLabel: '냉동피자',
     baseW: 700, baseSec: 180, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'frozen',
     container: '내열 접시',
     tip: '가장자리 타기 쉬움. 70% 시간으로 시작 → 추가 가열 권장. 오븐 토스터가 더 좋음.',
     vessel: '도자기·내열유리 (금색 X)',
@@ -120,7 +117,6 @@ export const FOODS: FoodPreset[] = [
     label: '냉동도시락',
     shortLabel: '도시락',
     baseW: 700, baseSec: 240, restSec: 60, restAdditionalSec: 60,
-    defaultTemp: 'frozen',
     container: '용기 그대로 OK',
     tip: '4분 가열 → 1분 휴지 → 1분 추가. 위치별 가열 차이 큼. 중간 회전 권장.',
     vessel: 'PP 전용 용기',
@@ -131,7 +127,6 @@ export const FOODS: FoodPreset[] = [
     label: 'CJ·오뚜기 즉석국·찌개',
     shortLabel: '즉석국',
     baseW: 700, baseSec: 150, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'fridge',
     container: '비닐 끝 살짝 자르기',
     tip: '비닐 끝을 1~2cm 잘라야 폭발 방지. 끓어 넘침 주의.',
     vessel: '내열 그릇에 옮기면 더 안전',
@@ -142,7 +137,6 @@ export const FOODS: FoodPreset[] = [
     label: '편의점 도시락',
     shortLabel: '편의점',
     baseW: 700, baseSec: 150, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'fridge',
     container: '비닐 일부 제거',
     tip: '뚜껑 비닐 끝부터 제거. CU·GS·세븐 모두 700W 2~3분 표준.',
     vessel: '도시락 용기 그대로',
@@ -153,7 +147,6 @@ export const FOODS: FoodPreset[] = [
     label: '우유·음료 (200ml)',
     shortLabel: '우유',
     baseW: 700, baseSec: 60, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'fridge',
     container: '내열 머그',
     warning: '끓어 넘침 주의 — 처음엔 30초씩 분할 가열',
     tip: '30초 → 저어주기 → 추가 30초 패턴이 안전. 컵 80%만 채우기.',
@@ -165,7 +158,6 @@ export const FOODS: FoodPreset[] = [
     label: '빵·베이커리',
     shortLabel: '빵',
     baseW: 700, baseSec: 15, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'room',
     container: '키친타올로 감싸기',
     tip: '10초 단위 가열. 너무 데우면 딱딱해지므로 살짝만. 물 한 방울 뿌리면 부드러움 유지.',
     vessel: '내열 접시 + 키친타올',
@@ -176,7 +168,6 @@ export const FOODS: FoodPreset[] = [
     label: '⚠️ 계란 (통째)',
     shortLabel: '계란',
     baseW: 0, baseSec: 0, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'fridge',
     container: '절대 사용 금지',
     warning: '🚨 통째 가열 시 폭발 위험 — 절대 금지. 부상 사례 다수.',
     tip: '계란을 데우려면 ① 노른자에 칼집 ② 흰자 풀기 ③ 그릇에 풀어 사용. 통째 X.',
@@ -189,7 +180,6 @@ export const FOODS: FoodPreset[] = [
     label: '떡 (가래·인절미)',
     shortLabel: '떡',
     baseW: 700, baseSec: 30, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'fridge',
     container: '내열 접시 + 물',
     tip: '물 1~2 스푼 뿌려서 가열. 비닐 X (눌어붙음). 30초 단위로 확인.',
     vessel: '도자기·내열유리',
@@ -199,11 +189,12 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥩',
     label: '냉동 고기 (해동)',
     shortLabel: '냉동고기',
-    baseW: 200, baseSec: 60, restSec: 30, restAdditionalSec: 0,
-    defaultTemp: 'frozen',
+    baseW: 200, baseSec: 60, restSec: 0, restAdditionalSec: 0,
     container: '내열 접시',
-    tip: '해동 모드 (200W) 200g당 1분 → 뒤집기 → 추가. 가장자리 익기 시작하면 정지.',
+    warning: '해동은 출력 W와 무관 — 반드시 해동 모드(약 200W)로. 일반 출력은 가장자리만 익습니다.',
+    tip: '해동 모드(약 200W) 200g당 1분 → 중간에 뒤집기. 가장자리 익기 시작하면 정지하고 휴지. 정밀 해동은 해동 시간 계산기 권장.',
     vessel: '도자기·내열유리',
+    defrostMode: true,
   },
   {
     id: 'veggie',
@@ -211,7 +202,6 @@ export const FOODS: FoodPreset[] = [
     label: '냉동 채소',
     shortLabel: '냉동채소',
     baseW: 700, baseSec: 90, restSec: 0, restAdditionalSec: 0,
-    defaultTemp: 'frozen',
     container: '뚜껑 있는 내열 그릇 + 물 약간',
     tip: '물 1~2 스푼 + 뚜껑 (찜 효과). 200g 1~2분, 중간 한 번 섞기.',
     vessel: '내열 뚜껑 그릇',

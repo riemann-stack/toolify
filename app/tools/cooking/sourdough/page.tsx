@@ -121,10 +121,10 @@ export default function SourdoughPage() {
               </thead>
               <tbody>
                 {[
-                  { r: '1:1:1', f: '음식 많음 → 빠름',   p: '4~8시간',   t: '서늘한 곳' },
-                  { r: '1:2:2', f: '균형 잡힌 표준',     p: '6~12시간',  t: '20~24°C' },
-                  { r: '1:3:3', f: '여유로운 급이',       p: '8~14시간',  t: '따뜻한 곳' },
-                  { r: '1:5:5', f: '많은 음식 → 느림',    p: '12~18시간', t: '25°C 이상' },
+                  { r: '1:1:1', f: '음식 적음 → 빠름',   p: '3~4시간',   t: '서늘한 곳' },
+                  { r: '1:2:2', f: '균형 잡힌 표준',     p: '4~6시간',   t: '20~24°C' },
+                  { r: '1:3:3', f: '여유로운 급이',       p: '5~8시간',   t: '따뜻한 곳' },
+                  { r: '1:5:5', f: '음식 많음 → 느림',    p: '7~10시간',  t: '25°C 이상' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row.r}</td>
@@ -136,6 +136,9 @@ export default function SourdoughPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            ※ 피크 속도는 <strong style={{ color: 'var(--text)' }}>24°C·백밀·피크 직후 급이</strong> 기준 (위 계산기와 동일). 온도가 10°C 낮아지면 약 2배 느려지고, 통밀·호밀을 섞으면 빨라집니다. &lsquo;적합 온도&rsquo;는 각 비율에 권장하는 보관 환경입니다.
+          </p>
         </div>
 
         {/* ── 4. 온도별 발효 가이드 ── */}

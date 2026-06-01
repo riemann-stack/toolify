@@ -129,12 +129,12 @@ export default function SavingsPage() {
           널리 알려진 방법으로, 수입을 6개 카테고리에 비율로 배분해 균형 잡힌 재정 관리를 합니다.
         </p>
         <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
-          <li><strong style={{ color: 'var(--text)' }}>🍽️ 생활비 (NEC) 55%</strong> — 의식주·교통·통신 등 기본 생활</li>
-          <li><strong style={{ color: 'var(--text)' }}>📚 교육·자기개발 (EDU) 10%</strong> — 책·강의·자격증 (한국에선 자녀 교육 포함)</li>
-          <li><strong style={{ color: 'var(--text)' }}>🎮 놀이·취미 (PLAY) 10%</strong> — 즐거움·여행·외식</li>
-          <li><strong style={{ color: 'var(--text)' }}>💰 저축·재정자유 (FFA) 10%</strong> — 비상금·단기 저축</li>
-          <li><strong style={{ color: 'var(--text)' }}>📈 장기 투자 (LTSS) 10%</strong> — 주식·연금·부동산</li>
-          <li><strong style={{ color: 'var(--text)' }}>🎁 기부·나눔 (GIVE) 5%</strong> — 기부·후원·선물</li>
+          <li><strong style={{ color: 'var(--text)' }}>생활비 (NEC) 55%</strong> — 의식주·교통·통신 등 기본 생활</li>
+          <li><strong style={{ color: 'var(--text)' }}>교육·자기개발 (EDU) 10%</strong> — 책·강의·자격증 (한국에선 자녀 교육 포함)</li>
+          <li><strong style={{ color: 'var(--text)' }}>놀이·취미 (PLAY) 10%</strong> — 즐거움·여행·외식</li>
+          <li><strong style={{ color: 'var(--text)' }}>저축·재정자유 (FFA) 10%</strong> — 비상금·단기 저축</li>
+          <li><strong style={{ color: 'var(--text)' }}>장기 투자 (LTSS) 10%</strong> — 주식·연금·부동산</li>
+          <li><strong style={{ color: 'var(--text)' }}>기부·나눔 (GIVE) 5%</strong> — 기부·후원·선물</li>
         </ul>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
           ※ 한국 상황에서는 월세·통신비가 비싸 NEC 60~65%, 기부 0~3%로 현실적으로 조정하기도 합니다.
@@ -157,11 +157,11 @@ export default function SavingsPage() {
             </thead>
             <tbody>
               {[
-                ['🌱 청년도약계좌', '만 19~34세 + 소득 7,500↓', '840만원', '정부 매칭 월 7만원 + 비과세'],
-                ['💼 ISA', '만 19세↑', '2,000만원', '200만원 비과세 + 9.9% 분리과세'],
-                ['🏦 연금저축', '만 18세↑', '600만원', '세액공제 16.5% (연 99만원 환급)'],
-                ['📊 IRP', '근로자·자영업자', '900만원 (저축 합산)', '연 148만원 환급 (저축 합산)'],
-                ['🏠 주택청약', '무주택자', '240만원', '소득공제 40% (96만원 한도)'],
+                ['청년도약계좌', '만 19~34세 + 소득 7,500↓', '840만원', '정부 매칭 월 7만원 + 비과세'],
+                ['ISA', '만 19세↑', '2,000만원', '200만원 비과세 + 9.9% 분리과세'],
+                ['연금저축', '만 18세↑', '600만원', '세액공제 16.5% (연 99만원 환급)'],
+                ['IRP', '근로자·자영업자', '900만원 (저축 합산)', '연 148만원 환급 (저축 합산)'],
+                ['주택청약', '무주택자', '240만원', '소득공제 40% (96만원 한도)'],
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                   {row.map((cell, j) => (
@@ -179,7 +179,7 @@ export default function SavingsPage() {
           </table>
         </div>
         <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, background: 'var(--bg3)' }}>
-          💡 <strong style={{ color: 'var(--text)' }}>우선순위 추천</strong>:
+          <strong style={{ color: 'var(--text)' }}>우선순위 추천</strong>:
           청년이라면 <strong>청년도약 → 주택청약 → ISA → 연금저축</strong> 순,
           30~40대 직장인은 <strong>연금저축 600 → IRP 추가 (총 900) → ISA</strong> 순이 일반적입니다.
         </div>

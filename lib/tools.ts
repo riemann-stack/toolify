@@ -37,6 +37,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/ipo-deposit', icon: '💰', name: '공모주 증거금 계산기', desc: '증거금 ↔ 예상 주수 양방향 + 5사6입·청약 한도 자동. 청약일 D-day 메모.', badge: 'new' },
       { href: '/tools/finance/stock-decision', icon: '🧠', name: '주식 매도·매수 심리 진단', desc: '팔까 살까 망설일 때, 행동경제학 7대 편향 자가진단으로 내 결정에 끼어든 감정을 점검. 투자 권유·종목 추천 X.', badge: 'new' },
       { href: '/tools/finance/savings', icon: '💰', name: '저축액 계산기', desc: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA 절세 시뮬.', badge: 'new' },
+      { href: '/tools/finance/wealth-rank', icon: '🏆', name: '자산 순위 계산기', desc: '내 순자산이 상위 몇 %? 전국·시도·연령대·세계 기준 + 상위 10%·1% 진입선. 2025 가계금융복지조사·UBS 기반.', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 비용 계산기', desc: '낙찰가 + 취득세·명도·체납·수리·대출까지 진짜 들어가는 비용을 시나리오별로.', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일과 3개월 급여로 퇴직금·퇴직소득세·실수령 자동. DB/DC/IRP 4모드.', badge: 'new' },
       { href: '/tools/finance/freelance-tax', icon: '💼', name: '프리랜서 종합소득세 계산기', desc: '업종별 단순경비율·8단계 누진세 자동 + 노란우산·연금 절세 시나리오 5종 비교.', badge: 'new' },
