@@ -38,11 +38,11 @@ const STORAGE_DATA: Record<string, StorageInfo> = {
   beefCooked:     { category: '소고기(조리)',  emoji: '🥩', group: 'meat', fridgeCooked: 4, freezerCooked: 90, freezeRecommendDay: 3, defaultCondition: 'cooked', defaultStorage: 'fridge' },
   porkRaw:        { category: '돼지고기(생)',  emoji: '🥩', group: 'meat', fridgeRaw: 3, freezerRaw: 120, freezeRecommendDay: 2, defaultCondition: 'raw',    defaultStorage: 'fridge' },
   porkCooked:     { category: '돼지고기(조리)',emoji: '🥩', group: 'meat', fridgeCooked: 4, freezerCooked: 90, defaultCondition: 'cooked', defaultStorage: 'fridge' },
-  chickenRaw:     { category: '닭고기(생)',    emoji: '🍗', group: 'meat', fridgeRaw: 2, freezerRaw: 90, warning: '살모넬라 위험. 신선 시 즉시 냉동 권장', freezeRecommendDay: 1, defaultCondition: 'raw', defaultStorage: 'fridge' },
+  chickenRaw:     { category: '닭고기(생)',    emoji: '🍗', group: 'meat', fridgeRaw: 2, freezerRaw: 270, warning: '살모넬라 위험. 신선 시 즉시 냉동 권장', freezeRecommendDay: 1, defaultCondition: 'raw', defaultStorage: 'fridge' },
   chickenCooked:  { category: '닭고기(조리)',  emoji: '🍗', group: 'meat', fridgeCooked: 3, freezerCooked: 90, defaultCondition: 'cooked', defaultStorage: 'fridge' },
   groundMeat:     { category: '다진고기',      emoji: '🍖', group: 'meat', fridgeRaw: 1, freezerRaw: 90, warning: '표면적이 넓어 부패가 빠릅니다. 즉시 냉동 권장', freezeRecommendDay: 1, defaultCondition: 'raw', defaultStorage: 'fridge' },
   ham:            { category: '햄·소시지(개봉전)', emoji: '🌭', group: 'meat', fridgeRaw: 14, defaultCondition: 'raw', defaultStorage: 'fridge' },
-  hamOpened:      { category: '햄·소시지(개봉후)', emoji: '🌭', group: 'meat', fridgeRaw: 5, defaultCondition: 'opened', defaultStorage: 'fridge' },
+  hamOpened:      { category: '햄·소시지(개봉후)', emoji: '🌭', group: 'meat', fridgeRaw: 5, freezerRaw: 60, defaultCondition: 'opened', defaultStorage: 'fridge' },
   bacon:          { category: '베이컨',        emoji: '🥓', group: 'meat', fridgeRaw: 7, freezerRaw: 30, defaultCondition: 'raw', defaultStorage: 'fridge' },
 
   fishRaw:        { category: '생선(생)',      emoji: '🐟', group: 'seafood', fridgeRaw: 2, freezerRaw: 90, warning: '비린내·부패가 빠릅니다. 손질 후 즉시 사용 또는 냉동', freezeRecommendDay: 1, defaultCondition: 'raw', defaultStorage: 'fridge' },
@@ -70,7 +70,7 @@ const STORAGE_DATA: Record<string, StorageInfo> = {
   banchan:        { category: '밑반찬',        emoji: '🥢', group: 'grain', fridgeCooked: 5, warning: '국물이 있는 반찬은 더 빨리 상합니다', defaultCondition: 'cooked', defaultStorage: 'fridge' },
   soup:           { category: '국·찌개',       emoji: '🍲', group: 'grain', fridgeCooked: 3, freezerCooked: 30, warning: '하루 한 번 끓여 먹으면 보관 기간을 연장할 수 있습니다', freezeRecommendDay: 2, defaultCondition: 'cooked', defaultStorage: 'fridge' },
 
-  tofu:           { category: '두부',          emoji: '⬜', group: 'processed', fridgeRaw: 7, warning: '개봉 후 물에 담가 보관, 매일 물 교체 권장', defaultCondition: 'opened', defaultStorage: 'fridge' },
+  tofu:           { category: '두부',          emoji: '⬜', group: 'processed', fridgeRaw: 4, warning: '개봉 후 물에 담가 보관, 매일 물 교체 권장 (냉동 시 식감 변화)', defaultCondition: 'opened', defaultStorage: 'fridge' },
 }
 
 const CATEGORY_KEYS = Object.keys(STORAGE_DATA)
@@ -80,7 +80,7 @@ const CATEGORY_KEYS = Object.keys(STORAGE_DATA)
  * ──────────────────────────────────────────────── */
 type StorageMethod = 'roomTemp' | 'fridge' | 'freezer' | 'kimchi'
 type Condition = 'raw' | 'cooked' | 'opened'
-type BaseDateType = 'purchase' | 'cook' | 'open'
+type BaseDateType = 'purchase' | 'cook' | 'open' | 'freeze'
 type Status = 'safe' | 'warning' | 'urgent' | 'expired' | 'unknown'
 
 interface FoodItem {
@@ -102,12 +102,6 @@ interface FoodItem {
 const STORAGE_KEY = 'youtil-food-storage-v1'
 const MAX_ITEMS = 30
 
-const STORAGE_LABEL: Record<StorageMethod, string> = {
-  roomTemp: '실온',
-  fridge:   '냉장(0~4°C)',
-  freezer:  '냉동(-18°C)',
-  kimchi:   '김치냉장고',
-}
 const STORAGE_BADGE_LABEL: Record<StorageMethod, string> = {
   roomTemp: '🌡️ 실온',
   fridge:   '❄️ 냉장',
@@ -125,6 +119,7 @@ const BASE_DATE_LABEL: Record<BaseDateType, string> = {
   purchase: '구매일',
   cook:     '조리일',
   open:     '개봉일',
+  freeze:   '냉동일',
 }
 
 const STATUS_LABEL: Record<Status, string> = {
@@ -217,6 +212,10 @@ function todayValues() {
   const t = new Date()
   return { y: t.getFullYear(), m: t.getMonth() + 1, d: t.getDate() }
 }
+// 보관 일수를 읽기 좋게 — 30일 이상은 개월로
+function fmtDuration(days: number): string {
+  return days >= 30 ? `${Math.round(days / 30)}개월` : `${days}일`
+}
 
 /* ────────────────────────────────────────────────
  * 컴포넌트
@@ -271,9 +270,13 @@ export default function FoodStorageClient() {
     return counts
   }, [itemsWithCalc])
 
+  // '오늘 우선' 카드 — 기한 임박(절대 일수 기준)만. 장기 보관 식품(김치 등)의 70% 경고는 제외
   const urgentTop = useMemo(() =>
     itemsWithCalc
-      .filter(({ calc }) => calc.status === 'urgent' || calc.status === 'expired' || calc.status === 'warning')
+      .filter(({ calc }) =>
+        calc.status === 'expired' ||
+        calc.status === 'urgent' ||
+        (calc.status === 'warning' && calc.remainingDays <= 3))
       .slice(0, 3),
   [itemsWithCalc])
 
@@ -290,7 +293,7 @@ export default function FoodStorageClient() {
       const info = STORAGE_DATA[i.category]
       if (!info?.freezerRaw && !info?.freezerCooked) return i
       const t = todayValues()
-      return { ...i, storage: 'freezer', baseDateType: 'cook', year: t.y, month: t.m, day: t.d }
+      return { ...i, storage: 'freezer', baseDateType: 'freeze', year: t.y, month: t.m, day: t.d }
     }))
   }
   const handleReset = () => {
@@ -314,9 +317,9 @@ export default function FoodStorageClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>📋 식재료 등록</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>📖 보관 가이드</button>
+      <div className={s.tabs} role="tablist">
+        <button role="tab" aria-selected={tab === 'register'} className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>식재료 등록</button>
+        <button role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>보관 가이드</button>
       </div>
 
       {/* ── 탭 1: 등록 ── */}
@@ -499,6 +502,12 @@ function FoodCard({
         </div>
       )}
 
+      {calc.status === 'unknown' && (
+        <div className={s.foodWarning}>
+          <span>❓</span><span>이 보관 방식·상태 조합은 기준 보관 기간 정보가 없어 D-day를 계산할 수 없습니다. 카드를 지우고 보관 방식·상태를 바꿔 다시 등록해보세요.</span>
+        </div>
+      )}
+
       {info?.warning && (
         <div className={s.foodWarning}>
           <span>💬</span><span>{info.warning}</span>
@@ -508,7 +517,7 @@ function FoodCard({
       {calc.freezeRecommend && freezerExtraDays && (
         <div className={s.freezeCard}>
           <div className={s.freezeText}>
-            💡 <strong>{info?.category}</strong>를 냉동 보관으로 전환하면 보관 기간이 약 <strong>{freezerExtraDays}일</strong>까지 늘어납니다.
+            💡 <strong>{info?.category}</strong>를 냉동 보관으로 전환하면 보관 기간이 약 <strong>{fmtDuration(freezerExtraDays)}</strong>까지 늘어납니다.
           </div>
           <button className={s.freezeBtn} onClick={onSwitchToFreezer}>냉동으로 변경</button>
         </div>
@@ -548,6 +557,10 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
   const dim = daysInMonth(year, month)
   const days = Array.from({ length: dim }, (_, i) => i + 1)
+
+  // 선택한 조합에 기준 보관 기간이 없는지 (D-day 계산 불가 안내용)
+  const comboUnsupported =
+    totalDaysFor({ id: '', category, baseDateType, year, month, day, storage, condition }) === 0
 
   const handleSubmit = () => {
     onAdd({
@@ -614,6 +627,7 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
             {(['purchase','cook','open'] as BaseDateType[]).map(b => (
               <button
                 key={b}
+                aria-pressed={baseDateType === b}
                 className={`${s.radioBtn} ${baseDateType === b ? s.radioBtnActive : ''}`}
                 onClick={() => setBaseDateType(b)}
               >
@@ -657,10 +671,10 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
         <div>
           <span className={s.fieldLabel}>보관 방식</span>
           <div className={s.storageRow}>
-            <button className={`${s.storageBtn} ${s.storageBtnRoom}    ${storage === 'roomTemp' ? s.storageBtnActive : ''}`} onClick={() => setStorage('roomTemp')}>🌡️ 실온</button>
-            <button className={`${s.storageBtn} ${s.storageBtnFridge}  ${storage === 'fridge'   ? s.storageBtnActive : ''}`} onClick={() => setStorage('fridge')}>❄️ 냉장</button>
-            <button className={`${s.storageBtn} ${s.storageBtnFreezer} ${storage === 'freezer'  ? s.storageBtnActive : ''}`} onClick={() => setStorage('freezer')}>🧊 냉동</button>
-            <button className={`${s.storageBtn} ${s.storageBtnKimchi}  ${storage === 'kimchi'   ? s.storageBtnActive : ''}`} onClick={() => setStorage('kimchi')}>🌶️ 김치냉장고</button>
+            <button aria-pressed={storage === 'roomTemp'} className={`${s.storageBtn} ${s.storageBtnRoom}    ${storage === 'roomTemp' ? s.storageBtnActive : ''}`} onClick={() => setStorage('roomTemp')}>🌡️ 실온</button>
+            <button aria-pressed={storage === 'fridge'} className={`${s.storageBtn} ${s.storageBtnFridge}  ${storage === 'fridge'   ? s.storageBtnActive : ''}`} onClick={() => setStorage('fridge')}>❄️ 냉장</button>
+            <button aria-pressed={storage === 'freezer'} className={`${s.storageBtn} ${s.storageBtnFreezer} ${storage === 'freezer'  ? s.storageBtnActive : ''}`} onClick={() => setStorage('freezer')}>🧊 냉동</button>
+            <button aria-pressed={storage === 'kimchi'} className={`${s.storageBtn} ${s.storageBtnKimchi}  ${storage === 'kimchi'   ? s.storageBtnActive : ''}`} onClick={() => setStorage('kimchi')}>🌶️ 김치냉장고</button>
           </div>
         </div>
 
@@ -671,6 +685,7 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
             {(['raw','cooked','opened'] as Condition[]).map(c => (
               <button
                 key={c}
+                aria-pressed={condition === c}
                 className={`${s.radioBtn} ${condition === c ? s.radioBtnActive : ''}`}
                 onClick={() => setCondition(c)}
               >
@@ -691,6 +706,20 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
             maxLength={50}
           />
         </div>
+
+        {comboUnsupported && (
+          <div style={{
+            background: 'rgba(234,88,12,0.08)',
+            border: '1px solid rgba(234,88,12,0.3)',
+            borderRadius: '10px',
+            padding: '10px 14px',
+            fontSize: '12px',
+            color: 'var(--muted)',
+            lineHeight: 1.6,
+          }}>
+            ⚠️ 선택한 <strong style={{ color: '#EA580C' }}>보관 방식·상태</strong> 조합은 이 식재료의 기준 보관 기간이 없어 D-day가 표시되지 않습니다. 보관 방식이나 상태를 바꿔보세요.
+          </div>
+        )}
 
         <div className={s.formActionRow}>
           <button className={s.cancelBtn} onClick={onCancel}>취소</button>
@@ -743,7 +772,7 @@ function GuideTab() {
                     const freezer = info.freezerRaw ?? info.freezerCooked
                     return (
                       <tr key={k} className={dangerous ? s.guideRowDanger : ''}>
-                        <td className={s.guideName}>{info.emoji} {info.category}</td>
+                        <td className={s.guideName}>{info.category}</td>
                         <td className={`${s.guideDays} ${info.roomTemp ? '' : s.guideDaysNone}`}>
                           {info.roomTemp ? `${info.roomTemp}일` : '×'}
                         </td>

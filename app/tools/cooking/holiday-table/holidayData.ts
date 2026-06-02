@@ -20,25 +20,19 @@ export interface Item {
   note?: string
 }
 
-/* ─── 품목 DB (50종) ─── */
+/* ─── 품목 DB (35종, 명절·상 형식별로 사용) ─── */
 export const ITEMS: Record<string, Item> = {
   /* 🥩 정육 */
   galbi_beef:    { id: 'galbi_beef',    name: '한우 갈비찜용 갈비', category: '정육', unit: 'g',  pricePerUnit: 80, note: '명절가 인상 큼' },
   beef_gukgeori: { id: 'beef_gukgeori', name: '소고기 국거리',     category: '정육', unit: 'g',  pricePerUnit: 55 },
   beef_sanjeok:  { id: 'beef_sanjeok',  name: '소고기 산적용',     category: '정육', unit: 'g',  pricePerUnit: 60 },
-  pork_galbi:    { id: 'pork_galbi',    name: '돼지 갈비',         category: '정육', unit: 'g',  pricePerUnit: 25 },
   pork_minced:   { id: 'pork_minced',   name: '돼지고기 다짐육 (동그랑땡용)', category: '정육', unit: 'g', pricePerUnit: 22 },
-  chicken:       { id: 'chicken',       name: '닭 (생닭)',         category: '정육', unit: '마리', pricePerUnit: 9500 },
 
   /* 🐟 수산 */
   jogi:        { id: 'jogi',        name: '조기',             category: '수산', unit: '마리', pricePerUnit: 4500 },
-  gulbi:       { id: 'gulbi',       name: '굴비 (1두름 10마리)', category: '수산', unit: '두름', pricePerUnit: 38000 },
   myungtae_po: { id: 'myungtae_po', name: '동태포',           category: '수산', unit: 'g',  pricePerUnit: 32 },
-  saewoo:      { id: 'saewoo',      name: '새우 (전용)',      category: '수산', unit: 'g',  pricePerUnit: 50 },
-  gul:         { id: 'gul',         name: '굴 (생굴)',         category: '수산', unit: 'g',  pricePerUnit: 25 },
 
   /* 🥬 채소·과일 (KAMIS 연동) */
-  baechu:    { id: 'baechu',    name: '배추',           category: '채소·과일', unit: '포기', pricePerUnit: 5500, kamisItemCode: '211', kamisKindCode: '01' },
   mu:        { id: 'mu',        name: '무',             category: '채소·과일', unit: '개',   pricePerUnit: 2200, kamisItemCode: '231', kamisKindCode: '01' },
   sagua:     { id: 'sagua',     name: '사과 (부사)',    category: '채소·과일', unit: '개',   pricePerUnit: 2500, kamisItemCode: '411', kamisKindCode: '06' },
   bae:       { id: 'bae',       name: '배 (신고)',      category: '채소·과일', unit: '개',   pricePerUnit: 4500, kamisItemCode: '412', kamisKindCode: '02' },
@@ -67,7 +61,6 @@ export const ITEMS: Record<string, Item> = {
   gotgam:      { id: 'gotgam',      name: '곶감',                category: '견과·제수', unit: '개',  pricePerUnit: 1200 },
   jat:         { id: 'jat',         name: '잣',                  category: '견과·제수', unit: 'g',   pricePerUnit: 90 },
   hangwa:      { id: 'hangwa',      name: '한과 세트',           category: '견과·제수', unit: '세트', pricePerUnit: 25000, note: '인당 0.1세트 = 10인 1세트' },
-  yakgwa:      { id: 'yakgwa',      name: '약과',                category: '견과·제수', unit: '개',  pricePerUnit: 1500 },
 
   /* 🍶 음료·기타 */
   jeongjong: { id: 'jeongjong', name: '청주 (제주)',     category: '음료·기타', unit: 'ml',  pricePerUnit: 8 },
@@ -282,7 +275,7 @@ const JESA: HolidayConfig = {
   formats: {
     formal: {
       name: '5열 차례상 (정석)',
-      desc: '메·갱·5탕·전·나물·과일·견과 모두 — 영혼 1위(位)당 분량',
+      desc: '메·갱(탕국)·전·나물·과일·견과 — 영혼 1위(位)당 분량 (탕은 탕국 1종으로 간소화)',
       items: [
         // 1열: 메·갱·면·떡
         { id: 'ssal',           perPerson: 130 },     // 메(밥)
@@ -387,11 +380,11 @@ export function calcRows(
       if (!item) return null
       const amount = entry.perPerson * people
       const price = priceOverrides[item.id] ?? livePrices[item.id] ?? item.pricePerUnit
-      const totalPriceWon = Math.round(amount * price)
 
-      // 표시 단위 정리
+      // 표시 단위 정리 + 구매 수량(가격 기준) — 낱개 품목은 표시 수량(올림)으로 가격 산정
       let displayAmount: string
       let displayUnit = item.unit
+      let purchaseAmount = amount   // g·ml·kg·L: 실사용량 그대로
       if (item.unit === 'g' && amount >= 1000) {
         displayAmount = (amount / 1000).toFixed(1)
         displayUnit = 'kg'
@@ -401,12 +394,16 @@ export function calcRows(
       } else if (item.unit === 'g' || item.unit === 'ml') {
         displayAmount = Math.round(amount).toLocaleString()
       } else if (item.unit === '개' || item.unit === '마리') {
-        displayAmount = Math.ceil(amount).toString()
+        purchaseAmount = Math.ceil(amount)          // 낱개 구매 → 올림
+        displayAmount = purchaseAmount.toString()
       } else if (item.unit === '포기' || item.unit === '단' || item.unit === '두름' || item.unit === '세트' || item.unit === '인분') {
-        displayAmount = Math.ceil(amount * 10) / 10 + ''
+        purchaseAmount = Math.ceil(amount * 10) / 10
+        displayAmount = purchaseAmount + ''
       } else {
         displayAmount = amount.toFixed(1)
       }
+      // 가격은 구매 수량 기준 → 표시 수량과 일치
+      const totalPriceWon = Math.round(purchaseAmount * price)
       return { item, amount, totalPriceWon, displayAmount, displayUnit }
     })
     .filter(Boolean) as CalcRow[]

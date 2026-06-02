@@ -28,15 +28,13 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;
@@ -215,10 +213,15 @@
   flex-direction: column;
   gap: 8px;
 }
+/* 라벨이 잘리지 않도록 바깥 래퍼 (overflow 미적용) */
+.gaugeWrap {
+  position: relative;
+  padding-top: 30px;
+}
 .gaugeBar {
   position: relative;
   display: flex;
-  height: 28px;
+  height: 30px;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -228,41 +231,58 @@
   position: relative;
 }
 .gaugeSegLabel { display: none; }  /* 라벨은 표 형식으로 별도 표시 */
+/* 마커 — 바 높이를 가로지르는 세로선 (overflow:hidden 안에서도 잘리지 않게 top/bottom:0) */
 .gaugeMarker {
   position: absolute;
-  top: -7px;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid var(--text);
+  top: 0;
+  bottom: 0;
+  width: 4px;
   transform: translateX(-50%);
-  z-index: 2;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.6), 0 0 5px rgba(0, 0, 0, 0.35);
+  z-index: 3;
 }
+/* BMI 숫자 배지 — 래퍼의 상단 여백 영역에 위치 */
 .gaugeMarkerLabel {
   position: absolute;
-  top: -26px;
+  top: 0;
   transform: translateX(-50%);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text);
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 2px 8px;
+  padding: 2px 9px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  z-index: 2;
+  z-index: 4;
+}
+.gaugeMarkerLabel::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--border);
 }
 .gaugeAxis {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: 13px;
   font-size: 10px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+.gaugeAxis span {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
 }
 /* 게이지 범례 — 색상 + 이름 + 범위 한 줄 */
 .gaugeLegend {

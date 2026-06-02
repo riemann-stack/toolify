@@ -237,6 +237,8 @@ export const PRESET_RECIPES: PresetRecipe[] = [
     ratios: { egg: 100, sugar: 90, flour: 95, butter: 110, bakingPowder: 3, honey: 12, vanilla: 1 } },
   { item: 'madeleine', name: '레몬 마들렌',
     ratios: { egg: 100, sugar: 100, flour: 100, butter: 95, bakingPowder: 3, honey: 8, lemonZest: 5 } },
+  { item: 'madeleine', name: '초코 마들렌',
+    ratios: { egg: 100, sugar: 100, flour: 90, butter: 100, bakingPowder: 3, honey: 10, cocoa: 10, milk: 10 } },
   // 파운드
   { item: 'poundcake', name: '르 코르동 블루 클래식 (1:1:1:1)',
     ratios: { butter: 100, sugar: 100, egg: 100, flour: 100, bakingPowder: 2 } },
@@ -244,6 +246,8 @@ export const PRESET_RECIPES: PresetRecipe[] = [
     ratios: { butter: 100, sugar: 100, egg: 100, flour: 100, sourCream: 20, bakingPowder: 2 } },
   { item: 'poundcake', name: '레몬 파운드',
     ratios: { butter: 100, sugar: 100, egg: 100, flour: 100, milk: 10, bakingPowder: 2, lemonZest: 5 } },
+  { item: 'poundcake', name: '묵직한 아몬드 파운드',
+    ratios: { butter: 110, sugar: 100, egg: 100, flour: 100, almondPowder: 10, bakingPowder: 2 } },
   // 쿠키
   { item: 'cookie', name: '미국식 청크 쿠키',
     ratios: { flour: 100, butter: 65, brownSugar: 50, whiteSugar: 25, egg: 30, bakingSoda: 1, salt: 0.7, vanilla: 1, chocChips: 60 } },

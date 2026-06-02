@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import s from './baking-schedule.module.css'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baking-schedule',
@@ -152,7 +153,7 @@ export default function BakingSchedulePage() {
         {/* 4. 빵별 표준 일정 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 빵별 표준 일정</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div className={s.guideGrid2} style={{ gap: '8px' }}>
             {[
               { icon: '🌾', name: '사워도우 (24시간)',  desc: '오토리즈 30분 → 폴딩 4회 → 1차 발효 3시간 → 성형 → 냉장 12~16시간 → 굽기' },
               { icon: '🥖', name: '바게트 (5시간)',     desc: '오토리즈 → 폴딩 2회 → 1차 발효 1.5시간 → 성형 → 2차 발효 1시간 → 굽기' },
@@ -179,7 +180,7 @@ export default function BakingSchedulePage() {
               ⭐ <strong style={{ color: '#CA8A04' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: '#CA8A04' }}>반죽 상태를 함께 확인</strong>하세요.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div className={s.guideGrid2} style={{ gap: '10px' }}>
             {[
               { title: '1차 발효 완료 신호', items: ['부피 50~70% 증가', '큰 기포 형성 (표면·내부)', '부드럽고 가벼운 느낌', '손가락 자국 천천히 회복'] },
               { title: '2차 발효 완료 신호', items: ['부피 1.5배 증가', '손가락 자국 살짝 남기', '표면 매끄럽고 윤기'] },
@@ -207,7 +208,7 @@ export default function BakingSchedulePage() {
               { problem: '2차 발효 과다', signal: '빵 표면 주저앉음',              fix: '즉시 굽기' },
               { problem: '오븐 예열 부족', signal: '굽기 색·구조 안 좋음',         fix: '250℃ 30분 이상 예열, 온도계로 확인' },
             ].map((it, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '12.5px' }}>
+              <div key={i} className={s.guideGrid3} style={{ gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '12.5px' }}>
                 <span style={{ color: '#DC2626', fontWeight: 700 }}>{it.problem}</span>
                 <span style={{ color: 'var(--text)' }}>{it.signal}</span>
                 <span style={{ color: 'var(--muted)' }}>→ {it.fix}</span>
@@ -240,7 +241,7 @@ export default function BakingSchedulePage() {
         {/* 관련 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+          <div className={s.guideGrid2} style={{ gap: '8px' }}>
             {[
               { href: '/tools/cooking/baker-percent',    icon: '🥖', name: '베이커 퍼센트 계산기',    desc: '제빵 배합비·수분율·르방 자동' },
               { href: '/tools/cooking/sourdough',        icon: '🍞', name: '사워도우 스타터 계산기',  desc: '르방 안정화·피크 시간 예측' },

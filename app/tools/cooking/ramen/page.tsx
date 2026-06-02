@@ -206,7 +206,7 @@ export default function RamenPage() {
             <br />
             <strong style={{ color: 'var(--text)' }}>투입 타이밍 기준</strong> — 재료가 익는 데 필요한 시간을 면 투입 시점에 맞춰 환산했습니다.
             냉동 만두·떡은 면보다 <strong>먼저</strong>, 계란·치즈·대파는 풀어지지 않도록 <strong>나중에</strong> 넣습니다.
-            (칼로리·단백질은 USDA·식약처 일반 평균으로 제품·분량에 따라 차이가 있습니다.)
+            (칼로리·단백질·나트륨 등 토핑 영양은 USDA·식약처 일반 평균으로 제품·분량에 따라 차이가 있습니다.)
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>

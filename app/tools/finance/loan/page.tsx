@@ -4,6 +4,18 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import { calcEqualPayment } from './loanUtils'
+
+/* §3 금리별 3억/30년 비교표 — 계산 엔진으로 직접 생성 (정적 수치 드리프트 방지) */
+const RATE_TABLE_ROWS = [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0].map(rate => {
+  const r = calcEqualPayment({ principal: 300_000_000, annualRate: rate, months: 360 })
+  return {
+    rate: `${rate.toFixed(1)}%`,
+    monthly: r.monthlyPayment.toLocaleString('ko-KR') + '원',
+    total: r.totalPayment.toLocaleString('ko-KR') + '원',
+    interest: r.totalInterest.toLocaleString('ko-KR') + '원',
+  }
+})
 
 export const metadata = buildMetadata({
   path: '/tools/finance/loan',
@@ -46,11 +58,11 @@ const FAQ_LD = [
               },
               {
                 q: '중도상환 시 기간 단축 vs 월 상환액 감소 어느 게 유리한가요?',
-                a: '일반적으로 <strong>기간 단축 모드가 총 이자 절감 효과가 큽니다.</strong><br>· 기간 단축: 월 상환액 동일, 기간 짧아짐 → 총 이자 ↓↓<br>· 월 상환액 감소: 기간 동일, 매월 부담 ↓ → 총 이자 ↓<br><br>같은 1,000만원 중도상환(3억 / 4% / 30년 / 24개월차) 시 — 기간 단축은 총 이자 약 −2,300만원 (약 4년 단축), 월 상환액 감소는 약 −1,800만원. 소득 안정적이면 기간 단축, 월 부담 줄이고 싶으면 월 상환액 감소를 선택하세요.',
+                a: '일반적으로 <strong>기간 단축 모드가 총 이자 절감 효과가 큽니다.</strong><br>· 기간 단축: 월 상환액 동일, 기간 짧아짐 → 총 이자 ↓↓<br>· 월 상환액 감소: 기간 동일, 매월 부담 ↓ → 총 이자 ↓<br><br>같은 1,000만원 중도상환(3억 / 4% / 30년 / 24개월차) 시 — 기간 단축은 총 이자 약 −1,960만원 (약 1.7년 단축), 월 상환액 감소는 약 −660만원. 소득 안정적이면 기간 단축, 월 부담 줄이고 싶으면 월 상환액 감소를 선택하세요.',
               },
               {
                 q: '갈아타기 손익분기는 어떻게 계산하나요?',
-                a: '<strong>손익분기 = 부대비용 ÷ 월 절감액</strong>. 예: 부대비용 350만원, 월 절감 12만원 → 350 ÷ 12 ≈ 29개월. 29개월 이상 유지 시 이득.<br><br>⚠️ 손익분기 외 추가 고려 — 향후 금리 변동(변동금리 갈아타기 시) / 본인 신용 변화 / 은행 상품 조건(수수료·면제 조건). 본 도구의 <strong>[갈아타기] 탭</strong>에서 자동 계산할 수 있습니다.',
+                a: '<strong>손익분기 = 부대비용 ÷ 월 절감액</strong>. 예: 잔액 2.5억을 5%→4%(25년)로 갈아타면 월 약 14만원 절감, 부대비용 350만원 → 350 ÷ 14 ≈ 25개월. 25개월 이상 유지 시 이득.<br><br>⚠️ 손익분기 외 추가 고려 — 향후 금리 변동(변동금리 갈아타기 시) / 본인 신용 변화 / 은행 상품 조건(수수료·면제 조건). 본 도구의 <strong>[갈아타기] 탭</strong>에서 자동 계산할 수 있습니다.',
               },
               {
                 q: '변동금리 대출에서 금리 인상에 어떻게 대비하나요?',
@@ -58,7 +70,7 @@ const FAQ_LD = [
               },
               {
                 q: '월 100만원씩 갚을 수 있으면 얼마까지 빌릴 수 있나요?',
-                a: '본 도구의 <strong>[역산] 탭</strong> 사용. 예: 월 100만원, 4.5%, 30년, 원리금균등 → 약 1억 9,400만원.<br><br>같은 월 100만원이라도 — 금리 1%p 차이 → 가능 원금 약 8% 차이 / 기간 10년 → 30년 → 가능 원금 약 2배.<br><br>⚠️ 단, 실제 대출 한도는 신용·소득·DSR·LTV에 따라 결정됩니다.',
+                a: '본 도구의 <strong>[역산] 탭</strong> 사용. 예: 월 100만원, 4.5%, 30년, 원리금균등 → 약 1억 9,700만원.<br><br>같은 월 100만원이라도 — 금리 1%p 차이 → 가능 원금 약 11~13% 차이 / 기간 10년 → 30년 → 가능 원금 약 2배.<br><br>⚠️ 단, 실제 대출 한도는 신용·소득·DSR·LTV에 따라 결정됩니다.',
               },
               {
                 q: '신용대출 vs 주택담보대출 어느 게 유리한가요?',
@@ -151,7 +163,7 @@ export default function LoanPage() {
             한국 시중은행 평균 금리 (2026년 5월 기준 추정)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
-            한국은행 가계대출 통계 기반 시중은행 평균 금리. 본 도구의 프리셋은 이 값을 기본으로 사용합니다.
+            한국은행 가계대출 통계 기반 시중은행 평균 금리. 계산기의 금리 입력란 기본값(주택담보대출 평균 4.3%)도 이 표를 참고했습니다.
             실제 금리는 신용점수·은행·상품에 따라 차이가 있으니 거래 은행 상담을 권장합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
@@ -193,7 +205,7 @@ export default function LoanPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
             대출 원금 3억 원, 30년(360개월) 원리금균등상환 기준으로 금리별 월 납입액과 총 이자를 비교합니다.
-            금리가 1%p 오를 때마다 월 납입액은 약 16~18만 원, 총 이자는 약 6,000~7,000만 원 증가합니다.
+            금리가 1%p 오를 때마다 월 납입액은 약 16~18만 원, 총 이자는 약 5,800~6,600만 원 증가합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -206,21 +218,12 @@ export default function LoanPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['2.5%', '1,185,357원', '426,728,520원', '126,728,520원'],
-                  ['3.0%', '1,264,808원', '455,330,880원', '155,330,880원'],
-                  ['3.5%', '1,347,047원', '484,936,920원', '184,936,920원'],
-                  ['4.0%', '1,432,252원', '515,610,720원', '215,610,720원'],
-                  ['4.5%', '1,520,060원', '547,221,600원', '247,221,600원'],
-                  ['5.0%', '1,610,465원', '579,767,400원', '279,767,400원'],
-                  ['5.5%', '1,703,376원', '613,215,360원', '313,215,360원'],
-                  ['6.0%', '1,798,651원', '647,514,360원', '347,514,360원'],
-                ].map(([rate, monthly, total, interest], i) => (
+                {RATE_TABLE_ROWS.map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{rate}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 500 }}>{monthly}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{total}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626' }}>{interest}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row.rate}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 500 }}>{row.monthly}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{row.total}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626' }}>{row.interest}</td>
                   </tr>
                 ))}
               </tbody>
@@ -274,13 +277,13 @@ export default function LoanPage() {
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2', marginBottom: 8 }}>
-              📌 예시 — 잔액 2.5억, 5% → 4% 갈아타기
+              📌 예시 — 잔액 2.5억, 5% → 4% 갈아타기 (남은 25년)
             </p>
             <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              <li>월 절감: 약 12만원</li>
+              <li>월 절감: 약 14만원</li>
               <li>부대비용: 350만원 (중도상환수수료 200 + 취급수수료 100 + 인지·등록 50)</li>
-              <li><strong style={{ color: 'var(--text)' }}>손익분기: 350 ÷ 12 ≈ 29개월</strong></li>
-              <li>29개월 이상 유지 시 이득. 1년 이내 다시 갈아탈 계획이면 신중 결정.</li>
+              <li><strong style={{ color: 'var(--text)' }}>손익분기: 350 ÷ 14 ≈ 25개월</strong></li>
+              <li>25개월 이상 유지 시 이득. 1년 이내 다시 갈아탈 계획이면 신중 결정.</li>
             </ul>
           </div>
         </section>

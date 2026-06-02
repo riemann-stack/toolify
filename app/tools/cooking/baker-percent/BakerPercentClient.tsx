@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect, react-hooks/static-components */
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
@@ -229,6 +229,15 @@ const liquidRatioOf = (name: string): number => {
   return 1
 }
 
+// 르방·프리퍼먼트(other 카테고리) 감지 → 전체 수분율 계산 시 안의 밀가루·물을 분리.
+// 이름의 "○○% 수분"에서 수분율을 읽고, 없으면 100%(르방 표준)로 가정.
+const prefermentHydrationOf = (i: { name: string; category: Category }): number | null => {
+  if (i.category !== 'other') return null
+  if (!/르방|levain|사워|스타터|발효종|프리퍼먼트|폴리쉬|poolish/i.test(i.name)) return null
+  const m = i.name.match(/(\d+(?:\.\d+)?)\s*%\s*수분/)
+  return m ? parseFloat(m[1]) : 100
+}
+
 // ─────────────────────────────────────────────
 // 빵 프리셋
 // ─────────────────────────────────────────────
@@ -308,13 +317,13 @@ const PRESETS: Preset[] = [
 
 const FLOUR_QUICK = [250, 500, 1000, 2000]
 
-// 빵 종류별 1개 무게 (예상 완성품)
+// 빵 종류별 1개 완성품 무게(굽기 후) + 굽기 손실률 — 생반죽 → 완성 개수 환산에 사용
 const PRODUCT_SIZES = [
-  { name: '식빵 (450g)',     w: 450 },
-  { name: '바게트 (250g)',   w: 250 },
-  { name: '치아바타 (300g)', w: 300 },
-  { name: '베이글 (90g)',    w: 90 },
-  { name: '피자 도우 (250g)', w: 250 },
+  { name: '식빵 (450g)',     w: 450, loss: 12 },
+  { name: '바게트 (250g)',   w: 250, loss: 15 },
+  { name: '치아바타 (300g)', w: 300, loss: 14 },
+  { name: '베이글 (90g)',    w: 90,  loss: 8 },
+  { name: '피자 도우 (250g)', w: 250, loss: 10 },
 ]
 
 // 발효·굽기 후 감소율
@@ -519,7 +528,18 @@ export default function BakerPercentClient() {
   // ─────────────────────────────────────────────
   function analyze(ings: Ingredient[]) {
     const flourTotal = ings.filter(i => i.category === 'flour').reduce((s, i) => s + i.weight, 0)
-    const liquidTotal = ings.filter(i => i.category === 'liquid').reduce((s, i) => s + i.weight * (i.liquidRatio ?? 1), 0)
+    let liquidTotal = ings.filter(i => i.category === 'liquid').reduce((s, i) => s + i.weight * (i.liquidRatio ?? 1), 0)
+    // 르방·프리퍼먼트 분해 — 안의 밀가루는 전체 수분율의 분모에, 물은 액체에 합산
+    let prefermentFlour = 0
+    for (const i of ings) {
+      const h = prefermentHydrationOf(i)
+      if (h !== null && i.weight > 0) {
+        const f = i.weight / (1 + h / 100)
+        prefermentFlour += f
+        liquidTotal += i.weight - f
+      }
+    }
+    const hydrationFlour = flourTotal + prefermentFlour
     const saltTotal = ings.filter(i => i.category === 'salt').reduce((s, i) => s + i.weight, 0)
     const yeastTotal = ings.filter(i => i.category === 'yeast').reduce((s, i) => s + i.weight, 0)
     const sugarTotal = ings.filter(i => i.category === 'sugar').reduce((s, i) => s + i.weight, 0)
@@ -529,7 +549,8 @@ export default function BakerPercentClient() {
     return {
       flourTotal,
       liquidTotal,
-      hydration: flourTotal > 0 ? (liquidTotal / flourTotal) * 100 : 0,
+      // 수분율은 르방 분해를 포함한 '전체 밀가루' 기준 (소금·이스트 등은 본반죽 밀가루 기준 유지)
+      hydration: hydrationFlour > 0 ? (liquidTotal / hydrationFlour) * 100 : 0,
       saltPct:  flourTotal > 0 ? (saltTotal / flourTotal) * 100 : 0,
       yeastPct: flourTotal > 0 ? (yeastTotal / flourTotal) * 100 : 0,
       sugarPct: flourTotal > 0 ? (sugarTotal / flourTotal) * 100 : 0,
@@ -776,11 +797,11 @@ export default function BakerPercentClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'toPercent'  ? s.tabActive : ''}`} onClick={() => setTab('toPercent')}>재료량 → %</button>
-        <button className={`${s.tabBtn} ${tab === 'toWeight'   ? s.tabActive : ''}`} onClick={() => setTab('toWeight')}>% → 재료량</button>
-        <button className={`${s.tabBtn} ${tab === 'fromTotal'  ? s.tabActive : ''}`} onClick={() => setTab('fromTotal')}>총 반죽량 역산</button>
-        <button className={`${s.tabBtn} ${tab === 'preferment' ? s.tabActive : ''}`} onClick={() => setTab('preferment')}>르방·프리퍼먼트</button>
+      <div className={s.tabs} role="tablist">
+        <button role="tab" aria-selected={tab === 'toPercent'} className={`${s.tabBtn} ${tab === 'toPercent'  ? s.tabActive : ''}`} onClick={() => setTab('toPercent')}>재료량 → %</button>
+        <button role="tab" aria-selected={tab === 'toWeight'} className={`${s.tabBtn} ${tab === 'toWeight'   ? s.tabActive : ''}`} onClick={() => setTab('toWeight')}>% → 재료량</button>
+        <button role="tab" aria-selected={tab === 'fromTotal'} className={`${s.tabBtn} ${tab === 'fromTotal'  ? s.tabActive : ''}`} onClick={() => setTab('fromTotal')}>총 반죽량 역산</button>
+        <button role="tab" aria-selected={tab === 'preferment'} className={`${s.tabBtn} ${tab === 'preferment' ? s.tabActive : ''}`} onClick={() => setTab('preferment')}>르방·프리퍼먼트</button>
       </div>
 
       {/* ──────────── TAB 1: 재료량 → 퍼센트 ──────────── */}
@@ -796,6 +817,7 @@ export default function BakerPercentClient() {
                 <button
                   key={p.key}
                   type="button"
+                  aria-pressed={presetKey1 === p.key}
                   className={`${s.presetCard} ${presetKey1 === p.key ? s.presetActive : ''}`}
                   onClick={() => {
                     setPresetKey1(p.key)
@@ -945,6 +967,7 @@ export default function BakerPercentClient() {
               {PRESETS.map(p => (
                 <button
                   key={p.key}
+                  aria-pressed={presetKey === p.key}
                   className={`${s.presetCard} ${presetKey === p.key ? s.presetActive : ''}`}
                   onClick={() => setPresetKey(p.key)}
                   type="button"
@@ -984,7 +1007,7 @@ export default function BakerPercentClient() {
             </div>
             <div className={s.flourQuickRow}>
               {FLOUR_QUICK.map(q => (
-                <button key={q} className={`${s.flourQuickBtn} ${flourWeight === q ? s.flourQuickActive : ''}`} onClick={() => setFlourAndRecalc(q)} type="button">
+                <button key={q} aria-pressed={flourWeight === q} className={`${s.flourQuickBtn} ${flourWeight === q ? s.flourQuickActive : ''}`} onClick={() => setFlourAndRecalc(q)} type="button">
                   {fmt(q)}g
                 </button>
               ))}
@@ -1082,12 +1105,15 @@ export default function BakerPercentClient() {
           {/* 빵 종류별 예상 완성품 */}
           {analysis2.totalWeight > 0 && (
             <div className={s.outputCard}>
-              <p className={s.outputTitle}>{fmt(analysis2.totalWeight)}g 반죽으로 만들 수 있는 양</p>
+              <p className={s.outputTitle}>
+                {fmt(analysis2.totalWeight)}g 반죽으로 만들 수 있는 양
+                <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 400 }}> · 굽기 손실 반영 (완성품 기준)</span>
+              </p>
               <div className={s.outputGrid}>
                 {PRODUCT_SIZES.map(p => (
                   <div key={p.name} className={s.outputItem}>
                     <p>{p.name}</p>
-                    <p>약 {(analysis2.totalWeight / p.w).toFixed(1)}개</p>
+                    <p>약 {((analysis2.totalWeight * (1 - p.loss / 100)) / p.w).toFixed(1)}개</p>
                   </div>
                 ))}
               </div>
@@ -1140,6 +1166,7 @@ export default function BakerPercentClient() {
               {PRESETS.map(p => (
                 <button
                   key={p.key}
+                  aria-pressed={presetKey3 === p.key}
                   className={`${s.presetCard} ${presetKey3 === p.key ? s.presetActive : ''}`}
                   onClick={() => setPresetKey3(p.key)}
                   type="button"
@@ -1183,7 +1210,7 @@ export default function BakerPercentClient() {
                 { l: '바게트 3개 (750g)', v: 750 },
                 { l: '피자 3장 (750g)',  v: 750 },
               ].map(q => (
-                <button key={q.l} className={`${s.flourQuickBtn} ${targetTotal === q.v ? s.flourQuickActive : ''}`} onClick={() => setTargetTotal(q.v)} type="button">
+                <button key={q.l} aria-pressed={targetTotal === q.v} className={`${s.flourQuickBtn} ${targetTotal === q.v ? s.flourQuickActive : ''}`} onClick={() => setTargetTotal(q.v)} type="button">
                   {q.l}
                 </button>
               ))}
@@ -1199,7 +1226,7 @@ export default function BakerPercentClient() {
               items={ing3}
               mode="pct"
               onUpdatePct={updatePct3}
-              onUpdateField={(id, patch) => setIng3(prev => prev.map(i => i.id === id ? { ...i, ...patch } : i))}
+              onUpdateField={(id, patch) => setIng3(prev => prev.map(i => i.id === id ? { ...i, ...patch, liquidRatio: (patch.category ?? i.category) === 'liquid' ? liquidRatioOf(patch.name ?? i.name) : undefined } : i))}
               onRemove={removeRow3}
             />
             {ing3.length < 15 && (
@@ -1290,10 +1317,10 @@ export default function BakerPercentClient() {
               <span className={s.cardLabelHint}>수분율 자동 적용</span>
             </div>
             <div className={s.prefermentTypeRow}>
-              <button className={`${s.prefermentTypeBtn} ${pfType === 'levain'  ? s.prefermentActive : ''}`} onClick={() => { setPfType('levain'); setPfHydration(100) }}>🥖 르방</button>
-              <button className={`${s.prefermentTypeBtn} ${pfType === 'poolish' ? s.prefermentActive : ''}`} onClick={() => { setPfType('poolish'); setPfHydration(100) }}>🇫🇷 폴리쉬</button>
-              <button className={`${s.prefermentTypeBtn} ${pfType === 'biga'    ? s.prefermentActive : ''}`} onClick={() => { setPfType('biga'); setPfHydration(55) }}>🇮🇹 비가</button>
-              <button className={`${s.prefermentTypeBtn} ${pfType === 'sponge'  ? s.prefermentActive : ''}`} onClick={() => { setPfType('sponge'); setPfHydration(55) }}>🍞 스폰지</button>
+              <button aria-pressed={pfType === 'levain'} className={`${s.prefermentTypeBtn} ${pfType === 'levain'  ? s.prefermentActive : ''}`} onClick={() => { setPfType('levain'); setPfHydration(100) }}>🥖 르방</button>
+              <button aria-pressed={pfType === 'poolish'} className={`${s.prefermentTypeBtn} ${pfType === 'poolish' ? s.prefermentActive : ''}`} onClick={() => { setPfType('poolish'); setPfHydration(100) }}>🇫🇷 폴리쉬</button>
+              <button aria-pressed={pfType === 'biga'} className={`${s.prefermentTypeBtn} ${pfType === 'biga'    ? s.prefermentActive : ''}`} onClick={() => { setPfType('biga'); setPfHydration(55) }}>🇮🇹 비가</button>
+              <button aria-pressed={pfType === 'sponge'} className={`${s.prefermentTypeBtn} ${pfType === 'sponge'  ? s.prefermentActive : ''}`} onClick={() => { setPfType('sponge'); setPfHydration(55) }}>🍞 스폰지</button>
             </div>
           </div>
 

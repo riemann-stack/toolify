@@ -117,15 +117,19 @@ export default function SalaryClient() {
     if (!result) return null
     const total = result.grossMonthly
     if (total <= 0) return null
+    // 실수령 = 과세분 실수령 + 비과세(이미 실수령에 포함). 비과세를 별도 조각으로 보일 땐
+    // 실수령에서 떼어내 중복 집계를 방지 → 모든 조각 합 = grossMonthly
+    const hasNonTax = result.nonTaxableMonthly > 0
+    const takeHomeTaxable = Math.max(0, result.netMonthly - result.nonTaxableMonthly)
     const segments = [
-      { name: '실수령',   value: result.netMonthly,                                  color: 'var(--accent)' },
-      { name: '4대보험', value: result.totalInsurance,                              color: '#0891B2' },
-      { name: '세금',    value: result.totalTax,                                    color: '#EA580C' },
+      { name: hasNonTax ? '실수령(과세분)' : '실수령', value: takeHomeTaxable, color: 'var(--accent)' },
+      { name: '4대보험', value: result.totalInsurance, color: '#0891B2' },
+      { name: '세금',    value: result.totalTax,       color: '#EA580C' },
     ]
-    if (result.nonTaxableMonthly > 0) {
-      segments.push({ name: '비과세', value: result.nonTaxableMonthly, color: '#059669' })
+    if (hasNonTax) {
+      segments.push({ name: '비과세 수당', value: result.nonTaxableMonthly, color: '#059669' })
     }
-    // 도넛: 비과세는 별도(과세에서 제외된 부분 표시) — 우리는 grossMonthly 기준
+    // 합계 = 과세실수령 + 비과세 + 4대보험 + 세금 = grossMonthly
     const sumForDonut = segments.reduce((s, x) => s + x.value, 0)
     let acc = 0
     const r = 56, cx = 80, cy = 80
@@ -166,9 +170,9 @@ export default function SalaryClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="연봉 계산 모드">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -187,7 +191,8 @@ export default function SalaryClient() {
           </div>
           <div className={styles.optionRow5} style={{ marginTop: 8 }}>
             {PRESETS.map(p => (
-              <button key={p.value}
+              <button key={p.value} type="button"
+                aria-pressed={parseAmount(annualMan) * 10_000 === p.value}
                 className={`${styles.optionBtn} ${parseAmount(annualMan) * 10_000 === p.value ? styles.optionActive : ''}`}
                 onClick={() => setAnnualMan(String(p.value / 10_000))}>
                 {p.label}
@@ -203,7 +208,7 @@ export default function SalaryClient() {
           <label className={styles.cardLabel}>부양가족 (본인 포함)</label>
           <div className={styles.optionRow6}>
             {[1, 2, 3, 4, 5, 6].map(n => (
-              <button key={n}
+              <button key={n} type="button" aria-pressed={dependents === n}
                 className={`${styles.optionBtn} ${dependents === n ? styles.optionActive : ''}`}
                 onClick={() => setDependents(n)}>{n === 6 ? '6+' : `${n}명`}</button>
             ))}
@@ -216,7 +221,7 @@ export default function SalaryClient() {
           <label className={styles.cardLabel}>8세 이상 20세 이하 자녀 <span className={styles.cardLabelHint}>(만 나이)</span></label>
           <div className={styles.optionRow6}>
             {[0, 1, 2, 3, 4, 5].map(n => (
-              <button key={n}
+              <button key={n} type="button" aria-pressed={childrenCount === n}
                 className={`${styles.optionBtn} ${childrenCount === n ? styles.optionActive : ''}`}
                 onClick={() => setChildrenCount(n)}>{n === 5 ? '5+' : `${n}명`}</button>
             ))}
@@ -498,7 +503,7 @@ export default function SalaryClient() {
               )}
 
               <div className={styles.infoBox}>
-                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 17% 차이날 수 있습니다.
+                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 8% 차이날 수 있습니다.
               </div>
             </>
           )}
@@ -528,7 +533,7 @@ export default function SalaryClient() {
             </div>
             <div className={styles.optionRow5} style={{ marginTop: 8 }}>
               {[200, 250, 300, 400, 500].map(v => (
-                <button key={v}
+                <button key={v} type="button" aria-pressed={parseAmount(targetNetMan) === v}
                   className={`${styles.optionBtn} ${parseAmount(targetNetMan) === v ? styles.optionActive : ''}`}
                   onClick={() => setTargetNetMan(String(v))}>
                   {v}만

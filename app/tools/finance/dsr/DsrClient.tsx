@@ -165,17 +165,17 @@ export default function DsrClient() {
         <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <div className={s.field}>
             <label className={s.fieldLabel}>상환 방식</label>
-            <div className={s.segRow}>
+            <div className={s.segRow} role="group" aria-label="상환 방식">
               {([['equal', '원리금균등'], ['principal', '원금균등']] as [RepayMethod, string][]).map(([k, lbl]) => (
-                <button key={k} type="button" className={`${s.segBtn} ${method === k ? s.segBtnActive : ''}`} onClick={() => setMethod(k)}>{lbl}</button>
+                <button key={k} type="button" aria-pressed={method === k} className={`${s.segBtn} ${method === k ? s.segBtnActive : ''}`} onClick={() => setMethod(k)}>{lbl}</button>
               ))}
             </div>
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>금리 유형 <span className={s.fieldHint}>스트레스 적용</span></label>
-            <div className={s.segRow}>
+            <div className={s.segRow} role="group" aria-label="금리 유형">
               {(['variable', 'mixed', 'periodic', 'fixed'] as RateType[]).map(k => (
-                <button key={k} type="button" className={`${s.segBtn} ${rateType === k ? s.segBtnActive : ''}`} onClick={() => setRateType(k)}>
+                <button key={k} type="button" aria-pressed={rateType === k} className={`${s.segBtn} ${rateType === k ? s.segBtnActive : ''}`} onClick={() => setRateType(k)}>
                   {RATE_TYPE_LABEL[k].split(' ')[0]}
                 </button>
               ))}
@@ -222,7 +222,7 @@ export default function DsrClient() {
 
         <div className={s.resultGrid} style={{ marginTop: 10 }}>
           <div className={s.resRow}>
-            <span className={s.resName}>신규 대출 연 원리금</span>
+            <span className={s.resName}>신규 대출 연 원리금{method === 'principal' && <small>원금균등 1년차(최대) 기준</small>}</span>
             <span className={s.resVal}>{fmtManwon(r.newAnnual)}</span>
           </div>
           <div className={s.resRow}>
@@ -239,6 +239,11 @@ export default function DsrClient() {
             ? <>✅ 스트레스 DSR <strong>{fmtPct(r.stressDsr)}%</strong>로 한도({fmtPct(dsrLimitN)}%) 이내입니다.</>
             : <>⚠️ 스트레스 DSR <strong className={s.statusOver}>{fmtPct(r.stressDsr)}%</strong>가 한도({fmtPct(dsrLimitN)}%)를 초과합니다. 대출 금액을 줄이거나 만기를 늘려야 합니다.</>}
         </p>
+        {method === 'principal' && (
+          <p className={s.note}>
+            ⓘ <strong>원금균등</strong>은 상환 초기(1년차) 부담이 가장 커서, DSR도 <strong>1년차 최대 상환액</strong> 기준으로 보수적으로 계산됩니다. 그래서 같은 조건이라도 원리금균등보다 DSR이 높게(=한도가 낮게) 나옵니다.
+          </p>
+        )}
       </div>
 
       {/* LTV 결과 */}
@@ -292,9 +297,9 @@ export default function DsrClient() {
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>스트레스 단계</label>
-            <div className={s.segRow}>
+            <div className={s.segRow} role="group" aria-label="스트레스 단계">
               {STRESS_PHASES.map(p => (
-                <button key={p.id} type="button" className={`${s.segBtn} ${phase === p.id ? s.segBtnActive : ''}`} onClick={() => setPhase(p.id)}>
+                <button key={p.id} type="button" aria-pressed={phase === p.id} className={`${s.segBtn} ${phase === p.id ? s.segBtnActive : ''}`} onClick={() => setPhase(p.id)}>
                   {p.id}단계
                 </button>
               ))}

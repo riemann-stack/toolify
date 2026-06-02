@@ -26,12 +26,13 @@ function diffBadgeClass(d: BreadDifficulty): string {
   return s.diffExpert
 }
 
-/* 수면 시간과 겹치는 능동 단계 찾기 */
-const ACTIVE_STEP_IDS = new Set([
-  'mix', 'fold1', 'fold2', 'fold3', 'fold4',
-  'preshape', 'bench', 'shape',
-  'preheat', 'bake', 'cool',
+/* 수면 중 자리를 비울 수 없는(능동) 단계 판별 —
+   무인으로 진행되는 발효·휴지 단계만 제외하고, 나머지(분할·끓이기·토핑·계란물 등 손이 가는 단계)는 모두 작업 단계로 간주 */
+const PASSIVE_STEP_IDS = new Set([
+  'autolyse', 'bulk', 'final-proof', 'cold-proof',
+  'bench', 'rest', 'rest1', 'rest2', 'overnight', 'biga', 'cool',
 ])
+const isActiveStep = (id: string): boolean => !PASSIVE_STEP_IDS.has(id)
 /** 'HH:MM' → 0~1439 (분) */
 function parseHHMM(s: string): number {
   const m = /^(\d{1,2}):(\d{2})$/.exec(s)
@@ -46,13 +47,21 @@ function isInSleepWindow(d: Date, sleepStartMin: number, sleepEndMin: number): b
   // 자정 넘김 (예: 22:00 ~ 07:00)
   return t >= sleepStartMin || t < sleepEndMin
 }
+/** 단계 작업 구간 [start, end)가 수면 구간과 겹치는가 — 시작 시각만이 아니라 진행 중 겹침까지 (자정 넘김 지원) */
+function stepOverlapsSleep(start: Date, end: Date, ss: number, se: number): boolean {
+  if (ss === se) return false
+  const startMs = start.getTime()
+  const lastMs = end.getTime() - 60_000   // 마지막 작업 분 (end는 다음 단계 시작 시각)
+  if (lastMs <= startMs) return isInSleepWindow(start, ss, se)
+  for (let t = startMs; t <= lastMs; t += 5 * 60_000) {
+    if (isInSleepWindow(new Date(t), ss, se)) return true
+  }
+  return isInSleepWindow(new Date(lastMs), ss, se)
+}
 function findSleepConflicts(steps: { id: string; name: string; emoji: string; startTime: Date; endTime: Date }[], sleepStart: string, sleepEnd: string) {
   const ss = parseHHMM(sleepStart)
   const se = parseHHMM(sleepEnd)
-  return steps.filter(st => {
-    if (!ACTIVE_STEP_IDS.has(st.id)) return false
-    return isInSleepWindow(st.startTime, ss, se)
-  })
+  return steps.filter(st => isActiveStep(st.id) && stepOverlapsSleep(st.startTime, st.endTime, ss, se))
 }
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
@@ -103,7 +112,7 @@ export default function BakingScheduleClient() {
         표시되는 시간은 표준 레시피 기준 예상 일정입니다.
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="제빵 일정 모드">
         {([
           ['forward',  '시작 시간 기준'],
           ['backward', '완성 시간 역산'],
@@ -116,7 +125,8 @@ export default function BakingScheduleClient() {
             key === 'preset'   ? s.tabActivePreset :
             key === 'recipe'   ? s.tabActiveRecipe : s.tabActive
           return (
-            <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
+            <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}
+              role="tab" aria-selected={tab === key}>
               {label}
             </button>
           )
@@ -181,6 +191,9 @@ type CommonInputsProps = {
 
 function CommonInputs(p: CommonInputsProps) {
   const tempInfo = getTempInfo(p.roomTempC)
+  const presetObj = BREAD_PRESETS.find(b => b.id === p.presetId)
+  const presetShortName = presetObj?.name.split(' ')[0] ?? ''
+  const builtInCold = !!presetObj?.steps.some(st => st.observationKey === 'cold-proof')
   const tempCls =
     tempInfo.band === 'cold'   ? s.tempCold :
     tempInfo.band === 'normal' ? s.tempNormal :
@@ -197,7 +210,7 @@ function CommonInputs(p: CommonInputsProps) {
         <div className={s.breadGrid}>
           {BREAD_PRESETS.map(bp => (
             <button key={bp.id} className={`${s.breadCard} ${p.presetId === bp.id ? s.breadCardActive : ''}`}
-              onClick={() => p.setPresetId(bp.id)}>
+              onClick={() => p.setPresetId(bp.id)} aria-pressed={p.presetId === bp.id}>
               <div className={s.breadCardEmoji}>{bp.icon}</div>
               <div className={s.breadCardName}>{bp.name.split(' ')[0]}</div>
               <div className={s.breadCardMeta}>약 {bp.totalTimeHours}시간</div>
@@ -212,12 +225,17 @@ function CommonInputs(p: CommonInputsProps) {
         <div className={s.fermRow}>
           {FERMENTATION_MODES.map(m => (
             <button key={m.id} className={`${s.fermBtn} ${p.fermentationMode === m.id ? s.fermActive : ''}`}
-              onClick={() => p.setFermentationMode(m.id)}>
+              onClick={() => p.setFermentationMode(m.id)} aria-pressed={p.fermentationMode === m.id}>
               <strong>{m.name}</strong>
               <small>{m.desc}</small>
             </button>
           ))}
         </div>
+        {builtInCold && p.fermentationMode === 'cold-final' && (
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            💡 <strong style={{ color: 'var(--text)' }}>{presetShortName}</strong>의 표준 일정에는 이미 냉장·장시간 발효가 포함돼 있어 <strong>냉장 2차 발효</strong>를 골라도 표준 일정과 동일합니다. 실온 당일 일정은 <strong style={{ color: 'var(--text)' }}>당일 발효</strong>를 선택하세요.
+          </p>
+        )}
       </div>
 
       <div className={s.card}>
@@ -229,7 +247,8 @@ function CommonInputs(p: CommonInputsProps) {
           <div className={s.tempRow}>
             <span className={s.tempLabelMin}>16℃</span>
             <input type="range" className={s.tempSlider} min={16} max={32} step={1}
-              value={p.roomTempC} onChange={e => p.setRoomTempC(Number(e.target.value))} />
+              value={p.roomTempC} onChange={e => p.setRoomTempC(Number(e.target.value))}
+              aria-label="실내 온도 (℃)" />
             <span className={s.tempValue}>{p.roomTempC}℃</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
@@ -269,7 +288,8 @@ function CommonInputs(p: CommonInputsProps) {
       </div>
 
       {/* 고급 옵션 — DDT 토글 */}
-      <button className={s.advancedToggle} onClick={() => p.setDdtEnabled(!p.ddtEnabled)} type="button">
+      <button className={s.advancedToggle} onClick={() => p.setDdtEnabled(!p.ddtEnabled)} type="button"
+        aria-expanded={p.ddtEnabled}>
         {p.ddtEnabled ? '— ' : '+ '}
         <strong>고급 옵션:</strong> 반죽 온도 정밀 계산 (DDT)
         <span style={{ marginLeft: 6, color: 'var(--muted)', fontSize: 11 }}>
@@ -286,6 +306,7 @@ function CommonInputs(p: CommonInputsProps) {
 function DDTPanel(p: CommonInputsProps) {
   const preset = BREAD_PRESETS.find(b => b.id === p.presetId)
   const hasLevain = !!preset?.hasLevain
+  const prefermentName = preset?.prefermentName ?? '르방'
   const flourC = p.flourTempC ?? p.roomTempC
   const levainC = p.levainTempC ?? p.roomTempC
 
@@ -308,14 +329,14 @@ function DDTPanel(p: CommonInputsProps) {
     s.ddtBandHot
 
   const formula = hasLevain
-    ? `물 온도 = 목표 ${p.targetDoughC} × 4 − 밀가루 ${flourC} − 실내 ${p.roomTempC} − 르방 ${levainC} − 마찰 ${result.friction}\n        = ${result.waterTempC}℃`
+    ? `물 온도 = 목표 ${p.targetDoughC} × 4 − 밀가루 ${flourC} − 실내 ${p.roomTempC} − ${prefermentName} ${levainC} − 마찰 ${result.friction}\n        = ${result.waterTempC}℃`
     : `물 온도 = 목표 ${p.targetDoughC} × 3 − 밀가루 ${flourC} − 실내 ${p.roomTempC} − 마찰 ${result.friction}\n        = ${result.waterTempC}℃`
 
   return (
     <div className={s.ddtCard}>
       <div className={s.ddtTitle}>
         🌡️ DDT — 권장 물 온도
-        <small>{hasLevain ? '르방 사용 (×4 공식)' : '이스트 사용 (×3 공식)'}</small>
+        <small>{hasLevain ? `${prefermentName} 사용 (×4 공식)` : '이스트 사용 (×3 공식)'}</small>
       </div>
 
       <div className={s.ddtFieldRow}>
@@ -347,7 +368,7 @@ function DDTPanel(p: CommonInputsProps) {
 
       {hasLevain && (
         <div className={s.ddtField}>
-          <span className={s.ddtFieldLabel}>르방 온도 (℃)</span>
+          <span className={s.ddtFieldLabel}>{prefermentName} 온도 (℃)</span>
           <input type="number" className={s.ddtNumInput} step={0.5} min={0} max={40}
             value={p.levainTempC ?? p.roomTempC}
             onChange={e => {
@@ -355,7 +376,7 @@ function DDTPanel(p: CommonInputsProps) {
               p.setLevainTempC(v === '' ? null : Number(v))
             }} />
           <span style={{ fontSize: 11, color: 'var(--muted)' }}>
-            기본: 실내 온도와 동일. 냉장 르방 사용 시 4~8℃로 입력
+            기본: 실내 온도와 동일. 냉장 {prefermentName} 사용 시 4~8℃로 입력
           </span>
         </div>
       )}
@@ -366,7 +387,7 @@ function DDTPanel(p: CommonInputsProps) {
           {MIXING_METHODS.map(m => (
             <button key={m.id} type="button"
               className={`${s.mixBtn} ${p.mixingMethod === m.id ? s.mixActive : ''}`}
-              onClick={() => p.setMixingMethod(m.id)}>
+              onClick={() => p.setMixingMethod(m.id)} aria-pressed={p.mixingMethod === m.id}>
               <strong>{m.name}</strong>
               <small>{m.desc}</small>
             </button>
@@ -684,7 +705,7 @@ function PresetTab({ onApply }: { onApply: (id: string) => void }) {
         <div className={s.breadGrid}>
           {BREAD_PRESETS.map(bp => (
             <button key={bp.id} className={`${s.breadCard} ${selectedId === bp.id ? s.breadCardActive : ''}`}
-              onClick={() => setSelectedId(bp.id)}>
+              onClick={() => setSelectedId(bp.id)} aria-pressed={selectedId === bp.id}>
               <div className={s.breadCardEmoji}>{bp.icon}</div>
               <div className={s.breadCardName}>{bp.name.split(' ')[0]}</div>
               <div className={s.breadCardMeta}>약 {bp.totalTimeHours}시간</div>

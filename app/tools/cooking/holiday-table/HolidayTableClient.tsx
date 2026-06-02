@@ -4,7 +4,7 @@ import Disclaimer from '@/components/Disclaimer'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import s from './holiday-table.module.css'
 import {
-  HOLIDAYS, ITEMS, calcRows, CHARYE_LAYOUT, SAVING_TIPS,
+  HOLIDAYS, calcRows, CHARYE_LAYOUT, SAVING_TIPS,
   type Category, type HolidayId, type FormatId,
 } from './holidayData'
 
@@ -27,6 +27,7 @@ export default function HolidayTableClient() {
   const [livePrices, setLivePrices] = useState<Record<string, LivePrice>>({})
   const [priceLoading, setPriceLoading] = useState(false)
   const [priceLoaded, setPriceLoaded] = useState(false)
+  const [priceError, setPriceError] = useState(false)
   const [copied, setCopied] = useState(false)
 
   /* localStorage */
@@ -50,19 +51,22 @@ export default function HolidayTableClient() {
   /* 실시간 시세 조회 */
   const fetchLivePrices = useCallback(async () => {
     setPriceLoading(true)
+    setPriceError(false)
     try {
-      const target = ['baechu', 'mu', 'sagua', 'bae', 'gam', 'sigeumchi', 'hobak', 'daepa', 'maneul']
+      const target = ['mu', 'sagua', 'bae', 'gam', 'sigeumchi', 'hobak', 'daepa', 'maneul']
       const res = await fetch(`/api/produce-price?items=${target.join(',')}`, { cache: 'no-store' })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json() as { ok: boolean; results?: LivePrice[] }
       if (data.ok && data.results) {
         const map: Record<string, LivePrice> = {}
         data.results.forEach(r => { map[r.id] = r })
         setLivePrices(map)
       }
-      setPriceLoaded(true)
     } catch {
-      // ignore
+      setPriceError(true)
     } finally {
+      // 성공·실패 모두 '조회 끝' 처리 — 실패해도 평균가로 계산은 됨
+      setPriceLoaded(true)
       setPriceLoading(false)
     }
   }, [])
@@ -107,6 +111,11 @@ export default function HolidayTableClient() {
   const grandTotal = rows.reduce((s, r) => s + r.totalPriceWon, 0)
   const perPersonCost = people > 0 ? Math.round(grandTotal / people) : 0
 
+  // 제사 정석·간소 차림은 '영혼 1위(位)당' 분량 — 참석 인원이 아니라 모시는 위(位) 수 기준
+  const isJesaRitual = holidayId === 'jesa' && formatId !== 'meal'
+  const unitWord = isJesaRitual ? '위' : '명'
+  const countTitle = isJesaRitual ? '위(位) 수' : '인원 수'
+
   /* 가격 직접 수정 */
   const onPriceEdit = (itemId: string, val: string) => {
     const n = parseFloat(val)
@@ -123,9 +132,9 @@ export default function HolidayTableClient() {
     const cfg = HOLIDAYS[holidayId]
     const fmt = cfg.formats[formatId]
     const lines: string[] = [
-      `# ${cfg.emoji} ${cfg.name} ${fmt.name} (${people}인)`,
+      `# ${cfg.emoji} ${cfg.name} ${fmt.name} (${people}${unitWord})`,
       ``,
-      `_예상 총 비용 **${grandTotal.toLocaleString()}원** · 1인당 **${perPersonCost.toLocaleString()}원**_`,
+      `_예상 총 비용 **${grandTotal.toLocaleString()}원** · 1${unitWord}당 **${perPersonCost.toLocaleString()}원**_`,
       ``,
     ]
     for (const cat of CATEGORIES) {
@@ -174,6 +183,7 @@ export default function HolidayTableClient() {
               <button
                 key={id}
                 type="button"
+                aria-pressed={on}
                 className={`${s.holidayBtn} ${on ? s.holidayActive : ''}`}
                 onClick={() => setHolidayId(id)}
               >
@@ -199,6 +209,7 @@ export default function HolidayTableClient() {
               <button
                 key={fid}
                 type="button"
+                aria-pressed={on}
                 className={`${s.formatBtn} ${on ? s.formatActive : ''}`}
                 onClick={() => setFormatId(fid)}
               >
@@ -209,7 +220,7 @@ export default function HolidayTableClient() {
           })}
         </div>
 
-        <div className={s.subLabel} style={{ marginTop: 14 }}>인원 수 — {people}명</div>
+        <div className={s.subLabel} style={{ marginTop: 14 }}>{countTitle} — {people}{unitWord}</div>
         <div className={s.peopleRow}>
           <input
             type="range"
@@ -222,18 +233,24 @@ export default function HolidayTableClient() {
             {[2, 4, 6, 8, 10, 15].map(n => (
               <button key={n}
                 type="button"
+                aria-pressed={people === n}
                 className={`${s.quickBtn} ${people === n ? s.quickActive : ''}`}
                 onClick={() => setPeople(n)}
-              >{n}명</button>
+              >{n}{unitWord}</button>
             ))}
           </div>
         </div>
+        {isJesaRitual && (
+          <p className={s.layoutNote} style={{ marginTop: 10 }}>
+            ℹ️ 제사 정석·간소 차림은 <strong>조상 1위(位)당</strong> 분량입니다. 참석 인원이 아니라 <strong>모시는 위(位) 수(보통 1~2위)</strong>를 입력하세요. (제사 후 음복 식사는 「음복 식사」 형식 + 참석 인원 기준)
+          </p>
+        )}
       </div>
 
       {/* ── 메인 결과 히어로 ── */}
       <div className={s.heroCard}>
         <div className={s.heroLabel}>
-          {cfg.emoji} {cfg.name} {fmt.name} · {people}명
+          {cfg.emoji} {cfg.name} {fmt.name} · {people}{unitWord}
         </div>
         <div className={s.heroBigRow}>
           <div className={s.heroBigItem}>
@@ -247,12 +264,16 @@ export default function HolidayTableClient() {
           <div className={s.heroBigItem}>
             <div className={s.heroNum}>{perPersonCost.toLocaleString()}</div>
             <div className={s.heroUnit}>원</div>
-            <div className={s.heroSub}>1인당 비용</div>
+            <div className={s.heroSub}>1{unitWord}당 비용</div>
           </div>
         </div>
         <div className={s.heroFootRow}>
           <span className={s.priceSource}>
-            {hasLive ? '✓ KAMIS 실시간 시세 적용' : '※ 최근 시장 평균가 (KAMIS API 키 미설정 폴백)'}
+            {priceError
+              ? '※ 시세 조회 실패 — 평균가 적용 (참고용)'
+              : hasLive
+                ? '✓ KAMIS 실시간 시세 적용 (농산물 8종)'
+                : '※ 최근 시장 평균가 (참고용)'}
           </span>
           <button
             type="button"

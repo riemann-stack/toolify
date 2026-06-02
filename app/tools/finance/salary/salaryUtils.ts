@@ -35,27 +35,65 @@ export const NON_TAXABLE_ITEMS: NonTaxableItem[] = [
     desc: '연구원 등 특정 직군',                 recommended: false },
 ]
 
-/* ─── 근로소득세 간이세액표 (2024 국세청 기준, 월 급여) ─── */
-interface TaxBracket { min: number; max: number; base: number; rate: number; threshold: number }
-const TAX_BRACKETS: TaxBracket[] = [
-  { min:         0, max: 1_060_000, base:        0, rate: 0,    threshold:         0 },
-  { min: 1_060_000, max: 1_500_000, base:        0, rate: 0.06, threshold: 1_060_000 },
-  { min: 1_500_000, max: 3_000_000, base:    26_400, rate: 0.15, threshold: 1_500_000 },
-  { min: 3_000_000, max: 4_500_000, base:   251_400, rate: 0.24, threshold: 3_000_000 },
-  { min: 4_500_000, max: 8_800_000, base:   611_400, rate: 0.35, threshold: 4_500_000 },
-  { min: 8_800_000, max: Infinity,  base: 2_116_400, rate: 0.38, threshold: 8_800_000 },
-]
+/* ─── 근로소득세 (간이세액표 근사 = 연 결정세액 ÷ 12) ───
+   기존 구현은 종합소득세 한계세율을 '월 급여'에 그대로 적용해 세금이 ~3배 과대 →
+   근로소득공제·과세표준·세액공제를 반영한 연 결정세액 방식으로 교체 (실제 연봉계산기와 정합) */
 
-function getMonthlyIncomeTax(taxableMonthly: number, dependents: number, childrenCount: number): number {
-  const bracket = TAX_BRACKETS.find(b => taxableMonthly >= b.min && taxableMonthly < b.max)
-  if (!bracket) return 0
-  let tax = bracket.base + (taxableMonthly - bracket.threshold) * bracket.rate
-  // 부양가족 기본공제 (월 환산 근사)
-  const deductionPerPerson = taxableMonthly <= 3_000_000 ? 25_000 : 30_000
-  tax -= deductionPerPerson * Math.max(1, dependents)
-  // 자녀세액공제 (8~20세, 1명당 월 약 12,500원 = 연 15만)
-  tax -= childrenCount * 12_500
-  return Math.max(0, Math.floor(tax / 10) * 10)
+// 근로소득공제 (총급여 기준, 2024~2026 동일)
+function earnedIncomeDeduction(annualGross: number): number {
+  let d: number
+  if (annualGross <= 5_000_000)        d = annualGross * 0.7
+  else if (annualGross <= 15_000_000)  d = 3_500_000 + (annualGross - 5_000_000) * 0.4
+  else if (annualGross <= 45_000_000)  d = 7_500_000 + (annualGross - 15_000_000) * 0.15
+  else if (annualGross <= 100_000_000) d = 12_000_000 + (annualGross - 45_000_000) * 0.05
+  else                                 d = 14_750_000 + (annualGross - 100_000_000) * 0.02
+  return Math.min(d, 20_000_000)
+}
+
+// 종합소득세 산출세액 (과세표준, 누진공제 방식)
+function progressiveTax(taxBase: number): number {
+  if (taxBase <= 0)             return 0
+  if (taxBase <= 14_000_000)    return taxBase * 0.06
+  if (taxBase <= 50_000_000)    return taxBase * 0.15 - 1_260_000
+  if (taxBase <= 88_000_000)    return taxBase * 0.24 - 5_760_000
+  if (taxBase <= 150_000_000)   return taxBase * 0.35 - 15_440_000
+  if (taxBase <= 300_000_000)   return taxBase * 0.38 - 19_940_000
+  if (taxBase <= 500_000_000)   return taxBase * 0.40 - 25_940_000
+  if (taxBase <= 1_000_000_000) return taxBase * 0.42 - 35_940_000
+  return taxBase * 0.45 - 65_940_000
+}
+
+// 근로소득세액공제 (산출세액 기준 + 총급여별 한도)
+function earnedTaxCredit(computedTax: number, annualGross: number): number {
+  const credit = computedTax <= 1_300_000
+    ? computedTax * 0.55
+    : 715_000 + (computedTax - 1_300_000) * 0.30
+  let limit: number
+  if (annualGross <= 33_000_000)       limit = 740_000
+  else if (annualGross <= 70_000_000)  limit = Math.max(660_000, 740_000 - (annualGross - 33_000_000) * 0.008)
+  else if (annualGross <= 120_000_000) limit = Math.max(500_000, 660_000 - (annualGross - 70_000_000) * 0.5)
+  else                                 limit = Math.max(200_000, 500_000 - (annualGross - 120_000_000) * 0.5)
+  return Math.min(credit, limit)
+}
+
+/** 월 원천징수 소득세 근사. annualPension = 국민연금 본인부담 연액(연금보험료공제) */
+function getMonthlyIncomeTax(
+  taxableMonthly: number, dependents: number, childrenCount: number, annualPension: number,
+): number {
+  const annualGross = taxableMonthly * 12
+  if (annualGross <= 0) return 0
+  const earnedIncome = Math.max(0, annualGross - earnedIncomeDeduction(annualGross))
+  const personalDeduction = 1_500_000 * Math.max(1, dependents)  // 기본공제 (본인+부양 1인당 150만)
+  const taxBase = Math.max(0, earnedIncome - personalDeduction - annualPension)
+  const computedTax = progressiveTax(taxBase)
+  const credit = earnedTaxCredit(computedTax, annualGross)
+  // 자녀세액공제 (8~20세): 1명 25만·2명 55만·3명 이상 55만 + 40만/명
+  const childCredit = childrenCount <= 0 ? 0
+    : childrenCount === 1 ? 250_000
+    : childrenCount === 2 ? 550_000
+    : 550_000 + (childrenCount - 2) * 400_000
+  const decidedAnnual = Math.max(0, computedTax - credit - childCredit)
+  return Math.floor(decidedAnnual / 12 / 10) * 10
 }
 
 /* ─── 메인 입력·결과 ─── */
@@ -107,7 +145,7 @@ export function calcSalary(input: SalaryInput): SalaryResult {
     : 0
   const totalInsurance = pension + health + longTermCare + employment
 
-  const incomeTax = getMonthlyIncomeTax(taxableMonthly, input.dependents, input.childrenCount)
+  const incomeTax = getMonthlyIncomeTax(taxableMonthly, input.dependents, input.childrenCount, pension * 12)
   const localTax = Math.floor(incomeTax * 0.1 / 10) * 10
   const totalTax = incomeTax + localTax
 
@@ -207,25 +245,28 @@ export function calcHourlyWage(input: HourlyInput): HourlyResult {
   const weeksPerYear = 52
   const workingDays = Math.max(1, 5 * weeksPerYear - input.vacationDays)
 
-  const baseMonthlyHours = 209  // 주 40시간 + 주휴
-  const baseHourlyGross = input.yearly / 12 / baseMonthlyHours
-  const baseHourlyNet = input.netYearly / 12 / baseMonthlyHours
+  // 공식(법정) 시급 — 주 40시간 + 주휴 = 월 209시간 기준
+  const baseAnnualHours = 209 * 12  // 2,508h
+  const baseHourlyGross = input.yearly / baseAnnualHours
+  const baseHourlyNet = input.netYearly / baseAnnualHours
 
-  const totalWeeklyHours = input.weeklyHours + input.weeklyOvertime
-  const yearlyHoursWithOvertime = totalWeeklyHours * weeksPerYear * (workingDays / 250)
-  const realHourlyNet = yearlyHoursWithOvertime > 0 ? input.netYearly / yearlyHoursWithOvertime : 0
+  // 실질·체감 시급은 '법정 기준시간 위에' 초과근무·출퇴근을 더해 산정 → 더 일할수록 시급 ↓
+  // (40시간 초과 근무 + 야근)을 추가 노동시간으로 환산
+  const extraWeeklyHours = Math.max(0, input.weeklyHours - 40) + input.weeklyOvertime
+  const realAnnualHours = baseAnnualHours + extraWeeklyHours * (workingDays / 5)
+  const realHourlyNet = input.netYearly / realAnnualHours
 
-  const dailyCommuteHours = input.dailyCommuteMin / 60
-  const totalDailyHours = (totalWeeklyHours / 5) + dailyCommuteHours
-  const yearlyTotalHours = Math.max(1, totalDailyHours * workingDays)
-  const perceivedHourlyNet = input.netYearly / yearlyTotalHours
+  // 체감 = 실질 + 출퇴근 시간
+  const commuteHoursYear = (input.dailyCommuteMin / 60) * workingDays
+  const perceivedAnnualHours = realAnnualHours + commuteHoursYear
+  const perceivedHourlyNet = input.netYearly / perceivedAnnualHours
 
   return {
     baseHourlyGross: Math.round(baseHourlyGross),
     baseHourlyNet: Math.round(baseHourlyNet),
     realHourlyNet: Math.round(realHourlyNet),
     perceivedHourlyNet: Math.round(perceivedHourlyNet),
-    yearlyTotalHours: Math.round(yearlyTotalHours),
+    yearlyTotalHours: Math.round(perceivedAnnualHours),
   }
 }
 

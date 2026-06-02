@@ -6,30 +6,26 @@ import styles from './bmi.module.css'
 import {
   Standard, Gender,
   BMI_CATEGORIES, BODY_FAT_RANGES,
-  calcBMI, calcRichResult, calcTargetWeight, buildTargetTable,
+  calcBMI, calcRichResult,
   calcWaistHeightRatio, classifyAbdominal, combinedJudgment,
   estimateBodyFat, classifyBodyFat,
-  simulateWeightChange, recommendTargetBMI,
+  simulateWeightChange,
   loadBmiHistory, saveBmiHistory, newBmiId, BmiRecord,
   cmToInch, inchToCm, kgToLb, lbToKg,
 } from './bmiUtils'
 
-type Tab = 'bmi' | 'target' | 'waist' | 'sim' | 'bf'
+type Tab = 'bmi' | 'body' | 'sim'
 
-const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'bmi',    name: 'BMI 계산',    icon: '⚖️' },
-  { id: 'target', name: '목표 체중',   icon: '🎯' },
-  { id: 'waist',  name: '허리둘레',    icon: '📐' },
-  { id: 'sim',    name: '체중 시뮬',   icon: '🎚️' },
-  { id: 'bf',     name: '체지방률',    icon: '📊' },
+const TABS: { id: Tab; name: string }[] = [
+  { id: 'bmi',  name: 'BMI 계산' },
+  { id: 'body', name: '허리·체지방' },
+  { id: 'sim',  name: '체중 시뮬' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
-  bmi:    styles.tabActive,
-  target: styles.tabActiveTarget,
-  waist:  styles.tabActiveWaist,
-  sim:    styles.tabActiveSim,
-  bf:     styles.tabActiveBf,
+  bmi:  styles.tabActive,
+  body: styles.tabActiveWaist,
+  sim:  styles.tabActiveSim,
 }
 
 export default function BmiClient() {
@@ -88,31 +84,7 @@ export default function BmiClient() {
     return Math.min(Math.max((rich.bmi / gaugeMaxBmi) * 100, 0), 100)
   }, [rich])
 
-  /* ─────── 탭 2: 목표 BMI ─────── */
-  const recommended = useMemo(() => {
-    if (!rich) return 22
-    return recommendTargetBMI(rich.bmi, standard)
-  }, [rich, standard])
-  const [targetBMI, setTargetBMI] = useState(22)
-  useEffect(() => { setTargetBMI(recommended) }, [recommended])
-
-  const targetWeight = useMemo(
-    () => heightCm > 0 ? calcTargetWeight(heightCm, targetBMI) : 0,
-    [heightCm, targetBMI],
-  )
-
-  const targetTable = useMemo(
-    () => heightCm > 0 ? buildTargetTable(heightCm, weightKg) : [],
-    [heightCm, weightKg],
-  )
-
-  const targetDiff = useMemo(() => {
-    const d = Math.round((weightKg - targetWeight) * 10) / 10
-    if (Math.abs(d) < 0.05) return { dir: 'eq' as const, kg: 0 }
-    return d > 0 ? { dir: 'lose' as const, kg: Math.abs(d) } : { dir: 'gain' as const, kg: Math.abs(d) }
-  }, [weightKg, targetWeight])
-
-  /* ─────── 탭 3: 허리둘레 ─────── */
+  /* ─────── 탭 2: 허리·체지방 ─────── */
   const [waist, setWaist] = useState('')
   const [unitWaist, setUnitWaist] = useState<'cm' | 'inch'>('cm')
 
@@ -283,7 +255,7 @@ export default function BmiClient() {
           <button key={t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            {t.name}
           </button>
         ))}
       </div>
@@ -378,27 +350,34 @@ export default function BmiClient() {
                   BMI 위치 ({standard === 'KOREA' ? '대한비만학회' : 'WHO'} 기준)
                 </label>
                 <div className={styles.gauge}>
-                  <div className={styles.gaugeBar} style={{ marginTop: 30 }}>
-                    {gaugeSegs.map(s => (
-                      <div key={s.id}
-                        className={styles.gaugeSeg}
-                        style={{ flex: s.flex, background: s.color, opacity: 0.85 }}
-                      />
-                    ))}
+                  <div className={styles.gaugeWrap}>
                     {gaugePos !== null && (
-                      <>
-                        <div className={styles.gaugeMarkerLabel} style={{ left: `${gaugePos}%` }}>
-                          {rich.bmi.toFixed(1)}
-                        </div>
-                        <div className={styles.gaugeMarker} style={{ left: `${gaugePos}%` }} />
-                      </>
+                      <div className={styles.gaugeMarkerLabel} style={{ left: `${gaugePos}%` }}>
+                        {rich.bmi.toFixed(1)}
+                      </div>
                     )}
+                    <div className={styles.gaugeBar}>
+                      {gaugeSegs.map(s => (
+                        <div key={s.id}
+                          className={styles.gaugeSeg}
+                          style={{ flex: s.flex, background: s.color, opacity: 0.85 }}
+                        />
+                      ))}
+                      {gaugePos !== null && (
+                        <div className={styles.gaugeMarker} style={{ left: `${gaugePos}%` }} />
+                      )}
+                    </div>
                   </div>
                   <div className={styles.gaugeAxis}>
-                    <span>0</span><span>18.5</span>
-                    <span>{standard === 'KOREA' ? '23' : '25'}</span>
-                    <span>{standard === 'KOREA' ? '25' : '30'}</span>
-                    <span>40+</span>
+                    {(standard === 'KOREA' ? [0, 18.5, 23, 25, 40] : [0, 18.5, 25, 30, 40]).map((v, i, arr) => {
+                      const pct = (v / gaugeMaxBmi) * 100
+                      const tx = i === 0 ? '0' : i === arr.length - 1 ? '-100%' : '-50%'
+                      return (
+                        <span key={v} style={{ left: `${pct}%`, transform: `translateX(${tx})` }}>
+                          {v === 40 ? '40+' : v}
+                        </span>
+                      )
+                    })}
                   </div>
                   {/* 범례 — 각 구간 색상·이름·BMI 범위 */}
                   <div className={styles.gaugeLegend}>
@@ -494,7 +473,6 @@ export default function BmiClient() {
                   onClick={() => copy(`키 ${Math.round(heightCm)}cm / 체중 ${Math.round(weightKg * 10) / 10}kg → BMI ${rich.bmi} (${rich.category.name})`)}>
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={() => setTab('target')}>🎯 목표 체중</button>
                 <button className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
               </div>
             </>
@@ -507,152 +485,111 @@ export default function BmiClient() {
         </>
       )}
 
-      {/* ─────────────── 탭 2: 목표 체중 ─────────────── */}
-      {tab === 'target' && (
+      {/* ─────────────── 탭 2: 허리·체지방 ─────────────── */}
+      {tab === 'body' && (
         <>
           <div className={styles.disclaimer}>
-            <strong>목표 BMI</strong>를 선택하면 필요한 체중과 차이가 계산됩니다. 건강한 감량 페이스는 주당 0.3~0.5kg가 권장됩니다.
+            <strong>허리둘레</strong>는 BMI의 한계(마른 비만·근육 우세형)를 보완하고, <strong>Navy 공식</strong>으로 체지방률을 추정합니다. 체지방률은 참고용(±3~5%)이며 정확한 측정은 InBody·DEXA를 권장합니다.
           </div>
 
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>목표 BMI 빠른 선택</label>
-            <div className={styles.optionRow4}>
-              {[
-                { v: 18.5, label: 'BMI 18.5\n정상 하한' },
-                { v: 21,   label: 'BMI 21\n이상 체중' },
-                { v: 22,   label: 'BMI 22\n한국 권장' },
-                { v: 23,   label: 'BMI 23\n정상 상한' },
-              ].map(o => (
-                <button key={o.v}
-                  className={`${styles.optionBtn} ${Math.abs(targetBMI - o.v) < 0.05 ? styles.optionActive : ''}`}
-                  onClick={() => setTargetBMI(o.v)} style={{ whiteSpace: 'pre-line' }}>
-                  {o.label}
-                </button>
-              ))}
+          {/* 허리 + 목 (1줄) */}
+          <div className={styles.fieldRow}>
+            <div className={styles.card}>
+              <label className={styles.cardLabel}>
+                허리둘레
+                <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
+                  onClick={toggleWaistUnit}>{unitWaist}</button>
+              </label>
+              <div className={styles.inputRow}>
+                <input className={styles.numInput} type="number" inputMode="decimal"
+                  placeholder={unitWaist === 'cm' ? '82' : '32'}
+                  value={waist} onChange={e => setWaist(e.target.value)} />
+                <span className={styles.unit}>{unitWaist}</span>
+              </div>
             </div>
-            <button className={styles.optionBtn} style={{ marginTop: 6, width: '100%' }}
-              onClick={() => setTargetBMI(recommended)}>
-              ⭐ 자동 추천: BMI {recommended} (현재 BMI 기반)
-            </button>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>
-              직접 입력 — BMI {targetBMI.toFixed(1)}
-            </label>
-            <div className={styles.sliderRow}>
-              <input className={styles.slider} type="range"
-                min="15" max="30" step="0.1"
-                value={targetBMI}
-                onChange={e => setTargetBMI(parseFloat(e.target.value))} />
-              <span className={styles.sliderVal}>{targetBMI.toFixed(1)}</span>
+            <div className={styles.card}>
+              <label className={styles.cardLabel}>목둘레 <span className={styles.cardLabelHint}>체지방용</span></label>
+              <div className={styles.inputRow}>
+                <input className={styles.numInput} type="number" inputMode="decimal"
+                  placeholder={unitWaist === 'cm' ? '38' : '15'}
+                  value={neck} onChange={e => setNeck(e.target.value)} />
+                <span className={styles.unit}>{unitWaist}</span>
+              </div>
             </div>
           </div>
 
-          {rich && (
-            <>
-              <div className={styles.hero}
-                style={{ borderColor: '#CA8A0450', background: '#CA8A0410' }}>
-                <div className={styles.heroLabel}>목표 BMI {targetBMI.toFixed(1)} 체중</div>
-                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
-                  {targetWeight}<span className={styles.heroNumUnit}>kg</span>
-                </div>
-                <div className={styles.heroSub}>
-                  현재 {Math.round(weightKg * 10) / 10}kg →&nbsp;
-                  {targetDiff.dir === 'eq' ? <strong style={{ color: '#059669' }}>이미 목표 도달</strong>
-                    : targetDiff.dir === 'lose'
-                      ? <span>{targetDiff.kg}kg 감량 필요</span>
-                      : <span>+{targetDiff.kg}kg 증량 필요</span>}
-                </div>
+          {gender === 'female' && (
+            <div className={styles.card}>
+              <label className={styles.cardLabel}>엉덩이둘레 <span className={styles.cardLabelHint}>여성 체지방용</span></label>
+              <div className={styles.inputRow}>
+                <input className={styles.numInput} type="number" inputMode="decimal"
+                  placeholder={unitWaist === 'cm' ? '95' : '37'}
+                  value={hip} onChange={e => setHip(e.target.value)} />
+                <span className={styles.unit}>{unitWaist}</span>
               </div>
-
-              {targetDiff.dir === 'lose' && targetDiff.kg > 0 && (
-                <div className={styles.infoBox}>
-                  💡 <strong>건강한 감량 페이스</strong> 주당 0.3~0.5kg 기준 ·
-                  {targetDiff.kg}kg 감량 시 약 <strong>{Math.ceil(targetDiff.kg / 0.5)}~{Math.ceil(targetDiff.kg / 0.3)}주 ({Math.ceil(targetDiff.kg / 0.5 / 4)}~{Math.ceil(targetDiff.kg / 0.3 / 4)}개월)</strong> 소요. 무리한 감량은 근손실·요요·건강 위험이 있습니다.
-                </div>
-              )}
-
-              <div className={styles.card}>
-                <label className={styles.cardLabel}>BMI별 체중 표 (키 {Math.round(heightCm)}cm)</label>
-                <div className={styles.targetTable}>
-                  {targetTable.map(t => (
-                    <div key={t.bmi}
-                      className={`${styles.targetRow} ${Math.abs(t.bmi - targetBMI) < 0.3 ? styles.targetRowActive : ''}`}>
-                      <span className={styles.targetBmi}>BMI {t.bmi}</span>
-                      <span style={{ fontSize: 11, color: 'var(--muted)' }}>
-                        {t.bmi === 18.5 ? '정상 하한' :
-                         t.bmi === 22 ? '한국 권장' :
-                         t.bmi === 23 ? '정상 상한 (한국)' :
-                         t.bmi === 24.9 ? '정상 상한 (WHO)' :
-                         t.isCurrent ? '현재' : ''}
-                      </span>
-                      <span className={styles.targetWeight}>
-                        {t.weight}kg{Math.abs(t.bmi - targetBMI) < 0.3 ? ' ←' : ''}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.resultActions}>
-                <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-                  onClick={() => copy(`목표 BMI ${targetBMI} → 체중 ${targetWeight}kg (${targetDiff.dir === 'eq' ? '도달' : targetDiff.dir === 'lose' ? `−${targetDiff.kg}kg` : `+${targetDiff.kg}kg`})`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
-                </button>
-                <a className={styles.copyBtn} href="/tools/health/weightloss"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-                  🎯 감량 기간 계산 →
-                </a>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
-              </div>
-            </>
+            </div>
           )}
-        </>
-      )}
 
-      {/* ─────────────── 탭 3: 허리둘레 ─────────────── */}
-      {tab === 'waist' && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>허리둘레는 BMI의 한계를 보완</strong>하는 핵심 지표입니다.
-            &lsquo;마른 비만&rsquo;·&lsquo;근육 우세형&rsquo;을 BMI 단독으로는 구분할 수 없지만, 허리둘레와 함께 보면 명확해집니다.
-          </div>
+          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2, marginBottom: 2, lineHeight: 1.7 }}>
+            <strong style={{ color: 'var(--text)' }}>측정법</strong> — 허리: 배꼽 위 약 2cm(장골 능선)를 호흡 후 평행하게. 목: 후두 결절 아래. 엉덩이: 가장 두꺼운 부분. 두꺼운 옷 위 측정 X.
+          </p>
 
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>
-              허리둘레
-              <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
-                onClick={toggleWaistUnit}>{unitWaist}</button>
-            </label>
-            <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder={unitWaist === 'cm' ? '82' : '32'}
-                value={waist} onChange={e => setWaist(e.target.value)} />
-              <span className={styles.unit}>{unitWaist}</span>
-            </div>
-            <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-              <strong style={{ color: 'var(--text)' }}>측정법</strong> — 호흡 후 자연스러운 자세에서 배꼽 위 약 2cm(장골 능선 위) 위치를 줄자가 평행하게 둘러서 측정. 두꺼운 옷 위로 측정하지 마세요.
-            </div>
-          </div>
-
+          {/* 허리둘레 판정 */}
           {abdom && (
-            <div className={styles.hero}
-              style={{ borderColor: `${abdom.color}50`, background: `${abdom.color}0F` }}>
+            <div className={styles.hero} style={{ borderColor: `${abdom.color}50`, background: `${abdom.color}0F` }}>
               <div className={styles.heroLabel}>허리둘레 판정</div>
               <div className={styles.heroNum} style={{ color: abdom.color, fontSize: 'clamp(40px, 10vw, 64px)' }}>
                 {Math.round(waistCm * 10) / 10}<span className={styles.heroNumUnit}>cm</span>
               </div>
-              <div className={styles.heroCategory} style={{ color: abdom.color }}>
-                {abdom.name}
-              </div>
+              <div className={styles.heroCategory} style={{ color: abdom.color }}>{abdom.name}</div>
               <div className={styles.heroSub}>{abdom.desc}</div>
-              <div className={styles.heroDisclaimer}>
-                대한비만학회 기준 — 남성 90cm·여성 85cm 이상 = 복부비만
-              </div>
+              <div className={styles.heroDisclaimer}>대한비만학회 기준 — 남성 90cm·여성 85cm 이상 = 복부비만</div>
             </div>
           )}
 
+          {/* 추정 체지방률 */}
+          {bodyFat !== null && bfClass && (
+            <>
+              <div className={styles.hero} style={{ borderColor: `${bfClass.color}50`, background: `${bfClass.color}0F` }}>
+                <div className={styles.heroLabel}>추정 체지방률</div>
+                <div className={styles.heroNum} style={{ color: bfClass.color }}>
+                  {bodyFat.toFixed(1)}<span className={styles.heroNumUnit}>%</span>
+                </div>
+                <div className={styles.heroCategory} style={{ color: bfClass.color }}>
+                  {bfClass.name} ({bfClass.rangeText})
+                </div>
+                <div className={styles.heroDisclaimer}>Navy 공식 추정치 · ±3~5% 오차 가능</div>
+              </div>
+
+              <div className={styles.card}>
+                <label className={styles.cardLabel}>{gender === 'male' ? '남성' : '여성'} 체지방률 기준</label>
+                <div className={styles.bfTable}>
+                  <div className={`${styles.bfRow} ${styles.headerRow}`}>
+                    <span>분류</span><span style={{ textAlign: 'right' }}>남성</span><span style={{ textAlign: 'right' }}>여성</span>
+                  </div>
+                  {[
+                    { name: '우수',     m: '<10%',   f: '<18%',   min: 0,  max: BODY_FAT_RANGES[gender].excellent },
+                    { name: '좋음',     m: '10~15%', f: '18~23%', min: BODY_FAT_RANGES[gender].excellent, max: BODY_FAT_RANGES[gender].good },
+                    { name: '평균',     m: '15~20%', f: '23~28%', min: BODY_FAT_RANGES[gender].good, max: BODY_FAT_RANGES[gender].average },
+                    { name: '평균 이상', m: '20~25%', f: '28~33%', min: BODY_FAT_RANGES[gender].average, max: BODY_FAT_RANGES[gender].aboveAverage },
+                    { name: '높음',     m: '25~30%', f: '33~38%', min: BODY_FAT_RANGES[gender].aboveAverage, max: BODY_FAT_RANGES[gender].poor },
+                    { name: '위험',     m: '>30%',   f: '>38%',   min: BODY_FAT_RANGES[gender].poor, max: 999 },
+                  ].map(r => {
+                    const active = bodyFat >= r.min && bodyFat < r.max
+                    return (
+                      <div key={r.name} className={`${styles.bfRow} ${active ? styles.bfRowActive : ''}`}>
+                        <span>{r.name}{active ? ' ←' : ''}</span>
+                        <span style={{ textAlign: 'right' }}>{r.m}</span>
+                        <span style={{ textAlign: 'right' }}>{r.f}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* 허리-신장비 */}
           {whtr && (
             <div className={styles.card}>
               <label className={styles.cardLabel}>허리-신장비 (Waist-to-Height Ratio)</label>
@@ -670,7 +607,6 @@ export default function BmiClient() {
               </div>
               <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                 💡 <strong style={{ color: 'var(--text)' }}>&ldquo;허리둘레가 키의 절반을 넘지 않도록&rdquo;</strong> — 0.5 미만 유지 권장.
-                BMI보다 복부비만 위험을 직관적으로 파악할 수 있어 국제적으로 보조 지표로 자주 활용됩니다.
               </p>
             </div>
           )}
@@ -681,10 +617,10 @@ export default function BmiClient() {
               <label className={styles.cardLabel}>BMI × 허리둘레 종합 해석</label>
               <div className={styles.matrix}>
                 {[
-                  { kind: 'healthy',        emoji: '✅', title: '건강한 체형',     desc: 'BMI·허리 정상' },
-                  { kind: 'skinny-fat',     emoji: '⚠️', title: '마른 비만',       desc: 'BMI 정상·허리 비만' },
-                  { kind: 'muscular',       emoji: '⚠️', title: '근육 우세형',     desc: 'BMI 비만·허리 정상' },
-                  { kind: 'combined-obese', emoji: '🔴', title: '종합 비만',       desc: 'BMI·허리 모두 비만' },
+                  { kind: 'healthy',        emoji: '✅', title: '건강한 체형', desc: 'BMI·허리 정상' },
+                  { kind: 'skinny-fat',     emoji: '⚠️', title: '마른 비만',   desc: 'BMI 정상·허리 비만' },
+                  { kind: 'muscular',       emoji: '⚠️', title: '근육 우세형', desc: 'BMI 비만·허리 정상' },
+                  { kind: 'combined-obese', emoji: '🔴', title: '종합 비만',   desc: 'BMI·허리 모두 비만' },
                 ].map(m => (
                   <div key={m.kind}
                     className={`${styles.matrixCell} ${judgment.kind === m.kind ? styles.matrixCellActive : ''}`}
@@ -696,20 +632,24 @@ export default function BmiClient() {
                   </div>
                 ))}
               </div>
-              <div className={styles.infoBox} style={{
-                marginTop: 10,
-                background: `${judgment.color}10`,
-                borderColor: `${judgment.color}50`,
-              }}>
+              <div className={styles.infoBox} style={{ marginTop: 10, background: `${judgment.color}10`, borderColor: `${judgment.color}50` }}>
                 <strong style={{ color: judgment.color }}>{judgment.emoji} {judgment.title}</strong> — {judgment.desc}
               </div>
             </div>
           )}
 
+          {/* 체지방 정확도 안내 */}
+          {bodyFat !== null && (
+            <div className={styles.warnBox}>
+              ⚠️ <strong>체지방률 정확도 한계</strong> — Navy 공식은 빠른 추정용이며 실제와 ±3~5% 차이가 날 수 있습니다. 정확한 분석은 <strong>InBody (±2~3%)</strong>·<strong>DEXA (±1~2%)</strong>를 권장합니다.
+            </div>
+          )}
+
+          {/* 입력 안내 */}
           {!waistCm && (
             <div className={styles.empty}>
               <div className={styles.emptyTitle}>허리둘레를 입력하세요</div>
-              성별 + 허리둘레로 복부비만·허리-신장비를 판정합니다
+              허리둘레로 복부비만·허리-신장비를, 목둘레{gender === 'female' ? '·엉덩이둘레' : ''}까지 입력하면 체지방률을 추정합니다.
             </div>
           )}
         </>
@@ -814,129 +754,6 @@ export default function BmiClient() {
                   ⚠️ <strong>주당 0.5kg 초과 변화는 권장되지 않습니다.</strong> 급격한 감량은 근손실·요요·건강 위험이 있고, 급격한 증량도 지방 비율 증가 등 부작용이 있을 수 있습니다.
                 </div>
               )}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* ─────────────── 탭 5: 체지방률 ─────────────── */}
-      {tab === 'bf' && (
-        <>
-          <div className={styles.disclaimer}>
-            <strong>Navy 공식</strong> 기반 체지방률 추정 (미 해군 군 측정법). 정확도 ±3~5%로 빠른 참고용이며, 정확한 측정은 InBody·DEXA 등 체성분 검사를 권장합니다.
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>
-              허리둘레
-              <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
-                onClick={toggleWaistUnit}>{unitWaist}</button>
-            </label>
-            <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder={unitWaist === 'cm' ? '82' : '32'}
-                value={waist} onChange={e => setWaist(e.target.value)} />
-              <span className={styles.unit}>{unitWaist}</span>
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>목둘레</label>
-            <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder={unitWaist === 'cm' ? '38' : '15'}
-                value={neck} onChange={e => setNeck(e.target.value)} />
-              <span className={styles.unit}>{unitWaist}</span>
-            </div>
-            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-              후두 결절(목 가장 두꺼운 부분) 아래 측정
-            </p>
-          </div>
-
-          {gender === 'female' && (
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>엉덩이둘레 <span className={styles.cardLabelHint}>여성만</span></label>
-              <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal"
-                  placeholder={unitWaist === 'cm' ? '95' : '37'}
-                  value={hip} onChange={e => setHip(e.target.value)} />
-                <span className={styles.unit}>{unitWaist}</span>
-              </div>
-              <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-                엉덩이 가장 두꺼운 부분 측정
-              </p>
-            </div>
-          )}
-
-          {bodyFat !== null && bfClass && (
-            <>
-              <div className={styles.hero}
-                style={{ borderColor: `${bfClass.color}50`, background: `${bfClass.color}0F` }}>
-                <div className={styles.heroLabel}>추정 체지방률</div>
-                <div className={styles.heroNum} style={{ color: bfClass.color }}>
-                  {bodyFat.toFixed(1)}<span className={styles.heroNumUnit}>%</span>
-                </div>
-                <div className={styles.heroCategory} style={{ color: bfClass.color }}>
-                  {bfClass.name} ({bfClass.rangeText})
-                </div>
-                <div className={styles.heroDisclaimer}>
-                  Navy 공식 추정치 · ±3~5% 오차 가능 · 정확도 ↓
-                </div>
-              </div>
-
-              <div className={styles.card}>
-                <label className={styles.cardLabel}>{gender === 'male' ? '남성' : '여성'} 체지방률 기준</label>
-                <div className={styles.bfTable}>
-                  <div className={`${styles.bfRow} ${styles.headerRow}`}>
-                    <span>분류</span><span style={{ textAlign: 'right' }}>남성</span><span style={{ textAlign: 'right' }}>여성</span>
-                  </div>
-                  {[
-                    { name: '우수',     m: '<10%',     f: '<18%',     min: 0,  max: BODY_FAT_RANGES[gender].excellent },
-                    { name: '좋음',     m: '10~15%',   f: '18~23%',   min: BODY_FAT_RANGES[gender].excellent, max: BODY_FAT_RANGES[gender].good },
-                    { name: '평균',     m: '15~20%',   f: '23~28%',   min: BODY_FAT_RANGES[gender].good, max: BODY_FAT_RANGES[gender].average },
-                    { name: '평균 이상', m: '20~25%',   f: '28~33%',   min: BODY_FAT_RANGES[gender].average, max: BODY_FAT_RANGES[gender].aboveAverage },
-                    { name: '높음',     m: '25~30%',   f: '33~38%',   min: BODY_FAT_RANGES[gender].aboveAverage, max: BODY_FAT_RANGES[gender].poor },
-                    { name: '위험',     m: '>30%',     f: '>38%',     min: BODY_FAT_RANGES[gender].poor, max: 999 },
-                  ].map(r => {
-                    const active = bodyFat >= r.min && bodyFat < r.max
-                    return (
-                      <div key={r.name}
-                        className={`${styles.bfRow} ${active ? styles.bfRowActive : ''}`}>
-                        <span>{r.name}{active ? ' ←' : ''}</span>
-                        <span style={{ textAlign: 'right' }}>{r.m}</span>
-                        <span style={{ textAlign: 'right' }}>{r.f}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {rich && (
-                <div className={styles.infoBox}>
-                  💡 <strong>BMI {rich.bmi} ({rich.category.name}) + 체지방률 {bodyFat.toFixed(1)}% ({bfClass.name})</strong>
-                  <br />
-                  {(() => {
-                    const bmiNormal = rich.category.id === 'normal'
-                    const bfHigh = bodyFat >= BODY_FAT_RANGES[gender].average
-                    if (bmiNormal && !bfHigh) return '→ 건강한 체형으로 추정됩니다.'
-                    if (bmiNormal && bfHigh)  return '→ "마른 비만" 가능성. 근력 운동 + 식단 점검을 권장합니다.'
-                    if (!bmiNormal && !bfHigh) return '→ 근육 우세형 체형 가능성. BMI는 높지만 체지방은 양호합니다.'
-                    return '→ 체중·체지방 모두 관리가 필요합니다.'
-                  })()}
-                </div>
-              )}
-
-              <div className={styles.warnBox}>
-                ⚠️ <strong>정확도 한계</strong> — Navy 공식은 빠른 추정용이며 실제와 ±3~5% 차이가 날 수 있습니다.
-                정확한 체성분 분석은 <strong>InBody (±2~3%)</strong>·<strong>DEXA (±1~2%)</strong> 등 전문 측정을 권장합니다.
-              </div>
-            </>
-          )}
-
-          {bodyFat === null && (
-            <div className={styles.empty}>
-              <div className={styles.emptyTitle}>측정값을 모두 입력하세요</div>
-              {gender === 'male' ? '남성: 키·허리·목둘레' : '여성: 키·허리·목둘레·엉덩이둘레'}
             </div>
           )}
         </>

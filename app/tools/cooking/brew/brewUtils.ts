@@ -249,7 +249,7 @@ export interface IntensityZone {
 }
 
 export const INTENSITY_ZONES: IntensityZone[] = [
-  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '에스프레소 영역',     emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트 영역', color: '#DB2777' },
+  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '초고농축',            emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트·콜드브루 농축', color: '#DB2777' },
   { id: 'strong',   ratioMin: 12, ratioMax: 15, label: '스트롱',              emoji: '🔥', desc: '진한 추출 · 다크 로스팅·콜드브루 농축', color: '#D97706' },
   { id: 'golden',   ratioMin: 15, ratioMax: 17, label: 'SCA 골든 컵 ⭐',       emoji: '🏆', desc: 'SCA 표준 · 균형 잡힌 추출 영역',      color: '#0D9488' },
   { id: 'sig',      ratioMin: 17, ratioMax: 20, label: '시그니처·연함',        emoji: '🌿', desc: '연한 추출 · 산미·향 강조',            color: '#0891B2' },

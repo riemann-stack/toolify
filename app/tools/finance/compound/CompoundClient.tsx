@@ -5,7 +5,6 @@ import { useState, useMemo } from 'react'
 import styles from './compound.module.css'
 import {
   RETURN_SCENARIOS,
-  CONTRIBUTION_FREQUENCIES,
   COMPOUND_FREQUENCIES,
   INFLATION_PRESETS,
   calcCompound,
@@ -103,10 +102,10 @@ export default function CompoundClient() {
       principal: principalNum,
       years: yearsNum,
       annualRate: annualRateNum,
-      contributionFreqId,
+      contributionFreqId: 'monthly', // 결과는 항상 "매월 X"로 표시 → 적립주기와 무관하게 월 기준으로 역산
       compoundFreqId,
     })
-  }, [goalNum, principalNum, yearsNum, annualRateNum, contributionFreqId, compoundFreqId])
+  }, [goalNum, principalNum, yearsNum, annualRateNum, compoundFreqId])
 
   /* ─── 인플레이션 ─── */
   const realValue = useMemo(() => {
@@ -173,7 +172,7 @@ export default function CompoundClient() {
           </div>
           <div className={styles.chips}>
             {PRINCIPAL_PRESETS.map(p => (
-              <button key={p.value}
+              <button key={p.value} type="button" aria-pressed={principal === String(p.value)}
                 className={`${styles.chip} ${principal === String(p.value) ? styles.chipActive : ''}`}
                 onClick={() => setPrincipal(String(p.value))}
               >{p.label}</button>
@@ -191,7 +190,7 @@ export default function CompoundClient() {
           </div>
           <div className={styles.chips}>
             {YEAR_PRESETS.map(y => (
-              <button key={y}
+              <button key={y} type="button" aria-pressed={years === String(y)}
                 className={`${styles.chip} ${years === String(y) ? styles.chipActive : ''}`}
                 onClick={() => setYears(String(y))}
               >{y}년</button>
@@ -209,7 +208,7 @@ export default function CompoundClient() {
           </div>
           <div className={styles.chips}>
             {SIMPLE_CONTRIB_FREQS.map(f => (
-              <button key={f.id}
+              <button key={f.id} type="button" aria-pressed={contributionFreqId === f.id}
                 className={`${styles.chip} ${contributionFreqId === f.id ? styles.chipActive : ''}`}
                 onClick={() => setContributionFreqId(f.id)}
               >{f.name}</button>
@@ -231,12 +230,12 @@ export default function CompoundClient() {
             <span className={styles.unit}>%</span>
           </div>
           {/* 월/년 토글 */}
-          <div className={styles.optionRow} style={{ marginTop: 8 }}>
-            <button
+          <div className={styles.optionRow} style={{ marginTop: 8 }} role="group" aria-label="수익률 입력 단위">
+            <button type="button" aria-pressed={rateType === 'yearly'}
               className={`${styles.optionBtn} ${rateType === 'yearly' ? styles.optionActive : ''}`}
               onClick={() => setRateType('yearly')}
             >연 수익률</button>
-            <button
+            <button type="button" aria-pressed={rateType === 'monthly'}
               className={`${styles.optionBtn} ${rateType === 'monthly' ? styles.optionActive : ''}`}
               onClick={() => setRateType('monthly')}
             >월 수익률</button>
@@ -245,7 +244,7 @@ export default function CompoundClient() {
           {rateType === 'yearly' && (
             <div className={styles.chips}>
               {RATE_PRESETS.map(r => (
-                <button key={r}
+                <button key={r} type="button" aria-pressed={rateInput === String(r)}
                   className={`${styles.chip} ${rateInput === String(r) ? styles.chipActive : ''}`}
                   onClick={() => setRateInput(String(r))}
                 >{r}%</button>
@@ -253,9 +252,9 @@ export default function CompoundClient() {
             </div>
           )}
           {/* 복리 주기 */}
-          <div className={styles.optionRow4} style={{ marginTop: 10 }}>
+          <div className={styles.optionRow4} style={{ marginTop: 10 }} role="group" aria-label="복리 주기">
             {COMPOUND_FREQUENCIES.map(f => (
-              <button key={f.id}
+              <button key={f.id} type="button" aria-pressed={compoundFreqId === f.id}
                 className={`${styles.optionBtn} ${compoundFreqId === f.id ? styles.optionActive : ''}`}
                 onClick={() => setCompoundFreqId(f.id)}
               >{f.name}</button>
@@ -273,7 +272,7 @@ export default function CompoundClient() {
           </div>
           <div className={styles.chips}>
             {GOAL_PRESETS.map(g => (
-              <button key={g.value}
+              <button key={g.value} type="button" aria-pressed={goal === String(g.value)}
                 className={`${styles.chip} ${goal === String(g.value) ? styles.chipActive : ''}`}
                 onClick={() => setGoal(String(g.value))}
               >{g.label}</button>
@@ -291,7 +290,7 @@ export default function CompoundClient() {
           </div>
           <div className={styles.chips}>
             {INFLATION_PRESETS.map(p => (
-              <button key={p.rate}
+              <button key={p.rate} type="button" aria-pressed={parseFloat(inflationRate) === p.rate}
                 className={`${styles.chip} ${parseFloat(inflationRate) === p.rate ? styles.chipActive : ''}`}
                 onClick={() => setInflationRate(String(p.rate))}
               >{p.rate}%</button>

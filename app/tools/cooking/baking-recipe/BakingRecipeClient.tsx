@@ -55,12 +55,13 @@ export default function BakingRecipeClient() {
   const [baseAmount, setBaseAmount] = useState<string>('100')
   const [ratios, setRatios] = useState<Partial<Record<IngredientKey, number>>>(() => getDefaultRatios(item))
 
-  // 품목 바뀌면 레시피 리셋
+  // 품목 바뀌면 레시피·기준 무게 리셋 (기준 재료가 달라져 이전 무게 유지가 어색함)
   const handleItemChange = (newId: string) => {
     setItemId(newId)
     const newItem = BAKING_ITEMS.find((i) => i.id === newId) ?? BAKING_ITEMS[0]
     setBaseKey(newItem.defaultBase)
     setRatios(getDefaultRatios(newItem))
+    setBaseAmount('100')
   }
 
   const baseAmountNum = parseFloat(baseAmount)
@@ -102,7 +103,7 @@ export default function BakingRecipeClient() {
       ratios: { ...ratios },
       baseKey,
       baseAmount: baseAmountNum || 100,
-      createdAt: new Date().toISOString().slice(0, 10),
+      createdAt: new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10),
     }
     setSaved((p) => [...p, rec])
     setSaveName('')
@@ -143,11 +144,11 @@ export default function BakingRecipeClient() {
         </div>
       </div>
 
-      <div className={s.tabs}>
-        <button className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피</button>
-        <button className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>비율 진단</button>
-        <button className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => setTab('mold')}>분량 변환</button>
-        <button className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>인기 레시피</button>
+      <div className={s.tabs} role="tablist" aria-label="제과 레시피 계산기 메뉴">
+        <button role="tab" aria-selected={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피</button>
+        <button role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>비율 진단</button>
+        <button role="tab" aria-selected={tab === 'mold'} className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => setTab('mold')}>분량 변환</button>
+        <button role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>인기 레시피</button>
       </div>
 
       {tab === 'recipe' && (
@@ -261,6 +262,7 @@ function RecipeTab(props: RecipeTabProps) {
           {BAKING_ITEMS.map((it) => (
             <button
               key={it.id}
+              aria-pressed={itemId === it.id}
               className={`${s.itemBtn} ${itemId === it.id ? s.itemBtnActive : ''}`}
               onClick={() => handleItemChange(it.id)}
             >
@@ -275,11 +277,12 @@ function RecipeTab(props: RecipeTabProps) {
         <span className={s.cardLabel}>{item.icon} {item.name} — 기준 재료</span>
         <p className={s.itemNote}>{item.notes}</p>
         <div className={s.field}>
-          <label className={s.fieldLabel}>기준 재료 (100% 기준점)</label>
+          <label className={s.fieldLabel}>기준 재료 (이 재료 무게로 전체 환산)</label>
           <div className={s.pillRow}>
             {item.baseOptions.map((k) => (
               <button
                 key={k}
+                aria-pressed={baseKey === k}
                 className={`${s.pill} ${baseKey === k ? s.pillActive : ''}`}
                 onClick={() => setBaseKey(k)}
               >{INGREDIENT_LABEL[k]}</button>
@@ -581,6 +584,7 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
           {moldList.map((m, i) => (
             <button
               key={i}
+              aria-pressed={moldIdx === i}
               className={`${s.moldBtn} ${moldIdx === i ? s.moldBtnActive : ''}`}
               onClick={() => setMoldIdx(i)}
             >
@@ -598,7 +602,7 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
 
       {isPiece && !useCake && (
         <div className={s.card}>
-          <span className={s.cardLabel}>목표 개수</span>
+          <span className={s.cardLabel}>목표 개수{item.id === 'macaron' ? ' (껍질 기준)' : ''}</span>
           <input
             type="number"
             inputMode="numeric"
@@ -608,6 +612,9 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
             min={1}
             max={500}
           />
+          {item.id === 'macaron' && (
+            <p className={s.moldHint}>※ 1개당 g은 <strong>껍질 1장</strong> 기준 — 완성품 1개 = 껍질 2장. 50개(껍질) ≈ 25쌍.</p>
+          )}
         </div>
       )}
 
@@ -695,12 +702,14 @@ function PresetTab({ itemId, handleItemChange, setRatios, setTab }: PresetTabPro
         <span className={s.cardLabel}>품목 필터</span>
         <div className={s.pillRow}>
           <button
+            aria-pressed={filter === 'all'}
             className={`${s.pill} ${filter === 'all' ? s.pillActive : ''}`}
             onClick={() => setFilter('all')}
           >전체</button>
           {BAKING_ITEMS.map((it) => (
             <button
               key={it.id}
+              aria-pressed={filter === it.id}
               className={`${s.pill} ${filter === it.id ? s.pillActive : ''}`}
               onClick={() => setFilter(it.id)}
             >{it.icon} {it.name}</button>

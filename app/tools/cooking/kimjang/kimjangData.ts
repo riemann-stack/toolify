@@ -30,7 +30,8 @@ export const INGREDIENTS: Ingredient[] = [
     kamisItemCode: '231', kamisKindCode: '01', source: '2025.11 KAMIS 소매 (참고용) (개당 ≈1kg)' },
   { id: 'jjokpa',    cat: '주재료', name: '쪽파',           unit: '단',   perCabbageAmt: 0.15, pricePerUnit: 4000,
     kamisItemCode: '245', kamisKindCode: '00', source: '단(1kg) 기준' },
-  { id: 'gat',       cat: '주재료', name: '갓',             unit: '단',   perCabbageAmt: 0.10, pricePerUnit: 5000 },
+  // 갓은 서울·중부 표준 배추김치엔 안 들어감(전라도·여수 갓). 기본 0, '갓김치' 선택 시 variant로 추가
+  { id: 'gat',       cat: '주재료', name: '갓',             unit: '단',   perCabbageAmt: 0,    pricePerUnit: 5000 },
 
   // ── 양념 ──
   { id: 'gochugaru', cat: '양념',   name: '고춧가루',       unit: 'g',    perCabbageAmt: 100,  pricePerUnit: 55,
@@ -109,12 +110,21 @@ export const KIMJANG_SCHEDULE = [
 export interface CalculatedIngredient {
   ing: Ingredient
   amount: number
+  /** 실제 구매 수량(개·단·포기는 올림). 가격은 이 값 기준 — 표시 수량과 일치 */
+  priceAmount: number
   totalPriceWon: number
   displayUnit: string
   displayAmount: string
 }
 
-export function calcIngredients(cabbages: number, variants: string[]): CalculatedIngredient[] {
+export function calcIngredients(
+  cabbages: number,
+  variants: string[],
+  /** 부가 김치 사이즈 기준 포기 수. 자동 감산을 켜도 부가 김치는 '감산 전' 포기 수로 계산
+   *  (감산이 부가 김치 추가분까지 줄이는 이중 감산 방지). 미지정 시 cabbages 사용 */
+  variantBaseCabbages?: number,
+): CalculatedIngredient[] {
+  const vBase = variantBaseCabbages ?? cabbages
   // 배추 포기당 양념 비율을 그대로 곱
   const items = INGREDIENTS.map(ing => {
     let amount = ing.perCabbageAmt * cabbages
@@ -124,8 +134,8 @@ export function calcIngredients(cabbages: number, variants: string[]): Calculate
       if (!v) continue
       const extra = v.extraIngredients[ing.id]
       if (extra) {
-        // extra는 부가 김치 1kg당 — 부가 김치 양 ≈ 배추 reduceRatio * cabbages * 2.5kg
-        const variantKg = v.reduceRatio * cabbages * 2.5
+        // extra는 부가 김치 1kg당 — 부가 김치 양 ≈ reduceRatio * (감산 전)포기 * 2.5kg
+        const variantKg = v.reduceRatio * vBase * 2.5
         amount += extra * variantKg
       }
     }
@@ -134,6 +144,7 @@ export function calcIngredients(cabbages: number, variants: string[]): Calculate
 
   return items.map(({ ing, amount }) => {
     // 표시 단위 다듬기
+    const isDiscrete = ing.unit === '포기' || ing.unit === '개' || ing.unit === '단'
     let displayAmount: string
     let displayUnit = ing.unit
     if (ing.unit === 'g' && amount >= 1000) {
@@ -144,13 +155,16 @@ export function calcIngredients(cabbages: number, variants: string[]): Calculate
       displayUnit = 'L'
     } else if (ing.unit === 'g') {
       displayAmount = Math.round(amount).toLocaleString()
-    } else if (ing.unit === '포기' || ing.unit === '개' || ing.unit === '단') {
+    } else if (isDiscrete) {
       displayAmount = Math.ceil(amount).toString()
     } else {
-      displayAmount = amount.toFixed(1)
+      // ml·L 등: 정수면 소수점 제거 (360.0ml → 360ml)
+      displayAmount = (Math.round(amount * 10) / 10).toString()
     }
-    const totalPriceWon = Math.round(amount * ing.pricePerUnit)
-    return { ing, amount, totalPriceWon, displayUnit, displayAmount }
+    // 개·단·포기는 낱개로 구매 → 가격도 올림 수량 기준(표시 수량과 일치)
+    const priceAmount = isDiscrete ? Math.ceil(amount) : amount
+    const totalPriceWon = Math.round(priceAmount * ing.pricePerUnit)
+    return { ing, amount, priceAmount, totalPriceWon, displayUnit, displayAmount }
   })
 }
 

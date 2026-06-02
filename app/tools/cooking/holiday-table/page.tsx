@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/cooking/holiday-table',
   title: '명절 상차림 계산기 — 설날·추석·제사 인원별 품목·비용 자동',
   description:
-    '명절(설날·추석·제사) × 차례상·간소 차림·식사 위주 + 인원만 입력하면 떡국떡·갈비·전·나물·과일 등 50종 품목별 수량과 비용 자동 계산. KAMIS 실시간 시세 연동 + 5열 차례상 배치 가이드.',
+    '명절(설날·추석·제사) × 차례상·간소 차림·식사 위주 + 인원만 입력하면 떡국떡·갈비·전·나물·과일 등 35종 품목별 수량과 비용 자동 계산. 주요 농산물 KAMIS 실시간 시세 + 5열 차례상 배치 가이드.',
   keywords: [
     '명절 상차림', '차례상', '제사상', '설날 차례', '추석 차례',
     '명절 비용', '제사 비용', '차례상 차림', '5열 차례상',
@@ -59,7 +59,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -72,11 +71,11 @@ const faqAnswer: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"4인 가족 설날 차례상 비용은 보통 얼마인가요?","a":"한국농수산식품유통공사(aT)가 매년 발표하는 4인 가족 설날 차례상 비용은 최근 약 28~33만 원 (전통 시장 기준), 대형 마트 36~42만 원 정도로 형성됩니다. 본 도구의 「설날 + 차례상 + 4인」 결과와 거의 일치합니다. 간소 차림으로 가면 15~22만 원까지 줄일 수 있습니다 (가장 최신은 aT·KAMIS 공식 사이트 확인)." },
+  { "q":"4인 가족 설날 차례상 비용은 보통 얼마인가요?","a":"aT(한국농수산식품유통공사)가 매년 발표하는 4인 가족 설날 차례상 비용은 전통시장 약 28~33만 원, 대형 마트 36~42만 원입니다. 본 도구는 표준 분량·평균 시세 기준이라 「설날 + 차례상 + 4인」이 약 25만 원 내외로, aT 전통시장가의 하단에 가깝습니다(aT 조사는 분량이 더 넉넉). 간소 차림은 약 15만 원까지 내려갑니다. 명절 성수기 실시간 시세를 반영하면 더 오를 수 있으니 위 계산기로 확인하세요." },
   { "q":"차례상에서 빼면 안 되는 음식은?","a":"전통적 필수: 설날 — 떡국 (장수·재산 상징, 흰떡 사용) 추석 — 송편 (햇곡식 의미) 제사 — 메·갱 (밥·국), 청주 3종 모두 — 3색 과일 (조율이시), 3색 나물 (시금치·도라지·고사리) 주의: 최근 성균관에서도 「간소 차림 표준안」을 권장 — 가짓수보다 정성이 중요." },
   { "q":"명절 비용을 줄이는 가장 효과적인 방법은?","a":"명절 1~2주 전 장보기 — 명절 가까울수록 가격 ↑ (특히 시금치·사과 30% 인상) 농협 하나로마트 명절 행사 — 일반 마트 대비 10~20% 저렴 전통시장 + 농산물 직거래 — 도매상 통하면 30% 절감 간소 차림 선택 — 5열 정석 X. 9~12종 표준 차림으로 30~50% 절감 전 미리 부치기·냉동 — 명절 직전 폭증 가격 회피" },
   { "q":"차례상에 올리면 안 되는 음식이 있나요?","a":"전통 금기 음식: 복숭아 — 귀신을 쫓는 과일이라고 여겨짐 꽁치·삼치·갈치 — 「치」자 들어가는 생선 고추·마늘 양념 강한 음식 — 산적·나물에 진한 양념 X (간장·참기름 위주) 붉은팥 — 흰콩·녹두 사용 권장 본 도구의 음식 구성은 이 금기를 따릅니다. (지역·가문별 차이 있을 수 있음)" },
-  { "q":"4인 가족 추석 차례상 vs 식사 위주 비용 차이?","a":"본 도구 기준 (4인 가족, 최근 시세): 추석 차례상 (정석): 약 35~45만 원 추석 간소 차림: 약 20~28만 원 추석 식사 위주: 약 15~20만 원 차이의 주된 원인: 차례상은 어동육서·조율이시 등 격식을 위해 다양한 종류를 소량씩 사야 해서 단위당 비용 ↑." },
+  { "q":"4인 가족 추석 차례상 vs 식사 위주 비용 차이?","a":"본 도구 기준 (4인, 표준 분량·평균 시세): 추석 차례상(정석) 약 25만 원, 간소 차림 약 13만 원, 식사 위주 약 13만 원. 차례상이 가장 비싼 이유는 어동육서·조율이시 등 격식을 위해 다양한 종류를 소량씩 갖춰야 해서 단위당 비용이 올라가기 때문입니다. 참고로 aT 발표 4인 추석 차례상은 전통시장 약 25~30만·마트 35~40만 원으로, 본 도구는 표준 분량 기준이라 다소 낮습니다. 명절 성수기 실시간 시세 반영 시 더 오를 수 있습니다." },
   { "q":"본 도구의 데이터는 어디서 가져오나요?","a":"농산물 시세: KAMIS(한국농수산식품유통공사) OpenAPI — 일별 서울 소매가 평균 육류·수산·가공식품: 최근 시장 평균가 (마트·정육점 기준) 하드코딩 인당 권장량: 한식진흥원·성균관 차례상 표준안 + 한국식품과학회 자료 종합 저장: 본인 브라우저(localStorage)에만 — 서버 전송 X" }
 ]
 
@@ -88,7 +87,7 @@ export default function HolidayTablePage() {
         🍱 명절 상차림 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        설날·추석·제사 × 상 형식 + 인원만 입력하면 <strong style={{ color: 'var(--text)' }}>품목별 수량과 비용 자동</strong>. KAMIS 실시간 시세 연동 + 5열 차례상 배치 가이드.
+        설날·추석·제사 × 상 형식 + 인원만 입력하면 <strong style={{ color: 'var(--text)' }}>품목별 수량과 비용 자동</strong>. 주요 농산물 KAMIS 실시간 시세 + 5열 차례상 배치 가이드.
       </p>
 
       <HolidayTableClient />
@@ -120,7 +119,7 @@ export default function HolidayTablePage() {
                   <td style={cell}><strong style={{ color: '#DC2626' }}>제사 (기제사)</strong></td>
                   <td style={cell}>고인 기일 매년</td>
                   <td style={cell}>특정 조상 (4대까지)</td>
-                  <td style={cell}>정식 5열 차례상. 메·갱·5탕 모두</td>
+                  <td style={cell}>정식 5열 차례상. 메·갱·전·나물·과일 (탕은 탕국으로 간소화)</td>
                 </tr>
                 <tr>
                   <td style={cell}><strong style={{ color: '#059669' }}>명절 식사</strong></td>
@@ -204,7 +203,7 @@ export default function HolidayTablePage() {
               명절 핵심 농산물의 서울 소매 시세를 실시간 조회합니다.
             </p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
-              <li><strong style={{ color: 'var(--text)' }}>실시간 연동 품목</strong>: 배추·무·사과·배·감·시금치·애호박·대파·마늘</li>
+              <li><strong style={{ color: 'var(--text)' }}>실시간 연동 품목</strong>: 무·사과·배·감·시금치·애호박·대파·마늘 (8종)</li>
               <li><strong style={{ color: 'var(--text)' }}>폴백</strong>: API 키 미설정·실패 시 <strong>최근 명절 평균가</strong> 사용</li>
               <li><strong style={{ color: 'var(--text)' }}>캐싱</strong>: 1시간 단위로 호출 절약</li>
               <li><strong style={{ color: 'var(--text)' }}>가격 직접 수정</strong>: 각 품목 단가 옆 칸을 클릭하면 자유롭게 변경 — 마트 광고지 가격 적용 가능</li>
@@ -223,10 +222,10 @@ export default function HolidayTablePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q1. 4인 가족 설날 차례상 비용은 보통 얼마인가요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>한국농수산식품유통공사(aT)</strong>가 매년 발표하는 4인 가족 설날 차례상 비용은
-              최근 <strong style={{ color: 'var(--accent)' }}> 약 28~33만 원</strong> (전통 시장 기준), <strong>대형 마트 36~42만 원</strong> 정도로 형성됩니다.
-              본 도구의 「설날 + 차례상 + 4인」 결과와 거의 일치합니다.
-              간소 차림으로 가면 <strong>15~22만 원</strong>까지 줄일 수 있습니다 (가장 최신은 aT·KAMIS 공식 사이트 확인).
+              <strong style={{ color: 'var(--text)' }}>aT(한국농수산식품유통공사)</strong>가 매년 발표하는 4인 가족 설날 차례상 비용은
+              전통시장 <strong style={{ color: 'var(--accent)' }}>약 28~33만 원</strong>, <strong>대형 마트 36~42만 원</strong>입니다.
+              본 도구는 표준 분량·평균 시세 기준이라 「설날 + 차례상 + 4인」이 <strong style={{ color: 'var(--accent)' }}>약 25만 원 내외</strong>로, aT 전통시장가의 하단에 가깝습니다 (aT 조사는 분량이 더 넉넉).
+              간소 차림은 <strong>약 15만 원</strong>까지 내려갑니다. 명절 성수기 실시간 시세를 반영하면 더 오를 수 있으니 위 계산기로 확인하세요.
             </div>
           </details>
 
@@ -274,13 +273,15 @@ export default function HolidayTablePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q5. 4인 가족 추석 차례상 vs 식사 위주 비용 차이?</summary>
             <div style={faqAnswer}>
-              본 도구 기준 (4인 가족, 최근 시세):
+              본 도구 기준 (4인, 표준 분량·평균 시세):
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li><strong style={{ color: 'var(--text)' }}>추석 차례상 (정석)</strong>: 약 35~45만 원</li>
-                <li><strong style={{ color: 'var(--text)' }}>추석 간소 차림</strong>: 약 20~28만 원</li>
-                <li><strong style={{ color: 'var(--text)' }}>추석 식사 위주</strong>: 약 15~20만 원</li>
+                <li><strong style={{ color: 'var(--text)' }}>추석 차례상 (정석)</strong>: 약 25만 원</li>
+                <li><strong style={{ color: 'var(--text)' }}>추석 간소 차림</strong>: 약 13만 원</li>
+                <li><strong style={{ color: 'var(--text)' }}>추석 식사 위주</strong>: 약 13만 원</li>
               </ul>
-              차이의 주된 원인: 차례상은 어동육서·조율이시 등 격식을 위해 다양한 종류를 소량씩 사야 해서 단위당 비용 ↑.
+              차례상이 가장 비싼 이유: 어동육서·조율이시 등 격식을 위해 다양한 종류를 소량씩 갖춰야 해서 단위당 비용 ↑.
+              <br /><br />
+              참고로 <strong style={{ color: 'var(--text)' }}>aT 발표</strong> 4인 추석 차례상은 전통시장 약 25~30만·마트 35~40만 원으로, 본 도구는 표준 분량 기준이라 다소 낮습니다. 명절 성수기 실시간 시세 반영 시 더 오를 수 있습니다.
             </div>
           </details>
 

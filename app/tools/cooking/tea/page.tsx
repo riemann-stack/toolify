@@ -37,7 +37,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -87,8 +86,8 @@ export default function TeaPage() {
           <li><strong>결과 확인</strong> — 권장 온도·시간·비율 + 떫음 게이지 + 카페인 추정</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 <strong style={{ color: 'var(--accent)' }}>다탕 스케줄 탭</strong>에서 보이·우롱의 세차 → 1탕 → 2탕 ... 8탕까지
-          단계별 시간을 확인하고, <strong style={{ color: 'var(--accent)' }}>냉침 모드 탭</strong>에서 카페인·탄닌 비교를 볼 수 있어요.
+          💡 <strong style={{ color: 'var(--accent)' }}>우리기 계산 탭의 다탕 스케줄</strong>에서 보이·우롱의 세차 → 1탕 → 2탕 …
+          탕마다 단계별 시간을 확인하고, <strong style={{ color: 'var(--accent)' }}>냉침 모드</strong> 체크박스로 카페인·탄닌 비교를 볼 수 있어요.
         </p>
       </div>
 

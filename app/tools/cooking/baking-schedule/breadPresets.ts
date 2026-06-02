@@ -39,6 +39,8 @@ export type BreadPreset = {
   ddtTargetC?: number
   /** 르방·프리퍼먼트 사용 여부 (DDT 공식에서 ×4 / ×3 결정) */
   hasLevain?: boolean
+  /** 발효종 표시 이름 (DDT 패널 라벨용) — 사워도우 '르방', 치아바타 '비가' 등 */
+  prefermentName?: string
 }
 
 export const BREAD_PRESETS: BreadPreset[] = [
@@ -83,7 +85,7 @@ export const BREAD_PRESETS: BreadPreset[] = [
     waterRatio: 75,
     levainRatio: 20,
     notes: '냉장 발효는 8~24시간 가능. 길수록 풍미 깊어짐.',
-    ddtTargetC: 25, hasLevain: true,
+    ddtTargetC: 25, hasLevain: true, prefermentName: '르방',
   },
   {
     id: 'baguette',
@@ -140,7 +142,7 @@ export const BREAD_PRESETS: BreadPreset[] = [
     ],
     waterRatio: 80,
     notes: '높은 수분율로 다루기 어려움. 손 적시고 작업.',
-    ddtTargetC: 24, hasLevain: true,
+    ddtTargetC: 24, hasLevain: true, prefermentName: '비가',
   },
   {
     id: 'whitebread',

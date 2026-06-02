@@ -165,8 +165,11 @@ export const NOODLE_TEXTURE: NoodleTexture[] = [
      · 계란·치즈·김치·대파 등은 물 흡수가 거의 없음 → 0
    timeOffsetSec 기준: '면 투입 시점(0초)'을 기준으로 한 상대 투입 시각.
      · 음수(−) = 면보다 먼저 넣어 더 끓임(냉동 만두·떡·콩나물 등 익는 데 오래)
-     · 양수(+) = 면보다 늦게 넣음(계란·치즈·대파 등 — 풀어지거나 익히면 안 되는 것)
-   kcal·protein은 식품 일반 평균(USDA·식약처 참고)이며 제품·분량에 따라 차이가 큼. */
+     · 0 = 면과 동시
+   beforeEndSec 기준: '완성(불 끔) N초 전'에 넣는 토핑은 조리 시간에 맞춰 위치를 환산합니다.
+     · 계란('마지막 1분 전')=60, 치즈·노른자·대파·김치('불 끈 직후/그릇')=0
+     · beforeEndSec가 있으면 timeOffsetSec 대신 (조리시간 − beforeEndSec)로 타임라인에 배치.
+   영양(kcal·protein·sodium·fat·carb)은 식품 일반 평균(USDA·식약처 참고)이며 제품·분량에 따라 차이가 큼. */
 export interface Topping {
   id: string
   name: string
@@ -174,32 +177,37 @@ export interface Topping {
   waterDelta: number  // ml
   kcal: number
   protein?: number    // g
+  sodium?: number     // mg
+  fat?: number        // g
+  carb?: number       // g
   timeAt: string      // 투입 타이밍
-  timeOffsetSec: number  // 0 = 면과 동시, +30 = 30초 후, -60 = 1분 전 (면 투입 기준)
+  timeOffsetSec: number  // 0 = 면과 동시, -60 = 1분 전 (면 투입 기준)
+  /** '완성(불 끔) N초 전' 투입 토핑 — 조리 시간에 따라 위치 환산 (계란·치즈·대파 등) */
+  beforeEndSec?: number
   note?: string
 }
 
 export const TOPPINGS: Topping[] = [
-  { id: 'egg',         name: '계란',          emoji: '🥚', waterDelta:   0, kcal:  70, protein: 6,  timeAt: '마지막 1분 전',         timeOffsetSec:  60 },
-  { id: 'egg-yolk',    name: '계란 노른자만', emoji: '🍳', waterDelta:   0, kcal:  55, protein: 3,  timeAt: '불 끈 직후 휘저음',     timeOffsetSec:   0 },
-  { id: 'cheese',      name: '치즈 1장',      emoji: '🧀', waterDelta:   0, kcal:  70, protein: 5,  timeAt: '불 끈 직후',            timeOffsetSec:   0,
+  { id: 'egg',         name: '계란',          emoji: '🥚', waterDelta:   0, kcal:  70, protein: 6,  sodium:  65, fat: 5,   carb: 0,  timeAt: '마지막 1분 전',     timeOffsetSec: 0, beforeEndSec: 60 },
+  { id: 'egg-yolk',    name: '계란 노른자만', emoji: '🍳', waterDelta:   0, kcal:  55, protein: 3,  sodium:   8, fat: 4.5, carb: 0,  timeAt: '불 끈 직후 휘저음', timeOffsetSec: 0, beforeEndSec: 0 },
+  { id: 'cheese',      name: '치즈 1장',      emoji: '🧀', waterDelta:   0, kcal:  70, protein: 5,  sodium: 215, fat: 5.5, carb: 1,  timeAt: '불 끈 직후',        timeOffsetSec: 0, beforeEndSec: 0,
     note: '짠맛 강해짐 — 국물 농도 싱겁게 권장' },
-  { id: 'rice-cake',   name: '떡 100g',       emoji: '🍡', waterDelta:  80, kcal: 240, protein: 4,  timeAt: '면 1분 전 추가',        timeOffsetSec: -60 },
-  { id: 'dumpling',    name: '만두 2개',      emoji: '🥟', waterDelta:  80, kcal: 200, protein: 8,  timeAt: '면 2분 전 추가',        timeOffsetSec:-120 },
-  { id: 'beansprouts', name: '콩나물 한 줌',  emoji: '🌱', waterDelta:  50, kcal:  15, protein: 2,  timeAt: '면 1분 전',             timeOffsetSec: -60 },
-  { id: 'green-onion', name: '대파',          emoji: '🌿', waterDelta:   0, kcal:   5, timeAt: '마지막 또는 그릇',        timeOffsetSec:  60 },
-  { id: 'onion',       name: '양파 1/4',      emoji: '🧅', waterDelta:  30, kcal:  15, timeAt: '면 2분 전',                timeOffsetSec:-120 },
-  { id: 'tofu',        name: '순두부 1/2팩',  emoji: '⬜', waterDelta: -50, kcal:  60, protein: 6,  timeAt: '면 1분 전',             timeOffsetSec: -60,
+  { id: 'rice-cake',   name: '떡 100g',       emoji: '🍡', waterDelta:  80, kcal: 240, protein: 4,  sodium:   5, fat: 0.5, carb: 50, timeAt: '면 1분 전 추가',    timeOffsetSec: -60 },
+  { id: 'dumpling',    name: '만두 2개',      emoji: '🥟', waterDelta:  80, kcal: 200, protein: 8,  sodium: 300, fat: 8,   carb: 22, timeAt: '면 2분 전 추가',    timeOffsetSec: -120 },
+  { id: 'beansprouts', name: '콩나물 한 줌',  emoji: '🌱', waterDelta:  50, kcal:  15, protein: 2,  sodium:   5, fat: 0,   carb: 3,  timeAt: '면 1분 전',         timeOffsetSec: -60 },
+  { id: 'green-onion', name: '대파',          emoji: '🌿', waterDelta:   0, kcal:   5, protein: 0,  sodium:   2, fat: 0,   carb: 1,  timeAt: '마지막 또는 그릇',  timeOffsetSec: 0, beforeEndSec: 0 },
+  { id: 'onion',       name: '양파 1/4',      emoji: '🧅', waterDelta:  30, kcal:  15, protein: 0,  sodium:   2, fat: 0,   carb: 4,  timeAt: '면 2분 전',         timeOffsetSec: -120 },
+  { id: 'tofu',        name: '순두부 1/2팩',  emoji: '⬜', waterDelta: -50, kcal:  60, protein: 6,  sodium:  10, fat: 3.5, carb: 2,  timeAt: '면 1분 전',         timeOffsetSec: -60,
     note: '두부 자체 수분 → 물 약간 줄임' },
-  { id: 'mushroom',    name: '버섯',          emoji: '🍄', waterDelta:  30, kcal:  20, protein: 2,  timeAt: '면과 동시',            timeOffsetSec:   0 },
-  { id: 'ham',         name: '햄·소시지',     emoji: '🌭', waterDelta:  30, kcal: 150, protein: 8,  timeAt: '면과 동시',            timeOffsetSec:   0 },
-  { id: 'spam',        name: '스팸 100g',     emoji: '🥫', waterDelta:  30, kcal: 290, protein: 15, timeAt: '면과 동시',            timeOffsetSec:   0 },
-  { id: 'fishcake',    name: '어묵',          emoji: '🐟', waterDelta:  30, kcal:  80, protein: 7,  timeAt: '면 1분 전',             timeOffsetSec: -60 },
-  { id: 'noodle-extra',name: '추가 면사리',   emoji: '🍜', waterDelta: 200, kcal: 350, protein: 8,  timeAt: '본 면과 동시',         timeOffsetSec:   0,
+  { id: 'mushroom',    name: '버섯',          emoji: '🍄', waterDelta:  30, kcal:  20, protein: 2,  sodium:   3, fat: 0,   carb: 3,  timeAt: '면과 동시',         timeOffsetSec: 0 },
+  { id: 'ham',         name: '햄·소시지',     emoji: '🌭', waterDelta:  30, kcal: 150, protein: 8,  sodium: 450, fat: 12,  carb: 2,  timeAt: '면과 동시',         timeOffsetSec: 0 },
+  { id: 'spam',        name: '스팸 100g',     emoji: '🥫', waterDelta:  30, kcal: 290, protein: 15, sodium: 1000,fat: 26,  carb: 2,  timeAt: '면과 동시',         timeOffsetSec: 0 },
+  { id: 'fishcake',    name: '어묵',          emoji: '🐟', waterDelta:  30, kcal:  80, protein: 7,  sodium: 400, fat: 4,   carb: 8,  timeAt: '면 1분 전',         timeOffsetSec: -60 },
+  { id: 'noodle-extra',name: '추가 면사리',   emoji: '🍜', waterDelta: 200, kcal: 350, protein: 8,  sodium:  30, fat: 15,  carb: 60, timeAt: '본 면과 동시',      timeOffsetSec: 0,
     note: '거의 1봉 추가 = 물 +200~300ml' },
-  { id: 'kimchi',      name: '김치',          emoji: '🌶️', waterDelta:   0, kcal:  20, timeAt: '그릇 위',                  timeOffsetSec:  60,
+  { id: 'kimchi',      name: '김치',          emoji: '🌶️', waterDelta:   0, kcal:  20, protein: 0,  sodium: 600, fat: 0,   carb: 4,  timeAt: '그릇 위',           timeOffsetSec: 0, beforeEndSec: 0,
     note: '국물 짜짐 — 싱겁게 권장' },
-  { id: 'tuna',        name: '참치캔',        emoji: '🐠', waterDelta:   0, kcal: 200, protein: 18, timeAt: '면과 동시',            timeOffsetSec:   0,
+  { id: 'tuna',        name: '참치캔',        emoji: '🐠', waterDelta:   0, kcal: 200, protein: 18, sodium: 300, fat: 8,   carb: 0,  timeAt: '면과 동시',         timeOffsetSec: 0,
     note: '기름 함께 — 국물 진해짐' },
 ]
 
@@ -277,13 +285,21 @@ export function calcRamen(input: RamenInput): RamenResult | null {
   const ramen = RAMEN_TYPES.find(r => r.id === input.ramenId)
   if (!ramen) return null
 
-  // 1. 기본 물양 + 다개수 보정
+  // 1. 기본 물양 + 다개수 보정 (타입별)
+  //   · 국물 라면: 농축 보정(2개 = 1.7배 등) — 단순 ×N이면 국물이 싱거워짐
+  //   · 물 빼기(짜장·볶음·비빔): 면을 삶을 물이라 거의 선형, 공유 증발만 약간 할인
+  //   · 컵라면: 물선까지 → 컵 개수만큼 선형
   const adjust = getMultiAdjust(input.count)
-  const waterAfterCount = ramen.baseWater * adjust.multiplier
+  const waterMultiplier =
+    ramen.type === 'broth' ? adjust.multiplier :
+    ramen.type === 'cup'   ? input.count :
+    1 + (input.count - 1) * 0.92
+  const waterAfterCount = ramen.baseWater * waterMultiplier
 
-  // 2. 국물 농도 보정
+  // 2. 국물 농도 보정 — 국물 라면만. 짜장·볶음·비빔은 따라내고, 컵라면은 물선까지 붓는 방식이라 무의미
   const broth = BROTH_STRENGTH.find(b => b.id === input.brothStrengthId) ?? BROTH_STRENGTH[2]
-  const waterAfterBroth = waterAfterCount + broth.delta * input.count
+  const brothApplies = ramen.type === 'broth'
+  const waterAfterBroth = waterAfterCount + (brothApplies ? broth.delta * input.count : 0)
 
   // 3. 토핑 보정
   const toppingDetails = input.toppings
@@ -310,14 +326,16 @@ export function calcRamen(input: RamenInput): RamenResult | null {
   const baseFat = ramen.fat * input.count
   const baseCarb = ramen.carb * input.count
   const totalKcal = baseKcal + toppingDetails.reduce((s, t) => s + t.kcal, 0)
-  const totalSodium = baseSodium  // 토핑 나트륨은 변동이 커 제품 기준만 반영
+  const totalSodium = baseSodium + toppingDetails.reduce((s, t) => s + (t.sodium ?? 0), 0)
   const totalProtein = baseProtein + toppingDetails.reduce((s, t) => s + (t.protein ?? 0), 0)
-  const totalFat = baseFat
-  const totalCarb = baseCarb
+  const totalFat = baseFat + toppingDetails.reduce((s, t) => s + (t.fat ?? 0), 0)
+  const totalCarb = baseCarb + toppingDetails.reduce((s, t) => s + (t.carb ?? 0), 0)
 
-  // 7. 토핑 타임라인
+  // 7. 토핑 타임라인 — beforeEndSec(완성 N초 전) 토핑은 조리 시간에 맞춰 위치 환산
+  const resolveOffset = (t: Topping) =>
+    t.beforeEndSec !== undefined ? Math.max(0, cookTimeSeconds - t.beforeEndSec) : t.timeOffsetSec
   const toppingTimeline = toppingDetails
-    .map(t => ({ topping: t.name, emoji: t.emoji, addAt: t.timeAt, offsetSec: t.timeOffsetSec, note: t.note }))
+    .map(t => ({ topping: t.name, emoji: t.emoji, addAt: t.timeAt, offsetSec: resolveOffset(t), note: t.note }))
     .sort((a, b) => a.offsetSec - b.offsetSec)
 
   // 8. 경고
@@ -337,10 +355,12 @@ export function calcRamen(input: RamenInput): RamenResult | null {
 
   // 9. 짜장·볶음·비빔 안내
   let drainAdvice: string | undefined
+  const keepMl = (ramen.waterDrainMl ?? 120) * input.count   // 개수만큼 남기는 물도 늘어남
+  const keepSpoons = Math.round(keepMl / 15)
   if (ramen.type === 'jjajang') {
-    drainAdvice = `끓인 후 물 약 ${ramen.waterDrainMl}ml(8큰술)만 남기고 따라낸 뒤 분말스프 + 올리브유 비비기.`
+    drainAdvice = `끓인 후 물 약 ${keepMl}ml(${keepSpoons}큰술)만 남기고 따라낸 뒤 분말스프 + 올리브유 비비기.`
   } else if (ramen.type === 'stir') {
-    drainAdvice = `끓인 후 물 약 ${ramen.waterDrainMl}ml(8큰술)만 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비비기.`
+    drainAdvice = `끓인 후 물 약 ${keepMl}ml(${keepSpoons}큰술)만 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비비기.`
   } else if (ramen.type === 'cold') {
     drainAdvice = '면만 익힌 뒤 물 전부 따라내고 찬물에 헹궈서 비빔장과 비비기.'
   }
@@ -350,7 +370,7 @@ export function calcRamen(input: RamenInput): RamenResult | null {
     cookTimeSeconds,
     potDiameter: pot.diameter, potLiters: pot.liters, potDesc: pot.desc,
     ramenInfo: ramen,
-    multiplier: adjust.multiplier,
+    multiplier: waterMultiplier,
     totalKcal, totalSodium, totalProtein, totalFat, totalCarb,
     baseKcal, baseSodium, baseProtein, baseFat, baseCarb,
     toppingTimeline,

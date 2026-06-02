@@ -276,16 +276,21 @@ export interface BodyFatInput {
 export function estimateBodyFat(input: BodyFatInput): number | null {
   const { gender, height, waist, neck, hip } = input
   if (height <= 0 || waist <= 0 || neck <= 0) return null
+  // US Navy 체지방 공식은 인치(inch) 기준 계수 → cm 입력을 인치로 변환 후 계산
+  const h = height / 2.54
+  const w = waist / 2.54
+  const n = neck / 2.54
   if (gender === 'male') {
     if (waist <= neck) return null
-    const v = 86.010 * Math.log10(waist - neck)
-            - 70.041 * Math.log10(height) + 36.76
+    const v = 86.010 * Math.log10(w - n)
+            - 70.041 * Math.log10(h) + 36.76
     return Math.round(v * 10) / 10
   }
   if (!hip || hip <= 0) return null
   if (waist + hip <= neck) return null
-  const v = 163.205 * Math.log10(waist + hip - neck)
-          - 97.684 * Math.log10(height) - 78.387
+  const hp = hip / 2.54
+  const v = 163.205 * Math.log10(w + hp - n)
+          - 97.684 * Math.log10(h) - 78.387
   return Math.round(v * 10) / 10
 }
 

@@ -121,7 +121,7 @@ export default function BakerPercentPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 일반적인 참고값이며, 레시피마다 차이가 있을 수 있습니다.
+            ※ 일반적인 참고값이며, 레시피마다 차이가 있을 수 있습니다. 계란·우유가 많은 빵(브리오슈 등)은 계산기가 수분 함량(계란 ≈75%, 우유 ≈90%)을 반영해 표시 수분율이 위 표보다 낮게 나올 수 있습니다.
           </p>
         </div>
 

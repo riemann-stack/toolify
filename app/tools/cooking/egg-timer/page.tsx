@@ -3,6 +3,7 @@ import EggTimerClient from './EggTimerClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import styles from './egg-timer.module.css'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/egg-timer',
@@ -30,13 +31,6 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   marginBottom: '14px',
   letterSpacing: '-0.01em',
-}
-const faqQuestion: React.CSSProperties = {
-  fontFamily: 'Noto Sans KR, sans-serif',
-  fontSize: '15px',
-  fontWeight: 700,
-  color: 'var(--text)',
-  marginBottom: '8px',
 }
 const faqAnswer: React.CSSProperties = {
   fontSize: '14px',
@@ -257,7 +251,7 @@ export default function EggTimerPage() {
         {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div className={styles.relatedGrid}>
             {[
               { href: '/tools/cooking/microwave',     icon: '🔥', name: '전자레인지 출력 환산기', desc: '600~1200W 양방향 변환·식품 프리셋' },
               { href: '/tools/cooking/ramen',         icon: '🍜', name: '라면 물양 계산기',       desc: '라면별 권장 물양·조리 시간' },

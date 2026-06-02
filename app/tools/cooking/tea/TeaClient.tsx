@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './tea.module.css'
 import {
   TEAS, VESSELS, STRENGTHS, COLD_GUIDES,
   type TeaId, type Vessel, type Strength, type ColdMode,
-  getTea, getVessel, recommendWaterMl, recommendTemp, recommendTime,
+  getTea, getVessel, recommendWaterMl, recommendLeafG, recommendTemp, recommendTime,
   caffeineMg, tanninRisk, tanninZoneColor, tanninLabel,
-  fmt, fmtTime,
+  buildSteepSchedule, fmt, fmtTime,
 } from './teaUtils'
 
 type Tab = 'calc' | 'guide'
@@ -19,6 +19,7 @@ const STORAGE_KEY = 'youtil_tea_v1'
 
 const LEAF_PRESETS = [2, 3, 5]
 const WATER_PRESETS = [200, 350, 500]
+const ALL_VESSELS: Vessel[] = VESSELS.map((v) => v.id)
 
 export default function TeaClient() {
   const [tab, setTab] = useState<Tab>('calc')
@@ -61,13 +62,23 @@ export default function TeaClient() {
   const water = parseFloat(waterMl) || 0
   const sec = parseInt(actualSec) || 0
 
-  const recoWater = useMemo(() => recommendWaterMl(tea, leaf, strength), [tea, leaf, strength])
-  const tempReco = useMemo(() => recommendTemp(tea, strength), [tea, strength])
-  const timeReco = useMemo(() => recommendTime(tea, strength, vessel), [tea, strength, vessel])
-  const caffeine = useMemo(() => caffeineMg(tea, leaf), [tea, leaf])
-  const risk = useMemo(() => tanninRisk(tea, sec, strength, vessel), [tea, sec, strength, vessel])
+  // 차별 허용 다구 — 비현실 조합 차단 (말차=차완, 옥로=다관/게이완). 선택값이 허용 밖이면 추천 다구로 대체
+  const allowedVessels = tea.vessels ?? ALL_VESSELS
+  const effVessel: Vessel = allowedVessels.includes(vessel) ? vessel : tea.vessel
 
-  const coldGuide = useMemo(() => COLD_GUIDES.find((g) => g.mode === coldMode)!, [coldMode])
+  // React Compiler가 자동 메모이즈 — 순수 파생값이라 수동 useMemo 불필요
+  const recoWater = recommendWaterMl(tea, leaf, strength)
+  const recoLeaf = recommendLeafG(tea, water, strength)
+  const tempReco = recommendTemp(tea, strength)
+  const timeReco = recommendTime(tea, strength, effVessel)
+  const caffeine = caffeineMg(tea, leaf)
+  const risk = tanninRisk(tea, sec, strength, effVessel)
+
+  const coldGuide = COLD_GUIDES.find((g) => g.mode === coldMode)!
+
+  /* 다탕 스케줄 — 시간은 진하기와 무관(원칙), 티백만 0.7배 → 1탕은 위 권장 시간과 일치 */
+  const steepTimeMul = effVessel === 'teabag' ? 0.7 : 1
+  const steepSchedule = buildSteepSchedule(tea, steepTimeMul)
 
   /* 카페인 막대그래프 (탭 2) */
   const maxCaff = Math.max(...TEAS.map((t) => t.caffeineMgPerG))
@@ -87,13 +98,15 @@ export default function TeaClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs2}`}>
+      <div className={`${s.tabs} ${s.tabs2}`} role="tablist" aria-label="차 계산기 메뉴">
         {([
           { id: 'calc',  label: '🍵 우리기 계산' },
           { id: 'guide', label: '📊 차 가이드' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -113,6 +126,7 @@ export default function TeaClient() {
               {TEAS.map((t) => (
                 <button
                   key={t.id}
+                  aria-pressed={teaId === t.id}
                   className={`${s.teaBtn} ${teaId === t.id ? s.teaBtnActive : ''}`}
                   onClick={() => setTeaId(t.id)}
                   type="button"
@@ -133,10 +147,11 @@ export default function TeaClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>다구</label>
               <div className={s.pillRow}>
-                {VESSELS.map((v) => (
+                {VESSELS.filter((v) => allowedVessels.includes(v.id)).map((v) => (
                   <button
                     key={v.id}
-                    className={`${s.pill} ${vessel === v.id ? s.pillActive : ''}`}
+                    aria-pressed={effVessel === v.id}
+                    className={`${s.pill} ${effVessel === v.id ? s.pillActive : ''}`}
                     onClick={() => setVessel(v.id)}
                     type="button"
                     title={v.desc}
@@ -156,6 +171,7 @@ export default function TeaClient() {
                 {(Object.keys(STRENGTHS) as Strength[]).map((st) => (
                   <button
                     key={st}
+                    aria-pressed={strength === st}
                     className={`${s.pill} ${strength === st ? s.pillActive : ''}`}
                     onClick={() => setStrength(st)}
                     type="button"
@@ -182,7 +198,7 @@ export default function TeaClient() {
                 />
                 <div className={s.pillRow} style={{ marginTop: 6 }}>
                   {LEAF_PRESETS.map((g) => (
-                    <button key={g}
+                    <button key={g} aria-pressed={parseFloat(leafG) === g}
                       className={`${s.pill} ${parseFloat(leafG) === g ? s.pillActive : ''}`}
                       onClick={() => setLeafG(String(g))} type="button">
                       {g}g
@@ -201,7 +217,7 @@ export default function TeaClient() {
                 />
                 <div className={s.pillRow} style={{ marginTop: 6 }}>
                   {WATER_PRESETS.map((w) => (
-                    <button key={w}
+                    <button key={w} aria-pressed={parseFloat(waterMl) === w}
                       className={`${s.pill} ${parseFloat(waterMl) === w ? s.pillActive : ''}`}
                       onClick={() => setWaterMl(String(w))} type="button">
                       {w}ml
@@ -224,6 +240,7 @@ export default function TeaClient() {
                 {COLD_GUIDES.map((g) => (
                   <button
                     key={g.mode}
+                    aria-pressed={coldMode === g.mode}
                     className={`${s.pill} ${coldMode === g.mode ? s.pillActive : ''}`}
                     onClick={() => setColdMode(g.mode)}
                     type="button"
@@ -277,7 +294,8 @@ export default function TeaClient() {
                 </div>
               </div>
               <p className={s.heroSub} style={{ marginTop: 12 }}>
-                찻잎:물 1:{Math.round(water / leaf || 0)} (입력) vs 권장 1:{Math.round(tea.ratioWaterPerLeaf * STRENGTHS[strength].ratioMul)}
+                찻잎:물 {leaf > 0 ? `1:${Math.round(water / leaf)}` : '—'} (입력) vs 권장 1:{Math.round(tea.ratioWaterPerLeaf * STRENGTHS[strength].ratioMul)}
+                {water > 0 && <> · 물 {water}ml 기준 권장 찻잎 <strong>{recoLeaf}g</strong></>}
               </p>
             </div>
           )}
@@ -367,6 +385,30 @@ export default function TeaClient() {
                 <li>✅ <strong>온도 ±5°C</strong> 미세 조정</li>
                 <li>❌ <strong>시간 늘리기 금지</strong> — 떫음·쓴맛이 폭증해 마실 수 없게 됨</li>
               </ul>
+            </div>
+          )}
+
+          {/* 다탕 스케줄 — 탕마다 시간 (핫 추출 시) */}
+          {!coldOn && (
+            <div className={s.card}>
+              <span className={s.cardLabel}>
+                다탕 스케줄 — 탕마다 시간{effVessel === 'teabag' ? ' (티백 −30%)' : ''}
+              </span>
+              <div className={s.stepGrid}>
+                {steepSchedule.map((step) => (
+                  <div key={step.id} className={s.stepCard} style={{ borderLeftColor: step.color }}>
+                    <p className={s.stepHead}>
+                      <span className={s.stepEmoji}>{step.emoji}</span>
+                      <strong>{step.label}</strong>
+                      <span className={s.stepTime}>{fmtTime(step.sec)}</span>
+                    </p>
+                    <p className={s.stepDesc}>{step.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <p className={s.helpText} style={{ marginTop: 8 }}>
+                💡 같은 찻잎으로 최대 <strong>{tea.maxSteeps}탕</strong>{tea.rinse ? ' · 세차(헹굼) 후 본 추출' : ''}. 탕마다 향·바디가 달라집니다.
+              </p>
             </div>
           )}
 

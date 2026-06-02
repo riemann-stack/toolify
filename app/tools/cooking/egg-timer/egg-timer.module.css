@@ -665,3 +665,13 @@
   .disclaimer ul a:hover { text-decoration: underline; }
 }
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }
+
+/* 관련 도구 그리드 — 데스크톱 2열, 모바일 1열 */
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 480px) {
+  .relatedGrid { grid-template-columns: 1fr; }
+}

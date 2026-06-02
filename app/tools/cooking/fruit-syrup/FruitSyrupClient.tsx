@@ -26,7 +26,7 @@ const FRUITS: FruitPreset[] = [
   { id: 'ginger',     name: '생강',   ratio: 1.0, stirDays: 10, readyDays: 14,  harvestDays: 0,   keepMonths: 6,  prep: '껍질을 벗겨 최대한 얇게 편으로 썹니다.',                       season: '가을~겨울' },
   { id: 'grapefruit', name: '자몽',   ratio: 1.0, stirDays: 7,  readyDays: 7,   harvestDays: 14,  keepMonths: 2,  prep: '세척 후 얇게 슬라이스하거나 과육만 발라냅니다.',               season: '겨울' },
   { id: 'cheonggyul', name: '청귤',   ratio: 1.0, stirDays: 10, readyDays: 14,  harvestDays: 0,   keepMonths: 6,  prep: '껍질째 얇게 슬라이스합니다.',                                 season: '8~9월' },
-  { id: 'strawberry', name: '딸기',   ratio: 1.0, stirDays: 3,  readyDays: 3,   harvestDays: 0,   keepMonths: 1,  prep: '꼭지를 떼고 반으로 자릅니다. 반드시 냉장 숙성하세요.',          season: '12~4월' },
+  { id: 'strawberry', name: '딸기',   ratio: 1.0, stirDays: 3,  readyDays: 3,   harvestDays: 0,   keepMonths: 1,  prep: '꼭지를 떼고 반으로 자릅니다. 반드시 냉장 숙성하세요.',          season: '1~4월' },
   { id: 'quince',     name: '모과',   ratio: 1.0, stirDays: 20, readyDays: 30,  harvestDays: 30,  keepMonths: 12, prep: '단단하므로 얇게 채 썹니다.',                                  season: '10~11월' },
   { id: 'apple',      name: '사과',   ratio: 1.0, stirDays: 10, readyDays: 14,  harvestDays: 0,   keepMonths: 6,  prep: '얇게 슬라이스하거나 채 썹니다.',                               season: '가을' },
   { id: 'omija',      name: '오미자', ratio: 1.0, stirDays: 20, readyDays: 100, harvestDays: 100, keepMonths: 12, prep: '흐르는 물에 가볍게 헹궈 물기를 제거합니다.',                   season: '9~10월' },
@@ -91,11 +91,18 @@ export default function FruitSyrupClient() {
     const sugarMl = sugar / SUGAR_BULK_DENSITY
     const totalMl = fruitMl + sugarMl
     const needed = totalMl * 1.2           // 여유 20%
-    const jarMl = JAR_SIZES.find(j => j >= needed) ?? JAR_SIZES[JAR_SIZES.length - 1]
+    const maxJar = JAR_SIZES[JAR_SIZES.length - 1]
+    const jarMl = JAR_SIZES.find(j => j >= needed) ?? maxJar
+    const overCapacity = needed > maxJar           // 최대 병으로도 부족 → 나눠 담기 안내
+    const neededL = Math.ceil(needed / 1000)       // 실제 필요 용량(L, 올림)
+    const jarCount = Math.ceil(needed / maxJar)    // 최대 병 기준 필요 개수
     const syrupMl = totalWeight * 0.6      // 완성 원액 근사
     const drinkCups = Math.floor((syrupMl * 9) / 200) // 1:8 희석, 200ml 잔
-    return { sugar, totalWeight, totalMl, jarMl, syrupMl, drinkCups }
+    return { sugar, totalWeight, totalMl, jarMl, overCapacity, neededL, jarCount, syrupMl, drinkCups }
   }, [weight, ratio])
+
+  // 저당(1:1 미만)은 보존성이 낮아 소비기한 단축 (본문·FAQ 기준 1~2개월)
+  const effKeepMonths = ratio >= 1.0 ? fruit.keepMonths : Math.min(fruit.keepMonths, 2)
 
   const schedule = useMemo(() => {
     const base = startDate ? parseISO(startDate) : null
@@ -108,15 +115,18 @@ export default function FruitSyrupClient() {
     if (fruit.harvestDays > 0) {
       rows.push({ key: 'harvest', label: '과일 건지기', date: fmtDate(addDays(base, fruit.harvestDays)), note: '이 시점에 과일을 건져내면 떫은맛·잡내 없이 깔끔하게 보관됩니다.' })
     }
-    rows.push({ key: 'best', label: '권장 소비기한', date: fmtDate(addMonths(base, fruit.keepMonths)), note: `냉장 보관 기준 약 ${fruit.keepMonths}개월. 곰팡이·이취가 나면 즉시 폐기하세요.` })
+    rows.push({ key: 'best', label: '권장 소비기한', date: fmtDate(addMonths(base, effKeepMonths)),
+      note: ratio < 1.0
+        ? `저당(1:${ratio})이라 보존성이 낮습니다 — 반드시 냉장, 약 ${effKeepMonths}개월 내 소비하세요. 곰팡이·이취 시 즉시 폐기.`
+        : `냉장 보관 기준 약 ${effKeepMonths}개월. 곰팡이·이취가 나면 즉시 폐기하세요.` })
     return rows
-  }, [startDate, fruit])
+  }, [startDate, fruit, ratio, effKeepMonths])
 
   function handleCopy() {
     const lines = [
       `🍯 ${fruit.name}청 담그기`,
       `과일 ${fmtG(weight)}g : 설탕 ${fmtG(calc.sugar)}g (1:${ratio})`,
-      `담금 총 중량 ${fmtG(calc.totalWeight)}g · 권장 용기 ${calc.jarMl >= 1000 ? (calc.jarMl / 1000) + 'L' : calc.jarMl + 'ml'}`,
+      `담금 총 중량 ${fmtG(calc.totalWeight)}g · 권장 용기 ${calc.overCapacity ? `약 ${calc.neededL}L (10L 병 ${calc.jarCount}개로 나눠 담기)` : (calc.jarMl >= 1000 ? (calc.jarMl / 1000) + 'L' : calc.jarMl + 'ml')}`,
       `완성 원액 약 ${fmtG(calc.syrupMl)}ml (근사)`,
     ]
     if (schedule.length) {
@@ -150,6 +160,7 @@ export default function FruitSyrupClient() {
             <button
               key={f.id}
               type="button"
+              aria-pressed={fruitId === f.id}
               className={`${s.fruitBtn} ${fruitId === f.id ? s.fruitActive : ''}`}
               onClick={() => pickFruit(f)}
             >
@@ -175,6 +186,7 @@ export default function FruitSyrupClient() {
         <div className={s.quickRow}>
           {[500, 1000, 2000, 3000].map(w => (
             <button key={w} type="button"
+              aria-pressed={weightStr === String(w)}
               className={`${s.quickBtn} ${weightStr === String(w) ? s.quickActive : ''}`}
               onClick={() => setWeightStr(String(w))}>
               {w >= 1000 ? `${w / 1000}kg` : `${w}g`}
@@ -189,6 +201,7 @@ export default function FruitSyrupClient() {
         <div className={s.ratioRow}>
           {RATIO_PRESETS.map(r => (
             <button key={r.v} type="button"
+              aria-pressed={!ratioCustom && ratio === r.v}
               className={`${s.ratioBtn} ${!ratioCustom && ratio === r.v ? s.ratioActive : ''}`}
               onClick={() => { setRatio(r.v); setRatioCustom(false) }}>
               <span className={s.ratioLabel}>{r.label}</span>
@@ -196,6 +209,7 @@ export default function FruitSyrupClient() {
             </button>
           ))}
           <button type="button"
+            aria-pressed={ratioCustom}
             className={`${s.ratioBtn} ${ratioCustom ? s.ratioActive : ''}`}
             onClick={() => setRatioCustom(true)}>
             <span className={s.ratioLabel}>직접</span>
@@ -206,8 +220,15 @@ export default function FruitSyrupClient() {
           <div className={s.inputRow} style={{ marginTop: 10 }}>
             <span className={s.unit} style={{ marginRight: 8 }}>1 :</span>
             <input type="number" min={0.1} max={2} step={0.1} className={s.numInput} style={{ maxWidth: 120 }}
-              value={ratio} onChange={e => setRatio(Math.max(0, parseFloat(e.target.value) || 0))} />
+              value={ratio} onChange={e => setRatio(Math.min(2, Math.max(0, parseFloat(e.target.value) || 0)))} />
           </div>
+        )}
+        {ratio < 1.0 && (
+          <p style={{ fontSize: '12.5px', lineHeight: 1.6, margin: '10px 0 0', fontWeight: 600, color: ratio < 0.8 ? '#DC2626' : '#D97706' }}>
+            {ratio < 0.8
+              ? '⚠️ 보존에 필요한 설탕이 부족합니다 (권장 최소 1:0.8). 발효·부패 위험이 큽니다.'
+              : '⚠️ 저당 비율 — 반드시 냉장 보관하고 1~2개월 내 소비하세요. 아래 소비기한이 자동 단축됩니다.'}
+          </p>
         )}
       </div>
 
@@ -231,8 +252,12 @@ export default function FruitSyrupClient() {
         </div>
         <div className={s.resultBox}>
           <div className={s.resultLabel}>권장 유리병</div>
-          <div className={s.resultNum}>{calc.jarMl >= 1000 ? <>{calc.jarMl / 1000}<small>L</small></> : <>{calc.jarMl}<small>ml</small></>}</div>
-          <div className={s.resultFoot}>여유 20% 포함</div>
+          <div className={s.resultNum}>
+            {calc.overCapacity
+              ? <>약 {calc.neededL}<small>L</small></>
+              : (calc.jarMl >= 1000 ? <>{calc.jarMl / 1000}<small>L</small></> : <>{calc.jarMl}<small>ml</small></>)}
+          </div>
+          <div className={s.resultFoot}>{calc.overCapacity ? `10L 병 약 ${calc.jarCount}개로 나눠 담기` : '여유 20% 포함'}</div>
         </div>
         <div className={s.resultBox}>
           <div className={s.resultLabel}>완성 원액 (근사)</div>

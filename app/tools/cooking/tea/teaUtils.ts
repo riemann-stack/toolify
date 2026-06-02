@@ -24,6 +24,7 @@ export interface TeaMeta {
   flavor: { acidity: number; sweet: number; body: number; bitter: number } // 0~5
   origin: string
   vessel: Vessel              // 추천 다구
+  vessels?: Vessel[]          // 허용 다구 (생략 시 전체) — 말차·옥로처럼 비현실 조합 차단용
   desc: string
   tip: string
 }
@@ -38,7 +39,7 @@ export const TEAS: TeaMeta[] = [
     ratioWaterPerLeaf: 60,
     caffeineMgPerG: 25,
     rinse: false, rinseSec: 0,
-    steeps: [75, 45, 60, 90],
+    steeps: [75, 45, 60],
     maxSteeps: 3,
     flavor: { acidity: 3, sweet: 3, body: 2, bitter: 2 },
     origin: '한국 보성·하동, 일본 우지·시즈오카',
@@ -60,6 +61,7 @@ export const TEAS: TeaMeta[] = [
     flavor: { acidity: 2, sweet: 5, body: 4, bitter: 1 },
     origin: '일본 우지·후쿠오카·시즈오카',
     vessel: 'teapot',
+    vessels: ['teapot', 'gaiwan'],   // 저온 단시간 — 머그·티백 부적합
     desc: '차광 재배 고급 녹차. 우마미(감칠맛) 강하고 단맛이 풍부.',
     tip: '저온 단시간 우림. 60°C 이상에선 떫음 폭증.',
   },
@@ -77,6 +79,7 @@ export const TEAS: TeaMeta[] = [
     flavor: { acidity: 2, sweet: 4, body: 5, bitter: 3 },
     origin: '일본 우지·니시오',
     vessel: 'mug',           // 차완 + 차센
+    vessels: ['mug'],        // 격불(차완) 전용 — 우림 다구·티백 불가
     desc: '찻잎 가루 자체를 마심. 격불(차센으로 거품)이 핵심.',
     tip: '체에 한 번 거른 후 격불, 가루 통째 섭취로 카페인·항산화 최대.',
   },
@@ -124,7 +127,7 @@ export const TEAS: TeaMeta[] = [
     caffeineMgPerG: 35,
     rinse: false, rinseSec: 0,
     steeps: [240, 180, 240],
-    maxSteeps: 2,
+    maxSteeps: 3,
     flavor: { acidity: 3, sweet: 3, body: 4, bitter: 3 },
     origin: '인도(다즐링·아쌈), 스리랑카(실론), 중국(기문·정산소종)',
     vessel: 'mug',
@@ -214,10 +217,11 @@ export interface StrengthMeta {
   timeMul: number    // 시간 보정 (1.0 권장)
 }
 
+// 진하기는 찻잎:물 비율(ratioMul)·온도(tempDelta)로만 조절 — 시간은 건드리지 않음(과추출·떫음 방지 원칙)
 export const STRENGTHS: Record<Strength, StrengthMeta> = {
-  light:  { id: 'light',  label: '연하게',  emoji: '🪶', ratioMul: 1.2,  tempDelta: -3, timeMul: 0.85 },
+  light:  { id: 'light',  label: '연하게',  emoji: '🪶', ratioMul: 1.2,  tempDelta: -3, timeMul: 1.0 },
   normal: { id: 'normal', label: '기본',    emoji: '⚖️', ratioMul: 1.0,  tempDelta:  0, timeMul: 1.0 },
-  strong: { id: 'strong', label: '진하게',  emoji: '💪', ratioMul: 0.8,  tempDelta: +3, timeMul: 1.1 },
+  strong: { id: 'strong', label: '진하게',  emoji: '💪', ratioMul: 0.8,  tempDelta: +3, timeMul: 1.0 },
 }
 
 /* ─────────────────────────────────────────────
@@ -293,14 +297,14 @@ export interface SteepStep {
 
 const STEP_COLORS = ['#0D9488', '#0891B2', '#D97706', '#EA580C', '#DB2777', '#9B59B6', '#9333EA', '#059669']
 
-export function buildSteepSchedule(tea: TeaMeta): SteepStep[] {
+export function buildSteepSchedule(tea: TeaMeta, timeMul = 1): SteepStep[] {
   const steps: SteepStep[] = []
   if (tea.rinse) {
     steps.push({
       id: 'rinse',
       label: '세차 (헹굼)',
       emoji: '💦',
-      sec: tea.rinseSec,
+      sec: tea.rinseSec,   // 세차는 진하기·다구 보정 영향 없음
       isRinse: true,
       desc: '뜨거운 물로 짧게 헹구고 첫 물은 버립니다. 먼지·잡내 제거 + 찻잎 깨우기.',
       color: '#9B9B9B',
@@ -312,7 +316,7 @@ export function buildSteepSchedule(tea: TeaMeta): SteepStep[] {
       id: `s${i + 1}`,
       label: `${i + 1}탕`,
       emoji: ['🍃', '🌿', '🪴', '🌱'][i] || '🌿',
-      sec,
+      sec: Math.round(sec * timeMul),
       isRinse: false,
       desc: flavors[i] || '깊고 부드러운 마무리 풍미.',
       color: STEP_COLORS[i] || '#9B9B9B',

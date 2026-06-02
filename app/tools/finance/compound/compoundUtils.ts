@@ -1,51 +1,9 @@
 /* ──────────────────────────────────────────────────────
    finance/compound/compoundUtils.ts
-   복리 계산 — 거치식·적립식·증액·역산·세금·인플레이션·시나리오
+   복리 계산 — 거치식·적립식·증액·역산·인플레이션·시나리오
    ※ 본 도구는 수학적 시뮬레이션이며 투자 자문·수익 보장 도구가 아닙니다.
+   ※ 절세 계좌(ISA·연금저축 등) 비교는 본문 가이드 표로만 제공하며, 세후 수익 계산은 UI에서 지원하지 않습니다.
    ────────────────────────────────────────────────────── */
-
-/* ─── 한국 절세 계좌 (2026년 기준) ─── */
-export interface TaxAccount {
-  id: string
-  name: string
-  taxRate: number              // 이자/배당소득세
-  nonTaxableLimit?: number     // ISA 비과세 한도 (원)
-  deductionRate?: number       // 세액공제율 (연금저축·IRP)
-  annualLimit: number          // 연 납입 한도 (원, Infinity = 무제한)
-  totalLimit?: number          // 전체 납입 한도
-  desc: string
-  pros: string
-  cons: string
-}
-
-export const TAX_ACCOUNTS: TaxAccount[] = [
-  { id: 'general',        name: '일반 계좌',
-    taxRate: 0.154, annualLimit: Infinity,
-    desc: '이자·배당소득세 15.4% (소득세 14% + 지방소득세 1.4%)',
-    pros: '제한 없음', cons: '세금 부담 가장 큼' },
-  { id: 'isa-saving',     name: 'ISA (서민형)',
-    taxRate: 0.099, nonTaxableLimit: 4_000_000,
-    annualLimit: 20_000_000, totalLimit: 100_000_000,
-    desc: '서민형 400만원 비과세 + 9.9% 분리과세',
-    pros: '비과세 + 분리과세 절세', cons: '연 2,000만 한도 · 5년 의무 · 소득 조건' },
-  { id: 'isa-general',    name: 'ISA (일반형)',
-    taxRate: 0.099, nonTaxableLimit: 2_000_000,
-    annualLimit: 20_000_000, totalLimit: 100_000_000,
-    desc: '일반형 200만원 비과세 + 9.9% 분리과세',
-    pros: '비과세 + 분리과세', cons: '연 2,000만 한도 · 3~5년 의무' },
-  { id: 'pension-saving', name: '연금저축',
-    taxRate: 0.055, deductionRate: 0.165, annualLimit: 6_000_000,
-    desc: '연 600만원 한도, 16.5% 세액공제 (총급여 5,500만 이하)',
-    pros: '연 99만원 환급 + 연금 수령 시 5.5%', cons: '55세 이후 수령 · 중도 해지 페널티' },
-  { id: 'irp',            name: 'IRP',
-    taxRate: 0.055, deductionRate: 0.165, annualLimit: 9_000_000,
-    desc: '개인형 퇴직연금 · 연금저축 합산 연 900만 한도',
-    pros: '추가 300만원 세액공제', cons: '55세 이후 수령 · 중도 해지 페널티' },
-  { id: 'tax-free',       name: '비과세 (이론)',
-    taxRate: 0, annualLimit: Infinity,
-    desc: '세금 없음 가정 (이론적 최대치)',
-    pros: '세금 0', cons: '실제 적용 어려움' },
-]
 
 /* ─── 인플레이션 프리셋 ─── */
 export const INFLATION_PRESETS = [
@@ -78,6 +36,7 @@ export interface Frequency { id: string; name: string; periodsPerYear: number }
 
 export const CONTRIBUTION_FREQUENCIES: Frequency[] = [
   { id: 'monthly',   name: '매월',   periodsPerYear: 12 },
+  { id: 'daily',     name: '매일',   periodsPerYear: 365 },
   { id: 'biweekly',  name: '격주',   periodsPerYear: 26 },
   { id: 'weekly',    name: '매주',   periodsPerYear: 52 },
   { id: 'quarterly', name: '분기',   periodsPerYear: 4 },
@@ -166,9 +125,9 @@ export function calcCompound(input: CompoundInput): CompoundResult {
     })
   }
 
-  const effectiveAnnualReturn = totalContribution > 0 && input.years > 0
-    ? (Math.pow(balance / totalContribution, 1 / input.years) - 1) * 100
-    : 0
+  // 실효 연수익률 = 복리 주기를 반영한 연환산 수익률(수수료 차감 후) — 본문 §8 표 정의와 동일.
+  // (납입 시점에 따라 왜곡되는 총납입 대비 CAGR이 아니라, 자금이 1년간 실제로 불어나는 비율)
+  const effectiveAnnualReturn = (Math.pow(1 + netRate, cf.periodsPerYear) - 1) * 100
 
   return {
     finalValue: Math.round(balance),
@@ -260,55 +219,6 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
     requiredMonthly,
     requiredYearly: requiredMonthly * 12,
     feasibility, feasibilityLabel, feasibilityColor, feasibilityNote,
-  }
-}
-
-/* ─── 세금 ─── */
-export interface AfterTaxResult {
-  taxableGain: number
-  taxAmount: number
-  afterTaxFinal: number
-  effectiveTaxRate: number
-  taxCreditAmount?: number  // 연금저축·IRP 세액공제 (전체 기간)
-}
-
-export function calcAfterTax(
-  pretaxFinal: number,
-  totalContribution: number,
-  accountId: string,
-  years: number,
-  totalIncome?: number,
-): AfterTaxResult {
-  const account = TAX_ACCOUNTS.find(a => a.id === accountId) ?? TAX_ACCOUNTS[0]
-  const totalGain = Math.max(0, pretaxFinal - totalContribution)
-  let taxableGain = totalGain
-  let taxAmount = 0
-  let taxCreditAmount = 0
-
-  if (account.id === 'isa-general' || account.id === 'isa-saving') {
-    const nonTaxable = account.nonTaxableLimit ?? 0
-    taxableGain = Math.max(0, totalGain - nonTaxable)
-    taxAmount = taxableGain * account.taxRate
-  } else if (account.id === 'pension-saving' || account.id === 'irp') {
-    // 연금 수령 시 5.5% 분리과세 (단순화)
-    taxAmount = totalGain * 0.055
-    // 세액공제 (총급여 5,500만 이하 16.5%, 초과 13.2%)
-    if (account.deductionRate) {
-      const yearlyContrib = totalContribution / years
-      const cappedContrib = Math.min(yearlyContrib, account.annualLimit)
-      const rate = totalIncome !== undefined && totalIncome > 55_000_000 ? 0.132 : 0.165
-      taxCreditAmount = cappedContrib * rate * years
-    }
-  } else {
-    taxAmount = totalGain * account.taxRate
-  }
-
-  return {
-    taxableGain: Math.round(taxableGain),
-    taxAmount: Math.round(taxAmount),
-    afterTaxFinal: Math.round(pretaxFinal - taxAmount),
-    effectiveTaxRate: totalGain > 0 ? Math.round((taxAmount / totalGain * 100) * 10) / 10 : 0,
-    taxCreditAmount: taxCreditAmount > 0 ? Math.round(taxCreditAmount) : undefined,
   }
 }
 

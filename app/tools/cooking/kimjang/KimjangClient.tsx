@@ -38,6 +38,7 @@ export default function KimjangClient() {
   const [livePrices, setLivePrices] = useState<Record<string, PriceUpdate>>({})
   const [priceLoading, setPriceLoading] = useState(false)
   const [priceLoaded, setPriceLoaded] = useState(false)
+  const [priceError, setPriceError] = useState(false)
 
   /* 배추 포기 수 계산 */
   const baseCabbages = useMemo(
@@ -54,10 +55,10 @@ export default function KimjangClient() {
     : 0
   const adjustedCabbages = Math.max(1, Math.round(baseCabbages * (1 - totalReduce)))
 
-  /* 재료 계산 */
+  /* 재료 계산 — 부가 김치는 감산 전(baseCabbages) 기준으로 사이즈 (이중 감산 방지) */
   const items = useMemo(
-    () => calcIngredients(adjustedCabbages, selectedVariants),
-    [adjustedCabbages, selectedVariants],
+    () => calcIngredients(adjustedCabbages, selectedVariants, baseCabbages),
+    [adjustedCabbages, selectedVariants, baseCabbages],
   )
 
   /* 가격 오버라이드·실시간 가격 적용 */
@@ -68,7 +69,7 @@ export default function KimjangClient() {
       const finalPrice = override !== undefined ? override
         : live ? live.price
         : it.ing.pricePerUnit
-      return { ...it, totalPriceWon: Math.round(it.amount * finalPrice) }
+      return { ...it, totalPriceWon: Math.round(it.priceAmount * finalPrice) }
     })
   }, [items, priceOverrides, livePrices])
 
@@ -82,20 +83,23 @@ export default function KimjangClient() {
   /* 실시간 가격 조회 */
   const fetchLivePrices = useCallback(async () => {
     setPriceLoading(true)
+    setPriceError(false)
     try {
       // KAMIS 매핑된 항목만
       const target = ['baechu', 'mu', 'jjokpa', 'gochugaru', 'maneul', 'saenggang']
       const res = await fetch(`/api/produce-price?items=${target.join(',')}`, { cache: 'no-store' })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json() as { ok: boolean; results?: PriceUpdate[] }
       if (data.ok && data.results) {
         const map: Record<string, PriceUpdate> = {}
         data.results.forEach(r => { map[r.id] = r })
         setLivePrices(map)
       }
-      setPriceLoaded(true)
     } catch {
-      // ignore
+      setPriceError(true)
     } finally {
+      // 성공·실패 모두 '조회 끝' 처리 — 실패해도 평균가로 계산은 되므로 안내만 갱신
+      setPriceLoaded(true)
       setPriceLoading(false)
     }
   }, [])
@@ -153,11 +157,13 @@ export default function KimjangClient() {
     }
   }
 
-  const priceSourceInfo = priceLoaded
-    ? (Object.values(livePrices).some(p => p.source === 'kamis')
-        ? '✓ KAMIS 실시간 가격 적용 중'
-        : '※ KAMIS API 키 미설정 — 평균 폴백 사용 (참고용)')
-    : '가격 조회 중…'
+  const priceSourceInfo = !priceLoaded
+    ? '가격 조회 중…'
+    : priceError
+      ? '※ 시세 조회 실패 — 평균가로 계산 (참고용)'
+      : Object.values(livePrices).some(p => p.source === 'kamis')
+        ? '✓ KAMIS 실시간 시세 적용 (배추·무 등 농산물 6종)'
+        : '※ 평균가로 계산 (KAMIS 미연동, 참고용)'
 
   return (
     <div className={s.wrap}>
@@ -169,7 +175,7 @@ export default function KimjangClient() {
           { href: '/tools/cooking/food-storage', label: '식재료 보관 계산기' },
         ]}
       >
-        2025년 11월 KAMIS 소매가 기준 평균. 작황·지역·구매처로 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
+        배추·무·고춧가루·마늘·생강·쪽파는 KAMIS 시세, 젓갈·소금 등은 고정 평균가(2025년 11월 기준)입니다. 작황·지역·구매처로 ±30% 차이 가능 — 장보기 직전 시세 확인 권장.
       </Disclaimer>
 
       {/* ── 메인 히어로 ── */}
@@ -211,17 +217,17 @@ export default function KimjangClient() {
           <div className={s.numField}>
             <label>성인</label>
             <div className={s.numCtrl}>
-              <button type="button" onClick={() => setAdults(Math.max(0, adults - 1))}>−</button>
+              <button type="button" aria-label="성인 한 명 줄이기" onClick={() => setAdults(Math.max(0, adults - 1))}>−</button>
               <span>{adults}</span>
-              <button type="button" onClick={() => setAdults(Math.min(15, adults + 1))}>+</button>
+              <button type="button" aria-label="성인 한 명 늘리기" onClick={() => setAdults(Math.min(15, adults + 1))}>+</button>
             </div>
           </div>
           <div className={s.numField}>
             <label>어린이</label>
             <div className={s.numCtrl}>
-              <button type="button" onClick={() => setKids(Math.max(0, kids - 1))}>−</button>
+              <button type="button" aria-label="어린이 한 명 줄이기" onClick={() => setKids(Math.max(0, kids - 1))}>−</button>
               <span>{kids}</span>
-              <button type="button" onClick={() => setKids(Math.min(10, kids + 1))}>+</button>
+              <button type="button" aria-label="어린이 한 명 늘리기" onClick={() => setKids(Math.min(10, kids + 1))}>+</button>
             </div>
           </div>
         </div>
@@ -232,6 +238,7 @@ export default function KimjangClient() {
             <button
               key={p.id}
               type="button"
+              aria-pressed={profileId === p.id}
               className={`${s.profileBtn} ${profileId === p.id ? s.profileActive : ''}`}
               onClick={() => setProfileId(p.id)}
             >
@@ -248,6 +255,7 @@ export default function KimjangClient() {
             <button
               key={m}
               type="button"
+              aria-pressed={months === m}
               className={`${s.monthBtn} ${months === m ? s.profileActive : ''}`}
               onClick={() => setMonths(m)}
             >
@@ -267,6 +275,7 @@ export default function KimjangClient() {
               <button
                 key={v.id}
                 type="button"
+                aria-pressed={on}
                 className={`${s.variantBtn} ${on ? s.variantActive : ''}`}
                 onClick={() => toggleVariant(v.id)}
               >

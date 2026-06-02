@@ -51,7 +51,8 @@ export default function LoanClient() {
   // 프리셋 제거됨 — 주담대 기본 금리 참조만 유지
   const presetId = 'mortgage'
 
-  const inputValid = principalWon > 0 && rateNum > 0 && monthsNum > 0
+  // 금리 0%(무이자 할부 등)도 허용 — 엔진은 r===0 분기를 지원. 단 금리 칸은 비어있지 않아야 함
+  const inputValid = principalWon > 0 && rate.trim() !== '' && rateNum >= 0 && monthsNum > 0
 
   /* 메인 계산 (3가지 동시) */
   const ep = useMemo(() => inputValid ? calcEqualPayment({
@@ -186,10 +187,10 @@ export default function LoanClient() {
   const compareTermTable = useMemo(() => {
     if (!inputValid) return []
     return [120, 180, 240, 300, 360].map(m => {
-      const r = calcEqualPayment({ principal: principalWon, annualRate: rateNum, months: m, graceMonths: 0 })
+      const r = calcEqualPayment({ principal: principalWon, annualRate: rateNum, months: m, graceMonths })
       return { months: m, monthlyPayment: r.monthlyPayment, totalInterest: r.totalInterest, totalPayment: r.totalPayment }
     })
-  }, [inputValid, principalWon, rateNum])
+  }, [inputValid, principalWon, rateNum, graceMonths])
 
   const compareRateTable = useMemo(() => {
     if (!inputValid || monthsNum <= 0) return []
@@ -229,9 +230,9 @@ export default function LoanClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="대출 계산 모드">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -284,7 +285,7 @@ export default function LoanClient() {
           </div>
           <div className={styles.chips}>
             {PERIOD_PRESETS.map(m => (
-              <button key={m}
+              <button key={m} type="button" aria-pressed={months === String(m)}
                 className={`${styles.chip} ${months === String(m) ? styles.chipActive : ''}`}
                 onClick={() => setMonths(String(m))}>
                 {m >= 12 ? `${m / 12}년` : `${m}개월`}
@@ -302,7 +303,7 @@ export default function LoanClient() {
           </div>
           <div className={styles.chips}>
             {GRACE_PRESETS.map(m => (
-              <button key={m}
+              <button key={m} type="button" aria-pressed={graceMonths === m}
                 className={`${styles.chip} ${graceMonths === m ? styles.chipActive : ''}`}
                 onClick={() => setGraceMonths(m)}>
                 {m === 0 ? '없음' : `${m / 12}년`}
@@ -349,12 +350,15 @@ export default function LoanClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>월별 상환 내역</label>
               {/* 상환 방식 선택 칩 */}
-              <div className={styles.chips} style={{ marginBottom: 10 }}>
-                <button className={`${styles.chip} ${method === 'equal-payment' ? styles.chipActive : ''}`}
+              <div className={styles.chips} style={{ marginBottom: 10 }} role="group" aria-label="상환 방식 선택">
+                <button type="button" aria-pressed={method === 'equal-payment'}
+                  className={`${styles.chip} ${method === 'equal-payment' ? styles.chipActive : ''}`}
                   onClick={() => setMethod('equal-payment')}>원리금균등</button>
-                <button className={`${styles.chip} ${method === 'equal-principal' ? styles.chipActive : ''}`}
+                <button type="button" aria-pressed={method === 'equal-principal'}
+                  className={`${styles.chip} ${method === 'equal-principal' ? styles.chipActive : ''}`}
                   onClick={() => setMethod('equal-principal')}>원금균등</button>
-                <button className={`${styles.chip} ${method === 'interest-only' ? styles.chipActive : ''}`}
+                <button type="button" aria-pressed={method === 'interest-only'}
+                  className={`${styles.chip} ${method === 'interest-only' ? styles.chipActive : ''}`}
                   onClick={() => setMethod('interest-only')}>만기일시</button>
               </div>
               <div className={styles.scheduleHead}>
@@ -396,7 +400,7 @@ export default function LoanClient() {
       {tab === 'prepay' && ep && (
         <>
           <div className={styles.disclaimer}>
-            💰 <strong>중도상환 시뮬</strong> — 잔여 원금을 일부 갚으면 총 이자를 줄일 수 있습니다. 중도상환수수료(주담대 3년 이내 1.0~1.5%)와 비교해 순절감액을 계산하세요.
+            💰 <strong>중도상환 시뮬</strong> — 잔여 원금을 일부 갚으면 총 이자를 줄일 수 있습니다. 중도상환수수료(주담대 3년 이내 1.0~1.5%)와 비교해 순절감액을 계산하세요. <strong>※ 원리금균등 상환 기준</strong>입니다.
           </div>
 
           <div className={styles.threeCol}>
@@ -411,13 +415,15 @@ export default function LoanClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>중도상환 시점 — {prepaymentMonth}개월차 ({(prepaymentMonth / 12).toFixed(1)}년)</label>
               <input className={styles.slider} type="range" min="1" max={monthsNum - 1} step="1"
+                aria-label={`중도상환 시점 (개월차)`}
+                aria-valuetext={`${prepaymentMonth}개월차`}
                 value={prepaymentMonth} onChange={e => setPrepaymentMonth(parseInt(e.target.value, 10))} />
             </div>
             <div className={styles.card}>
               <label className={styles.cardLabel}>수수료율 — {prepaymentFeeRate}%</label>
-              <div className={styles.optionRow4}>
+              <div className={styles.optionRow4} role="group" aria-label="중도상환 수수료율">
                 {[0, 0.8, 1.2, 1.5].map(r => (
-                  <button key={r}
+                  <button key={r} type="button" aria-pressed={prepaymentFeeRate === r}
                     className={`${styles.optionBtn} ${prepaymentFeeRate === r ? styles.optionActive : ''}`}
                     onClick={() => setPrepaymentFeeRate(r)}>
                     {r === 0 ? '면제' : `${r}%`}
@@ -429,12 +435,14 @@ export default function LoanClient() {
 
           <div className={styles.card}>
             <label className={styles.cardLabel}>상환 모드</label>
-            <div className={styles.toggleRow}>
-              <button className={`${styles.toggleBtn} ${prepaymentMode === 'reduce-period' ? styles.toggleActive : ''}`}
+            <div className={styles.toggleRow} role="group" aria-label="중도상환 상환 모드">
+              <button type="button" aria-pressed={prepaymentMode === 'reduce-period'}
+                className={`${styles.toggleBtn} ${prepaymentMode === 'reduce-period' ? styles.toggleActive : ''}`}
                 onClick={() => setPrepaymentMode('reduce-period')}>
                 기간 단축 (월 동일·기간 ↓)
               </button>
-              <button className={`${styles.toggleBtn} ${prepaymentMode === 'reduce-payment' ? styles.toggleActive : ''}`}
+              <button type="button" aria-pressed={prepaymentMode === 'reduce-payment'}
+                className={`${styles.toggleBtn} ${prepaymentMode === 'reduce-payment' ? styles.toggleActive : ''}`}
                 onClick={() => setPrepaymentMode('reduce-payment')}>
                 월 상환액 감소 (기간 동일)
               </button>
@@ -485,7 +493,7 @@ export default function LoanClient() {
       {tab === 'refi' && (
         <>
           <div className={styles.disclaimer}>
-            🔄 <strong>대출 갈아타기 (Refinancing)</strong> — 새 대출로 기존 대출 상환. 손익분기 = 부대비용 ÷ 월 절감액. 이 기간 이상 유지해야 갈아타기가 이득입니다.
+            🔄 <strong>대출 갈아타기 (Refinancing)</strong> — 새 대출로 기존 대출 상환. 손익분기 = 부대비용 ÷ 월 절감액. 이 기간 이상 유지해야 갈아타기가 이득입니다. <strong>※ 기존·새 대출 모두 원리금균등 상환 기준</strong>입니다.
           </div>
 
           <div className={styles.card}>

@@ -28,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: '스트레스 DSR이 적용되면 한도가 얼마나 줄어드나요?',
-                a: '같은 조건에서 변동형 + 3단계(가산 약 +1.5%p) 기준 대략 <strong>5~10% 정도 한도가 감소</strong>합니다. 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.',
+                a: '같은 조건에서 변동형 + 3단계(가산 약 +1.5%p) 기준 대략 <strong>14~16% 정도 한도가 감소</strong>합니다(만기 30년 기준). 만기가 길수록, 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.',
               },
               {
                 q: '왜 LTV는 충분한데 대출이 안 나오나요?',
@@ -57,10 +57,11 @@ export default function DsrPage() {
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         연소득·기존 대출·집값·금리를 <strong style={{ color: 'var(--text)' }}>한 번만 입력</strong>하면 DSR·LTV·스트레스 DSR을 동시에 계산하고,
-        세 기준 중 가장 빡빡한 쪽으로 <strong style={{ color: 'var(--text)' }}>실제 최대 대출 한도</strong>를 알려드려요.
+        세 기준 중 가장 빡빡한 쪽으로 <strong style={{ color: 'var(--text)' }}>예상 최대 대출 한도</strong>를 알려드려요.
+        <br /><span style={{ fontSize: '12.5px' }}>※ 금리유형별 스트레스 적용률 등 일부 기준은 <strong style={{ color: 'var(--text)' }}>대표 추정치</strong>입니다. 정확한 본인 적용값은 거래 은행·금융위 공시로 확인하고, [규제 기준값 수정]에서 직접 넣어 보세요.</span>
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="2026년 DSR 규제 기준" sources={[{"label":"금융감독원","href":"https://www.fss.or.kr"}]} />
+      <UpdatedMeta date="2026년 5월" basis="2026년 DSR 규제 참고 기준(추정)" sources={[{"label":"금융감독원","href":"https://www.fss.or.kr"}]} />
 
       <DsrClient />
 
@@ -109,10 +110,10 @@ export default function DsrPage() {
           </p>
           <div style={{ ...card }}>
             <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85 }}>
-              📌 <strong>예시</strong> — 연소득 6,000만원 / 집값 5억 / 금리 4.5% / 30년 / 변동형
+              📌 <strong>예시</strong> — 연소득 6,000만원 / 기존 대출 연 300만원 / 집값 5억 / 금리 4.5% / 30년 / 변동형
               <br />• LTV 70% → 최대 3.5억
-              <br />• 스트레스 DSR 40%(가산 +1.5%p 반영) → 약 3.0억
-              <br />→ <strong style={{ color: '#059669' }}>실제 한도 ≈ 3.0억 (DSR에 묶임)</strong>
+              <br />• 스트레스 DSR 40%(가산 +1.5%p 반영) → 약 2.9억
+              <br />→ <strong style={{ color: '#059669' }}>실제 한도 ≈ 2.9억 (DSR에 묶임)</strong>
             </p>
           </div>
         </section>

@@ -16,15 +16,13 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);  /* 탭 2개(실수령액·역산) */
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 5px;
 }
-@media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;

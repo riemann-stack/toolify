@@ -8,7 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/finance/compound',
   title: '복리 계산기 — 목표 역산·인플레이션·수익률 시나리오 한 번에',
-  description: '거치·적립·증액·인플레이션 반영해 시간이 만드는 자산을 시나리오별로 비교. 목표 역산·ISA·연금저축·복리 주기·수수료까지 정밀 계산.',
+  description: '거치·적립·복리 주기·인플레이션을 반영해 시간이 만드는 자산을 시나리오별로 비교하고 목표 금액을 역산. ISA·연금저축 등 절세 계좌는 비교 가이드로 정리.',
   keywords: [
     '복리계산기', '복리투자계산기', '복리수익계산', '목표금액역산',
     '적립식복리', '거치식복리', '월적립계산기', '1억만들기',
@@ -41,7 +41,7 @@ const FAQ_LD = [
               },
               {
                 q: '「1억 만들려면 월 얼마」를 계산하고 싶어요',
-                a: '본 계산기의 「목표 금액」 입력란에 1억(10,000만원)을 넣고 기간·수익률·초기 원금을 설정하세요. 결과 영역에 이진 탐색으로 계산된 필요한 월 적립액과 「매우 합리적 / 합리적 / 도전적 / 비현실적」 4단계 현실성 배지가 자동 표시됩니다. 예: 1억 / 10년 / 7% → 약 57만원, 1억 / 20년 / 7% → 약 19만원.',
+                a: '본 계산기의 「목표 금액」 입력란에 1억(10,000만원)을 넣고 기간·수익률·초기 원금을 설정하세요. 결과 영역에 이진 탐색으로 계산된 필요한 월 적립액과 「매우 합리적 / 합리적 / 도전적 / 비현실적」 4단계 현실성 배지가 자동 표시됩니다. 예: 1억 / 10년 / 7% → 약 58만원, 1억 / 20년 / 7% → 약 20만원.',
               },
               {
                 q: '연금저축과 IRP는 어떻게 다른가요?',
@@ -65,7 +65,7 @@ export default function CompoundPage() {
         📈 복리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        거치·적립·증액·인플레이션까지 반영해, <strong style={{ color: 'var(--text)' }}>시간이 만드는 자산</strong>을 시나리오별로 비교.
+        거치·적립·복리 주기·인플레이션까지 반영해, <strong style={{ color: 'var(--text)' }}>시간이 만드는 자산</strong>을 시나리오별로 비교.
       </p>
 
       <CompoundClient />
@@ -141,7 +141,7 @@ export default function CompoundPage() {
 
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8 }}>
-                💡 실제 계산에서는 거치식과 적립식을 합산하고, 본 도구는 추가로 적립 주기·복리 주기·매년 증액률·수수료까지 반영합니다.
+                💡 실제 계산에서는 거치식과 적립식을 합산하고, 본 도구는 추가로 적립 주기(매일·매주·매월·매년)·복리 주기(일·월·분기·연)까지 반영합니다.
               </p>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function CompoundPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            ※ 세금·수수료 미반영, 원금 1,000만 원 거치식 기준. 과거 수익률이 미래를 보장하지 않습니다.
+            ※ 세금·수수료 미반영, 원금 1,000만 원 거치식·연복리 기준(계산기 기본값은 월복리라 값이 조금 더 큽니다). 과거 수익률이 미래를 보장하지 않습니다.
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export default function CompoundPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             대부분의 사람은 「얼마를 적립할까」가 아니라 「언제까지 얼마를 모으고 싶다」로 생각합니다.
-            본 도구의 <strong style={{ color: '#CA8A04' }}>목표 역산</strong> 탭은 목표 금액·기간·수익률을 고정하고
+            본 도구의 <strong style={{ color: '#CA8A04' }}>목표 역산</strong> 기능은 목표 금액·기간·수익률을 고정하고
             필요한 월 적립액을 <strong style={{ color: 'var(--text) ' }}>이진 탐색(Binary Search)</strong>으로 계산합니다.
           </p>
 
@@ -223,12 +223,12 @@ export default function CompoundPage() {
               </thead>
               <tbody>
                 {[
-                  ['1억',   '10년', '7%',  '약 57만원'],
-                  ['1억',   '20년', '7%',  '약 19만원'],
-                  ['3억',   '20년', '7%',  '약 57만원'],
+                  ['1억',   '10년', '7%',  '약 58만원'],
+                  ['1억',   '20년', '7%',  '약 20만원'],
+                  ['3억',   '20년', '7%',  '약 58만원'],
                   ['5억',   '30년', '7%',  '약 41만원'],
-                  ['10억',  '30년', '7%',  '약 81만원'],
-                  ['10억',  '20년', '10%', '약 130만원'],
+                  ['10억',  '30년', '7%',  '약 82만원'],
+                  ['10억',  '20년', '10%', '약 131만원'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>

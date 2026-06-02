@@ -23,6 +23,9 @@ export default function BrewClient() {
   const [method, setMethod] = useState<BrewMethod>('drip')
   const [ratio, setRatio] = useState<number>(16)
 
+  /* 탭 2: 푸어 스케줄 전용 비율 (핸드드립 전용 — 공통 ratio와 분리해 에스프레소 비율 누출 방지) */
+  const [pourRatio, setPourRatio] = useState<number>(16)
+
   /* 탭 1: 비율 계산 */
   const [inputMode, setInputMode] = useState<InputMode>('coffee')
   const [coffeeG, setCoffeeG] = useState('20')
@@ -62,44 +65,60 @@ export default function BrewClient() {
     } catch {}
   }, [method, ratio, inputMode, coffeeG, waterMl, cups, mlPerCup, roast])
 
-  /* 추출법 변경 시 비율을 추출법 default로 */
+  /* 추출법 변경 시에만 비율을 보정 — 같은 추출법 안에서는 사용자가 1:12 등 자유 조정 가능.
+     새 추출법 권장 범위를 벗어난 비율은 기본값으로 (콜드브루 1:9 → 에스프레소 전환 시 1:9 잔류 방지) */
   useEffect(() => {
-    const m = getMethod(method)
-    if (ratio < m.ratioMin || ratio > m.ratioMax + 8) {
-      setRatio(m.ratioDefault)
-    }
-  }, [method, ratio])
+    const meta = getMethod(method)
+    setRatio((prev) => (prev < meta.ratioMin || prev > meta.ratioMax) ? meta.ratioDefault : prev)
+  }, [method])
 
   /* 계산 */
   const m = getMethod(method)
+  // 에스프레소는 '물'이 아니라 추출 샷(아웃풋, g) 기준 → 입력 모드를 원두→샷으로 고정
+  const isEspresso = method === 'espresso'
+  const effMode: InputMode = isEspresso ? 'coffee' : inputMode
   const calcCoffee = useMemo(() => {
-    if (inputMode === 'coffee') return parseFloat(coffeeG) || 0
-    if (inputMode === 'water') return waterToCoffee(parseFloat(waterMl) || 0, ratio)
+    if (effMode === 'coffee') return parseFloat(coffeeG) || 0
+    if (effMode === 'water') return waterToCoffee(parseFloat(waterMl) || 0, ratio)
     // cups
     const w = (parseInt(cups) || 0) * (parseInt(mlPerCup) || 0)
     return waterToCoffee(w, ratio)
-  }, [inputMode, coffeeG, waterMl, ratio, cups, mlPerCup])
+  }, [effMode, coffeeG, waterMl, ratio, cups, mlPerCup])
 
   const calcWater = useMemo(() => {
-    if (inputMode === 'coffee') return coffeeToWater(parseFloat(coffeeG) || 0, ratio)
-    if (inputMode === 'water') return parseFloat(waterMl) || 0
+    if (effMode === 'coffee') return coffeeToWater(parseFloat(coffeeG) || 0, ratio)
+    if (effMode === 'water') return parseFloat(waterMl) || 0
     return (parseInt(cups) || 0) * (parseInt(mlPerCup) || 0)
-  }, [inputMode, coffeeG, waterMl, ratio, cups, mlPerCup])
+  }, [effMode, coffeeG, waterMl, ratio, cups, mlPerCup])
 
-  const cupsCount = inputMode === 'cups'
+  const cupsCount = effMode === 'cups'
     ? (parseInt(cups) || 0)
     : Math.max(1, Math.round(calcWater / (parseInt(mlPerCup) || 250)))
+  // 비용용 잔수는 반올림하지 않음 — 320ml(1.28잔)를 1잔으로 반올림하면 1잔 원가가 과대평가됨
+  const costCups = effMode === 'cups'
+    ? Math.max(1, parseInt(cups) || 1)
+    : Math.max(1, calcWater / (parseInt(mlPerCup) || 250))
   const intensity = getIntensity(ratio)
+  // 방식별 해석 — 현재 추출법 권장 범위 대비 위치
+  const methodFit = ratio < m.ratioMin ? `${m.shortName} 권장보다 진함`
+    : ratio > m.ratioMax ? `${m.shortName} 권장보다 연함`
+    : `${m.shortName} 권장 범위`
+  // 에스프레소는 비율 범위가 1:1.5~3이라 프리셋·슬라이더를 별도로
+  const ratioPresets: number[] = isEspresso ? [1.5, 2, 2.5, 3] : [...RATIO_PRESETS]
+  const ratioStar = isEspresso ? 2 : 15
+  const sliderMin = isEspresso ? 1 : 5
+  const sliderMax = isEspresso ? 4 : 25
+  const sliderStep = isEspresso ? 0.1 : 0.5
 
-  /* 푸어 스케줄 */
+  /* 푸어 스케줄 — 핸드드립 전용 pourRatio 사용 (공통 ratio의 에스프레소 값 누출 방지) */
   const pourCoffee = parseFloat(coffeeG) || 20
-  const pourWater = pourCoffee * ratio
+  const pourWater = pourCoffee * pourRatio
   const schedule = useMemo(() => buildPourSchedule(pourCoffee, pourWater), [pourCoffee, pourWater])
 
   /* 비용 */
   const price100g = parseFloat(pricePer100g) || 0
   const dailyN = parseInt(dailyCups) || 1
-  const homeCostPerCup = (calcCoffee / cupsCount) * (price100g / 100)
+  const homeCostPerCup = (calcCoffee / costCups) * (price100g / 100)
   const cafeSaving = (cafePrice - homeCostPerCup) * dailyN
   const monthlySaving = cafeSaving * 30
   const yearlySaving = cafeSaving * 365
@@ -119,7 +138,7 @@ export default function BrewClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="브루잉 계산기 메뉴">
         {([
           { id: 'ratio',     label: '⚖️ 비율 계산' },
           { id: 'pour',      label: '⏱️ 푸어 스케줄' },
@@ -128,6 +147,8 @@ export default function BrewClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -147,6 +168,7 @@ export default function BrewClient() {
               {BREW_METHODS.map((bm) => (
                 <button
                   key={bm.id}
+                  aria-pressed={method === bm.id}
                   className={`${s.methodBtn} ${method === bm.id ? s.methodBtnActive : ''}`}
                   onClick={() => setMethod(bm.id)}
                   type="button"
@@ -161,18 +183,19 @@ export default function BrewClient() {
 
           {/* 비율 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>원두 : 물 비율</span>
+            <span className={s.cardLabel}>{isEspresso ? '원두 : 샷 비율 (인풋:아웃풋)' : '원두 : 물 비율'}</span>
             <div className={s.field}>
               <label className={s.fieldLabel}>비율 프리셋</label>
               <div className={s.pillRow}>
-                {RATIO_PRESETS.map((r) => (
+                {ratioPresets.map((r) => (
                   <button
                     key={r}
+                    aria-pressed={ratio === r}
                     className={`${s.pill} ${ratio === r ? s.pillActive : ''}`}
                     onClick={() => setRatio(r)}
                     type="button"
                   >
-                    1:{r}{r === 15 && ' ⭐'}
+                    1:{r}{r === ratioStar && ' ⭐'}
                   </button>
                 ))}
               </div>
@@ -181,49 +204,55 @@ export default function BrewClient() {
               <label className={s.fieldLabel}>또는 직접 (1:{ratio.toFixed(1)})</label>
               <input
                 type="range"
-                min={5}
-                max={25}
-                step={0.5}
+                min={sliderMin}
+                max={sliderMax}
+                step={sliderStep}
                 value={ratio}
                 onChange={(e) => setRatio(parseFloat(e.target.value))}
                 className={s.slider}
               />
               <div className={s.helpText}>
                 {intensity.emoji} <strong style={{ color: intensity.color }}>{intensity.label}</strong> — {intensity.desc}
+                <br /><strong style={{ color: 'var(--accent)' }}>{methodFit}</strong>
               </div>
             </div>
           </div>
 
           {/* 입력 모드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>입력 방식</span>
-            <div className={s.pillRow}>
-              <button
-                className={`${s.pill} ${inputMode === 'coffee' ? s.pillActive : ''}`}
-                onClick={() => setInputMode('coffee')}
-                type="button"
-              >
-                ☕ 원두 → 물
-              </button>
-              <button
-                className={`${s.pill} ${inputMode === 'water' ? s.pillActive : ''}`}
-                onClick={() => setInputMode('water')}
-                type="button"
-              >
-                💧 물 → 원두
-              </button>
-              <button
-                className={`${s.pill} ${inputMode === 'cups' ? s.pillActive : ''}`}
-                onClick={() => setInputMode('cups')}
-                type="button"
-              >
-                🥤 잔수 기준
-              </button>
-            </div>
+            <span className={s.cardLabel}>{isEspresso ? '원두 인풋 → 샷 아웃풋' : '입력 방식'}</span>
+            {!isEspresso && (
+              <div className={s.pillRow}>
+                <button
+                  aria-pressed={inputMode === 'coffee'}
+                  className={`${s.pill} ${inputMode === 'coffee' ? s.pillActive : ''}`}
+                  onClick={() => setInputMode('coffee')}
+                  type="button"
+                >
+                  ☕ 원두 → 물
+                </button>
+                <button
+                  aria-pressed={inputMode === 'water'}
+                  className={`${s.pill} ${inputMode === 'water' ? s.pillActive : ''}`}
+                  onClick={() => setInputMode('water')}
+                  type="button"
+                >
+                  💧 물 → 원두
+                </button>
+                <button
+                  aria-pressed={inputMode === 'cups'}
+                  className={`${s.pill} ${inputMode === 'cups' ? s.pillActive : ''}`}
+                  onClick={() => setInputMode('cups')}
+                  type="button"
+                >
+                  🥤 잔수 기준
+                </button>
+              </div>
+            )}
 
-            {inputMode === 'coffee' && (
+            {effMode === 'coffee' && (
               <div className={s.field} style={{ marginTop: 12 }}>
-                <label className={s.fieldLabel}>원두 (g)</label>
+                <label className={s.fieldLabel}>{isEspresso ? '원두 인풋 (g)' : '원두 (g)'}</label>
                 <input
                   type="number"
                   className={s.input}
@@ -241,7 +270,7 @@ export default function BrewClient() {
               </div>
             )}
 
-            {inputMode === 'water' && (
+            {effMode === 'water' && (
               <div className={s.field} style={{ marginTop: 12 }}>
                 <label className={s.fieldLabel}>물 (ml)</label>
                 <input
@@ -261,7 +290,7 @@ export default function BrewClient() {
               </div>
             )}
 
-            {inputMode === 'cups' && (
+            {effMode === 'cups' && (
               <>
                 <div className={s.row2} style={{ marginTop: 12 }}>
                   <div className={s.field}>
@@ -294,6 +323,7 @@ export default function BrewClient() {
                       {CUP_SIZES.map((c) => (
                         <button
                           key={c.id}
+                          aria-pressed={parseInt(mlPerCup) === c.ml}
                           className={`${s.pill} ${parseInt(mlPerCup) === c.ml ? s.pillActive : ''}`}
                           onClick={() => setMlPerCup(String(c.ml))}
                           type="button"
@@ -311,21 +341,30 @@ export default function BrewClient() {
           {/* 메인 결과 */}
           <div className={s.hero}>
             <p className={s.heroLabel}>{m.emoji} {m.shortName} · 1:{ratio.toFixed(1)}</p>
-            <div className={s.heroResult}>
+            <div className={s.heroResult} style={isEspresso ? { gridTemplateColumns: 'repeat(2, 1fr)' } : undefined}>
               <div className={s.heroBlock}>
-                <span className={s.heroBlockLabel}>원두</span>
+                <span className={s.heroBlockLabel}>{isEspresso ? '원두 (인풋)' : '원두'}</span>
                 <strong className={s.heroBlockValue}>{fmt(calcCoffee, 1)} g</strong>
               </div>
               <div className={s.heroBlock}>
-                <span className={s.heroBlockLabel}>물</span>
-                <strong className={s.heroBlockValue}>{fmt(calcWater, 0)} ml</strong>
+                <span className={s.heroBlockLabel}>{isEspresso ? '샷 (아웃풋)' : '물'}</span>
+                <strong className={s.heroBlockValue}>{fmt(calcWater, 0)} {isEspresso ? 'g' : 'ml'}</strong>
               </div>
-              <div className={s.heroBlock}>
-                <span className={s.heroBlockLabel}>잔수</span>
-                <strong className={s.heroBlockValue}>{cupsCount}잔</strong>
-              </div>
+              {!isEspresso && (
+                <div className={s.heroBlock}>
+                  <span className={s.heroBlockLabel}>잔수</span>
+                  <strong className={s.heroBlockValue}>{cupsCount}잔</strong>
+                </div>
+              )}
             </div>
           </div>
+
+          {isEspresso && (
+            <div className={s.tipBox}>
+              💡 <strong>에스프레소</strong>는 비율이 <strong>원두(인풋) : 샷(아웃풋)</strong>을 무게(g)로 잰 값입니다.
+              위 <strong>샷</strong>은 추출되는 액체 무게이며 <strong>부어넣는 물 양이 아닙니다</strong>. (예: 원두 18g · 1:2 → 샷 36g)
+            </div>
+          )}
 
           {/* 추출법 상세 */}
           <div className={s.card}>
@@ -374,8 +413,8 @@ export default function BrewClient() {
                 <input
                   type="number"
                   className={s.input}
-                  value={ratio}
-                  onChange={(e) => setRatio(parseFloat(e.target.value) || 16)}
+                  value={pourRatio}
+                  onChange={(e) => setPourRatio(parseFloat(e.target.value) || 16)}
                   min={10} max={20} step={0.5}
                 />
               </div>
@@ -524,7 +563,7 @@ export default function BrewClient() {
               <p className={s.heroValue} style={{ color: intensity.color }}>
                 {intensity.emoji} <strong>{intensity.label}</strong>
               </p>
-              <p className={s.heroSub}>{intensity.desc}</p>
+              <p className={s.heroSub}>{intensity.desc} · <strong style={{ color: 'var(--accent)' }}>{m.shortName} 1:{ratio.toFixed(1)} — {methodFit.replace(m.shortName + ' ', '')}</strong></p>
             </div>
           </div>
 
@@ -563,6 +602,7 @@ export default function BrewClient() {
               {ROASTS.map((r) => (
                 <button
                   key={r.id}
+                  aria-pressed={roast === r.id}
                   className={`${s.pill} ${roast === r.id ? s.pillActive : ''}`}
                   onClick={() => setRoast(r.id)}
                   type="button"
@@ -624,6 +664,7 @@ export default function BrewClient() {
                   {[3500, 4500, 5500, 6500].map((p) => (
                     <button
                       key={p}
+                      aria-pressed={cafePrice === p}
                       className={`${s.pill} ${cafePrice === p ? s.pillActive : ''}`}
                       onClick={() => setCafePrice(p)}
                       type="button"
@@ -640,6 +681,7 @@ export default function BrewClient() {
                 {[1, 2, 3, 4].map((d) => (
                   <button
                     key={d}
+                    aria-pressed={dailyN === d}
                     className={`${s.pill} ${dailyN === d ? s.pillActive : ''}`}
                     onClick={() => setDailyCups(String(d))}
                     type="button"
@@ -670,7 +712,7 @@ export default function BrewClient() {
               <table className={s.detailTable}>
                 <tbody>
                   <tr><td>원두 g당 단가</td><td className={s.cellMono}>{fmt(price100g / 100, 0)} 원/g</td></tr>
-                  <tr><td>1잔 사용 원두</td><td className={s.cellMono}>{fmt(calcCoffee / cupsCount, 1)} g</td></tr>
+                  <tr><td>1잔 사용 원두</td><td className={s.cellMono}>{fmt(calcCoffee / costCups, 1)} g</td></tr>
                   <tr><td>홈브루 1잔 원가</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(homeCostPerCup, 0)} 원</td></tr>
                   <tr><td>카페 1잔 가격</td><td className={s.cellMono}>{cafePrice.toLocaleString()} 원</td></tr>
                   <tr><td>1잔 절감액</td><td className={s.cellMono}>{fmt(cafePrice - homeCostPerCup, 0)} 원</td></tr>

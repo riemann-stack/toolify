@@ -24,6 +24,29 @@ const FAQ_LD = [
                 a: '미개봉 상태에서 유통기한 1~2일 지난 정도이고 냄새·맛이 멀쩡하다면 대개 안전합니다. 한국의 \'유통기한\'은 판매 가능 기한이고, 실제 \'소비기한\'은 보통 그보다 4~5일 더 깁니다. 단 개봉한 우유는 유통기한과 무관하게 개봉 후 3~5일 이내에 모두 마시세요. 응어리·분리·시큼한 냄새 중 하나라도 있으면 즉시 폐기.' },
             ]
 
+const faqDetails: React.CSSProperties = {
+  background: 'var(--bg2)',
+  border: '1px solid var(--border)',
+  borderRadius: '12px',
+  padding: '14px 18px',
+  marginBottom: '8px',
+}
+const faqSummary: React.CSSProperties = {
+  cursor: 'pointer',
+  fontSize: '15px',
+  fontWeight: 600,
+  color: 'var(--text)',
+  padding: '4px 0',
+}
+const faqAnswer: React.CSSProperties = {
+  marginTop: '10px',
+  paddingTop: '10px',
+  borderTop: '1px solid var(--border)',
+  fontSize: '14px',
+  color: 'var(--muted)',
+  lineHeight: 1.8,
+}
+
 export default function FoodStoragePage() {
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
@@ -81,7 +104,7 @@ export default function FoodStoragePage() {
                   { n: '밥',              s: '조리 후', f: '1~2일',  z: '2~4주',    m: '굳기 전 1회분 소분 냉동' },
                   { n: '계란',            s: '미개봉', f: '3~5주',  z: '권장 X',   m: '뾰족한 쪽 아래로 보관' },
                   { n: '우유 (개봉)',     s: '개봉',   f: '3~5일',  z: '권장 X',   m: '유통기한과 관계없이 개봉 후 5일' },
-                  { n: '두부 (개봉)',     s: '개봉',   f: '2~3일',  z: '1~2개월',  m: '물에 담가 매일 갈아주기' },
+                  { n: '두부 (개봉)',     s: '개봉',   f: '3~4일',  z: '권장 X',   m: '물에 담가 매일 갈아주기, 냉동 시 식감 변화' },
                   { n: '햄·소시지 (개봉)', s: '개봉',   f: '5~7일',  z: '1~2개월',  m: '진공포장 미개봉은 냉장 2~3주' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -171,7 +194,7 @@ export default function FoodStoragePage() {
               </thead>
               <tbody>
                 {[
-                  { n: '소·돼지·닭고기 (생)', a: '구입 후 1일 이내', b: '3~6개월' },
+                  { n: '소·돼지·닭고기 (생)', a: '구입 후 1일 이내', b: '4~9개월' },
                   { n: '다진 고기',           a: '구입 당일',        b: '3~4개월' },
                   { n: '생선 (생)',           a: '구입 당일',        b: '3~4개월' },
                   { n: '익힌 고기·요리',      a: '조리 후 2~3일',    b: '2~3개월' },
@@ -246,14 +269,12 @@ export default function FoodStoragePage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
-              </div>
-            ))}
-          </div>
+          {FAQ_LD.map((faq, i) => (
+            <details key={i} style={faqDetails}>
+              <summary style={faqSummary}>Q{i + 1}. {faq.q}</summary>
+              <div style={faqAnswer}>{faq.a}</div>
+            </details>
+          ))}
         </div>
 
         {/* ── 6. 관련 도구 ── */}

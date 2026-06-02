@@ -71,13 +71,27 @@ function applyFermentationMode(steps: StepDef[], mode: FermentationMode): StepDe
   }
 
   if (mode === 'cold-final') {
-    // 사워도우 등 기본 냉장 최종 발효 — 그대로
-    return steps
+    // 표준 일정에 이미 냉장·장시간 발효 단계가 있으면 그대로 (사워도우·피자·치아바타 비가·크루아상)
+    if (steps.some(s => s.observationKey === 'cold-proof')) return steps
+    // 실온 2차 발효(final-proof)를 냉장 2차 발효로 변환 (바게트·식빵·포카치아·베이글)
+    return steps.map<StepDef>(s => s.id === 'final-proof'
+      ? {
+          id: 'cold-proof',
+          name: '냉장 2차 발효',
+          minutes: 720,
+          observationKey: 'cold-proof',
+          flexible: true,
+          minRange: 480,
+          maxRange: 1440,
+          guide: '⭐ 성형 후 냉장 8~24시간 — 풍미↑·일정 유연. 12시간 권장',
+        }
+      : s)
   }
 
   if (mode === 'cold-bulk-final') {
-    // 1차 + 최종 모두 냉장 (전체 24시간+)
+    // 1차를 냉장(8시간)으로 옮기고 다음날 성형 — 기존 냉장 최종 발효는 제거(냉장은 1차로 이동)
     return steps.flatMap<StepDef>(s => {
+      if (s.id === 'cold-proof') return []
       if (s.id === 'bulk') {
         return [{
           id: 'bulk',

@@ -102,34 +102,34 @@ export interface RecipePreset {
 
 export const RECIPES: RecipePreset[] = [
   { id: 'ramen',     label: '🍜 라면 계란',          emoji: '🍜',
-    donenessId: 'jammy', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    donenessId: 'jammy', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '잼 노른자 7분이 라면 토핑 황금 비율. 라면과 별도로 삶아 완성 직전 올리기 (라면 조리 3~5분이라 동시 조리는 어려움)' },
   { id: 'gimbap',    label: '🍙 김밥 계란',          emoji: '🍙',
-    donenessId: 'extra', sizeId: 'teuk', tempId: 'fridge', methodId: 'cold',
-    tip: '단단한 완숙으로 자르기 좋게. 식초 1Ts 첨가하면 갈라짐 방지' },
+    donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
+    tip: '단단한 완숙으로 자르기 좋게. 식초 1Ts 첨가하면 갈라짐 방지. 껍질이 잘 안 까지면 냉수 시작으로 바꾸면 잘 벗겨짐 (+2분)' },
   { id: 'jangjorim', label: '🥩 장조림 계란',        emoji: '🥩',
     donenessId: 'hard', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '메추리알도 같은 시간. 양념장에 1~2일 절이면 풍미 ↑' },
   { id: 'mayak',     label: '🍱 마야크(양념장) 에그', emoji: '🍱',
-    donenessId: 'jammy', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    donenessId: 'jammy', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '잼 노른자가 핵심. 7분 정확히. 양념장(간장+물엿+참기름+파+마늘+홍고추)에 6시간+ 절임' },
   { id: 'ajitama',   label: '🍜 라멘 아지타마',      emoji: '🍜',
-    donenessId: 'jammy', sizeId: 'teuk', tempId: 'fridge', methodId: 'cold',
-    tip: '라멘 표준 7분 (잼 노른자). 미림+간장+물 1:1:1 절임 12시간+' },
+    donenessId: 'jammy', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
+    tip: '라멘 표준 7분 (잼 노른자, 실온 기준). 미림+간장+물 1:1:1 절임 12시간+. 냉수 시작·얼음물로 껍질 깔끔하게' },
   { id: 'mayo',      label: '🥚 마요계란 (에그샐러드)', emoji: '🥚',
-    donenessId: 'hard', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    donenessId: 'hard', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '완숙 후 으깨고 마요네즈+소금+후추. 머스타드 1Ts 추가 시 풍미 ↑' },
   { id: 'deviled',   label: '🍳 데빌드 에그',        emoji: '🍳',
-    donenessId: 'hard', sizeId: 'teuk', tempId: 'fridge', methodId: 'cold',
-    tip: '단단한 완숙 후 반으로 잘라 노른자만 빼서 마요+머스타드+파프리카' },
+    donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
+    tip: '단단한 완숙 후 반으로 잘라 노른자만 빼서 마요+머스타드+파프리카. 껍질은 냉수 시작이 잘 벗겨짐' },
   { id: 'salad',     label: '🥗 반숙 샐러드 토핑',   emoji: '🥗',
-    donenessId: 'flowing', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    donenessId: 'flowing', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '6분 30초가 가장 예쁨. 자르면 반쯤 흐르는 노른자' },
   { id: 'baeksuk',   label: '🐔 백숙용 한 알',       emoji: '🐔',
     donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '백숙 위에 올리는 단단한 완숙. 14분 권장' },
   { id: 'daily',     label: '🥚 데일리 한 알',       emoji: '🥚',
-    donenessId: 'soft', sizeId: 'teuk', tempId: 'fridge', methodId: 'boil',
+    donenessId: 'soft', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '아침 한 알 — 흰자 다 익고 노른자 약간 흐름. 6분이 가장 무난' },
 ]
 
@@ -163,12 +163,15 @@ export function calculate(inputs: CalcInputs): CalcResult {
   const adjustments: { label: string; sec: number }[] = []
 
   if (method.id === 'instapot') {
-    // 5-5-5 룰: 압력 5분 + 자연감압 5분 + 얼음물 5분 = 15분 (단순화)
+    // 5-5-5 룰: 압력 5분 + 자연감압 5분 + 얼음물 5분.
+    // 익힘 단계·크기·시작 온도·개수·고도와 무관하게 표준 완숙으로 익으므로
+    // 결과 노른자도 '표준 완숙'으로 고정(선택값과 충돌 방지), 보정 내역은 숨김.
+    const hardStage = DONENESS.find((d) => d.id === 'hard') ?? doneness
     return {
       totalSec: 5 * 60,
       baseSec: 5 * 60,
-      adjustments: [{ label: '인스턴트팟 5-5-5 (압력 5분만 표시)', sec: 0 }],
-      doneness, size, temp, method,
+      adjustments: [],
+      doneness: hardStage, size, temp, method,
     }
   }
 

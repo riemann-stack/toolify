@@ -39,7 +39,8 @@ export interface LoanResult {
 export function calcEqualPayment(input: LoanInput): LoanResult {
   const r = input.annualRate / 100 / 12
   const n = input.months
-  const grace = Math.max(0, input.graceMonths ?? 0)
+  // 거치 기간은 최소 1개월의 원금 상환이 남도록 제한 (거치 ≥ 총기간이면 사실상 만기일시)
+  const grace = Math.min(Math.max(0, input.graceMonths ?? 0), Math.max(0, n - 1))
   const principal = input.principal
   const repayMonths = Math.max(1, n - grace)
 
@@ -97,7 +98,8 @@ export function calcEqualPayment(input: LoanInput): LoanResult {
 export function calcEqualPrincipal(input: LoanInput): LoanResult {
   const r = input.annualRate / 100 / 12
   const n = input.months
-  const grace = Math.max(0, input.graceMonths ?? 0)
+  // 거치 기간은 최소 1개월의 원금 상환이 남도록 제한 (거치 ≥ 총기간이면 사실상 만기일시)
+  const grace = Math.min(Math.max(0, input.graceMonths ?? 0), Math.max(0, n - 1))
   const principal = input.principal
   const repayMonths = Math.max(1, n - grace)
   const monthlyPrincipal = principal / repayMonths

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './egg-timer.module.css'
 import {
@@ -21,7 +20,7 @@ const DEFAULT_INPUTS: CalcInputs = {
   altitudeM: 0,
 }
 
-type TimerPhase = 'idle' | 'cooking' | 'cooling'
+type TimerPhase = 'idle' | 'cooking' | 'releasing' | 'cooling'
 
 export default function EggTimerClient() {
   const [inputs, setInputs] = useState<CalcInputs>(DEFAULT_INPUTS)
@@ -36,6 +35,7 @@ export default function EggTimerClient() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const lastTickRef = useRef<number>(0)
+  const isInstapotRunRef = useRef(false)  // 타이머 시작 시 인스턴트팟 여부 고정 (5-5-5 자연감압 단계)
 
   /* localStorage 복원 */
   useEffect(() => {
@@ -124,8 +124,26 @@ export default function EggTimerClient() {
           setRunning(false)
           if (phase === 'cooking') {
             beep(3, 880, 0.25)
-            notify('🥚 계란 완성!', '얼음물에 식히기를 시작하세요')
-            // 5분 식히기 자동 시작
+            if (isInstapotRunRef.current) {
+              // 인스턴트팟 5-5-5: 압력 5분 → 자연 감압 5분 → 얼음물 5분
+              notify('🥚 압력 조리 완료!', '자연 감압 5분이 진행됩니다')
+              setTimeout(() => {
+                setPhase('releasing')
+                setRemaining(5 * 60)
+                setRunning(true)
+              }, 800)
+            } else {
+              notify('🥚 계란 완성!', '얼음물에 식히기를 시작하세요')
+              // 5분 식히기 자동 시작
+              setTimeout(() => {
+                setPhase('cooling')
+                setRemaining(5 * 60)
+                setRunning(true)
+              }, 800)
+            }
+          } else if (phase === 'releasing') {
+            beep(3, 770, 0.25)
+            notify('♨️ 자연 감압 완료', '이제 얼음물에 5분 식히세요')
             setTimeout(() => {
               setPhase('cooling')
               setRemaining(5 * 60)
@@ -158,6 +176,7 @@ export default function EggTimerClient() {
 
   /* 타이머 컨트롤 */
   const startTimer = () => {
+    isInstapotRunRef.current = inputs.methodId === 'instapot'
     setPhase('cooking')
     setRemaining(result.totalSec)
     setRunning(true)
@@ -182,19 +201,15 @@ export default function EggTimerClient() {
     setPhase('idle')
   }
 
-  /* 종료 시각 */
-  const endTime = useMemo(() => {
+  /* 완료 시각 — now+초를 분 단위 시계로. 타이머 진행 중에는 now+remaining이라 값이 밀리지 않음 */
+  const clockAfter = (sec: number): string | null => {
     if (now === 0) return null
-    const ms = now + result.totalSec * 1000
-    const d = new Date(ms)
+    const d = new Date(now + sec * 1000)
     return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
-  }, [now, result.totalSec])
-
-  const startTime = useMemo(() => {
-    if (now === 0) return null
-    const d = new Date(now)
-    return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
-  }, [now])
+  }
+  const cookDoneClock = clockAfter(result.totalSec)           // idle: 지금 시작 시 조리 완료 시각
+  const allDoneClock = clockAfter(result.totalSec + 5 * 60)   // idle: 얼음물 5분까지 마무리 시각
+  const liveFinishClock = clockAfter(remaining)               // 진행 중: 현재 단계 완료 예정(안정적)
 
   /* 레시피 적용 */
   const applyRecipe = (recipeId: string) => {
@@ -233,6 +248,7 @@ export default function EggTimerClient() {
           {RECIPES.map((r) => (
             <button key={r.id}
               className={`${styles.recipeChip} ${activeRecipe === r.id ? styles.recipeChipActive : ''}`}
+              aria-pressed={activeRecipe === r.id}
               onClick={() => applyRecipe(r.id)}>
               <span className={styles.recipeEmoji}>{r.emoji}</span>
               <span className={styles.recipeLabel}>{r.label.replace(/^[^\s]+\s/, '')}</span>
@@ -255,13 +271,14 @@ export default function EggTimerClient() {
           {DONENESS.map((d) => (
             <button key={d.id}
               className={`${styles.donenessCompact} ${inputs.donenessId === d.id ? styles.donenessCompactActive : ''}`}
+              aria-pressed={inputs.donenessId === d.id}
               onClick={() => update('donenessId', d.id)}>
               <span className={styles.donenessCompactLabel}>{d.label}</span>
               <span className={styles.donenessCompactTime}>{fmtMS(d.seconds)}</span>
             </button>
           ))}
         </div>
-        <p className={styles.donenessDesc}>{result.doneness.description}</p>
+        <p className={styles.donenessDesc}>{(DONENESS.find((d) => d.id === inputs.donenessId) ?? result.doneness).description}</p>
       </section>
 
       <section className={styles.optionCard}>
@@ -270,6 +287,7 @@ export default function EggTimerClient() {
           {SIZES.map((s) => (
             <button key={s.id}
               className={`${styles.pill} ${inputs.sizeId === s.id ? styles.pillActive : ''}`}
+              aria-pressed={inputs.sizeId === s.id}
               onClick={() => update('sizeId', s.id)}>
               {s.label}
               <span className={styles.pillSub}>{s.rangeG}</span>
@@ -285,6 +303,7 @@ export default function EggTimerClient() {
           {START_TEMPS.map((t) => (
             <button key={t.id}
               className={`${styles.pill} ${inputs.tempId === t.id ? styles.pillActive : ''}`}
+              aria-pressed={inputs.tempId === t.id}
               onClick={() => update('tempId', t.id)}>
               {t.label}
             </button>
@@ -299,6 +318,7 @@ export default function EggTimerClient() {
           {METHODS.map((m) => (
             <button key={m.id}
               className={`${styles.methodCard} ${inputs.methodId === m.id ? styles.methodCardActive : ''}`}
+              aria-pressed={inputs.methodId === m.id}
               onClick={() => update('methodId', m.id)}>
               <span className={styles.methodEmoji}>{m.emoji}</span>
               <div>
@@ -308,6 +328,11 @@ export default function EggTimerClient() {
             </button>
           ))}
         </div>
+        {inputs.methodId === 'instapot' && (
+          <p className={styles.note}>
+            ℹ️ 인스턴트팟 5-5-5는 익힘 단계·크기·시작 온도·개수·고도 설정과 무관하게 <strong>표준 완숙</strong>으로 익습니다.
+          </p>
+        )}
       </section>
 
       <section className={styles.optionCard}>
@@ -340,10 +365,14 @@ export default function EggTimerClient() {
             <p className={styles.resultBig}>{fmtMS(result.totalSec)}</p>
             <p className={styles.resultSub}>
               {inputs.methodId === 'instapot'
-                ? '인스턴트팟 5-5-5 룰 (압력 5분 + 자연감압 5분 + 얼음물 5분)'
-                : startTime && endTime
-                  ? <>지금 시작 → {endTime} 완성 (식히기 +5분)</>
-                  : '준비 중…'}
+                ? '인스턴트팟 5-5-5 룰 — 압력 5분 → 자연 감압 5분 → 얼음물 5분 (약 15분)'
+                : phase === 'cooking'
+                  ? <>조리 완료 예정 <strong>{liveFinishClock}</strong></>
+                  : phase === 'cooling'
+                    ? <>식히기 완료 예정 <strong>{liveFinishClock}</strong></>
+                    : cookDoneClock
+                      ? <>지금 시작 → <strong>{cookDoneClock}</strong> 조리 완료 · 얼음물 5분 후 {allDoneClock} 마무리</>
+                      : '준비 중…'}
             </p>
           </div>
 
@@ -386,7 +415,7 @@ export default function EggTimerClient() {
           {phase !== 'idle' && (
             <>
               <p className={styles.timerPhase}>
-                {phase === 'cooking' ? '🔥 조리 중' : '❄️ 얼음물 식히기'}
+                {phase === 'cooking' ? '🔥 조리 중' : phase === 'releasing' ? '♨️ 자연 감압 중' : '❄️ 얼음물 식히기'}
               </p>
               <p className={styles.timerCountdown}>{fmtMS(remaining)}</p>
               <div className={styles.timerControls}>

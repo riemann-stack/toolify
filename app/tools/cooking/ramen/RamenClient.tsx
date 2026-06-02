@@ -36,6 +36,9 @@ export default function RamenClient() {
 
   const ramen = RAMEN_TYPES.find(r => r.id === ramenId)
   const quickRamens = QUICK_RAMEN_IDS.map(id => RAMEN_TYPES.find(r => r.id === id)).filter(Boolean) as RamenType[]
+  // 국물 농도·다개수 비교는 국물 라면에만 의미 — 짜장·볶음·비빔은 따라내고, 컵은 물선까지 부음
+  const showBroth = ramen?.type === 'broth'
+  const isCup = ramen?.type === 'cup'
 
   const toggleTopping = (id: string) => {
     setToppings(toppings.includes(id) ? toppings.filter(t => t !== id) : [...toppings, id])
@@ -97,14 +100,14 @@ export default function RamenClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="라면 계산기 메뉴">
         {[
-          { id: 'main',      label: '💧 물양 계산',  cls: styles.tabActive },
-          { id: 'topping',   label: '🥢 토핑·시간',  cls: styles.tabActiveTopping },
-          { id: 'preset',    label: '🍜 라면 프리셋', cls: styles.tabActivePreset },
-          { id: 'nutrition', label: '💪 영양 정보',  cls: styles.tabActiveNutrition },
+          { id: 'main',      label: '물양 계산',  cls: styles.tabActive },
+          { id: 'topping',   label: '토핑·시간',  cls: styles.tabActiveTopping },
+          { id: 'preset',    label: '라면 프리셋', cls: styles.tabActivePreset },
+          { id: 'nutrition', label: '영양 정보',  cls: styles.tabActiveNutrition },
         ].map(t => (
-          <button key={t.id}
+          <button key={t.id} role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? t.cls : ''}`}
             onClick={() => setTab(t.id as TabId)}
           >{t.label}</button>
@@ -118,14 +121,13 @@ export default function RamenClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               라면 종류
-              <span className={styles.cardLabelHint}>※ 「라면 프리셋」 탭에서 15종 모두 보기</span>
+              <span className={styles.cardLabelHint}>※ 「라면 프리셋」 탭에서 {RAMEN_TYPES.length}종 모두 보기</span>
             </div>
             <div className={styles.quickGrid}>
               {quickRamens.map(r => (
-                <button key={r.id}
+                <button key={r.id} aria-pressed={ramenId === r.id}
                   className={`${styles.quickBtn} ${ramenId === r.id ? styles.quickBtnActive : ''}`}
                   onClick={() => setRamenId(r.id)}>
-                  <span className={styles.quickBtnEmoji}>{r.emoji}</span>
                   <div className={styles.quickBtnName}>{r.name}</div>
                   <div className={styles.quickBtnDesc}>{r.baseWater}ml · {formatTime(r.cookTime)}</div>
                 </button>
@@ -138,7 +140,7 @@ export default function RamenClient() {
             <div className={styles.cardLabel}>라면 개수</div>
             <div className={styles.countGrid}>
               {[1, 2, 3, 4, 5].map(n => (
-                <button key={n}
+                <button key={n} aria-pressed={count === n}
                   className={`${styles.countBtn} ${count === n ? styles.countBtnActive : ''}`}
                   onClick={() => setCount(n)}>
                   <div className={styles.countBtnNum}>{n}</div>
@@ -153,30 +155,32 @@ export default function RamenClient() {
             )}
           </div>
 
-          {/* 국물 농도 */}
-          <div className={styles.card}>
-            <div className={styles.cardLabel}>국물 농도</div>
-            <div className={styles.brothRow}>
-              {BROTH_STRENGTH.map(b => (
-                <button key={b.id}
-                  className={`${styles.brothBtn} ${brothId === b.id ? styles.brothBtnActive : ''}`}
-                  onClick={() => setBrothId(b.id)}
-                  style={brothId === b.id ? { background: `${b.color}15`, borderColor: b.color, color: b.color } : {}}>
-                  <div className={styles.brothBtnLabel}>{b.name}</div>
-                  <div className={styles.brothBtnDelta}>
-                    {b.delta === 0 ? '기준' : b.delta > 0 ? `+${b.delta}ml/개` : `${b.delta}ml/개`}
-                  </div>
-                </button>
-              ))}
+          {/* 국물 농도 — 국물 라면·컵라면만 (짜장·볶음·비빔은 물을 따라내므로 미표시) */}
+          {showBroth && (
+            <div className={styles.card}>
+              <div className={styles.cardLabel}>국물 농도</div>
+              <div className={styles.brothRow}>
+                {BROTH_STRENGTH.map(b => (
+                  <button key={b.id} aria-pressed={brothId === b.id}
+                    className={`${styles.brothBtn} ${brothId === b.id ? styles.brothBtnActive : ''}`}
+                    onClick={() => setBrothId(b.id)}
+                    style={brothId === b.id ? { background: `${b.color}15`, borderColor: b.color, color: b.color } : {}}>
+                    <div className={styles.brothBtnLabel}>{b.name}</div>
+                    <div className={styles.brothBtnDelta}>
+                      {b.delta === 0 ? '기준' : b.delta > 0 ? `+${b.delta}ml/개` : `${b.delta}ml/개`}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 면 익힘 */}
           <div className={styles.card}>
             <div className={styles.cardLabel}>면 익힘 정도</div>
             <div className={styles.brothRow}>
               {NOODLE_TEXTURE.map(t => (
-                <button key={t.id}
+                <button key={t.id} aria-pressed={textureId === t.id}
                   className={`${styles.brothBtn} ${textureId === t.id ? styles.brothBtnActive : ''}`}
                   onClick={() => setTextureId(t.id)}
                   style={textureId === t.id ? { background: 'var(--accent-dim)', borderColor: 'var(--accent)', color: 'var(--accent)' } : {}}>
@@ -199,7 +203,7 @@ export default function RamenClient() {
               {TOPPINGS.map(t => {
                 const active = toppings.includes(t.id)
                 return (
-                  <button key={t.id}
+                  <button key={t.id} aria-pressed={active}
                     className={`${styles.toppingBtn} ${active ? styles.toppingBtnActive : ''}`}
                     onClick={() => toggleTopping(t.id)}>
                     {active && <span className={styles.toppingBtnCheck}>✓</span>}
@@ -223,15 +227,15 @@ export default function RamenClient() {
                 <div className={styles.heroLabel}>권장 물양</div>
                 <div className={styles.heroNum}>{formatWater(result.recommendedWater)}</div>
                 <div className={styles.heroSub}>
-                  {ramen!.emoji} {ramen!.name} {count}개 · {BROTH_STRENGTH.find(b=>b.id===brothId)?.name} · {NOODLE_TEXTURE.find(t=>t.id===textureId)?.name}
+                  {ramen!.emoji} {ramen!.name} {count}개{showBroth ? ` · ${BROTH_STRENGTH.find(b=>b.id===brothId)?.name}` : ''} · {NOODLE_TEXTURE.find(t=>t.id===textureId)?.name}
                 </div>
                 <div className={styles.heroRange}>
                   범위 {formatWater(result.rangeMin)} ~ {formatWater(result.rangeMax)}
                 </div>
               </div>
 
-              {/* 다개수 비교 (count >= 2일 때만) */}
-              {count >= 2 && (
+              {/* 다개수 비교 (count >= 2 · 국물/컵라면만 — 짜장·볶음·비빔은 물을 따라내 희석 개념 없음) */}
+              {count >= 2 && showBroth && (
                 <div className={styles.card}>
                   <div className={styles.cardLabel}>1개 기준 대비 비교</div>
                   <div className={styles.compareBox}>
@@ -254,17 +258,24 @@ export default function RamenClient() {
                 </div>
               )}
 
+              {/* 컵라면 안내 */}
+              {isCup && (
+                <div className={styles.adviceBox}>
+                  <strong>{ramen!.emoji} 컵라면 조리:</strong> 별도 냄비가 아니라 <strong>뚜껑 안쪽 물선까지</strong> 끓는 물(약 {formatWater(result.recommendedWater)}{count > 1 ? ` · 컵 ${count}개 합계` : ''})을 붓고 뚜껑을 덮어 {formatTime(result.cookTimeSeconds)} 기다린 뒤 잘 저어 드세요.
+                </div>
+              )}
+
               {/* 4 메트릭 */}
               <div className={styles.metrics}>
                 <div className={styles.metric}>
                   <div className={styles.metricLabel}>조리 시간</div>
                   <div className={`${styles.metricValue} ${styles.metricValueAccent}`}>{formatTime(result.cookTimeSeconds)}</div>
-                  <div className={styles.metricSub}>물 끓이기 후 면 투입 기준</div>
+                  <div className={styles.metricSub}>{isCup ? '물 부은 후 대기 시간' : '물 끓이기 후 면 투입 기준'}</div>
                 </div>
                 <div className={styles.metric}>
-                  <div className={styles.metricLabel}>권장 냄비</div>
-                  <div className={styles.metricValue}>{result.potDiameter}cm</div>
-                  <div className={styles.metricSub}>{result.potDesc}</div>
+                  <div className={styles.metricLabel}>{isCup ? '조리 방식' : '권장 냄비'}</div>
+                  <div className={styles.metricValue}>{isCup ? '물선까지' : `${result.potDiameter}cm`}</div>
+                  <div className={styles.metricSub}>{isCup ? '뚜껑 안쪽 선까지 끓는 물' : result.potDesc}</div>
                 </div>
                 <div className={styles.metric}>
                   <div className={styles.metricLabel}>총 칼로리</div>
@@ -278,20 +289,20 @@ export default function RamenClient() {
                   <div className={`${styles.metricValue} ${result.totalSodium > WHO_DAILY_SODIUM ? styles.metricValueRed : styles.metricValueOrange}`}>
                     {(result.totalSodium / 1000).toFixed(1)} g
                   </div>
-                  <div className={styles.metricSub}>WHO 권장 {Math.round(result.totalSodium / WHO_DAILY_SODIUM * 100)}%</div>
+                  <div className={styles.metricSub}>WHO 권장 {Math.round(result.totalSodium / WHO_DAILY_SODIUM * 100)}%{toppings.length > 0 ? ' · 토핑 포함' : ''}</div>
                 </div>
               </div>
 
               {/* 조리 타임라인 */}
               <div className={styles.card}>
-                <div className={styles.cardLabel}>🕐 조리 단계 타임라인 (면 투입 기준)</div>
+                <div className={styles.cardLabel}>🕐 조리 단계 타임라인 ({isCup ? '물 붓기 기준' : '면 투입 기준'})</div>
                 <div className={styles.timelineList}>
                   <div className={styles.timelineRow}>
                     <span className={styles.timelineTime}>-5:00</span>
                     <span className={styles.timelineEmoji}>🔥</span>
                     <div>
-                      <div className={styles.timelineLabel}>물 끓이기 시작</div>
-                      <div className={styles.timelineNote}>{result.potDiameter}cm 냄비에 {formatWater(result.recommendedWater)} 투입</div>
+                      <div className={styles.timelineLabel}>{isCup ? '끓는 물 준비' : '물 끓이기 시작'}</div>
+                      <div className={styles.timelineNote}>{isCup ? `컵 물선까지 ${formatWater(result.recommendedWater)} 붓기` : `${result.potDiameter}cm 냄비에 ${formatWater(result.recommendedWater)} 투입`}</div>
                     </div>
                   </div>
                   {result.toppingTimeline.filter(t => t.offsetSec < 0).map((t, i) => (
@@ -308,11 +319,11 @@ export default function RamenClient() {
                     <span className={styles.timelineTime}>0:00</span>
                     <span className={styles.timelineEmoji}>🍜</span>
                     <div>
-                      <div className={styles.timelineLabel}>면·스프 투입</div>
-                      <div className={styles.timelineNote}>물 끓을 때 동시 투입</div>
+                      <div className={styles.timelineLabel}>{isCup ? '뚜껑 덮고 대기 시작' : '면·스프 투입'}</div>
+                      <div className={styles.timelineNote}>{isCup ? '물 부은 직후 뚜껑 덮기' : '물 끓을 때 동시 투입'}</div>
                     </div>
                   </div>
-                  {result.toppingTimeline.filter(t => t.offsetSec >= 0 && t.offsetSec < result.cookTimeSeconds).map((t, i) => (
+                  {result.toppingTimeline.filter(t => t.offsetSec >= 0 && t.offsetSec <= result.cookTimeSeconds).map((t, i) => (
                     <div key={`mid-${i}`} className={styles.timelineRow}>
                       <span className={styles.timelineTime}>+{Math.floor(t.offsetSec / 60)}:{String(t.offsetSec % 60).padStart(2, '0')}</span>
                       <span className={styles.timelineEmoji}>{t.emoji}</span>
@@ -328,7 +339,7 @@ export default function RamenClient() {
                     <div>
                       <div className={styles.timelineLabel}>완성</div>
                       <div className={styles.timelineNote}>
-                        {result.isStirOrCold ? '물 빼기 후 비빔/볶기' : '그릇에 옮겨 토핑 마무리'}
+                        {isCup ? '뚜껑 열고 잘 저어 드세요' : result.isStirOrCold ? '물 빼기 후 비빔/볶기' : '그릇에 옮겨 토핑 마무리'}
                       </div>
                     </div>
                   </div>
@@ -351,7 +362,7 @@ export default function RamenClient() {
               </button>
               <div className={styles.actionGrid}>
                 <button className={styles.actionBtn} onClick={() => setTab('topping')}>🥢 토핑·시간 자세히</button>
-                <button className={styles.actionBtn} onClick={() => setTab('preset')}>🍜 라면 15종 보기</button>
+                <button className={styles.actionBtn} onClick={() => setTab('preset')}>🍜 라면 {RAMEN_TYPES.length}종 보기</button>
                 <button className={styles.actionBtn} onClick={() => setTab('nutrition')}>💪 영양 정보</button>
               </div>
             </>
@@ -380,6 +391,7 @@ export default function RamenClient() {
                     <th>물양 보정</th>
                     <th>칼로리</th>
                     <th>단백질</th>
+                    <th>나트륨</th>
                     <th>투입 타이밍</th>
                   </tr>
                 </thead>
@@ -392,6 +404,7 @@ export default function RamenClient() {
                       </td>
                       <td style={{ color: '#EA580C' }}>+{t.kcal}</td>
                       <td>{t.protein ?? 0}g</td>
+                      <td style={{ color: '#EA580C' }}>+{t.sodium ?? 0}mg</td>
                       <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 11.5 }}>{t.timeAt}</td>
                     </tr>
                   ))}
@@ -448,7 +461,7 @@ export default function RamenClient() {
       {tab === 'preset' && (
         <>
           <div className={styles.infoBox}>
-            💡 <strong>한국 인기 라면 15종</strong> — 카드 클릭 시 메인 탭으로 자동 입력. 짜장·볶음·비빔면은 일반 라면과 조리법이 다르니 안내 참고.
+            💡 <strong>한국 인기 라면 {RAMEN_TYPES.length}종</strong> — 카드 클릭 시 메인 탭으로 자동 입력. 짜장·볶음·비빔면은 일반 라면과 조리법이 다르니 안내 참고.
           </div>
 
           <div className={styles.presetSection}>
@@ -457,11 +470,11 @@ export default function RamenClient() {
                 <div className={styles.presetCategoryTitle}>{title}</div>
                 <div className={styles.presetGrid}>
                   {group.ramens.map(r => (
-                    <button key={r.id}
+                    <button key={r.id} aria-pressed={ramenId === r.id}
                       className={`${styles.presetCard} ${ramenId === r.id ? styles.presetCardActive : ''}`}
                       onClick={() => { setRamenId(r.id); setTab('main') }}>
                       <div className={styles.presetCardName}>
-                        <span>{r.emoji}</span>{r.name}
+                        {r.name}
                       </div>
                       <div className={styles.presetCardSpec}>{r.baseWater}ml · {formatTime(r.cookTime)}</div>
                       <div className={styles.presetCardBrand}>{r.brand}</div>
@@ -511,7 +524,7 @@ export default function RamenClient() {
                   <tr>
                     <th>항목</th>
                     <th>1봉</th>
-                    <th>합계 ({count}개+토핑)</th>
+                    <th>합계 ({count}개{toppings.length > 0 ? '+토핑' : ''})</th>
                     <th>WHO/권장 대비</th>
                   </tr>
                 </thead>
@@ -552,7 +565,7 @@ export default function RamenClient() {
               </table>
             </div>
             <div className={styles.cardLabelHint} style={{ marginTop: 6 }}>
-              ※ 나트륨 합계는 제품 표기 기준(토핑 제외)이며, 국물을 남기면 실제 섭취량은 줄어듭니다.
+              ※ 합계는 라면 제품 표기값 + 토핑 영양(<strong>일반 평균 추정치</strong> — 제품·분량 차이 큼)입니다. 국물을 남기면 실제 나트륨 섭취량은 더 줄어듭니다.
             </div>
           </div>
 

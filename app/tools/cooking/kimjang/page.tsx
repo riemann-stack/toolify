@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/cooking/kimjang',
   title: '김장 양 계산기 — 가족 수·기간별 배추 포기·재료·예상 비용 (KAMIS 시세)',
   description:
-    '가족 수·소비 패턴·기간만 알려주면 배추 포기 수·고춧가루·마늘·젓갈·예상 비용 자동. KAMIS 실시간 시세 연동 + D-day 일정.',
+    '가족 수·소비 패턴·기간만 알려주면 배추 포기 수·고춧가루·마늘·젓갈·예상 비용 자동. 주요 농산물 KAMIS 실시간 시세 + D-day 일정.',
   keywords: [
     '김장 양 계산기', '김장 재료 계산', '배추 포기 수', '김장 비용',
     '김장 양념', '김장 일정', 'KAMIS 시세', '김장철 배추 가격',
@@ -59,7 +59,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -88,7 +87,7 @@ export default function KimjangPage() {
         🥬 김장 양 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        가족 수·소비·기간만 알려주면 배추 포기·양념·비용 자동. <strong style={{ color: 'var(--text)' }}>KAMIS 실시간 시세 연동</strong>.
+        가족 수·소비·기간만 알려주면 배추 포기·양념·비용 자동. 주요 농산물은 <strong style={{ color: 'var(--text)' }}>KAMIS 실시간 시세</strong> 연동.
       </p>
 
       <KimjangClient />

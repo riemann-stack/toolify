@@ -37,7 +37,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -82,7 +81,7 @@ export default function BrewPage() {
       <div style={card}>
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>추출법 선택</strong> — 6종 카드 (핸드드립이 가장 흔함)</li>
-          <li><strong>비율 선택</strong> — 1:15(SCA 골든) 기본 또는 1:5~25 슬라이더</li>
+          <li><strong>비율 선택</strong> — 추출법별 권장 비율 기본 (핸드드립 1:16, SCA 골든 1:15~17) 또는 1:5~25 슬라이더</li>
           <li><strong>입력 모드 선택</strong> — 원두→물 / 물→원두 / 잔수 기준</li>
           <li><strong>결과 확인</strong> — 원두·물·잔수 + 권장 온도·시간·분쇄도</li>
         </ol>

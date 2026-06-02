@@ -81,7 +81,7 @@ function matchPurpose(opt: SubstituteOption, purpose: string): boolean {
   if (purpose === 'cook')  return /요리|소스|수프|드레싱|마리네이드|볶음|카레/.test(text) || opt.useFor.includes('일반 요리')
   if (purpose === 'bake')  return /베이킹|쿠키|머핀|케이크|브라우니|빵|페이스트리|팬케이크|시폰|디저트/.test(text)
   if (purpose === 'diet')  return /저당|다이어트|저칼로리|알룰로스|스테비아|그릭요거트/.test(text)
-  if (purpose === 'vegan') return /비건|식물성|두유|아몬드밀크|코코넛|아마씨|치아씨드|두부|바나나|아보카도|오일/.test(text)
+  if (purpose === 'vegan') return /비건|식물성|두유|아몬드밀크|귀리|코코넛|아마씨|치아씨드|두부|바나나|아보카도|사과소스|아쿠아파바|오일/.test(text)
   if (purpose === 'gf')    return /쌀가루|아몬드 가루|오트|글루텐프리|타피오카/.test(text)
   return true
 }
@@ -204,14 +204,6 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '물엿',        ratio: 1.0, grade: 'okay',    useFor: ['졸임', '소스'], taste: '단맛만 있음', texture: '동일' },
     ],
   },
-  cornSyrup: {
-    original: '물엿', emoji: '🍯', category: '감미료', group: 'sweet',
-    options: [
-      { name: '꿀',         ratio: 1.0, grade: 'good', useFor: ['졸임', '소스'], taste: '꿀 향', texture: '약간 묽음' },
-      { name: '메이플시럽',  ratio: 1.0, grade: 'good', useFor: ['소스'], taste: '메이플 향', texture: '약간 묽음' },
-      { name: '설탕 + 물 (졸임)', ratio: 1.0, ratioNote: '설탕 1컵 + 물 1/4컵을 졸여 시럽화', combinedWith: '물 + 졸이기', grade: 'okay', useFor: ['졸임'], taste: '풍미 없음', texture: '비슷' },
-    ],
-  },
   egg: {
     original: '계란 (1개)', emoji: '🥚', category: '단백질', group: 'protein',
     options: [
@@ -283,34 +275,11 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '화이트와인',  ratio: 1.0, grade: 'okay', useFor: ['소스', '졸임'], taste: '와인 향', texture: '비슷' },
     ],
   },
-  garlicPaste: {
-    original: '다진마늘', emoji: '🧄', category: '양념', group: 'season',
-    options: [
-      { name: '마늘가루',         ratio: 0.125, ratioNote: '다진마늘 1큰술 = 마늘가루 1/8 작은술', grade: 'good', useFor: ['소스', '드레싱', '수프'], taste: '약간 약함', texture: '식감 없음' },
-      { name: '마늘 1쪽 (으깬 것)', ratio: 0.5,   ratioNote: '다진마늘 1큰술 = 마늘 2~3쪽', grade: 'perfect', useFor: ['모든 요리'], taste: '신선해서 더 강함', texture: '동일' },
-      { name: '마늘기름',          ratio: 1.0, grade: 'okay', useFor: ['볶음', '드레싱'], taste: '향만 있음, 매운맛 약함', texture: '액체' },
-    ],
-  },
   gingerPaste: {
     original: '다진생강', emoji: '🧄', category: '양념', group: 'season',
     options: [
       { name: '생강가루',         ratio: 0.25, ratioNote: '다진생강 1큰술 = 생강가루 1/4 작은술', grade: 'good', useFor: ['베이킹', '드레싱'], taste: '약간 다른 풍미', texture: '식감 없음' },
       { name: '생강 (생, 으깬 것)', ratio: 1.0, grade: 'perfect', useFor: ['모든 요리'], taste: '신선하고 더 매운', texture: '동일' },
-    ],
-  },
-  soy: {
-    original: '간장', emoji: '🧄', category: '양념', group: 'season',
-    options: [
-      { name: '타마리 간장 (글루텐프리)', ratio: 1.0, grade: 'perfect', useFor: ['모든 용도'], taste: '약간 더 진하고 깊음', texture: '동일' },
-      { name: '코코넛 아미노스',         ratio: 1.0, grade: 'good',    useFor: ['저염 요리'], taste: '단맛, 짠맛 약함', texture: '비슷', warning: '염도가 약 1/3 수준 — 소금 추가 필요' },
-      { name: '액젓 (피쉬소스)',         ratio: 0.75, grade: 'okay',   useFor: ['아시안 요리'], taste: '비린향, 더 짠맛', texture: '비슷' },
-    ],
-  },
-  doenjang: {
-    original: '된장', emoji: '🧄', category: '양념', group: 'season',
-    options: [
-      { name: '미소 (적·백미소)', ratio: 1.0, grade: 'good', useFor: ['국·찌개'], taste: '더 부드럽고 단맛', texture: '비슷' },
-      { name: '청국장',          ratio: 1.0, grade: 'okay', useFor: ['찌개'], taste: '발효 향 강함', texture: '동일' },
     ],
   },
   basil: {
@@ -404,6 +373,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   soySauceKr: {
     original: '간장 (양조)', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
     options: [
+      { name: '타마리 간장 (글루텐프리)', ratio: 1.0, grade: 'perfect', useFor: ['모든 용도'], taste: '약간 더 진하고 깊음', texture: '동일', warning: '글루텐프리 옵션' },
       { name: '진간장',        ratio: 0.7, grade: 'good', useFor: ['조림·구이'], taste: '단맛 ↑', texture: '동일' },
       { name: '국간장 (조선)', ratio: 0.5, grade: 'good', useFor: ['국·나물'], taste: '맑고 짠맛', texture: '맑음', warning: '진하지 않음' },
       { name: '액젓',          ratio: 0.7, grade: 'okay', useFor: ['김치·찌개'], taste: '생선 향', texture: '맑음', warning: '비린향' },
@@ -540,11 +510,22 @@ export default function SubstituteClient() {
 
   const selected = SUBSTITUTE_DATA[selectedKey]
 
-  // 자동 완성 매칭
+  // 자동 완성 매칭 — 원재료/카테고리 + 대체재 이름(역방향 검색)
   const suggestions = useMemo(() => {
     const q = searchTerm.trim().toLowerCase()
     if (!q) return []
-    return SEARCH_INDEX.filter(s => s.original.toLowerCase().includes(q) || s.category.toLowerCase().includes(q)).slice(0, 8)
+    const out: { key: string; original: string; emoji: string; category: string; via: string | null }[] = []
+    for (const s of SEARCH_INDEX) {
+      if (s.original.toLowerCase().includes(q) || s.category.toLowerCase().includes(q)) {
+        out.push({ key: s.key, original: s.original, emoji: s.emoji, category: s.category, via: null })
+      } else {
+        const opt = SUBSTITUTE_DATA[s.key].options.find(o => o.name.toLowerCase().includes(q))
+        if (opt) out.push({ key: s.key, original: s.original, emoji: s.emoji, category: s.category, via: opt.name })
+      }
+    }
+    // 원재료/카테고리 매칭을 대체재 매칭보다 먼저
+    out.sort((a, b) => (a.via === null ? 0 : 1) - (b.via === null ? 0 : 1))
+    return out.slice(0, 8)
   }, [searchTerm])
 
   // 옵션 필터·정렬
@@ -584,9 +565,9 @@ export default function SubstituteClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>🔍 대체 검색</button>
-        <button className={`${styles.tab} ${tab === 'browse' ? styles.tabActive : ''}`} onClick={() => setTab('browse')}>📚 카테고리 둘러보기</button>
+      <div className={styles.tabs} role="tablist">
+        <button role="tab" aria-selected={tab === 'search'} className={`${styles.tab} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>🔍 대체 검색</button>
+        <button role="tab" aria-selected={tab === 'browse'} className={`${styles.tab} ${tab === 'browse' ? styles.tabActive : ''}`} onClick={() => setTab('browse')}>📚 카테고리 둘러보기</button>
       </div>
 
       {tab === 'search' ? (
@@ -624,7 +605,7 @@ function SearchTab(props: {
   setSearchTerm: (s: string) => void
   showSuggestions: boolean
   setShowSuggestions: (b: boolean) => void
-  suggestions: { key: string; original: string; emoji: string; category: string }[]
+  suggestions: { key: string; original: string; emoji: string; category: string; via: string | null }[]
   handleSelect: (key: string) => void
   amount: string
   setAmount: (s: string) => void
@@ -676,7 +657,7 @@ function SearchTab(props: {
                     <div key={s.key} className={styles.suggestionItem} onClick={() => handleSelect(s.key)}>
                       <span className={styles.suggestionEmoji}>{s.emoji}</span>
                       <span>{s.original}</span>
-                      <span className={styles.suggestionMeta}>{s.category}</span>
+                      <span className={styles.suggestionMeta}>{s.via ? `${s.via} 대체` : s.category}</span>
                     </div>
                   ))
                 )}
@@ -738,6 +719,7 @@ function SearchTab(props: {
             {PURPOSE_OPTIONS.map(p => (
               <button
                 key={p.id}
+                aria-pressed={purpose === p.id}
                 className={`${styles.purposeChip} ${purpose === p.id ? styles.purposeChipActive : ''}`}
                 onClick={() => setPurpose(p.id)}
               >
@@ -784,7 +766,10 @@ function SearchTab(props: {
 function OptionCard({ opt, amount, unit }: { opt: SubstituteOption; amount: number; unit: string }) {
   const grade = GRADE_INFO[opt.grade]
   const subUnit = opt.substituteUnit || unit
-  const showConversion = amount > 0 && opt.ratio > 0
+  // 단위가 바뀌거나(가루·혼합·개수) substituteUnit이 없는데 환산 노트가 있으면
+  // 단순 ×ratio(같은 단위)는 오해를 줌 → 숫자 대신 단위 인식 노트만 표시
+  const reliableNumeric = opt.ratio > 0 && (opt.substituteUnit !== undefined || !opt.ratioNote)
+  const showNumeric = amount > 0 && reliableNumeric
 
   return (
     <div className={`${styles.optionCard} ${grade.cardClass}`}>
@@ -795,19 +780,20 @@ function OptionCard({ opt, amount, unit }: { opt: SubstituteOption; amount: numb
         </span>
       </div>
 
-      {/* 양 환산 */}
-      {showConversion ? (
+      {/* 양 환산 — 신뢰 가능한 경우에만 숫자, 그 외엔 단위 인식 노트 */}
+      {showNumeric && (
         <div className={styles.conversion}>
           <span className={styles.convFrom}>{formatAmount(amount)} {unit}</span>
           <span className={styles.convArrow}>→</span>
           <span className={styles.convTo}>{formatAmount(amount * opt.ratio)} {subUnit}</span>
           <span className={styles.convRatio}>×{opt.ratio.toString()}</span>
         </div>
-      ) : opt.ratioNote ? (
-        <div className={styles.conversion}>
+      )}
+      {opt.ratioNote && (
+        <div className={styles.conversion} style={{ marginTop: showNumeric ? 4 : 0 }}>
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>{opt.ratioNote}</span>
         </div>
-      ) : null}
+      )}
 
       {/* 적합 용도 */}
       {opt.useFor.length > 0 && (
@@ -854,7 +840,7 @@ function BrowseTab({ onDetail }: { onDetail: (key: string) => void }) {
   // 모든 카테고리 접힘 상태로 시작 — 사용자가 클릭해서 펼쳐서 확인
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => ({
     fat: false, dairy: false, sweet: false, protein: false, flour: false,
-    acid: false, season: false, herb: false, plant: false,
+    acid: false, season: false, herb: false, plant: false, korean: false,
   }))
 
   function toggle(g: string) {
@@ -869,7 +855,7 @@ function BrowseTab({ onDetail }: { onDetail: (key: string) => void }) {
         const isOpen = openGroups[g.id]
         return (
           <div key={g.id} className={styles.browseSection}>
-            <button className={styles.browseHeader} onClick={() => toggle(g.id)}>
+            <button className={styles.browseHeader} aria-expanded={isOpen} onClick={() => toggle(g.id)}>
               <span className={styles.browseHeaderEmoji}>{g.emoji}</span>
               <span>{g.label}</span>
               <span className={styles.browseCount}>({items.length}종)</span>

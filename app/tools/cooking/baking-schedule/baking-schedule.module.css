@@ -789,3 +789,11 @@
   max-height: 360px;
   overflow: auto;
 }
+
+/* ── 본문 가이드 그리드 (page.tsx) — 모바일에서 1열로 ── */
+.guideGrid2 { display: grid; grid-template-columns: 1fr 1fr; }
+.guideGrid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 480px) {
+  .guideGrid2 { grid-template-columns: 1fr; }
+  .guideGrid3 { grid-template-columns: 1fr; }
+}

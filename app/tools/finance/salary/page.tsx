@@ -3,7 +3,7 @@ import SalaryClient from './SalaryClient'
 import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
-import { buildSalaryTable, formatEok } from './salaryUtils'
+import { buildSalaryTable, buildNetTargetTable, calcSalary, formatEok } from './salaryUtils'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -24,14 +24,22 @@ const won = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원'
 /* 부양가족 1인·비과세 0원 기준 2026년 연봉 실수령액표 (1,800만~2억, 빌드 시 생성) */
 const SALARY_TABLE = buildSalaryTable(1, 0, 0)
 
+/* §7 연봉별 실수령률·월실수령 — 엔진 생성(1인·비과세 0) */
+const RATE_ROWS = [20_000_000, 30_000_000, 40_000_000, 50_000_000, 70_000_000, 100_000_000, 150_000_000, 200_000_000]
+  .map(y => calcSalary({ grossYearly: y, dependents: 1, childrenCount: 0, nonTaxableMonthly: 0, isInsured: true }))
+
+/* §5 월 실수령 목표 → 필요 세전 연봉 — 엔진 생성(1인·비과세 0) */
+const NET_TARGETS = buildNetTargetTable(1, 0, 0)
+const NET_TARGET_NOTES = ['신입 평균', '', '중위 수준', '', '', '상위 20%', '상위 5%']
+
 const FAQ_LD = [
               {
                 q: '부양가족 수가 늘어나면 실수령액이 얼마나 달라지나요?',
-                a: '근로소득세는 부양가족 수에 따라 기본공제(1인당 연 150만 원)가 적용됩니다. 연봉 5,000만 원 기준 부양가족 1인보다 3인이면 월 소득세가 약 5~8만 원 줄어듭니다. 8세~20세 자녀는 추가 자녀세액공제도 함께 적용됩니다.',
+                a: '근로소득세는 부양가족 수에 따라 기본공제(1인당 연 150만 원)가 적용됩니다. 연봉 5,000만 원 기준 부양가족 1인보다 3인이면 월 소득세가 약 3~4만 원 줄어듭니다. 8세~20세 자녀는 추가 자녀세액공제도 함께 적용됩니다.',
               },
               {
                 q: '식대 20만 원 비과세를 적용하면 실수령액이 얼마나 늘어나나요?',
-                a: '식대 월 20만 원이 비과세 처리되면 연봉 4,000만 원 기준 월 약 2~3만 원, 연간 약 25~35만 원의 추가 절세 효과가 있습니다. 식대 + 자가운전 + 육아수당을 모두 적용하면 월 60만원 비과세로 <strong>연 100만원 이상</strong> 실수령이 늘 수 있습니다.',
+                a: '식대 월 20만 원이 비과세 처리되면 연봉 4,000만 원 기준 월 약 4~5만 원, 연간 약 55만 원의 추가 실수령 효과가 있습니다(4대보험료·소득세 모두 절감 — 저연봉은 더 적고 고연봉은 더 큼). 식대 + 자가운전 + 육아수당을 모두 적용해 월 60만원을 비과세 처리하면 <strong>연 약 170만원</strong>까지 실수령이 늘 수 있습니다.',
               },
               {
                 q: '연봉 협상 시 세전과 세후 중 어느 기준으로 이야기해야 하나요?',
@@ -51,7 +59,7 @@ const FAQ_LD = [
               },
               {
                 q: '연봉 인상 시 실수령은 얼마나 늘어나나요?',
-                a: '인상률 그대로 실수령이 늘지 않습니다 (누진 세율 때문). 연봉 5,000만 → 5%(5,250만) 인상 시 월 약 +11만원(실수령률 +3.1%) / 10% 인상 시 월 +26만 / 20% 인상 시 월 +57만. 세전 인상률보다 실수령 인상률이 약 1~3%p 낮음. 특히 8,800만(24% → 35% 구간) 이상에서 차이가 커집니다. 인상 후 연봉을 <strong>[실수령액] 탭</strong>에 직접 입력하면 늘어나는 월 실수령을 바로 확인할 수 있습니다.',
+                a: '인상률 그대로 실수령이 늘지 않습니다 (누진 세율 때문). 연봉 5,000만 → 5%(5,250만) 인상 시 월 약 +16만원 / 10% 인상 시 월 +31만 / 20% 인상 시 월 +63만. 세전 인상률보다 실수령 인상률이 낮습니다. 특히 과세표준 8,800만(24% → 35% 구간) 이상에서 차이가 커집니다. 인상 후 연봉을 <strong>[실수령액] 탭</strong>에 직접 입력하면 늘어나는 월 실수령을 바로 확인할 수 있습니다.',
               },
               {
                 q: '13월 월급(연말정산)은 어떻게 계산되나요?',
@@ -59,7 +67,7 @@ const FAQ_LD = [
               },
               {
                 q: '체감 시급은 어떻게 계산하나요?',
-                a: '<strong>체감 시급 = 연 실수령 ÷ 연간 총 노동 시간(출퇴근 포함)</strong>. 연봉 4,000만원·왕복 출퇴근 60분·주 5시간 야근 가정 시 — 세전 시급 약 16,000원 / 세후 시급 약 13,900원 / 야근 포함 약 11,800원 / 체감 시급 약 9,500원. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 약 17% 차이날 수 있습니다. 본 도구의 <strong>[실수령액] 탭</strong>에서 &lsquo;체감 시급 보기&rsquo; 옵션을 켜면 본인 조건으로 비교 가능합니다.',
+                a: '<strong>체감 시급 = 연 실수령 ÷ 연간 총 노동 시간(출퇴근 포함)</strong>. 연봉 4,000만원·왕복 출퇴근 60분·주 5시간 야근 가정 시 — 세전 시급 약 16,000원 / 세후 시급 약 13,600원 / 야근 포함 약 12,400원 / 체감 시급 약 11,400원. 같은 연봉이라도 출퇴근 0분 vs 90분이면 체감 시급이 약 10% 이상 차이날 수 있습니다. 본 도구의 <strong>[실수령액] 탭</strong>에서 &lsquo;체감 시급 보기&rsquo; 옵션을 켜면 본인 조건으로 비교 가능합니다.',
               },
             ]
 
@@ -73,7 +81,7 @@ export default function SalaryPage() {
         💴 연봉 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        <strong style={{ color: 'var(--text)' }}>최신 세법 기준</strong>, 정확한 연봉 실수령액 계산기.
+        <strong style={{ color: 'var(--text)' }}>2026년 최신 세법 기준</strong>, 4대보험·근로소득세를 자동 반영한 실수령액 추정 계산기.
       </p>
 
       <UpdatedMeta date="2026년 5월" basis="2026년 4대보험 요율·근로소득 간이세액표 기준" sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"}]} />
@@ -178,7 +186,7 @@ export default function SalaryPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 비과세 급여 항목</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             비과세 수당은 4대보험료와 근로소득세 산정 기준에서 제외됩니다.
-            <strong style={{ color: 'var(--text)' }}> 월 60만원 비과세(식대·자가운전·육아) 적용 시 연 약 110만원 실수령 ↑</strong>이 가능합니다.
+            <strong style={{ color: 'var(--text)' }}> 월 60만원 비과세(식대·자가운전·육아) 적용 시 연 약 170만원 실수령 ↑</strong>이 가능합니다 (연봉 4,000만 기준).
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
@@ -259,19 +267,11 @@ export default function SalaryPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['200만원', '약 2,650만',    '신입 평균'],
-                  ['250만원', '약 3,300만',    ''],
-                  ['300만원', '약 4,250만',    '중위 수준'],
-                  ['350만원', '약 5,200만',    ''],
-                  ['400만원', '약 6,200만',    ''],
-                  ['500만원', '약 8,500만',    '상위 20%'],
-                  ['700만원', '약 1.4억',      '상위 5%'],
-                ].map((row, i) => (
+                {NET_TARGETS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{formatEok(r.targetNetMonthly)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>약 {formatEok(r.grossYearly)}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{NET_TARGET_NOTES[i]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -295,7 +295,7 @@ export default function SalaryPage() {
               { name: '세전 시급', desc: '공식 시급 — 연봉 ÷ (12 × 209h)', color: 'var(--muted)' },
               { name: '세후 시급', desc: '실수령 ÷ 209h — 약 86~91% 수준', color: 'var(--accent)' },
               { name: '야근 포함', desc: '실수령 ÷ (근무 + 야근) — 야근 많을수록 ↓', color: '#CA8A04' },
-              { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 17%↓', color: '#EA580C' },
+              { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 약 20%↓', color: '#EA580C' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}40`, borderRadius: 10, padding: '11px 14px' }}>
                 <p style={{ fontSize: 13.5, color: m.color, fontWeight: 700, marginBottom: 3 }}>{m.name}</p>
@@ -326,20 +326,11 @@ export default function SalaryPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['2,000만',  '약 91%', '약 152만'],
-                  ['3,000만',  '약 90%', '약 224만'],
-                  ['4,000만',  '약 87%', '약 290만'],
-                  ['5,000만',  '약 85%', '약 354만'],
-                  ['7,000만',  '약 81%', '약 470만'],
-                  ['1억',     '약 76%', '약 632만'],
-                  ['1.5억',   '약 70%', '약 880만'],
-                  ['2억',     '약 67%', '약 1,120만'],
-                ].map((row, i) => (
+                {RATE_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{formatEok(r.grossYearly)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>약 {r.takeHomeRate.toFixed(0)}%</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>약 {formatEok(r.netMonthly)}</td>
                   </tr>
                 ))}
               </tbody>
