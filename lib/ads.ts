@@ -32,3 +32,38 @@ export function isAdExcluded(pathname: string | null | undefined): boolean {
     (p) => pathname === p || pathname.startsWith(p + '/'),
   )
 }
+
+/**
+ * 광고를 게재하지 않는 정책·내비게이션 페이지 (정확 일치).
+ * - 정책/법적 페이지(개인정보·약관·소개·문의·면책): 광고에 부적합 → 영구 제외.
+ * - 홈·전체도구 인덱스: 콘텐츠보다 내비게이션 성격 → 심사 안전상 제외.
+ * Google Publisher Policies: 저가치·정책성 화면에는 광고(스크립트·슬롯)를 두지 않는다.
+ * (승인 후 홈 등에 광고를 켜고 싶다면 해당 항목을 이 목록에서 빼면 됨.)
+ */
+const AD_FREE_EXACT: ReadonlySet<string> = new Set([
+  '/',
+  '/tools',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms',
+  '/disclaimer',
+])
+
+/** 정책/내비/랜딩 페이지 여부 — 실제 도구 페이지(/tools/<카테고리>/<도구>)는 제외 대상 아님. */
+export function isAdRestrictedPage(pathname: string | null | undefined): boolean {
+  if (!pathname) return true
+  // 끝 슬래시 정규화 (루트는 유지)
+  const p = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname
+  if (AD_FREE_EXACT.has(p)) return true
+  // 컬렉션(큐레이션 목록) — 인덱스·개별 슬러그 모두
+  if (p === '/collections' || p.startsWith('/collections/')) return true
+  // 카테고리 랜딩 (/tools/<카테고리>) — 한 세그먼트. 도구 페이지는 두 세그먼트라 미해당.
+  if (/^\/tools\/[^/]+$/.test(p)) return true
+  return false
+}
+
+/** 해당 경로에 광고(자동/수동)를 로드해도 되는지 — 민감 카테고리·정책/내비 페이지 모두 차단. */
+export function adsAllowed(pathname: string | null | undefined): boolean {
+  return !isAdExcluded(pathname) && !isAdRestrictedPage(pathname)
+}

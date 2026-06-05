@@ -31,7 +31,9 @@ export interface IndustryPreset {
   category: '글·번역·강의' | '디자인·콘텐츠' | 'IT·기술' | '미용·서비스' | '판매·중개' | '기타'
   simpleRate: number   // 단순경비율 %
   baseRate: number     // 기준경비율 %
-  /** 단순경비율 적용 한도 (직전년도 매출, 원). 0이면 일반 한도(2400만) */
+  /** 단순경비율 적용 한도 — 계속사업자 기준(직전년도 수입, 원).
+   *  인적용역·음식 3,600만 / 도소매 6,000만 / 기타 서비스 2,400만.
+   *  신규사업자(개업 첫해)는 복식부기 의무 기준까지 단순경비율 적용 가능. */
   simpleLimit: number
   desc: string
 }
@@ -39,61 +41,61 @@ export interface IndustryPreset {
 export const INDUSTRIES: IndustryPreset[] = [
   // 글·번역·강의 (인적용역, 한도 7,500만)
   { id: 'writer',      code: '940100', name: '작가·저술가', category: '글·번역·강의',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '소설·시·에세이·시나리오 등' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '소설·시·에세이·시나리오 등' },
   { id: 'translator',  code: '940912', name: '번역·통역',   category: '글·번역·강의',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '문서 번역, 동시통역 등' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '문서 번역, 동시통역 등' },
   { id: 'lecturer',    code: '940903', name: '학원 강사',   category: '글·번역·강의',
-    simpleRate: 60.0, baseRate: 17.6, simpleLimit: 75_000_000, desc: '학원·과외 강의' },
+    simpleRate: 60.0, baseRate: 17.6, simpleLimit: 36_000_000, desc: '학원·과외 강의' },
   { id: 'tutor',       code: '940903', name: '과외 교습',   category: '글·번역·강의',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '개인 과외 (방문·온라인)' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '개인 과외 (방문·온라인)' },
   { id: 'speaker',     code: '940906', name: '특강·강연',   category: '글·번역·강의',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '기업·기관 강연료' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '기업·기관 강연료' },
 
   // 디자인·콘텐츠
   { id: 'designer',    code: '940909', name: '디자이너',     category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '그래픽·UI·웹 디자인' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '그래픽·UI·웹 디자인' },
   { id: 'illustrator', code: '940909', name: '일러스트레이터', category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '삽화·캐릭터·만화' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '삽화·캐릭터·만화' },
   { id: 'photographer',code: '940915', name: '사진작가',     category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '스튜디오·웨딩·상업 촬영' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '스튜디오·웨딩·상업 촬영' },
   { id: 'youtuber',    code: '940306', name: '유튜버·BJ',    category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '1인 미디어 콘텐츠 창작자' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '1인 미디어 콘텐츠 창작자' },
   { id: 'videographer',code: '940915', name: '영상 편집·제작', category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '영상 편집·모션그래픽' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '영상 편집·모션그래픽' },
   { id: 'musician',    code: '940904', name: '음악가·작곡가', category: '디자인·콘텐츠',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '작곡·연주·세션' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '작곡·연주·세션' },
   { id: 'voiceactor',  code: '940904', name: '성우·내레이터', category: '디자인·콘텐츠',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '더빙·내레이션' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '더빙·내레이션' },
 
   // IT·기술
   { id: 'developer',   code: '940909', name: 'IT 개발자',    category: 'IT·기술',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '웹·앱·서버 개발 (인적용역)' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '웹·앱·서버 개발 (인적용역)' },
   { id: 'datascientist',code: '940909', name: '데이터 분석가', category: 'IT·기술',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '데이터 분석·머신러닝' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '데이터 분석·머신러닝' },
   { id: 'planner',     code: '940909', name: '기획·컨설팅',  category: 'IT·기술',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: 'PM·PO·전략 컨설팅' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: 'PM·PO·전략 컨설팅' },
   { id: 'translator-tech', code: '940912', name: '기술번역', category: 'IT·기술',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '특허·매뉴얼·논문' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '특허·매뉴얼·논문' },
 
   // 미용·서비스
   { id: 'beauty',      code: '940905', name: '미용·메이크업', category: '미용·서비스',
-    simpleRate: 62.0, baseRate: 17.0, simpleLimit: 24_000_000, desc: '헤어·메이크업·네일' },
+    simpleRate: 62.0, baseRate: 17.0, simpleLimit: 36_000_000, desc: '헤어·메이크업·네일' },
   { id: 'massage',     code: '940905', name: '마사지·테라피', category: '미용·서비스',
-    simpleRate: 62.0, baseRate: 17.0, simpleLimit: 24_000_000, desc: '스파·테라피' },
+    simpleRate: 62.0, baseRate: 17.0, simpleLimit: 36_000_000, desc: '스파·테라피' },
   { id: 'fitness',     code: '940305', name: '피트니스 트레이너', category: '미용·서비스',
-    simpleRate: 60.0, baseRate: 17.6, simpleLimit: 75_000_000, desc: 'PT·요가·필라테스 강사' },
+    simpleRate: 60.0, baseRate: 17.6, simpleLimit: 36_000_000, desc: 'PT·요가·필라테스 강사' },
   { id: 'dance',       code: '940904', name: '댄서·안무가',  category: '미용·서비스',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '댄스·안무 강사' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '댄스·안무 강사' },
   { id: 'event',       code: '940906', name: '행사 진행·MC', category: '미용·서비스',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: 'MC·이벤트 호스트' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: 'MC·이벤트 호스트' },
   { id: 'model',       code: '940300', name: '모델·연기자',  category: '미용·서비스',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '광고·런웨이·연기' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '광고·런웨이·연기' },
 
   // 판매·중개
   { id: 'realestate',  code: '702002', name: '부동산 중개',  category: '판매·중개',
     simpleRate: 50.5, baseRate: 18.4, simpleLimit: 24_000_000, desc: '공인중개사 (사업소득)' },
   { id: 'salesagent',  code: '940908', name: '보험·금융 모집인', category: '판매·중개',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '보험·신용카드 모집' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '보험·신용카드 모집' },
   { id: 'shopowner',   code: '521000', name: '소매 사업자',  category: '판매·중개',
     simpleRate: 86.0, baseRate: 5.5,  simpleLimit: 60_000_000, desc: '온·오프라인 소매' },
   { id: 'restaurant',  code: '552201', name: '음식점업',     category: '판매·중개',
@@ -101,17 +103,17 @@ export const INDUSTRIES: IndustryPreset[] = [
 
   // 기타
   { id: 'researcher',  code: '940906', name: '연구원·자문',  category: '기타',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '연구용역·자문료' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '연구용역·자문료' },
   { id: 'cleaning',    code: '940911', name: '청소·가사',    category: '기타',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '청소 서비스·가사도우미' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '청소 서비스·가사도우미' },
   { id: 'caregiver',   code: '940911', name: '요양·간병',    category: '기타',
-    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 75_000_000, desc: '돌봄·요양 서비스' },
+    simpleRate: 75.0, baseRate: 24.6, simpleLimit: 36_000_000, desc: '돌봄·요양 서비스' },
   { id: 'rider',       code: '940918', name: '배달 라이더',  category: '기타',
-    simpleRate: 79.4, baseRate: 27.4, simpleLimit: 24_000_000, desc: '배달 플랫폼 (쿠팡·배민·요기요)' },
+    simpleRate: 79.4, baseRate: 27.4, simpleLimit: 36_000_000, desc: '배달 플랫폼 (쿠팡·배민·요기요)' },
   { id: 'driver',      code: '940917', name: '대리·택시',    category: '기타',
-    simpleRate: 79.4, baseRate: 27.4, simpleLimit: 24_000_000, desc: '대리운전·법인택시 등' },
+    simpleRate: 79.4, baseRate: 27.4, simpleLimit: 36_000_000, desc: '대리운전·법인택시 등' },
   { id: 'other',       code: '940909', name: '기타 인적용역', category: '기타',
-    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 75_000_000, desc: '위에 없는 프리랜서' },
+    simpleRate: 64.1, baseRate: 19.5, simpleLimit: 36_000_000, desc: '위에 없는 프리랜서' },
 ]
 
 /** 복식부기 의무 매출 한도 (2026년 기준) */
@@ -130,6 +132,7 @@ export interface CalcInputs {
   industryId: string       // 업종 ID
   expenseMode: 'simple' | 'book'
   bookExpenses: number     // 장부 모드 시 실경비 (원)
+  isNewBusiness: boolean   // 개업 첫해(신규사업자) — 단순경비율 한도 = 복식부기 의무 기준
 
   // 종합소득공제
   spouseExempt: boolean    // 배우자 공제 (연 100만 이하 소득)
@@ -154,6 +157,7 @@ export interface CalcResult {
   expenseAmount: number
   expenseRate: number          // 적용된 경비율 %
   canUseSimple: boolean
+  appliedSimpleLimit: number   // 실제 적용된 단순경비율 한도 (계속/신규 반영, 원)
   isComplexBookRequired: boolean
 
   // 소득 흐름
@@ -187,7 +191,7 @@ export function applyProgressiveTax(taxableBase: number): { tax: number; bracket
 }
 
 /* ─── 공제 합계 ─── */
-export function computeDeductions(inputs: CalcInputs): { total: number; details: { label: string; amount: number }[] } {
+export function computeDeductions(inputs: CalcInputs, businessIncome: number): { total: number; details: { label: string; amount: number }[] } {
   const details: { label: string; amount: number }[] = []
   // 인적공제 (본인 150 + 배우자 150 + 부양가족 150씩)
   const personal = 1_500_000
@@ -199,27 +203,28 @@ export function computeDeductions(inputs: CalcInputs): { total: number; details:
   if (inputs.pensionPaid > 0) details.push({ label: '국민연금', amount: inputs.pensionPaid })
   if (inputs.healthPaid > 0)  details.push({ label: '건강보험·장기요양', amount: inputs.healthPaid })
 
-  // 노란우산공제 — 사업소득금액 따라 한도 차등
-  // 4천 이하: 500만 / 4천~1억: 300만 / 1억 초과: 200만
+  // 노란우산공제 — 사업소득금액 따라 한도 차등 (4천↓ 500만 / 4천~1억 300만 / 1억↑ 200만)
   if (inputs.yellowUmbrella > 0) {
-    details.push({ label: '노란우산공제', amount: inputs.yellowUmbrella })
+    const cappedYellow = Math.min(inputs.yellowUmbrella, yellowUmbrellaLimit(businessIncome))
+    details.push({ label: '노란우산공제', amount: cappedYellow })
   }
 
   return { total: details.reduce((s, x) => s + x.amount, 0), details }
 }
 
-/** 노란우산 한도 (사업소득금액 기준) */
+/** 노란우산 소득공제 한도 (사업소득금액 기준, 2025 상향) */
 export function yellowUmbrellaLimit(businessIncome: number): number {
-  if (businessIncome <= 40_000_000) return 5_000_000
-  if (businessIncome <= 100_000_000) return 3_000_000
-  return 2_000_000
+  if (businessIncome <= 40_000_000) return 6_000_000   // 4천만 이하 (500→600)
+  if (businessIncome <= 100_000_000) return 4_000_000  // 4천만~1억 (300→400)
+  return 2_000_000                                      // 1억 초과 (유지)
 }
 
 /* ─── 세액공제 ─── */
-/** 연금저축 세액공제 (한도 600만, 종합소득금액 4,500만 이하 16.5%, 초과 13.2%) */
+/** 연금저축 세액공제 — 국세(소득세)분만 반환 (한도 600만, 종합소득금액 4,500만 이하 15%, 초과 12%).
+ *  지방소득세 10%는 결정세액에서 자동 차감되어 총 16.5% / 13.2% 효과. */
 export function pensionSavingsCredit(amount: number, businessIncome: number): number {
   const eligible = Math.min(6_000_000, Math.max(0, amount))
-  const rate = businessIncome <= 45_000_000 ? 0.165 : 0.132
+  const rate = businessIncome <= 45_000_000 ? 0.15 : 0.12
   return Math.floor(eligible * rate)
 }
 
@@ -235,8 +240,12 @@ export function calculate(inputs: CalcInputs): CalcResult {
   const industry = INDUSTRIES.find((i) => i.id === inputs.industryId) ?? INDUSTRIES[INDUSTRIES.length - 1]
 
   // 단순경비율 적용 가능 여부
-  const canUseSimple = inputs.revenue <= industry.simpleLimit
-  const isComplexBookRequired = inputs.revenue > (COMPLEX_BOOK_THRESHOLD[industry.category] ?? 75_000_000)
+  //  - 계속사업자: 직전연도 수입 기준 (본 도구는 입력 매출을 직전연도로 간주)
+  //  - 신규사업자(개업 첫해): 당해 수입이 복식부기 의무 기준 미만이면 단순경비율 가능
+  const complexLimit = COMPLEX_BOOK_THRESHOLD[industry.category] ?? 75_000_000
+  const appliedSimpleLimit = inputs.isNewBusiness ? complexLimit : industry.simpleLimit
+  const canUseSimple = inputs.revenue <= appliedSimpleLimit
+  const isComplexBookRequired = inputs.revenue > complexLimit
 
   // 경비
   let expenseAmount: number
@@ -244,11 +253,19 @@ export function calculate(inputs: CalcInputs): CalcResult {
   if (inputs.expenseMode === 'simple') {
     if (canUseSimple) {
       expenseRate = industry.simpleRate
+      expenseAmount = Math.floor(inputs.revenue * (expenseRate / 100))
     } else {
-      // 한도 초과 시 기준경비율 적용 (참고용)
-      expenseRate = industry.baseRate
+      /* 단순경비율 한도 초과 → 기준경비율 추계 (무증빙 보수적 기준)
+         추계 소득금액 = min( 매출 − 매출×기준경비율,  단순경비율 소득금액 × 배율 )
+         배율: 복식부기 의무자 3.4 / 간편장부 대상자 2.8
+         ※ 주요경비(매입·임차·인건비) 증빙은 본 도구 미반영 */
+      const baseMethodIncome = inputs.revenue * (1 - industry.baseRate / 100)
+      const simpleMethodIncome = inputs.revenue * (1 - industry.simpleRate / 100)
+      const multiplier = isComplexBookRequired ? 3.4 : 2.8
+      const estimatedIncome = Math.min(baseMethodIncome, simpleMethodIncome * multiplier)
+      expenseAmount = Math.floor(Math.max(0, inputs.revenue - estimatedIncome))
+      expenseRate = inputs.revenue > 0 ? (expenseAmount / inputs.revenue) * 100 : 0
     }
-    expenseAmount = Math.floor(inputs.revenue * (expenseRate / 100))
   } else {
     expenseAmount = Math.min(inputs.revenue, Math.max(0, inputs.bookExpenses))
     expenseRate = inputs.revenue > 0 ? (expenseAmount / inputs.revenue) * 100 : 0
@@ -258,7 +275,7 @@ export function calculate(inputs: CalcInputs): CalcResult {
   const businessIncome = Math.max(0, inputs.revenue - expenseAmount)
 
   // 종합소득공제
-  const { total: totalDeduction } = computeDeductions(inputs)
+  const { total: totalDeduction } = computeDeductions(inputs, businessIncome)
 
   // 과세표준
   const taxableBase = Math.max(0, businessIncome - totalDeduction)
@@ -313,6 +330,7 @@ export function calculate(inputs: CalcInputs): CalcResult {
     expenseAmount,
     expenseRate: Math.round(expenseRate * 10) / 10,
     canUseSimple,
+    appliedSimpleLimit,
     isComplexBookRequired,
     businessIncome,
     totalDeduction,
@@ -396,16 +414,17 @@ export function recommendSavings(result: CalcResult, base: CalcInputs): SavingTi
     })
   }
 
-  // 연금저축
+  // 연금저축 (국세 세액공제 × 1.1 = 지방세 포함 총 절세)
   if (base.pensionSavings < 6_000_000) {
     const additional = 6_000_000 - base.pensionSavings
     const credit = pensionSavingsCredit(additional, result.businessIncome)
-    if (credit > 100_000) {
+    const totalSaving = Math.floor(credit * 1.1)
+    if (totalSaving > 100_000) {
       tips.push({
         emoji: '💰',
         title: '연금저축 추가 납입',
         desc: `한도 600만원까지 ${(result.businessIncome <= 45_000_000 ? '16.5%' : '13.2%')} 세액공제 (소득공제와 별개)`,
-        estimatedSaving: credit,
+        estimatedSaving: totalSaving,
       })
     }
   }

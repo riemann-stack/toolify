@@ -78,8 +78,9 @@ export interface ProportionalToDepositResult {
   depositRequired: number         // 필요 증거금
   proportionalAlloc: number       // 5사6입 후 비례 배정
   totalAlloc: number              // 균등 + 비례
-  finalPayment: number            // 최종 납입
-  refundEstimate: number          // 환불 예상
+  finalPayment: number            // 최종 납입 (총배정 × 공모가)
+  refundEstimate: number          // 환불 예상 (증거금 - 최종 납입)
+  additionalPayment: number       // 추가 납입(잔금) — 배정금액이 증거금 초과 시
 }
 
 /** 비례 → 증거금 (메인) */
@@ -100,7 +101,10 @@ export function calcDepositFromTarget(targetShares: number, input: IpoCalcInput)
   const proportionalAlloc = applyFiveSixRule(rawAlloc, input.rule)
   const totalAlloc = proportionalAlloc + Math.max(0, input.evenExpected)
   const finalPayment = totalAlloc * input.publicPrice
-  const refundEstimate = Math.max(0, depositRequired - (proportionalAlloc * input.publicPrice))
+  // 환불 = 증거금 - 총배정금액(비례+균등). 균등배정도 증거금에서 차감 후 환불.
+  const refundEstimate = Math.max(0, depositRequired - finalPayment)
+  // 배정금액이 증거금을 초과하면(저경쟁률) 추가 납입(잔금) 발생
+  const additionalPayment = Math.max(0, finalPayment - depositRequired)
 
   return {
     targetShares,
@@ -114,6 +118,7 @@ export function calcDepositFromTarget(targetShares: number, input: IpoCalcInput)
     totalAlloc,
     finalPayment,
     refundEstimate,
+    additionalPayment,
   }
 }
 
@@ -129,6 +134,7 @@ export interface DepositToSharesResult {
   totalAlloc: number              // 균등 + 비례
   finalPayment: number
   refundEstimate: number
+  additionalPayment: number       // 추가 납입(잔금) — 배정금액이 사용 증거금 초과 시
 }
 
 /** 증거금 → 예상 주수 (역산) */
@@ -150,12 +156,14 @@ export function calcSharesFromDeposit(myDeposit: number, input: IpoCalcInput): D
   const proportionalAlloc = applyFiveSixRule(rawAlloc, input.rule)
   const totalAlloc = proportionalAlloc + Math.max(0, input.evenExpected)
   const finalPayment = totalAlloc * input.publicPrice
-  const refundEstimate = Math.max(0, usedDeposit - (proportionalAlloc * input.publicPrice))
+  // 환불 = 사용 증거금 - 총배정금액(비례+균등)
+  const refundEstimate = Math.max(0, usedDeposit - finalPayment)
+  const additionalPayment = Math.max(0, finalPayment - usedDeposit)
 
   return {
     myDeposit, possibleSubscribe, actualSubscribe, hitLimit, belowMinUnit,
     usedDeposit, unusedDeposit,
-    proportionalAlloc, totalAlloc, finalPayment, refundEstimate,
+    proportionalAlloc, totalAlloc, finalPayment, refundEstimate, additionalPayment,
   }
 }
 
@@ -239,6 +247,11 @@ export function memosToCSV(memos: IpoMemo[]): string {
     ].join(',')
   })
   return [head, ...lines].join('\n')
+}
+
+/** 오늘 날짜 (KST 기준) YYYY-MM-DD — UTC 자정 직후 하루 밀림 방지 */
+export function todayKST(): string {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
 // D-day 계산

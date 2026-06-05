@@ -66,12 +66,13 @@ export default function AuctionClient() {
     } catch {}
   }, [priceMan, property, owner, region, costs, autoOn])
 
-  /* 계산 */
-  const price = parseFloat(priceMan) || 0
+  /* 계산 (음수·NaN 입력 방어: 0 이상으로 보정) */
+  const price = Math.max(0, parseFloat(priceMan) || 0)
+  const isHouseProp = PROPERTIES.find((p) => p.id === property)?.isHouse ?? false
 
   /* 자동 항목 값 (토글 ON이면 자동, OFF면 수동 입력값) */
   const autoValue = (id: string): number => {
-    if (!autoOn[id]) return parseFloat(costs[id]) || 0
+    if (!autoOn[id]) return Math.max(0, parseFloat(costs[id]) || 0)
     switch (id) {
       case 'tax_acq': return calcAcquisitionTax(price, property, owner, region)
       case 'legal':   return calcLegalFee(price)
@@ -85,7 +86,7 @@ export default function AuctionClient() {
   const itemCosts = useMemo(() => {
     return COST_ITEMS.map((c) => ({
       ...c,
-      value: c.isAuto ? autoValue(c.id) : (parseFloat(costs[c.id]) || 0),
+      value: c.isAuto ? autoValue(c.id) : Math.max(0, parseFloat(costs[c.id]) || 0),
     }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, property, owner, region, costs, autoOn])
@@ -96,11 +97,13 @@ export default function AuctionClient() {
   const totalInvest = price + totalExtra
   const extraRatio = price > 0 ? (totalExtra / price) * 100 : 0
   const acqRate = getAcquisitionRate(price, property, owner, region)
+  /* 비중(%) — 총투자금 0일 때 NaN 방지 */
+  const pctOf = (v: number) => (totalInvest > 0 ? (v / totalInvest) * 100 : 0).toFixed(1)
 
   /* 대출 계산 */
   const loanResult = useMemo(
-    () => calcLoan(totalInvest, ltvPct, parseFloat(ratePct) || 0, parseFloat(years) || 1, parseFloat(income) || 0, parseFloat(existingMonth) || 0),
-    [totalInvest, ltvPct, ratePct, years, income, existingMonth],
+    () => calcLoan(price, totalInvest, ltvPct, parseFloat(ratePct) || 0, parseFloat(years) || 1, parseFloat(income) || 0, parseFloat(existingMonth) || 0),
+    [price, totalInvest, ltvPct, ratePct, years, income, existingMonth],
   )
   const cashOwnN = parseFloat(cashOwn) || 0
   const cashShortage = Math.max(0, loanResult.ownEquity - cashOwnN)
@@ -142,13 +145,16 @@ export default function AuctionClient() {
         sources={[
           { label: '대법원 법원경매정보', href: 'https://www.courtauction.go.kr' },
           { label: '국토교통부 실거래가', href: 'https://rt.molit.go.kr' },
+          { label: '위택스 (취득세·지방세)', href: 'https://www.wetax.go.kr' },
+          { label: '전자수입인지 (인지세)', href: 'https://www.e-revenuestamp.or.kr' },
+          { label: '금융위원회 (LTV·DSR)', href: 'https://www.fsc.go.kr' },
         ]}
       >
         사용 안내 세율·LTV·DSR은 매년 변동됩니다 — <strong>국세청·국토부·금감원 최신 공시</strong> 우선. 경매 부대비용은 <strong>물건별로 매우 다릅니다</strong> (특히 명도·수리·체납). <strong>유치권·법정지상권</strong> 같은 법적 분쟁은 변호사·법무사 상담 필수.
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="경매 계산 모드">
         {([
           { id: 'cost',     label: '💵 총비용 계산' },
           { id: 'loan',     label: '🏦 대출·자기자본' },
@@ -157,6 +163,8 @@ export default function AuctionClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -190,10 +198,11 @@ export default function AuctionClient() {
 
         <div className={s.field}>
           <label className={s.fieldLabel}>부동산 종류</label>
-          <div className={s.pillRow}>
+          <div className={s.pillRow} role="group" aria-label="부동산 종류">
             {PROPERTIES.map((p) => (
               <button
                 key={p.id}
+                aria-pressed={property === p.id}
                 className={`${s.pill} ${property === p.id ? s.pillActive : ''}`}
                 onClick={() => setProperty(p.id)}
                 type="button"
@@ -207,10 +216,11 @@ export default function AuctionClient() {
         <div className={s.row2}>
           <div className={s.field}>
             <label className={s.fieldLabel}>명의 유형</label>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="명의 유형">
               {OWNERS.map((o) => (
                 <button
                   key={o.id}
+                  aria-pressed={owner === o.id}
                   className={`${s.pill} ${owner === o.id ? s.pillActive : ''}`}
                   onClick={() => setOwner(o.id)}
                   type="button"
@@ -223,10 +233,11 @@ export default function AuctionClient() {
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>지역</label>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="지역">
               {REGIONS.map((r) => (
                 <button
                   key={r.id}
+                  aria-pressed={region === r.id}
                   className={`${s.pill} ${region === r.id ? s.pillActive : ''}`}
                   onClick={() => setRegion(r.id)}
                   type="button"
@@ -252,7 +263,7 @@ export default function AuctionClient() {
             <div className={s.costGrid}>
               {AUTO_ITEMS.map((c) => {
                 const isAutoMode = autoOn[c.id]
-                const value = isAutoMode ? autoValue(c.id) : (parseFloat(costs[c.id]) || 0)
+                const value = isAutoMode ? autoValue(c.id) : Math.max(0, parseFloat(costs[c.id]) || 0)
                 return (
                   <div key={c.id} className={s.costItem}>
                     <label className={s.costLabel}>
@@ -349,14 +360,14 @@ export default function AuctionClient() {
                   <tr>
                     <td>🏠 낙찰가</td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(price)}</td>
-                    <td className={s.cellMono}>{((price / totalInvest) * 100).toFixed(1)}%</td>
+                    <td className={s.cellMono}>{pctOf(price)}%</td>
                   </tr>
                   <tr className={s.cellSubtitle}><td colSpan={3}>자동 추정 (세금·법무)</td></tr>
                   {itemCosts.filter((c) => c.isAuto).map((c) => (
                     <tr key={c.id}>
                       <td>{c.emoji} {c.label.split(' ')[0]}</td>
                       <td className={s.cellMono}>{fmt(c.value, 0)} 만원</td>
-                      <td className={s.cellMono}>{((c.value / totalInvest) * 100).toFixed(1)}%</td>
+                      <td className={s.cellMono}>{pctOf(c.value)}%</td>
                     </tr>
                   ))}
                   <tr className={s.cellSubtitle}><td colSpan={3}>수동 입력 (경매 특화)</td></tr>
@@ -364,7 +375,7 @@ export default function AuctionClient() {
                     <tr key={c.id}>
                       <td>{c.emoji} {c.label.split(' ')[0]}</td>
                       <td className={s.cellMono}>{fmt(c.value, 0)} 만원</td>
-                      <td className={s.cellMono}>{((c.value / totalInvest) * 100).toFixed(1)}%</td>
+                      <td className={s.cellMono}>{pctOf(c.value)}%</td>
                     </tr>
                   ))}
                   <tr className={s.cellTotal}>
@@ -387,10 +398,11 @@ export default function AuctionClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>LTV 한도 (%)</label>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="LTV 한도">
                   {[70, 60, 50, 40, 30].map((v) => (
                     <button
                       key={v}
+                      aria-pressed={ltvPct === v}
                       className={`${s.pill} ${ltvPct === v ? s.pillActive : ''}`}
                       onClick={() => setLtvPct(v)}
                       type="button"
@@ -531,7 +543,11 @@ export default function AuctionClient() {
             <p className={s.heroValue}>
               최대 차액 <strong>{fmtMan(scenarios[scenarios.length - 1].diff)}</strong>
             </p>
-            <p className={s.heroSub}>실거주 1주택 vs 4주택+ — 취득세 차이가 가장 큼</p>
+            <p className={s.heroSub}>
+              {isHouseProp
+                ? '실거주 1주택 vs 다주택·법인 — 취득세 차이가 가장 큼'
+                : '비주택(오피스텔·상가·토지)은 명의 무관 동일 세율 4.6% — 명의별 차이 없음'}
+            </p>
           </div>
 
           <div className={s.card}>
@@ -592,9 +608,9 @@ export default function AuctionClient() {
           <div className={s.warnCard}>
             <strong>💡 시나리오 활용 팁</strong>
             <p>
-              • <strong>실거주 1주택</strong>: 취득세 1.1~3.3% — 가장 유리, 비과세 요건(보유 2년 + 거주 2년)<br />
-              • <strong>2주택</strong>: 비규제지역 1주택 세율, 조정대상지역 8% 적용<br />
-              • <strong>3주택+ / 법인</strong>: 12% 단일 세율 — 단기 매도 양도세 중과까지<br />
+              • <strong>실거주 1주택</strong>: 취득세 1.1~3.3% — 가장 유리 (양도세 비과세 요건은 보유·거주 2년으로 별개)<br />
+              • <strong>2주택</strong>: 비규제지역 1주택 세율, 조정대상지역 8.4% 적용<br />
+              • <strong>3주택+ / 법인</strong>: 12.4% 단일 세율 — 단기 매도 양도세 중과까지<br />
               • <strong>법인 명의</strong>: 종합소득세·종합부동산세 모두 부과, 1주택 특례 X
             </p>
           </div>
@@ -628,7 +644,7 @@ export default function AuctionClient() {
                     <span className={s.legendDot} style={{ background: d.color }} />
                     <span className={s.legendLabel}>{d.label}</span>
                     <span className={s.legendValue}>
-                      {fmtMan(d.value)} ({((d.value / totalInvest) * 100).toFixed(1)}%)
+                      {fmtMan(d.value)} ({pctOf(d.value)}%)
                     </span>
                   </div>
                 ))}

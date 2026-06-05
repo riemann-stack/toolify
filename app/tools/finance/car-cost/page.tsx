@@ -82,7 +82,7 @@ const FAQ_LD = [
           },
           {
             q: '전기차가 정말 유지비 더 싼가요?',
-            a: '연료비는 가솔린의 1/3~1/4 수준이지만 다음 추가 비용이 있습니다: ① 차량 가격 +1,000~2,000만(보조금 후), ② 감가율 ↑ (연 15~20%), ③ 배터리 교체 (10년+ 후 1,000~1,500만), ④ 충전기 설치 (아파트 50~200만). 5년 보유 비교 시 일반 가솔린 약 2,259만 vs 전기 가정 충전 약 3,120만으로 가솔린이 유리. 전기차는 10년+ 장기 + 가정 충전 + 시내 주행 + 환경 가치 시 유리.',
+            a: '연료비는 가솔린의 1/3~1/4 수준이지만 다음 추가 비용이 있습니다: ① 차량 가격 +1,000~2,000만(보조금 후), ② 감가율 ↑ (연 15~20%), ③ 배터리 교체 (10년+ 후 1,000~1,500만), ④ 충전기 설치 (아파트 50~200만). 5년 보유 비교 시 일반 가솔린 약 2,466만 vs 전기 가정 충전 약 3,192만으로 가솔린이 유리(LPG 약 2,147만이 최저). 전기차는 10년+ 장기 + 가정 충전 + 시내 주행 + 환경 가치 시 유리.',
           },
           {
             q: '카쉐어링과 차 보유 어느 게 더 싼가요?',
@@ -114,7 +114,7 @@ export default function CarCostPage() {
         <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px', color: 'var(--text)' }}>🏛️ 고정비 (매달 동일)</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--muted)' }}>
           <li><strong style={{ color: 'var(--text)' }}>자동차 보험</strong> — 연 평균 60~150만원 (연령·차종·경력별)</li>
-          <li><strong style={{ color: 'var(--text)' }}>자동차세</strong> — 배기량 기준 8만~80만원/년 · 전기차 13만/년 정액</li>
+          <li><strong style={{ color: 'var(--text)' }}>자동차세</strong> — 배기량 기준 약 10만~104만원/년 (지방교육세 30% 포함) · 전기차 13만/년 정액</li>
           <li><strong style={{ color: 'var(--text)' }}>할부금</strong> — 남은 기간만 가산 (할부 종료 후 0)</li>
           <li><strong style={{ color: 'var(--text)' }}>월 주차비</strong> — 지역별 0~20만원</li>
         </ul>
@@ -132,7 +132,7 @@ export default function CarCostPage() {
       <div style={card}>
         <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px', color: 'var(--text)' }}>🔧 소모품 평균 (한국 표준)</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--muted)' }}>
-          <li><strong style={{ color: 'var(--text)' }}>엔진오일</strong> — 5,000km 또는 6개월 (8만/회 → 월 1.5만)</li>
+          <li><strong style={{ color: 'var(--text)' }}>엔진오일</strong> — 1만km 또는 12개월 (8만/회 · 월 1,500km 기준 약 1.2만)</li>
           <li><strong style={{ color: 'var(--text)' }}>타이어 (4개)</strong> — 4만km 또는 3년 (60~80만/세트 → 월 1.5~2만)</li>
           <li><strong style={{ color: 'var(--text)' }}>배터리</strong> — 약 3년 (15만/회 → 월 4천)</li>
           <li><strong style={{ color: 'var(--text)' }}>브레이크 패드</strong> — 3~4만km (앞바퀴 기준 15만)</li>
@@ -189,18 +189,19 @@ export default function CarCostPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>1,000cc 이하</td><td style={cell}><strong>80,000원</strong></td><td style={cell}>경차 (모닝·캐스퍼)</td></tr>
-            <tr><td style={cell}>1,500cc 이하</td><td style={cell}><strong>200,000원</strong></td><td style={cell}>소형 (아반떼 1.6 GDI)</td></tr>
-            <tr><td style={cell}>2,000cc 이하</td><td style={cell}><strong>400,000원</strong></td><td style={cell}>준중형·중형 (쏘나타·K5)</td></tr>
-            <tr><td style={cell}>2,500cc 이하</td><td style={cell}><strong>500,000원</strong></td><td style={cell}>중형~대형</td></tr>
-            <tr><td style={cell}>3,000cc 이하</td><td style={cell}><strong>600,000원</strong></td><td style={cell}>대형 (그랜저 3.0)</td></tr>
-            <tr><td style={cell}>3,000cc 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>800,000원+</strong></td><td style={cell}>대형 SUV (팰리세이드)</td></tr>
+            <tr><td style={cell}>1,000cc 이하</td><td style={cell}><strong>104,000원</strong></td><td style={cell}>경차 (모닝·캐스퍼)</td></tr>
+            <tr><td style={cell}>1,500cc 이하</td><td style={cell}><strong>260,000원</strong></td><td style={cell}>소형 (베뉴·1,500cc급)</td></tr>
+            <tr><td style={cell}>2,000cc 이하</td><td style={cell}><strong>520,000원</strong></td><td style={cell}>준중형·중형 (쏘나타·K5)</td></tr>
+            <tr><td style={cell}>2,500cc 이하</td><td style={cell}><strong>650,000원</strong></td><td style={cell}>중형~대형</td></tr>
+            <tr><td style={cell}>3,000cc 이하</td><td style={cell}><strong>780,000원</strong></td><td style={cell}>대형 (그랜저 3.0)</td></tr>
+            <tr><td style={cell}>3,000cc 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>1,040,000원+</strong></td><td style={cell}>대형 SUV (팰리세이드)</td></tr>
             <tr><td style={cell}><strong style={{ color: '#0891B2' }}>전기차</strong></td><td style={cell}><strong style={{ color: '#0891B2' }}>130,000원 정액</strong></td><td style={cell}>아이오닉5·EV6 등</td></tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-        ※ 6월·12월 분납. 1월 일시납 시 약 10% 공제. 연식 5년 초과 시 단계별 인하.
+        ※ 위 금액은 지방교육세 30% 포함 실납부 기준 (비영업용 승용 = cc × 80/140/200원 + 교육세 30%, 1,600cc 기준 세율 구간 변동).
+        6월·12월 분납. 1월 일시납 시 약 10% 공제. 차령 5년 초과 시 단계별 인하(최대 50%).
       </p>
 
       {/* 4. 5년 vs 10년 보유 비교 (NEW) */}
@@ -257,7 +258,7 @@ export default function CarCostPage() {
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
               <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 부담</th>
+              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 평균</th>
               <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
               <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
             </tr>
@@ -265,40 +266,41 @@ export default function CarCostPage() {
           <tbody>
             <tr style={{ background: 'rgba(14,165,233,0.06)' }}>
               <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>현금 ★</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 28만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 1,680만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 54만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,266만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 X · 가장 저렴</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>할부 (5년·5%)</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 56만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,375만</td>
-              <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 약 397만 추가</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 60만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,597만</td>
+              <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 약 331만 추가</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>리스</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 75만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 4,500만</td>
-              <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 비용 처리 (사업자)</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 107만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 6,437만</td>
+              <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 운영비 포함 추정</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>장기렌트</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 84만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 5,040만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 105만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 6,278만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 보험·정비 포함</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-        ※ 본인 상황별 추천: 자금 충분 → 현금, 자금 부족 + 5년+ → 할부, 사업자 → 리스, 관리 편함 우선 → 장기렌트.
+        ※ 위 월 평균·5년 총비용은 유류·보험·세금·정비 등 <strong>운영비를 포함한 도구 기본값 기준</strong>(리스·렌트는 보험·정비 별도 가정)이라 단순 납입액보다 큽니다.
+        본인 상황별 추천: 자금 충분 → 현금, 자금 부족 + 5년+ → 할부, 사업자 → 리스, 관리 편함 우선 → 장기렌트.
         ⚠️ 광고 표시 가격 ≠ 실제 비용 — 캐피탈 회사 직접 견적 필수.
       </p>
 
       {/* 6. 전기차 vs 가솔린 (기존 보존·강화) */}
       <h2 style={sectionTitle}>🔋 전기차 vs 가솔린 정량 비교</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
-        5년 보유 / 연 1만 5천km 가정 — 본 도구의 「연료 타입 비교」 탭에서 6가지(가솔린·디젤·LPG·하이브리드·전기 가정/급속) 비교 가능.
+        5년 보유 / 월 1,500km(연 1만 8천km) 가정 — 본 도구의 「연료 타입 비교」 탭에서 6가지(가솔린·디젤·LPG·하이브리드·전기 가정/급속) 비교 가능.
       </p>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
@@ -312,23 +314,23 @@ export default function CarCostPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>가솔린</td><td style={cell}>3,000만</td><td style={cell}>약 1,031만</td><td style={cell}>약 1,228만</td><td style={cell}><strong>2,259만</strong></td></tr>
-            <tr><td style={cell}>디젤</td><td style={cell}>3,200만</td><td style={cell}>약 803만</td><td style={cell}>약 1,310만</td><td style={cell}><strong>2,113만</strong></td></tr>
+            <tr><td style={cell}>가솔린</td><td style={cell}>3,000만</td><td style={cell}>약 1,238만</td><td style={cell}>약 1,229만</td><td style={cell}><strong>2,466만</strong></td></tr>
+            <tr><td style={cell}>디젤</td><td style={cell}>3,200만</td><td style={cell}>약 964만</td><td style={cell}>약 1,310만</td><td style={cell}><strong>2,275만</strong></td></tr>
             <tr style={{ background: 'rgba(16,185,129,0.06)' }}>
               <td style={cell}><strong style={{ color: '#059669' }}>LPG ★</strong></td>
               <td style={cell}>2,800만</td>
-              <td style={cell}>약 833만</td>
-              <td style={cell}>약 1,146만</td>
-              <td style={cell}><strong style={{ color: '#059669' }}>1,979만</strong></td>
+              <td style={cell}>약 1,000만</td>
+              <td style={cell}>약 1,147만</td>
+              <td style={cell}><strong style={{ color: '#059669' }}>2,147만</strong></td>
             </tr>
-            <tr><td style={cell}>하이브리드</td><td style={cell}>3,500만</td><td style={cell}>약 688만</td><td style={cell}>약 1,500만</td><td style={cell}><strong>2,188만</strong></td></tr>
-            <tr><td style={cell}>전기 (가정)</td><td style={cell}>4,500만</td><td style={cell}><strong style={{ color: '#059669' }}>약 300만</strong></td><td style={cell}>약 2,820만</td><td style={cell}>3,120만</td></tr>
-            <tr><td style={cell}>전기 (급속)</td><td style={cell}>4,500만</td><td style={cell}>약 525만</td><td style={cell}>약 2,820만</td><td style={cell}>3,345만</td></tr>
+            <tr><td style={cell}>하이브리드</td><td style={cell}>3,500만</td><td style={cell}>약 825만</td><td style={cell}>약 1,546만</td><td style={cell}><strong>2,371만</strong></td></tr>
+            <tr><td style={cell}>전기 (가정)</td><td style={cell}>4,500만</td><td style={cell}><strong style={{ color: '#059669' }}>약 360만</strong></td><td style={cell}>약 2,832만</td><td style={cell}>3,192만</td></tr>
+            <tr><td style={cell}>전기 (급속)</td><td style={cell}>4,500만</td><td style={cell}>약 630만</td><td style={cell}>약 2,832만</td><td style={cell}>3,462만</td></tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-        ※ 5년 보유 시 LPG·하이브리드 가장 저렴, 전기차는 감가 큼. 전기차 유리 조건: 10년+ 장기 보유 + 가정 충전 + 시내 주행 위주 + 환경 가치 우선.
+        ※ 5년 보유 시 LPG가 최저(이어 디젤·하이브리드 순), 전기차는 감가가 커 총비용 높음. 전기차 유리 조건: 10년+ 장기 보유 + 가정 충전 + 시내 주행 위주 + 환경 가치 우선.
         배터리 교체(10년+ 후 1,000~1,500만), 보조금(약 700만+) 별도.
       </p>
 

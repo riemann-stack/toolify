@@ -78,16 +78,17 @@ export interface AutoTaxBracket {
   desc: string
 }
 
+// 비영업용 승용차 자동차세 = cc × (80/140/200원) + 지방교육세 30%. 아래는 교육세 포함 실납부 기준.
 export const AUTO_TAX_BRACKETS: AutoTaxBracket[] = [
-  { ccMax: 1000,     yearly:  80_000, desc: '경차 (1,000cc 이하)' },
-  { ccMax: 1500,     yearly: 200_000, desc: '소형 (1,500cc 이하)' },
-  { ccMax: 2000,     yearly: 400_000, desc: '준중형·중형 (2,000cc 이하)' },
-  { ccMax: 2500,     yearly: 500_000, desc: '중형~대형 (2,500cc 이하)' },
-  { ccMax: 3000,     yearly: 600_000, desc: '대형 (3,000cc 이하)' },
-  { ccMax: Infinity, yearly: 800_000, desc: '대형 SUV (3,000cc 초과)' },
+  { ccMax: 1000,     yearly:  104_000, desc: '경차 (1,000cc 이하)' },
+  { ccMax: 1500,     yearly:  260_000, desc: '소형 (1,500cc 이하)' },
+  { ccMax: 2000,     yearly:  520_000, desc: '준중형·중형 (2,000cc 이하)' },
+  { ccMax: 2500,     yearly:  650_000, desc: '중형~대형 (2,500cc 이하)' },
+  { ccMax: 3000,     yearly:  780_000, desc: '대형 (3,000cc 이하)' },
+  { ccMax: Infinity, yearly: 1_040_000, desc: '대형 SUV (3,000cc 초과)' },
 ]
 
-export const EV_AUTO_TAX = 130_000   // 전기차 정액
+export const EV_AUTO_TAX = 130_000   // 전기차 정액 (10만 + 교육세 3만)
 
 export function autoTaxByCC(cc: number): number {
   return AUTO_TAX_BRACKETS.find(b => cc <= b.ccMax)?.yearly ?? 800_000
@@ -279,7 +280,14 @@ export function comparePurchaseModes(input: PurchaseInput): {
   } else if (loanPrincipal > 0 && input.loanMonths > 0) {
     monthlyLoanPayment = loanPrincipal / input.loanMonths
   }
-  const loanCostInPeriod = Math.min(months, input.loanMonths) * monthlyLoanPayment + input.loanDownPayment
+  // 보유 기간이 할부 기간보다 짧으면 매각 시 남은 대출 잔액을 정산해야 함 (무시하면 할부가 비현실적으로 저렴해짐)
+  let remainingLoanBalance = 0
+  if (months < input.loanMonths && loanPrincipal > 0) {
+    remainingLoanBalance = monthlyRate > 0
+      ? loanPrincipal * (Math.pow(1 + monthlyRate, input.loanMonths) - Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, input.loanMonths) - 1)
+      : loanPrincipal * (input.loanMonths - months) / input.loanMonths
+  }
+  const loanCostInPeriod = Math.min(months, input.loanMonths) * monthlyLoanPayment + remainingLoanBalance + input.loanDownPayment
   const loanTotal = loanCostInPeriod - finalValue + baseTotalNoLoan
   const loan: ModeResult = {
     mode: '할부', totalCost: loanTotal, monthly: loanTotal / months,
@@ -289,8 +297,8 @@ export function comparePurchaseModes(input: PurchaseInput): {
     cons: `이자 약 ${formatKoreanCurrency(totalLoanInterest)} 추가 부담`,
   }
 
-  // 3. 리스 (월 + 보험·정비 별도)
-  const leaseMonthly = (input.monthlyLeaseRate ?? input.carPrice * 0.025) + input.variableCostMonthly + input.insuranceYearly / 12 + input.fuelMonthly
+  // 3. 리스 (월 + 보험·정비·주차 별도)
+  const leaseMonthly = (input.monthlyLeaseRate ?? input.carPrice * 0.025) + input.variableCostMonthly + input.insuranceYearly / 12 + input.parkingMonthly + input.fuelMonthly
   const leaseTotal = leaseMonthly * months
   const lease: ModeResult = {
     mode: '리스', totalCost: leaseTotal, monthly: leaseMonthly,
@@ -300,8 +308,8 @@ export function comparePurchaseModes(input: PurchaseInput): {
     cons: '총비용 큼 · 잔존가치·중도 해지 페널티',
   }
 
-  // 4. 장기렌트 (월 납입만, 보험·정비 포함)
-  const rentMonthly = (input.monthlyRentRate ?? input.carPrice * 0.028) + input.fuelMonthly
+  // 4. 장기렌트 (월 납입 + 주차, 보험·정비 포함)
+  const rentMonthly = (input.monthlyRentRate ?? input.carPrice * 0.028) + input.parkingMonthly + input.fuelMonthly
   const rentTotal = rentMonthly * months
   const rent: ModeResult = {
     mode: '장기렌트', totalCost: rentTotal, monthly: rentMonthly,
@@ -418,20 +426,23 @@ export interface CarShareCompareRow {
 }
 
 export function compareOwnVsShare(
-  ownCostMonthly: number,
+  nonFuelMonthly: number,        // 고정비+변동비+할부 (주행거리와 무관, 고정)
+  fuelPerKm: number,             // 1km당 연료비 (주행거리에 비례)
   monthlyKmRange: number[] = [200, 500, 800, 1000, 1200, 1500, 2000],
 ): CarShareCompareRow[] {
   return monthlyKmRange.map(km => {
+    // 보유 비용도 행마다 주행거리에 맞춰 연료비를 재계산 (고정비는 고정)
+    const ownCost = nonFuelMonthly + fuelPerKm * km
     const hours = km / (100 / CARSHARING_RATES.avgHoursPer100km)  // 100km당 3시간 → 1km당 0.03시간
     const shareCost = hours * CARSHARING_RATES.hourlyRate + km * CARSHARING_RATES.perKmRate
-    const diff = ownCostMonthly - shareCost
+    const diff = ownCost - shareCost
     let winner: '보유' | '쏘카' | '비슷'
     if (Math.abs(diff) < 30_000) winner = '비슷'
     else if (diff > 0) winner = '쏘카'
     else winner = '보유'
     return {
       monthlyKm: km,
-      ownCost: Math.round(ownCostMonthly),
+      ownCost: Math.round(ownCost),
       shareCost: Math.round(shareCost),
       winner,
       diff: Math.round(diff),
@@ -463,8 +474,9 @@ export const DEFAULT_CONSUMABLES: Omit<Consumable, 'enabled'>[] = [
 
 export function calcMonthlyConsumable(c: Consumable, monthlyKm: number): number {
   if (!c.enabled) return 0
-  const byKm = c.cycleKm && monthlyKm > 0 ? c.cost / (c.cycleKm / monthlyKm) : Infinity
-  const byMon = c.cycleMon ? c.cost / c.cycleMon : Infinity
-  const result = Math.min(byKm, byMon)
-  return isFinite(result) ? result : 0
+  // 교체까지 걸리는 개월 수 (정의된 주기만). km·개월 둘 다면 먼저 도달하는(짧은) 쪽이 교체 시점.
+  const monthsByKm = c.cycleKm && monthlyKm > 0 ? c.cycleKm / monthlyKm : Infinity
+  const monthsByMon = c.cycleMon ? c.cycleMon : Infinity
+  const interval = Math.min(monthsByKm, monthsByMon)
+  return isFinite(interval) && interval > 0 ? c.cost / interval : 0
 }

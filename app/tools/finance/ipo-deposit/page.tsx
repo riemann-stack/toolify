@@ -53,7 +53,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -92,9 +91,9 @@ export default function IpoDepositPage() {
       <IpoDepositClient />
 
       {/* 1. 비례·균등 구조 가이드 */}
-      <h2 style={sectionTitle}>📊 비례·균등 배정 구조 가이드 (50:50)</h2>
+      <h2 style={sectionTitle}>📊 비례·균등 배정 구조 가이드 (균등 50% 이상)</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        2021년 이후 한국 공모주는 일반 청약 물량의 50%는 균등·50%는 비례 배정 원칙. 각각 다른 메커니즘으로 작동합니다.
+        2021년부터 일반 청약자 배정 물량의 <strong style={{ color: 'var(--text)' }}>50% 이상</strong>을 균등 배정하도록 의무화됐습니다(금융위 규정). 나머지는 비례 배정으로, 각각 다른 메커니즘으로 작동합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>

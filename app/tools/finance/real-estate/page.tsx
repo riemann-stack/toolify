@@ -117,7 +117,7 @@ export default function RealEstatePage() {
               <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1주택자</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
                 6억 이하 → <strong style={{ color: 'var(--accent)' }}>1.0%</strong><br/>
-                6~9억 → <strong style={{ color: 'var(--accent)' }}>2.0%</strong><br/>
+                6~9억 → <strong style={{ color: 'var(--accent)' }}>1~3% 누진</strong><br/>
                 9억 초과 → <strong style={{ color: 'var(--accent)' }}>3.0%</strong>
               </p>
             </div>
@@ -155,11 +155,10 @@ export default function RealEstatePage() {
                 {[
                   { range: '5천만 미만',     rate: '0.6%', cap: '25만원' },
                   { range: '5천만 ~ 2억',    rate: '0.5%', cap: '80만원' },
-                  { range: '2억 ~ 6억',      rate: '0.4%', cap: '없음' },
-                  { range: '6억 ~ 9억',      rate: '0.5%', cap: '없음' },
-                  { range: '9억 ~ 12억',     rate: '0.6%', cap: '없음' },
-                  { range: '12억 ~ 15억',    rate: '0.7%', cap: '없음' },
-                  { range: '15억 이상',      rate: '협의 (최대 0.9%)', cap: '없음' },
+                  { range: '2억 ~ 9억',      rate: '0.4%', cap: '없음' },
+                  { range: '9억 ~ 12억',     rate: '0.5%', cap: '없음' },
+                  { range: '12억 ~ 15억',    rate: '0.6%', cap: '없음' },
+                  { range: '15억 이상',      rate: '0.7%', cap: '없음' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
@@ -171,7 +170,7 @@ export default function RealEstatePage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 매수·매도 양쪽 모두 별도로 부담합니다. 임대차(전·월세)는 별도 요율표가 적용되며 본 계산기는 매매 기준으로 자동 산정합니다.
+            ※ 2021.10 개정 상한요율(이 이내에서 협의 가능)이며, 매수·매도 양쪽 모두 별도로 부담합니다. 임대차(전·월세)는 별도 요율표가 적용되며 본 계산기는 매매 기준 상한으로 자동 산정합니다.
           </p>
         </div>
 
@@ -198,17 +197,17 @@ export default function RealEstatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>현금 100% (5억 자기자본)</p>
+              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>현금 100% (자기자본 5억 760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
-                수익 2억 − 비용 약 1,000만원 = <strong>1억 9,000만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 9,000 ÷ 5억 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>38%</strong>
+                수익 2억 − 비용 약 1,040만원 = <strong>1억 8,960만원</strong><br/>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 8,960 ÷ 5억 760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>37.4%</strong>
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>대출 70% (자기자본 1억 5,000)</p>
+              <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>대출 70% (자기자본 1억 5,760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
-                수익 2억 − 비용·이자 약 2,800만원 = <strong>1억 7,200만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,200 ÷ 1억 5,000 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>114.7%</strong>
+                수익 2억 − 비용·이자 약 2,615만원 = <strong>1억 7,385만원</strong><br/>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,385 ÷ 1억 5,760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>110.3%</strong>
               </p>
             </div>
           </div>

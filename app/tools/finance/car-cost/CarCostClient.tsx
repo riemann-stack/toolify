@@ -145,7 +145,7 @@ export default function CarCostClient() {
     parkingMonthly: parking,
     loanMonthly,
     loanRemainingMonths,
-    variableCostMonthly: mode === 'simple' ? variableCost : consumablesMonthly - washSimple,
+    variableCostMonthly: mode === 'simple' ? variableCost : consumablesMonthly,
     washMonthly: mode === 'simple' ? washSimple : 0,
     depreciationOn: deprOn,
     depreciationMonthly: deprMonthly,
@@ -210,8 +210,12 @@ export default function CarCostClient() {
     return best
   }, [fuelCompare])
 
-  // ── 카쉐어링 탭 ──
-  const shareCompare = useMemo(() => compareOwnVsShare(result.monthlyExclDepr), [result.monthlyExclDepr])
+  // ── 카쉐어링 탭 ── (보유 비용도 행별 주행거리에 맞춰 연료비 재계산)
+  const shareCompare = useMemo(() => {
+    const fuelPerKm = monthlyKm > 0 ? result.fuelMonthly / monthlyKm : 0
+    const nonFuelMonthly = result.monthlyExclDepr - result.fuelMonthly
+    return compareOwnVsShare(nonFuelMonthly, fuelPerKm)
+  }, [result.monthlyExclDepr, result.fuelMonthly, monthlyKm])
 
   // 복사
   const onCopy = async () => {
@@ -246,9 +250,10 @@ export default function CarCostClient() {
         본 계산기는 일반 정보 제공 도구
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="자동차 유지비 계산 탭">
         {TABS.map(t => (
           <button key={t.id}
+            role="tab" aria-selected={tab === t.id}
             className={`${s.tabBtn} ${tab === t.id ? t.cls : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -260,9 +265,9 @@ export default function CarCostClient() {
       {tab === 'main' && (
         <>
           {/* 모드 토글 */}
-          <div className={s.modeToggle}>
-            <button className={`${s.modeBtn} ${mode === 'simple' ? s.modeActive : ''}`} onClick={() => setMode('simple')}>간단 모드</button>
-            <button className={`${s.modeBtn} ${mode === 'detail' ? s.modeActive : ''}`} onClick={() => setMode('detail')}>상세 모드</button>
+          <div className={s.modeToggle} role="group" aria-label="입력 모드">
+            <button aria-pressed={mode === 'simple'} className={`${s.modeBtn} ${mode === 'simple' ? s.modeActive : ''}`} onClick={() => setMode('simple')}>간단 모드</button>
+            <button aria-pressed={mode === 'detail'} className={`${s.modeBtn} ${mode === 'detail' ? s.modeActive : ''}`} onClick={() => setMode('detail')}>상세 모드</button>
           </div>
 
           {/* ── 차량 기본 ── */}
@@ -270,10 +275,10 @@ export default function CarCostClient() {
             <span className={s.cardLabel}>① 차량 기본 정보</span>
 
             <div className={`${s.subLabel} ${s.firstSub}`}>연료 타입</div>
-            <div className={s.fuelGrid}>
-              <button className={`${s.fuelBtn} ${s.fuelGas} ${fuelType === 'gas' ? s.fuelActive : ''}`} onClick={() => setFuelType('gas')}>⛽ 가솔린/LPG</button>
-              <button className={`${s.fuelBtn} ${s.fuelEv} ${fuelType === 'ev' ? s.fuelActive : ''}`} onClick={() => setFuelType('ev')}>🔋 전기차</button>
-              <button className={`${s.fuelBtn} ${s.fuelHybrid} ${fuelType === 'hybrid' ? s.fuelActive : ''}`} onClick={() => setFuelType('hybrid')}>⚡ 하이브리드</button>
+            <div className={s.fuelGrid} role="group" aria-label="연료 타입">
+              <button aria-pressed={fuelType === 'gas'} className={`${s.fuelBtn} ${s.fuelGas} ${fuelType === 'gas' ? s.fuelActive : ''}`} onClick={() => setFuelType('gas')}>⛽ 가솔린/LPG</button>
+              <button aria-pressed={fuelType === 'ev'} className={`${s.fuelBtn} ${s.fuelEv} ${fuelType === 'ev' ? s.fuelActive : ''}`} onClick={() => setFuelType('ev')}>🔋 전기차</button>
+              <button aria-pressed={fuelType === 'hybrid'} className={`${s.fuelBtn} ${s.fuelHybrid} ${fuelType === 'hybrid' ? s.fuelActive : ''}`} onClick={() => setFuelType('hybrid')}>⚡ 하이브리드</button>
             </div>
 
             <div className={s.subLabel}>월 주행거리</div>
@@ -283,9 +288,9 @@ export default function CarCostClient() {
                 onChange={e => setMonthlyKm(Math.max(0, parseInt(e.target.value || '0', 10)))} />
               <span className={s.unit}>km</span>
             </div>
-            <div className={s.pills}>
+            <div className={s.pills} role="group" aria-label="월 주행거리 빠른 선택">
               {[500, 1000, 1500, 2000, 3000].map(v => (
-                <button key={v} className={`${s.pill} ${monthlyKm === v ? s.pillActive : ''}`} onClick={() => setMonthlyKm(v)}>{v.toLocaleString()}km</button>
+                <button key={v} aria-pressed={monthlyKm === v} className={`${s.pill} ${monthlyKm === v ? s.pillActive : ''}`} onClick={() => setMonthlyKm(v)}>{v.toLocaleString()}km</button>
               ))}
             </div>
 
@@ -342,16 +347,18 @@ export default function CarCostClient() {
             <div className={s.toggleHeader}>
               <span className={s.cardLabel} style={{ marginBottom: 0 }}>② 감가상각 (선택)</span>
               <div className={`${s.toggleSwitch} ${deprOn ? s.toggleSwitchOn : ''}`}
-                onClick={() => setDeprOn(!deprOn)} role="button" tabIndex={0}>
+                onClick={() => setDeprOn(!deprOn)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDeprOn(!deprOn) } }}
+                role="switch" aria-checked={deprOn} aria-label="감가상각 포함" tabIndex={0}>
                 <div className={s.toggleKnob} />
               </div>
             </div>
 
             {deprOn && (
               <>
-                <div className={s.methodTabs}>
-                  <button className={`${s.methodBtn} ${deprMethod === 'direct' ? s.methodActive : ''}`} onClick={() => setDeprMethod('direct')}>A. 직접 입력</button>
-                  <button className={`${s.methodBtn} ${deprMethod === 'rate' ? s.methodActive : ''}`} onClick={() => setDeprMethod('rate')}>B. 감가율 추정</button>
+                <div className={s.methodTabs} role="group" aria-label="감가 계산 방식">
+                  <button aria-pressed={deprMethod === 'direct'} className={`${s.methodBtn} ${deprMethod === 'direct' ? s.methodActive : ''}`} onClick={() => setDeprMethod('direct')}>A. 직접 입력</button>
+                  <button aria-pressed={deprMethod === 'rate'} className={`${s.methodBtn} ${deprMethod === 'rate' ? s.methodActive : ''}`} onClick={() => setDeprMethod('rate')}>B. 감가율 추정</button>
                 </div>
 
                 {deprMethod === 'direct' ? (
@@ -389,9 +396,9 @@ export default function CarCostClient() {
                     </div>
                     <div>
                       <div className={`${s.subLabel} ${s.firstSub}`}>연 감가율</div>
-                      <div className={s.pills}>
+                      <div className={s.pills} role="group" aria-label="연 감가율 빠른 선택">
                         {[5, 8, 10, 12, 15, 20].map(v => (
-                          <button key={v} className={`${s.pill} ${annualRate === v ? s.pillActive : ''}`} onClick={() => setAnnualRate(v)}>{v}%</button>
+                          <button key={v} aria-pressed={annualRate === v} className={`${s.pill} ${annualRate === v ? s.pillActive : ''}`} onClick={() => setAnnualRate(v)}>{v}%</button>
                         ))}
                       </div>
                       <div className={s.inputRow} style={{ marginTop: 8 }}>
@@ -420,9 +427,10 @@ export default function CarCostClient() {
                   <input className={s.numInput} type="number" value={insurance || ''} onChange={e => setInsurance(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/년</span>
                 </div>
-                <div className={s.optionRow4} style={{ marginTop: 6 }}>
+                <div className={s.optionRow4} style={{ marginTop: 6 }} role="group" aria-label="보험료 연령대 빠른 선택">
                   {KOREA_INSURANCE_AVG.map(a => (
                     <button key={a.ageRange}
+                      aria-pressed={insurance === a.yearly}
                       className={`${s.optionBtn} ${insurance === a.yearly ? s.optionActive : ''}`}
                       onClick={() => setInsurance(a.yearly)}
                       title={a.note}>
@@ -436,19 +444,20 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   자동차세 (연)
-                  <HelpTip>배기량별 자동: 1000cc↓ 8만 / 1500↓ 20만 / 2000↓ 40만 / 2500↓ 50만 / 3000↓ 60만 / 전기차 13만</HelpTip>
+                  <HelpTip>배기량별 (지방교육세 30% 포함): 1000cc↓ 10.4만 / 1500↓ 26만 / 2000↓ 52만 / 2500↓ 65만 / 3000↓ 78만 / 전기차 13만. 차령 5년 초과 시 단계 인하.</HelpTip>
                 </div>
                 <div className={s.inputRow}>
                   <input className={s.numInput} type="number" value={carTax || ''} onChange={e => setCarTax(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/년</span>
                 </div>
-                <div className={s.optionRow6} style={{ marginTop: 6 }}>
+                <div className={s.optionRow6} style={{ marginTop: 6 }} role="group" aria-label="자동차세 배기량 빠른 선택">
                   {fuelType === 'ev' ? (
-                    <button className={`${s.optionBtn} ${carTax === EV_AUTO_TAX ? s.optionActive : ''}`}
+                    <button aria-pressed={carTax === EV_AUTO_TAX} className={`${s.optionBtn} ${carTax === EV_AUTO_TAX ? s.optionActive : ''}`}
                       onClick={() => setCarTax(EV_AUTO_TAX)}>전기차<br/><span style={{ fontSize: 10 }}>13만</span></button>
                   ) : (
                     AUTO_TAX_BRACKETS.slice(0, 6).map(b => (
                       <button key={b.ccMax}
+                        aria-pressed={carTax === b.yearly}
                         className={`${s.optionBtn} ${carTax === b.yearly ? s.optionActive : ''}`}
                         onClick={() => setCarTax(b.yearly)}
                         title={b.desc}>
@@ -522,7 +531,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>
                     🔧 정비·소모품 (월 평균)
-                    <HelpTip>엔진오일(5천km/6개월) 약 월 1.5만 + 타이어(4만km/3년) 월 1.5~2만 + 와이퍼·에어컨 필터·정비점검 월 1~2만 = 합계 약 4~6만 원/월. 고연식·고주행 차량은 7~10만 원.</HelpTip>
+                    <HelpTip>엔진오일(1만km/12개월) 약 월 1.2만 + 타이어(4만km) 월 1.5~2.5만 + 와이퍼·에어컨 필터·정비점검 월 1~2만 = 합계 약 4~6만 원/월. 고연식·고주행 차량은 7~10만 원.</HelpTip>
                   </div>
                   <div className={s.inputRow}>
                     <input className={s.numInput} type="number" placeholder="예: 50000"
@@ -744,9 +753,9 @@ export default function CarCostClient() {
                 <input className={s.numInput} type="number" value={pYears || ''} onChange={e => setPYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
                 <span className={s.unit}>년</span>
               </div>
-              <div className={s.pills}>
+              <div className={s.pills} role="group" aria-label="보유 기간 빠른 선택">
                 {[3, 5, 7, 10].map(y => (
-                  <button key={y} className={`${s.pill} ${pYears === y ? s.pillActive : ''}`} onClick={() => setPYears(y)}>{y}년</button>
+                  <button key={y} aria-pressed={pYears === y} className={`${s.pill} ${pYears === y ? s.pillActive : ''}`} onClick={() => setPYears(y)}>{y}년</button>
                 ))}
               </div>
             </div>
@@ -963,9 +972,9 @@ export default function CarCostClient() {
                 <input className={s.numInput} type="number" value={fYears || ''} onChange={e => setFYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
                 <span className={s.unit}>년</span>
               </div>
-              <div className={s.pills}>
+              <div className={s.pills} role="group" aria-label="보유 기간 빠른 선택">
                 {[3, 5, 7, 10].map(y => (
-                  <button key={y} className={`${s.pill} ${fYears === y ? s.pillActive : ''}`} onClick={() => setFYears(y)}>{y}년</button>
+                  <button key={y} aria-pressed={fYears === y} className={`${s.pill} ${fYears === y ? s.pillActive : ''}`} onClick={() => setFYears(y)}>{y}년</button>
                 ))}
               </div>
             </div>
@@ -1033,7 +1042,7 @@ export default function CarCostClient() {
       {tab === 'share' && (
         <>
           <div className={s.infoBox}>
-            💡 <strong>월 주행거리별 손익분기</strong> — 「유지비 계산」 탭의 월 비용 (감가 제외 {formatKRW(result.monthlyExclDepr)}) 기준.
+            💡 <strong>월 주행거리별 손익분기</strong> — 「유지비 계산」 탭의 고정비·변동비(감가 제외)는 그대로 두고, <strong>보유 비용의 연료비만 각 행의 주행거리에 맞춰</strong> 재계산했습니다.
           </div>
 
           <div className={s.card}>

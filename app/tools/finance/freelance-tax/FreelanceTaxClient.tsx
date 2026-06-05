@@ -20,6 +20,7 @@ const DEFAULT_INPUTS: CalcInputs = {
   industryId: 'developer',
   expenseMode: 'simple',
   bookExpenses: 0,
+  isNewBusiness: false,
   spouseExempt: false,
   dependents: 0,
   pensionPaid: 0,
@@ -86,9 +87,12 @@ export default function FreelanceTaxClient() {
       </Disclaimer>
 
       {/* ── 탭 ── */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="프리랜서 세금 계산 탭">
         {TABS.map((t) => (
           <button key={t.k}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.k}
             className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`}
             onClick={() => setTab(t.k)}>
             {t.l}
@@ -135,8 +139,9 @@ function QuickCalcTab({ inputs, result, update }: {
     <div className={styles.panel}>
       {/* 업종 + 매출 */}
       <section>
-        <label className={styles.label}>업종 선택 <span className={styles.labelSub}>({INDUSTRIES.length}개 직군)</span></label>
+        <label className={styles.label} htmlFor="ft-industry">업종 선택 <span className={styles.labelSub}>({INDUSTRIES.length}개 직군)</span></label>
         <select
+          id="ft-industry"
           className={styles.select}
           value={inputs.industryId}
           onChange={(e) => update('industryId', e.target.value)}
@@ -150,7 +155,15 @@ function QuickCalcTab({ inputs, result, update }: {
           ))}
         </select>
         <p className={styles.note}>
-          {industry.desc} · 업종코드 <strong>{industry.code}</strong> · 단순경비율 한도 매출 <strong>{fmtKRW(industry.simpleLimit)}</strong>
+          {industry.desc} · 업종코드 <strong>{industry.code}</strong> · 단순경비율 한도 <strong>{fmtKRW(result.appliedSimpleLimit)}</strong>
+          {inputs.isNewBusiness ? ' (신규·복식부기 기준)' : ' (계속·직전연도 기준)'}
+        </p>
+        <label className={styles.checkLabel} style={{ marginTop: 6 }}>
+          <input type="checkbox" checked={inputs.isNewBusiness} onChange={(e) => update('isNewBusiness', e.target.checked)} />
+          <span>개업 첫해(신규사업자) — 단순경비율 한도가 복식부기 의무 기준까지 확대</span>
+        </label>
+        <p className={styles.note} style={{ marginTop: 6 }}>
+          ⚠️ 업종코드·경비율은 <strong>참고용</strong>입니다. 본인 정확한 코드는 <a href="https://hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 신고 화면에서 확인하세요. 940909는 별도 세분 코드가 없을 때의 ‘기타 자영업’ 분류로, 직군별 전용 코드가 있으면 그쪽이 우선입니다.
         </p>
       </section>
 
@@ -188,13 +201,17 @@ function QuickCalcTab({ inputs, result, update }: {
       {/* 경비 */}
       <section>
         <label className={styles.label}>필요경비 적용 방식</label>
-        <div className={styles.pillRow}>
+        <div className={styles.pillRow} role="group" aria-label="필요경비 적용 방식">
           <button
+            type="button"
+            aria-pressed={inputs.expenseMode === 'simple'}
             className={`${styles.pill} ${inputs.expenseMode === 'simple' ? styles.pillActive : ''}`}
             onClick={() => update('expenseMode', 'simple')}>
             단순경비율 ({industry.simpleRate}%)
           </button>
           <button
+            type="button"
+            aria-pressed={inputs.expenseMode === 'book'}
             className={`${styles.pill} ${inputs.expenseMode === 'book' ? styles.pillActive : ''}`}
             onClick={() => update('expenseMode', 'book')}>
             장부 (실경비)
@@ -218,7 +235,7 @@ function QuickCalcTab({ inputs, result, update }: {
         )}
         {!result.canUseSimple && inputs.expenseMode === 'simple' && (
           <p className={styles.warn}>
-            ⚠️ 단순경비율 한도(매출 {fmtKRW(industry.simpleLimit)}) 초과 — 기준경비율({industry.baseRate}%) 적용 또는 장부 작성 필요
+            ⚠️ 단순경비율 한도({fmtKRW(result.appliedSimpleLimit)}, {inputs.isNewBusiness ? '신규 기준' : '계속사업자 직전연도 기준'}) 초과 — 기준경비율 추계 적용. 본 도구는 주요경비(매입·임차·인건비) 증빙 미반영·배율 비교한도 기준이라, 증빙이 많으면 장부 작성이 유리할 수 있습니다.
           </p>
         )}
         {result.isComplexBookRequired && (
@@ -321,13 +338,17 @@ function QuickCalcTab({ inputs, result, update }: {
       {/* 원천징수 옵션 */}
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>🧾 원천징수 (이미 떼인 세금)</p>
-        <div className={styles.pillRow}>
+        <div className={styles.pillRow} role="group" aria-label="원천징수 입력 방식">
           <button
+            type="button"
+            aria-pressed={inputs.withholdingMode === 'auto'}
             className={`${styles.pill} ${inputs.withholdingMode === 'auto' ? styles.pillActive : ''}`}
             onClick={() => update('withholdingMode', 'auto')}>
             자동 (매출 × 3.3%)
           </button>
           <button
+            type="button"
+            aria-pressed={inputs.withholdingMode === 'manual'}
             className={`${styles.pill} ${inputs.withholdingMode === 'manual' ? styles.pillActive : ''}`}
             onClick={() => update('withholdingMode', 'manual')}>
             직접 입력
@@ -507,10 +528,12 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
             <strong>{fmtKRW(yellowSim)}</strong>
           </div>
           <input
-            type="range" min={0} max={5_000_000} step={100_000}
+            type="range" min={0} max={6_000_000} step={100_000}
             value={yellowSim}
             onChange={(e) => setYellowSim(+e.target.value)}
             className={styles.slider}
+            aria-label="노란우산공제 납입액"
+            aria-valuetext={fmtKRW(yellowSim)}
           />
           <p className={styles.simResult}>
             절세 효과: <strong className={styles.simSaving}>+{fmtKRW(yellowResult.refund - result.refund)}</strong>
@@ -528,6 +551,8 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
             value={pensionSim}
             onChange={(e) => setPensionSim(+e.target.value)}
             className={styles.slider}
+            aria-label="연금저축 납입액"
+            aria-valuetext={fmtKRW(pensionSim)}
           />
           <p className={styles.simResult}>
             절세 효과: <strong className={styles.simSaving}>+{fmtKRW(pensionResult.refund - result.refund)}</strong>
@@ -545,6 +570,8 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
             value={depSim}
             onChange={(e) => setDepSim(+e.target.value)}
             className={styles.slider}
+            aria-label="부양가족 수"
+            aria-valuetext={`${depSim}명`}
           />
           <p className={styles.simResult}>
             절세 효과: <strong className={styles.simSaving}>+{fmtKRW(depResult.refund - result.refund)}</strong>
@@ -586,11 +613,16 @@ function GuideTab() {
     let year = now.getFullYear()
     if (now.getMonth() > 4) year += 1  // 5월 지났으면 다음 해
     const deadline = new Date(year, 4, 31, 23, 59, 59)  // 5월 31일
+    // 마감일이 주말이면 다음 영업일(월)로 보정
+    const dow = deadline.getDay()  // 0=일, 6=토
+    if (dow === 0) deadline.setDate(deadline.getDate() + 1)       // 일 → 6/1(월)
+    else if (dow === 6) deadline.setDate(deadline.getDate() + 2)  // 토 → 6/2(월)
     const ms = deadline.getTime() - now.getTime()
     const daysLeft = Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)))
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setToday({ now, deadline, daysLeft })
   }, [])
+  const DOW = ['일', '월', '화', '수', '목', '금', '토']
 
   const checklist = [
     '📄 지급명세서 (사업소득) — 거래처에서 1월 말까지 발급',
@@ -623,7 +655,12 @@ function GuideTab() {
           {today ? `D-${today.daysLeft}` : '계산 중…'}
         </p>
         <p className={styles.ddaySub}>
-          {today ? `${today.deadline.getFullYear()}년 5월 31일 (수)` : '신고기간 5월 1일 ~ 5월 31일'}
+          {today
+            ? `${today.deadline.getFullYear()}년 ${today.deadline.getMonth() + 1}월 ${today.deadline.getDate()}일 (${DOW[today.deadline.getDay()]}) 마감`
+            : '신고기간 5월 1일 ~ 5월 31일'}
+        </p>
+        <p className={styles.note} style={{ marginTop: 6 }}>
+          ※ 성실신고확인대상자는 <strong>6월 30일</strong>까지. 마감일이 주말·공휴일이면 다음 영업일로 연장.
         </p>
       </section>
 

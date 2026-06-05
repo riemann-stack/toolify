@@ -24,7 +24,7 @@ const DEFAULT_INPUTS: CalcInputs = {
   monthlyRent: 1_500_000,
   monthlyTaxCreditEligible: false,
   monthlyDepositLoanRate: 6.0,
-  conversionRate: 5.0,
+  conversionRate: 4.5,
   semiJeonseRatio: 30,
   maintenance: 200_000,
   totalSalary: 50_000_000,
@@ -84,9 +84,12 @@ export default function RentJeonseClient() {
         실제 계약은 공인중개사·법무사·HUG 사이트에서 확인 필수. 2026년 금리·세법 기준이며 매년 변동 가능. 전세사기 위험 점수는 일반 가이드이므로 정확한 평가는 등기부·실거래가 확인 필요. 임대료 5% 인상은 계약갱신청구권 행사 시만 적용되며 신규 계약은 시세대로.
       </Disclaimer>
 
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="월세·전세 비교 탭">
         {TABS.map((t) => (
           <button key={t.k}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.k}
             className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`}
             onClick={() => setTab(t.k)}>
             {t.l}
@@ -130,7 +133,9 @@ function CompareTab({ inputs, update, results, best }: {
             <strong>{inputs.jeonseLoanRatio}% ({fmtKRW(inputs.jeonseDeposit * inputs.jeonseLoanRatio / 100)})</strong>
           </div>
           <input type="range" min={0} max={80} step={5} value={inputs.jeonseLoanRatio}
-            onChange={(e) => update('jeonseLoanRatio', +e.target.value)} className={styles.slider} />
+            onChange={(e) => update('jeonseLoanRatio', +e.target.value)} className={styles.slider}
+            aria-label="전세대출 비율"
+            aria-valuetext={`${inputs.jeonseLoanRatio}% (${fmtKRW(inputs.jeonseDeposit * inputs.jeonseLoanRatio / 100)})`} />
         </div>
         <div className={styles.numberRow}>
           <label>전세대출 금리</label>
@@ -139,8 +144,11 @@ function CompareTab({ inputs, update, results, best }: {
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={inputs.hugInsurance}
             onChange={(e) => update('hugInsurance', e.target.checked)} />
-          <span>HUG 전세보증보험 가입 (보증료 {(inputs.hugRateBp / 100).toFixed(3)}%)</span>
+          <span>HUG 전세보증보험 가입 (보증료 약 {(inputs.hugRateBp / 100).toFixed(3)}% 참고치)</span>
         </label>
+        <p className={styles.smallNote}>
+          ※ 보증료율은 보증금액·주택유형·부채비율에 따라 약 0.097~0.211%로 달라집니다 (HUG 공식 산정 기준 확인 필요).
+        </p>
       </section>
 
       {/* 월세 옵션 */}
@@ -157,11 +165,13 @@ function CompareTab({ inputs, update, results, best }: {
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={inputs.monthlyTaxCreditEligible}
             onChange={(e) => update('monthlyTaxCreditEligible', e.target.checked)} />
-          <span>월세 세액공제 자격 (무주택 + 총급여 7천만 이하)</span>
+          <span>월세 세액공제 자격 (무주택 + 총급여 8천만 이하)</span>
         </label>
         {inputs.monthlyTaxCreditEligible && (
           <p className={styles.smallNote}>
-            ✓ 자동 적용: 연 750만 한도 × {inputs.totalSalary <= 70_000_000 ? '17%' : '15%'}
+            {inputs.totalSalary > 80_000_000
+              ? '✗ 총급여 8천만 초과 — 공제 대상 아님'
+              : `✓ 자동 적용: 연 1,000만 한도 × ${inputs.totalSalary <= 55_000_000 ? '17%' : '15%'}`}
           </p>
         )}
       </section>
@@ -179,10 +189,12 @@ function CompareTab({ inputs, update, results, best }: {
             <strong>{inputs.semiJeonseRatio}% ({fmtKRW(inputs.jeonseDeposit * inputs.semiJeonseRatio / 100)})</strong>
           </div>
           <input type="range" min={10} max={70} step={5} value={inputs.semiJeonseRatio}
-            onChange={(e) => update('semiJeonseRatio', +e.target.value)} className={styles.slider} />
+            onChange={(e) => update('semiJeonseRatio', +e.target.value)} className={styles.slider}
+            aria-label="월세로 전환할 비율"
+            aria-valuetext={`${inputs.semiJeonseRatio}% (${fmtKRW(inputs.jeonseDeposit * inputs.semiJeonseRatio / 100)})`} />
         </div>
         <p className={styles.note}>
-          ※ 법정 한도 한국은행 기준금리 + 2% (≈ 5.5%) — 본인 대출금리({inputs.jeonseLoanRate}%)보다 낮으면 반전세 유리.
+          ※ 법정 한도 = 한국은행 기준금리 + 2% (주택임대차보호법). 기준금리 2.5% 기준 약 4.5% — 본인 대출금리({inputs.jeonseLoanRate}%)보다 전환율이 낮으면 반전세 유리.
         </p>
       </section>
 
@@ -207,7 +219,9 @@ function CompareTab({ inputs, update, results, best }: {
             <strong>{Math.floor(inputs.months / 12)}년 {inputs.months % 12}개월</strong>
           </div>
           <input type="range" min={6} max={120} step={6} value={inputs.months}
-            onChange={(e) => update('months', +e.target.value)} className={styles.slider} />
+            onChange={(e) => update('months', +e.target.value)} className={styles.slider}
+            aria-label="보유 예정 기간"
+            aria-valuetext={`${Math.floor(inputs.months / 12)}년 ${inputs.months % 12}개월`} />
         </div>
         <div className={styles.numberRow}>
           <label>기회비용 기대수익률</label>
@@ -512,9 +526,9 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
           <div>
             <p className={styles.savingTitle}>월세 세액공제</p>
             <p className={styles.savingDesc}>
-              조건: <strong>무주택자 + 총급여 7천만 이하 + 근로소득자</strong>.
-              연 750만 한도 × 17% (7천 이하) / 15% (이상). 월세 62.5만 이상 납부 시 한도 도달.
-              현금영수증 발급 시 추가 신용카드 소득공제 가능.
+              조건: <strong>무주택자 + 총급여 8천만 이하 + 근로소득자</strong>.
+              연 1,000만 한도 × 17% (총급여 5,500만 이하) / 15% (5,500만~8,000만). 월세 약 83만 이상 납부 시 한도 도달.
+              <strong>같은 월세액에 대해 현금영수증(신용카드 등) 소득공제와는 중복 불가</strong> — 둘 중 유리한 쪽 선택.
             </p>
           </div>
           <div>
@@ -525,9 +539,10 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
             </p>
           </div>
           <div>
-            <p className={styles.savingTitle}>현금영수증 발급</p>
+            <p className={styles.savingTitle}>현금영수증 (세액공제 자격 없을 때)</p>
             <p className={styles.savingDesc}>
-              월세는 임대인이 거부해도 홈택스에서 직접 신고 가능. 신용카드 소득공제 한도 내 적용.
+              월세 세액공제 자격이 안 되면 대안. 임대인이 거부해도 홈택스에서 직접 신고 가능, 신용카드 등 소득공제로 반영.
+              <strong>세액공제를 받는 월세액에는 중복 적용되지 않습니다.</strong>
             </p>
           </div>
         </div>
@@ -544,7 +559,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
           <li><strong>HUG 전세보증보험</strong> 가입 가능 여부 확인 (전세가율 90% 이하, 시세 7억 이하 등)</li>
           <li><strong>계약서 특약</strong> — 보증금 반환 지연 시 이자, 수리비 부담 등</li>
           <li><strong>잔금일 당일</strong> — 등기부 재확인 (계약 후 근저당 추가 가능) → 잔금 송금 → 확정일자 + 전입신고</li>
-          <li><strong>입주 후</strong> — HUG 보증보험 가입 (잔금일 기준 60일 이내 권장)</li>
+          <li><strong>입주 후</strong> — HUG 보증보험 가입 (신청기한은 전세계약기간의 1/2 경과 전 등 상품별 상이 — HUG 확인)</li>
         </ol>
       </section>
 

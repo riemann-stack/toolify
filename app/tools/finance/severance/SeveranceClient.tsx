@@ -9,7 +9,7 @@ import {
   PENSIONS,
   type PensionMode,
   parseDate, isoDate, daysBetween, addDays,
-  calcThreeMonthPeriod, splitMonths,
+  calcThreeMonthPeriod,
   calcThreeMonthTotal, calcAverageWageDaily, calcOrdinaryWageDaily,
   calcSeverance, calcSeveranceTax, checkEligibility,
   fmt, fmtMan, fmtDate,
@@ -104,7 +104,6 @@ export default function SeveranceClient() {
 
   const eligibility = useMemo(() => checkEligibility(startDate, endDate, weekHrs), [startDate, endDate, weekHrs])
   const period = useMemo(() => calcThreeMonthPeriod(endDate), [endDate])
-  const monthSplits = useMemo(() => splitMonths(period.start, period.end), [period.start, period.end])
 
   const wageInputs = useMemo(() => ({
     monthlyBase: [parseFloat(m1Base) || 0, parseFloat(m2Base) || 0, parseFloat(m3Base) || 0],
@@ -120,7 +119,9 @@ export default function SeveranceClient() {
   const appliedReason = dailyAvgWage >= dailyOrdWage ? '평균임금 적용' : '통상임금 적용 (평균 < 통상)'
 
   const severanceMan = useMemo(() => calcSeverance(dailyAppliedWage, eligibility.daysWorked), [dailyAppliedWage, eligibility.daysWorked])
-  const tax = useMemo(() => calcSeveranceTax(severanceMan, eligibility.daysWorked), [severanceMan, eligibility.daysWorked])
+  /* 자격 미충족(1년 미만·주15h 미만)이면 법정 퇴직금 0 — 표시·세금·총입금 모두 0 처리 */
+  const displaySev = eligibility.eligible ? severanceMan : 0
+  const tax = useMemo(() => calcSeveranceTax(displaySev, eligibility.daysWorked), [displaySev, eligibility.daysWorked])
 
   /* 시뮬레이터: 퇴사일 ±90일 */
   const simData = useMemo(() => {
@@ -128,7 +129,8 @@ export default function SeveranceClient() {
     for (let off = -30; off <= 90; off += 1) {
       const newEnd = addDays(endDate, off)
       const days = daysBetween(startDate, newEnd)
-      if (days < 365 || days > 365 * 50) {
+      /* 주 15시간 미만이면 일수와 무관하게 법정 퇴직금 0 */
+      if (weekHrs < 15 || days < 365 || days > 365 * 50) {
         points.push({ offset: off, days, severance: 0 })
         continue
       }
@@ -136,7 +138,7 @@ export default function SeveranceClient() {
       points.push({ offset: off, days, severance: sev })
     }
     return points
-  }, [startDate, endDate, dailyAppliedWage])
+  }, [startDate, endDate, dailyAppliedWage, weekHrs])
 
   /* 마일스톤 (1년/2년/3년/5년/10년) 도달 일자 */
   const milestones = useMemo(() => {
@@ -153,6 +155,18 @@ export default function SeveranceClient() {
   const insN = parseFloat(insuranceAdj) || 0
   const othN = parseFloat(otherDeduct) || 0
   const totalDeposit = tax.netSeverance + lastSalaryN + extraLeaveN - insN - othN
+
+  /* 입력값 초기화 (localStorage 포함) */
+  const resetAll = () => {
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+    setStartIso(isoDate(addDays(new Date(), -730)))
+    setEndIso(isoOffset(30))
+    setWeekHours('40'); setDailyHours('8')
+    setM1Base('250'); setM2Base('250'); setM3Base('250')
+    setM1Allow('20'); setM2Allow('20'); setM3Allow('20')
+    setYearlyBonus('300'); setUnusedLeave('100'); setMonthlyOrdinary('270')
+    setLastSalary('250'); setExtraLeave('100'); setInsuranceAdj('0'); setOtherDeduct('0')
+  }
 
   return (
     <div className={s.wrap}>
@@ -172,8 +186,26 @@ export default function SeveranceClient() {
         사용 안내 이 계산기는 <strong>입력값 기준 모의계산</strong>이며, 실제 퇴직금은 임금 항목·해석·회사 정산에 따라 달라질 수 있습니다. 평균임금·통상임금 판단은 노무사 영역입니다. 퇴직소득세는 <strong>2023년 개정 세법</strong> 기준이며, 매년 변동될 수 있습니다.
       </Disclaimer>
 
+      {/* 저장 안내 + 초기화 */}
+      <div className={s.card}>
+        <p className={s.helpText} style={{ margin: 0 }}>
+          🔒 입력한 입사·퇴사일·급여·상여·연차 정보는 <strong>이 브라우저(localStorage)에만 저장</strong>되며 서버로 전송되지 않습니다. 브라우저 데이터 삭제 시 사라지며, 공용 PC라면 사용 후 초기화하세요.
+        </p>
+        <button
+          type="button"
+          onClick={resetAll}
+          style={{
+            marginTop: 10, padding: '8px 16px', fontSize: 13, fontWeight: 600,
+            background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
+            borderRadius: 8, cursor: 'pointer',
+          }}
+        >
+          🗑️ 입력값 초기화
+        </button>
+      </div>
+
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="퇴직금 계산 탭">
         {([
           { id: 'calc',    label: '💼 퇴직금' },
           { id: 'compare', label: '⚖️ 평균 vs 통상' },
@@ -185,6 +217,8 @@ export default function SeveranceClient() {
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
+            role="tab"
+            aria-selected={tab === t.id}
           >
             {t.label}
           </button>
@@ -257,18 +291,18 @@ export default function SeveranceClient() {
             </p>
           </div>
 
-          {/* 월별 임금 입력 */}
+          {/* 월별 임금 입력 — 퇴사 직전 3개월 급여 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>월별 임금 (3개월)</span>
+            <span className={s.cardLabel}>퇴사 직전 3개월 급여</span>
             <div className={s.monthGrid}>
-              {monthSplits.slice(0, 3).map((m, i) => {
+              {['3개월 전', '2개월 전', '직전 1개월'].map((mLabel, i) => {
                 const baseGetter = [m1Base, m2Base, m3Base][i]
                 const baseSetter = [setM1Base, setM2Base, setM3Base][i]
                 const allowGetter = [m1Allow, m2Allow, m3Allow][i]
                 const allowSetter = [setM1Allow, setM2Allow, setM3Allow][i]
                 return (
                   <div key={i} className={s.monthCard}>
-                    <p className={s.monthLabel}>{i + 1}구간 — {m.label} ({m.days}일)</p>
+                    <p className={s.monthLabel}>{mLabel} 급여</p>
                     <div className={s.field}>
                       <label className={s.fieldLabel}>기본급 (만원)</label>
                       <input type="number" className={s.input} value={baseGetter} onChange={(e) => baseSetter(e.target.value)} min={0} max={5000} step={1} />
@@ -281,6 +315,11 @@ export default function SeveranceClient() {
                 )
               })}
             </div>
+            <p className={s.helpText}>
+              퇴사 직전 3개월의 월 급여를 각각 입력하세요 (월급제는 월 급여 그대로).
+              평균임금 = (3개월 급여 합 + 상여·연차 환산) ÷ 산정기간 {period.days}일.
+              산정기간이 달력상 4개월에 걸쳐도 3개월치 급여로 계산합니다.
+            </p>
           </div>
 
           <div className={s.card}>
@@ -303,18 +342,26 @@ export default function SeveranceClient() {
           <div className={s.hero}>
             <p className={s.heroLabel}>💼 예상 퇴직금</p>
             <p className={s.heroValue}>
-              세전 <strong>{fmtMan(severanceMan)}</strong>
+              세전 <strong>{fmtMan(displaySev)}</strong>
             </p>
-            <p className={s.heroSub}>
-              실수령 <strong style={{ color: 'var(--accent)' }}>{fmtMan(tax.netSeverance)}</strong>
-              {' · '}세금 <strong>{fmtMan(tax.totalTax)}</strong> ({tax.taxRatePct.toFixed(1)}%)
-            </p>
+            {eligibility.eligible ? (
+              <p className={s.heroSub}>
+                실수령 <strong style={{ color: 'var(--accent)' }}>{fmtMan(tax.netSeverance)}</strong>
+                {' · '}세금 <strong>{fmtMan(tax.totalTax)}</strong> ({tax.taxRatePct.toFixed(1)}%)
+              </p>
+            ) : (
+              <p className={s.heroSub}>
+                법정 퇴직금 발생 요건 미충족 (1년 이상 + 주 15시간 이상)
+                <br />
+                <span style={{ color: 'var(--muted)' }}>참고 — 요건 충족 시라면 약 {fmtMan(severanceMan)}</span>
+              </p>
+            )}
           </div>
 
           {/* SVG 막대 비교 */}
           <div className={s.card}>
             <span className={s.cardLabel}>세전 / 세금 / 실수령 비교</span>
-            <SeveranceBarChart pre={severanceMan} tax={tax.totalTax} net={tax.netSeverance} />
+            <SeveranceBarChart pre={displaySev} tax={tax.totalTax} net={tax.netSeverance} />
           </div>
 
           {/* 적용 임금 */}
@@ -452,6 +499,8 @@ export default function SeveranceClient() {
                 value={simOffset}
                 onChange={(e) => setSimOffset(parseInt(e.target.value))}
                 className={s.slider}
+                aria-label="퇴사일 조정 (일)"
+                aria-valuetext={`${simOffset > 0 ? `+${simOffset}` : simOffset}일 (${fmtDate(addDays(endDate, simOffset))})`}
               />
               <div className={s.helpText}>
                 슬라이더 위치: <strong className={s.cellAccent}>{simOffset > 0 ? `+${simOffset}` : simOffset}일</strong>
@@ -518,10 +567,10 @@ export default function SeveranceClient() {
           <div className={s.warnCard}>
             <strong>📅 퇴사일 결정 팁</strong>
             <p>
-              • <strong>1년 미만</strong>이면 법정 퇴직금 0 — 가능하면 1년 채우기<br />
-              • 매년 마일스톤(1·2·3·5·10년) 도달 직후 퇴사가 가장 유리<br />
-              • <strong>월말 퇴사</strong>가 일반적이지만, 며칠 차이로 마일스톤 변화 큼<br />
-              • 단, 회사 내부 규정·연차사용·인수인계 등도 고려해야 함
+              • <strong>유일한 절벽은 1년</strong>: 1년 미만이면 0원, 1년을 채우는 순간 약 1개월치 발생<br />
+              • 1년 이후엔 <strong>하루하루 근속일수에 비례</strong>해 꾸준히 증가 (2·3·5년에 특별한 점프 없음 — 마일스톤은 참고용 시점)<br />
+              • 단, <strong>호봉·연차 인상으로 평균임금이 바뀌면</strong> 퇴직금도 함께 변동<br />
+              • 회사 내부 규정·연차사용·인수인계 등도 함께 고려
             </p>
           </div>
         </>
@@ -532,7 +581,7 @@ export default function SeveranceClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>퇴직 제도 모드</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="퇴직 제도 모드 선택">
               {PENSIONS.map((p) => (
                 <button
                   key={p.id}
@@ -540,6 +589,7 @@ export default function SeveranceClient() {
                   onClick={() => setPensionMode(p.id)}
                   type="button"
                   title={p.desc}
+                  aria-pressed={pensionMode === p.id}
                 >
                   {p.emoji} {p.label}
                 </button>
@@ -610,7 +660,7 @@ export default function SeveranceClient() {
             <div className={s.tableScroll} style={{ marginTop: 12 }}>
               <table className={s.detailTable}>
                 <tbody>
-                  <tr><td>퇴직금 (세전)</td><td className={s.cellMono}>{fmtMan(severanceMan)}</td></tr>
+                  <tr><td>퇴직금 (세전)</td><td className={s.cellMono}>{fmtMan(displaySev)}</td></tr>
                   <tr><td>퇴직소득세 + 지방소득세</td><td className={s.cellMono} style={{ color: '#DB2777' }}>−{fmtMan(tax.totalTax)}</td></tr>
                   <tr><td>퇴직금 실수령</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(tax.netSeverance)}</td></tr>
                   <tr><td>마지막 월급</td><td className={s.cellMono}>{fmtMan(lastSalaryN)}</td></tr>
@@ -634,7 +684,7 @@ export default function SeveranceClient() {
               ✅ 퇴직금 14일 내 지급 의무 (지연 시 지연이자 발생)<br />
               ✅ 4대보험 상실 신고 → 다음 직장 또는 지역가입 전환<br />
               ✅ 퇴직소득세 원천징수 영수증 보관 (연말정산 시)<br />
-              ✅ 5,500만원 초과 시 IRP 계좌 의무 이전 사전 개설
+              ✅ 300만원 초과 퇴직급여는 IRP 계좌 의무 이전(55세 미만) — 사전 개설
             </p>
           </div>
         </>
@@ -793,7 +843,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
   }, [])
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 14, alignItems: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, alignItems: 'center', justifyItems: 'center' }}>
       <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }}>
         {slices.map(({ d, cum }) => {
           const startAngle = (cum / total) * Math.PI * 2 - Math.PI / 2
@@ -806,7 +856,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           {fmtMan(total)}
         </text>
       </svg>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%', maxWidth: 280 }}>
         {data.map((d) => (
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />

@@ -307,9 +307,6 @@ export default function PaintPage() {
               </Link>
             ))}
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, textAlign: 'center', fontStyle: 'italic' }}>
-            🚧 곧 출시 예정: 바닥재 계산기, 타일 소요량 계산기
-          </p>
         </div>
 
       </div>

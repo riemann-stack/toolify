@@ -37,7 +37,6 @@ const faqSummary: React.CSSProperties = {
   fontSize: '15px',
   fontWeight: 600,
   color: 'var(--text)',
-  listStyle: 'none',
   padding: '4px 0',
 }
 const faqAnswer: React.CSSProperties = {
@@ -50,11 +49,11 @@ const faqAnswer: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"정말 무작위가 인간보다 나은가요?","a":"장기·평균적으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 쥐(2009)·Orlando 고양이(2012) 등. 단, 이는 인간 평균 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;인간이 자기 편향을 이기는 게 어렵다&rdquo;입니다." },
+  { "q":"정말 무작위가 인간보다 나은가요?","a":"장기·평균적으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 인간 평균 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;인간이 자기 편향을 이기는 게 어렵다&rdquo;입니다." },
   { "q":"이 도구로 종목 추천도 받을 수 있나요?","a":"아니요 — 절대 X. 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 DART 증권신고서·본인 거래 증권사 안내에서 직접 확인." },
   { "q":"자가진단 결과가 빨강(🔴)이면 사면 안 되나요?","a":"금지가 아니라 보류 권장입니다. 매수/매도 권유는 절대 X. 빨강이 나오면: 24~48시간 보류 후 재진단 같은 결정이 다시 나오면 본인 판단 신뢰 다른 결정이 나오면 그게 본심 모든 결정의 책임은 본인에게 있습니다." },
-  { "q":"친칠라 모드가 왜 쥐(Lusha)가 아닌가요?","a":"Lusha는 러시아 쥐의 이름이지만, 본 도구의 마스코트는 친칠라입니다 (쥐의 사촌, 더 귀여움). Lusha 쥐가 큐브를 골라 펀드 매니저를 이긴 2009년 이야기에서 영감을 받았을 뿐 — 동물 자체가 중요한 게 아니라 &ldquo;인간 편향이 없는 무작위 선택의 힘&rdquo;이 핵심." },
-  { "q":"무작위 결과를 그대로 따르면 되나요?","a":"아니요 — 결과를 보고 5초 멈춰 자문해보세요. &ldquo;이 결과에 정말 동의하는가?&rdquo; 다르게 느껴진다면 그게 본심입니다 (그래서 반대 결정이 정답). 무작위 모드의 진짜 가치는 결과 자체가 아니라 본인 진심을 끌어내는 것." },
+  { "q":"친칠라 모드의 주인공 Lusha는 무슨 동물인가요?","a":"Lusha는 2009년 러시아 서커스 침팬지입니다 (쥐가 아닙니다). 종목명 큐브 30개 중 8개를 골라 펀드 매니저 94%를 이긴 이야기에서 영감을 받았고, 본 도구 마스코트는 더 친근한 친칠라로 표현했을 뿐 — 동물 자체가 중요한 게 아니라 &ldquo;인간 편향이 없는 무작위 선택의 힘&rdquo;이 핵심." },
+  { "q":"무작위 결과를 그대로 따르면 되나요?","a":"아니요 — 결과를 보고 5초 멈춰 자문해보세요. &ldquo;이 결과를 봤을 때 어떤 감정이 드는가?&rdquo; 안도·거부감 같은 반응이 본인 상태를 점검하는 신호입니다. 무작위 모드는 결정을 내려주는 게 아니라 감정 반응을 비춰보는 보조 장치이며, 결과를 그대로 따르라는 뜻이 아닙니다." },
   { "q":"자가진단 기록은 어디에 저장되나요?","a":"본인 브라우저(localStorage)에만 저장 — 서버 전송 X. 저장 내용은 날짜·방향·점수만 (종목명·매수가 등 민감 정보 X). 다른 기기·브라우저 자동 동기화 X. 브라우저 데이터 삭제 시 사라짐. 도구 내 &ldquo;전체 기록 삭제&rdquo; 버튼으로 즉시 정리 가능." },
   { "q":"다른 youtil 주식 도구와 어떻게 다른가요?","a":"📊 주식 물타기 계산기: 평단·물타기 계산 📈 복리 계산기: 장기 수익 시뮬 💰 월배당 목표 자산: 배당주 설계 💰 공모주 청약 증거금: IPO 계산 🐭 본 도구: 의사결정 심리·자가진단·무작위 보조 본 도구는 계산이 아닌 의사결정 망설임 해결에 특화." }
 ]
@@ -94,7 +93,7 @@ export default function StockDecisionPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
           { emoji: '🪙', name: '동전 던지기', story: '가장 단순. 50:50 확률.', use: 'BUY/SELL 양자택일' },
-          { emoji: '🐭', name: '친칠라 픽', story: 'Lusha 쥐 (러시아, 2009) — 펀드 매니저 94% 이김', use: '3~8개 옵션 픽' },
+          { emoji: '🐭', name: '친칠라 픽', story: 'Lusha 침팬지 (러시아, 2009) — 펀드 매니저 94% 이김', use: '3~8개 옵션 픽' },
           { emoji: '🎯', name: '다트', story: 'Burton Malkiel 원숭이 (1973)', use: '4분면 결정' },
           { emoji: '🐱', name: '고양이 발', story: 'Orlando 고양이 (영국, 2012) — Observer 1년 1등', use: '여러 옵션 톡톡' },
           { emoji: '🎰', name: '룰렛', story: 'Cass Business School (2013) — 1만 원숭이', use: '시각적 회전' },
@@ -107,6 +106,9 @@ export default function StockDecisionPage() {
           </div>
         ))}
       </div>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+        ⚠️ 위 사례(Lusha·Orlando·Malkiel·Cass·DALBAR)는 특정 시점의 일화·연구입니다. 과거 결과가 미래·재현·투자 성과를 보장하지 않으며, 종목 추천이 아니라 &ldquo;인간이 자기 편향을 이기기 어렵다&rdquo;는 의사결정 심리 교훈으로만 인용합니다.
+      </p>
 
       {/* 3. 자가진단 활용 가이드 */}
       <h2 style={sectionTitle}>🧠 자가진단 활용 가이드</h2>
@@ -158,7 +160,7 @@ export default function StockDecisionPage() {
         </table>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        💡 도구 안의 <strong>📚 왜 인간이 지나</strong> 탭에서 각 편향 상세 + 대처법 확인.
+        💡 도구 안의 <strong>📚 왜 지는가</strong> 탭에서 각 편향 상세 + 대처법 확인.
       </p>
 
       {/* 5. 사용 시나리오 */}
@@ -170,8 +172,8 @@ export default function StockDecisionPage() {
           <li>🟡🟠 노랑·주황이면 24~48시간 보류 + 다음날 재진단</li>
           <li>🔴 빨강이면 매수·매도 강력 보류</li>
           <li>그래도 결정 못하면 — <strong style={{ color: 'var(--accent)' }}>🎲 결정 보조</strong>로 친칠라·동전·다트</li>
-          <li>무작위 결과를 보고 5초 멈춤 — <strong>&ldquo;이 결과에 정말 동의하는가?&rdquo;</strong></li>
-          <li>다르게 느껴지면 그게 본심 — 반대 결정</li>
+          <li>무작위 결과를 보고 5초 멈춤 — 어떤 감정(안도·거부감)이 드는지 관찰</li>
+          <li>그 감정 반응이 점검 신호 — 결과를 그대로 따르라는 뜻이 아닙니다</li>
         </ol>
       </div>
 
@@ -182,7 +184,7 @@ export default function StockDecisionPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 정말 무작위가 인간보다 나은가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>장기·평균적</strong>으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 쥐(2009)·Orlando 고양이(2012) 등. 단, 이는 <strong>인간 평균</strong> 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;<strong>인간이 자기 편향을 이기는 게 어렵다</strong>&rdquo;입니다.
+          <strong style={{ color: 'var(--text)' }}>장기·평균적</strong>으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 <strong>인간 평균</strong> 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;<strong>인간이 자기 편향을 이기는 게 어렵다</strong>&rdquo;입니다.
         </div>
       </details>
 
@@ -207,16 +209,16 @@ export default function StockDecisionPage() {
       </details>
 
       <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. 친칠라 모드가 왜 쥐(Lusha)가 아닌가요?</summary>
+        <summary style={faqSummary}>Q4. 친칠라 모드의 주인공 Lusha는 무슨 동물인가요?</summary>
         <div style={faqAnswer}>
-          Lusha는 러시아 쥐의 이름이지만, 본 도구의 마스코트는 <strong style={{ color: 'var(--text)' }}>친칠라</strong>입니다 (쥐의 사촌, 더 귀여움). Lusha 쥐가 큐브를 골라 펀드 매니저를 이긴 2009년 이야기에서 영감을 받았을 뿐 — 동물 자체가 중요한 게 아니라 <strong>&ldquo;인간 편향이 없는 무작위 선택의 힘&rdquo;</strong>이 핵심.
+          Lusha는 <strong style={{ color: 'var(--text)' }}>2009년 러시아 서커스 침팬지</strong>입니다 (쥐가 아닙니다). 종목명 큐브 30개 중 8개를 골라 펀드 매니저 94%를 이긴 이야기에서 영감을 받았고, 본 도구 마스코트는 더 친근한 친칠라로 표현했을 뿐 — 동물 자체가 중요한 게 아니라 <strong>&ldquo;인간 편향이 없는 무작위 선택의 힘&rdquo;</strong>이 핵심.
         </div>
       </details>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q5. 무작위 결과를 그대로 따르면 되나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>아니요</strong> — 결과를 보고 5초 멈춰 자문해보세요. <strong>&ldquo;이 결과에 정말 동의하는가?&rdquo;</strong> 다르게 느껴진다면 그게 본심입니다 (그래서 반대 결정이 정답). 무작위 모드의 진짜 가치는 결과 자체가 아니라 <strong>본인 진심을 끌어내는 것</strong>.
+          <strong style={{ color: 'var(--text)' }}>아니요</strong> — 결과를 보고 5초 멈춰 자문해보세요. <strong>&ldquo;이 결과를 봤을 때 어떤 감정이 드는가?&rdquo;</strong> 안도·거부감 같은 반응이 본인 상태를 점검하는 신호입니다. 무작위 모드는 <strong>결정을 내려주는 게 아니라 감정 반응을 비춰보는 보조 장치</strong>이며, 결과를 그대로 따르라는 뜻이 아닙니다.
         </div>
       </details>
 

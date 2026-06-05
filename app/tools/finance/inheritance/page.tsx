@@ -91,7 +91,7 @@ const FAQ_LD = [
           },
           {
             q: '유류분이란 무엇인가요?',
-            a: '유류분은 유언으로도 침해할 수 없는 상속인의 최소 권리입니다. 배우자·직계비속(자녀)은 법정상속분 × 1/2, 부모·형제자매는 법정상속분 × 1/3. 예: 배우자 + 자녀 2명 / 자녀 법정상속분 2/7 → 유류분 1/7. 유언으로 일부 상속인을 배제하면 유류분 청구권 행사 가능 — 분쟁 발생. 본 도구의 「상속인별 분배」 탭에서 유류분 자동 표시.',
+            a: '유류분은 유언으로도 침해할 수 없는 상속인의 최소 권리입니다. 배우자·직계비속(자녀)은 법정상속분 × 1/2, 직계존속(부모)은 법정상속분 × 1/3입니다. 형제자매의 유류분은 2024년 4월 25일 헌법재판소 위헌 결정(민법 1112조 4호)으로 폐지되었습니다. 예: 배우자 + 자녀 2명 / 자녀 법정상속분 2/7 → 유류분 1/7. 유언으로 일부 상속인을 배제하면 유류분 청구권 행사 가능 — 분쟁 발생. 본 도구의 「상속인별 분배」 탭에서 유류분 자동 표시.',
           },
           {
             q: '본 계산기는 절세 자문에 사용해도 되나요?',
@@ -147,7 +147,7 @@ export default function InheritancePage() {
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li><strong>일괄공제 5억원</strong> — 기초공제(2억) + 인적공제(자녀 1인당 5천만원 등) 합계와 비교해 큰 금액 적용</li>
           <li><strong>배우자 상속공제 최소 5억 ~ 최대 30억</strong> — 실제 배우자 상속분 기준, 법정상속분 한도 적용</li>
-          <li><strong>금융재산공제</strong> — 금융재산의 20% (최대 2억원)</li>
+          <li><strong>금융재산공제</strong> — 순금융재산 2천만 이하 전액 · 1억 이하 2천만 · 초과분 20% (최대 2억원)</li>
           <li><strong>동거주택공제</strong> — 주택 가액의 100% (최대 6억, 10년 이상 동거 등 조건 충족 시)</li>
           <li><strong>장례비 공제</strong> — 실제 사용액 (1천만원 한도, 봉안시설 별도 5백만원)</li>
         </ul>
@@ -226,7 +226,7 @@ export default function InheritancePage() {
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
         <p style={{ fontSize: '12px', color: 'var(--muted)', padding: '10px 14px', margin: 0, background: 'var(--bg3)' }}>
-          예시 — 총 상속 20억 / 배우자 + 자녀 2명 / 법정한도 약 8.57억
+          예시 — 총 상속 20억 / 배우자 + 자녀 2명 / 법정한도 약 8.57억 (일괄공제 5억 별도 반영)
         </p>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -238,12 +238,12 @@ export default function InheritancePage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0원 (포기)</td><td style={cell}>5억 (최소)</td><td style={cell}>14.5억</td><td style={cell}>약 4.5억</td></tr>
-            <tr><td style={cell}>5억</td><td style={cell}>5억</td><td style={cell}>14.5억</td><td style={cell}>약 4.5억</td></tr>
-            <tr><td style={cell}>7억</td><td style={cell}>7억</td><td style={cell}>12.5억</td><td style={cell}>약 3.7억</td></tr>
-            <tr><td style={cell}>8.57억 (법정)</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>8.57억 ★</strong></td><td style={cell}>10.93억</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>약 2.93억</strong></td></tr>
-            <tr><td style={cell}>10억</td><td style={cell}>8.57억 (한도)</td><td style={cell}>10.93억</td><td style={cell}>약 2.93억</td></tr>
-            <tr><td style={cell}>15억</td><td style={cell}>8.57억 (한도)</td><td style={cell}>10.93억</td><td style={cell}>약 2.93억</td></tr>
+            <tr><td style={cell}>0원 (포기)</td><td style={cell}>5억 (최소)</td><td style={cell}>10억</td><td style={cell}>약 2.33억</td></tr>
+            <tr><td style={cell}>5억</td><td style={cell}>5억</td><td style={cell}>10억</td><td style={cell}>약 2.33억</td></tr>
+            <tr><td style={cell}>7억</td><td style={cell}>7억</td><td style={cell}>8억</td><td style={cell}>약 1.75억</td></tr>
+            <tr><td style={cell}>8.57억 (법정)</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>8.57억 ★</strong></td><td style={cell}>6.43억</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>약 1.29억</strong></td></tr>
+            <tr><td style={cell}>10억</td><td style={cell}>8.57억 (한도)</td><td style={cell}>6.43억</td><td style={cell}>약 1.29억</td></tr>
+            <tr><td style={cell}>15억</td><td style={cell}>8.57억 (한도)</td><td style={cell}>6.43억</td><td style={cell}>약 1.29억</td></tr>
           </tbody>
         </table>
       </div>

@@ -81,6 +81,7 @@ export interface OptionResult {
 
   // 기타
   effectiveDeposit: number     // 본인이 묶이는 보증금 (자기자본)
+  fundingGap: number           // 자금 공백 (자기부담 − 자기자본, 0 이상)
   riskFactors: string[]        // 위험 요인 텍스트 리스트
   taxCreditAnnual: number      // 연 절세액
 }
@@ -99,13 +100,15 @@ export const fmtKRWFull = (n: number): string => {
   return `${sign}${Math.round(Math.abs(n)).toLocaleString()}원`
 }
 
-/* ─── 월세 세액공제 계산 ─── */
+/* ─── 월세 세액공제 계산 (2024 상향: 한도 연 1,000만, 자격 총급여 8천만 이하) ─── */
 export function monthlyTaxCredit(annualRent: number, totalSalary: number, eligible: boolean): number {
   if (!eligible) return 0
-  // 한도: 연 750만 (월 62.5만 한도)
-  const eligibleRent = Math.min(7_500_000, annualRent)
-  // 7천 이하 17%, 초과 15%
-  const rate = totalSalary <= 70_000_000 ? 0.17 : 0.15
+  // 자격: 총급여 8,000만원 이하 (초과 시 공제 불가)
+  if (totalSalary > 80_000_000) return 0
+  // 한도: 연 월세액 1,000만 (월 약 83.3만)
+  const eligibleRent = Math.min(10_000_000, annualRent)
+  // 총급여 5,500만 이하 17%, 5,500만~8,000만 15%
+  const rate = totalSalary <= 55_000_000 ? 0.17 : 0.15
   return Math.floor(eligibleRent * rate)
 }
 
@@ -159,7 +162,11 @@ export function calculateJeonse(inputs: CalcInputs): OptionResult {
     monthlySeries.push(cum)
   }
 
+  // 자금 공백: 전세 자기부담(보증금 − 대출)이 보유 자기자본을 초과하면 실제 입주 불가
+  const fundingGap = Math.max(0, ownAmount - inputs.ownCapital)
+
   const riskFactors: string[] = []
+  if (fundingGap > 0) riskFactors.push(`자기자본 부족: 자기부담 ${fmtKRW(ownAmount)} > 자기자본 ${fmtKRW(inputs.ownCapital)} (부족 ${fmtKRW(fundingGap)})`)
   if (loanAmount > 0) riskFactors.push('전세대출 금리 인상 위험')
   riskFactors.push('보증금 미반환 위험 (전세사기·깡통전세)')
   if (!inputs.hugInsurance) riskFactors.push('HUG 보증보험 미가입 → 사고 시 보증금 손실 가능')
@@ -178,6 +185,7 @@ export function calculateJeonse(inputs: CalcInputs): OptionResult {
     cumulativeCost: cum,
     monthlySeries,
     effectiveDeposit: ownAmount,
+    fundingGap,
     riskFactors,
     taxCreditAnnual,
   }
@@ -220,7 +228,7 @@ export function calculateMonthly(inputs: CalcInputs): OptionResult {
   const monthlyNetCost = monthlyInterest + monthlyOpportunity + monthlyRentPaid + monthlyMaintenance - monthlyTaxSaving
 
   const riskFactors: string[] = [
-    '매년 임대료 인상 (5% 상한)',
+    '갱신 시(2년) 임대료 인상 (갱신청구권 5% 상한, 신규 계약은 시세)',
     '누적 비용 증가 → 자산 형성 어려움',
   ]
   if (loanInDeposit > 0) riskFactors.push('보증금 신용대출 시 5~7% 고금리')
@@ -238,6 +246,7 @@ export function calculateMonthly(inputs: CalcInputs): OptionResult {
     cumulativeCost: cum,
     monthlySeries,
     effectiveDeposit: ownInDeposit,
+    fundingGap: 0,
     riskFactors,
     taxCreditAnnual,
   }
@@ -310,6 +319,7 @@ export function calculateSemi(inputs: CalcInputs): OptionResult {
     cumulativeCost: cum,
     monthlySeries,
     effectiveDeposit: ownInDeposit,
+    fundingGap: 0,
     riskFactors,
     taxCreditAnnual: totalTaxAnnual,
   }

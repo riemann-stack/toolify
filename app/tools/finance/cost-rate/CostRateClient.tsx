@@ -133,8 +133,9 @@ export default function CostRateClient() {
     [ingredients]
   )
   const ingredient = showIngredients ? ingredientFromTable : parseComma(ingredientStr)
-  const packaging = (channel === 'delivery' || channel === 'pickup' || channel === 'all') ? parseComma(packagingStr) : 0
-  const accessory = parseComma(accessoryStr)
+  const usesPackaging = channel === 'delivery' || channel === 'pickup' || channel === 'all'
+  const packaging = usesPackaging ? parseComma(packagingStr) : 0
+  const accessory = usesPackaging ? parseComma(accessoryStr) : 0
   const variableCost = ingredient + packaging + accessory
 
   /* 배달 수수료 */
@@ -196,21 +197,22 @@ export default function CostRateClient() {
   /* 채널별 비교 (모두 비교 모드) */
   const channelCompare = useMemo(() => {
     if (channel !== 'all') return []
-    const buildRow = (label: string, appRate_: number, cls: string) => {
+    // isDelivery: 포장재·배달비·광고비가 드는 배달 채널 여부. 자체 페이지도 배달이므로 true(앱 수수료만 0%).
+    const buildRow = (label: string, appRate_: number, isDelivery: boolean, cls: string) => {
       const comm = price * ((appRate_ + payRate) / 100)
-      const variable = ingredient + (appRate_ > 0 ? packaging : 0) + accessory
-      const burden = appRate_ > 0 ? deliveryBurden : 0
-      const ad = appRate_ > 0 ? adCost : 0
+      const variable = ingredient + (isDelivery ? packaging : 0) + accessory
+      const burden = isDelivery ? deliveryBurden : 0
+      const ad = isDelivery ? adCost : 0
       const ded = variable + comm + burden + ad
       const net = price - ded
       return { label, net, real: price > 0 ? (ded / price) * 100 : 0, margin: price > 0 ? (net / price) * 100 : 0, cls }
     }
     const rows = [
-      buildRow('🏪 매장',                  0,   'compareStore'),
-      buildRow('🟢 배민 (6.8%)',           6.8, 'compareBaemin'),
-      buildRow('🔴 쿠팡이츠 (6.8%)',       6.8, 'compareCoupang'),
-      buildRow('🟡 요기요 (9.7%)',         9.7, 'compareYogiyo'),
-      buildRow('🌐 자체 (수수료 0%)',      0.0, 'compareOwn'),
+      buildRow('🏪 매장',                  0,   false, 'compareStore'),
+      buildRow('🟢 배민 (6.8%)',           6.8, true,  'compareBaemin'),
+      buildRow('🔴 쿠팡이츠 (6.8%)',       6.8, true,  'compareCoupang'),
+      buildRow('🟡 요기요 (9.7%)',         9.7, true,  'compareYogiyo'),
+      buildRow('🌐 자체 (수수료 0%)',      0.0, true,  'compareOwn'),
     ]
     const bestIdx = rows.reduce((maxI, r, i, arr) => r.net > arr[maxI].net ? i : maxI, 0)
     return rows.map((r, i) => ({ ...r, isBest: i === bestIdx }))
@@ -220,15 +222,13 @@ export default function CostRateClient() {
   const reverseResult = useMemo(() => {
     if (ingredient <= 0 || targetCostRate <= 0) return null
     const margin = targetCostRate / 100
-    if (!useDelivery) {
-      const need = ingredient / margin
-      return { exact: need, possible: true }
-    }
-    const totalVariable = ingredient + packaging + deliveryBurden
+    // 판매가에 비례하지 않는 주문당 고정 변동비 전체 (수수료만 가격 비례).
+    // packaging·accessory·deliveryBurden·adCost·commissionTotalRate는 채널별로 이미 0 처리됨.
+    const perOrderFixed = ingredient + packaging + accessory + deliveryBurden + adCost
     if (margin <= commissionTotalRate) return { exact: 0, possible: false }
-    const need = totalVariable / (margin - commissionTotalRate)
+    const need = perOrderFixed / (margin - commissionTotalRate)
     return { exact: need, possible: true }
-  }, [ingredient, packaging, deliveryBurden, commissionTotalRate, targetCostRate, useDelivery])
+  }, [ingredient, packaging, accessory, deliveryBurden, adCost, commissionTotalRate, targetCostRate])
 
   /* ─────────────────────────────── 탭 3 — 월 수익 ─────────────────────────────── */
   const businessDays = n(businessDaysStr, 1)
@@ -355,11 +355,11 @@ export default function CostRateClient() {
               <span>판매 채널</span>
               <span className={styles.cardLabelHint}>채널별로 비용 구성 다름</span>
             </div>
-            <div className={styles.channelGrid}>
-              <button type="button" className={`${styles.channelBtn} ${channel === 'store' ? styles.channelActive : ''}`}    onClick={() => selectChannel('store')}>🏪 매장</button>
-              <button type="button" className={`${styles.channelBtn} ${channel === 'delivery' ? styles.channelActive : ''}`} onClick={() => selectChannel('delivery')}>🛵 배달</button>
-              <button type="button" className={`${styles.channelBtn} ${channel === 'pickup' ? styles.channelActive : ''}`}   onClick={() => selectChannel('pickup')}>📦 포장</button>
-              <button type="button" className={`${styles.channelBtn} ${channel === 'all' ? styles.channelActive : ''}`}      onClick={() => selectChannel('all')}>🌐 모두 비교</button>
+            <div className={styles.channelGrid} role="group" aria-label="판매 채널">
+              <button type="button" aria-pressed={channel === 'store'} className={`${styles.channelBtn} ${channel === 'store' ? styles.channelActive : ''}`}    onClick={() => selectChannel('store')}>🏪 매장</button>
+              <button type="button" aria-pressed={channel === 'delivery'} className={`${styles.channelBtn} ${channel === 'delivery' ? styles.channelActive : ''}`} onClick={() => selectChannel('delivery')}>🛵 배달</button>
+              <button type="button" aria-pressed={channel === 'pickup'} className={`${styles.channelBtn} ${channel === 'pickup' ? styles.channelActive : ''}`}   onClick={() => selectChannel('pickup')}>📦 포장</button>
+              <button type="button" aria-pressed={channel === 'all'} className={`${styles.channelBtn} ${channel === 'all' ? styles.channelActive : ''}`}      onClick={() => selectChannel('all')}>🌐 모두 비교</button>
             </div>
           </div>
 
@@ -381,9 +381,9 @@ export default function CostRateClient() {
 
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>재료비</span>
-            <div className={styles.miniToggle}>
-              <button type="button" className={`${styles.miniBtn} ${!showIngredients ? styles.miniActive : ''}`} onClick={() => setShowIngredients(false)}>단순 입력</button>
-              <button type="button" className={`${styles.miniBtn} ${showIngredients ? styles.miniActive : ''}`}  onClick={() => setShowIngredients(true)}>재료별 상세</button>
+            <div className={styles.miniToggle} role="group" aria-label="재료비 입력 방식">
+              <button type="button" aria-pressed={!showIngredients} className={`${styles.miniBtn} ${!showIngredients ? styles.miniActive : ''}`} onClick={() => setShowIngredients(false)}>단순 입력</button>
+              <button type="button" aria-pressed={showIngredients} className={`${styles.miniBtn} ${showIngredients ? styles.miniActive : ''}`}  onClick={() => setShowIngredients(true)}>재료별 상세</button>
             </div>
 
             {!showIngredients ? (
@@ -399,7 +399,7 @@ export default function CostRateClient() {
                       <th>재료명</th>
                       <th style={{ width: 54 }}>양</th>
                       <th style={{ width: 52 }}>단위</th>
-                      <th style={{ width: 66 }}>단가</th>
+                      <th style={{ width: 66 }}>단위당가</th>
                       <th style={{ width: 28 }}></th>
                     </tr>
                   </thead>
@@ -424,6 +424,9 @@ export default function CostRateClient() {
                     ))}
                   </tbody>
                 </table>
+                <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, margin: '6px 2px 0' }}>
+                  ※ <strong style={{ color: 'var(--text)' }}>단위당가</strong>는 선택한 단위 1개당 가격입니다. kg↔g·L↔ml 자동 환산은 없으니 단위에 맞춰 입력하세요 (예: 200 g × 30원 = 6,000원 / 0.2 kg × 30,000원 = 6,000원).
+                </p>
                 {ingredients.length < 15 && (
                   <button type="button" className={styles.addBtn} onClick={addIngredient}>+ 재료 추가</button>
                 )}
@@ -469,11 +472,12 @@ export default function CostRateClient() {
                 <span>배달앱 수수료</span>
                 <span className={styles.cardLabelHint}>2026 차등수수료 기준</span>
               </div>
-              <div className={styles.appGrid}>
+              <div className={styles.appGrid} role="group" aria-label="배달앱 프리셋">
                 {DELIVERY_APPS.map(a => (
                   <button
                     key={a.id}
                     type="button"
+                    aria-pressed={appPreset === a.id}
                     className={`${styles.appBtn} ${styles[a.cls]} ${appPreset === a.id ? styles.appActive : ''}`}
                     onClick={() => selectApp(a.id)}
                   >
@@ -626,6 +630,8 @@ export default function CostRateClient() {
                 step={1}
                 value={targetCostRate}
                 onChange={e => setTargetCostRate(Number(e.target.value))}
+                aria-label="목표 원가율"
+                aria-valuetext={`${targetCostRate}%`}
               />
               <span className={styles.sliderValue}>{targetCostRate}%</span>
             </div>

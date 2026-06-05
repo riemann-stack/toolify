@@ -137,7 +137,6 @@ export interface InheritInput {
   debt: number
   hasSpouse: boolean
   childCount: number
-  otherHeirCount: number
   spouseActualShare?: number    // 배우자 실제 상속분 (선택)
   financialAsset?: number       // 금융재산 (금융재산공제용)
   cohabitHomeValue?: number     // 동거주택 가액 (선택)
@@ -153,7 +152,9 @@ export function getSpouseLegalShare(childCount: number, parentsAlive: number): n
 export function calcInheritanceTax(input: InheritInput): InheritResult {
   const { totalAsset, priorGift, funeral, debt, hasSpouse, childCount } = input
 
-  const taxableValue = Math.max(0, totalAsset + priorGift - debt - funeral)
+  // 장례비 공제 한도: 기본 최대 1,000만 + 봉안·자연장지 별도 최대 500만 = 1,500만
+  const funeralDeductible = Math.min(Math.max(0, funeral), 15_000_000)
+  const taxableValue = Math.max(0, totalAsset + priorGift - debt - funeralDeductible)
 
   // 일괄공제 vs 기초공제 + 인적공제
   const baseDeduction = 200_000_000
@@ -168,19 +169,24 @@ export function calcInheritanceTax(input: InheritInput): InheritResult {
   if (hasSpouse) {
     spouseLegalLimit = totalAsset * getSpouseLegalShare(childCount, 0)
     const cap = Math.min(spouseLegalLimit, 3_000_000_000)
-    if (input.spouseActualShare !== undefined && input.spouseActualShare > 0) {
-      // 실제 상속분 기준 (단, 법정한도와 30억 한도 내, 최소 5억 보장)
+    if (input.spouseActualShare !== undefined) {
+      // 실제 상속분 입력(0 포함): 법정한도·30억 한도 내, 최소 5억 보장
+      // 0원(상속포기)이라도 최소 5억은 공제되므로 0을 default 분기로 흘리지 않는다.
       spouseDeduction = Math.max(500_000_000, Math.min(input.spouseActualShare, cap))
     } else {
-      // 기본 추정: 법정한도와 5억 중 큰 값 (보수적으로 5억 사용 X — 법정한도 사용)
+      // 미입력 시 추정: 법정한도까지 취득한다고 가정(최소 5억 보장)
       spouseDeduction = Math.max(500_000_000, cap)
     }
   }
 
-  // 금융재산공제: 금융재산 × 20%, 최대 2억
-  const financialDeduction = input.financialAsset !== undefined && input.financialAsset > 0
-    ? Math.min(200_000_000, input.financialAsset * 0.20)
-    : 0
+  // 금융재산공제 (순금융재산 기준, 단계별):
+  //  2천만 이하 → 전액 / 2천만~1억 → 2천만 정액 / 1억 초과 → 20%, 최대 2억
+  const fa = input.financialAsset !== undefined && input.financialAsset > 0 ? input.financialAsset : 0
+  const financialDeduction =
+    fa <= 0 ? 0
+      : fa <= 20_000_000 ? fa
+        : fa <= 100_000_000 ? 20_000_000
+          : Math.min(200_000_000, fa * 0.20)
 
   // 동거주택공제: 주택 가액의 100%, 최대 6억 (조건 충족 가정)
   const homeDeduction = input.cohabitHomeValue !== undefined && input.cohabitHomeValue > 0
@@ -231,7 +237,7 @@ export function simulateSpouseDeduction(
   return uniqueShares.map(actual => {
     const r = calcInheritanceTax({
       totalAsset, priorGift: 0, debt, funeral,
-      hasSpouse: true, childCount, otherHeirCount: 0,
+      hasSpouse: true, childCount,
       spouseActualShare: actual,
       financialAsset,
     })
@@ -281,7 +287,10 @@ export function calcInheritanceDistribution(input: DistributionInput): {
     relation: InheritanceHeir['relation'],
     legalShare: number,
   ) => {
-    const reserveRatio = (relation === '배우자' || relation === '자녀') ? 0.5 : 1/3
+    // 유류분: 배우자·직계비속(자녀) 1/2, 직계존속(부모) 1/3,
+    // 형제자매는 2024.4.25 헌재 단순위헌(민법 1112조 4호)으로 폐지 → 0
+    const reserveRatio = relation === '형제자매' ? 0
+      : (relation === '배우자' || relation === '자녀') ? 0.5 : 1 / 3
     heirs.push({
       id, name, relation,
       legalShare,

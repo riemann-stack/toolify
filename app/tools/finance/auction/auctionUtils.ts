@@ -57,20 +57,30 @@ export const REGIONS: RegionMeta[] = [
 
 /* ─────────────────────────────────────────────
    취득세 계산 (2025~2026 일반 가이드)
-   세율 = 취득세 + 지방교육세 + 농어촌특별세 통합
+   세율 = 취득세 + 지방교육세 통합 (전용 85㎡ 이하 기준, 농특세 제외)
+   ※ 85㎡ 초과 주택은 농어촌특별세 추가: 1주택 +0.2%p,
+     중과 8%대 +0.6%p, 12%대 +1.0%p — 본 도구는 ≤85㎡ 기준
    ───────────────────────────────────────────── */
 
 /**
  * 취득세 자동 계산 (만원 단위 입력 → 세액 만원 반환)
  * 1주택 (실거주):
  *  - 6억 이하: 1.1%
- *  - 6~9억:   2.2%
+ *  - 6~9억:   1.1~3.3% (선형)
  *  - 9억 초과: 3.3%
- * 2주택: 8% (조정 +4 = 12%)
- * 3주택+: 12% (조정 동일)
- * 법인: 12% (전 지역)
+ * 2주택: 8.4% (조정 +4 = 12.4%) — 취득세 8% + 지방교육세 0.4%
+ * 3주택+: 12.4% (조정 무관) — 취득세 12% + 지방교육세 0.4%
+ * 법인: 12.4% (전 지역)
  * 오피스텔·상가·토지: 4.6%
  */
+/** 1주택 통합 취득세율(지방교육세 포함, 소수). 6~9억은 선형 1.1~3.3% */
+function oneHouseRate(priceEok: number): number {
+  if (priceEok <= 6) return 0.011
+  // 6~9억: 취득세율 = 가액(억)×2/3 − 3 (1~3%) → 지방교육세 포함 ×1.1
+  if (priceEok <= 9) return ((priceEok * 2) / 3 - 3) * 1.1 / 100
+  return 0.033
+}
+
 export function calcAcquisitionTax(
   priceMan: number,
   property: PropertyType,
@@ -85,35 +95,30 @@ export function calcAcquisitionTax(
     return priceMan * 0.046
   }
 
-  /* 법인은 12% */
+  /* 법인은 12.4% (취득세 12% + 지방교육세 0.4%) */
   if (owner === 'corp') {
-    return priceMan * 0.12
+    return priceMan * 0.124
   }
 
-  /* 다주택 가산 */
+  /* 다주택 가산 (지방교육세 0.4%p 포함) */
   const regionMeta = REGIONS.find((r) => r.id === region)!
   if (owner === 'multi3') {
-    return priceMan * 0.12  // 4주택+ 조정 무관 12%
+    return priceMan * 0.124  // 4주택+ 조정 무관 12% + 지방교육세 0.4%
   }
   if (owner === 'multi2') {
-    const baseRate = 8 + regionMeta.surcharge  // 조정 +4 = 12
+    const baseRate = 8 + regionMeta.surcharge + 0.4  // 비조정 8.4 / 조정 12.4
     return priceMan * (baseRate / 100)
   }
   if (owner === 'own1') {
-    /* 1주택 → 2주택: 조정대상이면 8%, 비규제면 일반 1주택 세율 */
+    /* 1주택 → 2주택: 조정대상이면 8.4%, 비규제면 일반 1주택 세율 */
     if (region === 'normal') {
-      // 비규제: 일반 1주택과 동일
-      if (priceEok <= 6) return priceMan * 0.011
-      if (priceEok <= 9) return priceMan * 0.022
-      return priceMan * 0.033
+      return priceMan * oneHouseRate(priceEok)
     }
-    return priceMan * 0.08
+    return priceMan * 0.084
   }
 
   /* 실거주 1주택 (live1) */
-  if (priceEok <= 6) return priceMan * 0.011
-  if (priceEok <= 9) return priceMan * 0.022
-  return priceMan * 0.033
+  return priceMan * oneHouseRate(priceEok)
 }
 
 /** 취득세율 % 조회 (UI 표시용) */
@@ -131,12 +136,14 @@ export function calcLegalFee(priceMan: number): number {
   return Math.max(30, Math.min(priceMan * 0.002, 200))
 }
 
-/** 인지세: 1억당 7만원, 최대 15만원 */
+/** 인지세: 부동산 거래금액 구간별 정액 (인지세법) */
 export function calcStampTax(priceMan: number): number {
-  const eok = priceMan / 10000
-  if (eok < 1) return 1
-  if (eok < 10) return Math.min(eok * 7, 15)
-  return 35  // 10억+ 35만원
+  if (priceMan <= 1000) return 0     // 1천만원 이하 비과세
+  if (priceMan <= 3000) return 2     // 1천만~3천만
+  if (priceMan <= 5000) return 4     // 3천만~5천만
+  if (priceMan <= 10000) return 7    // 5천만~1억
+  if (priceMan <= 100000) return 15  // 1억~10억
+  return 35                          // 10억 초과
 }
 
 /** 국민주택채권: 낙찰가 × 약 2% (시가표준 기반), 즉시 매도 시 약 0.5% 손실 */
@@ -165,11 +172,11 @@ export interface CostItem {
 
 export const COST_ITEMS: CostItem[] = [
   /* 자동 추정 — 세금·법무 */
-  { id: 'tax_acq',  emoji: '🏛️', label: '취득세 (지방교육·농특 포함)',  desc: '주택 1.1~12%, 비주택 4.6%', defaultMan: 0, isAuto: true, category: 'tax',
-    saveTip: '실거주 1주택 비과세·신혼부부·청년 특례로 50% 감면 가능' },
+  { id: 'tax_acq',  emoji: '🏛️', label: '취득세 (지방교육세 포함)',  desc: '주택 1.1~12.4%, 비주택 4.6%', defaultMan: 0, isAuto: true, category: 'tax',
+    saveTip: '생애최초·신혼부부 등 취득세 감면 요건 확인 (양도세 비과세와는 별개)' },
   { id: 'legal',    emoji: '⚖️', label: '법무비 (등기 위임)',             desc: '낙찰가 × 0.2%, 30~200만원',  defaultMan: 0, isAuto: true, category: 'legal',
     saveTip: '셀프 등기 시 0원 (난이도 ★★★, 시간 5~10시간)' },
-  { id: 'stamp',    emoji: '📋', label: '인지세',                        desc: '1억당 7만원, 최대 35만원',   defaultMan: 0, isAuto: true, category: 'tax' },
+  { id: 'stamp',    emoji: '📋', label: '인지세',                        desc: '구간별 2~35만원 (정액)',     defaultMan: 0, isAuto: true, category: 'tax' },
   { id: 'bond',     emoji: '🎟️', label: '국민주택채권 (즉시 매도 손실)',   desc: '주택 0.5% / 비주택 1.2%',   defaultMan: 0, isAuto: true, category: 'tax',
     saveTip: '5년 보유 시 손실 회피 가능 (이자 수익 있음)' },
 
@@ -215,19 +222,21 @@ export function monthlyPayment(principalMan: number, annualRatePct: number, year
 
 /**
  * 가능 대출 = min(LTV 한도, DSR 한도)
+ * LTV 한도 = 낙찰가(담보가치) × LTV%  ← 부대비용이 아닌 담보가 기준
  * DSR = (월 신규 + 기존) × 12 / 연소득 ≤ 0.40
  *  → 가능 월 상환액 = 연소득 × 0.40 / 12 - 기존 월 상환
  *  → DSR 가능 원금 = monthlyPayment 역산
  */
 export function calcLoan(
-  totalCostMan: number,
+  priceMan: number,        // 낙찰가 = 담보가치 (LTV 기준)
+  totalCostMan: number,    // 총투자금 (자기자본 산정 기준)
   ltvPct: number,
   ratePct: number,
   years: number,
   annualIncomeMan: number,
   existingMonthlyMan: number,
 ): LoanResult {
-  const ltvLimit = totalCostMan * (ltvPct / 100)
+  const ltvLimit = priceMan * (ltvPct / 100)
 
   /* DSR 가능 월 상환 */
   const maxMonthlyDsr = Math.max(0, (annualIncomeMan * 0.40 / 12) - existingMonthlyMan)

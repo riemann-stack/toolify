@@ -17,6 +17,8 @@ export interface CheckItem {
   /** 체크하면 위험 신호 (true) / 이성적 신호 (false) */
   isRiskSignal: boolean
   bias?: string  // 연결된 편향
+  /** 치명적 위험 신호 — 체크 시 이성 신호로 희석되지 않고 결과 강제 상향 */
+  critical?: boolean
 }
 
 export const CHECKLIST: Record<Direction, CheckItem[]> = {
@@ -30,10 +32,10 @@ export const CHECKLIST: Record<Direction, CheckItem[]> = {
     { id: 'b7', label: '내 매수 후 더 떨어지면 추가 매수 계획이 있다', isRiskSignal: false },
     { id: 'b8', label: '"이번엔 다르다·놓치면 후회한다"는 생각이 든다', isRiskSignal: true, bias: 'FOMO' },
     { id: 'b9', label: '이미 비슷한 종목 비중이 충분하다 (산업 집중)', isRiskSignal: true, bias: '집중 위험' },
-    { id: 'b10', label: '대출·신용·미수로 살 생각이 든다', isRiskSignal: true, bias: '레버리지 위험' },
+    { id: 'b10', label: '대출·신용·미수로 살 생각이 든다', isRiskSignal: true, bias: '레버리지 위험', critical: true },
   ],
   sell: [
-    { id: 's1', label: '최근 -10~20% 하락에 불안해서 팔고 싶다', isRiskSignal: true, bias: '손실 회피' },
+    { id: 's1', label: '최근 -10~20% 하락에 불안해서 팔고 싶다', isRiskSignal: true, bias: '손실 회피', critical: true },
     { id: 's2', label: '본전(매수가)만 회복하면 바로 팔 생각이다', isRiskSignal: true, bias: '본전 효과' },
     { id: 's3', label: '매도 이유가 회사 펀더멘털 변화 때문이다', isRiskSignal: false },
     { id: 's4', label: '이 돈이 곧(3개월 내) 필요하다', isRiskSignal: false },
@@ -53,21 +55,45 @@ export const CHECKLIST: Record<Direction, CheckItem[]> = {
     { id: 'h6', label: '같은 자금으로 더 나은 투자처가 떠오르지 않는다', isRiskSignal: false },
     { id: 'h7', label: '"내가 사면 떨어지고 팔면 오른다"는 트라우마가 있다', isRiskSignal: true, bias: '통제 착각' },
     { id: 'h8', label: '분할 매수·매도 계획이 있다 (감정 X 규칙)', isRiskSignal: false },
-    { id: 'h9', label: '이미 -30%인데 손절선을 안 정했다', isRiskSignal: true, bias: '계획 부재' },
-    { id: 'h10', label: '잠 못 잘 정도로 신경 쓰인다', isRiskSignal: true, bias: '심리 한계' },
+    { id: 'h9', label: '이미 -30%인데 손절선을 안 정했다', isRiskSignal: true, bias: '계획 부재', critical: true },
+    { id: 'h10', label: '잠 못 잘 정도로 신경 쓰인다', isRiskSignal: true, bias: '심리 한계', critical: true },
   ],
 }
 
 // ── 점수 결과 카드 ─────────────────────
+export type Band = 'green' | 'yellow' | 'orange' | 'red'
+
 export interface DiagnoseResult {
   direction: Direction
   riskScore: number       // 위험 신호 체크 수
   rationalScore: number   // 이성적 신호 체크 수
   total: number           // 총 체크 수
-  band: 'green' | 'yellow' | 'orange' | 'red'
+  band: Band
   title: string
   message: string
   triggeredBiases: string[]
+  criticalSignals: string[]  // 체크된 치명적 위험 신호 (강제 상향 트리거)
+}
+
+const BAND_ORDER: Band[] = ['green', 'yellow', 'orange', 'red']
+
+const BAND_INFO: Record<Band, { title: string; message: string }> = {
+  green: {
+    title: '✅ 비교적 이성적 — 본인 판단 위주로 점검',
+    message: '체크한 항목 대부분이 이성적 신호. 다만 "확신"이 클수록 과신 위험. 결정 전 5초 더 생각.',
+  },
+  yellow: {
+    title: '🟡 이성·감정 균형 — 결정 보류 권장',
+    message: '판단 근거와 감정 신호가 비슷함. 1~2일 보류 후 같은 결정인지 다시 점검 권장.',
+  },
+  orange: {
+    title: '🟠 감정 신호 ↑ — 신중',
+    message: '위험 신호가 이성 신호보다 많음. 분할 진행·소액 테스트 등 영향 줄이는 방법 검토.',
+  },
+  red: {
+    title: '🔴 강한 감정 신호 — 결정 보류 강력 권장',
+    message: '감정·편향 신호가 큼. 24~48시간 보류 후 같은 결정인지 재검토. 무작위 모드는 결정용이 아닌 감정 확인용입니다.',
+  },
 }
 
 export function diagnose(direction: Direction, checked: string[]): DiagnoseResult {
@@ -78,28 +104,19 @@ export function diagnose(direction: Direction, checked: string[]): DiagnoseResul
   const triggeredBiases = Array.from(new Set(
     checkedItems.filter((i) => i.isRiskSignal && i.bias).map((i) => i.bias!),
   ))
+  const criticalSignals = checkedItems.filter((i) => i.isRiskSignal && i.critical).map((i) => i.label)
 
-  // 위험-이성 격차로 밴드 결정
+  // 위험-이성 격차로 기본 밴드
   const diff = risk - rational
-  let band: DiagnoseResult['band'], title: string, message: string
+  let bandIdx = diff <= -3 ? 0 : diff <= 0 ? 1 : diff <= 2 ? 2 : 3
 
-  if (diff <= -3) {
-    band = 'green'
-    title = '✅ 비교적 이성적 — 본인 판단 신뢰'
-    message = '체크한 항목 대부분이 이성적 신호. 다만 "확신"이 클수록 과신 위험. 결정 전 5초 더 생각.'
-  } else if (diff <= 0) {
-    band = 'yellow'
-    title = '🟡 이성·감정 균형 — 결정 보류 권장'
-    message = '판단 근거와 감정 신호가 비슷함. 1~2일 보류 후 같은 결정인지 다시 점검 권장.'
-  } else if (diff <= 2) {
-    band = 'orange'
-    title = '🟠 감정 신호 ↑ — 신중'
-    message = '위험 신호가 이성 신호보다 많음. 분할 진행·소액 테스트 등 영향 줄이는 방법 검토.'
-  } else {
-    band = 'red'
-    title = '🔴 강한 감정 신호 — 결정 보류 강력 권장'
-    message = '대부분 감정·편향 신호. 24~48시간 보류 후 같은 결정인지 재검토. 망설여지면 무작위 모드는 마지막 수단.'
-  }
+  // 치명적 위험 신호는 이성 신호로 희석되지 않도록 강제 상향
+  // (예: 대출·신용 매수, -30% 손절선 미정, 수면 불안 — 이성 항목을 같이 체크해도 위험은 유지)
+  if (criticalSignals.length >= 1) bandIdx = Math.max(bandIdx, 2) // 최소 🟠
+  if (criticalSignals.length >= 2) bandIdx = Math.max(bandIdx, 3) // 🔴
+
+  const band = BAND_ORDER[bandIdx]
+  const info = BAND_INFO[band]
 
   return {
     direction,
@@ -107,9 +124,10 @@ export function diagnose(direction: Direction, checked: string[]): DiagnoseResul
     rationalScore: rational,
     total: checkedItems.length,
     band,
-    title,
-    message,
+    title: info.title,
+    message: info.message,
     triggeredBiases,
+    criticalSignals,
   }
 }
 
@@ -118,7 +136,7 @@ export type RandomMode = 'coin' | 'chinchilla' | 'dart' | 'cat' | 'roulette'
 
 export const MODE_META: Record<RandomMode, { label: string; emoji: string; story: string }> = {
   coin:       { label: '동전 던지기',       emoji: '🪙', story: '가장 단순. 50:50 확률 — 결정장애 즉시 해소.' },
-  chinchilla: { label: '친칠라 픽',         emoji: '🐭', story: '러시아 쥐 Lusha(2009) 영감. 펀드 매니저 94% 이김.' },
+  chinchilla: { label: '친칠라 픽',         emoji: '🐭', story: '러시아 침팬지 Lusha(2009) 영감. 펀드 매니저 94% 이김.' },
   dart:       { label: '다트 던지기',       emoji: '🎯', story: 'Burton Malkiel "눈 가린 원숭이"(1973) 영감.' },
   cat:        { label: '고양이 발',         emoji: '🐱', story: '영국 고양이 Orlando(2012) 영감. Observer 1년 실험 1등.' },
   roulette:   { label: '룰렛',              emoji: '🎰', story: 'Cass Business School(2013) — 1만 무작위 포트폴리오.' },
@@ -176,10 +194,10 @@ export interface CaseStudy {
 }
 
 export const CASES: CaseStudy[] = [
-  { key: 'lusha', title: 'Lusha 쥐 (러시아)', year: '2009',
-    who: '주식 종목명 적힌 큐브 30개 중 8개를 골라 1년 보유',
-    result: '+15% 수익. 러시아 펀드 매니저 94% 이상 이김.',
-    source: 'TASS·여러 언론 보도' },
+  { key: 'lusha', title: 'Lusha 침팬지 (러시아)', year: '2009',
+    who: '서커스 침팬지가 종목명 적힌 큐브 30개 중 8개를 골라 1년 보유',
+    result: '초기 자본 약 3배 — 러시아 펀드 매니저 94% 이상 이김.',
+    source: 'CBS·TASS 등 언론 보도' },
   { key: 'orlando', title: 'Orlando 고양이 (영국)', year: '2012',
     who: 'Observer 1년 실험 — 전문가팀 vs 학생팀 vs 고양이(쥐 인형으로 종목 선택)',
     result: '고양이 1등. 전문가팀 ₤8,400 vs 고양이 ₤10,800.',
@@ -197,6 +215,11 @@ export const CASES: CaseStudy[] = [
     result: '20년 평균 일반 투자자 ~3% / S&P 500 ~7~10% — 절반 이하',
     source: 'DALBAR QAIB Report (1994~)' },
 ]
+
+/** 오늘 날짜 (KST 기준) YYYY-MM-DD — UTC 자정 직후 하루 밀림 방지 */
+export function todayKST(): string {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
 
 // ── localStorage (익명, 점수만) ────────
 export interface DiagnoseHistory {

@@ -33,7 +33,7 @@ function fmtMan(m: number): string {
   if (eok) out += `${eok.toLocaleString('ko-KR')}억`
   if (man) out += `${eok ? ' ' : ''}${man.toLocaleString('ko-KR')}만`
   if (!eok && !man) out = '0'
-  return `${neg ? '-' : ''}${out}${out === '0' ? '원' : '원'}`
+  return `${neg ? '-' : ''}${out}원`
 }
 // 짧은 표기 (억 기준, 소수 1자리)
 function fmtEok(m: number): string {
@@ -58,6 +58,7 @@ export default function WealthRankClient() {
   const [helper, setHelper] = useState(false)
   const [assetRaw, setAssetRaw] = useState('')
   const [debtRaw, setDebtRaw] = useState('')
+  const [worldAdults, setWorldAdults] = useState('1') // 세계 모드: 가구 성인 수 (1인당 환산)
 
   // 총자산 - 부채 헬퍼가 켜지면 순자산을 자동 계산
   const netFromHelper = helper ? parseNum(assetRaw) - parseNum(debtRaw) : null
@@ -67,12 +68,17 @@ export default function WealthRankClient() {
     : raw.trim() !== ''
 
   const groupId = mode === 'region' ? regionId : mode === 'age' ? ageId : undefined
+  // 세계 모드는 UBS 성인 1인당 분포 → 가구 순자산을 성인 수로 나눠 1인당 환산 비교
+  const adults = Math.max(1, parseNum(worldAdults) || 1)
+  const effValue = mode === 'world' ? value / adults : value
   const result = useMemo(
-    () => computeRank(mode, value, groupId),
-    [mode, value, groupId],
+    () => computeRank(mode, effValue, groupId),
+    [mode, effValue, groupId],
   )
 
   const markerLeft = Math.max(1.5, Math.min(98.5, result.percentile))
+  // 최상위 앵커(전국 200억)를 넘으면 topPercent가 0으로 반올림 → "상위 0%" 방지
+  const topLabel = result.topPercent <= 0 ? '0.01% 이내' : `${result.topPercent}%`
   const top10Done = result.toTop10 <= 0
   const top1Done = result.toTop1 <= 0
   // 마커 라벨이 막대 밖으로 넘치지 않도록 가장자리에서 정렬 보정
@@ -214,6 +220,27 @@ export default function WealthRankClient() {
             )}
           </div>
         )}
+
+        {mode === 'world' && (
+          <div className={s.field} style={{ marginTop: 12 }}>
+            <label className={s.fieldLabel} htmlFor="wr-adults">가구 성인 수 (1인당 환산)</label>
+            <div className={s.inputUnitRow}>
+              <input
+                id="wr-adults"
+                className={s.input}
+                inputMode="numeric"
+                value={worldAdults}
+                onChange={(e) => setWorldAdults(e.target.value)}
+              />
+              <span className={s.unit}>명</span>
+            </div>
+            {hasInput && (
+              <p className={s.echo}>
+                {adults > 1 ? `1인당 ${fmtMan(effValue)} 기준으로 세계 분포와 비교` : '성인 1명 기준 (가족이면 성인 수를 늘리세요)'}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 결과 */}
@@ -222,7 +249,7 @@ export default function WealthRankClient() {
           <div className={s.hero}>
             <p className={s.heroLabel}>{result.basisLabel} 중 내 순자산은</p>
             <p className={s.heroValue}>
-              상위 <strong>{result.topPercent}%</strong>
+              상위 <strong>{topLabel}</strong>
             </p>
             <p className={s.heroSub}>
               백분위 <strong>{result.percentile}</strong> · <strong>{result.decile}분위</strong>
@@ -244,7 +271,7 @@ export default function WealthRankClient() {
                   className={s.barMarkerLabel}
                   style={{ transform: `translateX(${labelShift})` }}
                 >
-                  나 · 상위 {result.topPercent}%
+                  나 · 상위 {topLabel}
                 </span>
               </div>
             </div>
@@ -302,17 +329,23 @@ export default function WealthRankClient() {
           </div>
 
           {/* 기준별 보충 설명 */}
+          {mode === 'nation' && (
+            <div className={s.noteCard}>
+              전국 분포는 공식 앵커(평균·상위 컷·실측 구간) 사이를 <strong>보간한 추정 곡선</strong>입니다.
+              중앙값(약 2.45억) 등 하위~중간 구간의 순위는 원자료가 아닌 <strong>모델 추정값</strong>이라 실제와 다소 차이가 있을 수 있습니다.
+            </div>
+          )}
           {mode === 'world' && (
             <div className={s.noteCard}>
-              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 성인 1인당 순자산 분포를 사용합니다.
-              가구 단위 순자산을 1인 기준 분포와 비교하므로 실제보다 순위가 다소 높게 나올 수 있어 <strong>참고용</strong>입니다.
-              환율은 1달러 = 1,380원으로 환산했습니다.
+              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 <strong>성인 1인당</strong> 순자산 분포입니다 (환율 1달러 = 1,380원).
+              한국 통계는 가구 단위라, 위 <strong>가구 성인 수</strong>로 1인당 환산해 비교하세요. 1명 그대로 두면 부부·가족은 순위가 실제보다 높게 나올 수 있습니다.
             </div>
           )}
           {(mode === 'region' || mode === 'age') && (
             <div className={s.noteCard}>
-              {mode === 'region' ? '시·도' : '연령대'} 비교는 전국 순자산 분포를 해당 그룹의 <strong>평균 순자산</strong>으로 보정한 추정치입니다.
-              서울·세종·경기·제주(2025 실측)와 50대(실측)를 제외한 값은 평균 수준 추정이라 실제와 차이가 있을 수 있습니다.
+              {mode === 'region' ? '시·도' : '연령대'} 비교는 전국 분포를 그룹 <strong>평균 순자산 비율로 스케일</strong>한 추정치입니다.
+              분포 모양(예: 서울의 부동산 편중)은 반영하지 못해, <strong>특히 상위 10%·1% 진입선은 오차가 큰 추정</strong>입니다.
+              서울·세종·경기·제주·50대(실측 평균)를 제외한 값은 평균 수준 추정이니 그룹 내 대략적 위치 참고용으로만 보세요.
             </div>
           )}
         </>

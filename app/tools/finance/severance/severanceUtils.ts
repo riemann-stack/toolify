@@ -32,20 +32,25 @@ export function addDays(d: Date, days: number): Date {
   return r
 }
 
-/** 날짜에 개월 더하기 (음수 가능) */
+/** 날짜에 개월 더하기 (음수 가능, 월말 오버플로우 방지)
+ *  예: 5월 30일 − 3개월 = 2월 30일(없음) → 2월 28일로 클램프
+ */
 export function addMonths(d: Date, months: number): Date {
-  const r = new Date(d)
+  const targetDay = d.getDate()
+  const r = new Date(d.getFullYear(), d.getMonth(), 1)  // 1일로 고정해 오버플로우 차단
   r.setMonth(r.getMonth() + months)
+  const lastDay = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate()  // 해당 월 말일
+  r.setDate(Math.min(targetDay, lastDay))
   return r
 }
 
 /** 퇴사 전 3개월 산정기간
- *  퇴사일이 5월 31일이면 → 2월 28일 ~ 5월 30일 (3개월 전 → 퇴사 전날)
+ *  퇴사일이 5월 31일이면 → 3월 1일 ~ 5월 30일 (3개월 전 → 퇴사 전날, 약 91일)
  */
 export function calcThreeMonthPeriod(exitDate: Date): { start: Date; end: Date; days: number } {
   const end = addDays(exitDate, -1)        // 퇴사 전날
-  const start = addMonths(end, -3)         // 3개월 전 같은 날 + 1일
-  // 정확히는 3개월 전 + 1일로 설정 (3개월 = 약 89~92일)
+  const start = addMonths(end, -3)         // 3개월 전 같은 날 (월말 클램프)
+  // 3개월 전 + 1일로 설정 (3개월 = 약 89~92일)
   const startCorrected = addDays(start, 1)
   return {
     start: startCorrected,
@@ -251,7 +256,8 @@ export function checkEligibility(start: Date, end: Date, weekHours: number): Eli
     reasons.push(`주 ${weekHours}시간 (15시간 미만) — 법정 퇴직금 발생 X`)
   }
   if (daysWorked >= 365 && daysWorked < 730) {
-    warnings.push(`1년 이상 2년 미만 — 1년치 퇴직금만 해당`)
+    const yr = (daysWorked / 365).toFixed(2)
+    warnings.push(`재직 1~2년 구간 — 퇴직금은 재직일수에 정확히 비례 계산됩니다 (현재 약 ${yr}년치, 1년치 고정이 아님)`)
   }
   return {
     eligible: reasons.length === 0,
@@ -276,7 +282,7 @@ export const PENSIONS: PensionMeta[] = [
   { id: 'normal', emoji: '💼', label: '일반 퇴직금',  desc: '근로기준법 기준 법정 퇴직금. 회사가 직접 지급.', calculatedSame: true },
   { id: 'db',     emoji: '🏦', label: 'DB형 퇴직연금', desc: '확정급여형 — 평균임금 × 30 × 근속/365 (일반과 동일).',  calculatedSame: true },
   { id: 'dc',     emoji: '📊', label: 'DC형 퇴직연금', desc: '확정기여형 — 회사 적립 + 근로자 운용. 결과 변동.',     calculatedSame: false },
-  { id: 'irp',    emoji: '🏛️', label: 'IRP 수령',     desc: '5,500만원 초과 시 의무 이전. 연금 수령 시 절세.',       calculatedSame: true },
+  { id: 'irp',    emoji: '🏛️', label: 'IRP 수령',     desc: '300만원 초과 퇴직급여는 IRP 의무 이전(55세 미만). 연금 수령 시 절세.', calculatedSame: true },
 ]
 
 /* ─────────────────────────────────────────────

@@ -90,7 +90,7 @@ export function getGrade(savingsRate: number): SavingsGrade {
 }
 
 /* ─────────────────────────────────────────────
-   6 항아리 모델 (Sharon Lechter)
+   6 항아리(JARS) 모델 (T. Harv Eker)
    ───────────────────────────────────────────── */
 
 export interface JarMeta {
@@ -117,9 +117,9 @@ export const JARS: JarMeta[] = [
    계산 함수
    ───────────────────────────────────────────── */
 
-/** 저축액 (만원) = 수입 - 지출 */
+/** 월 수지 (만원) = 수입 - 지출. 지출이 수입을 초과하면 음수(적자)로 반환 */
 export function calcSavings(income: number, expense: number): number {
-  return Math.max(0, income - expense)
+  return income - expense
 }
 
 /** 저축률 (%) */
@@ -137,8 +137,9 @@ export function calcSavingsRate(income: number, savings: number): number {
  * 월 적립액 P = FV × r / ((1+r)^n - 1)
  */
 export function monthlyForGoal(goalMan: number, years: number, annualRatePct: number): number {
+  if (!(goalMan > 0) || !(years > 0)) return 0   // 음수·0 입력 방어
   const n = years * 12
-  const r = annualRatePct / 100 / 12
+  const r = Math.max(0, annualRatePct) / 100 / 12
   if (r === 0) return goalMan / n
   const denom = (Math.pow(1 + r, n) - 1) / r
   return denom > 0 ? goalMan / denom : goalMan / n
@@ -188,8 +189,8 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     monthlyMaxMan: 70,
     yearlyMaxMan: 840,
     durationYears: 5,
-    taxBenefitDesc: '정부 매칭 (소득별 월 최대 7만원) + 만기 비과세 + 우대금리',
-    pros: ['정부 매칭 (월 최대 7만원)', '5년 만기 비과세', '청년 전용 우대금리'],
+    taxBenefitDesc: '정부 기여금 (소득별 월 최대 약 3.3만원, 2025년 확대) + 만기 비과세 + 우대금리',
+    pros: ['정부 기여금 (월 최대 약 3.3만원)', '5년 만기 비과세', '청년 전용 우대금리'],
     cons: ['소득 제한 있음', '5년 의무 가입', '중도해지 시 정부지원금 환수'],
     recommendFor: '20~30대 초반 사회초년생',
     color: '#0D9488',
@@ -245,10 +246,10 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     label: '주택청약 종합저축',
     shortLabel: '주택청약',
     qualify: '무주택자 (1세대 1청약통장)',
-    monthlyMaxMan: 50,
-    yearlyMaxMan: 240,    // 일반 월 2~50만원, 소득공제 한도 별도
+    monthlyMaxMan: 25,
+    yearlyMaxMan: 300,    // 2024년 소득공제 인정 한도 240만→300만 상향 (월 25만 인정)
     durationYears: 10,
-    taxBenefitDesc: '무주택 세대주 + 총급여 7천만원 이하 시 연 240만원 한도 40% 소득공제 (최대 96만원)',
+    taxBenefitDesc: '무주택 세대주 + 총급여 7천만원 이하 시 연 300만원 한도 40% 소득공제 (최대 120만원, 2024년 상향)',
     pros: ['청약가점 누적', '소득공제 (자격 요건)', '저금리 시대 대안'],
     cons: ['금리 낮음', '청약 사용 시 해지', '소득공제 자격 까다로움'],
     recommendFor: '무주택 청년·세대주',

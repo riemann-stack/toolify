@@ -48,7 +48,11 @@ function calcAcquisitionTax(price: number, type: HomeType): number {
   if (price <= 0) return 0
   if (type === '1home') {
     if (price <= 600_000_000) return price * 0.01
-    if (price <= 900_000_000) return price * 0.02
+    if (price <= 900_000_000) {
+      // 6억~9억: 1~3% 누진 (세율 = 취득가액 × 2/3억 − 3, %)
+      const rate = (price * 2 / 300_000_000 - 3) / 100
+      return price * rate
+    }
     return price * 0.03
   }
   if (type === '2home')  return price * 0.08
@@ -56,16 +60,15 @@ function calcAcquisitionTax(price: number, type: HomeType): number {
   return price * 0.04
 }
 
-/* 한국 중개수수료 (매매 기준 누진) */
+/* 한국 주택 매매 중개보수 상한요율 (2021.10 개정 기준) */
 function calcBrokerFee(price: number): number {
   if (price <= 0) return 0
-  if (price < 50_000_000)    return Math.min(price * 0.006, 250_000)
-  if (price < 200_000_000)   return Math.min(price * 0.005, 800_000)
-  if (price < 600_000_000)   return price * 0.004
-  if (price < 900_000_000)   return price * 0.005
-  if (price < 1_200_000_000) return price * 0.006
-  if (price < 1_500_000_000) return price * 0.007
-  return price * 0.009
+  if (price < 50_000_000)    return Math.min(price * 0.006, 250_000)  // 5천만 미만 0.6%(한도 25만)
+  if (price < 200_000_000)   return Math.min(price * 0.005, 800_000)  // 5천만~2억 0.5%(한도 80만)
+  if (price < 900_000_000)   return price * 0.004                      // 2억~9억 0.4%
+  if (price < 1_200_000_000) return price * 0.005                      // 9억~12억 0.5%
+  if (price < 1_500_000_000) return price * 0.006                      // 12억~15억 0.6%
+  return price * 0.007                                                  // 15억 이상 0.7%
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -85,7 +88,6 @@ export default function RealEstateClient() {
   const [loanStr, setLoanStr]   = useState('350000000')       // 3.5억
   const [ltv,     setLtv]       = useState(70)
   const [loanRate, setLoanRate] = useState(4.5)
-  const [loanGrace, setLoanGrace] = useState(0)
 
   /* ── 취득세 ── */
   const [acqMode, setAcqMode] = useState<'auto' | 'manual'>('auto')
@@ -140,11 +142,12 @@ export default function RealEstateClient() {
   const interior  = mode === 'detail' ? parseNum(interiorStr) : 0
   const relocate  = mode === 'detail' ? parseNum(relocateStr) : 0
 
-  /* 대출 이자: 거치 기간 동안 이자만 납부, 이후도 단순화하여 전체 보유 기간 이자 계산 */
+  /* 대출 이자: 보유 기간 내내 원금 상환 없이 이자만 납부한다고 단순 가정 (이자만 납부) */
   const totalInterest = (loan * (loanRate / 100) * holdMonths) / 12
 
-  /* 중도상환 수수료 */
-  const earlyFeeAuto = loan * 0.012
+  /* 중도상환 수수료: 보통 3년(36개월) 면제기간 내 상환 시 잔존기간 비례로 부과, 3년 후 0
+   *  (이자만 납부 가정 → 잔여원금 = 대출 원금) */
+  const earlyFeeAuto = loan * 0.012 * Math.max(0, 36 - holdMonths) / 36
   const earlyFee = mode === 'detail'
     ? (earlyMode === 'auto' ? earlyFeeAuto : parseNum(earlyStr))
     : 0
@@ -167,9 +170,10 @@ export default function RealEstateClient() {
     ? parseNum(other1Str) + parseNum(other2Str) + parseNum(other3Str)
     : 0
 
-  /* 초기 자기자본 */
+  /* 초기 자기자본 — 보증금·대출이 매입가+비용을 모두 충당하면 0 이하가 되어 ROE 산정 불가 */
   const upfrontCost = acqTax + brokerBuy + legalFee + interior + relocate
-  const initialInvestment = Math.max(1, price - loan + upfrontCost - deposit)
+  const initialInvestment = price - loan + upfrontCost - deposit
+  const equityPositive = initialInvestment > 0
 
   /* 총 비용 */
   const totalCost = upfrontCost + totalInterest + brokerSell + earlyFee + otherCosts
@@ -177,11 +181,14 @@ export default function RealEstateClient() {
   /* 세전 순수익 */
   const profitBeforeTax = (salePrice - price) + rentalIncome - totalCost
 
-  /* 자기자본 수익률 (ROE) */
-  const roe = (profitBeforeTax / initialInvestment) * 100
+  /* 자기자본 수익률 (ROE) — 자기자본 0 이하면 측정 불가(NaN) */
+  const roe = equityPositive ? (profitBeforeTax / initialInvestment) * 100 : NaN
 
   /* 연환산 ROE */
-  const annualizedROE = holdMonths > 0 ? (roe / holdMonths) * 12 : 0
+  const annualizedROE = equityPositive && holdMonths > 0 ? (roe / holdMonths) * 12 : NaN
+
+  /* ROE 표시 헬퍼 — 측정 불가 시 텍스트 */
+  const fmtPct = (v: number) => Number.isFinite(v) ? `${v.toFixed(1)}%` : '측정 불가'
 
   /* 월 환산 수익 */
   const monthlyProfit = holdMonths > 0 ? profitBeforeTax / holdMonths : 0
@@ -195,7 +202,7 @@ export default function RealEstateClient() {
       const bSell = brokerMode === 'auto' ? calcBrokerFee(sp) : brokerSell
       const cost  = upfrontCost + totalInterest + bSell + earlyFee + otherCosts
       const profit = (sp - price) + rentalIncome - cost
-      const roe_ = (profit / initialInvestment) * 100
+      const roe_ = equityPositive ? (profit / initialInvestment) * 100 : NaN
       return { price: sp, profit, roe: roe_ }
     }
     return {
@@ -203,12 +210,13 @@ export default function RealEstateClient() {
       base:         buildScenario(salePrice),
       optimistic:   buildScenario(salePrice * 1.1),
     }
-  }, [salePrice, price, brokerMode, brokerSell, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment])
+  }, [salePrice, price, brokerMode, brokerSell, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment, equityPositive])
 
   /* ─── 전액 현금 매수 시 비교 ─── */
   const allCashCompare = useMemo(() => {
-    const cashUpfront = acqTax + brokerBuyAuto + legalFee + interior + relocate
-    const cashCost = cashUpfront + brokerSellAuto + otherCosts
+    // 중개수수료는 레버리지 경우와 동일 기준 사용 (사용자 직접 입력값 포함)
+    const cashUpfront = acqTax + brokerBuy + legalFee + interior + relocate
+    const cashCost = cashUpfront + brokerSell + otherCosts
     // 임대수익도 동일하게 적용 (전액현금이라 보증금 없음)
     const cashProfit = (salePrice - price) + (rentType !== 'self' ? monthlyRent * Math.max(0, rentMonths - vacancyMonths) - landlordMaint * rentMonths : 0) - cashCost
     const cashEquity = price + cashUpfront
@@ -218,9 +226,9 @@ export default function RealEstateClient() {
       profit: cashProfit,
       roe:    cashROE,
     }
-  }, [price, salePrice, acqTax, brokerBuyAuto, brokerSellAuto, legalFee, interior, relocate, otherCosts, rentType, monthlyRent, rentMonths, vacancyMonths, landlordMaint])
+  }, [price, salePrice, acqTax, brokerBuy, brokerSell, legalFee, interior, relocate, otherCosts, rentType, monthlyRent, rentMonths, vacancyMonths, landlordMaint])
 
-  const leverageMultiplier = allCashCompare.roe !== 0
+  const leverageMultiplier = equityPositive && allCashCompare.roe !== 0
     ? Math.abs(roe / allCashCompare.roe)
     : 0
 
@@ -234,8 +242,8 @@ export default function RealEstateClient() {
       `매입가: ${fmtKRW(price)} / 매도가: ${fmtKRW(salePrice)} (${holdMonths}개월 보유)`,
       `대출: ${fmtKRW(loan)} (${loanRate}%)`,
       `세전 수익: ${profitBeforeTax >= 0 ? '+' : ''}${fmtKRW(profitBeforeTax)}`,
-      `자기자본 수익률: ${roe.toFixed(1)}%`,
-      `연환산: ${annualizedROE.toFixed(1)}%`,
+      `자기자본 수익률: ${fmtPct(roe)}`,
+      `연환산: ${fmtPct(annualizedROE)}`,
       'youtil.kr/tools/finance/real-estate',
     ].join('\n')
     navigator.clipboard?.writeText(txt).then(() => {
@@ -354,11 +362,12 @@ export default function RealEstateClient() {
             onChange={e => setHoldMonths(Number(e.target.value))}
           />
         </div>
-        <div className={styles.pills}>
+        <div className={styles.pills} role="group" aria-label="보유 기간 빠른 선택">
           {[12, 24, 36, 60].map(m => (
             <button
               key={m}
               type="button"
+              aria-pressed={holdMonths === m}
               className={`${styles.pill} ${holdMonths === m ? styles.pillActive : ''}`}
               onClick={() => setHoldMonths(m)}
             >
@@ -372,12 +381,12 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>대출</span>
-          <span className={styles.cardLabelHint}>LTV·금리·거치 기간</span>
+          <span className={styles.cardLabelHint}>LTV·금리 (이자만 납부 가정)</span>
         </div>
 
-        <div className={styles.miniToggle}>
-          <button type="button" className={`${styles.miniBtn} ${loanMode === 'ltv' ? styles.miniActive : ''}`} onClick={() => setLoanMode('ltv')}>LTV(%)</button>
-          <button type="button" className={`${styles.miniBtn} ${loanMode === 'amount' ? styles.miniActive : ''}`} onClick={() => setLoanMode('amount')}>직접 금액</button>
+        <div className={styles.miniToggle} role="group" aria-label="대출 입력 방식">
+          <button type="button" aria-pressed={loanMode === 'ltv'} className={`${styles.miniBtn} ${loanMode === 'ltv' ? styles.miniActive : ''}`} onClick={() => setLoanMode('ltv')}>LTV(%)</button>
+          <button type="button" aria-pressed={loanMode === 'amount'} className={`${styles.miniBtn} ${loanMode === 'amount' ? styles.miniActive : ''}`} onClick={() => setLoanMode('amount')}>직접 금액</button>
         </div>
 
         {loanMode === 'ltv' ? (
@@ -398,7 +407,7 @@ export default function RealEstateClient() {
               <span>대출금</span>
               <strong>{fmtKRW(loan)}</strong>
             </div>
-            <div className={styles.ltvGrid}>
+            <div className={styles.ltvGrid} role="group" aria-label="LTV 빠른 선택">
               {[
                 { v: 0,  label: '0% (현금)', cls: styles.ltvCash },
                 { v: 40, label: '40%',        cls: styles.ltvNormal },
@@ -410,6 +419,7 @@ export default function RealEstateClient() {
                 <button
                   key={p.v}
                   type="button"
+                  aria-pressed={ltv === p.v}
                   className={`${styles.ltvBtn} ${p.cls} ${ltv === p.v ? styles.ltvActive : ''}`}
                   onClick={() => setLtv(p.v)}
                 >
@@ -447,21 +457,8 @@ export default function RealEstateClient() {
           <span className={styles.unit}>%</span>
         </div>
 
-        <div style={{ height: 12 }} />
-        <span className={styles.subLabel}>거치 기간 (개월) — 이자만 납부</span>
-        <div className={styles.inputRow}>
-          <input
-            className={styles.smallInput}
-            type="number"
-            min={0}
-            value={loanGrace}
-            onChange={e => setLoanGrace(Math.max(0, Number(e.target.value) || 0))}
-          />
-          <span className={styles.unit}>개월</span>
-        </div>
-
         <div className={styles.autoResult} style={{ marginTop: 12 }}>
-          <span>{holdMonths}개월 누적 이자 (단순 추정)</span>
+          <span>{holdMonths}개월 누적 이자 (이자만 납부 가정)</span>
           <strong>{fmtKRW(totalInterest)}</strong>
         </div>
       </div>
@@ -473,15 +470,15 @@ export default function RealEstateClient() {
           <span className={styles.cardLabelHint}>주택 종류별 누진</span>
         </div>
 
-        <div className={styles.miniToggle}>
-          <button type="button" className={`${styles.miniBtn} ${acqMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setAcqMode('auto')}>자동 계산</button>
-          <button type="button" className={`${styles.miniBtn} ${acqMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setAcqMode('manual')}>직접 입력</button>
+        <div className={styles.miniToggle} role="group" aria-label="취득세 입력 방식">
+          <button type="button" aria-pressed={acqMode === 'auto'} className={`${styles.miniBtn} ${acqMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setAcqMode('auto')}>자동 계산</button>
+          <button type="button" aria-pressed={acqMode === 'manual'} className={`${styles.miniBtn} ${acqMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setAcqMode('manual')}>직접 입력</button>
         </div>
 
         {acqMode === 'auto' ? (
           <>
             <span className={styles.subLabel}>주택 종류</span>
-            <div className={styles.toggleGrid4}>
+            <div className={styles.toggleGrid4} role="group" aria-label="주택 종류">
               {[
                 { id: '1home',  label: '1주택' },
                 { id: '2home',  label: '다주택(2주택)' },
@@ -491,6 +488,7 @@ export default function RealEstateClient() {
                 <button
                   key={o.id}
                   type="button"
+                  aria-pressed={homeType === o.id}
                   className={`${styles.toggleBtn} ${homeType === o.id ? styles.toggleActive : ''}`}
                   onClick={() => setHomeType(o.id as HomeType)}
                 >
@@ -524,9 +522,9 @@ export default function RealEstateClient() {
           <span className={styles.cardLabelHint}>매수·매도 별도</span>
         </div>
 
-        <div className={styles.miniToggle}>
-          <button type="button" className={`${styles.miniBtn} ${brokerMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setBrokerMode('auto')}>자동 계산</button>
-          <button type="button" className={`${styles.miniBtn} ${brokerMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setBrokerMode('manual')}>직접 입력</button>
+        <div className={styles.miniToggle} role="group" aria-label="중개수수료 입력 방식">
+          <button type="button" aria-pressed={brokerMode === 'auto'} className={`${styles.miniBtn} ${brokerMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setBrokerMode('auto')}>자동 계산</button>
+          <button type="button" aria-pressed={brokerMode === 'manual'} className={`${styles.miniBtn} ${brokerMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setBrokerMode('manual')}>직접 입력</button>
         </div>
 
         {brokerMode === 'auto' ? (
@@ -601,9 +599,9 @@ export default function RealEstateClient() {
 
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>중도상환 수수료</span>
-            <div className={styles.miniToggle}>
-              <button type="button" className={`${styles.miniBtn} ${earlyMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setEarlyMode('manual')}>직접 입력</button>
-              <button type="button" className={`${styles.miniBtn} ${earlyMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setEarlyMode('auto')}>자동 (잔여×1.2%)</button>
+            <div className={styles.miniToggle} role="group" aria-label="중도상환 수수료 입력 방식">
+              <button type="button" aria-pressed={earlyMode === 'manual'} className={`${styles.miniBtn} ${earlyMode === 'manual' ? styles.miniActive : ''}`} onClick={() => setEarlyMode('manual')}>직접 입력</button>
+              <button type="button" aria-pressed={earlyMode === 'auto'} className={`${styles.miniBtn} ${earlyMode === 'auto' ? styles.miniActive : ''}`} onClick={() => setEarlyMode('auto')}>자동 (3년 잔존 비례)</button>
             </div>
             {earlyMode === 'manual' ? (
               <div className={styles.inputRow}>
@@ -612,7 +610,7 @@ export default function RealEstateClient() {
               </div>
             ) : (
               <div className={styles.autoResult}>
-                <span>자동 산정 (3년 내 상환 가정)</span>
+                <span>자동 산정 (3년 면제기간 잔존 비례, 3년 후 0)</span>
                 <strong>{fmtKRW(earlyFeeAuto)}</strong>
               </div>
             )}
@@ -626,7 +624,7 @@ export default function RealEstateClient() {
             </div>
 
             <span className={styles.subLabel}>임대 형태</span>
-            <div className={styles.toggleGrid4}>
+            <div className={styles.toggleGrid4} role="group" aria-label="임대 형태">
               {[
                 { id: 'monthly', label: '월세' },
                 { id: 'jeonse',  label: '전세' },
@@ -636,6 +634,7 @@ export default function RealEstateClient() {
                 <button
                   key={o.id}
                   type="button"
+                  aria-pressed={rentType === o.id}
                   className={`${styles.toggleBtn} ${rentType === o.id ? styles.toggleActive : ''}`}
                   onClick={() => setRentType(o.id as RentType)}
                 >
@@ -693,9 +692,9 @@ export default function RealEstateClient() {
 
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>관리비 부담 주체</span>
-                <div className={styles.toggleGrid4} style={{ gridTemplateColumns: '1fr 1fr' }}>
-                  <button type="button" className={`${styles.toggleBtn} ${maintenancePayer === 'tenant' ? styles.toggleActive : ''}`} onClick={() => setMaintenancePayer('tenant')}>임차인</button>
-                  <button type="button" className={`${styles.toggleBtn} ${maintenancePayer === 'landlord' ? styles.toggleActive : ''}`} onClick={() => setMaintenancePayer('landlord')}>임대인</button>
+                <div className={styles.toggleGrid4} style={{ gridTemplateColumns: '1fr 1fr' }} role="group" aria-label="관리비 부담 주체">
+                  <button type="button" aria-pressed={maintenancePayer === 'tenant'} className={`${styles.toggleBtn} ${maintenancePayer === 'tenant' ? styles.toggleActive : ''}`} onClick={() => setMaintenancePayer('tenant')}>임차인</button>
+                  <button type="button" aria-pressed={maintenancePayer === 'landlord'} className={`${styles.toggleBtn} ${maintenancePayer === 'landlord' ? styles.toggleActive : ''}`} onClick={() => setMaintenancePayer('landlord')}>임대인</button>
                 </div>
                 {maintenancePayer === 'landlord' && (
                   <>
@@ -761,6 +760,16 @@ export default function RealEstateClient() {
         </div>
       )}
 
+      {/* 자기자본 0 이하 경고 (ROE 산정 불가) */}
+      {!equityPositive && (
+        <div className={styles.lossWarn}>
+          <span className={styles.lossIcon}>⚠️</span>
+          <span>
+            <strong>자기자본이 0 이하입니다.</strong> 보증금·대출이 매입가와 비용을 모두 충당하는 구조(무피·역전세성 갭투자)라 자기자본 수익률(ROE)을 산정할 수 없습니다. 절대 수익과 위험(보증금 반환·역전세)을 기준으로 판단하세요.
+          </span>
+        </div>
+      )}
+
       {/* 히어로 — 세전 수익 */}
       <div className={styles.hero}>
         <p className={styles.heroLead}>예상 세전 수익</p>
@@ -777,13 +786,13 @@ export default function RealEstateClient() {
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>자기자본 수익률 (ROE)</div>
           <div className={`${styles.kpiValue} ${isLoss ? styles.kpiValueNeg : styles.kpiValueAccent}`}>
-            {roe.toFixed(1)}%
+            {fmtPct(roe)}
           </div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>연환산 수익률</div>
           <div className={`${styles.kpiValue} ${isLoss ? styles.kpiValueNeg : styles.kpiValueAccent}`}>
-            {annualizedROE.toFixed(1)}%
+            {fmtPct(annualizedROE)}
           </div>
         </div>
         <div className={styles.kpiCard}>
@@ -847,7 +856,7 @@ export default function RealEstateClient() {
             <p className={`${styles.scenarioProfit} ${scenarios.conservative.profit >= 0 ? styles.posValue : styles.negValue}`}>
               {scenarios.conservative.profit >= 0 ? '+' : ''}{fmtKRW(scenarios.conservative.profit)}
             </p>
-            <p className={styles.scenarioROE}>ROE <strong>{scenarios.conservative.roe.toFixed(1)}%</strong></p>
+            <p className={styles.scenarioROE}>ROE <strong>{fmtPct(scenarios.conservative.roe)}</strong></p>
           </div>
           <div className={`${styles.scenarioCard} ${styles.scenarioBase}`}>
             <span className={`${styles.scenarioArrow} ${styles.arrowFlat}`}>●</span>
@@ -856,7 +865,7 @@ export default function RealEstateClient() {
             <p className={`${styles.scenarioProfit} ${scenarios.base.profit >= 0 ? styles.posValue : styles.negValue}`}>
               {scenarios.base.profit >= 0 ? '+' : ''}{fmtKRW(scenarios.base.profit)}
             </p>
-            <p className={styles.scenarioROE}>ROE <strong>{scenarios.base.roe.toFixed(1)}%</strong></p>
+            <p className={styles.scenarioROE}>ROE <strong>{fmtPct(scenarios.base.roe)}</strong></p>
           </div>
           <div className={`${styles.scenarioCard} ${styles.scenarioOptimistic}`}>
             <span className={`${styles.scenarioArrow} ${styles.arrowUp}`}>▲</span>
@@ -865,7 +874,7 @@ export default function RealEstateClient() {
             <p className={`${styles.scenarioProfit} ${scenarios.optimistic.profit >= 0 ? styles.posValue : styles.negValue}`}>
               {scenarios.optimistic.profit >= 0 ? '+' : ''}{fmtKRW(scenarios.optimistic.profit)}
             </p>
-            <p className={styles.scenarioROE}>ROE <strong>{scenarios.optimistic.roe.toFixed(1)}%</strong></p>
+            <p className={styles.scenarioROE}>ROE <strong>{fmtPct(scenarios.optimistic.roe)}</strong></p>
           </div>
         </div>
       </div>
@@ -904,17 +913,17 @@ export default function RealEstateClient() {
             <tr className={styles.roeRow}>
               <td>자기자본 수익률 (ROE)</td>
               <td>
-                {roe.toFixed(1)}%
+                {fmtPct(roe)}
                 {leverageMultiplier > 1.05 && allCashCompare.roe > 0 && (
                   <span className={styles.leverageMultiplier}>×{leverageMultiplier.toFixed(1)}</span>
                 )}
               </td>
-              <td>{allCashCompare.roe.toFixed(1)}%</td>
+              <td>{fmtPct(allCashCompare.roe)}</td>
             </tr>
           </tbody>
         </table>
 
-        {loan > 0 && allCashCompare.roe > 0 && (
+        {loan > 0 && equityPositive && allCashCompare.roe > 0 && (
           <div className={styles.leverageNote}>
             💡 <strong>레버리지 효과</strong>: 대출을 활용하면 자기자본 대비 수익률이 약 <strong>{leverageMultiplier.toFixed(1)}배</strong> {roe > allCashCompare.roe ? '증가' : '감소'}합니다. 단, 부동산 가격 하락 시 손실도 동일한 비율로 확대되며, 금리 인상은 이자 부담을 키웁니다.
           </div>

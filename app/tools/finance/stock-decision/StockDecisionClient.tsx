@@ -7,7 +7,7 @@ import Image from 'next/image'
 import s from './stock-decision.module.css'
 import {
   CHECKLIST, DIRECTION_LABEL, MODE_META, BIASES, CASES,
-  diagnose, loadHistory, saveHistory,
+  diagnose, loadHistory, saveHistory, todayKST,
   type Direction, type RandomMode, type DiagnoseHistory,
 } from './stockDecisionUtils'
 
@@ -96,7 +96,7 @@ export default function StockDecisionClient() {
     const r = diagnose(direction, Array.from(checked))
     setHistory((p) => [{
       id: uid(),
-      date: new Date().toISOString().slice(0, 10),
+      date: todayKST(),
       direction: r.direction,
       band: r.band,
       riskScore: r.riskScore,
@@ -172,15 +172,15 @@ export default function StockDecisionClient() {
       </div>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs3}`}>
-        <button className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>
+      <div className={`${s.tabs} ${s.tabs3}`} role="tablist" aria-label="주식 결정 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>
           🧠 자가진단
         </button>
-        <button className={`${s.tab} ${tab === 'random' ? s.tabActive : ''}`} onClick={() => setTab('random')}>
+        <button type="button" role="tab" aria-selected={tab === 'random'} className={`${s.tab} ${tab === 'random' ? s.tabActive : ''}`} onClick={() => setTab('random')}>
           🎲 결정 보조
         </button>
-        <button className={`${s.tab} ${tab === 'learn' ? s.tabActive : ''}`} onClick={() => setTab('learn')}>
-          📚 왜 인간이 지나
+        <button type="button" role="tab" aria-selected={tab === 'learn'} className={`${s.tab} ${tab === 'learn' ? s.tabActive : ''}`} onClick={() => setTab('learn')}>
+          📚 왜 지는가
         </button>
       </div>
 
@@ -188,10 +188,10 @@ export default function StockDecisionClient() {
       {tab === 'diagnose' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>① 무엇을 망설이고 있나요?</span>
-            <div className={s.dirRow}>
+            <span className={s.cardLabel} id="dir-label">① 무엇을 망설이고 있나요?</span>
+            <div className={s.dirRow} role="group" aria-labelledby="dir-label">
               {(['buy', 'sell', 'hold'] as Direction[]).map((d) => (
-                <button key={d}
+                <button key={d} type="button" aria-pressed={direction === d}
                   className={`${s.dirBtn} ${direction === d ? s.dirBtnActive : ''}`}
                   onClick={() => { setDirection(d); resetDiagnose() }}>
                   {DIRECTION_LABEL[d]}
@@ -253,6 +253,17 @@ export default function StockDecisionClient() {
                   <span className={s.scoreVal} style={{ color: 'var(--text)' }}>{result.total}</span>
                 </div>
               </div>
+              {result.criticalSignals.length > 0 && (
+                <div className={s.criticalBox}>
+                  <p className={s.criticalTitle}>🚨 고위험 신호 감지 — 결과를 강제로 높였습니다</p>
+                  <ul className={s.criticalList}>
+                    {result.criticalSignals.map((c) => (
+                      <li key={c}>{c}</li>
+                    ))}
+                  </ul>
+                  <p className={s.criticalNote}>위 항목은 이성 신호를 함께 체크해도 상쇄되지 않습니다. 특히 대출·신용 매수는 손실이 원금을 넘을 수 있어 별도 점검이 필요합니다.</p>
+                </div>
+              )}
               {result.triggeredBiases.length > 0 && (
                 <div className={s.biasBoxes}>
                   <p className={s.biasBoxesTitle}>🚨 감지된 편향</p>
@@ -294,10 +305,11 @@ export default function StockDecisionClient() {
       {tab === 'random' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>① 무작위 모드 선택</span>
-            <div className={s.modeGrid}>
+            <span className={s.cardLabel} id="mode-label">① 무작위 모드 선택</span>
+            <div className={s.modeGrid} role="group" aria-labelledby="mode-label">
               {(Object.keys(MODE_META) as RandomMode[]).map((m) => (
-                <button key={m}
+                <button key={m} type="button" aria-pressed={mode === m}
+                  aria-label={MODE_META[m].label}
                   className={`${s.modeBtn} ${mode === m ? s.modeBtnActive : ''}`}
                   onClick={() => { setMode(m); setPickedIdx(null) }}>
                   <span className={s.modeEmoji}>{MODE_META[m].emoji}</span>
@@ -361,7 +373,7 @@ export default function StockDecisionClient() {
                 <p className={s.pickedLabel}>{MODE_META[mode].emoji} {MODE_META[mode].label}의 선택</p>
                 <p className={s.pickedValue}>{options[pickedIdx]}</p>
                 <p className={s.pickedThink}>
-                  ⏰ 5초 멈춤 — 이 결과가 정말 본인 마음과 같은지? 다르면 그게 본심.
+                  ⏰ 5초 멈춤 — 이 결과를 봤을 때 드는 감정(안도·거부감)을 확인하세요. 결과대로 따르라는 뜻이 아니라, 본인 반응을 살피는 용도입니다.
                 </p>
               </div>
             )}
@@ -417,17 +429,17 @@ export default function StockDecisionClient() {
               {/* 다수결 */}
               {summary.total >= 3 && summary.winner && (
                 <div className={s.winnerBox} style={{ borderColor: colorFor(summary.winner, 0) }}>
-                  <p className={s.winnerLabel}>🏆 다수결 결과 ({summary.total}/5 진행)</p>
+                  <p className={s.winnerLabel}>📊 모드 결과 요약 ({summary.total}/5)</p>
                   <p className={s.winnerValue} style={{ color: colorFor(summary.winner, 0) }}>{summary.winner}</p>
                   {summary.total < 5 && (
-                    <p className={s.winnerHint}>나머지 {5 - summary.total}개 모드도 돌려서 확정해보세요.</p>
+                    <p className={s.winnerHint}>나머지 {5 - summary.total}개 모드도 돌려서 참고해보세요. (결정이 아닌 감정 확인용)</p>
                   )}
                 </div>
               )}
               {summary.total >= 3 && !summary.winner && (
                 <div className={s.winnerBox} style={{ borderColor: '#D97706' }}>
                   <p className={s.winnerLabel}>🤷 의견 분분</p>
-                  <p className={s.winnerHint}>모드 결과가 갈렸습니다. 본인 마음에 더 끌리는 쪽이 본심일 수 있어요.</p>
+                  <p className={s.winnerHint}>모드 결과가 갈렸습니다. 어느 쪽에 더 끌리는지 본인 감정을 확인해보세요 (결과는 참고용).</p>
                 </div>
               )}
             </div>
@@ -456,6 +468,7 @@ export default function StockDecisionClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>🐭 5가지 사례</span>
+            <p className={s.caseDisclaimer}>⚠️ 아래는 특정 시점의 일화·연구입니다. 재현이나 투자 성과를 보장하지 않으며, 연도·조건은 각 출처 원문에서 확인하세요.</p>
             <div className={s.caseList}>
               {CASES.map((c) => (
                 <div key={c.key} className={s.caseItem}>
@@ -495,12 +508,16 @@ export default function StockDecisionClient() {
 // ─────────────────────────────────────────────────────────────
 
 function CoinStage({ running, pickedIdx, options }: { running: boolean; pickedIdx: number | null; options: string[] }) {
-  // 동전: 2면. 옵션이 2개 이상이면 첫 두 개로 매핑하고 picked 결과 표시
-  const heads = options[0] ?? '앞'
-  const tails = options[1] ?? '뒷'
+  // 동전은 2면이지만 옵션이 3개 이상일 수 있음 → 착지 면에 실제 선택된 옵션을 표시
+  // (패리티로 앞/뒤 면만 결정 — 시각적 변화용)
+  const landed = pickedIdx !== null && !running
+  const showHeads = pickedIdx === null || pickedIdx % 2 === 0
+  const pickedText = pickedIdx !== null ? options[pickedIdx] : null
+  const heads = landed && showHeads && pickedText !== null ? pickedText : (options[0] ?? '앞')
+  const tails = landed && !showHeads && pickedText !== null ? pickedText : (options[1] ?? '뒤')
   return (
     <div className={s.coinScene}>
-      <div className={`${s.coin} ${running ? s.coinSpin : ''} ${pickedIdx !== null ? (pickedIdx === 0 ? s.coinShowHeads : s.coinShowTails) : ''}`}>
+      <div className={`${s.coin} ${running ? s.coinSpin : ''} ${pickedIdx !== null ? (showHeads ? s.coinShowHeads : s.coinShowTails) : ''}`}>
         <div className={`${s.coinFace} ${s.coinHeads}`}>{heads}</div>
         <div className={`${s.coinFace} ${s.coinTails}`}>{tails}</div>
       </div>

@@ -7,7 +7,7 @@
 
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
-import { isAdExcluded, ADSENSE_CLIENT_ID } from '@/lib/ads'
+import { adsAllowed, ADSENSE_CLIENT_ID } from '@/lib/ads'
 
 declare global {
   interface Window {
@@ -28,9 +28,9 @@ interface AdSlotProps {
 
 export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProps) {
   const pathname = usePathname()
-  const excluded = isAdExcluded(pathname)
+  const allowed = adsAllowed(pathname)
   const isProd = process.env.NODE_ENV === 'production'
-  const showIns = isProd && !excluded && !!slotId && !!ADSENSE_CLIENT_ID
+  const showIns = isProd && allowed && !!slotId && !!ADSENSE_CLIENT_ID
   const pushed = useRef(false)
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProp
     }
   }, [showIns])
 
-  // 광고 제외 경로(주류·도박·민감 건강): 렌더링 안 함
-  if (excluded) return null
+  // 광고 비허용 경로(민감 카테고리 + 정책/내비/랜딩 페이지): 렌더링 안 함
+  if (!allowed) return null
 
   // 개발 환경: 시각적 자리표시자
   if (!isProd) {

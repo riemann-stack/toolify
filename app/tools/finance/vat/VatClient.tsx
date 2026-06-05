@@ -50,8 +50,9 @@ export default function VatClient() {
   /* ── 탭4 세금계산서 — SSR/Client 일치 위해 빈 값으로 시작 ── */
   const [invoiceDate,    setInvoiceDate]    = useState('')
   useEffect(() => {
+    // 한국시간(KST, UTC+9) 기준 오늘 날짜 — UTC 자정 직후 하루 전으로 잡히는 문제 방지
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInvoiceDate(new Date().toISOString().slice(0, 10))
+    setInvoiceDate(new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10))
   }, [])
   const [invoiceClient,  setInvoiceClient]  = useState('')
   const [invoiceProvider, setInvoiceProvider] = useState('')
@@ -59,7 +60,7 @@ export default function VatClient() {
 
   /* ── 탭5 일반 vs 간이 ── */
   const [annualRevenueMan, setAnnualRevenueMan] = useState('8000')   // 만원
-  const [industryId, setIndustryId] = useState('food')
+  const [industryId, setIndustryId] = useState('retail')
   const [purchaseAmountMan, setPurchaseAmountMan] = useState('4000') // 만원
   const [vatPurchaseMan, setVatPurchaseMan] = useState('400')        // 만원
 
@@ -104,15 +105,15 @@ export default function VatClient() {
   const invoiceQuote = useMemo(() => {
     // 탭4는 탭2의 quoteItems 재사용 + 절사 옵션 적용
     const r = calcQuote(quoteItems, 0.10)
-    // 절사 적용
     if (invoiceTrunc === 'none') return r
+    // 절사: 품목별 부가세를 모두 같은 단위로 절사 → 합계 = 품목별 합 (표·요약 일치)
     const unit = parseInt(invoiceTrunc, 10)
-    const totalVat = Math.floor(r.totalVat / unit) * unit
-    return {
-      ...r,
-      totalVat,
-      grandTotal: r.totalSupply + totalVat,
-    }
+    const items = r.items.map(it => {
+      const lineVat = it.isTaxable ? Math.floor(it.lineVat / unit) * unit : 0
+      return { ...it, lineVat, lineTotal: it.lineSupply + lineVat }
+    })
+    const totalVat = items.reduce((s, it) => s + it.lineVat, 0)
+    return { ...r, items, totalVat, grandTotal: r.totalSupply + totalVat }
   }, [quoteItems, invoiceTrunc])
 
   /* ── 탭5 ── */
@@ -172,7 +173,7 @@ export default function VatClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="부가세 계산 모드">
         {[
           { id: 'main',    label: '빠른 계산',   cls: styles.tabActive },
           { id: 'quote',   label: '견적서',      cls: styles.tabActiveQuote },
@@ -180,7 +181,7 @@ export default function VatClient() {
           { id: 'invoice', label: '세금계산서',  cls: styles.tabActiveInvoice },
           { id: 'gs',      label: '일반 vs 간이', cls: styles.tabActiveCompare },
         ].map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? t.cls : ''}`}
             onClick={() => setTab(t.id as TabId)}
           >{t.label}</button>
@@ -198,7 +199,7 @@ export default function VatClient() {
                 { v: 'add' as VatMode,    label: '부가세 추가',   desc: '공급가액 → 합계' },
                 { v: 'remove' as VatMode, label: '부가세 역산',   desc: '합계 → 공급가액' },
               ].map(m => (
-                <button key={m.v}
+                <button key={m.v} type="button" aria-pressed={mode === m.v}
                   className={`${styles.modeBtn} ${mode === m.v ? styles.modeBtnActive : ''}`}
                   onClick={() => setMode(m.v)}>
                   <span className={styles.modeBtnLabel}>{m.label}</span>
@@ -229,7 +230,7 @@ export default function VatClient() {
               </div>
               <div className={styles.chips}>
                 {['10', '0'].map(r => (
-                  <button key={r}
+                  <button key={r} type="button" aria-pressed={rate === r}
                     className={`${styles.chip} ${rate === r ? styles.chipActive : ''}`}
                     onClick={() => setRate(r)}>
                     {r === '0' ? '면세' : `일반 ${r}%`}
@@ -249,7 +250,7 @@ export default function VatClient() {
                 { v: '100' as RoundUnit,  label: '100원 단위' },
                 { v: '1000' as RoundUnit, label: '1,000원 단위' },
               ].map(opt => (
-                <button key={opt.v}
+                <button key={opt.v} type="button" aria-pressed={trunc === opt.v}
                   className={`${styles.optionBtn} ${trunc === opt.v ? styles.optionActive : ''}`}
                   onClick={() => setTrunc(opt.v)}>
                   {opt.label}
@@ -397,7 +398,7 @@ export default function VatClient() {
             </div>
             <div className={styles.chips}>
               {[500_000, 1_000_000, 3_000_000, 5_000_000].map(v => (
-                <button key={v}
+                <button key={v} type="button" aria-pressed={parseAmount(exclVsInclAmount) === v}
                   className={`${styles.chip} ${parseAmount(exclVsInclAmount) === v ? styles.chipActive : ''}`}
                   onClick={() => setExclVsInclAmount(String(v))}
                 >{formatEok(v)}</button>
@@ -456,7 +457,7 @@ export default function VatClient() {
             </div>
             <div className={styles.chips}>
               {NET_PRESETS.map(v => (
-                <button key={v}
+                <button key={v} type="button" aria-pressed={targetNetMan === String(v)}
                   className={`${styles.chip} ${targetNetMan === String(v) ? styles.chipActive : ''}`}
                   onClick={() => setTargetNetMan(String(v))}
                 >{v >= 1000 ? `${v/1000}천만` : `${v}만`}</button>
@@ -466,26 +467,26 @@ export default function VatClient() {
 
           <div className={styles.card}>
             <div className={styles.cardLabel}>사업자 유형</div>
-            <div className={styles.optionRow3}>
-              <button className={`${styles.optionBtn} ${bizType === 'biz-exc' ? styles.optionActive : ''}`}
+            <div className={styles.optionRow3} role="group" aria-label="사업자 유형">
+              <button type="button" aria-pressed={bizType === 'biz-exc'} className={`${styles.optionBtn} ${bizType === 'biz-exc' ? styles.optionActive : ''}`}
                 onClick={() => setBizType('biz-exc')}>사업자 (부가세 별도)</button>
-              <button className={`${styles.optionBtn} ${bizType === 'biz-inc' ? styles.optionActive : ''}`}
+              <button type="button" aria-pressed={bizType === 'biz-inc'} className={`${styles.optionBtn} ${bizType === 'biz-inc' ? styles.optionActive : ''}`}
                 onClick={() => setBizType('biz-inc')}>사업자 (부가세 포함)</button>
-              <button className={`${styles.optionBtn} ${bizType === 'freelancer' ? styles.optionActive : ''}`}
+              <button type="button" aria-pressed={bizType === 'freelancer'} className={`${styles.optionBtn} ${bizType === 'freelancer' ? styles.optionActive : ''}`}
                 onClick={() => setBizType('freelancer')}>프리랜서 (3.3% 원천세)</button>
             </div>
           </div>
 
           <div className={styles.card}>
             <div className={styles.cardLabel}>플랫폼 수수료</div>
-            <div className={styles.optionRow5}>
+            <div className={styles.optionRow5} role="group" aria-label="플랫폼 수수료">
               {PAYMENT_FEES.slice(0, 9).map(f => (
-                <button key={f.id}
+                <button key={f.id} type="button" aria-pressed={platformId === f.id}
                   className={`${styles.optionBtn} ${platformId === f.id ? styles.optionActive : ''}`}
                   onClick={() => setPlatformId(f.id)}
                 >{f.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{(f.rate * 100).toFixed(1)}%</span></button>
               ))}
-              <button className={`${styles.optionBtn} ${platformId === 'custom' ? styles.optionActive : ''}`}
+              <button type="button" aria-pressed={platformId === 'custom'} className={`${styles.optionBtn} ${platformId === 'custom' ? styles.optionActive : ''}`}
                 onClick={() => setPlatformId('custom')}>직접 입력</button>
             </div>
             {platformId === 'custom' && (
@@ -599,7 +600,7 @@ export default function VatClient() {
                 { v: '100' as RoundUnit,  label: '100원 단위' },
                 { v: '1000' as RoundUnit, label: '1,000원 단위' },
               ].map(opt => (
-                <button key={opt.v}
+                <button key={opt.v} type="button" aria-pressed={invoiceTrunc === opt.v}
                   className={`${styles.optionBtn} ${invoiceTrunc === opt.v ? styles.optionActive : ''}`}
                   onClick={() => setInvoiceTrunc(opt.v)}>{opt.label}</button>
               ))}
@@ -690,7 +691,7 @@ export default function VatClient() {
               </div>
               <div className={styles.chips}>
                 {[3000, 5000, 8000, 10000, 12000].map(v => (
-                  <button key={v}
+                  <button key={v} type="button" aria-pressed={annualRevenueMan === String(v)}
                     className={`${styles.chip} ${annualRevenueMan === String(v) ? styles.chipActive : ''}`}
                     onClick={() => setAnnualRevenueMan(String(v))}
                   >{v >= 10000 ? `${(v/10000).toFixed(v % 10000 === 0 ? 0 : 1)}억` : `${v/1000}천`}</button>
@@ -699,9 +700,9 @@ export default function VatClient() {
             </div>
             <div className={styles.card}>
               <div className={styles.cardLabel}>업종</div>
-              <div className={styles.optionRow}>
+              <div className={styles.optionRow} role="group" aria-label="업종 선택">
                 {SIMPLIFIED_VAT_RATES.map(ind => (
-                  <button key={ind.id}
+                  <button key={ind.id} type="button" aria-pressed={industryId === ind.id}
                     className={`${styles.optionBtn} ${industryId === ind.id ? styles.optionActive : ''}`}
                     onClick={() => setIndustryId(ind.id)}
                   >{ind.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>실효 {(ind.effective * 100).toFixed(1)}%</span></button>

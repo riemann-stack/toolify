@@ -39,7 +39,7 @@ const FAQ_LD = [
               },
               {
                 q: '월배당 100만원 만들려면 매월 얼마를 적립해야 하나요?',
-                a: '본 도구의 「월 적립 역산」 탭 사용. 시드 1,000만 + 4.5% 가정 — 5년: 월 약 477만(매우 부담), 10년: 월 약 220만(부담), 20년: 월 약 100만(도전적), 30년: 월 약 62만(합리적). 기간이 핵심이며 배당 재투자·복리 효과로 후반 가속됩니다. 일찍 시작할수록 부담이 1/N로 감소.',
+                a: '본 도구의 「월 적립 역산」 탭 사용. 시드 1,000만 + 4.5% + 시세차익 3% + 배당 재투자 가정 — 5년: 월 약 423만(비현실적), 10년: 월 약 173만(도전적), 20년: 월 약 55만(합리적), 30년: 월 약 21만(매우 합리적). 기간이 핵심이며 배당 재투자·복리 효과로 후반 가속됩니다. 일찍 시작할수록 부담이 1/N로 감소.',
               },
               {
                 q: '종합과세에 진입하지 않는 안전한 투자 원금은 얼마인가요?',
@@ -290,13 +290,13 @@ export default function DividendPage() {
               </thead>
               <tbody>
                 {[
-                  ['5년 / 4.5%',  '월 약 480만',   '🔴 매우 부담'],
-                  ['10년 / 4.5%', '월 약 220만',   '🔴 비현실적'],
-                  ['15년 / 4.5%', '월 약 140만',   '🟡 도전적'],
-                  ['20년 / 4.5%', '월 약 100만',   '🟡 도전적'],
-                  ['30년 / 4.5%', '월 약 62만',    '🔵 합리적'],
-                  ['30년 / 6%',   '월 약 41만',    '🟢 매우 합리적'],
-                  ['30년 / 7%',   '월 약 32만',    '🟢 매우 합리적'],
+                  ['5년 / 4.5%',  '월 약 423만',   '🔴 비현실적'],
+                  ['10년 / 4.5%', '월 약 173만',   '🟡 도전적'],
+                  ['15년 / 4.5%', '월 약 93만',    '🟡 도전적'],
+                  ['20년 / 4.5%', '월 약 55만',    '🔵 합리적'],
+                  ['30년 / 4.5%', '월 약 21만',    '🟢 매우 합리적'],
+                  ['30년 / 6%',   '월 약 9만',     '🟢 매우 합리적'],
+                  ['30년 / 7%',   '월 약 4만',     '🟢 매우 합리적'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
@@ -326,18 +326,17 @@ export default function DividendPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>자산</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>비중</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>투자금</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>배당수익률</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>주기</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['국내 배당주 (KT&G·SK텔레콤 등)', '30%', '4.0%', '분기'],
-                  ['미국 ETF (SCHD·VIG)',          '30%', '3.5%', '분기'],
-                  ['월배당 ETF (JEPI 등)',          '20%', '7.0%', '월',   '⚠ 변동성'],
-                  ['한국 리츠 (제이알·맵스)',       '15%', '6.0%', '분기'],
-                  ['채권/현금',                     '5%',  '4.0%', '월',   '안정성'],
+                  ['국내 배당주 (KT&G·SK텔레콤 등)', '5,000만', '4.0%', '분기'],
+                  ['미국 ETF (SCHD·VIG)',          '5,000만', '3.5%', '분기'],
+                  ['월배당 ETF (JEPI 등)',          '3,000만', '7.0%', '월',   '⚠ 변동성'],
+                  ['한국 리츠 (제이알·맵스)',       '2,000만', '6.0%', '분기'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}{row[4] && <span style={{ marginLeft: 8, color: '#EA580C', fontSize: 11 }}>{row[4]}</span>}</td>
@@ -350,7 +349,7 @@ export default function DividendPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ※ 위 조합 → 가중평균 약 4.45% / 월 평균 약 56만 (세후). 「포트폴리오」 탭에서 자유롭게 조합 가능.
+            ※ 위 조합(도구 기본 프리셋·총 1.5억) → 가중평균 세전 약 4.70%(세후 3.99%) / 월 평균 약 49.8만 (세후). 「포트폴리오」 탭에서 자유롭게 조합 가능.
             JEPI·QYLD 등 커버드콜 ETF는 변동성 손실 위험이 있어 비중 신중.
           </p>
         </div>

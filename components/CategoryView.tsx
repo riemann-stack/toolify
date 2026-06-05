@@ -1,23 +1,16 @@
 import Link from 'next/link'
 import { categories } from '@/lib/tools'
 import AdSlot from './AdSlot'
+import CategoryGuide from './CategoryGuide'
 import s from './CategoryView.module.css'
-
-export interface ComingSoonItem {
-  icon: string
-  name: string
-  desc: string
-}
 
 interface CategoryViewProps {
   catId: string
   /** 카테고리 헤드라인 설명 (없으면 기본 문구) */
   description?: string
-  /** 곧 추가될 도구 (있으면 카드 그리드 아래에 표시) */
-  comingSoon?: ComingSoonItem[]
 }
 
-export default function CategoryView({ catId, description, comingSoon }: CategoryViewProps) {
+export default function CategoryView({ catId, description }: CategoryViewProps) {
   const cat = categories.find((c) => c.id === catId)
   if (!cat) return null
 
@@ -64,23 +57,8 @@ export default function CategoryView({ catId, description, comingSoon }: Categor
         ))}
       </div>
 
-      {comingSoon && comingSoon.length > 0 && (
-        <div className={s.soonWrap}>
-          <p className={s.soonLabel}>🚧 곧 추가됩니다</p>
-          <div className={s.soonGrid}>
-            {comingSoon.map((c, i) => (
-              <div key={i} className={s.soonItem}>
-                <p className={s.soonIcon}>{c.icon}</p>
-                <p className={s.soonName}>{c.name}</p>
-                <p className={s.soonDesc}>{c.desc}</p>
-              </div>
-            ))}
-          </div>
-          <p className={s.soonFooter}>
-            원하는 도구가 있다면 <Link href="/contact" className={s.soonFooterLink}>문의</Link>로 알려주세요.
-          </p>
-        </div>
-      )}
+      {/* 카테고리 본문(가이드 + FAQ) — 링크 그리드에 실질 콘텐츠 보강 */}
+      <CategoryGuide catId={catId} />
 
       <div className={s.adSlot}>
         <AdSlot position="footer" minHeight={250} />

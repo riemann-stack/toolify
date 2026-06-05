@@ -51,7 +51,6 @@ export default function DividendClient() {
   const [tax, setTax]         = useState('15.4')
   const [safety, setSafety]   = useState(100)
   const [current, setCurrent] = useState('')
-  const [growth, setGrowth]   = useState('0')
 
   const monthlyV = parseAmount(monthly)
   const rateV = parseAmount(rate)
@@ -64,7 +63,8 @@ export default function DividendClient() {
   )
   const atr = afterTaxRate(rateV, taxV)
   const annualTarget = monthlyV * 12
-  const effectiveRate = safety > 0 ? atr * 100 / safety : 0
+  // 안전계수 반영 실효 수익률(%) = 세후 수익률 ÷ 안전계수 배수. safety는 퍼센트(100=1.0배)
+  const effectiveRate = safety > 0 ? (atr * 100) / (safety / 100) : 0
 
   const additionalNeeded = isFinite(required) ? Math.max(0, required - currentV) : Infinity
   const achievement = isFinite(required) && required > 0
@@ -181,8 +181,9 @@ export default function DividendClient() {
       years: parseAmount(savingsYears),
       annualContribution: parseAmount(savingsAnnualContribution) * 10_000,
       totalIncome: parseAmount(totalIncomeMan) * 10_000,
+      dividendYield: rateV,
     })
-  }, [valid, annualDividendVal, savingsYears, savingsAnnualContribution, totalIncomeMan])
+  }, [valid, annualDividendVal, savingsYears, savingsAnnualContribution, totalIncomeMan, rateV])
 
   const bestSavings = useMemo(() => {
     if (!savingsCompare) return null
@@ -244,7 +245,7 @@ export default function DividendClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="월배당 계산 모드">
         {[
           { id: 'goal',          label: '목표 원금',     cls: styles.tabActive },
           { id: 'reverse',       label: '월 적립 역산',  cls: styles.tabActiveReverse },
@@ -252,7 +253,7 @@ export default function DividendClient() {
           { id: 'portfolio',     label: '포트폴리오',    cls: styles.tabActivePort },
           { id: 'savings',       label: '절세 계좌',     cls: styles.tabActiveSavings },
         ].map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? t.cls : ''}`}
             onClick={() => setTab(t.id as TabId)}
           >{t.label}</button>
@@ -277,7 +278,7 @@ export default function DividendClient() {
         )}
         <div className={styles.presets}>
           {MONTHLY_PRESETS.map(v => (
-            <button key={v} type="button"
+            <button key={v} type="button" aria-pressed={monthlyV === v}
               className={`${styles.presetBtn} ${monthlyV === v ? styles.presetActive : ''}`}
               onClick={() => setMonthly(v.toLocaleString('ko-KR'))}
             >{v >= 10_000_000 ? `${v/10_000_000}천만` : `${v/10_000}만`}</button>
@@ -296,7 +297,7 @@ export default function DividendClient() {
           </div>
           <div className={styles.presets}>
             {RATE_PRESETS.map(r => (
-              <button key={r} type="button"
+              <button key={r} type="button" aria-pressed={rateV === r}
                 className={`${styles.presetBtn} ${rateV === r ? styles.presetActive : ''}`}
                 onClick={() => setRate(String(r))}
               >{r}%</button>
@@ -314,7 +315,7 @@ export default function DividendClient() {
           </div>
           <div className={styles.presets}>
             {TAX_PRESETS.map(p => (
-              <button key={p.label} type="button"
+              <button key={p.label} type="button" aria-pressed={taxV === p.v}
                 className={`${styles.presetBtn} ${p.warn ? styles.presetWarn : ''} ${taxV === p.v ? styles.presetActive : ''}`}
                 onClick={() => setTax(String(p.v))}
               >{p.label}{p.warn ? ' ⚠️' : ''}</button>
@@ -326,9 +327,9 @@ export default function DividendClient() {
       {/* 안전계수 */}
       <div className={styles.card}>
         <label className={styles.cardLabel}>목표 안전계수 (배당 삭감·공백기 대비)</label>
-        <div className={styles.optionRow4}>
+        <div className={styles.optionRow4} role="group" aria-label="목표 안전계수">
           {SAFETY_PRESETS.map(p => (
-            <button key={p.v} type="button"
+            <button key={p.v} type="button" aria-pressed={safety === p.v}
               className={`${styles.optionBtn} ${safety === p.v ? styles.optionActive : ''}`}
               onClick={() => setSafety(p.v)}
             >{p.label}</button>
@@ -339,28 +340,17 @@ export default function DividendClient() {
       {/* ──────────── TAB 1: 목표 원금 ──────────── */}
       {tab === 'goal' && (
         <>
-          <div className={styles.twoCol}>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>현재 투자금 (선택)</label>
-              <div className={styles.inputRow}>
-                <input className={styles.numInput} type="text" inputMode="numeric"
-                  placeholder="50,000,000"
-                  value={current}
-                  onChange={e => setCurrent(fmtNumInput(e.target.value))} />
-                <span className={styles.unit}>원</span>
-              </div>
-              {currentV > 0 && <div className={styles.liveHint}>{formatEok(currentV)}</div>}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>현재 투자금 (선택)</label>
+            <div className={styles.inputRow}>
+              <input className={styles.numInput} type="text" inputMode="numeric"
+                placeholder="50,000,000"
+                value={current}
+                onChange={e => setCurrent(fmtNumInput(e.target.value))} />
+              <span className={styles.unit}>원</span>
             </div>
-            <div className={styles.card}>
-              <label className={styles.cardLabel}>배당 성장률 (% / 년) — 선택</label>
-              <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal"
-                  placeholder="0" step={0.5} min={0} max={50}
-                  value={growth} onChange={e => setGrowth(e.target.value)} />
-                <span className={styles.unit}>%</span>
-              </div>
-              <p className={styles.cardDesc}>매년 배당이 이만큼 성장한다고 가정 (DGI 전략)</p>
-            </div>
+            {currentV > 0 && <div className={styles.liveHint}>{formatEok(currentV)}</div>}
+            <p className={styles.cardDesc}>배당 성장(DGI) 가정은 「월 적립 역산」 탭의 재투자·시세차익 옵션을 사용하세요.</p>
           </div>
 
           {valid && isFinite(required) && (
@@ -464,7 +454,7 @@ export default function DividendClient() {
               </div>
               <div className={styles.chips}>
                 {REVERSE_YEARS_PRESETS.map(y => (
-                  <button key={y} type="button"
+                  <button key={y} type="button" aria-pressed={revYears === String(y)}
                     className={`${styles.chip} ${revYears === String(y) ? styles.chipActive : ''}`}
                     onClick={() => setRevYears(String(y))}
                   >{y}년</button>
@@ -947,6 +937,10 @@ export default function DividendClient() {
                   </tbody>
                 </table>
               </div>
+
+              <p className={styles.cardDesc} style={{ marginTop: 4 }}>
+                ※ ISA는 총 납입 한도(1억)·연금저축 연 600만·IRP 연 900만 등 <strong>납입 한도</strong>가 있어 큰 배당 흐름 전액을 절세 계좌에 담지 못합니다. 위 비교에서 ISA 한도(약 {formatEok(100_000_000 * rateV / 100)}/년) 초과분은 일반 15.4% 과세로 반영했습니다. 연금·IRP는 적립 한도 기준이라 별도 분산이 필요합니다.
+              </p>
 
               {/* 계좌별 상세 카드 */}
               <div className={styles.twoCol}>

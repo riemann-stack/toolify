@@ -91,14 +91,16 @@ export default function HistoricalMoneyClient() {
       {/* 방향 토글 */}
       <div className={s.card}>
         <span className={s.cardLabel}>변환 방향</span>
-        <div className={s.dirRow}>
+        <div className={s.dirRow} role="group" aria-label="변환 방향">
           <button
             type="button"
+            aria-pressed={direction === 'past_to_now'}
             className={`${s.dirBtn} ${direction === 'past_to_now' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('past_to_now')}
           >📅 과거 → 현재</button>
           <button
             type="button"
+            aria-pressed={direction === 'now_to_past'}
             className={`${s.dirBtn} ${direction === 'now_to_past' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('now_to_past')}
           >🕰️ 현재 → 과거</button>
@@ -124,6 +126,8 @@ export default function HistoricalMoneyClient() {
               value={pastYear}
               onChange={(e) => setPastYear(+e.target.value)}
               className={s.slider}
+              aria-label="과거 연도"
+              aria-valuetext={`${pastYear}년`}
             />
             <div className={s.sliderHead}>
               <input
@@ -136,15 +140,23 @@ export default function HistoricalMoneyClient() {
               />
               <span>년</span>
             </div>
-            <div className={s.presetRow}>
+            <div className={s.presetRow} role="group" aria-label="연도 빠른 선택">
               {PRESET_YEARS.map((y) => (
                 <button key={y} type="button"
+                  aria-pressed={pastYear === y}
                   className={`${s.presetBtn} ${pastYear === y ? s.presetBtnActive : ''}`}
                   onClick={() => setPastYear(y)}>
                   {y}
                 </button>
               ))}
             </div>
+            {(pastYear === 1953 || pastYear === 1962) && (
+              <p style={{ fontSize: 11.5, color: '#D97706', lineHeight: 1.55, margin: '8px 0 0' }}>
+                {pastYear === 1953
+                  ? '⚠️ 1953년은 2월 15일 화폐개혁(100圓=1환) 이후 「환」 기준으로 계산됩니다. 개혁 전(1~2월) 圓 금액이라면 1952년을 선택하세요.'
+                  : '⚠️ 1962년은 6월 10일 화폐개혁(10환=1원) 이후 「원」 기준으로 계산됩니다. 개혁 전(1~6월) 환 금액이라면 1961년을 선택하세요.'}
+              </p>
+            )}
           </div>
 
           <div className={s.inputField}>
@@ -168,9 +180,10 @@ export default function HistoricalMoneyClient() {
                 {direction === 'past_to_now' ? pastEra.symbol : currentEra.symbol}
               </span>
             </div>
-            <div className={s.presetRow}>
+            <div className={s.presetRow} role="group" aria-label="금액 빠른 선택">
               {PRESET_AMOUNTS.map((v) => (
                 <button key={v} type="button"
+                  aria-pressed={amt === v}
                   className={`${s.presetBtn} ${amt === v ? s.presetBtnActive : ''}`}
                   onClick={() => setAmount(String(v))}>
                   {fmtCompact(v)}
@@ -203,6 +216,9 @@ export default function HistoricalMoneyClient() {
                 누적 인플레 <strong className={s.factorAccent}>×{result.inflationFactor.toFixed(0)}</strong>
               </div>
             )}
+            <div style={{ fontSize: 10.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.4 }}>
+              ※ {CURRENT_YEAR}년 물가는 확정 전 추정치 (연 +1.8% 가정)
+            </div>
           </div>
         </div>
       )}
@@ -246,9 +262,11 @@ export default function HistoricalMoneyClient() {
             const firstPrice = item.prices[firstYear]
             const lastPrice = item.prices[lastYear]
             const firstEra = eraFromYear(firstYear)
-            // 첫 가격을 현재 가치로 환산
+            // 첫 가격을 현재(2026) 가치로 환산 — "≈ 현재 X원" 표시용
             const firstNowValue = convert(firstPrice, firstYear, CURRENT_YEAR).outputAmount
-            const realChange = lastPrice / firstNowValue   // 1보다 크면 실질가격 상승, 작으면 하락
+            // 실질 변동률은 끝 연도(lastYear) 기준으로 같은 시점끼리 비교
+            const firstAtLastYear = convert(firstPrice, firstYear, lastYear).outputAmount
+            const realChange = lastPrice / firstAtLastYear   // 1보다 크면 실질가격 상승, 작으면 하락
             return (
               <div key={item.name} className={s.priceCard}>
                 <div className={s.priceHead}>

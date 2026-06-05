@@ -468,6 +468,40 @@
   border-color: var(--accent);
 }
 
+/* 상품 유형 선택 (골드바/KRX/금통장) */
+.productRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.productBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 4px;
+  font-size: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  min-height: 50px;
+  line-height: 1.2;
+}
+.productBtn span { font-size: 17px; }
+@media (hover: hover) {
+  .productBtn:hover { color: var(--text); border-color: var(--accent); }
+}
+.productBtnActive {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
 /* checkbox */
 .checkLabel {
   display: flex;
@@ -663,7 +697,23 @@
 @media (max-width: 700px) {
   .assetRow { grid-template-columns: 1fr 80px auto 90px auto; }
 }
+/* 좁은 화면 — 닉네임 풀폭 / 무게·g·순도·삭제 둘째 줄 (320px 오버플로우 방지) */
+@media (max-width: 430px) {
+  .assetRow {
+    grid-template-columns: 1fr auto auto auto;
+    grid-template-areas:
+      "nick nick nick nick"
+      "wt   un   ka   rm";
+    gap: 6px;
+  }
+  .assetNickname { grid-area: nick; }
+  .assetWeight   { grid-area: wt; }
+  .assetUnit     { grid-area: un; justify-self: start; }
+  .assetKarat    { grid-area: ka; }
+  .assetRemove   { grid-area: rm; }
+}
 .assetNickname {
+  min-width: 0;
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -675,6 +725,7 @@
 }
 .assetNickname:focus { border-color: var(--accent); }
 .assetWeight {
+  min-width: 0;
   padding: 8px 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -688,6 +739,7 @@
 }
 .assetUnit { font-size: 11px; color: var(--muted); }
 .assetKarat {
+  min-width: 0;
   padding: 8px 10px;
   background: var(--bg3);
   border: 1px solid var(--border);

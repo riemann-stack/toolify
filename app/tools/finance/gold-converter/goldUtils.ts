@@ -37,7 +37,7 @@ export interface KaratDef {
 }
 
 export const KARATS: KaratDef[] = [
-  { key: '24k',  label: '24K',  ratio: 0.999, desc: '999.9 / 99.9% — 골드바·돌반지·투자',      color: '#CA8A04' },
+  { key: '24k',  label: '24K',  ratio: 1.000, desc: '순금 100% 기준점 (실물 품위 999~999.9 = 99.9~99.99%) — 골드바·돌반지·투자', color: '#CA8A04' },
   { key: '22k',  label: '22K',  ratio: 0.917, desc: '91.7% — 동남아 결혼반지',                color: '#FFC940' },
   { key: '21k',  label: '21K',  ratio: 0.875, desc: '87.5% — 중동 보석',                      color: '#FFB938' },
   { key: '18k',  label: '18K',  ratio: 0.750, desc: '75.0% — 한국 결혼반지·보석 표준',         color: '#E8A838' },
@@ -95,14 +95,24 @@ export function convertKarat(grams: number, fromKarat: string, toKarat: string):
 }
 
 /* ─── 가격 계산 ─── */
+export type GoldProduct = 'bar' | 'krx' | 'bankbook'
+
 export interface PriceInputs {
+  productType: GoldProduct  // 골드바(VAT 부과) / KRX 금현물·금통장(부가세 면제)
   pricePerGram24k: number   // 24K 1g 시세 (KRW)
-  vatIncluded: boolean      // 시세에 부가세 포함 여부
+  vatIncluded: boolean      // 시세에 부가세 포함 여부 (골드바만 의미 있음)
   spreadPercent: number     // 매수-매도 스프레드 % (기본 7%)
   feePercent: number        // 거래 수수료 % (기본 1%)
   craftFee: number          // 세공비 (원, 보석류)
   usdKrw: number            // USD 환율
   internationalOzUsd: number // 국제 1 oz USD 시세
+}
+
+/* ─── 상품별 기본 거래비용 (전환 시 적용) ─── */
+export const PRODUCT_DEFAULTS: Record<GoldProduct, { label: string; spread: number; fee: number; vat: boolean; emoji: string; note: string }> = {
+  bar:      { label: '골드바',     spread: 7,   fee: 1,   vat: true,  emoji: '🪙', note: '실물 골드바·돌반지. 매수 시 부가세 10% + 매장 마진. 매도 시 부가세 환급 X.' },
+  krx:      { label: 'KRX 금현물', spread: 0.5, fee: 0.3, vat: false, emoji: '📊', note: '한국거래소 금시장. 부가세 면제·매매차익 비과세. 증권사 계좌 필요.' },
+  bankbook: { label: '금통장',     spread: 1.5, fee: 0.5, vat: false, emoji: '💳', note: '은행 골드뱅킹. 부가세 면제(실물 인출 시 10%). 매매차익 배당소득세 15.4%.' },
 }
 
 export interface PriceResult {
@@ -120,15 +130,22 @@ export interface PriceResult {
   feeAmount: number
 }
 
+/** 24K 순도 비율 (시세는 24K 1g 기준이므로 가격 환산 시 기준값) */
+const K24_RATIO = KARATS.find((x) => x.key === '24k')!.ratio
+
 /** 매수·매도 실거래가 계산 */
 export function calculatePrice(grams: number, karatKey: string, p: PriceInputs): PriceResult {
   const pureGrams = pureGoldGram(grams, karatKey)
-  // 시세 (부가세 포함이면 미포함 가격으로 역산)
-  const cleanPricePerGram = p.vatIncluded ? p.pricePerGram24k / 1.10 : p.pricePerGram24k
-  const baseValue = pureGrams * cleanPricePerGram
+  // 부가세는 골드바(실물)만 부과 — KRX 금현물·금통장은 면제
+  const vatApplies = p.productType === 'bar'
+  // 시세 (골드바에서 부가세 포함 입력이면 미포함 가격으로 역산)
+  const cleanPricePerGram = (vatApplies && p.vatIncluded) ? p.pricePerGram24k / 1.10 : p.pricePerGram24k
+  // 시세는 24K(=K24_RATIO) 1g 기준 → 24K-환산 g으로 가격 산정 (24K 아이템 = 시세 전액)
+  const value24kGrams = pureGrams / K24_RATIO
+  const baseValue = value24kGrams * cleanPricePerGram
 
-  // 매수: VAT + 수수료 + 세공비
-  const vatAmount = baseValue * 0.10
+  // 매수: VAT(골드바만) + 수수료 + 세공비
+  const vatAmount = vatApplies ? baseValue * 0.10 : 0
   const buyFee = baseValue * (p.feePercent / 100)
   const buyCost = baseValue + vatAmount + buyFee + p.craftFee
 

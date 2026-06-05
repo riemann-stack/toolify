@@ -207,50 +207,5 @@
   border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
 }
 
-/* ── 곧 추가됩니다 (옵션) ── */
-.soonWrap {
-  margin-top: 36px;
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 5%, var(--bg2));
-  border: 1px solid color-mix(in srgb, var(--cat-color, var(--accent)) 25%, var(--border));
-  border-radius: 14px;
-  padding: 20px 22px;
-}
-.soonLabel {
-  font-size: 12px;
-  color: var(--cat-color, var(--accent));
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin: 0 0 14px;
-}
-.soonGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 8px;
-}
-.soonItem {
-  background: var(--bg2);
-  border: 1px dashed var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
-  opacity: 0.7;
-}
-.soonIcon { font-size: 20px; margin-bottom: 6px; }
-.soonName { font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 0 2px; }
-.soonDesc { font-size: 11px; color: var(--muted); line-height: 1.5; opacity: 0.85; margin: 0; }
-.soonFooter {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 14px 0 0;
-  line-height: 1.7;
-  text-align: center;
-}
-.soonFooterLink {
-  color: var(--cat-color, var(--accent));
-  text-decoration: none;
-}@media (hover: hover) {
-  .soonFooterLink:hover { text-decoration: underline; }
-}
-
 /* 광고 슬롯 여백 */
 .adSlot { margin-top: 40px; }

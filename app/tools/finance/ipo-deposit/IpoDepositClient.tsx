@@ -2,13 +2,12 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './ipo-deposit.module.css'
 import {
   calcDepositFromTarget, calcSharesFromDeposit, calcScenarios,
   recommendedUnit,
-  loadMemos, saveMemos, memosToCSV, dDay,
+  loadMemos, saveMemos, memosToCSV, dDay, todayKST,
   fmtKrw, fmtKrwShort,
   DEFAULT_SCENARIOS,
   type FiveSixRule, type IpoMemo,
@@ -53,17 +52,23 @@ export default function IpoDepositClient() {
   const numDeposit = Math.max(0, parseFloat(myDeposit) || 0)
 
   // 자동 단위 — 비례 모드는 이론 청약 주수 기준, 역산은 가능 주수 기준
+  // 한도가 이론 청약보다 작으면 한도 기준으로 단위 선택 (단위가 한도보다 커져 0주로 잘리는 것 방지)
   const autoUnitForDeposit = useMemo(() => {
     if (!unitAuto) return parseFloat(unit) || 10
-    return recommendedUnit(numTarget * numComp)
-  }, [unitAuto, unit, numTarget, numComp])
+    const theoretical = numTarget * numComp
+    const eff = (numLimit !== undefined && numLimit > 0 && numLimit < theoretical) ? numLimit : theoretical
+    return recommendedUnit(eff)
+  }, [unitAuto, unit, numTarget, numComp, numLimit])
   const autoUnitForShares = useMemo(() => {
     if (!unitAuto) return parseFloat(unit) || 10
     const possible = numRatio > 0 && numPrice > 0 ? numDeposit / numRatio / numPrice : 0
-    return recommendedUnit(possible)
-  }, [unitAuto, unit, numDeposit, numRatio, numPrice])
+    const eff = (numLimit !== undefined && numLimit > 0 && numLimit < possible) ? numLimit : possible
+    return recommendedUnit(eff)
+  }, [unitAuto, unit, numDeposit, numRatio, numPrice, numLimit])
 
   const valid = numPrice > 0 && numComp > 0 && numRatio > 0
+  // 시나리오 탭은 DEFAULT_SCENARIOS(고정 경쟁률 목록)를 쓰므로 입력 경쟁률 불필요
+  const scenarioValid = numPrice > 0 && numRatio > 0
 
   const depositResult = useMemo(() => {
     if (!valid || numTarget <= 0) return null
@@ -82,12 +87,12 @@ export default function IpoDepositClient() {
   }, [valid, numDeposit, numPrice, numComp, numRatio, autoUnitForShares, numLimit, rule, numEven])
 
   const scenarios = useMemo(() => {
-    if (!valid || numTarget <= 0) return []
+    if (!scenarioValid || numTarget <= 0) return []
     return calcScenarios(numTarget, DEFAULT_SCENARIOS, {
       publicPrice: numPrice, depositRatio: numRatio,
       unit: autoUnitForDeposit, limit: numLimit, rule, evenExpected: numEven,
     })
-  }, [valid, numTarget, numPrice, numRatio, autoUnitForDeposit, numLimit, rule, numEven])
+  }, [scenarioValid, numTarget, numPrice, numRatio, autoUnitForDeposit, numLimit, rule, numEven])
 
   // ── 메모 (localStorage) ─────────────────
   const [memos, setMemos] = useState<IpoMemo[]>([])
@@ -116,7 +121,7 @@ export default function IpoDepositClient() {
       refundDate: memoForm.refundDate,
       listingDate: memoForm.listingDate,
       notes: memoForm.notes,
-      createdAt: new Date().toISOString().slice(0, 10),
+      createdAt: todayKST(),
     }
     setMemos((p) => [rec, ...p])
     setMemoForm({})
@@ -128,7 +133,7 @@ export default function IpoDepositClient() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-ipo-memo-${new Date().toISOString().slice(0, 10)}.csv`
+    a.download = `youtil-ipo-memo-${todayKST()}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -155,8 +160,10 @@ export default function IpoDepositClient() {
       `- 비례 배정 (5사6입): ${r.proportionalAlloc}주`,
       `- 균등 기대: +${numEven}주 (추첨 보장 X)`,
       `- 총 배정 (예상): ${r.totalAlloc}주`,
-      `- 최종 납입: ${fmtKrw(r.finalPayment)}원`,
-      `- 환불 예상: 약 ${fmtKrw(r.refundEstimate)}원`,
+      `- 최종 납입 (배정금액): ${fmtKrw(r.finalPayment)}원`,
+      r.additionalPayment > 0
+        ? `- 추가 납입 (잔금): +${fmtKrw(r.additionalPayment)}원`
+        : `- 환불 예상: 약 ${fmtKrw(r.refundEstimate)}원`,
       ``,
       `⚠️ 본 도구는 일반 가이드. 종목 추천 X · 실제 결과 다를 수 있음.`,
       `youtil.kr/tools/finance/ipo-deposit`,
@@ -189,11 +196,11 @@ export default function IpoDepositClient() {
       </Disclaimer>
 
       {/* ── 탭 ── */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'deposit' ? s.tabActive : ''}`} onClick={() => setTab('deposit')}>💰 비례 → 증거금</button>
-        <button className={`${s.tab} ${tab === 'shares' ? s.tabActive : ''}`} onClick={() => setTab('shares')}>📊 증거금 → 주수</button>
-        <button className={`${s.tab} ${tab === 'scenario' ? s.tabActive : ''}`} onClick={() => setTab('scenario')}>📈 시나리오</button>
-        <button className={`${s.tab} ${tab === 'memo' ? s.tabActive : ''}`} onClick={() => setTab('memo')}>📋 내 청약 메모</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="계산 모드">
+        <button type="button" role="tab" aria-selected={tab === 'deposit'} className={`${s.tab} ${tab === 'deposit' ? s.tabActive : ''}`} onClick={() => setTab('deposit')}>💰 비례 → 증거금</button>
+        <button type="button" role="tab" aria-selected={tab === 'shares'} className={`${s.tab} ${tab === 'shares' ? s.tabActive : ''}`} onClick={() => setTab('shares')}>📊 증거금 → 주수</button>
+        <button type="button" role="tab" aria-selected={tab === 'scenario'} className={`${s.tab} ${tab === 'scenario' ? s.tabActive : ''}`} onClick={() => setTab('scenario')}>📈 시나리오</button>
+        <button type="button" role="tab" aria-selected={tab === 'memo'} className={`${s.tab} ${tab === 'memo' ? s.tabActive : ''}`} onClick={() => setTab('memo')}>📋 내 청약 메모</button>
       </div>
 
       {/* ── 공통 입력 (모든 계산 탭에서 사용) ── */}
@@ -228,9 +235,9 @@ export default function IpoDepositClient() {
 
           <div className={s.field}>
             <label className={s.fieldLabel}>증거금률 (%)</label>
-            <div className={s.pillRow}>
-              <button className={`${s.pill} ${depositRatioPct === '50' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('50')}>50%</button>
-              <button className={`${s.pill} ${depositRatioPct === '100' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('100')}>100%</button>
+            <div className={s.pillRow} role="group" aria-label="증거금률">
+              <button type="button" aria-pressed={depositRatioPct === '50'} className={`${s.pill} ${depositRatioPct === '50' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('50')}>50%</button>
+              <button type="button" aria-pressed={depositRatioPct === '100'} className={`${s.pill} ${depositRatioPct === '100' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('100')}>100%</button>
               <input type="number" inputMode="numeric" min={0} max={100}
                 className={s.miniInput}
                 value={depositRatioPct}
@@ -245,9 +252,9 @@ export default function IpoDepositClient() {
               자동 추천 ({tab === 'shares' ? autoUnitForShares : autoUnitForDeposit}주 단위)
             </label>
             {!unitAuto && (
-              <div className={s.pillRow} style={{ marginTop: 6 }}>
+              <div className={s.pillRow} style={{ marginTop: 6 }} role="group" aria-label="청약단위">
                 {[10, 20, 50, 100, 500, 1000].map((v) => (
-                  <button key={v} className={`${s.pill} ${unit === String(v) ? s.pillActive : ''}`}
+                  <button key={v} type="button" aria-pressed={unit === String(v)} className={`${s.pill} ${unit === String(v) ? s.pillActive : ''}`}
                     onClick={() => setUnit(String(v))}>{v}주</button>
                 ))}
                 <input type="number" inputMode="numeric" min={1}
@@ -271,9 +278,9 @@ export default function IpoDepositClient() {
 
           <div className={s.field}>
             <label className={s.fieldLabel}>균등 기대 (주) — 추첨 보장 X</label>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="균등 기대 주수">
               {['0', '0.5', '1', '2'].map((v) => (
-                <button key={v} className={`${s.pill} ${evenExpected === v ? s.pillActive : ''}`}
+                <button key={v} type="button" aria-pressed={evenExpected === v} className={`${s.pill} ${evenExpected === v ? s.pillActive : ''}`}
                   onClick={() => setEvenExpected(v)}>{v}주</button>
               ))}
               <input type="number" inputMode="numeric" min={0} step={0.5}
@@ -287,10 +294,10 @@ export default function IpoDepositClient() {
 
           <div className={s.field} style={{ marginBottom: 0 }}>
             <label className={s.fieldLabel}>5사6입 처리 (소수점 비례 배정)</label>
-            <div className={s.pillRow}>
-              <button className={`${s.pill} ${rule === 'standard' ? s.pillActive : ''}`}
+            <div className={s.pillRow} role="group" aria-label="5사6입 처리">
+              <button type="button" aria-pressed={rule === 'standard'} className={`${s.pill} ${rule === 'standard' ? s.pillActive : ''}`}
                 onClick={() => setRule('standard')}>표준 (0.5↑ 올림)</button>
-              <button className={`${s.pill} ${rule === 'guaranteed1' ? s.pillActive : ''}`}
+              <button type="button" aria-pressed={rule === 'guaranteed1'} className={`${s.pill} ${rule === 'guaranteed1' ? s.pillActive : ''}`}
                 onClick={() => setRule('guaranteed1')}>1주 보장 추첨 가정</button>
             </div>
           </div>
@@ -341,8 +348,12 @@ export default function IpoDepositClient() {
                     <tr><td>예상 비례 배정 (5사6입)</td><td>{depositResult.proportionalAlloc}주</td></tr>
                     <tr><td>+ 균등 기대 (추첨)</td><td>+{numEven}주</td></tr>
                     <tr><td>총 배정 (예상)</td><td className={s.cellAccent}>{depositResult.totalAlloc}주</td></tr>
-                    <tr><td>최종 납입</td><td>{fmtKrw(depositResult.finalPayment)}원</td></tr>
-                    <tr><td>환불 예상</td><td className={s.cellGood}>약 {fmtKrw(depositResult.refundEstimate)}원</td></tr>
+                    <tr><td>최종 납입 (배정금액)</td><td>{fmtKrw(depositResult.finalPayment)}원</td></tr>
+                    {depositResult.additionalPayment > 0 ? (
+                      <tr><td>추가 납입 (잔금)</td><td className={s.cellAccent}>+{fmtKrw(depositResult.additionalPayment)}원</td></tr>
+                    ) : (
+                      <tr><td>환불 예상</td><td className={s.cellGood}>약 {fmtKrw(depositResult.refundEstimate)}원</td></tr>
+                    )}
                   </tbody>
                 </table>
 
@@ -414,8 +425,12 @@ export default function IpoDepositClient() {
                     <tr className={s.rowBig}><td>예상 비례 배정 (5사6입)</td><td className={s.cellAccent}>{sharesResult.proportionalAlloc}주</td></tr>
                     <tr><td>+ 균등 기대 (추첨)</td><td>+{numEven}주</td></tr>
                     <tr><td>총 배정 (예상)</td><td className={s.cellAccent}>{sharesResult.totalAlloc}주</td></tr>
-                    <tr><td>최종 납입</td><td>{fmtKrw(sharesResult.finalPayment)}원</td></tr>
-                    <tr><td>환불 예상</td><td className={s.cellGood}>약 {fmtKrw(sharesResult.refundEstimate)}원</td></tr>
+                    <tr><td>최종 납입 (배정금액)</td><td>{fmtKrw(sharesResult.finalPayment)}원</td></tr>
+                    {sharesResult.additionalPayment > 0 ? (
+                      <tr><td>추가 납입 (잔금)</td><td className={s.cellAccent}>+{fmtKrw(sharesResult.additionalPayment)}원</td></tr>
+                    ) : (
+                      <tr><td>환불 예상</td><td className={s.cellGood}>약 {fmtKrw(sharesResult.refundEstimate)}원</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -451,7 +466,7 @@ export default function IpoDepositClient() {
             </div>
           </div>
 
-          {!valid && (
+          {!scenarioValid && (
             <div className={s.empty}>공모가·증거금률을 입력하세요.</div>
           )}
 

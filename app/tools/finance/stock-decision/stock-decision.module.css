@@ -221,6 +221,33 @@
   border-radius: 99px;
   padding: 4px 10px;
 }
+.criticalBox {
+  margin-top: 14px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.criticalTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: #DC2626;
+  margin: 0 0 8px;
+}
+.criticalList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.criticalList li { margin-bottom: 2px; }
+.criticalNote {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
 .resultDisclaimer {
   margin-top: 14px;
   font-size: 11px;
@@ -562,6 +589,11 @@
   pointer-events: none;
   text-shadow: 0 1px 2px rgba(255,255,255,0.4);
   letter-spacing: -0.02em;
+  display: inline-block;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 .dartLabelPicked {
   font-size: 14px;
@@ -751,6 +783,11 @@
   pointer-events: none;
   text-shadow: 0 1px 2px rgba(255,255,255,0.5);
   letter-spacing: -0.02em;
+  display: inline-block;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 .rouletteCenter {
   position: absolute;
@@ -944,6 +981,16 @@
 .learnIntro { font-size: 14px; color: var(--text); line-height: 1.8; margin: 0; }
 .learnIntro strong { color: var(--accent); }
 
+.caseDisclaimer {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 8px 0 12px;
+  padding: 8px 12px;
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: 8px;
+}
 .caseList { display: flex; flex-direction: column; gap: 10px; }
 .caseItem {
   background: var(--bg3);

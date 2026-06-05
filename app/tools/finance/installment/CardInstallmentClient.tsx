@@ -133,6 +133,9 @@ export default function CardInstallmentClient() {
     return amt * (1 - disc / 100) - points
   }, [amount, cashDiscount, rewardPoints])
 
+  // 일시불 할인·포인트가 입력돼 일시불 실결제액이 원금과 달라지는지
+  const hasCashAdjust = (parseFloat(cashDiscount) || 0) > 0 || parseComma(rewardPoints) > 0
+
   const schedule = useMemo(() => {
     if (installType !== 'paid') return []
     const amt = parseComma(amount)
@@ -140,15 +143,15 @@ export default function CardInstallmentClient() {
     return buildSchedule(amt, effMonths, r)
   }, [amount, effMonths, rate, installType])
 
-  // 해석 문구
+  // 해석 문구 — 일시불 실결제액(할인·포인트 반영) 대비 할부 총액의 추가 부담
   const interpretation = useMemo(() => {
     const amt = parseComma(amount)
-    const totalExtra = calc.totalInterest
+    const totalExtra = calc.totalPayment - cashPrice
     if (totalExtra <= 0) return null
     const cafes = Math.floor(totalExtra / 4000)
     const meals = Math.floor(totalExtra / 10000)
     return { amt, totalExtra, cafes, meals }
-  }, [amount, calc])
+  }, [amount, calc, cashPrice])
 
   // ─────────────────────────────────────────────
   // TAB 2 계산
@@ -362,10 +365,10 @@ export default function CardInstallmentClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'calc'    ? s.tabActive : ''}`} onClick={() => setTab('calc')}>할부 계산</button>
-        <button className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => setTab('compare')}>일시불 vs 할부</button>
-        <button className={`${s.tabBtn} ${tab === 'months'  ? s.tabActive : ''}`} onClick={() => setTab('months')}>개월수별 비교</button>
+      <div className={s.tabs} role="tablist" aria-label="할부 계산기 탭">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tabBtn} ${tab === 'calc'    ? s.tabActive : ''}`} onClick={() => setTab('calc')}>할부 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'compare'} className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => setTab('compare')}>일시불 vs 할부</button>
+        <button type="button" role="tab" aria-selected={tab === 'months'} className={`${s.tabBtn} ${tab === 'months'  ? s.tabActive : ''}`} onClick={() => setTab('months')}>개월수별 비교</button>
       </div>
 
       {/* ──────────── TAB 1 ──────────── */}
@@ -396,10 +399,11 @@ export default function CardInstallmentClient() {
               <span>할부 개월</span>
               <span className={s.cardLabelHint}>한국 카드 표준</span>
             </div>
-            <div className={s.monthsGrid}>
+            <div className={s.monthsGrid} role="group" aria-label="할부 개월">
               {MONTH_OPTIONS.map(m => (
                 <button
                   key={m}
+                  aria-pressed={months === m}
                   className={`${s.monthBtn} ${months === m ? s.monthActive : ''}`}
                   onClick={() => setMonths(m)}
                   type="button"
@@ -408,6 +412,7 @@ export default function CardInstallmentClient() {
                 </button>
               ))}
               <button
+                aria-pressed={months === 0}
                 className={`${s.monthBtn} ${months === 0 ? s.monthActive : ''}`}
                 onClick={() => setMonths(0)}
                 type="button"
@@ -438,8 +443,9 @@ export default function CardInstallmentClient() {
               <span>할부 종류</span>
               <span className={s.cardLabelHint}>이자 발생 여부</span>
             </div>
-            <div className={s.typeGrid}>
+            <div className={s.typeGrid} role="group" aria-label="할부 종류">
               <button
+                aria-pressed={installType === 'free'}
                 className={`${s.typeBtn} ${s.typeFree} ${installType === 'free' ? s.typeActive : ''}`}
                 onClick={() => setInstallType('free')}
                 type="button"
@@ -448,6 +454,7 @@ export default function CardInstallmentClient() {
                 <span className={s.typeBadge}>0% 이자</span>
               </button>
               <button
+                aria-pressed={installType === 'partial'}
                 className={`${s.typeBtn} ${s.typePartial} ${installType === 'partial' ? s.typeActive : ''}`}
                 onClick={() => setInstallType('partial')}
                 type="button"
@@ -456,6 +463,7 @@ export default function CardInstallmentClient() {
                 <span className={s.typeBadge}>일부 무이자</span>
               </button>
               <button
+                aria-pressed={installType === 'paid'}
                 className={`${s.typeBtn} ${s.typePaid} ${installType === 'paid' ? s.typeActive : ''}`}
                 onClick={() => setInstallType('paid')}
                 type="button"
@@ -570,7 +578,7 @@ export default function CardInstallmentClient() {
                   {calc.totalInterest > 0 && (
                     <tr className={s.interestRow}><td>총 이자</td><td>+{fmtKRW(calc.totalInterest)}</td></tr>
                   )}
-                  {parseFloat(cashDiscount) > 0 && (
+                  {(parseFloat(cashDiscount) > 0 || parseComma(rewardPoints) > 0) && (
                     <tr><td>일시불 시 실결제액</td><td>{fmtKRW(cashPrice)}</td></tr>
                   )}
                 </tbody>
@@ -579,23 +587,25 @@ export default function CardInstallmentClient() {
           )}
 
           {/* 비교 막대 그래프 */}
-          {parseComma(amount) > 0 && calc.totalInterest > 0 && (
+          {parseComma(amount) > 0 && (calc.totalInterest > 0 || hasCashAdjust) && (
             <div className={s.card}>
               <div className={s.cardLabel}>
                 <span>일시불 vs 할부 비교</span>
+                {hasCashAdjust && <span className={s.cardLabelHint}>일시불 = 할인·포인트 반영 실결제액</span>}
               </div>
               <div className={s.barCompare}>
                 {(() => {
                   const amt = parseComma(amount)
-                  const max = Math.max(amt, calc.totalPayment)
+                  const cashBar = hasCashAdjust ? cashPrice : amt
+                  const max = Math.max(cashBar, calc.totalPayment)
                   return (
                     <>
                       <div className={s.barRow}>
-                        <span className={s.barLabel}>일시불</span>
+                        <span className={s.barLabel}>{hasCashAdjust ? '일시불(할인)' : '일시불'}</span>
                         <div className={s.barTrack}>
-                          <div className={`${s.barFill} ${s.barFillCash}`} style={{ width: `${(amt / max) * 100}%` }} />
+                          <div className={`${s.barFill} ${s.barFillCash}`} style={{ width: `${(cashBar / max) * 100}%` }} />
                         </div>
-                        <span className={s.barValue}>{fmtKRW(amt)}</span>
+                        <span className={s.barValue}>{fmtKRW(cashBar)}</span>
                       </div>
                       <div className={s.barRow}>
                         <span className={s.barLabel}>{effMonths}개월 할부</span>
@@ -617,7 +627,8 @@ export default function CardInstallmentClient() {
           {/* 해석 */}
           {interpretation && interpretation.totalExtra > 0 && (
             <div className={s.interpretCard}>
-              일시불보다 약 <strong>{fmtKRW(interpretation.totalExtra)}</strong>을 더 내는 구조입니다.
+              {hasCashAdjust ? <>일시불 실결제액({fmtKRW(cashPrice)}, 할인·포인트 반영)보다 </> : '일시불보다 '}
+              약 <strong>{fmtKRW(interpretation.totalExtra)}</strong>을 더 내는 구조입니다.
               이 금액으로 무엇을 할 수 있을까요?
               <ul>
                 <li>카페 약 {interpretation.cafes}회 (4,000원 기준)</li>
@@ -831,9 +842,9 @@ export default function CardInstallmentClient() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
               <div>
                 <span className={s.subLabel}>유이자 vs 무이자</span>
-                <div className={s.typeGrid} style={{ gridTemplateColumns: '1fr 1fr' }}>
-                  <button className={`${s.typeBtn} ${s.typeFree} ${tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(true)} type="button">무이자</button>
-                  <button className={`${s.typeBtn} ${s.typePaid} ${!tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(false)} type="button">유이자</button>
+                <div className={s.typeGrid} style={{ gridTemplateColumns: '1fr 1fr' }} role="group" aria-label="유이자 vs 무이자">
+                  <button aria-pressed={tblIsFree} className={`${s.typeBtn} ${s.typeFree} ${tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(true)} type="button">무이자</button>
+                  <button aria-pressed={!tblIsFree} className={`${s.typeBtn} ${s.typePaid} ${!tblIsFree ? s.typeActive : ''}`} onClick={() => setTblIsFree(false)} type="button">유이자</button>
                 </div>
               </div>
               {!tblIsFree && (

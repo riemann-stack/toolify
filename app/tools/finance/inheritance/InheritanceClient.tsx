@@ -53,7 +53,6 @@ export default function InheritanceClient() {
   const [totalAssetStr, setTotalAssetStr] = useState('5000000000')
   const [hasSpouse, setHasSpouse] = useState(true)
   const [childCount, setChildCount] = useState(2)
-  const [otherHeirCount, setOtherHeirCount] = useState(0)
   const [priorGiftStr, setPriorGiftStr] = useState('0')
   const [funeralStr, setFuneralStr] = useState('5000000')
   const [debtStr, setDebtStr] = useState('0')
@@ -90,9 +89,10 @@ export default function InheritanceClient() {
         본 계산기는 일반 정보 제공용 단순 참고 도구이며 세무 신고·자문 도구가 아닙니다. 상속·증여는 가장 복잡한 세무 영역으로 재산 평가·공제 적용·신고 시점·가족관계에 따라 실제 세액이 크게 달라지고, 부동산·부담부증여는 매우 단순한 추정만 제공합니다(자금출처 소명 미반영). 특히 평가가 어려운 재산·부담부증여·다수 상속인 협의분할·사전증여·해외자산·상속세 5억 이상이 예상되면 반드시 세무사·변호사와 상담하세요. 세무 도움: 국세청 126 · 한국세무사회 무료상담 070-5008-1234 · 홈택스 hometax.go.kr.
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="상속·증여세 계산 탭">
         {TABS.map(t => (
           <button key={t.key}
+            role="tab" aria-selected={tab === t.key}
             className={`${s.tabBtn} ${tab === t.key ? t.cls : ''}`}
             onClick={() => setTab(t.key)}>
             {t.label}
@@ -117,7 +117,6 @@ export default function InheritanceClient() {
         totalAssetStr={totalAssetStr} setTotalAssetStr={setTotalAssetStr}
         hasSpouse={hasSpouse} setHasSpouse={setHasSpouse}
         childCount={childCount} setChildCount={setChildCount}
-        otherHeirCount={otherHeirCount} setOtherHeirCount={setOtherHeirCount}
         priorGiftStr={priorGiftStr} setPriorGiftStr={setPriorGiftStr}
         funeralStr={funeralStr} setFuneralStr={setFuneralStr}
         debtStr={debtStr} setDebtStr={setDebtStr}
@@ -221,9 +220,10 @@ function GiftTab(p: GiftTabProps) {
             placeholder="100,000,000" />
           <span className={s.unit}>원</span>
         </div>
-        <div className={s.pills}>
+        <div className={s.pills} role="group" aria-label="증여 금액 빠른 선택">
           {[10_000_000, 50_000_000, 100_000_000, 500_000_000, 1_000_000_000].map(v => (
             <button key={v}
+              aria-pressed={amount === v}
               className={`${s.pill} ${amount === v ? s.pillActive : ''}`}
               onClick={() => p.setAmountStr(v.toString())}>
               {formatShortKRW(v)}
@@ -236,9 +236,10 @@ function GiftTab(p: GiftTabProps) {
       {/* 관계 (확장: 9종) */}
       <div className={s.card}>
         <span className={s.cardLabel}>받는 사람 (수증자) 관계</span>
-        <div className={s.relGrid}>
+        <div className={s.relGrid} role="group" aria-label="수증자 관계 선택">
           {RELATIONS.map(r => (
             <button key={r.key}
+              aria-pressed={p.relation === r.key}
               className={`${s.relBtn} ${s[r.cls]} ${p.relation === r.key ? s.relActive : ''}`}
               onClick={() => p.setRelation(r.key)}>
               {r.label}
@@ -280,7 +281,7 @@ function GiftTab(p: GiftTabProps) {
         )}
       </div>
 
-      <button className={s.detailToggle} onClick={() => p.setShowDetail(!p.showDetail)}>
+      <button className={s.detailToggle} aria-expanded={p.showDetail} onClick={() => p.setShowDetail(!p.showDetail)}>
         {p.showDetail ? '▲' : '▼'} 계산 과정 보기
       </button>
       {p.showDetail && (
@@ -306,12 +307,12 @@ function GiftTab(p: GiftTabProps) {
       {/* ─── 부동산 단순 추정 (NEW) ─── */}
       <div className={s.card}>
         <span className={s.cardLabel}>🏠 부동산 증여 (단순 추정)</span>
-        <div className={s.optionRow3}>
-          <button className={`${s.optionBtn} ${p.propertyMode === 'none' ? s.optionActive : ''}`}
+        <div className={s.optionRow3} role="group" aria-label="부동산 증여 모드">
+          <button aria-pressed={p.propertyMode === 'none'} className={`${s.optionBtn} ${p.propertyMode === 'none' ? s.optionActive : ''}`}
             onClick={() => p.setPropertyMode('none')}>사용 안 함</button>
-          <button className={`${s.optionBtn} ${p.propertyMode === 'simple' ? s.optionActive : ''}`}
+          <button aria-pressed={p.propertyMode === 'simple'} className={`${s.optionBtn} ${p.propertyMode === 'simple' ? s.optionActive : ''}`}
             onClick={() => p.setPropertyMode('simple')}>일반 부동산 증여</button>
-          <button className={`${s.optionBtn} ${p.propertyMode === 'burdened' ? s.optionActive : ''}`}
+          <button aria-pressed={p.propertyMode === 'burdened'} className={`${s.optionBtn} ${p.propertyMode === 'burdened' ? s.optionActive : ''}`}
             onClick={() => p.setPropertyMode('burdened')}>부담부증여 (전세·대출)</button>
         </div>
 
@@ -439,7 +440,7 @@ function GiftTab(p: GiftTabProps) {
       {/* 주의 항목 */}
       <WarnList items={[
         prev > 0 && '🔔 10년 내 기존 증여액이 있어 합산되어 계산되었습니다.',
-        p.relation === '미성년자녀' && '🔔 미성년 자녀는 결혼·출산 공제(혼인 시 1억) 추가 적용 가능.',
+        p.relation === '성인자녀' && '🔔 혼인·출산 시 별도 증여공제 1억원 추가 적용 가능 (혼인신고 전후 2년 / 출산 2년 내). 본 도구 미반영.',
         p.relation === '손자녀' && '🔔 세대생략 증여는 30% 가산세 — 부모 살아 계신 경우 세무사 상담 권장.',
       ].filter(Boolean) as string[]} />
     </>
@@ -454,8 +455,6 @@ interface InheritTabProps {
   setHasSpouse: (b: boolean) => void
   childCount: number
   setChildCount: (n: number) => void
-  otherHeirCount: number
-  setOtherHeirCount: (n: number) => void
   priorGiftStr: string
   setPriorGiftStr: (v: string) => void
   funeralStr: string
@@ -483,11 +482,11 @@ function InheritTab(p: InheritTabProps) {
 
   const result = useMemo(() => calcInheritanceTax({
     totalAsset, priorGift, funeral, debt,
-    hasSpouse: p.hasSpouse, childCount: p.childCount, otherHeirCount: p.otherHeirCount,
+    hasSpouse: p.hasSpouse, childCount: p.childCount,
     spouseActualShare: spouseActual > 0 ? spouseActual : undefined,
     financialAsset: financialAsset > 0 ? financialAsset : undefined,
     cohabitHomeValue: cohabitHome > 0 ? cohabitHome : undefined,
-  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount, p.otherHeirCount, spouseActual, financialAsset, cohabitHome])
+  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount, spouseActual, financialAsset, cohabitHome])
 
   // 배우자 시뮬 표
   const spouseSim = useMemo(() => {
@@ -506,9 +505,10 @@ function InheritTab(p: InheritTabProps) {
             placeholder="5,000,000,000" />
           <span className={s.unit}>원</span>
         </div>
-        <div className={s.pills}>
+        <div className={s.pills} role="group" aria-label="상속 총재산 빠른 선택">
           {[500_000_000, 1_000_000_000, 3_000_000_000, 5_000_000_000, 10_000_000_000].map(v => (
             <button key={v}
+              aria-pressed={totalAsset === v}
               className={`${s.pill} ${totalAsset === v ? s.pillActive : ''}`}
               onClick={() => p.setTotalAssetStr(v.toString())}>
               {formatShortKRW(v)}
@@ -521,25 +521,17 @@ function InheritTab(p: InheritTabProps) {
       <div className={s.card}>
         <span className={s.cardLabel}>상속인 구성</span>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>배우자 여부</div>
-        <div className={s.toggleRow}>
-          <button className={`${s.toggleBtn} ${p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(true)}>배우자 있음</button>
-          <button className={`${s.toggleBtn} ${!p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(false)}>배우자 없음</button>
+        <div className={s.toggleRow} role="group" aria-label="배우자 여부">
+          <button aria-pressed={p.hasSpouse} className={`${s.toggleBtn} ${p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(true)}>배우자 있음</button>
+          <button aria-pressed={!p.hasSpouse} className={`${s.toggleBtn} ${!p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(false)}>배우자 없음</button>
         </div>
 
-        <div className={s.twoCol} style={{ marginTop: 12 }}>
-          <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</div>
-            <select className={s.selectInput} value={p.childCount}
-              onChange={e => p.setChildCount(parseInt(e.target.value, 10))}>
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n} value={n}>{n}명</option>)}
-            </select>
-          </div>
-          <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>기타 상속인</div>
-            <input className={s.numInput} type="number" min={0} style={{ fontSize: 16 }}
-              value={p.otherHeirCount}
-              onChange={e => p.setOtherHeirCount(Math.max(0, parseInt(e.target.value || '0', 10)))} />
-          </div>
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</div>
+          <select className={s.selectInput} value={p.childCount}
+            onChange={e => p.setChildCount(parseInt(e.target.value, 10))}>
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n} value={n}>{n}명</option>)}
+          </select>
         </div>
       </div>
 
@@ -560,7 +552,7 @@ function InheritTab(p: InheritTabProps) {
             </div>
           )}
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>금융재산 (20% 공제, 최대 2억)</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>금융재산 (2천만↓ 전액·1억↓ 2천만·초과 20%, 최대 2억)</div>
             <div className={s.inputRow}>
               <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                 value={commaInput(financialAsset)}
@@ -595,6 +587,7 @@ function InheritTab(p: InheritTabProps) {
         </div>
         <div className={s.helperText}>
           사망 전 10년 이내 상속인에게 증여한 금액은 상속재산에 합산. 비상속인은 5년 이내.
+          <br />※ 합산분에 대해 이미 납부한 증여세액공제는 미반영 — 합산 입력 시 세액이 다소 높게(보수적) 추정됩니다.
         </div>
       </div>
 
@@ -672,7 +665,7 @@ function InheritTab(p: InheritTabProps) {
         </div>
       )}
 
-      <button className={s.detailToggle} onClick={() => p.setShowDetail(!p.showDetail)}>
+      <button className={s.detailToggle} aria-expanded={p.showDetail} onClick={() => p.setShowDetail(!p.showDetail)}>
         {p.showDetail ? '▲' : '▼'} 계산 과정 보기
       </button>
       {p.showDetail && (
@@ -680,13 +673,13 @@ function InheritTab(p: InheritTabProps) {
           <div className={s.detailRow}><span>상속 총재산</span><span>{formatKRW(totalAsset)}</span></div>
           <div className={s.detailRow}><span>사전 증여 합산</span><span>+ {formatKRW(priorGift)}</span></div>
           <div className={s.detailRow}><span>채무</span><span>− {formatKRW(debt)}</span></div>
-          <div className={s.detailRow}><span>장례비</span><span>− {formatKRW(funeral)}</span></div>
+          <div className={s.detailRow}><span>장례비 (한도 1,500만)</span><span>− {formatKRW(Math.min(funeral, 15_000_000))}</span></div>
           <hr className={s.detailDivider} />
           <div className={s.detailRow}><span>과세가액</span><span>{formatKRW(result.taxableValue)}</span></div>
           {p.hasSpouse && <div className={s.detailRow}><span>배우자 공제</span><span>− {formatKRW(result.spouseDeduction)}</span></div>}
           <div className={s.detailRow}><span>일괄/인적공제</span><span>− {formatKRW(result.appliedDeduction)}</span></div>
           {result.financialDeduction > 0 && (
-            <div className={s.detailRow}><span>금융재산공제 (20%, 최대 2억)</span><span>− {formatKRW(result.financialDeduction)}</span></div>
+            <div className={s.detailRow}><span>금융재산공제 (순금융재산, 최대 2억)</span><span>− {formatKRW(result.financialDeduction)}</span></div>
           )}
           {result.homeDeduction > 0 && (
             <div className={s.detailRow}><span>동거주택공제 (최대 6억)</span><span>− {formatKRW(result.homeDeduction)}</span></div>
@@ -740,7 +733,7 @@ function HeirsTab(p: HeirsTabProps) {
   // 상속세 (탭2와 같은 입력 사용)
   const taxResult = useMemo(() => calcInheritanceTax({
     totalAsset, priorGift, funeral, debt,
-    hasSpouse: p.hasSpouse, childCount: p.childCount, otherHeirCount: 0,
+    hasSpouse: p.hasSpouse, childCount: p.childCount,
   }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount])
 
   const distribution = useMemo(() => calcInheritanceDistribution({
@@ -776,9 +769,9 @@ function HeirsTab(p: HeirsTabProps) {
       <div className={s.card}>
         <span className={s.cardLabel}>가족 구성</span>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>배우자</div>
-        <div className={s.toggleRow}>
-          <button className={`${s.toggleBtn} ${p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(true)}>있음</button>
-          <button className={`${s.toggleBtn} ${!p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(false)}>없음</button>
+        <div className={s.toggleRow} role="group" aria-label="배우자 여부">
+          <button aria-pressed={p.hasSpouse} className={`${s.toggleBtn} ${p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(true)}>있음</button>
+          <button aria-pressed={!p.hasSpouse} className={`${s.toggleBtn} ${!p.hasSpouse ? s.toggleActive : ''}`} onClick={() => p.setHasSpouse(false)}>없음</button>
         </div>
 
         <div className={s.threeCol} style={{ marginTop: 12 }}>
@@ -931,7 +924,8 @@ function HeirsTab(p: HeirsTabProps) {
               유언으로도 침해할 수 없는 상속인의 최소 권리 (법정상속분의 1/2 또는 1/3).
               <ul>
                 <li>배우자·직계비속(자녀): 법정상속분 × 1/2</li>
-                <li>부모·형제자매: 법정상속분 × 1/3</li>
+                <li>직계존속(부모): 법정상속분 × 1/3</li>
+                <li>형제자매: 유류분 없음 (2024.4.25 헌재 위헌 결정으로 폐지)</li>
                 <li>유류분 침해 시 청구권 행사 가능 — 분쟁 가능</li>
               </ul>
             </div>
@@ -1004,9 +998,10 @@ function SplitTab(p: SplitTabProps) {
             placeholder="200,000,000" />
           <span className={s.unit}>원</span>
         </div>
-        <div className={s.pills}>
+        <div className={s.pills} role="group" aria-label="총 이전 금액 빠른 선택">
           {[100_000_000, 200_000_000, 500_000_000, 1_000_000_000].map(v => (
             <button key={v}
+              aria-pressed={total === v}
               className={`${s.pill} ${total === v ? s.pillActive : ''}`}
               onClick={() => p.setTotalStr(v.toString())}>
               {formatShortKRW(v)}
@@ -1025,9 +1020,10 @@ function SplitTab(p: SplitTabProps) {
         </div>
         <div className={s.card}>
           <span className={s.cardLabel}>증여 회차 (10년 주기)</span>
-          <div className={s.optionRow3}>
+          <div className={s.optionRow3} role="group" aria-label="증여 회차 선택">
             {[1, 2, 3].map(n => (
               <button key={n}
+                aria-pressed={p.rounds === n}
                 className={`${s.optionBtn} ${p.rounds === n ? s.optionActive : ''}`}
                 onClick={() => p.setRounds(n as 1 | 2 | 3)}>
                 {n === 1 ? '1회' : n === 2 ? '2회' : '3회'}
@@ -1130,7 +1126,7 @@ function CompareTab(p: CompareTabProps) {
   const inheritResult = useMemo(
     () => calcInheritanceTax({
       totalAsset: p.giftAmount, priorGift: 0, funeral: 0, debt: 0,
-      hasSpouse: p.hasSpouse, childCount: p.childCount, otherHeirCount: 0,
+      hasSpouse: p.hasSpouse, childCount: p.childCount,
     }),
     [p.giftAmount, p.hasSpouse, p.childCount],
   )
@@ -1143,9 +1139,13 @@ function CompareTab(p: CompareTabProps) {
   return (
     <>
       <div className={s.explainCard}>
-        💡 <strong>「증여세 계산」·「상속세 계산」 탭의 입력값 기준 비교</strong>.{' '}
+        💡 <strong>같은 금액을 지금 증여 vs 나중에 상속할 때의 단순 비교</strong>.{' '}
         증여 금액 <strong style={{ color: 'var(--accent)' }}>{formatShortKRW(p.giftAmount)}</strong>를{' '}
-        지금 <strong style={{ color: '#0891B2' }}>증여</strong>할 때 vs 같은 금액을 나중에 <strong style={{ color: '#EA580C' }}>상속</strong>할 때
+        지금 <strong style={{ color: '#0891B2' }}>증여</strong>할 때 vs 같은 금액을 나중에 <strong style={{ color: '#EA580C' }}>상속</strong>할 때.
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
+          ※ 「증여세 계산」 탭의 금액·관계·기존 증여액, 「상속세 계산」 탭의 배우자·자녀 구성만 반영합니다.
+          상속 탭의 채무·장례비·금융재산·동거주택·배우자 실제 상속분 등 세부 공제는 이 비교에 반영되지 않습니다.
+        </div>
       </div>
 
       <div className={`${s.hero} ${s.heroPurple}`}>

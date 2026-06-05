@@ -202,8 +202,9 @@ export default function StockClient() {
       alternativeReturn: parseAmount(alternativeReturn),
       recoveryAssumption: parseAmount(recoveryAssumption),
       feeRate,
+      isUsStock,
     })
-  }, [validBase, cAvg, cShares, cPrice, additionalCash, alternativeReturn, recoveryAssumption, feeRate])
+  }, [validBase, cAvg, cShares, cPrice, additionalCash, alternativeReturn, recoveryAssumption, feeRate, isUsStock])
 
   /* ── 슬라이더 곡선 (탭1) ── */
   const sliderCurve = useMemo(() => {
@@ -360,7 +361,7 @@ export default function StockClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="주식 물타기 계산 모드">
         {[
           { id: 'main',     label: '물타기 계산', cls: styles.tabActive },
           { id: 'reverse',  label: '목표 역산',   cls: styles.tabActiveReverse },
@@ -368,7 +369,7 @@ export default function StockClient() {
           { id: 'recovery', label: '회복 시나리오', cls: styles.tabActiveRecovery },
           { id: 'compare',  label: '손절 vs 물타기', cls: styles.tabActiveCompare },
         ].map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? t.cls : ''}`}
             onClick={() => setTab(t.id as TabId)}
           >{t.label}</button>
@@ -402,7 +403,7 @@ export default function StockClient() {
           </div>
           <div className={styles.chips}>
             {PRICE_PRESETS.map(p => (
-              <button key={p}
+              <button key={p} type="button" aria-pressed={currentPrice === String(p)}
                 className={`${styles.chip} ${currentPrice === String(p) ? styles.chipActive : ''}`}
                 onClick={() => setCurrentPrice(String(p))}
               >{(p / 1000).toLocaleString()}천</button>
@@ -421,14 +422,14 @@ export default function StockClient() {
       {/* 증권사 + 미국주식 토글 */}
       <div className={styles.card}>
         <div className={styles.cardLabel}>증권사 / 시장</div>
-        <div className={styles.optionRow5}>
+        <div className={styles.optionRow5} role="group" aria-label="증권사 선택">
           {KOREA_BROKER_FEES.slice(0, 8).map(b => (
-            <button key={b.id}
+            <button key={b.id} type="button" aria-pressed={brokerId === b.id}
               className={`${styles.optionBtn} ${brokerId === b.id ? styles.optionActive : ''}`}
               onClick={() => setBrokerId(b.id)}
             >{b.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{b.rate}%</span></button>
           ))}
-          <button
+          <button type="button" aria-pressed={brokerId === 'custom'}
             className={`${styles.optionBtn} ${brokerId === 'custom' ? styles.optionActive : ''}`}
             onClick={() => setBrokerId('custom')}
           >직접 입력</button>
@@ -441,11 +442,11 @@ export default function StockClient() {
           </div>
         )}
         <div className={styles.toggleRow} style={{ marginTop: 12 }}>
-          <button
+          <button type="button" aria-pressed={!isUsStock}
             className={`${styles.toggleBtn} ${!isUsStock ? styles.toggleActive : ''}`}
             onClick={() => setIsUsStock(false)}
-          >🇰🇷 한국 주식 (거래세 0.18%)</button>
-          <button
+          >🇰🇷 한국 주식 (거래세 0.20%)</button>
+          <button type="button" aria-pressed={isUsStock}
             className={`${styles.toggleBtn} ${isUsStock ? styles.toggleActive : ''}`}
             onClick={() => setIsUsStock(true)}
           >🇺🇸 미국 주식 (환율 + 양도세)</button>
@@ -478,12 +479,12 @@ export default function StockClient() {
           {/* 입력 모드 */}
           <div className={styles.card}>
             <div className={styles.cardLabel}>추가 매수 입력 방식</div>
-            <div className={styles.optionRow3}>
-              <button className={`${styles.optionBtn} ${inputMode === 'slider' ? styles.optionActive : ''}`}
+            <div className={styles.optionRow3} role="group" aria-label="추가 매수 입력 방식">
+              <button type="button" aria-pressed={inputMode === 'slider'} className={`${styles.optionBtn} ${inputMode === 'slider' ? styles.optionActive : ''}`}
                 onClick={() => setInputMode('slider')}>🎚️ 슬라이더</button>
-              <button className={`${styles.optionBtn} ${inputMode === 'shares' ? styles.optionActive : ''}`}
+              <button type="button" aria-pressed={inputMode === 'shares'} className={`${styles.optionBtn} ${inputMode === 'shares' ? styles.optionActive : ''}`}
                 onClick={() => setInputMode('shares')}>📊 수량 기준</button>
-              <button className={`${styles.optionBtn} ${inputMode === 'amount' ? styles.optionActive : ''}`}
+              <button type="button" aria-pressed={inputMode === 'amount'} className={`${styles.optionBtn} ${inputMode === 'amount' ? styles.optionActive : ''}`}
                 onClick={() => setInputMode('amount')}>💴 금액 기준</button>
             </div>
 
@@ -606,8 +607,8 @@ export default function StockClient() {
                     ['평가액',   formatEok(cPrice * cShares),   formatEok(mainResult.currentValue), false],
                     ['미실현 손익', formatEok(cPrice * cShares - cAvg * cShares * (1 + feeRate / 100)), formatEok(mainResult.unrealizedPL), true],
                     ['손익률', formatPct(mainResult.beforeROI), formatPct(mainResult.unrealizedROI), false],
-                    ['본전 가격', `${formatKRW(cAvg / (1 - (feeRate/100 + KR_TRANSACTION_TAX_RATE)))}${isUsStock ? '$' : '원'}`, `${formatKRW(mainResult.breakEvenPrice)}${isUsStock ? '$' : '원'}`, false],
-                    ['본전 필요 상승', formatPct(((cAvg / (1 - (feeRate/100 + KR_TRANSACTION_TAX_RATE))) / cPrice - 1) * 100), formatPct(mainResult.breakEvenRise), true],
+                    ['본전 가격', `${formatKRW(cAvg / (1 - (feeRate/100 + (isUsStock ? 0 : KR_TRANSACTION_TAX_RATE))))}${isUsStock ? '$' : '원'}`, `${formatKRW(mainResult.breakEvenPrice)}${isUsStock ? '$' : '원'}`, false],
+                    ['본전 필요 상승', formatPct(((cAvg / (1 - (feeRate/100 + (isUsStock ? 0 : KR_TRANSACTION_TAX_RATE)))) / cPrice - 1) * 100), formatPct(mainResult.breakEvenRise), true],
                   ].map(([label, before, after, key], i) => (
                     <div key={i} className={`${styles.compareTableRow} ${key ? styles.compareRowKey : ''}`}>
                       <span>{label}</span>
@@ -739,7 +740,7 @@ export default function StockClient() {
               {[-2, -4, -6, -8, -10, -15, -20].map(d => {
                 const v = Math.round(cAvg * (1 + d / 100))
                 return (
-                  <button key={d}
+                  <button key={d} type="button" aria-pressed={parseAmount(targetAvg) === v}
                     className={`${styles.chip} ${parseAmount(targetAvg) === v ? styles.chipActive : ''}`}
                     onClick={() => setTargetAvg(String(v))}
                   >{d}%</button>
@@ -965,8 +966,11 @@ export default function StockClient() {
             <div className={styles.chartWrap}>{renderRecoveryChart()}</div>
             <div className={styles.chartLegend}>
               <span><i style={{ background: '#EA580C' }} />수익률</span>
-              <span><i style={{ background: 'var(--accent)' }} />0% (본전 라인)</span>
+              <span><i style={{ background: 'var(--accent)' }} />0% (평가손익 기준)</span>
             </div>
+            <p className={styles.cardLabelHint} style={{ marginTop: 8 }}>
+              ※ 곡선·표의 수익률은 <strong>매도 비용 제외 평가손익</strong> 기준이라 0%는 평단 회복 지점입니다. 매도 수수료·거래세까지 회수하는 <strong>실제 순매도 본전은 +{formatPct(mainResult.breakEvenRise).replace('+','')}</strong>(위 본전 가격)입니다.
+            </p>
           </div>
 
           <div className={styles.card}>
@@ -1045,6 +1049,11 @@ export default function StockClient() {
       {/* ──────────── TAB 5: 손절 vs 물타기 ──────────── */}
       {tab === 'compare' && (
         <>
+          {isUsStock && (
+            <div className={styles.infoBox}>
+              ※ 미국 주식 모드 — 이 비교는 <strong>거래세 0 기준</strong>이며 양도세·환율은 미반영입니다. 원화 손익은 「물타기 계산」 탭을 참고하세요.
+            </div>
+          )}
           <div className={styles.threeCol}>
             <div className={styles.card}>
               <div className={styles.cardLabel}>추가 가능 현금</div>
@@ -1063,7 +1072,7 @@ export default function StockClient() {
               </div>
               <div className={styles.chips}>
                 {ALT_RETURN_PRESETS.map(r => (
-                  <button key={r}
+                  <button key={r} type="button" aria-pressed={alternativeReturn === String(r)}
                     className={`${styles.chip} ${alternativeReturn === String(r) ? styles.chipActive : ''}`}
                     onClick={() => setAlternativeReturn(String(r))}
                   >{r}%</button>
@@ -1081,7 +1090,7 @@ export default function StockClient() {
                 {RECOVERY_PRESETS.map(d => {
                   const v = Math.round(cPrice * (1 + d / 100))
                   return (
-                    <button key={d}
+                    <button key={d} type="button" aria-pressed={parseAmount(recoveryAssumption) === v}
                       className={`${styles.chip} ${parseAmount(recoveryAssumption) === v ? styles.chipActive : ''}`}
                       onClick={() => setRecoveryAssumption(String(v))}
                     >{d > 0 ? `+${d}%` : `${d}%`}</button>

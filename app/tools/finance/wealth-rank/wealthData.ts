@@ -185,11 +185,12 @@ export function computeRank(mode: Mode, valueManwon: number, groupId?: string): 
     isEstimate = true // 그룹 보정은 추정
   }
 
-  const topPercent = 100 - p
-  const decile = Math.max(1, Math.min(10, Math.ceil(p / 10)))
+  const topRounded = roundTop(100 - p)
+  // 표시되는 상위%와 분위를 같은 반올림값에서 도출 → "상위 10% = 10분위" 일치 보장
+  const decile = Math.max(1, Math.min(10, 11 - Math.ceil(topRounded / 10)))
 
   return {
-    topPercent: roundTop(topPercent),
+    topPercent: topRounded,
     percentile: Math.round(p * 10) / 10,
     decile,
     median,

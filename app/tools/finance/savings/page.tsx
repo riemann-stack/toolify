@@ -33,7 +33,7 @@ const FAQ_LD = [
             },
             {
               q: '사회 초년생은 월급의 몇 %를 저축해야 하나요?',
-              a: '<strong>30~40%</strong> 권장입니다. 월급 250만원이면 75~100만원 저축이 목표. 왜냐하면 ① 부양 부담이 가장 적은 시기, ② 복리 효과가 가장 큰 시기 (1년 빠른 저축 = 30년 후 큰 차이), ③ 결혼·내 집 마련·차량 구입 등 큰 지출 대비. 청년도약계좌는 정부 매칭까지 받을 수 있어 사회 초년생에게 1순위입니다.',
+              a: '<strong>30~40%</strong> 권장입니다. 월급 250만원이면 75~100만원 저축이 목표. 왜냐하면 ① 부양 부담이 가장 적은 시기, ② 복리 효과가 가장 큰 시기 (1년 빠른 저축 = 30년 후 큰 차이), ③ 결혼·내 집 마련·차량 구입 등 큰 지출 대비. 청년도약계좌는 정부 기여금까지 받을 수 있어 사회 초년생에게 1순위입니다.',
             },
             {
               q: '고정비와 변동비 구분 기준은?',
@@ -41,7 +41,7 @@ const FAQ_LD = [
             },
             {
               q: '청년도약계좌 가입 자격이 어떻게 되나요?',
-              a: '<strong>만 19~34세 + 개인소득 7,500만원 이하 + 가구소득 중위 250% 이하</strong>가 기본 조건입니다. 5년 만기, 월 최대 70만원 납입, 정부가 소득에 따라 월 최대 7만원 매칭해 주고 만기 시 비과세. 5년 만기 시 약 5,000만원 자산 형성 가능. 단 중도해지 시 정부 지원금은 환수되니 5년 유지 가능한 금액으로 시작하세요.',
+              a: '<strong>만 19~34세 + 개인소득 7,500만원 이하 + 가구소득 중위 250% 이하</strong>가 기본 조건입니다. 5년 만기, 월 최대 70만원 납입, 정부가 소득에 따라 월 최대 약 3.3만원(2025년 확대) 기여금을 더해 주고 만기 시 비과세. 5년 만기 시 약 5,000만원 자산 형성 가능. 단 중도해지 시 정부 지원금은 환수되니 5년 유지 가능한 금액으로 시작하세요.',
             },
             {
               q: 'ISA와 연금저축 어느 게 더 좋은가요?',
@@ -78,7 +78,7 @@ export default function SavingsPage() {
         수입·지출 → 저축률과 한국 평균 비교 + <strong style={{ color: 'var(--text)' }}>6 항아리 분배</strong>. 청년도약·ISA 절세 시뮬.
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="2026년 예금·적금 금리 참고" sources={[{"label":"은행연합회 공시","href":"https://portal.kfb.or.kr"},{"label":"금융감독원","href":"https://www.fss.or.kr"}]} />
+      <UpdatedMeta date="2026년 5월" basis="2026년 절세 상품 기준·통계청 가계동향 평균 지출 참고" sources={[{"label":"통계청 KOSIS","href":"https://kosis.kr"},{"label":"서민금융진흥원 청년도약계좌","href":"https://ylaccount.kinfa.or.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
 
       <SavingsClient />
 
@@ -125,7 +125,7 @@ export default function SavingsPage() {
       <h2 style={sectionTitle}>🏺 6 항아리 모델이란?</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          <strong>샤론 레흐터(Sharon Lechter)</strong>의 재정 분배 모델. T. Harv Eker의 책 &quot;Secrets of the Millionaire Mind&quot;에서
+          <strong>T. Harv Eker</strong>의 재정 분배 모델(JARS). 그의 책 &quot;Secrets of the Millionaire Mind&quot;에서
           널리 알려진 방법으로, 수입을 6개 카테고리에 비율로 배분해 균형 잡힌 재정 관리를 합니다.
         </p>
         <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
@@ -157,11 +157,11 @@ export default function SavingsPage() {
             </thead>
             <tbody>
               {[
-                ['청년도약계좌', '만 19~34세 + 소득 7,500↓', '840만원', '정부 매칭 월 7만원 + 비과세'],
+                ['청년도약계좌', '만 19~34세 + 소득 7,500↓', '840만원', '정부 기여금 월 최대 3.3만원 + 비과세'],
                 ['ISA', '만 19세↑', '2,000만원', '200만원 비과세 + 9.9% 분리과세'],
                 ['연금저축', '만 18세↑', '600만원', '세액공제 16.5% (연 99만원 환급)'],
                 ['IRP', '근로자·자영업자', '900만원 (저축 합산)', '연 148만원 환급 (저축 합산)'],
-                ['주택청약', '무주택자', '240만원', '소득공제 40% (96만원 한도)'],
+                ['주택청약', '무주택자', '300만원', '소득공제 40% (120만원 한도)'],
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                   {row.map((cell, j) => (

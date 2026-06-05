@@ -73,7 +73,7 @@ export default function CostRatePage() {
             lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>기본 원가율</span> = 재료비 ÷ 판매가 × 100</div>
-            <div><span style={{ color: 'var(--muted)' }}>실질 원가율</span> = (재료비 + 포장재 + 배달앱·결제 수수료 + 배달비 부담 + 광고비) ÷ 판매가 × 100</div>
+            <div><span style={{ color: 'var(--muted)' }}>실질 원가율</span> = (재료비 + 포장재 + 부재료/소모품 + 배달앱·결제 수수료 + 배달비 부담 + 광고비) ÷ 판매가 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>1개당 마진</span> = 판매가 − 실질 변동비</div>
             <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>※ 임대료·인건비 같은 고정비는 별도로 손익분기 계산에 반영</div>
           </div>
@@ -230,7 +230,7 @@ export default function CostRatePage() {
               • 월 고정비 = 임대료 200만원 + 인건비 300만원 + 공과금 50만원 = <strong style={{ color: 'var(--text)' }}>550만원</strong><br />
               • 메뉴당 평균 마진 = <strong style={{ color: 'var(--text)' }}>7,000원</strong><br />
               • 손익분기 = 550만원 ÷ 7,000원 = <strong style={{ color: 'var(--accent)' }}>786개/월</strong><br />
-              • 영업일 26일 → <strong style={{ color: 'var(--accent)' }}>일 평균 30개 이상 판매 필요</strong>
+              • 영업일 26일 → <strong style={{ color: 'var(--accent)' }}>일 평균 31개 이상 판매 필요</strong> (786 ÷ 26 = 30.2, 올림)
             </p>
           </div>
         </div>

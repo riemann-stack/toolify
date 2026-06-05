@@ -23,7 +23,18 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
+  min-width: 0;
   font-family: 'Noto Sans KR', sans-serif;
+}
+/* 좁은 화면(≤360px)에서 긴 탭 라벨 줄바꿈 — 전역 가로 스크롤 방지 */
+@media (max-width: 360px) {
+  .tab {
+    white-space: normal;
+    word-break: keep-all;
+    font-size: 11.5px;
+    padding: 9px 4px;
+    line-height: 1.25;
+  }
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }

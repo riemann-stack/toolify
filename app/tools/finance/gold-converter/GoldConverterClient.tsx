@@ -5,8 +5,8 @@ import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './gold-converter.module.css'
 import {
-  type WeightUnit, type PriceInputs, type AssetItem,
-  UNITS, KARATS, SCENARIOS,
+  type WeightUnit, type PriceInputs, type AssetItem, type GoldProduct,
+  UNITS, KARATS, SCENARIOS, PRODUCT_DEFAULTS,
   toGram, fromGram, pureGoldGram, convertKarat,
   calculatePrice, koreaPremium, buildPriceTable,
   nextAssetId,
@@ -25,6 +25,7 @@ interface StoredState {
 }
 
 const DEFAULT_PRICE: PriceInputs = {
+  productType: 'bar',
   pricePerGram24k: 145_000,
   vatIncluded: false,
   spreadPercent: 7,
@@ -33,6 +34,8 @@ const DEFAULT_PRICE: PriceInputs = {
   usdKrw: 1_350,
   internationalOzUsd: 3_300,
 }
+
+const PRODUCT_ORDER: GoldProduct[] = ['bar', 'krx', 'bankbook']
 
 const TABS = [
   { k: 'convert', l: '⚖️ 단위·순도' },
@@ -95,9 +98,12 @@ export default function GoldConverterClient() {
         금 시세는 사용자 직접 입력이며 외부 API 의존 X (실시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>한국조폐공사</a>·은행 확인). 부가세·수수료·세공비·스프레드는 매장별 차이가 크니 실거래는 매장 확인. <strong>본 도구는 단위·가격 계산용 — 투자 권유 X.</strong>
       </Disclaimer>
 
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="금 계산기 탭">
         {TABS.map((t) => (
           <button key={t.k}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.k}
             className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`}
             onClick={() => setTab(t.k)}>
             {t.l}
@@ -208,9 +214,11 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
       {/* 순도 — 모바일도 1줄 6칸 */}
       <section>
         <label className={styles.label}>순도 (Karat)</label>
-        <div className={styles.karatRow}>
+        <div className={styles.karatRow} role="group" aria-label="순도(Karat) 선택">
           {KARATS.map((k) => (
             <button key={k.key}
+              type="button"
+              aria-pressed={karat === k.key}
               className={`${styles.karatPill} ${karat === k.key ? styles.karatPillActive : ''}`}
               onClick={() => setKarat(k.key)}
               style={{ ['--karat-color' as string]: k.color }}>
@@ -296,6 +304,13 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
   const updatePrice = <K extends keyof PriceInputs>(k: K, v: PriceInputs[K]) =>
     setPrice({ ...price, [k]: v })
 
+  // 상품 전환 시 스프레드·수수료·VAT 기본값 적용
+  const setProduct = (pt: GoldProduct) => {
+    const d = PRODUCT_DEFAULTS[pt]
+    setPrice({ ...price, productType: pt, spreadPercent: d.spread, feePercent: d.fee, vatIncluded: false })
+  }
+  const isBar = price.productType === 'bar'
+
   const result = useMemo(() => calculatePrice(grams, karat, price), [grams, karat, price])
   const premium = useMemo(() => koreaPremium(price), [price])
   const priceTable = useMemo(() => buildPriceTable(price, karat), [price, karat])
@@ -303,8 +318,10 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
   // 자산 합산
   const assetTotals = useMemo(() => {
     const totalPureG = assets.reduce((sum, a) => sum + pureGoldGram(a.weightG, a.karat), 0)
-    const cleanPrice = price.vatIncluded ? price.pricePerGram24k / 1.10 : price.pricePerGram24k
-    const baseValue = totalPureG * cleanPrice
+    const cleanPrice = (price.productType === 'bar' && price.vatIncluded) ? price.pricePerGram24k / 1.10 : price.pricePerGram24k
+    // 시세는 24K 1g 기준 → 24K-환산 g으로 가치 산정
+    const k24 = KARATS.find((x) => x.key === '24k')!.ratio
+    const baseValue = (totalPureG / k24) * cleanPrice
     const sellBase = baseValue * (1 - price.spreadPercent / 100)
     const sellFee = sellBase * (price.feePercent / 100)
     const sellRevenue = sellBase - sellFee
@@ -325,6 +342,24 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
 
   return (
     <div className={styles.panel}>
+      {/* 상품 유형 — 부가세·스프레드 전제가 다름 */}
+      <section className={styles.optionCard}>
+        <p className={styles.gapTitle}>🏷️ 상품 유형</p>
+        <div className={styles.productRow} role="group" aria-label="금 상품 유형 선택">
+          {PRODUCT_ORDER.map((pt) => (
+            <button key={pt}
+              type="button"
+              aria-pressed={price.productType === pt}
+              className={`${styles.productBtn} ${price.productType === pt ? styles.productBtnActive : ''}`}
+              onClick={() => setProduct(pt)}>
+              <span>{PRODUCT_DEFAULTS[pt].emoji}</span>
+              {PRODUCT_DEFAULTS[pt].label}
+            </button>
+          ))}
+        </div>
+        <p className={styles.note}>{PRODUCT_DEFAULTS[price.productType].note}</p>
+      </section>
+
       {/* 시세 입력 */}
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>📈 24K 1g 시세 (KRW)</p>
@@ -339,11 +374,15 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           <label>1돈 시세 (자동)</label>
           <span className={styles.autoValue}>{fmtKRW(price.pricePerGram24k * 3.75)}</span>
         </div>
-        <label className={styles.checkLabel}>
-          <input type="checkbox" checked={price.vatIncluded}
-            onChange={(e) => updatePrice('vatIncluded', e.target.checked)} />
-          <span>입력 시세에 부가세 10% 포함</span>
-        </label>
+        {isBar ? (
+          <label className={styles.checkLabel}>
+            <input type="checkbox" checked={price.vatIncluded}
+              onChange={(e) => updatePrice('vatIncluded', e.target.checked)} />
+            <span>입력 시세에 부가세 10% 포함</span>
+          </label>
+        ) : (
+          <p className={styles.note}>※ {PRODUCT_DEFAULTS[price.productType].label}은 부가세 면제 상품 — 매수가에 VAT 미포함.</p>
+        )}
       </section>
 
       {/* 거래 비용 */}
@@ -351,9 +390,11 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
         <p className={styles.gapTitle}>💸 거래 비용</p>
         <div className={styles.numberRow}>
           <label>매수-매도 스프레드</label>
-          <div className={styles.presetRow}>
+          <div className={styles.presetRow} role="group" aria-label="매수-매도 스프레드 프리셋">
             {SPREAD_PRESETS.map((s) => (
               <button key={s}
+                type="button"
+                aria-pressed={price.spreadPercent === s}
                 className={`${styles.preset} ${price.spreadPercent === s ? styles.presetActive : ''}`}
                 onClick={() => updatePrice('spreadPercent', s)}>
                 {s}%
@@ -396,7 +437,9 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
             <p className={styles.priceFull}>{fmtKRWFull(result.buyCost)}</p>
             <div className={styles.priceBreak}>
               <div><span>시세</span><span>{fmtKRW(result.baseValue)}</span></div>
-              <div><span>부가세 10%</span><span>+{fmtKRW(result.vatAmount)}</span></div>
+              {isBar
+                ? <div><span>부가세 10%</span><span>+{fmtKRW(result.vatAmount)}</span></div>
+                : <div><span>부가세</span><span>면제</span></div>}
               <div><span>수수료</span><span>+{fmtKRW(result.baseValue * (price.feePercent / 100))}</span></div>
               {price.craftFee > 0 && <div><span>세공비</span><span>+{fmtKRW(price.craftFee)}</span></div>}
             </div>
@@ -410,14 +453,24 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
               <div><span>시세</span><span>{fmtKRW(result.baseValue)}</span></div>
               <div><span>스프레드 {price.spreadPercent}%</span><span>-{fmtKRW(result.baseValue * (price.spreadPercent / 100))}</span></div>
               <div><span>수수료</span><span>-{fmtKRW(result.baseValue * (1 - price.spreadPercent / 100) * (price.feePercent / 100))}</span></div>
-              <div className={styles.warnRow}><span>※ 부가세 환급 X</span><span>—</span></div>
+              {isBar
+                ? <div className={styles.warnRow}><span>※ 부가세 환급 X</span><span>—</span></div>
+                : price.productType === 'bankbook'
+                  ? <div className={styles.warnRow}><span>※ 차익 배당소득세 15.4% 별도</span><span>—</span></div>
+                  : <div className={styles.warnRow}><span>※ 매매차익 비과세</span><span>✓</span></div>}
             </div>
           </div>
         </div>
 
         <div className={styles.spreadInfo}>
           <p>💡 <strong>매수→매도 손실:</strong> {fmtKRW(result.spreadLoss)} ({(result.spreadLoss / Math.max(1, result.buyCost) * 100).toFixed(1)}%)</p>
-          <p className={styles.note}>골드바를 사서 바로 팔면 부가세 10% + 스프레드 + 수수료로 약 {Math.round(((result.spreadLoss) / Math.max(1, result.buyCost)) * 100)}% 손실. 단기 거래는 KRX 금현물 권장.</p>
+          <p className={styles.note}>
+            {isBar
+              ? `골드바를 사서 바로 팔면 부가세 10% + 스프레드 + 수수료로 약 ${Math.round(((result.spreadLoss) / Math.max(1, result.buyCost)) * 100)}% 손실. 단기 거래는 KRX 금현물 권장.`
+              : price.productType === 'krx'
+                ? `KRX 금현물은 부가세 면제·스프레드 0.3~0.5%로 즉시 매도 손실이 작습니다. 매매차익도 비과세.`
+                : `금통장은 부가세 면제이나 스프레드 1~2% + 매매차익 배당소득세 15.4%. 실물 인출 시 부가세 10% 추가.`}
+          </p>
         </div>
       </section>
 
@@ -447,11 +500,11 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
         <p className={styles.gapTitle}>🌐 코리아 프리미엄 (한국 vs 국제 시세)</p>
         <div className={styles.numberRow}>
           <label>USD/KRW 환율</label>
-          <CompactInput value={price.usdKrw} onChange={(n) => updatePrice('usdKrw', n)} />
+          <CompactInput value={price.usdKrw} onChange={(n) => updatePrice('usdKrw', n)} decimal max={100_000} />
         </div>
         <div className={styles.numberRow}>
           <label>국제 1 oz 시세 (USD)</label>
-          <CompactInput value={price.internationalOzUsd} onChange={(n) => updatePrice('internationalOzUsd', n)} />
+          <CompactInput value={price.internationalOzUsd} onChange={(n) => updatePrice('internationalOzUsd', n)} suffix="USD" decimal max={1_000_000} />
         </div>
         <div className={styles.premiumResult}>
           <div>
@@ -573,11 +626,11 @@ function GuideTab() {
               color: '#0891B2',
               recommend: '소액 적립·환금성',
               vat: '면제 ✓',
-              capitalGain: '15.4% 부과 ✗',
+              capitalGain: '배당소득세 15.4% ✗',
               spread: '1~2% (중간)',
               storage: '디지털',
               redemption: '영업일 매도',
-              note: '0.01g 단위 적립. 양도세 부담. 실물 인출 시 부가세 10% 추가.',
+              note: '0.01g 단위 적립. 매매차익 배당소득세 15.4%. 실물 인출 시 부가세 10% 추가.',
             },
           ].map((item) => (
             <div key={item.title} className={styles.compareCard} style={{ ['--c-color' as string]: item.color }}>
@@ -588,7 +641,7 @@ function GuideTab() {
               <div className={styles.compareRows}>
                 <div><span>추천</span><strong>{item.recommend}</strong></div>
                 <div><span>부가세</span><strong>{item.vat}</strong></div>
-                <div><span>양도세</span><strong>{item.capitalGain}</strong></div>
+                <div><span>차익 과세</span><strong>{item.capitalGain}</strong></div>
                 <div><span>스프레드</span><strong>{item.spread}</strong></div>
                 <div><span>보관</span><strong>{item.storage}</strong></div>
                 <div><span>환매</span><strong>{item.redemption}</strong></div>
@@ -626,7 +679,7 @@ function GuideTab() {
             <span className={styles.costStepNum}>2</span>
             <div>
               <p className={styles.costStepTitle}>보유</p>
-              <p className={styles.costStepDesc}>보유 자체에는 세금 X (단, 금통장은 평가차익 시 양도세)</p>
+              <p className={styles.costStepDesc}>보유 자체에는 세금 X (단, 금통장은 매도 차익에 배당소득세 15.4%)</p>
             </div>
           </div>
           <div className={styles.costStep}>
@@ -657,21 +710,33 @@ function GuideTab() {
 }
 
 /* ─── 공통 입력 컴포넌트 ─── */
-function CompactInput({ value, onChange, placeholder }: { value: number; onChange: (n: number) => void; placeholder?: string }) {
+function CompactInput({ value, onChange, placeholder, suffix = '원', decimal = false, max = 100_000_000_000 }: {
+  value: number; onChange: (n: number) => void; placeholder?: string; suffix?: string; decimal?: boolean; max?: number
+}) {
+  // 편집 중 임시 문자열 버퍼 — 소수점 입력("3300.") 유지, blur 시 재포맷
+  const [buf, setBuf] = useState<string | null>(null)
+  const display = buf !== null ? buf : (decimal ? (value ? String(value) : '') : value.toLocaleString())
   return (
     <div className={styles.compactInputWrap}>
       <input
         type="text"
-        inputMode="numeric"
+        inputMode={decimal ? 'decimal' : 'numeric'}
         className={styles.compactInput}
-        value={value.toLocaleString()}
+        value={display}
         placeholder={placeholder}
         onChange={(e) => {
-          const n = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0
-          onChange(Math.min(100_000_000_000, n))
+          if (decimal) {
+            const raw = e.target.value.replace(/[^0-9.]/g, '')
+            setBuf(raw)
+            onChange(Math.min(max, parseFloat(raw) || 0))
+          } else {
+            const n = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0
+            onChange(Math.min(max, n))
+          }
         }}
+        onBlur={() => setBuf(null)}
       />
-      <span>원</span>
+      <span>{suffix}</span>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import HomeClient from './HomeClient'
+import HomeIntro from '@/components/HomeIntro'
 import { getFeaturedSlug } from '@/lib/collections'
 
 // ISR — 1시간마다 정적 HTML 재생성. 컬렉션 배너의 "오늘의 시즌 추천"이
@@ -17,5 +18,10 @@ export default function HomePage() {
   // (UTC 그대로 쓰면 자정~오전 9시 KST 구간에서 최대 9시간, 연·월 경계에서는 시즌 풀까지 어긋남)
   const kst = new Date(new Date().getTime() + 9 * 60 * 60 * 1000)
   const featuredSlug = getFeaturedSlug(kst.getUTCMonth() + 1, dayOfYear(kst))
-  return <HomeClient initialFeaturedSlug={featuredSlug} />
+  return (
+    <>
+      <HomeClient initialFeaturedSlug={featuredSlug} />
+      <HomeIntro />
+    </>
+  )
 }

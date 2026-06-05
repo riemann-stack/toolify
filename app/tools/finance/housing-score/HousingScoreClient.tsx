@@ -18,8 +18,16 @@ import {
 
 const STORAGE_KEY = 'youtil_housing_score_v1'
 
-type HouseStatus = 'none' | 'one_sell' | 'multi'
+type HouseStatus = 'none' | 'one_sell' | 'one_keep' | 'multi'
 type MarriedStatus = 'single' | 'married'
+
+/** 청약 1순위 가입기간·납입횟수 요건 (지역별) */
+type RankRegion = 'regulated' | 'metro' | 'nonmetro'
+const RANK_RULES: Record<RankRegion, { years: number; count: number; label: string; period: string }> = {
+  regulated: { years: 2,   count: 24, label: '규제지역', period: '2년' },
+  metro:     { years: 1,   count: 12, label: '수도권',   period: '1년' },
+  nonmetro:  { years: 0.5, count: 6,  label: '비수도권', period: '6개월' },
+}
 
 function toISODate(d: Date): string {
   const y = d.getFullYear()
@@ -54,6 +62,7 @@ export default function HousingScoreClient() {
   /* 청약통장 */
   const [bankbookJoinDate, setBankbookJoinDate] = useState<string>('2015-01-01')
   const [bankbookCount, setBankbookCount] = useState(24)
+  const [rankRegion, setRankRegion] = useState<RankRegion>('metro')
 
   /* 특별공급 자격 */
   const [specialChecks, setSpecialChecks] = useState<Record<string, boolean>>({})
@@ -76,6 +85,7 @@ export default function HousingScoreClient() {
       if (typeof j.parents3Years === 'boolean') setParents3Years(j.parents3Years)
       if (j.bankbookJoinDate) setBankbookJoinDate(j.bankbookJoinDate)
       if (typeof j.bankbookCount === 'number') setBankbookCount(j.bankbookCount)
+      if (j.rankRegion === 'regulated' || j.rankRegion === 'metro' || j.rankRegion === 'nonmetro') setRankRegion(j.rankRegion)
       if (j.specialChecks) setSpecialChecks(j.specialChecks)
     } catch {}
   }, [])
@@ -84,18 +94,18 @@ export default function HousingScoreClient() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         birthDate, marriedStatus, marriedDate, houseStatus, overrideUnhomedYears,
         hasSpouse, childrenCount, parentsCount, parents3Years,
-        bankbookJoinDate, bankbookCount, specialChecks,
+        bankbookJoinDate, bankbookCount, rankRegion, specialChecks,
       }))
     } catch {}
   }, [
     birthDate, marriedStatus, marriedDate, houseStatus, overrideUnhomedYears,
     hasSpouse, childrenCount, parentsCount, parents3Years,
-    bankbookJoinDate, bankbookCount, specialChecks,
+    bankbookJoinDate, bankbookCount, rankRegion, specialChecks,
   ])
 
-  /* 계산 — 무주택 기간 */
+  /* 계산 — 무주택 기간 (다주택·1주택 미서약은 가점제 대상 아님 → 0) */
   const unhomedYears = useMemo(() => {
-    if (houseStatus === 'multi') return 0
+    if (houseStatus === 'multi' || houseStatus === 'one_keep') return 0
     if (overrideUnhomedYears !== null) return overrideUnhomedYears
 
     const birth = fromISO(birthDate)
@@ -136,9 +146,10 @@ export default function HousingScoreClient() {
     }),
   [unhomedYears, dependentCount, bankbookYears, score.total])
 
-  /* 1순위 자격 */
+  /* 1순위 자격 — 지역별 가입기간·납입횟수 요건 */
+  const rankRule = RANK_RULES[rankRegion]
   const is1stRank =
-    bankbookYears >= 2 && bankbookCount >= 24 && houseStatus !== 'multi'
+    bankbookYears >= rankRule.years && bankbookCount >= rankRule.count && houseStatus !== 'multi'
 
   return (
     <div className={s.wrap}>
@@ -154,7 +165,7 @@ export default function HousingScoreClient() {
           { label: 'LH 청약플러스', href: 'https://apply.lh.or.kr' },
         ]}
       >
-        2025년 기준 주택법 시행규칙. 정부 정책·소득 기준은 매년 변경 — 청약 직전 청약홈·LH·HUG 공식 정보 재확인.
+        2026년 기준 「주택공급에 관한 규칙」. 정부 정책·소득 기준은 매년 변경 — 청약 직전 청약홈·LH·HUG 공식 정보 재확인.
       </Disclaimer>
 
       {/* ─── 1. 신청자 정보 ─── */}
@@ -170,14 +181,16 @@ export default function HousingScoreClient() {
           </div>
           <div className={s.field}>
             <label>혼인 상태</label>
-            <div className={s.toggleRow}>
+            <div className={s.toggleRow} role="group" aria-label="혼인 상태">
               <button
                 type="button"
+                aria-pressed={marriedStatus === 'single'}
                 className={`${s.toggleBtn} ${marriedStatus === 'single' ? s.toggleActive : ''}`}
                 onClick={() => setMarriedStatus('single')}
               >미혼</button>
               <button
                 type="button"
+                aria-pressed={marriedStatus === 'married'}
                 className={`${s.toggleBtn} ${marriedStatus === 'married' ? s.toggleActive : ''}`}
                 onClick={() => setMarriedStatus('married')}
               >기혼</button>
@@ -200,9 +213,10 @@ export default function HousingScoreClient() {
         <div className={s.cardLabel}>🏠 2. 무주택 기간 ({unhomedScore(unhomedYears)}점 / 32점)</div>
 
         <div className={s.subLabel}>주택 보유 상태</div>
-        <div className={s.statusRow}>
+        <div className={s.statusRow} role="group" aria-label="주택 보유 상태">
           <button
             type="button"
+            aria-pressed={houseStatus === 'none'}
             className={`${s.statusBtn} ${houseStatus === 'none' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('none')}
           >
@@ -211,29 +225,45 @@ export default function HousingScoreClient() {
           </button>
           <button
             type="button"
+            aria-pressed={houseStatus === 'one_sell'}
             className={`${s.statusBtn} ${houseStatus === 'one_sell' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('one_sell')}
           >
             <strong>🏚️ 1주택 (처분 서약)</strong>
-            <small>입주 전 처분 동의</small>
+            <small>입주 전 처분 동의 → 가점제</small>
           </button>
           <button
             type="button"
+            aria-pressed={houseStatus === 'one_keep'}
+            className={`${s.statusBtn} ${houseStatus === 'one_keep' ? s.statusActive : ''}`}
+            onClick={() => setHouseStatus('one_keep')}
+          >
+            <strong>🏠 1주택 (미서약)</strong>
+            <small>가점제 X — 추첨제만</small>
+          </button>
+          <button
+            type="button"
+            aria-pressed={houseStatus === 'multi'}
             className={`${s.statusBtn} ${houseStatus === 'multi' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('multi')}
           >
             <strong>❌ 다주택</strong>
-            <small>가점 0 — 추첨제만</small>
+            <small>가점제 X — 추첨제만</small>
           </button>
         </div>
 
+        {houseStatus === 'one_keep' && (
+          <p className={s.warnBox}>
+            ⚠️ 처분서약을 하지 않은 1주택자는 <strong>가점제 청약 대상이 아닙니다</strong> — 민영 추첨제로만 신청 가능. 가점으로 청약하려면 입주 전 <strong>처분서약(매도 동의)</strong>이 필요합니다.
+          </p>
+        )}
         {houseStatus === 'multi' && (
           <p className={s.warnBox}>
             ⚠️ 다주택자는 가점제 적용 X — 추첨제 (민영 분양) 또는 매도 후 무주택자 전환 필요.
           </p>
         )}
 
-        {houseStatus !== 'multi' && (
+        {(houseStatus === 'none' || houseStatus === 'one_sell') && (
           <>
             <div className={s.autoBox}>
               <div className={s.autoBoxRow}>
@@ -245,6 +275,11 @@ export default function HousingScoreClient() {
               <p className={s.autoBoxHint}>
                 {marriedStatus === 'married' ? '결혼일 또는 만 30세 중 빠른 쪽부터 카운트' : '만 30세 생일부터 카운트 (미혼 30세 미만 = 0년)'}
               </p>
+              {houseStatus === 'one_sell' && overrideUnhomedYears === null && (
+                <p className={s.warnBox}>
+                  ⚠️ 1주택자의 무주택 기간은 <strong>주택 매도(처분 예정)일부터</strong> 다시 기산됩니다. 위 자동값은 계속 무주택이었다고 가정한 값이므로, 아래 <strong>「직접 보정」</strong>으로 매도일 기준 기간을 입력하세요.
+                </p>
+              )}
               <label className={s.toggleLabel}>
                 <input
                   type="checkbox"
@@ -260,6 +295,8 @@ export default function HousingScoreClient() {
                     value={overrideUnhomedYears}
                     onChange={e => setOverrideUnhomedYears(parseFloat(e.target.value))}
                     className={s.slider}
+                    aria-label="무주택 기간 직접 보정 (년)"
+                    aria-valuetext={`${overrideUnhomedYears.toFixed(1)}년`}
                   />
                   <span className={s.sliderVal}>{overrideUnhomedYears.toFixed(1)}년</span>
                 </div>
@@ -290,17 +327,17 @@ export default function HousingScoreClient() {
           <div className={s.field}>
             <div className={s.subLabel} style={{ marginBottom: 4 }}>자녀 수 <small style={{ fontWeight: 400 }}>(미성년·만30세미만 미혼)</small></div>
             <div className={s.numRow}>
-              <button type="button" onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}>−</button>
+              <button type="button" aria-label="자녀 수 감소" onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}>−</button>
               <span>{childrenCount}</span>
-              <button type="button" onClick={() => setChildrenCount(Math.min(10, childrenCount + 1))}>+</button>
+              <button type="button" aria-label="자녀 수 증가" onClick={() => setChildrenCount(Math.min(10, childrenCount + 1))}>+</button>
             </div>
           </div>
           <div className={s.field}>
             <div className={s.subLabel} style={{ marginBottom: 4 }}>동거 직계존속 <small style={{ fontWeight: 400 }}>(부모·조부모)</small></div>
             <div className={s.numRow}>
-              <button type="button" onClick={() => setParentsCount(Math.max(0, parentsCount - 1))}>−</button>
+              <button type="button" aria-label="동거 직계존속 감소" onClick={() => setParentsCount(Math.max(0, parentsCount - 1))}>−</button>
               <span>{parentsCount}</span>
-              <button type="button" onClick={() => setParentsCount(Math.min(4, parentsCount + 1))}>+</button>
+              <button type="button" aria-label="동거 직계존속 증가" onClick={() => setParentsCount(Math.min(4, parentsCount + 1))}>+</button>
             </div>
           </div>
         </div>
@@ -344,8 +381,23 @@ export default function HousingScoreClient() {
               value={bankbookCount}
               onChange={e => setBankbookCount(parseInt(e.target.value))}
               className={s.slider}
+              aria-label="청약통장 납입 횟수"
+              aria-valuetext={`${bankbookCount}회`}
             />
           </div>
+        </div>
+
+        <div className={s.subLabel} style={{ marginTop: 12, marginBottom: 4 }}>청약 지역 <small style={{ fontWeight: 400 }}>(1순위 기준)</small></div>
+        <div className={s.toggleRow} role="group" aria-label="청약 지역 (1순위 기준)">
+          {(Object.keys(RANK_RULES) as RankRegion[]).map(r => (
+            <button
+              key={r}
+              type="button"
+              aria-pressed={rankRegion === r}
+              className={`${s.toggleBtn} ${rankRegion === r ? s.toggleActive : ''}`}
+              onClick={() => setRankRegion(r)}
+            >{RANK_RULES[r].label}</button>
+          ))}
         </div>
 
         <div className={s.autoBox}>
@@ -354,9 +406,12 @@ export default function HousingScoreClient() {
             <span className={s.autoBoxVal}>{bankbookYears.toFixed(1)}년</span>
           </div>
           <p className={s.autoBoxHint}>
-            1순위 자격: {is1stRank
-              ? <strong style={{ color: '#059669' }}>✓ 충족 (2년 + 24회)</strong>
-              : <strong style={{ color: '#EA580C' }}>미충족 — 2년 가입 + 24회 납입 필수 (수도권 기준)</strong>}
+            1순위 자격 <small style={{ fontWeight: 400 }}>({rankRule.label} · {rankRule.period}·{rankRule.count}회)</small>: {is1stRank
+              ? <strong style={{ color: '#059669' }}>✓ 충족</strong>
+              : <strong style={{ color: '#EA580C' }}>미충족 — {rankRule.period} 가입 + {rankRule.count}회 납입 필요</strong>}
+          </p>
+          <p className={s.autoBoxHint} style={{ marginTop: 4 }}>
+            ※ 규제지역 = 투기과열·청약과열지역(강남3구·용산 등). 그 외 수도권 1년·12회, 비수도권 6개월·6회. 가점은 가입기간만 반영하며, 민영은 지역·평형별 예치금도 충족해야 1순위.
           </p>
         </div>
       </div>
@@ -430,10 +485,10 @@ export default function HousingScoreClient() {
         </div>
       </div>
 
-      {/* ─── 특별공급 자가진단 ─── */}
+      {/* ─── 특별공급 자격 가이드 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>✨ 특별공급 자격 자가진단 (점수 무관)</div>
-        <p className={s.cardHint}>가점이 부족해도 특별공급으로 당첨 가능. 본인 해당 여부 체크 → 조건 확인.</p>
+        <div className={s.cardLabel}>✨ 특별공급 자격 가이드 (점수 무관)</div>
+        <p className={s.cardHint}>가점이 부족해도 특별공급으로 당첨 가능. 항목을 펼쳐 본인 해당 조건을 확인하세요 (소득·자산 요건은 청약홈에서 확인).</p>
 
         <div className={s.specialList}>
           {SPECIAL_SUPPLIES.map(sp => {
@@ -443,6 +498,7 @@ export default function HousingScoreClient() {
                 <button
                   type="button"
                   className={s.specialHead}
+                  aria-expanded={on}
                   onClick={() => setSpecialChecks(prev => ({ ...prev, [sp.id]: !prev[sp.id] }))}
                 >
                   <span className={s.specialEmoji}>{sp.emoji}</span>

@@ -62,8 +62,8 @@ export function annualTaxByCC(cc: number, isBusiness: boolean): number {
   return cc * 200
 }
 
-/** 전기차 자동차세 (정액, 2026 기준) */
-export const EV_ANNUAL_TAX = 130_000
+/** 전기차 자동차세 본세 (정액, 2026 기준). 지방교육세 30% 별도 가산 → 합계 13만원 */
+export const EV_ANNUAL_TAX = 100_000
 
 /** 연식별 감면율 (등록 후 N년차 → 감면 %) */
 export function annualTaxAgeDiscount(yearsSinceReg: number): number {
@@ -73,8 +73,8 @@ export function annualTaxAgeDiscount(yearsSinceReg: number): number {
   return Math.min(0.5, discount)
 }
 
-/** 자동차세 연납 할인 (1월 납부 시 약 9.15% 할인) */
-export const ANNUAL_PREPAY_DISCOUNT = 0.0915
+/** 자동차세 연납 할인 (2026년: 공제율 5% × 잔여 11개월/12 ≈ 4.58%) */
+export const ANNUAL_PREPAY_DISCOUNT = 0.0458
 
 /** 지방교육세 = 자동차세 × 30% */
 export const EDU_TAX_RATE = 0.30
@@ -159,7 +159,7 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
   // 감면 (다자녀·장애인·국가유공자)
   let exemptionSaved = 0
   if (inp.exemption === 'multi_child' && inp.carType !== 'business') {
-    // 다자녀 가구 7~10인승: 취득세 면제 (140만원 한도)
+    // 다자녀(18세 미만 3명+): 취득세 한도 면제. 6인승 이하 승용 140만 한도(7인승↑·승합 등은 200만) — 본 도구는 140만 한도로 보수 가정
     const cap = 1_400_000
     const ded = Math.min(acquisitionTax, cap)
     exemptionSaved += ded
@@ -180,13 +180,17 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
   // ─── 연간 ───
   const isBusiness = inp.carType === 'business'
   const isEV = inp.carType === 'ev'
+  // 장애인·국가유공자: 본인 명의 1대 — 취득세뿐 아니라 자동차세(+지방교육세)도 면제
+  const fullExempt = inp.exemption === 'disabled' || inp.exemption === 'merit'
 
   // 자동차세 본세 (현재 시점 — yearsSinceReg 기준)
   let annualBase = isEV ? EV_ANNUAL_TAX : annualTaxByCC(inp.cc, isBusiness)
-  const discount = annualTaxAgeDiscount(inp.yearsSinceReg)
+  // 전기차는 배기량이 없어 이미 최저 정액 → 차령(연식) 경감 없음
+  const discount = isEV ? 0 : annualTaxAgeDiscount(inp.yearsSinceReg)
   annualBase = annualBase * (1 - discount)
   let annualCarTax = annualBase
   if (inp.prepay) annualCarTax = annualCarTax * (1 - ANNUAL_PREPAY_DISCOUNT)
+  if (fullExempt) annualCarTax = 0
   const annualEduTax = annualCarTax * EDU_TAX_RATE
 
   // 환경부담금 (경유차만)
@@ -205,13 +209,15 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
   // ─── 누적 ───
   const yearlyBreakdown: CarTaxResult['yearlyBreakdown'] = []
   let cumulative = initialTotal
+  let exemptedAnnualSum = 0   // 면제로 절감된 자동차세+교육세 누계 (장애인·유공자)
   for (let y = 1; y <= inp.yearsToHold; y++) {
     const yearsFromNow = inp.yearsSinceReg + y - 1
     let yearBase = isEV ? EV_ANNUAL_TAX : annualTaxByCC(inp.cc, isBusiness)
-    const yDiscount = annualTaxAgeDiscount(yearsFromNow)
+    const yDiscount = isEV ? 0 : annualTaxAgeDiscount(yearsFromNow)
     yearBase = yearBase * (1 - yDiscount)
     let yCarTax = yearBase
     if (inp.prepay) yCarTax = yCarTax * (1 - ANNUAL_PREPAY_DISCOUNT)
+    if (fullExempt) { exemptedAnnualSum += yCarTax * (1 + EDU_TAX_RATE); yCarTax = 0 }
     const yEduTax = yCarTax * EDU_TAX_RATE
     const yEnvFee = inp.fuelType === 'diesel' ? dieselEnvironmentFee(inp.cc) : 0
     const yFuelTax = annualFuelTax  // 매년 같다고 가정 (주행거리 동일)
@@ -227,6 +233,8 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
       cumulative,
     })
   }
+  // 면제된 자동차세(+교육세) 누계를 절감액에 합산 (취득세 면제분과 함께)
+  exemptionSaved += exemptedAnnualSum
 
   return {
     acquisitionTax: Math.round(acquisitionTax),
@@ -263,8 +271,8 @@ export const FUEL_LABEL: Record<FuelType, string> = {
 
 export const EXEMPTION_LABEL = {
   none:        { name: '해당 없음',     desc: '일반 가구' },
-  multi_child: { name: '다자녀 (18세 미만 3명+)', desc: '7~10인승 차량 등록 시 취득세 면제 (140만원 한도)' },
-  disabled:    { name: '장애인 (1~3급)', desc: '본인 명의 1대 — 취득세·자동차세 면제' },
+  multi_child: { name: '다자녀 (18세 미만 3명+)', desc: '1대 취득세 한도 면제 — 6인승↓ 140만 (7인승↑ 200만)' },
+  disabled:    { name: '장애인 (1~3급)', desc: '본인 명의 1대 — 취득세·자동차세 면제 (승용 2000cc↓ 가정)' },
   merit:       { name: '국가유공자',     desc: '본인 명의 1대 — 취득세·자동차세 면제' },
 } as const
 
@@ -289,9 +297,9 @@ export const TRANSFER_NOTE = {
 
 /* ─── 절세 팁 ─── */
 export const SAVING_TIPS = [
-  { title: '🗓️ 자동차세 연납 (1월)', detail: '1월 일괄 납부 시 약 9.15% 할인. 6/9월 납부 대비 큰 절감' },
+  { title: '🗓️ 자동차세 연납 (1월)', detail: '1월 일괄 납부 시 약 4.6% 할인 (2026년 공제율 5%). 3/6/9월 납부 대비 큰 절감' },
   { title: '⚡ 친환경차 선택',         detail: '전기차 취득세 140만원 면제 + 자동차세 13만원 정액. 5년 보유 시 약 200~400만원 절감' },
-  { title: '👨‍👩‍👧‍👦 다자녀 가구',      detail: '18세 미만 자녀 3명+ + 7~10인승 등록 시 취득세 면제 (140만원 한도)' },
+  { title: '👨‍👩‍👧‍👦 다자녀 가구',      detail: '18세 미만 자녀 3명+ 1대 취득세 한도 면제 — 6인승↓ 140만 (7인승↑·승합 200만)' },
   { title: '🏥 장애인·국가유공자',     detail: '본인 명의 1대 한정 — 취득세·자동차세 모두 면제' },
   { title: '🛢️ 경유차 회피',           detail: '환경개선부담금 연 8~22만원. 노후 경유차는 조기폐차 지원금 활용' },
   { title: '⏳ 12년 이상 보유',        detail: '자동차세 최대 50% 감면. 장기 보유 가성비 ↑' },

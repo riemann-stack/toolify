@@ -313,6 +313,7 @@ export interface TaxAccountCompareInput {
   years: number
   annualContribution: number  // 매년 적립액
   totalIncome?: number        // 총급여 (세액공제율 결정)
+  dividendYield?: number      // % — 계좌 납입 한도를 배당으로 환산 (ISA 총 1억 등)
 }
 
 export interface TaxAccountCompareRow {
@@ -322,19 +323,26 @@ export interface TaxAccountCompareRow {
   taxCreditAnnual: number       // 1년 세액공제 환급 (연금/IRP)
   taxCreditTotal: number        // 누적 세액공제
   netBenefit: number            // 일반 대비 순이익
+  overLimitDividend: number     // 계좌 한도 초과로 일반과세된 배당 (0이면 한도 내)
 }
 
 export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCompareRow[] {
   const generalTaxAnnual = input.annualDividend * 0.154
   const generalTaxTotal = generalTaxAnnual * input.years
+  const yieldFrac = (input.dividendYield ?? 0) / 100
 
   return TAX_ACCOUNTS.map(acc => {
     let annualTax = 0
+    let overLimitDividend = 0
     if (acc.id === 'isa-saving' || acc.id === 'isa-general') {
-      const taxableDiv = Math.max(0, input.annualDividend - (acc.nonTaxableLimit ?? 0))
-      annualTax = taxableDiv * acc.taxRate
+      // ISA 총 납입 한도(1억)로 담을 수 있는 최대 배당 — 초과분은 일반 15.4% 과세
+      const maxShelter = acc.totalLimit && yieldFrac > 0 ? acc.totalLimit * yieldFrac : input.annualDividend
+      const sheltered = Math.min(input.annualDividend, maxShelter)
+      overLimitDividend = input.annualDividend - sheltered
+      const taxableDiv = Math.max(0, sheltered - (acc.nonTaxableLimit ?? 0))
+      annualTax = taxableDiv * acc.taxRate + overLimitDividend * 0.154
     } else if (acc.id === 'pension-saving' || acc.id === 'irp') {
-      // 단순화: 5.5% 분리과세 (수령 시점)
+      // 단순화: 5.5% 분리과세 (수령 시점). 한도는 적립액 기준이라 별도 안내로 표기.
       annualTax = input.annualDividend * acc.taxRate
     } else {
       annualTax = input.annualDividend * acc.taxRate
@@ -357,6 +365,7 @@ export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCom
       taxCreditAnnual: Math.round(taxCreditAnnual),
       taxCreditTotal: Math.round(taxCreditTotal),
       netBenefit: Math.round(netBenefit),
+      overLimitDividend: Math.round(overLimitDividend),
     }
   })
 }

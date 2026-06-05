@@ -127,9 +127,10 @@ export default function CarTaxClient() {
         </div>
 
         <div className={s.subLabel} style={{ marginTop: 14 }}>차종</div>
-        <div className={s.typeGrid}>
+        <div className={s.typeGrid} role="group" aria-label="차종 선택">
           {(Object.keys(CAR_TYPE_LABEL) as CarType[]).map(t => (
             <button key={t} type="button"
+              aria-pressed={carType === t}
               className={`${s.typeBtn} ${carType === t ? s.typeActive : ''}`}
               onClick={() => setCarType(t)}>
               {CAR_TYPE_LABEL[t]}
@@ -222,11 +223,12 @@ export default function CarTaxClient() {
         <div className={s.cardLabel}>⚙️ 3. 옵션</div>
 
         <div className={s.subLabel}>감면 자격</div>
-        <div className={s.exemptionList}>
+        <div className={s.exemptionList} role="group" aria-label="감면 자격 선택">
           {(Object.keys(EXEMPTION_LABEL) as Exemption[]).map(k => {
             const meta = EXEMPTION_LABEL[k]
             return (
               <button key={k} type="button"
+                aria-pressed={exemption === k}
                 className={`${s.exemptionBtn} ${exemption === k ? s.exemptionActive : ''}`}
                 onClick={() => setExemption(k)}>
                 <strong>{meta.name}</strong>
@@ -239,15 +241,16 @@ export default function CarTaxClient() {
         <div className={s.toggleRow}>
           <label className={s.toggleLabel}>
             <input type="checkbox" checked={prepay} onChange={e => setPrepay(e.target.checked)} />
-            <span>🗓️ 자동차세 1월 연납 할인 적용 (약 9.15% ↓)</span>
+            <span>🗓️ 자동차세 1월 연납 할인 적용 (약 4.6% ↓)</span>
           </label>
         </div>
 
         <div className={s.field} style={{ marginTop: 14 }}>
           <label>보유 시뮬레이션 기간</label>
-          <div className={s.holdRow}>
+          <div className={s.holdRow} role="group" aria-label="보유 시뮬레이션 기간 선택">
             {[1, 3, 5, 7, 10].map(y => (
               <button key={y} type="button"
+                aria-pressed={yearsToHold === y}
                 className={`${s.holdBtn} ${yearsToHold === y ? s.holdActive : ''}`}
                 onClick={() => setYearsToHold(y)}>
                 {y}년
@@ -320,9 +323,13 @@ export default function CarTaxClient() {
             <div>
               <strong>자동차세 본세</strong>
               <span className={s.taxSub}>
-                {carType === 'ev' ? '전기차 정액 13만원' : `${cc}cc × ${cc > 1600 ? '200' : cc > 1000 ? '140' : '80'}원/cc`}
-                {yearsSinceReg >= 3 && ` · 연식 ${Math.min(50, (yearsSinceReg - 2) * 5)}% 감면`}
-                {prepay && ' · 연납 9.15% 추가 할인'}
+                {exemption === 'disabled' || exemption === 'merit'
+                  ? '장애인·국가유공자 — 자동차세 면제'
+                  : carType === 'ev' ? '전기차 정액 10만원 (본세)'
+                  : carType === 'business' ? `${cc}cc × ${cc > 2500 ? '24' : cc > 1600 ? '19' : '18'}원/cc (영업용)`
+                  : `${cc}cc × ${cc > 1600 ? '200' : cc > 1000 ? '140' : '80'}원/cc`}
+                {exemption !== 'disabled' && exemption !== 'merit' && carType !== 'ev' && yearsSinceReg >= 3 && ` · 연식 ${Math.min(50, (yearsSinceReg - 2) * 5)}% 감면`}
+                {exemption !== 'disabled' && exemption !== 'merit' && prepay && ' · 연납 약 4.6% 추가 할인'}
               </span>
             </div>
             <span className={s.taxVal}>{fmt(result.annualCarTax)}원</span>
@@ -411,9 +418,9 @@ export default function CarTaxClient() {
               <strong>{t.range}</strong> — {t.perCC}원/cc · {t.example}
             </li>
           ))}
-          <li><strong>전기·수소차</strong> — 정액 130,000원/년 (배기량 무관)</li>
-          <li><strong>연식 감면</strong> — 3년차 5% · 4년차 10% · … · 12년차 이후 50% 최대</li>
-          <li><strong>연납 할인</strong> — 1월 일괄 납부 시 9.15% 추가 할인</li>
+          <li><strong>전기·수소차</strong> — 본세 100,000원 + 교육세 = 13만원/년 (배기량 무관·차령 경감 없음)</li>
+          <li><strong>연식 감면</strong> — 3년차 5% · 4년차 10% · … · 12년차 이후 50% 최대 (내연기관만)</li>
+          <li><strong>연납 할인</strong> — 1월 일괄 납부 시 약 4.6% 추가 할인 (2026년 공제율 5%)</li>
         </ul>
       </div>
 

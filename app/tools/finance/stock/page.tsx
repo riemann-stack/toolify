@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
   title: '주식 물타기 계산기 — 평단·역산·분할매수·회복·손절 비교 | Youtil',
-  description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율·양도세 시뮬.',
+  description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율 반영 원화 손익까지 (양도세는 참고 가이드).',
   keywords: [
     '주식물타기계산기', '평단가계산기', '평단가역산', '분할매수계산기',
     '본전상승률', '주식손절', '코스트에버리지', '미국주식환율계산',
@@ -27,7 +27,7 @@ const FAQ_LD = [
               },
               {
                 q: '증권사 수수료가 손익분기점에 미치는 영향은?',
-                a: '수수료는 매수·매도 양쪽에 부과됩니다. 0.015% × 2 + 거래세 0.18% = 약 0.21%가 매매 1회 비용입니다. 단기 트레이딩에서는 무시할 수 없으며, 물타기처럼 추가 매수를 반복할수록 수수료 누적 비용이 본전 상승률을 높입니다. 본 도구의 증권사 선택(한국 8곳)으로 정확한 본전 가격을 확인하세요.',
+                a: '수수료는 매수·매도 양쪽에 부과됩니다. 0.015% × 2 + 거래세 0.20% = 약 0.23%가 매매 1회 비용입니다. 단기 트레이딩에서는 무시할 수 없으며, 물타기처럼 추가 매수를 반복할수록 수수료 누적 비용이 본전 상승률을 높입니다. 본 도구의 증권사 선택(한국 8곳)으로 정확한 본전 가격을 확인하세요.',
               },
               {
                 q: '물타기와 불타기의 차이는 무엇인가요?',
@@ -51,7 +51,7 @@ const FAQ_LD = [
               },
               {
                 q: '미국 주식 물타기 시 환율도 고려해야 하나요?',
-                a: '네, 매수 환율·현재 환율·양도세 모두 영향. 예: 매수 환율 1,300원에 $100 매수 (13만원), 현재 환율 1,400원에 $90 (12.6만원) → 달러 -10%지만 원화 -3% 손실. 또한 매도 시 양도세 22%(연 250만 공제). 본 도구의 「🇺🇸 미국 주식」 토글에서 정확히 계산.',
+                a: '네, 매수 환율·현재 환율·양도세 모두 영향. 예: 매수 환율 1,300원에 $100 매수 (13만원), 현재 환율 1,400원에 $90 (12.6만원) → 달러 -10%지만 원화 -3% 손실. 본 도구의 「🇺🇸 미국 주식」 토글은 매수·현재 환율을 반영한 원화 평가액·손익을 계산합니다. 다만 <strong>매도 시 양도세 22%(연 250만 공제)는 계산기에 미반영</strong>이므로 별도로 고려하세요.',
               },
               {
                 q: '한 종목에 자산을 얼마나 투자해도 될까요?',
@@ -104,7 +104,7 @@ export default function StockPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>본전 탈출 필요 상승률 (수수료·거래세 포함)</p>
               <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, letterSpacing: '0.3px' }}>
-                본전 가격 = 새 평단가 ÷ (1 − 매수수수료 − 매도수수료 − 거래세 0.18%)<br />
+                본전 가격 = 새 평단가 ÷ (1 − 매수수수료 − 매도수수료 − 거래세 0.20%)<br />
                 필요 상승률 = (본전 가격 ÷ 현재가 − 1) × 100%
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function StockPage() {
           {/* 예시 시나리오 (기존 보존) */}
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>
-              📌 계산 예시 — 평단 50,000원 / 100주 보유 시 현재가 40,000원에 25주 추가 매수
+              📌 계산 예시 — 평단 50,000원 / 100주 보유 시 현재가 40,000원에 25주 추가 매수 <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(수수료·세금 제외 단순 예시)</span>
             </p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -256,11 +256,11 @@ export default function StockPage() {
         {/* ── 4. 본전 필요 상승률 — 수수료·세금 (NEW) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            🧾 본전 필요 상승률 — 수수료·거래세·양도세 모두 포함
+            🧾 본전 필요 상승률 — 수수료·거래세 포함 (미국 양도세는 참고)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            진짜 본전은 <strong style={{ color: 'var(--text)' }}>매수 수수료 + 매도 수수료 + 거래세(코스피·코스닥 0.18%)</strong>를 모두 회수해야 합니다.
-            미국 주식은 추가로 양도소득세 22%(연 250만 공제)도 고려해야 합니다.
+            진짜 본전은 <strong style={{ color: 'var(--text)' }}>매수 수수료 + 매도 수수료 + 거래세(코스피·코스닥 0.20%)</strong>를 모두 회수해야 합니다.
+미국 주식은 추가로 양도소득세 22%(연 250만 공제)도 고려해야 합니다 <span style={{ color: 'var(--muted)' }}>(계산기 미반영 — 별도 고려)</span>.
           </p>
 
           <div style={{ overflowX: 'auto' }}>
@@ -274,14 +274,14 @@ export default function StockPage() {
               </thead>
               <tbody>
                 {[
-                  ['키움증권',     '0.015%', '0.21%'],
-                  ['삼성증권',     '0.014%', '0.208%'],
-                  ['미래에셋',     '0.014%', '0.208%'],
-                  ['KB증권',       '0.015%', '0.21%'],
-                  ['신한투자',     '0.015%', '0.21%'],
-                  ['네이버페이',   '0.0066%', '0.193%'],
-                  ['토스증권',     '0.015%', '0.21%'],
-                  ['평생 무료 (이벤트)', '0%',     '0.18% (거래세만)'],
+                  ['키움증권',     '0.015%', '0.23%'],
+                  ['삼성증권',     '0.014%', '0.228%'],
+                  ['미래에셋',     '0.014%', '0.228%'],
+                  ['KB증권',       '0.015%', '0.23%'],
+                  ['신한투자',     '0.015%', '0.23%'],
+                  ['네이버페이',   '0.0066%', '0.213%'],
+                  ['토스증권',     '0.015%', '0.23%'],
+                  ['평생 무료 (이벤트)', '0%',     '0.20% (거래세만)'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
@@ -293,7 +293,7 @@ export default function StockPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ※ 2026년 1월 표준 온라인 수수료. 실시간·MTS·HTS 채널별 다를 수 있습니다. 코스피·코스닥 거래세 0.18% (2024년부터).
+            ※ 2026년 1월 표준 온라인 수수료. 실시간·MTS·HTS 채널별 다를 수 있습니다. 코스피·코스닥 거래세 0.20% (2026년 인상, 금투세 폐지로 환원).
           </p>
         </div>
 

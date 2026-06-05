@@ -24,8 +24,9 @@ export const KOREA_BROKER_FEES: BrokerFee[] = [
   { id: 'custom',    name: '직접 입력',    rate: 0 },
 ]
 
-/* ─── 한국 거래세 (2026년 매도 시) ─── */
-export const KR_TRANSACTION_TAX_RATE = 0.0018  // 코스피·코스닥 0.18%
+/* ─── 한국 증권거래세 (2026년 매도 시) ─── */
+// 2026.1.1~ 금투세 폐지로 2023년 수준 환원: 코스피 0.05%+농특세 0.15%=0.20%, 코스닥 0.20% → 둘 다 0.20%
+export const KR_TRANSACTION_TAX_RATE = 0.0020  // 코스피·코스닥 0.20%
 
 /* ─── 미국 주식 세금 ─── */
 export const US_STOCK = {
@@ -287,6 +288,7 @@ export interface CompareInput {
   alternativeReturn: number   // %, 1년
   recoveryAssumption: number  // 본 종목 회복 가정 가격
   feeRate: number             // %
+  isUsStock?: boolean         // 미국 주식이면 한국 거래세 미적용 (양도세·환율은 미반영)
 }
 
 export interface CompareResult {
@@ -311,7 +313,7 @@ export interface CompareResult {
 
 export function compareCutVsAvgDown(input: CompareInput): CompareResult {
   const buyFeeRate = input.feeRate / 100
-  const sellTax = KR_TRANSACTION_TAX_RATE
+  const sellTax = input.isUsStock ? 0 : KR_TRANSACTION_TAX_RATE
   const sellNet = 1 - buyFeeRate - sellTax
 
   // A. 물타기

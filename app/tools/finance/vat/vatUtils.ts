@@ -14,12 +14,13 @@ export interface SimplifiedRate {
   desc?: string
 }
 
+// 2021.7.1~ 현행 업종별 부가가치율 (부가가치세법 시행령 §111)
 export const SIMPLIFIED_VAT_RATES: SimplifiedRate[] = [
-  { id: 'retail',    name: '소매업·재생용재료',      rate: 0.15, effective: 0.015 },
-  { id: 'manuf',     name: '제조업·농업·숙박업',     rate: 0.20, effective: 0.020 },
-  { id: 'food',      name: '음식점업',               rate: 0.25, effective: 0.025 },
-  { id: 'construct', name: '건설업·부동산임대업',    rate: 0.30, effective: 0.030 },
-  { id: 'service',   name: '서비스업·금융보험업',    rate: 0.40, effective: 0.040 },
+  { id: 'retail',    name: '소매·음식점·재생용재료',        rate: 0.15, effective: 0.015 },
+  { id: 'manuf',     name: '제조·농업·임업·어업',           rate: 0.20, effective: 0.020 },
+  { id: 'lodging',   name: '숙박업',                       rate: 0.25, effective: 0.025 },
+  { id: 'construct', name: '건설·운수·정보통신·기타서비스', rate: 0.30, effective: 0.030 },
+  { id: 'service',   name: '금융보험·전문·부동산임대',      rate: 0.40, effective: 0.040 },
 ]
 
 export const SIMPLIFIED_THRESHOLD = 104_000_000           // 간이과세 한도 (1억 400만)
@@ -81,6 +82,7 @@ export function calcVAT(input: VATInput): VATResult {
   if (amount <= 0) return { supplyAmount: 0, vat: 0, total: 0 }
 
   if (mode === 'remove') {
+    if (rate <= 0) return { supplyAmount: Math.round(amount), vat: 0, total: Math.round(amount) }  // 면세 — 절사로 인한 가짜 부가세 방지
     const supply = roundDown(amount / (1 + rate), rounding)
     const vat = amount - supply
     return { supplyAmount: supply, vat, total: amount }
@@ -185,13 +187,11 @@ export function reverseCalcGrossAmount(input: NetCalcInput): NetCalcResult | nul
   const withholdingRate = input.isFreelancer ? FREELANCER_TAX.total : 0
   const platformRate = input.platformFeeRate / 100
 
-  // 실입금 = 청구액 - 플랫폼 수수료 - 원천세
-  // 청구액 = 공급가액 × (1 + vatRate)        (별도)
-  //        = 공급가액                         (포함, vatRate=0)
-  // 플랫폼 수수료 = 청구액 × platformRate
-  // 원천세 = 공급가액 × withholdingRate
-  // → 공급가액 X = targetNet / [(1+vatRate)(1-platformRate) - withholdingRate]
-  const factor = (1 + vatRate) * (1 - platformRate) - withholdingRate
+  // 실입금(본인 순수입, 부가세 제외) 목표 → 필요 공급가액 역산
+  // 부가세 별도: 청구액에 부가세를 더하고(+), 본인은 그 부가세를 신고·납부(통과)하므로 순수입엔 영향 없음.
+  // 공급가액 X → 청구액 = X(1+vatRate), 플랫폼수수료 = 청구액×p, 원천세 = X×w
+  // 순수입 = X(1+vatRate)(1−p) − X·w − X·vatRate = X·[1 − (1+vatRate)p − w]
+  const factor = 1 - (1 + vatRate) * platformRate - withholdingRate
   if (factor <= 0) return null
 
   const supplyAmount = Math.round(input.targetNet / factor)
@@ -199,7 +199,7 @@ export function reverseCalcGrossAmount(input: NetCalcInput): NetCalcResult | nul
   const totalCharge = supplyAmount + vat
   const platformFee = Math.round(totalCharge * platformRate)
   const withholding = Math.round(supplyAmount * withholdingRate)
-  const finalReceived = totalCharge - platformFee - withholding
+  const finalReceived = totalCharge - platformFee - withholding - vat  // 부가세는 통과(신고·납부)
 
   const steps: NetCalcResult['steps'] = [
     { label: '필요 공급가액', value: supplyAmount, sign: '=' },
@@ -208,7 +208,8 @@ export function reverseCalcGrossAmount(input: NetCalcInput): NetCalcResult | nul
   steps.push({ label: '총 청구액', value: totalCharge, sign: '=' })
   if (platformFee > 0) steps.push({ label: `플랫폼 수수료 (${input.platformFeeRate}%)`, value: -platformFee, sign: '-' })
   if (withholding > 0) steps.push({ label: '원천세 (3.3%)', value: -withholding, sign: '-' })
-  steps.push({ label: '최종 입금', value: finalReceived, sign: '=' })
+  if (vat > 0) steps.push({ label: '부가세 신고·납부 (통과)', value: -vat, sign: '-' })
+  steps.push({ label: '최종 실수입', value: finalReceived, sign: '=' })
 
   return { supplyAmount, vat, totalCharge, withholding, platformFee, finalReceived, factor, steps }
 }
@@ -246,10 +247,11 @@ export function compareGeneralVsSimplified(input: CompareGSInput): CompareGSResu
   const generalPayable = Math.max(0, vatOutput - input.vatPurchase)
 
   // 간이과세
-  // 매출세액 = 매출 × 부가가치율 × 10%  (= 매출 × effective)
-  // 매입세액 공제 = 매입 부가세 × 부가가치율 (간이는 부분 공제)
+  // 매출세액 = 매출(공급대가) × 부가가치율 × 10%  (= 매출 × effective)
+  // 매입세액 공제 = 세금계산서 수취 공급대가 × 0.5% (2021.7~ 현행 — 업종별 부가가치율 곱 방식 폐지)
   const simplifiedOutput = input.annualRevenue * industry.effective
-  const simplifiedInputCredit = input.vatPurchase * industry.rate
+  const purchaseGross = input.purchaseAmount + input.vatPurchase  // 공급대가(VAT 포함)
+  const simplifiedInputCredit = purchaseGross * 0.005
   const simplifiedPayable = Math.max(0, simplifiedOutput - simplifiedInputCredit)
 
   const available = input.annualRevenue <= SIMPLIFIED_THRESHOLD

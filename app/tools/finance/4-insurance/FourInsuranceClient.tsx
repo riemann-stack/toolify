@@ -192,12 +192,9 @@ export default function FourInsuranceClient() {
     const monthlyBase = hourly * monthlyHours
     const monthlySalary = monthlyBase + monthlyExtra
 
-    // 의무 가입 여부
+    // 의무 가입 여부 — 국민·건강·고용보험은 월 60시간 이상이면 적용(주 15시간은 주휴수당 기준)
     const isOver60h = monthlyHours >= 60
     const isOver15h = weekHours >= 15
-    // 1개월 이상 근무 가정
-    const fullCoverage = isOver60h && isOver15h
-    const onlyWorkersComp = !isOver60h && !isOver15h
 
     const calc = calc4Insurance({
       monthlySalary,
@@ -206,14 +203,16 @@ export default function FourInsuranceClient() {
       companySize: 'under150',
       year,
     })
+    // 월 60시간 미만이면 국민·건강·고용 가입 의무가 없어 근로자 공제 0 (산재는 사업주 부담)
+    const employeeDeduction = isOver60h ? calc.employeeTotal : 0
 
     return {
       monthlySalary, monthlyHours, weeklyExtra: monthlyExtra,
-      isOver60h, isOver15h, fullCoverage, onlyWorkersComp,
+      isOver60h, isOver15h,
       withCoverage: {
         gross: monthlySalary,
-        deduction: calc.employeeTotal,
-        net: calc.netSalary,
+        deduction: employeeDeduction,
+        net: monthlySalary - employeeDeduction,
       },
       withoutCoverage: {
         gross: monthlySalary,
@@ -337,11 +336,11 @@ export default function FourInsuranceClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${s.tabEmployee}  ${tab === 'employee'  ? s.tabActive : ''}`} onClick={() => setTab('employee')}>직장인</button>
-        <button className={`${s.tabBtn} ${s.tabEmployer}  ${tab === 'employer'  ? s.tabActive : ''}`} onClick={() => setTab('employer')}>사업주</button>
-        <button className={`${s.tabBtn} ${s.tabPartTime}  ${tab === 'partTime'  ? s.tabActive : ''}`} onClick={() => setTab('partTime')}>알바</button>
-        <button className={`${s.tabBtn} ${s.tabFreelance} ${tab === 'freelance' ? s.tabActive : ''}`} onClick={() => setTab('freelance')}>프리랜서 3.3%</button>
+      <div className={s.tabs} role="tablist" aria-label="4대보험 계산 대상">
+        <button type="button" role="tab" aria-selected={tab === 'employee'} className={`${s.tabBtn} ${s.tabEmployee}  ${tab === 'employee'  ? s.tabActive : ''}`} onClick={() => setTab('employee')}>직장인</button>
+        <button type="button" role="tab" aria-selected={tab === 'employer'} className={`${s.tabBtn} ${s.tabEmployer}  ${tab === 'employer'  ? s.tabActive : ''}`} onClick={() => setTab('employer')}>사업주</button>
+        <button type="button" role="tab" aria-selected={tab === 'partTime'} className={`${s.tabBtn} ${s.tabPartTime}  ${tab === 'partTime'  ? s.tabActive : ''}`} onClick={() => setTab('partTime')}>알바</button>
+        <button type="button" role="tab" aria-selected={tab === 'freelance'} className={`${s.tabBtn} ${s.tabFreelance} ${tab === 'freelance' ? s.tabActive : ''}`} onClick={() => setTab('freelance')}>프리랜서 3.3%</button>
       </div>
 
       {/* ──────────── TAB 1: 직장인 ──────────── */}
@@ -368,9 +367,9 @@ export default function FourInsuranceClient() {
                 </div>
               </div>
             </div>
-            <div className={s.yearToggle}>
-              <button className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
-              <button className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
+            <div className={s.yearToggle} role="group" aria-label="적용 연도">
+              <button type="button" aria-pressed={year === 2025} className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
+              <button type="button" aria-pressed={year === 2026} className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
             </div>
           </div>
 
@@ -435,7 +434,7 @@ export default function FourInsuranceClient() {
               <span className={s.noticeBadge}>📅 2026년 적용 요율</span>
               <div>2025년 대비 주요 변경사항:</div>
               <ul>
-                <li>국민연금 <strong>9% → 9.5%</strong> (0.5%p ↑, 33년 만의 인상)</li>
+                <li>국민연금 <strong>9% → 9.5%</strong> (0.5%p ↑, 1998년 이후 28년 만의 인상)</li>
                 <li>건강보험 <strong>7.09% → 7.19%</strong> (0.1%p ↑)</li>
                 <li>장기요양 <strong>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
                 <li>국민연금 기준소득월액 상한 <strong>617만 → 637만원</strong></li>
@@ -489,7 +488,7 @@ export default function FourInsuranceClient() {
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>월 상여 (선택)</span>
+                <span className={s.subLabel}>연 상여 (선택)</span>
                 <div className={s.inputRow}>
                   <input className={s.smallInput} type="text" inputMode="numeric" value={bonus} onChange={e => setBonus(fmtComma(e.target.value))} />
                   <span className={s.unit}>원/연</span>
@@ -499,10 +498,10 @@ export default function FourInsuranceClient() {
 
             <div style={{ marginTop: 12 }}>
               <span className={s.subLabel}>사업장 규모 (고용보험 사업주 추가 부담률)</span>
-              <div className={s.choiceRow}>
-                <button className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 10 }}>+0.25%</small></button>
-                <button className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 10 }}>+0.65%</small></button>
-                <button className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 10 }}>+0.85%</small></button>
+              <div className={s.choiceRow} role="group" aria-label="사업장 규모">
+                <button type="button" aria-pressed={companySize === 'under150'} className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 10 }}>+0.25%</small></button>
+                <button type="button" aria-pressed={companySize === 'under1000'} className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 10 }}>+0.65%</small></button>
+                <button type="button" aria-pressed={companySize === 'over1000'} className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 10 }}>+0.85%</small></button>
               </div>
             </div>
 
@@ -521,9 +520,9 @@ export default function FourInsuranceClient() {
               )}
             </div>
 
-            <div className={s.yearToggle}>
-              <button className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
-              <button className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
+            <div className={s.yearToggle} role="group" aria-label="적용 연도">
+              <button type="button" aria-pressed={year === 2025} className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
+              <button type="button" aria-pressed={year === 2026} className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
             </div>
           </div>
 
@@ -670,7 +669,8 @@ export default function FourInsuranceClient() {
               <div>
                 <span className={s.subLabel}>주 근무시간: {weekHours}시간</span>
                 <div className={s.sliderRow}>
-                  <input type="range" min={1} max={40} step={1} value={weekHours} onChange={e => setWeekHours(Number(e.target.value))} />
+                  <input type="range" min={1} max={40} step={1} value={weekHours} onChange={e => setWeekHours(Number(e.target.value))}
+                    aria-label="주 근무시간" aria-valuetext={`주 ${weekHours}시간`} />
                   <span className={s.sliderValue}>{weekHours}h/주</span>
                 </div>
               </div>
@@ -694,9 +694,9 @@ export default function FourInsuranceClient() {
                 </span>
               </div>
               <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
-                ② 주 15시간 이상 → 주휴수당 + 고용보험 의무
+                ② 주 15시간 이상 → 주휴수당 발생
                 <span className={`${s.statusBadge} ${partTimeCalc.isOver15h ? s.statusYes : s.statusNo}`} style={{ marginLeft: 10 }}>
-                  {partTimeCalc.isOver15h ? '✅ 의무' : '❌ 면제'}
+                  {partTimeCalc.isOver15h ? '✅ 발생' : '❌ 없음'}
                 </span>
               </div>
               <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
@@ -733,16 +733,16 @@ export default function FourInsuranceClient() {
               </div>
               <div className={`${s.scenarioCard} ${s.scenarioCardB}`}>
                 <p className={s.scenarioTitle}>시나리오 B</p>
-                <p className={s.scenarioName}>4대보험 가입 (정규 알바)</p>
+                <p className={s.scenarioName}>{partTimeCalc.isOver60h ? '4대보험 가입 (월 60시간↑ 의무)' : '국민·건강·고용 미적용 (월 60시간 미만)'}</p>
                 <div className={s.scenarioRow}><span>세전 월급</span><strong>{fmtKRW(partTimeCalc.withCoverage.gross)}</strong></div>
-                <div className={s.scenarioRow}><span>4대보험 공제</span><strong>−{fmtKRW(partTimeCalc.withCoverage.deduction)}</strong></div>
+                <div className={s.scenarioRow}><span>4대보험 공제</span><strong>{partTimeCalc.withCoverage.deduction > 0 ? `−${fmtKRW(partTimeCalc.withCoverage.deduction)}` : '0원'}</strong></div>
                 <div className={s.scenarioBig}><span>실수령</span><strong>{fmtKRW(partTimeCalc.withCoverage.net)}</strong></div>
               </div>
             </div>
           )}
 
           {/* 차액 + 혜택 */}
-          {parseComma(hourlyWage) > 0 && (
+          {parseComma(hourlyWage) > 0 && partTimeCalc.isOver60h && (
             <div className={s.diffCard}>
               <div className={s.diffRow}>
                 <span>가입 시 월 공제액</span>
@@ -752,6 +752,11 @@ export default function FourInsuranceClient() {
                 <span>실수령 차이 (월)</span>
                 <strong className={s.diffWarn}>−{fmtKRW(partTimeCalc.withoutCoverage.net - partTimeCalc.withCoverage.net)}</strong>
               </div>
+            </div>
+          )}
+          {parseComma(hourlyWage) > 0 && !partTimeCalc.isOver60h && (
+            <div className={s.interpretCard}>
+              월 근무시간이 60시간 미만이라 <strong>국민·건강·고용보험 가입 의무가 없습니다</strong>(근로자 공제 0원). 산재보험만 사업주가 부담합니다. 단, 월 60시간 이상이거나 3개월 이상 계속 근로 시 가입 대상이 될 수 있습니다.
             </div>
           )}
 
@@ -802,23 +807,23 @@ export default function FourInsuranceClient() {
                 </div>
               </div>
             </div>
-            <div className={s.yearToggle}>
-              <button className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
-              <button className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
+            <div className={s.yearToggle} role="group" aria-label="적용 연도">
+              <button type="button" aria-pressed={year === 2025} className={`${s.yearBtn} ${year === 2025 ? s.yearActive : ''}`} onClick={() => setYear(2025)}>2025년</button>
+              <button type="button" aria-pressed={year === 2026} className={`${s.yearBtn} ${year === 2026 ? s.yearActive : ''}`} onClick={() => setYear(2026)}>2026년</button>
             </div>
           </div>
 
           {/* HERO */}
           {parseComma(flAmount) > 0 && (
             <div className={`${s.hero} ${s.heroFreelance}`}>
-              <p className={s.heroLead}>실수령 차이 (근로자 관점)</p>
+              <p className={s.heroLead}>공제 후 차이 <small style={{ fontWeight: 400, opacity: 0.85 }}>(근로자 소득세 차감 전)</small></p>
               <div>
                 <span className={s.heroNum}>+{fmt(Math.round(Math.abs(freelanceCalc.diffNet)))}</span>
                 <span className={s.heroUnit}>원/월</span>
               </div>
               <p className={s.heroSub}>
-                {freelanceCalc.diffNet > 0 ? '프리랜서가 근로자보다 더 받음' : '근로자가 프리랜서보다 더 받음'}
-                {' · '}<span className={s.heroSubAccent}>5월 종합소득세 신고 의무 별도</span>
+                {freelanceCalc.diffNet > 0 ? '프리랜서(3.3% 후)가 더 받음' : '근로자(4대보험 후)가 더 받음'}
+                {' · '}<span className={s.heroSubAccent}>근로자 소득세 반영 시 격차 더 큼</span>
               </p>
             </div>
           )}
@@ -839,8 +844,8 @@ export default function FourInsuranceClient() {
                 <p className={s.scenarioName}>근로자 4대보험 가입</p>
                 <div className={s.scenarioRow}><span>월 보수액</span><strong>{fmtKRW(freelanceCalc.employee.gross)}</strong></div>
                 <div className={s.scenarioRow}><span>4대보험 공제</span><strong>−{fmtKRW(freelanceCalc.employee.deduction)}</strong></div>
-                <div className={s.scenarioRow}><span>소득세</span><strong>(별도)</strong></div>
-                <div className={s.scenarioBig}><span>실수령*</span><strong>{fmtKRW(freelanceCalc.employee.net)}</strong></div>
+                <div className={s.scenarioRow}><span>소득세·지방세</span><strong>(추가 차감)</strong></div>
+                <div className={s.scenarioBig}><span>4대보험 후*</span><strong>{fmtKRW(freelanceCalc.employee.net)}</strong></div>
               </div>
               <div className={`${s.scenarioCard} ${s.scenarioCardC}`}>
                 <p className={s.scenarioTitle}>시나리오 C</p>
@@ -855,10 +860,10 @@ export default function FourInsuranceClient() {
           {parseComma(flAmount) > 0 && (
             <div className={s.diffCard}>
               <div className={s.diffRow}>
-                <span>실수령 차이 (근로자 관점)</span>
+                <span>공제 후 차이 <small style={{ color: 'var(--muted)' }}>(근로자 소득세 전)</small></span>
                 <strong className={freelanceCalc.diffNet > 0 ? s.diffPositive : s.diffWarn}>
                   {freelanceCalc.diffNet > 0 ? '프리랜서 ' : '근로자 '}
-                  +{fmtKRW(Math.abs(freelanceCalc.diffNet))} 더 받음
+                  +{fmtKRW(Math.abs(freelanceCalc.diffNet))}
                 </strong>
               </div>
               <div className={s.diffRow}>
@@ -866,6 +871,12 @@ export default function FourInsuranceClient() {
                 <strong className={s.diffPositive}>프리랜서 −{fmtKRW(freelanceCalc.diffCompanyCost)} 절감</strong>
               </div>
             </div>
+          )}
+
+          {parseComma(flAmount) > 0 && (
+            <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, margin: '2px 2px 0' }}>
+              * 근로자 시나리오는 <strong style={{ color: 'var(--text)' }}>4대보험만 차감</strong>한 금액으로, 소득세·지방세(간이세액·연말정산)가 추가로 빠집니다. 두 방식 모두 연 1회 정산(프리랜서 5월 종소세 / 근로자 연말정산)이 있어 <strong style={{ color: 'var(--text)' }}>실제 세후 격차는 위 값보다 큽니다</strong>. 정확한 근로자 세후는 <Link href="/tools/finance/salary">연봉 실수령액 계산기</Link>에서 확인하세요.
+            </p>
           )}
 
           <div className={s.disguisedCard}>
