@@ -312,6 +312,11 @@ export default function FoodStorageClient() {
           { href: '/tools/cooking/thawing', label: '해동 시간 계산기' },
           { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
         ]}
+        sources={[
+          { label: '식품안전나라 — 소비기한 자료실(식품유형별 소비기한 설정 보고서)', href: 'https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612' },
+          { label: '한국식품산업협회 — 식품유형별 소비기한 참고값 검색', href: 'https://www.kfia.or.kr/kfia/sub.php?menukey=1513' },
+          { label: '대한민국 정책브리핑 — 소비기한 표시제 Q&A(식약처)', href: 'https://www.korea.kr/news/healthView.do?newsId=148911057' },
+        ]}
       >
         보관 기간은 일반 가이드(상온·냉장·냉동)이며 실제 온도·포장·신선도에 따라 달라집니다. <strong>색·냄새·곰팡이 등 이상이 보이면 기간과 무관하게 폐기</strong>하세요. 냉장 0~4℃·냉동 -18℃ 유지가 중요하며, 영유아·임산부·면역저하자는 더 보수적으로 판단하세요.
       </Disclaimer>

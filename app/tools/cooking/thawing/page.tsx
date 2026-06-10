@@ -36,8 +36,11 @@ export default function ThawingPage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧊 해동 시간 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
         냉장·전자레인지·찬물·실온 <strong style={{ color: 'var(--text)' }}>4가지 해동법 비교</strong> + 식품별 위험도와 시작·완료 시각.
+      </p>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+        이 도구는 냉동 식재료를 <strong style={{ color: 'var(--text)' }}>얼마 만에 녹일 수 있는지(해동 시간)</strong>를 다룹니다. 언제까지 보관할 수 있는지는 <Link href="/tools/cooking/food-storage" style={{ color: 'var(--accent)' }}>식재료 보관 계산기</Link>에서 확인하세요.
       </p>
 
       {/* 상단 면책 */}

@@ -33,6 +33,26 @@ const FAQ_LD = [
                 q: '피부 타입은 어떻게 알 수 있나요?',
                 a: 'Fitzpatrick 피부 타입은 햇빛에 대한 피부 반응으로 자가 진단할 수 있습니다: 항상 화상·거의 안 그을림 → 타입 I, 보통 화상·약간 그을림 → 타입 II, 가끔 화상·점진적 그을림 → 타입 III(<strong>한국인 다수</strong>), 드물게 화상·잘 그을림 → 타입 IV(<strong>한국인 다수</strong>), 매우 드물게 화상 → 타입 V, 거의 화상 X → 타입 VI. 한국인은 대부분 타입 III·IV에 해당하며, 정확한 진단은 피부과에서 광생물학적 검사로 가능합니다. 자가 진단이 애매하다면 <strong>보수적으로 한 단계 낮은(더 민감한) 타입을 선택</strong>하는 것이 안전합니다.',
               },
+              {
+                q: '어린이·영유아도 자외선 차단제를 발라도 되나요?',
+                a: '식품의약품안전처 안내(2024년 5월 기준)에 따르면, 생후 <strong>6개월 미만 영유아</strong>는 피부층이 얇고 외부 물질에 대한 감수성이 높을 수 있으므로 자외선차단제를 사용하기 전에 <strong>반드시 의사 등 전문가와 상담</strong>하도록 권고됩니다. 어린이에게 처음 사용할 때는 <strong>손목 안쪽에 소량만 발라</strong> 피부가 민감하게 반응하는지 확인한 뒤 사용하는 것이 좋습니다. 제품의 SPF(자외선B 차단지수, 50 이상은 50+로 표시)와 PA(자외선A 차단등급, PA+~PA++++) 표시를 확인하고, 바른 후 약 15분 건조, 장시간 노출 시 2시간 간격 재도포가 권장됩니다.',
+              },
+              {
+                q: '자외선 차단제를 쓰면 비타민D가 부족해지나요?',
+                a: '자외선 차단제가 피부의 비타민D 합성을 줄일 수 있다는 우려가 있지만, 미국피부과학회(AAD)는 자외선이 피부암 위험 요인이기 때문에 <strong>햇빛이나 태닝 기기 노출로 비타민D를 얻는 것을 권장하지 않으며</strong>, 비타민D가 풍부한 식품·강화식품·보충제로 섭취할 것을 권고합니다. AAD에 따르면 피부암 위험을 높이지 않으면서 비타민D 합성을 극대화할 수 있는 <strong>"안전한 자외선 노출량"은 없는 것</strong>으로 알려져 있습니다. 비타민D 결핍이 걱정된다면 자가 판단으로 차단제를 줄이기보다 의료진과 상담하세요.',
+              },
+              {
+                q: '실내나 차 안에서도 자외선 차단이 필요한가요?',
+                a: '미국 피부암재단(Skin Cancer Foundation)에 따르면 <strong>일반 유리창은 일광화상의 주원인인 UVB는 대부분 걸러내지만, 파장이 긴 UVA는 통과</strong>시키는 것으로 알려져 있습니다. 자동차의 경우 접합유리인 전면 유리는 UVA를 일부 막아주지만, <strong>측면·후면·선루프의 강화유리는 UVA 차단 효과가 낮습니다</strong>. 장시간 운전하거나 창가에서 오래 머문다면 자외선 차단제 사용이나 UV 차단 필름 등의 보호를 고려하는 것이 좋습니다.',
+              },
+              {
+                q: '선글라스의 "UV400"은 무슨 뜻인가요?',
+                a: 'UV400은 <strong>파장 400nm(나노미터) 이하의 자외선을 차단</strong>한다는 표시로, UVA·UVB 영역을 모두 포함합니다. 미국안과학회(AAO)는 <strong>"100% UV 또는 UV400 차단" 표시가 있거나 UVA·UVB를 모두 차단하는 선글라스</strong>를 선택하고, 구매 전 UV 차단 표시를 확인할 것을 권장합니다. 자외선은 각막염·백내장 등 안구 손상과도 관련이 있는 것으로 알려져 있으므로, UV 지수가 높은 날 야외 활동 시에는 차단제와 함께 선글라스 착용을 권장합니다.',
+              },
+              {
+                q: '기미·색소침착에는 UVA가 더 문제인가요?',
+                a: '미국피부과학회(AAD)에 따르면 <strong>햇빛이 피부에 닿으면 멜라닌 생성이 자극</strong>되며, 기미는 얼굴·목·팔처럼 <strong>햇빛을 많이 받는 부위에 주로 나타나는</strong> 것으로 알려져 있습니다. 특히 파장이 긴 UVA는 일반 유리창도 통과하므로(피부암재단) 실내·운전 중에도 노출이 누적될 수 있습니다. 색소침착이 걱정된다면 광범위(Broad-spectrum, UVA·UVB 차단) 제품과 PA 등급(자외선A 차단등급)을 확인하는 것이 좋고, 기미가 지속·악화되면 피부과 전문의와 상담하세요.',
+              },
             ]
 
 export default function UvProtectionPage() {
@@ -155,6 +175,13 @@ export default function UvProtectionPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📅 <strong style={{ color: 'var(--text)' }}>한국 계절별 평균:</strong>
             봄(3~5월) 5~8 · 여름(6~8월) <strong style={{ color: '#DC2626' }}>8~11</strong> · 가을(9~11월) 4~7 · 겨울(12~2월) 1~4
+          </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 10, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📡 <strong style={{ color: 'var(--text)' }}>오늘 자외선지수 확인 방법:</strong>{' '}
+            기상청 날씨누리의{' '}
+            <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>생활기상지수(자외선지수)</a>
+            {' '}페이지에서 읍면동(도로명) 단위로 조회할 수 있습니다. 자외선지수는 <strong style={{ color: 'var(--text)' }}>3시간 단위</strong> 예측값(해당 시간대 최대값)으로
+            오늘~글피까지 제공되며, 낮음~위험 <strong style={{ color: 'var(--text)' }}>5단계</strong>와 단계별 대응요령을 함께 안내합니다. <span style={{ fontSize: 11 }}>(2026년 6월 기준)</span>
           </div>
         </div>
 

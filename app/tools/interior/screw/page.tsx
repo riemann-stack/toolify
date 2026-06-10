@@ -6,7 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/interior/screw',
   title: '나사 규격 계산기 — M·UNC·UNF·PT 7종 + 탭드릴/관통홀/파일럿홀 + 인치↔mm',
-  description: 'M·UNC·UNF·PT·목재·석고 7종 + 탭드릴·관통홀·파일럿홀·육각/스패너 사이즈와 인치↔mm 변환표.',
+  description: '나사 가공·드릴 구멍 중심 — M·UNC·UNF·PT·목재·석고 7종의 탭드릴·관통홀·파일럿홀 치수와 인치↔mm 변환표.',
   keywords: ['탭드릴 계산기', '나사 규격표', 'M6 탭드릴', 'M8 탭드릴', '미터 나사', '유니파이 나사', 'UNC UNF', 'PT 나사', '파이프 나사', '인치 mm 변환', '관통홀 직경', '목재피스 파일럿홀'],
 })
 
@@ -85,8 +85,13 @@ export default function ScrewPage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔩 나사 규격 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
         M·UNC·UNF·PT·목재·석고 <strong style={{ color: 'var(--text)' }}>7종 + 탭드릴·관통홀·렌치 사이즈</strong>.
+      </p>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+        이 도구는 <strong style={{ color: 'var(--text)' }}>나사 가공·드릴 구멍</strong>(탭드릴·관통홀·파일럿홀) 중심입니다.
+        볼트 머리에 맞는 스패너·알렌렌치 선택과 체결 토크는{' '}
+        <Link href="/tools/interior/bolt-wrench" style={{ color: 'var(--accent)', fontWeight: 600 }}>볼트 스패너 계산기</Link>를 참고하세요.
       </p>
 
       <ScrewClient />

@@ -41,6 +41,22 @@ const FAQ_LD = [
                 q: '런과 스테이션 중 어디에 더 집중해야 하나요?',
                 a: '완주 시간에서 <strong>달리기가 차지하는 비중이 가장 큽니다</strong>(엘리트일수록 더 큼). 본 계산기의 「시간 비중」 막대로 본인 비중을 확인하고, 런 비중이 크면 컴파운드 러닝을, 스테이션 비중이 크면 근지구력·테크닉을 보강하세요.',
               },
+              {
+                q: '더블스(Doubles)는 어떻게 진행되나요?',
+                a: '2인 1팀(남자·여자·혼성) 형식으로, 공식 규정상 <strong>1km 달리기는 두 명이 전 구간을 함께</strong> 뛰어야 합니다(한 명이 앞서가면 1분 페널티, 「함께 달리기」 페널티가 3회를 넘으면 랭킹 제외). 스테이션은 두 명이 함께 입장·퇴장하되, 작업량은 「You go, I go」 방식으로 한 명이 수행하는 동안 다른 한 명이 쉬며 자유롭게 분담합니다. 서로 약한 종목을 상대가 더 맡는 분담 전략이 핵심입니다. (HYROX 공식 더블스 룰북 시즌 25/26 기준)',
+              },
+              {
+                q: '더블스와 릴레이(Relay)의 차이는 무엇인가요?',
+                a: '<strong>더블스는 2인이 런 8km 전부를 함께 뛰고</strong> 스테이션 작업만 나누는 반면, <strong>릴레이는 4인이 코스를 나눠</strong> 한 명당 1km 런 2회 + 해당 스테이션 2개씩 수행합니다. 두 부문 모두 남자·여자·혼성 팀으로 참가할 수 있어, 풀코스가 부담스러운 입문자는 릴레이 → 더블스 → 개인전 순서로 단계를 밟는 경우가 많습니다. (HYROX 공식 릴레이 룰북 시즌 25/26 기준)',
+              },
+              {
+                q: '첫 출전 준비물과 당일 체크리스트가 궁금해요.',
+                a: '공식 규정상 <strong>등록은 hyrox.com에서만</strong> 가능하며 대회 당일 만 16세 이상이어야 합니다. 당일 체크리스트: ① 발목 타이밍 칩 착용(미착용 시 기록 무효) ② 본인 스타트 웨이브 시간 엄수(임의 변경 시 실격) ③ 급수대 물은 음용 전용(몸에 부으면 페널티) ④ 장비·레인은 크루가 배정(임의 선택 불가). 개인 준비물은 접지력 좋은 러닝화, 가벼운 운동복, 에너지젤·전해질 보급 정도면 충분합니다.',
+              },
+              {
+                q: '하이록스 준비에는 훈련 기간이 얼마나 필요한가요?',
+                a: '정해진 공식 기준은 없으며 본인의 체력 베이스에 따라 크게 다릅니다. 일반적인 지구력 종목 훈련 원칙처럼 <strong>주 3~5회 훈련을 수 개월에 걸쳐 점진적으로</strong> 쌓는 것이 무난하며, 핵심 구성은 ① 런 베이스(주 2~3회) ② 스테이션 근지구력(썰매·월볼·로잉) ③ 「런+스테이션」을 이어 붙이는 컴파운드 시뮬레이션입니다. 부상 이력이 있거나 운동 경험이 적다면 전문가와 상담 후 시작하는 것이 안전합니다.',
+              },
             ]
 
 export default function HyroxPage() {
@@ -147,6 +163,50 @@ export default function HyroxPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* 한국 하이록스 현황 */}
+        <section>
+          <h2 style={h2}>한국 하이록스 현황 (2026년 6월 기준)</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            하이록스는 <strong style={{ color: 'var(--text)' }}>2024년 2월 인천 송도컨벤시아에서 국내 최초로 개최</strong>된 이후 매년 규모가 빠르게 커지고 있습니다.
+            2025년 11월에는 서울 코엑스에서 첫 서울 대회가 열렸고(참가자의 약 22%가 외국인), 2026년 5월 인천 대회는 국내 최초로 3일간 진행될 만큼 성장했습니다.
+          </p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>대회</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>일정 · 장소</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>규모</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['하이록스 인천 2024', '2024년 2월 · 송도컨벤시아', '1,068명 (국내 첫 개최)'],
+                    ['하이록스 인천 2025', '2025년 5월 · 인천', '4,054명'],
+                    ['하이록스 서울 2025', '2025년 11월 8~9일 · 코엑스', '6,000명+ (첫 서울 대회)'],
+                    ['하이록스 인천 2026', '2026년 5월 15~17일 · 송도컨벤시아', '약 15,000명 등록 (국내 최초 3일)'],
+                  ].map((r, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                      <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r[0]}</td>
+                      <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[1]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 참가비는 부문·시기마다 다르며, 2025년 11월 서울 대회 기준 <strong style={{ color: 'var(--text)' }}>1인 약 20만 원</strong> 수준으로 보도되었습니다(한국경제, 2025년 11월). 인기 부문은 조기 매진되는 경우가 많습니다.
+          </p>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
+            ※ 차기 서울 대회는 2026년 하반기 개최가 예고되어 있으나, 확정 일정·장소·티켓 오픈은 공식 사이트{' '}
+            <a href="https://hyrox.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>hyrox.com</a>
+            에서 확인하세요. 공식 규정상 대회 등록은 hyrox.com을 통해서만 가능합니다. (출처: 인천광역시·인천관광공사 보도자료, 한국경제·우리일보 보도, HYROX 공식 룰북 시즌 25/26)
+          </p>
         </section>
 
         <AdSlot position="between-tools" minHeight={250} />

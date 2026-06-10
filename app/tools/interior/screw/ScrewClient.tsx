@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo } from 'react'
 import s from './screw.module.css'
@@ -345,6 +346,10 @@ export default function ScrewClient() {
                     ⚠️ 토크값은 <strong>8.8 등급</strong> 일반 참고. 정확한 토크는 제조사 사양·기계 매뉴얼 확인.
                   </p>
                 )}
+                <p className={s.noteSmall}>
+                  🔧 머리 모양별 알렌 사이즈·ISO vs 옛 JIS 스패너 차이·강도등급별 토크는{' '}
+                  <Link href="/tools/interior/bolt-wrench" style={{ color: 'var(--accent)', fontWeight: 600 }}>볼트 스패너 계산기</Link>에서 자세히 확인하세요.
+                </p>
               </div>
             </>
           )}

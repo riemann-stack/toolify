@@ -4,6 +4,8 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import { CONSTANTS } from './sciUnitsData'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sci-units',
@@ -25,7 +27,10 @@ const FAQ_LD = [
               { q: '옹스트롬(Å)과 나노미터(nm)는 어떻게 변환하나요?', a: '<strong>1 Å = 0.1 nm = 10⁻¹⁰ m</strong>입니다. 즉 10 Å = 1 nm. 결정학·반도체·분광학에서 원자 단위 길이를 표현할 때 Å를 쓰고, 빛 파장은 nm를 주로 씁니다(가시광선 약 380~750 nm = 3,800~7,500 Å).' },
               { q: 'eV를 줄(J)로 바꾸면?', a: '<strong>1 eV = 1.602176634 × 10⁻¹⁹ J</strong>입니다. 1 eV는 전자 하나가 1V 전위차를 지날 때 얻는 에너지로 정의됩니다. keV(10³)·MeV(10⁶)·GeV(10⁹)·TeV(10¹²)는 각각 X선·핵반응·입자가속기·LHC 스케일 에너지에 쓰입니다.' },
               { q: '이 도구는 일반 단위 변환기와 무엇이 다른가요?', a: '일반 <a href="/tools/unit/converter" style="color:#0D9488;text-decoration:underline">단위 변환기</a>는 평·근·인치 같은 생활 단위 중심입니다. 본 도구는 <strong>지수 표기 변환 + 옹스트롬·광년·eV 같은 과학·천문 스케일 단위 + 물리 상수</strong>에 특화되어 있습니다.' },
-              { q: '물리 상수 값은 믿을 수 있나요?', a: 'CODATA 권장값 및 2019년 SI 재정의 기준입니다. c(빛의 속도)·h(플랑크)·e(기본 전하)·k_B(볼츠만)·N_A(아보가드로)는 <strong>정의 상수(정확값)</strong>이고, G(만유인력)·전자 질량 등은 측정값이라 불확도가 있습니다.' },
+              { q: '물리 상수 값은 믿을 수 있나요?', a: 'CODATA 2022 권장값(NIST 공개, 2026년 6월 확인) 및 2019년 SI 재정의 기준입니다. c(빛의 속도)·h(플랑크)·e(기본 전하)·k_B(볼츠만)·N_A(아보가드로)는 <strong>정의 상수(정확값)</strong>이고, G(만유인력)·전자 질량 등은 측정값이라 불확도가 있습니다.' },
+              { q: '파섹(pc)은 어떻게 정의되나요?', a: '<strong>1 AU(지구–태양 평균 거리)가 1초각(1″)으로 보이는 거리</strong>, 즉 연주시차가 1″인 별까지의 거리입니다. IAU 2015 결의 B2 기준으로 정확히 648,000/π AU이며, 약 3.0857×10¹⁶ m ≈ 3.26광년에 해당합니다. 기준이 되는 1 AU도 IAU 2012 결의 B2에서 정확히 149,597,870,700 m로 정의되어 있습니다.' },
+              { q: '달톤(Da)은 어디에 쓰이는 단위인가요?', a: '<strong>탄소-12 원자 질량의 1/12</strong>로 정의되는 질량 단위로, 원자질량단위(u)와 같은 단위입니다(SI와 병용이 허용된 단위, BIPM SI 브로슈어 9판). 1 Da = 1.66053906892×10⁻²⁷ kg(CODATA 2022)입니다. 단백질·핵산 등 생체분자 질량을 <strong>kDa</strong>로 표기할 때 널리 쓰입니다 — 예: 몰질량 64,000 g/mol인 단백질은 64 kDa.' },
+              { q: '광년과 파섹 중 어느 것을 쓰나요?', a: '같은 거리 단위지만 쓰임이 다릅니다. IAU에 따르면 <strong>광년(ly)은 주로 대중·교양 매체</strong>에서, <strong>파섹(pc)은 천문학 연구</strong>에서 쓰입니다. 1 pc ≈ 3.26 ly이며, 더 먼 거리는 킬로파섹(kpc)·메가파섹(Mpc)처럼 SI 접두어를 붙여 표기합니다.' },
             ]
 
 export default function SciUnitsPage() {
@@ -39,6 +44,15 @@ export default function SciUnitsPage() {
         SI 접두어와 <strong style={{ color: 'var(--text)' }}>과학적·공학적 표기</strong>를 상호 변환하고,
         <strong style={{ color: 'var(--text)' }}> 옹스트롬·광년·eV</strong> 같은 과학 스케일 단위와 주요 물리 상수까지 한 곳에서.
       </p>
+
+      <UpdatedMeta
+        date="2026년 6월"
+        basis="물리 상수 CODATA 2022 권장값 · AU·파섹은 IAU 정의 기준"
+        sources={[
+          { label: 'NIST CODATA', href: 'https://physics.nist.gov/cuu/Constants/' },
+          { label: 'IAU Measuring the Universe', href: 'https://iauarchive.eso.org/public/themes/measuring/' },
+        ]}
+      />
 
       <SciUnitsClient />
 
@@ -122,6 +136,69 @@ export default function SciUnitsPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* 3-1. 실생활 스케일 예시 */}
+        <section>
+          <h2 style={h2}>실생활 스케일 예시</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              {
+                t: '반도체와 나노미터(nm)',
+                d: '가시광선 파장이 400~700 nm인데, 최신 반도체는 그보다 훨씬 작은 패턴을 새깁니다. 첨단 공정의 EUV(극자외선) 노광 장비는 파장 13.5 nm 빛을 사용해 — 기존 DUV(193 nm)의 약 1/14 — 7·5·3나노 공정의 핵심 회로층을 그립니다.',
+                e: 'EUV 파장 13.5 nm = 1.35×10⁻⁸ m',
+              },
+              {
+                t: '천문 거리 — AU·광년·파섹 고르기',
+                d: '태양계 안에서는 AU(1 AU = 149,597,870,700 m, IAU 2012 정의)를 쓰고, 별 사이 거리부터는 광년·파섹을 씁니다. 태양에서 가장 가까운 별 프록시마 센타우리까지는 약 4.25광년(약 1.3 pc)입니다.',
+                e: '4.25 ly ≈ 4.02×10¹³ km',
+              },
+              {
+                t: 'eV로 읽는 에너지 사다리',
+                d: '가시광선 광자는 약 1.8~3.1 eV(E=hc/λ 환산), X선 광자는 100 eV~100 keV이고 그 이상은 감마선으로 분류됩니다. 입자가속기 LHC는 양성자를 13.6 TeV(2022년 3차 가동 시작 기준)로 충돌시킵니다 — 가시광 광자의 수조 배 에너지입니다.',
+                e: '1 TeV = 10¹² eV ≈ 1.6×10⁻⁷ J',
+              },
+            ].map((x, i) => (
+              <div key={i} style={{ ...card }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 출처: ASML(EUV 13.5 nm)·NASA(전자기 스펙트럼, 프록시마 센타우리 4.25광년)·CERN(LHC 13.6 TeV)·IAU(AU 정의) — 2026년 6월 확인.
+          </p>
+        </section>
+
+        {/* 3-2. 물리 상수표 (계산기 '물리 상수표' 탭과 동일 데이터) */}
+        <section>
+          <h2 style={h2}>주요 물리 상수표 (CODATA 2022)</h2>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['기호', '이름', '값', '단위'].map((hh, i) => (
+                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {CONSTANTS.map((c, i) => (
+                  <tr key={c.symbol} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{c.symbol}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{c.name}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{c.value}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{c.unit}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ c·h·ħ·e·k_B·N_A·R·σ는 2019년 SI 재정의에 따른 <strong>정확값(불확도 없음)</strong>이고, G·m_e·m_p·ε₀는 측정값입니다.
+            출처: NIST CODATA 2022 권장값(physics.nist.gov, 2026년 6월 확인). 위 계산기의 &lsquo;물리 상수표&rsquo; 탭과 동일한 값입니다.
+          </p>
         </section>
 
         {/* 4. FAQ */}

@@ -94,7 +94,7 @@ export const SCI_UNIT_GROUPS: SciUnitGroup[] = [
     name: '질량 (입자 ~ 거시)',
     baseSymbol: 'kg',
     units: [
-      { id: 'Da',  symbol: 'Da', name: '달톤 (원자질량)', toBase: 1.66053906660e-27, note: '원자질량단위(u)' },
+      { id: 'Da',  symbol: 'Da', name: '달톤 (원자질량)', toBase: 1.66053906892e-27, note: '원자질량단위(u) · CODATA 2022' },
       { id: 'ng',  symbol: 'ng', name: '나노그램',  toBase: 1e-12 },
       { id: 'ug',  symbol: 'µg', name: '마이크로그램', toBase: 1e-9 },
       { id: 'mg',  symbol: 'mg', name: '밀리그램',  toBase: 1e-6 },
@@ -122,7 +122,7 @@ export const SCI_UNIT_GROUPS: SciUnitGroup[] = [
   },
 ]
 
-// ─── 물리 상수 ───
+// ─── 물리 상수 (CODATA 2022 권장값 · NIST physics.nist.gov, 2026-06 확인) ───
 export interface PhysicalConstant {
   symbol: string
   name: string
@@ -139,10 +139,10 @@ export const CONSTANTS: PhysicalConstant[] = [
   { symbol: 'N_A', name: '아보가드로 수',       value: '6.02214076 × 10²³', unit: '1/mol' },
   { symbol: 'R',   name: '기체 상수',           value: '8.314462618', unit: 'J/(mol·K)' },
   { symbol: 'G',   name: '만유인력 상수',       value: '6.67430 × 10⁻¹¹', unit: 'N·m²/kg²' },
-  { symbol: 'm_e', name: '전자 질량',           value: '9.1093837015 × 10⁻³¹', unit: 'kg' },
-  { symbol: 'm_p', name: '양성자 질량',         value: '1.67262192369 × 10⁻²⁷', unit: 'kg' },
+  { symbol: 'm_e', name: '전자 질량',           value: '9.1093837139 × 10⁻³¹', unit: 'kg' },
+  { symbol: 'm_p', name: '양성자 질량',         value: '1.67262192595 × 10⁻²⁷', unit: 'kg' },
   { symbol: 'σ',   name: '슈테판-볼츠만 상수',  value: '5.670374419 × 10⁻⁸', unit: 'W/(m²·K⁴)' },
-  { symbol: 'ε₀',  name: '진공 유전율',         value: '8.8541878128 × 10⁻¹²', unit: 'F/m' },
+  { symbol: 'ε₀',  name: '진공 유전율',         value: '8.8541878188 × 10⁻¹²', unit: 'F/m' },
 ]
 
 // ─────────────────────────────────────────────

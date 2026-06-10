@@ -6,7 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/interior/bolt-wrench',
   title: '볼트 스패너 계산기 — M3~M24 + ISO/DIN/KS vs JIS + 알렌·와셔·토크',
-  description: 'M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + 알렌렌치·와셔·너트·토크 등급과 공구 세트 추천 4프리셋.',
+  description: '볼트 머리 공구 선택·토크 중심 — M3~M24 스패너·알렌렌치 사이즈, ISO/DIN/KS vs 옛 JIS 비교, 와셔·너트·강도등급, 공구 세트 4프리셋.',
   keywords: ['볼트 스패너 사이즈', 'M8 스패너', '알렌렌치 사이즈', '소켓 사이즈', 'ISO JIS 차이', '와셔 사이즈', '너트 높이', '체결 토크', '강도등급', '공구 세트'],
 })
 
@@ -71,8 +71,13 @@ export default function BoltWrenchPage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔧 볼트 스패너 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
         M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + <strong style={{ color: 'var(--text)' }}>알렌렌치·와셔·너트·토크 등급</strong>.
+      </p>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+        이 도구는 <strong style={{ color: 'var(--text)' }}>볼트 머리에 맞는 공구 사이즈 선택·체결 토크</strong> 중심입니다.
+        탭드릴·파일럿홀 등 구멍 가공 치수는{' '}
+        <Link href="/tools/interior/screw" style={{ color: 'var(--accent)', fontWeight: 600 }}>나사 규격 계산기</Link>를 참고하세요.
       </p>
 
       <BoltWrenchClient />

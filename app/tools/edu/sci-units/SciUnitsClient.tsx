@@ -197,7 +197,7 @@ function ConstantsTab() {
         </table>
       </div>
       <p className={s.note}>
-        ※ 2019년 SI 재정의 이후 c·h·e·k_B·N_A는 <strong>정의 상수(정확값)</strong>이며, G·m_e 등은 측정값(불확도 존재)입니다.
+        ※ 2019년 SI 재정의 이후 c·h·e·k_B·N_A는 <strong>정의 상수(정확값)</strong>이며, G·m_e 등은 측정값(불확도 존재)입니다. 측정 상수는 CODATA 2022 권장값(NIST, 2026년 6월 확인) 기준입니다.
       </p>
     </div>
   )

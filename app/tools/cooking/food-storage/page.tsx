@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               { q: '익힌 고기는 냉장고에서 며칠까지 먹을 수 있나요?',
-                a: '식약처 권고 기준 조리 후 3~4일 이내가 안전합니다. 단 조리 직후 빠르게 식혀 밀폐 보관했을 때 기준이며, 실온에 2시간 이상 두었거나 여러 번 데워 먹었다면 더 짧아집니다. 4일 안에 못 먹을 것 같다면 1회분씩 소분해 냉동(2~3개월)으로 옮기세요.' },
+                a: '식약처 권고 기준 조리 후 3~4일 이내가 안전합니다. 단 조리 직후 빠르게 식혀 밀폐 보관했을 때 기준이며, 실온에 2시간 이상 두었거나 여러 번 데워 먹었다면 더 짧아집니다. 4일 안에 못 먹을 것 같다면 1회분씩 소분해 냉동(2~3개월)으로 옮기세요. 식품별 공식 기준은 식약처가 식품안전나라(foodsafetykorea.go.kr)에 공개한 「식품유형별 소비기한 설정 보고서」 등 소비기한 자료에서 확인할 수 있습니다.' },
               { q: '한 번 해동한 고기를 다시 냉동해도 되나요?',
                 a: '원칙적으로 재냉동은 권장되지 않습니다. 해동 과정에서 세포가 손상돼 박테리아가 증식하기 좋은 환경이 되고, 다시 얼리면 풍미·식감이 크게 떨어집니다. 다만 \'냉장에서 천천히 해동한 생고기\'를 즉시(2일 이내) 조리한 후라면 익힌 상태로 다시 냉동할 수 있습니다.' },
               { q: '밥은 냉장과 냉동 중 어디에 보관하는 게 좋나요?',
@@ -22,6 +22,14 @@ const FAQ_LD = [
                 a: '2~3일 이내가 권장 기준입니다. 매번 먹을 때 한 번 더 팔팔 끓이면 표면 박테리아가 사라지지만, 끓이고 식히기를 4~5회 반복하면 풍미가 사라지고 식중독 위험도 누적됩니다. 김치찌개·된장찌개 등 발효 베이스는 4일까지도 가능하지만, 맑은 국·미역국은 2일 안에 먹는 것이 안전합니다.' },
               { q: '우유 유통기한이 지났는데 냄새가 멀쩡하면 먹어도 되나요?',
                 a: '미개봉 상태에서 유통기한 1~2일 지난 정도이고 냄새·맛이 멀쩡하다면 대개 안전합니다. 한국의 \'유통기한\'은 판매 가능 기한이고, 실제 \'소비기한\'은 보통 그보다 4~5일 더 깁니다. 단 개봉한 우유는 유통기한과 무관하게 개봉 후 3~5일 이내에 모두 마시세요. 응어리·분리·시큼한 냄새 중 하나라도 있으면 즉시 폐기.' },
+              { q: '소비기한과 유통기한은 어떻게 다른가요?',
+                a: '유통기한은 제조일로부터 소비자에게 판매가 허용되는 기한(영업자 중심)이고, 소비기한은 표시된 보관방법을 준수했을 때 섭취해도 안전에 이상이 없다고 판단되는 기한(소비자 중심)입니다. 식약처 기준으로 유통기한은 품질안전한계기간의 60~70%, 소비기한은 80~90% 시점으로 설정됩니다. 2023년 1월 1일부터 소비기한 표시제가 시행돼 식품 포장에는 유통기한 대신 소비기한이 표시됩니다(냉장 우유류는 2031년 1월 1일부터 적용). 소비기한이 지난 식품은 섭취하지 말고 폐기하세요. (출처: 식약처·대한민국 정책브리핑)' },
+              { q: '김치는 냉장고에서 얼마나 보관할 수 있나요?',
+                a: '식약처가 공개한 소비기한 참고값(2022년 12월 기준) 기준, 포장 김치의 소비기한 참고값은 35일로 기존 유통기한 30일보다 5일 깁니다. 단 이는 표시된 보관방법(냉장)을 준수한 제품 기준입니다. 집에서 담근 김치는 별도의 공인 기준이 없으며, 발효식품 특성상 시간이 지나면 상하기보다 신맛이 강해지는 쪽으로 변하는 것으로 알려져 있습니다. 군내·점성·푸른색이나 검은색 곰팡이 등 평소와 다른 이상이 보이면 폐기하세요.' },
+              { q: '달걀은 어떻게 보관하는 게 좋나요?',
+                a: '식약처는 달걀을 전용 용기에 담아 뾰족한 부분이 아래로 향하게 냉장 보관할 것을 권고합니다. 둥근 쪽에 있는 공기주머니(기실)가 위로 가야 세균 노출 위험이 줄어드는 것으로 알려져 있습니다. 금이 간 달걀은 세균 오염 위험이 있어 먹지 않는 것이 안전하며, 실온에 장시간 둔 달걀도 피하세요. 달걀 요리는 조리 후 60°C 이상 또는 5°C 이하에서 보관하는 것이 식약처 권고입니다. (출처: 식약처 카드뉴스, 2019)' },
+              { q: '두부 유통기한이 하루 지났는데 먹어도 되나요?',
+                a: '미개봉·냉장 보관 기준이라면 대개 안전합니다. 식약처 소비기한 참고값(2022년 12월 기준)에 따르면 두부의 소비기한 참고값은 23일로, 기존 유통기한 17일보다 6일 깁니다. 단 이는 표시된 보관방법을 준수한 미개봉 제품 기준이며, 개봉한 두부는 이와 무관하게 3~4일 이내에 먹는 것이 좋습니다. 쉰내·점성·포장 부풀음 중 하나라도 있으면 즉시 폐기하세요.' },
             ]
 
 const faqDetails: React.CSSProperties = {
@@ -54,8 +62,11 @@ export default function FoodStoragePage() {
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧊 식재료 보관 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
         냉장·냉동 식재료가 <strong style={{ color: 'var(--text)' }}>언제까지 안전한지</strong> + 소비 기한 알림으로 음식물 쓰레기 줄이기.
+      </p>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+        이 도구는 <strong style={{ color: 'var(--text)' }}>언제까지 보관할 수 있는지(소비 기한 D-day)</strong>를 다룹니다. 냉동한 식재료를 얼마 만에 녹일 수 있는지는 <Link href="/tools/cooking/thawing" style={{ color: 'var(--accent)' }}>해동 시간 계산기</Link>에서 확인하세요.
       </p>
 
       {/* ── 면책 조항 (상단) ── */}
@@ -69,6 +80,7 @@ export default function FoodStoragePage() {
         <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '6px' }}>⚠️ 안내</p>
         <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
           본 계산기는 식약처 권고 일반 기준에 따른 <strong style={{ color: 'var(--text)' }}>참고용 정보</strong>입니다. 실제 보관 가능 기간은 냉장고 온도·포장 상태·취급 환경에 따라 크게 달라질 수 있습니다. 색·냄새·점성에 이상이 있다면 D-day와 무관하게 폐기하세요.
+          {' '}기준 자료: 식약처 「식품유형별 소비기한 설정 보고서」 — <a href="https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612" target="_blank" rel="noopener noreferrer" style={{ color: '#EA580C', textDecoration: 'underline', textUnderlineOffset: '2px' }}>식품안전나라 소비기한 자료실 ↗</a>
         </p>
       </div>
 
@@ -275,6 +287,25 @@ export default function FoodStoragePage() {
               <div style={faqAnswer}>{faq.a}</div>
             </details>
           ))}
+        </div>
+
+        {/* ── 5.5 참고 기준·출처 ── */}
+        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 참고 기준·출처</p>
+          <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
+            본 계산기의 보관 기간은 <strong style={{ color: 'var(--text)' }}>일반 정보 제공용 참고값</strong>입니다. 식품 안전 진단·판정 도구가 아닙니다.
+          </p>
+          <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 10 }}>
+            <li>식약처 「식품유형별 소비기한 설정 보고서」 — <a href="https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>식품안전나라 소비기한 자료실 ↗</a></li>
+            <li>식품유형별 소비기한 참고값 검색 (한국식품산업협회, 2026년 6월 기준 약 2,000개 품목) — <a href="https://www.kfia.or.kr/kfia/sub.php?menukey=1513" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>kfia.or.kr ↗</a></li>
+            <li>소비기한 표시제 Q&A (식약처·대한민국 정책브리핑, 2023년 시행) — <a href="https://www.korea.kr/news/healthView.do?newsId=148911057" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>korea.kr ↗</a></li>
+          </ul>
+          <p style={{ fontSize: 12.5, color: 'var(--text)', fontWeight: 600, marginBottom: 6 }}>식품 안전 도움:</p>
+          <ul style={{ paddingLeft: 18, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+            <li>식약처 식품안전정보: <strong style={{ color: '#DC2626' }}>1399</strong></li>
+            <li>식품안전나라: <strong style={{ color: '#DC2626' }}>foodsafetykorea.go.kr</strong></li>
+            <li>USDA FSIS (영문): fsis.usda.gov</li>
+          </ul>
         </div>
 
         {/* ── 6. 관련 도구 ── */}

@@ -331,8 +331,8 @@ export default function WealthRankClient() {
           {/* 기준별 보충 설명 */}
           {mode === 'nation' && (
             <div className={s.noteCard}>
-              전국 분포는 공식 앵커(평균·상위 컷·실측 구간) 사이를 <strong>보간한 추정 곡선</strong>입니다.
-              중앙값(약 2.45억) 등 하위~중간 구간의 순위는 원자료가 아닌 <strong>모델 추정값</strong>이라 실제와 다소 차이가 있을 수 있습니다.
+              전국 분포는 공식 앵커(평균·중앙값·상위 컷·실측 구간) 사이를 <strong>보간한 추정 곡선</strong>입니다.
+              중앙값(2억 3,860만원)은 2025 조사 실측값이지만, 그 외 하위~중간 구간의 순위는 원자료가 아닌 <strong>모델 추정값</strong>이라 실제와 다소 차이가 있을 수 있습니다.
             </div>
           )}
           {mode === 'world' && (
