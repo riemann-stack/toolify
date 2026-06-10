@@ -6,7 +6,7 @@ export const metadata = buildMetadata({
   description: 'Youtil 개인정보처리방침입니다.',
 })
 
-const LAST_UPDATED  = '2026년 5월 28일'
+const LAST_UPDATED  = '2026년 6월 10일'
 const SITE_NAME     = 'Youtil'
 const SITE_URL      = 'https://youtil.kr'
 const CONTACT_EMAIL = 'contact@youtil.kr'
@@ -181,6 +181,7 @@ export default function PrivacyPage() {
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
             <p>서비스명: {SITE_NAME}</p>
+            <p style={{ marginTop: '6px' }}>개인정보 보호책임자: 이주훈</p>
             <p style={{ marginTop: '6px' }}>
               이메일:{' '}
               <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--accent)' }}>
