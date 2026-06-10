@@ -24,6 +24,7 @@ export default function Footer() {
           </div>
         </div>
         <div className={styles.links}>
+          <Link href="/collections" className={styles.link}>상황별 가이드</Link>
           <Link href="/about"      className={styles.link}>소개</Link>
           <Link href="/contact"    className={styles.link}>문의</Link>
           <Link href="/privacy"    className={styles.link}>개인정보처리방침</Link>

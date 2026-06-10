@@ -16,7 +16,7 @@ const HIGH_PRIORITY = new Set<string>([
   '/tools/life/dutch',
 ])
 
-const STATIC_PATHS = ['/', '/tools', '/about', '/contact', '/privacy', '/terms', '/disclaimer']
+const STATIC_PATHS = ['/', '/tools', '/collections', '/about', '/contact', '/privacy', '/terms', '/disclaimer']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

@@ -152,6 +152,14 @@ export default function ContactPage() {
           <dt style={{ color: 'var(--muted)' }}>사이트</dt>
           <dd style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>youtil.kr</dd>
 
+          <dt style={{ color: 'var(--muted)' }}>운영자</dt>
+          <dd style={{ color: 'var(--text)' }}>
+            리만 (필명)
+            <span style={{ display: 'block', color: 'var(--muted)', fontSize: '12px', marginTop: '4px', lineHeight: 1.6 }}>
+              도구 제작·데이터 검증·문의 응답을 직접 담당하는 1인 운영자입니다.
+            </span>
+          </dd>
+
           <dt style={{ color: 'var(--muted)' }}>운영 형태</dt>
           <dd style={{ color: 'var(--text)' }}>
             개인 운영 무료 웹서비스

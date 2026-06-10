@@ -76,6 +76,32 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── 만든 사람 ── */}
+      <section style={{ marginBottom: '56px' }}>
+        <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
+          만든 사람
+        </h2>
+        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            Youtil은 <strong style={{ color: 'var(--text)' }}>리만</strong>이 혼자 만들고 운영하는 1인 무료 웹서비스입니다.
+            도구 제작부터 데이터 검증, 문의 응답까지 직접 담당합니다.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            모든 도구는 같은 절차로 만들어집니다.
+          </p>
+          <ol style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li><strong style={{ color: 'var(--text)' }}>공식 출처 확인</strong> — 국세청·식약처·WHO 등 공신력 있는 기관의 산식·기준을 먼저 확인합니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>교차 검증</strong> — 구현 후 공식 예시·자료와 결과를 대조해 검증합니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>지속 갱신</strong> — 법령·요율이 바뀌면 갱신하고, 주요 도구에는 최종 업데이트 시점을 표기합니다.</li>
+          </ol>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
+            잘못된 정보를 발견하셨다면{' '}
+            <a href="mailto:contact@youtil.kr" style={{ color: 'var(--accent)', textDecoration: 'none' }}>contact@youtil.kr</a>
+            로 알려주세요. 확인 후 바로 수정합니다.
+          </p>
+        </div>
+      </section>
+
       {/* ── 3. 제공 도구 목록 ── */}
       <section style={{ marginBottom: '56px' }}>
         <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
