@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
+import { totalTools } from '@/lib/tools'
 
 export const metadata = buildMetadata({
   path: '/disclaimer',
   title: '면책조항 — 의료·세무·금융·법률·식품·건축·화학·운동',
-  description: 'Youtil의 모든 계산 도구는 일반 정보 제공 목적이며 전문가 자문을 대체하지 않습니다. 의료·건강, 세무·재무, 금융·투자, 법률, 식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠 8개 분야별 강화 면책 안내.',
+  description: 'Youtil의 모든 계산 도구는 일반 정보 제공 목적이며 전문가 자문을 대체하지 않습니다. 의료·건강, 세무·재무, 금융·투자, 법률, 식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠, 예술·창작, 개발자 10개 분야별 강화 면책 안내.',
 })
 
 const LAST_UPDATED  = '2026년 5월 5일'
@@ -302,7 +303,7 @@ export default function DisclaimerPage() {
       {/* 2. 분야별 강화 면책 */}
       <h2 style={sectionTitle}>2. 분야별 강화 면책</h2>
       <p style={muted}>
-        130+ 도구가 8개 위험 영역에 걸쳐 있어, 각 영역별로 추가 면책을 명시합니다. 도구 페이지 내 짧은 인라인 경고는 아래 박스의 요약입니다.
+        {totalTools}개 도구가 {DOMAINS.length}개 위험 영역에 걸쳐 있어, 각 영역별로 추가 면책을 명시합니다. 도구 페이지 내 짧은 인라인 경고는 아래 박스의 요약입니다.
       </p>
 
       {DOMAINS.map((d) => (

@@ -35,6 +35,26 @@ const FAQ_LD = [
                 q: '임대 수익을 포함한 수익률은 어떻게 계산되나요?',
                 a: '임대 수익은 <strong>(월세 × 임대 개월) − (공실 손실 + 임대인 부담 관리비)</strong>로 계산되어 세전 수익에 더해집니다. 매매 차익이 0이어도 월세 수익만으로 수익을 낼 수 있는 것이 “수익형 부동산”의 핵심입니다. 다만 임대소득세, 건강보험료(피부양자 자격 상실 위험) 등은 별도로 발생하므로 실제 수령액과 차이가 있습니다.',
               },
+              {
+                q: '양도소득세와 보유세(재산세·종합부동산세)는 계산 결과에 포함되나요?',
+                a: '아니요. 본 계산기는 취득세·중개수수료·대출이자 등 거래 비용까지만 반영한 <strong>세전 수익</strong>입니다. 매도 시 양도소득세(2026년 6월 기준, 국세청: 주택 1년 미만 70%, 1년 이상 2년 미만 60%, 2년 이상 기본세율 6~45%)가 별도로 발생하고, 보유 기간 중에는 재산세·(기준 초과 시) 종합부동산세, 임대 시 임대소득세가 추가됩니다. 위 ‘양도소득세 참고 가이드’를 확인하고 실제 세액은 세무사와 상담하세요.',
+              },
+              {
+                q: '다주택자인데 지금 매도하면 양도세 중과가 적용되나요?',
+                a: '2026년 6월 기준, 조정대상지역 내 주택을 양도하는 다주택자에게는 <strong>2주택 기본세율+20%p, 3주택 이상 +30%p</strong>의 중과세율이 적용됩니다. 2022.5.10부터 시행된 한시 중과 배제(유예)가 2026.5.9 종료되었고 정부는 추가 연장이 없다고 발표했습니다(대한민국 정책브리핑, 2026.2). 다만 2026.5.9까지 체결한 매매계약분은 계약일부터 일정 기간(4~6개월) 내 양도 시 중과가 배제되는 경과조치가 있으므로, 조정대상지역 지정 여부와 주택 수에 따라 반드시 세무사 확인이 필요합니다.',
+              },
+              {
+                q: '공실률은 어떻게 가정해서 입력하나요?',
+                a: '상세 모드의 <strong>‘공실 기간(개월)’</strong> 입력란에 보유 기간 중 임대가 비어 있을 것으로 예상하는 개월 수를 넣으면, 그 개월 수만큼 월세 수익에서 차감됩니다. 정해진 표준값은 없으므로 공실 0개월(낙관)과 임차인 교체 시마다 1~2개월(보수)처럼 <strong>복수 시나리오를 돌려 비교</strong>하는 방식을 권장합니다. 임차 수요가 한정된 상가·오피스라면 주거용보다 보수적으로 잡는 편이 안전합니다.',
+              },
+              {
+                q: '전세 낀 갭투자는 어떻게 입력하나요?',
+                a: '상세 모드에서 임대 형태를 <strong>‘전세’</strong>로 선택하고 임대보증금란에 전세보증금을 입력하세요. 자기자본이 <strong>매입가 + 초기 비용 − 대출 − 전세보증금</strong>으로 계산되고 월세 수익은 0으로 처리되어 갭투자 구조가 그대로 반영됩니다. 보증금·대출이 매입가와 비용을 모두 충당하는 무피 구조라면 자기자본이 0 이하가 되어 ROE를 산정할 수 없다는 안내가 표시되며, 이때는 절대 수익과 보증금 반환(역전세) 위험을 기준으로 판단해야 합니다.',
+              },
+              {
+                q: '상가(비주거)와 주택의 수익률 계산은 무엇이 다른가요?',
+                a: '본 계산기에서 주택 종류를 <strong>‘비주거’</strong>로 선택하면 취득세가 4%(농어촌특별세·지방교육세 별도)로 적용되어 주택(1주택 1~3%, 다주택 8~12%)과 초기 비용부터 달라집니다. 또한 1세대 1주택 비과세(양도가액 12억원 이하) 같은 주택 전용 혜택은 상가에 적용되지 않아 매도 차익에 대한 세금 부담 구조가 다릅니다. 상가는 월세 수익 비중이 큰 대신 공실·상권 변화가 수익률을 좌우하므로, 공실 기간을 보수적으로 입력해 시나리오를 비교해 보세요.',
+              },
             ]
 
 export default function RealEstatePage() {
@@ -50,7 +70,7 @@ export default function RealEstatePage() {
         매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="부동산 정책·시세 참고" sources={[{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"한국부동산원","href":"https://www.reb.or.kr"}]} />
+      <UpdatedMeta date="2026년 6월" basis="부동산 정책·시세 참고" sources={[{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"한국부동산원","href":"https://www.reb.or.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
 
       <RealEstateClient />
 
@@ -258,6 +278,70 @@ export default function RealEstatePage() {
               </ul>
             </div>
           </div>
+        </div>
+
+        {/* ── 6-1. 양도소득세 참고 가이드 (2026.6 추가) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            양도소득세 참고 가이드 (2026년 6월 기준)
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
+            본 계산기의 결과는 <strong style={{ color: 'var(--text)' }}>양도소득세를 반영하지 않은 세전 수익</strong>입니다.
+            매도 시점에 아래 양도소득세가 별도로 발생하므로, 계산된 세전 수익에서 양도세를 차감해야 실제 손에 쥐는 금액이 됩니다.
+            아래는 국세청이 안내하는 현행 보유기간별 세율 골격입니다(주택·조합원입주권 기준).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['보유 기간', '세율', '비고'].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { range: '1년 미만',          rate: '70%',            note: '단일 세율' },
+                  { range: '1년 이상 2년 미만', rate: '60%',            note: '단일 세율' },
+                  { range: '2년 이상',          rate: '기본세율 6~45%', note: '과세표준 8구간 누진' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', marginTop: '14px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>다주택 중과 (조정대상지역)</p>
+              <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
+                2주택 → <strong style={{ color: '#EA580C' }}>기본세율 +20%p</strong><br/>
+                3주택 이상 → <strong style={{ color: '#DC2626' }}>기본세율 +30%p</strong><br/>
+                <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
+                  2022.5.10~2026.5.9 한시 중과 배제(유예) 후 연장 없이 종료되어 2026.5.10부터 다시 적용됩니다.
+                  2026.5.9까지 체결한 매매계약분은 계약일부터 일정 기간(4~6개월) 내 양도 시 중과가 배제되는 경과조치가 있습니다.
+                </span>
+              </p>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1세대 1주택 비과세</p>
+              <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
+                2년 이상 보유 시 양도가액 <strong style={{ color: 'var(--accent)' }}>12억원 이하 비과세</strong><br/>
+                <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
+                  2017.8.3 이후 조정대상지역에서 취득한 주택은 2년 이상 거주 요건이 추가됩니다.
+                  12억원 초과 고가주택은 초과 비율만큼의 양도차익만 과세됩니다.
+                </span>
+              </p>
+            </div>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 2026년 6월 기준. 장기보유특별공제·감면 등에 따라 실제 세액은 달라지며, 본 계산기는 양도소득세를 반영하지 않습니다. 출처:{' '}
+            <a href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2312&cntntsId=7711" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국세청 — 양도소득세 세율</a>,{' '}
+            <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148959488" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한민국 정책브리핑 — 다주택자 양도세 중과 유예 종료(2026.2)</a>.
+          </p>
         </div>
 
         {/* ── 7. FAQ ── */}

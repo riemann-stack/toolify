@@ -336,6 +336,11 @@ export default function CostRateClient() {
           { href: '/tools/finance/salary', label: '연봉 실수령액' },
           { href: '/tools/finance/loan', label: '대출이자 계산기' }
         ]}
+        sources={[
+          { label: '대한민국 정책브리핑 — 배달플랫폼 상생협의체', href: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156660502' },
+          { label: '요기요 사장님포털', href: 'https://ceo.yogiyo.co.kr' },
+          { label: '국세청', href: 'https://www.nts.go.kr' },
+        ]}
       >
         원가율·마진·손익분기는 입력값 기준 <strong>참고용 계산</strong>입니다. 실제 수익은 배달·결제 수수료, 부가세·소득세, 임대료·인건비 등 고정비에 따라 달라지니, 사업 의사결정 전 세무사·전문가와 함께 확인하세요.
       </Disclaimer>

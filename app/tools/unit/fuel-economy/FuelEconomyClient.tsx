@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './fuel-economy.module.css'
 
 // ──────────────────────────────────────
@@ -52,6 +53,21 @@ export default function FuelEconomyClient() {
 
   return (
     <div className={styles.wrap}>
+      <Disclaimer
+        variant="default"
+        related={[
+          { href: '/tools/finance/car-cost', label: '자동차 유지비 계산기' },
+          { href: '/tools/unit/converter',   label: '단위 변환기' },
+          { href: '/tools/unit/tire-pressure', label: '타이어 공기압 변환기' },
+        ]}
+        sources={[
+          { label: '오피넷(한국석유공사)', href: 'https://www.opinet.co.kr' },
+          { label: '무공해차 통합누리집(환경부)', href: 'https://ev.or.kr' },
+        ]}
+      >
+        연료비·충전비 비교는 평균 단가 기준 추정치이며, 실주행 연비·전비는 제조사 공인 복합연비와 ±20% 이상 차이날 수 있습니다.
+      </Disclaimer>
+
       <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${tab === 'fuel' ? styles.tabActive : ''}`}
@@ -235,8 +251,9 @@ function evGrade(kmkwh: number): { className: string; title: string; desc: strin
 function EvTab() {
   const [value, setValue] = useState<string>('5')
   const [unit, setUnit] = useState<EvUnit>('kmkwh')
-  const [slowRate, setSlowRate] = useState<string>('200')
-  const [fastRate, setFastRate] = useState<string>('400')
+  // 기본 단가: 환경부 공공 충전요금 5단계 개편(2026-04-30 시행) — 완속(30kW 미만) 294.3원, 급속(100~200kW) 347.2원/kWh
+  const [slowRate, setSlowRate] = useState<string>('294.3')
+  const [fastRate, setFastRate] = useState<string>('347.2')
   const [copied, setCopied] = useState<EvUnit | null>(null)
 
   const numValue = parseFloat(value) || 0
@@ -367,7 +384,7 @@ function EvTab() {
               className={styles.costInput}
               value={slowRate}
               onChange={e => setSlowRate(e.target.value)}
-              placeholder="200"
+              placeholder="294.3"
               step="10"
             />
           </div>
@@ -378,7 +395,7 @@ function EvTab() {
               className={styles.costInput}
               value={fastRate}
               onChange={e => setFastRate(e.target.value)}
-              placeholder="400"
+              placeholder="347.2"
               step="10"
             />
           </div>
@@ -386,20 +403,24 @@ function EvTab() {
 
         <div className={styles.costGrid}>
           <div className={styles.costCell}>
-            <div className={styles.costLabel}>완속 충전 (200원/kWh 기준)</div>
+            <div className={styles.costLabel}>완속 충전 ({formatNumber(slow)}원/kWh 기준)</div>
             <div className={styles.costValue}>{formatKRW(slowCost)}</div>
             <div className={styles.costMeta}>
               {formatNumber(kwhPer100km)} kWh × {formatNumber(slow)}원
             </div>
           </div>
           <div className={styles.costCell}>
-            <div className={styles.costLabel}>급속 충전 (400원/kWh 기준)</div>
+            <div className={styles.costLabel}>급속 충전 ({formatNumber(fast)}원/kWh 기준)</div>
             <div className={styles.costValue}>{formatKRW(fastCost)}</div>
             <div className={styles.costMeta}>
               {formatNumber(kwhPer100km)} kWh × {formatNumber(fast)}원
             </div>
           </div>
         </div>
+
+        <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
+          기본 단가: 환경부 공공 충전요금 5단계 개편(2026-04-30 시행) — 완속(30kW 미만) 294.3원 · 급속(100~200kW) 347.2원/kWh. 사업자·시간대에 따라 다를 수 있습니다.
+        </p>
       </div>
     </>
   )

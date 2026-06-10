@@ -27,7 +27,7 @@ const FAQ_LD = [
               },
               {
                 q: '연비 1km/L 차이가 1년에 얼마 차이?',
-                a: '연 15,000km, 휘발유 1,800원/L 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>13만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × 1800 ≈ 128,571원. 5년이면 65만원, 10년이면 130만원입니다.',
+                a: '연 15,000km, 휘발유 약 2,011원/L(2026년 5월 말 오피넷 전국 평균) 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>14만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × 2,011 ≈ 143,600원. 5년이면 72만원, 10년이면 144만원입니다.',
               },
               {
                 q: '하이브리드차는 어떤 단위로 표기하나요?',
@@ -207,7 +207,7 @@ export default function FuelEconomyPage() {
             🇰🇷 연료별 100km 주행 비용 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            2026년 한국 평균 단가 기준 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
+            2026년 6월 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -220,12 +220,13 @@ export default function FuelEconomyPage() {
               </thead>
               <tbody>
                 {[
-                  { f: '⛽ 휘발유',         e: '12 km/L',     p: '1,800원/L',  c: '약 15,000원' },
-                  { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: '1,650원/L',  c: '약 11,800원' },
-                  { f: '🔥 LPG',           e: '9 km/L',      p: '1,150원/L',  c: '약 12,800원' },
-                  { f: '🍃 하이브리드',     e: '20 km/L',     p: '1,800원/L',  c: '약 9,000원' },
-                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '200원/kWh',  c: '약 4,000원' },
-                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '400원/kWh',  c: '약 8,000원' },
+                  { f: '⛽ 휘발유',         e: '12 km/L',     p: '2,011원/L',    c: '약 16,800원' },
+                  { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: '2,006원/L',    c: '약 14,300원' },
+                  { f: '🔥 LPG',           e: '9 km/L',      p: '1,090원/L',    c: '약 12,100원' },
+                  { f: '🍃 하이브리드',     e: '20 km/L',     p: '2,011원/L',    c: '약 10,100원' },
+                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '294.3원/kWh',  c: '약 5,900원' },
+                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '347.2원/kWh',  c: '약 6,900원' },
+                  { f: '🔌 전기 (초급속)',  e: '5 km/kWh',    p: '391.9원/kWh',  c: '약 7,800원' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
@@ -237,8 +238,11 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            기준: 2026-06 · 출처: 오피넷(휘발유·경유·LPG — 2026년 5월 전국 평균), 환경부(전기 — 공공 충전요금 5단계 개편, 2026-04-30 시행: 완속 30kW 미만 294.3원 · 급속 100~200kW 347.2원 · 초급속 200kW 이상 391.9원/kWh)
+          </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>3.7배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
+            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>2.8배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
           </p>
         </div>
 

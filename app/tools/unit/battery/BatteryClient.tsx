@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './battery.module.css'
 
 // ──────────────────────────────────────
@@ -21,14 +22,14 @@ function flightStatus(wh: number): { status: FlightStatus; label: string; desc: 
     return {
       status: 'safe',
       label: '✅ 휴대 반입 가능',
-      desc: '대부분 항공사에서 기내 휴대 반입 OK. 위탁 수하물(체크인)은 절대 금지입니다.',
+      desc: '기내 휴대 반입 OK — 위탁 수하물(체크인)은 절대 금지. 한국 출발·도착 편은 2026-04-20부터 보조배터리 1인당 최대 2개까지입니다.',
     }
   }
   if (wh <= 160) {
     return {
       status: 'warning',
       label: '🔶 사전 승인 필요',
-      desc: '항공사 사전 승인 필요. 보통 1인당 2개까지 허용됩니다. 출발 전 항공사에 직접 문의하세요.',
+      desc: '항공사 사전 승인 필요. 2026-04-20부터 보조배터리는 승인을 받아도 1인당 최대 2개까지입니다. 출발 전 항공사에 직접 문의하세요.',
     }
   }
   return {
@@ -133,6 +134,22 @@ export default function BatteryClient() {
 
   return (
     <div className={styles.wrap}>
+      <Disclaimer
+        variant="safety"
+        sources={[
+          { label: '국토교통부 보도자료 (2026-04-08)', href: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374' },
+          { label: '아시아나항공 공지', href: 'https://m.flyasiana.com/C/KR/KO/customer/notice/detail?id=CM202604100002528761' },
+          { label: '대한항공 뉴스룸', href: 'https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/' },
+        ]}
+        related={[
+          { href: '/tools/unit/converter', label: '단위 변환기' },
+          { href: '/tools/date/jet-lag',   label: '시차 적응 계산기' },
+          { href: '/tools/life/packing',   label: '여행 짐 계산기' },
+        ]}
+      >
+        환산값은 정격 전압 기준 계산치이며 제품에 표기된 Wh가 우선합니다. 기내 반입 판정은 ICAO·국토교통부 기준(2026-04-20 시행, 기준일 2026-06) 참고용으로, 국가·항공사별 적용 시점이 다를 수 있으니 출발 전 항공사 공식 규정을 꼭 확인하세요.
+      </Disclaimer>
+
       {/* 용량 입력 */}
       <div className={styles.card}>
         <span className={styles.cardLabel}>용량 입력</span>
@@ -242,13 +259,16 @@ export default function BatteryClient() {
 
       {/* 항공 규정 안내 */}
       <div className={styles.ruleBox}>
-        <p className={styles.ruleTitle}>📋 국제 항공 규정 (IATA 기준)</p>
+        <p className={styles.ruleTitle}>📋 국제 항공 규정 (ICAO·IATA 기준, 2026-06 기준)</p>
         <ul className={styles.ruleList}>
-          <li>• <strong>100Wh 이하</strong>: 휴대 반입 자유 (개수 제한 거의 없음)</li>
-          <li>• <strong>100~160Wh</strong>: 항공사 사전 승인 필요, 보통 1인당 2개까지</li>
+          <li>• <strong>보조배터리는 1인당 최대 2개</strong> (160Wh 이하) — 2026-04-20 시행 ICAO 국제기준</li>
+          <li>• <strong>100Wh 이하</strong>: 항공사 승인 없이 휴대 반입 가능 (개수는 2개 제한에 포함)</li>
+          <li>• <strong>100~160Wh</strong>: 항공사 사전 승인 필요</li>
           <li>• <strong>160Wh 초과</strong>: 일반 항공기 반입 불가</li>
           <li>• <strong>위탁 수하물(체크인) 절대 금지</strong> — 화재 위험으로 인해 모든 보조배터리는 기내 휴대만 허용</li>
-          <li>• 단자 보호를 위해 절연 테이프나 전용 파우치에 보관 권장</li>
+          <li>• <strong>기내 선반 보관 금지</strong> — 몸에 소지하거나 좌석 (앞)주머니에 보관 (2025-03-01부터)</li>
+          <li>• <strong>기내 충전·사용 전면 금지</strong> — 보조배터리 자체 충전은 물론 다른 기기 충전도 금지 (대한항공·아시아나 등 국내 5개사는 2026-01-26부터)</li>
+          <li>• 단자가 금속에 닿지 않도록 절연 테이프·지퍼백·전용 파우치로 1개씩 보호</li>
         </ul>
       </div>
 

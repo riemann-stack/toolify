@@ -128,7 +128,7 @@ export default function TermsPage() {
           }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
               📑 <strong style={{ color: '#FFA63E' }}>분야별 강화 면책</strong> — 의료·건강, 세무·재무, 금융·투자, 법률,
-              식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠 8개 분야의 상세 면책 조항은 별도 문서{' '}
+              식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠, 예술·창작, 개발자 10개 분야의 상세 면책 조항은 별도 문서{' '}
               「<a href="/disclaimer" style={{ color: 'var(--accent)', textDecoration: 'underline', fontWeight: 600 }}>면책조항(/disclaimer)</a>」에서 확인하실 수 있습니다.
               <br />
               본 약관과 면책조항 간 해석 충돌 시 <strong style={{ color: 'var(--text)' }}>면책조항이 우선 적용</strong>됩니다.

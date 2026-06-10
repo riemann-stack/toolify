@@ -27,7 +27,15 @@ const FAQ_LD = [
               },
               {
                 q: '보조배터리 2개 이상 가지고 탈 수 있나요?',
-                a: '<strong>100Wh 이하</strong>는 대부분 항공사에서 개수 제한이 거의 없거나 5개 이내로 허용합니다(아시아나는 5개 명시). <strong>100~160Wh</strong>는 1인당 <strong>최대 2개</strong>까지가 일반적입니다. 여러 개를 가져갈 때는 단자 보호를 위해 절연 테이프나 전용 파우치 사용을 권장합니다.',
+                a: '<strong>2026년 4월 20일부터</strong> ICAO 국제기준에 따라 보조배터리(파워뱅크)는 용량과 무관하게 <strong>1인당 최대 2개</strong>(160Wh 이하)까지만 기내 반입할 수 있습니다. <strong>100~160Wh</strong> 제품은 2개 이내라도 <strong>항공사 사전 승인</strong>이 필요합니다. 노트북용 등 <strong>교체용(예비) 배터리</strong>는 별도 기준이 적용되어 아시아나항공 기준 100Wh 이하 최대 5개까지 가능하며, 100~160Wh 구간은 보조배터리와 합산 2개까지입니다. 단자는 절연 테이프나 지퍼백·파우치로 1개씩 보호해야 합니다. (기준: 2026-06, 국토교통부·아시아나항공 공지)',
+              },
+              {
+                q: '기내에서 보조배터리로 휴대폰을 충전해도 되나요?',
+                a: '<strong>안 됩니다.</strong> 2026년 4월 20일부터 ICAO 국제기준에 따라 보조배터리 자체를 충전하는 것은 물론, <strong>보조배터리로 스마트폰 등 다른 기기를 충전하는 행위도 전면 금지</strong>됩니다. 대한항공·아시아나항공·진에어·에어부산·에어서울은 이에 앞서 <strong>2026년 1월 26일부터</strong> 기내 사용·충전을 금지했습니다. 비행 중에는 좌석 전원(USB·콘센트)을 이용하세요. (기준: 2026-06, 국토교통부·대한항공 뉴스룸)',
+              },
+              {
+                q: '보조배터리를 기내 선반(오버헤드빈)에 보관해도 되나요?',
+                a: '<strong>안 됩니다.</strong> 2025년 3월 1일 시행된 국토교통부 표준안에 따라 보조배터리는 기내 선반 보관이 금지되며, <strong>몸에 소지하거나 좌석 (앞)주머니</strong>에 보관해야 합니다. 단자가 금속에 닿지 않도록 절연테이프로 덮거나 지퍼백·보호 파우치에 1개씩 넣어야 하고, 과열되거나 부풀어 오르는 등 이상 징후가 있으면 즉시 승무원에게 알려야 합니다.',
               },
               {
                 q: '충전 케이블·어댑터도 함께 반입할 수 있나요?',
@@ -156,12 +164,12 @@ export default function BatteryPage() {
             항공사별 보조배터리 정책
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            대부분 IATA 기준을 따르지만, 100~160Wh 구간의 “사전 승인” 요건은 항공사마다 차이가 있습니다. 정확한 규정은 출발 전 항공사 공식 홈페이지 확인이 필수입니다.
+            대부분 IATA 기준을 따르지만, 100~160Wh 구간의 “사전 승인” 요건은 항공사마다 차이가 있습니다. 특히 <strong style={{ color: 'var(--text)' }}>한국 출발·도착 항공편은 2026년 4월 20일부터 ICAO 신기준(보조배터리 1인당 최대 2개·기내 사용 금지)</strong>이 적용됩니다. 정확한 규정은 출발 전 항공사 공식 홈페이지 확인이 필수입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
             {[
-              { air: '🇰🇷 대한항공 (KE)',     limit: '100Wh 이하 자유 / 100~160Wh 2개', note: '160Wh 초과 반입 불가. 의료용은 별도 신청.' },
-              { air: '🇰🇷 아시아나 (OZ)',     limit: '100Wh 이하 5개 / 100~160Wh 2개',  note: '예비 배터리는 모두 기내 휴대만 가능.' },
+              { air: '🇰🇷 대한항공 (KE)',     limit: '160Wh 이하 1인당 최대 2개 (100~160Wh는 승인 필요)', note: '160Wh 초과 반입 불가. 2026-01-26부터 기내 사용·충전 금지.' },
+              { air: '🇰🇷 아시아나 (OZ)',     limit: '보조배터리 최대 2개 / 교체용 배터리 100Wh 이하 5개',  note: '100~160Wh는 승인 필요·교체용과 합산 2개. 기내 사용·충전 금지, 예비 배터리는 모두 기내 휴대만 가능.' },
               { air: '🇺🇸 델타 (DL)',         limit: '100Wh 이하 자유 / 100~160Wh 2개', note: 'Hoverboard·전동 킥보드 배터리는 전면 금지.' },
               { air: '🇺🇸 유나이티드 (UA)',   limit: '100Wh 이하 자유 / 100~160Wh 2개', note: 'FAA 규정에 따라 위탁 수하물 절대 금지.' },
               { air: '🇯🇵 일본항공 (JL)',     limit: '160Wh 이하 (160Wh 초과 불가)',    note: '훼손·부풀어 오른 배터리는 반입 거부.' },
@@ -176,6 +184,54 @@ export default function BatteryPage() {
           </div>
           <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', opacity: 0.8 }}>
             ⚠️ 본 정보는 일반 가이드이며, 정책은 수시로 변경됩니다. 출국 전 항공사 공식 홈페이지에서 최신 규정을 반드시 재확인하세요.
+          </p>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px', opacity: 0.8 }}>
+            기준: 2026-06 · 출처:{' '}
+            <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
+            <a href="https://m.flyasiana.com/C/KR/KO/customer/notice/detail?id=CM202604100002528761" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>아시아나항공 공지 (2026-04-17)</a>{' · '}
+            <a href="https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한항공 뉴스룸 (2026-01-23)</a>
+            {' '}— 해외 항공사(델타·유나이티드·일본항공·싱가포르항공 등)는 ICAO 신기준 적용 시점이 국가·항공사별로 다를 수 있습니다.
+          </p>
+        </div>
+
+        {/* ── 4-1. 2025~2026년 달라진 한국 기내 보조배터리 규정 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            2025~2026년 달라진 한국 기내 보조배터리 규정
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            2025년 1월 에어부산 화재 사고를 계기로 국토교통부가 기내 안전관리 표준안을 시행했고, 이 한국 기준이 <strong style={{ color: 'var(--text)' }}>ICAO 국제기준(항공위험물운송기술지침 Doc 9284)</strong>으로 채택되어 <strong style={{ color: 'var(--accent)' }}>2026년 4월 20일부터 전면 시행</strong> 중입니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              {
+                d: '2025-03-01',
+                t: '국토교통부 기내 안전관리 표준안 시행',
+                body: '기내 선반 보관 금지 — 몸에 소지하거나 좌석 주머니에 보관. 보조배터리 자체 충전 금지(기내전원·배터리 간 충전). 단자가 금속에 닿지 않게 절연테이프·보호 파우치·지퍼백으로 단락 방지. 100Wh 이하 최대 5개, 100~160Wh는 항공사 승인하에 2개, 160Wh 초과 반입 금지. 과열·부풀어 오름 등 이상 징후 시 승무원에게 즉시 신고.',
+              },
+              {
+                d: '2026-01-26',
+                t: '대한항공·아시아나 등 5개사 기내 사용·충전 금지',
+                body: '대한항공·아시아나항공·진에어·에어부산·에어서울의 국내선·국제선 전 노선에서 보조배터리로 휴대전화·태블릿·노트북·카메라 등 전자기기를 충전하는 행위 전면 금지. 보조배터리는 승객 손이 닿는 곳에 직접 휴대하거나 좌석 앞 주머니에 보관.',
+              },
+              {
+                d: '2026-04-20',
+                t: 'ICAO 국제기준 시행 — 1인당 2개·기내 충전·사용 전면 금지',
+                body: '한국 제안으로 개정된 ICAO 국제기준(2026-03-27 이사회 최종 승인)에 따라 보조배터리(파워뱅크)는 1인당 최대 2개(160Wh 이하, 100~160Wh는 항공사 승인 필요)까지만 기내 반입 가능. 보조배터리 자체 충전은 물론, 보조배터리로 다른 기기를 충전하는 기내 사용도 전면 금지.',
+              },
+            ].map((c, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.d}</p>
+                <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.t}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', opacity: 0.8 }}>
+            ※ 국토교통부 기준 100Wh ≈ 27,000mAh, 160Wh ≈ 43,000mAh (3.7V 환산). 홍콩·싱가포르·일본 등 일부 국가는 이미 강화된 기준을 시행하는 등 국가별로 규정이 다를 수 있어 출국 전 항공사 확인이 필요합니다. 출처:{' '}
+            <a href="https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95090678" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2025-02-13)</a>{' · '}
+            <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
+            <a href="https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한항공 뉴스룸 (2026-01-23)</a>
           </p>
         </div>
 

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CostRateClient from './CostRateClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 
@@ -34,6 +35,18 @@ const FAQ_LD = [
                 q: '배달과 매장 가격을 다르게 해도 되나요?',
                 a: '법적으로 가능하며 많은 식당이 이미 적용 중입니다. 다만 배달앱에 표기된 가격과 실제 매장 가격이 다르다는 사실을 고객이 알면 신뢰도 하락 위험이 있어 배달가가 더 높음을 명시(배달 전용 메뉴 등)하는 방식이 권장됩니다. <strong>쿠팡이츠는 매장과 동일 가격을 요구하는 정책</strong>이 있으므로 약관 확인이 필요합니다.',
               },
+              {
+                q: '원가율은 부가세 포함 가격과 제외 가격 중 어느 쪽으로 계산하나요?',
+                a: '정확한 수익 분석은 <strong>공급가액(부가세 제외 금액) 기준</strong>이 원칙입니다. 일반과세자의 메뉴 판매가에는 부가세 10%가 포함되어 있고, 이 부가세는 매출세액으로 신고·납부해야 하는 돈이라 실제 수입이 아닙니다(매입세액 공제 후 차액 납부). 예: 판매가 11,000원이면 공급가액은 11,000 ÷ 1.1 = <strong>10,000원</strong>이고, 재료비 3,500원의 원가율은 판매가 기준 31.8%가 아닌 공급가액 기준 <strong>35%</strong>로 보는 것이 보수적입니다. 배달앱 중개수수료·결제수수료도 <strong>부가세 별도</strong>로 청구되므로 고지된 수수료율에 10%를 더한 금액이 실제 부담입니다. 본 계산기는 입력한 판매가 그대로 계산하므로, 부가세 제외 분석을 원하면 판매가 ÷ 1.1 값을 입력하세요.',
+              },
+              {
+                q: '인건비는 고정비인가요, 변동비인가요?',
+                a: '관리회계 원칙상 <strong>판매량에 비례해 늘어나는 비용은 변동비, 판매량과 무관하게 일정한 비용은 고정비</strong>로 분류합니다. 정규직·고정 스케줄 직원의 월급은 고정비, 주문이 늘 때만 추가 투입하는 시간제 인건비나 건당 지급하는 배달대행비는 변동비 성격입니다. 본 계산기는 메뉴 1개당 원가율에는 인건비를 넣지 않고, 「월 수익 계산」 탭에서 인건비를 <strong>월 고정비</strong>로 묶어 손익분기를 계산합니다. 외식업에서는 재료비와 인건비를 합친 <strong>프라임 코스트(prime cost)</strong>를 함께 관리하는 것이 일반적입니다.',
+              },
+              {
+                q: '배달앱 차등수수료는 어떻게 적용되나요?',
+                a: '2024년 11월 배달플랫폼-입점업체 상생협의체 합의에 따라 배달의민족·쿠팡이츠는 2025년부터 3년간 가게 매출(거래액) 구간별로 <strong>중개수수료 2.0~7.8%</strong>를 차등 적용합니다. 거래액 <strong>상위 35%는 7.8%</strong>, 중위 35~80%는 6.8%, <strong>하위 20%는 2.0%</strong>이며, 배달비는 구간별 1,900~3,400원입니다(수수료는 부가세 별도). 요기요는 기본 9.7%에서 주문 수에 따라 <strong>최저 4.7%</strong>까지 내려가는 자체 차등 체계를 운영합니다. 우리 가게가 어느 구간인지는 각 앱 사장님 페이지에서 확인한 뒤, 본 계산기의 수수료율 입력란에 직접 반영하면 됩니다. (2026년 6월 확인 기준)',
+              },
             ]
 
 export default function CostRatePage() {
@@ -48,6 +61,8 @@ export default function CostRatePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         재료비·배달 수수료·포장재까지 반영한 <strong style={{ color: 'var(--text)' }}>실질 원가율과 마진</strong>. 메뉴 가격 결정에 바로.
       </p>
+
+      <UpdatedMeta date="2026년 6월" basis="2025년 시행 배달앱 차등수수료(상생요금제 2.0~7.8%, 3년 한시) 기준" sources={[{"label":"대한민국 정책브리핑(상생협의체)","href":"https://www.korea.kr/briefing/pressReleaseView.do?newsId=156660502"},{"label":"요기요 사장님포털","href":"https://ceo.yogiyo.co.kr"}]} />
 
       <CostRateClient />
 
@@ -155,6 +170,11 @@ export default function CostRatePage() {
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ※ 2025년 도입된 <strong style={{ color: 'var(--text)' }}>차등수수료제(3년 한시)</strong>로 배민·쿠팡이츠 중개수수료가 매출 구간별 2.0~7.8%로 적용됩니다. 결제 수수료·배달비·광고비·부가세까지 더한 실질 부담은 매출의 약 <strong style={{ color: 'var(--text)' }}>25~30%</strong>. 정책은 수시 변경되니 각 앱 공식 페이지를 확인하세요.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '6px', lineHeight: 1.7 }}>
+            ※ 수수료 체계는 2024년 11월 배달플랫폼-입점업체 상생협의체 합의(
+            <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156660502" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>정책브리핑 보도자료 ↗</a>
+            )와 <a href="https://ceo.yogiyo.co.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>요기요 사장님포털 ↗</a> 기준 — <strong style={{ color: 'var(--text)' }}>2026년 6월 확인</strong>.
           </p>
         </div>
 
