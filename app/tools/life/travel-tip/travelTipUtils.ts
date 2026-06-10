@@ -35,7 +35,7 @@ export const SERVICES: ServiceMeta[] = [
 export const getService = (id: ServiceId) => SERVICES.find((s) => s.id === id)!
 
 /* ─────────────────────────────────────────────
-   국가 데이터 (18종)
+   국가 데이터 (19종)
    ───────────────────────────────────────────── */
 
 export interface CountryRates {
@@ -69,7 +69,7 @@ export const COUNTRIES: CountryMeta[] = [
     id: 'us', flag: '🇺🇸', name: '미국 (United States)', shortName: '미국',
     category: 'mandatory', serviceCharge: false,
     currency: 'USD', currencyUnit: '$', defaultRate: 1400,
-    manner: '식당·우버 팁은 사실상 의무. 봉사료 별도, 세전 기준이 일반적.',
+    manner: '식당 팁은 사실상 의무, 우버는 관례상 거의 기대(앱에서 선택). 봉사료 별도, 세전 기준이 일반적.',
     groupAuto: { size: 6, pct: 18 },
     rates: {
       restaurant: { pct: { min: 15, mid: 18, max: 20 }, note: '세전 기준이 일반적' },
@@ -341,7 +341,8 @@ export interface TipResult {
   totalKrw: number          // 총액 원화
   perPersonKrw: number      // 1인 원화
   isFlat: boolean
-  groupAutoApplied: boolean // 단체 자동 팁 적용
+  flatPerPerson: boolean    // 정액이 인원수에 비례하는지("/인" 단위만)
+  groupAutoApplied: boolean // 단체 자동 팁 "안내" 대상 (강제 적용 아님)
 }
 
 export function calcTip(
@@ -359,7 +360,7 @@ export function calcTip(
     return {
       tipAmount: 0, total: amount, perPerson: amount / safePeople,
       tipKrw: 0, totalKrw: (amount * currencyToKrw) / rateBase, perPersonKrw: ((amount / safePeople) * currencyToKrw) / rateBase,
-      isFlat: false, groupAutoApplied: false,
+      isFlat: false, flatPerPerson: false, groupAutoApplied: false,
     }
   }
 
@@ -367,14 +368,13 @@ export function calcTip(
   let tipAmount = 0
   let pct: number | undefined
   let flatAmount: number | undefined
-  let groupAuto = false
+  let flatPerPerson = false
 
-  /* 단체 자동 팁 (미국 6명+ 18%) */
-  if (country.groupAuto && service === 'restaurant' && safePeople >= country.groupAuto.size) {
-    pct = country.groupAuto.pct
-    tipAmount = amount * (pct / 100)
-    groupAuto = true
-  } else if (rates.pct) {
+  // 단체 자동 팁(미국·캐나다 6명+)은 만족도 선택을 덮어쓰지 않고 "안내"로만 처리.
+  // 실제로는 업장 정책(자동 서비스 차지)이라 항상 부과되는 게 아니므로 강제하지 않는다.
+  const groupAutoEligible = !!(country.groupAuto && service === 'restaurant' && safePeople >= country.groupAuto.size)
+
+  if (rates.pct) {
     const map = { normal: 'min', good: 'mid', great: 'max' } as const
     pct = rates.pct[map[satisfaction]]
     tipAmount = amount * (pct / 100)
@@ -382,8 +382,9 @@ export function calcTip(
   if (rates.flat) {
     const map = { normal: 'min', good: 'mid', great: 'max' } as const
     flatAmount = rates.flat[map[satisfaction]]
-    /* 정액은 인원·짐수에 비례 가정 */
-    tipAmount = flatAmount * safePeople
+    // "/인" 단위(투어·가이드)만 인원수 비례. 호텔(짐·박)·공항(짐)·골프(라운드)는 단위가 짐/박/라운드라 ×1.
+    flatPerPerson = rates.flat.unit.includes('인')
+    tipAmount = flatPerPerson ? flatAmount * safePeople : flatAmount
   }
 
   const total = amount + tipAmount
@@ -395,7 +396,8 @@ export function calcTip(
     totalKrw: total * krwFactor,
     perPersonKrw: perPerson * krwFactor,
     isFlat,
-    groupAutoApplied: groupAuto,
+    flatPerPerson,
+    groupAutoApplied: groupAutoEligible,
   }
 }
 
@@ -427,6 +429,8 @@ export interface Scenario {
   days: number
   defaultPeople: number
   items: ScenarioItem[]
+  /** 크루즈 등 자동 청구되는 1인·1일 gratuity (USD). 있으면 합계에 별도 반영 */
+  autoTipUsdPpPerDay?: number
 }
 
 export const SCENARIOS: Scenario[] = [
@@ -462,14 +466,11 @@ export const SCENARIOS: Scenario[] = [
     id: 'cruise',
     emoji: '🚢',
     title: '크루즈 (7박)',
-    desc: '카리브해·지중해 크루즈. 자동 팁 + 추가.',
+    desc: '카리브해·지중해 크루즈. 1인 $15~20/일 자동 gratuity가 핵심 (객실·다이닝·바 직원 포함).',
     days: 7,
     defaultPeople: 2,
-    items: [
-      { service: 'hotel',      countryId: 'us', amount: 0,   perDay: 1 },  // 룸 스튜어드
-      { service: 'restaurant', countryId: 'us', amount: 0,   perDay: 1 },  // 다이닝 자동 18%
-      { service: 'tour',       countryId: 'us', amount: 0,   perDay: 0.5 },
-    ],
+    autoTipUsdPpPerDay: 17.5,   // $15~20/일/인 중간값 — 객실 스튜어드·다이닝·바 자동 청구
+    items: [],
   },
   {
     id: 'us_biz',
@@ -525,7 +526,8 @@ export function calcScenarioTotal(scenario: Scenario, satisfaction: Satisfaction
     /* 정액 */
     if (r.flat) {
       const map = { normal: 'min', good: 'mid', great: 'max' } as const
-      const amt = r.flat[map[satisfaction]] * people
+      const perPerson = r.flat.unit.includes('인')   // "/인" 단위만 인원 비례
+      const amt = perPerson ? r.flat[map[satisfaction]] * people : r.flat[map[satisfaction]]
       const days = Math.max(1, scenario.days * (it.perDay ?? 1))
       const total = amt * days
       tipKrwTotal += (total * country.defaultRate) / (country.defaultRateBase ?? 1)
@@ -544,6 +546,15 @@ export function calcScenarioTotal(scenario: Scenario, satisfaction: Satisfaction
       byCurrency[k].amount += total
     }
   })
+
+  /* 크루즈 등 1인·1일 자동 gratuity (USD) — 항목과 별도로 합산 */
+  if (scenario.autoTipUsdPpPerDay) {
+    const usRate = getCountry('us').defaultRate
+    const usd = scenario.autoTipUsdPpPerDay * scenario.defaultPeople * scenario.days
+    tipKrwTotal += usd * usRate
+    if (!byCurrency['$']) byCurrency['$'] = { currency: '$', amount: 0 }
+    byCurrency['$'].amount += usd
+  }
 
   return { tipKrw: tipKrwTotal, tipNative: Object.values(byCurrency) }
 }

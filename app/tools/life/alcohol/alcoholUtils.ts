@@ -3,7 +3,9 @@
 // ─────────────────────────────────────────────────────────────
 
 export const ALCOHOL_DENSITY = 0.7893  // 에탄올 밀도 g/ml (정밀)
-export const STANDARD_DRINK_G = 8      // 한국 1표준잔 = 알코올 8g
+// 표준잔(순수 알코올)의 정의는 기관마다 다름: 보건복지부 절주 지침 7g · WHO 10g · 미국 NIAAA 14g.
+// 본 도구는 표시 편의상 8g을 '1잔'으로 환산하되, 정확한 값은 순수 알코올 g을 함께 제공한다.
+export const STANDARD_DRINK_G = 8      // 표시용 환산 기준(공식 단일 기준 아님)
 export const KCAL_PER_G_ALCOHOL = 7    // 알코올 1g = 7 kcal
 
 // ─────────────────────────────────────────────────────────────
@@ -25,7 +27,7 @@ export const KOREAN_GLASS_PRESETS: GlassPreset[] = [
   { id: 'beer-glass-300', name: '맥주잔 (작은)',  ml: 300, abv: 4.5,  icon: '🍺', group: 'glass', desc: '생맥주 300cc' },
   { id: 'beer-glass-500', name: '맥주잔 (큰)',    ml: 500, abv: 4.5,  icon: '🍺', group: 'glass', desc: '생맥주 500cc' },
   { id: 'whisky-shot',    name: '양주 샷',        ml: 30,  abv: 40,   icon: '🥃', group: 'glass', desc: '샷글래스 30ml' },
-  { id: 'whisky-1oz',     name: '양주 1온스',     ml: 45,  abv: 40,   icon: '🥃', group: 'glass', desc: '1온스 45ml' },
+  { id: 'whisky-1oz',     name: '양주 1.5온스',   ml: 45,  abv: 40,   icon: '🥃', group: 'glass', desc: '1.5온스 ≈ 45ml (1oz≈30ml)' },
   { id: 'highball-glass', name: '하이볼잔',       ml: 300, abv: null, icon: '🍹', group: 'glass', desc: '하이볼·진토닉 300ml' },
   { id: 'wine-glass',     name: '와인잔',         ml: 150, abv: 13,   icon: '🍷', group: 'glass', desc: '와인 표준 150ml' },
   { id: 'makgeolli-bowl', name: '막걸리 사발',    ml: 200, abv: 6,    icon: '🥣', group: 'glass', desc: '막걸리 사발 200ml' },
@@ -107,13 +109,14 @@ export const KOREAN_COCKTAIL_PRESETS: CocktailPreset[] = [
 // ─────────────────────────────────────────────────────────────
 // 한국 소주 도수 (제품별)
 // ─────────────────────────────────────────────────────────────
+// 브랜드 도수는 저도주화로 자주 바뀜 — 아래는 2025-06 기준 대표값일 뿐, 반드시 제품 라벨을 확인할 것.
 export const SOJU_BRANDS = [
-  { brand: '진로 이즈백',     abv: 16   },
-  { brand: '처음처럼',         abv: 16.5 },
-  { brand: '좋은데이',         abv: 16.5 },
-  { brand: '화이트',           abv: 16.5 },
-  { brand: '처음처럼 빨간뚜껑', abv: 16.9 },
-  { brand: '진로 (오리지널)',   abv: 17.5 },
+  { brand: '진로(두꺼비)',     abv: 16   },
+  { brand: '처음처럼 새로',     abv: 16   },
+  { brand: '좋은데이',         abv: 15.7 },
+  { brand: '참이슬 후레쉬',     abv: 16   },
+  { brand: '참이슬 오리지널',   abv: 16.9 },
+  { brand: '처음처럼(클래식)',  abv: 16.5 },
   { brand: '한라산',           abv: 25   },
 ]
 
@@ -155,6 +158,8 @@ export function calcDilutionAmount(args: {
 }): { dilutionMl: number; totalMl: number; finalAbv: number } | null {
   const { originalMl, originalAbv, targetAbv, dilutionAbv } = args
   if (originalMl <= 0 || originalAbv <= 0) return null
+  if (originalAbv > 100 || targetAbv > 100 || dilutionAbv > 100) return null  // 도수는 0~100%
+  if (targetAbv < 0) return null
   if (targetAbv >= originalAbv) return null   // 희석으로 도수 ↑ 불가
   if (targetAbv <= dilutionAbv) return null   // 희석재료 도수 ≥ 목표 → 불가
 
@@ -200,9 +205,11 @@ export function equivConvert(alcoholG: number, target: EquivItem) {
 // ─────────────────────────────────────────────────────────────
 // 저위험 음주 가이드
 // ─────────────────────────────────────────────────────────────
-// 한국 보건복지부 저위험 음주 (1일 기준)
+// 참고 기준(1일): 보건복지부 '적정음주' 권고 = 남 하루 4잔·여 2잔 이하
+// (서울대 국민건강지식센터, 보건복지부 절주 가이드 / 기준일 2025-06). 표준잔 8g 환산 → 남 32g·여 16g.
+// ⚠️ '적정'은 안전을 뜻하지 않음 — WHO(2023): "건강을 해치지 않는 안전한 음주량은 없다".
 export const KOREAN_DAILY_LOW_RISK_G = { male: 32, female: 16 }
-// 한국 보건복지부 권고 (주간 표준잔)
+// 저위험 주간 한도(표준잔): 남 14·여 7
 export const KOREAN_WEEKLY_LOW_RISK_STD = { male: 14, female: 7 }
 
 export function riskLevel(alcoholG: number, sex: 'male' | 'female'): {
@@ -213,10 +220,10 @@ export function riskLevel(alcoholG: number, sex: 'male' | 'female'): {
 } {
   const limit = sex === 'male' ? KOREAN_DAILY_LOW_RISK_G.male : KOREAN_DAILY_LOW_RISK_G.female
   const pct = Math.round((alcoholG / limit) * 100)
-  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 적정',         color: '#059669' }
-  if (pct <= 100) return { level: 'caution',   pct, label: '🟡 권장 한도 근접', color: '#FFD93E' }
-  if (pct <= 200) return { level: 'high',      pct, label: '🟠 큰 폭 초과',    color: '#EA580C' }
-  return                  { level: 'very-high', pct, label: '🔴 위험 음주',    color: '#DC2626' }
+  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 참고 기준 이내', color: '#059669' }
+  if (pct <= 100) return { level: 'caution',   pct, label: '🟡 기준 근접',      color: '#FFD93E' }
+  if (pct <= 200) return { level: 'high',      pct, label: '🟠 기준 초과',      color: '#EA580C' }
+  return                  { level: 'very-high', pct, label: '🔴 고위험 수준',    color: '#DC2626' }
 }
 
 // ─────────────────────────────────────────────────────────────

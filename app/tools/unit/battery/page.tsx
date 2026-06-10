@@ -235,8 +235,8 @@ export default function BatteryPage() {
             {[
               { href: '/tools/date/jet-lag',   icon: '✈️', name: '시차 적응 계산기',   desc: '여행 전·중·후 시차 적응 일정' },
               { href: '/tools/life/unit-price',icon: '🏷️', name: '단가 비교 계산기',   desc: '보조배터리 mAh당 가격 비교' },
-              { href: '/tools/unit/length',    icon: '📏', name: '길이 변환기',         desc: 'cm·inch·ft 단위 변환' },
-              { href: '/tools/unit/time',      icon: '⏱️', name: '시간 단위 변환기',   desc: '초·분·시간·일·주·월·년 변환' },
+              { href: '/tools/unit/converter', icon: '📐', name: '단위 변환기',         desc: '길이·무게·시간 등 14종 통합 변환' },
+              { href: '/tools/life/packing',   icon: '🧳', name: '여행 짐 계산기',     desc: '일수·기온별 짐 개수·체크리스트' },
             ].map((t, i) => (
               <Link
                 key={i}

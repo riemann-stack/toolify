@@ -292,7 +292,7 @@ export default function WallpaperPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/unit/area',       icon: '🏠', name: '평수 변환기',  desc: '아파트 면적 단위 변환' },
-              { href: '/tools/unit/length',     icon: '📏', name: '길이 변환기',         desc: 'cm·m·inch·ft 변환' },
+              { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',         desc: '길이·면적·무게 등 14종 통합 변환' },
               { href: '/tools/life/unit-price', icon: '🏷️', name: '단가 비교 계산기',    desc: '벽지 가성비 단가 비교' },
               { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·수수료 원가율 (자영업)' },
             ].map((t, i) => (

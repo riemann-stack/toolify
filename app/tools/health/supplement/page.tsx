@@ -87,7 +87,7 @@ export default function SupplementPage() {
         {/* 2. RDA/UL 표 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>주요 영양소 1일 권장량 & 상한 섭취량</h2>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국영양학회 · 성인 기준</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국영양학회 KDRI · 성인 기준 — 2025년 개정 기준이 배포되어 일부 수치가 달라질 수 있으니 최신 기준 확인 권장</p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
@@ -187,7 +187,7 @@ export default function SupplementPage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🐟 오메가3 EPA + DHA 합산 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            오메가3는 EPA + DHA <strong style={{ color: 'var(--text)' }}>합산</strong>으로 평가하는 게 표준입니다.
+            오메가3는 EPA + DHA <strong style={{ color: 'var(--text)' }}>합산</strong>으로 보는 게 일반적입니다 (EPA·DHA는 ALA와 달리 <strong style={{ color: 'var(--text)' }}>공식 권장량(RDA)이 설정돼 있지 않습니다 — NIH ODS</strong>).
             본 도구의 「성분 분석」 탭에서 자동 합산.
           </p>
           <div style={{ overflowX: 'auto' }}>
@@ -200,15 +200,15 @@ export default function SupplementPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#CA8A04' }}>🟡 권장 미달</strong></td><td style={cell}>식사 (등푸른 생선) 보충 권장</td></tr>
-                <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#059669' }}>🟢 적정 (일반 권장)</strong></td><td style={cell}>WHO·미국심장협회 일반 권장 범위</td></tr>
-                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 약간 초과 (안전)</strong></td><td style={cell}>심혈관 치료 목적이면 의사 상담</td></tr>
-                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 상한 초과</strong></td><td style={cell}>FDA 상한 초과 — 출혈 위험 ↑, 즉시 조정</td></tr>
+                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#CA8A04' }}>🟡 목표 미달</strong></td><td style={cell}>식사(등푸른 생선) 보충 고려</td></tr>
+                <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#059669' }}>🟢 목표 범위</strong></td><td style={cell}>WHO·심장협회 참고 목표 (공식 RDA 미설정)</td></tr>
+                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 목표보다 높음</strong></td><td style={cell}>심혈관 목적 고용량은 의사 상담</td></tr>
+                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 권고 한도 초과</strong></td><td style={cell}>FDA 권고 한도(총 3,000mg) 초과 — 출혈 위험 ↑</td></tr>
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ※ 일반 건강 목적 EPA+DHA 250~500mg/일 / 심혈관 치료 1,000mg+ (의사 처방). rTG 형태 &gt; EE 형태 (흡수율).
+            ※ EPA·DHA는 확립된 권장량(RDA)이 없으며(NIH ODS), FDA는 건강 효과 근거가 제한적이라 보고 보충제 기준 2,000mg/일(총 3,000mg) 이하를 권고합니다. 일반 목적 250~500mg, 심혈관 목적 고용량은 의사 처방. rTG 형태 &gt; EE 형태 (흡수율).
           </p>
         </div>
 
@@ -249,7 +249,7 @@ export default function SupplementPage() {
         {/* 7. 임산부·수유부 가이드 (NEW) */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🤰 임산부·수유부 영양제 가이드</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 10 }}>
             <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 임신 시 권장</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>
@@ -278,7 +278,7 @@ export default function SupplementPage() {
         {/* 8. 고령자(65세+) 가이드 (NEW) */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>👴 65세 이상 고령자 영양제 가이드</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 10 }}>
             <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 고령자 권장 추가</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, lineHeight: 1.85, color: 'var(--muted)' }}>

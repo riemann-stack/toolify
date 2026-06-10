@@ -6,7 +6,7 @@ import Disclaimer from '@/components/Disclaimer'
 import styles from './laundry-dry.module.css'
 import {
   LAUNDRY_EQUIPMENT, recommendCombos, evaluateCombo,
-  fmtMinutes, fmtKrw,
+  fmtMinutes, fmtKrw, tempFactorOf, humidFactorOf,
   type Priority,
 } from './laundryUtils'
 
@@ -84,22 +84,7 @@ const SPACE_META: { id: SpaceId; label: string; factor: number }[] = [
 ]
 
 /* ──────────────────────── 계산 ──────────────────────── */
-function tempFactorOf(t: number): number {
-  if (t < 5)  return 2.0
-  if (t < 10) return 1.6
-  if (t < 15) return 1.3
-  if (t < 20) return 1.1
-  if (t < 28) return 1.0
-  return 0.85
-}
-function humidFactorOf(h: number): number {
-  if (h < 40) return 0.7
-  if (h < 55) return 0.85
-  if (h < 70) return 1.0
-  if (h < 80) return 1.3
-  if (h < 90) return 1.7
-  return 2.3
-}
+/* tempFactorOf · humidFactorOf 는 laundryUtils에서 공유 (메인·조합 탭 동일 곡선) */
 const WIND_FACTOR: Record<WindId, number> = { none: 1.3, weak: 1.0, moderate: 0.75, strong: 0.55 }
 const SUN_FACTOR:  Record<SunId, number>  = { none: 1.2, indirect: 0.9, direct: 0.65 }
 const ENV_FACTOR:  Record<EnvId, number>  = { indoor: 1.4, balcony: 1.1, outdoor: 1.0 }
@@ -135,6 +120,17 @@ function formatTime(d: Date): string {
   const ap = hh < 12 ? '오전' : '오후'
   const h12 = hh % 12 || 12
   return `${ap} ${h12}시 ${mm.toString().padStart(2, '0')}분`
+}
+
+/* 완료 시각 — 날짜를 넘기면 '내일/모레/N일 후'를 붙인다 */
+function formatFinishTime(target: Date, start: Date): string {
+  const dayKey = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
+  const dayDiff = Math.round((dayKey(target) - dayKey(start)) / 86400000)
+  const t = formatTime(target)
+  if (dayDiff <= 0) return t
+  if (dayDiff === 1) return `내일 ${t}`
+  if (dayDiff === 2) return `모레 ${t}`
+  return `${dayDiff}일 후 ${t}`
 }
 
 /* ──────────────────────── 메인 ──────────────────────── */
@@ -212,9 +208,10 @@ export default function LaundryDryClient() {
     const totalFactor = itemFactor * envFactor * optionFactor
     const dryHours = baseHours * totalFactor
 
-    // 장비(추가 옵션) 영향 제외 baseline — 조합 추천·역산 탭용
+    // 장비(난방·제습기 등 조합 탭 장비) 영향 제외 baseline — 조합 추천·역산 탭용.
+    // 단, 창문 개방(adjWind)은 환경 설정이므로 baseline에 포함한다.
     const baselineHours = baseHours * itemFactor * (
-      tempFactorOf(temp) * humidFactorOf(humidity) * WIND_FACTOR[wind] * SUN_FACTOR[sun] * eF
+      tempFactorOf(temp) * humidFactorOf(humidity) * WIND_FACTOR[adjWind] * SUN_FACTOR[sun] * eF
     )
 
     return {
@@ -268,17 +265,18 @@ export default function LaundryDryClient() {
     return out.slice(0, 5)
   }, [fan, result, dehumid, space, env, wind, windowOpen, items, heating, spin])
 
-  const finishAt = now ? addHours(now, result.dryHours) : null
-  const surfaceAt = now ? addHours(now, result.surfaceDry) : null
-
-  /* 타임라인 커서 (실시간) */
+  /* 완료 시각은 '지금 넌 시점'(anchor)에 고정 — 진행바와 같은 기준. 매분 밀리지 않음 */
+  const [anchorMs, setAnchorMs] = useState<number | null>(null)
   const [timelineMs, setTimelineMs] = useState(0)
   useEffect(() => {
+    setAnchorMs(Date.now())
     setTimelineMs(0)
     const start = Date.now()
     const id = setInterval(() => setTimelineMs(Date.now() - start), 1000)
     return () => clearInterval(id)
-  }, [result.dryHours])
+  }, [result.dryHours, result.surfaceDry])
+  const finishAt = anchorMs != null ? addHours(new Date(anchorMs), result.dryHours) : null
+  const surfaceAt = anchorMs != null ? addHours(new Date(anchorMs), result.surfaceDry) : null
   const timelinePct = Math.min(100, (timelineMs / (result.dryHours * 3600 * 1000)) * 100)
   const surfacePct = 60
 
@@ -297,13 +295,14 @@ export default function LaundryDryClient() {
       </Disclaimer>
 
       {/* ── 탭 네비 ── */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="건조 계산 모드">
         {([
           { id: 'main',   label: '🧮 건조 시간 계산' },
           { id: 'combo',  label: '⚡ 최단 조합 추천' },
           { id: 'target', label: '🎯 목표 시간 역산' },
         ] as { id: TabId; label: string }[]).map(t => (
           <button key={t.id}
+            type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? styles.tabBtnActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -314,10 +313,10 @@ export default function LaundryDryClient() {
       {tab !== 'main' && (
         <>
           {tab === 'combo' && (
-            <ComboTab baselineHours={result.baselineHours} env={env} />
+            <ComboTab baselineHours={result.baselineHours} env={env} envCtx={{ temp, humidity }} />
           )}
           {tab === 'target' && (
-            <TargetTab baselineHours={result.baselineHours} now={now} />
+            <TargetTab baselineHours={result.baselineHours} now={now} envCtx={{ temp, humidity }} />
           )}
           {/* 면책 */}
           <p style={{ fontSize: 11, color: 'var(--muted)', padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, lineHeight: 1.7, marginTop: 4 }}>
@@ -334,10 +333,12 @@ export default function LaundryDryClient() {
           {ENV_META.map(e => (
             <button
               key={e.id}
+              type="button"
+              aria-pressed={env === e.id}
               className={`${styles.envBtn} ${styles['envBtn_' + e.id]} ${env === e.id ? styles.envBtnActive : ''}`}
               onClick={() => setEnv(e.id)}
             >
-              <span className={styles.envIcon}>{e.icon}</span>
+              <span className={styles.envIcon} aria-hidden="true">{e.icon}</span>
               <span className={styles.envName}>{e.name}</span>
               <span className={styles.envSub}>{e.sub}</span>
             </button>
@@ -355,6 +356,8 @@ export default function LaundryDryClient() {
           className={`${styles.slider} ${styles.sliderTemp}`}
           type="range" min={-10} max={40} step={1}
           value={temp}
+          aria-label="온도"
+          aria-valuetext={`${temp}°C`}
           onChange={e => setTemp(parseInt(e.target.value))}
         />
         <div className={styles.presetRow}>
@@ -366,6 +369,8 @@ export default function LaundryDryClient() {
           ].map(p => (
             <button
               key={p.t}
+              type="button"
+              aria-pressed={temp === p.t}
               className={`${styles.pBtn} ${temp === p.t ? styles.pBtnActive : ''}`}
               onClick={() => setTemp(p.t)}
             >
@@ -386,6 +391,8 @@ export default function LaundryDryClient() {
           className={`${styles.slider} ${styles.sliderHumid}`}
           type="range" min={20} max={100} step={5}
           value={humidity}
+          aria-label="습도"
+          aria-valuetext={`${humidity}%`}
           onChange={e => setHumidity(parseInt(e.target.value))}
         />
         <div className={styles.presetRow}>
@@ -398,6 +405,8 @@ export default function LaundryDryClient() {
           ].map(p => (
             <button
               key={p.h}
+              type="button"
+              aria-pressed={humidity === p.h}
               className={`${styles.pBtn} ${humidity === p.h ? styles.pBtnActive : ''}`}
               onClick={() => setHumidity(p.h)}
             >
@@ -415,6 +424,8 @@ export default function LaundryDryClient() {
           {WIND_META.map(w => (
             <button
               key={w.id}
+              type="button"
+              aria-pressed={wind === w.id}
               className={`${styles.segBtn} ${wind === w.id ? styles.segBtnActive : ''}`}
               onClick={() => setWind(w.id)}
             >{w.label}</button>
@@ -429,11 +440,13 @@ export default function LaundryDryClient() {
           {SUN_META.map(s => (
             <button
               key={s.id}
+              type="button"
+              aria-pressed={sun === s.id}
               className={`${styles.segBtn} ${sun === s.id ? styles.segBtnActive : ''}`}
               onClick={() => setSun(s.id)}
               disabled={env === 'indoor' && s.id !== 'none'}
             >
-              <span>{s.icon}</span>
+              <span aria-hidden="true">{s.icon}</span>
               <span>{s.label}</span>
             </button>
           ))}
@@ -452,11 +465,13 @@ export default function LaundryDryClient() {
             return (
               <button
                 key={it.id}
+                type="button"
+                aria-pressed={active}
                 className={`${styles.itemBtn} ${active ? styles.itemBtnActive : ''}`}
                 onClick={() => toggleItem(it.id)}
               >
-                {active && <span className={styles.itemCheck}>✓</span>}
-                <span className={styles.itemIcon}>{it.icon}</span>
+                {active && <span className={styles.itemCheck} aria-hidden="true">✓</span>}
+                <span className={styles.itemIcon} aria-hidden="true">{it.icon}</span>
                 <span className={styles.itemName}>{it.name}</span>
               </button>
             )
@@ -467,7 +482,7 @@ export default function LaundryDryClient() {
             ITEM_META.find(m => m.id === Array.from(items).reduce((a, b) =>
               BASE_DRY_HOURS[a] > BASE_DRY_HOURS[b] ? a : b
             ))!.name
-          }) 기준으로 계산합니다</p>
+          }) 기준으로 계산합니다 · 소재·두께는 공통 적용, 빨래 <strong>양(장수)</strong>은 반영하지 않습니다</p>
         )}
       </div>
 
@@ -478,10 +493,12 @@ export default function LaundryDryClient() {
           {MATERIAL_META.map(m => (
             <button
               key={m.id}
+              type="button"
+              aria-pressed={material === m.id}
               className={`${styles.segBtn} ${material === m.id ? styles.segBtnActive : ''}`}
               onClick={() => setMaterial(m.id)}
             >
-              <span>{m.icon}</span>
+              <span aria-hidden="true">{m.icon}</span>
               <span>{m.name}</span>
             </button>
           ))}
@@ -495,6 +512,8 @@ export default function LaundryDryClient() {
           {THICK_META.map(t => (
             <button
               key={t.id}
+              type="button"
+              aria-pressed={thick === t.id}
               className={`${styles.segBtn} ${thick === t.id ? styles.segBtnActive : ''}`}
               onClick={() => setThick(t.id)}
             >{t.label}</button>
@@ -509,6 +528,8 @@ export default function LaundryDryClient() {
           {SPIN_META.map(s => (
             <button
               key={s.id}
+              type="button"
+              aria-pressed={spin === s.id}
               className={`${styles.segBtn} ${spin === s.id ? styles.segBtnActive : ''}`}
               onClick={() => setSpin(s.id)}
             >{s.label}</button>
@@ -523,6 +544,8 @@ export default function LaundryDryClient() {
           {SPACE_META.map(s => (
             <button
               key={s.id}
+              type="button"
+              aria-pressed={space === s.id}
               className={`${styles.segBtn} ${space === s.id ? styles.segBtnActive : ''}`}
               onClick={() => setSpace(s.id)}
             >{s.label}</button>
@@ -556,8 +579,8 @@ export default function LaundryDryClient() {
             <div className={styles.heroRange}>
               {formatHours(result.surfaceDry * 0.85)}~{formatHours(result.surfaceDry * 1.15)}
             </div>
-            {surfaceAt && (
-              <div className={styles.heroTime}>{formatTime(surfaceAt)}까지</div>
+            {surfaceAt && anchorMs != null && (
+              <div className={styles.heroTime}>{formatFinishTime(surfaceAt, new Date(anchorMs))}까지</div>
             )}
           </div>
           <div className={styles.heroDivider} aria-hidden />
@@ -567,14 +590,17 @@ export default function LaundryDryClient() {
             <div className={styles.heroRange}>
               {formatHours(result.minHours)}~{formatHours(result.maxHours)}
             </div>
-            {finishAt && (
-              <div className={styles.heroTimeMain}>{formatTime(finishAt)}까지</div>
+            {finishAt && anchorMs != null && (
+              <div className={styles.heroTimeMain}>{formatFinishTime(finishAt, new Date(anchorMs))}까지</div>
             )}
           </div>
         </div>
         <div className={styles.speedBadge} style={{ color: speed.color, borderColor: speed.color + '55' }}>
           🌬️ 현재 조건은 <strong>{speed.label}</strong>입니다
         </div>
+        <span aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+          완전 건조 예상 {formatHours(result.dryHours)}{finishAt && anchorMs != null ? `, ${formatFinishTime(finishAt, new Date(anchorMs))}까지` : ''} · {speed.label}
+        </span>
       </div>
 
       {/* 타임라인 */}
@@ -641,9 +667,9 @@ export default function LaundryDryClient() {
 }
 
 /* ──────────────────────── 최단 조합 추천 탭 ──────────────────────── */
-function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId }) {
+function ComboTab({ baselineHours, env, envCtx }: { baselineHours: number; env: EnvId; envCtx: { temp: number; humidity: number } }) {
   const [owned, setOwned] = useState<Set<string>>(() => new Set(['fan', 'dehumidifier', 'extra-spin']))
-  const [priority, setPriority] = useState<Priority>('balanced')
+  const [priority, setPriority] = useState<Priority>('speed')
   const [bathroomMode, setBathroomMode] = useState(false)
 
   const toggleEq = (id: string) => {
@@ -664,11 +690,11 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
   }, [owned, bathroomMode])
 
   const recommendations = useMemo(() => {
-    return recommendCombos(effectiveOwned, baseMin, priority).slice(0, 6)
-  }, [effectiveOwned, baseMin, priority])
+    return recommendCombos(effectiveOwned, baseMin, priority, envCtx).slice(0, 6)
+  }, [effectiveOwned, baseMin, priority, envCtx])
 
   const best = recommendations[0]
-  const noEq = useMemo(() => evaluateCombo([], baseMin), [baseMin])
+  const noEq = useMemo(() => evaluateCombo([], baseMin, envCtx), [baseMin, envCtx])
 
   return (
     <div className={styles.tabContent}>
@@ -677,9 +703,11 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
         <div className={styles.eqGrid}>
           {LAUNDRY_EQUIPMENT.map(eq => (
             <button key={eq.id}
+              type="button"
+              aria-pressed={owned.has(eq.id)}
               className={`${styles.eqCard} ${owned.has(eq.id) ? styles.eqCardActive : ''}`}
               onClick={() => toggleEq(eq.id)}>
-              <span className={styles.eqIcon}>{eq.icon}</span>
+              <span className={styles.eqIcon} aria-hidden="true">{eq.icon}</span>
               <span className={styles.eqName}>{eq.name}</span>
               <span className={styles.eqMeta}>{eq.powerW > 0 ? `${eq.powerW}W` : '전력 0'}</span>
               <span className={styles.eqDesc}>{eq.desc}</span>
@@ -697,6 +725,8 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
             { id: 'cost',     label: '💰 전기료 최저' },
           ] as { id: Priority; label: string }[]).map(p => (
             <button key={p.id}
+              type="button"
+              aria-pressed={priority === p.id}
               className={`${styles.segBtn} ${priority === p.id ? styles.segBtnActive : ''}`}
               onClick={() => setPriority(p.id)}>
               {p.label}
@@ -706,6 +736,9 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
 
         {env === 'indoor' && (
           <button
+            type="button"
+            role="switch"
+            aria-checked={bathroomMode}
             className={`${styles.toggleRow} ${bathroomMode ? styles.toggleRowOn : ''}`}
             style={{ marginTop: 10 }}
             onClick={() => setBathroomMode(!bathroomMode)}>
@@ -806,7 +839,7 @@ function ComboTab({ baselineHours, env }: { baselineHours: number; env: EnvId })
 }
 
 /* ──────────────────────── 목표 시간 역산 탭 ──────────────────────── */
-function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | null }) {
+function TargetTab({ baselineHours, now, envCtx }: { baselineHours: number; now: Date | null; envCtx: { temp: number; humidity: number } }) {
   const [targetTime, setTargetTime] = useState('18:00')
   const [owned, setOwned] = useState<Set<string>>(() => new Set(['fan', 'dehumidifier', 'circulator', 'extra-spin']))
 
@@ -833,17 +866,21 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
   const minutesAvailable = target && now ? Math.round((target.getTime() - now.getTime()) / 60000) : null
 
   const scenarios = useMemo(() => {
-    if (!minutesAvailable || owned.size === 0) return null
+    if (!minutesAvailable) return null
     const ownedArr = Array.from(owned)
-    const fastest = recommendCombos(ownedArr, baseMin, 'speed')[0]
-    const balanced = recommendCombos(ownedArr, baseMin, 'balanced')[0]
-    const cheapest = recommendCombos(ownedArr, baseMin, 'cost').filter(c => c.minutes <= minutesAvailable)[0]
-      ?? recommendCombos(ownedArr, baseMin, 'cost')[0]
-    const natural = evaluateCombo([], baseMin)
+    const natural = evaluateCombo([], baseMin, envCtx)
+    // 장비가 없어도 자연 건조 시간·달성 여부는 보여준다
+    if (ownedArr.length === 0) {
+      return { fastest: natural, balanced: natural, cheapest: natural, natural }
+    }
+    const fastest = recommendCombos(ownedArr, baseMin, 'speed', envCtx)[0] ?? natural
+    const balanced = recommendCombos(ownedArr, baseMin, 'balanced', envCtx)[0] ?? natural
+    const cheapest = recommendCombos(ownedArr, baseMin, 'cost', envCtx).filter(c => c.minutes <= minutesAvailable)[0]
+      ?? recommendCombos(ownedArr, baseMin, 'cost', envCtx)[0] ?? natural
     return { fastest, balanced, cheapest, natural }
-  }, [owned, baseMin, minutesAvailable])
+  }, [owned, baseMin, minutesAvailable, envCtx])
 
-  const noEq = useMemo(() => evaluateCombo([], baseMin), [baseMin])
+  const noEq = useMemo(() => evaluateCombo([], baseMin, envCtx), [baseMin, envCtx])
 
   return (
     <div className={styles.tabContent}>
@@ -852,6 +889,7 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
           <input type="time"
             value={targetTime}
+            aria-label="목표 완료 시각"
             onChange={e => setTargetTime(e.target.value)}
             style={{
               background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
@@ -873,9 +911,11 @@ function TargetTab({ baselineHours, now }: { baselineHours: number; now: Date | 
         <div className={styles.eqGrid}>
           {LAUNDRY_EQUIPMENT.map(eq => (
             <button key={eq.id}
+              type="button"
+              aria-pressed={owned.has(eq.id)}
               className={`${styles.eqCard} ${owned.has(eq.id) ? styles.eqCardActive : ''}`}
               onClick={() => toggleEq(eq.id)}>
-              <span className={styles.eqIcon}>{eq.icon}</span>
+              <span className={styles.eqIcon} aria-hidden="true">{eq.icon}</span>
               <span className={styles.eqName}>{eq.name}</span>
               <span className={styles.eqMeta}>{eq.powerW > 0 ? `${eq.powerW}W` : '전력 0'}</span>
             </button>
@@ -985,10 +1025,12 @@ function ToggleRow({ icon, label, sub, on, onChange }: {
   return (
     <button
       type="button"
+      role="switch"
+      aria-checked={on}
       className={`${styles.toggleRow} ${on ? styles.toggleRowOn : ''}`}
       onClick={() => onChange(!on)}
     >
-      <span className={styles.toggleIcon}>{icon}</span>
+      <span className={styles.toggleIcon} aria-hidden="true">{icon}</span>
       <span className={styles.toggleBody}>
         <span className={styles.toggleLabel}>{label}</span>
         <span className={styles.toggleSub}>{sub}</span>

@@ -46,6 +46,15 @@ export default function PregnancyClient() {
   /* 체크리스트 진행 */
   const [checklistProgress, setChecklistProgress] = useState<Record<string, boolean>>({})
 
+  /* date input 범위 — 마운트 후 설정(하이드레이션 안전). min은 약 45주 전으로 비현실적 과거 입력 방지 */
+  const [maxDate, setMaxDate] = useState('')
+  const [minDate, setMinDate] = useState('')
+  useEffect(() => {
+    setMaxDate(today())
+    const m = new Date(); m.setDate(m.getDate() - 315)
+    setMinDate(fmtDateInput(m))
+  }, [])
+
   /* localStorage 자동 불러오기 */
   const [loadedFromStorage, setLoadedFromStorage] = useState(false)
   useEffect(() => {
@@ -70,8 +79,8 @@ export default function PregnancyClient() {
   }, [inputMode, date, cycleLength, isMultiple])
 
   const fetal = result ? getFetalSize(result.currentWeek) : null
-  const tests = useMemo(() => result ? generateTestSchedule(result.lmp) : [], [result])
-  const milestones = useMemo(() => result ? calcMilestones(result.lmp) : [], [result])
+  const tests = useMemo(() => result ? generateTestSchedule(result.datingLmp) : [], [result])
+  const milestones = useMemo(() => result ? calcMilestones(result.datingLmp) : [], [result])
 
   /* 체크리스트 */
   const currentTrimester = result?.trimester ?? 1
@@ -149,6 +158,10 @@ export default function PregnancyClient() {
     setTab('main')
   }
 
+  /* 비현실적 주수 가드 — 43주 이상은 정상 분만 범위를 벗어남(입력·모드 오류 가능) */
+  const overdue = !!result && result.currentWeek > 42
+  const reverseOverdue = !!reverseResult && reverseResult.currentWeek > 42
+
   /* ────────────────── 렌더 ────────────────── */
   return (
     <div className={styles.wrap}>
@@ -168,13 +181,13 @@ export default function PregnancyClient() {
       >
         정확한 임신 주수는 초음파 검사로만 확인 가능하며, 산전 검사 일정·태아 크기는 일반 가이드라인입니다.
         질 출혈·심한 복통·발열(38℃↑)·심한 두통·태동 감소(2삼분기 이후)·양수 누출 등 응급 신호 시 즉시 산부인과·응급실로,
-        응급 상황은 <strong>119</strong> 또는 응급의료정보센터 <strong>1339</strong>로 연락하세요.
+        응급 상황은 즉시 <strong>119</strong>로 연락하세요.
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="임신 계산 기능">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -194,13 +207,13 @@ export default function PregnancyClient() {
           입력 방식
           <span className={styles.labelHint}>기본: 마지막 생리일</span>
         </label>
-        <div className={styles.optionRow}>
+        <div className={styles.optionRow} role="group" aria-label="입력 방식">
           {([
             { v: 'lmp',        label: '마지막 생리일' },
             { v: 'conception', label: '수정일 (배란일)' },
             { v: 'duedate',    label: '출산 예정일' },
           ] as { v: InputMode; label: string }[]).map(o => (
-            <button key={o.v}
+            <button key={o.v} type="button" aria-pressed={inputMode === o.v}
               className={`${styles.optionBtn} ${inputMode === o.v ? styles.optionActive : ''}`}
               onClick={() => setInputMode(o.v)}>
               {o.label}
@@ -214,7 +227,8 @@ export default function PregnancyClient() {
           {inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}
         </label>
         <input className={styles.dateInput} type="date"
-          max={inputMode === 'duedate' ? undefined : today()}
+          min={inputMode === 'duedate' ? undefined : (minDate || undefined)}
+          max={inputMode === 'duedate' ? undefined : (maxDate || undefined)}
           value={date} onChange={e => setDate(e.target.value)} />
       </div>
 
@@ -231,9 +245,9 @@ export default function PregnancyClient() {
       <details className={styles.advanced}>
         <summary>고급 옵션 (생리주기 보정 · 쌍태아)</summary>
         <div className={styles.label} style={{ marginTop: 4 }}>생리주기 — {cycleLength}일</div>
-        <div className={styles.optionRow6}>
+        <div className={styles.optionRow6} role="group" aria-label="생리주기">
           {CYCLE_LENGTHS.map(c => (
-            <button key={c.value}
+            <button key={c.value} type="button" aria-pressed={cycleLength === c.value}
               className={`${styles.optionBtn} ${cycleLength === c.value ? styles.optionActive : ''}`}
               onClick={() => setCycleLength(c.value)}
               title={c.name}>
@@ -246,16 +260,16 @@ export default function PregnancyClient() {
         </p>
 
         <label className={styles.label} style={{ marginTop: 14 }}>다태아 여부</label>
-        <div className={styles.toggleRow}>
-          <button className={`${styles.toggleBtn} ${!isMultiple ? styles.toggleActive : ''}`}
+        <div className={styles.toggleRow} role="group" aria-label="다태아 여부">
+          <button type="button" aria-pressed={!isMultiple} className={`${styles.toggleBtn} ${!isMultiple ? styles.toggleActive : ''}`}
             onClick={() => setIsMultiple(false)}>단태아</button>
-          <button className={`${styles.toggleBtn} ${isMultiple ? styles.toggleActive : ''}`}
+          <button type="button" aria-pressed={isMultiple} className={`${styles.toggleBtn} ${isMultiple ? styles.toggleActive : ''}`}
             onClick={() => setIsMultiple(true)}>쌍태아 이상</button>
         </div>
         {isMultiple && (
           <div className={styles.warnBox} style={{ marginTop: 8 }}>
             ⚠️ <strong>쌍태아 임신은 검진 빈도가 더 잦고(2~3주 간격), 평균 분만 시기가 36~37주</strong>로 단태아와 다릅니다.
-            본 도구의 일정은 단태아 기준이므로 담당 산부인과 안내를 우선하세요.
+            <strong> 본 도구의 예정일·산전 검사·마일스톤은 단태아 40주 기준 그대로 표시되며 쌍태아용으로 조정되지 않습니다</strong> — 실제 일정은 담당 산부인과 안내를 우선하세요.
           </div>
         )}
       </details>
@@ -273,6 +287,11 @@ export default function PregnancyClient() {
       {/* ─────────── 탭 1: 주수 계산 ─────────── */}
       {tab === 'main' && result && (
         <>
+          {overdue && (
+            <div className={styles.warnBox}>
+              ⚠️ <strong>임신 {result.currentWeek}주는 정상 분만 범위(보통 37~42주)를 벗어납니다.</strong> 입력한 날짜·입력 방식을 다시 확인하세요. 실제로 예정일이 지났다면 즉시 산부인과 진료가 필요합니다.
+            </div>
+          )}
           <div className={styles.heroCard}>
             <div className={styles.heroLabel}>
               {babyName ? `🤱 ${babyName}` : '현재 임신 주수'}
@@ -366,13 +385,13 @@ export default function PregnancyClient() {
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{fetal.development}</div>
                 </div>
               </div>
-              <button className={styles.copyBtn} style={{ marginTop: 12 }}
+              <button type="button" className={styles.copyBtn} style={{ marginTop: 12 }}
                 onClick={() => setTab('fetal')}>🌱 자세히 보기</button>
             </div>
           )}
 
           {loadedFromStorage && (
-            <button className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={handleClear} style={{ alignSelf: 'flex-end' }}>
+            <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={handleClear} style={{ alignSelf: 'flex-end' }}>
               저장된 정보 삭제
             </button>
           )}
@@ -430,14 +449,14 @@ export default function PregnancyClient() {
           </div>
 
           <div className={styles.resultActions}>
-            <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+            <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(tests.map(t => `${t.test.name} (${t.test.startWeek}~${t.test.endWeek}주) — ${fmtDateKo(t.startDate)}`).join('\n'))}>
               {copied ? '✓ 복사됨' : '📋 일정 복사'}
             </button>
             <a className={styles.copyBtn} href="/tools/date/dday" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
               📅 D-day 계산기
             </a>
-            <button className={styles.copyBtn} onClick={() => setTab('checklist')}>✅ 체크리스트</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('checklist')}>✅ 체크리스트</button>
           </div>
         </>
       )}
@@ -578,7 +597,7 @@ export default function PregnancyClient() {
           })}
 
           <div className={styles.resultActions}>
-            <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+            <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(
                 ([1, 2, 3] as const).map(tri =>
                   `[${TRIMESTERS.find(t => t.id === tri)!.name}]\n` +
@@ -589,9 +608,9 @@ export default function PregnancyClient() {
               )}>
               {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
             </button>
-            <button className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
+            <button type="button" className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
               onClick={handleSave}>{saved ? '✓ 저장됨' : '💾 저장'}</button>
-            <button className={`${styles.copyBtn}`}
+            <button type="button" className={`${styles.copyBtn}`}
               onClick={() => { if (confirm('체크리스트를 초기화할까요?')) setChecklistProgress({}) }}>🔄 초기화</button>
           </div>
         </>
@@ -613,6 +632,11 @@ export default function PregnancyClient() {
 
           {reverseResult && (
             <>
+              {reverseOverdue && (
+                <div className={styles.warnBox}>
+                  ⚠️ <strong>현재 {reverseResult.currentWeek}주는 정상 범위를 벗어납니다.</strong> 입력한 출산 예정일을 다시 확인하세요.
+                </div>
+              )}
               <div className={styles.heroCard}>
                 <div className={styles.heroLabel}>예정일 {fmtDateKo(reverseResult.dueDate)} 기준</div>
                 <div className={styles.heroNum}>{reverseResult.currentWeek}주 {reverseResult.currentDay}일</div>
@@ -641,14 +665,14 @@ export default function PregnancyClient() {
               </div>
 
               <div className={styles.resultActions}>
-                <button className={styles.copyBtn} onClick={applyReverse}>
+                <button type="button" className={styles.copyBtn} onClick={applyReverse}>
                   ✨ 이 정보로 산전 검사 일정 보기
                 </button>
-                <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`예정일 ${fmtDateKo(reverseResult.dueDate)} → 현재 ${reverseResult.currentWeek}주 ${reverseResult.currentDay}일 · LMP ${fmtDateKo(reverseResult.lmp)}`)}>
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={() => { applyReverse(); setTab('checklist') }}>
+                <button type="button" className={styles.copyBtn} onClick={() => { applyReverse(); setTab('checklist') }}>
                   ✅ 체크리스트 보기
                 </button>
               </div>

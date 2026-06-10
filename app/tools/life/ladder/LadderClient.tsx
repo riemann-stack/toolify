@@ -7,7 +7,7 @@ import s from './ladder.module.css'
 import {
   MAX_PARTICIPANTS, MIN_PARTICIPANTS, CHARACTER_EMOJIS,
   ANIMATION_SPEEDS, DIFFICULTIES,
-  generateLadder, traceDest, shuffleArray,
+  generateLadderNoSelf, traceDest, shuffleArray,
   segsToPathD, pathTotalLength,
   loadGames, saveGames, newId,
   type AnimSpeed, type Difficulty, type SavedGame, type PathSeg,
@@ -34,6 +34,7 @@ export default function LadderClient() {
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
   const [rungsVisible, setRungsVisible] = useState(false)   // 가로줄 공개 여부 (스포일러 방지)
   const [copied, setCopied] = useState(false)
+  const [tableReady, setTableReady] = useState(false)        // 경로 애니메이션 후 결과표 노출 (긴장감)
 
   /* 카운트·행 수 */
   const count = names.length
@@ -48,9 +49,17 @@ export default function LadderClient() {
   /* 사다리 — 클라이언트에서만 생성 (Math.random hydration mismatch 방지)
      SSR·첫 렌더 시 빈 배열, mount 후 useEffect 로 가로줄 생성 */
   const [ladder, setLadder] = useState<boolean[][]>([])
+  const pendingLadderRef = useRef<boolean[][] | null>(null)  // 저장된 게임 불러오기 시 그대로 복원
   useEffect(() => {
+    if (pendingLadderRef.current) {
+      setLadder(pendingLadderRef.current)
+      pendingLadderRef.current = null
+      return
+    }
     const diff = DIFFICULTIES.find(d => d.id === difficulty)!
-    setLadder(generateLadder(count, rows, diff.rungProb))
+    // 시크릿 산타 등 이름=결과가 겹치면 자기 배정을 피해 생성 (안 겹치면 첫 시도 통과 → 일반 추첨 무영향)
+    setLadder(generateLadderNoSelf(count, rows, diff.rungProb, names, results))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count, rows, difficulty, regenKey])
 
   /* 인원 변경 시 결과 배열 길이 동기화 (단순 slice/pad with 빈 문자열) */
@@ -69,11 +78,14 @@ export default function LadderClient() {
   }, [count, regenKey, difficulty])
 
   /* 셋터들 */
+  /* 입력을 수정하면 공개 결과를 닫는다 — 추첨 후 결과를 바꾼 것처럼 보이는 문제 방지 */
   const setName = (i: number, v: string) => {
     setNames(prev => prev.map((p, j) => j === i ? v : p))
+    setRevealed(new Set()); setRungsVisible(false)
   }
   const setResult = (i: number, v: string) => {
     setResults(prev => prev.map((p, j) => j === i ? v : p))
+    setRevealed(new Set()); setRungsVisible(false)
   }
   const addPerson = () => {
     if (count >= MAX_PARTICIPANTS) return
@@ -101,6 +113,12 @@ export default function LadderClient() {
     dests.forEach((dest, src) => { arr[dest] = src })
     return arr
   }, [dests, count])
+
+  /* 시크릿 산타 등에서 본인↔본인 매칭 감지 (참가자 이름이 자신의 도착 결과와 같을 때) */
+  const hasSelfMatch = useMemo(
+    () => ladder.length > 0 && names.some((n, i) => n.trim() !== '' && n === results[dests[i]]),
+    [ladder.length, names, results, dests],
+  )
 
   /* 경로 세그먼트 (참가자 i 의 경로) */
   const getPathSegs = useCallback((startIdx: number): PathSeg[] => {
@@ -186,6 +204,13 @@ export default function LadderClient() {
   const speedDef = ANIMATION_SPEEDS.find(sp => sp.id === speed)!
   const allRevealed = revealed.size === count && count > 0
 
+  /* 결과표는 경로 애니메이션이 끝난 뒤에 노출 (느림 2초 선택 시 긴장감 유지) */
+  useEffect(() => {
+    if (!allRevealed) { setTableReady(false); return }
+    const t = setTimeout(() => setTableReady(true), speedDef.drawMs)
+    return () => clearTimeout(t)
+  }, [allRevealed, speedDef.drawMs])
+
   return (
     <div className={s.wrap}>
       <Disclaimer
@@ -214,6 +239,7 @@ export default function LadderClient() {
                   {CHARACTER_EMOJIS[i % CHARACTER_EMOJIS.length]}
                 </span>
                 <input className={s.nameInput} type="text"
+                  aria-label={`참가자 ${i + 1} 이름`}
                   value={n} onChange={e => setName(i, e.target.value)}
                   placeholder={`참가자${i + 1}`} maxLength={20} />
               </div>
@@ -223,6 +249,7 @@ export default function LadderClient() {
             <div className={s.colHeader}>🎯 결과</div>
             {Array.from({ length: count }, (_, i) => (
               <input key={i} className={`${s.nameInput} ${s.resultInput}`} type="text"
+                aria-label={`결과 ${i + 1}`}
                 value={results[i] ?? ''}
                 onChange={e => setResult(i, e.target.value)}
                 placeholder={`결과${i + 1}`} maxLength={20} />
@@ -263,9 +290,11 @@ export default function LadderClient() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div>
             <span className={s.subLabel}>애니메이션 속도</span>
-            <div className={s.optionRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+            <div className={s.optionRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }} role="group" aria-label="애니메이션 속도 선택">
               {ANIMATION_SPEEDS.map(sp => (
                 <button key={sp.id}
+                  type="button"
+                  aria-pressed={speed === sp.id}
                   className={`${s.optionBtn} ${speed === sp.id ? s.optionActive : ''}`}
                   onClick={() => setSpeed(sp.id)}>
                   {sp.name}
@@ -275,9 +304,11 @@ export default function LadderClient() {
           </div>
           <div>
             <span className={s.subLabel}>가로줄 난이도 (많을수록 결과가 더 섞임)</span>
-            <div className={s.optionRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+            <div className={s.optionRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }} role="group" aria-label="가로줄 난이도 선택">
               {DIFFICULTIES.map(d => (
                 <button key={d.id}
+                  type="button"
+                  aria-pressed={difficulty === d.id}
                   className={`${s.optionBtn} ${difficulty === d.id ? s.optionActive : ''}`}
                   onClick={() => setDifficulty(d.id)}>
                   {d.name}
@@ -296,6 +327,8 @@ export default function LadderClient() {
             const isOn = revealed.has(i)
             return (
               <button key={i}
+                type="button"
+                aria-pressed={isOn}
                 className={`${s.nameTag} ${isOn ? s.nameTagOn : ''}`}
                 onClick={() => handleClickPerson(i)}
                 title={isOn ? '경로 숨기기' : '경로 보기'}>
@@ -306,7 +339,7 @@ export default function LadderClient() {
           })}
         </div>
 
-        <svg viewBox={`0 0 ${SVG_W} ${svgH}`} className={s.ladderSvg}>
+        <svg viewBox={`0 0 ${SVG_W} ${svgH}`} className={s.ladderSvg} aria-hidden="true">
           {/* 세로줄 */}
           {Array.from({ length: count }, (_, i) => (
             <line key={`v${i}`} className={s.baseLine}
@@ -352,6 +385,8 @@ export default function LadderClient() {
             const isOn = srcIdx >= 0 && revealed.has(srcIdx)
             return (
               <button key={destIdx}
+                type="button"
+                aria-pressed={isOn}
                 className={`${s.resultTag} ${isOn ? s.resultTagOn : ''}`}
                 onClick={() => handleClickResult(destIdx)}
                 title={isOn ? '경로 숨기기' : '경로 보기'}
@@ -369,6 +404,12 @@ export default function LadderClient() {
         한 번에 공개하거나, 이름·결과를 클릭해 한 명씩 공개하세요.
       </div>
 
+      {hasSelfMatch && (
+        <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+          🎁 <strong>시크릿 산타 주의</strong> — 자기 배정을 자동으로 피하려 했지만, 중복 이름 등으로 본인에게 배정된 사람이 남아 있어요. 참가자·결과 이름을 서로 다르게 하면 해결됩니다.
+        </div>
+      )}
+
       <div className={s.startBtnRow}>
         <button className={s.bigGenerate} onClick={handleRevealAll}
           disabled={count < MIN_PARTICIPANTS}>
@@ -383,9 +424,9 @@ export default function LadderClient() {
         </button>
       </div>
 
-      {/* ── 전체 공개 시 결과표 ── */}
-      {allRevealed && (
-        <div className={s.card}>
+      {/* ── 전체 공개 + 애니메이션 종료 후 결과표 ── */}
+      {allRevealed && tableReady && (
+        <div className={s.card} role="status" aria-live="polite">
           <label className={s.cardLabel}>
             🎉 결과표
             <span className={s.cardLabelHint}>{count}명 모두 공개</span>
@@ -420,11 +461,17 @@ export default function LadderClient() {
       <SavedGamesSection
         currentNames={names}
         currentResults={results}
+        currentLadder={ladder}
+        currentDifficulty={difficulty}
         onApply={(g) => {
+          if (g.difficulty) setDifficulty(g.difficulty)
+          // 저장된 가로줄이 있으면 그대로 복원 (없으면 새로 생성)
+          pendingLadderRef.current = (g.ladder && g.ladder.length > 0) ? g.ladder : null
           setNames(g.participants)
           setResults(g.results)
           setRegenKey(k => k + 1)
           setRevealed(new Set())
+          setRungsVisible(false)
         }}
       />
     </div>
@@ -433,10 +480,12 @@ export default function LadderClient() {
 
 /* ═════════════════════════════════════════ 저장된 게임 ═════════════════════════════════════════ */
 function SavedGamesSection({
-  currentNames, currentResults, onApply,
+  currentNames, currentResults, currentLadder, currentDifficulty, onApply,
 }: {
   currentNames: string[]
   currentResults: string[]
+  currentLadder: boolean[][]
+  currentDifficulty: Difficulty
   onApply: (g: SavedGame) => void
 }) {
   const [games, setGames] = useState<SavedGame[]>([])
@@ -456,9 +505,11 @@ function SavedGamesSection({
       name: name.trim(),
       participants: currentNames,
       results: currentResults,
+      ladder: currentLadder,           // 가로줄·결과 그대로 저장 → 불러오면 동일 결과
+      difficulty: currentDifficulty,
       createdAt: now,
       updatedAt: now,
-    }]
+    }].slice(-30)
     setGames(next)
     saveGames(next)
     setShowForm(false)
@@ -486,14 +537,16 @@ function SavedGamesSection({
         const obj = JSON.parse(e.target?.result as string)
         const list = Array.isArray(obj) ? obj : (Array.isArray(obj.games) ? obj.games : null)
         if (!list) { alert('잘못된 백업 파일입니다'); return }
-        const valid = list.filter((g: unknown) => {
+        const valid = (list as unknown[]).filter((g) => {
           const x = g as SavedGame
-          return x && typeof x.id === 'string' && Array.isArray(x.participants)
-        })
-        if (!confirm(`${valid.length}개 게임을 가져옵니다. 기존 데이터에 추가? (취소 시 교체)`)) {
-          setGames(valid); saveGames(valid); return
-        }
-        const merged = [...games, ...valid.filter((g: SavedGame) => !games.some(x => x.id === g.id))]
+          return x && typeof x.id === 'string'
+            && Array.isArray(x.participants) && x.participants.length >= MIN_PARTICIPANTS && x.participants.length <= MAX_PARTICIPANTS
+            && Array.isArray(x.results)
+        }) as SavedGame[]
+        if (valid.length === 0) { alert('가져올 수 있는 유효한 게임이 없습니다 (참가자 2~16명·결과 배열 필요).'); return }
+        // 취소 = 중단(기존 데이터 유지), 확인 = 현재 목록에 추가
+        if (!confirm(`백업에서 ${valid.length}개 게임을 현재 목록에 추가합니다. 계속할까요?`)) return
+        const merged = [...games, ...valid.filter((g) => !games.some(x => x.id === g.id))].slice(-30)
         setGames(merged); saveGames(merged)
       } catch { alert('잘못된 백업 파일입니다') }
     }

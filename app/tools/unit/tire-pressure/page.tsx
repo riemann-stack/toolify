@@ -369,9 +369,9 @@ export default function TirePressurePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/car-cost',  icon: '🚗', name: '자동차 유지비 계산기', desc: '유류비·보험·소모품·감가상각' },
-              { href: '/tools/unit/length',       icon: '📏', name: '길이 변환기',           desc: 'km·mile·m·ft 단위 변환' },
+              { href: '/tools/unit/converter',    icon: '📐', name: '단위 변환기',           desc: '길이·무게·온도 등 14종 통합 변환' },
               { href: '/tools/unit/fuel-economy', icon: '⛽', name: '연비 변환기',     desc: 'km/L·mpg·L/100km 변환' },
-              { href: '/tools/unit/temperature',  icon: '🌡️', name: '온도 변환기',           desc: '계절별 기온 환산' },
+              { href: '/tools/unit/viscosity',    icon: '🛢️', name: '점도 변환기',           desc: 'cP·cSt·SAE 엔진오일 점도' },
             ].map((t, i) => (
               <Link
                 key={i}

@@ -83,8 +83,9 @@ export interface CycleResult {
   pmsEnd: Date               // PMS 예상 끝 (다음 생리 -1)
   dayInCycle: number         // 1-indexed
   phase: Phase
-  daysToNextPeriod: number   // 양수: 미래, 음수: 과거 (다음 주기 진입 후)
+  daysToNextPeriod: number   // 다음 생리까지 남은 일수 (앵커링으로 항상 1~avgCycle)
   cycleLength: number        // = avgCycle (편의)
+  cyclesSinceLog: number     // 기록된 마지막 생리일로부터 지난 완전 주기 수 (0=현재 주기, ≥1=오래된 입력 → 자동 보정)
 }
 
 export function calcCycle(input: CycleInput): CycleResult {
@@ -93,16 +94,21 @@ export function calcCycle(input: CycleInput): CycleResult {
   const avgCycle = input.avgCycle
   const periodLen = input.periodLength
 
-  let dayInCycle = dateDiff(today, lastPeriod) + 1  // 1-indexed
-  // dayInCycle가 음수거나 avgCycle 초과 시 다음 주기로 정규화
-  while (dayInCycle > avgCycle) dayInCycle -= avgCycle
-  while (dayInCycle < 1) dayInCycle += avgCycle
+  // 마지막 생리일이 오래된 경우(여러 주기 경과) 현재 주기로 자동 보정(anchoring).
+  // 배란·가임기·다음 생리·PMS를 전부 raw lastPeriod가 아닌 "가장 최근 추정 생리 시작일(cycleStart)"
+  // 기준으로 계산해야 다음 생리 예정일이 과거로 나오는 문제를 막을 수 있다.
+  const daysSinceLog = dateDiff(today, lastPeriod)
+  const cyclesSinceLog = Math.max(0, Math.floor(daysSinceLog / avgCycle))
+  const cycleStart = dateAdd(lastPeriod, cyclesSinceLog * avgCycle)  // today 이전(이하)의 가장 최근 추정 생리 시작일
+
+  let dayInCycle = dateDiff(today, cycleStart) + 1  // 1..avgCycle (cycleStart ≤ today < cycleStart + avgCycle)
+  while (dayInCycle < 1) dayInCycle += avgCycle      // 방어: 검증을 우회한 미래 입력 등 예외 상황
 
   const ovulationDay = avgCycle - 14  // 1-indexed, e.g., 28일 주기 → 14일
-  const ovulationDate = dateAdd(lastPeriod, ovulationDay - 1)
+  const ovulationDate = dateAdd(cycleStart, ovulationDay - 1)
   const fertilityStart = dateAdd(ovulationDate, -5)
   const fertilityEnd = dateAdd(ovulationDate, 1)
-  const nextPeriodDate = dateAdd(lastPeriod, avgCycle)
+  const nextPeriodDate = dateAdd(cycleStart, avgCycle)  // 항상 today 이후 (1~avgCycle일 뒤)
   const pmsStart = dateAdd(nextPeriodDate, -7)
   const pmsEnd = dateAdd(nextPeriodDate, -1)
 
@@ -119,6 +125,7 @@ export function calcCycle(input: CycleInput): CycleResult {
     nextPeriodDate, pmsStart, pmsEnd,
     dayInCycle, phase, daysToNextPeriod,
     cycleLength: avgCycle,
+    cyclesSinceLog,
   }
 }
 
@@ -162,7 +169,8 @@ export function phaseOfDate(date: Date, input: CycleInput): {
   const isPeriodStart = cycleDay === 1
   const isOvulation = cycleDay === ovulationDay
   const isInFertility = cycleDay >= ovulationDay - 5 && cycleDay <= ovulationDay + 1
-  const isInPMS = cycleDay >= avgCycle - 6 && cycleDay <= avgCycle - 1
+  // PMS = 다음 생리 -7 ~ -1일 (cycleDay avgCycle-6 ~ avgCycle). 결과 카드의 pmsStart/pmsEnd와 동일 범위로 정합
+  const isInPMS = cycleDay >= avgCycle - 6 && cycleDay <= avgCycle
 
   void cyclesAhead  // 미래 주기 카운트 (필요 시 활용)
 
@@ -250,7 +258,7 @@ export function validateInput(lastPeriodIso: string, periodLength: number, avgCy
   if (isNaN(date.getTime())) return '날짜 형식이 올바르지 않습니다.'
   const today = new Date()
   const diff = dateDiff(today, date)
-  if (diff < -7) return '미래 날짜는 입력 X.'
+  if (diff < 0) return '미래 날짜는 입력할 수 없어요 (오늘 또는 과거).'
   if (diff > 365) return '1년 이상 지난 날짜는 정확도가 떨어져요.'
   if (periodLength < 2 || periodLength > 10) return '생리 기간은 2~10일 범위.'
   if (avgCycle < 21 || avgCycle > 45) return '평균 주기는 21~45일 범위 (그 외는 산부인과 상담).'
@@ -380,7 +388,7 @@ export const PHASE_GUIDES: Record<Phase, PhaseGuide> = {
     nutrition: '철분·단백질 신경쓰기 (붉은 살코기·시금치·콩 일반 안내). 따뜻한 음료',
     sleep: '평소보다 30분~1시간 더 — 회복 우선',
     notes: ['복부 보온', '카페인·찬 음료 줄이기', '본인 컨디션 우선'],
-    warning: '⚠️ 심한 통증·과다 출혈 지속 시 산부인과 상담 (1577-1366)',
+    warning: '⚠️ 심한 통증·과다 출혈 지속 시 산부인과 전문의 상담을 받으세요',
   },
   follicular: {
     phase: 'follicular',

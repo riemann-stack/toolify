@@ -7,6 +7,7 @@ import styles from './dutch.module.css'
 import {
   ROUNDING_OPTIONS,
   RoundingId,
+  REMAINDER_OPTIONS, RemainderId,
   calcSimpleSplit, calcDrinkSplit, calcPerPersonSplit,
   calcPrepaidSplit, generateShareMessage,
   PerPersonParticipant, PrepaidParticipant, PersonItem,
@@ -15,25 +16,27 @@ import {
 } from './dutchUtils'
 
 /* 인원 조절 — +/− 버튼 + 직접 입력 */
-function Stepper({ value, onChange, min = 1, max = 50, color }: {
+function Stepper({ value, onChange, min = 1, max = 50, color, ariaLabel = '값' }: {
   value: number
   onChange: (v: number) => void
   min?: number
   max?: number
   color?: string
+  ariaLabel?: string
 }) {
   return (
     <div className={styles.stepper}>
-      <button type="button" className={styles.stepperBtn}
+      <button type="button" className={styles.stepperBtn} aria-label={`${ariaLabel} 1 줄이기`}
         onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}>−</button>
       <input className={styles.stepperInput} type="text" inputMode="numeric"
+        aria-label={ariaLabel}
         style={color ? { color } : undefined}
         value={value}
         onChange={e => {
           const v = parseInt(e.target.value.replace(/[^\d]/g, ''), 10)
           onChange(Number.isFinite(v) ? Math.max(min, Math.min(max, v)) : min)
         }} />
-      <button type="button" className={styles.stepperBtn}
+      <button type="button" className={styles.stepperBtn} aria-label={`${ariaLabel} 1 늘리기`}
         onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}>+</button>
     </div>
   )
@@ -42,8 +45,21 @@ function Stepper({ value, onChange, min = 1, max = 50, color }: {
 /* 1원 단위 처리 드롭다운 */
 function RoundingSelect({ value, onChange }: { value: RoundingId; onChange: (v: RoundingId) => void }) {
   return (
-    <select className={styles.select} value={value} onChange={e => onChange(e.target.value as RoundingId)}>
+    <select className={styles.select} value={value} aria-label="1원 단위 처리 방식"
+      onChange={e => onChange(e.target.value as RoundingId)}>
       {ROUNDING_OPTIONS.map(o => (
+        <option key={o.id} value={o.id}>{o.name}</option>
+      ))}
+    </select>
+  )
+}
+
+/* 잔여 금액(잔돈·부족분) 처리 드롭다운 */
+function RemainderSelect({ value, onChange }: { value: RemainderId; onChange: (v: RemainderId) => void }) {
+  return (
+    <select className={styles.select} value={value} aria-label="잔여 금액(잔돈·부족분) 처리 방식"
+      onChange={e => onChange(e.target.value as RemainderId)}>
+      {REMAINDER_OPTIONS.map(o => (
         <option key={o.id} value={o.id}>{o.name}</option>
       ))}
     </select>
@@ -74,15 +90,41 @@ export default function DutchClient() {
   const [tab, setTab] = useState<Tab>('simple')
 
   /* ─────── 1. 간단 N빵 ─────── */
-  const [sTotal,    setSTotal]    = useState('')
-  const [sPeople,   setSPeople]   = useState(4)
-  const [sRounding, setSRounding] = useState<RoundingId>('exact')
+  const [sTotal,     setSTotal]     = useState('')
+  const [sPeople,    setSPeople]    = useState(4)
+  const [sRounding,  setSRounding]  = useState<RoundingId>('exact')
+  const [sRemainder, setSRemainder] = useState<RemainderId>('common-fund')
 
   const simpleResult = useMemo(() => {
     const total = parseAmount(sTotal)
     if (total <= 0 || sPeople <= 0) return null
-    return calcSimpleSplit({ totalAmount: total, peopleCount: sPeople, rounding: sRounding, remainder: 'common-fund' })
-  }, [sTotal, sPeople, sRounding])
+    return calcSimpleSplit({ totalAmount: total, peopleCount: sPeople, rounding: sRounding, remainder: sRemainder })
+  }, [sTotal, sPeople, sRounding, sRemainder])
+
+  // 선택한 잔여 처리 방식에 따른 안내 문구 (히어로·상세에 표시)
+  const simpleRemainderNote = useMemo(() => {
+    if (!simpleResult) return ''
+    const { remainder: diff, perPerson: per, individualAmounts: amts } = simpleResult
+    const mn = amts.length ? Math.min(...amts) : 0
+    const mx = amts.length ? Math.max(...amts) : 0
+    switch (sRemainder) {
+      case 'common-fund':
+        return diff > 0 ? `잔돈 +${fmt(diff)}원 → 공금으로` : diff < 0 ? `${fmt(-diff)}원 부족 → 결제자 부담` : '딱 맞게 떨어짐'
+      case 'to-payer':
+        return diff > 0 ? `잔돈 +${fmt(diff)}원 → 결제자가 받음` : diff < 0 ? `결제자가 ${fmt(-diff)}원 더 부담` : '딱 맞게 떨어짐'
+      case 'first-person':
+        return diff !== 0 ? `첫 번째 사람만 ${fmt(amts[0])}원, 나머지 ${fmt(per)}원` : '딱 맞게 떨어짐'
+      case 'random': {
+        const di = amts.findIndex(a => a !== per)
+        return di >= 0 ? `무작위 1명만 ${fmt(amts[di])}원, 나머지 ${fmt(per)}원` : '딱 맞게 떨어짐'
+      }
+      case 'split-1won': {
+        const plus = amts.filter(a => a === mx).length
+        return mn === mx ? '1원 단위로 딱 맞음' : `${fmt(mx)}원 ${plus}명 · ${fmt(mn)}원 ${amts.length - plus}명`
+      }
+      default: return ''
+    }
+  }, [simpleResult, sRemainder])
 
   /* ─────── 2. 술값 분리 ─────── */
   const [dTotal,    setDTotal]    = useState('')
@@ -175,9 +217,13 @@ export default function DutchClient() {
     const settled = prepaidPpl.filter(p => !p.isContributor)
     if (!autoEqualShare || settled.length === 0) return prepaidPpl
     const totalPaid = prepaidPpl.reduce((s, p) => s + p.paid, 0)
-    const each = totalPaid / settled.length
+    const contribPaid = prepaidPpl.filter(p => p.isContributor).reduce((s, p) => s + p.paid, 0)
+    // 찬조자는 결제액을 "선물"로 처리 — 자기 부담 = 자기 결제액(잔액 0, 환급받지 않음).
+    // 찬조 금액만큼 나머지 사람이 나눠 낼 풀(toSplit)이 줄어든다.
+    const toSplit = Math.max(0, totalPaid - contribPaid)
+    const each = toSplit / settled.length
     return prepaidPpl.map(p =>
-      p.isContributor ? { ...p, share: 0 } : { ...p, share: each },
+      p.isContributor ? { ...p, share: p.paid } : { ...p, share: each },
     )
   }, [prepaidPpl, autoEqualShare])
 
@@ -238,7 +284,7 @@ export default function DutchClient() {
         payerName, payerAccount,
       })
     }
-    if (shareSrc === 'prepaid' && prepaidResult.transfers.length > 0) {
+    if (shareSrc === 'prepaid' && prepaidResult.transfers.length > 0 && prepaidResult.isBalanced) {
       return generateShareMessage({
         kind: 'prepaid',
         title: shareTitle,
@@ -266,8 +312,10 @@ export default function DutchClient() {
   useEffect(() => { setHistory(loadHistory()) }, [])
 
   const saveCurrent = () => {
+    // 공유 탭에서는 "공유 대상(shareSrc)"을 저장 — tab 으로 분기하면 항상 마지막 else(선결제자)로 잘못 기록됨
+    const src: Tab = tab === 'share' ? shareSrc : tab
     const item: SavedSplit = (() => {
-      if (tab === 'simple' && simpleResult) {
+      if (src === 'simple' && simpleResult) {
         return {
           id: newId(),
           title: '간단 N빵',
@@ -278,7 +326,7 @@ export default function DutchClient() {
           createdAt: new Date().toISOString(),
         }
       }
-      if (tab === 'drink' && drinkResult) {
+      if (src === 'drink' && drinkResult) {
         return {
           id: newId(), title: '술값 분리',
           total: parseAmount(dTotal), people: dPeople,
@@ -286,7 +334,7 @@ export default function DutchClient() {
           type: 'drink', createdAt: new Date().toISOString(),
         }
       }
-      if (tab === 'person') {
+      if (src === 'person') {
         return {
           id: newId(), title: '개인별 정산',
           total: personResult.grandTotal, people: participants.length,
@@ -315,12 +363,12 @@ export default function DutchClient() {
     <div className={styles.wrap}>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="정산 방식 선택">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            <span style={{ marginRight: 4 }} aria-hidden="true">{t.icon}</span>{t.name}
           </button>
         ))}
       </div>
@@ -334,6 +382,7 @@ export default function DutchClient() {
                 <label className={styles.subLabel}>총 금액</label>
                 <div className={styles.inputRow}>
                   <input className={styles.amountInput} type="text" inputMode="numeric"
+                    aria-label="총 금액 (원)"
                     placeholder="150,000"
                     value={sTotal}
                     onChange={e => setSTotal(fmtAmount(parseAmount(e.target.value)))} />
@@ -342,29 +391,31 @@ export default function DutchClient() {
               </div>
               <div className={styles.field}>
                 <label className={styles.subLabel}>인원 수</label>
-                <Stepper value={sPeople} onChange={setSPeople} min={1} max={50} />
+                <Stepper value={sPeople} onChange={setSPeople} min={1} max={50} ariaLabel="인원 수" />
               </div>
             </div>
             <div className={styles.roundRow}>
               <label className={styles.subLabel} style={{ marginBottom: 0 }}>1원 단위 처리</label>
               <RoundingSelect value={sRounding} onChange={setSRounding} />
             </div>
+            <div className={styles.roundRow} style={{ marginTop: 8 }}>
+              <label className={styles.subLabel} style={{ marginBottom: 0 }}>잔돈·부족분 처리</label>
+              <RemainderSelect value={sRemainder} onChange={setSRemainder} />
+            </div>
           </div>
 
           {simpleResult ? (
             <>
-              <div className={styles.hero}>
+              <div className={styles.hero} aria-live="polite">
                 <div className={styles.heroLabel}>1인당</div>
                 <div className={styles.heroNum}>
-                  {fmt(simpleResult.perPerson)}<span className={styles.heroNumUnit}>원</span>
+                  {sRemainder === 'split-1won'
+                    && Math.min(...simpleResult.individualAmounts) !== Math.max(...simpleResult.individualAmounts)
+                    ? `${fmt(Math.min(...simpleResult.individualAmounts))}~${fmt(Math.max(...simpleResult.individualAmounts))}`
+                    : fmt(simpleResult.perPerson)}<span className={styles.heroNumUnit}>원</span>
                 </div>
                 <div className={styles.heroSub}>
-                  총 {fmt(simpleResult.totalCollected)}원 걷힘
-                  {Math.abs(simpleResult.remainder) > 0 && (
-                    <> · {simpleResult.remainder > 0
-                      ? `잔돈 +${fmt(simpleResult.remainder)}원`
-                      : `부족 ${fmt(Math.abs(simpleResult.remainder))}원`}</>
-                  )}
+                  총 {fmt(simpleResult.totalCollected)}원 걷힘 · {simpleRemainderNote}
                 </div>
               </div>
 
@@ -375,6 +426,7 @@ export default function DutchClient() {
                   <div className={styles.detailRow}><span>인원</span><span>{sPeople}명</span></div>
                   <div className={styles.detailRow}><span>정확한 1인당</span><span>{simpleResult.exactPerPerson.toFixed(2)}원</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>1인당 (절삭 후)</span><span>{fmt(simpleResult.perPerson)}원</span></div>
+                  <div className={styles.detailRow}><span>잔여 처리</span><span style={{ fontFamily: "'Noto Sans KR', sans-serif", color: 'var(--text)' }}>{REMAINDER_OPTIONS.find(o => o.id === sRemainder)?.name}</span></div>
                 </div>
               </div>
 
@@ -407,6 +459,7 @@ export default function DutchClient() {
               <label className={styles.cardLabel}>총 금액 <span className={styles.cardLabelHint}>음식+술</span></label>
               <div className={styles.inputRow}>
                 <input className={styles.amountInput} type="text" inputMode="numeric"
+                  aria-label="총 금액 (음식+술, 원)"
                   placeholder="200,000"
                   value={dTotal}
                   onChange={e => setDTotal(fmtAmount(parseAmount(e.target.value)))} />
@@ -418,6 +471,7 @@ export default function DutchClient() {
               <label className={styles.cardLabel}>술값만 <span className={styles.cardLabelHint}>주류 비용</span></label>
               <div className={styles.inputRow}>
                 <input className={styles.amountInput} type="text" inputMode="numeric"
+                  aria-label="술값 (주류 비용, 원)"
                   placeholder="80,000"
                   value={dDrink}
                   onChange={e => setDDrink(fmtAmount(parseAmount(e.target.value)))} />
@@ -427,12 +481,12 @@ export default function DutchClient() {
 
             <div className={styles.card}>
               <label className={styles.cardLabel}>전체 인원</label>
-              <Stepper value={dPeople} onChange={v => { setDPeople(v); if (dDrinkers > v) setDDrinkers(v) }} min={1} max={50} />
+              <Stepper value={dPeople} onChange={v => { setDPeople(v); if (dDrinkers > v) setDDrinkers(v) }} min={1} max={50} ariaLabel="전체 인원" />
             </div>
 
             <div className={styles.card}>
               <label className={styles.cardLabel}>음주자</label>
-              <Stepper value={dDrinkers} onChange={setDDrinkers} min={0} max={dPeople} color="#EA580C" />
+              <Stepper value={dDrinkers} onChange={setDDrinkers} min={0} max={dPeople} color="#EA580C" ariaLabel="음주자 수" />
             </div>
           </div>
 
@@ -445,7 +499,7 @@ export default function DutchClient() {
 
           {drinkResult ? (
             <>
-              <div className={styles.hero}>
+              <div className={styles.hero} aria-live="polite">
                 <div className={styles.heroLabel}>1인당 (음주 여부별)</div>
                 <div className={styles.heroDual}>
                   <div className={styles.heroDualBox}>
@@ -466,6 +520,19 @@ export default function DutchClient() {
                 </div>
               </div>
 
+              {parseAmount(dDrink) > parseAmount(dTotal) && (
+                <div className={styles.warnBox}>
+                  ⚠️ <strong>술값이 총액보다 큽니다</strong> — 총액 {fmt(parseAmount(dTotal))}원보다 술값 {fmt(parseAmount(dDrink))}원이 많습니다.
+                  음식값이 0원으로 계산되니 입력을 확인하세요.
+                </div>
+              )}
+              {dDrinkers === 0 && parseAmount(dDrink) > 0 && (
+                <div className={styles.warnBox}>
+                  ⚠️ <strong>음주자가 0명</strong>이라 술값 {fmt(parseAmount(dDrink))}원이 정산에 포함되지 않았습니다.
+                  음주자 수를 입력하거나, 술값까지 전원이 나누려면 술값을 0원으로 두고 [간단 N빵]을 사용하세요.
+                </div>
+              )}
+
               <div className={styles.card}>
                 <label className={styles.cardLabel}>상세</label>
                 <div className={styles.detailTable}>
@@ -474,6 +541,14 @@ export default function DutchClient() {
                   <div className={styles.detailRow}><span>술값</span><span>{fmt(parseAmount(dDrink))}원</span></div>
                   <div className={styles.detailRow}><span>술값 1인 ({dDrinkers}명 분담)</span><span>{drinkResult.drinkPerDrinker.toFixed(0)}원</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>총 걷힘</span><span>{fmt(drinkResult.totalCollected)}원</span></div>
+                  {Math.round(drinkResult.remainder) !== 0 && (
+                    <div className={styles.detailRow}>
+                      <span>입력 총액 대비</span>
+                      <span style={{ color: drinkResult.remainder > 0 ? '#EA580C' : '#DC2626' }}>
+                        {drinkResult.remainder > 0 ? '+' : '−'}{fmt(Math.abs(drinkResult.remainder))}원
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -513,13 +588,14 @@ export default function DutchClient() {
             )}
             {sharedItems.map(it => (
               <div key={it.id} className={styles.itemRow}>
-                <input className={styles.textInput} value={it.name}
+                <input className={styles.textInput} value={it.name} aria-label="공동 메뉴 이름"
                   onChange={e => updateSharedItem(it.id, { name: e.target.value })} />
                 <input className={styles.itemPrice} type="text" inputMode="numeric"
+                  aria-label="공동 메뉴 가격 (원)"
                   placeholder="0"
                   value={it.price ? fmtAmount(it.price) : ''}
                   onChange={e => updateSharedItem(it.id, { price: parseAmount(e.target.value) })} />
-                <button className={styles.itemDelete} onClick={() => removeSharedItem(it.id)}>×</button>
+                <button type="button" className={styles.itemDelete} aria-label="공동 메뉴 삭제" onClick={() => removeSharedItem(it.id)}>×</button>
               </div>
             ))}
             <button className={styles.addItemBtn} onClick={addSharedItem}>+ 공동 메뉴 추가</button>
@@ -529,6 +605,7 @@ export default function DutchClient() {
             <label className={styles.cardLabel}>공동 술값 <span className={styles.cardLabelHint}>음주자만 균등 분배</span></label>
             <div className={styles.inputRow}>
               <input className={styles.amountInput} type="text" inputMode="numeric"
+                aria-label="공동 술값 (원)"
                 placeholder="0"
                 value={sharedDrinks}
                 onChange={e => setSharedDrinks(fmtAmount(parseAmount(e.target.value)))} />
@@ -542,26 +619,27 @@ export default function DutchClient() {
             {participants.map(p => (
               <div key={p.id} className={styles.personCard}>
                 <div className={styles.personHeader}>
-                  <input className={styles.personName} value={p.name}
+                  <input className={styles.personName} value={p.name} aria-label="참가자 이름"
                     onChange={e => updateParticipant(p.id, { name: e.target.value })} />
                   <label className={styles.toggleLabel}>
-                    <input type="checkbox" checked={p.drinker}
+                    <input type="checkbox" checked={p.drinker} aria-label={`${p.name || '참가자'} 음주자 여부`}
                       onChange={e => updateParticipant(p.id, { drinker: e.target.checked })} />
-                    🍺
+                    <span aria-hidden="true">🍺</span>
                   </label>
-                  <button className={`${styles.miniBtn} ${styles.miniDanger}`}
+                  <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} aria-label="참가자 삭제"
                     onClick={() => removeParticipant(p.id)} disabled={participants.length <= 1}>×</button>
                 </div>
 
                 {p.items.map(it => (
                   <div key={it.id} className={styles.itemRow}>
-                    <input className={styles.textInput} value={it.name}
+                    <input className={styles.textInput} value={it.name} aria-label="메뉴 이름"
                       onChange={e => updateItem(p.id, it.id, { name: e.target.value })} placeholder="메뉴" />
                     <input className={styles.itemPrice} type="text" inputMode="numeric"
+                      aria-label="메뉴 가격 (원)"
                       placeholder="0"
                       value={it.price ? fmtAmount(it.price) : ''}
                       onChange={e => updateItem(p.id, it.id, { price: parseAmount(e.target.value) })} />
-                    <button className={styles.itemDelete}
+                    <button type="button" className={styles.itemDelete} aria-label="메뉴 삭제"
                       onClick={() => removeItem(p.id, it.id)}>×</button>
                   </div>
                 ))}
@@ -582,16 +660,29 @@ export default function DutchClient() {
 
           {personResult.rows.some(r => r.total > 0) ? (
             <>
-              <div className={styles.hero}>
+              <div className={styles.hero} aria-live="polite">
                 <div className={styles.heroLabel}>전체 정산 금액</div>
                 <div className={styles.heroNum}>
                   {fmt(personResult.grandTotal)}<span className={styles.heroNumUnit}>원</span>
                 </div>
-                <div className={styles.heroSub}>{participants.length}명 · 개인별 차등</div>
+                <div className={styles.heroSub}>
+                  {participants.length}명 · 개인별 차등
+                  {Math.round(personResult.grandTotal - personResult.grandTotalRaw) !== 0 && (
+                    <> · 반올림 {personResult.grandTotal - personResult.grandTotalRaw > 0 ? '+' : '−'}{fmt(Math.abs(personResult.grandTotal - personResult.grandTotalRaw))}원</>
+                  )}
+                </div>
               </div>
+
+              {parseAmount(sharedDrinks) > 0 && participants.every(p => !p.drinker) && (
+                <div className={styles.warnBox}>
+                  ⚠️ <strong>음주자가 없습니다</strong> — 공동 술값 {fmt(parseAmount(sharedDrinks))}원은 음주자(🍺)에게만 분배되는데
+                  마신 사람으로 표시된 참가자가 없어 정산에서 빠졌습니다. 마신 사람을 🍺로 체크하세요.
+                </div>
+              )}
 
               <div className={styles.card}>
                 <label className={styles.cardLabel}>개인별 결과</label>
+                <div className={styles.resultTableScroll}>
                 <div className={styles.resultTable}>
                   <div className={`${styles.resultTableRow} ${styles.headerRow}`}>
                     <span>이름</span>
@@ -603,7 +694,7 @@ export default function DutchClient() {
                   {personResult.rows.map((r, i) => (
                     <div key={i} className={styles.resultTableRow}>
                       <span className={styles.rtName}>
-                        {r.name}{r.drinker && <small>🍺</small>}
+                        {r.name}{r.drinker && <small aria-hidden="true">🍺</small>}
                       </span>
                       <span className={styles.rtVal}>{fmt(r.ownAmount)}</span>
                       <span className={styles.rtVal}>{fmt(r.sharedShare)}</span>
@@ -611,6 +702,7 @@ export default function DutchClient() {
                       <span className={styles.rtTotal}>{fmt(r.total)}</span>
                     </div>
                   ))}
+                </div>
                 </div>
               </div>
 
@@ -658,13 +750,15 @@ export default function DutchClient() {
             {prepaidPpl.map(p => (
               <div key={p.id} style={{ marginBottom: 10 }}>
                 <div className={styles.prepaidRow}>
-                  <input className={styles.personName} value={p.name}
+                  <input className={styles.personName} value={p.name} aria-label="참가자 이름"
                     onChange={e => updatePrepaid(p.id, { name: e.target.value })} placeholder="이름" />
                   <input className={styles.itemPrice} type="text" inputMode="numeric"
+                    aria-label="결제한 금액 (원)"
                     placeholder="결제액"
                     value={p.paid ? fmtAmount(p.paid) : ''}
                     onChange={e => updatePrepaid(p.id, { paid: parseAmount(e.target.value) })} />
                   <input className={styles.itemPrice} type="text" inputMode="numeric"
+                    aria-label="부담할 금액 (원)"
                     placeholder="부담액"
                     disabled={autoEqualShare && !p.isContributor}
                     value={
@@ -673,7 +767,7 @@ export default function DutchClient() {
                         : (p.share ? fmtAmount(p.share) : '')
                     }
                     onChange={e => updatePrepaid(p.id, { share: parseAmount(e.target.value) })} />
-                  <button className={styles.itemDelete}
+                  <button type="button" className={styles.itemDelete} aria-label="참가자 삭제"
                     onClick={() => removePrepaid(p.id)}
                     disabled={prepaidPpl.length <= 2}>×</button>
                 </div>
@@ -691,13 +785,14 @@ export default function DutchClient() {
 
           {prepaidResult.totalPaid > 0 ? (
             <>
-              <div className={styles.hero}>
-                <div className={styles.heroLabel}>최소 송금 횟수</div>
+              <div className={styles.hero} aria-live="polite">
+                <div className={styles.heroLabel}>{prepaidResult.minimal ? '최소 송금 횟수' : '필요 송금 횟수 (근사)'}</div>
                 <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
                   {prepaidResult.transferCount}<span className={styles.heroNumUnit}>건</span>
                 </div>
                 <div className={styles.heroSub}>
                   총 결제 {fmt(prepaidResult.totalPaid)}원 · 총 부담 {fmt(prepaidResult.totalShare)}원
+                  {!prepaidResult.minimal && prepaidResult.isBalanced && <> · 참가자가 많아 최소에 가까운 근사값</>}
                 </div>
               </div>
 
@@ -744,13 +839,15 @@ export default function DutchClient() {
 
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                  disabled={!prepaidResult.isBalanced}
                   onClick={() => copy(prepaidResult.transfers.map(t => `${t.from} → ${t.to}: ${fmt(t.amount)}원`).join('\n'))}>
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={() => { setShareSrc('prepaid'); setTab('share') }}>
+                <button className={styles.copyBtn} disabled={!prepaidResult.isBalanced}
+                  onClick={() => { setShareSrc('prepaid'); setTab('share') }}>
                   💬 카톡 공유
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} disabled={!prepaidResult.isBalanced} onClick={saveCurrent}>💾 저장</button>
               </div>
             </>
           ) : (
@@ -772,14 +869,14 @@ export default function DutchClient() {
 
           <div className={styles.card}>
             <label className={styles.cardLabel}>공유할 정산 결과</label>
-            <div className={styles.shareSourceTabs}>
+            <div className={styles.shareSourceTabs} role="group" aria-label="공유할 정산 결과 선택">
               {(['simple', 'drink', 'person', 'prepaid'] as Tab[]).map(s => {
                 const t = TABS.find(x => x.id === s)!
                 return (
-                  <button key={s}
+                  <button key={s} type="button" aria-pressed={shareSrc === s}
                     className={`${styles.optionBtn} ${shareSrc === s ? styles.optionActive : ''}`}
                     onClick={() => setShareSrc(s)}>
-                    {t.icon} {t.name}
+                    <span aria-hidden="true">{t.icon}</span> {t.name}
                   </button>
                 )
               })}
@@ -788,16 +885,16 @@ export default function DutchClient() {
 
           <div className={styles.card}>
             <label className={styles.cardLabel}>모임 제목</label>
-            <input className={styles.textInput} value={shareTitle}
+            <input className={styles.textInput} value={shareTitle} aria-label="모임 제목"
               onChange={e => setShareTitle(e.target.value)} placeholder="예: 1월 팀 회식" />
           </div>
 
           <div className={styles.card}>
             <label className={styles.cardLabel}>입금 안내 <span className={styles.cardLabelHint}>선택</span></label>
             <div className={styles.shareInputRow}>
-              <input className={styles.textInput} value={payerName}
+              <input className={styles.textInput} value={payerName} aria-label="받을 사람"
                 onChange={e => setPayerName(e.target.value)} placeholder="받을 사람 (예: 김OO)" />
-              <input className={styles.textInput} value={payerAccount}
+              <input className={styles.textInput} value={payerAccount} aria-label="계좌번호"
                 onChange={e => setPayerAccount(e.target.value)} placeholder="계좌번호 (예: 카뱅 3333-XX-XXXXXX)" />
             </div>
           </div>

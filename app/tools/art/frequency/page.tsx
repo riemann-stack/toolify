@@ -193,7 +193,7 @@ export default function FrequencyPage() {
             {[
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '딜레이·리버브 ms 값 즉시 계산' },
               { href: '/tools/art/golden-ratio',icon: '🌀', name: '황금 비율 계산기',       desc: '음악 구성에 황금 비율 적용' },
-              { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',            desc: 'cm·m·inch·ft 단위 변환' },
+              { href: '/tools/unit/converter',   icon: '📐', name: '단위 변환기',            desc: '길이·무게·시간 등 14종 통합 변환' },
               { href: '/tools/art/color',        icon: '🎨', name: '색상 코드 변환기',       desc: 'HEX·RGB·HSL 즉시 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

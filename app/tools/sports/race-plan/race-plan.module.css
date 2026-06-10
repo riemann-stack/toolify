@@ -1,0 +1,168 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 공통 카드 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px; box-sizing: border-box;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px;
+}
+.hint { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
+.hint strong { color: var(--text); }
+
+/* ── 히어로 결과 ── */
+.hero {
+  background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(8,145,178,0.06));
+  border: 1.5px solid rgba(14,165,233,0.4); border-radius: 16px;
+  padding: 20px 22px; animation: fadeUp 0.25s ease;
+}
+.heroMain { display: flex; flex-direction: column; gap: 2px; }
+.heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.heroTime {
+  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(34px, 9vw, 48px);
+  font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1.5px;
+}
+.heroSub {
+  display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px;
+  font-size: 13px; color: var(--text);
+}
+.heroSub strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.empty {
+  padding: 18px; text-align: center; font-size: 13px; color: var(--muted);
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+}
+
+/* ── 거리 ── */
+.distRow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.distBtn {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
+  padding: 9px 16px; font-size: 13px; font-weight: 700; color: var(--text);
+  cursor: pointer; font-family: 'Inter', system-ui, sans-serif; min-height: 40px;
+  transition: all 0.15s;
+}@media (hover: hover) { .distBtn:hover { border-color: var(--accent); } }
+.distActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+.customWrap {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 0 12px 0 14px;
+}
+.customInput {
+  width: 56px; background: transparent; border: none; outline: none;
+  font-size: 16px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); text-align: right; min-height: 40px;
+}
+.customUnit { font-size: 12px; color: var(--muted); }
+
+/* ── 입력 필드 ── */
+.twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 380px) { .twoCol { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; font-size: 16px; color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif; outline: none; min-height: 44px;
+  transition: border-color 0.2s;
+}
+.input:focus { border-color: rgba(14,165,233,0.5); }
+
+/* ── 전략 ── */
+.stratRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.stratBtn {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 4px; font-size: 13px; font-weight: 700; color: var(--text);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 44px;
+  transition: all 0.15s;
+}@media (hover: hover) { .stratBtn:hover { border-color: var(--accent); } }
+.stratActive { background: rgba(14,165,233,0.16); border-color: var(--accent); color: var(--accent); }
+
+/* ── 토글(체크) ── */
+.toggleRow { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.check { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+.toggleLabel { font-size: 14px; color: var(--text); font-weight: 600; }
+.elevBody { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.gradeToggle { align-self: end; padding-bottom: 10px; }
+
+/* ── 구간 편집 ── */
+.segHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+.customTag {
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.3);
+  padding: 2px 8px; border-radius: 99px;
+}
+.segList { display: flex; flex-direction: column; gap: 6px; }
+.segRow {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+}
+.segKm {
+  flex-shrink: 0; min-width: 46px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 800; color: var(--text);
+}
+.segKmUnit { font-size: 10px; font-weight: 500; color: var(--muted); margin-left: 1px; }
+.segInputWrap {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 0 8px;
+}
+.segInput {
+  width: 52px; background: transparent; border: none; outline: none;
+  font-size: 16px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); text-align: right; min-height: 40px;
+}
+.segInputUnit { font-size: 10px; color: var(--muted); flex-shrink: 0; }
+.segReadout {
+  flex: 1; min-width: 110px; display: flex; align-items: center; justify-content: flex-end;
+  flex-wrap: wrap; gap: 4px 8px; font-family: 'Inter', system-ui, sans-serif;
+}
+.segCum { font-size: 13px; font-weight: 700; color: var(--text); }
+.segGrade { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+.gradeUp { color: #DC2626; background: rgba(220,38,38,0.12); }
+.gradeDown { color: #0891B2; background: rgba(8,145,178,0.14); }
+.segClock { font-size: 11px; color: var(--muted); }
+
+/* ── 통과 요약 ── */
+.splitGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 8px; }
+.splitBox {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 8px; text-align: center;
+}
+.splitFinish { background: rgba(14,165,233,0.12); border-color: rgba(14,165,233,0.35); }
+.splitLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.splitTime { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800; color: var(--text); }
+.splitFinish .splitTime { color: var(--accent); }
+.splitClock { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'Inter', system-ui, sans-serif; }
+
+/* ── 고도 프로파일 ── */
+.profHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.profStat { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.profSvg { width: 100%; height: 130px; display: block; }
+
+/* ── 경고 ── */
+.warnBox {
+  background: rgba(234,88,12,0.08); border: 1px solid rgba(234,88,12,0.3);
+  border-radius: 12px; padding: 12px 16px;
+}
+.warnItem { font-size: 12.5px; color: var(--text); line-height: 1.7; margin: 0; }
+.warnItem + .warnItem { margin-top: 6px; }
+
+/* ── 액션 ── */
+.actionRow { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
+@media (max-width: 380px) { .actionRow { grid-template-columns: 1fr; } }
+.shareBtn {
+  background: var(--accent); color: #fff; border: none; padding: 14px 18px; border-radius: 10px;
+  font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  min-height: 48px; transition: all 0.15s;
+}@media (hover: hover) { .shareBtn:hover { opacity: 0.88; } }
+.shareBtn.copied { background: #059669; }
+.resetBtn {
+  background: var(--bg3); color: var(--text); border: 1px solid var(--border);
+  padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; min-height: 48px; transition: all 0.15s;
+}@media (hover: hover) { .resetBtn:hover { border-color: var(--accent); } }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

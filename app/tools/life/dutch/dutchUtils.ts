@@ -258,30 +258,82 @@ export type PrepaidResult = {
   balances: { name: string; balance: number }[]   // + 받을 / - 낼
   transfers: Transfer[]
   transferCount: number
+  /** 결과가 수학적 최소 송금 횟수임이 보장되는지 (인원이 매우 많거나 합이 0이 아니면 근사) */
+  minimal: boolean
 }
 
-/** Greedy 최소 송금 — 가장 큰 채권자/채무자 매칭 반복 */
-export function calcMinimumTransfers(balances: { name: string; balance: number }[]): Transfer[] {
+const EPS = 0.5  // 1원 미만은 무시
+/** 비영(非零) 정확 최소화 한계 — 이보다 많으면 그리디 근사로 대체 (DP가 3^n 이라 보호) */
+const EXACT_MAX = 15
+
+/** 한 그룹 내부를 그리디로 정산 — 가장 큰 채권자/채무자 매칭 반복 */
+function settleGreedy(balances: { name: string; balance: number }[]): Transfer[] {
   const work = balances.map(b => ({ ...b }))
   const transfers: Transfer[] = []
-  const EPS = 0.5  // 1원 미만은 무시
-
   let safety = 0
-  while (safety++ < 1000) {
-    // 가장 많이 낼 사람 (음수 최저)
+  while (safety++ < 2000) {
     let debtor = work[0]; let credit = work[0]
     for (const p of work) {
       if (p.balance < debtor.balance) debtor = p
       if (p.balance > credit.balance) credit = p
     }
     if (Math.abs(debtor.balance) < EPS || credit.balance < EPS) break
-
     const amount = Math.min(Math.abs(debtor.balance), credit.balance)
     transfers.push({ from: debtor.name, to: credit.name, amount: Math.round(amount) })
     debtor.balance += amount
     credit.balance -= amount
   }
   return transfers
+}
+
+/** 최소 송금 횟수 — 잔액을 "합이 0인 그룹"으로 최대한 많이 쪼갠 뒤(비트마스크 DP) 각 그룹을 그리디로 정산.
+ *  최소 송금 = (비영 인원) − (합0 그룹 수). 그리디만 쓰면 합0 부분집합을 못 찾아 송금이 더 늘 수 있다
+ *  (예: -60·-50·+20·+40·+50 → 그리디 4건, 최적 3건).
+ *  per-group 그리디는 그룹 분할이 어떻든 항상 금액이 보존되므로 안전하다(분할은 횟수 최적화일 뿐).
+ *  비영 인원이 EXACT_MAX 초과면 DP가 느려 통째 그리디로 대체(이때만 근사). */
+export function calcMinimumTransfers(balances: { name: string; balance: number }[]): Transfer[] {
+  const nz = balances.filter(b => Math.abs(b.balance) > EPS)
+  const m = nz.length
+  if (m <= 1) return []
+  if (m > EXACT_MAX) return settleGreedy(nz)
+
+  const amt = nz.map(b => b.balance)
+  const N = 1 << m
+  const sum = new Float64Array(N)
+  const bitIdx: number[] = []
+  for (let i = 0; i < m; i++) bitIdx[1 << i] = i
+  for (let mask = 1; mask < N; mask++) {
+    const low = mask & -mask
+    sum[mask] = sum[mask ^ low] + amt[bitIdx[low]]
+  }
+  // dp[mask] = mask(합0)를 합0 부분집합으로 쪼갠 최대 그룹 수, choice[mask] = 선택한 부분집합
+  const dp = new Int32Array(N).fill(-1)
+  const choice = new Int32Array(N)
+  dp[0] = 0
+  for (let mask = 1; mask < N; mask++) {
+    if (Math.abs(sum[mask]) > EPS) continue          // 합0 mask만 분할 대상
+    const low = mask & -mask
+    for (let sub = mask; sub > 0; sub = (sub - 1) & mask) {
+      if (!(sub & low)) continue                     // 최저 비트 포함(중복 분할 방지)
+      if (Math.abs(sum[sub]) > EPS) continue          // 합0 부분집합만
+      const rest = mask ^ sub
+      if (dp[rest] < 0) continue
+      if (dp[rest] + 1 > dp[mask]) { dp[mask] = dp[rest] + 1; choice[mask] = sub }
+    }
+  }
+
+  const out: Transfer[] = []
+  let mask = N - 1
+  // 합이 0이 아니거나(불균형) 분할 실패 시 통째 그리디로 안전 처리
+  if (dp[mask] < 0) return settleGreedy(nz)
+  while (mask > 0) {
+    const sub = choice[mask]
+    if (!sub) { out.push(...settleGreedy(nz.filter((_, i) => mask & (1 << i)))); break }
+    const group = nz.filter((_, i) => sub & (1 << i))
+    out.push(...settleGreedy(group))
+    mask ^= sub
+  }
+  return out
 }
 
 export function calcPrepaidSplit(participants: PrepaidParticipant[]): PrepaidResult {
@@ -292,14 +344,18 @@ export function calcPrepaidSplit(participants: PrepaidParticipant[]): PrepaidRes
     balance: p.paid - p.share,
   }))
   const transfers = calcMinimumTransfers(balances)
+  const isBalanced = Math.abs(totalPaid - totalShare) < 1
+  const nzCount = balances.filter(b => Math.abs(b.balance) > EPS).length
   return {
     totalPaid,
     totalShare,
-    isBalanced: Math.abs(totalPaid - totalShare) < 1,
+    isBalanced,
     diff: totalPaid - totalShare,
     balances,
     transfers,
     transferCount: transfers.length,
+    // 합이 0이고(균형) 비영 인원이 정확 한계 이내일 때만 "수학적 최소" 보장
+    minimal: isBalanced && nzCount <= EXACT_MAX,
   }
 }
 

@@ -164,7 +164,9 @@ export function daysBetween(a: string, b: string): number {
   return Math.round((db.getTime() - da.getTime()) / (24 * 60 * 60 * 1000))
 }
 export function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  // 로컬(사용자 시간대) 기준 날짜 — toISOString()은 UTC라 자정 전후로 하루가 밀릴 수 있음
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 export function formatDateKo(date: string): string {
   const d = new Date(date)
@@ -182,24 +184,46 @@ export function generateProgression(
   totalWeeks: number,
   options: { plateauMode: PlateauMode; maintenanceInterval?: number } = { plateauMode: 'realistic' },
 ): ProgressionPoint[] {
+  const totalLoss = input.currentWeight - input.targetWeight
+
+  // realistic: 앞 2주 +30%·마지막 4주 −15% 형태(수분 변동·정체기)를 유지하되,
+  // 누적 손실을 정규화해 정확히 totalWeeks 주차에 목표 체중에 도달하도록 맞춘다
+  // (그래프 종료 시점 = 표기된 소요 기간/종료일과 일치).
+  if (options.plateauMode === 'realistic' && totalWeeks > 0 && totalWeeks <= 120 && totalLoss > 0) {
+    const raw: number[] = []
+    for (let w = 1; w <= totalWeeks; w++) {
+      let m = 1
+      if (w <= 2) m = 1.3
+      else if (w > totalWeeks - 4) m = 0.85
+      raw.push(weeklyLossKg * m)
+    }
+    const sumRaw = raw.reduce((acc, v) => acc + v, 0)
+    const k = sumRaw > 0 ? totalLoss / sumRaw : 1
+    const out: ProgressionPoint[] = [
+      { week: 0, weight: Math.round(input.currentWeight * 100) / 100, isMaintenance: false },
+    ]
+    let weight = input.currentWeight
+    for (let w = 1; w <= totalWeeks; w++) {
+      weight -= raw[w - 1] * k
+      if (w === totalWeeks) weight = input.targetWeight  // 마지막 주차는 정확히 목표 체중
+      out.push({ week: w, weight: Math.round(weight * 100) / 100, isMaintenance: false })
+    }
+    return out
+  }
+
+  // linear / with-maintenance (등속 또는 유지기 삽입)
   const out: ProgressionPoint[] = []
   let currentWeight = input.currentWeight
   const cap = Math.min(120, totalWeeks + 4)
 
   for (let w = 0; w <= cap; w++) {
-    let weeklyLoss = weeklyLossKg
     let isMaintenance = false
-
-    if (options.plateauMode === 'realistic') {
-      if (w <= 2) weeklyLoss *= 1.3                    // 첫 2주 +30%
-      else if (w >= totalWeeks - 4) weeklyLoss *= 0.85  // 마지막 4주 −15%
-    }
 
     if (options.plateauMode === 'with-maintenance' && options.maintenanceInterval && options.maintenanceInterval > 0) {
       isMaintenance = w > 0 && w % options.maintenanceInterval === 0
     }
 
-    if (!isMaintenance && w > 0) currentWeight -= weeklyLoss
+    if (!isMaintenance && w > 0) currentWeight -= weeklyLossKg
 
     out.push({
       week: w,
@@ -310,7 +334,10 @@ export interface TargetDateResult {
   targetDailyCalories: number
   feasibility: 'safe' | 'caution' | 'aggressive' | 'dangerous'
   isFeasible: boolean
+  warnings: string[]
 }
+
+const FEAS_ORDER: TargetDateResult['feasibility'][] = ['safe', 'caution', 'aggressive', 'dangerous']
 
 export function calcDeficitForTargetDate(
   input: Omit<WeightLossInput, 'speedId'>,
@@ -326,10 +353,37 @@ export function calcDeficitForTargetDate(
   const dailyDeficit = (weeklyLossKg * KCAL_PER_KG) / 7
   const targetDailyCalories = input.tdee - dailyDeficit
 
-  let feasibility: TargetDateResult['feasibility'] = 'safe'
-  if (weeklyLossPercent > 1.2)      feasibility = 'dangerous'
-  else if (weeklyLossPercent > 1.0) feasibility = 'aggressive'
-  else if (weeklyLossPercent > 0.5) feasibility = 'caution'
+  // 속도 기반 계획과 동일한 안전 하한선을 목표일 역산에도 적용 (탭 간 안전도 일관).
+  // 후보 심각도를 모아 가장 높은 것을 채택 (클로저 변이 대신 max-index).
+  const feasCandidates: TargetDateResult['feasibility'][] = ['safe']
+  if (weeklyLossPercent > 1.2)      feasCandidates.push('dangerous')
+  else if (weeklyLossPercent > 1.0) feasCandidates.push('aggressive')
+  else if (weeklyLossPercent > 0.5) feasCandidates.push('caution')
+
+  const warnings: string[] = []
+  if (input.age < 18) {
+    warnings.push('18세 미만 청소년은 본 도구가 부적합합니다. 소아청소년과 전문의 상담을 권장합니다.')
+    feasCandidates.push('dangerous')
+  }
+  if (dailyDeficit > DANGER_THRESHOLDS.dailyDeficitMax) {
+    warnings.push(`하루 적자 ${Math.round(dailyDeficit)}kcal는 권장 한도(1,000kcal)를 초과합니다.`)
+    feasCandidates.push('dangerous')
+  }
+  const minKcal = input.gender === 'male' ? DANGER_THRESHOLDS.minDailyKcalMale : DANGER_THRESHOLDS.minDailyKcalFemale
+  if (targetDailyCalories < minKcal) {
+    warnings.push(`목표 섭취량 ${Math.round(targetDailyCalories)}kcal는 권장 최소(${minKcal}kcal · ${input.gender === 'male' ? '남성' : '여성'})보다 낮습니다.`)
+    feasCandidates.push('dangerous')
+  }
+  if (input.tdee > 0 && (dailyDeficit / input.tdee) * 100 > DANGER_THRESHOLDS.tdeeDeficitPercent) {
+    warnings.push(`TDEE 대비 ${Math.round((dailyDeficit / input.tdee) * 100)}% 적자는 권장 한도(25~30%)를 초과합니다.`)
+    feasCandidates.push('aggressive')
+  }
+  const targetBMI = calcBMI(input.height, input.targetWeight)
+  if (targetBMI < DANGER_THRESHOLDS.underBMIWarn) {
+    warnings.push(`목표 체중의 BMI ${targetBMI.toFixed(1)}은 저체중 범위입니다. 건강상 권장하지 않습니다.`)
+    feasCandidates.push('aggressive')
+  }
+  const feasibility = FEAS_ORDER[Math.max(...feasCandidates.map(f => FEAS_ORDER.indexOf(f)))]
 
   return {
     totalDays,
@@ -340,6 +394,7 @@ export function calcDeficitForTargetDate(
     targetDailyCalories: Math.round(targetDailyCalories),
     feasibility,
     isFeasible: feasibility !== 'dangerous',
+    warnings,
   }
 }
 

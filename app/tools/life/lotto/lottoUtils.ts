@@ -74,10 +74,16 @@ function pickRandom(min: number, max: number): number {
 }
 
 function fillRandom(set: Set<number>, excluded: number[] = []): Set<number> {
-  while (set.size < PICK_COUNT) {
-    const n = pickRandom(1, LOTTO_TOTAL)
-    if (excluded.includes(n)) continue
-    set.add(n)
+  // 가용 후보 풀에서 뽑아 채운다 — 제외가 많아 6개 미만이어도 무한 반복 없이 종료.
+  const exSet = new Set(excluded)
+  const pool: number[] = []
+  for (let n = 1; n <= LOTTO_TOTAL; n++) {
+    if (!set.has(n) && !exSet.has(n)) pool.push(n)
+  }
+  while (set.size < PICK_COUNT && pool.length > 0) {
+    const idx = Math.floor(Math.random() * pool.length)
+    set.add(pool[idx])
+    pool.splice(idx, 1)
   }
   return set
 }
@@ -189,21 +195,16 @@ function generateSpreadTail(opts: GenerationOptions): number[] {
 }
 
 function generateEvenSpread(opts: GenerationOptions): number[] {
-  const set = new Set<number>(opts.fixed ?? [])
-  // 대략 7~9 간격으로 6개
-  let safety = 0
-  while (set.size < PICK_COUNT && safety < 30) {
-    safety++
-    set.clear()
-    if (opts.fixed) opts.fixed.forEach(n => set.add(n))
-    let cur = pickRandom(1, 7)
-    for (let i = 0; i < PICK_COUNT && cur <= LOTTO_TOTAL; i++) {
-      if (!opts.excluded?.includes(cur) && !set.has(cur)) set.add(cur)
-      cur += pickRandom(6, 9)
-    }
+  // 고정 번호를 항상 보존하고, 남는 자리만 균등 간격(6~9)으로 채운다.
+  // (이전: 간격 번호를 size 체크 없이 추가해 set이 6개를 초과 → 정렬 후 앞 6개만 잘라 큰 고정 번호가 탈락했음)
+  const set = new Set<number>((opts.fixed ?? []).filter(n => n >= 1 && n <= LOTTO_TOTAL))
+  let cur = pickRandom(1, 7)
+  while (set.size < PICK_COUNT && cur <= LOTTO_TOTAL) {
+    if (!opts.excluded?.includes(cur) && !set.has(cur)) set.add(cur)
+    cur += pickRandom(6, 9)
   }
-  fillRandom(set, opts.excluded) // 6개 안 차면 보충
-  return [...set].sort((a, b) => a - b).slice(0, PICK_COUNT)
+  fillRandom(set, opts.excluded) // 간격으로 6개 못 채우면 무작위 보충
+  return [...set]                // generateOne에서 정렬·6개·중복 검증
 }
 
 function generateSumBalanced(opts: GenerationOptions): number[] {
@@ -230,18 +231,28 @@ export function generateOne(opts: GenerationOptions): number[] {
     case 'random':
     default:               nums = generateRandom(opts); break
   }
-  // 안전 보장: 6개·1~45 범위·중복 X
+  // 안전 보장: 6개·1~45 범위·중복 X — 가용 후보 풀에서 보충(무한 반복 없음)
   const valid = [...new Set(nums.filter(n => n >= 1 && n <= 45))].slice(0, 6)
-  while (valid.length < 6) {
-    const n = pickRandom(1, 45)
-    if (!valid.includes(n) && !opts.excluded?.includes(n)) valid.push(n)
+  if (valid.length < 6) {
+    const exSet = new Set(opts.excluded ?? [])
+    const have = new Set(valid)
+    const pool: number[] = []
+    for (let n = 1; n <= LOTTO_TOTAL; n++) {
+      if (!have.has(n) && !exSet.has(n)) pool.push(n)
+    }
+    while (valid.length < 6 && pool.length > 0) {
+      const idx = Math.floor(Math.random() * pool.length)
+      valid.push(pool[idx])
+      pool.splice(idx, 1)
+    }
   }
   return valid.sort((a, b) => a - b)
 }
 
 export function generateGames(opts: GenerationOptions): LottoGame[] {
   const games: LottoGame[] = []
-  const usedAcross = new Set<number>()
+  const fixedSet = new Set(opts.fixed ?? [])
+  const usedAcross = new Set<number>()  // 고정 번호는 모든 게임 공통이므로 추적에서 제외
   for (let i = 0; i < opts.gameCount; i++) {
     let nums: number[] = []
     let attempts = 0
@@ -249,12 +260,13 @@ export function generateGames(opts: GenerationOptions): LottoGame[] {
       attempts++
       nums = generateOne(opts)
       if (opts.avoidGameOverlap && i > 0) {
-        const overlap = nums.filter(n => usedAcross.has(n)).length
+        // 비고정(무작위) 번호의 겹침만 계산 — 고정 번호 때문에 영원히 실패하는 문제 방지
+        const overlap = nums.filter(n => !fixedSet.has(n) && usedAcross.has(n)).length
         if (overlap > 3) continue
       }
       break
     }
-    nums.forEach(n => usedAcross.add(n))
+    nums.forEach(n => { if (!fixedSet.has(n)) usedAcross.add(n) })
     games.push({ numbers: nums, analysis: analyzeNumbers(nums) })
   }
   return games
@@ -401,42 +413,44 @@ export type TaxResult = {
 
 /**
  * 한국 로또 당첨금 세금 (기타소득세 + 지방소득세)
- * - 5만원 이하: 비과세 (실제: 5,000원, 50,000원도 비과세 처리)
- *   ※ 본 도구는 실용 기준 "200만원 이하 비과세"를 안내. 5등 5천원·4등 5만원은 비과세 분류.
- * - 200만원 초과 ~ 3억 이하: 22% (소득세 20% + 지방세 2%)
- * - 3억 초과 부분: 33% (소득세 30% + 지방세 3%)
+ * - 건별 200만원 이하: 비과세 (과세최저한 — 공제가 아니라 과세 여부를 가르는 기준선)
+ * - 200만원 초과 시: 200만원을 빼지 않고 "당첨금 전액"을 과세
+ *     · 3억원 이하분: 22% (소득세 20% + 지방세 2%)
+ *     · 3억원 초과분: 33% (소득세 30% + 지방세 3%)
+ *   ※ 200만원 바로 위 구간엔 "당첨금이 더 큰데 실수령은 더 적은" 문턱(cliff)이 생긴다.
+ *   (현재 UI 미사용 — 향후 세후 계산 기능용)
  */
 export function calcAfterTax(gross: number): TaxResult {
   if (gross <= 0) {
     return { gross: 0, exempt: 0, taxed22: 0, taxed33: 0, totalTax: 0, net: 0, effectiveRate: 0 }
   }
-  const TAX_FREE_LIMIT = 2_000_000     // 200만원 이하 기타소득세 비과세 (분리과세 면제)
-  const HIGH_BRACKET = 300_000_000     // 3억 초과 33%
+  const TAX_FREE_LIMIT = 2_000_000     // 과세최저한: 건별 200만원 이하면 전액 비과세
+  const HIGH_BRACKET = 300_000_000     // 3억 초과분 33%
 
-  let exempt = 0, taxed22 = 0, taxed33 = 0
-  let totalTax = 0
-
+  // 200만원 이하 → 전액 비과세
   if (gross <= TAX_FREE_LIMIT) {
-    exempt = gross
-  } else if (gross <= HIGH_BRACKET) {
-    exempt = TAX_FREE_LIMIT
-    taxed22 = gross - TAX_FREE_LIMIT
-    totalTax = taxed22 * 0.22
+    return { gross, exempt: gross, taxed22: 0, taxed33: 0, totalTax: 0, net: gross, effectiveRate: 0 }
+  }
+
+  // 200만원 초과 → 200만원을 차감하지 않고 전액 과세 (3억 기준 22%/33% 분할)
+  let taxed22 = 0, taxed33 = 0, totalTax = 0
+  if (gross <= HIGH_BRACKET) {
+    taxed22 = gross
+    totalTax = gross * 0.22
   } else {
-    exempt = TAX_FREE_LIMIT
-    taxed22 = HIGH_BRACKET - TAX_FREE_LIMIT
+    taxed22 = HIGH_BRACKET
     taxed33 = gross - HIGH_BRACKET
-    totalTax = taxed22 * 0.22 + taxed33 * 0.33
+    totalTax = HIGH_BRACKET * 0.22 + taxed33 * 0.33
   }
   const net = gross - totalTax
   return {
     gross,
-    exempt,
+    exempt: 0,
     taxed22,
     taxed33,
     totalTax: Math.round(totalTax),
     net: Math.round(net),
-    effectiveRate: gross > 0 ? (totalTax / gross) * 100 : 0,
+    effectiveRate: (totalTax / gross) * 100,
   }
 }
 
@@ -449,7 +463,9 @@ export function getBallColor(n: number): string {
   return '#B0D840'
 }
 export function getBallTextColor(n: number): string {
-  return n <= 10 ? '#000' : '#fff'
+  // 빨강 공(21~30)만 흰 글씨, 나머지 밝은 색(노랑·파랑·회색·초록)은 검정 글씨로 명암비 확보
+  // (흰 글씨 + 밝은 공은 명암비 1.6~2.3:1로 WCAG 미달 → 검정으로 9~13:1)
+  return (n >= 21 && n <= 30) ? '#fff' : '#000'
 }
 
 /* ─── 패턴 해석 (분석 탭 텍스트) ─── */
@@ -496,7 +512,8 @@ export function loadSaved(): SavedNumber[] {
 }
 export function saveSaved(items: SavedNumber[]) {
   if (typeof window === 'undefined') return
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 100))) } catch { /* quota */ }
+  // 100개 초과 시 가장 오래된 것을 버리고 최신 100개 유지 (신규 항목이 버려지지 않도록)
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(-100))) } catch { /* quota */ }
 }
 export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6)

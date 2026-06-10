@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/health/bmr',
   title: '기초대사량 계산기 2026 — BMR·TDEE·4공식 비교·운동일/휴식일',
   description:
-    '기초대사량과 하루 총 소비 칼로리(TDEE) + 4공식 비교·운동일/휴식일·목표별 권장 칼로리·스마트워치 연동까지.',
+    '기초대사량과 하루 총 소비 칼로리(TDEE) + 4공식 비교·운동일/휴식일·목표별 권장 칼로리·매크로 분배까지.',
   keywords: [
     '기초대사량 계산기', 'BMR 계산기', 'TDEE 계산기', '하루 칼로리',
     'Mifflin-St Jeor', 'Katch-McArdle', '운동일 칼로리', '활동량 계산',
@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: 'Harris-Benedict 공식이란?',
-                a: '1919년 개발된 기초대사량 계산 공식으로 현재 가장 널리 사용됩니다. 남성: 88.362 + (13.397×체중kg) + (4.799×키cm) − (5.677×나이), 여성: 447.593 + (9.247×체중kg) + (3.098×키cm) − (4.330×나이)로 계산합니다. 이후 Mifflin-St Jeor 공식도 개발되었으나 두 공식 모두 ±10% 수준의 오차가 있을 수 있습니다. 본 도구는 4공식을 모두 비교 표시합니다.',
+                a: '1919년 처음 발표되고 1984년 개정된(Roza-Shizgal) 기초대사량 계산 공식으로, 임상에서 오래 사용돼 왔습니다. 본 도구가 쓰는 개정판 계수는 — 남성: 88.362 + (13.397×체중kg) + (4.799×키cm) − (5.677×나이), 여성: 447.593 + (9.247×체중kg) + (3.098×키cm) − (4.330×나이) 입니다(원전 1919년 계수와는 다릅니다). 이후 Mifflin-St Jeor 공식도 개발되었으며 두 공식 모두 ±10% 수준의 오차가 있을 수 있습니다. 본 도구는 4공식을 모두 비교 표시합니다.',
               },
               {
                 q: '기초대사량은 왜 사람마다 다른가요?',
@@ -35,7 +35,7 @@ const FAQ_LD = [
               },
               {
                 q: '어떤 공식을 사용해야 하나요?',
-                a: '일반인은 <strong>Mifflin-St Jeor</strong> 공식을 권장합니다 (현대 의료계 표준). 상황별 추천 — 일반 성인 다이어트: Mifflin-St Jeor / 한국 의료 기록 일관성: Harris-Benedict / 체지방률 정확 측정(InBody): Katch-McArdle / 운동선수·근육량 많음: Cunningham. 본 도구는 4공식을 모두 비교 표시하므로 본인 상황에 맞는 결과를 참고할 수 있습니다.',
+                a: '일반인은 <strong>Mifflin-St Jeor</strong> 공식을 권장합니다 (현재 가장 널리 사용·권장). 상황별 추천 — 일반 성인 다이어트: Mifflin-St Jeor / 의료·연구 기록 일관성: Harris-Benedict / 체지방률 정확 측정(InBody): Katch-McArdle / 운동선수·근육량 많음: Cunningham. 모든 공식은 추정치(±10% 내외 오차 가능)이므로, 본 도구는 4공식을 모두 비교 표시합니다.',
               },
               {
                 q: '운동일과 휴식일의 칼로리를 따로 계산해야 하나요?',
@@ -122,8 +122,8 @@ export default function BmrPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { name: '① Mifflin-St Jeor (1990)', tag: '권장', tagColor: '#059669', desc: '현대 의료계 표준. 일반 성인에게 가장 정확 (±5~10%). 입력: 키·체중·나이·성별.' },
-              { name: '② Harris-Benedict (1919)', tag: '한국 표준', tagColor: '#CA8A04', desc: '가장 오래되고 널리 사용. 정확도 ±10%. Mifflin보다 약간 높게 추정. 한국 의료/연구 일관성 ↑.' },
+              { name: '① Mifflin-St Jeor (1990)', tag: '널리 권장', tagColor: '#059669', desc: '1990년 건강한 성인 498명 데이터 기반. 일반 성인에 비교적 정확 (±5~10%). 입력: 키·체중·나이·성별.' },
+              { name: '② Harris-Benedict (1919·1984 개정)', tag: '임상 다용', tagColor: '#CA8A04', desc: '원전 1919년·개정판 1984년(Roza-Shizgal). 본 도구는 개정판 계수 사용. 정확도 ±10%. Mifflin보다 약간 높게 추정. 의료/연구 기록 일관성 ↑.' },
               { name: '③ Katch-McArdle', tag: '체지방률 정확 시', tagColor: '#0891B2', desc: '체지방률 정확 입력 시 ±3~5%. 운동선수·체성분 검사 받은 사람에게 정확. 입력: 체중·체지방률.' },
               { name: '④ Cunningham', tag: 'LBM 정확 시', tagColor: '#EA580C', desc: '제지방량(LBM) 정확 입력 시 ±3~5%. 근육량 많은 사람에게 정확. 입력: LBM.' },
             ].map((f, i) => (
@@ -139,7 +139,11 @@ export default function BmrPage() {
             ))}
           </div>
           <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-            ⓘ 실용적 권장 — 일반인: <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>, 운동선수: <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>, 한국 의료/연구: <strong style={{ color: 'var(--text)' }}>Harris-Benedict</strong>.
+            ⓘ 실용적 권장 — 일반인: <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>, 운동선수: <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>, 의료/연구 기록 일관성: <strong style={{ color: 'var(--text)' }}>Harris-Benedict</strong>.
+          </p>
+          <p style={{ fontSize: '11.5px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.75, borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+            <strong style={{ color: 'var(--text)' }}>출처·정확도</strong> — Mifflin-St Jeor(1990)는 건강한 성인 498명 데이터 기반, Harris-Benedict(1919 원전·1984 개정)는 재평가 연구에서 정상 영양 상태 기준 약 <strong style={{ color: 'var(--text)' }}>±14%</strong> 정밀도로 보고됩니다. 모든 공식은 추정치이며 근육량·호르몬·질환에 따라 달라집니다. 건강한 체중 감량은 일반적으로 <strong style={{ color: 'var(--text)' }}>점진적 접근(주당 약 0.5kg 안팎)</strong>이 권장되고, 초저열량 식이(VLCD)는 <strong style={{ color: 'var(--text)' }}>의료 감독하에서만</strong> 고려합니다.
+            <br />참고: Mifflin MD <em>Am J Clin Nutr</em> 1990 · Roza &amp; Shizgal <em>Am J Clin Nutr</em> 1984 · 미국 CDC 건강 체중 가이드 · NIH/PubMed VLCD.
           </p>
         </section>
 
@@ -149,7 +153,7 @@ export default function BmrPage() {
             Harris-Benedict 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            1919년 개발되어 현재 가장 널리 사용되는 기초대사량 계산 공식입니다.
+            1919년 발표 후 1984년 개정된(Roza-Shizgal) 기초대사량 공식으로, 아래는 본 도구가 사용하는 <strong style={{ color: 'var(--text)' }}>개정판 계수</strong>입니다.
             체중, 키, 나이, 성별을 반영해 비교적 정확한 BMR 추정이 가능합니다.
           </p>
 
@@ -258,11 +262,11 @@ export default function BmrPage() {
             <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
               <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
-              <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 (3차원)</strong> — 250~800kcal/h</li>
+              <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 + 체중 (MET 기반)</strong> — 운동 칼로리가 체중에 비례</li>
               <li>④ <strong style={{ color: 'var(--text)' }}>휴식일·운동일 TDEE 자동 분리</strong></li>
             </ul>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 10 }}>
-              결과: 5단계 활동 수준보다 <strong style={{ color: 'var(--text)' }}>±5~10% 더 정확</strong>합니다.
+              결과: 직업·걸음·운동·체중을 분리 반영해 <strong style={{ color: 'var(--text)' }}>5단계 계수보다 더 현실적으로 추정</strong>합니다(여전히 추정치이며 개인차가 있습니다).
             </p>
           </div>
         </section>
@@ -311,31 +315,32 @@ export default function BmrPage() {
             안전 하한선 — 거식증·식이장애 예방
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            본 도구는 다음 조건에서 강한 경고를 표시합니다 —
+            본 도구는 아래 <strong style={{ color: 'var(--text)' }}>🔴 조건</strong>에서 강한 경고를 자동 표시합니다. <strong style={{ color: 'var(--text)' }}>🟡 상황</strong>은 도구가 일일이 잡지 못하므로 스스로 점검하세요 —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
             <div style={{ background: 'rgba(220,38,38,0.06)', border: '2px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>🔴 매우 위험</p>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>🔴 매우 위험 (자동 경고)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 여성 1,200kcal 미만</li>
                 <li>· 남성 1,500kcal 미만</li>
+                <li>· BMR(기초대사량) 미만 섭취</li>
                 <li>· 18세 미만 사용</li>
               </ul>
             </div>
             <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>🟡 주의</p>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>🟡 주의 (직접 점검)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
-                <li>· BMR 미만 섭취</li>
-                <li>· TDEE 대비 −25% 이상</li>
+                <li>· TDEE 대비 −20% 이상 장기 지속</li>
                 <li>· 운동량 매우 높은데 섭취 부족</li>
+                <li>· 빠른 체중 변화·지속적 피로</li>
               </ul>
             </div>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 10 }}>
-            <strong style={{ color: 'var(--text)' }}>왜 안전한가?</strong> — 1,200kcal 미만은 비타민·미네랄 부족 거의 확실, BMR 미만은 대사 적응 시작(장기 BMR↓), −25% 이상은 근손실 비율↑.
+            <strong style={{ color: 'var(--text)' }}>왜 안전한가?</strong> — 1,200kcal 미만은 비타민·미네랄 부족 거의 확실, BMR 미만은 대사 적응 시작(장기 BMR↓), −20% 이상 적자는 근손실 비율↑.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>건강한 감량</strong> — 천천히(−10%) 주당 0.2~0.3kg, 보통(−15%) 주당 0.4~0.5kg. 빠른 감량(−20% 이상)은 단기만 권장.
+            <strong style={{ color: 'var(--text)' }}>건강한 감량</strong> — 천천히(−10%)·보통(−15%)·빠른(−20% 이상) 순으로 적자가 커집니다. 주당 감량 폭(kg)은 TDEE에 비례하므로 계산기 목표표의 <strong style={{ color: 'var(--text)' }}>&lsquo;kg/주&rsquo;</strong> 표시로 확인하세요. 빠른 감량은 단기만 권장합니다.
           </p>
         </section>
 

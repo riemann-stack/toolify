@@ -26,8 +26,8 @@ export const TEMPLATES: RandomTemplate[] = [
   // 일·당번
   { id: 'cleaning', icon: '🧹', name: '청소 당번',
     items: ['거실', '주방', '화장실', '침실', '베란다', '쓰레기 분리수거'] },
-  { id: 'mc',      icon: '🎙️', name: '사회자 뽑기',
-    items: [] },
+  { id: 'duty',    icon: '📅', name: '요일 당번',
+    items: ['월요일', '화요일', '수요일', '목요일', '금요일'] },
 
   // 게임·놀이
   { id: 'penalty', icon: '😅', name: '벌칙 뽑기',
@@ -44,18 +44,13 @@ export const TEMPLATES: RandomTemplate[] = [
     items: ['상체', '하체', '코어', '유산소', '전신', '요가', '필라테스', '쉬는 날'] },
   { id: 'challenge', icon: '🎯', name: '랜덤 챌린지',
     items: ['1만보 걷기', '찬물 샤워', '독서 30분', '명상 10분', '스마트폰 1시간 금단', '낯선 카페 가기'] },
-
-  // 회사·이벤트
-  { id: 'gift',    icon: '🎁', name: '선물 추첨',
-    items: [] },
 ]
 
 export const TEMPLATE_CATEGORIES: TemplateCategory[] = [
   { id: 'food',     name: '음식·메뉴', emoji: '🍽️', templates: ['lunch', 'dinner', 'cafe'] },
-  { id: 'work',     name: '일·당번',   emoji: '💼', templates: ['cleaning', 'mc'] },
+  { id: 'work',     name: '일·당번',   emoji: '💼', templates: ['cleaning', 'duty'] },
   { id: 'fun',      name: '놀이·게임', emoji: '🎮', templates: ['penalty', 'game', 'movie'] },
   { id: 'leisure',  name: '여가·취미', emoji: '🌴', templates: ['travel', 'workout', 'challenge'] },
-  { id: 'event',    name: '이벤트',    emoji: '🎁', templates: ['gift'] },
 ]
 
 export function getTemplate(id: string): RandomTemplate | null {

@@ -292,7 +292,7 @@
   .distGrid { grid-template-columns: 1fr; }
   .distItemValue { font-size: 16px; }
   .fermiItem { padding: 10px 12px; }
-  .galaxySvg { width: 250px; height: 250px; }
+  .galaxySvg { width: 100%; max-width: 250px; height: auto; }
   .contribRow { grid-template-columns: 40px 1fr 70px; gap: 8px; }
   .contribName { font-size: 12px; }
   .contribVal { font-size: 11px; }

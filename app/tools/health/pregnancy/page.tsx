@@ -14,7 +14,7 @@ const PREGNANCY_FAQ = [
   { q: '태동을 언제부터 느끼나요?', a: '<strong>첫 임신(초산모)</strong>: 보통 18~22주차에 처음 느낌.<br><strong>경험 임신(경산모)</strong>: 보통 16~18주차에 더 빠름.<br><br>태동 종류:<br>· 초기: 가벼운 떨림·기포 터지는 느낌<br>· 중기: 분명한 발차기·움직임<br>· 후기: 강한 움직임·딸꾹질<br><br>28주차 이후는 매일 태동 횟수 기록을 권장하며, <strong>태동이 감소하면 즉시 산부인과 상담</strong>하세요.' },
   { q: '본 계산기 데이터는 어디에 저장되나요?', a: '입력한 정보(생리일·태명·체크리스트 진행)는 사용자 브라우저의 <strong>localStorage</strong>에 저장됩니다. 회원가입·로그인 불필요 / 사생활 보호 (서버 저장 X) / 같은 브라우저·기기에서만 접근 / 캐시 삭제 시 사라짐. 다른 기기 사용 시 출산 정보를 따로 백업하시기 바랍니다.' },
   { q: '쌍태아 임신은 어떻게 적용하나요?', a: '출산 예정일 계산은 동일하게 가능하지만 다음이 다릅니다.<br><br><strong>검진 빈도</strong> — 단태아: 4주 간격 → 후기 1~2주 / 쌍태아: 더 자주 (2~3주 간격).<br><strong>추가 검사</strong> — 추가 정밀 초음파 / 임신성 당뇨 위험↑ / 자궁경부 길이 측정(조산 위험↑).<br><strong>분만 시기</strong> — 단태아 평균 40주 / 쌍태아 평균 36~37주 (조산 빈도↑).<br><br>본 도구의 일반 일정은 단태아 기준이므로, 쌍태아 임신은 담당 산부인과의 일정 안내를 우선하세요.' },
-  { q: '임신 중 카페인·약은 어떻게 해야 하나요?', a: '본 도구는 일반 가이드라인만 제공하며, 구체적 결정은 의료진 상담이 필수입니다.<br><br><strong>카페인</strong> — WHO 권장: 하루 200mg 이하 (커피 1~2잔). 너무 많은 카페인: 유산·저체중 위험↑.<br><br><strong>약물</strong> — 임신 전 복용 약: 즉시 산부인과 상담 / 처방약: 의사·약사에게 임신 알림 / 일반의약품(감기약·진통제 등): 1삼분기 피해야 할 약 多 / 한약·영양제: 안전성 확인 후.<br><br>"임신 중 안전" 표시도 본인 상황별로 다를 수 있으니 <strong>반드시 산부인과 또는 약사 상담 후 복용</strong>하세요.' },
+  { q: '임신 중 카페인·약은 어떻게 해야 하나요?', a: '본 도구는 일반 가이드라인만 제공하며, 구체적 결정은 의료진 상담이 필수입니다.<br><br><strong>카페인</strong> — ACOG 권장: 하루 200mg 이하 (커피 1~2잔). WHO는 하루 300mg 초과를 과다 섭취로 봅니다. 너무 많은 카페인: 유산·저체중 위험↑.<br><br><strong>약물</strong> — 임신 전 복용 약: 즉시 산부인과 상담 / 처방약: 의사·약사에게 임신 알림 / 일반의약품(감기약·진통제 등): 1삼분기 피해야 할 약 多 / 한약·영양제: 안전성 확인 후.<br><br>"임신 중 안전" 표시도 본인 상황별로 다를 수 있으니 <strong>반드시 산부인과 또는 약사 상담 후 복용</strong>하세요.' },
 ]
 
 export const metadata = buildMetadata({
@@ -142,7 +142,7 @@ export default function PregnancyPage() {
                   ['④ 정밀 초음파 (level 2)',         '20~24주', '태아 장기·구조 점검 / 성별 확인'],
                   ['⑤ 임신성 당뇨 (GTT)',             '24~28주', '50g/100g 당부하 검사'],
                   ['⑥ 후기 정밀 초음파',              '28~32주', '성장·양수량·태반 위치'],
-                  ['⑦ GBS (B군 연쇄상구균)',         '35~37주', '신생아 감염 예방'],
+                  ['⑦ GBS (B군 연쇄상구균)',         '36~37주', '신생아 감염 예방 (ACOG/CDC)'],
                   ['⑧ 막달 검사·NST',                 '35~39주', '태아심박동·자궁수축 모니터링'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -208,7 +208,7 @@ export default function PregnancyPage() {
               },
               {
                 period: '3삼분기 (28~40주)', color: '#EA580C',
-                items: ['GBS 검사 (35~37주)', '출산 가방·신생아 용품', '아기침대·카시트', '산후조리원 예약', '분만 신호 학습', '응급 연락처 준비', '출산 휴가·육아 휴직 신청'],
+                items: ['GBS 검사 (36~37주)', '출산 가방·신생아 용품', '아기침대·카시트', '산후조리원 예약', '분만 신호 학습', '응급 연락처 준비', '출산 휴가·육아 휴직 신청'],
               },
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderLeft: `4px solid ${t.color}`, borderRadius: '12px', padding: '14px 18px' }}>
@@ -274,7 +274,7 @@ export default function PregnancyPage() {
               ))}
             </ul>
             <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '12px', lineHeight: 1.7, fontWeight: 600 }}>
-              📞 <strong style={{ color: '#DC2626' }}>119</strong> 또는 가까운 산부인과 응급실 / 한국 응급의료정보센터 <strong style={{ color: '#DC2626' }}>1339</strong>
+              📞 즉시 <strong style={{ color: '#DC2626' }}>119</strong> 또는 가까운 산부인과 응급실
             </p>
           </div>
         </section>
@@ -309,7 +309,7 @@ export default function PregnancyPage() {
             </p>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
               본 도구의 정보는 <strong style={{ color: 'var(--text)' }}>보건복지부·대한산부인과학회·WHO 공식 자료</strong>를 기반으로 일반화한 추정치이며, 개별 산모·태아에 적용 시 반드시 의료진 상담이 필요합니다.
-              <br /><br />응급 시 — <strong style={{ color: '#DC2626' }}>119</strong> · 한국 응급의료정보센터 <strong style={{ color: '#DC2626' }}>1339</strong>.
+              <br /><br />응급 시 — 즉시 <strong style={{ color: '#DC2626' }}>119</strong> 또는 가까운 산부인과 응급실.
             </p>
           </div>
         </section>

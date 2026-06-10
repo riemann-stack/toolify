@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react'
 import s from './fart-risk.module.css'
 import {
   FOOD_DATA, CATEGORIES, CAUSE_TYPES, CONDITIONS, FODMAP_ALTERNATIVES,
-  SYMPTOM_RESPONSES, RED_FLAGS,
+  SYMPTOM_RESPONSES, RED_FLAGS, PORTIONS,
   calcFartScore,
-  type CondKey, type SymptomKey,
+  type CondKey, type SymptomKey, type Portion,
 } from './fartRiskUtils'
 
 type TabId = 'main' | 'alt' | 'symptom'
@@ -22,9 +22,9 @@ export default function FartRiskClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="방귀 위험도 도구 모드">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" id={`fr-tab-${t.id}`} aria-controls={`fr-panel-${t.id}`} aria-selected={tab === t.id}
             className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -32,9 +32,10 @@ export default function FartRiskClient() {
         ))}
       </div>
 
-      {tab === 'main'    && <MainTab />}
-      {tab === 'alt'     && <AlternativeTab />}
-      {tab === 'symptom' && <SymptomTab />}
+      {/* 탭을 모두 마운트한 채 숨김 토글 — 전환해도 선택·결과 유지 */}
+      <div role="tabpanel" id="fr-panel-main"    aria-labelledby="fr-tab-main"    hidden={tab !== 'main'}><MainTab /></div>
+      <div role="tabpanel" id="fr-panel-alt"     aria-labelledby="fr-tab-alt"     hidden={tab !== 'alt'}><AlternativeTab /></div>
+      <div role="tabpanel" id="fr-panel-symptom" aria-labelledby="fr-tab-symptom" hidden={tab !== 'symptom'}><SymptomTab /></div>
 
       {/* 면책 (모든 탭 공통, 강화) */}
       <div className={s.disclaimerCard}>
@@ -47,7 +48,7 @@ export default function FartRiskClient() {
           ⚠️ <strong>다음 증상 시 즉시 의료 상담</strong>: 혈변·검은 변 / 갑작스러운 체중 감소 / 심한 복통(한밤중) / 발열·구토 반복 / 1주+ 지속 변비·설사 / 임산부.
         </p>
         <p className={s.disclaimerBody} style={{ marginTop: 8 }}>
-          📞 <strong>도움</strong>: 한국 의료진 상담(보건복지부) <strong style={{ color: '#EA580C' }}>1339</strong> · 응급 <strong style={{ color: '#EA580C' }}>119</strong> · 소화기내과 직접 방문.
+          📞 <strong>도움</strong>: 보건복지상담센터 <strong style={{ color: '#EA580C' }}>129</strong> · 질병관리청 건강상담 <strong style={{ color: '#EA580C' }}>1339</strong> · 응급 <strong style={{ color: '#EA580C' }}>119</strong> · 소화기내과 직접 방문.
         </p>
       </div>
     </div>
@@ -58,6 +59,7 @@ export default function FartRiskClient() {
 function MainTab() {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [conds, setConds] = useState<Set<CondKey>>(new Set())
+  const [portion, setPortion] = useState<Portion>('normal')
   const [copied, setCopied] = useState(false)
 
   const toggleFood = (id: string) => {
@@ -74,9 +76,9 @@ function MainTab() {
       return n
     })
   }
-  const reset = () => { setSelected(new Set()); setConds(new Set()); setCopied(false) }
+  const reset = () => { setSelected(new Set()); setConds(new Set()); setPortion('normal'); setCopied(false) }
 
-  const result = useMemo(() => calcFartScore(Array.from(selected), conds), [selected, conds])
+  const result = useMemo(() => calcFartScore(Array.from(selected), conds, portion), [selected, conds, portion])
 
   const handleShare = async () => {
     if (!result) return
@@ -105,10 +107,10 @@ function MainTab() {
                 if (!f) return null
                 const on = selected.has(id)
                 return (
-                  <button key={id} type="button"
+                  <button key={id} type="button" aria-pressed={on}
                     className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
                     onClick={() => toggleFood(id)}>
-                    <span className={s.foodEmoji}>{f.emoji}</span>
+                    <span className={s.foodEmoji} aria-hidden="true">{f.emoji}</span>
                     <span>{f.name}</span>
                   </button>
                 )
@@ -116,6 +118,21 @@ function MainTab() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* 섭취량 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>섭취량 (전체적으로)</span>
+        <div className={s.portionRow} role="group" aria-label="섭취량">
+          {PORTIONS.map(p => (
+            <button key={p.key} type="button" aria-pressed={portion === p.key}
+              className={`${s.portionBtn} ${portion === p.key ? s.portionActive : ''}`}
+              onClick={() => setPortion(p.key)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+        <p className={s.altHint}>같은 음식도 한 입과 한 대접은 다릅니다 — 대략적인 양을 고르면 점수에 반영됩니다.</p>
       </div>
 
       {/* 조건 */}
@@ -141,8 +158,8 @@ function MainTab() {
       ) : (
         <>
           {/* 히어로 */}
-          <div className={s.heroCard} style={{ borderColor: result.riskColor + 'aa', background: result.riskColor + '14' }}>
-            <div className={s.heroLabel}>💨 오늘의 가스 리스크</div>
+          <div className={s.heroCard} role="status" aria-live="polite" style={{ borderColor: result.riskColor + 'aa', background: result.riskColor + '14' }}>
+            <div className={s.heroLabel}><span aria-hidden="true">💨 </span>오늘의 가스 리스크</div>
             <div className={s.heroScore} style={{ color: result.riskColor }}>{result.total}<span className={s.heroUnit}>점</span></div>
             <div className={s.heroRiskBadge} style={{ color: result.riskColor, borderColor: result.riskColor + '55' }}>
               {result.riskLabel}
@@ -178,7 +195,7 @@ function MainTab() {
                   const ct = CAUSE_TYPES[p.type]
                   return (
                     <div key={p.type} className={s.causeCard} style={{ borderColor: ct.color + '55' }}>
-                      <span className={s.causeIcon}>{ct.icon}</span>
+                      <span className={s.causeIcon} aria-hidden="true">{ct.icon}</span>
                       <div>
                         <div className={s.causeName} style={{ color: ct.color }}>{ct.name}</div>
                         <div className={s.causeDesc}>{ct.desc}</div>
@@ -197,13 +214,13 @@ function MainTab() {
               <div className={s.topList}>
                 {result.topFoods.map((f, i) => (
                   <div key={f.id} className={s.topRow}>
-                    <span className={`${s.topRank} ${i === 0 ? s.rank1 : i === 1 ? s.rank2 : s.rank3}`}>{i + 1}</span>
-                    <span className={s.topEmoji}>{f.emoji}</span>
-                    <div style={{ flex: 1 }}>
+                    <span className={`${s.topRank} ${i === 0 ? s.rank1 : i === 1 ? s.rank2 : s.rank3}`} aria-hidden="true">{i + 1}</span>
+                    <span className={s.topEmoji} aria-hidden="true">{f.emoji}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
                       <div className={s.topName}>{f.name}</div>
                       <div className={s.topReason}>{f.causeTypes.map(t => CAUSE_TYPES[t].name).join(' · ')}</div>
+                      <span className={s.topScore}>가스 {f.gas} · 냄새 {f.smell} · 팽만 {f.bloat}</span>
                     </div>
-                    <span className={s.topScore}>가스 {f.gas} · 냄새 {f.smell} · 팽만 {f.bloat}</span>
                   </div>
                 ))}
               </div>
@@ -216,6 +233,15 @@ function MainTab() {
               <div className={s.comboHead}>🚨 위험 조합 감지</div>
               {result.comboWarnings.map((w, i) => (
                 <div key={i} className={s.comboItem}>{w}</div>
+              ))}
+            </div>
+          )}
+
+          {/* 안내 (선택 보정 등) */}
+          {result.hints.length > 0 && (
+            <div className={s.hintCard}>
+              {result.hints.map((h, i) => (
+                <p key={i} className={s.hintItem}><span aria-hidden="true">ℹ️ </span>{h}</p>
               ))}
             </div>
           )}
@@ -271,7 +297,7 @@ function AlternativeTab() {
   }
 
   const showItems = picked.size === 0
-    ? FODMAP_ALTERNATIVES   // 아무것도 선택 안 했으면 전체 보여줌
+    ? []   // 선택 전엔 카드를 접어 스크롤을 줄임 (안내만 표시)
     : FODMAP_ALTERNATIVES.filter(a => picked.has(a.highId))
 
   return (
@@ -282,10 +308,10 @@ function AlternativeTab() {
           {FODMAP_ALTERNATIVES.map(a => {
             const on = picked.has(a.highId)
             return (
-              <button key={a.highId} type="button"
+              <button key={a.highId} type="button" aria-pressed={on}
                 className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
                 onClick={() => togglePick(a.highId)}>
-                <span className={s.foodEmoji}>{a.highEmoji}</span>
+                <span className={s.foodEmoji} aria-hidden="true">{a.highEmoji}</span>
                 <span>{a.highName}</span>
               </button>
             )
@@ -293,7 +319,7 @@ function AlternativeTab() {
         </div>
         <p className={s.altHint}>
           {picked.size === 0
-            ? '↓ 아래는 모든 고FODMAP 음식의 대체 가이드입니다. 위에서 선택하면 해당 항목만 표시.'
+            ? '↑ 위에서 음식을 선택하면 저FODMAP 대체 추천이 표시됩니다.'
             : `↓ 선택한 ${picked.size}개 음식의 저FODMAP 대체 추천`}
         </p>
       </div>
@@ -301,7 +327,7 @@ function AlternativeTab() {
       {showItems.map(a => (
         <div key={a.highId} className={s.altCard}>
           <div className={s.altHead}>
-            <span className={s.altEmoji}>{a.highEmoji}</span>
+            <span className={s.altEmoji} aria-hidden="true">{a.highEmoji}</span>
             <span className={s.altTitle}>{a.highName} → 대체</span>
           </div>
           <div className={s.altOptionList}>
@@ -342,7 +368,7 @@ function SymptomTab() {
   }
 
   const showSymptoms = picked.size === 0
-    ? SYMPTOM_RESPONSES
+    ? []   // 선택 전엔 카드를 접어 스크롤을 줄임 (안내 + 아래 위험신호 카드만 표시)
     : SYMPTOM_RESPONSES.filter(sym => picked.has(sym.key))
 
   return (
@@ -353,10 +379,10 @@ function SymptomTab() {
           {SYMPTOM_RESPONSES.map(sym => {
             const on = picked.has(sym.key)
             return (
-              <button key={sym.key} type="button"
+              <button key={sym.key} type="button" aria-pressed={on}
                 className={`${s.foodBtn} ${on ? s.foodActive : ''}`}
                 onClick={() => togglePick(sym.key)}>
-                <span className={s.foodEmoji}>{sym.emoji}</span>
+                <span className={s.foodEmoji} aria-hidden="true">{sym.emoji}</span>
                 <span>{sym.name}</span>
               </button>
             )
@@ -364,7 +390,7 @@ function SymptomTab() {
         </div>
         <p className={s.altHint}>
           {picked.size === 0
-            ? '↓ 아래는 8가지 증상별 가이드 전체입니다. 위에서 선택하면 해당 증상만 표시.'
+            ? '↑ 위에서 증상을 선택하면 맞춤 대처가 표시됩니다. (아래 위험 신호는 항상 표시)'
             : `↓ 선택한 ${picked.size}개 증상에 대한 대처`}
         </p>
       </div>
@@ -372,7 +398,7 @@ function SymptomTab() {
       {showSymptoms.map(sym => (
         <div key={sym.key} className={s.symCard} style={sym.severity === 'urgent' ? { borderColor: 'rgba(220,38,38,0.4)' } : {}}>
           <div className={s.symHead}>
-            <span className={s.symEmoji}>{sym.emoji}</span>
+            <span className={s.symEmoji} aria-hidden="true">{sym.emoji}</span>
             <span className={s.symName}>{sym.name}</span>
           </div>
           <div className={s.symGrid}>
@@ -406,10 +432,11 @@ function SymptomTab() {
         </ul>
         <div className={s.redFlagFooter}>
           <p>📞 <strong>응급</strong>: 119</p>
-          <p>📞 <strong>한국 의료진 상담 (보건복지부)</strong>: 1339</p>
+          <p>📞 <strong>보건복지상담센터</strong>: 129</p>
+          <p>📞 <strong>질병관리청 건강상담</strong>: 1339</p>
           <p>🏥 <strong>소화기내과</strong> 직접 방문 권장</p>
           <p style={{ marginTop: 8, fontSize: 11, color: 'var(--muted)', lineHeight: 1.7 }}>
-            가능한 의학적 원인: IBS(과민성대장증후군) · SIBO(소장세균과증식) · 셀리악(글루텐 알레르기) · 유당불내증 · 췌장 효소 부족 · 담즙 문제. 자가 진단 X, 전문의 상담 필수.
+이런 증상의 원인은 다양합니다 — 과민성대장증후군(IBS) · 소장세균과증식(SIBO) · 셀리악병(글루텐에 대한 자가면역 질환, 알레르기 아님) · 유당불내증 · 췌장 효소 부족 · 담즙 문제 등. 증상만으로 특정 질환을 단정할 수 없으니 전문의 상담이 필요합니다.
           </p>
         </div>
       </div>

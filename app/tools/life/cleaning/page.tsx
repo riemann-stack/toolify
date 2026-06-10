@@ -24,7 +24,7 @@ const faqAnswer: React.CSSProperties = { marginTop: '10px', fontSize: '13px', co
 const FAQ_LD = [
   { q: '베이킹소다·과탄산소다·세스퀴소다는 뭐가 다른가요?', a: '모두 알칼리성이지만 세기와 용도가 다릅니다. <strong>베이킹소다</strong>는 가장 순하고 연마·탈취에, <strong>세스퀴소다</strong>는 중간 세기로 생활 기름때·물걸레 만능 청소에, <strong>과탄산소다</strong>는 산소계 표백제라 표백·찌든때·곰팡이·삶기에 강합니다(따뜻한 물 40~60℃에서 활성화). 강한 기름때엔 더 센 <strong>소다회</strong>를 쓰기도 합니다.' },
   { q: '구연산과 식초는 같은 건가요?', a: '둘 다 산성으로 <strong>물때·석회·비누때 제거, 냄새 중화, 섬유유연제 대체</strong>에 비슷하게 쓰입니다. 구연산은 가루라 보관·농도 조절이 쉽고 냄새가 거의 없으며, 식초는 액체라 바로 쓰기 편하지만 특유의 냄새가 있습니다. <strong>둘 다 락스와 절대 섞으면 안 됩니다(염소가스).</strong>' },
-  { q: '락스는 어떻게 안전하게 쓰나요?', a: '① <strong>물로만</strong> 희석하고 다른 세제와 섞지 않습니다. ② 창문·환풍기로 <strong>환기</strong>하고 장갑·마스크를 씁니다. ③ 살균은 보통 물 1L당 락스 10~25ml 정도로 충분합니다. ④ 사용 후 <strong>물로 충분히 헹구고</strong>, 식품이 닿는 면·금속·대리석에는 주의합니다. 색이 있는 천·줄눈은 탈색될 수 있습니다.' },
+  { q: '락스는 어떻게 안전하게 쓰나요?', a: '① <strong>물로만</strong> 희석하고 다른 세제와 섞지 않습니다. ② 창문·환풍기로 <strong>환기</strong>하고 장갑·마스크를 씁니다. ③ 일반 살균·곰팡이 모두 물 1L당 락스 <strong>약 10~25ml</strong>면 충분합니다(가정용 4~6% 기준, CDC 권장 수준). 곰팡이는 표백보다 <strong>세척·건조·습기 원인 제거</strong>가 먼저입니다. ④ 사용 후 <strong>물로 충분히 헹구고</strong>, 식품이 닿는 면·금속·대리석에는 주의합니다. 색이 있는 천·줄눈은 탈색될 수 있습니다.' },
   { q: '절대 섞으면 안 되는 조합은 무엇인가요?', a: '<strong>락스 + 산성(구연산·식초)</strong> → 염소가스, <strong>락스 + 암모니아 세제</strong> → 클로라민 가스, <strong>락스 + 과탄산소다·과산화수소</strong> → 가스 발생·효과 상쇄. 모두 호흡기에 치명적일 수 있습니다. 그 외 산성+알칼리(구연산+베이킹 등)는 위험은 낮지만 서로 중화돼 세정력이 사라집니다. <strong>원칙은 “한 번에 한 가지 세제만”</strong>입니다.' },
   { q: '천연세제(구연산·과탄산 등)는 항상 더 안전한가요?', a: '“천연”이라고 무조건 순한 건 아닙니다. 과탄산소다·소다회는 알칼리성이 강해 피부·점막을 자극하고, 구연산도 농도가 높으면 자극적이며 대리석·금속을 부식시킵니다. <strong>장갑 착용·환기·테스트(눈에 안 띄는 곳 먼저)</strong>는 종류와 무관하게 권장합니다.' },
   { q: '냉장고나 식기에 락스를 써도 되나요?', a: '식품이 직접 닿는 면에는 <strong>락스보다 베이킹소다·중성세제·뜨거운 물</strong>을 권장합니다. 살균이 꼭 필요하면 묽게 희석한 뒤 <strong>반드시 물로 여러 번 헹궈</strong> 잔류를 없애세요. 냉장고 내부 냄새·세척은 베이킹소다수로 닦고 물걸레로 한 번 더 닦는 것이 안전합니다.' },
@@ -113,6 +113,42 @@ export default function CleaningPage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
             반대 성질의 오염엔 효과가 약하고, <strong style={{ color: 'var(--text)' }}>산성과 알칼리를 섞으면 서로 중화</strong>돼 둘 다 무력화됩니다. 살균·곰팡이엔 <strong style={{ color: 'var(--text)' }}>락스·과탄산</strong>이 따로 필요합니다.
+          </p>
+        </div>
+
+        {/* 재질별 주의 */}
+        <div>
+          <h2 style={sectionTitle}>🧱 재질별 주의 — 같은 오염이어도 세제가 다릅니다</h2>
+          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
+              <thead>
+                <tr>
+                  <th style={headCell}>재질</th>
+                  <th style={headCell}>피해야 할 세제</th>
+                  <th style={headCell}>권장</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { m: '대리석·천연석·인조대리석', avoid: '산성(구연산·식초) — 부식·광택 손상', ok: '중성세제, 전용 클리너' },
+                  { m: '알루미늄', avoid: '알칼리(과탄산·소다회·세스퀴)·락스 — 변색', ok: '중성세제' },
+                  { m: '도금·유광 금속 수전', avoid: '산성 장시간·연마 가루 — 도금 손상', ok: '중성세제, 부드러운 천' },
+                  { m: '코팅(논스틱) 팬', avoid: '과탄산·소다회·연마 — 코팅 손상', ok: '중성세제, 미온수' },
+                  { m: '고무 패킹·실리콘', avoid: '락스 장시간 접촉 — 경화·변색', ok: '짧게 도포 후 충분히 헹굼' },
+                  { m: '아크릴·플라스틱', avoid: '알코올·강알칼리 — 변형·균열(크레이징)', ok: '중성세제' },
+                  { m: '원목·마감 목재', avoid: '과한 수분·산성·표백 — 마감·결 손상', ok: '물기 짠 천, 전용 제품' },
+                ].map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, fontWeight: 700, whiteSpace: 'nowrap' }}>{r.m}</td>
+                    <td style={{ ...cell, color: '#DC2626' }}>{r.avoid}</td>
+                    <td style={{ ...cell, color: 'var(--muted)' }}>{r.ok}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            어떤 세제든 <strong style={{ color: 'var(--text)' }}>눈에 안 띄는 곳에 먼저 테스트</strong>하고, 재질을 모르면 가장 순한 중성세제부터 시도하세요.
           </p>
         </div>
 

@@ -115,12 +115,11 @@ export const STAR_SIGNS: StarSignInfo[] = [
 ]
 
 export function getStarSign(month: number, day: number): StarSignInfo {
-  return STAR_SIGNS.find(s => {
-    if (s.startMonth > s.endMonth) {
-      return (month === s.startMonth && day >= s.startDay) || (month === s.endMonth && day <= s.endDay)
-    }
-    return (month === s.startMonth && day >= s.startDay) || (month === s.endMonth && day <= s.endDay)
-  }) ?? STAR_SIGNS[0]
+  // 각 별자리는 시작월(startDay 이후) 또는 종료월(endDay 이전)에 걸침.
+  // 염소자리(12→1 wrap)도 동일 식으로 처리되므로 분기 불필요.
+  return STAR_SIGNS.find(s =>
+    (month === s.startMonth && day >= s.startDay) || (month === s.endMonth && day <= s.endDay)
+  ) ?? STAR_SIGNS[0]
 }
 
 /* ─── 60갑자 ─── */
@@ -295,15 +294,18 @@ export interface AgeInfo {
 }
 
 export function getAgeInfo(year: number, month: number, day: number, today = new Date()): AgeInfo {
-  let age = today.getFullYear() - year
-  const md = today.getMonth() + 1 - month
-  if (md < 0 || (md === 0 && today.getDate() < day)) age--
+  // 시·분·초를 제거해 "날짜" 단위로만 비교 — 생일 당일을 D-0 으로,
+  // 현재 시각이 자정보다 늦어 다음 해로 잘못 넘어가던 버그 방지.
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  let age = t.getFullYear() - year
+  const md = t.getMonth() + 1 - month
+  if (md < 0 || (md === 0 && t.getDate() < day)) age--
 
-  const nextBirthday = new Date(today.getFullYear(), month - 1, day)
-  if (nextBirthday.getTime() < today.getTime()) {
-    nextBirthday.setFullYear(today.getFullYear() + 1)
+  const nextBirthday = new Date(t.getFullYear(), month - 1, day)
+  if (nextBirthday.getTime() < t.getTime()) {
+    nextBirthday.setFullYear(t.getFullYear() + 1)
   }
-  const daysToBirthday = Math.ceil((nextBirthday.getTime() - today.getTime()) / 86400000)
+  const daysToBirthday = Math.round((nextBirthday.getTime() - t.getTime()) / 86400000)
 
   return {
     age, daysToBirthday, nextBirthday,

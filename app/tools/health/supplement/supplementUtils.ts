@@ -35,24 +35,24 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
 
   if (total < OMEGA3_GUIDELINES.minDaily) {
     status = 'under'
-    statusLabel = '🟡 권장 미달'
+    statusLabel = '🟡 목표 미달'
     statusColor = '#CA8A04'
-    interpretation = `${total}mg은 권장 (250~500mg)에 못 미칩니다. 식사 (등푸른 생선) 보충 또는 용량 증가 고려.`
+    interpretation = `${total}mg은 일반적 섭취 목표(250~500mg)에 못 미칩니다. EPA·DHA는 공식 권장량(RDA)이 없으며, 식사(등푸른 생선) 보충이나 용량 증가를 고려할 수 있습니다.`
   } else if (total <= OMEGA3_GUIDELINES.idealMax) {
     status = 'meet'
-    statusLabel = '🟢 적정'
+    statusLabel = '🟢 목표 범위'
     statusColor = '#059669'
-    interpretation = `${total}mg은 일반 권장 범위 (250~500mg) 안. 안전.`
+    interpretation = `${total}mg은 일반적 섭취 목표 범위(250~500mg) 안입니다.`
   } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
     status = 'over'
-    statusLabel = '🟡 약간 초과 (안전 범위)'
+    statusLabel = '🟡 목표보다 높음 (한도 이내)'
     statusColor = '#EA580C'
-    interpretation = `${total}mg은 일반 권장보다 높지만 상한 (3,000mg) 안. 심혈관 치료 목적이면 의사 상담.`
+    interpretation = `${total}mg은 일반 목표보다 높지만 FDA 권고 한도(보충제 2,000mg·총 3,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
   } else {
     status = 'exceed'
-    statusLabel = '🔴 상한 초과'
+    statusLabel = '🔴 권고 한도 초과'
     statusColor = '#DC2626'
-    interpretation = `${total}mg은 FDA 상한 (3,000mg) 초과! 출혈 위험 ↑. 즉시 용량 조정·의사 상담.`
+    interpretation = `${total}mg은 FDA 권고 한도(총 3,000mg)를 초과합니다 — 출혈 위험 ↑. 용량 조정·의사 상담을 권합니다.`
   }
 
   return { epa, dha, total, status, statusLabel, statusColor, interpretation }
@@ -63,6 +63,7 @@ export interface DrugInteraction {
   ingredientName: string  // 매칭할 영양제 이름 (INGREDIENTS의 name과 일치)
   risk: 'high' | 'medium' | 'low'
   desc: string
+  minCanon?: number  // 합산량(canon 단위)이 이 값 이상일 때만 경고 — 고용량 한정 상호작용
 }
 
 export interface DrugCategory {
@@ -79,7 +80,7 @@ export const DRUG_INTERACTIONS: DrugCategory[] = [
     name: '항응고제·항혈소판제 (와파린·아스피린·플라빅스)',
     desc: '혈액 응고 억제 약물 — 비타민E·K·오메가3 등과 상호작용 큼',
     risky: [
-      { ingredientName: '비타민E',         risk: 'high',   desc: '비타민E 고용량 (400IU+) → 출혈 위험 증가' },
+      { ingredientName: '비타민E',         risk: 'high',   desc: '비타민E 고용량 (약 268mg=400IU 이상) → 출혈 위험 증가', minCanon: 268 },
       { ingredientName: '비타민K',         risk: 'high',   desc: '와파린 효과 무력화 가능 → 주치의 상담 필수' },
       { ingredientName: '오메가3(EPA)',    risk: 'medium', desc: '고용량 시 항응고 효과 강화 → 출혈 위험' },
       { ingredientName: '오메가3(DHA)',    risk: 'medium', desc: '동일' },
@@ -162,7 +163,7 @@ export const DRUG_INTERACTIONS: DrugCategory[] = [
     desc: '콜레스테롤 저하 약물 — CoQ10 ↓ + 나이아신 주의',
     risky: [
       { ingredientName: '코엔자임Q10',      risk: 'low',    desc: '스타틴 → CoQ10 ↓. 보충 권장 (해롭지 않음)' },
-      { ingredientName: '비타민B3(나이아신)', risk: 'medium', desc: '고용량 + 스타틴 → 근육통 위험' },
+      { ingredientName: '비타민B3(나이아신)', risk: 'medium', desc: '고용량 (500mg+) + 스타틴 → 근육통 위험', minCanon: 500 },
     ],
   },
   {
@@ -351,33 +352,3 @@ export const KOREA_POPULAR_PRESETS: KoreaPreset[] = [
     ingredients: [{ name: '코엔자임Q10', amount: 100, unit: 'mg' }] },
 ]
 
-/* ─── % vs RDA·UL 시각화 헬퍼 ─── */
-export type GaugeStatus = 'low' | 'ok' | 'high' | 'caution' | 'exceed'
-
-export function gaugeStatus(total: number, rda?: number, ul?: number): {
-  status: GaugeStatus
-  rdaPct: number   // RDA 대비 % (0~)
-  ulPct: number    // UL 대비 % (0~)
-  color: string
-  label: string
-} {
-  const rdaPct = rda ? (total / rda) * 100 : 0
-  const ulPct = ul ? (total / ul) * 100 : 0
-
-  if (ul && total > ul) {
-    return { status: 'exceed', rdaPct, ulPct, color: '#DC2626', label: '🚨 상한 초과 (즉시 점검)' }
-  }
-  if (ul && total > ul * 0.8) {
-    return { status: 'caution', rdaPct, ulPct, color: '#EA580C', label: '🟠 상한 임박 (주의)' }
-  }
-  if (rda && total > rda * 2) {
-    return { status: 'high', rdaPct, ulPct, color: '#CA8A04', label: '🟡 권장 초과 (200%+)' }
-  }
-  if (rda && total >= rda * 0.8) {
-    return { status: 'ok', rdaPct, ulPct, color: '#059669', label: '🟢 적정' }
-  }
-  if (rda) {
-    return { status: 'low', rdaPct, ulPct, color: '#0891B2', label: '🔵 권장 미달' }
-  }
-  return { status: 'ok', rdaPct: 0, ulPct: 0, color: 'var(--muted)', label: '기준 없음' }
-}

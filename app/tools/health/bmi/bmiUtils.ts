@@ -131,9 +131,16 @@ export function calcRichResult(
     }
   }
 
+  // 방향은 실제 분류(category)와 일치시킨다 — 반올림된 체중 경계로 비교하면
+  // BMI 23.01(과체중)인데 "정상까지 범위 내"가 되는 모순이 생긴다.
+  // kg은 반올림 없는 정상 경계(BMI×키²)와의 차이로 계산.
   let toNormal: RichResult['toNormal'] = { direction: 'in', kg: 0 }
-  if (weight < normalMin) toNormal = { direction: 'gain', kg: Math.round((normalMin - weight) * 10) / 10 }
-  else if (weight > normalMax) toNormal = { direction: 'lose', kg: Math.round((weight - normalMax) * 10) / 10 }
+  if (category.id !== 'normal') {
+    if (bmi < normal.min)
+      toNormal = { direction: 'gain', kg: Math.round(Math.max(0, normal.min * heightSq - weight) * 10) / 10 }
+    else
+      toNormal = { direction: 'lose', kg: Math.round(Math.max(0, weight - normal.max * heightSq) * 10) / 10 }
+  }
 
   // BMI 22 까지
   const w22 = 22 * heightSq
@@ -156,30 +163,6 @@ export function calcRichResult(
   }
 }
 
-/* ─── 목표 BMI → 체중 ─── */
-export function calcTargetWeight(height: number, targetBMI: number): number {
-  const heightM = height / 100
-  return Math.round(targetBMI * heightM * heightM * 10) / 10
-}
-
-export interface TargetTableRow {
-  bmi: number
-  weight: number
-  isCurrent: boolean
-}
-
-export function buildTargetTable(
-  height: number, currentWeight: number,
-): TargetTableRow[] {
-  const targets = [18.5, 20, 21, 22, 23, 24.9]
-  const currentBMI = calcBMI(height, currentWeight)
-  return targets.map(bmi => ({
-    bmi,
-    weight: calcTargetWeight(height, bmi),
-    isCurrent: Math.abs(bmi - currentBMI) < 0.3,
-  }))
-}
-
 /* ─── 허리-신장비 ─── */
 export interface WHtRResult {
   ratio: number
@@ -193,16 +176,15 @@ export function calcWaistHeightRatio(waist: number, height: number): WHtRResult 
   if (height <= 0 || waist <= 0) {
     return { ratio: 0, category: 'normal', name: '정상', color: '#059669', desc: '입력 필요' }
   }
+  // Ashwell 보더라인 차트 — 0.5("허리 < 키의 절반")를 핵심 기준으로 4구간
   const ratio = waist / height
-  if (ratio < 0.43)
-    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: '#0891B2', desc: '매우 마른 편. 영양·근육 점검 권장.' }
-  if (ratio < 0.49)
-    return { ratio: round2(ratio), category: 'ideal',       name: '이상적',   color: '#059669', desc: '이상적인 비율. 건강 유지.' }
-  if (ratio < 0.53)
-    return { ratio: round2(ratio), category: 'normal',      name: '정상',     color: '#CA8A04', desc: '정상 범위. 0.5 미만 유지 권장.' }
-  if (ratio < 0.58)
-    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: '#EA580C', desc: '복부비만 주의 시작. 허리둘레 관리 필요.' }
-  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: '#DC2626', desc: '복부비만. 의료 전문가 상담 권장.' }
+  if (ratio < 0.40)
+    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: '#0891B2', desc: '허리가 매우 가는 편. 영양·근육 상태 점검을 권장합니다.' }
+  if (ratio < 0.50)
+    return { ratio: round2(ratio), category: 'ideal',       name: '건강 범위', color: '#059669', desc: '이상적인 범위. 허리둘레가 키의 절반 미만 — 현재 상태 유지를 권장합니다.' }
+  if (ratio < 0.60)
+    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: '#EA580C', desc: '허리가 키의 절반을 넘었습니다. 복부 지방 관리(식단·유산소)를 권장합니다.' }
+  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: '#DC2626', desc: '복부비만 위험 구간. 의료 전문가 상담을 권장합니다.' }
 }
 
 function round2(n: number): number { return Math.round(n * 100) / 100 }
@@ -230,7 +212,7 @@ export function classifyAbdominal(waist: number, gender: Gender): AbdominalResul
 }
 
 /* ─── BMI × 허리둘레 종합 해석 ─── */
-export type CombinedKind = 'healthy' | 'skinny-fat' | 'muscular' | 'combined-obese'
+export type CombinedKind = 'healthy' | 'skinny-fat' | 'muscular' | 'combined-obese' | 'underweight' | 'overweight'
 
 export interface CombinedJudgment {
   kind: CombinedKind
@@ -244,18 +226,43 @@ export function combinedJudgment(
   bmi: number, isAbdominalObese: boolean, standard: Standard,
 ): CombinedJudgment {
   const obeseStart = standard === 'KOREA' ? 25 : 30
-  const bmiNormal = bmi < obeseStart && bmi >= 18.5
-  const bmiObese  = bmi >= obeseStart
 
-  if (bmiNormal && !isAbdominalObese)
-    return { kind: 'healthy', emoji: '✅', title: '건강한 체형',
-             desc: 'BMI·허리둘레 모두 정상 범위. 현재 상태 유지를 권장합니다.',
-             color: '#059669' }
-  if (bmiNormal && isAbdominalObese)
+  // 저체중(BMI 18.5 미만)은 정상/비만 매트릭스 밖 — 별도 안내 (종합 비만으로 오분류 방지)
+  if (bmi < 18.5) {
+    if (isAbdominalObese)
+      return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
+               desc: 'BMI는 낮지만 허리둘레가 높습니다. 근육량 부족 + 복부 지방이 의심되니 근력 운동 + 균형 잡힌 식단을 권장합니다.',
+               color: '#CA8A04' }
+    return { kind: 'underweight', emoji: '🔵', title: '저체중',
+             desc: 'BMI가 정상보다 낮습니다. 허리둘레는 정상 범위지만, 충분한 영양 섭취와 근력 운동으로 건강 체중 회복을 권장합니다.',
+             color: '#0891B2' }
+  }
+
+  // 정상 (18.5 ~ 정상 상한). 한국 18.5~22.9 / WHO 18.5~24.9
+  const normalMax = standard === 'KOREA' ? 23 : 25
+  if (bmi < normalMax) {
+    if (!isAbdominalObese)
+      return { kind: 'healthy', emoji: '✅', title: '건강한 체형',
+               desc: 'BMI·허리둘레 모두 정상 범위. 현재 상태 유지를 권장합니다.',
+               color: '#059669' }
     return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
              desc: 'BMI는 정상이지만 허리둘레가 높습니다. 근육 부족 + 복부 지방 가능성이 있어 근력 운동 + 식단 점검을 권장합니다.',
              color: '#CA8A04' }
-  if (bmiObese && !isAbdominalObese)
+  }
+
+  // 과체중/비만 전단계 (정상 상한 ~ 비만 시작). 한국 23~24.9 / WHO 25~29.9
+  if (bmi < obeseStart) {
+    if (!isAbdominalObese)
+      return { kind: 'overweight', emoji: '⚠️', title: '과체중 (경계)',
+               desc: 'BMI가 과체중(비만 전단계) 범위입니다. 허리둘레는 정상이지만, 식습관·활동량을 점검해 정상 체중 유지를 권장합니다.',
+               color: '#CA8A04' }
+    return { kind: 'overweight', emoji: '🟠', title: '과체중 + 복부비만',
+             desc: 'BMI가 과체중이고 허리둘레도 높습니다. 대사질환 위험이 커지기 전에 체중·복부 지방 관리를 권장합니다.',
+             color: '#EA580C' }
+  }
+
+  // 비만 (비만 시작 이상)
+  if (!isAbdominalObese)
     return { kind: 'muscular', emoji: '⚠️', title: '근육 우세형 가능성',
              desc: 'BMI는 비만 범위지만 허리둘레가 정상입니다. 근육량이 많은 운동선수형일 수 있으니 체성분 검사로 정확한 판정을 권장합니다.',
              color: '#0891B2' }
@@ -375,11 +382,3 @@ export const cmToInch = (cm: number) => cm / 2.54
 export const inchToCm = (inch: number) => inch * 2.54
 export const kgToLb   = (kg: number)   => kg * 2.20462
 export const lbToKg   = (lb: number)   => lb / 2.20462
-
-/* ─── 추천 목표 BMI ─── */
-export function recommendTargetBMI(currentBMI: number, standard: Standard): number {
-  if (currentBMI < 18.5) return 20    // 저체중 → 정상 진입
-  if (currentBMI < (standard === 'KOREA' ? 23 : 25)) return 21   // 정상 → 이상 (살짝 가벼운)
-  if (currentBMI < (standard === 'KOREA' ? 25 : 30)) return 22   // 과체중 → 정상 권장
-  return 22.9   // 비만 → 정상 진입
-}

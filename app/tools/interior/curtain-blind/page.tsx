@@ -264,7 +264,7 @@ export default function CurtainBlindPage() {
               { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 계산기', desc: '벽·천장 페인트 양·구매 조합' },
               { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피' },
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',    desc: '아파트 면적 단위 변환' },
-              { href: '/tools/unit/length',        icon: '📏', name: '길이 변환기',          desc: 'cm·m·inch·ft 변환' },
+              { href: '/tools/unit/converter',     icon: '🔄', name: '단위 변환기',          desc: '길이·면적·무게 등 14종 통합 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

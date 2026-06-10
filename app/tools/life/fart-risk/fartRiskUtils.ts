@@ -145,6 +145,15 @@ export const CONDITIONS: { key: CondKey; label: string }[] = [
 
 const DAIRY_IDS = ['milk', 'cheese', 'iceCream', 'wpc']
 
+// ── 섭취량 ──
+export type Portion = 'light' | 'normal' | 'heavy'
+export const PORTIONS: { key: Portion; label: string; mult: number }[] = [
+  { key: 'light',  label: '가볍게', mult: 0.6 },
+  { key: 'normal', label: '보통',   mult: 1.0 },
+  { key: 'heavy',  label: '많이',   mult: 1.4 },
+]
+const PORTION_MULT: Record<Portion, number> = { light: 0.6, normal: 1, heavy: 1.4 }
+
 // ── 점수 계산 ──
 export type ScoreResult = {
   gas: number          // 0~100
@@ -154,42 +163,62 @@ export type ScoreResult = {
   primaryTypes: { type: CauseType; weight: number }[]
   topFoods: FoodInfo[]
   comboWarnings: string[]
+  hints: string[]
   riskLevel: 'low' | 'medium' | 'high' | 'extreme'
   riskLabel: string
   riskColor: string
 }
 
+// 음식별 1~10 점수를 0~100 척도로 합치는 누적(체감) 모델.
+// 단순 합산은 음식 1~2개로는 등급 기준(30/60/85)에 한참 못 미쳐 "웬만하면 평온"이 된다.
+// 대신 각 음식이 축별로 일정 비율씩 "가스를 채운다"고 보고 1-∏(1-기여)로 합친다(수확체감).
+const INTENSITY = 0.55  // 음식 1개의 축 기여 강도 (튜닝값)
+
 export function calcFartScore(
   selectedIds: string[],
   conds: Set<CondKey>,
+  portion: Portion = 'normal',
 ): ScoreResult | null {
   if (selectedIds.length === 0 && conds.size === 0) return null
 
-  let gas = 0, smell = 0, bloat = 0
+  const pm = PORTION_MULT[portion]
+  // 축별 "아직 안 찬" 비율 (1에서 시작, 음식마다 곱해서 줄임)
+  let remGas = 1, remSmell = 1, remBloat = 1
   const causeTypeWeights: Record<string, number> = {}
   const foods: FoodInfo[] = []
+
+  const contrib = (v: number) => Math.min(0.95, (v / 10) * INTENSITY * pm)
 
   for (const id of selectedIds) {
     const f = FOOD_DATA.find(x => x.id === id)
     if (!f) continue
     foods.push(f)
-    gas += f.gas
-    smell += f.smell
-    bloat += f.bloat
+    remGas   *= (1 - contrib(f.gas))
+    remSmell *= (1 - contrib(f.smell))
+    remBloat *= (1 - contrib(f.bloat))
     for (const type of f.causeTypes) {
-      causeTypeWeights[type] = (causeTypeWeights[type] ?? 0) + (f.gas + f.smell + f.bloat) / 3
+      causeTypeWeights[type] = (causeTypeWeights[type] ?? 0) + ((f.gas + f.smell + f.bloat) / 3) * pm
     }
   }
 
-  // 조건 보정
-  if (conds.has('overate'))   { gas += 10; bloat += 15 }
-  if (conds.has('eatFast'))   { gas += 8;  bloat += 10 }
-  if (conds.has('drankSoda')) { gas += 12; bloat += 10 }
+  let gas   = 100 * (1 - remGas)
+  let smell = 100 * (1 - remSmell)
+  let bloat = 100 * (1 - remBloat)
+
+  const hasDairy = selectedIds.some(id => DAIRY_IDS.includes(id))
+  const hints: string[] = []
+  const addCause = (t: CauseType, w: number) => { causeTypeWeights[t] = (causeTypeWeights[t] ?? 0) + w }
+
+  // 조건 보정 — 점수 가산 + 원인 유형에도 반영
+  if (conds.has('overate'))   { gas += 8;  bloat += 15; addCause('slow', 12) }
+  if (conds.has('eatFast'))   { gas += 10; bloat += 8;  addCause('air', 12) }
+  if (conds.has('drankSoda')) { gas += 12; bloat += 10; addCause('air', 14) }
   if (conds.has('lactoseIntol')) {
-    if (selectedIds.some(id => DAIRY_IDS.includes(id))) { gas += 15; bloat += 15 }
+    if (hasDairy) { gas += 15; bloat += 12; addCause('lactose', 16) }
+    else hints.push('유당불내증을 선택했지만 유제품(우유·치즈·아이스크림·WPC)이 없어 점수에 반영되지 않았습니다. 유당은 유제품을 먹을 때만 문제가 됩니다.')
   }
-  if (conds.has('sensitiveGut')) { gas += 10; bloat += 10; smell += 5 }
-  if (conds.has('stressed'))     { gas += 5;  bloat += 8 }
+  if (conds.has('sensitiveGut')) { gas += 8; bloat += 8; smell += 4; addCause('fermentation', 10) }
+  if (conds.has('stressed'))     { gas += 5; bloat += 8; addCause('slow', 6) }
 
   const gasScore   = Math.min(100, Math.round(gas))
   const smellScore = Math.min(100, Math.round(smell))
@@ -232,7 +261,7 @@ export function calcFartScore(
 
   return {
     gas: gasScore, smell: smellScore, bloat: bloatScore, total,
-    primaryTypes, topFoods, comboWarnings,
+    primaryTypes, topFoods, comboWarnings, hints,
     riskLevel, riskLabel, riskColor,
   }
 }
@@ -257,10 +286,10 @@ export const FODMAP_ALTERNATIVES: Alternative[] = [
     ] },
   { highId: 'onion', highEmoji: '🧅', highName: '양파·마늘',
     options: [
-      { name: '🥬 파 초록 부분만',   reason: '프럭탄 ↓' },
-      { name: '🫒 마늘향 오일',     reason: '향 + FODMAP X' },
-      { name: '🌿 차이브·쪽파',    reason: '향 비슷, 저FODMAP' },
-      { name: '🌶️ 양파가루 (소량)', reason: '풍미 추가' },
+      { name: '🥬 대파·쪽파 초록 부분', reason: '프럭탄은 흰 부분에 집중 — 초록 부분은 저FODMAP' },
+      { name: '🫒 마늘향 오일',        reason: '프럭탄은 물에만 녹아 기름엔 향만 남음' },
+      { name: '🌿 차이브',            reason: '향 비슷, 저FODMAP' },
+      { name: '🫚 생강·후추',          reason: '저FODMAP 향신료로 풍미 보완 (양파가루·마늘가루는 프럭탄이라 부적합)' },
     ] },
   { highId: 'flour', highEmoji: '🍞', highName: '밀가루·보리·잡곡',
     options: [
@@ -343,13 +372,13 @@ export const SYMPTOM_RESPONSES: SymptomResponse[] = [
       '양파·마늘·콩류 줄이기',
       '천천히 씹기 (한 입 30회)',
     ],
-    seeDoctor: '지속 시 IBS 또는 소장세균과증식(SIBO) 가능성 → 소화기내과',
+    seeDoctor: '수 주 이상 지속되거나 통증·체중 변화가 동반되면 소화기내과 상담 (원인은 다양하므로 자가 진단보다 진료 권장)',
     severity: 'normal',
   },
   { key: 'manyFarts', emoji: '💨', name: '가스가 계속 나옴',
     immediate: ['걷기·자전거 (위치 바꾸기)', '따뜻한 차', '심호흡 (이완)'],
     nextMeal: ['FODMAP 음식 줄이기', '인공감미료 라벨 확인', '식사 속도 늦추기'],
-    seeDoctor: '하루 30회+ 지속 시 영양사·소화기내과',
+    seeDoctor: '평소보다 뚜렷이 늘고 통증·설사·체중 감소가 동반되면 소화기내과·영양사 상담 (횟수 자체보다 변화·동반 증상이 기준)',
     severity: 'normal',
   },
   { key: 'badSmell', emoji: '🦨', name: '냄새가 심함',
@@ -361,13 +390,13 @@ export const SYMPTOM_RESPONSES: SymptomResponse[] = [
   { key: 'burping', emoji: '😮‍💨', name: '트림이 많음',
     immediate: ['천천히 식사 (공기 삼킴 ↓)', '탄산 즉시 중단', '식후 바로 눕지 X'],
     nextMeal: ['빨대·껌 X', '뜨거운 음료 천천히', '이완·여유 식사'],
-    seeDoctor: '역류성 식도염·헬리코박터 가능성 → 소화기내과',
+    seeDoctor: '잦거나 가슴쓰림·신물이 함께라면 소화기내과 상담',
     severity: 'normal',
   },
   { key: 'postMealDiscomfort', emoji: '😣', name: '식후 바로 불편함',
     immediate: ['잠깐 누운 자세 (왼쪽으로)', '복부 따뜻하게', '깊은 호흡'],
     nextMeal: ['식사량 ↓ (3~4번 나눠 먹기)', '튀김·고지방 줄이기', '식후 카페인 X'],
-    seeDoctor: '담석·췌장 문제 가능성 → 검사 필요',
+    seeDoctor: '반복·지속되거나 심한 통증·구토가 동반되면 소화기내과 상담',
     severity: 'normal',
   },
   { key: 'diarrhea', emoji: '💧', name: '설사 동반',

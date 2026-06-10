@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               { q: '방귀는 하루에 몇 번이 정상인가요?',
-                a: '의학적으로 하루 평균 13~21회 방귀는 정상입니다. 소리 없이 나오는 것까지 포함하면 생각보다 많습니다. 횟수보다 냄새와 복부 불편감이 지속될 때 주의가 필요합니다.' },
+                a: '개인차가 매우 큽니다. 흔히 하루 십여 회 안팎이 보통이고, 음식·체질에 따라 <strong>20~25회가량까지도 정상 범위</strong>일 수 있습니다(미국 NIDDK 기준). 소리 없이 나오는 것까지 포함하면 생각보다 많습니다. 절대 횟수보다 <strong>평소와 다른 갑작스러운 변화</strong>와 통증·체중 감소·혈변 같은 동반 증상이 있을 때 진료가 필요합니다.' },
               { q: '고구마와 우유를 같이 먹으면 왜 배가 더 아프나요?',
                 a: '고구마의 식이섬유·전분과 우유의 유당이 합쳐지면 대장에서 발효가 가속화됩니다. 두 재료 모두 가스 생성력이 있어 함께 먹으면 시너지 효과가 발생합니다.' },
               { q: '계란 방귀가 냄새가 심한 이유는?',
@@ -27,7 +27,7 @@ const FAQ_LD = [
               { q: 'FODMAP 식단을 평생 해야 하나요?',
                 a: '아닙니다. 저FODMAP은 <strong>진단·재도입 도구</strong>입니다.<br/>• 1단계 (제거, 2~6주): 모든 고FODMAP 제거<br/>• 2단계 (재도입, 6~10주): 한 종류씩 다시 시도<br/>• 3단계 (개인화): 본인 민감 음식만 평생 제한<br/>평생 저FODMAP은 영양 결핍 위험(식이섬유·미네랄), 장내 미생물 다양성 ↓, 사회적 식사 어려움 등 부작용. 반드시 영양사 지도 하 진행. 한국 소화기학회: kgsa.or.kr.' },
               { q: '방귀가 너무 많이 나오면 병원 가야 하나요?',
-                a: '다음 경우 의료 상담 권장 — 하루 30회+ (정상 13~21회) / 심한 악취 + 혈변 / 갑작스러운 체중 감소 / 심한 복통(한밤중에 깨움) / 발열 동반 / 1주+ 지속 변비·설사 / 임산부.<br/>가능한 의학적 원인: IBS · SIBO(소장세균과증식) · 셀리악(글루텐 알레르기) · 유당불내증 · 췌장 효소 부족 · 담즙 문제. 상담: 소화기내과 / 한국 의료진 상담 1339 / 응급 119.' },
+                a: '횟수 자체보다 <strong>변화와 동반 증상</strong>이 기준입니다. 다음 경우 의료 상담 권장 — 평소보다 갑자기 뚜렷이 잦아지며 불편·통증 동반 / 심한 악취 + 혈변 / 갑작스러운 체중 감소 / 심한 복통(한밤중에 깨움) / 발열 동반 / 1주+ 지속 변비·설사 / 임산부.<br/>원인은 다양합니다(과민성대장증후군 · 소장세균과증식(SIBO) · 셀리악병(글루텐 자가면역 질환, 알레르기 아님) · 유당불내증 · 췌장 효소 부족 · 담즙 문제 등) — 증상만으로 단정할 수 없습니다. 상담: 소화기내과 / 보건복지상담센터 129 / 질병관리청 1339 / 응급 119.' },
               { q: '단순 일기로 본 도구를 활용할 수 있나요?',
                 a: '네. ① 매 식사 후 본 도구 입력 ② 점수·증상 기록(메모장·일기 앱) ③ 1~2주 후 패턴 확인 ④ 자주 등장하는 음식 = 의심.<br/>⚠️ 주의: 본 도구는 일기 기능이 없으며(단순 점수만), 정확한 분석은 영양사·의사 영역. 본 결과로 자가 진단 X. 진단이 필요하면 한국 영양사 상담 또는 소화기내과(병원), FODMAP 전문 영양사(Monash 인증) 권장.' },
             ]
@@ -197,7 +197,7 @@ export default function FartRiskPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626',     fontWeight: 600 }}>🔴 고FODMAP (피하기)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626',     fontWeight: 600 }}>🔴 고FODMAP (양·종류 주의)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: '#059669',     fontWeight: 600 }}>🟢 저FODMAP (대체)</th>
                 </tr>
               </thead>
@@ -220,7 +220,7 @@ export default function FartRiskPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ <strong style={{ color: 'var(--text)' }}>완두콩(green peas)</strong>은 1/4컵(약 30g) 이하면 저FODMAP, 그 이상은 GOS 함량으로 중간 위험. <strong style={{ color: 'var(--text)' }}>덜 익은 바나나</strong>는 저FODMAP, 잘 익을수록 과당이 ↑되어 중간으로 변합니다. 같은 음식도 <strong style={{ color: 'var(--text)' }}>양</strong>이 중요합니다 (Monash 대학 기준).
+            ※ 표의 <strong style={{ color: 'var(--text)' }}>&lsquo;고FODMAP&rsquo;은 무조건 금지가 아니라 &lsquo;양·종류를 확인&rsquo;하라는 뜻</strong>입니다. <strong style={{ color: 'var(--text)' }}>체더·페타·파르메산</strong> 같은 숙성·경성 치즈는 일반 제공량에서 유당이 매우 낮아 저FODMAP일 수 있고, <strong style={{ color: 'var(--text)' }}>브로콜리·고구마·두유·귀리 음료</strong>도 종류와 양에 따라 달라집니다. <strong style={{ color: 'var(--text)' }}>완두콩</strong>은 1/4컵 이하면 저FODMAP, <strong style={{ color: 'var(--text)' }}>덜 익은 바나나</strong>는 저FODMAP이나 잘 익을수록 과당이 ↑됩니다. 같은 음식도 <strong style={{ color: 'var(--text)' }}>양</strong>이 중요합니다 (Monash 대학 기준).
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
             ⚠️ 저FODMAP은 평생 식단이 아닌 <strong style={{ color: 'var(--text)' }}>진단·재도입 도구</strong>입니다. 평생 제한은 영양 결핍·장내 미생물 다양성 ↓ 위험. 영양사 지도 하 진행 권장.
@@ -311,7 +311,8 @@ export default function FartRiskPage() {
             </ul>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '6px' }}>
               {[
-                { l: '한국 의료진 상담 (보건복지부)', t: '1339' },
+                { l: '보건복지상담센터', t: '129' },
+                { l: '질병관리청 건강상담', t: '1339' },
                 { l: '응급', t: '119' },
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>

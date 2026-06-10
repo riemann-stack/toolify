@@ -55,11 +55,11 @@ const CAT_LABELS: Record<DrinkCat, string> = {
 /* ─── 반감기 프리셋 ─── */
 const HALF_LIFE_PRESETS = [
   { id: 'smoker',   label: '흡연자 (빠름)',   hours: 3.0, desc: '니코틴이 CYP1A2 활성화' },
-  { id: 'fast',     label: '빠른 대사 (대략 1/3)', hours: 4.0, desc: '유전적 CYP1A2 fast' },
+  { id: 'fast',     label: '빠른 대사 (유전 fast)', hours: 4.0, desc: '유전적 CYP1A2 fast' },
   { id: 'normal',   label: '보통 (성인 평균)',hours: 5.0, desc: '가장 흔한 기본값' },
-  { id: 'slow',     label: '느린 대사 (대략 1/2)', hours: 6.5, desc: '유전적 CYP1A2 slow' },
+  { id: 'slow',     label: '느린 대사 (유전 slow)', hours: 6.5, desc: '유전적 CYP1A2 slow' },
   { id: 'pill',     label: '경구 피임약 복용', hours: 9.0, desc: '에스트로겐이 분해 억제' },
-  { id: 'pregnant', label: '임신·수유 중',    hours: 12.0,desc: '간 효소 변화로 매우 느림' },
+  { id: 'pregnant', label: '임신 중 (후기)',   hours: 12.0,desc: '임신 후기 호르몬 영향으로 느림 (수유 중에는 출산 후 보통 수준으로 회복)' },
   { id: 'teen',     label: '청소년 (~18세)',  hours: 4.0, desc: '청소년 평균 (개인차 큼)' },
 ] as const
 
@@ -81,6 +81,7 @@ interface DrinkEntry {
 }
 
 const STORAGE_KEY = 'youtil_caffeine_v1'
+const SETTINGS_KEY = 'youtil_caffeine_settings_v1'
 const KST_OFFSET_MS = 9 * 3600 * 1000
 
 /* ─── 시각 포맷 ─── */
@@ -116,8 +117,8 @@ function loadEntries(): DrinkEntry[] {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
     const arr = JSON.parse(raw) as DrinkEntry[]
-    // 36시간 지난 항목은 자동 정리
-    const cutoff = Date.now() - 36 * 3600 * 1000
+    // 72시간 지난 항목은 자동 정리 (느린 반감기 12h에서도 3일이면 잔존 ~1.5%)
+    const cutoff = Date.now() - 72 * 3600 * 1000
     return arr.filter(e => e.consumedAtMs > cutoff)
   } catch {
     return []
@@ -127,6 +128,26 @@ function loadEntries(): DrinkEntry[] {
 function saveEntries(arr: DrinkEntry[]) {
   if (typeof window === 'undefined') return
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)) } catch { /* quota */ }
+}
+
+/* ─── localStorage: 개인 설정 (반감기·일일 한도·취침 시각) ─── */
+interface CaffeineSettings {
+  halfLifeId: string
+  dailyLimitId: string
+  bedtime: string
+}
+function loadSettings(): Partial<CaffeineSettings> | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY)
+    return raw ? (JSON.parse(raw) as Partial<CaffeineSettings>) : null
+  } catch {
+    return null
+  }
+}
+function saveSettings(set: CaffeineSettings) {
+  if (typeof window === 'undefined') return
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(set)) } catch { /* quota */ }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -143,8 +164,8 @@ export default function CaffeineClient() {
 
   // 입력 시각 — 기본 "지금", 직접 입력 가능
   const [timeMode, setTimeMode] = useState<'now' | 'custom'>('now')
-  const [customH, setCustomH] = useState<number>(() => new Date().getHours())
-  const [customM, setCustomM] = useState<number>(() => new Date().getMinutes())
+  const [customH, setCustomH] = useState<number>(() => new Date(Date.now() + KST_OFFSET_MS).getUTCHours())
+  const [customM, setCustomM] = useState<number>(() => new Date(Date.now() + KST_OFFSET_MS).getUTCMinutes())
 
   // 실시간 시계
   const [nowMs, setNowMs] = useState(() => Date.now())
@@ -160,23 +181,44 @@ export default function CaffeineClient() {
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   }, [])
 
-  // 초기 로드
+  const settingsLoadedRef = useRef(false)
+
+  // 초기 로드 — 음료 기록 + 개인 설정(반감기·한도·취침)
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    /* eslint-disable react-hooks/set-state-in-effect */
     setEntries(loadEntries())
+    const st = loadSettings()
+    if (st) {
+      if (st.halfLifeId && HALF_LIFE_PRESETS.some(p => p.id === st.halfLifeId)) {
+        setHalfLifeId(st.halfLifeId as typeof HALF_LIFE_PRESETS[number]['id'])
+      }
+      if (st.dailyLimitId && DAILY_LIMITS.some(p => p.id === st.dailyLimitId)) {
+        setDailyLimitId(st.dailyLimitId as typeof DAILY_LIMITS[number]['id'])
+      }
+      if (typeof st.bedtime === 'string' && /^\d{1,2}:\d{2}$/.test(st.bedtime)) {
+        setBedtime(st.bedtime)
+      }
+    }
+    settingsLoadedRef.current = true
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
-  // 저장
+  // 음료 기록 저장
   useEffect(() => {
     saveEntries(entries)
   }, [entries])
+  // 개인 설정 저장 — 로드 완료 후에만 (초기 기본값으로 덮어쓰기 방지)
+  useEffect(() => {
+    if (!settingsLoadedRef.current) return
+    saveSettings({ halfLifeId, dailyLimitId, bedtime })
+  }, [halfLifeId, dailyLimitId, bedtime])
 
   // 현재 시각 입력 모드일 때 매분 customH/M 갱신
   useEffect(() => {
     if (timeMode !== 'now') return
-    const d = new Date(nowMs)
+    const d = new Date(nowMs + KST_OFFSET_MS)
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCustomH(d.getHours())
-    setCustomM(d.getMinutes())
+    setCustomH(d.getUTCHours())
+    setCustomM(d.getUTCMinutes())
   }, [timeMode, nowMs])
 
   const halfHours = HALF_LIFE_PRESETS.find(p => p.id === halfLifeId)?.hours ?? 5
@@ -185,11 +227,13 @@ export default function CaffeineClient() {
   /* ─── 추가 ─── */
   const computeConsumedAtMs = useCallback((): number => {
     if (timeMode === 'now') return Date.now()
-    const d = new Date()
-    d.setHours(customH, customM, 0, 0)
-    let ts = d.getTime()
+    // 직접 입력 시각은 KST 벽시계 기준으로 해석 (fmtHM·bedtimeMs·todayStartMs와 동일 기준)
+    const now = Date.now()
+    const d = new Date(now + KST_OFFSET_MS)
+    d.setUTCHours(customH, customM, 0, 0)
+    let ts = d.getTime() - KST_OFFSET_MS
     // 미래로 5분 이상이면 어제로 (밤늦게 어제 새벽 기록 등 케이스 회피)
-    if (ts - Date.now() > 5 * 60 * 1000) ts -= 24 * 3600 * 1000
+    if (ts - now > 5 * 60 * 1000) ts -= 24 * 3600 * 1000
     return ts
   }, [timeMode, customH, customM])
 
@@ -277,14 +321,17 @@ export default function CaffeineClient() {
   const maxAddableForSafe = useMemo(() => {
     if (bedtimeMs === null) return null
     const decayFromNowToBed = Math.exp(-Math.LN2 / halfHours * ((bedtimeMs - nowMs) / 3600000))
-    // 새로 마신 mg은 그대로 잔존 시까지 decayFromNowToBed 만큼 줄어듦
-    const result = (threshold: number) => Math.max(0, (threshold - bedtimeBodyMg) / decayFromNowToBed)
+    const dailyHeadroom = Math.max(0, dailyLimit - todayTotalMg)  // 일일 권장량 잔여
+    // 취침 잔존 기준치와 일일 권장량 잔여 중 더 작은 값으로 제한 (오늘 누적+추가가 한도를 넘지 않도록)
+    const result = (threshold: number) =>
+      Math.min(dailyHeadroom, Math.max(0, (threshold - bedtimeBodyMg) / decayFromNowToBed))
     return {
       safe30: result(30),
       ok50: result(50),
       caution100: result(100),
+      dailyHeadroom,
     }
-  }, [bedtimeMs, nowMs, halfHours, bedtimeBodyMg])
+  }, [bedtimeMs, nowMs, halfHours, bedtimeBodyMg, dailyLimit, todayTotalMg])
 
   // 곡선 데이터 (6시간 전 ~ 12시간 후)
   const chartData = useMemo(() => {
@@ -310,12 +357,14 @@ export default function CaffeineClient() {
     return { label: '🚨 깊은 수면 차단 수준', color: '#DC2626' }
   })()
 
-  const dailyPct = Math.min(100, (todayTotalMg / dailyLimit) * 100)
+  const dailyPctRaw = (todayTotalMg / dailyLimit) * 100  // 미캡 — 초과 시 100% 넘게 표시
+  const dailyPct = Math.min(100, dailyPctRaw)            // 막대 너비용 (최대 100%)
   const dailyStatus =
-    dailyPct < 60 ? { label: '✅ 여유', color: '#059669' }
-    : dailyPct < 90 ? { label: '⚠️ 권장량 근접', color: '#D97706' }
-    : dailyPct < 100 ? { label: '🟠 권장량 거의 도달', color: '#EA580C' }
-    : { label: '🚨 권장량 초과', color: '#DC2626' }
+    todayTotalMg > dailyLimit ? { label: '🚨 기준 초과', color: '#DC2626' }
+    : dailyPctRaw >= 100 ? { label: '🟠 기준 도달', color: '#EA580C' }
+    : dailyPctRaw >= 90 ? { label: '🟠 기준 거의 도달', color: '#EA580C' }
+    : dailyPctRaw >= 60 ? { label: '⚠️ 기준 근접', color: '#D97706' }
+    : { label: '✅ 여유', color: '#059669' }
 
   /* ─── 차트 SVG ─── */
   const W = 600, H = 220, PL = 44, PR = 16, PT = 16, PB = 32
@@ -357,7 +406,7 @@ export default function CaffeineClient() {
           <span className={s.heroUnit}>mg</span>
         </div>
         <div className={s.heroSub}>
-          반감기 <strong>{halfHours}시간</strong> 기준 · 오늘 누적 <strong>{Math.round(todayTotalMg)}mg</strong> ({DAILY_LIMITS.find(l => l.id === dailyLimitId)?.label} 권장 {dailyLimit}mg)
+          반감기 <strong>{halfHours}시간</strong> 기준 · 오늘 누적 <strong>{Math.round(todayTotalMg)}mg</strong> ({DAILY_LIMITS.find(l => l.id === dailyLimitId)?.label} 기준 {dailyLimit}mg)
         </div>
         <div className={s.dailyBar}>
           <div className={s.dailyBarFill}
@@ -365,7 +414,7 @@ export default function CaffeineClient() {
         </div>
         <div className={s.dailyMeta}>
           <span style={{ color: dailyStatus.color, fontWeight: 700 }}>{dailyStatus.label}</span>
-          <span>{dailyPct.toFixed(0)}% / {dailyLimit}mg</span>
+          <span>{dailyPctRaw.toFixed(0)}% / {dailyLimit}mg</span>
         </div>
       </div>
 
@@ -374,11 +423,12 @@ export default function CaffeineClient() {
         <div className={s.cardLabel}>⚙️ 개인 설정</div>
 
         <div className={s.subLabel}>반감기 (대사 속도)</div>
-        <div className={s.optionGrid}>
+        <div className={s.optionGrid} role="group" aria-label="반감기(대사 속도) 선택">
           {HALF_LIFE_PRESETS.map(p => (
             <button
               key={p.id}
               type="button"
+              aria-pressed={halfLifeId === p.id}
               className={`${s.optionBtn} ${halfLifeId === p.id ? s.optionActive : ''}`}
               onClick={() => setHalfLifeId(p.id)}
               title={p.desc}
@@ -389,12 +439,13 @@ export default function CaffeineClient() {
           ))}
         </div>
 
-        <div className={s.subLabel} style={{ marginTop: 14 }}>일일 권장량 기준</div>
-        <div className={s.limitRow}>
+        <div className={s.subLabel} style={{ marginTop: 14 }}>일일 섭취 기준</div>
+        <div className={s.limitRow} role="group" aria-label="일일 섭취 기준 선택">
           {DAILY_LIMITS.map(p => (
             <button
               key={p.id}
               type="button"
+              aria-pressed={dailyLimitId === p.id}
               className={`${s.limitBtn} ${dailyLimitId === p.id ? s.optionActive : ''}`}
               onClick={() => setDailyLimitId(p.id)}
             >
@@ -402,6 +453,9 @@ export default function CaffeineClient() {
             </button>
           ))}
         </div>
+        <p className={s.addableNote}>
+          ※ 성인 400mg은 FDA가 &ldquo;대부분 건강한 성인에게 부정적 영향과 일반적으로 연관되지 않는 양&rdquo;으로 안내하는 수치입니다. 청소년 125mg·어린이 45mg은 체중 약 50·18kg(2.5mg/kg) 가정값으로, 실제 체중에 따라 달라집니다.
+        </p>
       </div>
 
       {/* ─── 음료 추가 ─── */}
@@ -409,24 +463,26 @@ export default function CaffeineClient() {
         <div className={s.cardLabel}>➕ 음료 추가</div>
 
         <div className={s.subLabel}>마신 시각</div>
-        <div className={s.timeRow}>
+        <div className={s.timeRow} role="group" aria-label="마신 시각 입력 방식">
           <button
             type="button"
+            aria-pressed={timeMode === 'now'}
             className={`${s.timeModeBtn} ${timeMode === 'now' ? s.optionActive : ''}`}
             onClick={() => setTimeMode('now')}
           >지금</button>
           <button
             type="button"
+            aria-pressed={timeMode === 'custom'}
             className={`${s.timeModeBtn} ${timeMode === 'custom' ? s.optionActive : ''}`}
             onClick={() => setTimeMode('custom')}
           >직접 입력</button>
           {timeMode === 'custom' && (
             <div className={s.timeInputs}>
-              <select className={s.timeSelect} value={customH} onChange={e => setCustomH(+e.target.value)}>
+              <select className={s.timeSelect} aria-label="마신 시각 (시)" value={customH} onChange={e => setCustomH(+e.target.value)}>
                 {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{String(i).padStart(2, '0')}시</option>)}
               </select>
               <span className={s.colon}>:</span>
-              <select className={s.timeSelect} value={customM} onChange={e => setCustomM(+e.target.value)}>
+              <select className={s.timeSelect} aria-label="마신 시각 (분)" value={customM} onChange={e => setCustomM(+e.target.value)}>
                 {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(m => <option key={m} value={m}>{String(m).padStart(2, '0')}분</option>)}
               </select>
             </div>
@@ -434,11 +490,12 @@ export default function CaffeineClient() {
         </div>
 
         <div className={s.subLabel} style={{ marginTop: 12 }}>음료 종류</div>
-        <div className={s.catTabs}>
+        <div className={s.catTabs} role="group" aria-label="음료 종류 선택">
           {(['coffee', 'tea', 'soda', 'energy', 'sweet', 'custom'] as DrinkCat[]).map(c => (
             <button
               key={c}
               type="button"
+              aria-pressed={selectedCat === c}
               className={`${s.catTab} ${selectedCat === c ? s.catTabActive : ''}`}
               onClick={() => setSelectedCat(c)}
             >{CAT_LABELS[c]}</button>
@@ -467,6 +524,7 @@ export default function CaffeineClient() {
             <input
               type="text"
               className={s.customInput}
+              aria-label="음료 이름"
               placeholder="음료 이름 (예: 핫초코)"
               value={customName}
               onChange={e => setCustomName(e.target.value)}
@@ -476,6 +534,7 @@ export default function CaffeineClient() {
               type="number"
               inputMode="decimal"
               className={s.customMg}
+              aria-label="카페인 함량 (mg)"
               placeholder="mg"
               value={customMg}
               onChange={e => setCustomMg(e.target.value)}
@@ -537,6 +596,7 @@ export default function CaffeineClient() {
           <input
             type="time"
             className={s.bedtimeInput}
+            aria-label="목표 취침 시각"
             value={bedtime}
             onChange={e => setBedtime(e.target.value)}
           />
@@ -558,23 +618,26 @@ export default function CaffeineClient() {
 
             {maxAddableForSafe && (
               <div className={s.addableBox}>
-                <div className={s.addableTitle}>지금부터 추가로 마실 수 있는 한도 (취침까지)</div>
+                <div className={s.addableTitle}>취침 시 잔존을 기준치 이하로 두려면 (참고 · 내부 추정)</div>
                 <div className={s.addableGrid}>
                   <div className={s.addableItem}>
-                    <span className={s.addableThresh}>💚 ~ 30mg 미만</span>
+                    <span className={s.addableThresh}>💚 ~ 30mg</span>
                     <span className={s.addableVal}>{Math.max(0, Math.round(maxAddableForSafe.safe30))}mg</span>
                   </div>
                   <div className={s.addableItem}>
-                    <span className={s.addableThresh}>💙 ~ 50mg 미만</span>
+                    <span className={s.addableThresh}>💙 ~ 50mg</span>
                     <span className={s.addableVal}>{Math.max(0, Math.round(maxAddableForSafe.ok50))}mg</span>
                   </div>
                   <div className={s.addableItem}>
-                    <span className={s.addableThresh}>🟡 ~ 100mg 미만</span>
+                    <span className={s.addableThresh}>🟡 ~ 100mg</span>
                     <span className={s.addableVal}>{Math.max(0, Math.round(maxAddableForSafe.caution100))}mg</span>
                   </div>
                 </div>
                 <p className={s.addableNote}>
                   💡 100mg = 아메리카노 Tall 약 0.7잔 · 50mg = 콜라 1.4캔 · 30mg = 녹차 1잔
+                </p>
+                <p className={s.addableNote}>
+                  ※ 30·50·100mg은 임상 확정 기준이 아닌 본 도구의 내부 참고치이며, 위 값은 일일 섭취 기준({dailyLimit}mg) 잔여 한도 안에서만 표시됩니다{maxAddableForSafe.dailyHeadroom <= 0 ? ' — 오늘은 이미 기준에 도달했습니다' : ''}.
                 </p>
               </div>
             )}
@@ -639,9 +702,9 @@ export default function CaffeineClient() {
           </svg>
           <div className={s.chartLegend}>
             <span><span className={s.dot} style={{ background: 'var(--accent)' }} />체내 카페인</span>
-            <span><span className={s.dot} style={{ background: '#059669' }} />수면 안전 (30mg)</span>
-            <span><span className={s.dot} style={{ background: '#D97706' }} />경고 (100mg)</span>
-            <span><span className={s.dot} style={{ background: '#DC2626' }} />수면 차단 (200mg)</span>
+            <span><span className={s.dot} style={{ background: '#059669' }} />참고선 30mg</span>
+            <span><span className={s.dot} style={{ background: '#D97706' }} />참고선 100mg</span>
+            <span><span className={s.dot} style={{ background: '#DC2626' }} />참고선 200mg</span>
           </div>
         </div>
       )}

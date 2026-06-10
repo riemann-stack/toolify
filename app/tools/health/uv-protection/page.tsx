@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: 'UV 지수 5는 얼마나 위험한가요?',
-                a: 'UV 지수 5는 한국 기상청 기준 <strong>"보통" 등급</strong>으로 일반적인 봄·가을 수준입니다. 한국인 평균 피부(타입 III)의 경우 <strong>무보호 상태에서 약 30분 정도부터 일광화상 위험</strong>이 있습니다. 차단제(SPF 30 이상)와 모자를 권장하며, 오전 10시~오후 4시 사이는 더 주의가 필요합니다. 구름이 적고 반사면(물·모래·눈)이 있다면 실제 노출량은 더 높을 수 있습니다.',
+                a: 'UV 지수 5는 한국 기상청 기준 <strong>"보통" 등급</strong>으로 일반적인 봄·가을 수준입니다. 한국인 평균 피부(타입 III)의 경우 <strong>무보호 상태에서 약 40분 정도부터 일광화상 위험</strong>이 있습니다. 차단제(SPF 30 이상)와 모자를 권장하며, 오전 10시~오후 4시 사이는 더 주의가 필요합니다. 구름이 적고 반사면(물·모래·눈)이 있다면 실제 노출량은 더 높을 수 있습니다.',
               },
               {
                 q: 'SPF 50과 SPF 30의 실제 차이는 얼마나 되나요?',
@@ -77,7 +77,7 @@ export default function UvProtectionPage() {
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> UV 지수 6, 피부 타입 III(한국인 평균) →
-            화상 위험 추정 시간 약 <strong style={{ color: '#0891B2' }}>25분 (무보호)</strong>
+            화상 위험 추정 시간 약 <strong style={{ color: '#0891B2' }}>33분 (무보호)</strong>
           </div>
         </div>
 
@@ -120,6 +120,9 @@ export default function UvProtectionPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+            ※ 한국인 비율은 공식 표준 통계가 아닌 <strong style={{ color: 'var(--text)' }}>대략적 추정</strong>입니다(피부과 임상 통념 기준). 본인 피부 타입은 햇빛 반응으로 자가 진단하거나 피부과 상담으로 확인하세요.
+          </p>
         </div>
 
         {/* ── 3. UV 5단계 ── */}
@@ -269,8 +272,9 @@ export default function UvProtectionPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🇰🇷 <strong style={{ color: '#0891B2' }}>한국 통계:</strong> 피부암 발생률 매년 5~6% 증가(대한피부과학회) ·
-            자외선이 피부 노화 원인의 약 80% · 일광화상 1회로도 흑색종 위험 증가
+            🇰🇷 <strong style={{ color: '#0891B2' }}>참고 통계:</strong> 피부암 발생률 매년 5~6% 증가(대한피부과학회) ·
+            피부 노화의 약 80%가 자외선(광노화)에 기인한다는 피부과 일반 인용치 · 일광화상 1회로도 흑색종 위험 증가
+            <br /><span style={{ fontSize: 11 }}>※ 위 수치는 인용·추정치이며, 정확한 값은 아래 「공식 자료 출처」를 확인하세요.</span>
           </div>
           <div style={{
             background: 'rgba(16,185,129,0.05)',
@@ -353,10 +357,11 @@ export default function UvProtectionPage() {
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>미국 EPA UV Index Scale: <strong style={{ color: 'var(--text)' }}>epa.gov/sunsafety</strong></li>
-              <li>WHO Global Solar UV Index: <strong style={{ color: 'var(--text)' }}>who.int</strong></li>
-              <li>한국 기상청 자외선지수: <strong style={{ color: 'var(--text)' }}>weather.go.kr</strong></li>
-              <li>대한피부과학회: <strong style={{ color: 'var(--text)' }}>derma.or.kr</strong></li>
+              <li>미국 EPA UV Index Scale: <a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>epa.gov/sunsafety</a></li>
+              <li>WHO Ultraviolet (UV) radiation: <a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>who.int</a></li>
+              <li>FDA Sunscreen·SPF 안내: <a href="https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>fda.gov</a></li>
+              <li>한국 기상청 생활기상지수(자외선): <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>weather.go.kr</a></li>
+              <li>대한피부과학회: <a href="https://www.derma.or.kr" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>derma.or.kr</a></li>
             </ul>
             <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
               본 도구는 <strong style={{ color: 'var(--text)' }}>의학적 진단·치료 목적이 아닙니다.</strong>

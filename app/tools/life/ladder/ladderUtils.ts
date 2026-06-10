@@ -29,8 +29,9 @@ export const ANIMATION_SPEEDS: { id: AnimSpeed; name: string; drawMs: number; st
 /* ─── 가로줄 난이도 (보통·많이) ─── */
 export type Difficulty = 'normal' | 'hard'
 export const DIFFICULTIES: { id: Difficulty; name: string; rowsMul: number; rungProb: number }[] = [
-  { id: 'normal', name: '보통 (권장)', rowsMul: 2.0, rungProb: 0.45 },
-  { id: 'hard',   name: '많이 (복잡)', rowsMul: 3.0, rungProb: 0.55 },
+  // 행·가로줄을 늘릴수록 섞임이 좋아져 도착 분포가 균등에 가까워진다(완전 균등은 아님).
+  { id: 'normal', name: '보통 (권장)', rowsMul: 3.0, rungProb: 0.5 },
+  { id: 'hard',   name: '많이 (복잡)', rowsMul: 5.0, rungProb: 0.6 },
 ]
 
 /* ─── 사다리 생성 ─── */
@@ -51,6 +52,27 @@ export function generateLadder(participantCount: number, rows: number, rungProb 
     }
     return row
   })
+}
+
+/** 자기 배정 회피 사다리 — 참가자 이름이 자신의 도착 결과와 같지 않도록 재생성(시크릿 산타 등).
+ *  names/results가 겹치지 않으면 첫 시도에서 통과하므로 일반 추첨에는 영향이 없다.
+ *  데인지먼트가 불가능하면(중복 이름 등) maxTries 후 마지막 사다리를 반환. */
+export function generateLadderNoSelf(
+  participantCount: number, rows: number, rungProb: number,
+  names?: string[], results?: string[], maxTries = 200,
+): boolean[][] {
+  let ladder = generateLadder(participantCount, rows, rungProb)
+  if (!names || !results) return ladder
+  for (let t = 0; t < maxTries; t++) {
+    let selfMatch = false
+    for (let i = 0; i < participantCount; i++) {
+      const n = names[i]
+      if (n && n.trim() !== '' && n === results[traceDest(ladder, i)]) { selfMatch = true; break }
+    }
+    if (!selfMatch) return ladder
+    ladder = generateLadder(participantCount, rows, rungProb)
+  }
+  return ladder
 }
 
 /** 도착점 추적 — 출발 컬럼 → 도착 컬럼 */
@@ -117,6 +139,9 @@ export type SavedGame = {
   name: string
   participants: string[]
   results: string[]
+  /** 저장 시점의 가로줄·난이도 — 불러오면 동일한 사다리·결과 복원 (없으면 새로 생성) */
+  ladder?: boolean[][]
+  difficulty?: Difficulty
   notes?: string
   createdAt: string
   updatedAt: string
@@ -133,7 +158,8 @@ export function loadGames(): SavedGame[] {
 }
 export function saveGames(items: SavedGame[]) {
   if (typeof window === 'undefined') return
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 30))) } catch { /* */ }
+  // 30개 초과 시 가장 오래된 것을 버리고 최신 30개 유지 (새 항목이 버려지지 않도록)
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(-30))) } catch { /* */ }
 }
 export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6)

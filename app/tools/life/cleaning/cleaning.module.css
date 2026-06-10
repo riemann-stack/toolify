@@ -170,3 +170,10 @@
 @media (max-width: 640px) {
   .input { font-size: 16px; min-height: 48px; }
 }
+
+/* 모바일: 상황 카드 2열로 축약(스크롤 단축) */
+@media (max-width: 480px) {
+  .sitGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .sitBtn { padding: 10px 11px; }
+  .sitStain { font-size: 11px; }
+}

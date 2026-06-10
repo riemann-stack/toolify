@@ -125,13 +125,13 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* ── 점수 카드 ── */
-.scoreGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* ── 점수 카드 (DOTS·Wilks·IPF GL 3개) ── */
+.scoreGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .scoreCard {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 18px 20px;
+  padding: 16px 10px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -145,12 +145,12 @@
 }
 .scoreValue {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 30px;
+  font-size: clamp(20px, 6vw, 28px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -0.02em;
 }
-.scoreBand { font-size: 12px; color: var(--muted); }
+.scoreBand { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
 
 /* ── 종목별 레벨 ── */
 .liftList { display: flex; flex-direction: column; gap: 18px; }
@@ -195,6 +195,98 @@
   font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
+}
+
+/* ── 탭 ── */
+.tabs {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px;
+}
+.tabBtn {
+  appearance: none; -webkit-appearance: none;
+  background: transparent; border: none; border-radius: 8px;
+  padding: 10px 2px; font-size: 12.5px; font-weight: 700; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 42px;
+  transition: all 0.15s; white-space: nowrap;
+}
+@media (hover: hover) { .tabBtn:hover { color: var(--text); } }
+.tabActive { background: var(--bg3); color: var(--accent); border: 1px solid rgba(202,138,4,0.35); }
+
+/* ── 시도 전략 ── */
+.attemptList { display: flex; flex-direction: column; gap: 10px; }
+.attemptRow { display: flex; flex-direction: column; gap: 8px; }
+.attemptName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.attemptVals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.attBox {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800; color: var(--text);
+}
+.attN { font-size: 10px; font-weight: 700; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.attThird { border-color: rgba(202,138,4,0.45); background: rgba(202,138,4,0.1); color: var(--accent); }
+.projBox {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px;
+  margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+  background: rgba(202,138,4,0.1); border: 1px solid rgba(202,138,4,0.3);
+  font-size: 14px; color: var(--text);
+}
+.projBox strong { font-family: 'Inter', system-ui, sans-serif; color: var(--accent); }
+.projScore { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+
+/* ── 대회 원판 ── */
+.plateInputRow { display: flex; align-items: center; gap: 8px; }
+.plateUnit { font-size: 14px; color: var(--muted); font-weight: 600; }
+.plateQuick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.quickBtn {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
+  padding: 7px 12px; font-size: 12px; font-weight: 600; color: var(--muted);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 34px;
+}
+@media (hover: hover) { .quickBtn:hover { border-color: var(--accent); color: var(--text); } }
+.plateStack {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  margin-top: 16px; min-height: 44px;
+}
+.plateChip {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 40px; padding: 0 8px; border-radius: 6px;
+  border: 1px solid; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 800;
+}
+.plateNone { font-size: 13px; color: var(--muted); }
+.plateLine { margin: 12px 0 0; font-size: 13px; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.plateWarn {
+  margin: 10px 0 0; font-size: 12px; color: #B45309; line-height: 1.6;
+  background: rgba(234,88,12,0.08); border: 1px solid rgba(234,88,12,0.28); border-radius: 8px; padding: 9px 12px;
+}
+.plateWarn strong { color: #B45309; }
+
+/* ── 내 기록 ── */
+.trendBox {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+  background: var(--bg3); border: 1px solid var(--border); font-size: 13px; color: var(--muted);
+}
+.trendBox strong { font-family: 'Inter', system-ui, sans-serif; }
+.trendUp { color: #059669; }
+.trendDown { color: #DC2626; }
+.recList { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+.recItem {
+  display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
+}
+.recDate { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.recTotal { font-size: 14px; font-weight: 800; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.recScore { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; text-align: right; }
+.recDel {
+  appearance: none; -webkit-appearance: none; background: transparent; border: none;
+  color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 4px 6px; min-width: 30px; min-height: 30px;
+}
+@media (hover: hover) { .recDel:hover { color: #DC2626; } }
+
+@media (max-width: 380px) {
+  .recItem { grid-template-columns: auto 1fr auto; }
+  .recScore { grid-column: 1 / -1; text-align: left; }
 }
 
 /* iOS zoom 방지 */

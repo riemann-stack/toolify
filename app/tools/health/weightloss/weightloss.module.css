@@ -154,25 +154,13 @@
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .fieldRow4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
 
-/* 모바일 — 4열·3열 유지 + 카드 padding/font 축소로 공간 절약 */
+/* 모바일 — 4열·3열을 2열로 재배치해 입력칸 터치 영역 확보 (좁은 폭에서 칸이 30px 수준으로 좁아지는 문제 해결) */
 @media (max-width: 540px) {
-  .fieldRow4 { gap: 4px; }
-  .fieldRow3 { gap: 4px; }
-  .fieldRow4 .card, .fieldRow3 .card { padding: 8px 6px; }
-  .fieldRow4 .cardLabel, .fieldRow3 .cardLabel {
-    font-size: 10px;
-    letter-spacing: 0.02em;
-    margin-bottom: 6px;
-    justify-content: center;
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-  .fieldRow4 .numInput, .fieldRow3 .numInput { font-size: 14px; padding: 6px 4px; text-align: center; }
-  .fieldRow4 .unit, .fieldRow3 .unit { font-size: 10px; }
-  .fieldRow4 .toggleBtn, .fieldRow3 .toggleBtn { padding: 6px 2px; font-size: 14px; }
-  /* 시작일·목표일 date input — 오버플로 방지 */
-  .fieldRow3 .dateInput { font-size: 12px; padding: 6px 4px; min-width: 0; }
+  .fieldRow4 { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fieldRow3 { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fieldRow3 > *:last-child { grid-column: 1 / -1; }  /* 시작일은 한 행 전체 폭 */
+  .fieldRow4 .numInput, .fieldRow3 .numInput { text-align: left; }
+  .fieldRow3 .dateInput { min-width: 0; }
 }
 
 /* date input은 항상 컨테이너에 맞도록 */
@@ -429,8 +417,8 @@
 .exerciseTable { display: flex; flex-direction: column; gap: 4px; }
 .exerciseRow {
   display: grid;
-  grid-template-columns: 32px 1fr 70px 90px;
-  gap: 10px;
+  grid-template-columns: 26px minmax(0, 1fr) 40px 64px;
+  gap: 6px;
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -521,8 +509,8 @@
 .macroTable { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
 .macroRow {
   display: grid;
-  grid-template-columns: 1fr 60px 70px 60px;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) 48px 56px 44px;
+  gap: 6px;
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);

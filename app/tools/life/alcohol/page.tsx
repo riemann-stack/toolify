@@ -39,19 +39,19 @@ const FAQ_LD = [
               },
               {
                 q: '4명이 소주 3병 + 맥주 6캔 마시면 1인당 얼마인가요?',
-                a: '본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(138g) + 맥주 6캔(108g) = 총 246g, 4명 균등 시 <strong>1인당 약 61.5g (7.7 표준잔)</strong>. 한국 보건복지부 1일 권장 (남 32g)의 192%, 여성 권장(16g)의 384%. ⚠️ 절대 운전 X, 다음날 출근 운전도 단속 가능 (BAC 잔류). 일주일 이상 간격 권장.',
+                a: '본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(약 136g) + 맥주 6캔(약 107g) = 총 약 243g, 4명 균등 시 <strong>1인당 약 60.8g (7.6 표준잔)</strong>. 적정음주 참고 기준(남 32g)의 약 190%, (여 16g)의 약 380% — 기준 이내라도 안전을 뜻하지 않습니다(WHO). ⚠️ 절대 운전 X, 다음날 출근 운전도 단속 가능 (BAC 잔류). 일주일 이상 간격 권장.',
               },
               {
                 q: '소주 도수가 제품마다 다른데 정확히 계산하려면?',
-                a: '본 도구 하단의 [본인 기준 도수 변환] 슬라이더에서 본인이 마신 소주 도수(14~25%)를 직접 설정하세요. 주요 도수: 진로 이즈백 16% · 처음처럼 16.5% · 진로 17.5% · 한라산 25%. 같은 1병이라도 한라산(71g) vs 이즈백(46g) = 알코올 약 56% 차이.',
+                a: '본 도구 하단의 [본인 기준 도수 변환] 슬라이더에서 본인이 마신 소주 도수(14~25%)를 직접 설정하세요. 주요 도수(2025.6 기준·라벨 확인): 진로·참이슬 후레쉬 16% · 처음처럼 새로 16% · 좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 25%. 저도주화로 자주 바뀌므로 제품 라벨이 정확합니다. 같은 1병이라도 한라산(71g) vs 16%(46g) = 알코올 약 56% 차이.',
               },
               {
                 q: '음주 후 운전 가능 시간은 어떻게 계산하나요?',
-                a: '체내 알코올 분해 속도는 개인마다 크게 달라(시간당 7~10g) 정확한 시점 예측은 어렵습니다. 본 도구의 결과를 운전 가능 여부 판단에 사용하지 마세요. 음주 후에는 반드시 대리(카카오 T 1577-1577 / 티맵 1644-3030) 또는 대중교통을 이용. 다음날 아침 출근 운전도 BAC 잔류로 단속 가능합니다. 본 도구의 [알코올 환산] 결과 카드 → 혈중알코올 도구 링크에서 BAC 추정 가능.',
+                a: '체내 알코올 분해 속도는 개인마다 크게 달라(시간당 7~10g) 정확한 시점 예측은 어렵습니다. 본 도구의 결과를 운전 가능 여부 판단에 사용하지 마세요. 음주 후에는 반드시 <strong>대리운전 앱(카카오 T·티맵 등)</strong> 또는 대중교통을 이용하세요. 다음날 아침 출근 운전도 BAC 잔류로 단속 가능합니다. 본 도구의 [알코올 환산] 결과 카드 → 혈중알코올 도구 링크에서 BAC 추정 가능.',
               },
               {
                 q: '맥주(4.5%)로 소주를 희석하면 어떻게 되나요?',
-                a: '맥주로 희석할 때는 <strong>목표 도수가 맥주(4.5%)보다 높아야</strong> 가능합니다. 예: 소주 50ml(16%) + 맥주 X = 목표 8% → 맥주 약 200ml 필요. 단, 목표가 4.5% 이하면 무한히 추가해도 도달할 수 없습니다 (수학적 한계). 본 도구의 [목표 도수 희석] 탭에 다양한 희석재료 비교표가 자동 생성됩니다.',
+                a: '맥주로 희석할 때는 <strong>목표 도수가 맥주(4.5%)보다 높아야</strong> 가능합니다. 예: 소주 50ml(16%)를 8%로 맞추려면 맥주 약 <strong>114ml</strong> 필요 — 계산식 50×(16−8)÷(8−4.5)≈114ml. 단, 목표가 4.5% 이하면 무한히 추가해도 도달할 수 없습니다 (수학적 한계). 본 도구의 [목표 도수 희석] 탭에 다양한 희석재료 비교표가 자동 생성됩니다.',
               },
               {
                 q: '음주 칼로리는 어떻게 되나요?',
@@ -98,7 +98,7 @@ export default function AlcoholPage() {
                   ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  '#059669'],
                   ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  '#059669'],
                   ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   '#EA580C'],
-                  ['🥃 양주 1온스',     '45ml',    '40%',   '14.2g',  '#EA580C'],
+                  ['🥃 양주 1.5온스',   '45ml',    '40%',   '14.2g',  '#EA580C'],
                   ['🍷 와인잔',         '150ml',   '13%',   '15.4g',  '#C83EFF'],
                   ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   '#EA580C'],
                   ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#DB2777'],
@@ -168,10 +168,10 @@ export default function AlcoholPage() {
         {/* ── 3. 같은 알코올량 환산 (NEW) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            같은 알코올량 환산 (1표준잔 = 8g)
+            같은 알코올량 환산 (본 도구 표시 기준 1잔 = 8g)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
-            한국 표준잔(8g 알코올)에 해당하는 각 술의 양을 비교하면, 같은 한 잔이라도 종류별로 알코올 양이 크게 다름을 알 수 있습니다.
+            순수 알코올 8g(본 도구 표시 기준)에 해당하는 각 술의 양을 비교하면, 같은 한 잔이라도 종류별로 알코올 양이 크게 다름을 알 수 있습니다. <strong style={{ color: 'var(--text)' }}>표준잔의 공식 정의는 기관마다 달라</strong>(보건복지부 7g · WHO 10g), 본 도구는 표시 편의상 8g을 쓰되 정확한 값은 순수 알코올 g으로 확인하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -179,8 +179,8 @@ export default function AlcoholPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>술</th>
                   <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>도수</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>1표준잔(8g) 분량</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>실제 1잔 (표준잔)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>1잔(8g) 분량</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>실제 1잔 (≈잔수)</th>
                 </tr>
               </thead>
               <tbody>
@@ -218,14 +218,14 @@ export default function AlcoholPage() {
                 title: '시나리오 A — 4명, 가벼운 술자리',
                 detail: '소주 1병 (16%) + 맥주 4캔 (500ml, 4.5%)',
                 perPerson: '1인당 약 29g (3.6 표준잔)',
-                risk: '🟡 남성 권장 90% / 여성 181% (여성 큰 폭 초과)',
+                risk: '🟡 참고 기준 남성 91% / 여성 182% (여성 크게 초과)',
                 color: '#FFD93E',
               },
               {
                 title: '시나리오 B — 4명, 보통 술자리',
                 detail: '소주 3병 + 맥주 6캔',
-                perPerson: '1인당 약 61g (7.7 표준잔)',
-                risk: '🟠 남성 권장 192% / 여성 384% (큰 폭 초과)',
+                perPerson: '1인당 약 61g (7.6 표준잔)',
+                risk: '🟠 참고 기준 남성 190% / 여성 380% (크게 초과)',
                 color: '#EA580C',
               },
               {
@@ -265,11 +265,11 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['진로 이즈백',       '16%',   '45.5g'],
-                  ['처음처럼',           '16.5%', '46.9g'],
-                  ['좋은데이',           '16.5%', '46.9g'],
-                  ['처음처럼 빨간뚜껑',  '16.9%', '48.0g'],
-                  ['진로 (오리지널)',    '17.5%', '49.7g'],
+                  ['진로(두꺼비)',       '16%',   '45.5g'],
+                  ['처음처럼 새로',       '16%',   '45.5g'],
+                  ['좋은데이',           '15.7%', '44.6g'],
+                  ['참이슬 후레쉬',       '16%',   '45.5g'],
+                  ['참이슬 오리지널',     '16.9%', '48.0g'],
                   ['한라산',             '25%',   '71.1g'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -282,24 +282,24 @@ export default function AlcoholPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 같은 1병이라도 한라산(25%) vs 이즈백(16%) = 알코올 약 56% 차이. 큰 차이입니다.
+            * 같은 1병이라도 한라산(25%) vs 16% 소주 = 알코올 약 56% 차이. 큰 차이입니다. (도수는 2025.6 기준·라벨 확인)
           </p>
         </section>
 
         {/* ── 6. 표준 음주량 안내 (기존 유지·확장) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            📊 표준 음주량 & 보건복지부 저위험 음주 권고
+            📊 음주 참고 기준 & 표준잔 정의 (출처·기준일)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국은 <strong style={{ color: 'var(--text)' }}>1표준잔 = 알코올 8g</strong> 기준 (WHO는 10g). 보건복지부 권고는 아래와 같으나, <strong style={{ color: '#EA580C' }}>WHO(2023)는 &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo;</strong>고 발표했습니다.
+            &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: '#EA580C' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>한국 보건복지부 저위험 음주 권고 기준</p>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>음주 참고 기준 (기준일 2025-06)</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               {[
-                { label: '남성', value: '주 14표준잔 이하', sub: '1일 4잔(32g) 이하' },
-                { label: '여성', value: '주 7표준잔 이하',  sub: '1일 2잔(16g) 이하' },
+                { label: '남성', value: '1일 4잔 이하', sub: '주 14잔 이하 · 8g 환산 ≈ 1일 32g' },
+                { label: '여성', value: '1일 2잔 이하', sub: '주 7잔 이하 · 8g 환산 ≈ 1일 16g' },
               ].map((item, i) => (
                 <div key={i} style={{ textAlign: 'center' }}>
                   <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{item.label}</p>
@@ -308,6 +308,9 @@ export default function AlcoholPage() {
                 </div>
               ))}
             </div>
+            <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '12px' }}>
+              출처: 보건복지부 절주문화 확산 지침 · 서울대 국민건강지식센터(적정음주 남 4잔·여 2잔) · 국가건강정보포털 · WHO 알코올 팩트시트. <strong style={{ color: 'var(--text)' }}>&lsquo;기준 이내&rsquo;가 안전을 뜻하지는 않습니다.</strong>
+            </p>
           </div>
         </section>
 
@@ -337,20 +340,19 @@ export default function AlcoholPage() {
             본 계산기는 <strong style={{ color: 'var(--text)' }}>음주를 권장하지 않으며</strong>, 본인 음주량 인지·관리 보조 도구입니다. 계산 결과는 체내 알코올 분해 속도나 취기 정도를 보장하지 않습니다.
           </p>
           <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>임산부·수유 중·미성년자는 절대 음주 금지 (법적 금지)</li>
+            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>미성년자(만 19세 미만)는 주류 판매·제공이 법으로 금지됩니다 (청소년보호법)</li>
+            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>임신·수유 중에는 태아알코올스펙트럼장애(FASD) 위험으로 금주가 강력히 권고됩니다 (의학적 권고)</li>
             <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>약물 복용 중 음주는 의사 상담 필수 (수면제·항우울제·진통제 위험)</li>
             <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>음주 후 운전 절대 금지 (다음날 아침 운전도 BAC 잔류 가능)</li>
             <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo; — 가능한 적게</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>주 21표준잔(남) / 14표준잔(여) 이상은 위험 음주(WHO 기준)</li>
+            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>1회 7잔(남) / 5잔(여) 이상을 주 2회 이상 마시면 &lsquo;고위험 음주&rsquo;(국내 기준) — 절주·휴식 필요</li>
           </ul>
           <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>📞 도움이 필요하면</p>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>📞 도움이 필요하면 (공식 상담)</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '6px' }}>
               {[
-                { label: '한국알코올중독상담센터', tel: '1899-0975' },
-                { label: '정신건강 위기상담',     tel: '1577-0199' },
-                { label: '카카오 T 대리',          tel: '1577-1577' },
-                { label: '티맵 대리',             tel: '1644-3030' },
+                { label: '보건복지상담센터 (중독·정신건강, 24h)', tel: '129' },
+                { label: '정신건강 위기상담 (24h)',            tel: '1577-0199' },
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
                   <span style={{ color: 'var(--muted)' }}>{c.label}</span>
@@ -358,6 +360,10 @@ export default function AlcoholPage() {
                 </div>
               ))}
             </div>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+              알코올 사용 문제는 가까운 <strong style={{ color: 'var(--text)' }}>중독관리통합지원센터</strong>(전국 약 50개소, 보건복지상담센터 129로 위치 안내)에서도 상담받을 수 있습니다.
+              음주 후 운전은 절대 금지 — <strong style={{ color: 'var(--text)' }}>대리운전 앱(카카오 T·티맵 등)·택시·대중교통</strong>을 이용하세요.
+            </p>
           </div>
         </section>
 
@@ -366,7 +372,7 @@ export default function AlcoholPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC 추정·운전 가능 시각' },
+              { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC 참고 추정 (운전 판단 불가)' },
               { href: '/tools/life/dutch',           icon: '🍻', name: '더치페이 계산기',         desc: '술자리 비용 N빵' },
               { href: '/tools/health/bmr',           icon: '🔥', name: 'BMR 계산기',              desc: '알코올 칼로리 vs 일일 권장' },
               { href: '/tools/health/supplement',    icon: '💊', name: '영양제 성분 체크',         desc: '약물 + 알코올 주의' },

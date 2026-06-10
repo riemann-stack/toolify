@@ -16,6 +16,9 @@ type Tab = 'calc' | 'manner' | 'service' | 'scenario'
 
 const STORAGE_KEY = 'youtil_traveltip_v1'
 
+/* 한국인이 자주 가는 주요 국가 — 기본 노출(나머지는 "더보기"로 접어 모바일 높이 절약) */
+const POPULAR_IDS = ['us', 'jp', 'th', 'vn', 'ph', 'fr', 'it', 'sg']
+
 export default function TravelTipClient() {
   const [tab, setTab] = useState<Tab>('calc')
 
@@ -25,13 +28,12 @@ export default function TravelTipClient() {
   const [amount, setAmount] = useState('80')
   const [satisfaction, setSatisfaction] = useState<Satisfaction>('good')
   const [people, setPeople] = useState('2')
-  const [taxIncluded, setTaxIncluded] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('card')
   const [krwRate, setKrwRate] = useState('')
 
   /* 탭 2 / 3 검색 */
   const [search, setSearch] = useState('')
   const [activeService, setActiveService] = useState<ServiceId>('restaurant')
+  const [showAllCountries, setShowAllCountries] = useState(false)
 
   /* 탭 4 */
   const [scenarioId, setScenarioId] = useState('us_honey')
@@ -59,9 +61,11 @@ export default function TravelTipClient() {
   /* 계산 */
   const country = getCountry(countryId)
   const service = getService(serviceId)
-  const amountN = parseFloat(amount) || 0
-  const peopleN = parseInt(people) || 1
-  const rateN = parseFloat(krwRate) || country.defaultRate
+  // 음수·이상값 방어: 금액은 0 이상, 인원은 1 이상, 환율은 0 이하면 기본 환율로 폴백
+  const amountN = Math.max(0, parseFloat(amount) || 0)
+  const peopleN = Math.max(1, parseInt(people) || 1)
+  const rawRate = parseFloat(krwRate)
+  const rateN = rawRate > 0 ? rawRate : country.defaultRate
   const rateBase = country.defaultRateBase ?? 1
   const result = useMemo(
     () => calcTip(country, serviceId, amountN, satisfaction, peopleN, rateN, rateBase),
@@ -75,6 +79,13 @@ export default function TravelTipClient() {
     const q = search.toLowerCase()
     return COUNTRIES.filter((c) => c.name.toLowerCase().includes(q) || c.shortName.toLowerCase().includes(q))
   }, [search])
+
+  /* 계산 탭 국가 그리드 — 검색 중이면 전체, 아니면 주요국(+선택국)만, 더보기 시 전체 */
+  const displayCountries = useMemo(() => {
+    if (search) return filteredCountries
+    if (showAllCountries) return COUNTRIES
+    return COUNTRIES.filter((c) => POPULAR_IDS.includes(c.id) || c.id === countryId)
+  }, [search, showAllCountries, filteredCountries, countryId])
 
   const scenario = SCENARIOS.find((s) => s.id === scenarioId)!
   const scenarioTotal = useMemo(() => calcScenarioTotal(scenario, satisfaction), [scenario, satisfaction])
@@ -94,7 +105,7 @@ export default function TravelTipClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="팁 계산기 모드">
         {([
           { id: 'calc',     label: '💵 팁 계산' },
           { id: 'manner',   label: '🌍 국가별 매너' },
@@ -103,6 +114,8 @@ export default function TravelTipClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -117,19 +130,21 @@ export default function TravelTipClient() {
         <>
           {/* 국가 선택 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>국가 (18+)</span>
+            <span className={s.cardLabel}>국가 ({COUNTRIES.length}개국)</span>
             <input
               type="text"
               className={s.input}
+              aria-label="국가 검색"
               placeholder="🔍 국가 검색 (예: 미국, 일본, 태국)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ marginBottom: 10 }}
             />
-            <div className={s.countryGrid}>
-              {filteredCountries.map((c) => (
+            <div className={s.countryGrid} role="group" aria-label="국가 선택">
+              {displayCountries.map((c) => (
                 <button
                   key={c.id}
+                  aria-pressed={countryId === c.id}
                   className={`${s.countryBtn} ${countryId === c.id ? s.countryBtnActive : ''}`}
                   onClick={() => setCountryId(c.id)}
                   type="button"
@@ -143,6 +158,17 @@ export default function TravelTipClient() {
                 </button>
               ))}
             </div>
+            {!search && (
+              <button
+                type="button"
+                className={s.pill}
+                style={{ marginTop: 10 }}
+                aria-expanded={showAllCountries}
+                onClick={() => setShowAllCountries((v) => !v)}
+              >
+                {showAllCountries ? '▲ 주요 국가만 보기' : `▼ 전체 ${COUNTRIES.length}개국 보기`}
+              </button>
+            )}
           </div>
 
           {/* 서비스 + 만족도 */}
@@ -150,25 +176,32 @@ export default function TravelTipClient() {
             <span className={s.cardLabel}>서비스 · 만족도</span>
             <div className={s.field}>
               <label className={s.fieldLabel}>서비스</label>
-              <div className={s.pillRow}>
-                {SERVICES.map((sv) => (
-                  <button
-                    key={sv.id}
-                    className={`${s.pill} ${serviceId === sv.id ? s.pillActive : ''}`}
-                    onClick={() => setServiceId(sv.id)}
-                    type="button"
-                  >
-                    {sv.emoji} {sv.shortLabel}
-                  </button>
-                ))}
+              <div className={s.pillRow} role="group" aria-label="서비스 종류">
+                {SERVICES.map((sv) => {
+                  const noData = !country.rates[sv.id]
+                  return (
+                    <button
+                      key={sv.id}
+                      aria-pressed={serviceId === sv.id}
+                      disabled={noData}
+                      title={noData ? `${country.shortName} ${sv.label} 데이터 없음` : undefined}
+                      className={`${s.pill} ${serviceId === sv.id ? s.pillActive : ''}`}
+                      onClick={() => setServiceId(sv.id)}
+                      type="button"
+                    >
+                      {sv.emoji} {sv.shortLabel}
+                    </button>
+                  )
+                })}
               </div>
             </div>
             <div className={s.field}>
               <label className={s.fieldLabel}>만족도</label>
-              <div className={s.pillRow}>
+              <div className={s.pillRow} role="group" aria-label="서비스 만족도">
                 {SATISFACTIONS.map((sat) => (
                   <button
                     key={sat.id}
+                    aria-pressed={satisfaction === sat.id}
                     className={`${s.pill} ${satisfaction === sat.id ? s.pillActive : ''}`}
                     onClick={() => setSatisfaction(sat.id)}
                     type="button"
@@ -185,50 +218,36 @@ export default function TravelTipClient() {
             <span className={s.cardLabel}>금액 · 인원 · 환율</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>결제 금액 ({country.currencyUnit} {country.currency})</label>
-                <input type="number" className={s.input} value={amount} onChange={(e) => setAmount(e.target.value)} min={0} step={1} />
+                <label className={s.fieldLabel} htmlFor="tt-amount">결제 금액 ({country.currencyUnit} {country.currency})</label>
+                <input id="tt-amount" type="number" className={s.input} aria-label={`결제 금액 (${country.currency})`} value={amount} onChange={(e) => setAmount(e.target.value)} min={0} step={1} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>인원 수</label>
-                <input type="number" className={s.input} value={people} onChange={(e) => setPeople(e.target.value)} min={1} max={20} step={1} />
-                <div className={s.pillRow} style={{ marginTop: 8 }}>
+                <label className={s.fieldLabel} htmlFor="tt-people">인원 수</label>
+                <input id="tt-people" type="number" className={s.input} aria-label="인원 수" value={people} onChange={(e) => setPeople(e.target.value)} min={1} max={20} step={1} />
+                <div className={s.pillRow} style={{ marginTop: 8 }} role="group" aria-label="인원 빠른 선택">
                   {[1, 2, 4, 6, 8].map((p) => (
-                    <button key={p} className={`${s.pill} ${peopleN === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
+                    <button key={p} aria-pressed={peopleN === p} className={`${s.pill} ${peopleN === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
                       {p}명
                     </button>
                   ))}
                 </div>
               </div>
             </div>
-            <div className={s.row2}>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>환율 (1 {country.currency} = ? 원, 기본 {country.defaultRate})</label>
-                <input
-                  type="number"
-                  className={s.input}
-                  value={krwRate}
-                  onChange={(e) => setKrwRate(e.target.value)}
-                  placeholder={String(country.defaultRate)}
-                  step={1}
-                />
-                {country.defaultRateBase && country.defaultRateBase > 1 && (
-                  <p className={s.helpText}>※ {country.defaultRateBase}{country.currencyUnit} = {country.defaultRate}원 기준</p>
-                )}
-              </div>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>옵션</label>
-                <div className={s.pillRow}>
-                  <button className={`${s.pill} ${taxIncluded ? s.pillActive : ''}`} onClick={() => setTaxIncluded(!taxIncluded)} type="button">
-                    {taxIncluded ? '✅' : '⬜'} 세금 포함
-                  </button>
-                  <button className={`${s.pill} ${paymentMethod === 'card' ? s.pillActive : ''}`} onClick={() => setPaymentMethod('card')} type="button">
-                    💳 카드
-                  </button>
-                  <button className={`${s.pill} ${paymentMethod === 'cash' ? s.pillActive : ''}`} onClick={() => setPaymentMethod('cash')} type="button">
-                    💵 현금
-                  </button>
-                </div>
-              </div>
+            <div className={s.field}>
+              <label className={s.fieldLabel} htmlFor="tt-rate">환율 (1 {country.currency} = ? 원, 기본 {country.defaultRate})</label>
+              <input
+                id="tt-rate"
+                type="number"
+                className={s.input}
+                aria-label={`환율 1 ${country.currency} 당 원화`}
+                value={krwRate}
+                onChange={(e) => setKrwRate(e.target.value)}
+                placeholder={String(country.defaultRate)}
+                step={1}
+              />
+              {country.defaultRateBase && country.defaultRateBase > 1 && (
+                <p className={s.helpText}>※ {country.defaultRateBase}{country.currencyUnit} = {country.defaultRate}원 기준</p>
+              )}
             </div>
           </div>
 
@@ -244,19 +263,32 @@ export default function TravelTipClient() {
             </div>
           )}
 
-          {/* 단체 자동 팁 안내 */}
+          {/* 단체 자동 팁 안내 (강제 적용이 아니라 업장 정책 안내) */}
           {result.groupAutoApplied && (
             <div className={s.warnCardStrong}>
-              <strong>👥 단체 자동 팁 적용</strong>
+              <strong>👥 단체 자동 팁(서비스 차지) 안내</strong>
               <p>
-                {country.shortName}은 <strong>{country.groupAuto?.size}명 이상 단체 식당 이용 시 자동 {country.groupAuto?.pct}% 팁</strong>이 적용됩니다.
-                영수증에 &quot;Auto Gratuity&quot; 항목을 확인하세요.
+                {country.shortName}은 <strong>{country.groupAuto?.size}명 이상 단체</strong>일 때 업장 정책에 따라
+                <strong> 자동 {country.groupAuto?.pct}% 팁(Auto Gratuity)이 청구될 수 있습니다</strong>.
+                영수증의 &quot;Gratuity·Service Charge&quot; 항목을 확인하고, 이미 포함됐다면 팁을 두 번 내지 마세요.
+                (위 계산은 선택한 만족도 기준 금액입니다.)
               </p>
             </div>
           )}
 
+          {/* 결과 — 해당 국가·서비스 데이터가 없으면 0원 대신 안내 */}
+          {!country.rates[serviceId] ? (
+            <div className={s.warnCard}>
+              <strong>ℹ️ 데이터 없음</strong>
+              <p>
+                {country.flag} {country.shortName}에는 {service.emoji} {service.label} 팁 기준이 없습니다
+                (이 조합은 팁 관행이 드물거나 정립되지 않음). 위에서 다른 서비스를 선택하세요.
+              </p>
+            </div>
+          ) : (
+          <>
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} aria-live="polite">
             <p className={s.heroLabel}>
               {country.flag} {country.shortName} · {service.emoji} {service.shortLabel}
             </p>
@@ -270,6 +302,13 @@ export default function TravelTipClient() {
               <br />원화 환산 팁 <strong style={{ color: 'var(--accent)' }}>{fmtKrw(result.tipKrw)}</strong>
               {' · '}총액 <strong style={{ color: 'var(--accent)' }}>{fmtKrw(result.totalKrw)}</strong>
             </p>
+            {result.isFlat && result.flatAmount !== undefined && (
+              <p className={s.heroSub} style={{ marginTop: 8, fontSize: 12 }}>
+                {result.flatPerPerson
+                  ? `※ 정액 ${fmtCurrency(result.flatAmount, country.currencyUnit, result.flatAmount > 100 ? 0 : 2)} × ${peopleN}명(1일 기준)으로 합산했습니다. 여행 일수만큼 추가로 곱하세요.`
+                  : `※ 정액 ${fmtCurrency(result.flatAmount, country.currencyUnit, result.flatAmount > 100 ? 0 : 2)}는 짐·객실·라운드 1개 기준입니다. 짐 개수·숙박 일수만큼 곱해 주세요.`}
+              </p>
+            )}
           </div>
 
           {/* 만족도별 비교 (% 모드만) */}
@@ -280,8 +319,13 @@ export default function TravelTipClient() {
                 {allSat.map((a) => (
                   <div
                     key={a.sat.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={satisfaction === a.sat.id}
+                    aria-label={`만족도 ${a.sat.label} — 팁 ${a.result.pct ?? 0}%`}
                     className={`${s.satCard} ${satisfaction === a.sat.id ? s.satCardActive : ''}`}
                     onClick={() => setSatisfaction(a.sat.id)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSatisfaction(a.sat.id) } }}
                     style={{ cursor: 'pointer' }}
                   >
                     <p className={s.satLabel}>{a.sat.emoji} {a.sat.label}</p>
@@ -315,6 +359,8 @@ export default function TravelTipClient() {
               💡 <strong>{country.shortName} 매너</strong> — {country.manner}
             </div>
           </div>
+          </>
+          )}
         </>
       )}
 
@@ -326,6 +372,7 @@ export default function TravelTipClient() {
             <input
               type="text"
               className={s.input}
+              aria-label="국가 검색"
               placeholder="🔍 국가 검색"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -374,10 +421,11 @@ export default function TravelTipClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>서비스 종류 (9가지)</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="서비스 종류 선택">
               {SERVICES.map((sv) => (
                 <button
                   key={sv.id}
+                  aria-pressed={activeService === sv.id}
                   className={`${s.pill} ${activeService === sv.id ? s.pillActive : ''}`}
                   onClick={() => setActiveService(sv.id)}
                   type="button"
@@ -444,10 +492,11 @@ export default function TravelTipClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>한국인 자주 가는 6 시나리오</span>
-            <div className={s.scenarioGrid}>
+            <div className={s.scenarioGrid} role="group" aria-label="여행 시나리오 선택">
               {SCENARIOS.map((sc) => (
                 <button
                   key={sc.id}
+                  aria-pressed={scenarioId === sc.id}
                   className={`${s.scenarioBtn} ${scenarioId === sc.id ? s.scenarioBtnActive : ''}`}
                   onClick={() => setScenarioId(sc.id)}
                   type="button"
@@ -460,7 +509,7 @@ export default function TravelTipClient() {
             </div>
           </div>
 
-          <div className={s.hero}>
+          <div className={s.hero} aria-live="polite">
             <p className={s.heroLabel}>{scenario.emoji} {scenario.title}</p>
             <p className={s.heroValue}>
               팁 합계 <strong>{fmtKrw(scenarioTotal.tipKrw)}</strong>
@@ -476,10 +525,11 @@ export default function TravelTipClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>만족도</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="만족도">
               {SATISFACTIONS.map((sat) => (
                 <button
                   key={sat.id}
+                  aria-pressed={satisfaction === sat.id}
                   className={`${s.pill} ${satisfaction === sat.id ? s.pillActive : ''}`}
                   onClick={() => setSatisfaction(sat.id)}
                   type="button"
@@ -503,7 +553,14 @@ export default function TravelTipClient() {
                   </tr>
                 </thead>
                 <tbody>
-                  {scenario.items.map((it, i) => {
+                  {scenario.items.length === 0 && scenario.autoTipUsdPpPerDay ? (
+                    <tr>
+                      <td>🚢 자동 gratuity</td>
+                      <td>🇺🇸 (USD)</td>
+                      <td className={s.cellMono}>{scenario.days}박 · {scenario.defaultPeople}인</td>
+                      <td className={s.cellMono}>${scenario.autoTipUsdPpPerDay}/일/인</td>
+                    </tr>
+                  ) : scenario.items.map((it, i) => {
                     const c = getCountry(it.countryId)
                     const sv = getService(it.service)
                     return (

@@ -7,7 +7,7 @@ import {
   Gender, Severity, PlateauMode,
   SAFE_SPEEDS, EXERCISES, PROTEIN_TARGETS,
   calcWeightLossPlan, calcDeficitForTargetDate, calcAlternatives,
-  splitDietExercise, exerciseTimeFor, calcMacros, calcMealSplit,
+  splitDietExercise, exerciseTimeFor, calcMacros,
   bmiCategoryName, todayISO, formatDateKo, addDays,
 } from './weightLossUtils'
 
@@ -95,7 +95,7 @@ export default function WeightLossClient() {
   const currentBMICat = bmiCategoryName(plan?.currentBMI ?? 0)
   const targetBMICat  = bmiCategoryName(plan?.targetBMI ?? 0)
 
-  /* 탭 2: 목표일 역산 */
+  /* 목표일 역산 (탭 3) */
   const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -114,7 +114,7 @@ export default function WeightLossClient() {
     return calcAlternatives(cw - tw, cw, td, Math.ceil(targetDateResult.totalWeeks))
   }, [targetDateResult, cw, tw, td])
 
-  /* 탭 3: 식단/운동 */
+  /* 식단/운동 분리 (탭 2) */
   const [dietPortionPct, setDietPortionPct] = useState(60)
   const [exerciseFreq, setExerciseFreq] = useState(4)
   const [selectedExerciseId, setSelectedExerciseId] = useState('jogging')
@@ -125,7 +125,7 @@ export default function WeightLossClient() {
   }, [plan, dietPortionPct, exerciseFreq])
 
 
-  /* 탭 5: 매크로 */
+  /* 매크로 (탄단지) — 탭 1 결과에 표시 */
   const [proteinId, setProteinId] = useState('active')
   const proteinTarget = PROTEIN_TARGETS.find(p => p.id === proteinId) ?? PROTEIN_TARGETS[1]
   const [fatRatio, setFatRatio] = useState(25)
@@ -134,11 +134,6 @@ export default function WeightLossClient() {
     if (!plan) return null
     return calcMacros(plan.targetDailyCalories, cw, proteinTarget.gPerKg, fatRatio / 100)
   }, [plan, cw, proteinTarget, fatRatio])
-
-  const mealSplit = useMemo(() => {
-    if (!macros || !plan) return []
-    return calcMealSplit(macros, plan.targetDailyCalories)
-  }, [macros, plan])
 
   /* 복사 */
   const [copied, setCopied] = useState(false)
@@ -152,6 +147,9 @@ export default function WeightLossClient() {
 
   /* 청소년 경고 */
   const teenWarn = a > 0 && a < 18
+
+  /* 계산 불가 — 적자가 TDEE를 초과해 목표 섭취 칼로리가 0 이하(매크로 음수 방지) */
+  const impossible = !!plan && plan.targetDailyCalories <= 0
 
   /* SVG 그래프 좌표 계산 */
   const chartData = useMemo(() => {
@@ -207,9 +205,9 @@ export default function WeightLossClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="감량 계산 방식">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -257,10 +255,12 @@ export default function WeightLossClient() {
       <div className={styles.fieldRow3}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>성별</label>
-          <div className={styles.toggleRow}>
-            <button className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
+          <div className={styles.toggleRow} role="group" aria-label="성별">
+            <button type="button" aria-label="남성" aria-pressed={gender === 'male'}
+              className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
               onClick={() => setGender('male')}>♂</button>
-            <button className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
+            <button type="button" aria-label="여성" aria-pressed={gender === 'female'}
+              className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
               onClick={() => setGender('female')}>♀</button>
           </div>
         </div>
@@ -268,7 +268,7 @@ export default function WeightLossClient() {
           <label className={styles.cardLabel}>
             <span>TDEE</span>
             <a href="/tools/health/bmr" style={{ fontSize: 10.5, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400, display: 'block', marginTop: 2 }}>
-              BMR 계산기에서 가져오기 →
+              BMR 계산기로 계산하기 →
             </a>
           </label>
           <div className={styles.inputRow}>
@@ -287,7 +287,7 @@ export default function WeightLossClient() {
       {teenWarn && (
         <div className={styles.criticalBox}>
           🔴 <strong>18세 미만</strong> 청소년에게 본 도구는 부적합합니다 — 성장기에는 체중 감량보다 균형 잡힌 영양 섭취가 우선입니다.
-          소아청소년과 전문의 상담을 권장합니다.
+          <strong> 감량 계획·목표 칼로리·그래프는 표시하지 않습니다.</strong> 식단·체중 목표는 소아청소년과 전문의와 상담하세요.
         </div>
       )}
 
@@ -298,14 +298,25 @@ export default function WeightLossClient() {
         </div>
       )}
 
+      {/* 계산 불가 안내 (목표 섭취 ≤ 0) — plan·split 탭 공통 */}
+      {plan && !teenWarn && impossible && tab !== 'date' && (
+        <div className={styles.criticalBox}>
+          🔴 <strong>계산 불가</strong> — 선택한 감량 속도의 하루 적자({fmt(plan.dailyDeficit)}kcal)가 TDEE({fmt(td)}kcal)를 초과해 <strong>목표 섭취 칼로리가 0 이하</strong>가 됩니다. 물리적으로 불가능한 계획이므로, 더 느린 감량 속도를 선택하거나 TDEE를 확인하세요.
+          <button type="button" className={styles.copyBtn} style={{ marginTop: 10 }}
+            onClick={() => setSpeedId('slow')}>
+            ✨ 안정 감량(0.5%/주)으로 변경
+          </button>
+        </div>
+      )}
+
       {/* ──────── 탭 1: 감량 계획 ──────── */}
-      {tab === 'plan' && plan && (
+      {tab === 'plan' && plan && !teenWarn && !impossible && (
         <>
           <div className={styles.card}>
             <label className={styles.cardLabel}>감량 속도 선택</label>
             <div className={styles.speedList}>
               {SAFE_SPEEDS.map(s => (
-                <button key={s.id}
+                <button key={s.id} type="button" aria-pressed={speedId === s.id}
                   className={`${styles.speedCard} ${speedId === s.id ? styles.speedCardActive : ''}`}
                   style={{ borderLeftColor: s.color }}
                   onClick={() => setSpeedId(s.id)}>
@@ -375,7 +386,7 @@ export default function WeightLossClient() {
                 💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
               </p>
               {(plan.safety.severity === 'danger' || plan.safety.severity === 'warning') && (
-                <button className={styles.copyBtn} style={{ marginTop: 8 }}
+                <button type="button" className={styles.copyBtn} style={{ marginTop: 8 }}
                   onClick={() => setSpeedId('slow')}>
                   ✨ 안정 감량(0.5%/주)으로 변경
                 </button>
@@ -405,7 +416,6 @@ export default function WeightLossClient() {
             // x축 보조선: 4등분
             const xTicks = [0, 1, 2, 3, 4].map((i) => Math.round((chartData.maxX * i) / 4))
             const innerW = chartData.W - chartData.pad.l - chartData.pad.r
-            const innerH = chartData.H - chartData.pad.t - chartData.pad.b
             // 정상 BMI 경계 체중 (라벨용)
             const normalMaxKg = 22.9 * chartData.hM * chartData.hM
             const normalMinKg = 18.5 * chartData.hM * chartData.hM
@@ -508,7 +518,29 @@ export default function WeightLossClient() {
           {macros && (
             <div className={styles.card}>
               <label className={styles.cardLabel}>🥗 탄단지(매크로) 분배 — {fmt(plan.targetDailyCalories)}kcal/일 기준</label>
-              <div className={styles.macroBar} style={{ marginBottom: 10 }}>
+
+              {/* 단백질 목표 선택 */}
+              <div className={styles.optionRow4} role="group" aria-label="단백질 목표">
+                {PROTEIN_TARGETS.map(p => (
+                  <button key={p.id} type="button" aria-pressed={proteinId === p.id}
+                    className={`${styles.optionBtn} ${proteinId === p.id ? styles.optionActive : ''}`}
+                    onClick={() => setProteinId(p.id)} title={p.desc}>
+                    {p.name}
+                    <br />
+                    <small style={{ fontSize: 10, opacity: 0.7 }}>{p.gPerKg}g/kg{p.recommended ? ' ★' : ''}</small>
+                  </button>
+                ))}
+              </div>
+              {/* 지방 비율 슬라이더 */}
+              <label className={styles.cardLabel} style={{ marginTop: 10 }}>지방 비율 — {fatRatio}%</label>
+              <div className={styles.sliderRow}>
+                <input className={styles.slider} type="range" min="15" max="40" step="5"
+                  aria-label="지방 비율" aria-valuetext={`${fatRatio}%`}
+                  value={fatRatio} onChange={e => setFatRatio(parseInt(e.target.value, 10))} />
+                <span className={styles.sliderVal}>{fatRatio}%</span>
+              </div>
+
+              <div className={styles.macroBar} style={{ marginBottom: 10, marginTop: 10 }}>
                 <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
                   단 {macros.protein.percent}%
                 </div>
@@ -549,17 +581,17 @@ export default function WeightLossClient() {
           )}
 
           <div className={styles.resultActions}>
-            <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+            <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`${cw}kg → ${tw}kg (${fmt1(plan.totalLossKg)}kg) / ${plan.weeksRequired}주 / 하루 적자 ${fmt(plan.dailyDeficit)}kcal / 목표 섭취 ${fmt(plan.targetDailyCalories)}kcal·일 / 종료일 ${plan.endDate}`)}>
               {copied ? '✓ 복사됨' : '📋 복사'}
             </button>
-            <button className={styles.copyBtn} onClick={() => setTab('split')}>🍽️ 식단+운동 분리 보기</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('split')}>🍽️ 식단+운동 분리 보기</button>
           </div>
         </>
       )}
 
-      {/* ──────── 탭 2: 목표일 역산 ──────── */}
-      {tab === 'date' && inputValid && (
+      {/* ──────── 탭 3: 목표일 역산 ──────── */}
+      {tab === 'date' && inputValid && !teenWarn && (
         <>
           <div className={styles.disclaimer}>
             <strong>목표일 역산</strong> — &lsquo;8주 안에 4kg 빼려면 하루 얼마나 적자가 필요할까?&rsquo; — 목표 날짜를 입력하면 필요 적자와 안전도를 자동 검증합니다.
@@ -571,7 +603,7 @@ export default function WeightLossClient() {
               value={targetDate} onChange={e => setTargetDate(e.target.value)} />
             <div className={styles.optionRow4} style={{ marginTop: 8 }}>
               {[28, 56, 84, 112].map(days => (
-                <button key={days}
+                <button key={days} type="button"
                   className={styles.optionBtn}
                   onClick={() => setTargetDate(addDays(startDate, days))}>
                   +{days / 7}주
@@ -613,12 +645,14 @@ export default function WeightLossClient() {
                 </div>
               </div>
 
-              {targetDateResult.feasibility === 'dangerous' && (
-                <div className={styles.criticalBox}>
-                  <strong>🔴 위험 — 이 목표는 권장 한도를 초과합니다</strong>
-                  <p style={{ marginTop: 6, fontSize: 12.5, color: 'var(--muted)' }}>
-                    주당 {targetDateResult.weeklyLossPercent}% 감량은 권장 한도(1%)를 초과합니다.
-                    근손실·요요·영양 부족·호르몬 이상 위험이 매우 높습니다. 아래 안전 대안을 권장합니다.
+              {targetDateResult.warnings.length > 0 && (
+                <div className={targetDateResult.feasibility === 'dangerous' ? styles.criticalBox : styles.warnBox}>
+                  <strong>{targetDateResult.feasibility === 'dangerous' ? '🔴 위험 — 권장 한도 초과' : '⚠️ 안전 경고'}</strong>
+                  <ul style={{ paddingLeft: 18, marginTop: 6, marginBottom: 0 }}>
+                    {targetDateResult.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
+                  </ul>
+                  <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간) · 아래 안전 대안을 권장합니다.
                   </p>
                 </div>
               )}
@@ -633,9 +667,12 @@ export default function WeightLossClient() {
                                   alt.feasibility === 'aggressive' ? '#EA580C' : '#DC2626'
                     return (
                       <div key={i}
+                        role="button" tabIndex={0}
+                        aria-label={`${alt.weeks}주 계획으로 변경 — 주 ${alt.weeklyLossPercent}%`}
                         className={styles.altRow}
                         style={{ borderLeftColor: color }}
-                        onClick={() => setTargetDate(addDays(startDate, alt.weeks * 7))}>
+                        onClick={() => setTargetDate(addDays(startDate, alt.weeks * 7))}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTargetDate(addDays(startDate, alt.weeks * 7)) } }}>
                         <div className={styles.altWeeks}>
                           {alt.weeks}주
                           <small>약 {(alt.weeks / 4.33).toFixed(1)}개월</small>
@@ -662,8 +699,8 @@ export default function WeightLossClient() {
         </>
       )}
 
-      {/* ──────── 탭 3: 식단·운동 분리 ──────── */}
-      {tab === 'split' && plan && split && (
+      {/* ──────── 탭 2: 식단·운동 분리 ──────── */}
+      {tab === 'split' && plan && split && !teenWarn && !impossible && (
         <>
           <div className={styles.disclaimer}>
             <strong>식단 vs 운동</strong> — 칼로리 적자를 어디서 만들지 분배합니다. 추천 분배는 식단 60% + 운동 40% (근손실 방지·지속 가능).
@@ -674,6 +711,7 @@ export default function WeightLossClient() {
             <div className={styles.sliderRow}>
               <input className={styles.slider} type="range"
                 min="0" max="100" step="10"
+                aria-label="식단 비율" aria-valuetext={`식단 ${dietPortionPct}% / 운동 ${100 - dietPortionPct}%`}
                 value={dietPortionPct} onChange={e => setDietPortionPct(parseInt(e.target.value, 10))} />
               <span className={styles.sliderVal}>{dietPortionPct}%</span>
             </div>
@@ -684,7 +722,7 @@ export default function WeightLossClient() {
                 { v: 50,  label: '균등 50%' },
                 { v: 0,   label: '운동 100%' },
               ].map(o => (
-                <button key={o.v}
+                <button key={o.v} type="button" aria-pressed={dietPortionPct === o.v}
                   className={`${styles.optionBtn} ${dietPortionPct === o.v ? styles.optionActive : ''}`}
                   onClick={() => setDietPortionPct(o.v)}>
                   {o.label}
@@ -698,6 +736,7 @@ export default function WeightLossClient() {
             <div className={styles.sliderRow}>
               <input className={styles.slider} type="range"
                 min="0" max="7" step="1"
+                aria-label="주간 운동 횟수" aria-valuetext={`주 ${exerciseFreq}회`}
                 value={exerciseFreq} onChange={e => setExerciseFreq(parseInt(e.target.value, 10))} />
               <span className={styles.sliderVal}>{exerciseFreq}회</span>
             </div>
@@ -730,9 +769,13 @@ export default function WeightLossClient() {
                   .sort((a, b) => a.time.minutes - b.time.minutes)
                   .map(e => (
                     <div key={e.id}
+                      role="button" tabIndex={0}
+                      aria-pressed={selectedExerciseId === e.id}
+                      aria-label={`${e.name} — 약 ${e.time.minutes}분`}
                       className={styles.exerciseRow}
                       style={selectedExerciseId === e.id ? { borderColor: 'var(--accent)', background: 'var(--accent-dim)' } : {}}
-                      onClick={() => setSelectedExerciseId(e.id)}>
+                      onClick={() => setSelectedExerciseId(e.id)}
+                      onKeyDown={ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); setSelectedExerciseId(e.id) } }}>
                       <span className={styles.exerciseIcon}>{e.icon}</span>
                       <span className={styles.exerciseName}>{e.name}</span>
                       <span className={styles.exerciseMet}>{e.met}</span>

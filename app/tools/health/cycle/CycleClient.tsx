@@ -214,11 +214,11 @@ export default function CycleClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>🌙 주기 캘린더</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>💆 컨디션 가이드</button>
-        <button className={`${s.tab} ${tab === 'fertility' ? s.tabActive : ''}`} onClick={() => setTab('fertility')}>👶 가임기 참고</button>
-        <button className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>📋 내 기록</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="생리주기 도구 탭">
+        <button type="button" role="tab" aria-selected={tab === 'calendar'} className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>🌙 주기 캘린더</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>💆 컨디션 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'fertility'} className={`${s.tab} ${tab === 'fertility' ? s.tabActive : ''}`} onClick={() => setTab('fertility')}>👶 가임기 참고</button>
+        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>📋 내 기록</button>
       </div>
 
       {/* ══════════ TAB 1: 주기 캘린더 ══════════ */}
@@ -227,16 +227,17 @@ export default function CycleClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>① 마지막 생리 시작일</span>
             <input type="date" className={s.input}
-              max={isoDate(dateAdd(today, 1))}
+              aria-label="마지막 생리 시작일"
+              max={isoDate(today)}
               value={lastPeriodIso}
               onChange={(e) => setLastPeriodIso(e.target.value)} />
           </div>
 
           <div className={s.card}>
             <span className={s.cardLabel}>② 생리 기간 (일)</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="생리 기간 선택">
               {PERIOD_LEN_QUICK.map((d) => (
-                <button key={d} className={`${s.pill} ${periodLength === d ? s.pillActive : ''}`}
+                <button key={d} type="button" aria-pressed={periodLength === d} className={`${s.pill} ${periodLength === d ? s.pillActive : ''}`}
                   onClick={() => setPeriodLength(d)}>{d}일</button>
               ))}
             </div>
@@ -244,15 +245,16 @@ export default function CycleClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>③ 평균 주기 (일) — 생리 첫날 ~ 다음 생리 첫날</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="평균 주기 빠른 선택">
               {CYCLE_QUICK.map((d) => (
-                <button key={d} className={`${s.pill} ${avgCycle === d ? s.pillActive : ''}`}
+                <button key={d} type="button" aria-pressed={avgCycle === d} className={`${s.pill} ${avgCycle === d ? s.pillActive : ''}`}
                   onClick={() => setAvgCycle(d)}>{d}일</button>
               ))}
             </div>
             <div className={s.customRow}>
               <input type="number" inputMode="numeric" min={21} max={45}
                 className={s.miniInput}
+                aria-label="평균 주기 (일)"
                 value={avgCycle}
                 onChange={(e) => setAvgCycle(Math.max(21, Math.min(45, parseInt(e.target.value) || 28)))} />
               <span className={s.unitText}>일 (21~45)</span>
@@ -261,9 +263,9 @@ export default function CycleClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>④ 주기 규칙성 (선택)</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="주기 규칙성 선택">
               {(Object.keys(REGULARITY_LABEL) as Regularity[]).map((r) => (
-                <button key={r} className={`${s.pill} ${regularity === r ? s.pillActive : ''}`}
+                <button key={r} type="button" aria-pressed={regularity === r} className={`${s.pill} ${regularity === r ? s.pillActive : ''}`}
                   onClick={() => setRegularity(r)}>{REGULARITY_LABEL[r]}</button>
               ))}
             </div>
@@ -271,9 +273,9 @@ export default function CycleClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>⑤ PMS 강도 (선택)</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="PMS 강도 선택">
               {(Object.keys(PMS_LEVEL_LABEL) as PMSLevel[]).map((l) => (
-                <button key={l} className={`${s.pill} ${pmsLevel === l ? s.pillActive : ''}`}
+                <button key={l} type="button" aria-pressed={pmsLevel === l} className={`${s.pill} ${pmsLevel === l ? s.pillActive : ''}`}
                   onClick={() => setPmsLevel(l)}>{PMS_LEVEL_LABEL[l]}</button>
               ))}
             </div>
@@ -297,6 +299,14 @@ export default function CycleClient() {
                   </span>
                 </p>
               </div>
+
+              {/* 오래된 입력 안내 — 마지막 생리일이 한 주기 이상 지나 자동 보정된 경우 */}
+              {result.cyclesSinceLog >= 1 && (
+                <div className={s.warningCard}>
+                  <strong>📅 마지막 생리일이 오래되었어요</strong>
+                  <p>입력한 마지막 생리 시작일이 한 주기(<strong>{avgCycle}일</strong>) 이상 지났습니다. 아래 결과는 평균 주기로 <strong>자동 보정</strong>한 추정치예요. 최근에 생리를 다시 시작했다면 위 <strong>①번 날짜를 업데이트</strong>하면 더 정확합니다.</p>
+                </div>
+              )}
 
               {/* 원형 차트 */}
               <CircleChart input={cycleInput} result={result} />
@@ -385,7 +395,7 @@ export default function CycleClient() {
                 <div className={s.warningCard}>
                   <strong>⚠️ 많이 불규칙한 주기</strong>
                   <p>본 도구의 예측 정확도가 떨어질 수 있어요. 배란일·생리일은 특정 날짜가 아닌 <strong>범위</strong>로 보세요. 6개월+ 지속되는 불규칙은 <strong>산부인과 상담 권장</strong> (PCOS·갑상선 등 가능성 점검).</p>
-                  <p>📞 보건복지부 여성·아동 상담: <strong>1577-1366</strong></p>
+                  <p>📞 산부인과 전문의 상담 권장 · 보건복지상담센터 <strong>129</strong> (보건복지부)</p>
                 </div>
               )}
             </>
@@ -398,9 +408,11 @@ export default function CycleClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>💆 라이프스타일 (선택 — 가이드 강조)</span>
-            <div className={s.pillRow}>
+            <div className={s.pillRow} role="group" aria-label="라이프스타일 선택">
               {(Object.keys(LIFESTYLE_LABEL) as Lifestyle[]).map((l) => (
                 <button key={l}
+                  type="button"
+                  aria-pressed={lifestyle.includes(l)}
                   className={`${s.pill} ${lifestyle.includes(l) ? s.pillActive : ''}`}
                   onClick={() => setLifestyle((prev) =>
                     prev.includes(l) ? prev.filter((x) => x !== l) : [...prev, l],
@@ -495,19 +507,19 @@ export default function CycleClient() {
           <div className={s.dangerCard}>
             <strong>⚠️ 본 도구는 피임 방법이 아닙니다</strong>
             <p>
-              캘린더 기반 피임은 실패율이 매우 높습니다 (~24%). 피임·임신 계획은 반드시 산부인과 상담을 받으세요.
-              <br />📞 보건복지부 여성건강 상담: <strong>1577-1366</strong>
+              캘린더·주기 기반 피임은 방법과 실천에 따라 일반적인 사용에서 실패율 편차가 크고 높은 편입니다(미국 CDC 기준 대략 2~23%대). 피임·임신 계획은 반드시 산부인과 상담을 받으세요.
+              <br />📞 산부인과 전문의 상담 · 보건복지상담센터 <strong>129</strong> (보건복지부)
             </p>
           </div>
 
           <div className={s.card}>
             <span className={s.cardLabel}>임신 준비 중이신가요?</span>
-            <div className={s.pillRow}>
-              <button className={`${s.pill} ${trackingPregnancy === true ? s.pillActive : ''}`}
+            <div className={s.pillRow} role="group" aria-label="임신 준비 여부">
+              <button type="button" aria-pressed={trackingPregnancy === true} className={`${s.pill} ${trackingPregnancy === true ? s.pillActive : ''}`}
                 onClick={() => setTrackingPregnancy(true)}>예</button>
-              <button className={`${s.pill} ${trackingPregnancy === false ? s.pillActive : ''}`}
+              <button type="button" aria-pressed={trackingPregnancy === false} className={`${s.pill} ${trackingPregnancy === false ? s.pillActive : ''}`}
                 onClick={() => setTrackingPregnancy(false)}>아니오</button>
-              <button className={`${s.pill} ${trackingPregnancy === null ? s.pillActive : ''}`}
+              <button type="button" aria-pressed={trackingPregnancy === null} className={`${s.pill} ${trackingPregnancy === null ? s.pillActive : ''}`}
                 onClick={() => setTrackingPregnancy(null)}>알리지 않음</button>
             </div>
             <p className={s.noteSmall}>본 응답도 본인 브라우저에만 저장.</p>
@@ -541,6 +553,7 @@ export default function CycleClient() {
               <div className={s.card}>
                 <span className={s.cardLabel}>관계일 입력 (선택 — 가임기 거리 확인)</span>
                 <input type="date" className={s.input}
+                  aria-label="관계일"
                   max={isoDate(today)}
                   value={intimacyDateIso}
                   onChange={(e) => setIntimacyDateIso(e.target.value)} />
@@ -566,9 +579,9 @@ export default function CycleClient() {
                   임신 테스트기는 보통 <strong style={{ color: 'var(--accent)' }}>생리 예정일 이후가 더 정확</strong>합니다.
                   너무 이른 검사는 음성이 나와도 확정 X. 양성·음성 관계없이 정확한 진단은 산부인과 상담.
                 </p>
-                {result && result.daysToNextPeriod < -3 && (
+                {result && result.cyclesSinceLog >= 1 && (
                   <p className={s.intimacyHighlight}>
-                    💡 생리 예정일에서 {-result.daysToNextPeriod}일 늦어짐 — 임신 테스트 고려해볼 시점.
+                    💡 마지막으로 기록한 생리일 기준 예정일이 이미 지났어요 — 아직 새 생리가 없다면 임신 테스트를 고려해볼 시점입니다.
                   </p>
                 )}
               </div>
@@ -594,15 +607,17 @@ export default function CycleClient() {
 
             <div className={s.field}>
               <label className={s.fieldLabel}>오늘 컨디션</label>
-              <div className={s.pillRow}>
+              <div className={s.pillRow} role="group" aria-label="오늘 컨디션 선택">
                 {(['good', 'normal', 'bad'] as const).map((m) => (
                   <button key={m}
+                    type="button"
+                    aria-pressed={todayMood === m}
                     className={`${s.pill} ${todayMood === m ? s.pillActive : ''}`}
                     onClick={() => setTodayMood(m)}>
                     {m === 'good' ? '😊 좋음' : m === 'normal' ? '😐 보통' : '😩 안좋음'}
                   </button>
                 ))}
-                <button className={`${s.pill} ${todayMood === '' ? s.pillActive : ''}`}
+                <button type="button" aria-pressed={todayMood === ''} className={`${s.pill} ${todayMood === '' ? s.pillActive : ''}`}
                   onClick={() => setTodayMood('')}>미응답</button>
               </div>
             </div>
@@ -618,6 +633,7 @@ export default function CycleClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>메모 (선택, 30자)</label>
               <input type="text" maxLength={30} className={s.input}
+                aria-label="오늘 메모"
                 placeholder="예: 약간 두통, 운동 X"
                 value={todayNotes} onChange={(e) => setTodayNotes(e.target.value)} />
             </div>
@@ -637,7 +653,7 @@ export default function CycleClient() {
               </p>
               <p className={analysis.isRegular ? s.analysisOk : s.analysisWarn}>
                 {analysis.isRegular
-                  ? '✓ 규칙적 — 본 도구의 예측 정확도 높음'
+                  ? '✓ 규칙적 — 최근 기록 기준 참고 신뢰도 양호 (예측은 어디까지나 추정)'
                   : '⚠️ 불규칙 — 산부인과 상담 권장 (PCOS·갑상선 등 점검)'}
               </p>
             </div>

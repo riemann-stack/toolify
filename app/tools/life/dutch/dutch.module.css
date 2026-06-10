@@ -74,7 +74,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 14px;
-  font-size: 14px;
+  font-size: 16px; /* 16px 이상이라야 iOS 포커스 시 자동 확대(zoom) 안 됨 */
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
@@ -119,18 +119,25 @@
   justify-content: space-between;
   gap: 12px;
 }
+/* 좁은 화면에서는 라벨 위·셀렉트 아래로 쌓아 긴 옵션명(잔돈 처리)도 잘리지 않게 */
+@media (max-width: 480px) {
+  .roundRow { flex-direction: column; align-items: stretch; gap: 6px; }
+  .roundRow .select { width: 100%; }
+}
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 12px;
-  font-size: 13px;
+  font-size: 16px; /* iOS 자동 확대 방지 */
   font-weight: 600;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
   cursor: pointer;
   flex-shrink: 0;
+  max-width: 100%;
+  min-width: 0;
 }
 .select:focus { border-color: var(--accent); }
 
@@ -178,7 +185,7 @@
 .stepperInput::-webkit-outer-spin-button,
 .stepperInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* 술값 분리 — 4 입력 2×2 그리드 (모바일 포함 유지) */
+/* 술값 분리 — 4 입력 2×2 그리드. 단, 아주 좁은 화면(≤380px)에선 입력이 잘려 1열로 전환 */
 .drinkGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -186,6 +193,7 @@
   margin-bottom: 4px;
 }
 .drinkGrid > .card { min-width: 0; }
+@media (max-width: 380px) { .drinkGrid { grid-template-columns: 1fr; } }
 
 /* 인원 조절 */
 .peopleRow {
@@ -362,6 +370,8 @@
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copyBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+@media (hover: hover) { .copyBtn:disabled:hover { border-color: var(--border); color: var(--muted); } }
 
 /* ── 결과 히어로 ── */
 .hero {
@@ -484,7 +494,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 13.5px;
+  font-size: 16px; /* iOS 자동 확대 방지 */
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
@@ -506,7 +516,7 @@
   border: 1px solid var(--border);
   border-radius: 7px;
   padding: 7px 10px;
-  font-size: 13px;
+  font-size: 16px; /* iOS 자동 확대 방지 */
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -542,11 +552,16 @@
   .addItemBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
 
-/* 결과 표 */
+/* 결과 표 — 5열(이름·본인·공동·술·합계)이라 아주 좁은 화면에선 가로 스크롤 */
+.resultTableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .resultTable {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 300px;
 }
 .resultTableRow {
   display: grid;
@@ -601,6 +616,11 @@
 }
 @media (max-width: 540px) {
   .prepaidRow { grid-template-columns: 1fr 80px 80px 24px; }
+}
+/* 아주 좁은 화면 — 이름을 한 줄 전체로, 결제액·부담액·삭제는 그 아래 줄로 (이름 잘림 방지) */
+@media (max-width: 420px) {
+  .prepaidRow { grid-template-columns: 1fr 1fr 26px; }
+  .prepaidRow > .personName { grid-column: 1 / -1; }
 }
 .balanceTable {
   display: grid;

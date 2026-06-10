@@ -81,9 +81,9 @@ export default function BmrClient() {
   const detailed = useMemo(() => {
     if (bmr === null) return null
     return calcDetailedTDEE(bmr, {
-      jobLevel, weeklyExercises, exerciseDuration, exerciseIntensity, dailySteps,
+      jobLevel, weeklyExercises, exerciseDuration, exerciseIntensity, weight: weightN, dailySteps,
     })
-  }, [bmr, jobLevel, weeklyExercises, exerciseDuration, exerciseIntensity, dailySteps])
+  }, [bmr, jobLevel, weeklyExercises, exerciseDuration, exerciseIntensity, weightN, dailySteps])
 
   /* tdeeSimple: 현재 선택 모드 기준 통합 TDEE */
   const tdeeSimple = useMemo(() => {
@@ -174,9 +174,9 @@ export default function BmrClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="계산 모드">
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -188,11 +188,11 @@ export default function BmrClient() {
       <div className={styles.fieldRow4}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>성별</label>
-          <div className={styles.toggleRow}>
-            <button className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
-              onClick={() => setGender('male')} aria-label="남성">♂</button>
-            <button className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
-              onClick={() => setGender('female')} aria-label="여성">♀</button>
+          <div className={styles.toggleRow} role="group" aria-label="성별">
+            <button type="button" className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
+              onClick={() => setGender('male')} aria-label="남성" aria-pressed={gender === 'male'}>♂</button>
+            <button type="button" className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
+              onClick={() => setGender('female')} aria-label="여성" aria-pressed={gender === 'female'}>♀</button>
           </div>
         </div>
         <div className={styles.card}>
@@ -261,7 +261,7 @@ export default function BmrClient() {
                 const r = allFormulas.find(x => x.id === f.id)
                 const disabled = r ? !r.available : false
                 return (
-                  <button key={f.id}
+                  <button key={f.id} type="button" aria-pressed={formula === f.id}
                     className={`${styles.optionBtn} ${formula === f.id ? styles.optionActive : ''}`}
                     onClick={() => setFormula(f.id)}
                     disabled={disabled}
@@ -280,12 +280,12 @@ export default function BmrClient() {
           <div className={styles.card}>
             <label className={styles.cardLabel}>활동 수준 입력 방식</label>
             <div className={styles.optionRow}>
-              <button
+              <button type="button" aria-pressed={actMode === 'simple'}
                 className={`${styles.optionBtn} ${actMode === 'simple' ? styles.optionActive : ''}`}
                 onClick={() => setActMode('simple')}>
                 🟢 단순 (5단계)
               </button>
-              <button
+              <button type="button" aria-pressed={actMode === 'detailed'}
                 className={`${styles.optionBtn} ${actMode === 'detailed' ? styles.optionActive : ''}`}
                 onClick={() => setActMode('detailed')}>
                 🎯 정밀 (직업·걸음·운동)
@@ -294,7 +294,7 @@ export default function BmrClient() {
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               {actMode === 'simple'
                 ? '💡 빠른 추정 — 5단계 활동 계수로 BMR × 계수.'
-                : '💡 ±5~10% 더 정확 — 직업 활동, 일일 걸음, 주간 운동을 분리해 계산.'}
+                : '💡 직업 활동·일일 걸음·주간 운동을 분리하고 운동 칼로리에 체중(MET)까지 반영해 더 현실적으로 추정합니다.'}
             </p>
           </div>
 
@@ -303,7 +303,7 @@ export default function BmrClient() {
               <label className={styles.cardLabel}>활동 수준 (단순 5단계)</label>
               <div className={styles.activityList}>
                 {ACTIVITY_FACTORS.map((a, i) => (
-                  <button key={a.id}
+                  <button key={a.id} type="button" aria-pressed={actIdx === i}
                     className={`${styles.activityBtn} ${actIdx === i ? styles.activityActive : ''}`}
                     onClick={() => setActIdx(i)}>
                     <span className={styles.activityName}>
@@ -320,7 +320,7 @@ export default function BmrClient() {
                 <label className={styles.cardLabel}>직업 활동량</label>
                 <div className={styles.optionRow4}>
                   {JOB_ACTIVITY_LEVELS.map(j => (
-                    <button key={j.id}
+                    <button key={j.id} type="button" aria-pressed={jobLevel === j.id}
                       className={`${styles.optionBtn} ${jobLevel === j.id ? styles.optionActive : ''}`}
                       onClick={() => setJobLevel(j.id)} title={j.desc}>
                       {j.name}
@@ -336,6 +336,7 @@ export default function BmrClient() {
                 <div className={styles.sliderRow}>
                   <input className={styles.slider} type="range"
                     min="0" max="20000" step="100"
+                    aria-label="일일 걸음 수" aria-valuetext={`${fmt(dailySteps)}보`}
                     value={dailySteps} onChange={e => setDailySteps(parseInt(e.target.value, 10))} />
                   <span className={styles.sliderVal}>{fmt(dailySteps)}</span>
                 </div>
@@ -346,6 +347,7 @@ export default function BmrClient() {
                 <div className={styles.sliderRow}>
                   <input className={styles.slider} type="range"
                     min="0" max="7" step="1"
+                    aria-label="주간 운동 횟수" aria-valuetext={`주 ${weeklyExercises}회`}
                     value={weeklyExercises} onChange={e => setWeeklyExercises(parseInt(e.target.value, 10))} />
                   <span className={styles.sliderVal}>{weeklyExercises}</span>
                 </div>
@@ -356,6 +358,7 @@ export default function BmrClient() {
                 <div className={styles.sliderRow}>
                   <input className={styles.slider} type="range"
                     min="0" max="180" step="5"
+                    aria-label="1회 운동 시간" aria-valuetext={`${exerciseDuration}분`}
                     value={exerciseDuration} onChange={e => setExerciseDuration(parseInt(e.target.value, 10))} />
                   <span className={styles.sliderVal}>{exerciseDuration}분</span>
                 </div>
@@ -365,12 +368,12 @@ export default function BmrClient() {
                 <label className={styles.cardLabel}>운동 강도</label>
                 <div className={styles.optionRow4}>
                   {EXERCISE_INTENSITIES.map(e => (
-                    <button key={e.id}
+                    <button key={e.id} type="button" aria-pressed={exerciseIntensity === e.id}
                       className={`${styles.optionBtn} ${exerciseIntensity === e.id ? styles.optionActive : ''}`}
                       onClick={() => setExerciseIntensity(e.id)}>
                       {e.name}
                       <br />
-                      <small style={{ fontSize: 10, opacity: 0.7 }}>{e.kcalPerHour}kcal/h</small>
+                      <small style={{ fontSize: 10, opacity: 0.7 }}>약 {fmt(e.met * (weightN || 70))}kcal/h</small>
                     </button>
                   ))}
                 </div>
@@ -382,7 +385,7 @@ export default function BmrClient() {
                   <div className={styles.detailTable}>
                     <div className={styles.detailRow}><span>BMR</span><span>{fmt(detailed.bmr)} kcal</span></div>
                     <div className={styles.detailRow}>
-                      <span>직업 활동 (×{JOB_ACTIVITY_LEVELS.find(j => j.id === jobLevel)?.factor})</span>
+                      <span>직업 활동·소화(TEF) (×{JOB_ACTIVITY_LEVELS.find(j => j.id === jobLevel)?.factor}×1.1)</span>
                       <span>+{fmt(detailed.baseDailyTDEE - detailed.bmr)} kcal</span>
                     </div>
                     <div className={styles.detailRow}><span>일일 걸음 보너스</span><span>+{fmt(detailed.dailyStepsBonus)} kcal</span></div>
@@ -465,11 +468,16 @@ export default function BmrClient() {
                   })}
                 </div>
                 <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                  💡 일반인은 <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>이 권장(현대 표준), 체지방률 정확하면 <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>이 더 정확. 실제 ±10% 오차 가능합니다.
+                  💡 일반인은 <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>이 권장(현재 널리 사용), 체지방률 정확하면 <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>이 더 정확. 모두 추정치로 ±10% 오차 가능합니다.
                 </p>
               </div>
 
-              {/* 목표별 칼로리 */}
+              {/* 목표별 칼로리 — 18세 미만은 성인 감량/증량 목표 차단 */}
+              {teenWarn ? (
+                <div className={styles.criticalBox}>
+                  🔴 <strong>18세 미만</strong>은 성장기 영양 필요량이 성인 공식과 달라 <strong>감량·증량 목표 칼로리를 제공하지 않습니다.</strong> 위 BMR·TDEE는 참고용이며, 식단·체중 목표는 소아청소년과 전문의와 상담하세요.
+                </div>
+              ) : (
               <div className={styles.card}>
                 <label className={styles.cardLabel}>목표별 칼로리 (TDEE 기준)</label>
                 <div className={styles.goalTable}>
@@ -493,6 +501,7 @@ export default function BmrClient() {
                   })}
                 </div>
               </div>
+              )}
 
               {/* 안전 경고 */}
               {safety && safety.warnings.length > 0 && (
@@ -510,12 +519,12 @@ export default function BmrClient() {
               )}
 
               <div className={styles.resultActions}>
-                <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`BMR ${fmt(bmr)} / TDEE ${fmt(tdeeSimple)} kcal (${FORMULAS.find(f => f.id === formula)?.name}, ${actMode === 'detailed' ? '정밀' : ACTIVITY_FACTORS[actIdx].name})`)}>
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={() => setTab('budget')}>💰 칼로리 예산</button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
+                <button type="button" className={styles.copyBtn} onClick={() => setTab('budget')}>💰 칼로리 예산</button>
+                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
               </div>
             </>
           ) : (
@@ -534,7 +543,11 @@ export default function BmrClient() {
             <strong>칼로리 = 돈</strong> — BMR은 고정 지출(월세), 활동은 변동 지출, 운동은 추가 지출, 감량 목표는 저축. 직관적으로 식단을 설계할 수 있습니다.
           </div>
 
-          {!bmr || !tdeeSimple || !budgetGoal ? (
+          {teenWarn ? (
+            <div className={styles.criticalBox}>
+              🔴 <strong>18세 미만</strong>은 성장기 영양 기준이 성인 공식과 달라 <strong>칼로리 예산·목표를 제공하지 않습니다.</strong> 소아청소년과 전문의와 상담하세요.
+            </div>
+          ) : !bmr || !tdeeSimple || !budgetGoal ? (
             <div className={styles.empty}>
               <div className={styles.emptyTitle}>BMR·TDEE 계산이 먼저 필요합니다</div>
               상단 입력값을 확인해주세요
@@ -547,7 +560,7 @@ export default function BmrClient() {
                   {allGoals.filter(g =>
                     ['lose-normal', 'lose-slow', 'maintain', 'bulk-slow'].includes(g.id),
                   ).map(g => (
-                    <button key={g.id}
+                    <button key={g.id} type="button" aria-pressed={budgetGoalId === g.id}
                       className={`${styles.optionBtn} ${budgetGoalId === g.id ? styles.optionActive : ''}`}
                       onClick={() => setBudgetGoalId(g.id)}>{g.name}</button>
                   ))}
@@ -623,15 +636,15 @@ export default function BmrClient() {
                     매크로 분배 — 탄 {macroRatio.c}% / 단 {macroRatio.p}% / 지 {macroRatio.f}%
                   </label>
                   <div className={styles.optionRow}>
-                    <button className={`${styles.optionBtn} ${macroRatio.c === 50 ? styles.optionActive : ''}`}
+                    <button type="button" aria-pressed={macroRatio.c === 50} className={`${styles.optionBtn} ${macroRatio.c === 50 ? styles.optionActive : ''}`}
                       onClick={() => setMacroRatio({ c: 50, p: 25, f: 25 })}>균형 (50/25/25)</button>
-                    <button className={`${styles.optionBtn} ${macroRatio.c === 40 ? styles.optionActive : ''}`}
+                    <button type="button" aria-pressed={macroRatio.c === 40} className={`${styles.optionBtn} ${macroRatio.c === 40 ? styles.optionActive : ''}`}
                       onClick={() => setMacroRatio({ c: 40, p: 30, f: 30 })}>고단백 (40/30/30)</button>
                   </div>
                   <div className={styles.optionRow} style={{ marginTop: 5 }}>
-                    <button className={`${styles.optionBtn} ${macroRatio.c === 60 ? styles.optionActive : ''}`}
+                    <button type="button" aria-pressed={macroRatio.c === 60} className={`${styles.optionBtn} ${macroRatio.c === 60 ? styles.optionActive : ''}`}
                       onClick={() => setMacroRatio({ c: 60, p: 20, f: 20 })}>지구력 (60/20/20)</button>
-                    <button className={`${styles.optionBtn} ${macroRatio.c === 25 ? styles.optionActive : ''}`}
+                    <button type="button" aria-pressed={macroRatio.c === 25} className={`${styles.optionBtn} ${macroRatio.c === 25 ? styles.optionActive : ''}`}
                       onClick={() => setMacroRatio({ c: 25, p: 30, f: 45 })}>저탄고지 (25/30/45)</button>
                   </div>
                   <div className={styles.macroTable} style={{ marginTop: 10 }}>
@@ -675,7 +688,7 @@ export default function BmrClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>
             저장된 기록 ({history.length}/60)
-            <button className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
+            <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
           </label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {history.slice(0, 8).map(h => (
@@ -685,7 +698,7 @@ export default function BmrClient() {
                   <small>· {h.weight}kg · {new Date(h.date).toLocaleDateString('ko-KR')} · {FORMULAS.find(f => f.id === h.formula)?.name}</small>
                 </span>
                 <span className={styles.historyVal}>{fmt(h.tdee)} kcal</span>
-                <button className={styles.miniBtn} onClick={() => removeHistory(h.id)}>×</button>
+                <button type="button" className={styles.miniBtn} onClick={() => removeHistory(h.id)} aria-label="기록 삭제">×</button>
               </div>
             ))}
           </div>

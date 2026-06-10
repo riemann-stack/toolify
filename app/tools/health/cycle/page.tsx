@@ -66,16 +66,16 @@ const faqAnswer: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"평균 주기 28일이 아닌데 정상인가요?","a":"네, 21~45일 모두 정상 범위입니다. &ldquo;28일&rdquo;은 평균값일 뿐. 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상. 21일 미만 또는 45일 초과 → 산부인과 상담 같은 사람이 매월 21~45일 사이로 들쭉날쭉 (변동폭 ±8일+) → 상담 권장" },
+  { "q":"평균 주기 28일이 아닌데 정상인가요?","a":"성인은 21~35일, 청소년(초경 후 몇 년)은 최대 45일까지 정상 범위입니다(NICHD·NHS 기준). \"28일\"은 평균값일 뿐이며, 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상입니다. 21일 미만이거나 성인이 35일을 꾸준히 넘으면 산부인과 상담을 권합니다. 같은 사람이 매월 들쭉날쭉하면(변동폭 ±8일 이상) 상담을 권장합니다." },
   { "q":"가임기는 어떻게 계산하나요?","a":"본 도구의 모델: 배란일 -5일 ~ +1일이 가임기. 이유: 정자는 자궁 내에서 최대 5일 생존, 난자는 배란 후 약 24시간 수정 가능. 배란일은 다음 생리 -14일 (황체기 길이가 가장 일정). ⚠️ 이는 통계 평균 — 실제 배란일은 ±2일 변동 가능. 정확한 진단은 산부인과 초음파·LH 검사." },
-  { "q":"본 도구를 피임으로 써도 되나요?","a":"절대 비추천. 캘린더 기반 피임의 실패율은 약 24%(일반 사용 기준)로 매우 높습니다. 배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동 가능. 본 도구는 참고 정보 제공만 합니다. 피임 방법은 산부인과 상담 필수 (호르몬·기구·자연 등 다양한 옵션). 보건복지부 여성건강 상담 1577-1366." },
-  { "q":"주기가 들쭉날쭉한데 어떻게 해야 하나요?","a":"본 도구의 주기 규칙성 → &ldquo;많이 불규칙&rdquo; 선택 시 안내가 표시됩니다. 변동폭 ±3일 이내: 정상 (규칙적) ±4~7일: 약간 불규칙 — 스트레스·체중 변화 점검 ±8일+: 불규칙 — 산부인과 상담 권장 (PCOS·갑상선·조기난소부전 등 가능성) 📋 내 기록 탭에서 매번 생리 시작일을 체크하면 본인 변동폭 자동 분석." },
-  { "q":"PMS는 무엇이고 언제 산부인과 가야 하나요?","a":"PMS(생리전증후군) = 생리 1주~수일 전 나타나는 신체·정서 변화. 가임기 여성 약 75% 경험. 일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고. 심한 PMS (PMDD): 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지부 1577-1366." },
+  { "q":"본 도구를 피임으로 써도 되나요?","a":"절대 비추천입니다. 캘린더·주기 기반 피임은 방법과 실천에 따라 일반적인 사용 실패율 편차가 크고 높은 편입니다(미국 CDC 기준 대략 2~23%대). 배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동할 수 있습니다. 본 도구는 참고 정보만 제공합니다. 피임 방법은 산부인과 상담이 필수입니다(호르몬·기구·자연 등 다양한 옵션). 보건복지상담센터 129." },
+  { "q":"주기가 들쭉날쭉한데 어떻게 해야 하나요?","a":"본 도구의 주기 규칙성에서 \"많이 불규칙\"을 선택하면 안내가 표시됩니다. 변동폭이 ±3일 이내면 정상(규칙적)이고, ±4~7일이면 약간 불규칙이므로 스트레스·체중 변화를 점검하세요. ±8일 이상이면 불규칙으로 산부인과 상담을 권장합니다(PCOS·갑상선·조기난소부전 등 가능성). 내 기록 탭에서 매번 생리 시작일을 체크하면 본인 변동폭이 자동 분석됩니다." },
+  { "q":"PMS는 무엇이고 언제 산부인과 가야 하나요?","a":"PMS(생리전증후군) = 생리 1주~수일 전 나타나는 신체·정서 변화. 가임기 여성 약 75% 경험. 일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고. 심한 PMS (PMDD): 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지상담센터 129." },
   { "q":"임신 테스트기는 언제 사용하면 정확한가요?","a":"일반 안내: 생리 예정일 이후가 더 정확. 너무 이른 검사는 음성이라도 확정 X. 본 도구의 👶 가임기 참고 탭에서 임신 준비 중 선택 시, 생리 예정일 기준 안내 표시. 정확한 진단은 산부인과 HCG 검사·초음파." },
   { "q":"황체기에 체중이 늘어요. 살이 찐 건가요?","a":"황체기 후반(생리 직전)에는 호르몬 영향으로 1~3kg 일시 변동이 흔합니다. 이는 수분 보유·소화 변화·식욕 증가 등 복합 요인 — 지방 증가가 아닌 경우가 많음. 정확한 체중 추세는 주간 평균으로 보세요. 다이어트 중이라면 황체기는 유지 모드, 난포기에 집중." },
-  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X · 외부 서비스 X ✅ Google Analytics에 cycle 데이터 X (일반 페이지뷰만) ✅ 익명 사용 (이름·이메일·전화 입력 X) ✅ 한 번 클릭 전체 삭제 (페이지 상단 또는 데이터 관리) ⚠️ 다른 기기·브라우저 자동 동기화 X — CSV 백업 권장 ⚠️ 시크릿 모드/브라우저 데이터 삭제 시 사라짐 민감 데이터인 만큼 본인 자유 + 책임으로 관리됩니다." },
+  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. youtil 서버나 외부 서비스로 전송하지 않고, Google Analytics에도 cycle 데이터는 보내지 않습니다(일반 페이지뷰만 집계). 이름·이메일·전화 입력 없이 익명으로 사용하며, 페이지 상단이나 데이터 관리에서 한 번 클릭으로 전체 삭제할 수 있습니다. 다른 기기·브라우저로는 자동 동기화되지 않으므로 CSV 백업을 권장하고, 시크릿 모드나 브라우저 데이터 삭제 시 사라집니다. 민감한 데이터인 만큼 본인 자유와 책임으로 관리됩니다." },
   { "q":"본 도구와 임신 주수 계산기 차이는?","a":"영역이 다릅니다. 🌙 본 도구 (생리주기·배란일): 임신 전 주기 트래킹·시각화·가임기 참고 🤰 임신 주수 계산기: 임신 확인 후 주차·태아 발달·검사 일정·출산 준비 본 도구의 가임기 모드 → 임신 가능성 점검 → 임신 확인 시 임신 주수 계산기로 이동하는 동선." },
-  { "q":"청소년인데 사용해도 되나요?","a":"본 도구는 일반 주기 트래킹 도구이므로 누구나 사용 가능. 단: 초경 후 2~3년은 주기가 매우 불규칙한 게 정상 심한 통증·과다 출혈 시 부모와 함께 산부인과 임신·피임 관련 정보는 전문가 상담이 우선 (학교 보건교사·소아청소년과·산부인과) 청소년 상담 1388 (24시간) · 보건복지부 1577-1366 본 도구는 의료 상담을 대체하지 않습니다." }
+  { "q":"청소년인데 사용해도 되나요?","a":"본 도구는 일반 주기 트래킹 도구이므로 누구나 사용할 수 있습니다. 다만 초경 후 2~3년은 주기가 매우 불규칙한 것이 정상이고, 심한 통증이나 과다 출혈이 있으면 부모와 함께 산부인과를 찾으세요. 임신·피임 관련 정보는 전문가 상담이 우선입니다(학교 보건교사·소아청소년과·산부인과). 청소년 상담 1388(24시간)·보건복지상담센터 129를 이용할 수 있습니다. 본 도구는 의료 상담을 대체하지 않습니다." }
 ]
 
 export default function CyclePage() {
@@ -113,7 +113,7 @@ export default function CyclePage() {
             </tr>
             <tr>
               <td style={cell}><strong style={{ color: '#FFD93E' }}>🌱 난포기</strong></td>
-              <td style={cell}>6~13일</td>
+              <td style={cell}>6~12일</td>
               <td style={cell}>에너지·집중력 ↑ · 새 운동 루틴 시작에 적합</td>
             </tr>
             <tr>
@@ -134,15 +134,17 @@ export default function CyclePage() {
       </p>
 
       {/* 2. 평균 주기 28일 ≠ 모두 */}
-      <h2 style={sectionTitle}>📐 평균 주기 28일 ≠ 모두 — 21~45일 정상 범위</h2>
+      <h2 style={sectionTitle}>📐 평균 주기 28일 ≠ 모두 — 성인 21~35일·청소년 ~45일</h2>
       <div style={card}>
         <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           교과서에서 흔히 말하는 &ldquo;28일 주기&rdquo;는 <strong style={{ color: 'var(--accent)' }}>평균값</strong>일 뿐입니다.
-          실제로는 <strong style={{ color: 'var(--text)' }}>21~45일 모두 정상 범위</strong>이며, 본인의 일정한 리듬이 있으면 OK.
+          미국 NICHD·영국 NHS 기준 <strong style={{ color: 'var(--text)' }}>성인은 21~35일</strong>이 일반적인 정상 범위이고,
+          <strong style={{ color: 'var(--text)' }}>청소년(초경 후 몇 년)은 최대 45일까지</strong> 정상일 수 있습니다. 본인의 일정한 리듬이 있으면 OK.
         </p>
         <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px', paddingLeft: '18px', marginBottom: 0 }}>
           <li>21일 미만: 너무 짧음 → 산부인과 상담</li>
-          <li>21~45일: 정상 범위 (본인 평균 기억)</li>
+          <li>21~35일: 성인 정상 범위 (본인 평균 기억)</li>
+          <li>36~45일: 청소년은 정상 가능 · 성인은 다소 길어 상담 고려</li>
           <li>45일 초과: 너무 김 → 산부인과 상담</li>
           <li>변동폭 ±8일+: 불규칙 → 산부인과 상담</li>
         </ul>
@@ -162,6 +164,7 @@ export default function CyclePage() {
         </ul>
         <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', marginBottom: 0, lineHeight: 1.7 }}>
           ⚠️ 이는 통계 평균 모델 — 실제 배란일은 ±2일 변동 가능. 스트레스·수면·체중·약물 등 영향. 정확한 배란 확인은 산부인과 초음파·LH 검사.
+          마지막 생리일이 한 주기 이상 지난 경우, 가장 최근 주기로 자동 보정해 다음 생리·배란을 추정합니다.
         </p>
       </div>
 
@@ -184,7 +187,7 @@ export default function CyclePage() {
         ))}
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '14px', lineHeight: 1.7 }}>
-        ⚠️ 본 도구는 PMS 일반 안내만 — 정확한 진단·약물은 산부인과 영역. 보건복지부 여성건강 상담 <strong>1577-1366</strong>.
+        ⚠️ 본 도구는 PMS 일반 안내만 — 정확한 진단·약물은 산부인과 영역. 보건복지상담센터 <strong>129</strong>.
       </p>
 
       {/* 5. 산부인과 상담 신호 */}
@@ -201,7 +204,7 @@ export default function CyclePage() {
           <li>21일 미만 / 45일 초과 주기</li>
         </ul>
         <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '14px', lineHeight: 1.7, marginBottom: 0 }}>
-          📞 <strong>도움 받기</strong>: 보건복지부 여성·아동 상담 <strong style={{ color: '#D97706' }}>1577-1366</strong> · 청소년 상담 <strong style={{ color: '#D97706' }}>1388</strong> · 응급 <strong style={{ color: '#D97706' }}>119</strong>
+          📞 <strong>도움 받기</strong>: 보건복지상담센터 <strong style={{ color: '#D97706' }}>129</strong> · 청소년 상담 <strong style={{ color: '#D97706' }}>1388</strong> · 응급 <strong style={{ color: '#D97706' }}>119</strong>
         </p>
       </div>
 
@@ -212,10 +215,10 @@ export default function CyclePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 평균 주기 28일이 아닌데 정상인가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>네, 21~45일 모두 정상 범위</strong>입니다. &ldquo;28일&rdquo;은 평균값일 뿐. 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상.
+          <strong style={{ color: 'var(--text)' }}>성인은 21~35일, 청소년은 최대 45일까지</strong> 정상 범위입니다(NICHD·NHS 기준). &ldquo;28일&rdquo;은 평균값일 뿐이고, 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상입니다.
           <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>21일 미만 또는 45일 초과 → 산부인과 상담</li>
-            <li>같은 사람이 매월 21~45일 사이로 들쭉날쭉 (변동폭 ±8일+) → 상담 권장</li>
+            <li>21일 미만이거나, 성인이 35일을 꾸준히 넘으면 → 산부인과 상담</li>
+            <li>같은 사람이 매월 들쭉날쭉 (변동폭 ±8일+) → 상담 권장</li>
           </ul>
         </div>
       </details>
@@ -234,10 +237,10 @@ export default function CyclePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q3. 본 도구를 피임으로 써도 되나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#DC2626' }}>절대 비추천.</strong> 캘린더 기반 피임의 실패율은 <strong>약 24%</strong>(일반 사용 기준)로 매우 높습니다.
+          <strong style={{ color: '#DC2626' }}>절대 비추천.</strong> 캘린더·주기 기반 피임은 방법과 실천에 따라 일반적인 사용 실패율 편차가 크고 높은 편입니다(미국 CDC 기준 <strong>대략 2~23%대</strong>).
           배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동 가능. 본 도구는 <strong>참고 정보 제공</strong>만 합니다.
           <br /><br />
-          피임 방법은 산부인과 상담 필수 (호르몬·기구·자연 등 다양한 옵션). 보건복지부 여성건강 상담 <strong>1577-1366</strong>.
+          피임 방법은 산부인과 상담 필수 (호르몬·기구·자연 등 다양한 옵션). 보건복지상담센터 <strong>129</strong>.
         </div>
       </details>
 
@@ -261,7 +264,7 @@ export default function CyclePage() {
           <br /><br />
           일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고.
           <br /><br />
-          <strong style={{ color: '#DC2626' }}>심한 PMS (PMDD)</strong>: 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지부 1577-1366.
+          <strong style={{ color: '#DC2626' }}>심한 PMS (PMDD)</strong>: 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지상담센터 129.
         </div>
       </details>
 
@@ -321,7 +324,7 @@ export default function CyclePage() {
             <li>초경 후 2~3년은 주기가 매우 불규칙한 게 정상</li>
             <li>심한 통증·과다 출혈 시 부모와 함께 산부인과</li>
             <li>임신·피임 관련 정보는 <strong style={{ color: 'var(--text)' }}>전문가 상담</strong>이 우선 (학교 보건교사·소아청소년과·산부인과)</li>
-            <li>청소년 상담 1388 (24시간) · 보건복지부 1577-1366</li>
+            <li>청소년 상담 1388 (24시간) · 보건복지상담센터 129</li>
           </ul>
           본 도구는 의료 상담을 대체하지 않습니다.
         </div>
@@ -343,8 +346,30 @@ export default function CyclePage() {
           <li>본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X · 약물 추천 X · 영양 처방 X · 특정 브랜드 추천 X</strong>.</li>
           <li>주기·배란일·가임기는 통계 평균 모델 — 실제 ±2일 이상 변동 가능 (스트레스·수면·체중·약물).</li>
           <li>모든 데이터는 본인 브라우저(localStorage)에만 저장 — 서버 전송 X.</li>
-          <li>도움 받기: 보건복지부 여성·아동 상담 <strong>1577-1366</strong> · 청소년 <strong>1388</strong> · 응급 <strong>119</strong>.</li>
+          <li>도움 받기: 보건복지상담센터 <strong>129</strong> · 청소년 <strong>1388</strong> · 응급 <strong>119</strong>.</li>
         </ul>
+      </div>
+
+      {/* 7-1. 공식 참고 자료 */}
+      <h2 style={sectionTitle}>📚 공식 참고 자료</h2>
+      <div style={card}>
+        <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '18px', margin: 0 }}>
+          <li>
+            <a href="https://www.nichd.nih.gov/health/topics/menstruation" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>NICHD — Menstruation</a>
+            {' '}(미국 국립아동보건·인간발달연구소 · 정상 주기: 성인 21~35일·청소년 ~45일)
+          </li>
+          <li>
+            <a href="https://www.cdc.gov/contraception/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>CDC — Contraception</a>
+            {' '}(미국 질병통제예방센터 · 피임법별 효과·실패율)
+          </li>
+          <li>
+            <a href="https://www.nhs.uk/conditions/periods/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>NHS — Periods</a>
+            {' '}(영국 국민보건서비스 · 생리·주기 일반)
+          </li>
+        </ul>
+        <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', marginBottom: 0, lineHeight: 1.7 }}>
+          국내 상담: 대한산부인과학회 · 보건복지상담센터 <strong>129</strong>. 본 도구의 수치는 위 공식 자료를 바탕으로 한 일반 참고용 추정입니다.
+        </p>
       </div>
 
       {/* 8. 함께 쓰면 좋은 도구 */}

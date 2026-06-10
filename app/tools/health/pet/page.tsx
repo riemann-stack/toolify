@@ -3,6 +3,7 @@ import PetClient from './PetClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import { dogHumanAge, calculateAll } from './petUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/health/pet',
@@ -76,18 +77,13 @@ export default function PetPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['1세',  '15세', '15세',  '15세'],
-                  ['2세',  '24세', '24세',  '24세'],
-                  ['5세',  '36세', '37세',  '40세'],
-                  ['10세', '56세', '60세',  '70세'],
-                  ['15세', '76세', '83세',  '100세'],
-                ].map(([age, s, m, l], i) => (
+                {/* 본문 표 = 계산기 엔진(dogHumanAge)에서 직접 도출 — 표와 계산기 값 영구 일치 */}
+                {[1, 2, 5, 10, 15].map((yr, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{age}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: '#FFB347' }}>{s}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{m}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{l}</td>
+                    <td style={{ padding: '9px 10px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{yr}세</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: '#FFB347' }}>{dogHumanAge(yr, 0, 'small')}세</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{dogHumanAge(yr, 0, 'medium')}세</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{dogHumanAge(yr, 0, 'large')}세</td>
                   </tr>
                 ))}
               </tbody>
@@ -166,7 +162,10 @@ export default function PetPage() {
                   </thead>
                   <tbody>
                     {[
-                      ['퍼피 / 키튼 / 성장기',                    '× 2.5'],
+                      ['강아지 퍼피 (4개월 미만)',                '× 3.0'],
+                      ['강아지 퍼피 (4개월~성장기)',              '× 2.0'],
+                      ['고양이 키튼 (4개월 미만)',                '× 2.5'],
+                      ['고양이 키튼 (4개월~성장기)',              '× 2.0'],
                       ['중성화 + 활동 낮음 (실내)',              '× 1.2'],
                       ['중성화 + 활동 보통',                      '× 1.4'],
                       ['중성화 + 활동 높음',                      '× 1.6'],
@@ -184,7 +183,7 @@ export default function PetPage() {
                 </table>
               </div>
               <p style={{ fontSize: '11.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-                ⓘ 본 도구는 <strong style={{ color: 'var(--text)' }}>중성화 × 활동량 6가지 조합</strong>을 명시적 매핑 테이블로 정확히 반영합니다 (조건문 분기 누락 방지).
+                ⓘ 본 도구는 <strong style={{ color: 'var(--text)' }}>중성화 × 활동량 6가지 조합</strong>을 명시적 매핑 테이블로 정확히 반영하며, 퍼피·키튼은 <strong style={{ color: 'var(--text)' }}>생후 4개월</strong>을 기준으로 급성장기·성장기를 구분합니다.
               </p>
             </div>
           </div>
@@ -193,31 +192,33 @@ export default function PetPage() {
         {/* ── 4. 시나리오 예시 (기존 유지) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>계산 예시</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
-            {[
-              {
-                label: '예시 1',
-                desc: '말티즈 4kg · 5세 · 중성화 · 실내',
-                color: '#FFB347',
-                items: ['사람 나이: 약 36세 (중년견)', 'RER: 70 × 4⁰·⁷⁵ ≈ 197kcal', 'DER: 197 × 1.4 ≈ 276kcal', '사료 권장량: 약 79g / 일 (350kcal/100g)'],
-              },
-              {
-                label: '예시 2',
-                desc: '골든리트리버 30kg · 3세 · 미중성화 · 활동적',
-                color: '#C084FC',
-                items: ['사람 나이: 약 28세 (청년견)', 'RER: 70 × 30⁰·⁷⁵ ≈ 862kcal', 'DER: 862 × 1.8 ≈ 1,552kcal', '사료 권장량: 약 443g / 일 (350kcal/100g)'],
-              },
-            ].map((ex, i) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '12px' }}>
+            {/* 예시 수치 = 계산기 엔진(calculateAll)에서 직접 도출 — 예시와 계산기 값 영구 일치 */}
+            {([
+              { label: '예시 1', name: '말티즈',       size: 'tiny'  as const, weight: 4,  yrs: 5, neutered: true,  activity: 'low'  as const, envLabel: '실내(낮은 활동)', kcal: 350, color: '#FFB347' },
+              { label: '예시 2', name: '골든리트리버', size: 'large' as const, weight: 30, yrs: 3, neutered: false, activity: 'high' as const, envLabel: '활동 높음',       kcal: 350, color: '#C084FC' },
+            ]).map((ex, i) => {
+              const r = calculateAll({ species: 'dog', yrs: ex.yrs, mos: 0, weight: ex.weight, size: ex.size, isNeutered: ex.neutered, activity: ex.activity, foodKcalPer100g: ex.kcal })
+              const foodG = Math.round(r.der / ex.kcal * 100)
+              const desc = `${ex.name} ${ex.weight}kg · ${ex.yrs}세 · ${ex.neutered ? '중성화' : '미중성화'} · ${ex.envLabel}`
+              const items = [
+                `사람 나이: 약 ${r.humanAge}세 (${r.stage})`,
+                `RER: 70 × ${ex.weight}⁰·⁷⁵ ≈ ${r.rerVal.toLocaleString('en-US')}kcal`,
+                `DER: ${r.rerVal.toLocaleString('en-US')} × ${r.derFactor} ≈ ${r.der.toLocaleString('en-US')}kcal`,
+                `사료 권장량: 약 ${foodG}g / 일 (${ex.kcal}kcal/100g)`,
+              ]
+              return (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${ex.color}30`, borderRadius: '14px', padding: '18px 20px' }}>
                 <p style={{ fontSize: '11px', color: ex.color, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>{ex.label}</p>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '12px' }}>{ex.desc}</p>
-                {ex.items.map((item, j) => (
+                <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '12px' }}>{desc}</p>
+                {items.map((item, j) => (
                   <p key={j} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                     <span style={{ color: ex.color, flexShrink: 0 }}>›</span>{item}
                   </p>
                 ))}
               </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 
@@ -227,7 +228,7 @@ export default function PetPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 입력한 체중을 품종 크기 기준 정상 범위와 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 자동 평가합니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 10, marginBottom: 12 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '8px' }}>🐶 강아지 정상 체중</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -298,12 +299,12 @@ export default function PetPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>같은 일일 칼로리도 사료 종류에 따라 그램 수가 크게 다릅니다.</strong> 건식은 100g당 약 350~380kcal, 습식은 약 70~120kcal로 4배 정도 차이.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 10, marginBottom: 12 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFB347', marginBottom: '6px' }}>건식 (Dry · Kibble)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 칼로리 밀도: <strong style={{ color: 'var(--text)' }}>350~400kcal/100g</strong></li>
-                <li>· 장점: 보관 편함·치석 ↓·가성비</li>
+                <li>· 장점: 보관 편함·가성비</li>
                 <li>· 단점: 수분 부족 (약 10%)</li>
               </ul>
             </div>
@@ -317,14 +318,17 @@ export default function PetPage() {
             </div>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>혼합 (건식 + 습식)</strong> — 한국에서 점점 표준이 되어가는 방식. 건식 70% + 습식 30% 비율 권장 — 보관·가성비는 건식, 수분·기호성은 습식으로 보완. 본 도구의 <strong style={{ color: 'var(--text)' }}>고양이 [건식+습식] 모드</strong>에서 자동 분배 그램 수를 계산합니다.
+            <strong style={{ color: 'var(--text)' }}>혼합 (건식 + 습식)</strong> — 한국에서 점점 표준이 되어가는 방식. 건식 70% + 습식 30% 비율 권장 — 보관·가성비는 건식, 수분·기호성은 습식으로 보완. 본 도구의 <strong style={{ color: 'var(--text)' }}>고양이 [건식+습식] 모드</strong>는 이 <strong style={{ color: 'var(--text)' }}>70:30</strong> 비율로 그램 수를 자동 계산합니다.
+          </p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+            ※ 건식 사료의 치석 감소 효과는 일반 건식 전체가 아니라 <strong style={{ color: 'var(--text)' }}>치과 전용·섬유질 설계(VOHC 인증 등)</strong> 사료에 한정됩니다. 일반 건식만으로 치석을 충분히 막기는 어려우며, 칫솔질·스케일링 병행을 권장합니다.
           </p>
         </section>
 
         {/* ── 8. 연령대별 건강 가이드 (기존 유지) ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '10px' }}>
             {[
               { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#0891B2', items: ['기본 백신 (디스템퍼·파보·홍역) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
               { pet: '🐶 강아지', stage: '성견 (1~7세)', color: '#059669', items: ['연 1회 건강검진 및 혈액검사', '치석 스케일링 (1~2년마다)', '심장사상충·외부기생충 예방 지속'] },
@@ -374,6 +378,9 @@ export default function PetPage() {
               <strong style={{ color: 'var(--text)' }}> 의료 진단·치료 도구 X / 약물 용량 계산 X / 영양제 추천 X.</strong>
               개별 반려동물의 건강 상태, 질병 유무, 특수 식이 요건에 따라 실제 필요량은 다를 수 있습니다.
               체중 증감·식욕 변화·활동량 변화가 있다면 반드시 수의사와 상담하시기 바랍니다.
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+              <strong style={{ color: 'var(--text)' }}>주요 근거</strong> — RER/DER·생활계수·BCS·생애단계 기준은 Merck Veterinary Manual, AAHA(미국동물병원협회), WSAVA(세계소동물수의사회) 등 수의영양 가이드라인을 참고했습니다.
             </p>
           </div>
         </section>

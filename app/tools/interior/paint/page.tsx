@@ -285,7 +285,7 @@ export default function PaintPage() {
             {[
               { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',    desc: '아파트 면적 단위 변환' },
-              { href: '/tools/unit/length',        icon: '📏', name: '길이 변환기',          desc: 'cm·m·inch·ft 변환' },
+              { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',          desc: '길이·면적·무게 등 14종 통합 변환' },
               { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',     desc: '페인트 가성비 단가 비교' },
             ].map((t, i) => (
               <Link

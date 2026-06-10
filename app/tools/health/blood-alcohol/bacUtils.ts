@@ -32,7 +32,7 @@ export interface FoodState {
 export const FOOD_STATES: FoodState[] = [
   { id: 'empty',     label: '완전 공복',    multiplier: 1.25, desc: '흡수 25% 빠름' },
   { id: 'light',     label: '가벼운 안주',  multiplier: 1.15, desc: '술 + 마른 안주' },
-  { id: 'normal',    label: '보통 식사',    multiplier: 1.00, desc: '봉지 권장 기준' },
+  { id: 'normal',    label: '보통 식사',    multiplier: 1.00, desc: '일반적인 식사량 (기준)' },
   { id: 'hearty',    label: '든든한 식사',  multiplier: 0.85, desc: '밥·고기' },
   { id: 'very-hearty', label: '매우 든든',  multiplier: 0.75, desc: '기름진 음식' },
 ]
@@ -40,12 +40,11 @@ export const FOOD_STATES: FoodState[] = [
 /* ─── 표준잔 (1잔 = 알코올 8g) ─── */
 export const STANDARD_DRINK_G = 8
 
-/* ─── 한국 음주 처벌 임계값 ─── */
+/* ─── 한국 음주운전 처벌 임계값 (도로교통법·윤창호법, 직군 무관 동일) ─── */
 export const BAC_THRESHOLDS = {
-  COMMERCIAL_SUSPEND: 0.02,   // 영업용 정지
-  GENERAL_SUSPEND:    0.03,   // 일반 정지
-  REVOKE:             0.08,   // 취소
-  CRIMINAL:           0.10,   // 가중 처벌
+  GENERAL_SUSPEND:    0.03,   // 면허정지 (단속 기준)
+  REVOKE:             0.08,   // 면허취소
+  AGGRAVATED:         0.20,   // 가중처벌 (2~5년 / 1000~2000만원)
 }
 
 /* ─── 약물·알코올 위험 ─── */
@@ -201,25 +200,25 @@ export function calcCumulativeBAC(input: CumulativeInput): CumulativeResult {
   const finalEndMin = sessions[sessions.length - 1].endMin
   const horizonMin = finalEndMin + 24 * 60   // 끝나고 24시간까지 시뮬
 
+  // 시간 흐름 기반 0차(zero-order) 모델:
+  // 각 자리 알코올은 종료 시점에 흡수 완료(단순화)되어 BAC가 점프하고,
+  // 그 사이에는 시간당 decayRate로 일정하게 소거(0 미만 불가)된다.
+  const bumps = sessions
+    .map(s => ({ at: s.endMin, add: (s.alcoholGrams * input.foodMultiplier) / (input.weightKg * r * 10) }))
+    .sort((a, b) => a.at - b.at)
+
   const curve: { min: number; bac: number }[] = []
+  let runBac = 0      // runT 시점의 누적 BAC
+  let runT = startMin
+  let bi = 0
   for (let t = startMin; t <= horizonMin; t += 5) {
-    // 이 시점까지 종료된 세션의 알코올 합 (단순화: 흡수는 음주 종료 시점에 완료)
-    let consumedSoFar = 0
-    let lastEndedMin = startMin
-    for (const ses of sessions) {
-      if (t >= ses.endMin) {
-        consumedSoFar += ses.alcoholGrams
-        lastEndedMin = Math.max(lastEndedMin, ses.endMin)
-      }
+    while (bi < bumps.length && bumps[bi].at <= t) {
+      runBac = Math.max(0, runBac - input.decayRate * ((bumps[bi].at - runT) / 60)) + bumps[bi].add
+      runT = bumps[bi].at
+      bi++
     }
-    if (consumedSoFar === 0) {
-      curve.push({ min: t, bac: 0 })
-      continue
-    }
-    const peakBacAtTime = (consumedSoFar * input.foodMultiplier) / (input.weightKg * r * 10)
-    const minutesSinceLastEnd = Math.max(0, t - lastEndedMin)
-    const decayed = Math.max(0, peakBacAtTime - input.decayRate * (minutesSinceLastEnd / 60))
-    curve.push({ min: t, bac: decayed })
+    const bac = Math.max(0, runBac - input.decayRate * ((t - runT) / 60))
+    curve.push({ min: t, bac })
   }
 
   let peakBAC = 0
@@ -228,21 +227,27 @@ export function calcCumulativeBAC(input: CumulativeInput): CumulativeResult {
     if (c.bac > peakBAC) { peakBAC = c.bac; peakMin = c.min }
   }
 
-  // 종료 시점 BAC 기준으로 임계값 도달 시각 계산
-  const finalSessionPeakBAC = (totalAlcoholGrams * input.foodMultiplier) / (input.weightKg * r * 10)
-  const minutesFromFinalEndToSuspend = finalSessionPeakBAC > BAC_THRESHOLDS.GENERAL_SUSPEND
-    ? (finalSessionPeakBAC - BAC_THRESHOLDS.GENERAL_SUSPEND) / input.decayRate * 60 : 0
-  const minutesFromFinalEndToRevoke = finalSessionPeakBAC > BAC_THRESHOLDS.REVOKE
-    ? (finalSessionPeakBAC - BAC_THRESHOLDS.REVOKE) / input.decayRate * 60 : 0
-  const minutesFromFinalEndToZero = finalSessionPeakBAC / input.decayRate * 60
+  // 마지막 자리 종료 시점의 BAC(이전 자리 소거를 반영) 기준으로 임계값 도달 시각 계산
+  let bacAtFinalEnd = 0
+  let fT = startMin
+  for (const b of bumps) {
+    bacAtFinalEnd = Math.max(0, bacAtFinalEnd - input.decayRate * ((b.at - fT) / 60)) + b.add
+    fT = b.at
+  }
+
+  const suspendClearMin = bacAtFinalEnd > BAC_THRESHOLDS.GENERAL_SUSPEND
+    ? finalEndMin + ((bacAtFinalEnd - BAC_THRESHOLDS.GENERAL_SUSPEND) / input.decayRate) * 60 : finalEndMin
+  const revokeClearMin = bacAtFinalEnd > BAC_THRESHOLDS.REVOKE
+    ? finalEndMin + ((bacAtFinalEnd - BAC_THRESHOLDS.REVOKE) / input.decayRate) * 60 : finalEndMin
+  const zeroMin = finalEndMin + (bacAtFinalEnd / input.decayRate) * 60
 
   return {
     curve, peakBAC, peakMin,
     totalAlcoholGrams,
     finalEndMin,
-    suspendClearMin: finalEndMin + minutesFromFinalEndToSuspend,
-    revokeClearMin: finalEndMin + minutesFromFinalEndToRevoke,
-    zeroMin: finalEndMin + minutesFromFinalEndToZero,
+    suspendClearMin,
+    revokeClearMin,
+    zeroMin,
   }
 }
 

@@ -6,7 +6,6 @@ import styles from './monty-hall.module.css'
 // ── 타입 ─────────────────────────────────
 type Tab = 'play' | 'sim' | 'why'
 type Phase = 'choose' | 'decide' | 'reveal'
-type Strategy = 'switch' | 'stay' | 'random'
 type Speed = 'slow' | 'normal' | 'fast'
 
 // ── 단일 시뮬레이션 ──────────────────────
@@ -42,8 +41,8 @@ function simulateNDoors(N: number): { switchWin: boolean; stayWin: boolean } {
   return { switchWin: switched === car, stayWin: pick === car }
 }
 
-// ── 4가지 변형 규칙 (3문) ──
-type VariantId = 'standard' | 'random-host' | 'monty-fall' | 'evil-monty'
+// ── 변형 규칙 (3문) ──
+type VariantId = 'standard' | 'random-host' | 'evil-monty'
 
 type VariantInfo = {
   id: VariantId
@@ -58,11 +57,8 @@ const VARIANTS: VariantInfo[] = [
   { id: 'standard', emoji: '🟢', name: '표준 몬티홀',
     desc: '진행자가 자동차 위치를 알고 의도적으로 염소 문을 공개. 본 문제.',
     switchTheory: 2/3, stayTheory: 1/3 },
-  { id: 'random-host', emoji: '🟡', name: '무작위 진행자',
-    desc: '진행자가 아무 문이나 염. 자동차 노출 시 게임 무효 (그 경우 제외).',
-    switchTheory: 1/2, stayTheory: 1/2 },
-  { id: 'monty-fall', emoji: '🟠', name: '몬티 폴 (랜덤 공개)',
-    desc: '진행자가 무작위로 1개를 열었는데 우연히 염소였던 경우만 카운트. 정보 X → 50:50.',
+  { id: 'random-host', emoji: '🟡', name: '무작위 공개 (= 몬티 폴)',
+    desc: '진행자가 위치를 모르고 아무 문이나 엶 — 또는 우연히 염소가 열림(‘몬티 폴’). 자동차가 나오면 무효. 두 이야기 모두 수학적으로 같은 50:50.',
     switchTheory: 1/2, stayTheory: 1/2 },
   { id: 'evil-monty', emoji: '🔴', name: '악마 몬티',
     desc: '진행자가 참가자가 자동차를 골랐을 때만 염소 공개. 함정 → 바꾸면 100% 패배.',
@@ -81,16 +77,8 @@ function simulateVariant(variant: VariantId): { switchWin: boolean; stayWin: boo
   }
 
   if (variant === 'random-host') {
-    // 진행자가 참가자가 안 고른 2개 중 1개 무작위 (자동차 일 수도)
-    const available = [0, 1, 2].filter(d => d !== pick)
-    const opened = available[Math.floor(Math.random() * available.length)]
-    if (opened === car) return { switchWin: false, stayWin: false, valid: false }
-    const switched = [0, 1, 2].find(d => d !== pick && d !== opened)!
-    return { switchWin: switched === car, stayWin: pick === car, valid: true }
-  }
-
-  if (variant === 'monty-fall') {
-    // 진행자가 무작위로 1개를 열었는데 우연히 염소였던 경우만 (= random-host와 같은 베이지안)
+    // 진행자가 위치를 모르고 안 고른 2개 중 1개 무작위 (자동차일 수도) — 자동차가 나오면 무효.
+    // '무작위 진행자'와 '몬티 폴'은 같은 조건부 확률 실험이므로 하나로 통합.
     const available = [0, 1, 2].filter(d => d !== pick)
     const opened = available[Math.floor(Math.random() * available.length)]
     if (opened === car) return { switchWin: false, stayWin: false, valid: false }
@@ -126,15 +114,16 @@ export default function MontyHallClient() {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'play' ? styles.tabActive : ''}`} onClick={() => setTab('play')}>🎮 직접 해보기</button>
-        <button className={`${styles.tab} ${tab === 'sim' ? styles.tabActive : ''}`} onClick={() => setTab('sim')}>⚡ 자동 시뮬레이션</button>
-        <button className={`${styles.tab} ${tab === 'why' ? styles.tabActive : ''}`} onClick={() => setTab('why')}>💡 왜 바꿔야 할까?</button>
+      <div className={styles.tabs} role="tablist" aria-label="몬티 홀 모드">
+        <button type="button" role="tab" id="mh-tab-play" aria-controls="mh-panel-play" aria-selected={tab === 'play'} className={`${styles.tab} ${tab === 'play' ? styles.tabActive : ''}`} onClick={() => setTab('play')}>🎮 직접 해보기</button>
+        <button type="button" role="tab" id="mh-tab-sim" aria-controls="mh-panel-sim" aria-selected={tab === 'sim'} className={`${styles.tab} ${tab === 'sim' ? styles.tabActive : ''}`} onClick={() => setTab('sim')}>⚡ 자동 시뮬레이션</button>
+        <button type="button" role="tab" id="mh-tab-why" aria-controls="mh-panel-why" aria-selected={tab === 'why'} className={`${styles.tab} ${tab === 'why' ? styles.tabActive : ''}`} onClick={() => setTab('why')}>💡 왜 바꿔야 할까?</button>
       </div>
 
-      {tab === 'play' && <PlayTab />}
-      {tab === 'sim' && <SimTab />}
-      {tab === 'why' && <WhyTab />}
+      {/* 탭을 모두 마운트한 채 숨김 토글 — 전환해도 플레이 전적·시뮬 설정/결과 유지 */}
+      <div role="tabpanel" id="mh-panel-play" aria-labelledby="mh-tab-play" hidden={tab !== 'play'}><PlayTab /></div>
+      <div role="tabpanel" id="mh-panel-sim" aria-labelledby="mh-tab-sim" hidden={tab !== 'sim'}><SimTab /></div>
+      <div role="tabpanel" id="mh-panel-why" aria-labelledby="mh-tab-why" hidden={tab !== 'why'}><WhyTab /></div>
     </div>
   )
 }
@@ -232,13 +221,17 @@ function PlayTab() {
             else if (hasCar) stateClass = styles.doorCar
           }
 
+          const stateLabel = isOpened ? ', 사회자가 연 염소 문'
+            : isRevealed ? (hasCar ? ', 자동차' : ', 염소')
+            : isPicked ? ', 내 선택' : ''
           return (
             <button
               key={d}
+              type="button"
               onClick={() => phase === 'choose' ? choose(d) : undefined}
               disabled={phase !== 'choose'}
               className={`${styles.door} ${stateClass}`}
-              aria-label={`문 ${d + 1}`}
+              aria-label={`문 ${d + 1}${stateLabel}`}
             >
               <span className={styles.doorNum}>{d + 1}</span>
               <span className={styles.doorIcon}>
@@ -254,10 +247,10 @@ function PlayTab() {
       {/* 결정 버튼 */}
       {phase === 'decide' && (
         <div className={styles.decideRow}>
-          <button className={styles.decideSwitch} onClick={() => decide('switch')}>
+          <button type="button" className={styles.decideSwitch} onClick={() => decide('switch')}>
             🔄 바꾸기
           </button>
-          <button className={styles.decideStay} onClick={() => decide('stay')}>
+          <button type="button" className={styles.decideStay} onClick={() => decide('stay')}>
             🎯 유지하기
           </button>
         </div>
@@ -272,7 +265,7 @@ function PlayTab() {
           <p className={styles.resultSub}>
             선택 전략: <strong>{usedStrategy === 'switch' ? '바꾸기' : '유지'} 전략</strong>
           </p>
-          <button className={styles.againBtn} onClick={resetRound}>
+          <button type="button" className={styles.againBtn} onClick={resetRound}>
             다시 하기 →
           </button>
         </div>
@@ -284,7 +277,7 @@ function PlayTab() {
           <div className={styles.statsHead}>
             <p className={styles.statsTitle}>내 전적</p>
             <span className={styles.statsTotal}>{totalPlays}회 플레이</span>
-            <button className={styles.statsReset} onClick={resetAll}>기록 초기화</button>
+            <button type="button" className={styles.statsReset} onClick={resetAll}>기록 초기화</button>
           </div>
           <div className={styles.statsGrid}>
             <StatsRow
@@ -341,18 +334,23 @@ function SimTab() {
   const [n, setN] = useState(1000)
   const [doorCount, setDoorCount] = useState(3)
   const [variant, setVariant] = useState<VariantId>('standard')
-  const [strategy, setStrategy] = useState<Strategy>('switch')
   const [speed, setSpeed] = useState<Speed>('fast')
   const [running, setRunning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState<{
     switchWin: number; stayWin: number; n: number; doors: number; variant: VariantId
-    validTrials: number
+    attempted: number; validTrials: number; stopped: boolean
     curveSwitch: { x: number; y: number }[]; curveStay: { x: number; y: number }[]
     switchTheory: number; stayTheory: number
   } | null>(null)
   const cancelRef = useRef(false)
   const [copied, setCopied] = useState(false)
+
+  // 설정을 바꾸면 이전 결과를 지운다 (상단 이론값과 하단 결과가 어긋나는 것 방지)
+  function clearResult() { setResult(null); setProgress(0) }
+  function changeVariant(v: VariantId) { setVariant(v); clearResult() }
+  function changeDoorCount(d: number) { setDoorCount(d); clearResult() }
+  function changeN(v: number) { setN(v); clearResult() }
 
   // 변형 규칙 선택 시 N=3으로 잠금
   const isVariantMode = variant !== 'standard'
@@ -379,6 +377,7 @@ function SimTab() {
     let switchWin = 0
     let stayWin = 0
     let validTrials = 0
+    let attempted = 0
 
     const delay = speed === 'slow' ? 30 : speed === 'normal' ? 5 : 0
     const batchSize = speed === 'slow' ? 1 : speed === 'normal' ? 20 : 500
@@ -414,12 +413,14 @@ function SimTab() {
           curveStay.push({ x: j + 1, y: (stayWin / validTrials) * 100 })
         }
       }
+      attempted = end
       setProgress(end)
       if (delay > 0) await new Promise(r => setTimeout(r, delay))
     }
 
     setResult({
-      switchWin, stayWin, n, validTrials,
+      switchWin, stayWin, n, attempted, validTrials,
+      stopped: cancelRef.current && attempted < n,
       doors: effectiveDoors, variant,
       curveSwitch, curveStay,
       switchTheory, stayTheory,
@@ -438,7 +439,8 @@ function SimTab() {
   async function share() {
     if (!result) return
     const variantName = VARIANTS.find(v => v.id === result.variant)?.name ?? '표준'
-    const text = `몬티홀 시뮬레이터 ${result.n.toLocaleString()}회 결과 (문 ${result.doors}개 · ${variantName}):\n바꾸기 ${switchRate.toFixed(1)}% (이론 ${result.switchTheory.toFixed(1)}%)\n유지 ${stayRate.toFixed(1)}% (이론 ${result.stayTheory.toFixed(1)}%)\n직접 확인 → youtil.kr/tools/life/monty-hall`
+    const countNote = result.stopped ? ` (${result.n.toLocaleString()}회 중 중단)` : ''
+    const text = `몬티홀 시뮬레이터 유효 ${validN.toLocaleString()}회 결과${countNote} (문 ${result.doors}개 · ${variantName}):\n바꾸기 ${switchRate.toFixed(1)}% (이론 ${result.switchTheory.toFixed(1)}%)\n유지 ${stayRate.toFixed(1)}% (이론 ${result.stayTheory.toFixed(1)}%)\n직접 확인 → youtil.kr/tools/life/monty-hall`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -448,14 +450,15 @@ function SimTab() {
 
   return (
     <div className={styles.panel}>
-      {/* 변형 규칙 (4가지) */}
+      {/* 변형 규칙 (3가지) */}
       <div className={styles.field}>
         <p className={styles.fieldLabel}>변형 규칙 <span className={styles.fieldSub}>(진행자의 의도에 따라 결과 달라짐)</span></p>
         <div className={styles.variantGrid}>
           {VARIANTS.map(v => (
             <button key={v.id}
+              type="button" aria-pressed={variant === v.id}
               className={`${styles.variantCard} ${variant === v.id ? styles.variantCardActive : ''}`}
-              onClick={() => setVariant(v.id)} disabled={running}>
+              onClick={() => changeVariant(v.id)} disabled={running}>
               <div className={styles.variantHead}>
                 <span>{v.emoji} {v.name}</span>
                 <span className={styles.variantTheory}>
@@ -476,8 +479,9 @@ function SimTab() {
         <div className={styles.nRow}>
           {[3, 5, 10, 100, 1000].map(v => (
             <button key={v}
+              type="button" aria-pressed={doorCount === v}
               className={`${styles.nBtn} ${doorCount === v ? styles.nBtnActive : ''}`}
-              onClick={() => setDoorCount(v)}
+              onClick={() => changeDoorCount(v)}
               disabled={running || isVariantMode}>
               {v}개
             </button>
@@ -491,8 +495,9 @@ function SimTab() {
         <div className={styles.nRow}>
           {[10, 100, 1000, 10000].map(v => (
             <button key={v}
+              type="button" aria-pressed={n === v}
               className={`${styles.nBtn} ${n === v ? styles.nBtnActive : ''} ${styles[`nBtn_${v}`]}`}
-              onClick={() => setN(v)}
+              onClick={() => changeN(v)}
               disabled={running}>
               {v.toLocaleString()}회
             </button>
@@ -500,34 +505,21 @@ function SimTab() {
         </div>
       </div>
 
-      {/* 전략 */}
-      <div className={styles.field}>
-        <p className={styles.fieldLabel}>전략 <span className={styles.fieldSub}>(양쪽 모두 병렬 계산)</span></p>
-        <div className={styles.segRow}>
-          <button className={`${styles.segBtn} ${strategy === 'switch' ? styles.segBtnActive : ''}`}
-            onClick={() => setStrategy('switch')} disabled={running}>🔄 항상 바꾸기</button>
-          <button className={`${styles.segBtn} ${strategy === 'stay' ? styles.segBtnActive : ''}`}
-            onClick={() => setStrategy('stay')} disabled={running}>🎯 항상 유지</button>
-          <button className={`${styles.segBtn} ${strategy === 'random' ? styles.segBtnActive : ''}`}
-            onClick={() => setStrategy('random')} disabled={running}>🎲 랜덤</button>
-        </div>
-      </div>
-
       {/* 속도 */}
       <div className={styles.field}>
         <p className={styles.fieldLabel}>실행 속도</p>
         <div className={styles.segRow}>
-          <button className={`${styles.segBtn} ${speed === 'slow' ? styles.segBtnActive : ''}`}
+          <button type="button" aria-pressed={speed === 'slow'} className={`${styles.segBtn} ${speed === 'slow' ? styles.segBtnActive : ''}`}
             onClick={() => setSpeed('slow')} disabled={running}>🐢 천천히</button>
-          <button className={`${styles.segBtn} ${speed === 'normal' ? styles.segBtnActive : ''}`}
+          <button type="button" aria-pressed={speed === 'normal'} className={`${styles.segBtn} ${speed === 'normal' ? styles.segBtnActive : ''}`}
             onClick={() => setSpeed('normal')} disabled={running}>🚶 보통</button>
-          <button className={`${styles.segBtn} ${speed === 'fast' ? styles.segBtnActive : ''}`}
+          <button type="button" aria-pressed={speed === 'fast'} className={`${styles.segBtn} ${speed === 'fast' ? styles.segBtnActive : ''}`}
             onClick={() => setSpeed('fast')} disabled={running}>⚡ 빠르게</button>
         </div>
       </div>
 
       {/* 실행 버튼 */}
-      <button className={styles.runBtn}
+      <button type="button" className={styles.runBtn}
         onClick={running ? stop : runSim}
         disabled={false}>
         {running ? `⏹ 중단 (${progress.toLocaleString()}/${n.toLocaleString()})` : `▶ 시뮬레이션 시작`}
@@ -543,7 +535,7 @@ function SimTab() {
       {/* 결과 */}
       {result && (
         <>
-          <div className={styles.simResultRow}>
+          <div className={styles.simResultRow} role="status" aria-live="polite">
             <ResultCard
               label="🔄 바꾸기 전략"
               wins={result.switchWin}
@@ -562,9 +554,15 @@ function SimTab() {
             />
           </div>
 
-          {result.validTrials < result.n && (
+          {result.stopped && (
             <p className={styles.interpret} style={{ background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.3)' }}>
-              ⚠️ 변형 규칙으로 인해 {result.n - result.validTrials}회는 무효 처리됨 (예: 진행자가 자동차를 우연히 공개). 유효 시행 {validN.toLocaleString()}회 기준 결과.
+              ⏹ {result.n.toLocaleString()}회 목표 중 <strong>{result.attempted.toLocaleString()}회 진행 후 중단</strong>했습니다. 아래 결과는 실제 진행한 시행 기준입니다.
+            </p>
+          )}
+
+          {result.attempted > result.validTrials && (
+            <p className={styles.interpret} style={{ background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.3)' }}>
+              ⚠️ 변형 규칙으로 인해 진행한 {result.attempted.toLocaleString()}회 중 <strong>{(result.attempted - result.validTrials).toLocaleString()}회는 무효</strong> 처리됨 (예: 진행자가 자동차를 우연히 공개). 유효 시행 {validN.toLocaleString()}회 기준 결과.
             </p>
           )}
 
@@ -576,7 +574,7 @@ function SimTab() {
             <ConvergenceGraph
               curveSwitch={result.curveSwitch}
               curveStay={result.curveStay}
-              n={result.n}
+              n={result.attempted}
               switchTheory={result.switchTheory}
               stayTheory={result.stayTheory}
             />
@@ -611,17 +609,17 @@ function SimTab() {
             </table>
           </div>
 
-          {/* 해석 */}
+          {/* 해석 — 실제 유효 시행 수(validN) 기준 */}
           <div className={styles.interpret}>
-            {result.n >= 1000
-              ? `✅ 대수의 법칙이 확인됐습니다! 시행 횟수가 많을수록 이론값(${result.switchTheory.toFixed(1)}% / ${result.stayTheory.toFixed(1)}%)에 가까워집니다.`
-              : result.n >= 100
-                ? '📊 시행 횟수를 1,000회 이상으로 늘리면 이론값에 훨씬 가깝게 수렴합니다.'
-                : '⚠️ 시행 횟수가 적어 편차가 클 수 있습니다. 1,000회 이상 실행해 보세요.'}
+            {validN >= 1000
+              ? `✅ 대수의 법칙이 확인됐습니다! 유효 시행 ${validN.toLocaleString()}회 기준으로 이론값(${result.switchTheory.toFixed(1)}% / ${result.stayTheory.toFixed(1)}%)에 가깝게 수렴했습니다.`
+              : validN >= 100
+                ? `📊 유효 시행 ${validN.toLocaleString()}회입니다. 1,000회 이상으로 늘리면 이론값에 훨씬 가깝게 수렴합니다.`
+                : `⚠️ 유효 시행 ${validN.toLocaleString()}회로 적어 편차가 클 수 있습니다. 1,000회 이상 실행해 보세요.`}
           </div>
 
           {/* 공유 */}
-          <button className={styles.shareBtn} onClick={share}>
+          <button type="button" className={styles.shareBtn} onClick={share}>
             {copied ? '✓ 복사 완료!' : '📋 결과 텍스트 복사'}
           </button>
         </>
@@ -638,7 +636,7 @@ function ResultCard({ label, wins, losses, rate, theory, color }: {
       <p className={styles.resLabel}>{label}</p>
       <p className={styles.resRate} style={{ color }}>{rate.toFixed(1)}%</p>
       <p className={styles.resDetail}>{wins.toLocaleString()}승 / {losses.toLocaleString()}패</p>
-      <p className={styles.resTheory}>이론 {theory}%</p>
+      <p className={styles.resTheory}>이론 {theory.toFixed(1)}%</p>
     </div>
   )
 }
@@ -671,7 +669,8 @@ function ConvergenceGraph({
   const yTicks = Array.from(new Set([0, Math.round(stayTheory), 50, Math.round(switchTheory), 100])).sort((a, b) => a - b)
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={styles.graph} preserveAspectRatio="xMidYMid meet">
+    <svg viewBox={`0 0 ${W} ${H}`} className={styles.graph} preserveAspectRatio="xMidYMid meet"
+      role="img" aria-label={`승률 수렴 그래프 — 시행이 늘수록 바꾸기는 이론 ${switchTheory.toFixed(0)}%, 유지는 ${stayTheory.toFixed(0)}%에 수렴`}>
       {/* Y 그리드 + 레이블 */}
       {yTicks.map(y => {
         const isTheory = Math.abs(y - switchTheory) < 1 || Math.abs(y - stayTheory) < 1
@@ -822,21 +821,20 @@ function WhyTab() {
         <p className={styles.whyNum}>5</p>
         <h3 className={styles.whyTitle}>N개 문 일반화</h3>
         <p className={styles.whyBody}>
-          사회자가 1개 문만 공개하고 바꾸게 해준다면, <strong>N개 문에서 바꾸기 승률</strong>은
-          남은 N−2개의 닫힌 문에 1−1/N 확률이 나눠집니다.
+          표준 몬티홀처럼 <strong>사회자가 N−2개 문을 열어 1개만 남겨준다면</strong>, 처음 고른 문(1/N)을 뺀 나머지 확률이 그 한 문에 모입니다 — <strong>바꾸기 승률 (N−1)/N</strong>.
         </p>
         <div className={styles.genTable}>
           <table>
             <thead>
-              <tr><th>문 수</th><th>유지 승률</th><th>바꾸기 승률*</th></tr>
+              <tr><th>문 수</th><th>유지 승률</th><th>바꾸기 승률</th></tr>
             </thead>
             <tbody>
               {[
                 { n: 3,   stay: 33.33, switch: 66.67 },
-                { n: 4,   stay: 25.00, switch: 37.50 },
-                { n: 5,   stay: 20.00, switch: 26.67 },
-                { n: 10,  stay: 10.00, switch: 11.25 },
-                { n: 100, stay: 1.00,  switch: 1.01 },
+                { n: 4,   stay: 25.00, switch: 75.00 },
+                { n: 5,   stay: 20.00, switch: 80.00 },
+                { n: 10,  stay: 10.00, switch: 90.00 },
+                { n: 100, stay: 1.00,  switch: 99.00 },
               ].map(r => (
                 <tr key={r.n}>
                   <td>{r.n}개</td>
@@ -847,8 +845,8 @@ function WhyTab() {
             </tbody>
           </table>
           <p className={styles.genNote}>
-            * 사회자가 1개 문만 여는 경우. (N−1)/(N(N−2)) 기준.<br />
-            사회자가 N−2개 문을 모두 연다면 바꾸기 승률은 (N−1)/N로 치솟습니다 — 100개 → 99%.
+            표준 몬티홀 = 사회자가 <strong>N−2개를 열어 1개만 남기는</strong> 경우 바꾸기 (N−1)/N — [자동 시뮬레이션] 탭과 같은 기준입니다.<br />
+            (참고: 사회자가 단 1개만 열고 남은 N−2개 중 무작위로 바꾸면 (N−1)/(N(N−2))로 오히려 낮아집니다 — 4개 37.5%.)
           </p>
         </div>
       </div>

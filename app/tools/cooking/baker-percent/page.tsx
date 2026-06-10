@@ -322,7 +322,7 @@ export default function BakerPercentPage() {
               { href: '/tools/cooking/serving',       icon: '🍽️', name: '1인분 분량 계산기',       desc: '파스타·고기·쌀 분량 가이드' },
               { href: '/tools/cooking/food-storage',  icon: '🧊', name: '식재료 보관 계산기', desc: '냉장·냉동 보관 기간 추적' },
               { href: '/tools/cooking/substitute',    icon: '🔄', name: '식재료 대체 계산기', desc: '버터·설탕·계란 대체 비율' },
-              { href: '/tools/unit/weight',           icon: '⚖️', name: '무게 변환기',             desc: 'kg·g·lb·oz·근·돈 변환' },
+              { href: '/tools/unit/converter',        icon: '⚖️', name: '단위 변환기',             desc: '무게·부피·온도 등 14종 통합 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

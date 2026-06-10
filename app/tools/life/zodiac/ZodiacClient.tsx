@@ -31,7 +31,9 @@ function getDaysInMonth(year: number, month: number) {
 }
 
 const currentYear = new Date().getFullYear()
-const YEARS = Array.from({ length: currentYear - 1930 + 1 }, (_, i) => currentYear - i)
+// 1924 = 갑자년(60갑자 시작) — 본문 60갑자 표와 범위 일치 + 고령 사용자 입력 허용
+const YEARS = Array.from({ length: currentYear - 1924 + 1 }, (_, i) => currentYear - i)
+const MAX_FAMILY = 12   // 궁합 매트릭스가 N² 라서 모바일 부하 방지 상한
 
 export default function ZodiacClient() {
   const [tab, setTab] = useState<TabId>('profile')
@@ -59,16 +61,31 @@ export default function ZodiacClient() {
   const daysInMonth = year && month ? getDaysInMonth(parseInt(year), parseInt(month)) : 31
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
 
+  /* ── 미래 날짜 여부 (음수 나이 방지) ── */
+  const profileFuture = useMemo(() => {
+    const y = parseInt(year), m = parseInt(month), d = parseInt(day)
+    if (!y || !m || !d) return false
+    const t = new Date()
+    return y > t.getFullYear() || (y === t.getFullYear() && (m > t.getMonth() + 1 || (m === t.getMonth() + 1 && d > t.getDate())))
+  }, [year, month, day])
+
   /* ── 메인 프로필 결과 ── */
   const profile = useMemo(() => {
     const y = parseInt(year), m = parseInt(month), d = parseInt(day)
     if (!y || !m || !d) return null
+    // 미래 날짜는 결과를 만들지 않음 (만 -1세 등 방지)
+    const t = new Date()
+    if (y > t.getFullYear() || (y === t.getFullYear() && (m > t.getMonth() + 1 || (m === t.getMonth() + 1 && d > t.getDate())))) return null
     const chinese = getZodiacByYear(y)
     const star = getStarSign(m, d)
     const ganji = getGanji(y)
     const birthMonth = getBirthMonth(m)
     const ageInfo = getAgeInfo(y, m, d)
-    return { chinese, star, ganji, birthMonth, ageInfo, year: y, month: m, day: d }
+    // 1~2월 출생: 음력 설(보통 1/21~2/20)·입춘(2/4경) 이전이면 전통적으로 전년 띠
+    const lunarRisk = m === 1 || (m === 2 && d <= 20)
+    const prevChinese = lunarRisk ? getZodiacByYear(y - 1) : null
+    const prevGanji = lunarRisk ? getGanji(y - 1) : null
+    return { chinese, star, ganji, birthMonth, ageInfo, year: y, month: m, day: d, lunarRisk, prevChinese, prevGanji }
   }, [year, month, day])
 
   /* ── 두 사람 궁합 결과 ── */
@@ -80,8 +97,8 @@ export default function ZodiacClient() {
     const b = { chinese: getZodiacByYear(y2), star: getStarSign(m2, d2), ganji: getGanji(y2) }
     const zodiacEval = evalZodiacPair(a.chinese.name, b.chinese.name)
     const elementEval = evalElementPair(a.star.element, b.star.element)
-    // 종합: 띠 60% + 별자리 40%
-    const overall = Math.round((zodiacEval.score * 0.6 + elementEval.score * 0.4) * 10) / 10
+    // 종합: 띠 60% + 별자리 40% (재미용 임의 배분). 0.5점 단위로 반올림해 과도한 정밀도 인상 방지.
+    const overall = Math.round((zodiacEval.score * 0.6 + elementEval.score * 0.4) * 2) / 2
     return { a, b, zodiacEval, elementEval, overall }
   }, [aYear, aMonth, aDay, bYear, bMonth, bDay])
 
@@ -96,7 +113,7 @@ export default function ZodiacClient() {
 ${profile.chinese.emoji} ${profile.chinese.name}띠 (${profile.chinese.hanja}) · ${profile.star.emoji} ${profile.star.name}
 60갑자: ${profile.ganji.hanja} (${profile.ganji.hangul})
 ${profile.month}월 탄생석: ${profile.birthMonth.stone}
-다음 생일까지: D-${profile.ageInfo.daysToBirthday}
+다음 생일까지: ${profile.ageInfo.daysToBirthday === 0 ? '오늘 생일!' : `D-${profile.ageInfo.daysToBirthday}`}
 환갑: ${profile.ageInfo.hwangapYear}년
 youtil.kr/tools/life/zodiac (재미용 도구)`
     try {
@@ -107,6 +124,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
   /* ── 가족 추가/삭제 ── */
   const handleAddFamily = () => {
+    if (family.length >= MAX_FAMILY) return
     const y = parseInt(newY), m = parseInt(newM), d = parseInt(newD)
     if (!y || !m || !d || !newName.trim()) return
     const next: FamilyMember[] = [...family, {
@@ -122,18 +140,26 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
     setFamily(next); saveFamily(next)
   }
 
+  /* ── 월/년 변경 시 일(日) 클램프 — 윤년 29일 등 잘못된 날짜 방지 ── */
+  const setAYearC  = (v: string) => { setAYear(v);  const dim = getDaysInMonth(parseInt(v), parseInt(aMonth) || 1);     if ((parseInt(aDay) || 1) > dim) setADay(String(dim)) }
+  const setAMonthC = (v: string) => { setAMonth(v); const dim = getDaysInMonth(parseInt(aYear) || 2000, parseInt(v));  if ((parseInt(aDay) || 1) > dim) setADay(String(dim)) }
+  const setBYearC  = (v: string) => { setBYear(v);  const dim = getDaysInMonth(parseInt(v), parseInt(bMonth) || 1);     if ((parseInt(bDay) || 1) > dim) setBDay(String(dim)) }
+  const setBMonthC = (v: string) => { setBMonth(v); const dim = getDaysInMonth(parseInt(bYear) || 2000, parseInt(v));  if ((parseInt(bDay) || 1) > dim) setBDay(String(dim)) }
+  const setNewYC   = (v: string) => { setNewY(v);   if (newM && (parseInt(newD) || 1) > getDaysInMonth(parseInt(v), parseInt(newM))) setNewD('') }
+  const setNewMC   = (v: string) => { setNewM(v);   if (newY && (parseInt(newD) || 1) > getDaysInMonth(parseInt(newY), parseInt(v))) setNewD('') }
+
   return (
     <div className={styles.wrap}>
       {/* 탭 — 모바일에서도 가로 배치 */}
-      <div className={styles.tabs}>
-        <button className={`${styles.tabBtn} ${tab === 'profile' ? styles.tabActive : ''}`} onClick={() => setTab('profile')}>
-          🐯 본인
+      <div className={styles.tabs} role="tablist" aria-label="띠·별자리 계산 모드">
+        <button type="button" role="tab" aria-selected={tab === 'profile'} className={`${styles.tabBtn} ${tab === 'profile' ? styles.tabActive : ''}`} onClick={() => setTab('profile')}>
+          <span aria-hidden="true">🐯</span> 본인
         </button>
-        <button className={`${styles.tabBtn} ${tab === 'compat' ? styles.tabActiveCompat : ''}`} onClick={() => setTab('compat')}>
-          💕 두 사람 궁합
+        <button type="button" role="tab" aria-selected={tab === 'compat'} className={`${styles.tabBtn} ${tab === 'compat' ? styles.tabActiveCompat : ''}`} onClick={() => setTab('compat')}>
+          <span aria-hidden="true">💕</span> 두 사람 궁합
         </button>
-        <button className={`${styles.tabBtn} ${tab === 'family' ? styles.tabActiveFamily : ''}`} onClick={() => setTab('family')}>
-          👨‍👩‍👧 가족 궁합
+        <button type="button" role="tab" aria-selected={tab === 'family'} className={`${styles.tabBtn} ${tab === 'family' ? styles.tabActiveFamily : ''}`} onClick={() => setTab('family')}>
+          <span aria-hidden="true">👨‍👩‍👧</span> 가족 궁합
         </button>
       </div>
 
@@ -145,25 +171,25 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             <label className={styles.cardLabel}>생년월일 선택 (양력)</label>
             <div className={styles.selectRow}>
               <div className={styles.selectWrap}>
-                <select className={styles.select} value={year} onChange={e => { setYear(e.target.value); setDay('') }}>
+                <select className={styles.select} aria-label="출생 연도 (양력)" value={year} onChange={e => { setYear(e.target.value); setDay('') }}>
                   <option value="">년도</option>
                   {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
                 </select>
-                <span className={styles.selectArrow}>▾</span>
+                <span className={styles.selectArrow} aria-hidden="true">▾</span>
               </div>
               <div className={styles.selectWrap}>
-                <select className={styles.select} value={month} onChange={e => handleMonthChange(e.target.value, 'self')}>
+                <select className={styles.select} aria-label="출생 월" value={month} onChange={e => handleMonthChange(e.target.value, 'self')}>
                   <option value="">월</option>
                   {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
                 </select>
-                <span className={styles.selectArrow}>▾</span>
+                <span className={styles.selectArrow} aria-hidden="true">▾</span>
               </div>
               <div className={styles.selectWrap}>
-                <select className={styles.select} value={day} onChange={e => setDay(e.target.value)} disabled={!month}>
+                <select className={styles.select} aria-label="출생 일" value={day} onChange={e => setDay(e.target.value)} disabled={!month}>
                   <option value="">일</option>
                   {days.map(d => <option key={d} value={d}>{d}일</option>)}
                 </select>
-                <span className={styles.selectArrow}>▾</span>
+                <span className={styles.selectArrow} aria-hidden="true">▾</span>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -176,7 +202,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
           {profile ? (
             <>
               {/* ★ 통합 프로필 카드 (NEW) */}
-              <div className={styles.profileCard}>
+              <div className={styles.profileCard} aria-live="polite">
                 <div className={styles.profileTitle}>
                   🎂 {profile.year}년 {profile.month}월 {profile.day}일 (양력)
                 </div>
@@ -214,11 +240,22 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                   </div>
                   <div className={styles.profileMetaCard}>
                     <div className={styles.profileMetaLabel}>🎂 만 나이 · 다음 생일</div>
-                    <div className={styles.profileMetaValue}>만 {profile.ageInfo.age}세 · D-{profile.ageInfo.daysToBirthday}</div>
-                    <div className={styles.profileMetaSub}>환갑: {profile.ageInfo.hwangapYear}년 ({profile.year + 60})</div>
+                    <div className={styles.profileMetaValue}>만 {profile.ageInfo.age}세 · {profile.ageInfo.daysToBirthday === 0 ? '오늘 생일 🎉' : `D-${profile.ageInfo.daysToBirthday}`}</div>
+                    <div className={styles.profileMetaSub}>환갑(만 60세): {profile.ageInfo.hwangapYear}년</div>
                   </div>
                 </div>
+                <div className={styles.profileFootNote}>
+                  ⓘ 띠·60갑자는 <strong>양력 연도 기준</strong> 간편 계산입니다.
+                </div>
               </div>
+
+              {profile.lunarRisk && profile.prevChinese && profile.prevGanji && (
+                <div className={styles.lunarCaveat}>
+                  📅 <strong>1~2월 출생</strong> — 음력 설(보통 1/21~2/20)이나 입춘(2/4경) <strong>이전</strong> 출생이라면
+                  전통적으로 <strong>{profile.prevChinese.emoji} {profile.prevChinese.name}띠 · {profile.prevGanji.hanja}({profile.prevGanji.hangul})</strong>(전년 기준)일 수 있습니다.
+                  정확히는 <Link href="/tools/date/lunar" style={{ color: '#CA8A04', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
+                </div>
+              )}
 
               {/* 띠 성격 */}
               <div className={styles.card}>
@@ -288,6 +325,11 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 </button>
               </div>
             </>
+          ) : profileFuture ? (
+            <div className={styles.empty}>
+              <strong style={{ color: '#EA580C' }}>⚠️ 미래 날짜는 입력할 수 없습니다.</strong>
+              <div style={{ marginTop: 4 }}>오늘 이전의 생년월일을 선택하세요.</div>
+            </div>
           ) : (
             <div className={styles.empty}>
               {year && month && !day
@@ -306,15 +348,15 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
             <div className={styles.twoPersonRow}>
               <div className={styles.personPanel}>
-                <div className={styles.personPanelTitle}>🙋 나</div>
+                <div className={styles.personPanelTitle}><span aria-hidden="true">🙋</span> 나</div>
                 <div className={styles.personPanelRow}>
-                  <select className={styles.personPanelSelect} value={aYear} onChange={e => setAYear(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="나 출생 연도" value={aYear} onChange={e => setAYearC(e.target.value)}>
                     {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
                   </select>
-                  <select className={styles.personPanelSelect} value={aMonth} onChange={e => setAMonth(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="나 출생 월" value={aMonth} onChange={e => setAMonthC(e.target.value)}>
                     {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
                   </select>
-                  <select className={styles.personPanelSelect} value={aDay} onChange={e => setADay(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="나 출생 일" value={aDay} onChange={e => setADay(e.target.value)}>
                     {Array.from({ length: getDaysInMonth(parseInt(aYear) || 2000, parseInt(aMonth) || 1) }, (_, i) => i + 1)
                       .map(d => <option key={d} value={d}>{d}일</option>)}
                   </select>
@@ -328,15 +370,15 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 )}
               </div>
               <div className={styles.personPanel}>
-                <div className={styles.personPanelTitle}>👤 상대</div>
+                <div className={styles.personPanelTitle}><span aria-hidden="true">👤</span> 상대</div>
                 <div className={styles.personPanelRow}>
-                  <select className={styles.personPanelSelect} value={bYear} onChange={e => setBYear(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="상대 출생 연도" value={bYear} onChange={e => setBYearC(e.target.value)}>
                     {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
                   </select>
-                  <select className={styles.personPanelSelect} value={bMonth} onChange={e => setBMonth(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="상대 출생 월" value={bMonth} onChange={e => setBMonthC(e.target.value)}>
                     {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
                   </select>
-                  <select className={styles.personPanelSelect} value={bDay} onChange={e => setBDay(e.target.value)}>
+                  <select className={styles.personPanelSelect} aria-label="상대 출생 일" value={bDay} onChange={e => setBDay(e.target.value)}>
                     {Array.from({ length: getDaysInMonth(parseInt(bYear) || 2000, parseInt(bMonth) || 1) }, (_, i) => i + 1)
                       .map(d => <option key={d} value={d}>{d}일</option>)}
                   </select>
@@ -354,12 +396,12 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
           <div className={styles.card}>
             <label className={styles.cardLabel}>관계 유형</label>
-            <div className={styles.relationKindRow}>
+            <div className={styles.relationKindRow} role="group" aria-label="관계 유형 선택">
               {RELATION_KINDS.map(k => (
-                <button key={k.id}
+                <button key={k.id} type="button" aria-pressed={relKind === k.id}
                   className={`${styles.relationKindBtn} ${relKind === k.id ? styles.relationKindBtnActive : ''}`}
                   onClick={() => setRelKind(k.id)}>
-                  <span className={styles.relationKindEmoji}>{k.emoji}</span>
+                  <span className={styles.relationKindEmoji} aria-hidden="true">{k.emoji}</span>
                   {k.label}
                 </button>
               ))}
@@ -370,22 +412,25 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             <>
               {/* 종합 점수 카드 */}
               <div className={`${styles.compatScoreCard} ${
-                compatResult.zodiacEval.type === '삼합' ? styles.compatScoreCardSamhap :
-                compatResult.zodiacEval.type === '육합' ? styles.compatScoreCardYukhap :
-                compatResult.zodiacEval.type === '충' ? styles.compatScoreCardChung : styles.compatScoreCardOk
-              }`}>
+                compatResult.overall >= 4 ? styles.compatScoreCardSamhap :
+                compatResult.overall >= 3 ? styles.compatScoreCardOk :
+                styles.compatScoreCardChung
+              }`} aria-live="polite">
                 <div className={styles.compatScoreLabel}>종합 궁합 (재미용)</div>
                 <div className={styles.compatScoreNum}
-                  style={{ color: compatResult.zodiacEval.score >= 4 ? '#059669' : compatResult.zodiacEval.score === 3 ? '#CA8A04' : '#DC2626' }}>
+                  style={{ color: compatResult.overall >= 4 ? '#059669' : compatResult.overall >= 3 ? '#CA8A04' : '#DC2626' }}>
                   {compatResult.overall.toFixed(1)} / 5.0
                 </div>
-                <div className={styles.starRow}>
+                <div className={styles.starRow} role="img" aria-label={`5점 만점에 ${compatResult.overall.toFixed(1)}점`}>
                   {[1, 2, 3, 4, 5].map(n => (
-                    <span key={n} className={n <= Math.round(compatResult.overall) ? styles.starOn : styles.starOff}>★</span>
+                    <span key={n} aria-hidden="true" className={n <= Math.round(compatResult.overall) ? styles.starOn : styles.starOff}>★</span>
                   ))}
                 </div>
                 <div className={styles.compatScoreType}>
                   띠: {compatResult.zodiacEval.type} · 별자리 원소: {compatResult.elementEval.type === '삼합' ? '시너지' : compatResult.elementEval.type === '충' ? '거리감' : '평범'}
+                </div>
+                <div className={styles.compatScoreDesc}>
+                  띠 60% + 별자리 40% 가중 (재미용 임의 배분 · 과학적 근거 아님)
                 </div>
               </div>
 
@@ -422,7 +467,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
           <div className={styles.card}>
             <label className={styles.cardLabel}>👨‍👩‍👧 가족 구성원 추가 <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(브라우저에 저장)</span></label>
             <div className={styles.familyAddGrid}>
-              <select className={styles.personPanelSelect} value={newRel} onChange={e => setNewRel(e.target.value as FamilyMember['relation'])}>
+              <select className={styles.personPanelSelect} aria-label="가족 관계" value={newRel} onChange={e => setNewRel(e.target.value as FamilyMember['relation'])}>
                 <option value="본인">본인</option>
                 <option value="배우자">배우자</option>
                 <option value="자녀">자녀</option>
@@ -430,21 +475,24 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <option value="형제자매">형제자매</option>
                 <option value="기타">기타</option>
               </select>
-              <input className={styles.personPanelSelect} type="text" placeholder="이름" maxLength={20}
+              <input className={styles.personPanelSelect} type="text" placeholder="이름" maxLength={20} aria-label="가족 이름"
                 value={newName} onChange={e => setNewName(e.target.value)} />
-              <select className={styles.personPanelSelect} value={newY} onChange={e => setNewY(e.target.value)}>
+              <select className={styles.personPanelSelect} aria-label="가족 출생 연도" value={newY} onChange={e => setNewYC(e.target.value)}>
                 <option value="">년</option>
                 {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
               </select>
-              <select className={styles.personPanelSelect} value={newM} onChange={e => setNewM(e.target.value)}>
+              <select className={styles.personPanelSelect} aria-label="가족 출생 월" value={newM} onChange={e => setNewMC(e.target.value)}>
                 <option value="">월</option>
                 {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
               </select>
-              <select className={styles.personPanelSelect} value={newD} onChange={e => setNewD(e.target.value)}>
+              <select className={styles.personPanelSelect} aria-label="가족 출생 일" value={newD} onChange={e => setNewD(e.target.value)}>
                 <option value="">일</option>
                 {Array.from({ length: newY && newM ? getDaysInMonth(parseInt(newY), parseInt(newM)) : 31 }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
               </select>
-              <button className={styles.familyAddBtn} onClick={handleAddFamily} title="추가">+ 추가</button>
+              <button type="button" className={styles.familyAddBtn} onClick={handleAddFamily}
+                disabled={family.length >= MAX_FAMILY} title="가족 구성원 추가">
+                {family.length >= MAX_FAMILY ? `최대 ${MAX_FAMILY}명까지` : '+ 추가'}
+              </button>
             </div>
             {family.length === 0 && (
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
@@ -483,7 +531,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                             <td>{z.emoji} {z.name}</td>
                             <td>{s.emoji} {s.name}</td>
                             <td className="numCol">{g.hanja}</td>
-                            <td><button className={styles.familyDelBtn} onClick={() => handleDelFamily(f.id)}>×</button></td>
+                            <td><button type="button" className={styles.familyDelBtn} aria-label={`${f.name} 삭제`} onClick={() => handleDelFamily(f.id)}>×</button></td>
                           </tr>
                         )
                       })}

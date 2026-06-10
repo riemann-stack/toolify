@@ -581,6 +581,7 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px;
+  overflow-x: auto;   /* 열이 많으면 셀을 8px로 찌그러뜨리지 말고 가로 스크롤 */
 }
 .seatCell {
   background: var(--bg2);

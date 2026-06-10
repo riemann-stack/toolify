@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import s from './sleep-debt.module.css'
 
 /* ─── 타입 ─── */
@@ -19,6 +19,7 @@ type Period = 7 | 14 | 30
 
 /* ─── 상수 ─── */
 const STORAGE_KEY = 'youtil_sleep_debt_v1'
+const SETTINGS_KEY = 'youtil_sleep_debt_settings_v1'
 const KST_OFFSET_MS = 9 * 3600 * 1000
 const RECOVERY_EFFICIENCY = 0.5  // 초과 수면 1h → 부채 0.5h 상쇄
 
@@ -69,6 +70,25 @@ function saveEntries(arr: SleepEntry[]) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)) } catch { /* quota */ }
 }
 
+/* ─── localStorage: 개인 설정 (목표·분석기간·회복) ─── */
+interface SleepSettings {
+  targetHours: number
+  period: Period
+  recoveryDailyHours: number
+  tomorrowWakeTime: string
+}
+function loadSettings(): Partial<SleepSettings> | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY)
+    return raw ? (JSON.parse(raw) as Partial<SleepSettings>) : null
+  } catch { return null }
+}
+function saveSettings(set: SleepSettings) {
+  if (typeof window === 'undefined') return
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(set)) } catch { /* quota */ }
+}
+
 /* ─── 부채 모델 ─── */
 interface DebtAnalysis {
   totalDebt: number       // 누적 부채 (시간, 음수 가능 → 0으로 클램프 표시)
@@ -93,7 +113,10 @@ function analyze(
   const byDate = new Map<string, SleepEntry>()
   relevant.forEach(e => byDate.set(e.date, e))
 
-  let rawDebt = 0
+  // 일별 running-balance — 매 스텝 0으로 floor.
+  // 초과 수면은 "이미 쌓인 부채"만 상쇄하고, 미래 부족분을 선불(크레딧)하지 못하게 한다.
+  // (전체를 합산한 뒤 마지막에 한 번만 0으로 클램프하면 초과일이 이후 부족일을 선불해 부채가 과소 집계됨)
+  let debt = 0
   let totalHours = 0
   let daysWithData = 0
   let streak = 0, longestStreak = 0
@@ -113,18 +136,18 @@ function analyze(
     if (h > longest) longest = h
     const diff = targetHours - h
     if (diff > 0) {
-      rawDebt += diff           // 부족
+      debt += diff           // 부족 → 부채 누적
       streak = 0
     } else {
-      rawDebt += diff * RECOVERY_EFFICIENCY  // 초과 → 부채 일부 상쇄
+      debt = Math.max(0, debt + diff * RECOVERY_EFFICIENCY)  // 초과 → 기존 부채만 상쇄 (0 미만으로 선불 X)
       streak++
       if (streak > longestStreak) longestStreak = streak
     }
   }
 
   return {
-    totalDebt: Math.max(0, rawDebt),
-    rawDebt,
+    totalDebt: debt,
+    rawDebt: debt,
     avgHours: daysWithData > 0 ? totalHours / daysWithData : 0,
     daysWithData,
     daysInPeriod: period,
@@ -202,15 +225,38 @@ export default function SleepDebtClient() {
   const [recoveryDailyHours, setRecoveryDailyHours] = useState(9)
   const [tomorrowWakeTime, setTomorrowWakeTime] = useState('07:00')
 
-  // 초기 로드
+  // 입력 검증 메시지
+  const [addError, setAddError] = useState('')
+
+  const settingsLoadedRef = useRef(false)
+
+  // 초기 로드 — 기록 + 개인 설정 + 날짜 동기화
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    /* eslint-disable react-hooks/set-state-in-effect */
     setEntries(loadEntries())
+    // 빌드시점(SSG) 날짜와 실제 클라이언트 KST 날짜가 다를 수 있어 마운트 시 동기화 (max/기본값 어긋남 방지)
+    const t = todayKstStr()
+    setTodayDate(t)
+    setInputDate(t)
+    const st = loadSettings()
+    if (st) {
+      if (typeof st.targetHours === 'number' && st.targetHours >= 5 && st.targetHours <= 10) setTargetHours(st.targetHours)
+      if (st.period === 7 || st.period === 14 || st.period === 30) setPeriod(st.period)
+      if (typeof st.recoveryDailyHours === 'number' && st.recoveryDailyHours >= 5 && st.recoveryDailyHours <= 11) setRecoveryDailyHours(st.recoveryDailyHours)
+      if (typeof st.tomorrowWakeTime === 'string' && /^\d{1,2}:\d{2}$/.test(st.tomorrowWakeTime)) setTomorrowWakeTime(st.tomorrowWakeTime)
+    }
+    settingsLoadedRef.current = true
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
-  // 저장
+  // 기록 저장
   useEffect(() => {
     saveEntries(entries)
   }, [entries])
+  // 개인 설정 저장 — 로드 완료 후에만 (초기 기본값으로 덮어쓰기 방지)
+  useEffect(() => {
+    if (!settingsLoadedRef.current) return
+    saveSettings({ targetHours, period, recoveryDailyHours, tomorrowWakeTime })
+  }, [targetHours, period, recoveryDailyHours, tomorrowWakeTime])
   // 오늘 날짜 매분 갱신 (자정 넘어가면 자동 반영)
   useEffect(() => {
     const id = setInterval(() => setTodayDate(todayKstStr()), 60_000)
@@ -232,10 +278,10 @@ export default function SleepDebtClient() {
     const d = analysis.totalDebt
     if (analysis.daysWithData === 0) return { label: '기록 없음', color: '#888', desc: '아래에서 수면 기록을 추가하세요' }
     if (d < 1) return { label: '✅ 정상', color: '#059669', desc: '현재 부채 거의 없음 — 잘 유지 중' }
-    if (d < 5) return { label: '🟢 양호', color: '#0891B2', desc: '경미한 부채 — 1~2일 충분히 자면 회복' }
+    if (d < 5) return { label: '🟢 양호', color: '#0891B2', desc: '경미한 부채 — 아래 회복 계획대로면 곧 0으로' }
     if (d < 10) return { label: '🟡 경미한 부채', color: '#D97706', desc: '집중력·기분 영향 시작 — 회복 권장' }
     if (d < 20) return { label: '🟠 누적 부채', color: '#EA580C', desc: '명확한 인지·면역 영향 — 회복 우선' }
-    return { label: '🔴 만성 부채', color: '#DC2626', desc: '심각 — 1~2주 집중 회복 + 생활 점검' }
+    return { label: '🔴 만성 부채', color: '#DC2626', desc: '심각 — 집중 회복 + 생활 점검 필요' }
   })()
 
   /* ─── 회복 계획 ─── */
@@ -252,16 +298,16 @@ export default function SleepDebtClient() {
     return { days, surplusPerDay, message: '' }
   })()
 
-  // 권장 취침 시각 (내일 기상 + 목표 시간 역산)
+  // 권장 취침 시각 — 회복 카드 안에서 쓰이므로 "회복 계획 수면시간" 기준으로 역산 (목표가 아님)
   const recommendedBedtime = useMemo(() => {
     const m = tomorrowWakeTime.match(/^(\d{1,2}):(\d{2})$/)
     if (!m) return null
     const wakeMin = parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
-    // 잠드는데 평균 15분 걸린다고 가정 → 목표 + 15분 전에 잠자리
-    const bedTotalMin = wakeMin - targetHours * 60 - 15
+    // 잠드는데 평균 15분 걸린다고 가정 → 회복 목표 + 15분 전에 잠자리
+    const bedTotalMin = wakeMin - recoveryDailyHours * 60 - 15
     const norm = ((bedTotalMin % (24 * 60)) + 24 * 60) % (24 * 60)
     return `${pad2(Math.floor(norm / 60))}:${pad2(norm % 60)}`
-  }, [tomorrowWakeTime, targetHours])
+  }, [tomorrowWakeTime, recoveryDailyHours])
 
   /* ─── 막대 차트 데이터 ─── */
   const chartData = useMemo(() => {
@@ -282,13 +328,16 @@ export default function SleepDebtClient() {
     let hours: number
     if (directMode) {
       const v = parseFloat(directHours)
-      if (!isFinite(v) || v <= 0 || v > 16) return
+      if (!isFinite(v) || v <= 0 || v > 16) { setAddError('수면 시간을 0~16시간 사이로 입력하세요.'); return }
       hours = v
     } else {
       const h = computeHours(bedtime, wakeTime)
-      if (h === null || h <= 0 || h > 16) return
+      if (h === null || h <= 0 || h > 16) { setAddError('잠든·일어난 시각을 확인하세요 (수면 0~16시간 범위).'); return }
       hours = h
     }
+    if (!inputDate || !/^\d{4}-\d{2}-\d{2}$/.test(inputDate)) { setAddError('기록할 날짜를 선택하세요.'); return }
+    if (inputDate > todayDate) { setAddError('미래 날짜는 기록할 수 없어요.'); return }
+    setAddError('')
     const newEntry: SleepEntry = {
       id: String(Date.now()) + Math.random().toString(36).slice(2, 5),
       date: inputDate,
@@ -371,6 +420,11 @@ export default function SleepDebtClient() {
             <span className={s.heroMetaVal}>{analysis.longestStreak}일 연속</span>
           </div>
         </div>
+        {analysis.daysWithData > 0 && analysis.daysWithData < analysis.daysInPeriod && (
+          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 10, lineHeight: 1.5 }}>
+            ※ 미입력일은 계산에서 제외 — 기록한 {analysis.daysWithData}일 기준 (전체 {analysis.daysInPeriod}일)
+          </div>
+        )}
       </div>
 
       {/* ─── 설정 ─── */}
@@ -384,6 +438,8 @@ export default function SleepDebtClient() {
             value={targetHours}
             onChange={e => setTargetHours(parseFloat(e.target.value))}
             className={s.slider}
+            aria-label="목표 수면 시간 (시간/일)"
+            aria-valuetext={`${targetHours}시간`}
           />
           <span className={s.sliderVal}>{targetHours}h</span>
         </div>
@@ -392,11 +448,12 @@ export default function SleepDebtClient() {
         </div>
 
         <div className={s.subLabel} style={{ marginTop: 14 }}>분석 기간</div>
-        <div className={s.periodRow}>
+        <div className={s.periodRow} role="group" aria-label="분석 기간 선택">
           {([7, 14, 30] as Period[]).map(p => (
             <button
               key={p}
               type="button"
+              aria-pressed={period === p}
               className={`${s.periodBtn} ${period === p ? s.periodActive : ''}`}
               onClick={() => setPeriod(p)}
             >지난 {p}일</button>
@@ -413,6 +470,7 @@ export default function SleepDebtClient() {
           <input
             type="date"
             className={s.dateInput}
+            aria-label="기록할 날짜 (기상한 날)"
             value={inputDate}
             max={todayDate}
             onChange={e => setInputDate(e.target.value)}
@@ -426,11 +484,13 @@ export default function SleepDebtClient() {
         </div>
 
         <div className={s.subLabel} style={{ marginTop: 12 }}>입력 방식</div>
-        <div className={s.modeRow}>
+        <div className={s.modeRow} role="group" aria-label="입력 방식 선택">
           <button type="button"
+            aria-pressed={!directMode}
             className={`${s.modeBtn} ${!directMode ? s.modeActive : ''}`}
             onClick={() => setDirectMode(false)}>🛏️ 잠든 시각 · 일어난 시각</button>
           <button type="button"
+            aria-pressed={directMode}
             className={`${s.modeBtn} ${directMode ? s.modeActive : ''}`}
             onClick={() => setDirectMode(true)}>⏱️ 시간 직접 입력</button>
         </div>
@@ -439,12 +499,12 @@ export default function SleepDebtClient() {
           <div className={s.timePairRow}>
             <div className={s.timeField}>
               <label>잠든 시각</label>
-              <input type="time" className={s.timeInput} value={bedtime}
+              <input type="time" className={s.timeInput} aria-label="잠든 시각" value={bedtime}
                 onChange={e => setBedtime(e.target.value)} />
             </div>
             <div className={s.timeField}>
               <label>일어난 시각</label>
-              <input type="time" className={s.timeInput} value={wakeTime}
+              <input type="time" className={s.timeInput} aria-label="일어난 시각" value={wakeTime}
                 onChange={e => setWakeTime(e.target.value)} />
             </div>
             <div className={s.timeField}>
@@ -462,6 +522,7 @@ export default function SleepDebtClient() {
             <input
               type="number" inputMode="decimal" step="0.5" min={0.5} max={16}
               className={s.directInput}
+              aria-label="잔 시간 (시간)"
               value={directHours}
               onChange={e => setDirectHours(e.target.value)}
             />
@@ -477,29 +538,36 @@ export default function SleepDebtClient() {
         )}
 
         <div className={s.subLabel} style={{ marginTop: 12 }}>수면 질 (선택)</div>
-        <div className={s.qualityRow}>
-          {[0, 1, 2, 3, 4, 5].map(q => (
-            <button
-              key={q}
-              type="button"
-              className={`${s.qualityBtn} ${quality === q ? s.qualityActive : ''}`}
-              onClick={() => setQuality(q as 0 | 1 | 2 | 3 | 4 | 5)}
-              title={
-                q === 0 ? '입력 안함' :
-                q === 1 ? '최악 (계속 깸·악몽)' :
-                q === 2 ? '나쁨' :
-                q === 3 ? '보통' :
-                q === 4 ? '좋음' : '최고 (개운함)'
-              }
-            >
-              {q === 0 ? '—' : '⭐'.repeat(q)}
-            </button>
-          ))}
+        <div className={s.qualityRow} role="group" aria-label="수면 질 선택">
+          {[0, 1, 2, 3, 4, 5].map(q => {
+            const qLabel =
+              q === 0 ? '입력 안함' :
+              q === 1 ? '최악 (계속 깸·악몽)' :
+              q === 2 ? '나쁨' :
+              q === 3 ? '보통' :
+              q === 4 ? '좋음' : '최고 (개운함)'
+            return (
+              <button
+                key={q}
+                type="button"
+                aria-pressed={quality === q}
+                aria-label={`수면 질: ${qLabel}`}
+                className={`${s.qualityBtn} ${quality === q ? s.qualityActive : ''}`}
+                onClick={() => setQuality(q as 0 | 1 | 2 | 3 | 4 | 5)}
+                title={qLabel}
+              >
+                {q === 0 ? '—' : '⭐'.repeat(q)}
+              </button>
+            )
+          })}
         </div>
 
         <button type="button" className={s.addBtn} onClick={addEntry}>
           {entries.some(e => e.date === inputDate) ? '↻ 이 날 기록 덮어쓰기' : '+ 추가'}
         </button>
+        {addError && (
+          <p style={{ color: '#DC2626', fontSize: 12.5, margin: '8px 0 0', textAlign: 'center', lineHeight: 1.5 }}>{addError}</p>
+        )}
       </div>
 
       {/* ─── 차트 ─── */}
@@ -539,7 +607,7 @@ export default function SleepDebtClient() {
                 )
               }
               const diff = d.hours - targetHours
-              const color = diff >= -0.5 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
+              const color = diff >= 0 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
               const y = yFromH(d.hours)
               return (
                 <g key={i}>
@@ -612,6 +680,8 @@ export default function SleepDebtClient() {
                   value={recoveryDailyHours}
                   onChange={e => setRecoveryDailyHours(parseFloat(e.target.value))}
                   className={s.slider}
+                  aria-label="회복 기간 동안 매일 잘 시간 (시간)"
+                  aria-valuetext={`${recoveryDailyHours}시간`}
                 />
                 <span className={s.sliderVal}>{recoveryDailyHours}h</span>
               </div>
@@ -636,11 +706,12 @@ export default function SleepDebtClient() {
             <div className={s.bedtimeAdvice}>
               내일 <input type="time"
                 className={s.miniTime}
+                aria-label="내일 기상 시각"
                 value={tomorrowWakeTime}
                 onChange={e => setTomorrowWakeTime(e.target.value)}
               /> 기상 시 →
               <strong style={{ color: 'var(--accent)' }}> {recommendedBedtime ?? '—'}</strong>까지 잠자리
-              <span className={s.bedtimeNote}>(잠들기 15분 여유 포함)</span>
+              <span className={s.bedtimeNote}>(회복 목표 {recoveryDailyHours}h + 잠들기 15분 여유)</span>
             </div>
           </div>
 
@@ -666,7 +737,7 @@ export default function SleepDebtClient() {
           <ul className={s.entryList}>
             {sortedEntries.slice(0, 30).map(e => {
               const diff = e.hours - targetHours
-              const color = diff >= -0.5 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
+              const color = diff >= 0 ? '#059669' : diff >= -2 ? '#D97706' : '#DC2626'
               return (
                 <li key={e.id} className={s.entryItem}>
                   <div className={s.entryDate}>{fmtKoreanDate(e.date)}</div>
@@ -696,7 +767,7 @@ export default function SleepDebtClient() {
       <div className={s.tipCard}>
         <div className={s.cardLabel}>💡 수면 부채 회복 가이드</div>
         <ul className={s.tipList}>
-          <li><strong>1~2주 누적 부채는 회복 가능</strong> — 그 이상은 인지·면역 손상이 일부 영구화 가능</li>
+          <li><strong>1~2주 누적 부채는 회복 가능</strong> — 그 이상 만성화되면 회복이 더디고 장기 건강 위험 ↑ (만성화 전 회복 권장)</li>
           <li><strong>매일 +1시간씩 7~10일</strong>이 가장 효과적 — 주말 몰아 자기보다 우월</li>
           <li><strong>같은 시각 기상</strong> 유지 (주말 ±30분 이내) — 생체리듬 보호</li>
           <li><strong>20~30분 낮잠</strong> — 부채 일부 상쇄, 다만 오후 3시 이전</li>

@@ -489,7 +489,8 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);
-  white-space: nowrap;
+  white-space: normal;       /* 긴 범위 문자열이 좁은 화면에서 줄바꿈되도록 (320px 오버플로우 방지) */
+  word-break: keep-all;
 }
 .scenarioTable .currentRow td {
   background: rgba(8,145,178,0.14);

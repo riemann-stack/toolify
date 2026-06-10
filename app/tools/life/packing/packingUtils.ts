@@ -133,13 +133,17 @@ export interface PackingItem {
   label: string
   count: number       // 1인 기준
   weight: number      // 1개 무게 (g)
-  totalWeight: number // count × weight × people
+  totalWeight: number // count × weight (1인 기준, g)
 }
 
 export interface PackingResult {
   items: PackingItem[]
-  totalWeight: number   // kg
-  totalWeightCompressed: number  // 압축팩 -30%
+  clothingWeight: number   // 1인 의류 kg
+  extrasWeight: number     // 1인 비의류(세면·전자·약 등) 추정 kg
+  carrierWeight: number    // 캐리어 자체 kg
+  totalWeight: number      // 1인 총(의류+비의류+캐리어) kg — 위탁 실측 기준
+  groupTotal: number       // 전체 인원 합계 kg
+  people: number
   carrier: { id: string; label: string; capacity: string; }
   airline: string
 }
@@ -157,18 +161,21 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   const cli = getClimate(inp.climate)
   const ph = getPhoto(inp.photo)
 
-  /* 상의 = ceil(일수 × 활동량 × 세탁 보정) + 1 + 사진 보너스 */
-  const topsBase = Math.ceil(days * act.multiplier * lau.multiplier)
+  /* 여름·열대는 땀으로 자주 갈아입어 옷 +30~50% (가이드 콘텐츠 기준 반영) */
+  const heat = inp.climate === 'hot' ? 1.5 : inp.climate === 'summer' ? 1.3 : 1.0
+
+  /* 상의 = ceil(일수 × 활동량 × 세탁 보정 × 더위 보정) + 1 + 사진 보너스 */
+  const topsBase = Math.ceil(days * act.multiplier * lau.multiplier * heat)
   const topsCount = Math.max(2, topsBase + (mode === 'comfort' ? 1 : 0) + ph.bonus)
 
   /* 하의 = ceil(일수 / 3 × 세탁 보정) + 1 */
   const bottomsBase = Math.ceil((days / 3) * (lau.cycle === 99 ? 1 : lau.cycle / 4))
   const bottomsCount = Math.max(1, bottomsBase + (mode === 'comfort' ? 1 : 0))
 
-  /* 속옷·양말 = 일수 + 1 (세탁 가능 시 절반) */
+  /* 속옷·양말 = 일수 보정 (세탁·더위 반영) */
   const underwearCount = lau.id === 'none'
-    ? Math.max(3, days + (mode === 'comfort' ? 2 : 1))
-    : Math.max(3, Math.ceil(days * lau.multiplier) + (mode === 'comfort' ? 2 : 1))
+    ? Math.max(3, Math.ceil(days * heat) + (mode === 'comfort' ? 2 : 1))
+    : Math.max(3, Math.ceil(days * lau.multiplier * heat) + (mode === 'comfort' ? 2 : 1))
   const sockCount = underwearCount
 
   /* 아우터 = 기온대별 (min은 -1) */
@@ -181,8 +188,12 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   if (mode === 'min') shoeCount = Math.min(shoeCount, 2)
   shoeCount = Math.min(shoeCount, 3)
 
-  /* 운동복 1세트 (상하의) */
-  const sportsCount = inp.needSports ? (mode === 'comfort' ? 2 : 1) : 0
+  /* 운동복 — 액티비티(골프·등산)는 일수만큼(라운드·산행별), 그 외는 1~2세트 */
+  const sportsCount = inp.needSports
+    ? (inp.activity === 'active'
+        ? Math.min(days, mode === 'comfort' ? 5 : 4)
+        : (mode === 'comfort' ? 2 : 1))
+    : 0
 
   /* 격식 옷 1세트 */
   const formalCount = inp.needFormal ? 1 : 0
@@ -190,29 +201,34 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   /* 수영복 (해양 활동 또는 한여름) */
   const swimCount = (inp.activity === 'beach' || inp.climate === 'hot') ? (mode === 'comfort' ? 2 : 1) : 0
 
+  /* 무게는 모두 1인 기준 (totalWeight = count × weight). 일행 합계는 groupTotal 로 별도 제공 */
   const items: PackingItem[] = [
-    { id: 'top',       emoji: '👕', label: '상의 (티·셔츠)',      count: topsCount,    weight: ITEM_WEIGHTS.top,       totalWeight: topsCount * ITEM_WEIGHTS.top * people },
-    { id: 'bottom',    emoji: '👖', label: '하의 (바지·치마)',     count: bottomsCount, weight: ITEM_WEIGHTS.bottom,    totalWeight: bottomsCount * ITEM_WEIGHTS.bottom * people },
-    { id: 'underwear', emoji: '🩲', label: '속옷',                count: underwearCount, weight: ITEM_WEIGHTS.underwear, totalWeight: underwearCount * ITEM_WEIGHTS.underwear * people },
-    { id: 'sock',      emoji: '🧦', label: '양말',                count: sockCount,     weight: ITEM_WEIGHTS.sock,      totalWeight: sockCount * ITEM_WEIGHTS.sock * people },
-    { id: 'outer',     emoji: '🧥', label: '아우터',              count: outerCount,    weight: ITEM_WEIGHTS.outer,     totalWeight: outerCount * ITEM_WEIGHTS.outer * people },
-    { id: 'shoe',      emoji: '👟', label: '신발',                count: shoeCount,     weight: ITEM_WEIGHTS.shoe,      totalWeight: shoeCount * ITEM_WEIGHTS.shoe * people },
+    { id: 'top',       emoji: '👕', label: '상의 (티·셔츠)',      count: topsCount,    weight: ITEM_WEIGHTS.top,       totalWeight: topsCount * ITEM_WEIGHTS.top },
+    { id: 'bottom',    emoji: '👖', label: '하의 (바지·치마)',     count: bottomsCount, weight: ITEM_WEIGHTS.bottom,    totalWeight: bottomsCount * ITEM_WEIGHTS.bottom },
+    { id: 'underwear', emoji: '🩲', label: '속옷',                count: underwearCount, weight: ITEM_WEIGHTS.underwear, totalWeight: underwearCount * ITEM_WEIGHTS.underwear },
+    { id: 'sock',      emoji: '🧦', label: '양말',                count: sockCount,     weight: ITEM_WEIGHTS.sock,      totalWeight: sockCount * ITEM_WEIGHTS.sock },
+    { id: 'outer',     emoji: '🧥', label: '아우터',              count: outerCount,    weight: ITEM_WEIGHTS.outer,     totalWeight: outerCount * ITEM_WEIGHTS.outer },
+    { id: 'shoe',      emoji: '👟', label: '신발',                count: shoeCount,     weight: ITEM_WEIGHTS.shoe,      totalWeight: shoeCount * ITEM_WEIGHTS.shoe },
   ]
-  if (sportsCount > 0) items.push({ id: 'sports', emoji: '🏃', label: '운동복 (상하)', count: sportsCount, weight: ITEM_WEIGHTS.sports, totalWeight: sportsCount * ITEM_WEIGHTS.sports * people })
-  if (formalCount > 0) items.push({ id: 'formal', emoji: '👔', label: '격식 옷',       count: formalCount, weight: ITEM_WEIGHTS.formal, totalWeight: formalCount * ITEM_WEIGHTS.formal * people })
-  if (swimCount > 0) items.push({ id: 'swim',     emoji: '🩱', label: '수영복',         count: swimCount,   weight: ITEM_WEIGHTS.swim,   totalWeight: swimCount * ITEM_WEIGHTS.swim * people })
+  if (sportsCount > 0) items.push({ id: 'sports', emoji: '🏃', label: '운동복 (상하)', count: sportsCount, weight: ITEM_WEIGHTS.sports, totalWeight: sportsCount * ITEM_WEIGHTS.sports })
+  if (formalCount > 0) items.push({ id: 'formal', emoji: '👔', label: '격식 옷',       count: formalCount, weight: ITEM_WEIGHTS.formal, totalWeight: formalCount * ITEM_WEIGHTS.formal })
+  if (swimCount > 0) items.push({ id: 'swim',     emoji: '🩱', label: '수영복',         count: swimCount,   weight: ITEM_WEIGHTS.swim,   totalWeight: swimCount * ITEM_WEIGHTS.swim })
 
-  const totalGrams = items.reduce((s, it) => s + it.totalWeight, 0)
-  const totalKg = totalGrams / 1000
-  const totalKgCompressed = totalKg * 0.85  // 압축팩으로 부피만 줄어 무게는 -15% 정도
+  const clothingKg = items.reduce((s, it) => s + it.totalWeight, 0) / 1000   // 1인 의류
+  // 비의류(세면·화장품·전자·약·잡화) 1인 추정 + 캐리어 자체 — 위탁 시 함께 측정되므로 한도 판정에 포함
+  const extrasKg = 2.5
+  const contentsKg = clothingKg + extrasKg
+  const carrierKg = contentsKg <= 7 ? 2.5 : contentsKg <= 14 ? 3.5 : 4.5
+  const totalKg = contentsKg + carrierKg     // 1인 1캐리어 총 무게
+  const groupTotal = totalKg * people
 
-  /* 캐리어 추천 */
+  /* 캐리어 추천 (1인 기준) */
   let carrier = { id: 'cabin', label: '기내용 (20인치)', capacity: '~ 7kg' }
   if (totalKg > 7 && totalKg <= 15) carrier = { id: '24', label: '24인치 (중형)', capacity: '~ 15kg' }
   else if (totalKg > 15 && totalKg <= 23) carrier = { id: '28', label: '28인치 (대형)', capacity: '~ 23kg' }
   else if (totalKg > 23) carrier = { id: 'large', label: '28인치+ 또는 분할', capacity: '23kg+' }
 
-  /* 항공사 한도 안내 */
+  /* 항공사 한도 안내 (1인 위탁 기준) */
   let airline = ''
   if (totalKg <= 7) airline = '✅ 기내 휴대 가능 (대부분 LCC 7~10kg, 풀서비스 7~12kg)'
   else if (totalKg <= 15) airline = '⚠️ 위탁 수하물 (대부분 LCC 15~20kg, 풀서비스 23kg)'
@@ -221,8 +237,12 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
 
   return {
     items,
+    clothingWeight: clothingKg,
+    extrasWeight: extrasKg,
+    carrierWeight: carrierKg,
     totalWeight: totalKg,
-    totalWeightCompressed: totalKgCompressed,
+    groupTotal,
+    people,
     carrier,
     airline,
   }
@@ -243,7 +263,7 @@ export interface ChecklistCategory {
 export const CHECKLISTS: ChecklistCategory[] = [
   {
     id: 'toiletry', emoji: '🧴', label: '세면도구',
-    items: ['칫솔·치약', '샴푸·린스', '바디워시·비누', '폼클렌징', '로션·스킨', '선크림', '면도기·면도크림', '여성용품', '면봉·면도면', '헤어 빗·드라이어'],
+    items: ['칫솔·치약', '샴푸·린스', '바디워시·비누', '폼클렌징', '로션·스킨', '선크림', '면도기·면도크림', '여성용품', '면봉·화장솜', '헤어 빗·드라이어'],
   },
   {
     id: 'medicine', emoji: '💊', label: '비상약',
@@ -251,7 +271,7 @@ export const CHECKLISTS: ChecklistCategory[] = [
   },
   {
     id: 'electronics', emoji: '📱', label: '전자기기',
-    items: ['핸드폰·충전기', '보조배터리 (위탁 X)', '이어폰·헤드폰', '카메라·메모리카드', '돼지코 (멀티 어댑터)', 'eSim·로밍 유심', '노트북·태블릿', '셀카봉·삼각대', '드라이기 (없는 호텔 대비)'],
+    items: ['핸드폰·충전기', '보조배터리 (기내 휴대만·단자 절연·100Wh↓)', '이어폰·헤드폰', '카메라·메모리카드', '돼지코 (멀티 어댑터)', 'eSim·로밍 유심', '노트북·태블릿', '셀카봉·삼각대', '드라이기 (없는 호텔 대비)'],
   },
   {
     id: 'misc', emoji: '🧳', label: '잡화',
@@ -259,7 +279,7 @@ export const CHECKLISTS: ChecklistCategory[] = [
   },
   {
     id: 'docs', emoji: '🆔', label: '서류 (필수)',
-    items: ['여권 (만료 6개월 이상)', '여권 사본 + 사진', '항공권·E-티켓', '호텔·숙소 예약 확인서', '여행자보험증', '환전·신용카드', '국제운전면허증 (필요시)', '비자 (해당 국가)', '백신 증명서 (해당 국가)', '비상 연락처 메모'],
+    items: ['여권 (잔여 유효기간 확인 — 국가별 3~6개월)', '여권 사본 + 사진', '항공권·E-티켓', '호텔·숙소 예약 확인서', '여행자보험증', '환전·신용카드', '국제운전면허증 (필요시)', '비자 (해당 국가)', '백신 증명서 (해당 국가)', '비상 연락처 메모'],
   },
   {
     id: 'beauty', emoji: '💄', label: '화장품·뷰티',
@@ -288,7 +308,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'honeymoon',
     emoji: '🥂',
-    title: '신혼여행 (해외 7박)',
+    title: '신혼여행 (해외 6박 7일)',
     desc: '사진 매우 중요 + 격식 디너 일정 + 휴양·관광 혼합',
     inputs: { days: 7, climate: 'mild', laundry: 'weekly', activity: 'city', photo: 'very', needSports: false, needFormal: true, people: 2 },
     notes: ['📸 콘셉트 의상 3~4벌 (커플룩 1세트)', '👔 격식 디너용 정장·드레스 1세트', '💍 결혼반지·악세서리', '📷 카메라·삼각대'],
@@ -296,7 +316,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'sea_resort',
     emoji: '🏖️',
-    title: '동남아 휴양 (5박)',
+    title: '동남아 휴양 (4박 5일)',
     desc: '비치·풀빌라 + 매일 세탁 가능 + 한여름',
     inputs: { days: 5, climate: 'hot', laundry: 'daily', activity: 'beach', photo: 'important', needSports: false, needFormal: false, people: 2 },
     notes: ['🩱 수영복 2벌 (갈아입기)', '🌞 선크림 SPF 50+', '🕶️ 모자·선글라스', '🩴 슬리퍼·아쿠아슈즈', '👜 비치백·방수 가방'],
@@ -304,7 +324,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'eu_city',
     emoji: '🏛️',
-    title: '유럽 자유여행 (10박)',
+    title: '유럽 자유여행 (9박 10일)',
     desc: '도시 관광 + 환절기 + 매일 걷기',
     inputs: { days: 10, climate: 'spring', laundry: 'weekly', activity: 'city', photo: 'important', needSports: false, needFormal: false, people: 1 },
     notes: ['👟 편한 운동화 (매일 1만보+)', '🧥 가벼운 자켓·바람막이 (일교차)', '🎒 데이팩 (관광용)', '🔌 유럽식 멀티 어댑터', '☂️ 접이식 우산'],
@@ -312,7 +332,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'golf',
     emoji: '⛳',
-    title: '골프투어 (4박, 동남아)',
+    title: '골프투어 (3박 4일, 동남아)',
     desc: '운동복 필수 + 라운드 4회 + 휴양',
     inputs: { days: 4, climate: 'summer', laundry: 'daily', activity: 'active', photo: 'normal', needSports: true, needFormal: false, people: 4 },
     notes: ['⛳ 골프복 4세트 (라운드별)', '🧤 골프 장갑 2~3개', '👟 골프화 + 일반화', '🧴 골프공·티 (현지 비싸요)', '☔ 비옷 (스콜 대비)'],
@@ -320,7 +340,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'camping',
     emoji: '🎒',
-    title: '캠핑·등산 (3박)',
+    title: '캠핑·등산 (2박 3일)',
     desc: '액티비티 + 변덕스러운 날씨 + 짧은 일정',
     inputs: { days: 3, climate: 'spring', laundry: 'none', activity: 'active', photo: 'normal', needSports: true, needFormal: false, people: 2 },
     notes: ['🥾 등산화·트래킹화', '🧥 방수·방풍 자켓', '🦟 모기·벌레 퇴치제', '🔦 헤드랜턴', '🧴 응급 키트 (찰과상·뱀·벌)'],
@@ -328,7 +348,7 @@ export const SCENARIOS: PackingScenario[] = [
   {
     id: 'baby_family',
     emoji: '👨‍👩‍👧‍👦',
-    title: '아기 동반 가족여행 (5박)',
+    title: '아기 동반 가족여행 (4박 5일)',
     desc: '아기 항목 추가 + 가족 4인 + 도시 관광',
     inputs: { days: 5, climate: 'mild', laundry: 'weekly', activity: 'city', photo: 'important', needSports: false, needFormal: false, people: 4 },
     notes: ['👶 기저귀·물티슈 충분히', '🍼 분유·이유식 (현지 어려움)', '🚼 아기띠 + 휴대용 유모차', '🛏️ 아기 담요·블랭킷', '💊 아기 상비약·체온계'],

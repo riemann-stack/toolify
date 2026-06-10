@@ -109,7 +109,7 @@ export default function BmiClient() {
     return combinedJudgment(rich.bmi, abdom.isObese, standard)
   }, [rich, abdom, standard])
 
-  /* ─────── 탭 4: 체중 시뮬 ─────── */
+  /* ─────── 탭 3: 체중 시뮬 ─────── */
   const [simWeight, setSimWeight] = useState(weightKg)
   useEffect(() => { setSimWeight(weightKg) }, [weightKg])
   const [perWeek, setPerWeek] = useState(-0.5)
@@ -132,7 +132,7 @@ export default function BmiClient() {
     [heightCm, weightKg, standard, perWeek, totalWeeks],
   )
 
-  /* ─────── 탭 5: 체지방률 ─────── */
+  /* ─────── 탭 2: 체지방률 입력 ─────── */
   const [neck, setNeck] = useState('')
   const [hip, setHip] = useState('')
   const neckCm = useMemo(() => {
@@ -250,9 +250,12 @@ export default function BmiClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="BMI 도구 탭">
         {TABS.map(t => (
           <button key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             {t.name}
@@ -265,7 +268,8 @@ export default function BmiClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>
             키
-            <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
+            <button type="button" aria-label="키 단위 전환"
+              className={`${styles.unitToggle} ${styles.unitToggleActive}`}
               onClick={toggleHeightUnit}>{unitH}</button>
           </label>
           <div className={styles.inputRow}>
@@ -278,7 +282,8 @@ export default function BmiClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>
             체중
-            <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
+            <button type="button" aria-label="체중 단위 전환"
+              className={`${styles.unitToggle} ${styles.unitToggleActive}`}
               onClick={toggleWeightUnit}>{unitW}</button>
           </label>
           <div className={styles.inputRow}>
@@ -293,10 +298,12 @@ export default function BmiClient() {
       <div className={styles.fieldRow}>
         <div className={styles.card}>
           <label className={styles.cardLabel}>성별</label>
-          <div className={styles.toggleRow}>
-            <button className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
+          <div className={styles.toggleRow} role="group" aria-label="성별 선택">
+            <button type="button" aria-pressed={gender === 'male'}
+              className={`${styles.toggleBtn} ${gender === 'male' ? styles.toggleActive : ''}`}
               onClick={() => setGender('male')}>♂ 남성</button>
-            <button className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
+            <button type="button" aria-pressed={gender === 'female'}
+              className={`${styles.toggleBtn} ${gender === 'female' ? styles.toggleActive : ''}`}
               onClick={() => setGender('female')}>♀ 여성</button>
           </div>
         </div>
@@ -312,10 +319,12 @@ export default function BmiClient() {
 
       <div className={styles.card}>
         <label className={styles.cardLabel}>BMI 분류 기준</label>
-        <div className={styles.toggleRow}>
-          <button className={`${styles.toggleBtn} ${standard === 'KOREA' ? styles.toggleActive : ''}`}
+        <div className={styles.toggleRow} role="group" aria-label="BMI 분류 기준 선택">
+          <button type="button" aria-pressed={standard === 'KOREA'}
+            className={`${styles.toggleBtn} ${standard === 'KOREA' ? styles.toggleActive : ''}`}
             onClick={() => setStandard('KOREA')}>🇰🇷 대한비만학회 (권장)</button>
-          <button className={`${styles.toggleBtn} ${standard === 'WHO' ? styles.toggleActive : ''}`}
+          <button type="button" aria-pressed={standard === 'WHO'}
+            className={`${styles.toggleBtn} ${standard === 'WHO' ? styles.toggleActive : ''}`}
             onClick={() => setStandard('WHO')}>🌐 WHO (국제)</button>
         </div>
       </div>
@@ -435,10 +444,11 @@ export default function BmiClient() {
                 <div className={styles.detailItem}>
                   <small>정상까지</small>
                   <div style={{ color: rich.toNormal.direction === 'in' ? '#059669' : 'var(--accent)' }}>
-                    {rich.toNormal.direction === 'in' ? '범위 내' :
-                      `${rich.toNormal.direction === 'lose' ? '−' : '+'}${rich.toNormal.kg}`}
+                    {rich.toNormal.direction === 'in' ? '범위 내'
+                      : rich.toNormal.kg === 0 ? '경계'
+                      : `${rich.toNormal.direction === 'lose' ? '−' : '+'}${rich.toNormal.kg}`}
                   </div>
-                  <p>{rich.toNormal.direction === 'in' ? '✓' : 'kg'}</p>
+                  <p>{rich.toNormal.direction === 'in' ? '✓' : rich.toNormal.kg === 0 ? '⚠' : 'kg'}</p>
                 </div>
                 <div className={styles.detailItem}>
                   <small>BMI 1당</small>
@@ -469,17 +479,17 @@ export default function BmiClient() {
               )}
 
               <div className={styles.resultActions}>
-                <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`키 ${Math.round(heightCm)}cm / 체중 ${Math.round(weightKg * 10) / 10}kg → BMI ${rich.bmi} (${rich.category.name})`)}>
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
+                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
               </div>
             </>
           ) : (
             <div className={styles.empty}>
               <div className={styles.emptyTitle}>키와 체중을 입력하세요</div>
-              유효 범위: 키 80~250{unitH === 'inch' ? 'in' : 'cm'} · 체중 20~300{unitW === 'lb' ? 'lb' : 'kg'}
+              유효 범위: 키 {unitH === 'inch' ? '31.5~98.4in' : '80~250cm'} · 체중 {unitW === 'lb' ? '44.1~661.4lb' : '20~300kg'}
             </div>
           )}
         </>
@@ -497,7 +507,8 @@ export default function BmiClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>
                 허리둘레
-                <button className={`${styles.unitToggle} ${styles.unitToggleActive}`}
+                <button type="button" aria-label="둘레 단위 전환"
+                  className={`${styles.unitToggle} ${styles.unitToggleActive}`}
                   onClick={toggleWaistUnit}>{unitWaist}</button>
               </label>
               <div className={styles.inputRow}>
@@ -655,7 +666,7 @@ export default function BmiClient() {
         </>
       )}
 
-      {/* ─────────────── 탭 4: 체중 시뮬레이터 ─────────────── */}
+      {/* ─────────────── 탭 3: 체중 시뮬레이터 ─────────────── */}
       {tab === 'sim' && (
         <>
           <div className={styles.disclaimer}>
@@ -668,6 +679,8 @@ export default function BmiClient() {
             </label>
             <div className={styles.sliderRow}>
               <input className={styles.slider} type="range"
+                aria-label="시뮬 체중"
+                aria-valuetext={`${simWeight.toFixed(1)}kg`}
                 min={Math.max(20, weightKg - 20).toFixed(0)}
                 max={(weightKg + 20).toFixed(0)}
                 step="0.1"
@@ -702,6 +715,8 @@ export default function BmiClient() {
             </label>
             <div className={styles.sliderRow}>
               <input className={styles.slider} type="range"
+                aria-label="주당 변화 페이스"
+                aria-valuetext={`주당 ${perWeek > 0 ? '+' : ''}${perWeek.toFixed(1)}kg`}
                 min="-1" max="1" step="0.1"
                 value={perWeek}
                 onChange={e => setPerWeek(parseFloat(e.target.value))} />
@@ -715,6 +730,7 @@ export default function BmiClient() {
                 { v: 0.5,  label: '+0.5kg\n근성장' },
               ].map(o => (
                 <button key={o.v}
+                  type="button" aria-pressed={Math.abs(perWeek - o.v) < 0.05}
                   className={`${styles.optionBtn} ${Math.abs(perWeek - o.v) < 0.05 ? styles.optionActive : ''}`}
                   onClick={() => setPerWeek(o.v)} style={{ whiteSpace: 'pre-line' }}>
                   {o.label}
@@ -728,6 +744,7 @@ export default function BmiClient() {
             <div className={styles.optionRow4}>
               {[4, 8, 12, 24].map(w => (
                 <button key={w}
+                  type="button" aria-pressed={totalWeeks === w}
                   className={`${styles.optionBtn} ${totalWeeks === w ? styles.optionActive : ''}`}
                   onClick={() => setTotalWeeks(w)}>
                   {w}주
@@ -764,7 +781,7 @@ export default function BmiClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>
             저장된 기록 ({history.length}/60)
-            <button className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
+            <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
           </label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {history.slice(0, 8).map(h => (
@@ -774,7 +791,7 @@ export default function BmiClient() {
                   <small>· {new Date(h.date).toLocaleDateString('ko-KR')}{h.waist ? ` · 허리 ${h.waist}cm` : ''}{h.bodyFat !== undefined ? ` · 체지방 ${h.bodyFat}%` : ''}</small>
                 </span>
                 <span className={styles.historyVal}>BMI {h.bmi}</span>
-                <button className={styles.miniBtn} onClick={() => removeHistory(h.id)}>×</button>
+                <button type="button" className={styles.miniBtn} onClick={() => removeHistory(h.id)}>×</button>
               </div>
             ))}
           </div>

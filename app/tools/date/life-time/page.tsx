@@ -246,7 +246,7 @@ export default function LifeTimePage() {
             {[
               { href: '/tools/date/dday',    icon: '📅', name: 'D-day 계산기',     desc: '목표일까지 남은 일수' },
               { href: '/tools/date/age',     icon: '🎂', name: '만 나이 계산기',    desc: '법 개정 기준 만 나이' },
-              { href: '/tools/unit/time',    icon: '⏱️', name: '시간 단위 변환기',  desc: '1만 시간이 몇 년인지 환산' },
+              { href: '/tools/unit/converter', icon: '📐', name: '단위 변환기',     desc: '시간·길이·무게 등 14종 통합 변환' },
               { href: '/tools/life/pomodoro',icon: '🍅', name: '뽀모도로 타이머',   desc: '오늘의 시간 활용' },
               { href: '/tools/life/zodiac',  icon: '🐯', name: '띠·별자리 계산기',  desc: '생년월일로 띠·별자리 확인' },
             ].map((t, i) => (

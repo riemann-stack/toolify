@@ -64,7 +64,10 @@ const UV_LEVELS: { range: [number, number]; level: string; color: string; icon: 
   { range: [11, 20], level: '위험',     color: '#9B59B6', icon: '🟣', advice: '가능한 외출 자제. 모든 보호 수단 필수.',                heroCls: s.heroExtreme, quickCls: s.uvQuickExtreme },
 ]
 function findUvLevel(uvi: number) {
-  return UV_LEVELS.find(l => uvi >= l.range[0] && uvi <= l.range[1]) ?? UV_LEVELS[0]
+  // adjustedUvi는 환경·고도·구름 보정으로 소수가 됨 → 정수 구간([6,7] 등)에서 7.2 같은 값이
+  // 모든 구간을 탈락해 '낮음(녹색)'으로 폴백되던 버그 방지. UV지수 표준대로 반올림 후 매칭.
+  const r = Math.round(uvi)
+  return UV_LEVELS.find(l => r >= l.range[0] && r <= l.range[1]) ?? UV_LEVELS[UV_LEVELS.length - 1]
 }
 
 // ─────────────────────────────────────────────
@@ -100,15 +103,25 @@ function calcBurnTime(input: {
   if (input.isWaterContact && spf.spf > 1) withSpf *= 0.5
 
   // 보수적 범위 (±30%)
+  const spfApplied = spf.spf > 1
+  const reapplyMinutes = input.isWaterContact ? 60 : 120
+  const rangeMin = withSpf * 0.7
+  const rangeMax = withSpf * 1.3
+  // SPF 적용 시 표시 보호시간을 재도포 주기로 캡 — SPF는 햇빛에 머물 수 있는 시간을 늘려주지
+  // 않으며(FDA), 재도포 없이 2시간(수영·땀 1시간) 초과 보호를 주장하지 않도록 한다.
+  const displayMin = spfApplied ? Math.min(rangeMin, reapplyMinutes) : rangeMin
+  const displayMax = spfApplied ? Math.min(rangeMax, reapplyMinutes) : rangeMax
+  const cappedByReapply = spfApplied && rangeMax > reapplyMinutes  // 일부라도 캡됨 → FDA 노트 표시
+  const fullyCapped = spfApplied && rangeMin >= reapplyMinutes     // 전체 캡 → 단일 "약 2시간"
   return {
     adjustedUvi,
     uvLevel: findUvLevel(adjustedUvi),
     base: baseMin,
     withSpf,
-    rangeMin: withSpf * 0.7,
-    rangeMax: withSpf * 1.3,
+    rangeMin, rangeMax,
+    displayMin, displayMax, cappedByReapply, fullyCapped, spfApplied,
     spfBlocks: spf.blocks,
-    reapplyMinutes: input.isWaterContact ? 60 : 120,
+    reapplyMinutes,
   }
 }
 
@@ -144,7 +157,6 @@ export default function UvProtectionClient() {
 
   // 재도포 카운트다운
   const [reapplyStartedAt, setReapplyStartedAt] = useState<number | null>(null)
-  // eslint-disable-next-line react-hooks/purity
   const [now, setNow] = useState<number>(() => Date.now())
   useEffect(() => {
     if (reapplyStartedAt === null) return
@@ -214,7 +226,10 @@ export default function UvProtectionClient() {
       `피부 타입: ${skin.name} · SPF: ${spf.name} · 환경: ${env.icon} ${env.name}`,
       ``,
       `무보호 화상 위험: ${fmtMinutes(result.base)}`,
-      `${spf.name} 적용 (이상적): ${fmtRange(result.rangeMin, result.rangeMax)}`,
+      ...(result.spfApplied ? [
+        `${spf.name} 적용 (재도포 전): ${result.fullyCapped ? `약 ${fmtMinutes(result.reapplyMinutes)}` : fmtRange(result.displayMin, result.displayMax)}`,
+        `※ SPF는 햇빛에 머무는 시간을 늘려주지 않음 — 2시간(수영·땀 1시간)마다 재도포 (FDA)`,
+      ] : []),
       ``,
       `※ '안전 시간'이 아닌 화상 위험 추정치입니다.`,
       `※ 실제 도포량·땀·재도포 빈도에 따라 보호 시간이 단축될 수 있습니다.`,
@@ -246,10 +261,10 @@ export default function UvProtectionClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'calc'      ? s.tabActive : ''}`} onClick={() => setTab('calc')}>위험 시간 계산</button>
-        <button className={`${s.tabBtn} ${tab === 'activity'  ? s.tabActive : ''}`} onClick={() => setTab('activity')}>활동별 가이드</button>
-        <button className={`${s.tabBtn} ${tab === 'reference' ? s.tabActive : ''}`} onClick={() => setTab('reference')}>SPF·UV 비교표</button>
+      <div className={s.tabs} role="tablist" aria-label="자외선 계산 탭">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tabBtn} ${tab === 'calc'      ? s.tabActive : ''}`} onClick={() => setTab('calc')}>위험 시간 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'activity'} className={`${s.tabBtn} ${tab === 'activity'  ? s.tabActive : ''}`} onClick={() => setTab('activity')}>활동별 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'reference'} className={`${s.tabBtn} ${tab === 'reference' ? s.tabActive : ''}`} onClick={() => setTab('reference')}>SPF·UV 비교표</button>
       </div>
 
       {/* ──────────── TAB 1 ──────────── */}
@@ -283,12 +298,12 @@ export default function UvProtectionClient() {
                 </div>
               </div>
             </div>
-            <div className={s.uvQuickRow}>
-              <button className={`${s.uvQuickBtn} ${s.uvQuickLow}     ${uvIndex >= 0  && uvIndex <= 2  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(2)}  type="button">🟢 0~2<br /><small>낮음</small></button>
-              <button className={`${s.uvQuickBtn} ${s.uvQuickMid}     ${uvIndex >= 3  && uvIndex <= 5  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(4)}  type="button">🟡 3~5<br /><small>보통</small></button>
-              <button className={`${s.uvQuickBtn} ${s.uvQuickHigh}    ${uvIndex >= 6  && uvIndex <= 7  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(7)}  type="button">🟠 6~7<br /><small>높음</small></button>
-              <button className={`${s.uvQuickBtn} ${s.uvQuickVHigh}   ${uvIndex >= 8  && uvIndex <= 10 ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(9)}  type="button">🔴 8~10<br /><small>매우 높음</small></button>
-              <button className={`${s.uvQuickBtn} ${s.uvQuickExtreme} ${uvIndex >= 11                 ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(11)} type="button">🟣 11+<br /><small>위험</small></button>
+            <div className={s.uvQuickRow} role="group" aria-label="UV 지수 빠른 설정">
+              <button aria-pressed={uvIndex >= 0 && uvIndex <= 2}   className={`${s.uvQuickBtn} ${s.uvQuickLow}     ${uvIndex >= 0  && uvIndex <= 2  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(2)}  type="button">🟢 0~2<br /><small>낮음</small></button>
+              <button aria-pressed={uvIndex >= 3 && uvIndex <= 5}   className={`${s.uvQuickBtn} ${s.uvQuickMid}     ${uvIndex >= 3  && uvIndex <= 5  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(4)}  type="button">🟡 3~5<br /><small>보통</small></button>
+              <button aria-pressed={uvIndex >= 6 && uvIndex <= 7}   className={`${s.uvQuickBtn} ${s.uvQuickHigh}    ${uvIndex >= 6  && uvIndex <= 7  ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(7)}  type="button">🟠 6~7<br /><small>높음</small></button>
+              <button aria-pressed={uvIndex >= 8 && uvIndex <= 10}  className={`${s.uvQuickBtn} ${s.uvQuickVHigh}   ${uvIndex >= 8  && uvIndex <= 10 ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(9)}  type="button">🔴 8~10<br /><small>매우 높음</small></button>
+              <button aria-pressed={uvIndex >= 11}                  className={`${s.uvQuickBtn} ${s.uvQuickExtreme} ${uvIndex >= 11                 ? s.uvQuickActive : ''}`} onClick={() => setUvIndex(11)} type="button">🟣 11+<br /><small>위험</small></button>
             </div>
             <div className={s.uvSourceLink}>
               📡 현재 UV 지수를 모르세요? <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer">한국 기상청 생활기상지수(자외선지수)</a>에서 확인하세요.
@@ -301,10 +316,12 @@ export default function UvProtectionClient() {
               <span>피부 타입 (Fitzpatrick)</span>
               <span className={s.cardLabelHint}>한국인은 보통 III·IV</span>
             </div>
-            <div className={s.skinGrid}>
+            <div className={s.skinGrid} role="group" aria-label="피부 타입 선택">
               {SKIN_TYPES.map(t => (
                 <button
                   key={t.id}
+                  aria-pressed={skinTypeId === t.id}
+                  aria-label={`${t.name} — ${t.desc}`}
                   className={`${s.skinCard} ${t.isKoreanCommon ? s.skinKoreanCommon : ''} ${skinTypeId === t.id ? s.skinActive : ''}`}
                   onClick={() => setSkinTypeId(t.id)}
                   type="button"
@@ -324,10 +341,12 @@ export default function UvProtectionClient() {
               <span>자외선 차단제 (SPF)</span>
               <span className={s.cardLabelHint}>SPF 50이 한국 표준</span>
             </div>
-            <div className={s.spfGrid}>
+            <div className={s.spfGrid} role="group" aria-label="자외선 차단제 SPF 선택">
               {SPF_OPTIONS.map(o => (
                 <button
                   key={o.id}
+                  aria-pressed={spfId === o.id}
+                  aria-label={o.name}
                   className={`${s.spfCard} ${o.cls} ${spfId === o.id ? s.spfActive : ''}`}
                   onClick={() => setSpfId(o.id)}
                   type="button"
@@ -345,10 +364,12 @@ export default function UvProtectionClient() {
               <span>활동 환경</span>
               <span className={s.cardLabelHint}>반사면 보정</span>
             </div>
-            <div className={s.envGrid}>
+            <div className={s.envGrid} role="group" aria-label="활동 환경 선택">
               {ENVIRONMENTS.map(e => (
                 <button
                   key={e.id}
+                  aria-pressed={envId === e.id}
+                  aria-label={e.name}
                   className={`${s.envCard} ${e.cls} ${envId === e.id ? s.envActive : ''}`}
                   onClick={() => setEnvId(e.id)}
                   type="button"
@@ -367,14 +388,14 @@ export default function UvProtectionClient() {
               <div>
                 <span className={s.subLabel}>고도 (m): {altitude}m</span>
                 <div className={s.sliderRow}>
-                  <input type="range" min={0} max={5000} step={100} value={altitude} onChange={e => setAltitude(Number(e.target.value))} />
+                  <input type="range" min={0} max={5000} step={100} value={altitude} onChange={e => setAltitude(Number(e.target.value))} aria-label="고도 (m)" />
                   <span className={s.sliderValue}>{fmt(altitude)}m</span>
                 </div>
               </div>
               <div>
                 <span className={s.subLabel}>구름 양 (%): {cloudCover}%</span>
                 <div className={s.sliderRow}>
-                  <input type="range" min={0} max={100} step={10} value={cloudCover} onChange={e => setCloudCover(Number(e.target.value))} />
+                  <input type="range" min={0} max={100} step={10} value={cloudCover} onChange={e => setCloudCover(Number(e.target.value))} aria-label="구름 양 (%)" />
                   <span className={s.sliderValue}>{cloudCover}%</span>
                 </div>
               </div>
@@ -387,19 +408,29 @@ export default function UvProtectionClient() {
 
           {/* HERO */}
           <div className={`${s.hero} ${result.uvLevel.heroCls}`}>
-            <p className={s.heroLead}>화상 위험 추정 시간</p>
+            <p className={s.heroLead}>{result.spfApplied ? '재도포 전 보호 가능 시간' : '화상 위험 추정 시간'}</p>
             <p className={s.heroLevelLabel}>{result.uvLevel.icon} {result.uvLevel.level} (UV 지수 {round(result.adjustedUvi, 1)})</p>
             <div>
-              <span className={s.heroNum}>{fmtRange(result.rangeMin, result.rangeMax)}</span>
+              <span className={s.heroNum}>
+                {result.fullyCapped ? `약 ${fmtMinutes(result.reapplyMinutes)}` : fmtRange(result.displayMin, result.displayMax)}
+              </span>
             </div>
             <p className={s.heroSub}>
-              {SPF_OPTIONS.find(x => x.id === spfId)!.name} 사용 + 이상적 도포 가정 ·
+              {spfId === 'none'
+                ? '차단제 없음 · 무보호 기준'
+                : `${SPF_OPTIONS.find(x => x.id === spfId)!.name} 사용 · 라벨 대비 약 50% 실효 가정(보수적)`} ·
               {' '}<span className={s.heroSubAccent}>{result.uvLevel.advice}</span>
             </p>
-            <p className={s.heroFinePrint}>
-              ⚠️ 이 시간은 <strong style={{ color: 'var(--text)' }}>안전 시간이 아닌 화상 위험 추정 시간</strong>입니다.
-              실제 도포량 부족·땀·재도포 미실시로 보호 시간이 약 50% 수준으로 단축될 수 있습니다.
-            </p>
+            {result.cappedByReapply ? (
+              <p className={s.heroFinePrint}>
+                ⚠️ <strong style={{ color: 'var(--text)' }}>SPF는 햇빛에 머물 수 있는 시간을 늘려주지 않습니다 (FDA).</strong> 차단제를 발라도 <strong>2시간(수영·땀 1시간)마다 재도포</strong>가 필요해, 위 시간은 재도포 권장 주기로 표시합니다. 무보호 화상 위험 시간은 아래 「SPF별 비교」의 ‘없음’ 행을 참고하세요.
+              </p>
+            ) : (
+              <p className={s.heroFinePrint}>
+                ⚠️ 이 시간은 <strong style={{ color: 'var(--text)' }}>안전 시간이 아닌 화상 위험 추정 시간</strong>입니다.
+                {spfId !== 'none' && ' 이미 라벨 SPF의 약 50% 실효를 반영한 보수적 추정이며,'} 땀·물·재도포 미실시 시 보호 시간이 더 짧아질 수 있습니다.
+              </p>
+            )}
           </div>
 
           {/* 시나리오 비교 */}
@@ -418,13 +449,19 @@ export default function UvProtectionClient() {
                 {scenarios.map(sc => (
                   <tr key={sc.id} className={sc.id === spfId ? s.currentRow : ''}>
                     <td>{sc.name}{isWaterContact && sc.id !== 'none' ? ' + 수영·땀' : ''}</td>
-                    <td>{sc.id === 'none' ? fmtMinutes(sc.r.base) : fmtRange(sc.r.rangeMin, sc.r.rangeMax)}</td>
+                    <td>
+                      {sc.id === 'none'
+                        ? `${fmtMinutes(sc.r.base)} (무보호)`
+                        : sc.r.fullyCapped
+                          ? `약 ${fmtMinutes(sc.r.reapplyMinutes)} (재도포 주기)`
+                          : fmtRange(sc.r.displayMin, sc.r.displayMax)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-              ⚠️ 위 수치는 도포량 충분 + 균등 도포 + 재도포 가정. 실제로는 도포량 부족·땀·물 등으로 보호 시간이 약 50% 수준일 수 있습니다.
+              ⚠️ SPF는 햇빛에 머물 수 있는 시간을 늘려주지 않습니다(FDA) — SPF 행은 <strong>재도포 권장 주기(2시간/수영·땀 1시간)</strong> 내 보호로 표시하며, 라벨 SPF의 약 50% 실효를 가정한 보수적 추정입니다. SPF 30·50의 핵심 차이는 보호 시간이 아니라 UVB 차단율(96.7% vs 98.0%)입니다.
             </p>
           </div>
 
@@ -669,6 +706,7 @@ export default function UvProtectionClient() {
             <p style={{ fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
               따라서 <strong style={{ color: '#0891B2' }}>라벨 SPF 50 → 실제 SPF 25 정도 효과</strong>이며,
               충분한 도포량과 2시간마다의 재도포가 매우 중요합니다.
+              <br />※ <strong>「위험 시간 계산」 탭의 결과는 이미 이 약 50% 실효를 반영</strong>한 보수적 추정치입니다.
             </p>
           </div>
 
@@ -699,8 +737,12 @@ export default function UvProtectionClient() {
       {/* 공식 자료 출처 (모든 탭 공통 푸터) */}
       <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
         <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>📚 공식 자료 출처</p>
-        한국 기상청 자외선지수 · 미국 EPA UV Index Scale · WHO Global Solar UV Index · 대한피부과학회.
-        피부 이상 증상 또는 일광화상 시 즉시 피부과 전문의 상담을 받으세요.
+        <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>기상청 자외선지수</a>
+        {' · '}<a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>EPA UV Index</a>
+        {' · '}<a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>WHO UV</a>
+        {' · '}<a href="https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>FDA Sunscreen</a>
+        {' · '}<a href="https://www.derma.or.kr" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>대한피부과학회</a>.
+        {' '}피부 이상 증상 또는 일광화상 시 즉시 피부과 전문의 상담을 받으세요.
       </div>
     </div>
   )

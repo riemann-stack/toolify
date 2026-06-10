@@ -6,10 +6,10 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/strength-level',
-  title: '스트렝스 레벨 계산기 — 3대 측정·윌크스·DOTS 점수 + 입문~엘리트 등급',
+  title: '파워리프팅·스트렝스 레벨 계산기 — 3대 합·Wilks·DOTS·IPF GL + 시도 전략·대회 원판',
   description:
-    '스쿼트·벤치·데드 1RM으로 3대 합과 Wilks·DOTS 점수, 체중·성별·연령 보정 레벨(입문~엘리트)을 한 번에. 내 근력이 어느 수준인지 백분위로 확인.',
-  keywords: ['스트렝스레벨', '3대측정', '3대중량', '윌크스계산기', 'DOTS점수', '파워리프팅토탈', '3대500', '체중대비근력', '벤치스쿼트데드'],
+    '스쿼트·벤치·데드 3대 합과 Wilks·DOTS·IPF GL 점수, 입문~엘리트 레벨에 더해 대회 1·2·3차 시도 전략, IPF 색상 원판 세팅, 합계·점수 추이 저장까지. 체급·성별 무관 비교.',
+  keywords: ['파워리프팅계산기', '스트렝스레벨', '3대측정', '3대중량', '윌크스계산기', 'DOTS점수', 'IPFGL', 'IPF점수', '파워리프팅토탈', '대회시도', '오프너', '3대500', '체중대비근력', '벤치스쿼트데드'],
 })
 
 const cell: React.CSSProperties = {
@@ -73,7 +73,11 @@ const FAQ_LD = [
   { "q": "여성인데 점수가 낮게 나와요. 정상인가요?", "a": "레벨 기준은 성별 보정이 적용되므로 <strong>같은 레벨이라도 여성의 절대 무게 기준은 더 낮습니다</strong>(체중 대비 약 0.7배). Wilks·DOTS 점수는 성별 다항식으로 계산되어 남녀 점수를 직접 비교할 수 있게 설계돼 있습니다. 절대 무게가 아니라 같은 성별·체중대 내에서의 위치로 해석하세요." },
   { "q": "'3대 500'이면 어느 정도 수준인가요?", "a": "체중에 따라 다릅니다. 체중 70~80kg 남성 기준 3대 합 500kg은 대체로 <strong>상급</strong>에 해당하며, 꾸준히 훈련한 헬스인의 의미 있는 목표선입니다. 다만 체중 100kg인 사람의 500과 60kg인 사람의 500은 상대 근력이 크게 다릅니다 — 그래서 Wilks·DOTS 점수를 함께 보는 것이 정확합니다." },
   { "q": "1RM을 직접 측정하지 않았는데 어떻게 입력하나요?", "a": "실제 1RM 시도는 부상 위험이 크므로, 5회 정도 들 수 있는 무게로 <a href='/tools/sports/one-rm'>1RM 계산기</a>를 이용해 추정한 값을 넣으면 됩니다. 추정 오차는 2~5% 수준이라 레벨 판정에는 충분합니다." },
-  { "q": "이 점수가 대회 공식 기록과 같나요?", "a": "Wilks·DOTS 계산식 자체는 공식과 동일하지만, 본 도구는 <strong>참고용 시뮬레이션</strong>입니다. 공식 기록은 심판 판정(스쿼트 깊이·벤치 정지·락아웃 등)을 통과한 시도만 인정되며, 체급·장비(로우바/장비) 구분이 있습니다. 실제 대회 기준과 차이가 있을 수 있습니다." },
+  { "q": "이 점수가 대회 공식 기록과 같나요?", "a": "Wilks·DOTS·IPF GL 계산식 자체는 공식과 동일하지만, 본 도구는 <strong>참고용 시뮬레이션</strong>입니다. 공식 기록은 심판 판정(스쿼트 깊이·벤치 정지·락아웃 등)을 통과한 시도만 인정되며, 체급·장비(로우바/장비) 구분이 있습니다. 실제 대회 기준과 차이가 있을 수 있습니다." },
+  { "q": "IPF GL 점수는 Wilks·DOTS와 뭐가 다른가요?", "a": "IPF GL(Goodlift) Points는 2020년부터 IPF가 공식 순위에 쓰는 점수로, 다항식인 Wilks·DOTS와 달리 <strong>지수식</strong>을 씁니다(약 100이 세계 정상권). 본 도구는 <strong>클래식(논장비) 풀파워</strong> 계수를 사용하며, 장비 부문이나 벤치 단일 종목은 계수가 달라 값이 다릅니다. 셋 다 '체급·성별이 다른 선수를 한 줄로 세우는' 같은 목적입니다." },
+  { "q": "대회 1·2·3차 시도는 어떻게 잡아야 하나요?", "a": "표준은 <strong>1차 ≈ 1RM의 90%(내림)</strong>, 2차 ≈ 95%, 3차 = 현재 1RM 또는 PR(+2.5~5kg)입니다. 1차(오프너)는 컨디션이 나빠도 거의 확실히 드는 무게여야 합니다 — 3번 다 실패하면 그 종목 기록이 0이 되어 합계 자체가 무효(DQ)가 되기 때문입니다. [시도 전략] 탭이 2.5kg 단위로 제안하지만, 당일 컨디션·코치 판단이 우선입니다." },
+  { "q": "체급을 맞추려고 단기 감량을 해도 되나요?", "a": "급격한 수분·체중 감량은 근력 저하·탈진·건강 위험이 크고, 본 도구는 감량 계획을 제공하지 않습니다. 계체 후 회복 시간이 짧은 대회도 많으니 <strong>무리한 단기 감량은 권장하지 않습니다</strong>. 점수는 어차피 체급·체중 보정이 되므로, 체급에 집착하기보다 안전한 범위에서 준비하세요." },
+  { "q": "보충제·약물로 기록을 올려도 되나요?", "a": "<strong>절대 안 됩니다.</strong> 파워리프팅은 도핑 검사가 엄격하며(IPF·KPF), 금지약물 적발 시 자격 정지·기록 말소됩니다. 한국도핑방지위원회(KADA)의 금지목록을 반드시 확인하고, 의약품·보충제 성분도 점검하세요. 본 도구의 점수는 안전하고 정직한 훈련의 참고 지표일 뿐입니다." },
 ]
 
 export default function StrengthLevelPage() {
@@ -81,10 +85,10 @@ export default function StrengthLevelPage() {
     <div style={{ maxWidth: '860px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💪 스트렝스 레벨 계산기
+        🏋️ 파워리프팅 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        3대(스쿼트·벤치·데드) 기록으로 <strong style={{ color: 'var(--text)' }}>3대 합·윌크스·DOTS 점수</strong>와 입문~엘리트 레벨을 한 번에.
+        3대(스쿼트·벤치·데드) 합과 <strong style={{ color: 'var(--text)' }}>Wilks·DOTS·IPF GL 점수</strong>·레벨에 더해, 대회 <strong style={{ color: 'var(--text)' }}>1·2·3차 시도 전략</strong>·IPF 색상 원판·기록 추이까지.
       </p>
 
       <StrengthLevelClient />
@@ -129,28 +133,46 @@ export default function StrengthLevelPage() {
         예) 체중 75kg 남성의 3대 합이 281kg이면 3.75배 → <strong style={{ color: 'var(--text)' }}>중급</strong>. 450kg이면 6.0배 → 엘리트입니다.
       </p>
 
-      {/* 3. Wilks vs DOTS */}
-      <h2 style={sectionTitle}>🧮 Wilks vs DOTS — 두 점수의 차이</h2>
+      {/* 3. Wilks vs DOTS vs IPF GL */}
+      <h2 style={sectionTitle}>🧮 Wilks · DOTS · IPF GL — 세 보정 점수</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        두 점수 모두 체중이 다른 사람의 근력을 한 줄로 세우기 위한 <strong style={{ color: 'var(--text)' }}>계수 보정 점수</strong>입니다.
-        3대 합(kg)에 체중·성별 기반 계수를 곱해 산출합니다.
+        모두 체중이 다른 사람의 근력을 한 줄로 세우기 위한 <strong style={{ color: 'var(--text)' }}>계수 보정 점수</strong>입니다.
+        3대 합(kg)에 체중·성별 기반 계수를 곱해 산출하며, 본 도구는 세 점수를 모두 보여줍니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
               <th style={headCell}>구분</th>
               <th style={headCell}>Wilks</th>
               <th style={headCell}>DOTS</th>
+              <th style={headCell}>IPF GL</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>도입</td><td style={cell}>1994년 (Robert Wilks)</td><td style={cell}>2019년 전후</td></tr>
-            <tr><td style={cell}>특징</td><td style={cell}>오랜 표준, 높은 인지도</td><td style={cell}>최신 데이터로 재보정, 다수 연맹 채택</td></tr>
-            <tr><td style={cell}>계산</td><td style={cell}>5차 다항식 계수</td><td style={cell}>4차 다항식 계수</td></tr>
-            <tr><td style={cell}>활용</td><td style={cell}>예전 기록·커뮤니티 비교</td><td style={cell}>현행 대회·랭킹</td></tr>
+            <tr><td style={cell}>도입</td><td style={cell}>1994 (Robert Wilks)</td><td style={cell}>2019 전후</td><td style={cell}>2020 (IPF 공식)</td></tr>
+            <tr><td style={cell}>특징</td><td style={cell}>오랜 표준, 높은 인지도</td><td style={cell}>최신 데이터 재보정</td><td style={cell}>IPF 공식 랭킹 점수</td></tr>
+            <tr><td style={cell}>형태</td><td style={cell}>5차 다항식</td><td style={cell}>4차 다항식</td><td style={cell}>지수식 (100=세계 정상권)</td></tr>
+            <tr><td style={cell}>활용</td><td style={cell}>예전 기록·커뮤니티</td><td style={cell}>현행 랭킹</td><td style={cell}>IPF 대회 공식 순위</td></tr>
           </tbody>
         </table>
+      </div>
+      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+        ※ 본 도구의 IPF GL은 <strong style={{ color: 'var(--text)' }}>클래식(논장비) 풀파워 기준</strong> 2020 계수를 사용합니다. 장비(기어드)·벤치 단일 종목은 계수가 달라 값이 다릅니다. IPF GL은 약 <strong style={{ color: 'var(--text)' }}>100이 세계 정상권</strong>으로 스케일됩니다.
+      </p>
+
+      {/* 3-2. 대회 시도·원판 */}
+      <h2 style={sectionTitle}>🏁 대회 시도 전략과 원판 세팅</h2>
+      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+        파워리프팅 대회는 종목별 <strong style={{ color: 'var(--text)' }}>3번의 시도</strong>가 주어지고, 성공한 가장 무거운 무게가 합계에 들어갑니다. [시도 전략] 탭에서 1RM을 넣으면 표준 배분을 제안합니다.
+      </p>
+      <div style={{ ...card }}>
+        <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.9 }}>
+          <li><strong>1차(오프너)</strong> — 1RM의 약 90%를 <strong style={{ color: 'var(--accent)' }}>내림</strong>. 거의 100% 성공해야 하는 무게로, 한 종목을 세 번 다 실패하면 합계가 0이 되어 기록 자체가 무효가 되는 참사를 막는 보험입니다.</li>
+          <li><strong>2차</strong> — 약 95%. 컨디션이 좋으면 PR 발판, 나쁘면 합계 확보.</li>
+          <li><strong>3차</strong> — 현재 1RM(≈100%) 또는 PR 도전 시 +2.5~5kg. 욕심내 실패하면 2차 무게가 기록됩니다.</li>
+          <li><strong>원판</strong> — 대회 봉은 20kg, 칼라는 한쪽 2.5kg. 무게는 2.5kg 단위로만 세팅됩니다. [대회 원판] 탭이 IPF 색상(25 빨강·20 파랑·15 노랑·10 초록·5 흰색)으로 한쪽 조합을 보여줍니다.</li>
+        </ul>
       </div>
 
       {/* 4. 점수 해석 가이드 */}
@@ -228,7 +250,10 @@ export default function StrengthLevelPage() {
         <ul style={{ paddingLeft: '20px', margin: 0 }}>
           <li><strong style={{ color: '#DC2626' }}>실제 1RM 시도는 신중히</strong> — 워밍업 후, 스포터·세이프티를 확보하고 시도하세요. 초보자는 추정값 사용을 권장합니다.</li>
           <li><strong style={{ color: '#DC2626' }}>레벨에 집착하지 마세요</strong> — 본 평가는 참고용이며, 체급·골격·종목 특성에 따라 개인차가 큽니다.</li>
-          <li><strong style={{ color: '#DC2626' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 지속되면 정형외과·스포츠의학과 전문의와 상담하세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 지속되면 정형외과·스포츠의학과(KASEM 등) 전문의와 상담하세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>95%+·대회 시도는 스포터·세이프티 필수</strong> — 오프너부터 무리하지 말고, 폼이 무너지면 중량을 내리세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>도핑 금지</strong> — 파워리프팅 도핑 검사는 엄격합니다. 한국도핑방지위원회(KADA) 금지목록을 확인하고 약물·성분을 점검하세요.</li>
+          <li><strong style={{ color: '#DC2626' }}>무리한 체급 감량 금지</strong> — 급격한 단기 감량은 건강·기록 모두에 해롭습니다. 점수는 체중 보정되니 안전을 우선하세요.</li>
         </ul>
         <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', marginBottom: 0, lineHeight: 1.7 }}>
           본 도구는 <strong>참고용 시뮬레이션</strong>이며 의학적·코칭 조언이 아닙니다. 레벨 기준·점수는 공개된 표준치를 근사한 추정값으로, 실제 대회 기록과 차이가 있을 수 있습니다.

@@ -177,7 +177,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 14px;
+  font-size: 16px; /* iOS Safari 포커스 자동 확대 방지 (16px 미만 시 줌) */
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
@@ -494,13 +494,13 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 8px;
-  font-size: 14px;
+  font-size: 16px; /* iOS 자동 확대 방지 */
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   outline: none;
   color-scheme: dark;
-  width: 110px;
+  width: 120px;
 }
 .miniTime:focus { border-color: var(--accent); }
 .bedtimeNote {

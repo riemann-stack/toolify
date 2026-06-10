@@ -89,8 +89,10 @@ export interface ItemMeta {
   label: string
   shortLabel: string
   dutyRate: number          // 관세율 (%)
-  isListed: boolean         // 목록통관 21개 품목 여부
+  isListed: boolean         // 목록통관(간이절차) 가능 품목 여부 — 면세 자격과 별개
+  dutyFreeExcluded?: boolean // 소액면세 배제 품목 (주류·담배 등) — 한도와 무관하게 과세
   excise?: { threshold: number; rate: number }   // 개별소비세 (가방·시계 등)
+  liquor?: { rate: number }  // 주류: 주세율 (%) — 와인 등
   hsCode: string
   note?: string
 }
@@ -120,8 +122,8 @@ export const ITEMS: ItemMeta[] = [
   { id: 'supplement', emoji: '💊', label: '영양제 (오메가3·비타민)', shortLabel: '영양제',     dutyRate: 8,  isListed: true, hsCode: '2106·3004', note: '150ml/300g 이하 목록통관' },
 
   /* 전자 */
-  { id: 'laptop',     emoji: '💻', label: '노트북·태블릿',           shortLabel: '노트북',      dutyRate: 0,  isListed: false, hsCode: '8471', note: '⭐ 무관세 (부가세만 10%)' },
-  { id: 'phone',      emoji: '📱', label: '스마트폰',                shortLabel: '스마트폰',   dutyRate: 0,  isListed: false, hsCode: '8517', note: '⭐ 무관세 (부가세만 10%)' },
+  { id: 'laptop',     emoji: '💻', label: '노트북·태블릿',           shortLabel: '노트북',      dutyRate: 0,  isListed: true, hsCode: '8471', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
+  { id: 'phone',      emoji: '📱', label: '스마트폰',                shortLabel: '스마트폰',   dutyRate: 0,  isListed: true, hsCode: '8517', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
   { id: 'monitor',    emoji: '🖥️', label: '모니터',                  shortLabel: '모니터',     dutyRate: 8,  isListed: true, hsCode: '8528' },
   { id: 'earphone',   emoji: '🎧', label: '이어폰·헤드폰',           shortLabel: '이어폰',     dutyRate: 8,  isListed: true, hsCode: '8518' },
   { id: 'keyboard',   emoji: '⌨️', label: '키보드·마우스',           shortLabel: '키보드',     dutyRate: 8,  isListed: true, hsCode: '8471' },
@@ -138,7 +140,7 @@ export const ITEMS: ItemMeta[] = [
   /* 식품·주류 */
   { id: 'snack',      emoji: '🍫', label: '초콜릿·과자',             shortLabel: '과자',        dutyRate: 8,  isListed: true, hsCode: '1806', note: '식품 가공 8~30% 다양' },
   { id: 'cheese',     emoji: '🧀', label: '치즈',                    shortLabel: '치즈',        dutyRate: 36, isListed: false, hsCode: '0406', note: '치즈 36% 고세율' },
-  { id: 'wine',       emoji: '🍷', label: '와인',                    shortLabel: '와인',        dutyRate: 15, isListed: false, hsCode: '2204', note: '15% + 주세 30%' },
+  { id: 'wine',       emoji: '🍷', label: '와인',                    shortLabel: '와인',        dutyRate: 15, isListed: false, dutyFreeExcluded: true, liquor: { rate: 30 }, hsCode: '2204', note: '소액면세 배제(주류) · 관세 15% + 주세 30% + 교육세 — 주류는 통관·검역·자가소비 한도 별도, 관세청 확인 필수' },
 ]
 
 export const getItem = (id: string) => ITEMS.find((i) => i.id === id) ?? ITEMS[0]
@@ -162,16 +164,19 @@ export interface CustomsResult {
   /* 입력 환산 */
   totalLocal: number          // 상품+배송 (현지 통화)
   totalKrw: number            // 원화 환산 = 과세가격 (CIF)
-  totalUsd: number            // USD 환산 (면세 한도 비교)
+  totalUsd: number            // 상품+배송 USD 환산 (참고)
+  productUsd: number          // 물품가격 USD (배송 제외) — 면세 한도 판정 기준
   /* 면세 판단 */
   dutyFreeLimit: number       // USD
   isDutyFree: boolean         // 면세 여부
-  isListedClearance: boolean  // 목록통관 가능
+  isListedClearance: boolean  // 목록통관(간이절차) 가능
   reason: string              // 판단 이유
   /* 세금 (원) */
   duty: number                // 관세
   vat: number                 // 부가세 10%
   excise: number              // 개별소비세
+  liquorTax: number           // 주세 (주류)
+  eduTax: number              // 교육세 (개소세 30% 또는 주세 10%)
   totalTax: number            // 합계
   /* 결과 */
   finalKrw: number            // 최종 구매가 (원)
@@ -182,45 +187,66 @@ export interface CustomsResult {
 export function calcCustoms(inp: CustomsInputs): CustomsResult {
   const country = getCountry(inp.countryId)
   const item = getItem(inp.itemId)
-  const totalLocal = inp.productPrice + inp.shippingFee
-  const totalKrw = (totalLocal * inp.exchangeRate) / Math.max(1, inp.rateBase)
-  const totalUsd = totalLocal * inp.toUsdRate
+  /* 음수·비정상 입력 방어 */
+  const productLocal = Math.max(0, inp.productPrice)
+  const shipLocal = Math.max(0, inp.shippingFee)
+  const exchange = Math.max(0, inp.exchangeRate)
+  const base = Math.max(1, inp.rateBase)
+
+  const totalLocal = productLocal + shipLocal
+  const totalKrw = (totalLocal * exchange) / base          // 과세가격(CIF): 상품+배송
+  const totalUsd = totalLocal * inp.toUsdRate              // 참고용
+  /* 면세 한도는 '물품가격'(운임·보험 제외) 기준 — 관세청 소액면세 규정 */
+  const productUsd = productLocal * inp.toUsdRate
 
   const dutyFreeLimit = country.dutyFreeUsd
 
-  /* 면세 판단 */
+  /* 면세 판단 — 소액면세는 목록통관/일반신고 무관하게 자가사용+한도 이하면 적용 (주류 등 배제 품목 제외) */
   let isDutyFree = false
   let isListedClearance = false
   let reason = ''
 
   if (inp.usage === 'business') {
-    reason = '🚫 사업자 직구는 면세 X — 일반통관'
-  } else if (!item.isListed) {
-    reason = `⚠️ ${item.label}은(는) 목록통관 21개 품목 외 — 일반통관 (관세·부가세 부과)`
-  } else if (totalUsd <= dutyFreeLimit) {
+    reason = '🚫 사업자 직구는 면세 X — 일반통관 (관세·부가세 부과)'
+  } else if (item.dutyFreeExcluded) {
+    reason = `⚠️ ${item.label}은(는) 소액면세 배제 품목(주류·담배 등) — 한도와 무관하게 과세`
+  } else if (productUsd <= dutyFreeLimit) {
     isDutyFree = true
-    isListedClearance = true
-    reason = `✅ ${country.shortName} 면세 한도 $${dutyFreeLimit} 이하 + 자가사용 + 목록통관 품목 → 면세 (관세·부가세 X)`
+    isListedClearance = item.isListed
+    reason = item.isListed
+      ? `✅ 물품가격 $${productUsd.toFixed(2)} ≤ ${country.shortName} 면세 한도 $${dutyFreeLimit} + 자가사용 + 목록통관 품목 → 면세 (배송비 제외 기준)`
+      : `✅ 물품가격 $${productUsd.toFixed(2)} ≤ 한도 $${dutyFreeLimit} + 자가사용 → 소액면세 (목록통관 외 품목이라 일반(간이)신고 절차)`
   } else {
-    reason = `❌ 면세 한도 $${dutyFreeLimit} 초과 ($${totalUsd.toFixed(2)}) → 일반통관`
+    reason = `❌ 물품가격 $${productUsd.toFixed(2)}가 면세 한도 $${dutyFreeLimit} 초과 → 과세 (배송비 제외 물품가격 기준)`
   }
 
-  /* 세금 계산 */
+  /* 세금 계산 (수입 과세 적층: 관세 → 개소세/주세 → 교육세 → 부가세) */
   let duty = 0
   let vat = 0
   let excise = 0
+  let liquorTax = 0
+  let eduTax = 0
   if (!isDutyFree) {
     duty = totalKrw * (item.dutyRate / 100)
-    /* 도서는 부가세 면제 */
-    if (item.id !== 'book') {
-      vat = (totalKrw + duty) * 0.10
+    if (item.liquor) {
+      /* 주류: 주세 = (과세가격 + 관세) × 주세율, 교육세 = 주세의 10% (주세율 70% 미만) */
+      liquorTax = (totalKrw + duty) * (item.liquor.rate / 100)
+      eduTax = liquorTax * 0.10
+    } else if (item.excise) {
+      /* 개별소비세: 기준가격(200만원) 초과분 — 과세표준 = 과세가격 + 관세 */
+      const exciseBase = totalKrw + duty
+      if (exciseBase > item.excise.threshold) {
+        excise = (exciseBase - item.excise.threshold) * (item.excise.rate / 100)
+      }
+      /* 교육세 = 개별소비세의 30% */
+      eduTax = excise * 0.30
     }
-    /* 개별소비세 (200만원 초과분) */
-    if (item.excise && totalKrw > item.excise.threshold) {
-      excise = (totalKrw - item.excise.threshold) * (item.excise.rate / 100)
+    /* 부가세 10% — 과세표준 = 과세가격 + 관세 + 개소세/주세 + 교육세 (도서는 면제) */
+    if (item.id !== 'book') {
+      vat = (totalKrw + duty + excise + liquorTax + eduTax) * 0.10
     }
   }
-  const totalTax = duty + vat + excise
+  const totalTax = duty + vat + excise + liquorTax + eduTax
   const finalKrw = totalKrw + totalTax
 
   /* 한국 백화점 추정가 (일반적으로 직구 + 30~80% 마진) */
@@ -233,9 +259,9 @@ export function calcCustoms(inp: CustomsInputs): CustomsResult {
   const saving = Math.max(0, domesticEstimate - finalKrw)
 
   return {
-    totalLocal, totalKrw, totalUsd,
+    totalLocal, totalKrw, totalUsd, productUsd,
     dutyFreeLimit, isDutyFree, isListedClearance, reason,
-    duty, vat, excise, totalTax, finalKrw,
+    duty, vat, excise, liquorTax, eduTax, totalTax, finalKrw,
     domesticEstimate, saving,
   }
 }

@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/dutch',
   title: '더치페이 계산기 — N빵·술값 분리·개인별 메뉴·선결제자 최소 송금·카톡 공유',
   description:
-    '회식·여행 정산을 가장 적은 송금 횟수로. 음주자만 술값 분담, 메뉴별 개인 정산, Greedy 최소 송금 알고리즘 + 카카오톡 메시지 자동 생성.',
+    '회식·여행 정산을 가장 적은 송금 횟수로. 음주자만 술값 분담, 메뉴별 개인 정산, 최소 송금 횟수 알고리즘(15명 이하 최소 보장) + 카카오톡 메시지 자동 생성.',
   keywords: [
     '더치페이 계산기', 'N빵 계산기', '회식비 계산기', '1인당 금액 계산',
     '술값 분리', '회식 정산', '모임비 정산', '선결제자 정산',
@@ -134,22 +134,23 @@ export default function DutchPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>선결제자 — 최소 송금 횟수 알고리즘</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             여러 명이 나눠서 결제했을 때 누가 누구에게 얼마를 보낼지 결정하는 문제. 본 도구는
-            <strong style={{ color: 'var(--text)' }}> Greedy(탐욕) 알고리즘</strong>으로 송금 횟수를 최소화합니다 —
+            <strong style={{ color: 'var(--text)' }}> 잔액의 합이 0이 되는 그룹</strong>으로 최대한 잘게 나눈 뒤 각 그룹을 정리해 송금 횟수를 줄입니다
+            (정산 인원 <strong style={{ color: 'var(--text)' }}>15명 이하</strong>는 수학적 최소 횟수를 보장, 그 이상은 최소에 가까운 근사) —
           </p>
           <ol style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, paddingLeft: '20px', margin: 0 }}>
             <li>각자의 잔액 = 결제액 − 부담액 (+ 받을, − 낼)</li>
-            <li>가장 많이 받을 사람과 가장 많이 낼 사람 매칭</li>
-            <li>두 금액 중 작은 쪽만큼 송금 처리</li>
-            <li>잔액 0인 사람 제외, 1~3 반복</li>
+            <li>잔액의 합이 0이 되는 부분 그룹을 최대한 많이 분리</li>
+            <li>각 그룹 안에서 가장 많이 받을·낼 사람을 매칭해 송금</li>
+            <li>최소 송금 = (정산할 인원) − (합이 0인 그룹 수)</li>
           </ol>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px', background: 'rgba(202,138,4,0.06)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 10, padding: '11px 14px' }}>
-            💡 <strong style={{ color: '#CA8A04' }}>예시</strong> — A 30,000 / B 0 / C 60,000 결제, 각자 30,000 부담 →
-            <br />· B → A: 0원 (둘 다 잔액 0)
-            <br />· B → C: 30,000원 (1건)
-            <br />단순 계산이면 B가 A·C에게 각각 송금(2건)이지만 알고리즘이 1건으로 압축합니다.
+            💡 <strong style={{ color: '#CA8A04' }}>예시</strong> — 5명의 잔액이 −60,000 / −50,000 / +20,000 / +40,000 / +50,000원일 때
+            <br />· 낼 사람이 받을 사람에게 제각각 보내면 최대 6건
+            <br />· 알고리즘: (−50,000 ↔ +50,000) 1건 + (−60,000 ↔ +20,000·+40,000) 2건 = <strong>총 3건</strong>
+            <br />단순 그리디만 쓰면 4건이 되는데, 합이 0인 그룹을 찾아 3건까지 줄입니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
-            <strong style={{ color: 'var(--text)' }}>찬조자(Contributor)</strong> — 결제는 했지만 부담은 없는 사람(상사 협찬·생일 주인공 협찬 등). 체크박스로 표시하면 부담 0원으로 처리되어 다른 사람들에게 100% 환급됩니다.
+            <strong style={{ color: 'var(--text)' }}>찬조자(Contributor)</strong> — 결제는 했지만 부담은 없는 사람(상사 협찬·생일 주인공 협찬 등). 체크박스로 표시하면 그 사람의 부담은 0원이 되고, <strong style={{ color: 'var(--text)' }}>찬조한 금액만큼 나머지 사람들이 나눠 낼 금액이 줄어듭니다</strong> (찬조자는 환급받지 않습니다).
           </p>
         </section>
 
@@ -173,7 +174,7 @@ export default function DutchPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>모임별 1인당 적정 예산</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            모임 성격별 평균 1인당 예산 — 2025년 서울·수도권 평균치 참고용입니다.
+            모임 성격별 1인당 예산 — 지역·시기·메뉴에 따라 크게 달라지는 대략적인 참고용 범위입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
@@ -212,7 +213,7 @@ export default function DutchPage() {
             카뱅 3333-XX-XXXXXX
           </div>
           <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ⓘ 카카오톡 자동 전송은 카카오 정책상 제한됩니다. 본 도구는 <strong style={{ color: 'var(--text)' }}>메시지 자동 생성 + 클립보드 복사 + 카톡 열기</strong>까지 지원합니다.
+            ⓘ 카카오톡 자동 전송은 카카오 정책상 제한됩니다. 본 도구는 <strong style={{ color: 'var(--text)' }}>메시지 자동 생성 + 클립보드 복사</strong>까지 지원하며, 복사한 메시지를 카카오톡 채팅방에 직접 붙여넣으면 됩니다.
           </p>
         </section>
 

@@ -26,9 +26,9 @@ export interface BmrFormulaInfo {
 }
 
 export const FORMULAS: BmrFormulaInfo[] = [
-  { id: 'mifflin',         name: 'Mifflin-St Jeor', desc: '1990년 개발, 현대 의료계 표준 (가장 정확하다고 평가)',
+  { id: 'mifflin',         name: 'Mifflin-St Jeor', desc: '1990년 건강한 성인 데이터 기반, 현재 널리 권장 (일반인에 비교적 정확)',
     needs: ['키', '체중', '나이', '성별'], accuracy: '±5~10%' },
-  { id: 'harris-benedict', name: 'Harris-Benedict', desc: '1919년 개발, 가장 널리 사용 (한국 표준)',
+  { id: 'harris-benedict', name: 'Harris-Benedict', desc: '1919년 원전·1984년 개정판(Roza-Shizgal). 임상에서 널리 사용',
     needs: ['키', '체중', '나이', '성별'], accuracy: '±10%' },
   { id: 'katch-mcardle',   name: 'Katch-McArdle',   desc: '체지방률 입력 시 정확. 운동선수에게 권장',
     needs: ['체중', '체지방률'], accuracy: '±3~5% (체지방률 정확 시)' },
@@ -119,20 +119,27 @@ export const JOB_ACTIVITY_LEVELS: JobActivityLevel[] = [
   { id: 'physical',  name: '육체노동',          desc: '건설·물류',    factor: 1.20 },
 ]
 
-/* ─── 운동 강도 ─── */
+/* ─── 운동 강도 (MET 계수) ─── */
+// 1 MET ≈ 1 kcal/kg/시간 → 운동 칼로리는 체중에 비례한다(50kg과 100kg이 달라야 함).
+// kcalPerHour = met × 체중(kg). 아래 MET는 약 70kg 기준 250~800kcal/h와 일치.
 export interface ExerciseIntensity {
   id: string
   name: string
   desc: string
-  kcalPerHour: number
+  met: number
 }
 
 export const EXERCISE_INTENSITIES: ExerciseIntensity[] = [
-  { id: 'low',       name: '가벼운 강도',     desc: '걷기·요가',         kcalPerHour: 250 },
-  { id: 'moderate',  name: '보통 강도',       desc: '조깅·자전거',       kcalPerHour: 400 },
-  { id: 'high',      name: '높은 강도',       desc: '러닝·HIIT',         kcalPerHour: 600 },
-  { id: 'very-high', name: '매우 높은 강도', desc: '경쟁 스포츠·격투기', kcalPerHour: 800 },
+  { id: 'low',       name: '가벼운 강도',     desc: '걷기·요가',         met: 3.5 },
+  { id: 'moderate',  name: '보통 강도',       desc: '조깅·자전거',       met: 5.7 },
+  { id: 'high',      name: '높은 강도',       desc: '러닝·HIIT',         met: 8.5 },
+  { id: 'very-high', name: '매우 높은 강도', desc: '경쟁 스포츠·격투기', met: 11.4 },
 ]
+
+/** 강도 MET × 체중(kg) → 시간당 운동 소비 칼로리(근사). */
+export function exerciseKcalPerHour(met: number, weightKg: number): number {
+  return met * weightKg
+}
 
 /* ─── 정밀 TDEE ─── */
 export interface ActivityInput {
@@ -140,6 +147,7 @@ export interface ActivityInput {
   weeklyExercises: number
   exerciseDuration: number  // 분
   exerciseIntensity: string
+  weight: number            // kg — 운동 칼로리 체중 보정(MET 기반)
   dailySteps?: number
 }
 
@@ -163,7 +171,8 @@ export function calcDetailedTDEE(bmr: number, activity: ActivityInput): Detailed
   const stepsBonus = activity.dailySteps && activity.dailySteps > 5000
     ? ((activity.dailySteps - 5000) / 1000) * 50
     : 0
-  const exercisePerSession = (activity.exerciseDuration / 60) * intensity.kcalPerHour
+  // 운동 칼로리 = MET × 체중(kg) × 시간 → 체중에 비례(50kg과 100kg이 다름)
+  const exercisePerSession = (activity.exerciseDuration / 60) * exerciseKcalPerHour(intensity.met, activity.weight)
   const weeklyExerciseKcal = exercisePerSession * activity.weeklyExercises
   const dailyExerciseAvg = weeklyExerciseKcal / 7
 
@@ -179,55 +188,6 @@ export function calcDetailedTDEE(bmr: number, activity: ActivityInput): Detailed
   }
 }
 
-/* ─── 활동계수 퀴즈 ─── */
-export interface QuizAnswer {
-  steps: number          // 1~4
-  commute: number        // 1~3
-  exerciseFreq: number   // 0~7
-  exerciseDuration: number // 분
-  sittingHours: number   // 1~4
-  weekend: number        // 1~3
-}
-
-export interface QuizResult {
-  factor: number
-  description: string
-  range: string
-}
-
-export function estimateActivityFactor(quiz: QuizAnswer): QuizResult {
-  let score = 1.2
-
-  if (quiz.steps === 2) score += 0.075
-  else if (quiz.steps === 3) score += 0.15
-  else if (quiz.steps === 4) score += 0.25
-
-  if (quiz.commute === 2) score += 0.05
-  else if (quiz.commute === 3) score += 0.075
-
-  const exerciseHoursWeekly = (quiz.exerciseFreq * quiz.exerciseDuration) / 60
-  if (exerciseHoursWeekly >= 1 && exerciseHoursWeekly < 3) score += 0.075
-  else if (exerciseHoursWeekly >= 3 && exerciseHoursWeekly < 6) score += 0.15
-  else if (exerciseHoursWeekly >= 6) score += 0.25
-
-  if (quiz.sittingHours === 4) score -= 0.05
-
-  if (quiz.weekend === 3) score += 0.05
-
-  const factor = Math.min(1.9, Math.max(1.2, score))
-
-  let description = ''
-  let range = ''
-  if (factor < 1.3)        { description = '거의 안 움직임';      range = '1.2~1.3' }
-  else if (factor < 1.45)  { description = '가벼운 활동';         range = '1.3~1.45' }
-  else if (factor < 1.6)   { description = '가벼운~보통 사이';    range = '1.45~1.55' }
-  else if (factor < 1.7)   { description = '보통 활동';           range = '1.55~1.7' }
-  else if (factor < 1.8)   { description = '활동적';              range = '1.7~1.8' }
-  else                     { description = '매우 활동적';         range = '1.8~1.9' }
-
-  return { factor: Math.round(factor * 100) / 100, description, range }
-}
-
 /* ─── 목표별 칼로리 ─── */
 export interface GoalPreset {
   id: string
@@ -237,15 +197,17 @@ export interface GoalPreset {
   warning?: boolean
 }
 
+// desc는 TDEE 조정 비율(%)로 표기 — 실제 주당 체중 변화(kg)는 TDEE에 비례하므로
+// 결과 행의 라이브 weeklyChangeKg로 표시한다(고정 kg을 desc에 넣으면 라이브 값과 모순).
 export const GOAL_PRESETS: GoalPreset[] = [
-  { id: 'lose-fast',   name: '빠른 감량',    adjust: -0.20, desc: '주당 0.6~0.8kg 감량', warning: true },
-  { id: 'lose-normal', name: '보통 감량',    adjust: -0.15, desc: '주당 0.4~0.5kg 감량' },
-  { id: 'lose-slow',   name: '천천히 감량',  adjust: -0.10, desc: '주당 0.2~0.3kg 감량' },
+  { id: 'lose-fast',   name: '빠른 감량',    adjust: -0.20, desc: 'TDEE −20% · 공격적', warning: true },
+  { id: 'lose-normal', name: '보통 감량',    adjust: -0.15, desc: 'TDEE −15% · 표준' },
+  { id: 'lose-slow',   name: '천천히 감량',  adjust: -0.10, desc: 'TDEE −10% · 완만' },
   { id: 'maintain',    name: '체중 유지',    adjust: 0,     desc: '현재 체중 유지' },
-  { id: 'bulk-slow',   name: '근육 증가 (천천히)', adjust: 0.075, desc: '주당 약 0.2kg 증량' },
-  { id: 'bulk-normal', name: '근육 증가 (보통)',   adjust: 0.15,  desc: '주당 약 0.4kg 증량' },
-  { id: 'race-prep',   name: '대회 준비',    adjust: 0,     desc: '탄수 비율 ↑' },
-  { id: 'recovery',    name: '식단 회복기',  adjust: 0.05,  desc: '점진적 회복' },
+  { id: 'bulk-slow',   name: '근육 증가 (천천히)', adjust: 0.075, desc: 'TDEE +7.5% · 린벌크' },
+  { id: 'bulk-normal', name: '근육 증가 (보통)',   adjust: 0.15,  desc: 'TDEE +15% · 표준 벌크' },
+  { id: 'race-prep',   name: '대회 준비',    adjust: 0,     desc: '유지 + 탄수 비율 ↑' },
+  { id: 'recovery',    name: '식단 회복기',  adjust: 0.05,  desc: 'TDEE +5% · 점진적 회복' },
 ]
 
 export interface GoalResult {
@@ -329,29 +291,6 @@ export function calcMacros(daily: number, ratio: { c: number; p: number; f: numb
   }
 }
 
-/* ─── 주간 플랜 (운동일/휴식일) ─── */
-export interface WeeklyPlan {
-  restDays: number
-  exerciseDays: number
-  restDayKcal: number
-  exerciseDayKcal: number
-  weeklyTotal: number
-  weeklyAverage: number
-}
-
-export function calcWeeklyPlan(tdee: DetailedTDEE, weeklyExercises: number): WeeklyPlan {
-  const restDays = Math.max(0, 7 - weeklyExercises)
-  const exerciseDays = Math.min(7, weeklyExercises)
-  return {
-    restDays,
-    exerciseDays,
-    restDayKcal: tdee.restDayTDEE,
-    exerciseDayKcal: tdee.exerciseDayTDEE,
-    weeklyTotal: tdee.restDayTDEE * restDays + tdee.exerciseDayTDEE * exerciseDays,
-    weeklyAverage: tdee.avgTDEE,
-  }
-}
-
 /* ─── 음식 환산 (근사값) ─── */
 export const FOOD_REFERENCES = [
   { name: '밥 1공기 (210g)',     kcal: 300 },
@@ -365,40 +304,6 @@ export const FOOD_REFERENCES = [
   { name: '치킨 1조각',          kcal: 250 },
   { name: '김밥 1줄',            kcal: 480 },
 ]
-
-/* ─── 스마트워치 비교 ─── */
-export interface SmartwatchInput {
-  device: 'apple' | 'garmin' | 'fitbit' | 'other'
-  resting: number
-  active: number
-  period: 'day' | 'week' | 'month'
-}
-
-export interface SmartwatchComparison {
-  formulaBmr: number
-  formulaTdee: number
-  watchResting: number
-  watchActive: number
-  watchTotal: number
-  diffBmr: number     // 워치 - 공식
-  diffActive: number
-  diffTotal: number
-  recommendedTdee: number  // 평균
-}
-
-export function compareWithWatch(formulaBmr: number, formulaTdee: number, watch: SmartwatchInput): SmartwatchComparison {
-  const watchTotal = watch.resting + watch.active
-  return {
-    formulaBmr, formulaTdee,
-    watchResting: watch.resting,
-    watchActive: watch.active,
-    watchTotal,
-    diffBmr: watch.resting - formulaBmr,
-    diffActive: watch.active - (formulaTdee - formulaBmr),
-    diffTotal: watchTotal - formulaTdee,
-    recommendedTdee: Math.round((formulaTdee + watchTotal) / 2),
-  }
-}
 
 /* ─── localStorage ─── */
 export interface BmrRecord {

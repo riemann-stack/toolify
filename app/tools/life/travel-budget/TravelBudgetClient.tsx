@@ -8,13 +8,16 @@ import s from './travelBudget.module.css'
 import {
   CITIES, STYLES, SEASONS, AIRLINES, REGION_LABELS,
   type Style, type Season, type Airline,
-  getCity, getFlight, calcBudget, diagnose, autoFill,
+  getCity, calcBudget, diagnose, autoFill,
   fmtMan, fmtCurrency,
 } from './travelBudgetUtils'
 
 type Tab = 'calc' | 'cities' | 'diagnose' | 'compare'
 
 const STORAGE_KEY = 'youtil_travelbudget_v1'
+
+/* 한국인이 자주 가는 주요 도시 — 계산 탭 기본 노출(나머지는 "더보기") */
+const POPULAR_CITY_IDS = ['tokyo', 'fukuoka', 'bangkok', 'danang', 'cebu', 'bali']
 
 export default function TravelBudgetClient() {
   const [tab, setTab] = useState<Tab>('calc')
@@ -45,6 +48,7 @@ export default function TravelBudgetClient() {
 
   /* 검색 (탭 2) */
   const [search, setSearch] = useState('')
+  const [showAllCities, setShowAllCities] = useState(false)
 
   /* localStorage */
   useEffect(() => {
@@ -81,9 +85,9 @@ export default function TravelBudgetClient() {
     } catch {}
   }, [cityId, style, days, people, season, airline, flight, hotel, food, transport, shopping, ticket, comm, insurance, etc, reservePct, krwRate])
 
-  /* 자동 채움 */
-  const fillAuto = () => {
-    const a = autoFill({ cityId, style, days: parseInt(days) || 1, people: parseInt(people) || 1, season, airline })
+  /* 자동 채움 — overrideStyle 로 setStyle 직후의 stale state 회피 */
+  const fillAuto = (overrideStyle?: Style) => {
+    const a = autoFill({ cityId, style: overrideStyle ?? style, days: parseInt(days) || 1, people: parseInt(people) || 1, season, airline })
     setFlight(String(a.flight))
     setHotel(String(a.hotel))
     setFood(String(a.food))
@@ -96,33 +100,36 @@ export default function TravelBudgetClient() {
   }
 
   /* 계산 */
+  // 음수·이상 입력 방어: 모든 항목 0 이상으로 클램프
+  const nn = (v: string) => Math.max(0, parseFloat(v) || 0)
   const inp = useMemo(() => ({
     cityId, style, days: parseInt(days) || 1, people: parseInt(people) || 1, season, airline,
-    flight: parseFloat(flight) || 0,
-    hotel: parseFloat(hotel) || 0,
-    food: parseFloat(food) || 0,
-    transport: parseFloat(transport) || 0,
-    shopping: parseFloat(shopping) || 0,
-    ticket: parseFloat(ticket) || 0,
-    comm: parseFloat(comm) || 0,
-    insurance: parseFloat(insurance) || 0,
-    etc: parseFloat(etc) || 0,
+    flight: nn(flight),
+    hotel: nn(hotel),
+    food: nn(food),
+    transport: nn(transport),
+    shopping: nn(shopping),
+    ticket: nn(ticket),
+    comm: nn(comm),
+    insurance: nn(insurance),
+    etc: nn(etc),
     reservePct,
   }), [cityId, style, days, people, season, airline, flight, hotel, food, transport, shopping, ticket, comm, insurance, etc, reservePct])
 
   const result = useMemo(() => calcBudget(inp), [inp])
   const city = getCity(cityId)
-  const rate = parseFloat(krwRate) || city.defaultRate
+  const rawRate = parseFloat(krwRate)
+  const rate = rawRate > 0 ? rawRate : city.defaultRate
   const rateBase = city.defaultRateBase ?? 1
   const totalNative = (result.total * 10000) / rate * rateBase
 
   /* 도시 평균 (1인 기준 만원) */
+  // 평균 = 자동 추천(autoFill) 그대로의 예산. 결과와 같은 항목·예비비 기준이라
+  // 자동값을 쓰면 "평균 대비 0%"가 나온다 (이전엔 입장권·통신·보험·예비비가 빠져 항상 +X%).
   const avgPerPerson = useMemo(() => {
-    const sty = city.styles[style]
-    const dy = inp.days
-    const flt = getFlight(city.region, airline, season)
-    return flt + (sty.hotel + sty.food + sty.transport) * dy + 30 + 5  // 항공+일별+쇼핑·기타
-  }, [city, style, inp.days, airline, season])
+    const a = autoFill({ cityId, style, days: inp.days, people: inp.people, season, airline })
+    return calcBudget({ cityId, style, days: inp.days, people: inp.people, season, airline, ...a, reservePct }).perPerson
+  }, [cityId, style, inp.days, inp.people, season, airline, reservePct])
   const myPerPerson = result.perPerson
   const vsAvgPct = avgPerPerson > 0 ? ((myPerPerson - avgPerPerson) / avgPerPerson) * 100 : 0
 
@@ -149,6 +156,12 @@ export default function TravelBudgetClient() {
     return CITIES.filter((c) => c.name.toLowerCase().includes(q) || c.shortName.toLowerCase().includes(q))
   }, [search])
 
+  /* 계산 탭 도시 그리드 — 주요 도시(+선택 도시)만 기본, 더보기 시 전체 */
+  const displayCities = useMemo(() => {
+    if (showAllCities) return CITIES
+    return CITIES.filter((c) => POPULAR_CITY_IDS.includes(c.id) || c.id === cityId)
+  }, [showAllCities, cityId])
+
   return (
     <div className={s.wrap}>
       {/* 안내 */}
@@ -164,7 +177,7 @@ export default function TravelBudgetClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="여행 예산 모드">
         {([
           { id: 'calc',     label: '✈️ 예산 계산' },
           { id: 'cities',   label: '🌆 도시별 평균' },
@@ -173,6 +186,8 @@ export default function TravelBudgetClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -186,30 +201,41 @@ export default function TravelBudgetClient() {
       {tab === 'calc' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>여행 도시 (18개)</span>
-            <div className={s.cityGrid}>
-              {CITIES.map((c) => (
+            <span className={s.cardLabel}>여행 도시 ({CITIES.length}개)</span>
+            <div className={s.cityGrid} role="group" aria-label="여행 도시 선택">
+              {displayCities.map((c) => (
                 <button
                   key={c.id}
+                  aria-pressed={cityId === c.id}
                   className={`${s.cityBtn} ${cityId === c.id ? s.cityBtnActive : ''}`}
                   onClick={() => setCityId(c.id)}
                   type="button"
                 >
-                  <span className={s.cityFlag}>{c.flag}</span>
+                  <span className={s.cityFlag} aria-hidden="true">{c.flag}</span>
                   <span className={s.cityName}>{c.shortName}</span>
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              className={s.pill}
+              style={{ marginTop: 10 }}
+              aria-expanded={showAllCities}
+              onClick={() => setShowAllCities((v) => !v)}
+            >
+              {showAllCities ? '▲ 주요 도시만 보기' : `▼ 전체 ${CITIES.length}개 도시 보기`}
+            </button>
           </div>
 
           <div className={s.card}>
             <span className={s.cardLabel}>스타일 · 시즌 · 항공사</span>
             <div className={s.field}>
               <label className={s.fieldLabel}>여행 스타일</label>
-              <div className={s.pillRow}>
+              <div className={s.pillRow} role="group" aria-label="여행 스타일">
                 {STYLES.map((st) => (
                   <button
                     key={st.id}
+                    aria-pressed={style === st.id}
                     className={`${s.pill} ${style === st.id ? s.pillActive : ''}`}
                     onClick={() => setStyle(st.id)}
                     type="button"
@@ -223,10 +249,11 @@ export default function TravelBudgetClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>시즌</label>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="여행 시즌">
                   {SEASONS.map((sn) => (
                     <button
                       key={sn.id}
+                      aria-pressed={season === sn.id}
                       className={`${s.pill} ${season === sn.id ? s.pillActive : ''}`}
                       onClick={() => setSeason(sn.id)}
                       type="button"
@@ -238,10 +265,11 @@ export default function TravelBudgetClient() {
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>항공사</label>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="항공사 유형">
                   {AIRLINES.map((a) => (
                     <button
                       key={a.id}
+                      aria-pressed={airline === a.id}
                       className={`${s.pill} ${airline === a.id ? s.pillActive : ''}`}
                       onClick={() => setAirline(a.id)}
                       type="button"
@@ -253,7 +281,7 @@ export default function TravelBudgetClient() {
                 </div>
               </div>
             </div>
-            <button className={s.autoBtn} onClick={fillAuto} type="button">
+            <button className={s.autoBtn} onClick={() => fillAuto()} type="button">
               ⚡ 도시·스타일·시즌으로 9 항목 자동 채우기
             </button>
           </div>
@@ -262,34 +290,38 @@ export default function TravelBudgetClient() {
             <span className={s.cardLabel}>여행 기간 · 인원</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>여행 일수 ({days}일)</label>
+                <label className={s.fieldLabel} id="tb-days-label">여행 일수 ({days}일)</label>
                 <input
                   type="range"
                   min={1} max={30} step={1}
                   value={days}
                   onChange={(e) => setDays(e.target.value)}
                   className={s.slider}
+                  aria-labelledby="tb-days-label"
+                  aria-valuetext={`${days}일`}
                 />
-                <div className={s.pillRow} style={{ marginTop: 8 }}>
+                <div className={s.pillRow} style={{ marginTop: 8 }} role="group" aria-label="여행 일수 빠른 선택">
                   {[3, 5, 7, 10, 14].map((d) => (
-                    <button key={d} className={`${s.pill} ${parseInt(days) === d ? s.pillActive : ''}`} onClick={() => setDays(String(d))} type="button">
+                    <button key={d} aria-pressed={parseInt(days) === d} className={`${s.pill} ${parseInt(days) === d ? s.pillActive : ''}`} onClick={() => setDays(String(d))} type="button">
                       {d}일
                     </button>
                   ))}
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>인원 ({people}명)</label>
+                <label className={s.fieldLabel} id="tb-people-label">인원 ({people}명)</label>
                 <input
                   type="range"
                   min={1} max={10} step={1}
                   value={people}
                   onChange={(e) => setPeople(e.target.value)}
                   className={s.slider}
+                  aria-labelledby="tb-people-label"
+                  aria-valuetext={`${people}명`}
                 />
-                <div className={s.pillRow} style={{ marginTop: 8 }}>
+                <div className={s.pillRow} style={{ marginTop: 8 }} role="group" aria-label="인원 빠른 선택">
                   {[1, 2, 4, 6].map((p) => (
-                    <button key={p} className={`${s.pill} ${parseInt(people) === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
+                    <button key={p} aria-pressed={parseInt(people) === p} className={`${s.pill} ${parseInt(people) === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
                       {p}명
                     </button>
                   ))}
@@ -305,20 +337,22 @@ export default function TravelBudgetClient() {
                 { id: 'flight',    emoji: '✈️', label: '항공권 (왕복 1인)',  v: flight,    set: setFlight,    perPerson: true },
                 { id: 'hotel',     emoji: '🏨', label: '숙박 (1박 1인)',      v: hotel,     set: setHotel,     perPerson: true },
                 { id: 'food',      emoji: '🍽️', label: '식비 (1일 1인)',      v: food,      set: setFood,      perPerson: true },
-                { id: 'transport', emoji: '🚕', label: '교통 (1일 1인)',      v: transport, set: setTransport, perPerson: true },
+                { id: 'transport', emoji: '🚕', label: '교통·투어 (1일 1인)', v: transport, set: setTransport, perPerson: true },
                 { id: 'shopping',  emoji: '🛍️', label: '쇼핑 (총액)',         v: shopping,  set: setShopping,  perPerson: false },
-                { id: 'ticket',    emoji: '🎟️', label: '입장권·투어 (총액)',  v: ticket,    set: setTicket,    perPerson: false },
+                { id: 'ticket',    emoji: '🎟️', label: '입장권·액티비티 (총액)', v: ticket,   set: setTicket,    perPerson: false },
                 { id: 'comm',      emoji: '📱', label: '통신·로밍 (총액)',    v: comm,      set: setComm,      perPerson: false },
                 { id: 'insurance', emoji: '🛡️', label: '여행자보험 (1인)',    v: insurance, set: setInsurance, perPerson: true },
                 { id: 'etc',       emoji: '💵', label: '기타 (총액)',         v: etc,       set: setEtc,       perPerson: false },
               ].map((it) => (
                 <div key={it.id} className={s.itemCard}>
-                  <label className={s.itemLabel}>
+                  <label className={s.itemLabel} htmlFor={`tb-item-${it.id}`}>
                     {it.emoji} {it.label}
                   </label>
                   <input
+                    id={`tb-item-${it.id}`}
                     type="number"
                     className={s.input}
+                    aria-label={`${it.label} (만원)`}
                     value={it.v}
                     onChange={(e) => it.set(e.target.value)}
                     min={0}
@@ -327,6 +361,7 @@ export default function TravelBudgetClient() {
                 </div>
               ))}
             </div>
+            <p className={s.helpText}>💡 숙박은 <strong style={{ color: 'var(--text)' }}>(여행일수 − 1)박</strong>으로 계산됩니다 (예: 5일 → 4박). 식비·교통은 매일 발생. 모든 항목은 <strong style={{ color: 'var(--text)' }}>1인 단위</strong> — 2인 1실·택시 분담 시 실제는 더 저렴할 수 있어요.</p>
           </div>
 
           <div className={s.card}>
@@ -334,10 +369,11 @@ export default function TravelBudgetClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>예비비 ({reservePct}%)</label>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="예비비 비율">
                   {[5, 10, 15, 20].map((p) => (
                     <button
                       key={p}
+                      aria-pressed={reservePct === p}
                       className={`${s.pill} ${reservePct === p ? s.pillActive : ''}`}
                       onClick={() => setReservePct(p)}
                       type="button"
@@ -349,10 +385,12 @@ export default function TravelBudgetClient() {
                 <p className={s.helpText}>일반 10%, 새 국가·장기 15~20% 권장</p>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>환율 (1{city.currencyUnit}{city.defaultRateBase && city.defaultRateBase > 1 ? `(${city.defaultRateBase})` : ''} = ? 원)</label>
+                <label className={s.fieldLabel} htmlFor="tb-rate">환율 (1{city.currencyUnit}{city.defaultRateBase && city.defaultRateBase > 1 ? `(${city.defaultRateBase})` : ''} = ? 원)</label>
                 <input
+                  id="tb-rate"
                   type="number"
                   className={s.input}
+                  aria-label={`환율 1 ${city.currency} 당 원화`}
                   value={krwRate}
                   onChange={(e) => setKrwRate(e.target.value)}
                   placeholder={String(city.defaultRate)}
@@ -363,16 +401,17 @@ export default function TravelBudgetClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} aria-live="polite">
             <p className={s.heroLabel}>{city.flag} {city.shortName} · {STYLES.find((s) => s.id === style)!.label} · {inp.days}일 · {inp.people}명</p>
             <p className={s.heroValue}>
               총 <strong>{fmtMan(result.total)}</strong>
             </p>
             <p className={s.heroSub}>
               1인 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perPerson)}</strong>
-              {' · '}하루 평균 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perDay)}</strong>
-              {' · '}현지 통화 ≈ <strong>{fmtCurrency(totalNative, city.currencyUnit, totalNative > 1000 ? 0 : 2)}</strong>
-              <br />도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? '#DB2777' : vsAvgPct < -30 ? '#0D9488' : 'var(--text)' }}>
+              {' · '}1인 하루 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perPerson / inp.days)}</strong>
+              {' · '}전체 하루 <strong>{fmtMan(result.perDay)}</strong>
+              <br />현지 통화 ≈ <strong>{fmtCurrency(totalNative, city.currencyUnit, totalNative > 1000 ? 0 : 2)}</strong>
+              {' · '}도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? '#DB2777' : vsAvgPct < -30 ? '#0D9488' : 'var(--text)' }}>
                 {vsAvgPct > 0 ? '+' : ''}{vsAvgPct.toFixed(0)}%
               </strong>
             </p>
@@ -403,16 +442,16 @@ export default function TravelBudgetClient() {
                       <td>{it.emoji} {it.label}</td>
                       <td className={s.cellMono}>{fmtMan(it.perPerson)}</td>
                       <td className={s.cellMono}>{fmtMan(it.total)}</td>
-                      <td className={s.cellMono} style={{ color: it.color }}>{((it.total / result.subTotal) * 100).toFixed(1)}%</td>
+                      <td className={s.cellMono} style={{ color: it.color }}>{result.subTotal > 0 ? `${((it.total / result.subTotal) * 100).toFixed(1)}%` : '—'}</td>
                     </tr>
                   ))}
-                  <tr className={s.cellSubtitle}><td colSpan={4}>예비비 별도</td></tr>
-                  <tr><td>💰 예비비 ({reservePct}%)</td><td className={s.cellMono}>{fmtMan(result.reserve / inp.people)}</td><td className={s.cellMono}>{fmtMan(result.reserve)}</td><td className={s.cellMono}>{reservePct}%</td></tr>
+                  <tr className={s.cellSubtitle}><td colSpan={4}>소계의 100% (예비비 별도)</td></tr>
+                  <tr><td>💰 예비비 ({reservePct}%)</td><td className={s.cellMono}>{fmtMan(result.reserve / inp.people)}</td><td className={s.cellMono}>{fmtMan(result.reserve)}</td><td className={s.cellMono}>+{reservePct}%</td></tr>
                   <tr className={s.cellTotal}>
-                    <td><strong>총 합계</strong></td>
+                    <td><strong>총 합계 (소계+예비비)</strong></td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}><strong>{fmtMan(result.perPerson)}</strong></td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}><strong>{fmtMan(result.total)}</strong></td>
-                    <td className={s.cellMono}>100%</td>
+                    <td className={s.cellMono}>—</td>
                   </tr>
                 </tbody>
               </table>
@@ -429,6 +468,7 @@ export default function TravelBudgetClient() {
             <input
               type="text"
               className={s.input}
+              aria-label="도시 검색"
               placeholder="🔍 도시 검색 (예: 도쿄, 파리, 발리)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -593,7 +633,7 @@ export default function TravelBudgetClient() {
                   className={s.styleSelectBtn}
                   onClick={() => {
                     setStyle(sc.style.id)
-                    fillAuto()
+                    fillAuto(sc.style.id)
                     setTab('calc')
                   }}
                   type="button"
@@ -639,9 +679,10 @@ export default function TravelBudgetClient() {
           <div className={s.warnCard}>
             <strong>💡 스타일 선택 팁</strong>
             <p>
-              • <strong>🎒 배낭</strong>: 호스텔·로컬식·대중교통. 하루 5~12만원, 자유로움<br />
-              • <strong>🧳 중간</strong>: 3~4성 호텔·일반 식당·기본 투어. 하루 10~25만원, 가성비 최고<br />
-              • <strong>🥂 럭셔리</strong>: 5성·고급식·프라이빗. 하루 25~60만원, 휴식·기념일<br />
+              • <strong>🎒 배낭</strong>: 호스텔·로컬식·대중교통. 1인 하루 약 5~20만원, 자유로움<br />
+              • <strong>🧳 중간</strong>: 3~4성 호텔·일반 식당·기본 투어. 1인 하루 약 12~40만원, 가성비 최고<br />
+              • <strong>🥂 럭셔리</strong>: 5성·고급식·프라이빗. 1인 하루 약 30~100만원, 휴식·기념일<br />
+              <span style={{ fontSize: 11, color: 'var(--muted)' }}>(현지비 1인 하루, 항공 제외 · 동남아 낮고 일본·유럽·미국 높음)</span><br />
               <br />
               일반 한국 여행객은 <strong>중간 스타일</strong>이 가장 만족도 ↑. 신혼·기념일은 럭셔리, 학생·장기여행은 배낭.
             </p>
@@ -692,7 +733,7 @@ function DonutChart({ items, total }: { items: DonutItem[]; total: number }) {
     <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 14, alignItems: 'center' }}
       className="donut-wrap"
     >
-      <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }}>
+      <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }} aria-hidden="true">
         {slices.map(({ d, cum }) => {
           const startAngle = (cum / total) * Math.PI * 2 - Math.PI / 2
           const endAngle = ((cum + d.total) / total) * Math.PI * 2 - Math.PI / 2

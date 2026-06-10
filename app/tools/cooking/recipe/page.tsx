@@ -254,7 +254,7 @@ export default function RecipePage() {
               { href: '/tools/cooking/serving',          icon: '🍽️', name: '1인분 분량 계산기',         desc: '재료별 적정 분량' },
               { href: '/tools/cooking/food-storage',     icon: '🧊', name: '식재료 보관 계산기',   desc: '냉장·냉동 유통기한' },
               { href: '/tools/cooking/substitute',       icon: '🔄', name: '식재료 대체 계산기',   desc: '버터·설탕·계란 대체' },
-              { href: '/tools/unit/weight',              icon: '⚖️', name: '무게 변환기',              desc: 'g·kg·oz·lb 단위' },
+              { href: '/tools/unit/converter',           icon: '⚖️', name: '단위 변환기',              desc: '무게·부피·온도 등 14종 통합 변환' },
             ].map((tool, i) => (
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>

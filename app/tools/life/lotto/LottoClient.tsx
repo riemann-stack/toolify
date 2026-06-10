@@ -14,6 +14,9 @@ import {
 
 type Tab = 'generate' | 'analyze' | 'simulator' | 'jackpot'
 
+// 제외 번호 상한 — 45-6, 최소 6개 선택 가능 보장(무한 루프 방지)
+const MAX_EXCLUDED = 39
+
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function LottoClient() {
   const [tab, setTab] = useState<Tab>('generate')
@@ -32,7 +35,7 @@ export default function LottoClient() {
         로또 번호 생성은 <strong>재미·참고용</strong>이며 당첨을 보장하지 않습니다. 모든 번호 조합의 당첨 확률은 동일하며, 분석·패턴은 통계적 흥미일 뿐 예측력이 없습니다. 복권 구매는 <strong>여유 자금 범위에서</strong> 하시고 과도한 구매·도박 중독에 주의하세요. 도박문제 상담 ☎ <strong>1336</strong>.
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="로또 도구 탭">
         {([
           ['generate',  '번호 생성'],
           ['analyze',   '번호 분석'],
@@ -45,7 +48,8 @@ export default function LottoClient() {
             key === 'simulator' ? s.tabActiveSim :
             key === 'jackpot'   ? s.tabActiveJackpot : s.tabActive
           return (
-            <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
+            <button key={key} type="button" role="tab" aria-selected={tab === key}
+              className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
               {label}
             </button>
           )
@@ -81,6 +85,13 @@ function GenerateTab() {
   const [showAnalysis, setShowAnalysis] = useState(true)
   const [games, setGames] = useState<LottoGame[]>([])
   const [saveConfirm, setSaveConfirm] = useState(false)
+  const [saved, setSaved] = useState<SavedNumber[]>([])
+  useEffect(() => { setSaved(loadSaved()) }, [])
+  const persist = (next: SavedNumber[]) => {
+    const trimmed = next.slice(-100)  // 최신 100개 유지
+    setSaved(trimmed)
+    saveSaved(trimmed)
+  }
 
   const toggleNumber = (n: number) => {
     if (editMode === 'fix') {
@@ -92,7 +103,7 @@ function GenerateTab() {
     } else {
       if (excluded.includes(n)) {
         setExcluded(excluded.filter(x => x !== n))
-      } else if (!fixed.includes(n)) {
+      } else if (!fixed.includes(n) && excluded.length < MAX_EXCLUDED) {
         setExcluded([...excluded, n])
       }
     }
@@ -110,25 +121,14 @@ function GenerateTab() {
   }
 
   const handleSaveOne = (g: LottoGame) => {
-    const all = loadSaved()
-    all.push({
-      id: newId(),
-      numbers: g.numbers,
-      mode,
-      savedAt: new Date().toISOString(),
-    })
-    saveSaved(all)
+    persist([...saved, { id: newId(), numbers: g.numbers, mode, savedAt: new Date().toISOString() }])
     setSaveConfirm(true)
     setTimeout(() => setSaveConfirm(false), 1500)
   }
 
   const handleSaveAll = () => {
-    const all = loadSaved()
     const now = new Date().toISOString()
-    games.forEach(g => {
-      all.push({ id: newId(), numbers: g.numbers, mode, savedAt: now })
-    })
-    saveSaved(all)
+    persist([...saved, ...games.map(g => ({ id: newId(), numbers: g.numbers, mode, savedAt: now }))])
     setSaveConfirm(true)
     setTimeout(() => setSaveConfirm(false), 1500)
   }
@@ -141,9 +141,12 @@ function GenerateTab() {
           생성 모드
           <span className={s.cardLabelHint}>8가지 — 모두 동일 확률</span>
         </label>
-        <div className={s.modeGridCompact}>
+        <div className={s.modeGridCompact} role="group" aria-label="번호 생성 모드 선택">
           {GENERATION_MODES.map(m => (
             <button key={m.id}
+              type="button"
+              aria-pressed={mode === m.id}
+              aria-label={`${m.name} — ${m.desc}`}
               className={`${s.modeChip} ${mode === m.id ? s.modeChipActive : ''}`}
               onClick={() => setMode(m.id)}
               title={`${m.name} — ${m.desc}`}>
@@ -156,9 +159,11 @@ function GenerateTab() {
       {/* 게임 수 */}
       <div className={s.card}>
         <label className={s.cardLabel}>게임 수</label>
-        <div className={s.countRow}>
+        <div className={s.countRow} role="group" aria-label="게임 수 선택">
           {[1, 2, 3, 4, 5].map(n => (
             <button key={n}
+              type="button"
+              aria-pressed={gameCount === n}
               className={`${s.countBtn} ${gameCount === n ? s.countActive : ''}`}
               onClick={() => setGameCount(n)}>
               {n}게임
@@ -171,21 +176,26 @@ function GenerateTab() {
       <div className={s.card}>
         <label className={s.cardLabel}>
           고정·제외 번호 (선택)
-          <span className={s.cardLabelHint}>고정 {fixed.length}/5 · 제외 {excluded.length}</span>
+          <span className={s.cardLabelHint}>고정 {fixed.length}/5 · 제외 {excluded.length}/{MAX_EXCLUDED}</span>
         </label>
-        <div className={s.fixExcludeToggle}>
-          <button className={`${s.fixExcludeBtn} ${editMode === 'fix' ? s.fixActive : ''}`}
+        <div className={s.fixExcludeToggle} role="group" aria-label="고정/제외 편집 모드">
+          <button type="button" aria-pressed={editMode === 'fix'}
+            className={`${s.fixExcludeBtn} ${editMode === 'fix' ? s.fixActive : ''}`}
             onClick={() => setEditMode('fix')}>📌 고정 번호 (최대 5)</button>
-          <button className={`${s.fixExcludeBtn} ${editMode === 'excl' ? s.exclActive : ''}`}
+          <button type="button" aria-pressed={editMode === 'excl'}
+            className={`${s.fixExcludeBtn} ${editMode === 'excl' ? s.exclActive : ''}`}
             onClick={() => setEditMode('excl')}>🚫 제외 번호</button>
         </div>
-        <div className={s.numGrid}>
+        <div className={s.numGrid} role="group" aria-label="번호판 (고정·제외 선택)">
           {Array.from({ length: 45 }, (_, i) => i + 1).map(n => {
             const isFixed = fixed.includes(n)
             const isExcl = excluded.includes(n)
             const cls = isFixed ? s.numCellFixed : isExcl ? s.numCellExcluded : ''
             return (
-              <button key={n} className={`${s.numCell} ${cls}`}
+              <button key={n} type="button"
+                aria-pressed={isFixed || isExcl}
+                aria-label={`${n}번${isFixed ? ', 고정됨' : isExcl ? ', 제외됨' : ''}`}
+                className={`${s.numCell} ${cls}`}
                 onClick={() => toggleNumber(n)}
                 disabled={editMode === 'fix' ? isExcl : isFixed}>
                 {n}
@@ -200,6 +210,9 @@ function GenerateTab() {
             </span>
           ))}
         </div>
+        <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, marginTop: 8 }}>
+          ⓘ 고정 번호는 생성 모드 조건보다 <strong style={{ color: 'var(--text)' }}>우선</strong>합니다. 예를 들어 「연속 제외」 모드라도 연속된 번호를 직접 고정하면 그대로 유지됩니다.
+        </p>
         {(fixed.length > 0 || excluded.length > 0) && (
           <button className={s.miniBtn}
             style={{ marginTop: 8 }}
@@ -269,29 +282,20 @@ function GenerateTab() {
       )}
 
       {/* 저장된 번호 */}
-      <SavedList />
+      <SavedList saved={saved} onChange={persist} />
     </>
   )
 }
 
 /* ─── 저장된 번호 목록 ─── */
-function SavedList() {
-  const [saved, setSaved] = useState<SavedNumber[]>([])
-  const [loaded, setLoaded] = useState(false)
-  useEffect(() => { setSaved(loadSaved()); setLoaded(true) }, [])
-
-  const handleDelete = (id: string) => {
-    const next = saved.filter(s => s.id !== id)
-    setSaved(next)
-    saveSaved(next)
-  }
+function SavedList({ saved, onChange }: { saved: SavedNumber[]; onChange: (next: SavedNumber[]) => void }) {
+  const handleDelete = (id: string) => onChange(saved.filter(s => s.id !== id))
   const handleClear = () => {
     if (!confirm('저장된 번호를 모두 삭제하시겠습니까?')) return
-    setSaved([])
-    saveSaved([])
+    onChange([])
   }
 
-  if (!loaded || saved.length === 0) return null
+  if (saved.length === 0) return null
 
   return (
     <div className={s.card}>
@@ -346,11 +350,13 @@ function NumberPicker({ selected, onChange }: { selected: number[]; onChange: (n
           <button className={s.miniBtn} onClick={clear} disabled={selected.length === 0}>전체 해제</button>
         </div>
       </div>
-      <div className={s.numGrid}>
+      <div className={s.numGrid} role="group" aria-label="번호 선택 (최대 6개)">
         {Array.from({ length: 45 }, (_, i) => i + 1).map(n => {
           const on = selected.includes(n)
           return (
-            <button key={n}
+            <button key={n} type="button"
+              aria-pressed={on}
+              aria-label={`${n}번${on ? ', 선택됨' : ''}`}
               className={`${s.numCell} ${on ? s.numCellFixed : ''}`}
               onClick={() => toggle(n)}
               disabled={!on && selected.length >= 6}>
@@ -444,7 +450,7 @@ function AnalyzeTab() {
               <div className={s.analysisCard}>
                 <div className={s.analysisLabel}>평균 간격</div>
                 <div className={s.analysisValue}>{analysis.intervalAvg.toFixed(1)}</div>
-                <div className={s.analysisHint}>이론 평균 7.5</div>
+                <div className={s.analysisHint}>이론 평균 ≈ 6.6</div>
               </div>
             </div>
           </div>
@@ -517,9 +523,11 @@ function SimulatorTab() {
 
       <div className={s.card}>
         <label className={s.cardLabel}>시뮬레이션 횟수</label>
-        <div className={s.simInputRow}>
+        <div className={s.simInputRow} role="group" aria-label="시뮬레이션 횟수 선택">
           {[100, 1000, 10000, 100000].map(n => (
             <button key={n}
+              type="button"
+              aria-pressed={drawCount === n}
               className={`${s.simBtn} ${drawCount === n ? s.simActive : ''}`}
               onClick={() => setDrawCount(n)}>
               {n.toLocaleString()}회
@@ -584,7 +592,7 @@ function SimulatorTab() {
           <div className={s.warningBox}>
             <strong>⚠️ 시뮬레이션 결과 해석</strong> — 본 시뮬레이션은 무작위 추첨을 {result.totalGames.toLocaleString()}회 반복한 통계 결과이며, 실제 당첨을 예측하지 않습니다. 시뮬레이션 결과가 좋게 나와도 실제 구매 시 동일한 결과가 보장되지 않습니다. 1등 확률은 매 게임 1/8,145,060로 동일합니다.
             <br /><br />
-            로또는 오락 목적으로 즐기시고, 무리한 구매는 자제하세요. 도박 의존 우려 시 <a href="tel:1336">한국도박문제예방치유원 1336</a>(24시간 무료) 상담받으실 수 있습니다.
+            로또는 오락 목적으로 즐기시고, 무리한 구매는 자제하세요. 도박 의존 우려 시 <a href="tel:1336">한국도박문제예방치유원 1336</a>(365일 09~22시, 무료) 상담받으실 수 있습니다.
           </div>
         </>
       )}
@@ -620,9 +628,11 @@ function JackpotTab() {
           주간 구매 게임 수
           <span className={s.cardLabelHint}>한 주에 사는 게임 수</span>
         </label>
-        <div className={s.simInputRow}>
+        <div className={s.simInputRow} role="group" aria-label="주간 구매 게임 수 선택">
           {[1, 5, 10, 20, 50].map(n => (
             <button key={n}
+              type="button"
+              aria-pressed={weeklyGames === n}
               className={`${s.simBtn} ${weeklyGames === n ? s.simActive : ''}`}
               onClick={() => setWeeklyGames(n)}>
               {n}게임
@@ -635,6 +645,7 @@ function JackpotTab() {
         <label className={s.cardLabel}>시작 나이 (선택)</label>
         <div className={s.fieldRow}>
           <input className={s.numberField} type="number" min={1} max={100}
+            aria-label="시작 나이"
             value={startAge} onChange={e => setStartAge(Math.max(1, Math.min(100, parseInt(e.target.value) || 30)))} />
           <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center', fontFamily: 'Noto Sans KR, sans-serif' }}>
             결과에 &quot;{startAge + Math.round(avgYears)}세에 1등&quot; 형식으로 표시
@@ -651,8 +662,12 @@ function JackpotTab() {
         <label className={s.cardLabel}>수학적 평균 (기댓값)</label>
         <div className={s.compareTable}>
           <div className={s.compareRow}>
-            <span>매주 {weeklyGames}게임 × 1주</span>
+            <span>게임당 1등 확률</span>
             <span>{ODDS_FIRST_PRIZE.toLocaleString()}분의 1</span>
+          </div>
+          <div className={s.compareRow}>
+            <span>매주 {weeklyGames}게임 기준 주간 확률</span>
+            <span>약 {Math.round(ODDS_FIRST_PRIZE / weeklyGames).toLocaleString()}분의 1</span>
           </div>
           <div className={s.compareRow}>
             <span>1등까지 평균 게임 수</span>
@@ -672,7 +687,7 @@ function JackpotTab() {
           </div>
         </div>
         <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-          ⓘ 수학적 평균은 확률의 기댓값이며, 실제 한 사람의 결과는 더 빠를 수도 더 늦을 수도 있습니다. 매주 사도 한 평생 1등을 못 볼 확률이 99% 이상입니다.
+          ⓘ 수학적 평균은 확률의 기댓값이며, 실제 한 사람의 결과는 더 빠를 수도 더 늦을 수도 있습니다. 평균 당첨까지 걸리는 시간(위 &ldquo;평균 연수&rdquo;)이 사람 수명을 크게 넘어, 평생 1등을 보지 못할 가능성이 매우 큽니다.
         </p>
       </div>
 

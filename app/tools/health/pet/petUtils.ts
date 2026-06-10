@@ -74,7 +74,7 @@ export function sizeOfBreed(id: string): DogSize {
 export function dogHumanAge(yrs: number, mos: number, size: DogSize): number {
   const a = yrs + mos / 12
   if (a <= 0) return 0
-  const inc = size === 'large' ? 6 : size === 'medium' ? 5 : 4.5
+  const inc = size === 'large' ? 6 : size === 'medium' ? 5 : 4
   if (a <= 1) return Math.round(15 * a)
   if (a <= 2) return Math.round(15 + 9 * (a - 1))
   return Math.round(24 + inc * (a - 2))
@@ -149,9 +149,21 @@ export function getDerFactor(
 ): DerResult {
   const ageYears = yrs + mos / 12
 
-  // 1. 퍼피·키튼 (1세 미만)
+  // 1. 퍼피·키튼 (1세 미만) — 성장 단계별 (Merck/AAHA: 4개월 미만 급성장기, 이후 성장기)
   if (ageYears < 1) {
-    return { factor: 2.5, label: species === 'dog' ? '퍼피·성장기' : '키튼·성장기', stage: 'puppy' }
+    const youngGrowth = ageYears < 4 / 12
+    if (species === 'dog') {
+      return {
+        factor: youngGrowth ? 3.0 : 2.0,
+        label: youngGrowth ? '퍼피·급성장기 (4개월 미만)' : '퍼피·성장기 (4개월~)',
+        stage: 'puppy',
+      }
+    }
+    return {
+      factor: youngGrowth ? 2.5 : 2.0,
+      label: youngGrowth ? '키튼·급성장기 (4개월 미만)' : '키튼·성장기 (4개월~)',
+      stage: 'puppy',
+    }
   }
 
   // 2. 시니어
@@ -212,26 +224,25 @@ export function evaluateBody(species: Species, weight: number, size: DogSize): B
       message: '비만은 당뇨·관절염 위험이 큽니다. 수의사 상담 후 감량 계획을 권장합니다.' }
   }
 
-  // 강아지 — 품종 크기별 정상 범위 기준 ±15%
+  // 강아지 — 품종 크기별 정상 범위(밴드 [min,max]) 기준
   const range = DOG_IDEAL_WEIGHT[size]
-  const idealMid = (range.min + range.max) / 2
-  const ratio = weight / idealMid
+  const r = { ...range, sizeName: range.name }
 
-  if (ratio < 0.85)
+  if (weight < range.min)
     return { status: 'underweight', label: '저체중', color: '#0891B2',
-      message: '평균보다 가벼운 편입니다. 영양·기생충·치아 점검을 권장합니다.',
-      range: { ...range, sizeName: range.name } }
-  if (ratio < 1.15)
+      message: `${range.name}견 정상 범위(${range.min}~${range.max}kg)보다 가볍습니다. 영양·기생충·치아 점검을 권장합니다.`,
+      range: r }
+  if (weight <= range.max)
     return { status: 'ideal', label: '적정 체중', color: '#059669',
-      message: `${range.name}견 정상 체중 범위 (${range.min}~${range.max}kg).`,
-      range: { ...range, sizeName: range.name } }
-  if (ratio < 1.30)
+      message: `${range.name}견 정상 체중 범위입니다 (${range.min}~${range.max}kg).`,
+      range: r }
+  if (weight <= range.max * 1.25)
     return { status: 'overweight', label: '과체중', color: '#CA8A04',
-      message: '관절 부담이 늘어납니다. 사료량 10~15% 감량을 권장합니다.',
-      range: { ...range, sizeName: range.name } }
+      message: `${range.name}견 정상 범위(${range.min}~${range.max}kg)를 초과했습니다. 사료량 10~15% 감량을 권장합니다.`,
+      range: r }
   return     { status: 'obese', label: '비만', color: '#DC2626',
       message: '비만견은 수명 1.5~2년 단축 보고가 있습니다. 수의사 감량 계획을 권장합니다.',
-      range: { ...range, sizeName: range.name } }
+      range: r }
 }
 
 /* ─── 평균 수명 ─── */
@@ -261,12 +272,13 @@ export interface LifeProgress {
 }
 
 export function calcLifeProgress(
-  species: Species, yrs: number, mos: number, size: DogSize, catActivity: Activity = 'normal',
+  species: Species, yrs: number, mos: number, size: DogSize, catOutdoor = false,
 ): LifeProgress {
   const ageYears = yrs + mos / 12
+  // 고양이 수명은 생활 환경(실내/실외)으로 결정 — 활동량(칼로리용)과 분리
   const data = species === 'dog'
     ? DOG_LIFESPAN[size]
-    : (catActivity === 'high' ? CAT_LIFESPAN.outdoor : CAT_LIFESPAN.indoor)
+    : (catOutdoor ? CAT_LIFESPAN.outdoor : CAT_LIFESPAN.indoor)
 
   const progressPercent = Math.max(0, Math.min(150, (ageYears / data.avg) * 100))
   const remainingYears = Math.max(0, data.avg - ageYears)
@@ -305,6 +317,7 @@ export interface PetCalcInput {
   size: DogSize       // 고양이는 size='small' 같은 값 무시
   isNeutered: boolean
   activity: Activity
+  catOutdoor?: boolean   // 고양이 실외 여부(수명 계산용) — 강아지는 무시
   foodKcalPer100g?: number
 }
 
@@ -335,7 +348,7 @@ export function calculateAll(input: PetCalcInput): PetCalcResult {
   const treatKcal = Math.round(der * 0.1)
   const waterMl = Math.round(input.weight * 55)
   const body = evaluateBody(input.species, input.weight, input.size)
-  const life = calcLifeProgress(input.species, input.yrs, input.mos, input.size, input.activity)
+  const life = calcLifeProgress(input.species, input.yrs, input.mos, input.size, input.catOutdoor ?? false)
 
   return {
     humanAge,
@@ -372,7 +385,10 @@ export function runPetUtilsSelfTest(): { passed: number; failed: number; errors:
   expect('cat adult neutered normal → 1.4 (BUG)', getDerFactor('cat', 5, 0, 'small', true, 'normal').factor, 1.4)
   expect('cat adult neutered low → 1.2',          getDerFactor('cat', 5, 0, 'small', true, 'low').factor, 1.2)
   // 경계
-  expect('puppy 0.5y → 2.5',           getDerFactor('dog', 0, 6, 'small', false, 'high').factor, 2.5)
+  expect('dog puppy 2mo → 3.0',        getDerFactor('dog', 0, 2, 'small', false, 'high').factor, 3.0)
+  expect('dog puppy 6mo → 2.0',        getDerFactor('dog', 0, 6, 'small', false, 'high').factor, 2.0)
+  expect('cat kitten 2mo → 2.5',       getDerFactor('cat', 0, 2, 'small', false, 'high').factor, 2.5)
+  expect('cat kitten 6mo → 2.0',       getDerFactor('cat', 0, 6, 'small', false, 'high').factor, 2.0)
   expect('large dog 7y → senior',      getDerFactor('dog', 7, 0, 'large', true, 'normal').stage, 'senior')
   expect('small dog 7y → adult',       getDerFactor('dog', 7, 0, 'small', true, 'normal').stage, 'adult')
   expect('cat 11y → senior',           getDerFactor('cat', 11, 0, 'small', true, 'normal').stage, 'senior')

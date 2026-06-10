@@ -28,7 +28,7 @@ const MILKY_WAY_STARS = 300_000_000_000 // 3000억
 const GALAXY_RADIUS_LY = 50_000          // 광년 (반경)
 const GALAXY_THICKNESS_LY = 1_000        // 광년 (디스크 두께)
 const GALAXY_VOLUME_LY3 = Math.PI * GALAXY_RADIUS_LY * GALAXY_RADIUS_LY * GALAXY_THICKNESS_LY
-const STARS_IN_RADIO_RANGE = 14_000      // 100광년 내 별 약 14,000개 (참고)
+const STARS_IN_RADIO_RANGE = 28_000      // 126광년(인류 전파권) 내 별 약 28,000개 ≈ 100ly 내 ~14,000 × (126/100)³
 
 type DistanceEstimate = {
   averageDistance: number
@@ -145,16 +145,16 @@ function formatN(n: number): string {
   if (n < 1)     return n.toFixed(3)
   if (n < 100)   return n.toFixed(1)
   if (n < 1_000_000)       return Math.round(n).toLocaleString('ko-KR')
-  if (n < 1_000_000_000)   return (n / 1_000_000).toFixed(2) + '백만'
-  if (n < 1_000_000_000_000) return (n / 1_000_000_000).toFixed(2) + '억'
+  if (n < 100_000_000)     return (n / 1_000_000).toFixed(2) + '백만'      // 1e6 ~ 1e8
+  if (n < 1_000_000_000_000) return (n / 100_000_000).toFixed(2) + '억'    // 1억(1e8) ~ 1조
   return n.toExponential(2)
 }
 
 function formatL(L: number): string {
   if (L < 1000) return `${Math.round(L).toLocaleString()}년`
   if (L < 1_000_000) return `${(L / 1000).toFixed(1)}천년`
-  if (L < 1_000_000_000) return `${(L / 1_000_000).toFixed(2)}백만년`
-  return `${(L / 1_000_000_000).toFixed(2)}억년`
+  if (L < 100_000_000) return `${(L / 1_000_000).toFixed(2)}백만년`
+  return `${(L / 100_000_000).toFixed(2)}억년`
 }
 
 /* 결과 메시지 */
@@ -306,6 +306,8 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       {/* 프리셋 */}
       <div className={styles.presetRow}>
         <button
+          type="button"
+          aria-pressed={activePreset === 'optimistic'}
           className={`${styles.presetBtn} ${styles.presetOpt} ${activePreset === 'optimistic' ? styles.presetActive : ''}`}
           onClick={() => applyPreset('optimistic')}
         >
@@ -314,20 +316,24 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
           <span className={styles.presetSub}>칼 세이건 추정</span>
         </button>
         <button
+          type="button"
+          aria-pressed={activePreset === 'realistic'}
           className={`${styles.presetBtn} ${styles.presetReal} ${activePreset === 'realistic' ? styles.presetActive : ''}`}
           onClick={() => applyPreset('realistic')}
         >
           <span className={styles.presetEmoji}>🔭</span>
           <span className={styles.presetName}>현실론</span>
-          <span className={styles.presetSub}>과학계 중앙값</span>
+          <span className={styles.presetSub}>중간 가정 (예시)</span>
         </button>
         <button
+          type="button"
+          aria-pressed={activePreset === 'pessimistic'}
           className={`${styles.presetBtn} ${styles.presetPes} ${activePreset === 'pessimistic' ? styles.presetActive : ''}`}
           onClick={() => applyPreset('pessimistic')}
         >
           <span className={styles.presetEmoji}>🤔</span>
           <span className={styles.presetName}>비관론</span>
-          <span className={styles.presetSub}>페르미 역설</span>
+          <span className={styles.presetSub}>레어 어스 가정</span>
         </button>
       </div>
 
@@ -357,6 +363,8 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
               <input
                 className={styles.slider}
                 type="range"
+                aria-label={`${v.name} (${v.symbol})`}
+                aria-valuetext={`${display}${v.unit ? ' ' + v.unit : ''}`}
                 min={v.log ? 0 : v.min}
                 max={v.log ? 100 : v.max}
                 step={v.log ? 0.1 : v.step}
@@ -389,6 +397,9 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
         <CountUp value={N} />
         <div className={styles.heroUnit}>개의 문명</div>
         <p className={styles.heroMsg}>{msg}</p>
+        <span aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+          은하 내 교신 가능 문명 약 {formatN(N)}개 · {badge.label}
+        </span>
       </div>
 
       {/* 스케일 + 배지 */}
@@ -410,45 +421,55 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       {distance && (
         <div className={styles.distCard}>
           <div className={styles.distLabel}>📏 거리·통신 추정 (N = {formatN(N)})</div>
-          <div className={styles.distGrid}>
-            <div className={styles.distItem}>
-              <div className={styles.distItemLabel}>평균 문명 간 거리</div>
-              <div className={styles.distItemValue}>{fmtLy(distance.averageDistance)}</div>
-            </div>
-            <div className={styles.distItem}>
-              <div className={styles.distItemLabel}>가장 가까운 문명</div>
-              <div className={styles.distItemValue} style={{ color: '#DC2626' }}>{fmtLy(distance.nearestDistance)}</div>
-            </div>
-            <div className={styles.distItem}>
-              <div className={styles.distItemLabel}>왕복 통신 시간</div>
-              <div className={styles.distItemValue}>{fmtYears(distance.roundTripCommYears)}</div>
-            </div>
-            <div className={styles.distItem}>
-              <div className={styles.distItemLabel}>인류 전파권 (126광년) 내</div>
-              <div className={styles.distItemValue} style={{
-                color: distance.rangeLabel === 'high' ? '#059669'
-                  : distance.rangeLabel === 'medium' ? '#FFD93E' : '#EA580C',
-              }}>
-                {distance.potentialContactsInRange < 0.001
-                  ? distance.potentialContactsInRange.toExponential(2)
-                  : distance.potentialContactsInRange.toFixed(3)}개
+          {N < 1 ? (
+            <p className={styles.distHint} style={{ margin: 0 }}>
+              🌑 기대 문명 수가 <strong>1개 미만</strong>입니다. 은하 안에 우리뿐일 가능성이 높아,
+              균등 분포(은하 반경 5만 광년) 모델로는 &lsquo;가장 가까운 문명까지의 거리&rsquo;를 의미 있게 추정할 수 없습니다.
+              (N ≥ 1에서만 거리·통신 추정을 표시합니다.)
+            </p>
+          ) : (
+            <>
+              <div className={styles.distGrid}>
+                <div className={styles.distItem}>
+                  <div className={styles.distItemLabel}>평균 문명 간 거리</div>
+                  <div className={styles.distItemValue}>{fmtLy(distance.averageDistance)}</div>
+                </div>
+                <div className={styles.distItem}>
+                  <div className={styles.distItemLabel}>가장 가까운 문명</div>
+                  <div className={styles.distItemValue} style={{ color: '#DC2626' }}>{fmtLy(distance.nearestDistance)}</div>
+                </div>
+                <div className={styles.distItem}>
+                  <div className={styles.distItemLabel}>왕복 통신 시간</div>
+                  <div className={styles.distItemValue}>{fmtYears(distance.roundTripCommYears)}</div>
+                </div>
+                <div className={styles.distItem}>
+                  <div className={styles.distItemLabel}>인류 전파권 (126광년) 내</div>
+                  <div className={styles.distItemValue} style={{
+                    color: distance.rangeLabel === 'high' ? '#059669'
+                      : distance.rangeLabel === 'medium' ? '#FFD93E' : '#EA580C',
+                  }}>
+                    {distance.potentialContactsInRange < 0.001
+                      ? distance.potentialContactsInRange.toExponential(2)
+                      : distance.potentialContactsInRange.toFixed(3)}개
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <p className={styles.distHint}>
-            {distance.rangeLabel === 'high'
-              ? '🟢 인류 전파(1900~) 도달권 안에 외계 문명이 존재할 가능성 — 신호를 기다리거나 보내볼 만한 시기.'
-              : distance.rangeLabel === 'medium'
-              ? '🟡 인류 전파권 안에 문명이 있을 확률은 낮지만 가능. 가장 가까운 문명도 광년 단위로 멀음.'
-              : '🔴 인류 전파(현재 126광년)는 가장 가까운 문명에 아직 도달하지 못함. 균등 분포 가정의 한계 — 실제는 나선팔 집중 가능성.'}
-          </p>
+              <p className={styles.distHint}>
+                {distance.rangeLabel === 'high'
+                  ? '🟢 인류 전파(1900~) 도달권 안에 외계 문명이 존재할 가능성 — 신호를 기다리거나 보내볼 만한 시기.'
+                  : distance.rangeLabel === 'medium'
+                  ? '🟡 인류 전파권 안에 문명이 있을 확률은 낮지만 가능. 가장 가까운 문명도 광년 단위로 멀음.'
+                  : '🔴 인류 전파(현재 126광년)는 가장 가까운 문명에 아직 도달하지 못함. 균등 분포 가정의 한계 — 실제는 나선팔 집중 가능성.'}
+              </p>
+            </>
+          )}
         </div>
       )}
 
       {/* 페르미 역설 가설 추천 */}
       {fermiTop.length > 0 && (
         <div className={styles.fermiCard}>
-          <div className={styles.distLabel}>🤔 N = {formatN(N)}일 때 가장 유력한 페르미 역설 가설</div>
+          <div className={styles.distLabel}>🤔 N = {formatN(N)}에 어울리는 페르미 역설 가설 (참고용)</div>
           <div className={styles.fermiList}>
             {fermiTop.map((h, i) => (
               <div key={h.id} className={styles.fermiItem}>
@@ -461,23 +482,23 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
             ))}
           </div>
           <p className={styles.distHint}>
-            ※ 5가지 가설 전체는 아래 SEO 섹션 [페르미 역설] 참고. N값 변화에 따라 자동 추천이 달라집니다.
+            ※ 순위는 과학적 계산이 아니라 N 구간별 <strong>임의 가중치</strong>에 따른 참고용 사고 실험입니다. 5가지 가설 전체는 아래 [페르미 역설] 섹션 참고.
           </p>
         </div>
       )}
 
       {/* 은하 SVG (태양·전파권·가장 가까운 문명 강조) */}
       <div className={styles.galaxyCard}>
-        <div className={styles.galaxyLabel}>우리 은하 시뮬레이션</div>
+        <div className={styles.galaxyLabel}>우리 은하 시뮬레이션 (상징적 시각화)</div>
         <Galaxy highlightCount={highlightCount} />
         <p className={styles.galaxyHint}>
-          🌟 초록색 별 <strong>{highlightCount}개</strong> = 교신 가능 문명 · ☀ 태양(지구) · 🔵 인류 전파권 · 🔴 가장 가까운 문명
+          🌟 초록 별 = 교신 가능 문명 · ☀ 태양 · 🔵 인류 전파권 · 🔴 최근접 문명 — <strong>상징적 표현</strong>으로, 별 개수·거리·전파권 크기는 실제 N·거리 결과와 다릅니다.
         </p>
       </div>
 
       {/* 기여도 차트 */}
       <div className={styles.contribCard}>
-        <div className={styles.contribLabel}>변수별 기여도 (누적 곱)</div>
+        <div className={styles.contribLabel}>계산 진행 과정 (변수를 순서대로 곱한 누적값)</div>
         <div className={styles.contribList}>
           {contribution.map((c, i) => {
             const lg = Math.log10(Math.max(c.cum, 1e-12))
@@ -501,13 +522,13 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
           })}
         </div>
         <p className={styles.contribHint}>
-          막대가 크게 줄어드는 구간이 결과의 <strong>병목</strong>입니다
+          막대가 크게 줄어드는 구간이 값을 가장 낮추는 변수 — 단, <strong>곱하는 순서에 따라 달라지므로</strong> 엄밀한 민감도 분석은 아닙니다.
         </p>
       </div>
 
       {/* 공유 */}
       <div className={styles.shareRow}>
-        <button className={`${styles.shareBtn} ${shareCopied ? styles.shareBtnDone : ''}`} onClick={handleShare}>
+        <button type="button" className={`${styles.shareBtn} ${shareCopied ? styles.shareBtnDone : ''}`} onClick={handleShare}>
           {shareCopied ? '✓ 링크와 결과가 복사되었습니다' : '🔗 결과 공유하기'}
         </button>
       </div>

@@ -284,7 +284,7 @@ export default function CosmicCalendarPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 계산기',     desc: '8개 행성에서 내 몸무게·나이·하루' },
-              { href: '/tools/unit/time',             icon: '⏱️', name: '시간 단위 변환기',     desc: '초·분·시간·일·주·년 변환' },
+              { href: '/tools/unit/converter',        icon: '📐', name: '단위 변환기',           desc: '시간·길이·무게 등 14종 통합 변환' },
               { href: '/tools/date/history-era',      icon: '📜', name: '연호·연대 변환기', desc: '단기·왕 연호·간지 ↔ 서기 변환' },
               { href: '/tools/date/age',              icon: '🎂', name: '만 나이 계산기',        desc: '법 개정 기준 만 나이' },
               { href: '/tools/date/life-time',        icon: '⏳', name: '생애 시간 계산기',      desc: '기대수명 기준 살아온 시간·앞으로의 시간' },

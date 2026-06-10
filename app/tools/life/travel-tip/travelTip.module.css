@@ -93,7 +93,7 @@
 /* 국가 카드 */
 .countryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(120px, 100%), 1fr));
   gap: 8px;
 }
 .countryBtn {
@@ -269,7 +269,7 @@
 /* 매너 카드 */
 .mannerGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 10px;
 }
 .mannerCard {
@@ -327,7 +327,7 @@
 /* 시나리오 */
 .scenarioGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
   gap: 8px;
 }
 .scenarioBtn {

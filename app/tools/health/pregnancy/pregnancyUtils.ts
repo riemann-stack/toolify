@@ -47,8 +47,8 @@ export const PRENATAL_TESTS: PrenatalTest[] = [
     desc: '50g/100g 당부하 검사', importance: 'essential' },
   { id: 'late-anomaly', name: '후기 정밀 초음파',                startWeek: 28, endWeek: 32,
     desc: '태아 성장·양수량·태반 위치 점검', importance: 'recommended' },
-  { id: 'gbs',          name: 'GBS (B군 연쇄상구균) 검사',       startWeek: 35, endWeek: 37,
-    desc: '신생아 감염 예방 검사', importance: 'essential' },
+  { id: 'gbs',          name: 'GBS (B군 연쇄상구균) 검사',       startWeek: 36, endWeek: 37,
+    desc: '신생아 감염 예방 검사 (ACOG/CDC 36~37주 권고)', importance: 'essential' },
   { id: 'final',        name: '막달 검사·NST',                   startWeek: 35, endWeek: 39,
     desc: '태아심박동·자궁수축 모니터링', importance: 'essential' },
 ]
@@ -90,7 +90,7 @@ export const FETAL_SIZE_COMPARISON: Record<number, FetalSize> = {
   32: { size: '큰 도자기', length: '~42cm', emoji: '🍯', development: '태아 위치 (머리 아래) 자리잡기' },
   33: { size: '파인애플',  length: '~43cm', emoji: '🍍', development: '뼈 단단해짐 (두개골 제외)' },
   34: { size: '큰 멜론',   length: '~45cm', emoji: '🍈', development: '면역 체계 발달' },
-  35: { size: '큰 멜론',   length: '~46cm', emoji: '🍈', development: 'GBS 검사 시기' },
+  35: { size: '큰 멜론',   length: '~46cm', emoji: '🍈', development: '막달 검진 준비기 (GBS 검사 36~37주)' },
   36: { size: '파파야',    length: '~47cm', emoji: '🍈', development: '태아 성숙 거의 완료' },
   37: { size: '루꼴라',    length: '~48cm', emoji: '🥬', development: '만삭 진입 (정상 분만 가능)' },
   38: { size: '리크',      length: '~49cm', emoji: '🌿', development: '태아 거의 모든 발달 완료' },
@@ -130,7 +130,7 @@ export const PREPARATION_CHECKLIST: Record<1 | 2 | 3, ChecklistItem[]> = {
     { id: 'birth-class',     name: '출산 호흡법·분만 강의 듣기' },
   ],
   3: [
-    { id: 'gbs-test',        name: 'GBS 검사 (35~37주)' },
+    { id: 'gbs-test',        name: 'GBS 검사 (36~37주)' },
     { id: 'birth-bag',       name: '출산 가방 준비 (산모·신생아 용품)' },
     { id: 'baby-items',      name: '신생아 용품 준비 (옷·기저귀·젖병 등)' },
     { id: 'crib',            name: '아기침대·카시트 준비' },
@@ -165,7 +165,8 @@ export interface PregnancyInput {
 }
 
 export interface PregnancyResult {
-  lmp: Date
+  lmp: Date          // 표시용 — LMP 모드는 입력한 실제 생리일 그대로
+  datingLmp: Date    // 주기 보정이 반영된 데이팅 기준일(예정일·주수·검사일정 계산용)
   conceptionDate: Date
   dueDate: Date
   currentWeek: number
@@ -191,6 +192,7 @@ export function calcPregnancy(input: PregnancyInput, today: Date = new Date()): 
   const inputDate = new Date(input.date)
   if (isNaN(inputDate.getTime())) return null
 
+  // 표시용 LMP — LMP 모드는 입력값 그대로(사용자가 아는 날짜), 그 외는 역산
   let lmp: Date
   if (input.inputMode === 'lmp') {
     lmp = new Date(inputDate)
@@ -200,16 +202,18 @@ export function calcPregnancy(input: PregnancyInput, today: Date = new Date()): 
     lmp = new Date(inputDate); lmp.setDate(lmp.getDate() - PREGNANCY_TOTAL_DAYS)
   }
 
-  // 생리주기 보정 — 28일 외인 경우 LMP 보정
-  if (input.cycleLength && input.cycleLength !== 28) {
-    const adj = input.cycleLength - 28
-    lmp.setDate(lmp.getDate() - adj)
-  }
+  // 생리주기 보정 — LMP 입력 시에만 적용.
+  // 긴 주기(>28)는 배란이 늦으므로 예정일이 늦어지고 현재 주수는 작아진다(+ 부호).
+  // 수정일·예정일을 직접 입력한 모드는 이미 배란/예정일이 확정이므로 보정하지 않는다.
+  const cycleAdj = (input.inputMode === 'lmp' && input.cycleLength && input.cycleLength !== 28)
+    ? input.cycleLength - 28
+    : 0
+  const datingLmp = new Date(lmp); datingLmp.setDate(datingLmp.getDate() + cycleAdj)
 
-  const dueDate = new Date(lmp); dueDate.setDate(dueDate.getDate() + PREGNANCY_TOTAL_DAYS)
-  const conceptionDate = new Date(lmp); conceptionDate.setDate(conceptionDate.getDate() + 14)
+  const dueDate = new Date(datingLmp); dueDate.setDate(dueDate.getDate() + PREGNANCY_TOTAL_DAYS)
+  const conceptionDate = new Date(datingLmp); conceptionDate.setDate(conceptionDate.getDate() + 14)
 
-  const totalDays = diffDays(lmp, today)
+  const totalDays = diffDays(datingLmp, today)
   if (totalDays < 0) return null
   const currentWeek = Math.floor(totalDays / 7)
   const currentDay = totalDays % 7
@@ -223,7 +227,7 @@ export function calcPregnancy(input: PregnancyInput, today: Date = new Date()): 
   const monthsApprox = Math.floor(currentWeek / 4)
 
   return {
-    lmp, conceptionDate, dueDate,
+    lmp, datingLmp, conceptionDate, dueDate,
     currentWeek, currentDay, totalDays,
     daysToDue, trimester, monthsApprox,
     progressPercent,

@@ -297,8 +297,9 @@
 .testList { display: flex; flex-direction: column; gap: 5px; }
 .testRow {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
+  align-items: start;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-left: 4px solid;
@@ -309,7 +310,7 @@
 .testRowUpcoming { border-left-color: var(--border); }
 .testRowCurrent  { border-left-color: #CA8A04; background: rgba(202,138,4,0.14); }
 .testRowPast     { border-left-color: var(--muted); opacity: 0.55; }
-.testName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; }
+.testName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; overflow-wrap: anywhere; }
 .testRowPast .testName { text-decoration: line-through; color: var(--muted); }
 .testDesc { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
 .testWindow {

@@ -50,7 +50,7 @@ const FAQ_LD = [
               { q: '두 사람의 띠 궁합은 어떻게 계산하나요?', a: '본 도구의 「두 사람 궁합」 탭 사용. 12간지 궁합 기준 — 삼합(3개씩 묶음, 환상적 시너지: 신자진/사유축/인오술/해묘미), 육합(2개씩, 안정적: 자축/인해/묘술/진유/사신/오미), 충(정반대, 충돌: 자오/축미/인신/묘유/진술/사해). ⚠️ 본 결과는 재미용. 실제 관계는 노력·소통.' },
               { q: '별자리 원소가 잘 맞는다는 게 무슨 뜻인가요?', a: '점성술 4원소: 불(양·사자·사수, 열정), 지(황소·처녀·염소, 안정), 공기(쌍둥이·천칭·물병, 소통), 물(게·전갈·물고기, 감성). 시너지: 같은 원소(자연스러운 공감), 불+공기(산소가 불 살림), 지+물(식물 자라기). 충돌: 불+물(가치관 차이), 지+공기(현실 vs 자유). ⚠️ 별자리만으로 관계를 판단할 수 없으며, 실제 사람은 모든 원소 면을 갖고 있습니다.' },
               { q: '음력 생일이 양력보다 띠가 다를 수 있나요?', a: '네, 가능합니다. 예: 양력 1990년 1월 25일 출생 → 양력 띠(1월 1일 기준) 말띠(1990년), 음력 띠(음력 설날 기준) 뱀띠(1989년 음력). 본 도구는 양력 입력 → 양력 1월 1일 기준. 엄격한 사주 해석은 절기 기준(입춘 2/4 전후)도 사용.' },
-              { q: '본 도구의 궁합 결과로 결혼을 결정해도 되나요?', a: '절대 안 됩니다. 본 궁합은 재미·문화 도구입니다. 실제 관계는 두 사람의 가치관·인생관·소통·이해 능력·함께 보낸 시간·노력·헌신·가족 환경으로 결정됩니다. 띠·별자리 궁합은 일반적 성향 참고·대화 소재·자기 이해 도구일 뿐. 결혼·이별 결정은 본인의 직접 경험·소통으로. 관계 갈등 시 한국 결혼관계 상담 1644-2255, 청소년·가족 상담 1388.' },
+              { q: '본 도구의 궁합 결과로 결혼을 결정해도 되나요?', a: '절대 안 됩니다. 본 궁합은 재미·문화 도구입니다. 실제 관계는 두 사람의 가치관·인생관·소통·이해 능력·함께 보낸 시간·노력·헌신·가족 환경으로 결정됩니다. 띠·별자리 궁합은 일반적 성향 참고·대화 소재·자기 이해 도구일 뿐. 결혼·이별 결정은 본인의 직접 경험·소통으로. 관계 갈등 시 여성긴급전화 1366(24시간), 청소년·가족 상담 1388.' },
               { q: '본 도구의 결과는 얼마나 정확한가요?', a: '본 도구는 일반적·재미용·문화적 해석입니다. 점성술·사주명리는 과학적으로 검증되지 않은 영역이며, 인생 결정·운세 예측·미래 예언 도구가 아닙니다. 띠·별자리·60갑자는 한국·동아시아 문화 일부분이며, 자기 이해와 대화 소재로 활용 권장. ⚠️ 본 도구의 어떤 결과도 「반드시」·「절대」·「확실히」 같은 절대적 의미로 해석하지 마세요.' },
             ]
 
@@ -145,6 +145,9 @@ export default function ZodiacPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+            ⓘ 별자리 경계 날짜는 <strong style={{ color: 'var(--text)' }}>대표적인 서양 점성술(트로피컬) 기준</strong>이며, 출생 연도·시간대에 따라 경계일이 ±1일 달라질 수 있습니다.
+          </p>
         </div>
 
         {/* ── 섹션 A: 60갑자 ── */}
@@ -153,9 +156,14 @@ export default function ZodiacPage() {
             60갑자 (干支) 표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
-            10천간과 12지지를 조합한 60개의 주기. 내 생년의 간지를 빠르게 확인하세요.
+            10천간과 12지지를 조합한 60개의 주기. 내 생년의 간지는 위 계산기에서 바로 확인하고, 1924~2043년 전체 표는 아래에서 펼쳐 보세요.
           </p>
 
+          <details>
+            <summary style={{ cursor: 'pointer', fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', padding: '10px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', listStyle: 'none' }}>
+              📜 1924~2043년 간지 120년 전체표 펼쳐보기
+            </summary>
+            <div style={{ marginTop: 16 }}>
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>甲子(갑자) 1924 ~ 癸亥(계해) 1983</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '6px', marginBottom: '20px' }}>
             {GANJI_A.map(g => (
@@ -197,6 +205,8 @@ export default function ZodiacPage() {
               </div>
             ))}
           </div>
+            </div>
+          </details>
         </div>
 
         {/* ── 섹션 B: 띠별 성격·궁합 ── */}
@@ -391,6 +401,9 @@ export default function ZodiacPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+            ⓘ 탄생석·탄생화·탄생색은 보석협회·국가·시대별로 목록이 달라 <strong style={{ color: 'var(--text)' }}>대표적인 현대 서양권 기준</strong>만 표기했습니다. 월별로 여러 대체 보석이 있을 수 있습니다.
+          </p>
         </div>
 
         {/* ── 양력 vs 음력 띠 차이 (NEW) ── */}
@@ -461,9 +474,10 @@ export default function ZodiacPage() {
           </ul>
           <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>도움이 필요하면:</p>
           <ul style={{ paddingLeft: 18 }}>
-            <li>한국 결혼관계 상담: <strong style={{ color: '#EA580C' }}>1644-2255</strong></li>
+            <li>여성긴급전화 (가족·관계 위기, 24시간): <strong style={{ color: '#EA580C' }}>1366</strong></li>
             <li>청소년·가족 상담: <strong style={{ color: '#EA580C' }}>1388</strong></li>
-            <li>정신건강 위기상담: <strong style={{ color: '#EA580C' }}>1577-0199</strong></li>
+            <li>자살예방 상담 (24시간): <strong style={{ color: '#EA580C' }}>1393</strong></li>
+            <li>정신건강 상담: <strong style={{ color: '#EA580C' }}>1577-0199</strong></li>
             <li>사주·점성 자문: 본 도구 영역 X</li>
           </ul>
         </div>

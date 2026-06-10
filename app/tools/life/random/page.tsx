@@ -163,7 +163,7 @@ export default function RandomPage() {
         <section>
           <h2 style={sectionTitle}>발표 순서·자리 배치</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            자리 배치 결과는 행·열 수에 따라 <strong style={{ color: 'var(--text)' }}>폰트 크기가 자동 조정</strong>되어 4×6 이상에서도 이름이 잘립니다 X. 발표 순서는 1번·마지막 고정과 제외자 옵션 지원.
+            자리 배치 결과는 행·열 수에 따라 <strong style={{ color: 'var(--text)' }}>폰트 크기가 자동 조정</strong>됩니다. 다만 열이 많거나 이름이 매우 길면 좁은 셀에서 잘릴 수 있으며, 셀에 마우스를 올리면 툴팁으로 전체 이름을 확인할 수 있습니다. 발표 순서는 1번·마지막 고정과 제외자 옵션 지원.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
@@ -192,17 +192,17 @@ export default function RandomPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['시뮬 횟수', '편차 (4개 균등 항목 기준)', '해석'].map(h => (
+                  {['시뮬 횟수', '최대 상대 편차 (4개 균등·중앙값 근사)', '해석'].map(h => (
                     <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['100회',     '±10%',     '작은 표본 — 변동 큼'],
-                  ['1,000회',   '±2~3%',    '상당히 균등'],
-                  ['10,000회',  '±1% 미만',  '거의 완벽'],
-                  ['100,000회', '±0.5% 미만', '이론값에 매우 근접'],
+                  ['100회',     '±20% 안팎',   '작은 표본 — 변동 큼'],
+                  ['1,000회',   '±7% 안팎',    '상당히 균등'],
+                  ['10,000회',  '±2% 안팎',    '거의 균등'],
+                  ['100,000회', '±0.7% 안팎',  '이론값에 매우 근접'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
@@ -214,7 +214,8 @@ export default function RandomPage() {
             </table>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>큰 수의 법칙(Law of Large Numbers)</strong>: 시행 횟수가 많을수록 실제 비율이 기대 확률에 수렴. 본 도구의 <code style={{ color: 'var(--text)' }}>Math.random()</code> 의사난수는 1,000회 이상에서 매우 균등한 분포를 보입니다.
+            <strong style={{ color: 'var(--text)' }}>큰 수의 법칙(Law of Large Numbers)</strong>: 시행 횟수가 많을수록 실제 비율이 기대 확률에 수렴합니다.
+            위 &ldquo;상대 편차&rdquo;는 <strong style={{ color: 'var(--text)' }}>(실제−기대)/기대 × 100</strong>으로, 공정성 탭의 &ldquo;편차&rdquo; 열과 같은 기준입니다(절대 비율 %p 차이는 이보다 작습니다). 항목 수·가중치에 따라 값이 달라지므로 대략적 경향입니다.
           </p>
         </section>
 
@@ -265,7 +266,7 @@ export default function RandomPage() {
           <h2 style={sectionTitle}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플 알고리즘</strong> — Knuth, 1969 (Art of Computer Programming Vol.2)</li>
-            <li><strong style={{ color: 'var(--text)' }}>Math.random() 의사난수</strong> — MDN Web Docs (xorshift128+ 기반)</li>
+            <li><strong style={{ color: 'var(--text)' }}>Math.random() 의사난수</strong> — MDN Web Docs (구체적 알고리즘은 ECMAScript가 규정하지 않고 자바스크립트 엔진 구현에 따름)</li>
             <li><strong style={{ color: 'var(--text)' }}>큰 수의 법칙 (Law of Large Numbers)</strong> — 베르누이 정리</li>
           </ul>
         </section>

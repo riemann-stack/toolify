@@ -69,6 +69,7 @@ export default function PomodoroClient() {
       if (typeof opts.notifOn === 'boolean')   setNotifOn(opts.notifOn)
       if (opts.dailyGoal) setDailyGoal(opts.dailyGoal)
       if (opts.activePreset) setActivePreset(opts.activePreset)
+      // 저장된 집중 시간 → 초기 타이머 동기화는 위의 '단계 시간 동기화' effect가 처리
     } catch {}
     setHydrated(true)
   }, [])
@@ -90,10 +91,23 @@ export default function PomodoroClient() {
     return longMin * 60
   }, [focusMin, shortMin, longMin])
 
+  // ── 현재 단계의 설정 시간이 바뀌면(정지 상태) 타이머를 새 시간으로 동기화 ──
+  // 스테퍼·프리셋·저장 옵션 복원을 한 곳에서 처리 (한 박자 늦게 적용되는 stale-closure 방지)
+  // running은 의도적으로 deps에서 제외 — 일시정지 시 남은 시간을 보존하기 위함
+  useEffect(() => {
+    if (running) return
+    const t = getTotal(phase)
+    totalRef.current = t
+    setSeconds(t)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, focusMin, shortMin, longMin])
+
   // ── 페이즈 완료 처리 ──
   const handleComplete = useCallback(() => {
     setRunning(false)
     if (intervalRef.current) clearInterval(intervalRef.current)
+    // 새 단계는 타임스탬프 기준 시각을 다시 잡아야 함 (autoNext가 옛 기준으로 즉시 완료되는 것 방지)
+    startedAtRef.current = null
 
     const theme = SOUND_THEMES.find(t => t.id === soundId) ?? SOUND_THEMES[0]
     playSound(theme)
@@ -193,7 +207,12 @@ export default function PomodoroClient() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return
+      // 포커스가 입력·버튼 등 인터랙티브 요소에 있으면 단축키 비활성 (Space가 버튼 클릭과 중복 발동되는 것 방지)
+      if (target && (
+        target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ||
+        target.tagName === 'BUTTON' || target.tagName === 'SELECT' ||
+        target.tagName === 'A' || target.isContentEditable
+      )) return
       if (e.key === ' ') { e.preventDefault(); setRunning(r => !r) }
       else if (e.key === 'r' || e.key === 'R') { handleReset() }
       else if (e.key === 's' || e.key === 'S') { handleNext() }
@@ -234,9 +253,8 @@ export default function PomodoroClient() {
   const handleNext = () => {
     setRunning(false)
     if (phase === 'focus') {
-      const newCompleted = completed + 1
-      setCompleted(newCompleted)
-      switchPhase(newCompleted % longEvery === 0 ? 'long' : 'short')
+      // 건너뛰기는 '완료'가 아님 → completed(긴 휴식 카운트·통계 기준) 미증가, 짧은 휴식으로만 이동
+      switchPhase('short')
     } else {
       setCycle(cycle + 1)
       switchPhase('focus')
@@ -253,6 +271,9 @@ export default function PomodoroClient() {
     setLongEvery(p.every)
     setRunning(false)
     setPhase('focus')
+    // 프리셋은 새 사이클로 시작 — 이전 프리셋의 사이클/완료 수 이어받지 않음
+    setCycle(1)
+    setCompleted(0)
     const total = p.focus * 60
     totalRef.current = total
     setSeconds(total)
@@ -281,9 +302,12 @@ export default function PomodoroClient() {
     <div className={styles.wrap}>
 
       {/* ── 탭 네비 ── */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="뽀모도로 도구 모드">
         {TABS.map(t => (
           <button key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
+            type="button"
             className={`${styles.tabBtn} ${tab === t.id ? styles.tabBtnActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -304,12 +328,15 @@ export default function PomodoroClient() {
             value={task}
             onChange={e => setTask(e.target.value)}
             maxLength={60}
+            aria-label="집중할 작업 이름"
           />
 
           {/* 페이즈 선택 */}
-          <div className={styles.phaseRow}>
+          <div className={styles.phaseRow} role="group" aria-label="타이머 단계 선택">
             {(Object.keys(PHASES) as Phase[]).map(p => (
               <button key={p}
+                type="button"
+                aria-pressed={phase === p}
                 className={`${styles.phaseBtn} ${phase === p ? styles.phaseBtnActive : ''}`}
                 style={phase === p ? { borderColor: PHASES[p].color, color: PHASES[p].color } : {}}
                 onClick={() => switchPhase(p)}>
@@ -320,7 +347,7 @@ export default function PomodoroClient() {
 
           {/* 원형 타이머 */}
           <div className={styles.timerWrap}>
-            <svg width="240" height="240" viewBox="0 0 240 240">
+            <svg width="100%" height="100%" viewBox="0 0 240 240" aria-hidden="true">
               <circle cx="120" cy="120" r={R} fill="none" stroke="var(--bg3)" strokeWidth="10" />
               <circle cx="120" cy="120" r={R} fill="none"
                 stroke={phaseColor} strokeWidth="10"
@@ -342,19 +369,20 @@ export default function PomodoroClient() {
 
           {/* 컨트롤 */}
           <div className={styles.controls}>
-            <button className={styles.ctrlBtn} onClick={handleReset} title="리셋 (R)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <button type="button" className={styles.ctrlBtn} onClick={handleReset} title="리셋 (R)" aria-label="현재 단계 리셋 (단축키 R)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                 <path d="M3 3v5h5"/>
               </svg>
             </button>
-            <button className={styles.mainBtn}
+            <button type="button" className={styles.mainBtn}
               style={{ background: phaseColor }}
-              onClick={running ? handlePause : handleStart}>
+              onClick={running ? handlePause : handleStart}
+              aria-label={running ? '일시정지 (단축키 Space)' : (seconds < total ? '재개 (단축키 Space)' : '시작 (단축키 Space)')}>
               {running ? '일시정지' : (seconds < total ? '재개' : '시작')}
             </button>
-            <button className={styles.ctrlBtn} onClick={handleNext} title="건너뛰기 (S)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <button type="button" className={styles.ctrlBtn} onClick={handleNext} title="건너뛰기 (S)" aria-label="다음 단계로 건너뛰기 (단축키 S)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/>
               </svg>
             </button>
@@ -380,7 +408,7 @@ export default function PomodoroClient() {
           <div className={styles.card}>
             <div className={styles.goalRow}>
               <span className={styles.goalLabel}>오늘 목표</span>
-              <div className={styles.goalDots}>
+              <div className={styles.goalDots} aria-hidden="true">
                 {Array.from({ length: dailyGoal }).map((_, i) => (
                   <div key={i} className={`${styles.goalDot} ${i < insights.todayCount ? styles.goalDotDone : ''}`} />
                 ))}
@@ -502,6 +530,7 @@ export default function PomodoroClient() {
             )}
             {sessions.length > 0 && (
               <button
+                type="button"
                 onClick={() => {
                   if (confirm('전체 기록을 삭제하시겠습니까?')) {
                     setSessions([]); saveSessions([])
@@ -520,12 +549,39 @@ export default function PomodoroClient() {
       {/* ============================================================ */}
       {tab === 'settings' && (
         <>
+          {/* 시간 직접 설정 (간단 변경 편의를 위해 프리셋보다 먼저 노출) */}
+          <div className={styles.card}>
+            <label className={styles.cardLabel}>시간 직접 설정 (분)</label>
+            <div className={styles.settingsGrid}>
+              {[
+                { label: '집중', value: focusMin, set: setFocusMin, min: 1, max: 120 },
+                { label: '짧은 휴식', value: shortMin, set: setShortMin, min: 1, max: 30 },
+                { label: '긴 휴식', value: longMin, set: setLongMin, min: 1, max: 60 },
+                { label: '긴 휴식 주기', value: longEvery, set: setLongEvery, min: 2, max: 10 },
+              ].map(({ label, value, set, min, max }) => (
+                <div key={label} className={styles.settingItem} role="group" aria-label={label}>
+                  <div className={styles.settingLabel}>{label}</div>
+                  <div className={styles.settingRow}>
+                    <button type="button" className={styles.settingBtn} aria-label={`${label} 줄이기`}
+                      onClick={() => { if (value > min) { set(value - 1); setActivePreset('custom') } }}>−</button>
+                    <span className={styles.settingValue} aria-live="polite">{value}</span>
+                    <button type="button" className={styles.settingBtn} aria-label={`${label} 늘리기`}
+                      onClick={() => { if (value < max) { set(value + 1); setActivePreset('custom') } }}>+</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* 프리셋 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>7가지 검증된 프리셋</label>
+            <label className={styles.cardLabel}>상황별 프리셋 7가지</label>
             <div className={styles.presetGrid}>
               {POMODORO_PRESETS.map(p => (
                 <button key={p.id}
+                  type="button"
+                  aria-pressed={activePreset === p.id}
+                  aria-label={`${p.name}: 집중 ${p.focus}분, 휴식 ${p.short}분, 긴 휴식 ${p.long}분`}
                   className={`${styles.presetCard} ${activePreset === p.id ? styles.presetCardActive : ''}`}
                   onClick={() => applyPreset(p.id)}>
                   {p.badge && <span className={styles.presetBadge}>{p.badge}</span>}
@@ -537,44 +593,24 @@ export default function PomodoroClient() {
             </div>
           </div>
 
-          {/* 시간 직접 설정 */}
-          <div className={styles.card}>
-            <label className={styles.cardLabel}>시간 직접 설정 (분)</label>
-            <div className={styles.settingsGrid}>
-              {[
-                { label: '집중', value: focusMin, set: setFocusMin, min: 1, max: 120 },
-                { label: '짧은 휴식', value: shortMin, set: setShortMin, min: 1, max: 30 },
-                { label: '긴 휴식', value: longMin, set: setLongMin, min: 1, max: 60 },
-                { label: '긴 휴식 주기', value: longEvery, set: setLongEvery, min: 2, max: 10 },
-              ].map(({ label, value, set, min, max }) => (
-                <div key={label} className={styles.settingItem}>
-                  <div className={styles.settingLabel}>{label}</div>
-                  <div className={styles.settingRow}>
-                    <button className={styles.settingBtn}
-                      onClick={() => { if (value > min) { set(value - 1); setActivePreset('custom'); if (!running) switchPhase(phase) } }}>−</button>
-                    <span className={styles.settingValue}>{value}</span>
-                    <button className={styles.settingBtn}
-                      onClick={() => { if (value < max) { set(value + 1); setActivePreset('custom'); if (!running) switchPhase(phase) } }}>+</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* 알림음 */}
           <div className={styles.card}>
             <label className={styles.cardLabel}>알림음 테마</label>
-            <div className={styles.soundList}>
+            <div className={styles.soundList} role="group" aria-label="알림음 테마 선택">
               {SOUND_THEMES.map(t => (
                 <div key={t.id}
-                  className={`${styles.soundRow} ${soundId === t.id ? styles.soundRowActive : ''}`}
-                  onClick={() => setSoundId(t.id)}>
-                  <div style={{ flex: 1 }}>
-                    <div className={styles.soundName}>{t.name}</div>
-                    <div className={styles.soundDesc}>{t.desc}</div>
-                  </div>
-                  <button className={styles.soundTest}
-                    onClick={(e) => { e.stopPropagation(); playSound(t) }}>
+                  className={`${styles.soundRow} ${soundId === t.id ? styles.soundRowActive : ''}`}>
+                  <button type="button"
+                    className={styles.soundSelect}
+                    aria-pressed={soundId === t.id}
+                    aria-label={`알림음 ${t.name.replace(/[^가-힣a-zA-Z0-9 ]/g, '').trim()} 선택`}
+                    onClick={() => setSoundId(t.id)}>
+                    <span className={styles.soundName}>{t.name}</span>
+                    <span className={styles.soundDesc}>{t.desc}</span>
+                  </button>
+                  <button type="button" className={styles.soundTest}
+                    aria-label={`${t.name.replace(/[^가-힣a-zA-Z0-9 ]/g, '').trim()} 미리듣기`}
+                    onClick={() => playSound(t)}>
                     🔊 들어보기
                   </button>
                 </div>
@@ -590,44 +626,49 @@ export default function PomodoroClient() {
                 <div className={styles.optionLabel}>브라우저 알림</div>
                 <div className={styles.optionDesc}>다른 탭에서 작업 중에도 완료를 알려줍니다.</div>
               </div>
-              <div className={`${styles.toggle} ${notifOn ? styles.toggleOn : ''}`}
+              <button type="button" role="switch" aria-checked={notifOn} aria-label="브라우저 알림"
+                className={`${styles.toggle} ${notifOn ? styles.toggleOn : ''}`}
                 onClick={async () => {
                   if (!notifOn) {
                     const p = await requestNotifPermission()
                     setNotifOn(p === 'granted')
                   } else setNotifOn(false)
                 }}>
-                <div className={styles.toggleDot} />
-              </div>
+                <span className={styles.toggleDot} />
+              </button>
             </div>
             <div className={styles.optionRow}>
               <div>
                 <div className={styles.optionLabel}>자동 다음 단계</div>
                 <div className={styles.optionDesc}>집중·휴식 완료 후 자동으로 다음 단계 시작.</div>
               </div>
-              <div className={`${styles.toggle} ${autoNext ? styles.toggleOn : ''}`}
+              <button type="button" role="switch" aria-checked={autoNext} aria-label="자동 다음 단계"
+                className={`${styles.toggle} ${autoNext ? styles.toggleOn : ''}`}
                 onClick={() => setAutoNext(!autoNext)}>
-                <div className={styles.toggleDot} />
-              </div>
+                <span className={styles.toggleDot} />
+              </button>
             </div>
             <div className={styles.optionRow}>
               <div>
                 <div className={styles.optionLabel}>탭 제목에 시간 표시</div>
                 <div className={styles.optionDesc}>브라우저 탭 제목에 남은 시간이 실시간 표시됩니다.</div>
               </div>
-              <div className={`${styles.toggle} ${tickTitle ? styles.toggleOn : ''}`}
+              <button type="button" role="switch" aria-checked={tickTitle} aria-label="탭 제목에 시간 표시"
+                className={`${styles.toggle} ${tickTitle ? styles.toggleOn : ''}`}
                 onClick={() => setTickTitle(!tickTitle)}>
-                <div className={styles.toggleDot} />
-              </div>
+                <span className={styles.toggleDot} />
+              </button>
             </div>
           </div>
 
           {/* 일일 목표 */}
           <div className={styles.card}>
             <label className={styles.cardLabel}>오늘 집중 목표</label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }} role="group" aria-label="오늘 집중 목표 횟수">
               {DAILY_GOAL_OPTIONS.map(n => (
                 <button key={n}
+                  type="button"
+                  aria-pressed={dailyGoal === n}
                   onClick={() => setDailyGoal(n)}
                   style={{
                     background: dailyGoal === n ? 'var(--accent)' : 'var(--bg3)',
@@ -691,9 +732,9 @@ export default function PomodoroClient() {
             <label className={styles.cardLabel}>집중력 향상 팁 7가지</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
-                { e: '📵', t: '알림 끄기', d: '스마트폰을 무음·뒤집어 놓거나 다른 방에 두세요. 알림 1회당 평균 23분 집중이 깨집니다.' },
-                { e: '🧘', t: '한 번에 하나만', d: '멀티태스킹은 생산성을 40% 떨어뜨립니다. 한 뽀모도로 = 한 작업.' },
-                { e: '💧', t: '수분 보충', d: '탈수는 집중력을 13% 떨어뜨립니다. 휴식마다 한 모금씩.' },
+                { e: '📵', t: '알림 끄기', d: '스마트폰을 무음·뒤집어 놓거나 다른 방에 두세요. 한 연구(G. Mark 등)에선 한 번 흐트러지면 원래 작업으로 돌아오는 데 평균 약 23분이 걸린다고 보고합니다.' },
+                { e: '🧘', t: '한 번에 하나만', d: '동시에 여러 일을 하면 작업 전환 비용 때문에 생산성과 정확도가 떨어진다는 연구가 많습니다. 한 뽀모도로 = 한 작업.' },
+                { e: '💧', t: '수분 보충', d: '가벼운 탈수도 집중력·기분에 부정적 영향을 줄 수 있습니다. 휴식마다 한 모금씩.' },
                 { e: '🪟', t: '시야 환기', d: '20-20-20 규칙: 20분마다 20피트(6m) 떨어진 곳을 20초간 보세요. 안구 피로 ↓' },
                 { e: '🍫', t: '간단한 보상', d: '4사이클 완료 시 좋아하는 음악·간식 등으로 도파민을 보상해 습관화.' },
                 { e: '📝', t: '딴 생각 메모', d: '집중 중 떠오른 다른 일은 즉시 종이에 적고 다음 휴식에 처리.' },

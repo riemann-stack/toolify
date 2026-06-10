@@ -243,14 +243,16 @@ export interface ItemBreakdown {
 export function calcBudget(inp: BudgetInputs): { items: ItemBreakdown[]; subTotal: number; reserve: number; total: number; perPerson: number; perDay: number } {
   const days = Math.max(1, inp.days)
   const people = Math.max(1, inp.people)
+  // 숙박 박수 = 여행일수 − 1 (예: 5일 = 4박). 식비·교통은 매일 발생하므로 일수 그대로.
+  const nights = Math.max(1, days - 1)
 
   const items: ItemBreakdown[] = [
     { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: '#0891B2' },
-    { id: 'hotel',     emoji: '🏨', label: '숙박',       perPerson: inp.hotel * days,           total: inp.hotel * days * people,             isPerson: true,  color: '#EA580C' },
+    { id: 'hotel',     emoji: '🏨', label: `숙박 (${nights}박)`, perPerson: inp.hotel * nights,    total: inp.hotel * nights * people,           isPerson: true,  color: '#EA580C' },
     { id: 'food',      emoji: '🍽️', label: '식비',       perPerson: inp.food * days,            total: inp.food * days * people,              isPerson: true,  color: '#D97706' },
-    { id: 'transport', emoji: '🚕', label: '교통',       perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: '#0D9488' },
+    { id: 'transport', emoji: '🚕', label: '교통·투어',  perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: '#0D9488' },
     { id: 'shopping',  emoji: '🛍️', label: '쇼핑',       perPerson: inp.shopping / people,      total: inp.shopping,                          isPerson: false, color: '#DB2777' },
-    { id: 'ticket',    emoji: '🎟️', label: '입장권·투어', perPerson: inp.ticket / people,        total: inp.ticket,                            isPerson: false, color: '#9B59B6' },
+    { id: 'ticket',    emoji: '🎟️', label: '입장권·액티비티', perPerson: inp.ticket / people,    total: inp.ticket,                            isPerson: false, color: '#9B59B6' },
     { id: 'comm',      emoji: '📱', label: '통신·로밍',   perPerson: inp.comm / people,          total: inp.comm,                              isPerson: false, color: '#059669' },
     { id: 'insurance', emoji: '🛡️', label: '여행자보험',  perPerson: inp.insurance,              total: inp.insurance * people,                isPerson: true,  color: '#9333EA' },
     { id: 'etc',       emoji: '💵', label: '기타',       perPerson: inp.etc / people,           total: inp.etc,                               isPerson: false, color: '#9B9B9B' },
@@ -310,13 +312,15 @@ export function autoFill(inp: { cityId: string; style: Style; days: number; peop
   const city = getCity(inp.cityId)
   const sty = city.styles[inp.style]
   const flight = getFlight(city.region, inp.airline, inp.season)
+  // 성수기엔 항공권뿐 아니라 숙박도 오른다 (대략 +30%). 식비·교통은 변동 작아 유지.
+  const seasonHotel = inp.season === 'high' ? 1.3 : 1
   return {
     flight,
-    hotel: sty.hotel,
+    hotel: Math.round(sty.hotel * seasonHotel * 10) / 10,
     food: sty.food,
     transport: sty.transport,
     shopping: inp.style === 'backpack' ? 20 : inp.style === 'middle' ? 50 : 150,
-    ticket: 10 * inp.days * inp.people,
+    ticket: (inp.style === 'backpack' ? 2 : inp.style === 'middle' ? 4 : 8) * inp.days * inp.people,
     comm: 3 * inp.people,
     insurance: 3,
     etc: 5,

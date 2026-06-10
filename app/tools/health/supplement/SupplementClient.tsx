@@ -10,8 +10,8 @@ import {
   EXTRA_SYNERGY,
   KOREA_POPULAR_PRESETS,
   analyzeOmega3,
-  gaugeStatus,
   type LifeStage,
+  type KoreaPreset,
 } from './supplementUtils'
 
 /* ════════════════════════════════════════════════════════════
@@ -43,7 +43,7 @@ const INGREDIENTS: IngredientDef[] = [
   { name: '비타민B12(코발라민)', category: '비타민', canonUnit: 'μg', rda: 2.4 },
   { name: '비타민C',             category: '비타민', canonUnit: 'mg', rda: 100,  ul: 2000, warning: '소화 장애, 신장 결석 위험' },
   { name: '비타민D',             category: '비타민', canonUnit: 'IU', rda: 600,  ul: 4000, iuPerMcg: 40,   warning: '고칼슘혈증, 신장 결석 위험' },
-  { name: '비타민E',             category: '비타민', canonUnit: 'mg', rda: 15,   ul: 1000, iuPerMcg: 1.49, warning: '출혈 위험 증가 (항응고제 복용 시 특히 주의)' },
+  { name: '비타민E',             category: '비타민', canonUnit: 'mg', rda: 15,   ul: 1000, iuPerMcg: 0.00149, warning: '출혈 위험 증가 (항응고제 복용 시 특히 주의)' }, // 비타민E: 1mg(천연 d-α)=1.49IU → 1μg=0.00149IU. canonUnit이 mg이므로 μg 다리 기준으로 환산
   { name: '비타민K',             category: '비타민', canonUnit: 'μg', rda: 75 },
   // 미네랄
   { name: '칼슘',     category: '미네랄', canonUnit: 'mg', rda: 800,  ul: 2500, warning: '심혈관 위험, 신장 결석' },
@@ -270,6 +270,14 @@ export default function SupplementClient() {
       return [...base, ...newOnes].slice(0, 10)
     })
   }
+  const applyKorea = (preset: KoreaPreset) => {
+    const newOne = applyKoreaPreset(preset)
+    setSups((p) => {
+      const firstIsEmpty = p.length === 1 && !p[0].name && p[0].ingredients.every((i) => !i.name && !i.amount)
+      const base = firstIsEmpty ? [] : p
+      return [...base, newOne].slice(0, 10)
+    })
+  }
   const reset = () => setSups([emptySupplement()])
 
   return (
@@ -283,20 +291,22 @@ export default function SupplementClient() {
         ]}
         sources={[
           { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' },
-          { label: '한국영양학회', href: 'https://www.kns.or.kr' },
+          { label: '한국영양학회(KDRI)', href: 'https://www.kns.or.kr' },
+          { label: 'NIH ODS', href: 'https://ods.od.nih.gov' },
+          { label: 'FDA Dietary Supplements', href: 'https://www.fda.gov/food/dietary-supplements' },
         ]}
       >
         본 도구는 「성분 정보 정리」 참고용이며 의학적 진단·처방·복용 권유 도구가 아닙니다. 처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사와 상담하세요. 도움: 식약처 식품안전정보 <strong>1577-1255</strong> · 의약품안전사용서비스 <strong>1577-2334</strong>. (참고: 한국영양학회·보건복지부 한국인 영양소 섭취 기준)
       </Disclaimer>
 
-      <div className={s.tabs}>
-        <button className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>
+      <div className={s.tabs} role="tablist" aria-label="영양제 분석 탭">
+        <button type="button" role="tab" aria-selected={tab === 'register'} className={`${s.tab} ${tab === 'register' ? s.tabActive : ''}`} onClick={() => setTab('register')}>
           영양제 등록<span className={s.countBadge}>{sups.length}</span>
         </button>
-        <button className={`${s.tab} ${tab === 'analysis' ? s.tabActive : ''}`} onClick={() => setTab('analysis')}>성분 분석</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>복용 가이드</button>
-        <button className={`${s.tab} ${tab === 'drug' ? s.tabActiveDrug : ''}`} onClick={() => setTab('drug')}>약물·특수 상황</button>
-        <button className={`${s.tab} ${tab === 'synergy' ? s.tabActiveSyn : ''}`} onClick={() => setTab('synergy')}>시너지·주의 조합</button>
+        <button type="button" role="tab" aria-selected={tab === 'analysis'} className={`${s.tab} ${tab === 'analysis' ? s.tabActive : ''}`} onClick={() => setTab('analysis')}>성분 분석</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>복용 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'drug'} className={`${s.tab} ${tab === 'drug' ? s.tabActiveDrug : ''}`} onClick={() => setTab('drug')}>약물·특수 상황</button>
+        <button type="button" role="tab" aria-selected={tab === 'synergy'} className={`${s.tab} ${tab === 'synergy' ? s.tabActiveSyn : ''}`} onClick={() => setTab('synergy')}>시너지·주의 조합</button>
       </div>
 
       {tab === 'register' && (
@@ -309,10 +319,11 @@ export default function SupplementClient() {
           removeIng={removeIng}
           updateIng={updateIng}
           applyPreset={applyPreset}
+          applyKorea={applyKorea}
           reset={reset}
         />
       )}
-      {tab === 'analysis' && <AnalysisTab sups={sups} />}
+      {tab === 'analysis' && <AnalysisTab sups={sups} lifeStage={lifeStage} />}
       {tab === 'guide' && <GuideTab sups={sups} />}
       {tab === 'drug' && (
         <DrugSpecialTab
@@ -340,19 +351,49 @@ interface RegisterTabProps {
   removeIng: (supId: string, ingId: string) => void
   updateIng: (supId: string, ingId: string, patch: Partial<IngredientEntry>) => void
   applyPreset: (preset: (typeof PRESETS)[number]) => void
+  applyKorea: (preset: KoreaPreset) => void
   reset: () => void
 }
 
-function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, updateIng, applyPreset, reset }: RegisterTabProps) {
+const KOREA_PRESET_CATEGORIES: KoreaPreset['category'][] = ['종합비타민', '단일', '임산부', '특수']
+
+function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, updateIng, applyPreset, applyKorea, reset }: RegisterTabProps) {
   return (
     <>
       <div className={s.card}>
         <span className={s.cardLabel}>빠른 입력 프리셋</span>
         <div className={s.presetRow}>
           {PRESETS.map((p) => (
-            <button key={p.label} className={s.presetBtn} onClick={() => applyPreset(p)}>{p.label}</button>
+            <button key={p.label} type="button" className={s.presetBtn} onClick={() => applyPreset(p)}>{p.label}</button>
           ))}
-          <button className={s.resetBtn} onClick={reset} style={{ marginLeft: 'auto' }}>초기화</button>
+          <button type="button" className={s.resetBtn} onClick={reset} style={{ marginLeft: 'auto' }}>초기화</button>
+        </div>
+
+        <div className={s.sectionDivider} />
+        <span className={s.cardLabel}>한국 인기 영양제 (라벨 함량 그대로 입력)</span>
+        <div className={s.koreaPresetSection}>
+          {KOREA_PRESET_CATEGORIES.map((cat) => {
+            const items = KOREA_POPULAR_PRESETS.filter((p) => p.category === cat)
+            if (items.length === 0) return null
+            return (
+              <div key={cat} className={s.koreaPresetCategory}>
+                <div className={s.koreaPresetTitle}>{cat}</div>
+                <div className={s.koreaPresetGrid}>
+                  {items.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className={s.koreaPresetBtn}
+                      aria-label={`${p.name} 불러오기`}
+                      onClick={() => applyKorea(p)}
+                    >
+                      {p.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -362,14 +403,15 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
             <input
               className={s.supNameInput}
               placeholder={`제품명 (예: 종근당 비타민D)`}
+              aria-label={`제품 ${idx + 1} 제품명`}
               value={sup.name}
               onChange={(e) => updateSup(sup.id, { name: e.target.value })}
             />
-            <button className={s.supToggle} onClick={() => updateSup(sup.id, { collapsed: !sup.collapsed })}>
+            <button type="button" className={s.supToggle} aria-label={sup.collapsed ? '성분 펼치기' : '성분 접기'} aria-expanded={!sup.collapsed} onClick={() => updateSup(sup.id, { collapsed: !sup.collapsed })}>
               {sup.collapsed ? '▼' : '▲'}
             </button>
             {sups.length > 1 && (
-              <button className={s.supRemove} onClick={() => removeSup(sup.id)} aria-label="삭제">✕</button>
+              <button type="button" className={s.supRemove} onClick={() => removeSup(sup.id)} aria-label="삭제">✕</button>
             )}
           </div>
 
@@ -379,6 +421,7 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
                 <div key={ing.id} className={s.ingRow}>
                   <select
                     className={s.ingSelect}
+                    aria-label="성분 선택"
                     value={ing.name}
                     onChange={(e) => {
                       const name = e.target.value
@@ -410,12 +453,14 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
                     type="number"
                     inputMode="decimal"
                     placeholder="함량"
+                    aria-label="함량"
                     min={0}
                     value={ing.amount}
                     onChange={(e) => updateIng(sup.id, ing.id, { amount: e.target.value })}
                   />
                   <select
                     className={s.ingUnitSelect}
+                    aria-label="단위"
                     value={ing.unit}
                     onChange={(e) => updateIng(sup.id, ing.id, { unit: e.target.value as Unit })}
                   >
@@ -424,6 +469,7 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
                     <option value="IU">IU</option>
                   </select>
                   <button
+                    type="button"
                     className={s.ingRemove}
                     onClick={() => removeIng(sup.id, ing.id)}
                     aria-label="성분 삭제"
@@ -431,12 +477,14 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
                   >✕</button>
                 </div>
               ))}
-              <button className={s.addIngBtn} onClick={() => addIng(sup.id)}>+ 성분 추가</button>
+              <button type="button" className={s.addIngBtn} onClick={() => addIng(sup.id)}>+ 성분 추가</button>
 
-              <div className={s.timeRow}>
+              <div className={s.timeRow} role="group" aria-label="복용 시간대">
                 {TIMINGS.map((t) => (
                   <button
                     key={t}
+                    type="button"
+                    aria-pressed={sup.timing === t}
                     className={`${s.timeBtn} ${sup.timing === t ? s.timeBtnActive : ''}`}
                     onClick={() => updateSup(sup.id, { timing: sup.timing === t ? null : t })}
                   >
@@ -449,7 +497,7 @@ function RegisterTab({ sups, addSup, removeSup, updateSup, addIng, removeIng, up
         </div>
       ))}
 
-      <button className={s.addSupBtn} onClick={addSup} disabled={sups.length >= 10}>
+      <button type="button" className={s.addSupBtn} onClick={addSup} disabled={sups.length >= 10}>
         + 영양제 추가 {sups.length >= 10 && '(최대 10개)'}
       </button>
     </>
@@ -463,10 +511,30 @@ interface Aggregate {
   ing: IngredientDef
   byProduct: { productName: string; value: number; display: string }[]  // canon 값
   total: number
-  status: 'ok' | 'over' | 'exceed' | 'low' | 'none'
+  status: 'ok' | 'over' | 'caution' | 'exceed' | 'low' | 'none'
+  effRda?: number   // 적용 권장량 (특수 상황 보정 반영)
+  effUl?: number    // 적용 상한 (특수 상황 보정 반영)
+  adjusted: boolean // 특수 상황(임신·고령 등) 기준으로 보정됐는지
 }
 
-function aggregate(sups: Supplement[]): Aggregate[] {
+/* 특수 상황(임신·수유·청소년·고령)별 권장·상한 보정 — 데이터가 있고 단위가 일치할 때만 */
+function lifeStageAdjust(def: IngredientDef, lifeStage: LifeStage): { rda?: number; ul?: number; adjusted: boolean } {
+  let rda = def.rda
+  let ul = def.ul
+  let adjusted = false
+  if (lifeStage !== 'general') {
+    const match = (SPECIAL_MODE_ALERTS[lifeStage] ?? [])
+      .find((a) => a.ingredientName === def.name && a.recommendedAmount && a.recommendedAmount.unit === def.canonUnit)
+    if (match?.recommendedAmount) {
+      const { min, max } = match.recommendedAmount
+      if (min !== undefined) { rda = min; adjusted = true }
+      if (max !== undefined) { ul = max; adjusted = true }
+    }
+  }
+  return { rda, ul, adjusted }
+}
+
+function aggregate(sups: Supplement[], lifeStage: LifeStage = 'general'): Aggregate[] {
   const map = new Map<string, Aggregate>()
 
   for (const sup of sups) {
@@ -492,14 +560,20 @@ function aggregate(sups: Supplement[]): Aggregate[] {
           byProduct: [{ productName, value: canonVal, display }],
           total: canonVal,
           status: 'ok',
+          adjusted: false,
         })
       }
     }
   }
 
   for (const agg of map.values()) {
-    const { rda, ul } = agg.ing
+    const { rda, ul, adjusted } = lifeStageAdjust(agg.ing, lifeStage)
+    agg.effRda = rda
+    agg.effUl = ul
+    agg.adjusted = adjusted
+    // 상태는 '상한(UL)' 기준으로 경고. RDA 초과는 위험이 아니라 '권장 이상(안전 범위)'로 중립 처리
     if (ul !== undefined && agg.total > ul) agg.status = 'exceed'
+    else if (ul !== undefined && agg.total > ul * 0.8) agg.status = 'caution'
     else if (rda !== undefined && agg.total > rda) agg.status = 'over'
     else if (rda !== undefined && agg.total < rda * 0.5) agg.status = 'low'
     else if (rda !== undefined) agg.status = 'ok'
@@ -518,9 +592,11 @@ function fmtNum(n: number): string {
 /* ════════════════════════════════════════════════════════════
    TAB 2 — 분석
    ════════════════════════════════════════════════════════════ */
-function AnalysisTab({ sups }: { sups: Supplement[] }) {
-  const aggregates = useMemo(() => aggregate(sups), [sups])
+function AnalysisTab({ sups, lifeStage }: { sups: Supplement[]; lifeStage: LifeStage }) {
+  const aggregates = useMemo(() => aggregate(sups, lifeStage), [sups, lifeStage])
   const hasAny = aggregates.length > 0
+  const lifeStageInfo = LIFE_STAGES.find((l) => l.id === lifeStage)
+  const hasAdjusted = aggregates.some((a) => a.adjusted)
 
   // ★ 오메가3 EPA + DHA 합산 분석 (NEW)
   const omega3 = useMemo(() => {
@@ -537,8 +613,8 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
   // 중복 (2개 이상 제품에 포함)
   const duplicates = aggregates.filter((a) => a.byProduct.length >= 2)
 
-  // 주의 성분 (exceed / over)
-  const warnings = aggregates.filter((a) => a.status === 'exceed' || a.status === 'over')
+  // 주의 성분 — '상한(UL)' 관련만 (초과/근접). RDA 초과는 위험이 아니므로 제외
+  const warnings = aggregates.filter((a) => a.status === 'exceed' || a.status === 'caution')
 
   if (!hasAny) {
     return (
@@ -565,7 +641,7 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
             {omega3.statusLabel}
           </div>
           <div className={s.omega3Interpretation}>
-            <strong>📌 일반 권장 250~500mg/일 (WHO·미국심장협회) · 상한 3,000mg/일 (FDA)</strong><br />
+            <strong>📌 일반적 섭취 목표 250~500mg/일 (EPA·DHA 공식 권장량 미설정 — WHO·심장협회 참고치) · FDA 권고 한도 보충제 2,000mg(총 3,000mg)/일</strong><br />
             {omega3.interpretation}
           </div>
         </div>
@@ -591,12 +667,14 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
             <tbody>
               {aggregates.map((a) => {
                 const { ing, total, status } = a
-                const rowClass = status === 'exceed' ? s.rowExceed : status === 'over' ? s.rowOver : ''
+                const rda = a.effRda
+                const ul = a.effUl
+                const rowClass = status === 'exceed' ? s.rowExceed : status === 'caution' ? s.rowOver : ''
 
-                // 진행 바
-                const barMax = ing.ul ?? (ing.rda !== undefined ? ing.rda * 2 : total * 1.2)
-                const barGreenEnd = ing.rda !== undefined ? Math.min(ing.rda, barMax) : barMax
-                const barOrangeEnd = ing.ul !== undefined ? ing.ul : barMax
+                // 진행 바 (적용 권장량/상한 기준)
+                const barMax = ul ?? (rda !== undefined ? rda * 2 : total * 1.2)
+                const barGreenEnd = rda !== undefined ? Math.min(rda, barMax) : barMax
+                const barOrangeEnd = ul !== undefined ? ul : barMax
                 const markerPct = Math.min(100, (total / barMax) * 100)
                 const greenPct = (barGreenEnd / barMax) * 100
                 const orangePct = ((barOrangeEnd - barGreenEnd) / barMax) * 100
@@ -606,8 +684,11 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
                 return (
                   <tr key={ing.name} className={rowClass}>
                     <td>
-                      <div className={s.ingName}>{ing.name}</div>
-                      {ing.rda !== undefined && (
+                      <div className={s.ingName}>
+                        {ing.name}
+                        {a.adjusted && <span className={s.adjustedMark}> ※{lifeStageInfo?.name} 기준</span>}
+                      </div>
+                      {rda !== undefined && (
                         <div className={s.progressBar}>
                           <div className={s.progressGreen}  style={{ width: `${greenPct}%`, left: 0 }} />
                           <div className={s.progressOrange} style={{ width: `${orangePct}%`, left: `${greenPct}%` }} />
@@ -624,14 +705,15 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
                       )
                     })}
                     <td className={s.ingVal}>{fmtNum(total)}{ing.canonUnit}</td>
-                    <td className={s.ingValMuted}>{ing.rda !== undefined ? `${fmtNum(ing.rda)}${ing.canonUnit}` : '—'}</td>
-                    <td className={s.ingValMuted}>{ing.ul !== undefined ? `${fmtNum(ing.ul)}${ing.canonUnit}` : '—'}</td>
+                    <td className={s.ingValMuted}>{rda !== undefined ? `${fmtNum(rda)}${ing.canonUnit}` : '—'}</td>
+                    <td className={s.ingValMuted}>{ul !== undefined ? `${fmtNum(ul)}${ing.canonUnit}` : '—'}</td>
                     <td>
-                      {status === 'exceed' && <span className={`${s.badge} ${s.badgeExceed}`}>🚨 상한 초과</span>}
-                      {status === 'over' &&   <span className={`${s.badge} ${s.badgeOver}`}>🔶 권장량 초과</span>}
-                      {status === 'ok' &&     <span className={`${s.badge} ${s.badgeOk}`}>✅ 적정</span>}
-                      {status === 'low' &&    <span className={`${s.badge} ${s.badgeLow}`}>⬇️ 부족</span>}
-                      {status === 'none' &&   <span className={`${s.badge} ${s.badgeNone}`}>기준 없음</span>}
+                      {status === 'exceed' &&  <span className={`${s.badge} ${s.badgeExceed}`}>🚨 상한 초과</span>}
+                      {status === 'caution' && <span className={`${s.badge} ${s.badgeOver}`}>🟠 상한 근접</span>}
+                      {status === 'over' &&    <span className={`${s.badge} ${s.badgeInfo}`}>🔷 권장 이상</span>}
+                      {status === 'ok' &&      <span className={`${s.badge} ${s.badgeOk}`}>✅ 적정</span>}
+                      {status === 'low' &&     <span className={`${s.badge} ${s.badgeLow}`}>⬇️ 부족</span>}
+                      {status === 'none' &&    <span className={`${s.badge} ${s.badgeNone}`}>기준 없음</span>}
                     </td>
                   </tr>
                 )
@@ -681,10 +763,10 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
                 }}
               >
                 <div className={s.hintHead}>
-                  {a.status === 'exceed' ? '🚨' : '🔶'} {a.ing.name} — {fmtNum(a.total)}{a.ing.canonUnit}
-                  {a.ing.ul !== undefined && (
+                  {a.status === 'exceed' ? '🚨' : '🟠'} {a.ing.name} — {fmtNum(a.total)}{a.ing.canonUnit}
+                  {a.effUl !== undefined && (
                     <span style={{ color: 'var(--muted)', fontWeight: 400, fontSize: 12, marginLeft: 6 }}>
-                      (상한 {fmtNum(a.ing.ul)}{a.ing.canonUnit})
+                      ({a.status === 'exceed' ? '상한' : '상한 근접'} {fmtNum(a.effUl)}{a.ing.canonUnit})
                     </span>
                   )}
                 </div>
@@ -695,8 +777,15 @@ function AnalysisTab({ sups }: { sups: Supplement[] }) {
         </div>
       )}
 
+      {lifeStage !== 'general' && (
+        <div className={s.disclaimer} style={{ background: 'rgba(8,145,178,0.06)', borderColor: 'rgba(8,145,178,0.25)' }}>
+          🔎 <strong>{lifeStageInfo?.name} 기준 적용</strong> — {hasAdjusted
+            ? '「※ … 기준」으로 표시된 성분은 해당 상황의 권장·상한으로 보정했습니다.'
+            : '등록된 성분 중 이 상황의 보정 데이터가 없어'} 나머지 성분은 성인 일반 기준입니다. 정확한 개인별 기준은 의사·약사와 상담하세요.
+        </div>
+      )}
       <div className={s.disclaimer}>
-        ⚕️ 위 수치는 <strong>한국영양학회·보건복지부 한국인 영양소 섭취 기준</strong>을 참고한 성인 일반 기준입니다. 임산부·수유부·기저 질환자는 전문가와 상담하세요.
+        ⚕️ 상태는 <strong>상한(UL) 기준</strong>입니다 — 🔷 권장 이상은 상한 이내 <strong>안전 범위</strong>이고, 🟠 상한 근접·🚨 상한 초과만 실제 주의 대상입니다. 권장량(RDA)은 「부족하지 않을 목표치」이지 위험 기준이 아닙니다. 수치는 <strong>한국영양학회 한국인 영양소 섭취기준(KDRI)</strong> 기반 성인 일반값이며, 2025년 개정판이 배포되어 일부 값이 달라질 수 있으니 최신 기준·전문가 상담으로 확인하세요.
       </div>
     </>
   )
@@ -743,7 +832,7 @@ function GuideTab({ sups }: { sups: Supplement[] }) {
       {/* 복용 타이밍 */}
       <div className={s.card}>
         <span className={s.cardLabel}>복용 타이밍 정리</span>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: 10 }}>
           {byTime.map((t) => (
             <div key={t.timing} className={s.timeSection}>
               <div className={s.timeSectionHead}>{t.label}</div>
@@ -838,20 +927,28 @@ function DrugSpecialTab({
     return set
   }, [sups])
 
-  // 약물 상호작용 알림
+  // 성분별 합산량(canon) — 용량 기반 게이팅용
+  const ingredientTotals = useMemo(() => {
+    const m = new Map<string, number>()
+    for (const a of aggregate(sups)) m.set(a.ing.name, a.total)
+    return m
+  }, [sups])
+
+  // 약물 상호작용 알림 — 용량 임계(minCanon)를 반영해 고용량일 때만 경고
   const drugAlerts = useMemo(() => {
     const alerts: { drugName: string; ingredientName: string; risk: 'high' | 'medium' | 'low'; desc: string }[] = []
     for (const drugId of selectedDrugs) {
       const cat = DRUG_INTERACTIONS.find(d => d.id === drugId)
       if (!cat) continue
       for (const r of cat.risky) {
-        if (ingredientSet.has(r.ingredientName)) {
-          alerts.push({ drugName: cat.name, ingredientName: r.ingredientName, risk: r.risk, desc: r.desc })
-        }
+        const total = ingredientTotals.get(r.ingredientName)
+        if (total === undefined) continue                            // 미등록 성분
+        if (r.minCanon !== undefined && total < r.minCanon) continue // 고용량 임계 미만 → 경고 제외
+        alerts.push({ drugName: cat.name, ingredientName: r.ingredientName, risk: r.risk, desc: r.desc })
       }
     }
     return alerts
-  }, [selectedDrugs, ingredientSet])
+  }, [selectedDrugs, ingredientTotals])
 
   // 특수 상황 알림
   const specialAlerts = useMemo(() => {
@@ -868,9 +965,11 @@ function DrugSpecialTab({
       {/* 특수 상황 토글 */}
       <div className={s.card}>
         <span className={s.cardLabel}>현재 상태 (특수 상황 자동 체크)</span>
-        <div className={s.lifeStageRow}>
+        <div className={s.lifeStageRow} role="group" aria-label="현재 상태 선택">
           {LIFE_STAGES.map(ls => (
             <button key={ls.id}
+              type="button"
+              aria-pressed={lifeStage === ls.id}
               className={`${s.lifeStageBtn} ${lifeStage === ls.id ? s.lifeStageBtnActive : ''}`}
               onClick={() => setLifeStage(ls.id)}>
               <span className={s.lifeStageBtnEmoji}>{ls.emoji}</span>
@@ -913,11 +1012,14 @@ function DrugSpecialTab({
       {/* 약물 선택 */}
       <div className={s.card}>
         <span className={s.cardLabel}>현재 복용 중인 처방약 (해당 시 모두 선택)</span>
-        <div className={s.drugCategoryGrid}>
+        <div className={s.drugCategoryGrid} role="group" aria-label="복용 중인 처방약 선택">
           {DRUG_INTERACTIONS.map(d => {
             const checked = selectedDrugs.includes(d.id)
             return (
               <button key={d.id}
+                type="button"
+                aria-pressed={checked}
+                aria-label={d.name}
                 className={`${s.drugCategoryBtn} ${checked ? s.drugCategoryBtnActive : ''}`}
                 onClick={() => toggleDrug(d.id)}>
                 <span className={s.drugCategoryBtnEmoji}>{d.emoji}</span>
@@ -1069,6 +1171,3 @@ export function applyKoreaPreset(preset: typeof KOREA_POPULAR_PRESETS[number]): 
     })),
   }
 }
-
-// gaugeStatus는 미래 사용 위해 export 유지
-export { gaugeStatus }

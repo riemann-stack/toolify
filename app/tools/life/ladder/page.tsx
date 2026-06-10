@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/ladder',
   title: '사다리타기 — 무료 온라인 사다리 게임 (캐릭터·실시간 미리보기)',
   description:
-    '캐릭터 16종 + 6가지 공개 모드(한 명씩·전체·익명·역추적) + 자동 채우기와 카톡 결과 공유로 진짜 한 번에 끝나는 사다리.',
+    '캐릭터 16종 + 공개 모드(클릭 개별·역추적·전체) + 시크릿 산타 자기배정 방지 + 결과 텍스트 복사로 한 번에 끝나는 사다리.',
   keywords: [
     '사다리타기', '온라인 사다리', '사다리 게임', '청소 당번', '벌칙 뽑기',
     '선물 교환', '점심 메뉴', '발표 순서', '사다리 무료', '회식 분담', '제비뽑기',
@@ -18,19 +18,19 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '사다리타기는 정말 공정한가요?',
-                a: '본 도구는 다음 단계로 공정성을 보장합니다 — ① 매번 새로운 가로줄 위치를 <code>Math.random()</code>으로 무작위 생성, ② 인접 가로줄 방지(사다리 규칙), ③ 모든 참가자가 서로 다른 결과로 도착 보장, ④ 의사난수지만 1,000회 시뮬레이션 시 균등 분포. 같은 명단으로 계속 같은 결과가 나온다고 느껴지면 [🔀 순서 섞기] 또는 [🔄 새 사다리]를 누르면 새 가로줄로 다른 결과가 나옵니다.',
+                a: '본 도구는 다음 단계로 공정성을 보장합니다 — ① 매번 새로운 가로줄 위치를 <code>Math.random()</code>으로 무작위 생성, ② 인접 가로줄 방지(사다리 규칙), ③ <strong>모든 참가자가 서로 다른 결과에 정확히 1:1로 도착(전단사) 보장</strong>, ④ 단, 도착 분포가 완전 균등은 아닙니다 — 시작 위치에 따라 특정 결과로 갈 확률이 다소 다를 수 있으니, <strong>[🔀 순서 섞기]</strong>로 입력 순서 영향을 없애고 <strong>[가로줄 난이도: 많이]</strong>로 편향을 줄이세요(아래 질문 참고). 같은 명단으로 계속 같은 결과가 나온다고 느껴지면 [🔀 순서 섞기] 또는 [🔄 가로선 새로 만들기]로 새 가로줄을 만들면 됩니다.',
               },
               {
                 q: '사다리타기에서 유리한 시작 위치가 있나요?',
-                a: '<strong>수학적으로는 없습니다.</strong> 1,000회 이상 시뮬레이션하면 모든 시작 위치가 모든 결과에 거의 균등한 빈도로 도착합니다. 다만 <strong>한 판</strong>만 본다면 다음과 같은 미세한 경향은 있습니다 — ① <strong>양 끝(첫 번째·마지막) 위치는 가로줄을 만날 확률이 1번 적음</strong>(왼쪽 끝은 오른쪽 가로줄만, 오른쪽 끝은 왼쪽 가로줄만 영향). 그래서 <strong>같은 위치의 결과로 도착할 가능성이 중간보다 살짝 높음</strong>. ② 입력 순서대로 배치하면 첫 사람이 첫 결과로 갈 확률이 약간 더 높을 수 있어, 본 도구의 <strong>[🔀 순서 섞기]</strong> 버튼으로 입력 순서의 영향을 제거하는 것을 권장합니다. ③ 가로줄 난이도를 [많이]로 설정하면 양 끝 효과도 거의 사라집니다.',
+                a: '<strong>특정 「사람」에게 고정된 유리함은 없지만, 「위치」에는 경향이 있습니다.</strong> 사다리는 모든 참가자를 서로 다른 결과로 1:1(전단사) 보내는 것은 보장하지만, 도착 분포가 완전히 균등하지는 않습니다 — 가로줄이 적으면 <strong>시작 위치가 가까운 결과(대각선)로 도착할 확률이 다소 높습니다</strong>(예: 4명·보통에서 첫 위치는 첫 결과 쪽으로 약 30%대로 치우침). 줄이는 방법: ① <strong>[🔀 순서 섞기]</strong>로 참가자·결과 순서를 무작위로 섞으면 특정 사람이 유리해지지 않습니다(위치↔사람 상관 제거). ② <strong>[가로줄 난이도: 많이]</strong>로 행을 늘리면 위치 편향이 더 줄어듭니다(완전히 사라지지는 않음). 세부 경향: 양 끝 위치는 한쪽 가로줄만 만나 중앙보다 자기 위치 결과에 더 머무는 편입니다.',
               },
               {
-                q: '익명 모드는 어떻게 작동하나요?',
-                a: '<strong>선물 교환(시크릿 산타)</strong>에 적합한 모드입니다 — ① 참가자 이름·결과 행은 그대로 보이지만 매칭은 숨김, ② 각 참가자가 본인 캐릭터 카드 클릭, ③ 본인 결과만 비밀로 표시(다른 사람은 안 보임), ④ 모두 확인 후 게임 종료. 이 방식으로 누가 누구에게 선물할지 비밀이 유지되어 시크릿 산타 게임이 가능합니다.',
+                q: '시크릿 산타(선물 교환)는 어떻게 하나요?',
+                a: '<strong>[🎁 선물 교환] 템플릿</strong>을 누르면 참가자=결과로 채워지고, 본 도구가 <strong>자기 자신에게 배정되지 않도록 가로줄을 자동 조정</strong>합니다(중복 이름 등으로 불가능하면 안내가 표시됩니다). 진행은 각자 차례로 <strong>본인 이름 카드를 클릭</strong>해 누구에게 선물할지 확인하고 다른 사람은 잠시 화면을 보지 않으면 됩니다. ※ 화면을 가려 주는 별도의 &quot;익명 모드&quot;는 없으며, 클릭한 경로는 화면에 함께 표시됩니다.',
               },
               {
                 q: '참가자와 결과 개수가 다르면 어떻게 되나요?',
-                a: '자동 채우기 옵션 3가지 중 선택할 수 있습니다 — <strong>꽝 추가</strong>(부족분 "꽝" 자동, 예: 8명 + 당첨 2 → 꽝 6 자동), <strong>균등 분배</strong>(각 결과를 균등 인원에, 예: 6명 + 3결과 → 각 2명씩), <strong>결과 반복</strong>(결과 순환 배정, 예: 5명 + 3결과 → 1,2,3,1,2). 직접 [+ 늘리기] [− 줄이기]로 수동 조정도 가능합니다.',
+                a: '본 도구는 <strong>참가자 수에 맞춰 결과 칸을 자동으로 맞춥니다</strong> — 결과가 모자라면 빈 칸이 추가되고, 많으면 잘립니다. [+ 늘리기]로 참가자를 추가하면 결과 칸에 기본값 &quot;꽝&quot;이 채워지며, 각 결과 칸은 직접 수정할 수 있습니다. 사다리는 항상 <strong>참가자 N명 ↔ 결과 N칸</strong>이 1:1로 대응합니다.',
               },
               {
                 q: '결과를 미리 정해놓을 수 있나요?',
@@ -54,7 +54,7 @@ export default function LadderPage() {
         🪜 사다리타기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        캐릭터 16종 + 6가지 공개 모드 + <strong style={{ color: 'var(--text)' }}>카톡 공유</strong>. 진짜 한 번에 끝나는 사다리.
+        캐릭터 16종 + 클릭·전체·역추적 공개 + <strong style={{ color: 'var(--text)' }}>결과 텍스트 복사</strong>. 진짜 한 번에 끝나는 사다리.
       </p>
 
       <LadderClient />
@@ -72,7 +72,7 @@ export default function LadderPage() {
             본 도구의 알고리즘:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>· 참가자 수 × <strong style={{ color: 'var(--text)' }}>1.2~3배</strong> 행의 사다리 (난이도별)</li>
+            <li>· 참가자 수 × <strong style={{ color: 'var(--text)' }}>2~3배</strong> 행의 사다리 (최소 8행, 난이도별)</li>
             <li>· 각 행에 무작위 위치에 가로줄 (인접 가로줄 방지)</li>
             <li>· 매번 새 가로줄 분포로 <strong style={{ color: 'var(--text)' }}>같은 명단도 다른 결과</strong> 가능</li>
             <li>· Math.random() 의사난수 + 인접 검증 알고리즘</li>
@@ -84,9 +84,9 @@ export default function LadderPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>결과 공개 — 3가지 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { icon: '👤', name: '한 명씩 공개', desc: '왼쪽부터 한 명씩 자동으로 경로가 그려지며 공개됩니다 (느림·빠름 속도 선택)' },
-              { icon: '👥', name: '한 번에 공개', desc: '모든 참가자 경로가 동시에 표시됩니다' },
-              { icon: '🖱️', name: '클릭으로 개별 공개', desc: '이름이나 결과를 클릭하면 그 사람의 경로만 공개·숨김 — 원하는 사람부터 자유롭게 확인' },
+              { icon: '🖱️', name: '클릭 개별 공개', desc: '이름을 클릭하면 그 사람의 경로만 그려지며 공개·숨김 (느림·빠름 그리기 속도 선택)' },
+              { icon: '🔁', name: '역추적 공개', desc: '결과를 클릭하면 그 결과로 도착한 사람을 거꾸로 찾아 경로를 표시' },
+              { icon: '👥', name: '한 번에 공개', desc: '[한 번에 공개] 버튼으로 모든 참가자 경로를 동시에 표시' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{m.icon} {m.name}</p>
@@ -98,9 +98,9 @@ export default function LadderPage() {
 
         {/* 3. 실시간 미리보기 + 셔플 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실시간 사다리 미리보기 + 순서 셔플</h2>
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실시간 입력 반영 + 순서 셔플</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            참가자·결과를 입력하는 즉시 사다리에 반영됩니다. 결과 공개 전에도 사다리 모양·가로줄을 미리 확인할 수 있고, <strong style={{ color: 'var(--text)' }}>[🔀 순서 섞기]</strong> 버튼으로 참가자·결과 입력 순서를 무작위로 섞고 새 가로줄을 생성할 수 있습니다.
+            참가자·결과를 입력하는 즉시 사다리에 반영됩니다. 단, <strong style={{ color: 'var(--text)' }}>가로줄은 공개 전까지 숨겨져</strong>(암산 스포일러 방지) 결과를 미리 알 수 없고, 인원·세로줄 구조만 실시간으로 보입니다. <strong style={{ color: 'var(--text)' }}>[🔀 순서 섞기]</strong> 버튼으로 참가자·결과 입력 순서를 무작위로 섞고 새 가로줄을 생성할 수 있습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 10, padding: '11px 14px' }}>
             💡 <strong style={{ color: '#9333EA' }}>왜 셔플이 중요한가?</strong> — 입력 순서대로 배치되면 첫 번째 참가자는 첫 번째 결과 근처에 도착할 가능성이 살짝 더 큽니다(가로줄이 적게 만나서). 셔플하면 입력 순서의 영향이 사라져 더 공정합니다.

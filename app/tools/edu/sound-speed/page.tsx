@@ -357,8 +357,8 @@ export default function SoundSpeedPage() {
               { href: '/tools/edu/planet-comparison',  icon: '🪐', name: '행성 비교 계산기',     desc: '8개 행성에서 내 몸무게·나이·하루' },
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',         desc: '138억 년 우주 역사를 1년으로' },
               { href: '/tools/edu/circuit-simulator',  icon: '⚡', name: '옴의 법칙 계산기',  desc: '직렬·병렬 회로 시각화' },
-              { href: '/tools/unit/length',            icon: '📏', name: '길이 변환기',           desc: 'cm·m·inch·ft·mile 변환' },
-              { href: '/tools/unit/time',              icon: '⏱️', name: '시간 단위 변환기',     desc: '초·분·시간·일 변환' },
+              { href: '/tools/unit/converter',         icon: '📐', name: '단위 변환기',           desc: '길이·무게·시간 등 14종 통합 변환' },
+              { href: '/tools/edu/sci-units',          icon: '🧪', name: '과학 단위 변환기',     desc: '과학적 표기·SI 접두어·eV' },
               { href: '/tools/edu',                    icon: '🔬', name: '교육·학습 카테고리',     desc: '추가 교육 도구 더보기' },
             ].map((t, i) => (
               <Link

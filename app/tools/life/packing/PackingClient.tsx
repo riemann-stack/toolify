@@ -27,6 +27,7 @@ export default function PackingClient() {
   const [photo, setPhoto] = useState<PhotoLevel>('normal')
   const [needSports, setNeedSports] = useState(false)
   const [needFormal, setNeedFormal] = useState(false)
+  const [needBaby, setNeedBaby] = useState(false)
   const [people, setPeople] = useState('1')
 
   /* 체크리스트 상태 */
@@ -45,15 +46,16 @@ export default function PackingClient() {
       if (j.photo) setPhoto(j.photo)
       if (typeof j.needSports === 'boolean') setNeedSports(j.needSports)
       if (typeof j.needFormal === 'boolean') setNeedFormal(j.needFormal)
+      if (typeof j.needBaby === 'boolean') setNeedBaby(j.needBaby)
       if (j.people) setPeople(j.people)
       if (j.checked) setChecked(j.checked)
     } catch {}
   }, [])
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ days, climate, laundry, activity, photo, needSports, needFormal, people, checked }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ days, climate, laundry, activity, photo, needSports, needFormal, needBaby, people, checked }))
     } catch {}
-  }, [days, climate, laundry, activity, photo, needSports, needFormal, people, checked])
+  }, [days, climate, laundry, activity, photo, needSports, needFormal, needBaby, people, checked])
 
   /* 계산 */
   const inp: PackingInputs = useMemo(() => ({
@@ -79,14 +81,29 @@ export default function PackingClient() {
     setPhoto(sc.inputs.photo)
     setNeedSports(sc.inputs.needSports)
     setNeedFormal(sc.inputs.needFormal)
+    setNeedBaby(sc.id === 'baby_family')
     setPeople(String(sc.inputs.people))
     setTab('calc')
   }
 
   /* 체크리스트 토글 */
   const toggleCheck = (id: string) => setChecked((p) => ({ ...p, [id]: !p[id] }))
-  const totalCheckItems = CHECKLISTS.reduce((s, c) => s + c.items.length, 0)
-  const checkedCount = Object.values(checked).filter(Boolean).length
+  /* 아기 동반이 아니면 아기 카테고리 숨김 (PKR2-6) */
+  const visibleChecklists = useMemo(
+    () => CHECKLISTS.filter((c) => !c.optional || needBaby),
+    [needBaby],
+  )
+  /* 진행률 분모 = 의류(계산 결과) + 화면에 보이는 체크리스트만 → 100% 초과 방지 (PKR2-2) */
+  const checkIds = useMemo(() => {
+    const ids: string[] = comfortResult.items.map((it) => `top_${it.id}`)
+    visibleChecklists.forEach((c) => {
+      for (let i = 0; i < c.items.length; i++) ids.push(`${c.id}_${i}`)
+    })
+    return ids
+  }, [comfortResult, visibleChecklists])
+  const totalCheckItems = checkIds.length
+  const checkedCount = checkIds.filter((id) => checked[id]).length
+  const checkedPct = totalCheckItems > 0 ? Math.round((checkedCount / totalCheckItems) * 100) : 0
 
   /* 체크리스트 텍스트 복사 */
   const copyChecklist = async () => {
@@ -96,8 +113,7 @@ export default function PackingClient() {
       text += `  □ ${it.label}: ${it.count}개\n`
     })
     text += '\n'
-    CHECKLISTS.forEach((c) => {
-      if (c.optional) return
+    visibleChecklists.forEach((c) => {
       text += `${c.emoji} ${c.label}\n`
       c.items.forEach((it) => {
         text += `  □ ${it}\n`
@@ -127,7 +143,7 @@ export default function PackingClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="여행 짐 도구 모드">
         {([
           { id: 'calc',     label: '🧳 옷 계산' },
           { id: 'check',    label: '✅ 체크리스트' },
@@ -136,6 +152,8 @@ export default function PackingClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -157,30 +175,32 @@ export default function PackingClient() {
                   여행 일수
                   <strong className={s.sliderValue}>{days}일 <span className={s.sliderValueHint}>({Math.max(0, parseInt(days) - 1)}박)</span></strong>
                 </label>
-                <input type="range" min={1} max={30} step={1} value={days} onChange={(e) => setDays(e.target.value)} className={s.slider} />
+                <input type="range" min={1} max={30} step={1} value={days} onChange={(e) => setDays(e.target.value)} className={s.slider} aria-label="여행 일수" aria-valuetext={`${days}일 (${Math.max(0, parseInt(days) - 1)}박)`} />
               </div>
               <div className={s.field}>
                 <label className={s.sliderLabel}>
                   인원
                   <strong className={s.sliderValue}>{people}명</strong>
                 </label>
-                <input type="range" min={1} max={6} step={1} value={people} onChange={(e) => setPeople(e.target.value)} className={s.slider} />
+                <input type="range" min={1} max={6} step={1} value={people} onChange={(e) => setPeople(e.target.value)} className={s.slider} aria-label="인원" aria-valuetext={`${people}명`} />
               </div>
             </div>
           </div>
 
           <div className={s.card}>
             <span className={s.cardLabel}>여행지 기온</span>
-            <div className={s.climateRow}>
+            <div className={s.climateRow} role="group" aria-label="여행지 기온">
               {CLIMATES.map((c) => (
                 <button
                   key={c.id}
+                  aria-pressed={climate === c.id}
+                  aria-label={`${c.label} (${c.range})`}
                   className={`${s.climateBtn} ${climate === c.id ? s.climateBtnActive : ''}`}
                   onClick={() => setClimate(c.id)}
                   type="button"
                   style={{ borderTopColor: c.color }}
                 >
-                  <span className={s.climateEmoji}>{c.emoji}</span>
+                  <span className={s.climateEmoji} aria-hidden="true">{c.emoji}</span>
                   <span className={s.climateLabel}>{c.label}</span>
                   <span className={s.climateRange}>{c.range}</span>
                 </button>
@@ -194,9 +214,9 @@ export default function PackingClient() {
             <div className={s.compactGrid}>
               <div className={s.compactField}>
                 <span className={s.compactLabel}>세탁</span>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="세탁 가능 여부">
                   {LAUNDRIES.map((l) => (
-                    <button key={l.id} className={`${s.pill} ${laundry === l.id ? s.pillActive : ''}`} onClick={() => setLaundry(l.id)} type="button" title={l.desc}>
+                    <button key={l.id} aria-pressed={laundry === l.id} className={`${s.pill} ${laundry === l.id ? s.pillActive : ''}`} onClick={() => setLaundry(l.id)} type="button" title={l.desc}>
                       {l.emoji} {l.label}
                     </button>
                   ))}
@@ -204,9 +224,9 @@ export default function PackingClient() {
               </div>
               <div className={s.compactField}>
                 <span className={s.compactLabel}>활동량</span>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="활동량">
                   {ACTIVITIES.map((a) => (
-                    <button key={a.id} className={`${s.pill} ${activity === a.id ? s.pillActive : ''}`} onClick={() => setActivity(a.id)} type="button" title={a.desc}>
+                    <button key={a.id} aria-pressed={activity === a.id} className={`${s.pill} ${activity === a.id ? s.pillActive : ''}`} onClick={() => setActivity(a.id)} type="button" title={a.desc}>
                       {a.emoji} {a.label}
                     </button>
                   ))}
@@ -214,9 +234,9 @@ export default function PackingClient() {
               </div>
               <div className={s.compactField}>
                 <span className={s.compactLabel}>사진</span>
-                <div className={s.pillRow}>
+                <div className={s.pillRow} role="group" aria-label="사진 중요도">
                   {PHOTOS.map((p) => (
-                    <button key={p.id} className={`${s.pill} ${photo === p.id ? s.pillActive : ''}`} onClick={() => setPhoto(p.id)} type="button">
+                    <button key={p.id} aria-pressed={photo === p.id} className={`${s.pill} ${photo === p.id ? s.pillActive : ''}`} onClick={() => setPhoto(p.id)} type="button">
                       {p.emoji} {p.label}
                     </button>
                   ))}
@@ -242,20 +262,32 @@ export default function PackingClient() {
                 <span className={s.optionToggleCheck}>{needFormal ? '✓' : ''}</span>
                 👔 격식
               </button>
+              <button
+                type="button"
+                className={`${s.optionToggle} ${needBaby ? s.optionToggleActive : ''}`}
+                onClick={() => setNeedBaby(!needBaby)}
+                aria-pressed={needBaby}
+              >
+                <span className={s.optionToggleCheck}>{needBaby ? '✓' : ''}</span>
+                👶 아기 동반
+              </button>
             </div>
             <p className={s.helpText} style={{ marginTop: 6 }}>{lauMeta.desc}</p>
+            {needBaby && <p className={s.helpText} style={{ marginTop: 2 }}>👶 아기 용품은 <strong>✅ 체크리스트</strong> 탭에 별도 카테고리로 추가됩니다 (의류 수량 계산과는 별개).</p>}
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
-            <p className={s.heroLabel}>{cliMeta.emoji} {cliMeta.label} · {days}일 · {people}명</p>
+          <div className={s.hero} aria-live="polite">
+            <p className={s.heroLabel}>{cliMeta.emoji} {cliMeta.label} · {days}일 ({Math.max(0, parseInt(days) - 1)}박) · {people}명</p>
             <p className={s.heroValue}>
-              총 무게 <strong>{fmtKg(comfortResult.totalWeight)}</strong>
+              1인 총 무게 <strong>{fmtKg(comfortResult.totalWeight)}</strong>
             </p>
             <p className={s.heroSub}>
-              추천 캐리어 <strong style={{ color: 'var(--accent)' }}>{comfortResult.carrier.label}</strong>
+              의류 {fmtKg(comfortResult.clothingWeight)} + 비의류 추정 {fmtKg(comfortResult.extrasWeight)} + 캐리어 {fmtKg(comfortResult.carrierWeight)}
+              {inp.people > 1 && <> · 전체 {inp.people}명 ≈ <strong style={{ color: 'var(--accent)' }}>{fmtKg(comfortResult.groupTotal)}</strong></>}
+              <br />추천 캐리어 (1인당) <strong style={{ color: 'var(--accent)' }}>{comfortResult.carrier.label}</strong>
               {' · '}{comfortResult.carrier.capacity}
-              <br />압축팩 사용 시 <strong>{fmtKg(comfortResult.totalWeightCompressed)}</strong> (부피 -30%)
+              <br />🗜️ 압축팩은 <strong>부피만 약 30% 절약</strong> — 무게·항공 수하물 한도는 그대로입니다
             </p>
           </div>
 
@@ -293,9 +325,13 @@ export default function PackingClient() {
             </div>
           </div>
 
+          <p className={s.helpText} style={{ textAlign: 'center', marginTop: -2 }}>
+            ※ 모든 무게는 <strong>1인 1캐리어 기준</strong> — 의류 + 비의류 추정 2.5kg(세면·화장품·전자·약·잡화) + 캐리어 자체
+          </p>
+
           {/* 캐리어 안내 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🛄 캐리어·항공사 수하물</span>
+            <span className={s.cardLabel}>🛄 캐리어·항공사 수하물 (1인 기준)</span>
             <p className={s.tipBox}>{comfortResult.airline}</p>
             <div className={s.tableScroll} style={{ marginTop: 10 }}>
               <table className={s.detailTable}>
@@ -317,6 +353,11 @@ export default function PackingClient() {
             <p className={s.helpText} style={{ marginTop: 8 }}>
               ※ 항공사·노선·등급별 한도 다름. LCC 기내 7~10kg, 위탁 15~20kg / 풀서비스 7~12kg, 위탁 23kg 표준.
             </p>
+            {(climate === 'frigid' || climate === 'winter') && (
+              <p className={s.tipBox} style={{ marginTop: 8 }}>
+                🧥 겨울 패딩·니트는 무게가 가벼워도 <strong>부피가 커서</strong> 추천보다 한 단계 큰 캐리어가 필요할 수 있어요. 압축팩으로 부피를 줄이면 도움이 됩니다.
+              </p>
+            )}
           </div>
 
           {/* 기온 가이드 카드 */}
@@ -345,7 +386,8 @@ export default function PackingClient() {
               <strong>{checkedCount}</strong> / {totalCheckItems}
             </p>
             <p className={s.heroSub}>
-              완료 <strong style={{ color: 'var(--accent)' }}>{((checkedCount / totalCheckItems) * 100).toFixed(0)}%</strong>
+              완료 <strong style={{ color: 'var(--accent)' }}>{checkedPct}%</strong>
+              <br /><span style={{ fontSize: 12, color: 'var(--muted)' }}>의류(계산 결과) + {needBaby ? '아기 포함 ' : ''}준비물 기준</span>
             </p>
             <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 14, flexWrap: 'wrap' }}>
               <button className={s.copyBtn} onClick={copyChecklist} type="button">📋 클립보드 복사</button>
@@ -366,8 +408,8 @@ export default function PackingClient() {
             </div>
           </div>
 
-          {/* 카테고리별 체크리스트 */}
-          {CHECKLISTS.map((cat) => (
+          {/* 카테고리별 체크리스트 (아기 동반 시에만 아기 카테고리 노출) */}
+          {visibleChecklists.map((cat) => (
             <div key={cat.id} className={s.card}>
               <span className={s.cardLabel}>{cat.emoji} {cat.label} {cat.optional && <span style={{ color: 'var(--muted)', textTransform: 'none' }}>(선택)</span>}</span>
               <div className={s.checkGrid}>
@@ -399,6 +441,7 @@ export default function PackingClient() {
             {CLIMATES.map((c) => (
               <button
                 key={c.id}
+                aria-pressed={climate === c.id}
                 className={`${s.climateGuideCard} ${climate === c.id ? s.climateGuideActive : ''}`}
                 onClick={() => { setClimate(c.id); setTab('calc') }}
                 type="button"
@@ -441,10 +484,10 @@ export default function PackingClient() {
                   </p>
                   <p className={s.scenarioDesc}>{sc.desc}</p>
                   <div className={s.scenarioMeta}>
-                    <span>📅 {sc.inputs.days}박</span>
+                    <span>📅 {Math.max(0, sc.inputs.days - 1)}박 {sc.inputs.days}일</span>
                     <span>{getClimate(sc.inputs.climate).emoji} {getClimate(sc.inputs.climate).label}</span>
                     <span>👥 {sc.inputs.people}명</span>
-                    <span>⚖️ {fmtKg(r.totalWeight)}</span>
+                    <span>⚖️ 1인 {fmtKg(r.totalWeight)}</span>
                   </div>
                   <div className={s.scenarioNotes}>
                     {sc.notes.map((n, i) => (

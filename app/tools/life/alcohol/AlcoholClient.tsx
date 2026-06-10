@@ -85,9 +85,11 @@ function MixTab() {
       <div className={styles.presetCard}>
         <div className={styles.presetTop}>
           <span className={styles.presetLabel}>프리셋 적용 대상</span>
-          <div className={styles.presetTargetBtns}>
+          <div className={styles.presetTargetBtns} role="group" aria-label="프리셋 적용 대상 선택">
             {items.map(it => (
               <button key={it.id}
+                type="button"
+                aria-pressed={presetTarget === it.id}
                 className={`${styles.targetBtn} ${presetTarget === it.id ? styles.targetBtnActive : ''}`}
                 onClick={() => setPresetTarget(it.id)}>
                 {it.name || `술 ${items.indexOf(it) + 1}`}
@@ -95,16 +97,16 @@ function MixTab() {
             ))}
           </div>
         </div>
-        <div className={styles.modeToggle}>
-          <button className={`${styles.modeBtn} ${glassMode === 'glass' ? styles.modeBtnActive : ''}`}
+        <div className={styles.modeToggle} role="group" aria-label="잔/병 단위 선택">
+          <button type="button" aria-pressed={glassMode === 'glass'} className={`${styles.modeBtn} ${glassMode === 'glass' ? styles.modeBtnActive : ''}`}
             onClick={() => setGlassMode('glass')}>잔 단위</button>
-          <button className={`${styles.modeBtn} ${glassMode === 'bottle' ? styles.modeBtnActive : ''}`}
+          <button type="button" aria-pressed={glassMode === 'bottle'} className={`${styles.modeBtn} ${glassMode === 'bottle' ? styles.modeBtnActive : ''}`}
             onClick={() => setGlassMode('bottle')}>병·캔</button>
         </div>
         <div className={styles.glassGrid}>
           {filteredGlasses.map(g => (
-            <button key={g.id} className={styles.glassCard} onClick={() => applyGlass(g)}>
-              <span className={styles.glassIcon}>{g.icon}</span>
+            <button key={g.id} type="button" aria-label={`${g.name} ${g.ml}ml${g.abv !== null ? ` ${g.abv}%` : ''} 적용`} className={styles.glassCard} onClick={() => applyGlass(g)}>
+              <span className={styles.glassIcon} aria-hidden="true">{g.icon}</span>
               <span className={styles.glassName}>{g.name}</span>
               <span className={styles.glassMeta}>
                 {g.ml}ml{g.abv !== null ? ` · ${g.abv}%` : ''}
@@ -119,7 +121,7 @@ function MixTab() {
         <label className={styles.cardLabel}>한국 인기 칵테일 (자동 채우기)</label>
         <div className={styles.cocktailGrid}>
           {KOREAN_COCKTAIL_PRESETS.map(c => (
-            <button key={c.id} className={styles.cocktailCard} onClick={() => applyCocktail(c.id)}>
+            <button key={c.id} type="button" aria-label={`${c.name} 자동 채우기`} className={styles.cocktailCard} onClick={() => applyCocktail(c.id)}>
               <div className={styles.cocktailTitle}>{c.emoji} {c.name}</div>
               <div className={styles.cocktailDesc}>{c.desc}</div>
             </button>
@@ -134,9 +136,10 @@ function MixTab() {
             <div className={styles.itemHeader}>
               <input className={styles.nameInput} type="text"
                 placeholder={`술 ${idx + 1}`} value={it.name}
+                aria-label={`술 ${idx + 1} 이름`}
                 onChange={e => update(it.id, 'name', e.target.value)} />
               {items.length > 2 && (
-                <button className={styles.removeBtn}
+                <button type="button" aria-label={`${it.name || `술 ${idx + 1}`} 삭제`} className={styles.removeBtn}
                   onClick={() => setItems(prev => prev.filter(x => x.id !== it.id))}>×</button>
               )}
             </div>
@@ -146,6 +149,7 @@ function MixTab() {
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="number" inputMode="decimal"
                     placeholder="50" value={it.volume}
+                    aria-label={`술 ${idx + 1} 용량 (ml)`}
                     onChange={e => update(it.id, 'volume', e.target.value)} />
                   <span className={styles.unit}>ml</span>
                 </div>
@@ -155,6 +159,7 @@ function MixTab() {
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="number" inputMode="decimal"
                     placeholder="16" value={it.abv}
+                    aria-label={`술 ${idx + 1} 도수 (%)`}
                     onChange={e => update(it.id, 'abv', e.target.value)} />
                   <span className={styles.unit}>%</span>
                 </div>
@@ -165,7 +170,7 @@ function MixTab() {
       </div>
 
       {items.length < 5 && (
-        <button className={styles.addBtn}
+        <button type="button" className={styles.addBtn}
           onClick={() => { const n = { id: ++nextId, name: '', volume: '', abv: '' }; setItems(prev => [...prev, n]); setPresetTarget(n.id) }}>
           + 술 추가 ({items.length}/5)
         </button>
@@ -173,7 +178,7 @@ function MixTab() {
 
       {/* 결과 */}
       {result ? (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} aria-live="polite">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>혼합 도수</div>
@@ -210,7 +215,8 @@ function MixTab() {
             </div>
           </div>
           <p className={styles.stdNote}>
-            * 한국 1표준잔 = 알코올 8g · 에탄올 밀도 0.79g/ml · 알코올 1g = 7 kcal
+            * 표시용 1잔 = 알코올 8g 환산(정의는 기관별 상이 — 복지부 7g·WHO 10g) · 밀도 0.79g/ml · 1g=7kcal<br />
+            * 혼합 도수는 얼음 용해·부피 수축을 제외한 이론값으로, 실제 제조 도수와 다를 수 있습니다.
           </p>
         </div>
       ) : (
@@ -277,8 +283,8 @@ function DilutionTab() {
         <span className={styles.presetLabel}>원액 (잔/병 빠른 선택)</span>
         <div className={styles.glassGrid} style={{ marginTop: 10 }}>
           {KOREAN_GLASS_PRESETS.filter(g => g.abv !== null).map(g => (
-            <button key={g.id} className={styles.glassCard} onClick={() => applyGlass(g)}>
-              <span className={styles.glassIcon}>{g.icon}</span>
+            <button key={g.id} type="button" aria-label={`원액 ${g.name} ${g.ml}ml ${g.abv}% 선택`} className={styles.glassCard} onClick={() => applyGlass(g)}>
+              <span className={styles.glassIcon} aria-hidden="true">{g.icon}</span>
               <span className={styles.glassName}>{g.name}</span>
               <span className={styles.glassMeta}>{g.ml}ml · {g.abv}%</span>
             </button>
@@ -294,7 +300,7 @@ function DilutionTab() {
             <label className={styles.fieldLabel}>용량</label>
             <div className={styles.inputRow}>
               <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder="30" value={originalMl} onChange={e => setOriginalMl(e.target.value)} />
+                placeholder="30" value={originalMl} aria-label="원액 용량 (ml)" onChange={e => setOriginalMl(e.target.value)} />
               <span className={styles.unit}>ml</span>
             </div>
           </div>
@@ -302,7 +308,7 @@ function DilutionTab() {
             <label className={styles.fieldLabel}>도수</label>
             <div className={styles.inputRow}>
               <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder="40" value={originalAbv} onChange={e => setOriginalAbv(e.target.value)} />
+                placeholder="40" value={originalAbv} aria-label="원액 도수 (%)" onChange={e => setOriginalAbv(e.target.value)} />
               <span className={styles.unit}>%</span>
             </div>
           </div>
@@ -315,6 +321,9 @@ function DilutionTab() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 6 }}>
           {DILUTION_OPTIONS.map(d => (
             <button key={d.id}
+              type="button"
+              aria-pressed={dilutionId === d.id}
+              aria-label={`희석 재료 ${d.name.replace(/[^가-힣a-zA-Z0-9.% ()]/g, '').trim()} 선택`}
               className={`${styles.glassCard} ${dilutionId === d.id ? styles.glassCardActive : ''}`}
               onClick={() => setDilutionId(d.id)}>
               <span className={styles.glassName} style={{ fontSize: 13 }}>{d.name}</span>
@@ -330,20 +339,23 @@ function DilutionTab() {
         <div className={styles.inputRow}>
           <input className={`${styles.numInput} ${invalidTarget ? styles.numInputError : ''}`}
             type="number" inputMode="decimal"
-            placeholder="7" value={targetAbv} onChange={e => setTargetAbv(e.target.value)} />
+            placeholder="7" value={targetAbv} aria-label="목표 도수 (%)" onChange={e => setTargetAbv(e.target.value)} />
           <span className={styles.unit}>%</span>
         </div>
-        {invalidTarget && (
+        {(parseFloat(originalAbv) > 100 || parseFloat(targetAbv) > 100) && (
+          <p className={styles.errorMsg}>도수는 0~100% 범위로 입력하세요</p>
+        )}
+        {invalidTarget && parseFloat(originalAbv) <= 100 && (
           <p className={styles.errorMsg}>목표 도수는 원액({originalAbv}%)보다 낮아야 합니다</p>
         )}
-        {!invalidTarget && parseFloat(targetAbv) > 0 && parseFloat(targetAbv) <= dilution.abv && (
+        {!invalidTarget && parseFloat(originalAbv) <= 100 && parseFloat(targetAbv) > 0 && parseFloat(targetAbv) <= dilution.abv && (
           <p className={styles.errorMsg}>희석재료 도수({dilution.abv}%) 이하로는 만들 수 없습니다 (다른 재료 선택)</p>
         )}
       </div>
 
       {/* 결과 */}
       {result ? (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} aria-live="polite">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>추가할 {dilution.name.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\s*/u, '')}</div>
@@ -429,26 +441,29 @@ function EquivTab() {
         <div className={styles.glassGrid}>
           {KOREAN_GLASS_PRESETS.filter(g => g.abv !== null).map(g => (
             <button key={g.id}
+              type="button"
+              aria-pressed={glassId === g.id}
+              aria-label={`기준 술 ${g.name} ${g.ml}ml ${g.abv}% 선택`}
               className={`${styles.glassCard} ${glassId === g.id ? styles.glassCardActive : ''}`}
               onClick={() => setGlassId(g.id)}>
-              <span className={styles.glassIcon}>{g.icon}</span>
+              <span className={styles.glassIcon} aria-hidden="true">{g.icon}</span>
               <span className={styles.glassName}>{g.name}</span>
               <span className={styles.glassMeta}>{g.ml}ml · {g.abv}%</span>
             </button>
           ))}
         </div>
         <div className={styles.qtyRow}>
-          <span className={styles.qtyLabel}>갯수</span>
-          <div className={styles.qtyControls}>
-            <button className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
-            <span className={styles.qtyValue}>{qty}</span>
-            <button className={styles.qtyBtn} onClick={() => setQty(Math.min(50, qty + 1))}>+</button>
+          <span className={styles.qtyLabel} id="equiv-qty-label">갯수</span>
+          <div className={styles.qtyControls} role="group" aria-labelledby="equiv-qty-label">
+            <button type="button" aria-label="갯수 줄이기" className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+            <span className={styles.qtyValue} aria-live="polite">{qty}</span>
+            <button type="button" aria-label="갯수 늘리기" className={styles.qtyBtn} onClick={() => setQty(Math.min(50, qty + 1))}>+</button>
           </div>
         </div>
       </div>
 
       {/* 결과 히어로 */}
-      <div className={styles.resultCard}>
+      <div className={styles.resultCard} aria-live="polite">
         <div className={styles.heroBlock} style={{ marginBottom: 14 }}>
           <div className={styles.heroLabel}>{glass.icon} {glass.name} {qty}잔</div>
           <div className={styles.heroNum}>{calc.alcoholG}<span className={styles.heroUnit}>g</span></div>
@@ -487,7 +502,7 @@ function EquivTab() {
 
       {/* 위험도 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>한국 보건복지부 1일 권장 대비</label>
+        <label className={styles.cardLabel}>적정음주 참고 기준 대비 (1잔 8g 환산)</label>
         <div className={styles.sexToggle} style={{ marginBottom: 12 }}>
           <button className={`${styles.sexBtn} ${sex === 'male' ? styles.sexBtnActive : ''}`}
             onClick={() => setSex('male')}>남성 (32g/일)</button>
@@ -503,12 +518,12 @@ function EquivTab() {
             <div className={styles.riskFill} style={{ width: `${Math.min(100, risk.pct)}%`, background: risk.color }} />
           </div>
           <p className={styles.riskHint}>
-            오늘 마신 양이 한국 보건복지부 1일 저위험 음주 기준 ({sex === 'male' ? '남성 4잔(32g)' : '여성 2잔(16g)'})의 {risk.pct}%에 해당.
+            보건복지부 적정음주 <strong>참고 기준</strong>({sex === 'male' ? '남 하루 4잔' : '여 하루 2잔'}, 표준잔 8g 환산 {sex === 'male' ? '32g' : '16g'})의 {risk.pct}%. 기준 이내라도 안전을 뜻하지 않습니다 — WHO: 안전한 음주량은 없음.
           </p>
         </div>
         {risk.level === 'high' || risk.level === 'very-high' ? (
           <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#EA580C', lineHeight: 1.7 }}>
-            ⚠️ 이 정도 마셨다면: 절대 운전 금지 · 충분한 수분 · 다음날 운전도 자제(혈중알코올 도구 확인) · 카카오 T 대리 1577-1577 / 티맵 대리 1644-3030
+            ⚠️ 이 정도 마셨다면: 절대 운전 금지 · 충분한 수분 · 다음날 운전도 자제(혈중알코올 도구 확인) · 대리운전 앱(카카오 T·티맵)·대중교통 이용
           </p>
         ) : null}
       </div>
@@ -516,8 +531,8 @@ function EquivTab() {
       {/* 혈중알코올 도구 연결 */}
       <Link href="/tools/health/blood-alcohol" className={styles.linkBanner}>
         <div>
-          <div className={styles.linkBannerText}>🚗 음주 후 운전 가능 시각 계산</div>
-          <div className={styles.linkBannerSub}>혈중알코올(BAC) 추정 도구로 이동 →</div>
+          <div className={styles.linkBannerText}>🚗 음주 후 혈중알코올(BAC) 참고 추정</div>
+          <div className={styles.linkBannerSub}>BAC 추정 도구로 이동 · 운전 가능 판단엔 사용 불가 →</div>
         </div>
         <span className={styles.linkBannerArrow}>→</span>
       </Link>
@@ -576,28 +591,29 @@ function PartyTab() {
             <div key={d.id} style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
               <select
                 value={d.presetId}
+                aria-label="마신 술 종류 선택"
                 onChange={e => updateDrink(d.id, 'presetId', e.target.value)}
                 style={{
-                  flex: 1, background: 'var(--bg3)', color: 'var(--text)',
+                  flex: 1, minWidth: 0, background: 'var(--bg3)', color: 'var(--text)',
                   border: '1px solid var(--border)', borderRadius: 8,
-                  padding: '8px 10px', fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
+                  padding: '8px 10px', fontSize: 16, fontFamily: 'Noto Sans KR, sans-serif',
                 }}>
                 {KOREAN_GLASS_PRESETS.filter(p => p.abv !== null).map(p => (
                   <option key={p.id} value={p.id}>{p.icon} {p.name} ({p.ml}ml, {p.abv}%)</option>
                 ))}
               </select>
-              <div className={styles.qtyControls}>
-                <button className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.max(1, d.qty - 1))}>−</button>
-                <span className={styles.qtyValue}>{d.qty}</span>
-                <button className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.min(50, d.qty + 1))}>+</button>
+              <div className={styles.qtyControls} role="group" aria-label="갯수">
+                <button type="button" aria-label="갯수 줄이기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.max(1, d.qty - 1))}>−</button>
+                <span className={styles.qtyValue} aria-live="polite">{d.qty}</span>
+                <button type="button" aria-label="갯수 늘리기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.min(50, d.qty + 1))}>+</button>
               </div>
               {drinks.length > 1 && (
-                <button className={styles.removeBtn} onClick={() => removeDrink(d.id)}>×</button>
+                <button type="button" aria-label="이 술 삭제" className={styles.removeBtn} onClick={() => removeDrink(d.id)}>×</button>
               )}
             </div>
           ))}
         </div>
-        <button className={styles.addBtn} style={{ marginTop: 10 }} onClick={addDrink}>+ 술 추가</button>
+        <button type="button" className={styles.addBtn} style={{ marginTop: 10 }} onClick={addDrink}>+ 술 추가</button>
       </div>
 
       {/* 인원·음주자 */}
@@ -605,19 +621,19 @@ function PartyTab() {
         <label className={styles.cardLabel}>인원 설정</label>
         <div className={styles.partyRow}>
           <div className={styles.partyNumLabel}>
-            <span>총 인원</span>
-            <div className={styles.qtyControls}>
-              <button className={styles.qtyBtn} onClick={() => { const v = Math.max(1, people - 1); setPeople(v); if (drinkers > v) setDrinkers(v) }}>−</button>
-              <span className={styles.qtyValue}>{people}</span>
-              <button className={styles.qtyBtn} onClick={() => setPeople(Math.min(30, people + 1))}>+</button>
+            <span id="party-total-label">총 인원</span>
+            <div className={styles.qtyControls} role="group" aria-labelledby="party-total-label">
+              <button type="button" aria-label="총 인원 줄이기" className={styles.qtyBtn} onClick={() => { const v = Math.max(1, people - 1); setPeople(v); if (drinkers > v) setDrinkers(v) }}>−</button>
+              <span className={styles.qtyValue} aria-live="polite">{people}</span>
+              <button type="button" aria-label="총 인원 늘리기" className={styles.qtyBtn} onClick={() => setPeople(Math.min(30, people + 1))}>+</button>
             </div>
           </div>
           <div className={styles.partyNumLabel}>
-            <span>음주자만 (비음주자 제외)</span>
-            <div className={styles.qtyControls}>
-              <button className={styles.qtyBtn} onClick={() => setDrinkers(Math.max(1, drinkers - 1))}>−</button>
-              <span className={styles.qtyValue}>{drinkers}</span>
-              <button className={styles.qtyBtn} onClick={() => setDrinkers(Math.min(people, drinkers + 1))}>+</button>
+            <span id="party-drinkers-label">음주자만 (비음주자 제외)</span>
+            <div className={styles.qtyControls} role="group" aria-labelledby="party-drinkers-label">
+              <button type="button" aria-label="음주자 수 줄이기" className={styles.qtyBtn} onClick={() => setDrinkers(Math.max(1, drinkers - 1))}>−</button>
+              <span className={styles.qtyValue} aria-live="polite">{drinkers}</span>
+              <button type="button" aria-label="음주자 수 늘리기" className={styles.qtyBtn} onClick={() => setDrinkers(Math.min(people, drinkers + 1))}>+</button>
             </div>
           </div>
         </div>
@@ -626,7 +642,7 @@ function PartyTab() {
       {/* 결과 */}
       {totals.rows.length > 0 ? (
         <>
-          <div className={styles.resultCard}>
+          <div className={styles.resultCard} aria-live="polite">
             <div className={styles.heroBlock} style={{ marginBottom: 14 }}>
               <div className={styles.heroLabel}>음주자 1인당 알코올</div>
               <div className={styles.heroNum}>{perPerson.toFixed(1)}<span className={styles.heroUnit}>g</span></div>
@@ -661,10 +677,10 @@ function PartyTab() {
           {/* 위험도 */}
           <div className={styles.card}>
             <label className={styles.cardLabel}>1인당 음주량 위험도</label>
-            <div className={styles.sexToggle} style={{ marginBottom: 12 }}>
-              <button className={`${styles.sexBtn} ${sex === 'male' ? styles.sexBtnActive : ''}`}
-                onClick={() => setSex('male')}>남성 (32g/일)</button>
-              <button className={`${styles.sexBtn} ${sex === 'female' ? styles.sexBtnActive : ''}`}
+            <div className={styles.sexToggle} style={{ marginBottom: 12 }} role="group" aria-label="성별 (1일 권장 기준)">
+              <button type="button" aria-pressed={sex === 'male'} className={`${styles.sexBtn} ${sex === 'male' ? styles.sexBtnActive : ''}`}
+                onClick={() => setSex('male')}>남성 (참고 32g)</button>
+              <button type="button" aria-pressed={sex === 'female'} className={`${styles.sexBtn} ${sex === 'female' ? styles.sexBtnActive : ''}`}
                 onClick={() => setSex('female')}>여성 (16g/일)</button>
             </div>
             <div className={styles.riskCard}>
@@ -676,12 +692,12 @@ function PartyTab() {
                 <div className={styles.riskFill} style={{ width: `${Math.min(100, risk.pct)}%`, background: risk.color }} />
               </div>
               <p className={styles.riskHint}>
-                1인당 {perPerson.toFixed(1)}g = {sex === 'male' ? '남성' : '여성'} 1일 저위험 음주 기준의 {risk.pct}%.
+                1인당 {perPerson.toFixed(1)}g = {sex === 'male' ? '남성' : '여성'} 적정음주 참고 기준({sex === 'male' ? '32g' : '16g'})의 {risk.pct}%. 기준 이내라도 안전을 보장하지 않습니다(WHO).
               </p>
             </div>
             {(risk.level === 'high' || risk.level === 'very-high') && (
               <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#DC2626', lineHeight: 1.7 }}>
-                🔴 위험 수준 음주: 절대 운전 X · 다음날 출근 운전도 단속 가능(BAC 잔류) · 일주일 이상 간격 권장 · 카카오 T 대리 1577-1577 / 알코올중독상담 1899-0975
+                🔴 위험 수준 음주: 절대 운전 X · 다음날 출근 운전도 단속 가능(BAC 잔류) · 일주일 이상 간격 권장 · 대리운전 앱·대중교통 이용 · 상담 보건복지상담센터 129
               </p>
             )}
           </div>
@@ -689,8 +705,8 @@ function PartyTab() {
           {/* 혈중알코올 연결 */}
           <Link href="/tools/health/blood-alcohol" className={styles.linkBanner}>
             <div>
-              <div className={styles.linkBannerText}>🚗 1인당 BAC 추정·운전 가능 시각</div>
-              <div className={styles.linkBannerSub}>혈중알코올 도구로 이동 →</div>
+              <div className={styles.linkBannerText}>🚗 1인당 혈중알코올(BAC) 참고 추정</div>
+              <div className={styles.linkBannerSub}>혈중알코올 도구로 이동 · 운전 판단엔 사용 불가 →</div>
             </div>
             <span className={styles.linkBannerArrow}>→</span>
           </Link>
@@ -715,12 +731,15 @@ export default function AlcoholClient() {
   return (
     <div className={styles.wrap}>
       <Disclaimer variant="safety">
-        본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 한국알코올중독상담센터 <strong>1899-0975</strong>, 정신건강 위기상담 <strong>1577-0199</strong>, 카카오 T 대리 <strong>1577-1577</strong>.
+        본 도구는 음주를 권장하지 않으며, 본인 음주량 인지·관리 보조용입니다. 임산부·수유 중·미성년자는 절대 음주 금지. 약물 복용 중 음주는 의사 상담 필수. 음주 후 운전 절대 금지 — <strong>대리운전 앱(카카오 T·티맵)·대중교통</strong>을 이용하세요. WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다.&rdquo; 도움이 필요하면 보건복지상담센터 <strong>129</strong>, 정신건강 위기상담 <strong>1577-0199</strong>.
       </Disclaimer>
 
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="알코올 계산 모드">
         {TABS.map(t => (
           <button key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
+            type="button"
             className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -741,7 +760,7 @@ export default function AlcoholClient() {
             <label className={styles.fieldLabel}>알코올 양</label>
             <div className={styles.inputRow}>
               <input className={styles.numInput} type="number" inputMode="decimal"
-                placeholder="19.2" value={convAlcG} onChange={e => setConvAlcG(e.target.value)} />
+                placeholder="19.2" value={convAlcG} aria-label="변환할 알코올 양 (g)" onChange={e => setConvAlcG(e.target.value)} />
               <span className={styles.unit}>g</span>
             </div>
           </div>
@@ -750,6 +769,8 @@ export default function AlcoholClient() {
             <div className={styles.sliderRow}>
               <input type="range" min="14" max="25" step="0.5" value={convSojuAbv}
                 className={styles.slider}
+                aria-label="본인 소주 도수"
+                aria-valuetext={`${convSojuAbv}%`}
                 onChange={e => setConvSojuAbv(parseFloat(e.target.value))} />
               <span className={styles.sliderValue}>{convSojuAbv}%</span>
             </div>
@@ -788,7 +809,7 @@ export default function AlcoholClient() {
               </tbody>
             </table>
             <p className={styles.stdNote} style={{ marginTop: 8 }}>
-              ※ 한국 소주 도수: 진로 이즈백 16% · 처음처럼 16.5~16.9% · 진로 17.5% · 한라산 25%. 라벨 확인 후 슬라이더 조정.
+              ※ 한국 소주 도수(2025.6 기준·라벨 확인): 진로·참이슬 후레쉬 16% · 좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 25%. 저도주화로 자주 바뀌니 라벨 확인 후 슬라이더 조정.
             </p>
           </div>
         )}

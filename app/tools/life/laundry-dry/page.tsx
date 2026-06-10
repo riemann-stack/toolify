@@ -23,7 +23,7 @@ const FAQ_LD = [
               { q: '빨래건조지수란 무엇인가요?',
                 a: '기상청에서 제공하는 생활기상지수로, 온도·습도·풍속·일사량을 종합해 빨래 건조에 얼마나 적합한지 5단계(매우 나쁨~매우 좋음)로 나타냅니다. 본 계산기는 이와 유사한 방식으로 각 조건을 종합해 예상 건조 시간을 계산합니다.' },
               { q: '보유 장비별 가장 빠른 건조 조합은?',
-                a: '본 도구의 [⚡ 최단 조합 추천] 탭 활용. 일반적 추천 (장마철):<br/>• <strong>1순위:</strong> 제습기 + 서큘레이터 + 추가 탈수 (-50%)<br/>• 2순위: 제습기 + 선풍기 (-45%)<br/>• 3순위: 에어컨 제습 + 선풍기 (-50%, 전기료 ↑)<br/>• 가장 저렴: 서큘레이터만 (-40%, 거의 무료)<br/>봄·가을은 서큘레이터 + 추가 탈수만으로 충분, 겨울은 난방 + 선풍기 권장.' },
+                a: '본 도구의 [⚡ 최단 조합 추천] 탭에서 보유 장비별 모든 조합을 자동 계산합니다. <strong>단축률은 습도가 높을수록 제습 효과가 커져 환경에 따라 달라집니다.</strong> 장마철(습도 90%) 예시:<br/>• <strong>1순위:</strong> 제습기 + 서큘레이터 + 추가 탈수 (약 -67%)<br/>• 제습기 + 서큘레이터 (약 -60%)<br/>• 제습기가 없으면 서큘레이터 + 추가 탈수 (약 -51%, 거의 무료)<br/>• 가장 저렴: 서큘레이터만 (약 -40%)<br/>※ 에어컨 제습도 강력(-60%대)하나 전력(800W)이 큽니다. 습도가 낮은 봄·가을엔 제습 효과가 작아 서큘레이터·추가 탈수가 더 효율적, 겨울은 난방을 권장합니다. 탭 결과가 가장 정확합니다.' },
               { q: '빨래 건조에 전기료 얼마나 드나요?',
                 a: '한국 평균 5시간 사용 기준 (2026, 2단계 200원/kWh):<br/>• 선풍기: <strong>약 50원</strong><br/>• 서큘레이터: 약 30원 (★ 가장 효율적)<br/>• 제습기: 약 200원 (장마철 필수)<br/>• 에어컨 제습: 약 800원 (전기료 ↑)<br/>• 난방·라디에이터: 약 1,500원<br/>가장 저렴한 옵션은 서큘레이터만 사용. 누진제 3단계(400kWh+)면 표시 금액 ×약 1.5배.' },
               { q: '욕실에서 빨래 건조해도 되나요?',
@@ -76,7 +76,7 @@ export default function LaundryDryPage() {
             소재별·의류별 평균 건조 시간
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            기준 조건: 실외, 온도 20°C, 습도 60%, 바람 약함, 직사광
+            기준 조건(계산기 기본값): 베란다·간접광, 온도 18°C, 습도 60%, 바람 약함, 탈수·간격 보통. 조건을 바꾸면 위 계산기가 더 정밀하게 산출합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
@@ -89,13 +89,13 @@ export default function LaundryDryPage() {
               </thead>
               <tbody>
                 {[
-                  { item: '티셔츠',   mat: '면',        surf: '1~1.5시간',  full: '2~3시간' },
-                  { item: '티셔츠',   mat: '합성섬유',   surf: '0.5~1시간',  full: '1~1.5시간' },
-                  { item: '청바지',   mat: '데님',       surf: '3~4시간',    full: '5~7시간' },
-                  { item: '수건',     mat: '면',        surf: '1.5~2시간',  full: '3~4시간' },
-                  { item: '후드티',   mat: '면 혼방',    surf: '2.5~3시간',  full: '4~6시간' },
-                  { item: '이불커버', mat: '면',        surf: '3~4시간',    full: '6~8시간' },
-                  { item: '양말',     mat: '합성혼방',   surf: '30분',       full: '1~1.5시간' },
+                  { item: '티셔츠',   mat: '면',        surf: '1~1.5시간',  full: '2~2.5시간' },
+                  { item: '티셔츠',   mat: '합성섬유',   surf: '50분~1시간', full: '1~1.5시간' },
+                  { item: '청바지',   mat: '데님',       surf: '4~5시간',    full: '7~9시간' },
+                  { item: '수건',     mat: '면',        surf: '1.5~2시간',  full: '3~3.5시간' },
+                  { item: '후드티',   mat: '면 혼방',    surf: '2.5~3시간',  full: '4~5시간' },
+                  { item: '이불커버', mat: '면',        surf: '4~4.5시간',  full: '7~8시간' },
+                  { item: '양말',     mat: '합성혼방',   surf: '40~50분',    full: '1~1.5시간' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.item}</td>
@@ -121,17 +121,17 @@ export default function LaundryDryPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['환경', '여름 (28°C, 70%)', '봄·가을 (18°C, 55%)', '겨울 (5°C, 60%)'].map((h, i) => (
+                  {['환경', '여름 (28°C, 80%)', '봄·가을 (18°C, 55%)', '겨울 (5°C, 60%)'].map((h, i) => (
                     <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { env: '실외 직사광',   summer: '1.5~2시간',   spring: '2.5~3시간',   winter: '4~6시간' },
-                  { env: '베란다 간접광', summer: '2~3시간',     spring: '3~4시간',     winter: '6~8시간' },
-                  { env: '실내 환기',     summer: '3~4시간',     spring: '4~6시간',     winter: '8~12시간' },
-                  { env: '실내 밀폐',     summer: '5~7시간',     spring: '8~12시간',    winter: '12시간 이상' },
+                  { env: '실외 직사광',   summer: '1.5~2시간',   spring: '1~1.5시간',   winter: '1.5~2.5시간' },
+                  { env: '베란다 간접광', summer: '2.5~3시간',   spring: '1.5~2.5시간', winter: '2.5~3.5시간' },
+                  { env: '실내 환기',     summer: '4~5시간',     spring: '3~4시간',     winter: '4.5~5.5시간' },
+                  { env: '실내 밀폐',     summer: '5.5~6.5시간', spring: '4~5시간',     winter: '6~7시간' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.env}</td>
@@ -244,7 +244,7 @@ export default function LaundryDryPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 한국 평균 200원/kWh 기준. 같은 카테고리(예: 선풍기 + 서큘레이터) 동시 사용 시 효과가 큰 쪽만 적용됩니다.
+            * 한국 평균 200원/kWh 기준. 같은 카테고리(예: 선풍기 + 서큘레이터) 동시 사용 시 효과가 큰 쪽만 적용됩니다. 제습기·에어컨·난방의 실제 시간 단축률은 <strong style={{ color: 'var(--text)' }}>현재 습도·온도에 따라 달라집니다</strong>(고습도일수록 제습 효과 ↑) — 위 [최단 조합 추천] 탭이 환경별로 자동 계산합니다.
           </p>
         </div>
 
@@ -341,7 +341,7 @@ export default function LaundryDryPage() {
             {[
               { href: '/tools/life/pomodoro',    icon: '🍅', name: '뽀모도로 타이머',  desc: '건조 시간 동안 집중 작업' },
               { href: '/tools/date/dday',        icon: '📅', name: 'D-Day 계산기', desc: '두 날짜 사이·시간 단위 기간' },
-              { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',       desc: '°C ↔ °F ↔ K 즉시 변환' },
+              { href: '/tools/unit/converter',   icon: '📐', name: '단위 변환기',       desc: '온도·길이·무게 등 14종 통합 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

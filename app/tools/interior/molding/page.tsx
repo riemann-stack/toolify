@@ -281,7 +281,7 @@ export default function MoldingPage() {
               { href: '/tools/interior/paint',         icon: '🎨', name: '페인트 계산기',       desc: '벽·천장 페인트 양' },
               { href: '/tools/interior/flooring',      icon: '🪵', name: '바닥재 계산기',       desc: '마루·장판·데코타일 박스 수' },
               { href: '/tools/interior/curtain-blind', icon: '🪟', name: '커튼·블라인드 사이즈',       desc: '창문 사이즈로 추천 사이즈' },
-              { href: '/tools/unit/length',            icon: '📏', name: '길이 변환기',                desc: 'cm·m·inch·ft 변환' },
+              { href: '/tools/unit/converter',         icon: '🔄', name: '단위 변환기',                desc: '길이·면적·무게 등 14종 통합 변환' },
             ].map((t, i) => (
               <Link
                 key={i}

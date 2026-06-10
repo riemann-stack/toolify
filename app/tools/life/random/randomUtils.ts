@@ -83,66 +83,69 @@ export function divideIntoTeams(members: string[], opts: TeamDivideOptions): str
   }
   teamCount = Math.max(1, Math.min(teamCount ?? 2, members.length))
 
-  const teams: string[][] = Array.from({ length: teamCount }, () => [])
-  const remaining = new Set(members)
+  // 인덱스 기반 — 같은 이름이 여러 명이어도 누락되지 않음 (Set 사용 시 중복 이름이 1명으로 합쳐졌음)
+  const teamsIdx: number[][] = Array.from({ length: teamCount }, () => [])
+  const placed = new Array(members.length).fill(false)
+  const takeByName = (name: string): number => {
+    for (let i = 0; i < members.length; i++) if (!placed[i] && members[i] === name) return i
+    return -1
+  }
 
   // 1) 리더 우선 배치
   if (opts.leaders) {
     for (let i = 0; i < Math.min(opts.leaders.length, teamCount); i++) {
-      const leader = opts.leaders[i]
-      if (remaining.has(leader)) {
-        teams[i].push(leader)
-        remaining.delete(leader)
-      }
+      const li = takeByName(opts.leaders[i])
+      if (li >= 0) { teamsIdx[i].push(li); placed[li] = true }
     }
   }
 
   // 2) 함께 묶을 그룹 — 가장 작은 팀에 통째로 추가
   if (opts.keepTogether) {
     for (const group of opts.keepTogether) {
-      const valid = group.filter(m => remaining.has(m))
-      if (valid.length === 0) continue
-      // 인원 가장 적은 팀 찾기
+      const idxs: number[] = []
+      for (const name of group) { const gi = takeByName(name); if (gi >= 0) { idxs.push(gi); placed[gi] = true } }
+      if (idxs.length === 0) continue
       let minIdx = 0
-      for (let k = 1; k < teams.length; k++) {
-        if (teams[k].length < teams[minIdx].length) minIdx = k
+      for (let k = 1; k < teamsIdx.length; k++) {
+        if (teamsIdx[k].length < teamsIdx[minIdx].length) minIdx = k
       }
-      teams[minIdx].push(...valid)
-      valid.forEach(m => remaining.delete(m))
+      teamsIdx[minIdx].push(...idxs)
     }
   }
 
   // 3) 나머지 셔플 후 균등 배치 (떨어뜨릴 그룹 고려)
-  const pool = shuffleArray([...remaining])
+  const remainingIdx: number[] = []
+  for (let i = 0; i < members.length; i++) if (!placed[i]) remainingIdx.push(i)
+  const pool = shuffleArray(remainingIdx)
   const findApartGroup = (m: string) => opts.keepApart?.find(g => g.includes(m)) ?? null
 
-  // 가장 작은 팀부터 채우기
-  for (const member of pool) {
+  for (const mi of pool) {
+    const member = members[mi]
     let bestIdx = 0
     let bestSize = Infinity
     const apartGroup = findApartGroup(member)
 
-    for (let k = 0; k < teams.length; k++) {
+    for (let k = 0; k < teamsIdx.length; k++) {
       // 떨어뜨릴 그룹 동료가 있는 팀은 회피
-      if (apartGroup && teams[k].some(m => apartGroup.includes(m) && m !== member)) continue
+      if (apartGroup && teamsIdx[k].some(j => apartGroup.includes(members[j]) && j !== mi)) continue
       // teamSize 제한
-      if (opts.teamSize && teams[k].length >= opts.teamSize) continue
-      if (teams[k].length < bestSize) {
-        bestSize = teams[k].length
+      if (opts.teamSize && teamsIdx[k].length >= opts.teamSize) continue
+      if (teamsIdx[k].length < bestSize) {
+        bestSize = teamsIdx[k].length
         bestIdx = k
       }
     }
     // 모두 회피 불가 시 가장 작은 팀에 강제 배치
     if (bestSize === Infinity) {
       bestIdx = 0
-      for (let k = 1; k < teams.length; k++) {
-        if (teams[k].length < teams[bestIdx].length) bestIdx = k
+      for (let k = 1; k < teamsIdx.length; k++) {
+        if (teamsIdx[k].length < teamsIdx[bestIdx].length) bestIdx = k
       }
     }
-    teams[bestIdx].push(member)
+    teamsIdx[bestIdx].push(mi)
   }
 
-  return teams
+  return teamsIdx.map(t => t.map(i => members[i]))
 }
 
 /* ─── 발표 순서·자리 배치 ─── */
@@ -163,11 +166,13 @@ export function arrangeOrder(names: string[], opts: OrderOptions = {}): string[]
   const total = filtered.length
   const result: (string | null)[] = Array(total).fill(null)
 
-  // 고정 위치 먼저 채움
+  // 고정 위치 먼저 채움 — 같은 사람을 두 위치(1번·마지막)에 동시에 고정하면 한 번만 적용(중복 배치 방지)
+  const placedFixed = new Set<string>()
   for (const f of fixed) {
     if (!filtered.includes(f.name)) continue
+    if (placedFixed.has(f.name)) continue
     const idx = f.position === 'last' ? total - 1 : Math.max(0, Math.min(total - 1, f.position - 1))
-    if (result[idx] === null) result[idx] = f.name
+    if (result[idx] === null) { result[idx] = f.name; placedFixed.add(f.name) }
   }
 
   // 빈 자리에 free를 순서대로
@@ -282,17 +287,17 @@ export type FairnessRow = {
 
 export function simulateFairness(items: WeightedItem[], trials: number): FairnessRow[] {
   const totalWeight = items.reduce((s, x) => s + Math.max(0, x.weight), 0)
-  const counts: Record<string, number> = {}
-  items.forEach(it => { counts[it.name] = 0 })
+  // 이름이 아니라 인덱스로 카운트 — 같은 이름이 둘 이상이어도 각각 따로 집계됨
+  const counts: number[] = new Array(items.length).fill(0)
 
   for (let i = 0; i < trials; i++) {
     const idx = pickWeightedIndex(items)
-    counts[items[idx].name]++
+    counts[idx]++
   }
 
-  return items.map(it => {
+  return items.map((it, i) => {
     const expected = (it.weight / totalWeight) * trials
-    const actual = counts[it.name]
+    const actual = counts[i]
     const actualPct = (actual / trials) * 100
     const expectedPct = (it.weight / totalWeight) * 100
     const deviation = expected > 0 ? ((actual - expected) / expected) * 100 : 0
@@ -312,15 +317,21 @@ export function simulateFairness(items: WeightedItem[], trials: number): Fairnes
 export function calcRouletteAngle(
   items: WeightedItem[],
   selectedIndex: number,
+  currentRotation = 0,
   baseRotations = 5,
 ): number {
   const total = items.reduce((s, x) => s + Math.max(0, x.weight), 0)
-  if (total <= 0) return 0
+  if (total <= 0) return currentRotation
   let cum = 0
   for (let i = 0; i < selectedIndex; i++) cum += (items[i].weight / total) * 360
   const itemMid = cum + ((items[selectedIndex].weight / total) * 360) / 2
-  // 12시 방향에 멈추도록: 360 - itemMid
-  return baseRotations * 360 + (360 - itemMid)
+  // 선택 항목이 12시 방향에 멈추도록 하는 목표 잔여각 (0~360)
+  const targetOffset = ((360 - itemMid) % 360 + 360) % 360
+  // 현재 회전각의 잔여각 → 목표까지 앞으로(시계방향) 돌려야 하는 추가각
+  const currentOffset = ((currentRotation % 360) + 360) % 360
+  const delta = (targetOffset - currentOffset + 360) % 360
+  // 누적 절대 회전각 반환 — 이전 위치와 무관하게 항상 선택 항목이 12시에 멈춤
+  return currentRotation + baseRotations * 360 + delta
 }
 
 /** SVG 부채꼴 path (룰렛 슬라이스) */

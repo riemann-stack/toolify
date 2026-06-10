@@ -1,6 +1,5 @@
 import LottoClient from './LottoClient'
 import Link from 'next/link'
-import Disclaimer from '@/components/Disclaimer'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
@@ -36,7 +35,7 @@ const FAQ_LD = [
               },
               {
                 q: '로또에 얼마까지 쓰는 것이 적절한가요?',
-                a: '한국도박문제예방치유원의 권장 — <strong>가처분 소득의 1% 이내</strong> (예: 월 200만원 → 월 2만원), "오락비"로 명확히 분류, 손실을 만회하려는 추가 구매 X, 가족·일·일상에 영향 없는 범위. 신호 점검: 정해진 예산을 자주 초과 / 손실 만회 위해 더 사기 / 끊기 어렵다고 느낌 → 즉시 <a href="tel:1336" style="color: var(--accent); font-weight: 600;">1336</a> 상담. 로또는 일확천금이 아닌 <strong>"재미"</strong>로 즐기시기 바랍니다.',
+                a: '건강한 구매를 위한 일반적인 예산 가이드(예시) — <strong>가처분 소득의 1% 안팎</strong> (예: 월 200만원이면 월 2만원 정도), "오락비"로 명확히 분류, 손실을 만회하려는 추가 구매 X, 가족·일·일상에 영향 없는 범위. 신호 점검: 정해진 예산을 자주 초과 / 손실 만회 위해 더 사기 / 끊기 어렵다고 느낌 → 즉시 <a href="tel:1336" style="color: var(--accent); font-weight: 600;">1336</a> 상담. 로또는 일확천금이 아닌 <strong>"재미"</strong>로 즐기시기 바랍니다.',
               },
               {
                 q: '저장된 번호는 어디에 보관되나요?',
@@ -54,13 +53,6 @@ export default function LottoPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         8가지 생성 모드 + 번호 통계 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>까지.
       </p>
-
-      {/* 통합 면책 — 사이트 전체 동일 디자인 (상단 배치) */}
-      <div style={{ marginBottom: '16px' }}>
-        <Disclaimer variant="safety">
-          본 도구는 <strong>로또 번호 생성·분석·시뮬레이션을 위한 재미·교육용 시뮬레이터</strong>입니다. 수학적으로 어떤 6개 번호 조합도 1등 확률은 1/8,145,060로 동일하며, 어떤 생성 모드·분석·필터도 당첨 확률에 영향을 주지 않습니다. 로또는 사행성 게임이므로 <strong>본인의 경제 능력 안에서만 구매</strong>하시기 바랍니다. 도박 의존 우려가 있다면 <strong>한국도박문제예방치유원 1336</strong>(24시간 무료) 또는 kcgp.or.kr에서 도움받으실 수 있습니다.
-        </Disclaimer>
-      </div>
 
       <LottoClient />
 
@@ -142,7 +134,7 @@ export default function LottoPage() {
             <li>· <strong style={{ color: 'var(--text)' }}>구간 분포</strong> — 5구간(1~10/11~20/.../41~45)별 개수</li>
             <li>· <strong style={{ color: 'var(--text)' }}>소수·3의 배수</strong> 개수</li>
             <li>· <strong style={{ color: 'var(--text)' }}>연속 번호</strong> 쌍·끝자리 겹침</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>번호 간 간격</strong> — 평균 7.5가 이론값</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>번호 간 간격</strong> — 인접 번호 차이의 이론 평균 ≈ 6.6 (= (max−min) 기댓값 ÷ 5)</li>
           </ul>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 10, padding: '11px 14px' }}>
             ⚠️ 통계 패턴은 <strong style={{ color: '#DC2626' }}>학습 목적</strong>입니다. 어떤 패턴도 다음 회차의 당첨 확률에 영향을 주지 않습니다.
@@ -163,7 +155,7 @@ export default function LottoPage() {
               { title: '단독 1등 가능성 ↑', desc: '일반인이 잘 안 고르는 조합 → 동시 당첨자 적음' },
               { title: '당첨금 분배 적음 ↑', desc: '1등이 5명일 때보다 1명일 때 수령액 5배' },
               { title: '심리적 만족', desc: '"제대로 무작위인 것 같다"는 자기만족' },
-              { title: '단순 패턴 회피', desc: '1,2,3,4,5,6은 절대 안 나오지만 같은 확률' },
+              { title: '단순 패턴 회피', desc: '1,2,3,4,5,6도 확률은 동일하지만 함께 고르는 사람이 많아 당첨 시 분배액 ↓' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.title}</p>
@@ -218,8 +210,8 @@ export default function LottoPage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>1등 (25억) 시 실수령</strong>:
-            {' '}3억까지 22% 세금 + 22억은 33% 세금 → 약 7.3억 세금 → <strong style={{ color: '#059669' }}>약 17.7억 실수령</strong>.
-            정확한 세금은 다른 소득 합산·신고 방식에 따라 달라지므로 <strong style={{ color: 'var(--text)' }}>1등 당첨 시 세무사 상담 필수</strong>.
+            {' '}3억까지 22%(약 0.66억) + 3억 초과분 22억에 33%(약 7.26억) → 약 <strong style={{ color: 'var(--text)' }}>7.9억 세금</strong> → <strong style={{ color: '#059669' }}>약 17.1억 실수령</strong>.
+            복권 당첨금은 <strong style={{ color: 'var(--text)' }}>기타소득으로 원천징수되어 분리과세</strong>되며, 다른 소득과 합산해 종합소득세로 신고하지 않습니다(무조건 분리과세). 세부 처리는 사안에 따라 다를 수 있으니 고액 당첨 시 <strong style={{ color: 'var(--text)' }}>세무사 상담을 권합니다</strong>.
           </p>
         </section>
 
@@ -246,12 +238,12 @@ export default function LottoPage() {
           <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>📞 도움이 필요하시면</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'Noto Sans KR, sans-serif' }}>
-              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#059669', fontWeight: 700 }}>1336</a> (24시간 무료, 익명)</li>
+              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#059669', fontWeight: 700 }}>1336</a> (365일 09~22시, 무료·익명)</li>
               <li>· 인터넷 상담: kcgp.or.kr</li>
               <li>· 단도박 모임 (GA): dandobakkorea.org</li>
             </ul>
             <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-              <strong style={{ color: 'var(--text)' }}>건강한 로또 즐기기</strong>: 가처분 소득의 1% 이내(예: 월 200만원 → 월 2만원), &quot;오락비&quot; 분류, 손실 인정, 일확천금 기대 X.
+              <strong style={{ color: 'var(--text)' }}>건강한 로또 즐기기</strong>: 예산은 미리 정하기(예시 — 가처분 소득의 1% 안팎, 월 200만원이면 월 2만원 정도), &quot;오락비&quot; 분류, 손실 인정, 일확천금 기대 X.
             </p>
           </div>
         </section>
@@ -305,7 +297,7 @@ export default function LottoPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>동행복권 공식</strong> — dhlottery.co.kr</li>
-            <li><strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong> — 1336 (24시간), kcgp.or.kr</li>
+            <li><strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong> — 1336 (365일 09~22시), kcgp.or.kr</li>
             <li><strong style={{ color: 'var(--text)' }}>단도박 모임 (GA Korea)</strong> — dandobakkorea.org</li>
             <li><strong style={{ color: 'var(--text)' }}>국세청</strong> — 기타소득세·지방소득세 (당첨금 세금)</li>
           </ul>

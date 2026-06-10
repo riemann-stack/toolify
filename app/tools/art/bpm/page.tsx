@@ -165,7 +165,7 @@ export default async function BpmPage({
               { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',       desc: '앨범·프로젝트 마감일 카운트다운' },
               { href: '/tools/art/color',       icon: '🎨', name: '색상 코드 변환기',   desc: 'DAW 커버아트·앨범 디자인 색상' },
               { href: '/tools/art/charcount',   icon: '🔡', name: '글자수 세기',         desc: '음악 플랫폼 설명·歌詞 글자수 확인' },
-              { href: '/tools/unit/length',     icon: '📏', name: '길이 변환기',         desc: '스튜디오 장비 케이블 길이 변환' },
+              { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',         desc: '길이·무게·시간 등 14종 통합 변환' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

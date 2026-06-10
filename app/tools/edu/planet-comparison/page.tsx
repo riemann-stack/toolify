@@ -328,12 +328,12 @@ export default function PlanetComparisonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/unit/area',        icon: '🏠', name: '평수 변환기',  desc: '아파트 면적 단위 변환' },
-              { href: '/tools/unit/time',        icon: '⏱️', name: '시간 단위 변환기',   desc: '초·분·시간·일·주·년 변환' },
-              { href: '/tools/unit/length',      icon: '📏', name: '길이 변환기',         desc: 'cm·m·inch·ft·mile 변환' },
-              { href: '/tools/unit/weight',      icon: '⚖️', name: '무게 변환기',         desc: 'kg·g·lb·oz 변환' },
-              { href: '/tools/unit/temperature', icon: '🌡️', name: '온도 변환기',         desc: '섭씨·화씨·켈빈 즉시 변환' },
-              { href: '/tools/edu',              icon: '🔬', name: '교육·학습 카테고리',  desc: '추가 교육 도구 더보기' },
+              { href: '/tools/unit/converter',      icon: '📐', name: '단위 변환기',         desc: '길이·무게·시간 등 14종 통합 변환' },
+              { href: '/tools/edu/cosmic-calendar', icon: '🌌', name: '코스믹 캘린더',       desc: '138억 년 우주 역사를 1년으로' },
+              { href: '/tools/edu/sound-speed',     icon: '🔊', name: '음속 계산기',         desc: '천둥·번개 거리·소리 도달 시간' },
+              { href: '/tools/date/age',            icon: '🎂', name: '만 나이 계산기',      desc: '법 개정 기준 만 나이' },
+              { href: '/tools/unit/area',           icon: '🏠', name: '평수 변환기',         desc: '아파트 면적 단위 변환' },
+              { href: '/tools/edu',                 icon: '🔬', name: '교육·학습 카테고리',  desc: '추가 교육 도구 더보기' },
             ].map((t, i) => (
               <Link
                 key={i}

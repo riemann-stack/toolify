@@ -75,11 +75,11 @@ const faqAnswer: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"디카페인 커피는 정말 카페인이 없나요?","a":"아니요, 약 5~15mg 정도 남습니다. EU 규정상 디카페인은 카페인 0.1% 이하인데, Tall 사이즈 기준 약 10mg 수준. 임산부나 매우 민감한 사람은 디카페인이라도 늦은 오후 이후엔 자제 권장." },
   { "q":"콜드브루가 아메리카노보다 카페인이 많은 이유는?","a":"오랜 추출 시간 + 더 많은 원두 사용 때문입니다. 차가운 물은 추출 효율이 낮아 12~24시간 우려내며, 그만큼 원두를 1.5~2배 사용. 결과적으로 Tall 기준 195mg ≈ 아메리카노 그란데(225mg)와 비슷한 수준. 「부드러운 맛 = 약함」 통념과 달리 카페인은 높음." },
-  { "q":"카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?","a":"유명한 2013년 Sleep Medicine 연구에서 취침 6시간 전 400mg 카페인도 수면을 1시간 단축시킨다고 밝혔습니다. 본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 20mg (안전). 하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다." },
+  { "q":"카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?","a":"유명한 2013년 Sleep Medicine 연구에서 취침 6시간 전 400mg 카페인도 수면을 1시간 단축시킨다고 밝혔습니다. 본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 43mg (가벼운 영향 가능 수준). 하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다." },
   { "q":"카페인 내성·금단이 진짜 있나요?","a":"둘 다 진짜입니다. 내성: 매일 같은 양 섭취 시 1~2주 내 효과 ↓. 「커피 마셔도 안 깬다」 호소. 금단: 갑자기 끊으면 12~24시간 후 두통·피로·집중력 ↓·짜증 (1~3일 지속). 해결: 2주마다 1~2일 「카페인 휴식일」 또는 양 점진적 감량." },
   { "q":"&ldquo;커피 낮잠(Coffee Nap)&rdquo;이 효과 있다는 게 진짜?","a":"네, 여러 연구로 확인됐습니다. 방법: 커피 200mg을 빠르게 마시고 즉시 20분 낮잠. 카페인 효과 발현이 약 20~30분 후라 낮잠 후 깰 때 카페인 효과 + 졸음 클리어 모두 작용. 30분 넘게 자면 깊은 수면 단계에 들어가 오히려 더 멍해집니다." },
-  { "q":"임산부 200mg은 어느 정도인가요?","a":"아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다. 주의: 임신 중에는 반감기가 10~15시간으로 매우 길어져 평소 양도 체내에 오래 남습니다. 본 도구 「반감기: 임신·수유 중」 선택 시 자동 반영. 차·콜라·초콜릿·일부 진통제(타이레놀 ER 등)에도 카페인 함유 — 합산 주의." },
-  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X ✅ 36시간 지난 항목은 자동 정리 (오늘+어제 누적까지만 필요) ⚠️ 시크릿 모드·다른 기기는 자동 동기화 X" }
+  { "q":"임산부 200mg은 어느 정도인가요?","a":"아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다. 주의: 임신 중에는 반감기가 10~15시간으로 매우 길어져 평소 양도 체내에 오래 남습니다(수유 중에는 출산 후 보통 수준으로 회복). 본 도구 「반감기: 임신 중」 선택 시 자동 반영됩니다. 차·콜라·초콜릿, 그리고 일부 복합 진통제·감기약(카페인 함유 제품)에도 카페인이 들어 있어 합산에 주의하세요." },
+  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. youtil 서버로는 전송하지 않습니다. 72시간이 지난 항목은 자동으로 정리됩니다(느린 반감기 12시간에서도 3일이면 잔존이 미미). 시크릿 모드나 다른 기기와는 자동 동기화되지 않습니다." }
 ]
 
 export default function CaffeinePage() {
@@ -104,7 +104,7 @@ export default function CaffeinePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>반감기(half-life)</strong>는 체내 카페인이 절반으로 줄어드는 데 걸리는 시간입니다.
             성인 평균 <strong style={{ color: 'var(--accent)' }}>약 5시간</strong> — 즉, 오후 2시에 아메리카노 150mg을 마시면
-            오후 7시 ≈ 75mg, 자정 ≈ 약 19mg이 남습니다.
+            오후 7시(5시간) ≈ 75mg, 자정(약 10시간) ≈ 약 38mg이 남습니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             카페인은 간의 <strong style={{ color: 'var(--text)' }}>CYP1A2 효소</strong>에 의해 분해됩니다.
@@ -164,7 +164,7 @@ export default function CaffeinePage() {
             {[
               { name: '🚬 흡연자', color: '#FFD93E', desc: '반감기 ≈ 3시간 — 니코틴이 CYP1A2 강력 활성화. 같은 양 마셔도 효과 짧음' },
               { name: '💊 경구 피임약', color: '#B885DA', desc: '반감기 ≈ 8~10시간 — 에스트로겐이 효소 억제. 잠 안 옴 호소 흔함' },
-              { name: '🤰 임신·수유 중', color: '#DC2626', desc: '반감기 ≈ 10~15시간 — 호르몬 변화로 매우 느림. 식약처 200mg 권장' },
+              { name: '🤰 임신 (후기)', color: '#DC2626', desc: '반감기 ≈ 10~15시간 — 호르몬 변화로 느림. 수유 중엔 출산 후 보통 수준으로 회복(LactMed). 섭취는 ACOG 200mg 미만 권장' },
               { name: '🧬 유전 fast/slow', color: '#0891B2', desc: 'CYP1A2 변이로 빠른/느린 대사자. 한국인 약 50%가 보통, 25%가 빠름' },
               { name: '👶 청소년·어린이', color: '#EA580C', desc: '반감기 ≈ 4시간이지만 체중 대비 영향 큼. WHO·식약처 권장량 낮음' },
               { name: '👴 고령자', color: '#059669', desc: '간 기능 ↓로 약간 느려질 수 있음. 야간 깊은 수면 영향 ↑' },
@@ -179,7 +179,7 @@ export default function CaffeinePage() {
 
         {/* 4. 일일 권장량 */}
         <section>
-          <h2 style={sectionTitle}>일일 카페인 권장량 (FDA·식약처)</h2>
+          <h2 style={sectionTitle}>일일 카페인 섭취 기준 (FDA·식약처)</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -201,7 +201,7 @@ export default function CaffeinePage() {
                   <td style={cell}>임산부·수유부</td>
                   <td style={cell}><strong style={{ color: '#EA580C' }}>200mg</strong></td>
                   <td style={cell}>Tall 약 1.3잔</td>
-                  <td style={cell}>식약처·ACOG</td>
+                  <td style={cell}>ACOG (보수적)</td>
                 </tr>
                 <tr>
                   <td style={cell}>청소년 (만 11~18)</td>
@@ -219,7 +219,11 @@ export default function CaffeinePage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⚠️ 권장량 초과 시: 불면·심박 ↑·불안·소화 불량·골밀도 영향(고용량 장기 시)·임신 시 저체중·유산 위험.
+            ※ 성인 400mg은 FDA가 &ldquo;권장량&rdquo;이 아니라 <strong style={{ color: 'var(--text)' }}>&ldquo;대부분 건강한 성인에게 부정적 영향과 일반적으로 연관되지 않는 양&rdquo;</strong>으로 안내하는 수치입니다.
+            임산부 기준은 기관마다 달라 — <strong style={{ color: 'var(--text)' }}>ACOG는 200mg 미만</strong>, <strong style={{ color: 'var(--text)' }}>식약처는 300mg 이하</strong>를 제시하고, 수유부는 <strong style={{ color: 'var(--text)' }}>CDC 기준 약 300mg 이하</strong>가 일반적으로 무난합니다. 본 도구는 보수적으로 200mg을 기본값으로 둡니다.
+          </p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ⚠️ 기준 초과 시: 불면·심박 ↑·불안·소화 불량·골밀도 영향(고용량 장기 시)·임신 시 저체중·유산 위험.
             한 번에 1,000mg+ 섭취는 급성 중독 (응급실 방문) 가능.
           </p>
         </section>
@@ -234,10 +238,10 @@ export default function CaffeinePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
               { range: '< 30mg', desc: '수면 영향 거의 없음', color: '#059669' },
-              { range: '30~100mg', desc: '입면 가능 · 깊은 수면 약간 ↓', color: '#0891B2' },
-              { range: '100~200mg', desc: '입면 지연 가능 · N3 수면 25% ↓', color: '#D97706' },
-              { range: '200~400mg', desc: '수면 질 큰 영향 · 다음날 피로', color: '#EA580C' },
-              { range: '> 400mg', desc: '심박 ↑·불면·불안', color: '#DC2626' },
+              { range: '30~50mg', desc: '가벼운 영향 가능', color: '#0891B2' },
+              { range: '50~100mg', desc: '입면 지연 가능 · 깊은 수면(N3) ↓', color: '#D97706' },
+              { range: '100~200mg', desc: '수면 질 큰 영향 · 다음날 피로', color: '#EA580C' },
+              { range: '≥ 200mg', desc: '깊은 수면 차단 수준 · 심박 ↑', color: '#DC2626' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'Inter, system-ui, sans-serif' }}>{b.range}</p>
@@ -247,7 +251,7 @@ export default function CaffeinePage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '14px', lineHeight: 1.8 }}>
             💡 본 도구의 <strong style={{ color: 'var(--text)' }}>「수면 영향 예측」</strong> 카드에서 목표 취침 시각의 잔존량을 즉시 확인하세요.
-            지금부터 추가로 마셔도 안전한 한도(30·50·100mg 기준)까지 역산해 줍니다.
+            취침 시 잔존을 30·50·100mg(내부 참고치) 이하로 두려면 지금부터 얼마나 더 마실 수 있는지도 역산해 줍니다 (일일 섭취 기준 잔여 한도 안에서).
           </p>
         </section>
 
@@ -278,7 +282,7 @@ export default function CaffeinePage() {
             <summary style={faqSummary}>Q3. 카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?</summary>
             <div style={faqAnswer}>
               유명한 2013년 Sleep Medicine 연구에서 <strong style={{ color: 'var(--text)' }}>취침 6시간 전 400mg 카페인도 수면을 1시간 단축</strong>시킨다고 밝혔습니다.
-              본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 20mg (안전).
+              본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 43mg (가벼운 영향 가능 수준).
               하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다.
             </div>
           </details>
@@ -310,8 +314,8 @@ export default function CaffeinePage() {
             <div style={faqAnswer}>
               아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다.
               주의: 임신 중에는 반감기가 <strong style={{ color: 'var(--text)' }}>10~15시간으로 매우 길어져</strong>
-              평소 양도 체내에 오래 남습니다. 본 도구 「반감기: 임신·수유 중」 선택 시 자동 반영.
-              차·콜라·초콜릿·일부 진통제(타이레놀 ER 등)에도 카페인 함유 — 합산 주의.
+              평소 양도 체내에 오래 남습니다 (수유 중에는 출산 후 보통 수준으로 회복).  본 도구 「반감기: 임신 중」 선택 시 자동 반영.
+              차·콜라·초콜릿, 그리고 일부 복합 진통제·감기약(카페인 함유 제품)에도 카페인이 들어 있어 합산에 주의하세요.
             </div>
           </details>
 
@@ -321,7 +325,7 @@ export default function CaffeinePage() {
               <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>✅ youtil 서버 전송 X</li>
-                <li>✅ 36시간 지난 항목은 자동 정리 (오늘+어제 누적까지만 필요)</li>
+                <li>✅ 72시간 지난 항목은 자동 정리 (느린 반감기 12h에서도 3일이면 잔존 미미)</li>
                 <li>⚠️ 시크릿 모드·다른 기기는 자동 동기화 X</li>
               </ul>
             </div>

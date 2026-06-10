@@ -78,7 +78,7 @@
 @media (max-width: 360px) { .itemList { grid-template-columns: 1fr; } }
 .itemList > .card { min-width: 0; }
 .itemHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.nameInput { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 14px; color: var(--text); outline: none; font-family: 'Noto Sans KR', sans-serif; transition: border-color 0.2s; }
+.nameInput { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 16px; color: var(--text); outline: none; font-family: 'Noto Sans KR', sans-serif; transition: border-color 0.2s; }
 .nameInput:focus { border-color: rgba(14,165,233,0.5); }
 .nameInput::placeholder { color: var(--muted); font-size: 13px; }
 .removeBtn { background: transparent; border: 1px solid var(--border); border-radius: 8px; width: 30px; height: 30px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; margin-left: 8px; }@media (hover: hover) {

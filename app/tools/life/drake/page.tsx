@@ -28,9 +28,9 @@ const FAQ_LD = [
               { q: '대필터(Great Filter)란 무엇인가요?',
                 a: '로빈 핸슨이 1998년 제안한 개념으로, 생명체가 우주를 정복할 수준으로 발전하는 경로에 거의 모든 문명을 멸종시키는 단계가 있다는 가설입니다. 대필터가 인류 앞에 있다면(핵전쟁·기후변화·AI 위험 등) 인류 문명의 미래가 어둡다는 의미가 됩니다.' },
               { q: '실제로 외계 신호를 받은 적 있나요?',
-                a: '1977년 &ldquo;와우! 신호(Wow! Signal)&rdquo;가 가장 유명한 사례입니다. 72초간 강력한 협대역 전파 신호가 감지됐지만 이후 재현되지 않았습니다. 2015년 HD 164922 항성계의 반복 신호도 주목받았으나, 현재까지 외계 기원으로 공식 확인된 신호는 없습니다.' },
+                a: '1977년 &ldquo;와우! 신호(Wow! Signal)&rdquo;가 가장 유명한 사례입니다. 72초간 강력한 협대역 전파 신호가 감지됐지만 이후 재현되지 않았습니다. 2016년 러시아 RATAN-600이 HD 164595(태양과 비슷한 별, 약 95광년) 방향에서 포착한 신호도 화제였으나 단발성이었고 후속 관측에서 재현되지 않았습니다. 현재까지 외계 기원으로 공식 확인된 신호는 없습니다.' },
               { q: '가장 가까운 외계 문명까지 거리는 어떻게 계산하나요?',
-                a: '우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 거리 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 약 259광년, N = 100만 → 약 55광년(인류 전파권 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.' },
+                a: '우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 126ly 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.' },
               { q: '인류 전파는 어디까지 도달했나요?',
                 a: '약 <strong>126광년</strong> (1900년 첫 라디오부터 2026년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.' },
               { q: 'N값에 따라 어떤 페르미 역설 가설이 유력한가요?',
@@ -48,13 +48,14 @@ export default async function DrakePage({
   const initial: {
     rStar?: number; fp?: number; ne?: number; fl?: number; fi?: number; fc?: number; L?: number
   } = {}
-  const rStar = parseNumParam(sp.r, 0.1, 100);      if (rStar !== undefined) initial.rStar = rStar
-  const fp    = parseNumParam(sp.fp, 0.001, 1);     if (fp    !== undefined) initial.fp    = fp
-  const ne    = parseNumParam(sp.ne, 0.01, 20);     if (ne    !== undefined) initial.ne    = ne
-  const fl    = parseNumParam(sp.fl, 1e-6, 1);      if (fl    !== undefined) initial.fl    = fl
-  const fi    = parseNumParam(sp.fi, 1e-6, 1);      if (fi    !== undefined) initial.fi    = fi
-  const fc    = parseNumParam(sp.fc, 1e-6, 1);      if (fc    !== undefined) initial.fc    = fc
-  const L     = parseNumParam(sp.l,  1, 1e12);      if (L     !== undefined) initial.L     = L
+  // 범위는 슬라이더 [min,max]와 일치 — 벗어난 URL 값은 무시하고 기본값 사용
+  const rStar = parseNumParam(sp.r, 1, 10);         if (rStar !== undefined) initial.rStar = rStar
+  const fp    = parseNumParam(sp.fp, 0.1, 1);       if (fp    !== undefined) initial.fp    = fp
+  const ne    = parseNumParam(sp.ne, 0.1, 5);       if (ne    !== undefined) initial.ne    = ne
+  const fl    = parseNumParam(sp.fl, 0.001, 1);     if (fl    !== undefined) initial.fl    = fl
+  const fi    = parseNumParam(sp.fi, 0.001, 1);     if (fi    !== undefined) initial.fi    = fi
+  const fc    = parseNumParam(sp.fc, 0.001, 1);     if (fc    !== undefined) initial.fc    = fc
+  const L     = parseNumParam(sp.l,  1, 100_000_000); if (L   !== undefined) initial.L     = L
 
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
@@ -149,9 +150,9 @@ export default async function DrakePage({
               </thead>
               <tbody>
                 {[
-                  { who: '칼 세이건 (낙관)',       n: '~100만 개',     color: '#059669', note: '생명 발생·진화 확률 높음' },
-                  { who: '드레이크 본인',          n: '~10,000 개',    color: 'var(--accent)', note: '중간 추정값' },
-                  { who: '현재 과학계 중앙값',     n: '수십~수백 개',   color: 'var(--accent)', note: '거주 가능 행성 발견 기반' },
+                  { who: '칼 세이건 (낙관, 1980년대)', n: '~100만 개',  color: '#059669', note: '생명 발생·진화 확률 높게 가정' },
+                  { who: '드레이크 본인 (1961)',    n: '~10,000 개',    color: 'var(--accent)', note: '그린뱅크 회의 추정' },
+                  { who: '본 도구 "현실론" 예시',    n: '수십~수백 개',   color: 'var(--accent)', note: '중간 가정 (공식 합의값 아님)' },
                   { who: '비관론 (레어 어스)',     n: '< 1 개',        color: '#EA580C', note: '지구 조건이 매우 특별함' },
                   { who: '페르미 역설 관점',       n: '수백만~수억',   color: '#0891B2', note: '계산상 많지만 신호 없음' },
                 ].map((row, i) => (
@@ -164,6 +165,9 @@ export default async function DrakePage({
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            ⚠️ 위 값은 가정에 따른 <strong style={{ color: 'var(--text)' }}>예시</strong>입니다. fl(생명 발생)·fi(지능 진화)·L(문명 수명)은 아직 알려진 바가 없어 <strong style={{ color: 'var(--text)' }}>공식적으로 합의된 추정치나 &lsquo;중앙값&rsquo;은 존재하지 않습니다</strong> (SETI Institute). 결과는 입력값에 따라 수십 자릿수까지 달라집니다.
+          </p>
         </div>
 
         {/* ── 4. 페르미 역설 ── */}
@@ -199,11 +203,11 @@ export default async function DrakePage({
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { title: '케플러 · TESS 망원경', desc: '외계행성 5,000개 이상 발견. 거주 가능 구역(골디락스 존) 후보 행성 수십 개 확인. fp 추정값을 크게 끌어올림.' },
-              { title: 'Breakthrough Listen',  desc: '2016년 시작된 10년·1억 달러 규모의 SETI 프로젝트. 가까운 별 100만 개와 100개 은하의 전파·광학 신호를 스캔 중.' },
+              { title: '케플러 · TESS 망원경', desc: '확인된 외계행성 약 6,000개 (NASA, 2025). 거주 가능 구역(골디락스 존) 후보 행성도 다수 확인되어 fp 추정값을 크게 끌어올림.' },
+              { title: 'Breakthrough Listen',  desc: '2015년 7월 출범한 10년·1억 달러 규모의 SETI 프로젝트(관측은 2016년부터). 가까운 별 100만 개와 100개 은하의 전파·광학 신호를 스캔.' },
               { title: '제임스 웹 우주망원경(JWST)', desc: '외계행성 대기 성분 분석 가능. 산소·메탄 등 생명 활동 지표(바이오시그니처)를 찾는 중.' },
-              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper(2024~)가 유로파의 생명 가능성을 탐사 중.' },
-              { title: '중국 톈옌(FAST) 전파망원경', desc: '세계 최대 단일 전파망원경. 2022년 후보 신호 포착 후 정밀 분석 중.' },
+              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper는 2024년 발사돼 목성으로 항해 중 — 2030년 유로파 도착·탐사 예정.' },
+              { title: '중국 톈옌(FAST) 전파망원경', desc: '세계 최대 단일 전파망원경. 2022년 보고된 후보 신호는 이후 전파 간섭(RFI)으로 외계 기원 가능성이 거의 배제됨.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '4px' }}>🔭 {item.title}</p>
@@ -211,6 +215,9 @@ export default async function DrakePage({
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.6 }}>
+            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute. 거리·문명 수는 본문 모델 가정에 따른 추정입니다. <strong style={{ color: 'var(--text)' }}>최종 검토: 2025-06.</strong>
+          </p>
         </div>
 
         {/* ── 6. 가장 가까운 외계 문명까지 거리 (NEW) ── */}
@@ -234,11 +241,11 @@ export default async function DrakePage({
               </thead>
               <tbody>
                 {[
-                  { n: '100',       avg: '약 2,200 광년', near: '약 1,210 광년', rt: '약 2,420년',  note: '현실론 — 인류 전파(126ly) 미도달' },
-                  { n: '1,000',     avg: '약 1,020 광년', near: '약 561 광년',   rt: '약 1,122년',  note: '균형론' },
-                  { n: '10,000',    avg: '약 470 광년',   near: '약 259 광년',   rt: '약 518년',     note: '드레이크 본인 추정' },
-                  { n: '100,000',   avg: '약 218 광년',   near: '약 120 광년',   rt: '약 240년',     note: '거의 인류 전파권 안' },
-                  { n: '1,000,000', avg: '약 100 광년',   near: '약 55 광년',    rt: '약 110년',     note: '낙관론(칼 세이건) — 전파권 안' },
+                  { n: '100',       avg: '약 4,282 광년', near: '약 2,355 광년', rt: '약 4,711년',  note: '인류 전파(126ly) 미도달' },
+                  { n: '1,000',     avg: '약 1,988 광년', near: '약 1,093 광년', rt: '약 2,187년',  note: '균형론 · 전파권 밖' },
+                  { n: '10,000',    avg: '약 923 광년',   near: '약 507 광년',   rt: '약 1,015년',  note: '드레이크 본인 추정' },
+                  { n: '100,000',   avg: '약 428 광년',   near: '약 236 광년',   rt: '약 471년',     note: '전파권 밖 (근접)' },
+                  { n: '1,000,000', avg: '약 199 광년',   near: '약 109 광년',   rt: '약 219년',     note: '낙관론(칼 세이건) — 전파권 안' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>N = {r.n}</td>
