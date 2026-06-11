@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -62,9 +62,9 @@ const FAQ_LD = [
 
 export default function RadiationPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ☢️ 방사선·전자파 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -87,7 +87,7 @@ export default function RadiationPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['관점', 'SI 단위', '구 단위', '의미'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 11.5 }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -99,15 +99,15 @@ export default function RadiationPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
             ⓘ 일상에서 가장 많이 쓰는 단위는 <strong style={{ color: 'var(--text)' }}>μSv·mSv</strong>입니다(인체 노출량). 식품 검사에서는 <strong style={{ color: 'var(--text)' }}>Bq/kg</strong>(킬로그램당 방사능). 방사선 치료에서는 <strong style={{ color: 'var(--text)' }}>Gy</strong>(흡수선량).
           </p>
         </section>
@@ -126,8 +126,8 @@ export default function RadiationPage() {
               { t: '☢️ 일반인 인공 한도',      d: '1 mSv/년 (자연 제외)', desc: 'ICRP·원안위 권고 — 의료 영상은 별도 적용', c: '#D97706' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 12.5, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-                <p style={{ fontSize: 16, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Inter, system-ui, sans-serif' }}>{g.d}</p>
+                <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
+                <p style={{ fontSize: 16, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.d}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.desc}</p>
               </div>
             ))}
@@ -155,11 +155,11 @@ export default function RadiationPage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, margin: '0 0 6px' }}>{g.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{g.desc}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{g.desc}</p>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
             ⓘ WHO·IARC 기준 휴대폰 RF는 발암성 등급 <strong style={{ color: 'var(--text)' }}>2B</strong>(가능성 있음, 커피·피클과 같은 등급), 이온화 방사선은 <strong style={{ color: 'var(--text)' }}>1</strong>(확실한 발암 물질). 절대적 위험도가 다릅니다.
           </p>
         </section>
@@ -198,7 +198,7 @@ export default function RadiationPage() {
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
-                  <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
                   <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
                 </div>
               </Link>

@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -83,7 +83,7 @@ export default function HolidayTablePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍱 명절 상차림 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -151,7 +151,7 @@ export default function HolidayTablePage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             💡 <strong style={{ color: 'var(--text)' }}>유교 표준안 (성균관 차례상)</strong>: 최근에는 9~12종 간소 차림이 표준으로 권장됨.
             「조율이시」 등 전통 원칙은 따르되 음식 가짓수는 줄이는 추세.
           </p>
@@ -163,7 +163,7 @@ export default function HolidayTablePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🐲 설날 (음력 1.1)</p>
-              <ul style={{ fontSize: 12.5, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>떡국</strong> 필수 — 흰떡 (장수·재산 상징)</li>
                 <li>갈비찜 — 한우 사용 비중 높음</li>
                 <li>전 3종 (동태·동그랑땡·호박)</li>
@@ -173,7 +173,7 @@ export default function HolidayTablePage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🌕 추석 (음력 8.15)</p>
-              <ul style={{ fontSize: 12.5, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>송편</strong> 필수 — 햇곡식의 의미</li>
                 <li>토란국 — 추석 대표 국물</li>
                 <li>햇과일 (햇사과·햇배·단감)</li>
@@ -183,7 +183,7 @@ export default function HolidayTablePage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🕯️ 제사 (기일)</p>
-              <ul style={{ fontSize: 12.5, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>메·갱</strong> (밥·국) 위(位)별 1세트</li>
                 <li>탕 3종 (육탕·소탕·어탕)</li>
                 <li>적·전 (어동육서)</li>

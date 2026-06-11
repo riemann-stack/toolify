@@ -59,7 +59,7 @@
 .resultType { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .resultName { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
 .traitsRow { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
-.trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--muted); }
+.trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; color: var(--muted); }
 .element { font-size: 12px; font-weight: 600; }
 
 /* ── 간지 카드 ── */
@@ -128,7 +128,7 @@
 .compatPill {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 6px 10px;
   font-size: 13px;
   color: var(--text);
@@ -148,7 +148,7 @@
   display: inline-block;
   font-weight: 700;
   padding: 1px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 12px;
   margin-right: 4px;
 }
@@ -172,7 +172,7 @@
 .famousPill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 6px 12px;
   font-size: 13px;
   color: var(--text);
@@ -313,7 +313,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 4px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -321,7 +321,7 @@
   white-space: nowrap;
 }
 @media (max-width: 540px) {
-  .tabBtn { font-size: 11.5px; padding: 9px 2px; }
+  .tabBtn { font-size: 12px; padding: 9px 2px; }
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
@@ -335,7 +335,7 @@
   border: 1px solid rgba(234,88,12,0.30);
   border-radius: 12px;
   padding: 14px 18px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
@@ -407,7 +407,7 @@
   color: var(--text);
 }
 .profileMetaSub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.profileFootNote { margin-top: 12px; font-size: 11.5px; color: var(--muted); line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; }
+.profileFootNote { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; }
 .profileFootNote strong { color: var(--text); }
 
 /* 1~2월 음력/입춘 경계 안내 */
@@ -416,7 +416,7 @@
   border: 1px solid rgba(161,98,7,0.35);
   border-radius: 12px;
   padding: 12px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.8;
   font-family: 'Noto Sans KR', sans-serif;
@@ -499,7 +499,7 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.compatScoreDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
+.compatScoreDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
 
 /* 별 5개 시각화 */
 .starRow { display: inline-flex; gap: 4px; margin-top: 6px; }
@@ -512,7 +512,7 @@
   width: 100%;
   min-width: 480px;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .familyTable thead th {
@@ -618,7 +618,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -635,7 +635,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;

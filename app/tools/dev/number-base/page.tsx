@@ -37,11 +37,11 @@ const FAQ_LD = [
 
 export default function NumberBasePage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔢 진법 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -57,7 +57,7 @@ export default function NumberBasePage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             진법 변환 핵심 원리
           </h2>
           <div style={{
@@ -87,13 +87,13 @@ export default function NumberBasePage() {
 
         {/* ── 2. 진법 간 관계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             진법 간 단축 변환 관계
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 16진수 (가장 자주)</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 4자리 = 16진수 1자리</strong>
                 <br />0000 = 0 / 0001 = 1 / 1010 = A / 1111 = F
                 <br />8비트(1바이트) = 16진수 2자리 (예: 0xFF)
@@ -101,7 +101,7 @@ export default function NumberBasePage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #A16207', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#A16207', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 3자리 = 8진수 1자리</strong>
                 <br />000 = 0 / 111 = 7
                 <br />Unix 권한(rwx)에 자주 사용 (chmod 755)
@@ -113,7 +113,7 @@ export default function NumberBasePage() {
             border: '1px solid rgba(8,145,178,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
-            fontSize: 12.5,
+            fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
@@ -127,7 +127,7 @@ export default function NumberBasePage() {
 
         {/* ── 3. 비트 폭 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             비트 폭별 표현 범위
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -147,9 +147,9 @@ export default function NumberBasePage() {
                   { b: '64-bit (8B)',  u: '약 1.8 × 10¹⁹',        s: '−9.2 × 10¹⁸ ~ 9.2 × 10¹⁸' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.u}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.u}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
               </tbody>
@@ -169,7 +169,7 @@ export default function NumberBasePage() {
 
         {/* ── 4. 2의 보수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2의 보수 (Two&apos;s Complement)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -209,7 +209,7 @@ export default function NumberBasePage() {
 
         {/* ── 5. 비트 연산 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             비트 연산 활용 가이드
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -252,7 +252,7 @@ export default function NumberBasePage() {
 
         {/* ── 6. ASCII ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ASCII 표준
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -271,7 +271,7 @@ export default function NumberBasePage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: g.c, fontWeight: 800, marginBottom: 2 }}>{g.range}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.label}</p>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6 }}>{g.d}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{g.d}</p>
               </div>
             ))}
           </div>
@@ -280,7 +280,7 @@ export default function NumberBasePage() {
             border: '1px solid rgba(155,89,182,0.30)',
             borderRadius: 12,
             padding: '12px 16px',
-            fontSize: 12.5,
+            fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
@@ -292,7 +292,7 @@ export default function NumberBasePage() {
 
         {/* ── 7. 언어별 표기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             프로그래밍 언어별 진법 표기
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -330,7 +330,7 @@ export default function NumberBasePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -351,7 +351,7 @@ export default function NumberBasePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

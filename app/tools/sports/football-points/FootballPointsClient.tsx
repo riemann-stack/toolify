@@ -608,7 +608,7 @@ export default function FootballPointsClient() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <span className={styles.simHint}>목표 {target}점</span>
-                  <p style={{ fontSize: 13, color: simReachedTarget ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>
+                  <p style={{ fontSize: 13, color: simReachedTarget ? '#059669' : '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
                     {simReachedTarget ? `✅ 도달 (+${simPoints - target})` : `❌ 미달 (${simPoints - target})`}
                   </p>
                 </div>

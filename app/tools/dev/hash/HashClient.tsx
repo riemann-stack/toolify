@@ -527,7 +527,7 @@ export default function HashClient() {
           {/* SRI 사용법 */}
           <div className={s.card}>
             <span className={s.cardLabel}>🌐 SRI (Subresource Integrity) 사용법</span>
-            <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 10px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 10px' }}>
               CDN에서 로드하는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다.
               본 도구의 [📝 텍스트] 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 사용하세요.
             </p>

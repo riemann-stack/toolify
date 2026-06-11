@@ -418,7 +418,7 @@ function EvTab() {
           </div>
         </div>
 
-        <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
+        <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
           기본 단가: 환경부 공공 충전요금 5단계 개편(2026-04-30 시행) — 완속(30kW 미만) 294.3원 · 급속(100~200kW) 347.2원/kWh. 사업자·시간대에 따라 다를 수 있습니다.
         </p>
       </div>

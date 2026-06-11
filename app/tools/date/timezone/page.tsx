@@ -2,7 +2,7 @@ import Link from 'next/link'
 import TimezoneClient from './TimezoneClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 
 export const metadata = buildMetadata({
   path: '/tools/date/timezone',
@@ -52,9 +52,9 @@ const FAQ_LD = [
 
 export default function TimezonePage() {
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🌐 시간대(타임존) 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -69,7 +69,7 @@ export default function TimezonePage() {
 
         {/* 1. 사용법 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { n: '1', t: '기준 도시 선택', d: '회의를 잡고 싶은 본인 위치 (보통 🇰🇷 서울)' },
@@ -79,7 +79,7 @@ export default function TimezonePage() {
             ].map((s) => (
               <div key={s.n} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-strong)', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
+                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-strong)', color: '#fff', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
                   <strong style={{ fontSize: '14px', color: 'var(--text)' }}>{s.t}</strong>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{s.d}</p>
@@ -90,7 +90,7 @@ export default function TimezonePage() {
 
         {/* 2. DST 설명 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             북미·유럽·호주 등 많은 국가는 <strong style={{ color: 'var(--text)' }}>여름철에 시계를 1시간 앞당기는 일광절약제(Daylight Saving Time)</strong>를 시행합니다.
             그래서 같은 서울→뉴욕이라도 <strong style={{ color: 'var(--accent)' }}>겨울엔 14시간 차이, 여름엔 13시간 차이</strong>가 납니다.
@@ -118,7 +118,7 @@ export default function TimezonePage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -128,7 +128,7 @@ export default function TimezonePage() {
 
         {/* 3. 특수 오프셋 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             대부분의 시간대는 UTC에서 1시간 단위로 차이가 나지만, 일부 국가는 <strong style={{ color: 'var(--text)' }}>30분·45분 단위</strong>의 독특한 오프셋을 사용합니다.
             본 도구는 이 비표준 오프셋도 정확히 처리합니다.
@@ -146,7 +146,7 @@ export default function TimezonePage() {
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '18px' }}>{c.flag}</span>
                   <strong style={{ fontSize: '14px', color: 'var(--text)' }}>{c.name}</strong>
-                  <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginLeft: 'auto' }}>{c.off}</span>
+                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginLeft: 'auto' }}>{c.off}</span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.note}</p>
               </div>
@@ -156,7 +156,7 @@ export default function TimezonePage() {
 
         {/* 4. 시간대 vs 시간차 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>UTC·GMT·KST — 약어 정리</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>UTC·GMT·KST — 약어 정리</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { abbr: 'UTC', name: '협정 세계시', desc: '국제 표준시. 모든 시간대의 기준점. 1972년부터 GMT를 대체.' },
@@ -169,10 +169,10 @@ export default function TimezonePage() {
               { abbr: 'AEST/AEDT', name: '호주 동부 표준시/일광절약시', desc: '시드니·멜버른. AEST=UTC+10(겨울), AEDT=UTC+11(여름).' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
-                <code style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '13px', color: 'var(--accent)', fontWeight: 800, background: 'var(--accent-dim)', padding: '3px 9px', borderRadius: '6px', minWidth: '70px', textAlign: 'center' }}>{item.abbr}</code>
+                <code style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--accent)', fontWeight: 800, background: 'var(--accent-dim)', padding: '3px 9px', borderRadius: '6px', minWidth: '70px', textAlign: 'center' }}>{item.abbr}</code>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{item.name}</p>
-                  <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{item.name}</p>
+                  <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -181,7 +181,7 @@ export default function TimezonePage() {
 
         {/* 5. 회의 잡기 팁 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 권장</p>
@@ -210,26 +210,12 @@ export default function TimezonePage() {
 
         {/* 6. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((item, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {item.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: item.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/jet-lag',     emoji: '✈️', name: '시차 적응 계산기',  desc: '여행 전·중·후 수면 일정' },

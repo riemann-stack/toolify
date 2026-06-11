@@ -49,7 +49,7 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
             <div style={{ fontSize: 'clamp(18px, 4vw, 22px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>
               {featured.title}
             </div>
-            <div style={{ fontSize: 13.5, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
               {featured.lead}
             </div>
           </div>

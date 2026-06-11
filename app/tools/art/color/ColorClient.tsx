@@ -471,7 +471,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
               적용
             </button>
           </div>
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
             HSL 명도 단계만 조정해 4.5:1 통과를 만족하는 가장 가까운 색상입니다.
           </p>
         </div>

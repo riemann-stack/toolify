@@ -129,11 +129,11 @@
   position: relative;
   display: flex;
   height: 12px;
-  border-radius: 99px;
+  border-radius: 999px;
   overflow: visible;
 }
 .gaugeSegment { height: 100%; }
-.gaugeSegment:first-child { border-radius: 99px 0 0 99px; }
+.gaugeSegment:first-child { border-radius: 999px 0 0 99px; }
 .gaugeSegment:last-child  { border-radius: 0 99px 99px 0; }
 .gaugeThumb {
   position: absolute;

@@ -2,7 +2,8 @@ import Link from 'next/link'
 import BmiClient from './BmiClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmi',
@@ -76,7 +77,7 @@ export default function BmiPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚖️ BMI 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -90,7 +91,7 @@ export default function BmiPage() {
 
         {/* ── 1. BMI 공식 (기존 유지·보완) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             BMI 체질량지수 산출 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -102,7 +103,7 @@ export default function BmiPage() {
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>BMI 계산 공식</p>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
               BMI = 체중(kg) ÷ 키(m)²
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
@@ -113,7 +114,7 @@ export default function BmiPage() {
 
         {/* ── 2. WHO vs 대한비만학회 기준표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             BMI 기준표 — WHO vs 대한비만학회
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -152,7 +153,7 @@ export default function BmiPage() {
 
         {/* ── 3. 키별 정상 체중 범위 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             키별 정상 체중 범위 (대한비만학회 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -193,7 +194,7 @@ export default function BmiPage() {
 
         {/* ── 4. 풍부한 결과 활용 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             풍부한 결과 활용 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -212,7 +213,7 @@ export default function BmiPage() {
 
         {/* ── 5. 허리둘레와 복부비만 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             허리둘레와 복부비만 — BMI의 한계 보완
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -222,7 +223,7 @@ export default function BmiPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>📐 허리둘레 기준 (대한비만학회)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 남성: <strong style={{ color: 'var(--text)' }}>90cm 이상</strong> = 복부비만</li>
                 <li>· 여성: <strong style={{ color: 'var(--text)' }}>85cm 이상</strong> = 복부비만</li>
                 <li>· 측정: 배꼽 위 2cm, 호흡 후 자연 자세</li>
@@ -230,7 +231,7 @@ export default function BmiPage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>📏 허리-신장비 (WHtR)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 허리(cm) ÷ 키(cm)</li>
                 <li>· <strong style={{ color: 'var(--text)' }}>0.5 미만</strong> 권장</li>
                 <li>· &ldquo;허리둘레가 키의 절반을 넘지 말라&rdquo;</li>
@@ -238,8 +239,8 @@ export default function BmiPage() {
             </div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>BMI + 허리둘레 종합 — 4가지 경우</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px', fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>BMI + 허리둘레 종합 — 4가지 경우</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
               <p>✅ <strong style={{ color: '#059669' }}>BMI 정상 + 허리 정상</strong> — 건강한 체형. 현재 상태 유지 권장.</p>
               <p>⚠️ <strong style={{ color: '#A16207' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
               <p>⚠️ <strong style={{ color: '#0891B2' }}>BMI 비만 + 허리 정상</strong> — 근육 우세형 가능성. 체성분 검사 권장.</p>
@@ -250,7 +251,7 @@ export default function BmiPage() {
 
         {/* ── 6. 목표 BMI 설정 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             목표 BMI 설정 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -267,21 +268,21 @@ export default function BmiPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'grid', gridTemplateColumns: '32px 1fr auto', gap: 10, alignItems: 'center' }}>
                 <span style={{ fontSize: 22 }}>{g.icon}</span>
                 <div>
-                  <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{g.name}</p>
-                  <p style={{ fontSize: 11.5, color: 'var(--muted)' }}>{g.desc}</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{g.name}</p>
+                  <p style={{ fontSize: 12, color: 'var(--muted)' }}>{g.desc}</p>
                 </div>
-                <span style={{ fontSize: 12.5, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{g.range}</span>
+                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{g.range}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
             ⓘ 단순히 BMI를 낮추는 것보다 <strong style={{ color: 'var(--text)' }}>체지방률·근육량을 함께 고려</strong>하는 것이 중요합니다. 무리한 감량은 요요·근손실을 유발합니다.
           </p>
         </section>
 
         {/* ── 7. 러너 전용 팁 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🏃 러닝 효율을 높이는 체중 관리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -320,7 +321,7 @@ export default function BmiPage() {
 
         {/* ── 8. 체지방률 추정 정확도 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             체지방률 추정 정확도
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -346,61 +347,38 @@ export default function BmiPage() {
                 ].map(([m, a, d], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{a}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{d}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ⓘ 본 도구의 체지방률은 빠른 추정용이며, 정확한 측정은 <strong style={{ color: 'var(--text)' }}>InBody 검사</strong>를 권장합니다. 다이어트 진척 추적은 측정법을 일관되게 유지하는 것이 더 중요합니다.
           </p>
         </section>
 
         {/* ── 9. FAQ (accordion 방식) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* ── 면책 강화 ── */}
         <section>
-          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>
-              ⚠️ 본 BMI 계산기는 건강 정보 참고용입니다
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text)' }}>의학적 진단·치료 도구가 아닙니다.</strong> BMI는 다음 한계가 있습니다 —
-              근육량과 체지방을 구분하지 못함 / 체지방 분포(복부 vs 전신) 반영 X / 나이·성별·인종에 따라 해석 다름 / 운동선수·노인·임산부에 부적합할 수 있음.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text)' }}>종합적 건강 평가에는</strong> 허리둘레·체지방률 측정, 혈압·혈당·콜레스테롤 검사, 의료 전문가 상담이 함께 필요합니다.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              체중 강박·거식증 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
-            </p>
-          </div>
+          <Disclaimer variant="medical" open>
+            BMI는 다음 한계가 있습니다 —
+            근육량과 체지방을 구분하지 못함 / 체지방 분포(복부 vs 전신) 반영 X / 나이·성별·인종에 따라 해석 다름 / 운동선수·노인·임산부에 부적합할 수 있음.
+            <br />
+            <strong>종합적 건강 평가에는</strong> 허리둘레·체지방률 측정, 혈압·혈당·콜레스테롤 검사, 의료 전문가 상담이 함께 필요합니다.
+            <br />
+            체중 강박·거식증 우려 시 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>1393</strong> (24시간)
+          </Disclaimer>
         </section>
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기',     desc: '하루 기본 소비 칼로리 계산' },

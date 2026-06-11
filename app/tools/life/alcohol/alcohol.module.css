@@ -119,8 +119,8 @@
 .riskHead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
 .riskLabel { font-size: 12px; font-weight: 600; }
 .riskPct { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; }
-.riskBar { height: 6px; background: var(--bg2); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
-.riskFill { height: 100%; transition: width 0.4s; border-radius: 99px; }
+.riskBar { height: 6px; background: var(--bg2); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+.riskFill { height: 100%; transition: width 0.4s; border-radius: 999px; }
 .riskHint { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
 /* ── 비교 표 ── */

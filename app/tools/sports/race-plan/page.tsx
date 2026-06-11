@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import RacePlanClient from './RacePlanClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import { PACE_TABLE, fmtPace } from './racePlanUtils'
 
@@ -16,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px', fontWeight: 700, marginBottom: '14px',
 }
 
@@ -39,9 +40,9 @@ const FAQ_LD = [
 
 export default function RacePlanPage() {
   return (
-    <div style={{ maxWidth: '820px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏁 레이스 페이스 플래너
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -49,6 +50,8 @@ export default function RacePlanPage() {
       </p>
 
       <RacePlanClient />
+
+      <GuideDivider />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '44px', marginTop: '52px' }}>
 
@@ -62,7 +65,7 @@ export default function RacePlanPage() {
               { n: '③', t: '(선택) 코스 고도 입력', d: '언덕이 있는 코스라면 각 km 고도를 넣어 경사·상승/하강을 반영하고, 자동 보정으로 언덕 페이스를 추정합니다.' },
             ].map((x, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
+                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{x.t}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
@@ -83,7 +86,7 @@ export default function RacePlanPage() {
             ].map((x, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${x.c}55`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: x.c, marginBottom: '6px' }}>{x.t}</p>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -118,10 +121,10 @@ export default function RacePlanPage() {
               <tbody>
                 {PACE_TABLE.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.full}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.fullPace)}/km</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.half}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.halfPace)}/km</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.full}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.fullPace)}/km</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.half}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.halfPace)}/km</td>
                   </tr>
                 ))}
               </tbody>

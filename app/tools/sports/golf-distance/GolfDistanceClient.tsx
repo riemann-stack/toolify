@@ -827,7 +827,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                     <td style={{
                       textAlign: 'right',
                       color: c.tone === 'pos' ? '#059669' : c.tone === 'neg' ? '#DC2626' : 'var(--muted)',
-                      fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700,
+                      fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700,
                     }}>
                       {c.impact > 0 ? '+' : ''}{showDist(c.impact, unit)}{unit}
                     </td>
@@ -838,7 +838,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                   <td style={{
                     textAlign: 'right',
                     color: result.totalImpact >= 0 ? '#059669' : '#DC2626',
-                    fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 14,
+                    fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14,
                   }}>
                     {result.totalImpact >= 0 ? '+' : ''}{showDist(result.totalImpact, unit)}{unit}
                   </td>
@@ -1020,7 +1020,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
               <tbody>
                 {records.slice(0, 30).map(r => (
                   <tr key={r.id}>
-                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.date}</td>
+                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.date}</td>
                     <td style={{ fontSize: 12, color: 'var(--muted)' }}>{LOCATION_LABEL[r.location]}</td>
                     <td className={s.tdNum}>{r.driver ? `${showDist(r.driver, unit)}${unit}` : '—'}</td>
                     <td className={s.tdNum}>{r.iron7 ? `${showDist(r.iron7, unit)}${unit}` : '—'}</td>

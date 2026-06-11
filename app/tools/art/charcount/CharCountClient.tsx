@@ -355,7 +355,7 @@ export default function CharCountClient() {
                 />
                 <span style={{ fontSize: 12, color: 'var(--muted)' }}>자 (공백 포함)</span>
                 {hasTarget && (
-                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? '#DC2626' : 'var(--accent)' }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? '#DC2626' : 'var(--accent)' }}>
                     {over ? `초과 ${fmt(stats.len - targetN)}자` : `남은 ${fmt(targetN - stats.len)}자`}
                     <span style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 12, marginLeft: 6 }}>{fmt(stats.len)} / {fmt(targetN)}</span>
                   </span>
@@ -429,7 +429,7 @@ export default function CharCountClient() {
             <div className={s.miniStat}><p className={s.miniStatLabel}>@멘션</p>            <p className={s.miniStatValue}>{fmt(stats.mentions)}</p></div>
           </div>
 
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
             ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (한국어 표준 기준 추정)
           </p>
         </>
@@ -465,7 +465,7 @@ export default function CharCountClient() {
               </div>
             </div>
           ))}
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
             ※ X(트위터)는 한글 1자 = 가중치 2로 계산 (실제 280 weight). SMS는 EUC-KR 바이트로 계산 (한글 2B / 영문 1B).
             플랫폼 정책은 변동될 수 있으므로 공식 페이지에서 최신 한도를 확인하세요.
           </p>
@@ -514,7 +514,7 @@ export default function CharCountClient() {
             <div className={s.cardTop}>
               <label className={s.cardLabel}>찾기·바꾸기</label>
               {findReplaceResult && (
-                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>
+                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
                   {findReplaceResult.count}회 일치
                 </span>
               )}

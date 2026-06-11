@@ -7,7 +7,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   position: relative;
@@ -28,7 +28,7 @@
 }
 
 .responsibilityMini {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   text-align: center;
   padding: 6px;
@@ -39,7 +39,7 @@
   color: #DC2626;
   cursor: pointer;
   text-decoration: underline;
-  font-size: 11.5px;
+  font-size: 12px;
   padding: 0 2px;
 }
 
@@ -58,7 +58,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -66,7 +66,7 @@
   transition: all 0.15s;
   white-space: nowrap;
 }
-@media (max-width: 540px) { .tabBtn { font-size: 11.5px; padding: 9px 2px; } }
+@media (max-width: 540px) { .tabBtn { font-size: 12px; padding: 9px 2px; } }
 @media (max-width: 380px) { .tabBtn { font-size: 11px; } }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
@@ -124,9 +124,9 @@
   box-shadow: 0 0 0 2px rgba(14,165,233,0.18);
 }
 .modeCardEmoji { font-size: 28px; line-height: 1; margin-bottom: 6px; }
-.modeCardName { font-size: 12.5px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 3px; }
+.modeCardName { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 3px; }
 .modeCardActive .modeCardName { color: var(--accent); }
-.modeCardDesc { font-size: 10.5px; color: var(--muted); line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; }
+.modeCardDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; }
 
 /* ── 컴팩트 모드 그리드 (입력 영역 — 이름만 4열) ── */
 .modeGridCompact {
@@ -161,7 +161,7 @@
 }
 .modeChipActive .modeChipName { color: var(--accent); font-weight: 700; }
 @media (max-width: 540px) { .modeChipName { font-size: 12px; } }
-@media (max-width: 380px) { .modeChipName { font-size: 11.5px; } }
+@media (max-width: 380px) { .modeChipName { font-size: 12px; } }
 
 /* ── 번호 선택기 (NumberPicker) ── */
 .pickerHead {
@@ -263,7 +263,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -278,7 +278,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -325,7 +325,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 5px 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -419,7 +419,7 @@
 }
 
 .gameMeta {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
@@ -480,7 +480,7 @@
   color: #A16207;
   font-variant-numeric: tabular-nums;
 }
-.analysisHint { font-size: 10.5px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
+.analysisHint { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
 
 .tagRow {
   display: flex;
@@ -494,7 +494,7 @@
   color: #A16207;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }
@@ -543,7 +543,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 6px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -616,7 +616,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
@@ -674,7 +674,7 @@
   color: #9333EA;
   font-variant-numeric: tabular-nums;
 }
-.jackpotInfoLbl { font-size: 11.5px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
+.jackpotInfoLbl { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
 
 .compareTable {
   background: var(--bg3);
@@ -687,7 +687,7 @@
   grid-template-columns: 1fr auto;
   padding: 5px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .compareRow:last-child { border-bottom: none; }
@@ -754,7 +754,7 @@
 .taxTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
   margin-top: 8px;
 }
 .taxTable th, .taxTable td {
@@ -763,7 +763,7 @@
   border-bottom: 1px solid var(--border);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.taxTable th { font-size: 10.5px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
+.taxTable th { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
 .taxTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #059669; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* ── 저장된 번호 ── */
@@ -801,7 +801,7 @@
   font-variant-numeric: tabular-nums;
 }
 .savedMeta {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   margin-left: 8px;
   font-family: 'Noto Sans KR', sans-serif;

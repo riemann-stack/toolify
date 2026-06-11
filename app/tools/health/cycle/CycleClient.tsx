@@ -796,7 +796,7 @@ function CircleChart({
 
         {/* 가운데 D-day + phase */}
         <text x={cx} y={cy - 4} fontSize="32" fill="var(--text)"
-          textAnchor="middle" dominantBaseline="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+          textAnchor="middle" dominantBaseline="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
           {result.daysToNextPeriod > 0 ? `D-${result.daysToNextPeriod}` : result.daysToNextPeriod === 0 ? 'D-DAY' : `D+${-result.daysToNextPeriod}`}
         </text>
         <text x={cx} y={cy + 24} fontSize="15" fill={PHASE_META[result.phase].color}

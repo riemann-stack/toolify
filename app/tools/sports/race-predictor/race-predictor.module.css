@@ -187,7 +187,7 @@
   padding: 6px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
@@ -201,7 +201,7 @@
   font-size: 10px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
 }
 
 .predCardGrid {
@@ -654,7 +654,7 @@
 .quickChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 6px 14px;
   font-size: 12px;
   font-family: 'Inter', system-ui, sans-serif;
@@ -684,7 +684,7 @@
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 
@@ -827,7 +827,7 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;

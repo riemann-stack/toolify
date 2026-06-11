@@ -309,9 +309,9 @@ export default function SavingsClient() {
               <rect x={0} y={20} width={Math.max(0, Math.min((savingsRate / 50) * 420, 420))} height={20} rx={5} fill="url(#rateGrad)" />
               {/* 권장 라인 */}
               <line x1={(recoMid / 50) * 420} y1={12} x2={(recoMid / 50) * 420} y2={48} stroke="var(--accent)" strokeWidth="2" strokeDasharray="3,2" />
-              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">권장 {recoMid}%</text>
+              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장 {recoMid}%</text>
               {[0, 10, 20, 30, 40, 50].map((v) => (
-                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{v}%</text>
+                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{v}%</text>
               ))}
             </svg>
           </div>
@@ -745,7 +745,7 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
           <g key={d.id}>
             <path d={path} fill={d.color} opacity={0.85} />
             {d.value >= 6 && (
-              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
+              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
                 {Math.round(d.value)}%
               </text>
             )}
@@ -753,8 +753,8 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">합계</text>
-      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">{total.toFixed(0)}%</text>
+      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>합계</text>
+      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">{total.toFixed(0)}%</text>
     </svg>
   )
 }

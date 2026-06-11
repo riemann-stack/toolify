@@ -41,7 +41,7 @@ export default function CosmicCalendarPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🌌 코스믹 캘린더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 1. 코스믹 캘린더란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             코스믹 캘린더란?
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -87,7 +87,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 2. 주요 사건 요약 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 달력의 주요 사건 (요약)
           </h2>
           <div className="tableScroll">
@@ -117,12 +117,12 @@ export default function CosmicCalendarPage() {
                   { d: '12월 31일 23:59:59.4',e: '⚙️ 산업혁명',               r: '250년 전',     c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>
                       <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: r.c, marginRight: 8, verticalAlign: 'middle' }} />
                       {r.e}
                     </td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -132,7 +132,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 3. 12월 31일 충격 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             12월 31일 - 인류 등장
           </h2>
           <div style={{
@@ -140,7 +140,7 @@ export default function CosmicCalendarPage() {
             border: '1px solid rgba(220,38,38,0.30)',
             borderRadius: 14,
             padding: '18px 22px',
-            fontSize: 13.5,
+            fontSize: 13,
             color: 'var(--text)',
             lineHeight: 2,
           }}>
@@ -159,7 +159,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 4. 압축 단위 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 1년 vs 24시간 vs 1km 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -180,7 +180,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 5. 138억 년 핵심 시기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 사건
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -193,7 +193,7 @@ export default function CosmicCalendarPage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
           </div>
@@ -201,7 +201,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 6. 칼 세이건 관점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             칼 세이건의 코스믹 관점
           </h2>
           <div style={{
@@ -230,7 +230,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 7. 우주 시간 이해의 의미 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 시간 이해의 의미
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 16 }}>
@@ -245,8 +245,8 @@ export default function CosmicCalendarPage() {
               { t: '남은 찰나에 대한 책임', d: '모든 인류 역사가 마지막 몇 초라면, 우리가 지구에 남기는 흔적(기후·생태)은 그 찰나가 다음 세대에게 보내는 신호입니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13.5, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.8 }}>{c.d}</p>
+                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>{c.d}</p>
               </div>
             ))}
           </div>
@@ -257,7 +257,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -278,7 +278,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -313,10 +313,10 @@ export default function CosmicCalendarPage() {
 
         {/* ── 10. 참고 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             참고 자료
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>칼 세이건, &ldquo;에덴의 용&rdquo;(The Dragons of Eden), 1977</li>
               <li>칼 세이건, &ldquo;코스모스&rdquo;(Cosmos), 1980 다큐멘터리</li>

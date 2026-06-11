@@ -532,7 +532,7 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
             </div>
           ))}
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
           ⚠️ 법적 기준은 변경될 수 있으니 실제 신청·계약 시 관련 법령을 확인하세요. 일부 제도(병역법·학교 입학 등)는 만 나이가 아닌 별도 기준을 사용합니다.
         </p>
       </div>
@@ -590,10 +590,10 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.card}>
           <label className={s.cardLabel}>한국 세대 분류</label>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
               {generation.name}
             </span>
-            <span style={{ fontSize: 12.5, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
               {generation.range[0]}~{generation.range[1]}년생 · {generation.desc}
             </span>
           </div>

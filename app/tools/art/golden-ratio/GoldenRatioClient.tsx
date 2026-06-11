@@ -223,11 +223,11 @@ function MiniGoldenRect({ A, B, unit }: { A: number; B: number; unit: string }) 
           fill="none" stroke="var(--accent)" strokeWidth={1.5} strokeLinecap="round"
         />
         {/* A 라벨 (가로 전체) */}
-        <text x={W / 2} y={H - 6} fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif" fontSize="11" fontWeight={700} textAnchor="middle">
+        <text x={W / 2} y={H - 6} fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontSize="11" fontWeight={700} textAnchor="middle">
           A = {A.toFixed(1)}{unit}
         </text>
         {/* B 라벨 (세로) */}
-        <text x={H / 2} y={14} fill="var(--accent)" fontFamily="Inter, system-ui, sans-serif" fontSize="11" fontWeight={700} textAnchor="middle">
+        <text x={H / 2} y={14} fill="var(--accent)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontSize="11" fontWeight={700} textAnchor="middle">
           B = {B.toFixed(1)}{unit}
         </text>
       </svg>
@@ -472,7 +472,7 @@ function SpiralTab() {
                   x={p.x + p.size / 2}
                   y={p.y + p.size / 2}
                   fill={textColor}
-                  fontFamily="Inter, system-ui, sans-serif"
+                  fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight={700}
                   fontSize={Math.max(p.size * 0.22, 9)}
                   textAnchor="middle"

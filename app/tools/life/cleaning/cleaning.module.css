@@ -26,7 +26,7 @@
 }
 .safetyHead { font-size: 14px; font-weight: 800; color: #DC2626; margin-bottom: 10px; }
 .safetyList { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
-.safetyList li { font-size: 12.5px; line-height: 1.6; color: var(--text); }
+.safetyList li { font-size: 13px; line-height: 1.6; color: var(--text); }
 .safetyList li strong { color: var(--text); }
 .riskDanger::marker { color: #DC2626; }
 .riskCaution::marker { color: #EA580C; }
@@ -56,7 +56,7 @@
 .sitActive { background: var(--bg2); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .sitEmoji { font-size: 20px; }
 .sitPlace { font-size: 13px; font-weight: 700; color: var(--text); }
-.sitStain { font-size: 11.5px; color: var(--muted); }
+.sitStain { font-size: 12px; color: var(--muted); }
 
 /* ── 용량 입력 ── */
 .volRow { display: flex; align-items: center; gap: 8px; }
@@ -83,7 +83,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 7px 13px;
   font-size: 12px;
   font-weight: 600;
@@ -124,13 +124,13 @@
   font-weight: 800;
   color: #fff;
   padding: 4px 12px;
-  border-radius: 99px;
+  border-radius: 999px;
   margin-bottom: 10px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .recipeMain { font-size: 16px; color: var(--text); line-height: 1.6; }
 .recipeMain strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
-.recipeSub { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.recipeSub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 .steps {
   margin: 0 0 14px;
@@ -142,7 +142,7 @@
 .steps li { font-size: 13px; color: var(--text); line-height: 1.6; }
 
 .metaRow { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-.metaItem { display: flex; gap: 8px; font-size: 12.5px; color: var(--text); line-height: 1.6; }
+.metaItem { display: flex; gap: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
 .metaLabel { flex-shrink: 0; color: var(--muted); font-weight: 700; }
 
 .neverBox {
@@ -150,7 +150,7 @@
   border: 1px solid rgba(220,38,38,0.3);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.6;
 }
@@ -161,10 +161,10 @@
 .agentRow { display: flex; gap: 10px; }
 .agentDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
 .agentBody { min-width: 0; }
-.agentName { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.agentName { font-size: 13px; font-weight: 700; color: var(--text); }
 .agentType { font-size: 11px; color: var(--muted); font-weight: 500; }
-.agentUse { font-size: 12.5px; color: var(--text); margin-top: 2px; }
-.agentTip { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.6; }
+.agentUse { font-size: 13px; color: var(--text); margin-top: 2px; }
+.agentTip { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.6; }
 
 /* iOS zoom 방지 */
 @media (max-width: 640px) {

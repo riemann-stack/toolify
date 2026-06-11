@@ -7,7 +7,7 @@ import { CATEGORY_GUIDES } from '@/lib/categoryGuides'
 import { categories } from '@/lib/tools'
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   letterSpacing: '-0.01em',

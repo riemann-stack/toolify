@@ -151,7 +151,7 @@ export default function HistoricalMoneyClient() {
               ))}
             </div>
             {(pastYear === 1953 || pastYear === 1962) && (
-              <p style={{ fontSize: 11.5, color: '#D97706', lineHeight: 1.55, margin: '8px 0 0' }}>
+              <p style={{ fontSize: 12, color: '#D97706', lineHeight: 1.55, margin: '8px 0 0' }}>
                 {pastYear === 1953
                   ? '⚠️ 1953년은 2월 15일 화폐개혁(100圓=1환) 이후 「환」 기준으로 계산됩니다. 개혁 전(1~2월) 圓 금액이라면 1952년을 선택하세요.'
                   : '⚠️ 1962년은 6월 10일 화폐개혁(10환=1원) 이후 「원」 기준으로 계산됩니다. 개혁 전(1~6월) 환 금액이라면 1961년을 선택하세요.'}
@@ -216,7 +216,7 @@ export default function HistoricalMoneyClient() {
                 누적 인플레 <strong className={s.factorAccent}>×{result.inflationFactor.toFixed(0)}</strong>
               </div>
             )}
-            <div style={{ fontSize: 10.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.4 }}>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.4 }}>
               ※ {CURRENT_YEAR}년 물가는 확정 전 추정치 (연 +1.8% 가정)
             </div>
           </div>

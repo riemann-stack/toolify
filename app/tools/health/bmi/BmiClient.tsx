@@ -616,7 +616,7 @@ export default function BmiClient() {
                   <p>{whtr.desc}</p>
                 </div>
               </div>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                 💡 <strong style={{ color: 'var(--text)' }}>&ldquo;허리둘레가 키의 절반을 넘지 않도록&rdquo;</strong> — 0.5 미만 유지 권장.
               </p>
             </div>

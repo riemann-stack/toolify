@@ -436,7 +436,7 @@
   gap: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 5px 12px;
   font-size: 13px;
   color: var(--muted);
@@ -568,18 +568,18 @@
 .drawerSearchIcon { font-size: 20px; line-height: 1; text-align: center; }
 .drawerSearchBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .drawerSearchName {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
 }
 .drawerSearchCat {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .drawerSearchDesc {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.45;
   font-family: 'Noto Sans KR', sans-serif;
@@ -608,7 +608,7 @@
   font-weight: 700;
 }
 .drawerEmptySub {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   text-align: center;
   margin: 0 0 6px;
@@ -636,7 +636,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 7px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
@@ -701,7 +701,7 @@
 }
 .drawerAccCount {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--muted);
   background: var(--bg2);
@@ -726,7 +726,7 @@
   align-items: center;
   justify-content: flex-end;
   padding: 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--accent);
   text-decoration: none;
@@ -749,7 +749,7 @@
   gap: 8px;
   min-height: 44px;
   padding: 9px 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   text-decoration: none;
   border-radius: 6px;

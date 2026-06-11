@@ -2,7 +2,9 @@ import Link from 'next/link'
 import GiftMoneyClient from './GiftMoneyClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/life/gift-money',
@@ -13,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -68,7 +70,7 @@ export default function GiftMoneyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧧 축의금·부의금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -76,6 +78,8 @@ export default function GiftMoneyPage() {
       </p>
 
       <GiftMoneyClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -97,14 +101,14 @@ export default function GiftMoneyPage() {
                 {RATE_ROWS.map((r, i) => (
                   <tr key={i}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.rel}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.wed}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{r.fun}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.wed}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.fun}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             예식·조문에 직접 참석해 식사하는 경우 기준입니다. 식대 상승으로 “안 가면 5만원, 가면 10만원”이 일반적인 기준선이 되었습니다.
           </p>
         </div>
@@ -135,7 +139,7 @@ export default function GiftMoneyPage() {
         {/* 봉투·신권 */}
         <div>
           <h2 style={sectionTitle}>✉️ 봉투 쓰는 법 · 지폐 매너</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
             <p style={{ margin: '0 0 10px' }}>
               <strong style={{ color: 'var(--text)' }}>앞면</strong> — 축의는 “축 결혼(祝結婚)”, 부의는 “부의(賻儀)”가 가장 무난합니다.
             </p>
@@ -161,20 +165,9 @@ export default function GiftMoneyPage() {
         </div>
 
         {/* 면책 */}
-        <div style={{
-          background: 'rgba(225,29,72,0.05)',
-          border: '1px solid rgba(225,29,72,0.2)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          fontSize: '13px',
-          color: 'var(--text)',
-          lineHeight: 1.8,
-        }}>
-          <strong style={{ color: '#E11D48' }}>ℹ️ 참고용 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
-            경조사비는 정해진 규칙이 아니라 <strong style={{ color: 'var(--text)' }}>지역·집안·시대·개인 관계</strong>에 따라 달라지는 관습입니다. 본 추천은 최근의 일반적 시세를 반영한 참고치이니, 마지막엔 본인과 상대의 관계와 형편을 기준으로 마음 가는 선에서 정하시면 됩니다.
-          </p>
-        </div>
+        <Disclaimer variant="default" open>
+          경조사비는 정해진 규칙이 아니라 <strong>지역·집안·시대·개인 관계</strong>에 따라 달라지는 관습입니다. 본 추천은 최근의 일반적 시세를 반영한 참고치이니, 마지막엔 본인과 상대의 관계와 형편을 기준으로 마음 가는 선에서 정하시면 됩니다.
+        </Disclaimer>
 
         {/* 관련 도구 */}
         <div>

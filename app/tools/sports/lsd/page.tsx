@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
 }
 const card: React.CSSProperties = {
   background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px',
@@ -36,7 +36,7 @@ export default function LsdPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏃 LSD·이지런 페이스 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -63,7 +63,7 @@ export default function LsdPage() {
         <section>
           <h2 style={sectionTitle}>이지런을 너무 빨리 뛰면 안 되는 이유</h2>
           <div style={{ ...card, borderLeft: `3px solid #A16207`, marginBottom: 12 }}>
-            <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>🚦 회색지대(Gray Zone) = 정크 마일</p>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>🚦 회색지대(Gray Zone) = 정크 마일</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               마라톤 페이스보다 살짝 느린 &ldquo;힘들진 않은데 회복도 안 되는&rdquo; 애매한 속도입니다. 대부분의 아마추어가 매일 여기서 달립니다 — 충분히 느리지 않아 유산소 적응은 약하고, 충분히 빠르지도 않아 자극도 부족하며, 피로만 누적돼 부상·정체로 이어집니다.
             </p>
@@ -83,8 +83,8 @@ export default function LsdPage() {
               { t: '③ 페이스 기준', d: '10K 페이스보다 약 20~30% 느리게(보통 마라톤 페이스 + 60~90초/km). 위 계산기가 자동 산출.' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
-                <p style={{ fontSize: 13.5, fontWeight: 700, color: ACCENT, marginBottom: 6 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>{x.d}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: ACCENT, marginBottom: 6 }}>{x.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -139,7 +139,7 @@ export default function LsdPage() {
               }}>
                 <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
               </Link>

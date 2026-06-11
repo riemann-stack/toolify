@@ -400,7 +400,7 @@ export default function FermiEstimateClient() {
       return (
         <div className={s.card} style={{ textAlign: 'center', padding: 30 }}>
           <p style={{ fontSize: 32, marginBottom: 8 }}>🧮</p>
-          <p style={{ color: 'var(--muted)', fontSize: 13.5, lineHeight: 1.85 }}>
+          <p style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.85 }}>
             템플릿을 선택하거나 변수를 추가해 추정을 시작하세요.
           </p>
         </div>
@@ -417,7 +417,7 @@ export default function FermiEstimateClient() {
           <span className={s.heroUnit}>{f.unit}{resultUnit && ` ${resultUnit}`}</span>
         </div>
         <p className={s.heroSub}>
-          정확한 값 ≈ <strong style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
+          정확한 값 ≈ <strong style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
         </p>
         <div className={s.heroCalc}>
           {calcStr}<br />
@@ -651,7 +651,7 @@ export default function FermiEstimateClient() {
           {vars.length === 0 || !scenarios ? (
             <div className={s.card} style={{ textAlign: 'center', padding: 30 }}>
               <p style={{ fontSize: 32, marginBottom: 8 }}>📊</p>
-              <p style={{ color: 'var(--muted)', fontSize: 13.5, lineHeight: 1.85 }}>
+              <p style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.85 }}>
                 먼저 <strong style={{ color: '#0D9488' }}>템플릿 시작</strong> 또는 <strong style={{ color: '#0D9488' }}>자유 추정</strong> 탭에서 추정을 입력해주세요.
               </p>
             </div>
@@ -716,7 +716,7 @@ export default function FermiEstimateClient() {
                       )
                     })}
                   </div>
-                  <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
                     💡 가장 민감한 변수에 대해서는 더 정확한 데이터를 찾는 것이 추정 정확도 향상에 효과적입니다.
                   </p>
                 </div>
@@ -758,7 +758,7 @@ export default function FermiEstimateClient() {
           <div className={s.libraryAddBox}>
             <p className={s.libTitle}>💾 현재 추정 저장</p>
             {vars.length === 0 || baseResult === null ? (
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 자유 추정 탭에서 변수를 입력한 후 저장할 수 있습니다.
               </p>
             ) : (
@@ -805,7 +805,7 @@ export default function FermiEstimateClient() {
                         <span className={s.libItemDate}>{date}</span>
                       </div>
                       <p className={s.libItemValue}>약 {f.value} {f.unit}{item.resultUnit && ` ${item.resultUnit}`}</p>
-                      <p style={{ fontSize: 11.5, color: 'var(--muted)', fontFamily: 'JetBrains Mono, Menlo, monospace' }}>
+                      <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'JetBrains Mono, Menlo, monospace' }}>
                         {item.formula} · 변수 {item.variables.length}개
                       </p>
                       <div className={s.libItemActions}>

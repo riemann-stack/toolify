@@ -7,7 +7,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -30,7 +30,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -139,7 +139,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -236,7 +236,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 7px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -340,7 +340,7 @@
 
 .ddayDate {
   text-align: center;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 10px;
@@ -350,7 +350,7 @@
   display: inline-block;
   padding: 3px 10px;
   border-radius: 999px;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
   font-family: 'Noto Sans KR', sans-serif;
@@ -365,7 +365,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   border-top: 1px solid var(--border);
@@ -399,7 +399,7 @@
   border: 1px solid rgba(161,98,7,0.25);
   border-radius: 8px;
   padding: 8px 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 8px;
@@ -486,12 +486,12 @@
   font-variant-numeric: tabular-nums;
 }
 .statLabel {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }
-.statSub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.statSub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* 라이브 카운트다운 4박스 */
 .countdown4 {
@@ -699,7 +699,7 @@
 }
 
 .holidayList {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 6px;
   line-height: 1.7;

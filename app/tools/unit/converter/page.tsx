@@ -3,7 +3,7 @@ import ConverterClient from './ConverterClient'
 import ConversionTableTabs from './ConversionTableTabs'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/converter',
@@ -116,7 +116,7 @@ export default function ConverterPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📐 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -131,13 +131,13 @@ export default function ConverterPage() {
 
         {/* 자주 쓰는 변환 표 — 분야별 서브탭 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 쓰는 변환</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 쓰는 변환</h2>
           <ConversionTableTabs />
         </section>
 
         {/* 한국 전통 단위 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>한국 전통·생활 단위 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>한국 전통·생활 단위 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구는 한국에서 일상적으로 쓰이는 전통·생활 단위를 모두 지원합니다. 시대·지역·용도에 따라 차이가 있어 주의가 필요한 단위도 있습니다.
           </p>
@@ -149,21 +149,21 @@ export default function ConverterPage() {
               { name: '🧴 부피', items: ['홉(合) = 180ml', '되(升) = 1.8L', '말(斗) = 18L', '컵 = 200ml (한국 표준)', '소주잔 ≈ 50ml · 종이컵 ≈ 180ml'] },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-                <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>{c.name}</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>{c.name}</p>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                   {c.items.map((it, j) => <li key={j}>· {it}</li>)}
                 </ul>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ⓘ <strong style={{ color: 'var(--text)' }}>1근 주의</strong> — 옛날 한국 1근 = 400g, 중국 1근 = 500g, 한국 시장 관행 1근 = 600g. 정육점·과일가게에서는 보통 600g 기준이며, 옛 문헌의 1근은 400g인 경우가 많습니다.
           </p>
         </section>
 
         {/* 카테고리별 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>14개 카테고리 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>14개 카테고리 가이드</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               { icon: '📏', name: '길이', desc: 'mm·cm·m·km / inch·ft·yard·mile / 푼·치·자(척)·보·간·정·리(한국)' },
@@ -182,8 +182,8 @@ export default function ConverterPage() {
               { icon: '📐', name: '각도·기울기', desc: '도(°)·라디안·그라디안 / % 경사·‰ 구배·1/n 구배·N:1 비율 / 한국 물매(치/자) — 도로·철도·하수관·지붕·비탈면' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px' }}>
-                <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{c.icon} {c.name}</p>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>{c.desc}</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{c.icon} {c.name}</p>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{c.desc}</p>
               </div>
             ))}
           </div>
@@ -191,7 +191,7 @@ export default function ConverterPage() {
 
         {/* 당도·염도 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🍯 당도·염도 활용 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🍯 당도·염도 활용 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             <strong style={{ color: 'var(--text)' }}>Brix(°Bx)</strong>는 100g 용액에 녹은 자당(설탕)의 그램 수로, 굴절계로 측정하는 표준 당도 단위입니다.
             염도(salinity)는 소금물에서 100g 용액에 녹은 소금의 그램 수로, Brix와 동일한 % 단위지만 측정 대상이 다릅니다.
@@ -219,21 +219,21 @@ export default function ConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 13 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
             ⓘ <strong style={{ color: 'var(--text)' }}>측정 도구</strong> — 굴절계(refractometer)로 °Bx 직접 측정 가능 (3~5만원대). 염도계는 전도도 기반으로 염도(‰·%)를 표시합니다. 가정에서는 디지털 굴절계 1대로 잼·청·소금물·소스 모두 측정 가능합니다.
           </p>
         </section>
 
         {/* 농도 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🧪 농도 활용 가이드 — 소독액·수질·비료</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🧪 농도 활용 가이드 — 소독액·수질·비료</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             농도 단위는 절대 환산 관계가 있습니다. <strong style={{ color: 'var(--text)' }}>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong>(수용액 가정).
             mg/L와 ppm은 수용액에서 거의 같으며, ppb는 ppm의 1/1,000입니다.
@@ -259,8 +259,8 @@ export default function ConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: 13 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -277,7 +277,7 @@ export default function ConverterPage() {
 
         {/* 각도·기울기 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>📐 각도·기울기 활용 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>📐 각도·기울기 활용 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             기울기는 분야마다 표기가 다릅니다. 수학·물리는 <strong style={{ color: 'var(--text)' }}>도(°)</strong>·<strong style={{ color: 'var(--text)' }}>라디안</strong>, 도로는 <strong style={{ color: 'var(--text)' }}>%</strong>, 철도·하수는 <strong style={{ color: 'var(--text)' }}>1/n 구배</strong> 또는 <strong style={{ color: 'var(--text)' }}>‰</strong>, 한옥 지붕은 <strong style={{ color: 'var(--text)' }}>물매(치/자)</strong>를 씁니다.
             모두 <strong>tan(각도)</strong> 한 함수로 환산됩니다.
@@ -308,39 +308,25 @@ export default function ConverterPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
             ⓘ <strong style={{ color: 'var(--text)' }}>핵심 공식</strong> — % 경사 = tan(각도) × 100, 각도 = atan(% / 100). 1/n 구배 = 1 / tan(각도). 한국 물매 N치 = 10 × tan(각도). 작은 각도에서는 % ≈ 1/n × 100 이 거의 같지만 큰 각도에서는 차이가 커집니다(예: 45° = 100% = 1/1).
           </p>
         </section>
 
         {/* FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',     desc: '아파트 평형·전용·공급면적' },

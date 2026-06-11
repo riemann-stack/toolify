@@ -291,7 +291,7 @@ export default function Base64Client() {
               <div className={s.sizeRow}><span>원본 (UTF-8 바이트)</span><strong>{sizeAnalysis.origBytes.toLocaleString()} B</strong></div>
               <div className={s.sizeRow}><span>Base64 결과</span><strong>{sizeAnalysis.encBytes.toLocaleString()} B</strong></div>
               <div className={s.sizeRow}><span>오버헤드</span><strong style={{ color: '#EA580C' }}>+{sizeAnalysis.overhead.toFixed(1)}%</strong></div>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
                 ※ Base64 인코딩은 약 33% 크기 증가 (3바이트 → 4문자)
               </p>
             </div>
@@ -361,7 +361,7 @@ export default function Base64Client() {
                   </button>
                 </div>
                 <textarea className={s.textarea} value={dataUri} readOnly rows={6} />
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
                   💡 사용 예시: <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>{`<img src="${dataUri.slice(0, 40)}...">`}</code>
                 </p>
               </div>

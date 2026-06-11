@@ -907,14 +907,14 @@ function ClampTab() {
                   <line x1={graph.xStart} y1={graph.padT} x2={graph.xStart} y2={graph.H - graph.padB} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
                   <line x1={graph.xEnd} y1={graph.padT} x2={graph.xEnd} y2={graph.H - graph.padB} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
                   <path d={graph.path} stroke="var(--accent)" strokeWidth="2.5" fill="none" strokeLinejoin="round" strokeLinecap="round" />
-                  <text x={graph.xStart} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{nMinVw}px</text>
-                  <text x={graph.xEnd} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{nMaxVw}px</text>
-                  <text x={graph.padL - 6} y={graph.minLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{nMinPx}px</text>
-                  <text x={graph.padL - 6} y={graph.maxLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{nMaxPx}px</text>
+                  <text x={graph.xStart} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMinVw}px</text>
+                  <text x={graph.xEnd} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMaxVw}px</text>
+                  <text x={graph.padL - 6} y={graph.minLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMinPx}px</text>
+                  <text x={graph.padL - 6} y={graph.maxLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMaxPx}px</text>
                   {graph.markerX !== null && (
                     <>
                       <line x1={graph.markerX} y1={graph.padT} x2={graph.markerX} y2={graph.H - graph.padB} stroke="var(--text)" strokeWidth="1.5" />
-                      <text x={graph.markerX} y={graph.padT - 2} fill="var(--text)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
+                      <text x={graph.markerX} y={graph.padT - 2} fill="var(--text)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
                         {curVw}px → {graph.curValue !== null ? fmt(graph.curValue, 2) : ''}px
                       </text>
                     </>

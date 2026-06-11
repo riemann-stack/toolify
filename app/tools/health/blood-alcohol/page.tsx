@@ -33,7 +33,7 @@ export default function BloodAlcoholPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍺 혈중알코올 잔존량 추정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -47,12 +47,12 @@ export default function BloodAlcoholPage() {
 
         {/* ── 1. Widmark 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Widmark 공식
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Blood Alcohol Concentration</p>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6, marginBottom: '12px' }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6, marginBottom: '12px' }}>
               BAC(g/dL) = 알코올(g) ÷ (체중(kg) × r × 10)
             </p>
             <ul style={{ paddingLeft: '18px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
@@ -61,7 +61,7 @@ export default function BloodAlcoholPage() {
               <li>알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7894 (에탄올 밀도)</li>
               <li>감소율: 시간당 <strong style={{ color: 'var(--text)' }}>약 0.015 g/dL</strong> (표준, 개인차 있음)</li>
             </ul>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', marginTop: '14px', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', marginTop: '14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
               <span style={{ color: 'var(--muted)' }}>예시</span> 70kg 남성이 소주 1병(360ml × 16%) 음주 시<br/>
               알코올 = 360 × 0.16 × 0.7894 ≈ <strong>45.5g</strong><br/>
               최고 BAC = 45.5 ÷ (70 × 0.68 × 10) ≈ <strong style={{ color: 'var(--accent)' }}>0.096 g/dL</strong>
@@ -71,7 +71,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 2. 음주운전 처벌 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             음주운전 처벌 기준 (현행 · 2019년 6월~)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -93,7 +93,7 @@ export default function BloodAlcoholPage() {
                   ['측정 거부',   '면허취소',   '5년 결격, 1~5년 징역 또는 500만~2000만원 벌금',                 '#B91C1C'],
                 ].map(([bac, level, desc, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{bac}</td>
+                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{bac}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontWeight: 600 }}>{level}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{desc}</td>
                   </tr>
@@ -108,7 +108,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 3. 음주량별 BAC 예시 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             음주량별 BAC 예시
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.6 }}>
@@ -134,9 +134,9 @@ export default function BloodAlcoholPage() {
                 ].map(([drink, alc, bac, clear, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{drink}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{alc}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{bac}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{clear}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{alc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{bac}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{clear}</td>
                   </tr>
                 ))}
               </tbody>
@@ -146,7 +146,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 4. 알코올 분해 영향 요인 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧬 알코올 분해에 영향을 주는 요인
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -171,7 +171,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 5. 다음날 아침 운전 — 한국 단속 최다 케이스 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🌅 다음날 아침 운전 — 한국 단속 최다 케이스
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -196,7 +196,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 6. 여러 자리 음주 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🔢 1차·2차·3차 누적 음주 위험
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -212,13 +212,13 @@ export default function BloodAlcoholPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>1차 (19~20:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>소주 1병 + 맥주 500cc</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 60g</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>2차 (22~23:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>맥주 500cc 2잔</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 28g</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>3차 (0~1:00)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>양주 2샷</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 28g</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>1차 (19~20:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>소주 1병 + 맥주 500cc</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 60g</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>2차 (22~23:30)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>맥주 500cc 2잔</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 28g</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)' }}>3차 (0~1:00)</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>양주 2샷</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 28g</td></tr>
                 <tr style={{ background: 'rgba(220,38,38,0.06)' }}>
                   <td style={{ padding: '10px 12px', color: '#DC2626', fontWeight: 700 }}>합계</td>
                   <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>표준잔 14.5잔 (WHO 위험 음주 4배)</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>116g</td>
+                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>116g</td>
                 </tr>
               </tbody>
             </table>
@@ -230,7 +230,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 7. ALDH2 결손 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🧬 ALDH2 결손 — 한국인 30~40%
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '16px 18px' }}>
@@ -251,7 +251,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 8. 자전거·전동킥보드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🚲 자전거·전동킥보드 음주운전 (2021~)
           </h2>
           <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
@@ -268,7 +268,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 9. 약물 + 알코올 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             💊 약물 + 알코올 위험
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -296,7 +296,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 10. FAQ (accordion - salary style) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -337,7 +337,7 @@ export default function BloodAlcoholPage() {
           border: '2px solid rgba(220, 38, 38, 0.40)',
           borderRadius: '12px',
           padding: '18px 20px',
-          fontSize: '12.5px',
+          fontSize: '13px',
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
@@ -363,14 +363,14 @@ export default function BloodAlcoholPage() {
           <p style={{ color: 'var(--text)', fontWeight: 700, fontSize: 13.5 }}>
             본인과 타인의 생명을 지키는 가장 안전한 방법: <strong style={{ color: '#DC2626' }}>음주 후에는 절대 운전하지 마세요.</strong>
           </p>
-          <p style={{ marginTop: 10, fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <p style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
             <strong style={{ color: 'var(--text)' }}>주요 근거</strong> — 음주운전 처벌 기준: 도로교통공단·경찰청·찾기쉬운 생활법령정보 / 표준잔·위험 음주: NIAAA·WHO / 아세트알데히드·ALDH2·음주 암 위험: 국가암정보센터·WHO IARC. 법령·의학 기준은 개정될 수 있으니 공식 출처를 확인하세요.
           </p>
         </div>
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/alcohol',  icon: '🍺', name: '알코올 도수 계산기', desc: '혼합 음료 도수·표준 음주량' },

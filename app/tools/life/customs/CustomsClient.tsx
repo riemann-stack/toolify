@@ -240,7 +240,7 @@ export default function CustomsClient() {
               간이 예상세액 <strong style={{ color: result.totalTax > 0 ? '#DB2777' : 'var(--accent)' }}>
                 {result.totalTax > 0 ? `+${fmtKrw(result.totalTax)}` : '0원'}
               </strong>
-              <br /><span style={{ fontSize: 11.5 }}>※ HS코드·원산지·FTA·개별 규정 미반영 <strong>간이 예상치</strong>입니다. 통관 수수료·국내 판매가 비교는 품목·브랜드 편차가 커 제공하지 않아요. 정확한 세액은 <strong>관세청 예상세액 조회</strong>로 확인하세요.</span>
+              <br /><span style={{ fontSize: 12 }}>※ HS코드·원산지·FTA·개별 규정 미반영 <strong>간이 예상치</strong>입니다. 통관 수수료·국내 판매가 비교는 품목·브랜드 편차가 커 제공하지 않아요. 정확한 세액은 <strong>관세청 예상세액 조회</strong>로 확인하세요.</span>
             </p>
           </div>
 

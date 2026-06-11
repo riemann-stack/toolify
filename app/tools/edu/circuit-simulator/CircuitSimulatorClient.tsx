@@ -166,9 +166,9 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
           <g transform={`translate(0, ${(bottomY - wireY) / 2})`}>
             <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
             <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-            <text x="-25" y="0" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>+</text>
-            <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>−</text>
-            <text x="-50" y="5" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{fmtV(voltage)}</text>
+            <text x="-25" y="0" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
+            <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
+            <text x="-50" y="5" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
           </g>
         </g>
 
@@ -193,10 +193,10 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
                 fill="none" stroke="#A16207" strokeWidth="1.5"
               />
               {/* 라벨 */}
-              <text x={cx} y={y - 18} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label}</text>
-              <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{fmtR(r.resistance)}</text>
-              <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{fmtV(r.voltage)}</text>
-              <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? '#DC2626' : 'var(--muted)'} textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+              <text x={cx} y={y - 18} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{r.label}</text>
+              <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmtR(r.resistance)}</text>
+              <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{fmtV(r.voltage)}</text>
+              <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? '#DC2626' : 'var(--muted)'} textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                 {fmtW(r.power)}{r.powerExceeded ? ' ⚠️' : ''}
               </text>
             </g>
@@ -207,7 +207,7 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         <line x1={padX - 30} y1={bottomY} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         <line x1={W - padX + 30} y1={wireY - 30} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         {/* 전류 화살표 (상단) */}
-        <text x={padX + innerW / 2} y={wireY - 50} fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+        <text x={padX + innerW / 2} y={wireY - 50} fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
           → I = {fmtA(totalI)}
         </text>
       </svg>
@@ -229,9 +229,9 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         <line x1="0" y1={-(wireYBottom - wireYTop) / 2} x2="0" y2={(wireYBottom - wireYTop) / 2} stroke="var(--text)" strokeWidth="2" />
         <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
         <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-        <text x="-25" y="-20" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>+</text>
-        <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>−</text>
-        <text x="-50" y="5"   fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{fmtV(voltage)}</text>
+        <text x="-25" y="-20" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
+        <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
+        <text x="-50" y="5"   fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
       </g>
 
       {/* 위 메인 라인 */}
@@ -267,12 +267,12 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
               points={`${x + 4},${y + rectH / 2} ${x + 8},${y + 4} ${x + 14},${y + rectH - 4} ${x + 20},${y + 4} ${x + 26},${y + rectH - 4} ${x + 32},${y + 4} ${x + 38},${y + rectH - 4} ${x + 42},${y + rectH / 2} ${x + rectW - 4},${y + rectH / 2}`}
               fill="none" stroke="#A16207" strokeWidth="1.5"
             />
-            <text x={cx} y={y - 6} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
-            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="#A16207" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>I = {fmtA(r.current)}</text>
+            <text x={cx} y={y - 6} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
+            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="#A16207" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>I = {fmtA(r.current)}</text>
           </g>
         )
       })}
-      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="#0D9488" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
         → I_total = {fmtA(totalI)}
       </text>
     </svg>
@@ -839,7 +839,7 @@ export default function CircuitSimulatorClient() {
               <span>현재 시뮬레이터 회로의 단계별 풀이</span>
               <span className={s.cardLabelHint}>회로 시뮬레이터 탭에서 회로 변경 가능</span>
             </div>
-            <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
               회로: <strong style={{ color: '#0D9488' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
               {' '}저항 <strong style={{ color: '#A16207' }}>{resistors.length}개</strong> ·
               {' '}전원 <strong style={{ color: '#0D9488' }}>{fmtV(voltage)}</strong>

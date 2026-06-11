@@ -64,7 +64,7 @@ function BodyConditionCard({ body, weight, species }: { body: BodyEvaluation; we
       </div>
       {body.range && (
         <div className={styles.bcsRange}>
-          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
+          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
         </div>
       )}
       <div className={styles.bcsBar}>
@@ -294,7 +294,7 @@ function DogTab() {
         <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10% · 사료에서 차감" treat />
       </div>
 
-      <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
 
       <div className={styles.waterCard}>
         <span className={styles.waterIcon}>💧</span>
@@ -521,7 +521,7 @@ function CatTab() {
         </div>
       )}
 
-      <p style={{ fontSize: '11.5px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
 
       <div className={styles.waterTip}>
         💧 <strong style={{ color: 'var(--text)' }}>고양이 수분 섭취 팁:</strong> 고양이는 본능적으로 물을 잘 마시지 않아 만성 탈수와 신장병 위험이 높습니다. 습식 사료(수분 약 70~80%)를 활용하거나, 흐르는 물 분수를 사용하면 수분 섭취를 늘릴 수 있습니다.

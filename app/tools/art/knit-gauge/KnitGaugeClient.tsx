@@ -712,7 +712,7 @@ export default function KnitGaugeClient() {
                         <td><strong>{y.shortLabel}</strong></td>
                         <td className={s.mono}>{y.sts10cm[0]}–{y.sts10cm[1]}</td>
                         <td className={s.mono}>{y.needleMm[0]}–{y.needleMm[1]}</td>
-                        <td style={{ fontSize: 11.5 }}>{y.examples}</td>
+                        <td style={{ fontSize: 12 }}>{y.examples}</td>
                       </tr>
                     )
                   })}
@@ -804,7 +804,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#9333EA" fontSize={12} fontWeight={700} fontFamily="Inter, system-ui, sans-serif">
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#9333EA" fontSize={12} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
         {getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · {fmt(stsPer10cm, 0)} sts × {fmt(rowsPer10cm, 0)} rows / 10cm
       </text>
     </svg>

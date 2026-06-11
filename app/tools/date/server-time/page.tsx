@@ -56,7 +56,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -66,7 +66,7 @@ export default function ServerTimePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⏱️ 실시간 서버 시간
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -148,13 +148,13 @@ export default function ServerTimePage() {
             <p style={{ fontSize: '12px', color: '#0D9488', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '10px' }}>
               실사용 사례 — 2026 경주 동아마라톤 접수 성공 (2026. 05. 26. 19시)
             </p>
-            <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
               지난해 경주 동아마라톤은 10시 정각에 「시작!」 버튼을 눌렀는데도 이미 대기열 수천 번째였고, 결국 <strong style={{ color: 'var(--text)' }}>풀코스는 눈앞에서 마감</strong>됐습니다. 분명 시계는 10시였는데 왜 늦었을까 — 알고 보니 제 노트북 시계가 서버보다 <strong style={{ color: 'var(--text)' }}>약 1.8초 빨랐던</strong> 것이었습니다.
             </p>
-            <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
               올해 <strong style={{ color: 'var(--text)' }}>2026 경주 동아마라톤</strong>은 전략을 바꿨습니다. 접수 며칠 전부터 이 도구의 외부 사이트 트래킹에 <strong style={{ color: 'var(--text)' }}>동마클럽 서버</strong>를 등록해 두고, 내 시계와의 오차를 매일 확인했습니다. 당일엔 유선 인터넷에 연결하고, 알림음을 1초·정각으로 켠 뒤, 서버 시각 기준 <strong style={{ color: 'var(--text)' }}>약 0.7초 전</strong>에 새로고침을 눌렀습니다.
             </p>
-            <p style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.9, fontWeight: 600 }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, fontWeight: 600 }}>
               결과 — 대기열 앞쪽에 진입해 결제까지 2분 만에 완료, 그렇게 어렵던 <strong style={{ color: '#0D9488' }}>풀코스 배번을 확보</strong>했습니다. 1초의 차이가 완주의 출발선이 됐습니다. 🏃
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function ServerTimePage() {
               { step: '4', title: '5분마다 재동기화', content: '브라우저 슬립·시계 드리프트를 보정하기 위해 자동 재측정. 「↻ 다시 동기화」 버튼으로 수동 실행도 가능.' },
             ].map((item) => (
               <div key={item.step} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', gap: '14px' }}>
-                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
+                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.content}</p>

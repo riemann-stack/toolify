@@ -213,7 +213,7 @@ function TextureCard({ analysis }: { analysis: AnalysisLike }) {
     <div className={s.textureCard}>
       <div className={s.textureLabel}>🧁 예상 식감·외관</div>
       <p className={s.textureBody}>{t.headline}</p>
-      <p className={s.textureBody} style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6 }}>{t.detail}</p>
+      <p className={s.textureBody} style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6 }}>{t.detail}</p>
       {t.tags.length > 0 && (
         <div className={s.textureTags}>
           {t.tags.map(tag => <span key={tag} className={s.textureTag}>{tag}</span>)}
@@ -915,7 +915,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 
@@ -999,7 +999,7 @@ export default function BakerPercentClient() {
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
                   border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14,
+                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1197,7 +1197,7 @@ export default function BakerPercentClient() {
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
                   border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14,
+                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />

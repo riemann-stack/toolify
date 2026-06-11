@@ -61,7 +61,7 @@ export default function IntervalTrainingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏃‍♂️ 인터벌 훈련 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -78,7 +78,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 1. Jack Daniels 5가지 강도 (E·M·T·I·R) 자세히 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>
             러닝 훈련의 5가지 강도 — E · M · T · I · R 완벽 정리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '18px' }}>
@@ -126,10 +126,10 @@ export default function IntervalTrainingPage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `4px solid ${g.c}`, borderRadius: 12, padding: '14px 18px' }}>
                 <p style={{ marginBottom: 8 }}>
-                  <span style={{ fontSize: 18, color: g.c, fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif' }}>{g.i}</span>
+                  <span style={{ fontSize: 18, color: g.c, fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.i}</span>
                   <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginLeft: 8 }}>{g.n}</span>
                 </p>
-                <div style={{ display: 'grid', gridTemplateColumns: '74px 1fr', gap: '4px 10px', fontSize: 12.5, lineHeight: 1.65 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '74px 1fr', gap: '4px 10px', fontSize: 13, lineHeight: 1.65 }}>
                   <span style={{ color: 'var(--muted)', fontWeight: 600 }}>키우는 것</span><span style={{ color: 'var(--text)' }}>{g.what}</span>
                   <span style={{ color: 'var(--muted)', fontWeight: 600 }}>체감</span><span style={{ color: 'var(--text)' }}>{g.feel}</span>
                   <span style={{ color: 'var(--muted)', fontWeight: 600 }}>페이스</span><span style={{ color: 'var(--text)' }}>{g.pace}</span>
@@ -146,7 +146,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 2. 거리별 추천 메뉴 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             거리별 인터벌 추천 메뉴
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -167,9 +167,9 @@ export default function IntervalTrainingPage() {
                   { d: '2km',          u: '역치·하프',       r: '3~4회',  c: '600m 조깅' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.u}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.c}</td>
                   </tr>
                 ))}
@@ -180,7 +180,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 3. 야소 800 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             야소 800 완전 가이드 (한국 러너에게 인기)
           </h2>
           <div style={{
@@ -205,7 +205,7 @@ export default function IntervalTrainingPage() {
               { i: '4:30/800m', m: '4:30:00 풀코스', c: '#DC2626' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: r.c, fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.i}</p>
+                <p style={{ fontSize: 13, color: r.c, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.i}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>→ {r.m}</p>
               </div>
             ))}
@@ -215,7 +215,7 @@ export default function IntervalTrainingPage() {
             border: '2px solid rgba(234,88,12,0.3)',
             borderRadius: 12,
             padding: '14px 18px',
-            fontSize: 12.5,
+            fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
@@ -228,7 +228,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 4. VDOT 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             VDOT 표 — 5km 기록별 인터벌 페이스
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -250,10 +250,10 @@ export default function IntervalTrainingPage() {
                   { t: '16:00', v: 60, i: '3:14', r: '1:18' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.i}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.i}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -263,7 +263,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 5. 회복 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             회복 시간·거리 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -295,7 +295,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 6. 트랙 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             트랙 거리 환산 (표준 트랙 1바퀴 = 400m)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8 }}>
@@ -308,7 +308,7 @@ export default function IntervalTrainingPage() {
               { d: '1600m', l: '4바퀴 (1마일)' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
-                <p style={{ fontSize: 16, color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
+                <p style={{ fontSize: 16, color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{r.l}</p>
               </div>
             ))}
@@ -317,7 +317,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 7. 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인터벌 훈련 시 주의사항
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -328,7 +328,7 @@ export default function IntervalTrainingPage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => (<li key={j}>{it}</li>))}
                 </ul>
               </div>
@@ -338,7 +338,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 8. 16주 풀 스케줄 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📅 16주 풀 인터벌 스케줄 구조
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -352,7 +352,7 @@ export default function IntervalTrainingPage() {
               { p: '13~16주', n: '🟠 테이퍼', d: '강도 ↓ + 회복. 대회 직전 1~2주 집중 회복.' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.p}</p>
+                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.p}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>{m.n}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{m.d}</p>
               </div>
@@ -365,7 +365,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 9. 1바퀴(400m) 페이스 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏟️ 1바퀴(400m) 페이스 일정성 — 인터벌 효과의 핵심
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -390,9 +390,9 @@ export default function IntervalTrainingPage() {
                   { d: '1.6km',  t: '6:57', l: '1:44.3',  track: '4바퀴 (1마일)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.track}</td>
                   </tr>
                 ))}
@@ -406,7 +406,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 10. 목적별 거리 선택 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🎯 목적별 인터벌 거리 선택
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -430,7 +430,7 @@ export default function IntervalTrainingPage() {
                   { d: '2~3km',    e: '🔵 T 페이스 (역치)',                    t: '하프·풀코스 지구력' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.e}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
                   </tr>
@@ -442,7 +442,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 11. 한국 인기 대회 시즌 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏃 한국 인기 마라톤 대회 시즌
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -456,7 +456,7 @@ export default function IntervalTrainingPage() {
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>{m.s}</p>
-                <p style={{ fontSize: '12.5px', color: 'var(--text)', marginBottom: '6px', lineHeight: 1.6 }}>{m.races}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '6px', lineHeight: 1.6 }}>{m.races}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>📅 준비: {m.plan}</p>
               </div>
             ))}
@@ -471,7 +471,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 12. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -492,7 +492,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

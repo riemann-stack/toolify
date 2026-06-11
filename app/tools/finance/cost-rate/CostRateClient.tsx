@@ -429,7 +429,7 @@ export default function CostRateClient() {
                     ))}
                   </tbody>
                 </table>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, margin: '6px 2px 0' }}>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: '6px 2px 0' }}>
                   ※ <strong style={{ color: 'var(--text)' }}>단위당가</strong>는 선택한 단위 1개당 가격입니다. kg↔g·L↔ml 자동 환산은 없으니 단위에 맞춰 입력하세요 (예: 200 g × 30원 = 6,000원 / 0.2 kg × 30,000원 = 6,000원).
                 </p>
                 {ingredients.length < 15 && (
@@ -756,7 +756,7 @@ export default function CostRateClient() {
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
+            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
           </div>
 
           <div className={styles.kpiGrid}>
@@ -806,7 +806,7 @@ export default function CostRateClient() {
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 {monthlyMenuStats.targetExtraItems === 0
                   ? <>✅ 이미 목표 영업이익 <strong style={{ color: 'var(--accent)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong>를 달성하고 있습니다.</>
-                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
+                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
               </p>
             ) : (
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>메뉴 데이터를 먼저 입력해주세요.</p>

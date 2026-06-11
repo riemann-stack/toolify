@@ -289,7 +289,7 @@ function ScaleTab() {
 
         {/* 양념 자동 인식 안내 */}
         {ingredients.some(i => isSeasoning(i.name)) && (
-          <p style={{ fontSize: 11.5, color: '#EA580C', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <p style={{ fontSize: 12, color: '#EA580C', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
             🌶️ 양념·향신료가 자동 감지되었습니다. &quot;양념 자동 보정&quot;이 활성화된 경우 인분 늘릴 때 보정값이 적용됩니다.
           </p>
         )}
@@ -451,11 +451,11 @@ function ConvertTab() {
         </div>
 
         {info ? (
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
             ✓ <strong style={{ color: 'var(--text)' }}>{info.name}</strong> 인식됨 — 밀도 {info.gPerMl} g/ml{info.isSeasoning && ' · 🌶️ 양념'}
           </p>
         ) : (
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
             ⚠️ 재료 밀도 정보 없음 — 부피 ↔ 무게 변환은 물(1.0 g/ml)로 가정됩니다.
           </p>
         )}
@@ -484,7 +484,7 @@ function ConvertTab() {
               })}
             </div>
           ) : (
-            <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'Noto Sans KR, sans-serif', margin: 0 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'Noto Sans KR, sans-serif', margin: 0 }}>
               {isCountUnit
                 ? <>⚠️ <strong style={{ color: 'var(--text)' }}>개·반 개·쪽·단</strong> 같은 개수 단위는 무게·부피로 변환할 수 없습니다. <strong style={{ color: 'var(--text)' }}>g·ml·컵·큰술</strong> 등으로 입력해 주세요.</>
                 : <>변환할 수 있는 결과가 없습니다. 재료명·양·단위를 확인해 주세요.</>}
@@ -667,7 +667,7 @@ function SavedTab({ active }: { active: boolean }) {
           내 레시피
           <span className={s.cardLabelHint}>{recipes.length}개 저장됨</span>
         </label>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
+        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
           자주 만드는 레시피를 브라우저에 저장하고 인분 변경·복제·메모 관리. <strong style={{ color: 'var(--text)' }}>localStorage</strong>에 저장되므로 캐시 삭제 시 사라질 수 있습니다 — 중요 레시피는 백업 권장.
         </p>
         {!showForm && (
@@ -888,7 +888,7 @@ function ShoppingTab({ active }: { active: boolean }) {
           장보기 리스트
           <span className={s.cardLabelHint}>여러 레시피 재료 합산</span>
         </label>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
+        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
           이번 주 만들 레시피를 추가하면 마트 코너별(채소·육류·유제품 등)로 정리된 합산 장보기 리스트가 생성됩니다.
           {allRecipes.length === 0 && ` [내 레시피] 탭에 저장된 레시피와 ${RECIPE_PRESETS.length}가지 프리셋 모두 사용 가능합니다.`}
         </p>
@@ -973,7 +973,7 @@ function ShoppingTab({ active }: { active: boolean }) {
               </div>
             </div>
           ))}
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.6 }}>
             ⚠️ 같은 재료라도 단위가 다르면(g vs ml) 합산되지 않습니다. 같은 단위로 입력하면 자동 합산됩니다.
           </p>
         </div>

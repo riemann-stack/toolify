@@ -36,7 +36,7 @@
 .ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }@media (hover: hover) {
   .ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.mainBtn { padding: 14px 40px; border: none; border-radius: 99px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #ffffff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
+.mainBtn { padding: 14px 40px; border: none; border-radius: 999px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #ffffff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
   .mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
 }
 
@@ -97,7 +97,7 @@
 .optionRow + .optionRow { border-top: 1px solid var(--border); }
 .optionLabel { font-size: 13px; color: var(--text); }
 .optionDesc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.toggle { width: 40px; height: 22px; background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; position: relative; cursor: pointer; transition: all 0.15s; flex-shrink: 0; appearance: none; -webkit-appearance: none; padding: 0; }
+.toggle { width: 40px; height: 22px; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; position: relative; cursor: pointer; transition: all 0.15s; flex-shrink: 0; appearance: none; -webkit-appearance: none; padding: 0; }
 .toggleOn { background: var(--accent); border-color: var(--accent); }
 .toggleDot { width: 16px; height: 16px; background: var(--bg2); border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.15s; }
 .toggleOn .toggleDot { left: 20px; background: #0D0D0D; }

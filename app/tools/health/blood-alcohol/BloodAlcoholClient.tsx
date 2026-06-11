@@ -613,7 +613,7 @@ export default function BloodAlcoholClient() {
               {/* Y축 레이블 */}
               {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
                 <text key={i} x={padL - 6} y={padT + (1 - t) * plotH + 3}
-                  fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
+                  fill="var(--muted)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
                 >
                   {(t * maxBAC).toFixed(2)}
                 </text>
@@ -624,7 +624,7 @@ export default function BloodAlcoholClient() {
                 if (h > maxHours) return null
                 return (
                   <text key={i} x={xFromHour(h)} y={chartH - padB + 14}
-                    fill="var(--muted)" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle"
+                    fill="var(--muted)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle"
                   >
                     +{h}h
                   </text>
@@ -634,14 +634,14 @@ export default function BloodAlcoholClient() {
               <line x1={padL} x2={chartW - padR} y1={y003} y2={y003}
                 stroke="#EA580C" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y003 - 4}
-                fill="#EA580C" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
+                fill="#EA580C" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
               >
                 0.03 면허정지
               </text>
               <line x1={padL} x2={chartW - padR} y1={y008} y2={y008}
                 stroke="#DC2626" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y008 - 4}
-                fill="#DC2626" fontSize="10" fontFamily="Inter, system-ui, sans-serif" textAnchor="end"
+                fill="#DC2626" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
               >
                 0.08 면허취소
               </text>
@@ -1054,7 +1054,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
               {[0.03, 0.08].map(t => (
                 <g key={t}>
                   <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#DC2626' : '#EA580C'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
                 </g>
               ))}
               {/* 자리별 영역 */}

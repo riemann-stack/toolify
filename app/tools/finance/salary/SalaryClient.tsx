@@ -260,7 +260,7 @@ export default function SalaryClient() {
           ))}
         </div>
         <details style={{ marginTop: 8 }}>
-          <summary style={{ cursor: 'pointer', fontSize: 11.5, color: 'var(--muted)' }}>
+          <summary style={{ cursor: 'pointer', fontSize: 12, color: 'var(--muted)' }}>
             기타 비과세 직접 입력
           </summary>
           <div className={styles.inputRow} style={{ marginTop: 8 }}>
@@ -293,7 +293,7 @@ export default function SalaryClient() {
             style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
             <div className={styles.heroLabel}>월 실수령액</div>
             <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
-              {won(result.netMonthly)}
+              {wn(result.netMonthly)}<span className={styles.heroNumUnit}>원</span>
             </div>
             <div className={styles.heroSub}>
               연 실수령 {formatEok(result.netYearly)} · 실수령률 <strong style={{ color: 'var(--accent)' }}>{result.takeHomeRate.toFixed(1)}%</strong>
@@ -314,7 +314,7 @@ export default function SalaryClient() {
                   ))}
                   <circle cx="80" cy="80" r="32" fill="var(--bg2)" />
                   <text x="80" y="78" textAnchor="middle" fontSize="11" fill="var(--muted)" fontFamily="Noto Sans KR">월급</text>
-                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily="Inter, system-ui, sans-serif">{Math.round(result.grossMonthly / 10_000)}만</text>
+                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{Math.round(result.grossMonthly / 10_000)}만</text>
                 </svg>
                 <div className={styles.donutLegend}>
                   {donut.arcs.map((a, i) => {
@@ -416,7 +416,7 @@ export default function SalaryClient() {
                 {percentile.description}
               </div>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
               ⓘ 통계청·국세청 임금근로자 평균 연봉 약 4,300만원, 중위소득 약 3,600만원 (2026년 기준 추정).
               본 위치는 추정값이며 업종·지역·연령에 따라 다릅니다.
             </p>
@@ -477,7 +477,7 @@ export default function SalaryClient() {
                 style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
                 <div className={styles.heroLabel}>체감 시급 (출퇴근 포함)</div>
                 <div className={styles.heroNum} style={{ color: '#EA580C' }}>
-                  {won(hourly.perceivedHourlyNet)}
+                  {wn(hourly.perceivedHourlyNet)}<span className={styles.heroNumUnit}>원</span>
                 </div>
                 <div className={styles.heroSub}>
                   세전 시급 {won(hourly.baseHourlyGross)} · 세후 {won(hourly.baseHourlyNet)} · 야근 포함 {won(hourly.realHourlyNet)}

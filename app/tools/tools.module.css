@@ -47,7 +47,7 @@
 @media (hover: hover) { .searchClear:hover { color: var(--text); } }
 
 .searchCount {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-weight: 600;
   margin: 0 0 12px;
@@ -58,7 +58,7 @@
   border-radius: 12px;
   padding: 28px 20px;
   text-align: center;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.8;
 }
@@ -269,7 +269,7 @@
   }
   .toolIcon { font-size: 19px; margin-top: 0; }
   .toolName {
-    font-size: 13.5px;
+    font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -277,7 +277,7 @@
   }
   /* 모바일에서는 설명 숨김 — 이름만으로 빠른 스캔 */
   .toolDesc { display: none; }
-  .toolCatTag { font-size: 10.5px; }
+  .toolCatTag { font-size: 11px; }
   .badge {
     position: static;
     flex-shrink: 0;

@@ -84,7 +84,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -209,7 +209,7 @@
 .ingredientTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
   margin-top: 8px;
 }
 .ingredientTable th, .ingredientTable td {
@@ -218,7 +218,7 @@
   text-align: left;
 }
 .ingredientTable th {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -241,7 +241,7 @@
 .ingRow td input[type=text] {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 400;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .ingRow td input[type=number]::-webkit-outer-spin-button,
 .ingRow td input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -306,7 +306,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -322,7 +322,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--accent);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .appBaemin    { border-color: rgba(16,185,129,0.45); }
 .appCoupang   { border-color: rgba(220,38,38,0.45); }
@@ -464,7 +464,7 @@
 }
 .breakdownTable td:first-child {
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 13px;
   white-space: nowrap;
 }
 .breakdownDot {
@@ -497,7 +497,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   padding: 7px 4px;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
@@ -590,7 +590,7 @@
   -webkit-appearance: none;
   height: 4px;
   background: var(--bg3);
-  border-radius: 99px;
+  border-radius: 999px;
   outline: none;
   cursor: pointer;
 }
@@ -738,7 +738,7 @@
   grid-template-columns: 1.4fr 1fr 1fr 0.5fr;
   gap: 6px;
   margin-bottom: 6px;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;

@@ -405,7 +405,7 @@ export default function LadderClient() {
       </div>
 
       {hasSelfMatch && (
-        <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+        <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
           🎁 <strong>시크릿 산타 주의</strong> — 자기 배정을 자동으로 피하려 했지만, 중복 이름 등으로 본인에게 배정된 사람이 남아 있어요. 참가자·결과 이름을 서로 다르게 하면 해결됩니다.
         </div>
       )}

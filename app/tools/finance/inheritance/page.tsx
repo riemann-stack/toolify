@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import InheritanceClient from './InheritanceClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
@@ -33,7 +34,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -103,7 +104,7 @@ export default function InheritancePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏛️ 상속·증여세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -113,6 +114,8 @@ export default function InheritancePage() {
       <UpdatedMeta date="2026년 5월" basis="2026년 상속·증여세법 기준" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"}]} />
 
       <InheritanceClient />
+
+      <GuideDivider />
 
       {/* 1. 증여세 공제 한도표 (기존 SEO 보존) */}
       <h2 style={sectionTitle}>📋 증여세 공제 한도 (2026년 기준)</h2>

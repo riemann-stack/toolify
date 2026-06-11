@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import ScrewClient from './ScrewClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/screw',
@@ -11,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -82,7 +84,7 @@ export default function ScrewPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔩 나사 규격 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
@@ -95,6 +97,8 @@ export default function ScrewPage() {
       </p>
 
       <ScrewClient />
+
+      <GuideDivider />
 
       {/* 1. 나사 종류 가이드 */}
       <h2 style={sectionTitle}>🔩 7가지 나사 종류 가이드</h2>
@@ -382,24 +386,15 @@ export default function ScrewPage() {
       </details>
 
       {/* 면책 */}
-      <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+      <Disclaimer variant="default" open>
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>본 도구는 <strong>일반 가이드</strong>입니다. 표준 사이즈 기준 (KS·DIN·ISO·JIS).</li>
           <li>실제 호환성은 ±0.1~0.5mm 차이 가능. 정밀 가공은 실측 권장.</li>
           <li>본 도구는 <strong>특정 브랜드·공구 추천 X · 정확한 토크값 보장 X · 인장/전단강도 보장 X · 항공/자동차 정밀 산업 적용 X · DIY 안전 가이드 X</strong>.</li>
           <li>⚠️ 드릴·탭 작업: 보호 안경·장갑 필수. 절삭유 사용. 응급 <strong>119</strong>.</li>
           <li>도움: 한국공구협회 · 한국표준과학연구원 · 가까운 공구상·시공 전문가.</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

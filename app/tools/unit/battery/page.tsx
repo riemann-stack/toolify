@@ -45,9 +45,9 @@ const FAQ_LD = [
 
 export default function BatteryPage() {
   return (
-    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔋 배터리 용량 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -64,7 +64,7 @@ export default function BatteryPage() {
 
         {/* ── 1. mAh와 Wh의 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             mAh와 Wh의 차이 — 왜 Wh로 환산해야 하나?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -91,11 +91,11 @@ export default function BatteryPage() {
 
         {/* ── 2. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 공식
           </h2>
           <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: '6px' }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: '6px' }}>
               Wh = (<span style={{ color: 'var(--accent)' }}>mAh</span> × <span style={{ color: 'var(--accent)' }}>V</span>) ÷ 1000
             </p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -110,8 +110,8 @@ export default function BatteryPage() {
               { ex: '5,000mAh × 5V',     res: '25 Wh' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 12px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{c.ex}</p>
-                <p style={{ fontSize: '15px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, marginTop: '2px' }}>= {c.res}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{c.ex}</p>
+                <p style={{ fontSize: '15px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, marginTop: '2px' }}>= {c.res}</p>
               </div>
             ))}
           </div>
@@ -119,7 +119,7 @@ export default function BatteryPage() {
 
         {/* ── 3. 인기 보조배터리 모델별 Wh 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인기 보조배터리 모델별 Wh 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -148,8 +148,8 @@ export default function BatteryPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.w}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.w}</td>
                     <td style={{ padding: '9px 10px', color: r.c, fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
@@ -160,7 +160,7 @@ export default function BatteryPage() {
 
         {/* ── 4. 항공사별 보조배터리 정책 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             항공사별 보조배터리 정책
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -177,7 +177,7 @@ export default function BatteryPage() {
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.air}</p>
-                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.limit}</p>
+                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.limit}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.note}</p>
               </div>
             ))}
@@ -196,7 +196,7 @@ export default function BatteryPage() {
 
         {/* ── 4-1. 2025~2026년 달라진 한국 기내 보조배터리 규정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2025~2026년 달라진 한국 기내 보조배터리 규정
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -221,7 +221,7 @@ export default function BatteryPage() {
               },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.d}</p>
+                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.d}</p>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>{c.body}</p>
               </div>
@@ -237,7 +237,7 @@ export default function BatteryPage() {
 
         {/* ── 5. 자주 검색되는 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 사례
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -251,7 +251,7 @@ export default function BatteryPage() {
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -260,7 +260,7 @@ export default function BatteryPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -284,7 +284,7 @@ export default function BatteryPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

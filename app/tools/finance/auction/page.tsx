@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import AuctionClient from './AuctionClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -12,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +69,7 @@ export default function AuctionPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏛️ 경매 비용 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -78,6 +79,8 @@ export default function AuctionPage() {
       <UpdatedMeta date="2026년 6월" basis="2026년 지방세법 기준 (취득세율 제11조·중과 제13조의2)" sources={[{"label":"위택스","href":"https://www.wetax.go.kr"},{"label":"행정안전부","href":"https://www.mois.go.kr"}]} />
 
       <AuctionClient />
+
+      <GuideDivider />
 
       {/* 1. 어떻게 사용하나요? */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -126,7 +129,7 @@ export default function AuctionPage() {
                       fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'inherit',
                       color: j === 1 ? 'var(--accent)' : (j === 2 ? 'var(--muted)' : 'var(--text)'),
                       fontWeight: j === 0 ? 700 : 500,
-                      fontSize: 12.5,
+                      fontSize: 13,
                     }}>{cell}</td>
                   ))}
                 </tr>
@@ -165,7 +168,7 @@ export default function AuctionPage() {
                       padding: '6px 0',
                       textAlign: j === 0 ? 'left' : 'right',
                       color: j === 1 ? 'var(--accent)' : 'var(--text)',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
                       fontWeight: j === 0 ? 600 : 700,
                     }}>{cell}</td>
                   ))}
@@ -173,7 +176,7 @@ export default function AuctionPage() {
               ))}
             </tbody>
           </table>
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '10px 0 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', margin: '10px 0 0', lineHeight: 1.7 }}>
             ※ 2026년 지방세법 기준 (제11조·제13조의2, 2026년 6월 확인 — 위택스·행정안전부) · 취득세 + 지방교육세 합계, 전용 85㎡ 이하
           </p>
         </div>

@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
 
 const FAQ_LD = [
@@ -63,7 +63,7 @@ export default function HyroxPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏋️ 하이록스(HYROX) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -117,14 +117,14 @@ export default function HyroxPage() {
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#A16207', fontWeight: 700 }}>1km</span></td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. 월 볼은 남자 100회·여자 75회.
           </p>
         </section>
@@ -141,7 +141,7 @@ export default function HyroxPage() {
             ].map((x, i) => (
               <div key={i} style={{ ...card, borderLeft: `4px solid ${x.c}` }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: x.c, marginBottom: 6 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -159,7 +159,7 @@ export default function HyroxPage() {
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -192,17 +192,17 @@ export default function HyroxPage() {
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r[0]}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 참가비는 부문·시기마다 다르며, 2025년 11월 서울 대회 기준 <strong style={{ color: 'var(--text)' }}>1인 약 20만 원</strong> 수준으로 보도되었습니다(한국경제, 2025년 11월). 인기 부문은 조기 매진되는 경우가 많습니다.
           </p>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
             ※ 차기 서울 대회는 2026년 하반기 개최가 예고되어 있으나, 확정 일정·장소·티켓 오픈은 공식 사이트{' '}
             <a href="https://hyrox.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>hyrox.com</a>
             에서 확인하세요. 공식 규정상 대회 등록은 hyrox.com을 통해서만 가능합니다. (출처: 인천광역시·인천관광공사 보도자료, 한국경제·우리일보 보도, HYROX 공식 룰북 시즌 25/26)
@@ -238,7 +238,7 @@ export default function HyroxPage() {
               <Link key={t.href} href={t.href} style={{ ...card, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
                 <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
               </Link>

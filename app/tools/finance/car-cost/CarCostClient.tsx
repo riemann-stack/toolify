@@ -1050,17 +1050,17 @@ export default function CarCostClient() {
             <div className={s.threeCol}>
               <div>
                 <div className={s.subLabel}>시간당 요금</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
+                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
                 <div className={s.helperText}>소형 기준</div>
               </div>
               <div>
                 <div className={s.subLabel}>km당 요금</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
+                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
                 <div className={s.helperText}>보험·연료 포함</div>
               </div>
               <div>
                 <div className={s.subLabel}>100km당 평균 시간</div>
-                <div style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
+                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
                 <div className={s.helperText}>도심 운전 가정</div>
               </div>
             </div>
@@ -1074,7 +1074,7 @@ export default function CarCostClient() {
               </div>
               {shareCompare.map(row => (
                 <div key={row.monthlyKm} className={s.shareRow}>
-                  <span style={{ fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row.monthlyKm.toLocaleString()}km</span>
+                  <span style={{ fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row.monthlyKm.toLocaleString()}km</span>
                   <span className={s.shareRowOwn}>{formatKRW(row.ownCost)}</span>
                   <span className={s.shareRowShare}>{formatKRW(row.shareCost)}</span>
                   <span className={`${s.winnerCell} ${row.winner === '쏘카' ? s.shareRowShare : row.winner === '보유' ? s.shareRowOwn : s.shareRowEqual}`}>

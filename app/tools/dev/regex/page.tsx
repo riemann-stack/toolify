@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import RegexClient from './RegexClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -19,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -61,7 +62,7 @@ const codeStyle: React.CSSProperties = {
   padding: '2px 6px',
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
-  fontSize: '12.5px',
+  fontSize: '13px',
 }
 
 const FAQ_LD = [
@@ -83,7 +84,7 @@ export default function RegexPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔍 정규식 테스트기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -98,7 +99,7 @@ export default function RegexPage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 정규식 매칭은 모두 <strong>브라우저에서 실행</strong>되며 입력 데이터는 외부로 전송되지 않습니다.
           주민번호·카드번호 등 <strong>개인정보를 다룰 때는 본 도구가 아닌 KISA·OWASP 가이드</strong>를 따른 안전한 검증 절차를 사용하세요.
           잘못된 정규식은 브라우저를 일시 정지시킬 수 있습니다 (catastrophic backtracking) —{' '}
@@ -107,6 +108,8 @@ export default function RegexPage() {
       </div>
 
       <RegexClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -237,7 +240,7 @@ $1 = "example" (도메인만 캡처)
                   <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: '#0EA5E9', fontWeight: 700 }}>{row[0]}</code></td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -254,7 +257,7 @@ $1 = "example" (도메인만 캡처)
         </p>
         <div style={{ background: 'rgba(219, 39, 119, 0.06)', border: '1px solid #DB2777', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
           <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
-          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
+          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             <li><code style={codeStyle}>{`(a+)+$`}</code> + <code style={codeStyle}>aaaaaaaaaaaaa!</code> — 매치 시도 2^N</li>
             <li><code style={codeStyle}>{`(a|aa)+$`}</code> — 분기 백트래킹 폭발</li>
             <li><code style={codeStyle}>{`(.*)*`}</code> — 무한 분기</li>
@@ -263,7 +266,7 @@ $1 = "example" (도메인만 캡처)
         </div>
         <div style={{ background: 'rgba(14, 165, 233, 0.06)', border: '1px solid #0EA5E9', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 13, color: '#0EA5E9', fontWeight: 700, margin: '0 0 8px' }}>✅ 안전한 대체 패턴</p>
-          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
+          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             <li>중첩 양화 한정자 피하기 — <code style={codeStyle}>{`(a+)+`}</code> → <code style={codeStyle}>{`a+`}</code></li>
             <li>분기는 가능한 한 명확하게 — <code style={codeStyle}>{`(?:foo|bar)`}</code></li>
             <li>가능하면 lazy 사용 — <code style={codeStyle}>{`.*?`}</code></li>

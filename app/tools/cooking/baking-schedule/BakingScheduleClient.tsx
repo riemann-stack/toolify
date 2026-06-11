@@ -868,7 +868,7 @@ function RecipeTab({
           내 레시피
           <span className={s.cardLabelHint}>{recipes.length}개 저장됨</span>
         </label>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
+        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
           자주 만드는 빵의 설정(빵 종류·발효 방식·실내 온도·메모)을 브라우저에 저장합니다. 다른 탭에서 현재 입력한 설정을 바로 저장하려면 [+ 새 레시피 저장] 클릭.
         </p>
         {!showForm && (
@@ -888,7 +888,7 @@ function RecipeTab({
 
           <div>
             <span className={s.inlineLabel}>현재 적용될 설정</span>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
               {(() => {
                 const bp = BREAD_PRESETS.find(b => b.id === currentSettings.presetId)
                 const fm = FERMENTATION_MODES.find(m => m.id === currentSettings.fermentationMode)
@@ -951,7 +951,7 @@ function RecipeTab({
                 </div>
                 {r.notes && <div className={s.recipeNote}>{r.notes}</div>}
                 <div className={s.btnRow}>
-                  <button className={s.actionBtn} style={{ width: 'auto', flex: 1, padding: '9px 14px', fontSize: 12.5 }}
+                  <button className={s.actionBtn} style={{ width: 'auto', flex: 1, padding: '9px 14px', fontSize: 13 }}
                     onClick={() => onApply(r)}>
                     → 일정 만들기
                   </button>

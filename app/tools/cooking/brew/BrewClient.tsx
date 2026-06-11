@@ -439,10 +439,10 @@ export default function BrewClient() {
                 return (
                   <g key={i}>
                     <rect x={x1} y={20} width={w - 1} height={28} fill={step.color} rx={3} />
-                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {step.emoji}
                     </text>
-                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {step.startSec}~{step.endSec}s
                     </text>
                   </g>
@@ -452,7 +452,7 @@ export default function BrewClient() {
               {[0, 30, 60, 90, 120, 150, 180, 210].map((t) => (
                 <g key={t}>
                   <line x1={(t / 210) * 420} y1={15} x2={(t / 210) * 420} y2={20} stroke="var(--muted)" strokeWidth="1" />
-                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{t}</text>
+                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t}</text>
                 </g>
               ))}
             </svg>
@@ -540,7 +540,7 @@ export default function BrewClient() {
                 fill="var(--text)"
                 fontSize="10"
                 textAnchor="middle"
-                fontFamily="Inter, system-ui, sans-serif"
+                fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight="800"
               >
                 ▼ 1:{ratio.toFixed(1)}
@@ -552,7 +552,7 @@ export default function BrewClient() {
                 { x: 240, label: '1:17' },
                 { x: 335, label: '1:20' },
               ].map((t, i) => (
-                <text key={i} x={t.x} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                <text key={i} x={t.x} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                   {t.label}
                 </text>
               ))}
@@ -584,7 +584,7 @@ export default function BrewClient() {
                   <div style={{ flex: 1 }}>
                     <p className={s.zoneLabel} style={{ color: z.color }}>
                       {z.label}{' '}
-                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'Inter, system-ui, sans-serif' }}>
+                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
                         1:{z.ratioMin}~{z.ratioMax >= 99 ? '∞' : z.ratioMax}
                       </span>
                     </p>

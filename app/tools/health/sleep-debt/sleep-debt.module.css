@@ -132,7 +132,7 @@
   font-variant-numeric: tabular-nums;
 }
 .sliderHint {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 6px;
   line-height: 1.5;
@@ -149,7 +149,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -213,7 +213,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -407,7 +407,7 @@
 }
 .consNote {
   margin-top: 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
   background: var(--bg3);
@@ -462,7 +462,7 @@
 }
 .recoverySub {
   display: block;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
 }
@@ -472,7 +472,7 @@
   border-radius: 6px;
   padding: 10px 12px;
   margin-top: 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
 }
@@ -513,7 +513,7 @@
   border: 1px solid rgba(234,88,12,0.30);
   border-radius: 10px;
   padding: 12px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
   margin-top: 14px;
@@ -557,7 +557,7 @@
   padding: 8px 12px;
 }
 .entryDate {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
@@ -580,7 +580,7 @@
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .entryQual { font-size: 11px; }
 .entryDel {

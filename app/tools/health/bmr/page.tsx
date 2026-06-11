@@ -2,7 +2,8 @@ import Link from 'next/link'
 import BmrClient from './BmrClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmr',
@@ -63,7 +64,7 @@ export default function BmrPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔥 기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -77,7 +78,7 @@ export default function BmrPage() {
 
         {/* ── 1. BMR과 TDEE란? (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             기초대사량(BMR)과 TDEE란?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -89,14 +90,14 @@ export default function BmrPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>BMR</p>
-              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
+              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 완전한 안정 상태에서 생명 유지에 필요한 최소 칼로리. 아무것도 안 해도 소모됩니다.
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>TDEE</p>
-              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
+              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 BMR에 활동량을 반영한 <strong style={{ color: 'var(--text)' }}>하루 실제 소비 칼로리</strong>. 다이어트·식단 설계의 기준이 됩니다.
               </p>
@@ -114,7 +115,7 @@ export default function BmrPage() {
 
         {/* ── 2. BMR 4공식 비교 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             BMR 4공식 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -134,14 +135,14 @@ export default function BmrPage() {
                     {f.tag}
                   </span>
                 </div>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>{f.desc}</p>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{f.desc}</p>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
             ⓘ 실용적 권장 — 일반인: <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>, 운동선수: <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>, 의료/연구 기록 일관성: <strong style={{ color: 'var(--text)' }}>Harris-Benedict</strong>.
           </p>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.75, borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.75, borderTop: '1px solid var(--border)', paddingTop: 12 }}>
             <strong style={{ color: 'var(--text)' }}>출처·정확도</strong> — Mifflin-St Jeor(1990)는 건강한 성인 498명 데이터 기반, Harris-Benedict(1919 원전·1984 개정)는 재평가 연구에서 정상 영양 상태 기준 약 <strong style={{ color: 'var(--text)' }}>±14%</strong> 정밀도로 보고됩니다. 모든 공식은 추정치이며 근육량·호르몬·질환에 따라 달라집니다. 건강한 체중 감량은 일반적으로 <strong style={{ color: 'var(--text)' }}>점진적 접근(주당 약 0.5kg 안팎)</strong>이 권장되고, 초저열량 식이(VLCD)는 <strong style={{ color: 'var(--text)' }}>의료 감독하에서만</strong> 고려합니다.
             <br />참고: Mifflin MD <em>Am J Clin Nutr</em> 1990 · Roza &amp; Shizgal <em>Am J Clin Nutr</em> 1984 · 미국 CDC 건강 체중 가이드 · NIH/PubMed VLCD.
           </p>
@@ -149,7 +150,7 @@ export default function BmrPage() {
 
         {/* ── 3. Harris-Benedict 공식 시각화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             Harris-Benedict 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -196,7 +197,7 @@ export default function BmrPage() {
 
         {/* ── 4. 활동 수준별 TDEE 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             활동 수준별 TDEE 계산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -245,7 +246,7 @@ export default function BmrPage() {
 
         {/* ── 5. 정밀 활동 수준 분석 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             정밀 활동 수준 분석 — 5단계의 한계
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -258,8 +259,8 @@ export default function BmrPage() {
             <li>· 일일 걸음 수 반영 X</li>
           </ul>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
-            <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
+            <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
               <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
               <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 + 체중 (MET 기반)</strong> — 운동 칼로리가 체중에 비례</li>
@@ -273,7 +274,7 @@ export default function BmrPage() {
 
         {/* ── 6. 운동일/휴식일 칼로리 사이클링 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             운동일/휴식일 칼로리 사이클링
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -282,8 +283,8 @@ export default function BmrPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>✅ 장점</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>✅ 장점</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 운동일 충분한 영양 → 회복·근성장</li>
                 <li>· 휴식일 적정 칼로리 → 체지방 감소</li>
                 <li>· 식단 만족감 (운동일 보상)</li>
@@ -291,8 +292,8 @@ export default function BmrPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>⚠️ 주의</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>⚠️ 주의</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 단순 평균 TDEE 사용 시 운동일 영양 부족</li>
                 <li>· 휴식일 잉여 칼로리 → 체지방 증가</li>
                 <li>· 한국 다이어트 실패의 흔한 원인</li>
@@ -303,7 +304,7 @@ export default function BmrPage() {
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>본 도구에서 활용하는 법</strong> — [BMR·TDEE] 탭에서 활동 수준 입력 방식을 <strong style={{ color: 'var(--accent)' }}>「정밀」</strong>로 전환하면 직업·걸음·주간 운동량을 기반으로 <strong style={{ color: 'var(--text)' }}>휴식일 TDEE</strong>와 <strong style={{ color: 'var(--text)' }}>운동일 TDEE</strong>가 자동 분리 계산됩니다.
             </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
               💡 권장 실전 적용 — 운동일은 분리된 운동일 TDEE에서 −10~15%, 휴식일은 휴식일 TDEE에서 −10~15%를 식단 칼로리로 설정합니다. 주간 평균으로만 잡으면 운동일 영양 부족이 흔히 발생합니다.
             </p>
           </div>
@@ -311,7 +312,7 @@ export default function BmrPage() {
 
         {/* ── 7. 안전 하한선 — 거식증 예방 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             안전 하한선 — 거식증·식이장애 예방
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -319,8 +320,8 @@ export default function BmrPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
             <div style={{ background: 'rgba(220,38,38,0.06)', border: '2px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>🔴 매우 위험 (자동 경고)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>🔴 매우 위험 (자동 경고)</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 여성 1,200kcal 미만</li>
                 <li>· 남성 1,500kcal 미만</li>
                 <li>· BMR(기초대사량) 미만 섭취</li>
@@ -328,8 +329,8 @@ export default function BmrPage() {
               </ul>
             </div>
             <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>🟡 주의 (직접 점검)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>🟡 주의 (직접 점검)</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· TDEE 대비 −20% 이상 장기 지속</li>
                 <li>· 운동량 매우 높은데 섭취 부족</li>
                 <li>· 빠른 체중 변화·지속적 피로</li>
@@ -346,7 +347,7 @@ export default function BmrPage() {
 
         {/* ── 8. 목표별 칼로리 가이드 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             목표별 칼로리 설정 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -373,28 +374,28 @@ export default function BmrPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ⓘ 하루 적자별 주당 감량 페이스, 목표 체중까지의 구체적 기간 설계와 정체기·요요 방지 전략은 <Link href="/tools/health/weightloss" style={{ color: 'var(--accent)' }}>체중 감량 기간 계산기</Link>에서 확인하세요.
           </p>
         </section>
 
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             스마트워치 vs 공식 — 어느 게 정확?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>📐 공식 BMR/TDEE</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>📐 공식 BMR/TDEE</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 장점: 빠른 추정</li>
                 <li>· 단점: 개인 차이 반영 X</li>
                 <li>· 정확도: ±10%</li>
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>⌚ Apple/Garmin/Fitbit</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>⌚ Apple/Garmin/Fitbit</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 장점: 실시간·개인화</li>
                 <li>· 단점: 운동 강도 추정 오차</li>
                 <li>· 정확도: ±10~20%</li>
@@ -408,46 +409,26 @@ export default function BmrPage() {
 
         {/* ── 10. FAQ (accordion 방식) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* ── 면책 강화 ── */}
         <section>
-          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>
-              ⚠️ 본 BMR/TDEE 계산기는 건강 정보 참고용입니다
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text)' }}>의학적 진단·치료 도구가 아닙니다.</strong> 실제 에너지 소비량은 다음에 따라 달라집니다 —
-              근육량·체지방률 / 호르몬 상태(갑상선·인슐린·코르티솔) / 수면 질·시간 / 만성질환·약물 복용 / 운동 강도·기술 / 측정기 정확도.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text)' }}>다음의 경우 사용 X 또는 의료 상담 필수</strong> — 18세 미만(성장기 별도 기준) / 임산부·수유부 / 당뇨·심혈관·갑상선 등 만성질환 / 거식증·폭식증 등 식이 장애 / 약물 복용 중.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              <strong style={{ color: 'var(--text)' }}>극단적 칼로리 제한·지속적 피로·체중 강박 시</strong> — 의료 전문가(영양사·내과·정신과) 상담 / 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간).
-              <br /><br />건강한 체중 관리는 단순 칼로리 계산을 넘어 <strong style={{ color: 'var(--text)' }}>영양 균형·운동·수면·정신 건강</strong>을 함께 고려해야 합니다.
-            </p>
-          </div>
+          <Disclaimer variant="medical" open>
+            실제 에너지 소비량은 다음에 따라 달라집니다 —
+            근육량·체지방률 / 호르몬 상태(갑상선·인슐린·코르티솔) / 수면 질·시간 / 만성질환·약물 복용 / 운동 강도·기술 / 측정기 정확도.
+            <br />
+            <strong>다음의 경우 사용 X 또는 의료 상담 필수</strong> — 18세 미만(성장기 별도 기준) / 임산부·수유부 / 당뇨·심혈관·갑상선 등 만성질환 / 거식증·폭식증 등 식이 장애 / 약물 복용 중.
+            <br />
+            <strong>극단적 칼로리 제한·지속적 피로·체중 강박 시</strong> — 의료 전문가(영양사·내과·정신과) 상담 / 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>1393</strong> (24시간).
+            <br />
+            건강한 체중 관리는 단순 칼로리 계산을 넘어 <strong>영양 균형·운동·수면·정신 건강</strong>을 함께 고려해야 합니다.
+          </Disclaimer>
         </section>
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수·키별 정상 체중·허리둘레' },

@@ -93,7 +93,7 @@
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 99px;
+  border-radius: 999px;
   letter-spacing: 0.06em;
   backdrop-filter: blur(8px);
 }
@@ -236,7 +236,7 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -715,7 +715,7 @@
 .contrastGrade {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
   margin: 0 0 6px;

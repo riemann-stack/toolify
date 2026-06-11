@@ -16,6 +16,12 @@
 
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
+  /* radius 스케일 — 신규·수정 코드는 토큰 사용 (기존값 분포: 카드 14, 내부 박스 10~12, 버튼·입력 8~10, 필 999) */
+  --radius-s:    8px;
+  --radius-m:    12px;
+  --radius-card: 14px;
+  --radius-pill: 999px;
+
   --accent:        #0284C7;   /* sky-600 — primary brand (흰 배경 4.10:1, 대형 텍스트 AA) */
   --accent-hover:  #0369A1;   /* sky-700 — hover state */
   --accent-ink:    #0369A1;   /* sky-700 — 캡션급(≤14px) accent 텍스트용 (5.93:1) */

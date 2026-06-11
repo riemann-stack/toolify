@@ -532,7 +532,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
           fill={textColor}
           fontSize="11"
           textAnchor="middle"
-          fontFamily="Inter, system-ui, sans-serif"
+          fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           fontWeight={isInScale ? 800 : 500}
         >
           {showInterval && isInScale ? intervalMap[noteIdx] : noteName(noteIdx, acc)}
@@ -577,7 +577,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
               fill={textColor}
               fontSize="9"
               textAnchor="middle"
-              fontFamily="Inter, system-ui, sans-serif"
+              fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
               fontWeight={isInScale ? 800 : 500}
             >
               {showInterval && isInScale ? intervalMap[bIdx] : noteName(bIdx, acc)}
@@ -706,7 +706,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
                   fill="#0D0D0D"
                   fontSize="10"
                   textAnchor="middle"
-                  fontFamily="Inter, system-ui, sans-serif"
+                  fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight="800"
                 >
                   {showInterval ? intervalLabel[noteIdx] : noteName(noteIdx, acc)}
@@ -726,7 +726,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily="Inter, system-ui, sans-serif"
+            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           >
             {f}
           </text>
@@ -741,7 +741,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily="Inter, system-ui, sans-serif"
+            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
             fontWeight="700"
           >
             {noteName(openNote, acc)}

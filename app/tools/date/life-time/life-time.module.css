@@ -10,7 +10,7 @@
   border: 1px solid rgba(8,145,178,0.2);
   border-radius: 12px;
   padding: 14px 18px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--muted-strong, #D0D0C8);
   line-height: 1.8;
 }
@@ -183,7 +183,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -363,7 +363,7 @@
   position: relative;
   height: 12px;
   background: var(--bg3);
-  border-radius: 99px;
+  border-radius: 999px;
   overflow: visible;
   margin-bottom: 14px;
 }
@@ -372,7 +372,7 @@
   top: 0; left: 0;
   height: 100%;
   background: linear-gradient(90deg, #059669, var(--accent));
-  border-radius: 99px;
+  border-radius: 999px;
   transition: width 0.8s ease;
 }
 .progressMarker {
@@ -582,7 +582,7 @@
   border-radius: 12px;
   padding: 14px 18px;
   margin-top: 14px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }

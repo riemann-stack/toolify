@@ -31,7 +31,7 @@
   .tab {
     white-space: normal;
     word-break: keep-all;
-    font-size: 11.5px;
+    font-size: 12px;
     padding: 9px 4px;
     line-height: 1.25;
   }
@@ -309,7 +309,7 @@
   font-size: 10px;
   font-weight: 800;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   letter-spacing: 0.08em;
   background: var(--accent-strong);
   color: #ffffff;

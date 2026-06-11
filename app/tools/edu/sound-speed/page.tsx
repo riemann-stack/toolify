@@ -41,7 +41,7 @@ export default function SoundSpeedPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔊 음속 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -57,7 +57,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 1. 음속 기본 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             음속 기본 공식
           </h2>
           <div style={{
@@ -86,7 +86,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 2. 천둥 번개 거리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             천둥 번개 거리 계산
           </h2>
           <div style={{
@@ -126,23 +126,23 @@ export default function SoundSpeedPage() {
 
         {/* ── 3. 빛 vs 소리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             빛 vs 소리 — 우주의 두 속도
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>💡 빛의 속도</p>
-              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
+              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
                 299,792,458 m/s
               </p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)' }}>≈ 30만 km/s · 1초에 지구 약 7바퀴</p>
+              <p style={{ fontSize: 13, color: 'var(--muted)' }}>≈ 30만 km/s · 1초에 지구 약 7바퀴</p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔊 음속 (공기, 20°C)</p>
-              <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
+              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
                 343 m/s
               </p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)' }}>≈ 1,235 km/h · 1마하</p>
+              <p style={{ fontSize: 13, color: 'var(--muted)' }}>≈ 1,235 km/h · 1마하</p>
             </div>
           </div>
           <div style={{
@@ -155,7 +155,7 @@ export default function SoundSpeedPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚡ <strong style={{ color: '#9333EA' }}>비율:</strong> 빛은 소리의 약 <strong style={{ color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>874,400배</strong> 빠름.
+            ⚡ <strong style={{ color: '#9333EA' }}>비율:</strong> 빛은 소리의 약 <strong style={{ color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>874,400배</strong> 빠름.
             같은 1km를 가는 데 빛은 0.0000033초, 소리는 2.9초.
             <br /><br />
             <strong style={{ color: 'var(--text)' }}>왜 번개가 먼저 보이고 천둥이 늦게 들리는가?</strong>
@@ -165,7 +165,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 4. 매질별 음속 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             매질별 음속 차이
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -194,21 +194,21 @@ export default function SoundSpeedPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s === 0 ? '0' : r.s.toLocaleString()}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s === 0 ? '0' : r.s.toLocaleString()}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 우주(진공)에서는 매질이 없어 소리가 전달되지 않습니다. 영화의 우주 폭발 소리는 과학적으로 정확하지 않습니다.
           </p>
         </div>
 
         {/* ── 5. 마하·소닉붐 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             마하와 음속 — 소닉붐의 비밀
           </h2>
           <div style={{
@@ -245,13 +245,13 @@ export default function SoundSpeedPage() {
 
         {/* ── 6. 에코·잔향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에코(반향) 원리와 잔향 시간 RT60
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>📢 단순 에코</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
                 지연 시간 = 왕복 거리 ÷ 음속
               </p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
@@ -263,7 +263,7 @@ export default function SoundSpeedPage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #9333EA', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>🎼 RT60 (Sabine 공식)</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
                 소리가 60dB 감쇠하는 데 걸리는 시간
               </p>
               <p style={{ fontFamily: 'JetBrains Mono, Menlo, monospace', fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
@@ -293,7 +293,7 @@ export default function SoundSpeedPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}</td>
                   </tr>
                 ))}
@@ -304,7 +304,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 7. 흥미로운 사실 모음 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🤓 음속·광속 흥미로운 사실
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -318,7 +318,7 @@ export default function SoundSpeedPage() {
             ].map((c, i) => (
               <div key={i} style={{ background: 'rgba(155,89,182,0.05)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 4, fontFamily: 'Noto Sans KR, sans-serif' }}>{c.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
           </div>
@@ -328,7 +328,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -349,7 +349,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

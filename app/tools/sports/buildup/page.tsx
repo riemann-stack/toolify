@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import BuildupClient from './BuildupClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/buildup',
@@ -11,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -82,7 +84,7 @@ export default function BuildupPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📈 러닝 빌드업 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -90,6 +92,8 @@ export default function BuildupPage() {
       </p>
 
       <BuildupClient />
+
+      <GuideDivider />
 
       {/* 1. 빌드업 vs 인터벌 vs 템포런 */}
       <h2 style={sectionTitle}>📊 빌드업 vs 인터벌 vs 템포런 차이</h2>
@@ -128,7 +132,7 @@ export default function BuildupPage() {
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: p.color, fontWeight: 700, marginBottom: '8px' }}>{p.name}</p>
-            <p style={{ fontSize: '12px', fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--text)', marginBottom: '8px' }}>{p.curve}</p>
+            <p style={{ fontSize: '12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)', marginBottom: '8px' }}>{p.curve}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{p.use}</p>
           </div>
         ))}
@@ -308,17 +312,8 @@ export default function BuildupPage() {
       </details>
 
       {/* 7. 면책 */}
-      <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+      <Disclaimer variant="safety" open>
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>본 도구는 <strong>일반 빌드업 설계 가이드</strong>입니다. 페이스·거리 추천은 평균값 — 컨디션·날씨·지형에 따라 조정.</li>
           <li>안전성 체크는 일반 가이드 — 본인 한계 보장 X.</li>
           <li>본 도구는 <strong>부상 진단·영양 자문·신발/기어 추천·약물/도핑 정보</strong>를 제공하지 않습니다.</li>
@@ -326,7 +321,7 @@ export default function BuildupPage() {
           <li>통증·심한 피로 시 즉시 휴식. 부상 의심 시 정형외과·재활의학과.</li>
           <li>도움 받기: 한국스포츠의학회 / 정형외과·재활의학과 / 응급 119.</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 8. 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

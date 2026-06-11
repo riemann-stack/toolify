@@ -14,7 +14,7 @@ const CONTACT_EMAIL = 'contact@youtil.kr'
 
 /* ─── 공통 스타일 ─── */
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   color: 'var(--text)',
@@ -234,7 +234,7 @@ export default function DisclaimerPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         법적 고지
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚠️ 면책조항 (Disclaimer)
       </h1>
       <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '28px' }}>
@@ -321,7 +321,7 @@ export default function DisclaimerPage() {
           }}
         >
           <h3 style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
+            fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
             fontSize: '18px',
             fontWeight: 700,
             color: d.color,
@@ -347,7 +347,7 @@ export default function DisclaimerPage() {
               ⚖️ <strong style={{ color: 'var(--text)' }}>법령 관계</strong> — {d.legal}
             </p>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
             {d.recommend}
           </p>
         </div>
@@ -407,11 +407,11 @@ export default function DisclaimerPage() {
           </thead>
           <tbody>
             <tr>
-              <td style={{ padding: '10px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
+              <td style={{ padding: '10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
               <td style={{ padding: '10px', color: 'var(--text)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 8개 분야별 강화 면책 추가</td>
             </tr>
             <tr>
-              <td style={{ padding: '10px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>2026-04-12</td>
+              <td style={{ padding: '10px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2026-04-12</td>
               <td style={{ padding: '10px', color: 'var(--text)' }}>이용약관 제7조 면책조항 작성 (금융 일반)</td>
             </tr>
           </tbody>

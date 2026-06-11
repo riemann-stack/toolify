@@ -261,7 +261,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
@@ -273,7 +273,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
@@ -298,7 +298,7 @@
   font-variant-numeric: tabular-nums;
   color: #EA580C;
 }
-.tomorrowHeroSub { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.tomorrowHeroSub { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .tomorrowStatusBadge {
   display: inline-block;
   margin-top: 12px;
@@ -405,7 +405,7 @@
 .cumTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
   min-width: 480px;
 }
@@ -486,7 +486,7 @@
   border: 2px solid rgba(220,38,38,0.40);
   border-radius: 12px;
   padding: 16px 18px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
@@ -549,7 +549,7 @@
 .liveBoxSafe   { border-color: rgba(16,185,129,0.30); background: rgba(16,185,129,0.14); }
 .liveBoxDone   { border-color: rgba(16,185,129,0.45); background: rgba(16,185,129,0.18); }
 .liveLabel {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-bottom: 6px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -570,13 +570,13 @@
   background: var(--bg3);
   border-radius: 8px;
   padding: 10px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   margin: 0;
   text-align: center;
 }
 .liveCaveat {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin: 10px 0 0;
   line-height: 1.6;
@@ -611,7 +611,7 @@
   padding: 10px 12px;
   background: var(--bg3);
   border-radius: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.6;
   font-family: 'Noto Sans KR', sans-serif;

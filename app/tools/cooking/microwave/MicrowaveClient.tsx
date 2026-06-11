@@ -609,7 +609,7 @@ export default function MicrowaveClient() {
                       fontSize="36"
                       fontWeight="800"
                       textAnchor="middle"
-                      fontFamily="Inter, system-ui, sans-serif"
+                      fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                     >
                       {fmtTimer(total)}
                     </text>

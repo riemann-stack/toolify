@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CleaningClient from './CleaningClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import { AGENTS, MIX_RISKS } from './cleaningData'
 
@@ -13,9 +14,9 @@ export const metadata = buildMetadata({
   keywords: ['청소세제계산기', '구연산사용법', '과탄산소다사용법', '베이킹소다청소', '락스희석', '천연세제', '청소꿀팁', '세제혼합위험', '곰팡이제거'],
 })
 
-const sectionTitle: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
+const sectionTitle: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '18px 20px' }
-const cell: React.CSSProperties = { padding: '9px 11px', borderBottom: '1px solid var(--border)', fontSize: '12.5px', color: 'var(--text)', verticalAlign: 'top' }
+const cell: React.CSSProperties = { padding: '9px 11px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: React.CSSProperties = { padding: '9px 11px', textAlign: 'left', fontWeight: 700, fontSize: '11px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)', whiteSpace: 'nowrap' }
 const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '8px' }
 const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
@@ -34,7 +35,7 @@ export default function CleaningPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧽 상황별 청소 세제 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -42,6 +43,8 @@ export default function CleaningPage() {
       </p>
 
       <CleaningClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -55,8 +58,8 @@ export default function CleaningPage() {
               <tbody>
                 {MIX_RISKS.map((m, i) => (
                   <tr key={i} style={{ borderBottom: i < MIX_RISKS.length - 1 ? '1px solid rgba(220,38,38,0.15)' : 'none' }}>
-                    <td style={{ padding: '10px 14px', fontSize: '12.5px', fontWeight: 700, color: m.level === 'danger' ? '#DC2626' : '#EA580C', width: '42%' }}>{m.combo}</td>
-                    <td style={{ padding: '10px 14px', fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.6 }}>{m.result}</td>
+                    <td style={{ padding: '10px 14px', fontSize: '13px', fontWeight: 700, color: m.level === 'danger' ? '#DC2626' : '#EA580C', width: '42%' }}>{m.combo}</td>
+                    <td style={{ padding: '10px 14px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.6 }}>{m.result}</td>
                   </tr>
                 ))}
               </tbody>

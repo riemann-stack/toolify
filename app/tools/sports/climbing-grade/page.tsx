@@ -2,8 +2,10 @@ import Link from 'next/link'
 import ClimbingGradeClient from './ClimbingGradeClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import Disclaimer from '@/components/Disclaimer'
 import { BANDS, BOULDER_ROWS, ROUTE_ROWS } from './climbingData'
 
 export const metadata = buildMetadata({
@@ -15,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -56,7 +58,7 @@ export default function ClimbingGradePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧗 클라이밍 등급 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -73,6 +75,8 @@ export default function ClimbingGradePage() {
       />
 
       <ClimbingGradeClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -111,7 +115,7 @@ export default function ClimbingGradePage() {
                 {BOULDER_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.font}</td>
+                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.font}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -146,8 +150,8 @@ export default function ClimbingGradePage() {
                 {ROUTE_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.yds}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.french}</td>
-                    <td style={{ ...td, color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.uiaa}</td>
+                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.french}</td>
+                    <td style={{ ...td, color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.uiaa}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -224,7 +228,7 @@ export default function ClimbingGradePage() {
         {/* 한국 맥락 */}
         <div>
           <h2 style={sectionTitle}>🇰🇷 한국 실내 클라이밍 팁</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ margin: 0 }}>
               한국 실내 클라이밍장은 대부분 <strong style={{ color: 'var(--text)' }}>V등급 또는 자체 색깔 난이도</strong>를 씁니다. 색깔은 표준이 없어 체육관마다 달라서, 다른 체육관·아웃도어와 비교하려면 V·Font·YDS 같은 국제 체계로 환산하는 게 정확합니다. 다니는 체육관의 <strong style={{ color: 'var(--text)' }}>색깔 ↔ V등급</strong> 표를 한번 받아두면 위 변환기와 함께 어디서든 내 수준을 가늠할 수 있어요.
             </p>
@@ -244,20 +248,9 @@ export default function ClimbingGradePage() {
         </div>
 
         {/* 면책 */}
-        <div style={{
-          background: 'rgba(217,119,6,0.06)',
-          border: '1px solid rgba(217,119,6,0.25)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          fontSize: '13px',
-          color: 'var(--text)',
-          lineHeight: 1.8,
-        }}>
-          <strong style={{ color: '#D97706' }}>⚠️ 참고용 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
-            클라이밍 등급은 본질적으로 <strong style={{ color: 'var(--text)' }}>주관적이며 구간이 겹칩니다</strong>. 본 변환은 널리 쓰이는 표준 환산표 기준 근사치로, 출처·세터·루트 성향에 따라 한 단계 차이날 수 있습니다. 안전 등반(매트·확보·파트너 확인)을 항상 우선하세요.
-          </p>
-        </div>
+        <Disclaimer variant="default" open>
+          클라이밍 등급은 본질적으로 <strong>주관적이며 구간이 겹칩니다</strong>. 본 변환은 널리 쓰이는 표준 환산표 기준 근사치로, 출처·세터·루트 성향에 따라 한 단계 차이날 수 있습니다. 안전 등반(매트·확보·파트너 확인)을 항상 우선하세요.
+        </Disclaimer>
 
         {/* 관련 도구 */}
         <div>

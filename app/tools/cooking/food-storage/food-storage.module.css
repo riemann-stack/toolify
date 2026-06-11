@@ -219,10 +219,10 @@
 /* 진행 바 */
 .progressRow { display: flex; align-items: center; gap: 10px; }
 .progressTrack {
-  flex: 1; height: 8px; background: var(--bg3); border-radius: 99px; overflow: hidden;
+  flex: 1; height: 8px; background: var(--bg3); border-radius: 999px; overflow: hidden;
 }
 .progressFill {
-  height: 100%; border-radius: 99px;
+  height: 100%; border-radius: 999px;
   background: linear-gradient(90deg, #059669, var(--accent));
   transition: width 0.4s ease;
 }

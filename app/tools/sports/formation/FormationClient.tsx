@@ -397,7 +397,7 @@ export default function FormationClient() {
                   fill={teamColor} stroke="#fff" strokeWidth="4"
                   opacity="0.95" />
                 <text x={pos.x} y={pos.y + 14} textAnchor="middle"
-                  fill="#fff" fontFamily="Inter, system-ui, sans-serif"
+                  fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontSize="42" fontWeight="800"
                   style={{ pointerEvents: 'none' }}>
                   {p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}
@@ -420,7 +420,7 @@ export default function FormationClient() {
                 {/* 포지션 라벨 */}
                 {showLabels && (
                   <text x={pos.x} y={pos.y - 58} textAnchor="middle"
-                    fill="#fff" fontFamily="Inter, system-ui, sans-serif"
+                    fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                     fontSize="22" fontWeight="800"
                     opacity="0.92"
                     style={{ pointerEvents: 'none' }}>

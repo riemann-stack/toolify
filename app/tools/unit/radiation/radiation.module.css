@@ -40,7 +40,7 @@
   border-radius: 5px;
   padding: 1px 7px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   margin-left: 4px;
 }
@@ -121,7 +121,7 @@
   border: 1px dashed var(--border);
   border-radius: 999px;
   padding: 5px 11px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -152,7 +152,7 @@
 }
 .resName {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 700;
 }
@@ -203,13 +203,13 @@
   font-variant-numeric: tabular-nums;
 }
 .expValue small {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-weight: 600;
   margin-left: 3px;
 }
 .expCat {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   background: var(--bg3);
   border-radius: 4px;
@@ -219,7 +219,7 @@
 }
 .expBadge {
   grid-column: 1 / -1;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--accent);
   font-weight: 700;
   background: var(--bg2);
@@ -236,7 +236,7 @@
   margin-top: -2px;
 }
 @media (max-width: 540px) {
-  .expRow { grid-template-columns: 24px 1fr 75px; gap: 6px; font-size: 12.5px; }
+  .expRow { grid-template-columns: 24px 1fr 75px; gap: 6px; font-size: 13px; }
   .expCat { display: none; }
 }
 
@@ -252,7 +252,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   position: relative;
 }
 .limitRowDanger {
@@ -306,7 +306,7 @@
 }
 .emfHead p {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.75;
 }
@@ -327,7 +327,7 @@
   border-left: 3px solid var(--border);
   border-radius: 6px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .emfCat_sar   { border-left-color: #9333EA; }
 .emfCat_rf    { border-left-color: #0891B2; }

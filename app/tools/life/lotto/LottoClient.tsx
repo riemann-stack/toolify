@@ -210,7 +210,7 @@ function GenerateTab() {
             </span>
           ))}
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, marginTop: 8 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginTop: 8 }}>
           ⓘ 고정 번호는 생성 모드 조건보다 <strong style={{ color: 'var(--text)' }}>우선</strong>합니다. 예를 들어 「연속 제외」 모드라도 연속된 번호를 직접 고정하면 그대로 유지됩니다.
         </p>
         {(fixed.length > 0 || excluded.length > 0) && (
@@ -686,7 +686,7 @@ function JackpotTab() {
             <span>{fmtMoney(avgGames * PRICE_PER_GAME)}</span>
           </div>
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
           ⓘ 수학적 평균은 확률의 기댓값이며, 실제 한 사람의 결과는 더 빠를 수도 더 늦을 수도 있습니다. 평균 당첨까지 걸리는 시간(위 &ldquo;평균 연수&rdquo;)이 사람 수명을 크게 넘어, 평생 1등을 보지 못할 가능성이 매우 큽니다.
         </p>
       </div>

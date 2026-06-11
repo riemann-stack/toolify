@@ -2,6 +2,7 @@ import Link from 'next/link'
 import StrengthLevelClient from './StrengthLevelClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -29,7 +30,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -82,9 +83,9 @@ const FAQ_LD = [
 
 export default function StrengthLevelPage() {
   return (
-    <div style={{ maxWidth: '860px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏋️ 파워리프팅 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -92,6 +93,8 @@ export default function StrengthLevelPage() {
       </p>
 
       <StrengthLevelClient />
+
+      <GuideDivider />
 
       {/* 본문 광고 — 도구 결과 직후 */}
       <AdSlot position="in-article" minHeight={200} />
@@ -167,7 +170,7 @@ export default function StrengthLevelPage() {
         파워리프팅 대회는 종목별 <strong style={{ color: 'var(--text)' }}>3번의 시도</strong>가 주어지고, 성공한 가장 무거운 무게가 합계에 들어갑니다. [시도 전략] 탭에서 1RM을 넣으면 표준 배분을 제안합니다.
       </p>
       <div style={{ ...card }}>
-        <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.9 }}>
+        <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '13px', color: 'var(--text)', lineHeight: 1.9 }}>
           <li><strong>1차(오프너)</strong> — 1RM의 약 90%를 <strong style={{ color: 'var(--accent)' }}>내림</strong>. 거의 100% 성공해야 하는 무게로, 한 종목을 세 번 다 실패하면 합계가 0이 되어 기록 자체가 무효가 되는 참사를 막는 보험입니다.</li>
           <li><strong>2차</strong> — 약 95%. 컨디션이 좋으면 PR 발판, 나쁘면 합계 확보.</li>
           <li><strong>3차</strong> — 현재 1RM(≈100%) 또는 PR 도전 시 +2.5~5kg. 욕심내 실패하면 2차 무게가 기록됩니다.</li>

@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
 }
 const card: React.CSSProperties = {
   background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px',
@@ -55,7 +55,7 @@ export default function FruitSyrupPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🍯 과일청 담그기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -95,7 +95,7 @@ export default function FruitSyrupPage() {
               { step: '5', title: '숙성 & 건지기', desc: '서늘한 곳에서 숙성하고, 과일에 따라 일정 시점에 건더기를 걸러낸 뒤 냉장 보관합니다.' },
             ].map(item => (
               <div key={item.step} style={{ ...card, display: 'flex', gap: '14px' }}>
-                <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: ACCENT, minWidth: '22px' }}>{item.step}</span>
+                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: ACCENT, minWidth: '22px' }}>{item.step}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</p>
@@ -131,7 +131,7 @@ export default function FruitSyrupPage() {
                   ['연중',    '레몬', '레몬청 (겨울이 제맛)'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r[0]}</td>
                     <td style={{ padding: '9px 10px', color: ACCENT, fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -149,16 +149,16 @@ export default function FruitSyrupPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
             <div style={{ ...card, borderLeft: '3px solid #DC2626' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>에틸렌 多 (따로 보관)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>에틸렌 多 (따로 보관)</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 사과 · 바나나 · 복숭아</li>
                 <li>· 토마토 · 멜론 · 망고</li>
                 <li>· 배 · 살구 · 아보카도</li>
               </ul>
             </div>
             <div style={{ ...card, borderLeft: '3px solid #0891B2' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>에틸렌 민감 (멀리 둘 것)</p>
-              <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>에틸렌 민감 (멀리 둘 것)</p>
+              <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 키위 · 딸기 · 포도</li>
                 <li>· 감귤류(레몬·오렌지)</li>
                 <li>· 잎채소 · 오이 · 브로콜리</li>

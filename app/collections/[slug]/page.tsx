@@ -37,7 +37,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
       <p style={{ fontSize: 12, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
         상황별 가이드
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
         <span aria-hidden>{c.emoji}</span>{c.title}
       </h1>
       <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 8 }}>{c.lead}</p>
@@ -68,15 +68,15 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
                     width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
                     background: `${c.color}22`, color: c.color, fontWeight: 800, fontSize: 13,
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
                   }}
                 >{i + 1}</span>
-                <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em' }}>
+                <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em' }}>
                   {step.title}
                 </h2>
               </div>
               {step.note && (
-                <p style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7, margin: '0 0 14px', paddingLeft: 36 }}>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: '0 0 14px', paddingLeft: 36 }}>
                   {step.note}
                 </p>
               )}
@@ -97,12 +97,12 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
       </div>
 
       {/* 전체 도구 CTA */}
-      <div style={{ marginTop: 44, padding: '18px 20px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+      <div style={{ marginTop: 44, padding: '18px 20px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
         찾는 도구가 없나요? <Link href="/tools" style={{ color: 'var(--accent)', fontWeight: 600 }}>전체 도구 목록</Link>에서 더 많은 계산기·유틸리티를 확인하세요.
       </div>
 
       {/* 다른 상황별 가이드 */}
-      <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 20, fontWeight: 700, margin: '44px 0 16px' }}>
+      <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 20, fontWeight: 700, margin: '44px 0 16px' }}>
         다른 상황별 가이드
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
@@ -110,8 +110,8 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
           <Link key={o.slug} href={`/collections/${o.slug}`} style={{ ...card, display: 'flex', alignItems: 'center', gap: 12, borderLeft: `3px solid ${o.color}` }}>
             <span style={{ fontSize: 22, flexShrink: 0 }} aria-hidden>{o.emoji}</span>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{o.short}</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>도구 {collectionToolCount(o)}개</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{o.short}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>도구 {collectionToolCount(o)}개</div>
             </div>
           </Link>
         ))}

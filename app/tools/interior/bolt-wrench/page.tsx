@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import BoltWrenchClient from './BoltWrenchClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -11,7 +12,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +69,7 @@ export default function BoltWrenchPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔧 볼트 스패너 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
@@ -81,6 +82,8 @@ export default function BoltWrenchPage() {
       </p>
 
       <BoltWrenchClient />
+
+      <GuideDivider />
 
       {/* 1. 어떻게 사용하나요? */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -113,10 +116,10 @@ export default function BoltWrenchPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>주요 차이 사이즈</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>ISO 22 mm / JIS 19 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 22 mm / JIS 19 mm</td></tr>
             </tbody>
           </table>
         </div>
@@ -185,7 +188,7 @@ export default function BoltWrenchPage() {
         ].map((g, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
             <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
-            <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{g.d}</p>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{g.d}</p>
           </div>
         ))}
       </div>

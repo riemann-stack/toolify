@@ -655,7 +655,7 @@ export default function UrlEncodeClient() {
           {/* 한글·이모지 UTF-8 */}
           <div className={s.card}>
             <span className={s.cardLabel}>🇰🇷 한글·이모지 UTF-8 인코딩 원리</span>
-            <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 12px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 12px' }}>
               ASCII 외 문자(한글·한자·이모지)는 <strong>UTF-8 멀티바이트</strong>로 변환된 후 각 바이트가 <code className={s.codeMono}>%XX</code>로 인코딩됩니다.
             </p>
             <div className={s.tableWrap}>

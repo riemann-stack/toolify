@@ -289,8 +289,8 @@ export default function SoundSpeedClient() {
           <input type="range" min={-20} max={40} step={1} value={tempC} onChange={e => setTempC(parseFloat(e.target.value))} />
           <span className={s.sliderValue}>{tempC}°C</span>
         </div>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, textAlign: 'center' }}>
-          현재 음속: <strong style={{ color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
+        <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, textAlign: 'center' }}>
+          현재 음속: <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
           {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h ≈ <strong style={{ color: '#0D9488' }}>1마하</strong>
         </p>
       </div>
@@ -386,7 +386,7 @@ export default function SoundSpeedClient() {
               <circle cx="60" cy="110" r="36" fill="url(#lightning)" opacity="0.7" />
               <text x="60" y="122" fontSize="44" textAnchor="middle">⚡</text>
               <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>번개</text>
-              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">T = 0</text>
+              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>T = 0</text>
 
               {/* 음파 */}
               <circle cx="60" cy="110" r="14" fill="none" stroke="#0D9488" strokeWidth="2.5" opacity="0.6" className={s.soundRing} />
@@ -396,14 +396,14 @@ export default function SoundSpeedClient() {
 
               {/* 거리 표시 */}
               <line x1="100" y1="110" x2="320" y2="110" stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="5 4" />
-              <text x="210" y="95" fontSize="22" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+              <text x="210" y="95" fontSize="22" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
                 {thunderResult.distM.toFixed(0)}m
               </text>
 
               {/* 관찰자 */}
               <text x="350" y="128" fontSize="46" textAnchor="middle">👤</text>
               <text x="350" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>관찰자</text>
-              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">T = {thunderSec}초</text>
+              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>T = {thunderSec}초</text>
             </svg>
           </div>
 
@@ -553,7 +553,7 @@ export default function SoundSpeedClient() {
               </div>
               <span className={s.vsBarValue}>{fmtTime(1000 / soundSpeed)}</span>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
               ※ 막대는 시각화용. 실제 빛은 소리보다 약 87만 배 빠름.
             </p>
           </div>
@@ -600,7 +600,7 @@ export default function SoundSpeedClient() {
                 </tbody>
               </table>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ⭐ 음속(1마하)은 자동차의 <strong style={{ color: '#0D9488' }}>약 12배</strong>, KTX의 <strong style={{ color: '#0D9488' }}>약 4배</strong> 빠릅니다.
             </p>
           </div>

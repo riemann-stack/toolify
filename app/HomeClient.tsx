@@ -271,6 +271,10 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
       <div className={styles.content}>
 
         {/* 상황별 가이드 (큐레이션) — 서버에서 계산한 오늘의 시즌 추천을 prop으로 전달 → 첫 페인트부터 정합 */}
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>상황별 가이드</h2>
+          <Link href="/collections" className={styles.sectionLink}>전체 보기 →</Link>
+        </div>
         <CollectionBanner initialSlug={initialFeaturedSlug} />
 
         {/* CATEGORIES */}

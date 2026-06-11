@@ -248,7 +248,7 @@ export default function StockClient() {
           <>
             <circle cx={xs(curIdx)} cy={ys(curPoint.newAvg)} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
             <text x={xs(curIdx)} y={ys(curPoint.newAvg) - 12} textAnchor="middle" fill="var(--accent)"
-              fontSize="11" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
+              fontSize="11" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
               {formatKRW(curPoint.newAvg)}원
             </text>
           </>

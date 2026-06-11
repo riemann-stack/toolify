@@ -771,7 +771,7 @@ export default function DutchClient() {
                     onClick={() => removePrepaid(p.id)}
                     disabled={prepaidPpl.length <= 2}>×</button>
                 </div>
-                <label className={styles.toggleLabel} style={{ fontSize: 11.5, marginTop: 3, marginLeft: 4 }}>
+                <label className={styles.toggleLabel} style={{ fontSize: 12, marginTop: 3, marginLeft: 4 }}>
                   <input type="checkbox" checked={!!p.isContributor}
                     onChange={e => updatePrepaid(p.id, { isContributor: e.target.checked })} />
                   💝 찬조자 (부담 0원)

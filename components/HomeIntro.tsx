@@ -6,14 +6,14 @@ import Link from 'next/link'
 import { totalTools, categories } from '@/lib/tools'
 
 const h2: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '24px',
   fontWeight: 800,
   letterSpacing: '-0.02em',
   marginBottom: '14px',
 }
 const h3: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '17px',
   fontWeight: 700,
   marginBottom: '8px',

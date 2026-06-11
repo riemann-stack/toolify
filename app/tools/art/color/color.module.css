@@ -7,7 +7,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -31,7 +31,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -230,7 +230,7 @@
   padding: 10px 12px;
 }
 .infoBoxLabel {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -238,7 +238,7 @@
   font-weight: 600;
 }
 .infoBoxValue {
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
@@ -307,7 +307,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 8px;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -340,7 +340,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -355,7 +355,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   overflow-x: auto;
   white-space: pre;
@@ -466,7 +466,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .gradeName  { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
 .gradeReq   { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
@@ -496,7 +496,7 @@
 }
 .suggestHex {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
 }
 .suggestArrow { color: var(--muted); font-size: 18px; text-align: center; }
@@ -550,7 +550,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -590,7 +590,7 @@
 }
 .paletteSwatchHex {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
@@ -647,7 +647,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
   cursor: pointer;
@@ -713,7 +713,7 @@
 }
 .uiStateName  { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 .uiStateSwatch { width: 36px; height: 24px; border-radius: 6px; border: 1px solid var(--border); }
-.uiStateCode  { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--text); }
+.uiStateCode  { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
 
 .semanticGrid {
   display: grid;
@@ -732,8 +732,8 @@
   align-items: center;
 }
 .semanticSwatch { width: 28px; height: 28px; border-radius: 6px; }
-.semanticLabel { font-size: 12.5px; color: var(--text); font-weight: 600; }
-.semanticHex { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--muted); }
+.semanticLabel { font-size: 13px; color: var(--text); font-weight: 600; }
+.semanticHex { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
 
 .colorNameInput {
   background: var(--bg3);
@@ -790,7 +790,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 6px 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'JetBrains Mono', monospace;
   color: var(--text);
   outline: none;
@@ -920,7 +920,7 @@
 .dropAreaActive { border-color: #059669; background: rgba(16,185,129,0.14); }
 .dropAreaIcon { font-size: 36px; margin-bottom: 8px; }
 .dropAreaText { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.dropAreaHint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.dropAreaHint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
 .imagePreviewWrap {
   position: relative;
@@ -985,7 +985,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .classifyLabel { color: var(--muted); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .classifySwatch { width: 32px; height: 22px; border-radius: 4px; border: 1px solid var(--border); }
@@ -1007,7 +1007,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 7px 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;

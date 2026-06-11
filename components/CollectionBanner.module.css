@@ -27,10 +27,13 @@
   .otherCard:hover { border-color: var(--border-hover); }
 }
 
+/* 데스크톱: 카드 12개로 cap — 나머지는 /collections 인덱스('전체 보기')에 위임 */
+.otherCard:nth-child(n + 13) { display: none; }
+
 .otherEmoji { font-size: 22px; flex-shrink: 0; }
 .otherBody { min-width: 0; }
 .otherTitle {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 2px;
@@ -38,7 +41,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.otherCount { font-size: 11.5px; color: var(--muted); }
+.otherCount { font-size: 12px; color: var(--muted); }
 
 /* 모바일: 가로 스크롤 선반 — 카드 1.3개 정도 보여 스크롤 가능함을 암시 */
 @media (max-width: 600px) {
@@ -57,4 +60,6 @@
     flex: 0 0 76%;
     scroll-snap-align: start;
   }
+  /* 모바일 가로 스크롤 선반은 cap 없이 전체 노출 — 기존 동작 불변 */
+  .otherCard:nth-child(n + 13) { display: flex; }
 }

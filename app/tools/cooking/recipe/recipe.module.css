@@ -7,7 +7,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -189,7 +189,7 @@
 }
 .presetCardEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
 .presetCardName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-.presetCardMeta { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.presetCardMeta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* ── 재료 입력 ── */
 .ingredientHeader {
@@ -209,7 +209,7 @@
   display: grid;
   grid-template-columns: 1fr 80px 100px 28px;
   gap: 6px;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
@@ -218,7 +218,7 @@
   padding: 0 4px 6px;
 }
 @media (max-width: 540px) {
-  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 9.5px; }
+  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 10px; }
 }
 
 .ingredientList {
@@ -279,7 +279,7 @@
   border: 1px dashed var(--border);
   border-radius: 8px;
   padding: 9px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -295,7 +295,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -356,7 +356,7 @@
   color: var(--text);
 }
 .seasonLevelHint {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-weight: 500;
 }
@@ -389,7 +389,7 @@
 }
 .resultAccent { color: var(--accent); }
 .resultSub {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 2px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -429,7 +429,7 @@
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-.resultVal small { color: var(--muted); font-weight: 400; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; margin-left: 6px; }
+.resultVal small { color: var(--muted); font-weight: 400; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: 6px; }
 
 .resultRowSeasoned {
   background: rgba(234,88,12,0.14);
@@ -441,7 +441,7 @@
   color: #EA580C;
   border-radius: 999px;
   padding: 2px 7px;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   margin-left: 6px;
 }
@@ -530,12 +530,12 @@
   font-variant-numeric: tabular-nums;
 }
 .convertBoxUnit { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-top: 2px; }
-.convertApprox { font-size: 9.5px; color: var(--muted); margin-top: 2px; }
+.convertApprox { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
 .quickRefTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .quickRefTable th, .quickRefTable td {
   padding: 8px 10px;
@@ -544,7 +544,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .quickRefTable th {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -579,7 +579,7 @@
   color: var(--text);
   margin-bottom: 4px;
 }
-.savedCardMeta { font-size: 11.5px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-bottom: 8px; }
+.savedCardMeta { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-bottom: 8px; }
 .savedCardNote { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif; }
 
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -588,7 +588,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 5px 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;

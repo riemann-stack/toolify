@@ -646,7 +646,7 @@ function TeamTab() {
       </div>
 
       {teamWarnings.length > 0 && (
-        <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+        <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
           {teamWarnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
         </div>
       )}
@@ -852,7 +852,7 @@ function OrderTab() {
             </div>
           </div>
           {names.length > rows * cols && (
-            <div style={{ marginTop: 10, background: 'rgba(220,38,38,0.10)', border: '1px solid rgba(220,38,38,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+            <div style={{ marginTop: 10, background: 'rgba(220,38,38,0.10)', border: '1px solid rgba(220,38,38,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
               ⚠️ 참가자 {names.length}명 &gt; 자리 {rows * cols}개 — <strong>{names.length - rows * cols}명이 배치되지 않습니다.</strong> 행·열을 늘리세요.
             </div>
           )}
@@ -1067,7 +1067,7 @@ function FairnessTab() {
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
               ⓘ 흰색 마커는 <strong style={{ color: 'var(--text)' }}>기대 비율</strong>, 초록 막대는 <strong style={{ color: '#059669' }}>실제 비율</strong>입니다.
             </p>
           </div>

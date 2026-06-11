@@ -10,7 +10,7 @@
 .tabBtn {
   flex: 1 1 0; background: transparent; border: none; border-radius: 9px;
   padding: 10px 6px; font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px; font-weight: 600; color: var(--muted);
+  font-size: 13px; font-weight: 600; color: var(--muted);
   cursor: pointer; white-space: nowrap; min-width: 0;
 }
 .tabActive { background: rgba(13,148,136,0.12); color: #0D9488; font-weight: 700; }
@@ -24,7 +24,7 @@
 .seg {
   flex: 1 1 0; background: transparent; border: none; border-radius: 8px;
   padding: 9px 6px; font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px; font-weight: 600; color: var(--muted);
+  font-size: 13px; font-weight: 600; color: var(--muted);
   cursor: pointer; min-width: 0;
 }
 .segActive { background: rgba(13,148,136,0.12); color: #0D9488; font-weight: 700; }
@@ -65,7 +65,7 @@
 /* 반올림 컨트롤 행 */
 .ctrlRow { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .ctrlRow:first-of-type { margin-top: 0; }
-.ctrlLabel { font-size: 12.5px; color: var(--muted); font-weight: 600; min-width: 66px; font-family: 'Noto Sans KR', sans-serif; }
+.ctrlLabel { font-size: 13px; color: var(--muted); font-weight: 600; min-width: 66px; font-family: 'Noto Sans KR', sans-serif; }
 .sel {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 9px;
   padding: 8px 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px;
@@ -86,7 +86,7 @@
   padding: 11px 14px; background: var(--bg3);
   border: 1px solid var(--border); border-radius: 10px;
 }
-.resName { font-family: 'Noto Sans KR', sans-serif; font-size: 12.5px; color: var(--muted); font-weight: 600; min-width: 0; }
+.resName { font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: var(--muted); font-weight: 600; min-width: 0; }
 .resVal {
   font-family: 'Inter', system-ui, sans-serif; font-size: 15.5px; font-weight: 800;
   color: var(--text); text-align: right; word-break: break-all; min-width: 0;
@@ -118,13 +118,13 @@
 .formula {
   margin: 12px 0 0; padding: 10px 12px;
   background: rgba(13,148,136,0.06); border: 1px solid rgba(13,148,136,0.2);
-  border-radius: 9px; font-size: 12.5px; color: #0D9488; font-weight: 600;
+  border-radius: 9px; font-size: 13px; color: #0D9488; font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;
 }
 .warn {
   margin: 12px 0 0; padding: 10px 12px;
   background: rgba(217,119,6,0.07); border: 1px solid rgba(217,119,6,0.25);
-  border-radius: 9px; font-size: 12.5px; color: var(--text);
+  border-radius: 9px; font-size: 13px; color: var(--text);
   font-family: 'Noto Sans KR', sans-serif; line-height: 1.7;
 }
 .warn strong { color: #D97706; }

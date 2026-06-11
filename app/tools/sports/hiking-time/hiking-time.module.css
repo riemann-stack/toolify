@@ -44,7 +44,7 @@
   flex-shrink: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
@@ -101,7 +101,7 @@
   font-size: 10px;
   font-weight: 800;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   letter-spacing: 0.04em;
 }
 .diff_초급   { background: rgba(16, 185, 129, 0.15); color: #059669; }
@@ -143,7 +143,7 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -307,7 +307,7 @@
 .safetyMsg {
   display: inline-block;
   padding: 6px 12px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
   margin: 0;
@@ -366,7 +366,7 @@
 .adjChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 4px 12px;
   font-size: 11px;
   color: var(--text);

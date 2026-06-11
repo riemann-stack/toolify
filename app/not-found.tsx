@@ -23,7 +23,7 @@ export default function NotFound() {
 
       {/* 큰 404 — 시각적 임팩트 */}
       <p style={{
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
         fontSize: 'clamp(80px, 18vw, 160px)',
         fontWeight: 800,
         letterSpacing: '-4px',
@@ -35,7 +35,7 @@ export default function NotFound() {
       </p>
 
       <h1 style={{
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
         fontSize: 'clamp(20px, 4vw, 28px)',
         fontWeight: 700,
         letterSpacing: '-0.5px',
@@ -128,7 +128,7 @@ export default function NotFound() {
               gap: '6px',
               background: 'transparent',
               border: '1px solid var(--border)',
-              borderRadius: '99px',
+              borderRadius: '999px',
               padding: '8px 14px',
               textDecoration: 'none',
               fontSize: '12px',

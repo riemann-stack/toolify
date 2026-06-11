@@ -2,7 +2,9 @@ import Link from 'next/link'
 import PrintResolutionClient from './PrintResolutionClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/art/print-resolution',
@@ -13,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -74,7 +76,7 @@ export default function PrintResolutionPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🖨️ 인쇄 해상도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -82,6 +84,8 @@ export default function PrintResolutionPage() {
       </p>
 
       <PrintResolutionClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -116,7 +120,7 @@ export default function PrintResolutionPage() {
               <tbody>
                 {DPI_ROWS.map((r, i) => (
                   <tr key={i}>
-                    <td style={{ ...td, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.dpi}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.dpi}</td>
                     <td style={td}>{r.use}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.dist}</td>
                     <td style={{ ...td, color: 'var(--muted)', whiteSpace: 'normal' }}>{r.ex}</td>
@@ -125,7 +129,7 @@ export default function PrintResolutionPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             현수막처럼 멀리서 보는 대형 인쇄물은 72~100DPI로도 충분합니다. 인쇄소에 따라 권장 값이 다를 수 있으니 발주 전 확인하세요.
           </p>
         </div>
@@ -148,14 +152,14 @@ export default function PrintResolutionPage() {
                   <tr key={i}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.name}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.cm}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.px300}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>{r.mp}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.px300}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.mp}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             테두리 재단(도련)이 필요한 인쇄물은 사방 1~3mm 여유를 더하면 좋습니다. 위 값은 재단 여백을 제외한 마감 크기 기준이에요.
           </p>
         </div>
@@ -173,20 +177,9 @@ export default function PrintResolutionPage() {
         </div>
 
         {/* 면책 */}
-        <div style={{
-          background: 'rgba(14,165,233,0.06)',
-          border: '1px solid rgba(14,165,233,0.25)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          fontSize: '13px',
-          color: 'var(--text)',
-          lineHeight: 1.8,
-        }}>
-          <strong style={{ color: '#0EA5E9' }}>ℹ️ 참고용 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
-            권장 DPI는 일반적인 기준이며, 인쇄 방식(오프셋·디지털·잉크젯)과 용지·관람 환경에 따라 적정 값이 달라질 수 있습니다. 중요한 인쇄물은 발주 전 인쇄소의 입고 규격을 반드시 확인하세요.
-          </p>
-        </div>
+        <Disclaimer variant="default" open>
+          권장 DPI는 일반적인 기준이며, 인쇄 방식(오프셋·디지털·잉크젯)과 용지·관람 환경에 따라 적정 값이 달라질 수 있습니다. 중요한 인쇄물은 발주 전 인쇄소의 입고 규격을 반드시 확인하세요.
+        </Disclaimer>
 
         {/* 관련 도구 */}
         <div>

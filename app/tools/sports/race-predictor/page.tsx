@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import RacePredictorClient from './RacePredictorClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -11,7 +12,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -80,7 +81,7 @@ export default function RacePredictorPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏅 마라톤 기록 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -88,6 +89,8 @@ export default function RacePredictorPage() {
       </p>
 
       <RacePredictorClient />
+
+      <GuideDivider />
 
       {/* 1. 3공식 비교 */}
       <h2 style={sectionTitle}>📐 3가지 예측 공식</h2>
@@ -102,7 +105,7 @@ export default function RacePredictorPage() {
         ].map((f, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: '12px', padding: '16px 18px' }}>
             <p style={{ fontSize: '13px', color: f.color, fontWeight: 700, marginBottom: '8px' }}>{f.name}</p>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', fontWeight: 700, background: 'var(--bg3)', padding: '8px 10px', borderRadius: '8px', marginBottom: '10px' }}>{f.formula}</p>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', fontWeight: 700, background: 'var(--bg3)', padding: '8px 10px', borderRadius: '8px', marginBottom: '10px' }}>{f.formula}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
           </div>
         ))}
@@ -130,9 +133,9 @@ export default function RacePredictorPage() {
             ].map((r, i) => (
               <tr key={i}>
                 <td style={cell}>{r.from}</td>
-                <td style={{ ...cell, textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.r}</td>
-                <td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.v}</td>
-                <td style={{ ...cell, textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.c}</td>
+                <td style={{ ...cell, textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.r}</td>
+                <td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.v}</td>
+                <td style={{ ...cell, textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.c}</td>
               </tr>
             ))}
           </tbody>
@@ -195,11 +198,11 @@ export default function RacePredictorPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>서브5 (5:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>~30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~30:40</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~63:46</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~2:21:04</td></tr>
-            <tr><td style={cell}><strong>서브4:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>~34</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~26:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~55:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~2:03:30</td></tr>
-            <tr><td style={cell}><strong>서브4 (4:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>~39</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~23:30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~49:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~1:48:30</td></tr>
-            <tr><td style={cell}><strong>서브3:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>~44</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~21:15</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~44:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~1:38:00</td></tr>
-            <tr><td style={cell}><strong>서브3 (3:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif' }}>~52</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~17:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~37:10</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>~1:23:00</td></tr>
+            <tr><td style={cell}><strong>서브5 (5:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~30:40</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~63:46</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~2:21:04</td></tr>
+            <tr><td style={cell}><strong>서브4:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~34</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~26:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~55:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~2:03:30</td></tr>
+            <tr><td style={cell}><strong>서브4 (4:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~39</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~23:30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~49:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:48:30</td></tr>
+            <tr><td style={cell}><strong>서브3:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~44</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~21:15</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~44:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:38:00</td></tr>
+            <tr><td style={cell}><strong>서브3 (3:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~52</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~17:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~37:10</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:23:00</td></tr>
           </tbody>
         </table>
       </div>
@@ -225,8 +228,8 @@ export default function RacePredictorPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>남성 보정</strong></td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>1.00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.97</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.92</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.84</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.76</td></tr>
-            <tr><td style={cell}><strong>여성 보정</strong></td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.91</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.88</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.83</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.76</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>0.68</td></tr>
+            <tr><td style={cell}><strong>남성 보정</strong></td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1.00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.97</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.92</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.84</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.76</td></tr>
+            <tr><td style={cell}><strong>여성 보정</strong></td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.91</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.88</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.83</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.76</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>0.68</td></tr>
           </tbody>
         </table>
       </div>
@@ -245,7 +248,7 @@ export default function RacePredictorPage() {
         ].map((s, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: s.color, fontWeight: 700, marginBottom: '6px' }}>{s.season}</p>
-            <p style={{ fontSize: '12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', marginBottom: '4px' }}>{s.temp}</p>
+            <p style={{ fontSize: '12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: '4px' }}>{s.temp}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '6px' }}>{s.rating}</p>
             <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>{s.races}</p>
           </div>

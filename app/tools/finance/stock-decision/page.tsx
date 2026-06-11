@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import StockDecisionClient from './StockDecisionClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock-decision',
@@ -11,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -62,7 +64,7 @@ export default function StockDecisionPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧠 주식 매도·매수 심리 진단
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -70,6 +72,8 @@ export default function StockDecisionPage() {
       </p>
 
       <StockDecisionClient />
+
+      <GuideDivider />
 
       {/* 1. 왜 이 도구가 필요한가 */}
       <h2 style={sectionTitle}>📊 왜 인간은 자기 편향을 이기기 어려운가</h2>
@@ -244,25 +248,23 @@ export default function StockDecisionPage() {
       </details>
 
       {/* 7. 면책 */}
-      <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+      <Disclaimer
+        variant="finance"
+        open
+        sources={[
+          { label: 'DART 증권신고서', href: 'https://dart.fss.or.kr' },
+          { label: 'KIND 공시', href: 'https://kind.krx.co.kr' },
+        ]}
+      >
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>본 도구는 <strong>의사결정 보조·교육·재미</strong> 목적입니다.</li>
           <li>본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 투자 권유 X · 종목 정보 검색 X</strong>.</li>
           <li>자가진단 점수·무작위 결과 모두 <strong>본인 판단 보조</strong> — 모든 책임은 본인에게.</li>
           <li>학계 사례(Lusha·Orlando·Malkiel·Cass·DALBAR)는 의사결정 심리 교훈이며, &ldquo;무작위 투자 권장&rdquo;이 아닙니다.</li>
-          <li>투자 판단 전 필수 확인: <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>, <Link href="https://kind.krx.co.kr" target="_blank" style={{ color: 'var(--accent)' }}>KIND 공시</Link>, 본인 거래 증권사 안내.</li>
+          <li>투자 판단 전 필수 확인: DART 증권신고서·KIND 공시(아래 근거 자료 링크)·본인 거래 증권사 안내.</li>
           <li>도움 받기: 금융감독원 1332 / 본인 거래 증권사 고객센터.</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 8. 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

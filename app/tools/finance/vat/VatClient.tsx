@@ -354,7 +354,7 @@ export default function VatClient() {
                 <tbody>
                   {quoteResult.items.map((it, i) => (
                     <tr key={i}>
-                      <td>{it.name || '(품목명 없음)'}{!it.isTaxable && <span style={{ marginLeft: 6, fontSize: 10.5, color: '#0891B2' }}>면세</span>}</td>
+                      <td>{it.name || '(품목명 없음)'}{!it.isTaxable && <span style={{ marginLeft: 6, fontSize: 11, color: '#0891B2' }}>면세</span>}</td>
                       <td>{it.quantity}</td>
                       <td>{formatKRW(it.unitPrice)}</td>
                       <td>{formatKRW(it.lineSupply)}</td>

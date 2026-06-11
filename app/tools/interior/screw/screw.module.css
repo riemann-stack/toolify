@@ -47,7 +47,7 @@
   white-space: nowrap;
 }
 @media (max-width: 480px) {
-  .tab { font-size: 11.5px; padding: 10px 2px; }
+  .tab { font-size: 12px; padding: 10px 2px; }
 }
 @media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -92,7 +92,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -127,7 +127,7 @@
 @media (max-width: 600px) {
   .systemGrid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
   .systemBtn { padding: 10px 12px; }
-  .systemDesc { font-size: 10.5px; }
+  .systemDesc { font-size: 11px; }
 }
 .systemBtn {
   appearance: none;
@@ -263,7 +263,7 @@
 .compactTable th {
   padding: 6px 8px;
   text-align: left;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 600;
   background: var(--bg3);

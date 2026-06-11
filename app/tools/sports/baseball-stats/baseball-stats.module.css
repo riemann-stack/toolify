@@ -7,7 +7,7 @@
   border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
@@ -37,7 +37,7 @@
 }
 .leagueBtn small {
   display: block;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -158,7 +158,7 @@
   text-align: center;
 }
 .statLabel {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   margin-bottom: 2px;
@@ -332,7 +332,7 @@
   position: relative;
   height: 8px;
   background: rgba(15,23,42,0.04);
-  border-radius: 99px;
+  border-radius: 999px;
   overflow: hidden;
 }
 .compareBarMine {
@@ -340,7 +340,7 @@
   top: 0; left: 0;
   height: 100%;
   background: var(--accent);
-  border-radius: 99px;
+  border-radius: 999px;
   transition: width 0.3s;
 }
 .compareBarLeague {
@@ -486,7 +486,7 @@
 .legendTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .legendTable th, .legendTable td {
   padding: 8px 8px;
@@ -495,7 +495,7 @@
 }
 .legendTable th:first-child, .legendTable td:first-child { text-align: left; }
 .legendTable th {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   font-weight: 600;
@@ -541,7 +541,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .milestoneSub {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -599,5 +599,5 @@
   font-weight: 800;
   letter-spacing: -0.02em;
 }
-.plusDesc { font-size: 12.5px; color: var(--muted); line-height: 1.8; margin-top: 8px; }
+.plusDesc { font-size: 13px; color: var(--muted); line-height: 1.8; margin-top: 8px; }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }

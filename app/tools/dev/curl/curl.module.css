@@ -65,7 +65,7 @@
   border: 1px solid #FFA63E;
   border-radius: 10px;
   padding: 12px 20px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   z-index: 1000;
   font-family: 'Noto Sans KR', sans-serif;
@@ -132,7 +132,7 @@
   border: 1px solid rgba(255, 138, 62, 0.40);
   border-radius: 8px;
   padding: 10px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   margin-top: 10px;
   line-height: 1.7;
@@ -156,7 +156,7 @@
   padding: 4px 10px;
   border-radius: 5px;
   border: 1px solid;
-  font-size: 12.5px;
+  font-size: 13px;
   letter-spacing: 0.05em;
 }
 .summaryUrl {
@@ -169,7 +169,7 @@
 }
 .summaryStat {
   color: var(--muted);
-  font-size: 11.5px;
+  font-size: 12px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
 }
@@ -179,7 +179,7 @@
 .optBlock:last-child { margin-bottom: 0; }
 .optTitle {
   display: block;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 600;
   margin-bottom: 6px;
@@ -196,7 +196,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 7px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -211,7 +211,7 @@
   border-color: #0EA5E9;
 }
 .optLabel {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin-right: 6px;
   font-weight: 600;
@@ -243,7 +243,7 @@
   margin-bottom: 10px;
 }
 .codeLang {
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
 }
 .codeLang strong { color: var(--text); }
@@ -263,7 +263,7 @@
   max-height: 480px;
   overflow-y: auto;
 }
-@media (max-width: 600px) { .codeBlock { font-size: 11.5px; } }
+@media (max-width: 600px) { .codeBlock { font-size: 12px; } }
 
 /* METHOD 큰 배지 */
 .methodBig {
@@ -308,7 +308,7 @@
   padding: 2px 6px;
   border-radius: 3px;
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
 }
 
@@ -341,7 +341,7 @@
   font-weight: 700;
   color: #0EA5E9;
   word-break: break-all;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .kvValue {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
@@ -364,7 +364,7 @@
   color: #FFA63E;
   padding: 1px 5px;
   border-radius: 3px;
-  font-size: 9.5px;
+  font-size: 10px;
   margin-left: 6px;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
@@ -400,7 +400,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
@@ -422,7 +422,7 @@
   gap: 4px;
 }
 .statLabel {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -448,7 +448,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -546,7 +546,7 @@
   color: var(--text);
   border-bottom: 1px solid var(--border);
   line-height: 1.6;
-  font-size: 12.5px;
+  font-size: 13px;
   vertical-align: top;
 }
 .guideTable tr:last-child td { border-bottom: none; }
@@ -556,7 +556,7 @@
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 3px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: #0EA5E9;
   font-weight: 700;
 }

@@ -25,6 +25,8 @@ interface Props {
   related?: { href: string; label: string }[]
   /** 공식 기준 출처 (선택) — YMYL 도구에 근거 명기·링크 */
   sources?: SourceLink[]
+  /** 기본 펼침 여부 (선택) — 항상 노출이 필요한 페이지에서만 true (기본 false) */
+  open?: boolean
 }
 
 const VARIANT_CONFIG: Record<DisclaimerVariant, { title: string; baseLines: string[] }> = {
@@ -73,12 +75,12 @@ const VARIANT_EMOJI: Record<DisclaimerVariant, string> = {
   safety: '⚠️',
 }
 
-export default function Disclaimer({ variant = 'default', children, related, sources }: Props) {
+export default function Disclaimer({ variant = 'default', children, related, sources, open = false }: Props) {
   const cfg = VARIANT_CONFIG[variant]
   const emoji = VARIANT_EMOJI[variant]
 
   return (
-    <details className={styles.disclaimer} data-variant={variant} aria-label="이용 안내">
+    <details className={styles.disclaimer} data-variant={variant} aria-label="이용 안내" open={open || undefined}>
       <summary className={styles.head}>
         <span className={styles.emoji} aria-hidden>{emoji}</span>
         <strong className={styles.title}>{cfg.title}</strong>

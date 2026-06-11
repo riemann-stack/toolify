@@ -7,7 +7,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
@@ -19,7 +19,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
@@ -31,7 +31,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
@@ -55,7 +55,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -198,7 +198,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -217,7 +217,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -281,8 +281,8 @@
 .heroNumCyan   { color: #0891B2; }
 .heroNumPurple { color: #9333EA; }
 .heroNumRed    { color: #DC2626; }
-.heroSub  { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
-.heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub  { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.heroDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
 
 .rateBadge {
   display: inline-block;
@@ -291,7 +291,7 @@
   border: 1px solid rgba(14,165,233,0.30);
   border-radius: 999px;
   padding: 5px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--accent);
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
@@ -324,11 +324,11 @@
 
 /* 진행 바 */
 .progressRow { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
-.progressBar { flex: 1; height: 8px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+.progressBar { flex: 1; height: 8px; background: var(--bg3); border-radius: 999px; overflow: hidden; }
 .progressFill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), #059669);
-  border-radius: 99px;
+  border-radius: 999px;
   transition: width 0.4s ease;
 }
 .progressFillWarn { background: linear-gradient(90deg, #A16207, #EA580C); }
@@ -351,7 +351,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-top: 10px;
 }
-.feasibilityNote { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+.feasibilityNote { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
 
 /* 종합과세 진행 막대 (큰) */
 .compTaxBar {
@@ -441,7 +441,7 @@
   width: 100%;
   min-width: 640px;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .compareTable thead th {
@@ -512,7 +512,7 @@
   border-radius: 8px;
   padding: 10px 12px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   outline: none;
   cursor: pointer;
@@ -576,7 +576,7 @@
 }
 .fxRow.headerRow {
   background: transparent; border: none;
-  font-size: 10.5px; color: var(--muted);
+  font-size: 11px; color: var(--muted);
   letter-spacing: 0.04em; text-transform: uppercase;
   font-weight: 700; padding: 3px 14px;
 }

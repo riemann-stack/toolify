@@ -451,7 +451,7 @@ export default function CurtainBlindClient() {
             )}
             {result.type === 'curtain' && (
               <p className={styles.heroSub}>
-                1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
+                1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
                 {doubleLayer && ' · 이중 (시어 + 암막)'}
               </p>
             )}
@@ -684,7 +684,7 @@ export default function CurtainBlindClient() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
               <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #A16207', borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.8 }}>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>
                   <li>가격 저렴</li>
@@ -692,7 +692,7 @@ export default function CurtainBlindClient() {
               </div>
               <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>🧵 로만쉐이드</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.8 }}>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>가로 주름이 잡히며 올라감</li>
                   <li>커튼처럼 부드러운 느낌</li>
                   <li>가격 중상</li>

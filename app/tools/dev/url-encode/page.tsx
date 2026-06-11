@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import UrlEncodeClient from './UrlEncodeClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -20,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -62,7 +63,7 @@ const codeStyle: React.CSSProperties = {
   padding: '2px 6px',
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
-  fontSize: '12.5px',
+  fontSize: '13px',
   color: '#0EA5E9',
 }
 
@@ -85,7 +86,7 @@ export default function UrlEncodePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔗 URL 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -100,7 +101,7 @@ export default function UrlEncodePage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 인코드·디코드·파싱은 모두 <strong>브라우저에서 실행</strong>되며 입력 URL·데이터는 외부로 전송되지 않습니다.
           추적 파라미터 정리 결과는 일반적인 광고 추적 제거이며, <strong>일부 합법적 기능</strong>(다국어 분기·캠페인 식별)도 함께 제거될 수 있으니 검토 후 사용하세요.
           OAuth state·CSRF 토큰 등 <strong>보안 관련 파라미터를 무단 수정·공유하지 마세요</strong>. 입력 100KB 제한.
@@ -109,6 +110,8 @@ export default function UrlEncodePage() {
       </div>
 
       <UrlEncodeClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -142,17 +145,17 @@ export default function UrlEncodePage() {
             <tbody>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURIComponent</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>A-Z a-z 0-9 - _ . ! ~ * &apos; ( )</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>A-Z a-z 0-9 - _ . ! ~ * &apos; ( )</td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)' }}>쿼리 값·경로 세그먼트 (권장)</td>
               </tr>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURI</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)' }}>전체 URL 인코딩</td>
               </tr>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>escape</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>영숫자 + @*+-./_</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>영숫자 + @*+-./_</td>
                 <td style={{ padding: '8px 10px', color: '#DB2777', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
               </tr>
             </tbody>
@@ -213,7 +216,7 @@ export default function UrlEncodePage() {
         padding: '18px 22px',
         marginBottom: '14px',
       }}>
-        <ol style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ol style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>이중 인코딩</strong> — 이미 인코딩된 값을 또 인코딩 → <code style={codeStyle}>%2520</code>(원래 공백 = <code style={codeStyle}>%20</code>). 본 도구의 <strong>반복 디코드</strong> 옵션으로 풀기 가능</li>
           <li><strong>encodeURIComponent vs encodeURI 잘못 사용</strong> — 쿼리 값에 encodeURI 쓰면 <code style={codeStyle}>=</code>·<code style={codeStyle}>&amp;</code>가 그대로 남아 파싱 깨짐</li>
           <li><strong>옛날 escape() 사용</strong> — Unicode 부정확, deprecated. 절대 쓰지 마세요</li>
@@ -241,7 +244,7 @@ export default function UrlEncodePage() {
           ].map((s, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #FFA63E' }}>
               <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>{s.emoji} {s.name}</p>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
             </div>
           ))}
         </div>

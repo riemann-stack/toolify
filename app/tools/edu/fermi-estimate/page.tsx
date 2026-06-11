@@ -41,7 +41,7 @@ export default function FermiEstimatePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧮 페르미 추정 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -57,7 +57,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 1. 페르미 추정이란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정이란?
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -74,7 +74,7 @@ export default function FermiEstimatePage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
           </div>
@@ -96,7 +96,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 2. 4단계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정 4단계
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -107,8 +107,8 @@ export default function FermiEstimatePage() {
               { n: 'STEP 4', t: '곱셈·검증',  d: '변수값 곱하기 → 시나리오 비교 → 실제 데이터와 비교' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '4px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#0D9488', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
-                <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
+                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 11, color: '#0D9488', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
             ))}
@@ -117,7 +117,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 3. 활용 분야 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정의 활용 분야
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -129,7 +129,7 @@ export default function FermiEstimatePage() {
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
-                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
+                <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => <li key={j}>{it}</li>)}
                 </ul>
               </div>
@@ -139,7 +139,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 4. 시나리오 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시나리오 비교의 가치
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -180,7 +180,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 5. 한국 통계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 쓰는 한국 통계 (페르미 추정용)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -198,14 +198,14 @@ export default function FermiEstimatePage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 위 통계는 2024년 기준 추정치이며, 정확한 값은 통계청·관련 기관 확인이 필요합니다.
           </p>
         </div>
 
         {/* ── 6. 컨설팅 면접 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             컨설팅 면접에서의 페르미 추정
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
@@ -234,7 +234,7 @@ export default function FermiEstimatePage() {
               <li>④ 결과 검증·해석</li>
               <li>⑤ 의사소통 (명확한 설명)</li>
             </ul>
-            <p style={{ marginTop: 8, fontSize: 12.5, color: '#A16207', fontWeight: 700 }}>
+            <p style={{ marginTop: 8, fontSize: 13, color: '#A16207', fontWeight: 700 }}>
               ※ 정확한 답이 중요하지 않음 — <strong>사고 과정</strong>을 평가받음
             </p>
           </div>
@@ -242,7 +242,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 7. TAM·SAM·SOM ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             TAM·SAM·SOM 분석 (시장 규모)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -255,9 +255,9 @@ export default function FermiEstimatePage() {
               { t: 'SOM', n: 'Serviceable Obtainable Market', d: '실제 점유 가능한 시장. "현실적으로 얼마를 가져올 수 있나?" SAM의 일부.', c: '#DC2626' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 24, fontWeight: 800, color: g.c, marginBottom: 4 }}>{g.t}</p>
+                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 24, fontWeight: 800, color: g.c, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, fontStyle: 'italic' }}>{g.n}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7 }}>{g.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
             ))}
           </div>
@@ -282,7 +282,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -303,7 +303,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -338,10 +338,10 @@ export default function FermiEstimatePage() {
 
         {/* ── 10. 학습 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             추천 학습 자료
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li><em>&quot;How to Solve It&quot;</em> — George Pólya (사고법 고전)</li>
               <li><em>&quot;Thinking in Bets&quot;</em> — Annie Duke (불확실성 하의 의사결정)</li>

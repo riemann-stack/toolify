@@ -1001,7 +1001,7 @@ function DrugSpecialTab({
                   <span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 4 }}>
                     [{label}{a.registered ? ' · 현재 복용 중' : ''}]
                   </span>
-                  <div style={{ marginTop: 4, fontSize: 12.5, color: 'var(--muted)' }}>{a.desc}</div>
+                  <div style={{ marginTop: 4, fontSize: 13, color: 'var(--muted)' }}>{a.desc}</div>
                 </div>
               )
             })}
@@ -1046,7 +1046,7 @@ function DrugSpecialTab({
               return (
                 <div key={i} className={`${s.drugAlertCard} ${cls}`}>
                   <strong>{riskIcon} {a.drugName.split(' (')[0]} + {a.ingredientName} (위험도 {riskLabel})</strong>
-                  <div style={{ marginTop: 6, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{a.desc}</div>
+                  <div style={{ marginTop: 6, fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{a.desc}</div>
                 </div>
               )
             })}

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import HttpStatusClient from './HttpStatusClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -19,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -61,7 +62,7 @@ const codeStyle: React.CSSProperties = {
   padding: '2px 6px',
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
-  fontSize: '12.5px',
+  fontSize: '13px',
   color: '#0EA5E9',
 }
 
@@ -84,7 +85,7 @@ export default function HttpStatusPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🌐 HTTP 상태 코드 검색기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -99,7 +100,7 @@ export default function HttpStatusPage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 HTTP 상태 코드 설명·해결 힌트는 <strong>RFC 7231·9110 등 표준 명세와 일반적 운영 경험을 정리한 어림</strong>이며, 모든 시나리오를 완전히 커버하지 않습니다.
           실제 운영 환경에서 마주친 오류는 <strong>서버 로그·DevTools Network 탭·CDN 대시보드</strong> 등 추가 진단이 필요합니다.
           <strong> Cloudflare(521·524)·nginx(499) 등 비표준 코드는 해당 벤더의 공식 문서를 우선</strong> 참조하세요.
@@ -108,6 +109,8 @@ export default function HttpStatusPage() {
       </div>
 
       <HttpStatusClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -163,7 +166,7 @@ export default function HttpStatusPage() {
       {/* 3. 흔한 혼동 비교 */}
       <h2 style={sectionTitle}>🆚 흔한 혼동 비교 (401 vs 403, 502 vs 504, 301 vs 302)</h2>
       <div style={card}>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>401 vs 403</strong> — 401: 인증 정보 X·만료 (토큰 누락) / 403: 인증은 됐지만 권한 없음 (스코프 부족)</li>
           <li><strong>301 vs 302</strong> — 301: 영구 이동 (SEO 인덱스 갱신) / 302: 임시 이동 (SEO 영향 X)</li>
           <li><strong>502 vs 504</strong> — 502: 백엔드 다운·잘못된 응답 / 504: 백엔드 응답 너무 느림 (timeout)</li>
@@ -175,7 +178,7 @@ export default function HttpStatusPage() {
       {/* 4. 표준 vs 비표준 출처 */}
       <h2 style={sectionTitle}>📜 표준 vs 비표준 출처</h2>
       <div style={card}>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li>📖 <strong>표준 RFC</strong>: 7231 (HTTP/1.1)·6585 (추가 코드 428·429·431·511)·8297 (103 Early Hints)·7235 (인증)·7232 (조건부)·7538 (308)·7540 (HTTP/2)·4918 (WebDAV)·9110 (HTTP 의미론, 2022 최신)</li>
           <li>☁️ <strong>Cloudflare 5xx (520~530)</strong>: Cloudflare 자체 정의 — Origin 서버 통신 문제 진단</li>
           <li>🔌 <strong>nginx (444·494·499)</strong>: nginx 내부 코드 — 클라이언트 종료·헤더 크기·차단</li>
@@ -216,7 +219,7 @@ export default function HttpStatusPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
@@ -338,7 +341,7 @@ export default function HttpStatusPage() {
           • <strong>Spring Boot</strong>: @Valid 실패 시 기본 400 (수동 422 권장)<br />
           • <strong>Rails ActiveRecord</strong>: validation 실패 시 422<br />
           REST 베스트 프랙티스는 <strong>422 사용</strong>으로 의미 명확화. 응답 본문에 필드별 오류 배열 포함:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`{ "detail": [
   { "loc": ["body", "email"], "msg": "invalid email", "type": "value_error.email" }
 ]}`}

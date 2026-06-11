@@ -487,7 +487,7 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {sunsetX !== null && (
           <>
             <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="#DC2626" strokeWidth="2" strokeDasharray="4 3" />
-            <text x={sunsetX} y={padT-12} fill="#DC2626" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
+            <text x={sunsetX} y={padT-12} fill="#DC2626" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
               🌅 일몰 {fmtHHMM(sunsetMinutes)}
             </text>
           </>

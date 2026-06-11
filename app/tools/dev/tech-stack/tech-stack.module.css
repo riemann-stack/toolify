@@ -133,7 +133,7 @@
 }
 @media (max-width: 480px) {
   .scenarioLabel { font-size: 12px; }
-  .scenarioDesc { font-size: 10.5px; -webkit-line-clamp: 2; }
+  .scenarioDesc { font-size: 11px; -webkit-line-clamp: 2; }
 }
 
 .scenarioTip {
@@ -224,7 +224,7 @@
 .summaryStackEmoji { font-size: 18px; flex-shrink: 0; align-self: center; }
 @media (max-width: 480px) {
   .summaryStackCard { padding: 10px 12px; }
-  .summaryStackName { font-size: 13.5px; }
+  .summaryStackName { font-size: 13px; }
   .summaryStackCategory { font-size: 10px; }
 }
 .selectField {
@@ -281,7 +281,7 @@
 .weightChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 4px 12px;
   font-size: 11px;
   color: var(--text);

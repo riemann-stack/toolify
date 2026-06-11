@@ -3,7 +3,9 @@ import SchengenClient from './SchengenClient'
 import AdSlot from '@/components/AdSlot'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/date/schengen',
@@ -14,7 +16,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -68,7 +70,7 @@ export default function SchengenPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🇪🇺 쉥겐 체류일 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -86,6 +88,8 @@ export default function SchengenPage() {
       />
 
       <SchengenClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -126,7 +130,7 @@ export default function SchengenPage() {
         {/* 계산 예시 */}
         <div>
           <h2 style={sectionTitle}>🧮 계산 예시</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ margin: '0 0 8px', color: 'var(--text)', fontWeight: 600 }}>예) 1월 1일~1월 30일(30일) 체류 후, 3월 1일에 다시 입국한다면?</p>
             <p style={{ margin: 0 }}>
               3월 1일 기준 직전 180일 안에 1월 체류 30일이 포함되므로 <strong style={{ color: 'var(--text)' }}>남은 한도는 90 − 30 = 60일</strong>. 단, 머무는 동안에도 매일 180일 창을 다시 확인해야 하며, 시간이 지나 1월 체류가 창 밖으로 빠지면 그만큼 한도가 회복됩니다. 위 계산기는 이 과정을 <strong style={{ color: 'var(--text)' }}>하루 단위로 시뮬레이션</strong>해 ‘연속 체류 가능일’과 ‘다음 입국 가능일’을 정확히 알려줍니다.
@@ -137,7 +141,7 @@ export default function SchengenPage() {
         {/* EES·ETIAS */}
         <div>
           <h2 style={sectionTitle}>🛂 EES·ETIAS — 2026년 쉥겐 입국 변화</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ margin: '0 0 8px', color: 'var(--text)' }}>
               <strong style={{ color: 'var(--accent)' }}>EES(입·출국 시스템)</strong> — 2025년 10월 12일 단계 도입을 시작해 <strong>2026년 4월 10일부터 모든 쉥겐 국가에서 전면 시행</strong>됐습니다(EU 집행위 발표).
             </p>
@@ -163,7 +167,7 @@ export default function SchengenPage() {
         {/* 양자 사증면제협정 */}
         <div>
           <h2 style={sectionTitle}>🤝 한국과의 양자 사증면제협정 — 90/180일과 별도?</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ margin: '0 0 10px' }}>
               외교부 해외안전여행 안내(2026년 6월 확인) 기준, 아래 <strong style={{ color: 'var(--text)' }}>13개국은 한국과의 양자 사증면제협정이 쉥겐 90/180 규칙보다 우선 적용</strong>됩니다. 나머지 16개국(프랑스·스페인·스위스·폴란드 등)은 쉥겐 규칙이 우선입니다.
             </p>
@@ -192,20 +196,9 @@ export default function SchengenPage() {
         </div>
 
         {/* 면책 */}
-        <div style={{
-          background: 'rgba(220,38,38,0.06)',
-          border: '1px solid rgba(220,38,38,0.25)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          fontSize: '13px',
-          color: 'var(--text)',
-          lineHeight: 1.8,
-        }}>
-          <strong style={{ color: '#DC2626' }}>⚠️ 참고용 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
-            본 계산기는 일반적인 90/180 규칙에 따른 <strong style={{ color: 'var(--text)' }}>참고용 추정</strong>입니다. 쉥겐 회원국·규정은 변경될 수 있고, 장기비자·거주허가·일부 국가와의 양자협정 등 예외가 있습니다. <strong style={{ color: 'var(--text)' }}>최종 입·출국 허가는 현지 입국심사관의 재량</strong>이며, 정확한 판단은 해당국 대사관 또는 EU 공식 쉥겐 계산기로 재확인하세요.
-          </p>
-        </div>
+        <Disclaimer variant="default" open>
+          본 계산기는 일반적인 90/180 규칙에 따른 <strong>참고용 추정</strong>입니다. 쉥겐 회원국·규정은 변경될 수 있고, 장기비자·거주허가·일부 국가와의 양자협정 등 예외가 있습니다. <strong>최종 입·출국 허가는 현지 입국심사관의 재량</strong>이며, 정확한 판단은 해당국 대사관 또는 EU 공식 쉥겐 계산기로 재확인하세요.
+        </Disclaimer>
 
         {/* 관련 도구 */}
         <div>

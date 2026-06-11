@@ -38,7 +38,7 @@ export default function LiveWidget() {
     >
       <div
         style={{
-          fontSize: 12.5,
+          fontSize: 13,
           fontWeight: 500,
           letterSpacing: '-0.01em',
           lineHeight: 1.6,
@@ -47,7 +47,7 @@ export default function LiveWidget() {
       >
         {text}
       </div>
-      <div style={{ fontSize: 10.5, opacity: 0.7, marginTop: 2 }}>
+      <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
         내 기기 시계 기준 ·{' '}
         <Link
           href="/tools/date/server-time"

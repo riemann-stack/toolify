@@ -24,7 +24,7 @@ export default function UpdatedMeta({ date, basis, sources }: Props) {
         flexWrap: 'wrap',
         alignItems: 'center',
         gap: '4px 14px',
-        fontSize: '12.5px',
+        fontSize: '13px',
         color: 'var(--muted)',
         background: 'var(--bg2)',
         border: '1px solid var(--border)',

@@ -37,7 +37,7 @@
 }
 .accent { color: var(--accent); }
 .note {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
   margin: 10px 0 0;
@@ -74,7 +74,7 @@
   color: var(--text);
 }
 .scaleType {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-weight: 500;
 }
@@ -195,7 +195,7 @@
   border: none;
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -231,7 +231,7 @@
   border: 1px dashed var(--border);
   border-radius: 999px;
   padding: 5px 11px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -268,13 +268,13 @@
 }
 .resName {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 800;
   color: var(--muted);
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
@@ -293,7 +293,7 @@
 }
 .resCardInput .resValue { color: var(--accent); }
 .resFull {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.5;
@@ -328,7 +328,7 @@
   font-size: 11px;
   color: var(--muted);
 }
-.saeHint { font-size: 11.5px; color: var(--text); }
+.saeHint { font-size: 12px; color: var(--text); }
 
 .saeFullList { padding-top: 4px; border-top: 1px dashed var(--border); }
 .saeList { display: flex; flex-direction: column; gap: 3px; }
@@ -340,7 +340,7 @@
   padding: 6px 10px;
   border-radius: 6px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   opacity: 0.55;
 }
 .saeRowActive {
@@ -359,7 +359,7 @@
   font-variant-numeric: tabular-nums;
 }
 .saeNote { color: var(--muted); }
-@media (max-width: 540px) { .saeRow { grid-template-columns: 60px 80px 1fr; gap: 6px; font-size: 11.5px; } }
+@media (max-width: 540px) { .saeRow { grid-template-columns: 60px 80px 1fr; gap: 6px; font-size: 12px; } }
 
 /* ── ISO VG 매칭 ── */
 .isoMatchedCard {
@@ -385,7 +385,7 @@
   margin: 4px 0;
 }
 .isoMatchedUse {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -400,7 +400,7 @@
   padding: 6px 10px;
   border-radius: 6px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   opacity: 0.65;
 }
 .isoRowActive {
@@ -417,10 +417,10 @@
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .isoUse { color: var(--muted); }
-@media (max-width: 540px) { .isoRow { grid-template-columns: 60px 95px 1fr; gap: 6px; font-size: 11.5px; } }
+@media (max-width: 540px) { .isoRow { grid-template-columns: 60px 95px 1fr; gap: 6px; font-size: 12px; } }
 
 /* ── 자동차 오일 가이드 ── */
 .oilGrid {
@@ -462,7 +462,7 @@
 }
 .oilUse {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.55;
   font-family: 'Noto Sans KR', sans-serif;
@@ -478,11 +478,11 @@
   padding: 7px 4px;
   border-bottom: 1px dashed var(--border);
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .fluidRow:last-child { border-bottom: none; }
 @media (max-width: 600px) {
-  .fluidRow { grid-template-columns: 24px 1fr 90px 60px; gap: 8px; font-size: 11.5px; }
+  .fluidRow { grid-template-columns: 24px 1fr 90px 60px; gap: 8px; font-size: 12px; }
   .fluidNote { display: none; }
 }
 .fluidEmoji { font-size: 18px; line-height: 1; text-align: center; }
@@ -498,4 +498,4 @@
   color: var(--muted);
   font-size: 11px;
 }
-.fluidNote { color: var(--muted); font-size: 11.5px; }
+.fluidNote { color: var(--muted); font-size: 12px; }

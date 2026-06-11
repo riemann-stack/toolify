@@ -334,7 +334,7 @@ export default function CardInstallmentClient() {
         {tableRows.map((r, i) => {
           const cx = padL + (innerW / tableRows.length) * (i + 0.5)
           return (
-            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
               {r.months}
             </text>
           )
@@ -785,7 +785,7 @@ export default function CardInstallmentClient() {
           {parseComma(cmpAmount) > 0 && (
             <div className={s.opportunityCard}>
               <p className={s.opportunityTitle}>💡 기회비용 분석</p>
-              <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7, marginBottom: 12 }}>
+              <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, marginBottom: 12 }}>
                 무이자 할부의 진짜 가치는 <strong style={{ color: 'var(--text)' }}>현금 보유</strong>에서 나옵니다.
                 일시불 할인과 무이자 + 파킹통장 운용을 비교해 봅니다.
               </p>

@@ -41,7 +41,7 @@ export default function AcCapacityPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ❄️ 에어컨 평형 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function AcCapacityPage() {
 
         {/* ── 1. 계산 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에어컨 평형 계산 공식
           </h2>
           <div style={{
@@ -86,7 +86,7 @@ export default function AcCapacityPage() {
 
         {/* ── 2. 한국 평형 표준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 에어컨 평형 표준 (시판 모델)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -109,8 +109,8 @@ export default function AcCapacityPage() {
                   { p: '22~36평형', k: '12.8~20.9 kW', u: '매장·상가·사무실' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -121,7 +121,7 @@ export default function AcCapacityPage() {
 
         {/* ── 3. 평형 보정 계수 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 평형 보정 계수 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -157,7 +157,7 @@ export default function AcCapacityPage() {
                   {g.items.map(([k, v], j) => (
                     <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)' }}>
                       <span>{k}</span>
-                      <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
+                      <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -168,7 +168,7 @@ export default function AcCapacityPage() {
 
         {/* ── 4. BTU·W·평형 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌐 BTU·W·평형 환산 가이드
           </h2>
           <div style={{
@@ -196,7 +196,7 @@ export default function AcCapacityPage() {
 
         {/* ── 5. 평형이 너무 크거나 작으면 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚖️ 평형이 너무 크거나 작으면 안 좋은 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -234,7 +234,7 @@ export default function AcCapacityPage() {
 
         {/* ── 6. 인버터 vs 정속형 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚡ 인버터 vs 정속형 — 어떤 걸 골라야 할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -263,7 +263,7 @@ export default function AcCapacityPage() {
 
         {/* ── 7. 언제, 몇 도로 틀까 (사용 가이드) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌡️ 에어컨 언제, 몇 도로 틀까? — 사용 가이드
           </h2>
 
@@ -273,7 +273,7 @@ export default function AcCapacityPage() {
             borderRadius: 14, padding: '18px 20px', marginBottom: 12, textAlign: 'center',
           }}>
             <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 4px' }}>권장 실내 설정 온도</p>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px,7vw,40px)', fontWeight: 800, color: 'var(--accent)', margin: 0, letterSpacing: '-0.02em' }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px,7vw,40px)', fontWeight: 800, color: 'var(--accent)', margin: 0, letterSpacing: '-0.02em' }}>
               26 ~ 28°C
             </p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '6px 0 0', lineHeight: 1.6 }}>
@@ -322,8 +322,8 @@ export default function AcCapacityPage() {
               },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>{b.t}</p>
-                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.8 }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>{b.t}</p>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
                   {b.items.map((it, j) => <li key={j}>{it}</li>)}
                 </ul>
               </div>
@@ -332,7 +332,7 @@ export default function AcCapacityPage() {
 
           <div style={{
             background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)',
+            borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)',
             marginTop: 12, lineHeight: 1.75,
           }}>
             ⚠️ <strong style={{ color: '#EA580C' }}>냉방병 주의</strong> — 실내외 온도차가 8°C 넘게 큰 곳을 자주 드나들면 자율신경이 피로해져 두통·피로·소화불량이 생깁니다. 온도차를 5~8°C로 유지하고 2시간마다 환기하세요. 폭염(외기 35°C↑)에는 평형도 한 단계 크게 잡는 것이 좋습니다.
@@ -344,7 +344,7 @@ export default function AcCapacityPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -365,7 +365,7 @@ export default function AcCapacityPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

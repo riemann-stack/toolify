@@ -103,7 +103,7 @@
 @media (max-width: 480px) {
   .searchRow { grid-template-columns: 1fr 110px; gap: 6px; }
   .searchRow .searchInput { padding: 10px 10px 10px 32px; font-size: 14px; }
-  .searchRow .select { padding: 10px 24px 10px 10px; font-size: 12.5px; }
+  .searchRow .select { padding: 10px 24px 10px 10px; font-size: 13px; }
 }
 
 /* 목적 칩 */

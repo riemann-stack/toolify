@@ -275,7 +275,7 @@ export default function MoldingClient() {
             <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
             {/* 문 표시 */}
             <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="#0891B2" opacity={0.8} />
-            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#0891B2" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#0891B2" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
               문
             </text>
           </>
@@ -606,7 +606,7 @@ export default function MoldingClient() {
                 <span className={s.cardLabelHint}>모서리 ● 절단 위치</span>
               </div>
               <div className={s.floorPlanWrap}>{planSvg}</div>
-              <div style={{ display: 'flex', gap: 12, marginTop: 12, fontSize: 11.5, color: 'var(--muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', gap: 12, marginTop: 12, fontSize: 12, color: 'var(--muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {selectedTypes.has('ceiling')   && <span><span style={{ color: 'var(--accent)', fontWeight: 700 }}>━━</span> 천장 몰딩</span>}
                 {selectedTypes.has('baseboard') && <span><span style={{ color: '#EA580C', fontWeight: 700 }}>━━</span> 걸레받이</span>}
                 {selectedTypes.has('belt')      && <span><span style={{ color: '#9B59B6', fontWeight: 700 }}>┄┄</span> 띠몰딩</span>}

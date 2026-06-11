@@ -255,7 +255,7 @@ export default function PregnancyClient() {
             </button>
           ))}
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
           ⓘ 네겔레 공식은 28일 주기 가정. 24일은 4일 빠르게, 35일은 7일 늦게 보정. 불규칙 주기는 초음파 기준 주수가 더 정확합니다.
         </p>
 
@@ -327,7 +327,7 @@ export default function PregnancyClient() {
               </div>
               <div className={styles.triMarker} style={{ left: `${markerPos}%` }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, marginTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginTop: 8 }}>
               <span>0주</span><span>13주</span><span>27주</span><span>40주</span>
             </div>
           </div>
@@ -508,7 +508,7 @@ export default function PregnancyClient() {
                 </ul>
               </div>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ⓘ 구체적 영양제·식이 가이드는 산부인과·영양사 상담 필수. 개인 건강 상태에 따라 권장사항이 달라집니다.
             </p>
           </div>
@@ -571,13 +571,13 @@ export default function PregnancyClient() {
                 }}>
                 <summary style={{
                   cursor: 'pointer',
-                  fontSize: 13.5, fontWeight: 700,
+                  fontSize: 13, fontWeight: 700,
                   color: isCurrentTri ? triInfo.color : 'var(--text)',
                   fontFamily: 'Noto Sans KR, sans-serif',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
                   <span>{triInfo.name} ({triInfo.startWeek}~{triInfo.endWeek}주){isCurrentTri && ' · 현재'}</span>
-                  <span style={{ fontSize: 11.5, color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>
+                  <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
                     {triCompleted}/{items.length}
                   </span>
                 </summary>

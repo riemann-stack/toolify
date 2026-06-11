@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
 
 const FAQ_LD = [
@@ -37,7 +37,7 @@ export default function SciUnitsPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔬 과학 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -72,8 +72,8 @@ export default function SciUnitsPage() {
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
@@ -104,16 +104,16 @@ export default function SciUnitsPage() {
                   ['f', '펨토', '10⁻¹⁵', '1 fs = 10⁻¹⁵ s'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r[0]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{r[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 계산기는 퀘타(Q,10³⁰)~퀙토(q,10⁻³⁰)까지 전체 접두어를 지원합니다.
           </p>
         </section>
@@ -131,8 +131,8 @@ export default function SciUnitsPage() {
               { t: 'Da 달톤', d: '원자질량단위(u). 1 Da ≈ 1.661×10⁻²⁷ kg.' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
-                <p style={{ fontSize: 13.5, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{x.d}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{x.d}</p>
               </div>
             ))}
           </div>
@@ -161,12 +161,12 @@ export default function SciUnitsPage() {
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 출처: ASML(EUV 13.5 nm)·NASA(전자기 스펙트럼, 프록시마 센타우리 4.25광년)·CERN(LHC 13.6 TeV)·IAU(AU 정의) — 2026년 6월 확인.
           </p>
         </section>
@@ -186,16 +186,16 @@ export default function SciUnitsPage() {
               <tbody>
                 {CONSTANTS.map((c, i) => (
                   <tr key={c.symbol} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{c.symbol}</td>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{c.symbol}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{c.name}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{c.value}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c.value}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{c.unit}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ c·h·ħ·e·k_B·N_A·R·σ는 2019년 SI 재정의에 따른 <strong>정확값(불확도 없음)</strong>이고, G·m_e·m_p·ε₀는 측정값입니다.
             출처: NIST CODATA 2022 권장값(physics.nist.gov, 2026년 6월 확인). 위 계산기의 &lsquo;물리 상수표&rsquo; 탭과 동일한 값입니다.
           </p>
@@ -228,7 +228,7 @@ export default function SciUnitsPage() {
               <Link key={t.href} href={t.href} style={{ ...card, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
                 <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
               </Link>

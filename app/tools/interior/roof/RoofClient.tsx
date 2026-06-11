@@ -533,10 +533,10 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         )}
 
         {/* 치수 라벨 */}
-        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
           {input.L.toFixed(1)}m
         </text>
-        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
           {input.W.toFixed(1)}m
         </text>
         {(eaveL + eaveR + eaveT + eaveB) > 0 && (
@@ -586,7 +586,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 경사각 표기 */}
         {input.type !== 'flat' && (
           <text x={elevArea.cx} y={wallTopY - ridgeHeightScaled - 8} fontSize="11" fill="#EA580C"
-            textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+            textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
             {input.pitchDeg.toFixed(1)}° ({fmtMoemae(degToMoemae(input.pitchDeg))})
           </text>
         )}

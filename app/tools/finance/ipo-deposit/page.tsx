@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import IpoDepositClient from './IpoDepositClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/ipo-deposit',
@@ -11,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -81,7 +83,7 @@ export default function IpoDepositPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💰 공모주 증거금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -89,6 +91,8 @@ export default function IpoDepositPage() {
       </p>
 
       <IpoDepositClient />
+
+      <GuideDivider />
 
       {/* 1. 비례·균등 구조 가이드 */}
       <h2 style={sectionTitle}>📊 비례·균등 배정 구조 가이드 (균등 50% 이상)</h2>
@@ -132,11 +136,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
-            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
-            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
-            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
-            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
+            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
+            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
+            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
+            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
+            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
           </tbody>
         </table>
       </div>
@@ -159,12 +163,12 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
-            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
-            <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
-            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>2.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>3주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
+            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
+            <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
+            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>2.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>3주</td><td style={cell}>올림</td></tr>
           </tbody>
         </table>
       </div>
@@ -213,11 +217,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
-            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
-            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#059669', fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
-            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
-            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
+            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
+            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
+            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
+            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
+            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
           </tbody>
         </table>
       </div>
@@ -351,26 +355,24 @@ export default function IpoDepositPage() {
       </details>
 
       {/* 8. 면책 */}
-      <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+      <Disclaimer
+        variant="finance"
+        open
+        sources={[
+          { label: 'DART 증권신고서', href: 'https://dart.fss.or.kr' },
+          { label: 'KIND 공시', href: 'https://kind.krx.co.kr' },
+        ]}
+      >
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>본 도구는 <strong>일반 계산 가이드</strong>입니다. 비례경쟁률·균등배정·5사6입·청약단위·한도 등 변수가 많아 실제 결과와 차이 가능.</li>
           <li>본 도구는 <strong>특정 종목·증권사 추천 X · 주가 예측 X · 따상/따따상 보장 X · 실시간 청약 정보 X</strong>.</li>
           <li>균등배정은 추첨 — 인기 종목은 0주 가능. 본 도구의 &ldquo;균등 기대&rdquo;는 사용자 가정값.</li>
           <li>청약 자금 대출·레버리지 권유 X. 본인 자금 한도 내 보수적 운용 권장.</li>
           <li>중복청약 금지 위반 시 배정 취소 + 자금 묶임 + 추후 청약 제한 가능.</li>
-          <li>투자 판단 전 필수 확인: <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>, <Link href="https://kind.krx.co.kr" target="_blank" style={{ color: 'var(--accent)' }}>KIND 공시</Link>, 본인 거래 증권사 청약 안내.</li>
+          <li>투자 판단 전 필수 확인: DART 증권신고서·KIND 공시(아래 근거 자료 링크)·본인 거래 증권사 청약 안내.</li>
           <li>도움 받기: 금융감독원 1332 / 한국예탁결제원 / 본인 거래 증권사 고객센터.</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 9. 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

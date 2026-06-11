@@ -145,7 +145,7 @@ export default function CompoundChart({ years = YEARS }: Props) {
       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '12px' }}>
         {data.map(({ label, color, points }) => (
           <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '20px', height: '3px', background: color, borderRadius: '99px', display: 'inline-block' }} />
+            <span style={{ width: '20px', height: '3px', background: color, borderRadius: '999px', display: 'inline-block' }} />
             <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
               연 {label} → <strong style={{ color }}>{fmtVal(points[years].value)}</strong>
             </span>

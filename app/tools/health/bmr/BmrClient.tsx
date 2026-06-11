@@ -272,7 +272,7 @@ export default function BmrClient() {
                 )
               })}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               {FORMULAS.find(f => f.id === formula)?.desc} · 정확도: {FORMULAS.find(f => f.id === formula)?.accuracy}
             </p>
           </div>
@@ -291,7 +291,7 @@ export default function BmrClient() {
                 🎯 정밀 (직업·걸음·운동)
               </button>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               {actMode === 'simple'
                 ? '💡 빠른 추정 — 5단계 활동 계수로 BMR × 계수.'
                 : '💡 직업 활동·일일 걸음·주간 운동을 분리하고 운동 칼로리에 체중(MET)까지 반영해 더 현실적으로 추정합니다.'}
@@ -436,7 +436,7 @@ export default function BmrClient() {
                       활동 +{fmt(tdeeSimple - bmr)}
                     </div>
                   </div>
-                  <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
                     BMR이 전체의 <strong style={{ color: 'var(--text)' }}>{Math.round(tdeeBarSplit.bmrPct)}%</strong> · 활동이 <strong style={{ color: 'var(--text)' }}>{Math.round(tdeeBarSplit.actPct)}%</strong>
                   </p>
                 </div>
@@ -467,7 +467,7 @@ export default function BmrClient() {
                     )
                   })}
                 </div>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                   💡 일반인은 <strong style={{ color: 'var(--text)' }}>Mifflin-St Jeor</strong>이 권장(현재 널리 사용), 체지방률 정확하면 <strong style={{ color: 'var(--text)' }}>Katch-McArdle</strong>이 더 정확. 모두 추정치로 ±10% 오차 가능합니다.
                 </p>
               </div>
@@ -675,7 +675,7 @@ export default function BmrClient() {
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                   💡 오늘 예산 <strong style={{ color: '#0891B2' }}>{fmt(budgetGoal.daily)}kcal</strong> ≈ 밥 {Math.floor(budgetGoal.daily / 300)}공기 + 단백질·지방·야채 균형
                 </p>
               </div>

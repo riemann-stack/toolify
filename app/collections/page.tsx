@@ -16,7 +16,7 @@ export default function CollectionsIndexPage() {
       <p style={{ fontSize: 12, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
         상황별 가이드
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: 12 }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: 12 }}>
         상황별 도구 가이드
       </h1>
       <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 40 }}>

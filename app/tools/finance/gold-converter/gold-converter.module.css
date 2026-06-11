@@ -173,7 +173,7 @@
   padding: 8px 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
   color: var(--muted);

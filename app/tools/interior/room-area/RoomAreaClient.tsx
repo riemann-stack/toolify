@@ -451,7 +451,7 @@ export default function RoomAreaClient() {
                       fill="rgba(14,165,233,0.08)" stroke="#0EA5E9" strokeWidth={2} />
                     {/* 면적 라벨 */}
                     <text x={x0 + w / 2} y={y0 + d / 2 - 4} textAnchor="middle"
-                      fill="#0EA5E9" fontSize="18" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>
+                      fill="#0EA5E9" fontSize="18" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
                       {fmt(t1.floorArea)}㎡
                     </text>
                     <text x={x0 + w / 2} y={y0 + d / 2 + 16} textAnchor="middle"
@@ -462,14 +462,14 @@ export default function RoomAreaClient() {
                     <line x1={x0} y1={y0 + d + 14} x2={x0 + w} y2={y0 + d + 14} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0} y1={y0 + d + 10} x2={x0} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w} y1={y0 + d + 10} x2={x0 + w} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {W.toFixed(1)}m
                     </text>
                     {/* 세로 치수 */}
                     <line x1={x0 + w + 14} y1={y0} x2={x0 + w + 14} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0} x2={x0 + w + 18} y2={y0} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0 + d} x2={x0 + w + 18} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {L.toFixed(1)}m
                     </text>
                     {/* 라벨 */}
@@ -504,28 +504,28 @@ export default function RoomAreaClient() {
                         fill={face.fill} stroke={face.stroke} strokeWidth={1.5} />
                     ))}
                     {/* 면적 라벨 — 바닥은 아래로, 정면은 위로 오프셋해 겹침 방지 */}
-                    <text x={floorC.x} y={floorC.y + 16} textAnchor="middle" fill="#0EA5E9" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={floorC.x} y={floorC.y + 16} textAnchor="middle" fill="#0EA5E9" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
                       바닥 {fmt(t1.floorArea)}㎡
                     </text>
-                    <text x={frontC.x} y={frontC.y - 8} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={frontC.x} y={frontC.y - 8} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
                       정면 {fmt(tab1Dims.width * heightM)}㎡
                     </text>
-                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
                       우측 {fmt(tab1Dims.length * heightM)}㎡
                     </text>
-                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="12.5" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
                       천장
                     </text>
                     {/* 치수선 — 가로 */}
-                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {tab1Dims.width.toFixed(1)}m
                     </text>
                     {/* 치수선 — 세로 (깊이) */}
-                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {tab1Dims.length.toFixed(1)}m
                     </text>
                     {/* 치수선 — 높이 */}
-                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="11.5" fontFamily="Inter, system-ui, sans-serif">
+                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                       {heightM}m
                     </text>
                     {/* 라벨 */}
@@ -534,7 +534,7 @@ export default function RoomAreaClient() {
                 )
               })()}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
               ⓘ 평면도는 가로·세로 정확한 비율, 3D 박스는 캐비넷 투영(깊이 50% 축소)으로 표시됩니다. 본 시각화는 입력값 기반 비례 도형이며 실제 시공 도면이 아닙니다.
             </p>
           </div>
@@ -666,15 +666,15 @@ export default function RoomAreaClient() {
                 }}>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>바닥</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#0EA5E9', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
+                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: '#0EA5E9', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>벽 (실)</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)', fontSize: 16 }}>{fmt(calc.wallNet)}㎡</p>
+                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)', fontSize: 16 }}>{fmt(calc.wallNet)}㎡</p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>부피</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#A16207', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
+                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: '#A16207', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
                   </div>
                 </div>
               </div>

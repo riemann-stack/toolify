@@ -57,7 +57,7 @@
   border: 1px solid #FFA63E;
   border-radius: 10px;
   padding: 12px 20px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   z-index: 1000;
   font-family: 'Noto Sans KR', sans-serif;
@@ -69,7 +69,7 @@
 .optBlock:last-child { margin-bottom: 0; }
 .optTitle {
   display: block;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 600;
   margin-bottom: 6px;
@@ -86,7 +86,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 7px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -192,14 +192,14 @@
 .textarea:focus { border-color: #0EA5E9; }
 
 .detectInfo {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin: 8px 0 0;
 }
 .detectInfo strong { color: var(--text); font-weight: 700; }
 
 .statText {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   margin: 8px 0 0;
   font-family: 'Inter', system-ui, sans-serif;
@@ -209,7 +209,7 @@
 /* 형식 배지 */
 .formatBadge {
   display: inline-block;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 4px;
@@ -273,7 +273,7 @@
   background: var(--bg3);
   padding: 1px 5px;
   border-radius: 3px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: #0EA5E9;
 }
 .warnNote {
@@ -350,7 +350,7 @@
   gap: 4px;
 }
 .statLabel {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -385,7 +385,7 @@
   color: var(--text);
 }
 .treeType {
-  font-size: 10.5px;
+  font-size: 11px;
   color: #0EA5E9;
   background: var(--bg2);
   padding: 2px 6px;
@@ -397,7 +397,7 @@
 }
 .treePreview {
   font-family: 'Inter', 'SF Mono', Consolas, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   word-break: break-all;
 }
@@ -433,7 +433,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
@@ -519,7 +519,7 @@
   color: var(--text);
   border-bottom: 1px solid var(--border);
   line-height: 1.6;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .compareTable tr:last-child td { border-bottom: none; }
 .compareTable td:first-child { width: 130px; white-space: nowrap; }
@@ -529,6 +529,6 @@
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 3px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: #0EA5E9;
 }

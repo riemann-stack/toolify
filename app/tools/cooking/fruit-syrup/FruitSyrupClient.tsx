@@ -224,7 +224,7 @@ export default function FruitSyrupClient() {
           </div>
         )}
         {ratio < 1.0 && (
-          <p style={{ fontSize: '12.5px', lineHeight: 1.6, margin: '10px 0 0', fontWeight: 600, color: ratio < 0.8 ? '#DC2626' : '#D97706' }}>
+          <p style={{ fontSize: '13px', lineHeight: 1.6, margin: '10px 0 0', fontWeight: 600, color: ratio < 0.8 ? '#DC2626' : '#D97706' }}>
             {ratio < 0.8
               ? '⚠️ 보존에 필요한 설탕이 부족합니다 (권장 최소 1:0.8). 발효·부패 위험이 큽니다.'
               : '⚠️ 저당 비율 — 반드시 냉장 보관하고 1~2개월 내 소비하세요. 아래 소비기한이 자동 단축됩니다.'}

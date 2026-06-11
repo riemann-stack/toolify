@@ -668,8 +668,8 @@ export default function PaintClient() {
                     </button>
                   ))}
                 </div>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>1L당 {coverage}㎡</strong>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1L당 {coverage}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label} 보정)`}
                 </p>
               </>
@@ -802,7 +802,7 @@ export default function PaintClient() {
               </tbody>
             </table>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(t1.requiredPaint, 2)}L</strong>
+              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(t1.requiredPaint, 2)}L</strong>
             </p>
           </div>
 
@@ -1033,7 +1033,7 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>{tab === 'quote' ? `필요 ${fmt(usedPaintL, 1)}L · 구매 ${totalCans}L` : ''}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              간편 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평) · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{totalCans}L</strong>
+              간편 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평) · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{totalCans}L</strong>
             </p>
 
             <span className={styles.subLabel}>페인트 1L 가격</span>

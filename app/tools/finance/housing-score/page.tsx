@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -86,7 +86,7 @@ export default function HousingScorePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏠 청약 가점 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -147,7 +147,7 @@ export default function HousingScorePage() {
         <section>
           <h2 style={sectionTitle}>🏠 무주택 기간 — 언제부터 카운트?</h2>
           <div style={{ ...card }}>
-            <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.95 }}>
+            <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.95 }}>
               <li><strong style={{ color: 'var(--text)' }}>만 30세 이상 + 미혼</strong>: 만 30세 생일부터</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이전 결혼</strong>: 혼인 신고일부터 (가장 유리)</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이후 결혼·이혼</strong>: 만 30세 생일부터 (결혼일과 무관)</li>
@@ -257,7 +257,7 @@ export default function HousingScorePage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             💡 한 달에 <strong style={{ color: 'var(--text)' }}>2만~50만 원</strong> 자유 납입 가능. 매월 10만 원 추천 (1순위 + 절세 + 예치금 빠른 충족).
           </p>
         </section>

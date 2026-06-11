@@ -53,7 +53,7 @@ export default function RoomAreaPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📐 공간 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -70,7 +70,7 @@ export default function RoomAreaPage() {
 
         {/* ── 1. 6가지 면적 한눈에 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             공간 면적 6가지 한눈에 정리
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -107,7 +107,7 @@ export default function RoomAreaPage() {
 
         {/* ── 2. 평수 ↔ ㎡ 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수 ↔ ㎡ 환산
           </h2>
           <div style={{
@@ -115,12 +115,12 @@ export default function RoomAreaPage() {
             border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '14px 18px',
-            fontSize: 13.5,
+            fontSize: 13,
             color: 'var(--text)',
             lineHeight: 1.85,
             marginBottom: 14,
           }}>
-            <p>1평 = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>3.3058㎡</strong> (공식 환산값, 일본식 척관법 6자×6자 기준)</p>
+            <p>1평 = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>3.3058㎡</strong> (공식 환산값, 일본식 척관법 6자×6자 기준)</p>
             <p style={{ color: 'var(--muted)', fontSize: 13 }}>1평 ≈ 3.3㎡ (간이 환산)</p>
           </div>
           <div>
@@ -144,8 +144,8 @@ export default function RoomAreaPage() {
                   ['40평', '132.2㎡'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -155,7 +155,7 @@ export default function RoomAreaPage() {
 
         {/* ── 3. 한국 아파트 천장 높이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 아파트 천장 높이 표준
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -166,8 +166,8 @@ export default function RoomAreaPage() {
               { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: '#A16207' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <span style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 600 }}>{s.i} {s.t}</span>
-                <span style={{ fontSize: 14, color: s.color, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, whiteSpace: 'nowrap' }}>{s.h}</span>
+                <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{s.i} {s.t}</span>
+                <span style={{ fontSize: 14, color: s.color, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, whiteSpace: 'nowrap' }}>{s.h}</span>
               </div>
             ))}
           </div>
@@ -176,7 +176,7 @@ export default function RoomAreaPage() {
             border: '1px solid rgba(234,88,12,0.25)',
             borderRadius: 12,
             padding: '12px 16px',
-            fontSize: 12.5,
+            fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
@@ -188,7 +188,7 @@ export default function RoomAreaPage() {
 
         {/* ── 4. 시공별 활용 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🛠️ 시공별 활용 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -201,8 +201,8 @@ export default function RoomAreaPage() {
               { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#A16207' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13.5, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.i} {s.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
+                <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.i} {s.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
               </div>
             ))}
           </div>
@@ -210,7 +210,7 @@ export default function RoomAreaPage() {
 
         {/* ── 5. 창문·문 차감 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🪟 창문·문 표준 크기 (차감 참고)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -232,8 +232,8 @@ export default function RoomAreaPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
                   </tr>
                 ))}
               </tbody>
@@ -244,7 +244,7 @@ export default function RoomAreaPage() {
             border: '1px solid var(--border)',
             borderRadius: 12,
             padding: '12px 16px',
-            fontSize: 12.5,
+            fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
@@ -261,7 +261,7 @@ export default function RoomAreaPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -282,7 +282,7 @@ export default function RoomAreaPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

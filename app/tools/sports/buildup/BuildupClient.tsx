@@ -798,10 +798,10 @@ function BuildupChart({ result }: { result: ReturnType<typeof calcBuildup> }) {
       <p className={s.chartTitle}>📊 페이스 그래프</p>
       <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
         {/* y축 라벨 (빠른 페이스 ↑·느린 페이스 ↓) */}
-        <text x={padL - 6} y={padT + 8} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+        <text x={padL - 6} y={padT + 8} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
           {fmtPace(yMin)}
         </text>
-        <text x={padL - 6} y={padT + innerH - 2} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+        <text x={padL - 6} y={padT + innerH - 2} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
           {fmtPace(yMax)}
         </text>
         <text x={padL - 6} y={padT + innerH + 14} fontSize="9" fill="var(--muted)" textAnchor="end" fontFamily="Noto Sans KR" opacity="0.6">
@@ -824,12 +824,12 @@ function BuildupChart({ result }: { result: ReturnType<typeof calcBuildup> }) {
                 width={widths[i]} height={Math.max(2, barH)}
                 fill={color} fillOpacity="0.7" stroke={color} strokeWidth="1" rx="2" />
               <text x={xStarts[i] + widths[i] / 2} y={y - 6}
-                fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>
+                fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
                 {fmtPace(seg.paceSec)}
               </text>
               {/* x축 거리 */}
               <text x={xStarts[i] + widths[i] / 2} y={padT + innerH + 16}
-                fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                 {seg.km.toFixed(1)}km
               </text>
             </g>

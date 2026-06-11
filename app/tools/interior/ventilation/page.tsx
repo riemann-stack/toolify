@@ -2,7 +2,8 @@ import Link from 'next/link'
 import VentilationClient from './VentilationClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ventilation',
@@ -55,7 +56,7 @@ export default function VentilationPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💨 환기량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -69,12 +70,12 @@ export default function VentilationPage() {
 
         {/* 1. ACH란 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>ACH (시간당 환기 횟수)란?</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>ACH (시간당 환기 횟수)란?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>ACH (Air Changes per Hour)</strong> = 환기량(㎥/h) ÷ 공간 부피(㎥). 1 ACH는 1시간에 공간 공기를 1번 완전 교체한다는 의미입니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.20)', borderRadius: 12, padding: '16px 20px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#E89757', marginBottom: 6 }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#E89757', marginBottom: 6 }}>
               ACH = 환기량(㎥/h) ÷ 공간 부피(㎥)
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
@@ -85,7 +86,7 @@ export default function VentilationPage() {
 
         {/* 2. 공간 용도별 권장 ACH */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공간 용도별 한국 권장 ACH</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공간 용도별 한국 권장 ACH</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -111,7 +112,7 @@ export default function VentilationPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#E89757', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#E89757', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -122,12 +123,12 @@ export default function VentilationPage() {
 
         {/* 3. CADR vs 한국 표시면적 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CADR vs 한국 표시면적 — 공기청정기 비교</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CADR vs 한국 표시면적 — 공기청정기 비교</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             한국 공기청정기는 <strong style={{ color: 'var(--text)' }}>표시면적(㎡)</strong>으로 표기되지만, 미국·국제 표준은 <strong style={{ color: 'var(--text)' }}>CADR(㎥/h)</strong>입니다. 환산 공식 —
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px', textAlign: 'center', marginBottom: 12 }}>
-            <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2' }}>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2' }}>
               CADR (㎥/h) ≈ 한국 표시면적 (㎡) × 7~8
             </p>
           </div>
@@ -149,7 +150,7 @@ export default function VentilationPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -160,11 +161,11 @@ export default function VentilationPage() {
 
         {/* 4. 공기청정기 ≠ 환기 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공기청정기 ≠ 환기 (중요)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공기청정기 ≠ 환기 (중요)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🌀 공기청정기</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🌀 공기청정기</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                 <li>✅ 미세먼지·꽃가루 제거</li>
                 <li>✅ 일부 입자·VOC</li>
                 <li>❌ CO₂ 제거 X</li>
@@ -174,8 +175,8 @@ export default function VentilationPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#E89757', marginBottom: '6px' }}>💨 환기 (외부 공기 도입)</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#E89757', marginBottom: '6px' }}>💨 환기 (외부 공기 도입)</p>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                 <li>✅ CO₂ 배출</li>
                 <li>✅ 신선한 산소 보충</li>
                 <li>✅ 냄새·습기 배출</li>
@@ -191,7 +192,7 @@ export default function VentilationPage() {
 
         {/* 5. 창문 환기 효율 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>창문 환기 효율 (한국 가정 기준)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>창문 환기 효율 (한국 가정 기준)</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -210,21 +211,21 @@ export default function VentilationPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ⓘ 자연환기량은 창문 크기·바람 세기·실내외 온도차에 따라 ±300% 변동 가능합니다. 본 표는 일반 가정 표준 창문(1.5×1.5m) 기준 추정값입니다.
           </p>
         </section>
 
         {/* 6. CO₂ 농도와 영향 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CO₂ 농도와 영향</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CO₂ 농도와 영향</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -244,7 +245,7 @@ export default function VentilationPage() {
                   ['2,500+',     '⛔ 매우 나쁨', '즉시 환기 필요', '#CC4444'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: row[3] as string, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: row[3] as string, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
@@ -252,14 +253,14 @@ export default function VentilationPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ⓘ <strong style={{ color: 'var(--text)' }}>한국 학교보건법 / KOSHA 사무실 기준 1,000 ppm 이하 권장</strong>. CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 정확합니다.
           </p>
         </section>
 
         {/* 7. 냉난방 손실 줄이기 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>환기 시 냉난방 손실 줄이기</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>환기 시 냉난방 손실 줄이기</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { icon: '✅', title: '짧고 강한 맞통풍 (5~10분)', desc: '에너지 손실 최소 + 빠른 공기 교체 — 가장 권장' },
@@ -270,7 +271,7 @@ export default function VentilationPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'grid', gridTemplateColumns: '32px 1fr', gap: 10 }}>
                 <span style={{ fontSize: 22 }}>{m.icon}</span>
                 <div>
-                  <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 3 }}>{m.title}</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 3 }}>{m.title}</p>
                   <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{m.desc}</p>
                 </div>
               </div>
@@ -280,37 +281,18 @@ export default function VentilationPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 면책 강화 */}
         <section>
-          <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>⚠️ 면책 조항</p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '6px' }}>
-              본 도구는 일반 환기·공기질 가이드를 제공하는 <strong style={{ color: 'var(--text)' }}>참고용 계산기</strong>입니다. 의료·산업안전 진단 도구가 아닙니다.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '6px' }}>
-              <strong style={{ color: 'var(--text)' }}>본 도구의 한계</strong> — CO₂ 추정은 단순 모델 (±50% 오차) / 자연환기량은 ±300% 변동 / 공기청정기 CADR은 미세먼지 기준 (다른 오염물질 별도) / 산업·의료시설은 별도 법규 우선.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              천식·호흡기 질환자, 영유아, 임산부 등 민감군은 의료 전문가 상담을 권장하며, 정확한 실내 공기질 측정은 CO₂·미세먼지·VOC 센서 사용을 권장합니다.
-            </p>
-          </div>
+          <Disclaimer variant="default" open>
+            본 도구는 일반 환기·공기질 가이드를 제공하는 <strong>참고용 계산기</strong>입니다. 의료·산업안전 진단 도구가 아닙니다.
+            <br />
+            <strong>본 도구의 한계</strong> — CO₂ 추정은 단순 모델 (±50% 오차) / 자연환기량은 ±300% 변동 / 공기청정기 CADR은 미세먼지 기준 (다른 오염물질 별도) / 산업·의료시설은 별도 법규 우선.
+            <br />
+            천식·호흡기 질환자, 영유아, 임산부 등 민감군은 의료 전문가 상담을 권장하며, 정확한 실내 공기질 측정은 CO₂·미세먼지·VOC 센서 사용을 권장합니다.
+          </Disclaimer>
         </section>
 
         {/* 참고 자료 */}
@@ -334,7 +316,7 @@ export default function VentilationPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피 (입력값 자동 호환)' },

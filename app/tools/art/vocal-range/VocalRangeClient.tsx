@@ -570,17 +570,17 @@ export default function VocalRangeClient() {
                         borderRadius: 8, padding: '8px 14px',
                         display: 'grid', gridTemplateColumns: '1fr auto auto',
                         gap: 10, alignItems: 'center',
-                        fontSize: 12.5, fontFamily: 'Noto Sans KR, sans-serif',
+                        fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
                         opacity: isCurrent ? 1 : 0.7,
                       }}>
                         <span style={{ color: 'var(--text)', fontWeight: isCurrent ? 700 : 600 }}>
                           {r.name}{isCurrent && ' ←'}
                           <small style={{ display: 'block', color: 'var(--muted)', fontSize: 11, fontWeight: 400 }}>{r.examples}</small>
                         </span>
-                        <span style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: r.color }}>
+                        <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: r.color }}>
                           {r.low}~{r.high}
                         </span>
-                        <span style={{ fontSize: 10.5, color: 'var(--muted)' }}>{r.gender === 'male' ? '♂' : r.gender === 'female' ? '♀' : '·'}</span>
+                        <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.gender === 'male' ? '♂' : r.gender === 'female' ? '♀' : '·'}</span>
                       </div>
                     )
                   })}
@@ -622,7 +622,7 @@ export default function VocalRangeClient() {
                       )
                     })}
                   </div>
-                  <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                     ⓘ 본 매칭은 단순 음역 비교 결과이며, 실제 노래 난이도는 멜로디·리듬·발성 기교에 따라 다릅니다. 키 변경은 노래방 ±6 키 기준입니다.
                   </p>
                 </div>

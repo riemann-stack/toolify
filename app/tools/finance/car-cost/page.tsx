@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import CarCostClient from './CarCostClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/car-cost',
@@ -32,7 +34,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -98,7 +100,7 @@ export default function CarCostPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🚗 자동차 유지비 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -106,6 +108,8 @@ export default function CarCostPage() {
       </p>
 
       <CarCostClient />
+
+      <GuideDivider />
 
       {/* 1. 자동차 유지비 항목 가이드 (기존 보존) */}
       <h2 style={sectionTitle}>📋 자동차 유지비 항목 완전 가이드</h2>
@@ -224,20 +228,20 @@ export default function CarCostPage() {
             <tbody>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>3년</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,000만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 333만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 1,000만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 333만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 비쌈 (초기 감가 큼)</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>5년 ⭐</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 1,800만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 360만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 1,800만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 360만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>한국 평균 보유 기간</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>10년</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 2,300만</td>
-                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#059669', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 230만/년</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 2,300만</td>
+                <td style={{ padding: '10px 12px', textAlign: 'right', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 230만/년</td>
                 <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>가장 경제적 (정비비 ↑ 주의)</td>
               </tr>
             </tbody>
@@ -266,26 +270,26 @@ export default function CarCostPage() {
           <tbody>
             <tr style={{ background: 'rgba(14,165,233,0.06)' }}>
               <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>현금 ★</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 54만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,266만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 54만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 3,266만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 X · 가장 저렴</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>할부 (5년·5%)</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 60만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 3,597만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 60만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 3,597만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>이자 약 331만 추가</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>리스</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 107만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 6,437만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 107만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 6,437만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 운영비 포함 추정</td>
             </tr>
             <tr>
               <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>장기렌트</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>약 105만</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>약 6,278만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 105만</td>
+              <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>약 6,278만</td>
               <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>비소유 · 보험·정비 포함</td>
             </tr>
           </tbody>
@@ -363,7 +367,7 @@ export default function CarCostPage() {
           쏘카·그린카 등 카쉐어링이 보유보다 유리한 경계는 <strong style={{ color: 'var(--text)' }}>월 800km</strong> 부근입니다.
           본 도구의 「보유 vs 카쉐어링」 탭에서 본인 상황 정량 비교.
         </p>
-        <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13.5, lineHeight: 1.85, color: 'var(--text)' }}>
+        <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, lineHeight: 1.85, color: 'var(--text)' }}>
           <li>월 500km 미만: <strong style={{ color: '#9333EA' }}>쏘카·그린카 압도적 유리</strong></li>
           <li>월 500~800km: 카쉐어링 약간 유리</li>
           <li>월 800~1,200km: 비슷</li>
@@ -391,36 +395,24 @@ export default function CarCostPage() {
       </div>
 
       {/* 10. 면책 강화 */}
-      <div style={{
-        background: 'rgba(220, 38, 38, 0.04)',
-        border: '1px solid rgba(220, 38, 38, 0.30)',
-        borderRadius: '12px',
-        padding: '18px 20px',
-        marginTop: '32px',
-        fontSize: '13px',
-        color: 'var(--muted)',
-        lineHeight: 1.85,
-      }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 면책 조항</p>
-        <p style={{ marginBottom: 8 }}>
-          본 자동차 유지비 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 도구</strong>입니다. 실제 비용은 다음에 따라 다를 수 있습니다:
-        </p>
-        <ul style={{ paddingLeft: 18, marginBottom: 10 }}>
+      <Disclaimer variant="finance" open>
+        본 자동차 유지비 계산기는 <strong>일반 정보 제공 도구</strong>입니다. 실제 비용은 다음에 따라 다를 수 있습니다:
+        <ul style={{ paddingLeft: 18, margin: '6px 0 0' }}>
           <li>운전 습관·정비 주기</li>
           <li>보험 조건·할인 (다이렉트·운전자 한정 등)</li>
           <li>지역별 유가·주차비</li>
           <li>차량 상태·연식</li>
           <li>정책 변경 (자동차세·전기차 보조금 등)</li>
         </ul>
-        <p style={{ marginBottom: 6, color: 'var(--text)', fontWeight: 600 }}>전문가 상담 권장:</p>
-        <ul style={{ paddingLeft: 18 }}>
+        <p style={{ margin: '8px 0 4px', fontWeight: 600 }}>전문가 상담 권장:</p>
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>리스·장기렌트 견적 — 캐피탈 회사 직접 문의 필수</li>
           <li>중고차 시세 — KB차차차·엔카 등 전문 사이트</li>
           <li>보험 견적 — 다이렉트 보험사 비교</li>
           <li>정비비 — 정비소 직접 견적</li>
           <li>「이 차 사세요」 같은 추천은 하지 않음 — 본인 상황·취향 종합 결정</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 11. 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

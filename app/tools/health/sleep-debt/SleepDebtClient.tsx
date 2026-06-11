@@ -566,7 +566,7 @@ export default function SleepDebtClient() {
           {entries.some(e => e.date === inputDate) ? '↻ 이 날 기록 덮어쓰기' : '+ 추가'}
         </button>
         {addError && (
-          <p style={{ color: '#DC2626', fontSize: 12.5, margin: '8px 0 0', textAlign: 'center', lineHeight: 1.5 }}>{addError}</p>
+          <p style={{ color: '#DC2626', fontSize: 13, margin: '8px 0 0', textAlign: 'center', lineHeight: 1.5 }}>{addError}</p>
         )}
       </div>
 
@@ -582,7 +582,7 @@ export default function SleepDebtClient() {
             ))}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <text key={t} x={PL - 6} y={PT + (1 - t) * plotH + 3}
-                fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+                fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                 {(t * maxY).toFixed(0)}h
               </text>
             ))}
@@ -590,7 +590,7 @@ export default function SleepDebtClient() {
             <line x1={PL} x2={W - PR} y1={targetY} y2={targetY}
               stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.7" />
             <text x={W - PR - 4} y={targetY - 4}
-              fill="var(--accent)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">
+              fill="var(--accent)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
               목표 {targetHours}h
             </text>
             {/* 막대 */}
@@ -614,7 +614,7 @@ export default function SleepDebtClient() {
                   <rect x={cx - bw / 2} y={y} width={bw} height={PT + plotH - y}
                     fill={color} opacity="0.85" rx="2" />
                   <text x={cx} y={y - 4} fill={color} fontSize="9"
-                    textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                    textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                     {d.hours.toFixed(1)}
                   </text>
                 </g>
@@ -627,7 +627,7 @@ export default function SleepDebtClient() {
               const cx = PL + (i + 0.5) * barW
               return (
                 <text key={i} x={cx} y={H - PB + 14}
-                  fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                  fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                   {d.date.slice(5)}
                 </text>
               )

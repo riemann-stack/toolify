@@ -36,7 +36,7 @@
 }
 .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .field label, .field > span:first-child {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
@@ -90,7 +90,7 @@
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .numInput[type=number] { -moz-appearance: textfield; }
 .numUnit {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   white-space: nowrap;
 }
@@ -124,14 +124,14 @@
 .methodEmoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
 .methodBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .methodName {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
 }
 .methodActive .methodName { color: var(--accent); }
 .methodDesc {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.5;
   font-family: 'Noto Sans KR', sans-serif;
@@ -140,7 +140,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
   font-family: 'Inter', system-ui, sans-serif;
@@ -214,7 +214,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -315,7 +315,7 @@
 }
 .segLabel {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -329,7 +329,7 @@
 .segMe {
   position: absolute;
   top: -9px;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   color: #fff;
   background: var(--accent-strong);
@@ -399,11 +399,11 @@
   border-left: 3px solid;
   border-radius: 8px;
   padding: 9px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 @media (max-width: 540px) {
   .paceRow { grid-template-columns: auto 1fr; }
-  .paceDesc { grid-column: 1 / -1; font-size: 11.5px; }
+  .paceDesc { grid-column: 1 / -1; font-size: 12px; }
 }
 .paceLeft { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
 .paceCode {
@@ -425,7 +425,7 @@
   font-variant-numeric: tabular-nums;
 }
 .paceDesc {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -443,7 +443,7 @@
   padding: 12px 14px;
 }
 .improveTitle {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;

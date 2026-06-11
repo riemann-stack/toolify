@@ -483,7 +483,7 @@ export default function CurlClient() {
                   ].map((row, i) => (
                     <tr key={i}>
                       <td><strong>{row[0]}</strong></td>
-                      {row.slice(1).map((c, j) => <td key={j} style={{ fontSize: 11.5 }}>{c}</td>)}
+                      {row.slice(1).map((c, j) => <td key={j} style={{ fontSize: 12 }}>{c}</td>)}
                     </tr>
                   ))}
                 </tbody>

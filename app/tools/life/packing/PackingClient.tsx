@@ -450,7 +450,7 @@ export default function PackingClient() {
                 <p className={s.climateGuideHead}>
                   <span className={s.climateGuideEmoji}>{c.emoji}</span>
                   <strong>{c.label}</strong>
-                  <span style={{ color: c.color, fontSize: 11, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{c.range}</span>
+                  <span style={{ color: c.color, fontSize: 11, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c.range}</span>
                 </p>
                 <div className={s.climateGuideContent}>
                   <p><strong>👕 상의</strong>: {c.tops}</p>

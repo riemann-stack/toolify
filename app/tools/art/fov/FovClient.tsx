@@ -459,7 +459,7 @@ function AovDiagram({ aovDegrees, color }: { aovDegrees: number; color: string }
       {/* 카메라 점 */}
       <circle cx={cx} cy={cy} r={4} fill={color} />
       {/* 각도 텍스트 */}
-      <text x={cx} y={cy - R - 4} textAnchor="middle" fill={color} fontSize={14} fontWeight={700} fontFamily="Inter, system-ui, sans-serif">
+      <text x={cx} y={cy - R - 4} textAnchor="middle" fill={color} fontSize={14} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
         {aovDegrees.toFixed(1)}°
       </text>
     </svg>
@@ -497,7 +497,7 @@ function CompareDiagram({ sensorWidth }: { sensorWidth: number }) {
             />
             <text
               x={x2 + 4} y={y2 + 4}
-              fill={p.color} fontSize={11} fontWeight={700} fontFamily="Inter, system-ui, sans-serif"
+              fill={p.color} fontSize={11} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
             >
               {p.label} ({aovDeg.toFixed(0)}°)
             </text>

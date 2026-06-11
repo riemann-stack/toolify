@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -84,7 +84,7 @@ export default function VO2MaxPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🫁 VO₂ Max 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -184,7 +184,7 @@ export default function VO2MaxPage() {
           <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>♂ 남성</p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '12.5px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
                     <th style={headCell}>연령</th>
@@ -210,7 +210,7 @@ export default function VO2MaxPage() {
           <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '20px 0 8px' }}>♀ 여성</p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '12.5px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
                     <th style={headCell}>연령</th>
@@ -250,7 +250,7 @@ export default function VO2MaxPage() {
               { icon: '⚠️', title: '주의', desc: '심장질환·고혈압·관절 통증 있으면 의사 상담 후 측정' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
-                <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.title}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
             ))}
@@ -261,7 +261,7 @@ export default function VO2MaxPage() {
         <section>
           <h2 style={sectionTitle}>📈 VO₂ Max 향상 트레이닝 (검증된 방법)</h2>
           <div style={{ ...card }}>
-            <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.95 }}>
+            <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
               <li><strong style={{ color: 'var(--text)' }}>HIIT 4×4 (Bjørn Mæhlum 프로토콜)</strong>: 4분 격렬(90~95% HRmax) + 3분 회복 × 4 세트, 주 2회 → 8주 +6~10%</li>
               <li><strong style={{ color: 'var(--text)' }}>30/30 인터벌</strong>: 30초 전력 + 30초 회복 × 15~20 세트 — 시간 효율 ↑</li>
               <li><strong style={{ color: 'var(--text)' }}>Threshold 런</strong>: 20~40분 역치 페이스 (1시간 race pace) — 젖산 처리 ↑</li>
@@ -269,7 +269,7 @@ export default function VO2MaxPage() {
               <li><strong style={{ color: 'var(--text)' }}>크로스 트레이닝</strong>: 자전거·수영·로잉 등 다른 종목으로 회복일 활용</li>
               <li><strong style={{ color: 'var(--text)' }}>호흡근 훈련</strong>: 파워 브리드 등 IMT 기기 — 폐활량 자체 ↑</li>
             </ul>
-            <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--text)' }}>일반인 8~12주 트레이닝 시 +3~10 mL/kg/min</strong> 향상 가능 (시작 수준·성실도에 따라).
               엘리트 수준에선 향상 폭이 작아지지만 1년에 +1~2 mL 가능.
             </p>

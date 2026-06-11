@@ -42,7 +42,7 @@ export default function BaseballStatsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚾ 야구 타율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,7 +59,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 1. 핵심 타격 지표 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             야구 핵심 타격 지표 공식
           </h2>
           <div style={{
@@ -82,7 +82,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 2. OPS 수준 평가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             OPS 수준 평가 기준
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -104,7 +104,7 @@ export default function BaseballStatsPage() {
                   { ops: '0.600 미만',   lv: '❌ 교체 권장',    cls: '#DC2626', who: '마이너급' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.ops}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.ops}</td>
                     <td style={{ padding: '10px 12px', color: r.cls, fontWeight: 600 }}>{r.lv}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.who}</td>
                   </tr>
@@ -116,7 +116,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 3. 투수 핵심 지표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             투수 핵심 지표
           </h2>
           <div style={{
@@ -140,7 +140,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 4. 세이버메트릭스 입문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             세이버메트릭스 입문 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -151,7 +151,7 @@ export default function BaseballStatsPage() {
               { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: '#EA580C' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: s.color, marginBottom: 6, fontFamily: 'Inter, system-ui, sans-serif' }}>{s.name} <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>— {s.kor}</span></p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: s.color, marginBottom: 6, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{s.name} <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>— {s.kor}</span></p>
                 <p style={{ fontSize: 12, color: 'var(--text)', fontFamily: "'JetBrains Mono', Menlo, monospace", marginBottom: 6, opacity: 0.85 }}>{s.formula}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.tip}</p>
               </div>
@@ -161,7 +161,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 5. KBO 역대 기록 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             KBO 역대 단일시즌 주요 기록
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
@@ -188,7 +188,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 6. 자주 검색되는 질문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 시나리오
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -200,7 +200,7 @@ export default function BaseballStatsPage() {
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -212,7 +212,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -233,7 +233,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

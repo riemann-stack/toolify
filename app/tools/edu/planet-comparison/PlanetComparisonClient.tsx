@@ -322,7 +322,7 @@ export default function PlanetComparisonClient() {
           )
         })}
         {/* 기준 라벨 */}
-        <text x={W / 2} y={20} textAnchor="middle" fill="#0D9488" fontFamily="Inter, system-ui, sans-serif" fontWeight={700} fontSize={12} letterSpacing="0.06em">
+        <text x={W / 2} y={20} textAnchor="middle" fill="#0D9488" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700} fontSize={12} letterSpacing="0.06em">
           크기 비교 (지구 = 1.0×)
         </text>
       </svg>
@@ -424,7 +424,7 @@ export default function PlanetComparisonClient() {
         <div className={s.sizeCompareWrap}>
           {sizeSvg}
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', textAlign: 'center', marginTop: 8, lineHeight: 1.7 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', marginTop: 8, lineHeight: 1.7 }}>
           지구를 1.0× 기준으로 한 실제 비율 · 목성은 지구를 1,300개 넣을 수 있는 크기
         </p>
       </div>
@@ -556,7 +556,7 @@ export default function PlanetComparisonClient() {
             )
           })}
         </div>
-        <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 18, lineHeight: 1.7, textAlign: 'center' }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 18, lineHeight: 1.7, textAlign: 'center' }}>
           중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: '#EA580C' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: '#DC2626' }}>1.6배 천천히</strong> 떨어집니다.
         </p>
       </div>
@@ -700,7 +700,7 @@ export default function PlanetComparisonClient() {
           <li><strong style={{ color: 'var(--text)' }}>화성:</strong> 산소 X, 기압 0.01 → 우주복 필수</li>
           <li><strong style={{ color: 'var(--text)' }}>목성·토성·천왕성·해왕성:</strong> 가스 행성이라 표면이 없음</li>
         </ul>
-        <p style={{ marginTop: 8, fontSize: 11.5, color: 'var(--muted)' }}>
+        <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
           이 도구는 표면 중력만 고려한 가상 시나리오입니다.
         </p>
       </div>

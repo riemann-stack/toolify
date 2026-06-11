@@ -740,8 +740,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">총 투자</text>
-      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
+      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>총 투자</text>
+      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
         {total >= 10000 ? `${(total / 10000).toFixed(1)}억` : `${total.toFixed(0)}만`}
       </text>
     </svg>

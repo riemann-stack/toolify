@@ -716,7 +716,7 @@ function ThermometerBox() {
             <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="700">
               {seg.label}
             </text>
-            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle" fontWeight="600">
+            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle" fontWeight="600">
               {seg.range}
             </text>
           </g>
@@ -749,7 +749,7 @@ function GuideTab() {
             <ul className={s.foodGuideTipList}>
               {food.tips.map((tip, i) => <li key={i}>{tip}</li>)}
             </ul>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 11.5, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
               ⏰ 해동 후 조리 권장: <strong style={{ color: 'var(--text)' }}>{food.cookingHours}시간 내</strong>
             </div>
           </div>

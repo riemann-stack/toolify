@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -84,7 +84,7 @@ export default function FormationPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚽ 축구 포메이션 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -170,7 +170,7 @@ export default function FormationPage() {
               { name: '3-6-1',   color: '#DB2777', tag: '점유 압도', desc: '미드 6인으로 중원 압도. 빌드업·점유 위주' },
             ].map((f, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 12, padding: '10px 12px', minWidth: 0 }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 17, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
+                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 17, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
                 <p style={{ fontSize: 11, color: f.color, fontWeight: 700, margin: '2px 0 6px', opacity: 0.85 }}>{f.tag}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
               </div>
@@ -250,7 +250,7 @@ export default function FormationPage() {
               { title: '4. 체력 수준', desc: '풀백 공격 가담은 체력 소모 큼. 동호회는 4-4-2·4-2-3-1 권장 / 청소년은 3-3-2(KFA U-12 표준)' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
-                <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
             ))}
@@ -291,7 +291,7 @@ export default function FormationPage() {
         <section>
           <h2 style={sectionTitle}>💡 라인업 작성 실전 팁</h2>
           <div style={card}>
-            <ul style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.95, paddingLeft: 20, margin: 0 }}>
+            <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.95, paddingLeft: 20, margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>주전 11명 + 후보 5~7명</strong>: 동호회 출전 인원이 들쭉날쭉할 때 옵션 확보 필수</li>
               <li><strong style={{ color: 'var(--text)' }}>측면 좌우 균형</strong>: 왼발잡이/오른발잡이를 좌우에 맞게 배치. 잘못 배치하면 크로스·드리블 효율 ↓</li>
               <li><strong style={{ color: 'var(--text)' }}>골키퍼는 가장 일찍 확정</strong>: GK 자원이 적어 교체 어려움. 첫 멤버 모집부터 우선</li>

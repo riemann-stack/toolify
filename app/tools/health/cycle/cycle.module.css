@@ -123,7 +123,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -421,7 +421,7 @@
   background: var(--accent-strong);
   color: #ffffff;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   font-weight: 700;
   font-family: 'Inter', system-ui, sans-serif;
   margin-left: auto;
@@ -544,7 +544,7 @@
   font-size: 11px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 2px 8px;
 }
 .recordNotes {

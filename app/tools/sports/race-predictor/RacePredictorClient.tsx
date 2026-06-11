@@ -899,10 +899,10 @@ function RecordsChart({ records }: { records: RaceRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.vdot)} r={3.5} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{maxV.toFixed(1)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{minV.toFixed(1)}</text>
-        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily="Inter, system-ui, sans-serif">{first.date.slice(2)}</text>
-        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{last.date.slice(2)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{maxV.toFixed(1)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{minV.toFixed(1)}</text>
+        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{first.date.slice(2)}</text>
+        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{last.date.slice(2)}</text>
       </svg>
       <p className={styles.chartCaption}>
         {days}일간 VDOT <strong style={{ color: diff >= 0 ? '#059669' : '#DC2626' }}>

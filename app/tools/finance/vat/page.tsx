@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/vat',
@@ -22,7 +23,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 )
 
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '0' }}>
+  <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '0' }}>
     {children}
   </h2>
 )
@@ -78,7 +79,7 @@ export default function VatPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧾 부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -217,7 +218,7 @@ export default function VatPage() {
             ].map((ex, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: '99px', padding: '2px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>{ex.tag}</span>
+                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: '999px', padding: '2px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>{ex.tag}</span>
                   <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)' }}>{ex.title}</span>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{ex.content}</p>
@@ -253,7 +254,7 @@ export default function VatPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -263,7 +264,7 @@ export default function VatPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>3.3% 원천세</p>
-              <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>프리랜서 (사업자 등록 X) 적용</li>
                 <li>발주처가 차감 후 입금</li>
                 <li>소득세 3% + 지방소득세 0.3%</li>
@@ -272,7 +273,7 @@ export default function VatPage() {
             </div>
             <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>10% 부가세</p>
-              <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>사업자 등록자 적용</li>
                 <li><strong>본인 돈이 아닙니다</strong> — 신고·납부 의무</li>
                 <li>발주처가 별도 지급 또는 포함 청구</li>
@@ -440,27 +441,22 @@ export default function VatPage() {
 
         {/* ── 10. 면책 ── */}
         <Section>
-          <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 10 }}>ⓘ 면책 조항</p>
-            <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
-              본 부가세 계산기는 <strong style={{ color: 'var(--text)' }}>일반 정보 제공 목적의 참고용 도구</strong>이며, 세무 자문·신고 도구가 아닙니다.
-            </p>
-            <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18, marginBottom: 12 }}>
+          <Disclaimer variant="finance" open>
+            본 부가세 계산기는 <strong>일반 정보 제공 목적의 참고용 도구</strong>이며, 세무 자문·신고 도구가 아닙니다.
+            <ul style={{ paddingLeft: 18, margin: '6px 0 0' }}>
               <li>정확한 부가세 신고는 홈택스 또는 세무사 권장</li>
               <li>업종별 세부 규정 (의제매입세액·면세 등) 다양</li>
               <li>정책 변경 가능 — 본 도구는 2026년 1월 기준</li>
               <li>본 도구의 결과는 일반 케이스 가정이며 실제와 차이 가능</li>
             </ul>
-            <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 6 }}>
-              세무 도움 필요 시:
-            </p>
-            <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18 }}>
-              <li>한국 국세청: <strong style={{ color: '#0891B2' }}>126</strong></li>
-              <li>한국세무사회 무료 상담: <strong style={{ color: '#0891B2' }}>070-5008-1234</strong></li>
-              <li>홈택스: <strong style={{ color: '#0891B2' }}>hometax.go.kr</strong></li>
+            <p style={{ margin: '8px 0 4px' }}>세무 도움 필요 시:</p>
+            <ul style={{ paddingLeft: 18, margin: 0 }}>
+              <li>한국 국세청: <strong>126</strong></li>
+              <li>한국세무사회 무료 상담: <strong>070-5008-1234</strong></li>
+              <li>홈택스: <strong>hometax.go.kr</strong></li>
               <li>본인 거주 지역 세무서 직접 문의</li>
             </ul>
-          </div>
+          </Disclaimer>
         </Section>
 
         {/* ── 11. 함께 쓰면 좋은 도구 ── */}

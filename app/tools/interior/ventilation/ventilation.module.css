@@ -6,7 +6,7 @@
   border: 1px solid rgba(234,88,12,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -17,7 +17,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
@@ -29,7 +29,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 10px;
   padding: 11px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
@@ -53,7 +53,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -142,7 +142,7 @@
 .spaceCardIcon { font-size: 22px; line-height: 1; margin-bottom: 4px; display: block; }
 .spaceCardName { font-size: 12px; color: var(--text); font-weight: 700; }
 .spaceCardActive .spaceCardName { color: #EA580C; }
-.spaceCardAch { font-size: 10.5px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.spaceCardAch { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
 /* 옵션 그리드 */
 .optionRow { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
@@ -229,7 +229,7 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumUnit { font-size: 0.36em; color: var(--text); margin-left: 6px; letter-spacing: 0; }
-.heroSub { font-size: 13.5px; color: var(--muted); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; }
 .heroCategory {
   display: inline-block;
   margin-top: 12px;
@@ -277,7 +277,7 @@
   border-left: 4px solid;
   border-radius: 8px;
   padding: 9px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .co2RowActive {
@@ -289,7 +289,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .co2Label { color: var(--text); }
 .co2Label small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
@@ -343,7 +343,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 7px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;

@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/real-estate',
@@ -63,7 +64,7 @@ export default function RealEstatePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏘️ 부동산 수익률 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -81,27 +82,16 @@ export default function RealEstatePage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 면책 조항 (강조) ── */}
-        <div style={{
-          background: 'rgba(220,38,38,0.06)',
-          border: '1px solid rgba(220,38,38,0.3)',
-          borderRadius: '14px',
-          padding: '18px 22px',
-          fontSize: '14px',
-          color: 'var(--text)',
-          lineHeight: 1.85,
-        }}>
-          <strong style={{ color: '#DC2626', fontSize: '14px' }}>⚖️ 투자 결정 전 반드시 읽어주세요</strong>
-          <p style={{ marginTop: '10px' }}>
-            본 계산기는 부동산 투자 의사결정을 위한 <strong style={{ color: 'var(--text)' }}>참고용 시뮬레이션 도구</strong>입니다.
-            실제 거래에서는 양도소득세, 종합부동산세, 재산세, 임대소득세 등 추가 세금이 발생하며 시장 상황에 따라 결과가 크게 달라질 수 있습니다.
-            투자 결정 전 반드시 <strong style={{ color: 'var(--text)' }}>세무사·공인중개사와 상담</strong>하시기 바랍니다.
-            <strong style={{ color: '#DC2626' }}> 본 계산기는 투자 권유가 아닙니다.</strong>
-          </p>
-        </div>
+        <Disclaimer variant="finance" open>
+          본 계산기는 부동산 투자 의사결정을 위한 <strong>참고용 시뮬레이션 도구</strong>입니다.
+          실제 거래에서는 양도소득세, 종합부동산세, 재산세, 임대소득세 등 추가 세금이 발생하며 시장 상황에 따라 결과가 크게 달라질 수 있습니다.
+          투자 결정 전 반드시 <strong>세무사·공인중개사와 상담</strong>하시기 바랍니다.
+          <strong> 본 계산기는 투자 권유가 아닙니다.</strong>
+        </Disclaimer>
 
         {/* ── 2. 핵심 공식 박스 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 계산 공식
           </h2>
           <div style={{
@@ -110,7 +100,7 @@ export default function RealEstatePage() {
             borderRadius: '12px',
             padding: '18px 20px',
             fontFamily: "'JetBrains Mono', Menlo, monospace",
-            fontSize: '12.5px',
+            fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
             whiteSpace: 'nowrap',
@@ -126,7 +116,7 @@ export default function RealEstatePage() {
 
         {/* ── 3. 한국 취득세 자동 계산 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 취득세 자동 계산 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -159,7 +149,7 @@ export default function RealEstatePage() {
 
         {/* ── 4. 한국 중개수수료 법정 요율표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 중개수수료 법정 요율 (매매 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -182,8 +172,8 @@ export default function RealEstatePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r.cap}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.cap}</td>
                   </tr>
                 ))}
               </tbody>
@@ -196,7 +186,7 @@ export default function RealEstatePage() {
 
         {/* ── 5. 대출 레버리지 효과 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🔑 대출 레버리지 효과 완전 가이드
           </h2>
           <div style={{
@@ -220,14 +210,14 @@ export default function RealEstatePage() {
               <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>현금 100% (자기자본 5억 760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용 약 1,040만원 = <strong>1억 8,960만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 8,960 ÷ 5억 760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>37.4%</strong>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 8,960 ÷ 5억 760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>37.4%</strong>
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '14px 16px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>대출 70% (자기자본 1억 5,760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용·이자 약 2,615만원 = <strong>1억 7,385만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,385 ÷ 1억 5,760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>110.3%</strong>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,385 ÷ 1억 5,760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>110.3%</strong>
               </p>
             </div>
           </div>
@@ -253,7 +243,7 @@ export default function RealEstatePage() {
 
         {/* ── 6. 갭투자 vs 일반 매수 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             갭투자 vs 일반 매수 + 임대 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -282,7 +272,7 @@ export default function RealEstatePage() {
 
         {/* ── 6-1. 양도소득세 참고 가이드 (2026.6 추가) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             양도소득세 참고 가이드 (2026년 6월 기준)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -307,7 +297,7 @@ export default function RealEstatePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.note}</td>
                   </tr>
                 ))}
@@ -346,7 +336,7 @@ export default function RealEstatePage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -367,7 +357,7 @@ export default function RealEstatePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

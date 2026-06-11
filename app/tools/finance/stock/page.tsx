@@ -3,6 +3,7 @@ import StockClient from './StockClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
@@ -71,7 +72,7 @@ export default function StockPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📉 주식 물타기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -85,7 +86,7 @@ export default function StockPage() {
 
         {/* ── 1. 평단가 산출 공식 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             물타기 후 평균단가 산출 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -154,7 +155,7 @@ export default function StockPage() {
 
         {/* ── 2. 물타기 vs 손절 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             ⚖️ 물타기 vs 손절 — 어느 게 유리한가?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -180,7 +181,7 @@ export default function StockPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#059669' : '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: row[2].startsWith('+') ? '#059669' : '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -214,7 +215,7 @@ export default function StockPage() {
 
         {/* ── 3. 분할 매수 (DCA) 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 분할 매수(DCA) — 손실률별 추천 차수
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -241,7 +242,7 @@ export default function StockPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -255,7 +256,7 @@ export default function StockPage() {
 
         {/* ── 4. 본전 필요 상승률 — 수수료·세금 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🧾 본전 필요 상승률 — 수수료·거래세 포함 (미국 양도세는 참고)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -285,8 +286,8 @@ export default function StockPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -299,7 +300,7 @@ export default function StockPage() {
 
         {/* ── 5. 종목 비중 관리 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 종목 비중 관리 — 한 종목에 몰빵해도 될까?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -329,7 +330,7 @@ export default function StockPage() {
 
         {/* ── 6. 미국 주식 (서학개미) (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🇺🇸 미국 주식 (서학개미) — 환율·양도세까지 포함
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -340,21 +341,21 @@ export default function StockPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>💱 환율 변동 영향</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 매수 환율 1,300원, $100 매수 → 13만원 / 현재 환율 1,400원, $90 → 12.6만원 (원화 -3% 손실).
                 달러로는 -10%지만 원화로는 -3% — 환율이 평가손익을 크게 좌우합니다.
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>🧾 양도소득세 22% (연 250만 공제)</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 해외주식 차익은 연 250만원 초과분에 대해 22% (지방세 포함) 양도소득세 부과.
                 예: 1,000만 원 차익 → (1,000 − 250) × 22% = 165만원 세금.
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: '12px', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>💸 배당세 15% (미국 원천징수)</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 미국 주식 배당금은 미국에서 15% 원천징수 후 한국으로 송금됩니다 (한미 조세조약). 배당 재투자 시 세후 금액 기준.
               </p>
             </div>
@@ -363,7 +364,7 @@ export default function StockPage() {
 
         {/* ── 7. FAQ — accordion ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -380,32 +381,27 @@ export default function StockPage() {
         </div>
 
         {/* ── 8. 면책 ── */}
-        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
-          <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 10 }}>⚠️ 면책 조항</p>
-          <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
-            본 주식 물타기 계산기는 <strong style={{ color: 'var(--text)' }}>수학적 시뮬레이션 도구</strong>이며, 투자 자문·매수 권유 도구가 아닙니다.
-          </p>
-          <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18, marginBottom: 12 }}>
+        <Disclaimer variant="finance" open>
+          본 주식 물타기 계산기는 <strong>수학적 시뮬레이션 도구</strong>이며, 투자 자문·매수 권유 도구가 아닙니다.
+          <ul style={{ paddingLeft: 18, margin: '6px 0 0' }}>
             <li>물타기는 항상 유리한 전략이 아닙니다</li>
             <li>주가 회복은 보장되지 않습니다 (떨어지는 칼날 위험)</li>
             <li>펀더멘털 악화 종목은 손절이 더 나을 수 있습니다</li>
             <li>한 종목 집중 위험 — 자산의 10~20% 이내 권장</li>
             <li>본인 투자 성향·기간·목적에 맞는 결정 필수</li>
           </ul>
-          <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85, marginBottom: 6 }}>
-            투자 결정은 본인 책임이며, 다음 도움이 권장됩니다:
-          </p>
-          <ul style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18 }}>
+          <p style={{ margin: '8px 0 4px' }}>투자 결정은 본인 책임이며, 다음 도움이 권장됩니다:</p>
+          <ul style={{ paddingLeft: 18, margin: 0 }}>
             <li>거래 증권사 고객센터 상담</li>
-            <li>한국 금융감독원 e-금융민원: <strong style={{ color: '#DC2626' }}>1332</strong></li>
+            <li>한국 금융감독원 e-금융민원: <strong>1332</strong></li>
             <li>가족·신뢰할 수 있는 사람과 상의</li>
-            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong style={{ color: '#DC2626' }}>1577-0199</strong></li>
+            <li>큰 손실로 인한 정신적 어려움 시 — 한국 정신건강 위기상담: <strong>1577-0199</strong></li>
           </ul>
-        </div>
+        </Disclaimer>
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '평단 낮춘 후 장기 보유하면 얼마나 불어날까?' },

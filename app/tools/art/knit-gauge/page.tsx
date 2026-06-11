@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import KnitGaugeClient from './KnitGaugeClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -18,7 +19,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -75,7 +76,7 @@ export default function KnitGaugePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 디자인·미술
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🧶 뜨개질 게이지 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -90,7 +91,7 @@ export default function KnitGaugePage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구는 표준 게이지·사이즈 기반 <strong>어림 계산</strong>입니다. 실 종류·블로킹 후 변화·개인 손 텐션에 따라 5~15% 차이 발생.
           실제 작업은 반드시 <strong>게이지 스와치를 떠서 측정한 실제 게이지</strong>로 작업하세요.
           분야별 안전 안내는 <Link href="/disclaimer#art" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
@@ -98,6 +99,8 @@ export default function KnitGaugePage() {
       </div>
 
       <KnitGaugeClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -120,7 +123,7 @@ export default function KnitGaugePage() {
           같은 패턴, 같은 실, 같은 바늘이라도 사람마다 손 텐션이 달라 게이지가 다릅니다. <strong>스와치를 떠서 내 게이지를 측정해야</strong> 패턴이 정확하게 맞아요.
           <strong> 스와치를 생략하면 완성 후 사이즈가 +5~10cm 큰 / 작은 비극이 생깁니다.</strong>
         </p>
-        <ol style={{ margin: '14px 0 0', paddingLeft: 20, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ol style={{ margin: '14px 0 0', paddingLeft: 20, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>15×15cm 시험 편물</strong>을 같은 실·바늘로 떠 줍니다 (가장자리 2~3코는 측정 제외용).</li>
           <li><strong>물에 적신 후 펴서 말립니다 (블로킹)</strong>. 실은 블로킹 후 5~15% 변하므로 필수.</li>
           <li>가운데 <strong>10×10cm를 핀으로 표시</strong>하고 그 안의 코·단 수를 셉니다.</li>
@@ -166,10 +169,10 @@ export default function KnitGaugePage() {
                 ['7', 'Super Bulky',  '7–12',  '8.0–12.0',  '대형 담요·러그'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[3]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[4]}</td>
                 </tr>
               ))}
@@ -190,7 +193,7 @@ export default function KnitGaugePage() {
         {/* 여성 */}
         <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>여성</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
@@ -210,10 +213,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -223,7 +226,7 @@ export default function KnitGaugePage() {
         {/* 남성 */}
         <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>남성</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
@@ -241,10 +244,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -254,7 +257,7 @@ export default function KnitGaugePage() {
         {/* 키즈 */}
         <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '14px 0 6px' }}>키즈</p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
@@ -272,10 +275,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -290,7 +293,7 @@ export default function KnitGaugePage() {
       {/* 5. 부위별 작업 팁 */}
       <h2 style={sectionTitle}>🎯 부위별 작업 팁</h2>
       <div style={card}>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li>👕 <strong>스웨터 몸통</strong> — 평직 작업 시 앞·뒤판 동일하게 떠서 옆선 봉합. 톱다운 원형 작업이면 한 번에 몸통 진행.</li>
           <li>💪 <strong>스웨터 소매</strong> — 손목에서 시작해 위로 갈수록 넓어짐 (늘림 분배). 또는 레글런·세트인 방식.</li>
           <li>🎩 <strong>모자 (비니)</strong> — 머리 둘레보다 10% 작게 떠야 늘어났을 때 잘 맞음 (음의 ease). 원형 작업 권장, 정수리는 cdd 줄임으로 마감.</li>

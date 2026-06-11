@@ -726,7 +726,7 @@ function SeveranceBarChart({ pre, tax, net }: { pre: number; tax: number; net: n
                 justifyContent: 'flex-end',
                 padding: '0 8px',
               }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMan(it.value)}</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtMan(it.value)}</span>
               </div>
             </div>
           </div>
@@ -778,7 +778,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
             return (
               <g key={off}>
                 <line x1={xScale(off)} y1={H - padB - 2} x2={xScale(off)} y2={H - padB + 4} stroke="var(--muted)" strokeWidth="0.8" />
-                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
+                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                   {off > 0 ? `+${off}` : off}일
                 </text>
               </g>
@@ -797,7 +797,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
           {highlightP && highlightP.severance > 0 && (
             <g>
               <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="#DB2777" stroke="#000" strokeWidth="1" />
-              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#DB2777" fontSize="11" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="700">
+              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#DB2777" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
                 {fmtMan(highlightP.severance)}
               </text>
             </g>
@@ -805,7 +805,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
 
           {/* Y축 값 (3개) */}
           {sevs.length > 0 && [minSev, (minSev + maxSev) / 2, maxSev].map((v, i) => (
-            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily="Inter, system-ui, sans-serif">{fmtMan(v)}</text>
+            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmtMan(v)}</text>
           ))}
         </svg>
       </div>
@@ -851,8 +851,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           return <path key={d.id} d={describeArc(startAngle, endAngle)} fill={d.color} opacity={0.85} />
         })}
         <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">총 입금</text>
-        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="800">
+        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>총 입금</text>
+        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
           {fmtMan(total)}
         </text>
       </svg>
@@ -861,7 +861,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{d.label}</span>
-            <span style={{ fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
+            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
           </div>
         ))}
       </div>

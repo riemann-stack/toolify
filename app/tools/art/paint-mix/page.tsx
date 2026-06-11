@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import PaintMixClient from './PaintMixClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -19,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -75,7 +76,7 @@ export default function PaintMixPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 디자인·미술
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎨 색상 혼합 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -90,7 +91,7 @@ export default function PaintMixPage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 색 시뮬레이션은 <strong>디지털 RGB 공간의 근사</strong>이며, 실제 물감·잉크의 안료 농도·매체(수성/유성)·건조 후 변색을 완전히 반영하지 않습니다.
           정확한 색은 <strong>반드시 소량 테스트</strong> 후 작업하세요. 분야별 안전 안내는{' '}
           <Link href="/disclaimer#art" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
@@ -98,6 +99,8 @@ export default function PaintMixPage() {
       </div>
 
       <PaintMixClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -123,31 +126,31 @@ export default function PaintMixPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginTop: 14 }}>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #9333EA', borderRadius: 10, padding: '14px 16px' }}>
             <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, margin: '0 0 6px' }}>Subtractive (물감·잉크)</p>
-            <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               안료가 빛을 <strong>흡수</strong>하고 남은 빛을 반사. 섞을수록 어두워짐.<br />
               <strong>3원색 = Cyan·Magenta·Yellow (CMY)</strong>, 모두 합치면 검정.
             </p>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
               👉 수채·아크릴·유화·잉크·인쇄·머리 염색 모두 이 방식
             </p>
           </div>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '14px 16px' }}>
             <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>Additive (빛)</p>
-            <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               빛이 <strong>더해질수록</strong> 밝아짐. <br />
               <strong>3원색 = Red·Green·Blue (RGB)</strong>, 모두 합치면 흰색.
             </p>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
               👉 모니터·LED·무대 조명·프로젝터
             </p>
           </div>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
             <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>RYB (전통)</p>
-            <p style={{ fontSize: 12.5, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               학교 미술의 <strong>빨강·노랑·파랑</strong> 3원색. <br />
               직관적이지만 과학적으론 부정확 (CMY가 더 정확).
             </p>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, fontStyle: 'italic' }}>
               👉 학교 미술·전통 회화·아동 교육
             </p>
           </div>
@@ -165,7 +168,7 @@ export default function PaintMixPage() {
           색환에서 <strong>마주 보는 두 색</strong>이 보색입니다. 보색은 함께 쓰면 강한 대비를 주고, <strong>섞으면 무채색(회색·갈색)</strong>이 됩니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, tableLayout: 'fixed' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주색</th>
@@ -186,7 +189,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[3]}</td>
                 </tr>
               ))}
@@ -205,7 +208,7 @@ export default function PaintMixPage() {
           한국 작가·취미생이 자주 만드는 색의 12색 물감 비율입니다. 본 페이지의 [📚 레시피] 탭에서 카드 클릭으로 즉시 적용 가능.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, tableLayout: 'fixed' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '20%' }}>분류</th>
@@ -239,7 +242,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '7px 8px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
                   <td style={{ padding: '7px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '7px 8px', color: '#9333EA', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '7px 8px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -253,7 +256,7 @@ export default function PaintMixPage() {
       {/* 5. 분야별 가이드 */}
       <h2 style={sectionTitle}>🎓 분야별 가이드 — 수채·아크릴·잉크·푸드컬러</h2>
       <div style={card}>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li>💧 <strong>수채화</strong> — 4색 한정 팔레트(울트라마린·번트 시에나·옐로우 오커·알리자린 크림슨)로 거의 모든 색 가능. 물 비율 ↑ → 투명. 두 번 이상 덧칠 시 진해짐.</li>
           <li>🖌️ <strong>아크릴</strong> — 6색 기본(타이타늄 화이트·블랙·카드뮴 옐로우/레드/블루·프탈로 그린). 건조 후 살짝 어두워지므로 한 톤 밝게 섞기.</li>
           <li>🎨 <strong>유화</strong> — Zorn 4색 팔레트(울트라마린·알리자린·옐로우 오커·티타늄 화이트)로 인물 가능. 건조 수일 소요, 두꺼운 임파스토는 갈라짐 주의.</li>
@@ -394,7 +397,7 @@ export default function PaintMixPage() {
           }}>
             <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
             <div>
-              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
               <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
             </div>
           </Link>

@@ -7,7 +7,7 @@
   border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
@@ -157,7 +157,7 @@
 }
 @media (max-width: 600px) {
   .typeGrid { grid-template-columns: repeat(3, 1fr); }
-  .typeBtn { padding: 10px 4px; font-size: 11.5px; gap: 3px; }
+  .typeBtn { padding: 10px 4px; font-size: 12px; gap: 3px; }
   .typeBadge { font-size: 9px; padding: 2px 5px; }
 }
 .typeBtn {
@@ -165,7 +165,7 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -200,7 +200,7 @@
   margin-top: 12px;
 }
 .rateHint {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.65;
   margin: 8px 0 0;
@@ -381,7 +381,7 @@
 }
 .scheduleTable th:first-child, .scheduleTable td:first-child { text-align: center; }
 .scheduleTable th {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -490,7 +490,7 @@
 .opportunityRow {
   display: flex;
   justify-content: space-between;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   padding: 5px 0;
 }
@@ -510,7 +510,7 @@
 .compareTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .compareTable th, .compareTable td {
   padding: 9px 4px;
@@ -578,7 +578,7 @@
   border: 1px solid rgba(220,38,38,0.30);
   border-radius: 12px;
   padding: 14px 18px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }

@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -63,9 +63,9 @@ const FAQ_LD = [
 
 export default function HistoricalMoneyPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💰 한국 화폐가치 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -88,7 +88,7 @@ export default function HistoricalMoneyPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['시기', '단위', '환산 누적', '맥락'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 11.5 }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -99,9 +99,9 @@ export default function HistoricalMoneyPage() {
                   ['1962.06~현재', '원 (Won)', '기준 단위', '2차 화폐개혁(10환=1원). 박정희 정부, 음성 자금 흡수가 목적.'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -144,7 +144,7 @@ export default function HistoricalMoneyPage() {
             <li><strong style={{ color: 'var(--text)' }}>단위 통일</strong> — 입력 금액을 화폐개혁 비율로 현재 원(post-1962)에 맞춰 환산. 50환(1960)은 5원으로, 1만 圓(1950)은 10원으로.</li>
             <li><strong style={{ color: 'var(--text)' }}>CPI 비율 곱셈</strong> — <code style={{ color: 'var(--text)' }}>현재가치 = 입력가치 × CPI(현재) / CPI(과거)</code>. 2020=100 기준으로 정규화된 CPI 시계열을 사용.</li>
           </ol>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginTop: 12 }}>
             CPI는 식료품·교통·주거·통신·교육 등 약 460개 품목 가중평균이라 <strong style={{ color: 'var(--text)' }}>품목별 체감과 다를 수 있습니다</strong>. 특히 부동산은 CPI 대비 훨씬 가파르게 올랐고, 가전제품·통신비는 CPI보다 덜 올랐어요(또는 하락).
           </p>
         </section>
@@ -183,7 +183,7 @@ export default function HistoricalMoneyPage() {
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
-                  <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
                   <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
                 </div>
               </Link>

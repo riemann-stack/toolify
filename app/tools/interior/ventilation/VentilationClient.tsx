@@ -199,7 +199,7 @@ export default function VentilationClient() {
           <span className={styles.sliderVal}>{targetAch.toFixed(1)}</span>
         </div>
         {main?.achInfo && (
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
             ⓘ <strong style={{ color: '#E89757' }}>{SPACE_STANDARDS.find(s => s.id === spaceTypeId)?.name}</strong> 권장: {main.achInfo.min}~{main.achInfo.max} ACH ({main.achInfo.standard})
           </p>
         )}
@@ -317,7 +317,7 @@ export default function VentilationClient() {
                 placeholder="120" value={currentAirflow} onChange={e => setCurrentAirflow(e.target.value)} />
               <span className={styles.unit}>㎥/h</span>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               ⓘ 환풍기 사양에 보통 표기되어 있습니다. 신축 아파트 전열교환기는 약 100~250 ㎥/h.
             </p>
           </div>

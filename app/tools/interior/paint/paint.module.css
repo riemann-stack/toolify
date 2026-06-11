@@ -7,7 +7,7 @@
   border: 1px solid rgba(220,38,38,0.25);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
@@ -91,7 +91,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -348,7 +348,7 @@
 }
 .paintCard.pntActive .paintName { color: inherit; }
 .paintCoverage {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
@@ -356,7 +356,7 @@
 }
 .paintBadge {
   display: inline-block;
-  font-size: 10.5px;
+  font-size: 11px;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   padding: 2px 8px;
@@ -382,7 +382,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -692,7 +692,7 @@
   margin-bottom: 8px;
 }
 .openingsHeader {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   margin-bottom: 4px;
   letter-spacing: 0.04em;
@@ -850,7 +850,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;

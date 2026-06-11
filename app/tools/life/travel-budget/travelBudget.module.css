@@ -102,7 +102,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -144,7 +144,7 @@
   box-shadow: 0 0 0 1px var(--accent);
 }
 .cityFlag { font-size: 22px; line-height: 1; }
-.cityName { font-size: 11.5px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.cityName { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; }
 
 /* 도시 카드 그리드 (탭 2) */
 .cityCardGrid {
@@ -187,7 +187,7 @@
   color: var(--muted);
   background: var(--bg3);
   padding: 3px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
 }
 .cityCardStyles {
   display: flex;

@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
 
 const FAQ_LD = [
@@ -32,7 +32,7 @@ export default function SigFigsPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📏 유효숫자·오차 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -63,12 +63,12 @@ export default function SigFigsPage() {
                 <span style={{ fontSize: 20, flexShrink: 0 }}>{x.e}</span>
                 <div>
                   <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{x.t}</p>
-                  <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6 }}>{x.d}</p>
+                  <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>{x.d}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 모호한 후행 0은 <strong style={{ color: 'var(--text)' }}>과학적 표기</strong>(예: 1.5×10³ vs 1.500×10³)로 쓰면 명확해집니다.
           </p>
         </section>
@@ -83,9 +83,9 @@ export default function SigFigsPage() {
               { t: '백분율오차', d: '상대오차를 %로 표현. 정확도 비교에 편리.', e: '상대오차 × 100%' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
-                <p style={{ fontSize: 13.5, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
-                <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
@@ -112,14 +112,14 @@ export default function SigFigsPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 위 제곱합(quadrature) 공식은 오차가 <strong style={{ color: 'var(--text)' }}>서로 독립인 무작위 오차</strong>일 때 표준입니다.
             모든 오차가 겹친 최악의 경우(상한)는 절대값을 단순히 더합니다.
           </p>
@@ -152,7 +152,7 @@ export default function SigFigsPage() {
               <Link key={t.href} href={t.href} style={{ ...card, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
                 <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
                 <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
               </Link>

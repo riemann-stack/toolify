@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import PregnancyClient from './PregnancyClient'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
+import Disclaimer from '@/components/Disclaimer'
 
 const PREGNANCY_FAQ = [
   { q: '임신 주수는 어떻게 계산하나요?', a: '임신 주수는 마지막 생리 시작일로부터 계산합니다. 실제 수정은 배란일(생리 시작 후 약 14일)에 일어나지만, 정확한 배란일을 알기 어렵기 때문에 의학적으로는 마지막 생리 시작일을 기준으로 삼습니다. 따라서 임신 1주차는 아직 수정 전인 시기입니다.' },
@@ -33,7 +34,7 @@ export default function PregnancyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🤰 임신 주수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -47,7 +48,7 @@ export default function PregnancyPage() {
 
         {/* ── 1. 네겔레 공식 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             출산 예정일 산출법 — 네겔레 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -98,7 +99,7 @@ export default function PregnancyPage() {
 
         {/* ── 2. 삼분기별 변화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { period: '1삼분기 (1~13주)', color: '#A16207', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
@@ -119,14 +120,14 @@ export default function PregnancyPage() {
 
         {/* ── 3. 산전 검사 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             산전 검사 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             본 도구의 검사 일정은 다음 표준 기반 — <strong style={{ color: 'var(--text)' }}>보건복지부 임신·출산 가이드라인 / 대한산부인과학회(KSOG) 산전 진료 지침 / WHO 임산부 산전 진료 권고안</strong>.
           </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '9px 10px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>검사</th>
@@ -147,21 +148,21 @@ export default function PregnancyPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ⚠️ 검사 시기·항목은 병원·산모 상태·고위험 임신 여부·쌍태아 여부에 따라 달라질 수 있으며, 본 도구의 일정은 일반 가이드라인입니다. 실제 일정은 담당 산부인과의 안내를 우선하세요.
           </p>
         </section>
 
         {/* ── 4. 태아 크기 비유 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             태아 크기 비유 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -181,19 +182,19 @@ export default function PregnancyPage() {
               ['40주', '🍉 큰 수박 (~51cm)'],
             ].map(([w, label], i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
-                <span style={{ fontSize: 12.5, color: 'var(--text)' }}>{label}</span>
+                <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
+                <span style={{ fontSize: 13, color: 'var(--text)' }}>{label}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ⓘ 비유는 일반 가이드이며 정확한 태아 크기는 초음파 검사로만 확인 가능합니다. 본 도구 [태아 크기] 탭에서 1~40주 전체 그리드를 확인할 수 있습니다.
           </p>
         </section>
 
         {/* ── 5. 출산 준비 체크리스트 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             삼분기별 출산 준비 체크리스트
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -212,23 +213,23 @@ export default function PregnancyPage() {
               },
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderLeft: `4px solid ${t.color}`, borderRadius: '12px', padding: '14px 18px' }}>
-                <p style={{ fontSize: '13.5px', fontWeight: 700, color: t.color, marginBottom: '8px' }}>{t.period}</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: t.color, marginBottom: '8px' }}>{t.period}</p>
                 <ul style={{ paddingLeft: '18px', margin: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
                   {t.items.map((it, j) => (
-                    <li key={j} style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>{it}</li>
+                    <li key={j} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{it}</li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             ⓘ 본 도구의 [체크리스트] 탭에서 28개 항목 진행률을 localStorage에 저장 추적할 수 있습니다. 개인 상황·고위험·다태아 시 추가/변경 항목 있을 수 있으니 담당 산부인과와 상담 권장.
           </p>
         </section>
 
         {/* ── 6. 생리주기 보정 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             생리주기 보정의 중요성
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -244,8 +245,8 @@ export default function PregnancyPage() {
               { c: '35일 주기', d: '예정일 약 7일 늦음' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 13px', display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.c}</span>
-                <span style={{ fontSize: 12.5, color: 'var(--text)' }}>{r.d}</span>
+                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.c}</span>
+                <span style={{ fontSize: 13, color: 'var(--text)' }}>{r.d}</span>
               </div>
             ))}
           </div>
@@ -281,37 +282,18 @@ export default function PregnancyPage() {
 
         {/* ── 8. FAQ (accordion) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={PREGNANCY_FAQ} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {PREGNANCY_FAQ.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={PREGNANCY_FAQ} />
         </section>
 
         {/* ── 9. 면책 강화 ── */}
         <section>
-          <div style={{ background: 'rgba(220,38,38,0.05)', border: '2px solid #DC2626', borderRadius: 12, padding: '18px 22px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 800, color: '#DC2626', marginBottom: '10px' }}>
-              ⚕️ 의료 면책 조항 — 본 도구는 참고용이며 의학적 진단·치료 도구가 아닙니다
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text)' }}>다음 사항을 반드시 명심해주세요</strong> — 정확한 임신 주수는 초음파 검사로만 확인 가능 / 본 도구의 산전 검사 일정은 일반 가이드라인 / 태아 크기·발달은 개체차 매우 큼(정상 범위 내 다양함) / 본 정보로 자가 진단·자가 처방 절대 X.
-            </p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              본 도구의 정보는 <strong style={{ color: 'var(--text)' }}>보건복지부·대한산부인과학회·WHO 공식 자료</strong>를 기반으로 일반화한 추정치이며, 개별 산모·태아에 적용 시 반드시 의료진 상담이 필요합니다.
-              <br /><br />응급 시 — 즉시 <strong style={{ color: '#DC2626' }}>119</strong> 또는 가까운 산부인과 응급실.
-            </p>
-          </div>
+          <Disclaimer variant="medical" open>
+            <strong>다음 사항을 반드시 명심해주세요</strong> — 정확한 임신 주수는 초음파 검사로만 확인 가능 / 본 도구의 산전 검사 일정은 일반 가이드라인 / 태아 크기·발달은 개체차 매우 큼(정상 범위 내 다양함) / 본 정보로 자가 진단·자가 처방 절대 X.
+            <br />
+            본 도구의 정보는 <strong>보건복지부·대한산부인과학회·WHO 공식 자료</strong>를 기반으로 일반화한 추정치이며, 개별 산모·태아에 적용 시 반드시 의료진 상담이 필요합니다.
+            <br />
+            응급 시 — 즉시 <strong>119</strong> 또는 가까운 산부인과 응급실.
+          </Disclaimer>
         </section>
 
         {/* ── 참고 출처 (기존 유지·확장) ── */}
@@ -333,7 +315,7 @@ export default function PregnancyPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',           desc: '출산 예정일 카운트다운' },

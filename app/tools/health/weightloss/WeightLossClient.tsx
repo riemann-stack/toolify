@@ -267,7 +267,7 @@ export default function WeightLossClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>
             <span>TDEE</span>
-            <a href="/tools/health/bmr" style={{ fontSize: 10.5, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400, display: 'block', marginTop: 2 }}>
+            <a href="/tools/health/bmr" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400, display: 'block', marginTop: 2 }}>
               BMR 계산기로 계산하기 →
             </a>
           </label>
@@ -444,7 +444,7 @@ export default function WeightLossClient() {
                           x2={chartData.W - chartData.pad.r} y2={chartData.yScale(y)}
                           stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.5} />
                         <text x={chartData.pad.l - 6} y={chartData.yScale(y) + 4}
-                          fontSize="11" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="600">
+                          fontSize="11" fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="600">
                           {y.toFixed(0)}kg
                         </text>
                       </g>
@@ -457,7 +457,7 @@ export default function WeightLossClient() {
                           x2={chartData.xScale(x)} y2={chartData.H - chartData.pad.b}
                           stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.4} />
                         <text x={chartData.xScale(x)} y={chartData.H - chartData.pad.b + 16}
-                          fontSize="11" fill="var(--muted)" fontFamily="Inter, system-ui, sans-serif" textAnchor="middle" fontWeight="600">
+                          fontSize="11" fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle" fontWeight="600">
                           {x}주
                         </text>
                       </g>
@@ -466,13 +466,13 @@ export default function WeightLossClient() {
                     {/* 정상 BMI 경계 라벨 */}
                     {normalMaxKg < chartData.maxY && normalMaxKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMaxKg) - 4}
-                        fontSize="10" fill="#059669" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        fontSize="10" fill="#059669" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="700">
                         BMI 23 ({normalMaxKg.toFixed(0)}kg)
                       </text>
                     )}
                     {normalMinKg < chartData.maxY && normalMinKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMinKg) - 4}
-                        fontSize="10" fill="#DC2626" fontFamily="Inter, system-ui, sans-serif" textAnchor="end" fontWeight="700">
+                        fontSize="10" fill="#DC2626" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="700">
                         BMI 18.5 ({normalMinKg.toFixed(0)}kg)
                       </text>
                     )}
@@ -574,7 +574,7 @@ export default function WeightLossClient() {
                   <span>{macros.carb.percent}%</span>
                 </div>
               </div>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
                 💡 단백질 {macros.protein.g}g ≈ 닭가슴살 {Math.round(macros.protein.g / 23)}× 100g · 계란 {Math.round(macros.protein.g / 6)}개 / 탄수 {macros.carb.g}g ≈ 밥 {(macros.carb.g / 75).toFixed(1)}공기. 감량 시 단백질 1.6g/kg 권장 (근손실 방지·포만감).
               </p>
             </div>
@@ -690,7 +690,7 @@ export default function WeightLossClient() {
                     )
                   })}
                 </div>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
                   💡 대안을 클릭하면 해당 기간으로 자동 변경됩니다. ★는 가장 안전한 옵션.
                 </p>
               </div>
@@ -783,7 +783,7 @@ export default function WeightLossClient() {
                     </div>
                   ))}
               </div>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
                 💡 METs(Metabolic Equivalent of Task) 표준값 기반 — kcal/h = METs × 체중(kg) × 1.05.
                 실제 소모는 강도·심박·개인차에 따라 ±20% 차이 가능. 스마트워치 데이터 활용 권장.
               </p>

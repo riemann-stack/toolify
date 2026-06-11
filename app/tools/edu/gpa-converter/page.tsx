@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -62,9 +62,9 @@ const FAQ_LD = [
 
 export default function GpaConverterPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎓 학점(GPA) 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -87,7 +87,7 @@ export default function GpaConverterPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['국가', '주요 만점', '평어', '특징'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 11.5 }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -101,7 +101,7 @@ export default function GpaConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
@@ -144,7 +144,7 @@ export default function GpaConverterPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
             ⓘ <strong style={{ color: 'var(--text)' }}>대원칙</strong>: 미국 대학원·취업은 WES 기준에 맞춰 준비하되, 학교 공식 환산이 제공되면 그걸 최우선으로 따르세요.
           </p>
         </section>
@@ -163,9 +163,9 @@ export default function GpaConverterPage() {
               { abbr: '3rd', name: 'Third Class', cut: '40-49%', meaning: '학사 학위는 인정', c: '#EA580C' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 22, color: g.c, fontWeight: 800, margin: '0 0 4px', fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: '-0.5px' }}>{g.abbr}</p>
+                <p style={{ fontSize: 22, color: g.c, fontWeight: 800, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', letterSpacing: '-0.5px' }}>{g.abbr}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>{g.name}</p>
-                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, margin: '0 0 6px' }}>{g.cut}</p>
+                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, margin: '0 0 6px' }}>{g.cut}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.meaning}</p>
               </div>
             ))}
@@ -206,7 +206,7 @@ export default function GpaConverterPage() {
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
-                  <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
                   <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
                 </div>
               </Link>

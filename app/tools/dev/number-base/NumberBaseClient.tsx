@@ -339,7 +339,7 @@ export default function NumberBaseClient() {
       {/* 면책 */}
       <div className={s.disclaimer || ''} style={{
         background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 12,
-        padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7,
+        padding: '12px 16px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7,
       }}>
         <strong style={{ color: '#EA580C' }}>참고:</strong> 정수 변환을 지원합니다. 부동소수점(IEEE 754) 변환은 별도 도구를 권장하며,
         실제 시스템 구현 시 비트 폭·엔디안·부호 처리에 따라 결과가 다를 수 있습니다. 본 도구는 32-bit 정밀도로 동작합니다.
@@ -530,7 +530,7 @@ export default function NumberBaseClient() {
                 </button>
               ))}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               {bitWidth}-bit 부호 없는: 0 ~ {unsignedMax(bitWidth).toLocaleString('ko-KR')} ·
               {' '}부호 있는: {signedRange(bitWidth).min.toLocaleString('ko-KR')} ~ {signedRange(bitWidth).max.toLocaleString('ko-KR')}
             </p>
@@ -696,7 +696,7 @@ export default function NumberBaseClient() {
             />
             {charsToCodes.length > 0 && (
               <div style={{ overflowX: 'auto', marginTop: 12 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 460 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--border)' }}>
                       {['문자', '10진', '16진', '8진', '2진'].map((h, i) => (
@@ -767,7 +767,7 @@ export default function NumberBaseClient() {
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               💡 자주 쓰는 코드: 32(공백) · 48~57(0~9) · 65~90(A~Z) · 97~122(a~z) · 10(LF) · 13(CR) · 9(TAB)
             </p>
           </div>
@@ -899,7 +899,7 @@ export default function NumberBaseClient() {
             </div>
             <div style={{
               background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10,
-              padding: '14px 16px', fontFamily: 'var(--font-mono)', fontSize: 12.5,
+              padding: '14px 16px', fontFamily: 'var(--font-mono)', fontSize: 13,
               color: 'var(--text)', lineHeight: 2,
             }}>
               <div><span style={{ color: 'var(--muted)' }}># 자리값 (오른쪽이 0번째)</span></div>

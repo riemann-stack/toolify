@@ -65,7 +65,7 @@
 .envResultHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .envResultBadge {
   font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
-  border: 1px solid; border-radius: 99px; padding: 4px 12px;
+  border: 1px solid; border-radius: 999px; padding: 4px 12px;
 }
 .envResultRow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
 .envResultBlock { text-align: center; }

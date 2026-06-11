@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import CurlClient from './CurlClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -19,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -61,7 +62,7 @@ const codeStyle: React.CSSProperties = {
   padding: '2px 6px',
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
-  fontSize: '12.5px',
+  fontSize: '13px',
   color: '#0EA5E9',
 }
 
@@ -84,7 +85,7 @@ export default function CurlPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🌀 cURL 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -99,7 +100,7 @@ export default function CurlPage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 cURL 파싱·코드 생성은 모두 <strong>브라우저에서 실행</strong>되며 입력 cURL·토큰·인증 정보는 외부로 전송되지 않습니다.
           <strong> 파일 업로드(@filename) · TLS 인증서(--cert) · 프록시(--proxy)</strong> 등 일부 옵션은 미지원이며 명시적으로 안내됩니다.
           생성된 코드는 일반 케이스 가정 어림이며, 운영 환경 적용 전 반드시 테스트하세요.
@@ -109,6 +110,8 @@ export default function CurlPage() {
       </div>
 
       <CurlClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -131,7 +134,7 @@ export default function CurlPage() {
           본 도구가 지원하는 cURL 옵션 사전입니다. 모든 옵션은 짧은 형식·긴 형식 모두 인식합니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 540 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>옵션</th>
@@ -183,10 +186,10 @@ export default function CurlPage() {
             { emoji: '🐹', name: 'Go net/http', when: '백엔드·CLI', pros: '내장, 동시성', cons: 'Go 문법 학습 필요' },
           ].map((l, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #0EA5E9' }}>
-              <p style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{l.emoji} {l.name}</p>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 4px' }}><strong>언제:</strong> {l.when}</p>
-              <p style={{ fontSize: 11.5, color: '#0D9488', margin: '0 0 4px' }}>✓ {l.pros}</p>
-              <p style={{ fontSize: 11.5, color: '#EA580C', margin: 0 }}>✗ {l.cons}</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{l.emoji} {l.name}</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 4px' }}><strong>언제:</strong> {l.when}</p>
+              <p style={{ fontSize: 12, color: '#0D9488', margin: '0 0 4px' }}>✓ {l.pros}</p>
+              <p style={{ fontSize: 12, color: '#EA580C', margin: 0 }}>✗ {l.cons}</p>
             </div>
           ))}
         </div>
@@ -204,7 +207,7 @@ export default function CurlPage() {
         <p style={{ fontSize: 14, color: '#FFA63E', fontWeight: 700, margin: '0 0 12px' }}>
           🚨 본 도구가 <strong>지원하지 않는 cURL 옵션</strong> (생성 코드에 반영 X)
         </p>
-        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
+        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>📁 파일 업로드 @filename</strong> — <code style={codeStyle}>-d @body.txt</code>는 미지원, 단 multipart <code style={codeStyle}>-F file=@photo.jpg</code>는 지원 (placeholder 코드)</li>
           <li><strong>🔐 TLS 인증서</strong> <code style={codeStyle}>--cert</code> / <code style={codeStyle}>--key</code> / <code style={codeStyle}>--cacert</code></li>
           <li><strong>🌐 프록시</strong> <code style={codeStyle}>--proxy</code> / <code style={codeStyle}>--socks5</code></li>
@@ -224,7 +227,7 @@ export default function CurlPage() {
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           본 도구의 [📚 예시] 탭에 한국 백엔드 개발자가 자주 만나는 5개 API 예시가 준비되어 있습니다. 클릭 한 번으로 5 언어 코드 자동 생성.
         </p>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li>💬 <strong>카카오 메시지 보내기</strong> — Bearer 토큰 + form-urlencoded (talk_message API)</li>
           <li>💬 <strong>카카오 OAuth 토큰 발급</strong> — authorization_code → access_token</li>
           <li>🇰🇷 <strong>네이버 검색 API</strong> — X-Naver-Client-Id/Secret 헤더 (블로그 검색)</li>
@@ -291,7 +294,7 @@ export default function CurlPage() {
         <div style={faqAnswer}>
           <strong>네, 완벽히 지원</strong>합니다. Chrome/Firefox DevTools의 &quot;Copy as cURL&quot;이 생성하는 다중 라인 형식 그대로 붙여넣어도 동작합니다.<br />
           예시:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`curl 'https://api.example.com/data' \\
   -H 'accept: application/json' \\
   -H 'authorization: Bearer XXX' \\
@@ -347,7 +350,7 @@ export default function CurlPage() {
         <div style={faqAnswer}>
           GraphQL은 일반 HTTP POST + JSON body이므로 <strong>완벽히 변환</strong>됩니다.<br />
           예시 cURL:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`curl -X POST 'https://api.github.com/graphql' \\
   -H 'Authorization: Bearer TOKEN' \\
   -d '{

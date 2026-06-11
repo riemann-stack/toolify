@@ -144,7 +144,7 @@ function HandicapIndexTab({
       <div className={s.card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span className={s.cardLabel} style={{ margin: 0 }}>라운드 기록 ({rounds.length}/20)</span>
-          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Inter, system-ui, sans-serif' }}>
+          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
             사용 {validRounds.length > 0 ? usedCount : 0}개
           </span>
         </div>
@@ -992,13 +992,13 @@ function RecordsTab() {
                   const d = diff * 113 / r.slope
                   return (
                     <tr key={r.id}>
-                      <td style={{ fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif', color: 'var(--muted)' }}>
+                      <td style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>
                         {r.date}
                         {r.is9Holes && <span style={{ marginLeft: 4, color: '#EA580C', fontSize: 10 }}>9H</span>}
                       </td>
                       <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
+                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
                         {d.toFixed(1)}
                       </td>
                       <td>

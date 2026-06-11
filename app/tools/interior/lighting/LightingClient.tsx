@@ -402,7 +402,7 @@ export default function LightingClient() {
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{space.range}</strong>
+              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{space.range}</strong>
             </p>
           </div>
 
@@ -689,7 +689,7 @@ export default function LightingClient() {
                 </p>
               </div>
             </div>
-            <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--accent)' }}>권장 비율</strong>: 메인 70% + 보조 20% + 무드 10%
             </p>
           </div>

@@ -694,7 +694,7 @@ export default function IntervalTrainingClient() {
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
                         <td>{r.distance >= 1000 ? `${r.distance / 1000}km` : `${r.distance}m`}</td>
                         <td>{time}</td>
-                        <td style={{ color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
+                        <td style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
                         <td>{r.laps}바퀴</td>
                         <td>
                           <button
@@ -893,7 +893,7 @@ export default function IntervalTrainingClient() {
                 </div>
 
                 <div style={{ marginTop: 14 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--muted)', cursor: 'pointer' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--muted)', cursor: 'pointer' }}>
                     <input type="checkbox" checked={showSplits} onChange={e => setShowSplits(e.target.checked)} />
                     회별 기록 입력 (후반 저하 분석)
                   </label>
@@ -1047,7 +1047,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
               </p>
             </div>
           )}
@@ -1132,11 +1132,11 @@ export default function IntervalTrainingClient() {
             </div>
 
             <div style={{ marginTop: 14, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--muted)', cursor: 'pointer' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--muted)', cursor: 'pointer' }}>
                 <input type="checkbox" checked={trackOk} onChange={e => setTrackOk(e.target.checked)} />
                 트랙 이용 가능
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--muted)', cursor: 'pointer' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--muted)', cursor: 'pointer' }}>
                 <input type="checkbox" checked={injuryHistory} onChange={e => setInjuryHistory(e.target.checked)} />
                 부상 이력 있음 (-10%)
               </label>
@@ -1190,16 +1190,16 @@ export default function IntervalTrainingClient() {
                         '🟠'
                       return (
                         <tr key={w.week}>
-                          <td style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
+                          <td style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
                           <td style={{ color: 'var(--text)', fontSize: 13, fontWeight: 500 }}>
                             {w.menu1.name}
                             {w.menu2 && <><br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
                           </td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
+                          <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
                             {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
                           </td>
                           <td style={{ color: 'var(--muted)', fontSize: 12 }}>{w.menu1.recovery}</td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
+                          <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
                             {totalKm.toFixed(1)}km
                           </td>
                           <td style={{ textAlign: 'center' }}>

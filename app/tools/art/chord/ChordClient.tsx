@@ -730,7 +730,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
               <text
                 x={x + whiteW / 2} y={whiteH - 8}
                 textAnchor="middle"
-                fontSize="10" fontFamily="Inter, system-ui, sans-serif" fontWeight="700"
+                fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700"
                 fill={isHighlight ? '#0D0D0D' : '#666'}
               >
                 {whiteLabels[i]}
@@ -761,7 +761,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 <text
                   x={x + blackW / 2} y={blackH - 6}
                   textAnchor="middle"
-                  fontSize="9" fontFamily="Inter, system-ui, sans-serif" fontWeight="800"
+                  fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800"
                   fill="#0D0D0D"
                 >
                   {blackLabels[j]}
@@ -773,8 +773,8 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
       )}
 
       {/* Octave separator label */}
-      <text x={whiteW * whitePCs.length / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily="Inter, system-ui, sans-serif">C3 옥타브</text>
-      <text x={whiteW * whitePCs.length * 1.5} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily="Inter, system-ui, sans-serif">C4 옥타브</text>
+      <text x={whiteW * whitePCs.length / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>C3 옥타브</text>
+      <text x={whiteW * whitePCs.length * 1.5} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>C4 옥타브</text>
     </svg>
   )
 }

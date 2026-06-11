@@ -17,7 +17,7 @@ const codeBox: React.CSSProperties = {
   borderRadius: '10px',
   padding: '14px 16px',
   fontFamily: "'Fira Code', 'Consolas', monospace",
-  fontSize: '12.5px',
+  fontSize: '13px',
   color: 'var(--text)',
   lineHeight: 1.8,
   whiteSpace: 'pre-wrap',
@@ -51,9 +51,9 @@ const FAQ_LD = [
 
 export default function CssConverterPage() {
   return (
-    <div style={{ maxWidth: '820px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎨 CSS 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -67,7 +67,7 @@ export default function CssConverterPage() {
 
         {/* 1. 핵심 공식 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>CSS 단위 핵심 공식 참조표</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>CSS 단위 핵심 공식 참조표</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -87,7 +87,7 @@ export default function CssConverterPage() {
                   ['px → vh',  '(px ÷ viewportHeight) × 100', '24px ÷ 900px ≈ 2.67vh'],
                 ].map((row, i, arr) => (
                   <tr key={i}>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace" }}>{row[1]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
@@ -99,7 +99,7 @@ export default function CssConverterPage() {
 
         {/* 2. rem vs em */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -129,7 +129,7 @@ export default function CssConverterPage() {
 
         {/* 3. clamp() 가이드 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>clamp(최솟값, 선호값, 최댓값)</strong>은 뷰포트 크기에 따라 값을 부드럽게 변화시키면서도 안전한 상·하한을 보장합니다.
           </p>
@@ -146,16 +146,16 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
   → 그 사이:     부드럽게 변화`}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Chrome 79+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Firefox 75+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
-            <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Chrome 79+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Firefox 75+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
+            <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
           </div>
         </div>
 
         {/* 4. aspect-ratio vs padding-top */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>✨ 최신 방법 (aspect-ratio)</p>
@@ -185,7 +185,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
 
         {/* 5. line-height unitless */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>unitless</strong>(단위 없는) line-height는 자식 요소에 상속될 때 <strong style={{ color: 'var(--text)' }}>자식의 font-size</strong>로 재계산됩니다. 반면 em·%는 계산된 px값이 그대로 상속되어 의도와 달라질 수 있습니다.
           </p>
@@ -203,7 +203,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
 
         {/* 6. Figma → CSS */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -232,7 +232,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
 
         {/* 7. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -253,7 +253,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
 
         {/* 8. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/color',     emoji: '🎨', name: '색상 코드 변환기',   desc: 'HEX·RGB·HSL 변환' },

@@ -460,7 +460,7 @@ export default function UvProtectionClient() {
                 ))}
               </tbody>
             </table>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ⚠️ SPF는 햇빛에 머물 수 있는 시간을 늘려주지 않습니다(FDA) — SPF 행은 <strong>재도포 권장 주기(2시간/수영·땀 1시간)</strong> 내 보호로 표시하며, 라벨 SPF의 약 50% 실효를 가정한 보수적 추정입니다. SPF 30·50의 핵심 차이는 보호 시간이 아니라 UVB 차단율(96.7% vs 98.0%)입니다.
             </p>
           </div>
@@ -517,7 +517,7 @@ export default function UvProtectionClient() {
                 </>
               )}
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ※ 일반 환경 2시간 / 수영·땀 활동 1시간 권장. 옷·수건 마찰 후에도 재도포하세요.
             </p>
           </div>
@@ -620,7 +620,7 @@ export default function UvProtectionClient() {
                 </tbody>
               </table>
             </div>
-            <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 10, padding: '12px 16px', fontSize: 12.5, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 10, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
               ⚠️ <strong style={{ color: '#EA580C' }}>SPF는 &quot;햇빛에 X배 더 오래 머물 수 있다&quot;는 의미가 아닙니다.</strong>
               도포량·땀·수영·시간 경과에 따라 실제 효과는 표시 SPF의 50% 수준일 수 있습니다.
             </div>
@@ -724,8 +724,8 @@ export default function UvProtectionClient() {
                 { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#059669' },
               ].map((r, i) => (
                 <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                  <p style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
-                  <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
+                  <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
+                  <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
                   <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{r.level}</p>
                 </div>
               ))}

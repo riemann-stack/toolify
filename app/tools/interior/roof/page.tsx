@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import RoofClient from './RoofClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/roof',
@@ -11,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -81,7 +83,7 @@ export default function RoofPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏠 지붕 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -89,6 +91,8 @@ export default function RoofPage() {
       </p>
 
       <RoofClient />
+
+      <GuideDivider />
 
       {/* 1. 5가지 지붕 형태 비교 */}
       <h2 style={sectionTitle}>🔺 5가지 지붕 형태 비교</h2>
@@ -165,9 +169,9 @@ export default function RoofPage() {
               { m: '10물매', d: '45.0°', f: '×1.414', n: '매우 가파름' },
             ].map((r, i) => (
               <tr key={i}>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.d}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.f}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
+                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.d}</td>
+                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.f}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.n}</td>
               </tr>
             ))}
@@ -185,7 +189,7 @@ export default function RoofPage() {
           { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#EA580C' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Inter, system-ui, sans-serif' }}>{p.len}</p>
+            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{p.len}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{p.use}</p>
           </div>
         ))}
@@ -359,24 +363,15 @@ export default function RoofPage() {
       </details>
 
       {/* 면책 */}
-      <h2 style={sectionTitle}>⚠️ 면책 조항</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+      <Disclaimer variant="safety" open>
+        <ul style={{ paddingLeft: 18, margin: 0 }}>
           <li>본 도구는 <strong>일반 면적 계산 가이드</strong>입니다. 도면 vs 실측 ±5~10% 차이 가능.</li>
           <li>자재 단가는 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적.</li>
           <li>본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong>.</li>
           <li>⚠️ 지붕 작업은 고소작업 — 전문가 시공 강력 권장. 셀프 시공 시 안전벨트·헬멧 필수. 응급 <strong>119</strong>.</li>
           <li>도움: 한국건설기술연구원 · 대한건축사협회 · 가까운 건축사사무소·시공사 견적.</li>
         </ul>
-      </div>
+      </Disclaimer>
 
       {/* 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

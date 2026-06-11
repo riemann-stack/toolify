@@ -7,7 +7,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -30,7 +30,7 @@
   border: none;
   border-radius: 8px;
   padding: 9px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
@@ -77,7 +77,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 7px 8px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -179,7 +179,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   overflow-x: auto;
   white-space: pre;
@@ -233,7 +233,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 14px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.6;
@@ -277,7 +277,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   cursor: pointer;
@@ -291,7 +291,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -345,7 +345,7 @@
   line-height: 1.4;
 }
 .previewDesc {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
   margin-bottom: 8px;
@@ -379,7 +379,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -431,11 +431,11 @@
 .lenItem .lenLabel {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--accent);
   letter-spacing: 0.04em;
 }
-.lenItem .lenText { word-break: break-word; line-height: 1.6; font-size: 12.5px; }
+.lenItem .lenText { word-break: break-word; line-height: 1.6; font-size: 13px; }
 .lenItem .lenSize {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import RoomModeClient from './RoomModeClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -11,7 +12,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +69,7 @@ export default function RoomModePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔊 룸 모드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -76,6 +77,8 @@ export default function RoomModePage() {
       </p>
 
       <RoomModeClient />
+
+      <GuideDivider />
 
       {/* 1. 어떻게 사용하나요? */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -114,7 +117,7 @@ export default function RoomModePage() {
           ))}
         </div>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
             <strong style={{ color: 'var(--accent)' }}>Rayleigh 공식</strong>:<br />
             f(p,q,r) = (c/2) × √[(p/L)² + (q/W)² + (r/H)²]<br />
             <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
@@ -132,7 +135,7 @@ export default function RoomModePage() {
           이 주파수 미만에서는 룸 모드가 음향을 좌우하므로 <strong>베이스 트랩이 가장 효과적</strong>이에요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
             fs = 2000 × √(RT60 / V)<br />
             <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
               RT60 = 잔향시간 (일반 거실 0.4초), V = 방 체적 (m³)

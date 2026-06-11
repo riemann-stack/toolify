@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import HashClient from './HashClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -19,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -76,7 +77,7 @@ export default function HashPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🔒 해시 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -91,7 +92,7 @@ export default function HashPage() {
         padding: '14px 18px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
           🚨 <strong style={{ color: '#DB2777' }}>중요</strong> — <strong>MD5와 SHA-1은 충돌 공격이 발견</strong>되어 비밀번호 해싱·디지털 서명·SSL 인증서에 사용 금지입니다.
           <strong> 파일 무결성 확인(체크섬) 용도로만</strong> 사용하세요.
           비밀번호는 반드시 <strong>bcrypt·scrypt·Argon2</strong>(서버 측)를 사용하세요.
@@ -101,6 +102,8 @@ export default function HashPage() {
       </div>
 
       <HashClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -141,10 +144,10 @@ export default function HashPage() {
                 ['SHA-512', '512bit / 128자', '🟢 안전 (64bit 시스템 빠름)',    '금융, 정부, 고보안 서명'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 13 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -167,7 +170,7 @@ export default function HashPage() {
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
           ❌ <strong style={{ color: '#DB2777' }}>MD5 · SHA-1을 절대 사용하면 안 되는 곳</strong>
         </p>
-        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
+        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>비밀번호 해싱</strong> — 무지개 표(rainbow table)로 즉시 깨짐. 반드시 <strong>bcrypt·scrypt·Argon2</strong>(KDF, 서버 측)</li>
           <li><strong>디지털 서명</strong> — 충돌 공격으로 위변조 가능. SHA-256 + RSA/ECDSA</li>
           <li><strong>SSL/TLS 인증서</strong> — CA Browser Forum 표준 SHA-256 이상 (모든 브라우저 SHA-1 인증서 차단)</li>
@@ -182,7 +185,7 @@ export default function HashPage() {
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
           ✅ <strong style={{ color: '#0D9488' }}>MD5 · SHA-1을 사용해도 되는 곳 (무결성 전용)</strong>
         </p>
-        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
+        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>파일 체크섬</strong> — Linux ISO·소프트웨어 다운로드 무결성 (충돌 위험 ↔ 손상 검출은 OK)</li>
           <li><strong>중복 파일 검출</strong> — 같은 콘텐츠 빠르게 식별 (deduplication)</li>
           <li><strong>캐시 키·CDN 무효화</strong> — 콘텐츠 변경 감지용 식별자</li>
@@ -218,8 +221,8 @@ export default function HashPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, fontSize: 12.5 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12.5 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 13 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 13 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -237,7 +240,7 @@ export default function HashPage() {
           ISO·설치 파일을 다운로드 후 무결성을 확인하는 표준 절차입니다. 본 도구의 결과는 아래 CLI 명령과 정확히 동일합니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 480 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>알고리즘</th>
@@ -253,9 +256,9 @@ export default function HashPage() {
                 ['SHA-512', 'shasum -a 512 file',                      'certutil -hashfile FILE SHA512'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 12 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 12 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -337,7 +340,7 @@ export default function HashPage() {
           SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다.<br />
           <strong>생성 방법</strong>: 본 도구의 [📝 텍스트] 또는 [📁 파일] 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 사용 (또는 SHA-256/512).<br />
           <strong>HTML 사용</strong>:
-          <br /><code style={{ background: 'var(--bg3)', padding: '4px 6px', borderRadius: 3, display: 'block', marginTop: 6, fontSize: 11.5 }}>
+          <br /><code style={{ background: 'var(--bg3)', padding: '4px 6px', borderRadius: 3, display: 'block', marginTop: 6, fontSize: 12 }}>
             &lt;script src=&quot;...&quot; integrity=&quot;sha384-Base64결과&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
           </code>
           jsDelivr·cdnjs는 자동 생성 SRI를 제공합니다. 자체 호스팅 시 본 도구로 생성 가능.

@@ -260,7 +260,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               {/* 띠 성격 */}
               <div className={styles.card}>
                 <label className={styles.cardLabel}>{profile.chinese.name}띠 성격 — 일반적 해석</label>
-                <p style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
                   {profile.chinese.personality}
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
@@ -276,11 +276,11 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 6 }}>
                   <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 10, padding: '10px 12px' }}>
                     <p style={{ fontSize: 12, color: '#059669', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
-                    <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.strengths.join(' · ')}</p>
+                    <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.strengths.join(' · ')}</p>
                   </div>
                   <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '10px 12px' }}>
                     <p style={{ fontSize: 12, color: '#EA580C', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
-                    <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.cautions.join(' · ')}</p>
+                    <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.cautions.join(' · ')}</p>
                   </div>
                 </div>
               </div>
@@ -437,7 +437,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               {/* 띠 궁합 */}
               <div className={styles.card}>
                 <label className={styles.cardLabel}>🐯 띠 궁합 ({compatResult.a.chinese.name} × {compatResult.b.chinese.name})</label>
-                <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
                   <strong style={{ color: 'var(--accent)' }}>{compatResult.zodiacEval.type}</strong> 조합 — {compatResult.zodiacEval.desc}
                 </p>
               </div>
@@ -445,7 +445,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               {/* 별자리 원소 궁합 */}
               <div className={styles.card}>
                 <label className={styles.cardLabel}>🌬️ 별자리 원소 궁합 ({compatResult.a.star.element} × {compatResult.b.star.element})</label>
-                <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
                   {elementSynergyText(compatResult.a.star.element, compatResult.b.star.element)}
                 </p>
               </div>

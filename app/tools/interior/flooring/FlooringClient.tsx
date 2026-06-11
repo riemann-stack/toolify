@@ -426,8 +426,8 @@ export default function FlooringClient() {
                     </button>
                   ))}
                 </div>
-                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>1박스 {effectiveUnitArea}㎡</strong>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1박스 {effectiveUnitArea}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label})`}
                 </p>
               </>

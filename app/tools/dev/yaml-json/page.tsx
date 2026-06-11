@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import YamlJsonClient from './YamlJsonClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -21,7 +22,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -63,7 +64,7 @@ const codeStyle: React.CSSProperties = {
   padding: '2px 6px',
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
-  fontSize: '12.5px',
+  fontSize: '13px',
   color: '#0EA5E9',
 }
 
@@ -86,7 +87,7 @@ export default function YamlJsonPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📄 YAML ↔ JSON 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -101,7 +102,7 @@ export default function YamlJsonPage() {
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
+        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 변환·검증은 모두 <strong>브라우저에서 실행</strong>되며 입력 데이터는 외부로 전송되지 않습니다.
           YAML → JSON 변환 시 <strong>주석·앵커·별칭·커스텀 태그가 손실</strong>될 수 있습니다.
           K8s·Spring 등 운영 환경 설정 파일은 변환 전후 <strong>반드시 검증·테스트 후 적용</strong>하세요.
@@ -111,6 +112,8 @@ export default function YamlJsonPage() {
       </div>
 
       <YamlJsonClient />
+
+      <GuideDivider />
 
       {/* 1. 사용법 */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -155,8 +158,8 @@ export default function YamlJsonPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -179,7 +182,7 @@ export default function YamlJsonPage() {
         <p style={{ fontSize: 14, color: '#FFA63E', fontWeight: 700, margin: '0 0 12px' }}>
           🚨 <strong>YAML → JSON 변환 시 다음 정보가 사라집니다</strong>
         </p>
-        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 1.95 }}>
+        <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>💬 주석 (#)</strong> — JSON은 주석을 지원하지 않으므로 모두 삭제. <strong>역변환 시 복원 불가</strong></li>
           <li><strong>🔗 앵커 (&) / 별칭 (*)</strong> — 펼쳐져 데이터 중복으로 변환됨. 참조 관계 손실</li>
           <li><strong>📚 멀티 도큐먼트 (---)</strong> — JSON 배열로 통합 변환 (구분 정보 손실)</li>
@@ -192,7 +195,7 @@ export default function YamlJsonPage() {
       {/* 4. 흔한 YAML 오류 */}
       <h2 style={sectionTitle}>🚨 흔한 YAML 오류 5가지</h2>
       <div style={card}>
-        <ol style={{ margin: 0, paddingLeft: 22, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ol style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>탭 문자 사용</strong> — YAML은 공백만 허용. 에디터에서 &quot;탭 → 공백 2/4&quot; 자동 변환 설정 필수</li>
           <li><strong>콜론 뒤 공백 누락</strong> — <code style={codeStyle}>key:value</code> ❌ → <code style={codeStyle}>key: value</code> ✅</li>
           <li><strong>들여쓰기 불일치</strong> — 같은 레벨에서 2/4 spaces 혼용 금지. 한 파일 내 통일</li>
@@ -204,7 +207,7 @@ export default function YamlJsonPage() {
       {/* 5. 한국 개발자 시나리오 */}
       <h2 style={sectionTitle}>🇰🇷 한국 개발자 자주 쓰는 변환 시나리오</h2>
       <div style={card}>
-        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, color: 'var(--text)', lineHeight: 2 }}>
+        <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
           <li>🍃 <strong>Spring application.yml → JSON</strong> — 외부 시스템 연동·설정 백업·환경별 비교</li>
           <li>☸️ <strong>K8s YAML → JSON</strong> — kubectl 일부 명령에 JSON 사용 (<code style={codeStyle}>kubectl create -f - --dry-run -o json</code>)</li>
           <li>🐙 <strong>GitHub Actions YAML 검증</strong> — 워크플로 푸시 전 들여쓰기·구문 오류 사전 발견</li>

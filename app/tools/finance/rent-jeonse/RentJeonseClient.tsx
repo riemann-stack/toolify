@@ -358,7 +358,7 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
             <line x1={padL} y1={padT + (H - padT - padB) * (1 - t)} x2={W - padR} y2={padT + (H - padT - padB) * (1 - t)}
               stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" opacity={0.5} />
             <text x={padL - 8} y={padT + (H - padT - padB) * (1 - t) + 5}
-              fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+              fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="600">
               {fmtKRW(maxV * t)}
             </text>
           </g>
@@ -367,7 +367,7 @@ function CumulativeChart({ results }: { results: OptionResult[] }) {
         {/* x-axis labels */}
         {[0, 0.25, 0.5, 0.75, 1].map((t) => (
           <text key={t} x={padL + (W - padL - padR) * t} y={H - 16}
-            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="600">
             {Math.floor(months * t)}개월
           </text>
         ))}
@@ -408,16 +408,16 @@ function RoiChart({ scenarios, initial, months }: { scenarios: ReturnType<typeof
           <line key={t} x1={padL} y1={padT + (H - padT - padB) * (1 - t)} x2={W - padR} y2={padT + (H - padT - padB) * (1 - t)}
             stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" opacity={0.4} />
         ))}
-        <text x={padL - 8} y={yOf(initial) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+        <text x={padL - 8} y={yOf(initial) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="600">
           {fmtKRW(initial)}
         </text>
-        <text x={padL - 8} y={yOf(maxV) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+        <text x={padL - 8} y={yOf(maxV) + 5} fill="var(--muted)" fontSize="15" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="600">
           {fmtKRW(maxV)}
         </text>
         {/* x-axis labels */}
         {[0, 0.5, 1].map((t) => (
           <text key={t} x={padL + (W - padL - padR) * t} y={H - 12}
-            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight="600">
+            fill="var(--muted)" fontSize="15" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="600">
             {Math.floor(months * t)}개월
           </text>
         ))}

@@ -10,7 +10,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 7px 13px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
@@ -29,7 +29,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .table td {

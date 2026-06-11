@@ -99,7 +99,7 @@
 .warnTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
 .warnList {
   margin: 0; padding-left: 18px;
-  font-size: 12.5px; color: var(--text); line-height: 1.85;
+  font-size: 13px; color: var(--text); line-height: 1.85;
 }
 .warnList li { margin-bottom: 2px; }
 
@@ -402,7 +402,7 @@
   appearance: none;
   height: 6px;
   background: var(--bg3);
-  border-radius: 99px;
+  border-radius: 999px;
   outline: none;
 }
 .slider::-webkit-slider-thumb {
@@ -553,7 +553,7 @@
   width: 44px;
   height: 24px;
   background: var(--bg3);
-  border-radius: 99px;
+  border-radius: 999px;
   cursor: pointer;
   transition: background 0.2s;
   flex-shrink: 0;

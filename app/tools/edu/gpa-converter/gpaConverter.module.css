@@ -56,7 +56,7 @@
   transition: all 0.12s;
 }
 .scaleBtn small {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
@@ -107,7 +107,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -151,13 +151,13 @@
   border-color: var(--accent);
 }
 .methodName {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
 }
 .methodBtnActive .methodName { color: var(--accent); }
 .methodDesc {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.5;
 }
@@ -171,7 +171,7 @@
   text-align: center;
 }
 .heroLabel {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -219,7 +219,7 @@
   margin-top: 4px;
 }
 .heroNote {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   margin-top: 6px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -262,7 +262,7 @@
 .compareCardActive .compareHead strong { color: var(--accent); }
 .letterBadge {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 800;
   color: var(--muted);
   background: var(--bg2);
@@ -351,7 +351,7 @@
   font-weight: 500;
 }
 .note {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
   margin: 8px 0 0;
@@ -385,7 +385,7 @@
 }
 .uniScale {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 800;
   padding: 3px 8px;
   border-radius: 999px;
@@ -472,7 +472,7 @@
 @media (max-width: 600px) { .crossValue { font-size: 20px; } }
 .crossMax { font-size: 11px; color: var(--muted); font-weight: 600; }
 .crossSourceTag {
-  font-size: 9.5px;
+  font-size: 10px;
   color: var(--accent);
   font-weight: 800;
   letter-spacing: 0.04em;

@@ -4,7 +4,8 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import { buildSalaryTable, buildNetTargetTable, calcSalary, formatEok } from './salaryUtils'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/salary',
@@ -77,7 +78,7 @@ export default function SalaryPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         💰 연봉 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -93,7 +94,7 @@ export default function SalaryPage() {
 
         {/* ── 1. 연봉 실수령액 표 (SEO 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             연봉 실수령액 표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '8px' }}>
@@ -134,7 +135,7 @@ export default function SalaryPage() {
 
         {/* ── 2. 4대보험 요율 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             근로자 4대보험 요율 및 변경사항 총정리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -183,7 +184,7 @@ export default function SalaryPage() {
 
         {/* ── 3. 비과세 항목 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 비과세 급여 항목</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 비과세 급여 항목</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             비과세 수당은 4대보험료와 근로소득세 산정 기준에서 제외됩니다.
             <strong style={{ color: 'var(--text)' }}> 월 60만원 비과세(식대·자가운전·육아) 적용 시 연 약 170만원 실수령 ↑</strong>이 가능합니다 (연봉 4,000만 기준).
@@ -199,7 +200,7 @@ export default function SalaryPage() {
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{item.title}</span>
-                <span style={{ fontSize: '11px', color: 'var(--accent)', background: 'var(--accent-dim)', borderRadius: '99px', padding: '2px 8px', alignSelf: 'flex-start' }}>{item.limit}</span>
+                <span style={{ fontSize: '11px', color: 'var(--accent)', background: 'var(--accent-dim)', borderRadius: '999px', padding: '2px 8px', alignSelf: 'flex-start' }}>{item.limit}</span>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -208,7 +209,7 @@ export default function SalaryPage() {
 
         {/* ── 4. 소득세 누진 구간 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             소득세 (근로소득 간이세액표) — 누진 구간
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -237,7 +238,7 @@ export default function SalaryPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -251,7 +252,7 @@ export default function SalaryPage() {
 
         {/* ── 5. 월 실수령 역산 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             월 실수령 역산 — 연봉 협상 활용
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -270,21 +271,21 @@ export default function SalaryPage() {
                 {NET_TARGETS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{formatEok(r.targetNetMonthly)}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>약 {formatEok(r.grossYearly)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>약 {formatEok(r.grossYearly)}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{NET_TARGET_NOTES[i]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ⓘ 본 도구의 <strong style={{ color: 'var(--text)' }}>[역산] 탭</strong>에서 본인 부양가족·비과세 조건으로 정확한 역산이 가능합니다. 이직·연봉 협상 시 본인이 원하는 월 실수령을 기준으로 시작 금액을 결정하세요.
           </p>
         </section>
 
         {/* ── 6. 시급·체감 시급 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             시급·체감 시급
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -298,19 +299,19 @@ export default function SalaryPage() {
               { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 약 20%↓', color: '#EA580C' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}40`, borderRadius: 10, padding: '11px 14px' }}>
-                <p style={{ fontSize: 13.5, color: m.color, fontWeight: 700, marginBottom: 3 }}>{m.name}</p>
+                <p style={{ fontSize: 13, color: m.color, fontWeight: 700, marginBottom: 3 }}>{m.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>{m.desc}</p>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
             <strong style={{ color: 'var(--text)' }}>참고</strong> — 2026년 최저시급 10,320원 / OECD 평균 연 1,750시간 / 한국 평균 1,950시간. 왕복 출퇴근 2시간 이상 직장은 체감 시급이 최저시급 수준에 근접할 수 있습니다.
           </p>
         </section>
 
         {/* ── 7. 연봉별 실수령률 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             연봉별 실수령률 — 누진 구조
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -329,7 +330,7 @@ export default function SalaryPage() {
                 {RATE_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{formatEok(r.grossYearly)}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>약 {r.takeHomeRate.toFixed(0)}%</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>약 {r.takeHomeRate.toFixed(0)}%</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>약 {formatEok(r.netMonthly)}</td>
                   </tr>
                 ))}
@@ -340,7 +341,7 @@ export default function SalaryPage() {
 
         {/* ── 8. 한국 직장인 연봉 분포 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             한국 직장인 연봉 분포 (2026년 기준 추정)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '14px' }}>
@@ -355,8 +356,8 @@ export default function SalaryPage() {
               { name: '상위 5%',    value: '약 1억+' },
             ].map((p, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontSize: 12.5, color: 'var(--muted)', fontFamily: 'Noto Sans KR' }}>{p.name}</span>
-                <span style={{ fontSize: 14, color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{p.value}</span>
+                <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Noto Sans KR' }}>{p.name}</span>
+                <span style={{ fontSize: 14, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{p.value}</span>
               </div>
             ))}
           </div>
@@ -367,38 +368,21 @@ export default function SalaryPage() {
 
         {/* ── 9. FAQ (accordion) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* ── 면책 ── */}
         <section>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 20px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>ⓘ 면책 조항</p>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85 }}>
-              본 계산기는 <strong style={{ color: 'var(--text)' }}>2026년 4대보험 요율과 국세청 근로소득 간이세액표 기반 추정</strong>입니다. 법적 효력 X.
-              실제 급여는 회사별 비과세 항목·복지, 상여금·성과급, 부양가족 정확한 정보, 연말정산 결과, 두루누리 사회보험 지원 등에 따라 차이날 수 있습니다.
-              정확한 급여명세서·연말정산은 회사 인사팀 또는 세무사 상담을 권장합니다.
-            </p>
-          </div>
+          <Disclaimer variant="finance" open>
+            본 계산기는 <strong>2026년 4대보험 요율과 국세청 근로소득 간이세액표 기반 추정</strong>입니다. 법적 효력 X.
+            실제 급여는 회사별 비과세 항목·복지, 상여금·성과급, 부양가족 정확한 정보, 연말정산 결과, 두루누리 사회보험 지원 등에 따라 차이날 수 있습니다.
+            정확한 급여명세서·연말정산은 회사 인사팀 또는 세무사 상담을 권장합니다.
+          </Disclaimer>
         </section>
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',    desc: '월 실수령으로 감당 가능한 대출' },

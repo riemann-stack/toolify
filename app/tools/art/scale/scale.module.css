@@ -105,7 +105,7 @@
 }
 .scaleEmoji { font-size: 18px; }
 .scaleLabel { font-size: 13px; font-weight: 700; color: var(--text); }
-.scaleDesc { font-size: 10.5px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.scaleDesc { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
 
 /* pill */
 .pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -114,7 +114,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -156,7 +156,7 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 10px 24px;
   font-size: 14px;
   font-weight: 700;
@@ -173,7 +173,7 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 5px 12px;
   font-size: 11px;
   font-weight: 700;

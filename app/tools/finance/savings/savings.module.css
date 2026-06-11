@@ -131,7 +131,7 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 99px;
+  border-radius: 999px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -216,7 +216,7 @@
 }
 .detailTable td:first-child {
   width: 60%;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 .detailTable td:nth-child(2) {
   width: 40%;
@@ -228,10 +228,10 @@
 }
 .detailTable tr:last-child td { border-bottom: none; }
 @media (max-width: 540px) {
-  .detailTable { font-size: 12.5px; }
+  .detailTable { font-size: 13px; }
   .detailTable td { padding: 8px 8px; }
   .detailTable td:first-child { font-size: 12px; }
-  .detailTable td:nth-child(2) { font-size: 12.5px; }
+  .detailTable td:nth-child(2) { font-size: 13px; }
 }
 .cellAccent { color: var(--accent); }
 .cellMono { font-family: 'Inter', system-ui, sans-serif; }
@@ -290,7 +290,7 @@
   border-radius: 8px;
   padding: 10px 14px;
   margin-top: 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
 }
@@ -412,7 +412,7 @@
 .taxHead strong { font-weight: 700; }
 .taxQualify {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
 }
@@ -462,7 +462,7 @@
 }
 .taxRecommend {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--accent);
   font-weight: 600;
 }

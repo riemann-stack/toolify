@@ -405,7 +405,7 @@ export default function RamenClient() {
                       <td style={{ color: '#EA580C' }}>+{t.kcal}</td>
                       <td>{t.protein ?? 0}g</td>
                       <td style={{ color: '#EA580C' }}>+{t.sodium ?? 0}mg</td>
-                      <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 11.5 }}>{t.timeAt}</td>
+                      <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 12 }}>{t.timeAt}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -435,7 +435,7 @@ export default function RamenClient() {
                         <td>
                           {t.timeDelta === 0 ? '기준' : t.timeDelta > 0 ? `+${t.timeDelta}초` : `${t.timeDelta}초`}
                         </td>
-                        <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 11.5 }}>{t.desc}</td>
+                        <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 12 }}>{t.desc}</td>
                       </tr>
                     )
                   })}

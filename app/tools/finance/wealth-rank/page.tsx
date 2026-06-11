@@ -3,7 +3,9 @@ import WealthRankClient from './WealthRankClient'
 import AdSlot from '@/components/AdSlot'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/wealth-rank',
@@ -14,7 +16,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -45,7 +47,7 @@ const td: React.CSSProperties = {
   fontSize: '13px',
 }
 const tdNum: React.CSSProperties = {
-  ...td, textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif',
+  ...td, textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontWeight: 700, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums',
 }
 
@@ -108,7 +110,7 @@ export default function WealthRankPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📊 자산 순위 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -126,6 +128,8 @@ export default function WealthRankPage() {
       />
 
       <WealthRankClient />
+
+      <GuideDivider />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -155,7 +159,7 @@ export default function WealthRankPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             가구 기준. 상위 0.1~10%·1%·5%·평균·중앙값(2억 3,860만)은 통계청(현 국가데이터처) 등 「2025년 가계금융복지조사」와 상위 구간 보도치(2024년 컷)를 따른 값이며, 상위 20%는 분포 보간 추정입니다.
           </p>
         </div>
@@ -204,7 +208,7 @@ export default function WealthRankPage() {
               </table>
             </div>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             50대와 서울·세종·경기·제주는 2025 실측 평균입니다. 그 외 연령대·시도는 평균 수준 추정치로, 계산기에서 17개 시·도를 모두 선택할 수 있습니다.
           </p>
         </div>
@@ -234,10 +238,10 @@ export default function WealthRankPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             국가데이터처(통계청)·한국은행·금융감독원 「2025년 가계금융복지조사」 표 2-7·표 3-8 (2025년 3월 말 기준, 2025년 12월 발표). 평균 순자산은 분위별 평균 자산에서 평균 부채를 뺀 값(반올림 차이 있음)이며, 실물자산 비중의 나머지가 전·월세보증금을 포함한 금융자산 비중입니다.
           </p>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '8px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '8px 2px 0', lineHeight: 1.7 }}>
             분위가 올라갈수록 자산에서 실물자산(대부분 부동산)이 차지하는 비중이 커집니다 — 1분위 37.7% → 5분위 80.2%, 5분위의 평균 부동산만 13억 3,828만원. 반대로 1분위는 자산의 36.6%가 전·월세보증금입니다. 같은 조사에서 상위 10%(10분위)의 순자산 점유율은 46.1%(전년 대비 +1.6%p), 순자산 지니계수는 0.625(+0.014)로 집계됐습니다.
           </p>
         </div>
@@ -257,7 +261,7 @@ export default function WealthRankPage() {
                 {WORLD_ROWS.map((r, i) => (
                   <tr key={i}>
                     <td style={td}>
-                      <strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>{r.k}</strong>
+                      <strong style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.k}</strong>
                       <span style={{ display: 'block', fontSize: '11px', color: 'var(--muted)', marginTop: 2 }}>{r.desc}</span>
                     </td>
                     <td style={tdNum}>{r.v}</td>
@@ -266,7 +270,7 @@ export default function WealthRankPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11.5px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             UBS Global Wealth Report 2025(2024년 말 기준). 세계 상위 10% 진입선은 약 $307,000(약 4.2억), 상위 1%는 약 $1.45M(약 20억) 수준입니다.
           </p>
         </div>
@@ -311,20 +315,9 @@ export default function WealthRankPage() {
         </div>
 
         {/* 면책 */}
-        <div style={{
-          background: 'rgba(14,165,233,0.05)',
-          border: '1px solid rgba(14,165,233,0.2)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          fontSize: '13px',
-          color: 'var(--text)',
-          lineHeight: 1.8,
-        }}>
-          <strong style={{ color: 'var(--accent)' }}>참고용 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
-            본 계산기는 공개 통계를 바탕으로 한 <strong style={{ color: 'var(--text)' }}>추정 순위</strong>로, 투자 권유나 재무 자문이 아닙니다. 실제 분포는 조사 방법·시점·표본에 따라 달라지며, 특히 시·도·연령대·세계 비교는 보정·환산이 들어간 참고치입니다. 중요한 의사결정은 원자료와 전문가 상담을 통해 확인하세요.
-          </p>
-        </div>
+        <Disclaimer variant="finance" open>
+          본 계산기는 공개 통계를 바탕으로 한 <strong>추정 순위</strong>로, 투자 권유나 재무 자문이 아닙니다. 실제 분포는 조사 방법·시점·표본에 따라 달라지며, 특히 시·도·연령대·세계 비교는 보정·환산이 들어간 참고치입니다. 중요한 의사결정은 원자료와 전문가 상담을 통해 확인하세요.
+        </Disclaimer>
 
         {/* 관련 도구 */}
         <div>

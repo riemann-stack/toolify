@@ -687,19 +687,19 @@ export default function FourInsuranceClient() {
               <span>4대보험 의무 가입 여부</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>
                 ① 1개월 이상 + 월 60시간 이상 → 국민·건강·고용 의무
                 <span className={`${s.statusBadge} ${partTimeCalc.isOver60h ? s.statusYes : s.statusNo}`} style={{ marginLeft: 10 }}>
                   {partTimeCalc.isOver60h ? '✅ 의무' : '❌ 면제'}
                 </span>
               </div>
-              <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>
                 ② 주 15시간 이상 → 주휴수당 발생
                 <span className={`${s.statusBadge} ${partTimeCalc.isOver15h ? s.statusYes : s.statusNo}`} style={{ marginLeft: 10 }}>
                   {partTimeCalc.isOver15h ? '✅ 발생' : '❌ 없음'}
                 </span>
               </div>
-              <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>
                 ③ 산재보험 → 모든 근로자 (시간 무관)
                 <span className={`${s.statusBadge} ${s.statusOnly}`} style={{ marginLeft: 10 }}>✅ 항상 적용</span>
               </div>
@@ -874,7 +874,7 @@ export default function FourInsuranceClient() {
           )}
 
           {parseComma(flAmount) > 0 && (
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.6, margin: '2px 2px 0' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: '2px 2px 0' }}>
               * 근로자 시나리오는 <strong style={{ color: 'var(--text)' }}>4대보험만 차감</strong>한 금액으로, 소득세·지방세(간이세액·연말정산)가 추가로 빠집니다. 두 방식 모두 연 1회 정산(프리랜서 5월 종소세 / 근로자 연말정산)이 있어 <strong style={{ color: 'var(--text)' }}>실제 세후 격차는 위 값보다 큽니다</strong>. 정확한 근로자 세후는 <Link href="/tools/finance/salary">연봉 실수령액 계산기</Link>에서 확인하세요.
             </p>
           )}

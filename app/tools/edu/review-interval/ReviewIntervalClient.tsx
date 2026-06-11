@@ -140,13 +140,13 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { 
       {[0, 25, 50, 75, 100].map(p => (
         <g key={p}>
           <line x1={padL} y1={yScale(p)} x2={W - padR} y2={yScale(p)} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{p}%</text>
+          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{p}%</text>
         </g>
       ))}
       {[0, 7, 14, 21, 30].filter(d => d <= totalDays).map(d => (
         <g key={d}>
           <line x1={xScale(d)} y1={padT} x2={xScale(d)} y2={H - padB} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{d}일</text>
+          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{d}일</text>
         </g>
       ))}
 
@@ -173,7 +173,7 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { 
           {/* 100% 점프 표시 */}
           <line x1={m.x} y1={m.yBefore} x2={m.x} y2={m.yAfter} stroke="#0D9488" strokeWidth="1.5" strokeDasharray="3 3" />
           <circle cx={m.x} cy={m.yAfter} r="5" fill="#0D9488" stroke="#0a0a2e" strokeWidth="2" />
-          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>R{m.idx}</text>
+          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>R{m.idx}</text>
         </g>
       ))}
 
@@ -797,7 +797,7 @@ export default function ReviewIntervalClient() {
           {dueItems.length > 0 && (
             <div className={s.todayBanner}>
               <p className={s.todayBannerTitle}>⏰ 복습할 항목 ({dueItems.length}개)</p>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
                 {missedItems.length > 0 && <>놓친 항목 <strong style={{ color: '#DC2626' }}>{missedItems.length}개</strong> · </>}
                 {todayItems.length > 0 && <>오늘 복습 <strong style={{ color: '#0D9488' }}>{todayItems.length}개</strong></>}
               </p>
@@ -809,7 +809,7 @@ export default function ReviewIntervalClient() {
             <button
               style={{
                 background: 'rgba(13,148,136,0.06)', border: '1px dashed #0D9488', borderRadius: 12,
-                padding: '14px 18px', fontSize: 13.5, color: '#0D9488', fontFamily: 'Noto Sans KR, sans-serif',
+                padding: '14px 18px', fontSize: 13, color: '#0D9488', fontFamily: 'Noto Sans KR, sans-serif',
                 fontWeight: 700, cursor: 'pointer', width: '100%',
               }}
               onClick={() => setShowAdd(true)}
@@ -939,7 +939,7 @@ export default function ReviewIntervalClient() {
               </label>
               <button className={`${s.itemActionBtn} ${s.itemActionDanger}`} onClick={clearAll} disabled={items.length === 0} type="button">⚠️ 전체 삭제</button>
             </div>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ※ 데이터는 이 브라우저의 localStorage에 저장됩니다. 다른 기기에서 사용하려면 백업 다운로드를 활용하세요.
             </p>
           </div>

@@ -125,7 +125,7 @@
 .fieldRow { display: flex; flex-direction: column; gap: 8px; }
 .field { display: flex; flex-direction: column; gap: 4px; }
 .fieldLabel {
-  font-size: 10.5px; color: var(--muted);
+  font-size: 11px; color: var(--muted);
   letter-spacing: 0.04em; text-transform: uppercase;
   display: flex; justify-content: space-between; align-items: baseline;
 }
@@ -164,7 +164,7 @@
   display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
 }
 .chip {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 999px;
   padding: 6px 12px; font-size: 12px; color: var(--muted);
   cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
   min-height: 32px; transition: all 0.15s;
@@ -237,7 +237,7 @@
   color: var(--text);
   text-align: center;
 }
-.consumptionCustomInput::placeholder { color: var(--muted); font-weight: 400; font-size: 11.5px; font-family: 'Noto Sans KR', sans-serif; }
+.consumptionCustomInput::placeholder { color: var(--muted); font-weight: 400; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; }
 .consumptionCustomUnit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .consumptionCustomWrap.consumptionPillActive {
   background: rgba(234,88,12,0.18);
@@ -259,7 +259,7 @@
 .autoBaseToggle input { accent-color: var(--accent); cursor: pointer; }
 .basePills { display: flex; flex-wrap: wrap; gap: 6px; }
 .basePill {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 99px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 999px;
   padding: 8px 14px; font-size: 13px; color: var(--text);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   min-height: 36px; transition: all 0.15s;
@@ -317,7 +317,7 @@
 .productLabel { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .productTag {
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
-  color: #ffffff; padding: 2px 8px; border-radius: 99px;
+  color: #ffffff; padding: 2px 8px; border-radius: 999px;
 }
 .tagA { background: #0891B2; }
 .tagB { background: #0EA5E9; }
@@ -327,7 +327,7 @@
 .badgeRow { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .badge {
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 700;
-  padding: 2px 8px; border-radius: 99px;
+  padding: 2px 8px; border-radius: 999px;
 }
 .badgeCount { background: var(--bg3); color: var(--accent); border: 1px solid rgba(14,165,233,0.3); }
 .badgeConsumption { background: rgba(234,88,12,0.18); color: #EA580C; border: 1px solid rgba(234,88,12,0.3); }

@@ -7,7 +7,7 @@
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 13px 16px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
@@ -77,7 +77,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
@@ -157,7 +157,7 @@
   border: 1px dashed var(--border);
   border-radius: 10px;
   padding: 9px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -188,7 +188,7 @@
 }
 .tplEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
 .tplName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-.tplDesc { font-size: 10.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+.tplDesc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
 /* ── CTA 버튼 ── */
 .bigGenerate {
@@ -230,7 +230,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 5px 10px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -298,7 +298,7 @@
 }
 .nameTagOn { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 .nameEmoji { font-size: 22px; line-height: 1; }
-.nameLabel { font-size: 11.5px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nameLabel { font-size: 12px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 결과 행 (하단) */
 .resultRow {
@@ -444,7 +444,7 @@
 }
 .anonCardRevealed { background: var(--accent-dim); border-color: var(--accent); }
 .anonEmoji { font-size: 32px; line-height: 1; margin-bottom: 4px; }
-.anonLabel { font-size: 11.5px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.anonLabel { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
 .anonResult {
   font-size: 13px;
   color: var(--accent);
@@ -477,7 +477,7 @@
 .reverseRevealed { background: rgba(161,98,7,0.18); border-color: #A16207; }
 .reverseRevealed .reverseResult { color: #A16207; }
 .reverseAnswer {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--accent);
   margin-top: 4px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -503,7 +503,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 9px 14px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 .savedName { color: var(--text); font-weight: 600; }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ExposureClient from './ExposureClient'
 import { buildMetadata } from '@/lib/seo'
+import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
@@ -11,7 +12,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
+  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -68,7 +69,7 @@ export default function ExposurePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 사진
       </p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         📸 사진 노출 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -76,6 +77,8 @@ export default function ExposurePage() {
       </p>
 
       <ExposureClient />
+
+      <GuideDivider />
 
       {/* 1. 어떻게 사용하나요? */}
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
@@ -97,19 +100,19 @@ export default function ExposurePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: 14 }}>
         <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
           <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>🆓 0개 잠금 — 자유 모드</p>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             각 슬라이더가 EV를 직접 변경. 노출 3요소를 처음 배울 때, 또는 효과(심도·흔들림·노이즈)를 한 변수씩 비교해볼 때.
           </p>
         </div>
         <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #D97706', borderRadius: 10, padding: '14px 16px' }}>
           <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 6px' }}>🔁 1개 잠금 — 등가 노출 모드</p>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             잠근 축 고정 + 나머지 두 축이 서로 보정. 「심도 유지하면서 셔터·ISO만 바꿔보고 싶을 때」 가장 유용. Av/Tv 모드 시뮬에 가까움.
           </p>
         </div>
         <div style={{ background: 'var(--bg2)', borderLeft: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
           <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>🎯 2개 잠금 — 1축 자유</p>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.75 }}>
             두 축 고정 + 남은 한 축만 움직임 → EV가 변함. 「조리개 f/8 + ISO 100 고정인 풍경 촬영에서 셔터만 조정」처럼 실전 제약 시뮬.
           </p>
         </div>
@@ -174,7 +177,7 @@ export default function ExposurePage() {
                 ['−6~−4', '별빛', '도심 외 별 사진'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '6px 0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                  <td style={{ padding: '6px 0', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--text)' }}>{row[1]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>{row[2]}</td>
                 </tr>
@@ -231,7 +234,7 @@ export default function ExposurePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 0', color: 'var(--text)' }}>{row[0]}</td>
-                  <td style={{ padding: '6px 0', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 0', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[1]}</td>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>{row[2]}</td>
                 </tr>
               ))}

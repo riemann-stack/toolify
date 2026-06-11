@@ -42,9 +42,9 @@ const FAQ_LD = [
 
 export default function ColorPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🎨 색상 코드 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function ColorPage() {
 
         {/* 1. 색상 형식 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색상 코드 형식 종합 가이드</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색상 코드 형식 종합 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             본 도구는 12가지 색상 형식을 동시에 표시·변환합니다. 각 형식은 사용처가 명확히 다르므로, 적재적소에 맞는 표기를 선택하면 협업과 유지보수가 쉬워집니다.
           </p>
@@ -97,7 +97,7 @@ export default function ColorPage() {
 
         {/* 2. WCAG */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>WCAG 색상 대비비 (접근성)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>WCAG 색상 대비비 (접근성)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             W3C가 정한 웹 접근성 표준 — 텍스트와 배경 색상의 명도 대비를 1:1 ~ 21:1 사이의 수치로 평가합니다.
             한국 정보접근성 인증, 미국 ADA, 유럽 EAA 모두 동일 기준을 따릅니다.
@@ -137,7 +137,7 @@ export default function ColorPage() {
 
         {/* 3. 색맹 시뮬레이션 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색맹 시뮬레이션</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색맹 시뮬레이션</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             전 세계 인구의 약 8% 남성, 0.5% 여성이 색각 이상을 갖고 있습니다. 한국 성인 남성 약 30만 명이 영향을 받습니다.
             본 도구는 표준 행렬 변환 기반으로 4가지 유형을 동시에 시뮬레이션합니다.
@@ -150,14 +150,14 @@ export default function ColorPage() {
               { type: '전색맹 (Achromatopsia)', pct: '극히 드뭄',             hint: '흑백만' },
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13.5px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>{t.type}</p>
-                <p style={{ fontSize: '11.5px', color: 'var(--muted)', marginBottom: '4px' }}>{t.pct}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>{t.type}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{t.pct}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{t.hint}</p>
               </div>
             ))}
           </div>
           <div style={{ marginTop: '14px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: '10px', padding: '12px 16px' }}>
-            <p style={{ fontSize: '12.5px', color: 'var(--text)', lineHeight: 1.8 }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
               <strong style={{ color: '#DC2626' }}>디자인 가이드:</strong> 색상만으로 정보 전달 X (텍스트·아이콘 병행) · 빨강·녹색 조합 주의 · 명도 차이도 함께 활용 · 흑백 변환에서도 구분 가능한지 검증.
             </p>
           </div>
@@ -165,7 +165,7 @@ export default function ColorPage() {
 
         {/* 4. 팔레트 이론 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>팔레트 이론 (색상환 기반 8가지 조합)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>팔레트 이론 (색상환 기반 8가지 조합)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { icon: '⚖️', name: '보색 (Complementary)',   desc: '180° — 강한 대비, 주의 끌기, 브랜드 강조' },
@@ -180,7 +180,7 @@ export default function ColorPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '18px' }}>{p.icon}</span>
-                  <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)' }}>{p.name}</span>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{p.name}</span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.65 }}>{p.desc}</p>
               </div>
@@ -190,7 +190,7 @@ export default function ColorPage() {
 
         {/* 5. 디자인 토큰·CSS 변수 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>디자인 토큰·CSS 변수</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>디자인 토큰·CSS 변수</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             현대 웹 개발의 표준 — Tailwind, shadcn/ui, MUI, Chakra 모두 동일한 패턴을 따릅니다. 본 도구는 한 색상에서 11단계 스케일과 다양한 형식의 CSS 변수를 자동 생성합니다.
           </p>
@@ -211,7 +211,7 @@ export default function ColorPage() {
 
         {/* 6. Tailwind */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Tailwind CSS 색상 시스템</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Tailwind CSS 색상 시스템</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             Tailwind는 22개 기본 색상 × 11단계 = <strong style={{ color: 'var(--text)' }}>총 242개 색상</strong>을 제공합니다 — slate, gray, zinc, neutral, stone (회색 5종), red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose (유채색 17종).
           </p>
@@ -222,7 +222,7 @@ export default function ColorPage() {
 
         {/* 7. 그라디언트 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>그라디언트 디자인</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>그라디언트 디자인</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             CSS는 3가지 그라디언트 함수를 제공합니다 — <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>linear-gradient</code> (직선 방향), <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>radial-gradient</code> (원형), <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>conic-gradient</code> (회전).
           </p>
@@ -246,7 +246,7 @@ export default function ColorPage() {
 
         {/* 8. 활용 팁 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               '브랜드 컬러를 입력 → Tailwind 11단계 즉시 생성 → 그대로 디자인 시스템에 채택',
@@ -257,7 +257,7 @@ export default function ColorPage() {
             ].map((tip, i) => (
               <div key={i} style={{ display: 'grid', gridTemplateColumns: '24px 1fr', gap: '10px', alignItems: 'baseline', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
                 <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700 }}>{i + 1}.</span>
-                <span style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.7 }}>{tip}</span>
+                <span style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>{tip}</span>
               </div>
             ))}
           </div>
@@ -265,7 +265,7 @@ export default function ColorPage() {
 
         {/* FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -286,7 +286,7 @@ export default function ColorPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트 생성기', desc: '문단·버튼·카드·JSON 더미 데이터' },
@@ -299,7 +299,7 @@ export default function ColorPage() {
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
-                  <p style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
                   <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{tool.desc}</p>
                 </div>
               </Link>
@@ -309,7 +309,7 @@ export default function ColorPage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>참고 자료</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>WCAG 2.1</strong> — w3.org/WAI/WCAG21</li>
             <li><strong style={{ color: 'var(--text)' }}>Tailwind Colors</strong> — tailwindcss.com/docs/customizing-colors</li>

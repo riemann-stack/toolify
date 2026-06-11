@@ -362,7 +362,7 @@ export default function TeaClient() {
                 <rect x={0} y={20} width={420} height={22} rx={5} fill="var(--bg3)" />
                 <rect x={0} y={20} width={(risk / 100) * 420} height={22} rx={5} fill="url(#tanninGrad)" />
                 <line x1={(30 / 100) * 420} y1={15} x2={(30 / 100) * 420} y2={47} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3,2" />
-                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">권장</text>
+                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장</text>
               </svg>
 
               <div className={s.hero} style={{ marginTop: 12 }}>
