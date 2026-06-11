@@ -347,6 +347,14 @@ export default function JsonClient() {
     return `${(b / 1024 / 1024).toFixed(2)} MB`
   }
 
+  // 빈 상태 안내 (트리 탭과 동일 패턴 — 정렬·압축 / 변환 탭 공용)
+  const emptyState = (
+    <div className={s.outputBox} style={{ color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+      <span>JSON을 입력하거나 샘플을 넣어보세요</span>
+      <button className={s.clearBtn} onClick={handleSample}>샘플 넣기</button>
+    </div>
+  )
+
   return (
     <div className={s.wrap}>
       {/* 탭 */}
@@ -433,6 +441,8 @@ export default function JsonClient() {
             </button>
           </div>
 
+          {!parsed.ok && emptyState}
+
           {/* 사이즈 비교 */}
           {sizes && (
             <div className={s.card}>
@@ -487,6 +497,8 @@ export default function JsonClient() {
               </button>
             ))}
           </div>
+
+          {!parsed.ok && emptyState}
 
           {parsed.ok && transformOutput && (
             <div className={s.card}>

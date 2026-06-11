@@ -541,9 +541,9 @@ export default function BmiClient() {
             </div>
           )}
 
-          <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2, marginBottom: 2, lineHeight: 1.7 }}>
-            <strong style={{ color: 'var(--text)' }}>측정법</strong> — 허리: 배꼽 위 약 2cm(장골 능선)를 호흡 후 평행하게. 목: 후두 결절 아래. 엉덩이: 가장 두꺼운 부분. 두꺼운 옷 위 측정 X.
-          </p>
+          <div className={styles.infoBox}>
+            <strong>측정법</strong> — 허리: 배꼽 위 약 2cm(장골 능선)를 호흡 후 평행하게. 목: 후두 결절 아래. 엉덩이: 가장 두꺼운 부분. 두꺼운 옷 위 측정 X.
+          </div>
 
           {/* 허리둘레 판정 */}
           {abdom && (

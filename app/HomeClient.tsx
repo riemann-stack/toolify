@@ -20,6 +20,13 @@ const popularTools = [
 
 const RANDOM_PICK_COUNT = 5
 
+// Mac 판별 — userAgentData 우선, navigator.platform 폴백 (mounted 후 호출)
+function isMacPlatform(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
+  return /mac/i.test(nav.userAgentData?.platform ?? nav.platform ?? '')
+}
+
 type DiscoverTab = 'recent' | 'favorite' | 'random'
 
 interface HomeClientProps {
@@ -34,6 +41,8 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
   const [favoriteHrefs, setFavoriteHrefs] = useState<string[]>([])
   const [tab, setTab] = useState<DiscoverTab>('random')
   const [mounted, setMounted] = useState(false)
+  // SSR/첫 페인트는 기존 표기(⌘K) 유지 → mounted 후 실제 플랫폼으로 분기 (hydration 안전)
+  const [isMac, setIsMac] = useState(true)
 
   function pickRandom() {
     const shuffled = [...allTools].sort(() => Math.random() - 0.5)
@@ -49,6 +58,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
     setFavoriteHrefs(nav.favorites)
     // 재방문자(최근 사용 있음) → 최근 사용 탭, 처음 온 사람 → 랜덤 추천
     setTab(nav.recents.length > 0 ? 'recent' : 'random')
+    setIsMac(isMacPlatform())
     setMounted(true)
   }, [])
 
@@ -126,7 +136,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
               <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
-              <kbd className={styles.searchKbd} aria-hidden="true">⌘K</kbd>
+              <kbd className={styles.searchKbd} aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
 
               {/* 검색 결과 드롭다운 */}
               {query.trim() && (
@@ -265,7 +275,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
 
         {/* CATEGORIES */}
         <div className={styles.sectionHeader} style={{ marginTop: 56 }}>
-          <span className={styles.sectionTitle}>카테고리</span>
+          <h2 className={styles.sectionTitle}>카테고리</h2>
           <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
         <div className={styles.catGrid}>
@@ -287,7 +297,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
 
         {/* POPULAR TOOLS */}
         <div className={styles.sectionHeader}>
-          <span className={styles.sectionTitle}>인기 도구</span>
+          <h2 className={styles.sectionTitle}>인기 도구</h2>
           <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
         <div className={styles.toolsGrid}>

@@ -221,7 +221,7 @@ export default function SavingsPage() {
         <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
           {[
-            { href: '/tools/finance/salary',      icon: '💴', name: '연봉 실수령액 계산기',  desc: '4대보험·세금 + 월 실수령' },
+            { href: '/tools/finance/salary',      icon: '💰', name: '연봉 실수령액 계산기',  desc: '4대보험·세금 + 월 실수령' },
             { href: '/tools/finance/compound',    icon: '📈', name: '복리 계산기',           desc: '거치·적립·목표역산·시나리오' },
             { href: '/tools/finance/dividend',    icon: '💰', name: '월배당 목표 자산',      desc: '은퇴 자산 + 배당 ETF 시뮬' },
             { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 계산기',     desc: '관계별 공제·10년 합산' },

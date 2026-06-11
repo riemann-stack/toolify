@@ -501,7 +501,7 @@ export default function DividendPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '배당 재투자 시뮬레이션 — ISA·연금 절세 비교' },
-              { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '월 투자 여력 파악' },
+              { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '월 투자 여력 파악' },
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',       desc: '대출 vs 투자 비교' },
               { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '배당주 추가 매수 시 평단 관리' },
               { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',        desc: '사업소득 + 배당소득 종합' },

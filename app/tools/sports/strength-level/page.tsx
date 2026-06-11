@@ -189,7 +189,7 @@ export default function StrengthLevelPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong style={{ color: '#94A3B8' }}>~200</strong></td><td style={cell}>입문~초급 — 기본기 다지는 단계</td></tr>
+            <tr><td style={cell}><strong style={{ color: 'var(--muted)' }}>~200</strong></td><td style={cell}>입문~초급 — 기본기 다지는 단계</td></tr>
             <tr><td style={cell}><strong style={{ color: '#0EA5E9' }}>200~300</strong></td><td style={cell}>중급 — 꾸준히 훈련한 일반 헬스인</td></tr>
             <tr><td style={cell}><strong style={{ color: '#EA580C' }}>300~400</strong></td><td style={cell}>상급 — 상위권 동호인</td></tr>
             <tr><td style={cell}><strong style={{ color: '#DC2626' }}>400~500</strong></td><td style={cell}>매우 우수 — 지역 대회 입상권</td></tr>

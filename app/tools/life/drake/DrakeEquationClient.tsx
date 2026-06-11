@@ -3,6 +3,11 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import styles from './drake.module.css'
 
+/* prefers-reduced-motion 사용자는 트윈 생략 — 값 즉시 적용 */
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 /* ──────────────────────── 타입 & 프리셋 ──────────────────────── */
 type DrakeParams = {
   rStar: number
@@ -208,8 +213,14 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
   const animRef = useRef<number | null>(null)
   const applyPreset = (id: Exclude<PresetId, null>) => {
     if (animRef.current != null) cancelAnimationFrame(animRef.current)
-    const from = { ...params }
     const to = PRESETS[id]
+    // prefers-reduced-motion — 트윈 생략, 즉시 적용
+    if (prefersReducedMotion()) {
+      setParams({ ...to })
+      setActivePreset(id)
+      return
+    }
+    const from = { ...params }
     const start = performance.now()
     const DURATION = 450
     const tick = (now: number) => {
@@ -543,6 +554,14 @@ function CountUp({ value }: { value: number }) {
   const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
+    // prefers-reduced-motion — 카운트업 트윈 생략, 즉시 표시
+    if (prefersReducedMotion()) {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current)
+      fromRef.current = value
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplay(value)
+      return
+    }
     const from = fromRef.current
     const to = value
     const start = performance.now()

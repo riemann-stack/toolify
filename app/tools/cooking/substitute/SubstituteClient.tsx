@@ -4,6 +4,11 @@ import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './substitute.module.css'
 
+// prefers-reduced-motion 사용자는 스크롤 애니메이션 대신 즉시 이동
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 // ──────────────────────────────────────
 // 타입
 // ──────────────────────────────────────
@@ -547,7 +552,7 @@ export default function SubstituteClient() {
   function handleBrowseDetail(key: string) {
     handleSelect(key)
     setTab('search')
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }
 
   return (

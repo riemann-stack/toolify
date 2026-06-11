@@ -73,7 +73,7 @@ const DOMAINS: DomainBlock[] = [
   },
   {
     id: 'tax',
-    emoji: '💴',
+    emoji: '💰',
     title: '세무·재무',
     color: '#0891B2',
     tools: '연봉 실수령액 · 4대보험료 · 상속세 · 양도소득세 · 부동산 취득세 · 퇴직금 · 부가가치세 · 종합소득세 (해당 시) · 자동차 비용',

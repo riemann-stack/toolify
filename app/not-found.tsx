@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
 
 // 인기 카테고리 진입점 — 사용자가 길을 잃었을 때 빠르게 복귀할 수 있도록
 const QUICK_LINKS: Array<{ href: string; label: string; icon: string }> = [
-  { href: '/tools/finance/salary', label: '연봉 실수령액', icon: '💴' },
+  { href: '/tools/finance/salary', label: '연봉 실수령액', icon: '💰' },
   { href: '/tools/health/bmi',     label: 'BMI 계산기',   icon: '⚖️' },
   { href: '/tools/life/lotto',     label: '로또 번호',     icon: '🎰' },
   { href: '/tools/date/age',       label: '만 나이',      icon: '🎂' },

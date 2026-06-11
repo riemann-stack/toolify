@@ -85,11 +85,11 @@
 .segPos { font-size: 9px; color: var(--muted); text-align: center; font-family: 'Inter', system-ui, sans-serif; }
 
 /* 섹션 색상 (점·문자칸 테두리) */
-.cWmi    { background: rgba(14,165,233,0.14);  border-color: rgba(14,165,233,0.5);  color: #38BDF8; }
+.cWmi    { background: rgba(14,165,233,0.14);  border-color: rgba(14,165,233,0.5);  color: #0284C7; }
 .cVds    { background: rgba(148,163,184,0.12); border-color: rgba(148,163,184,0.4); color: var(--text); }
-.cCheck  { background: rgba(161,98,7,0.16);   border-color: rgba(161,98,7,0.5);   color: #FBBF24; }
-.cYear   { background: rgba(5,150,105,0.16);   border-color: rgba(5,150,105,0.5);   color: #34D399; }
-.cPlant  { background: rgba(139,92,246,0.16);  border-color: rgba(139,92,246,0.5);  color: #A78BFA; }
+.cCheck  { background: rgba(161,98,7,0.16);   border-color: rgba(161,98,7,0.5);   color: #A16207; }
+.cYear   { background: rgba(5,150,105,0.16);   border-color: rgba(5,150,105,0.5);   color: #047857; }
+.cPlant  { background: rgba(139,92,246,0.16);  border-color: rgba(139,92,246,0.5);  color: #6D28D9; }
 .cSerial { background: rgba(148,163,184,0.08); border-color: var(--border);         color: var(--muted); }
 .dWmi    { background: #0EA5E9; }
 .dVds    { background: #94A3B8; }

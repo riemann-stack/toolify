@@ -256,7 +256,7 @@ export default function RentJeonsePage() {
               { href: '/tools/finance/savings',       icon: '💰', name: '저축액 계산기',           desc: '월세 절약분으로 자산 만들기' },
               { href: '/tools/finance/compound',      icon: '📈', name: '복리 계산기',             desc: '보증금 운용 시 장기 수익' },
               { href: '/tools/finance/freelance-tax', icon: '🧾', name: '프리랜서 종합소득세',     desc: '사업소득자 월세 세액공제' },
-              { href: '/tools/finance/salary',        icon: '💴', name: '연봉 실수령액 계산기',    desc: '월급·세후로 임대료 부담 판단' },
+              { href: '/tools/finance/salary',        icon: '💰', name: '연봉 실수령액 계산기',    desc: '월급·세후로 임대료 부담 판단' },
             ].map((tool, i) => (
               <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>

@@ -303,7 +303,7 @@ export default function SeverancePage() {
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         <Link href="/tools/finance/salary" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>💴</p>
+          <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>연봉 실수령액 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             4대보험·세금·시급

@@ -309,7 +309,7 @@ export default function FourInsurancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기',  desc: '2026년 기준 세후 월 실수령액' },
+              { href: '/tools/finance/salary',     icon: '💰', name: '연봉 실수령액 계산기',  desc: '2026년 기준 세후 월 실수령액' },
               { href: '/tools/finance/installment',icon: '💳', name: '카드 할부 계산기',      desc: '월 납부액·일시불 vs 무이자 비교' },
               { href: '/tools/finance/vat',        icon: '🧾', name: '부가세 계산기',         desc: '공급가액·부가세 역산 계산' },
               { href: '/tools/finance/cost-rate',  icon: '🍽️', name: '음식점 원가율 계산기',    desc: '재료비·배달 수수료·실질 원가율' },

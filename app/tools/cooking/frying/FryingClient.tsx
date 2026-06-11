@@ -4,6 +4,11 @@ import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import styles from './frying.module.css'
 
+// prefers-reduced-motion 사용자는 스크롤 애니메이션 대신 즉시 이동
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 // ── Types & data ──────────────────────────────────────
 type ColorTarget = 'light-yellow' | 'golden' | 'near-dark'
 type SecondFry = 'recommended' | 'optional' | 'unnecessary'
@@ -208,7 +213,7 @@ export default function FryingClient() {
     setTimerSecond(secondFry)
     // scroll to timer
     setTimeout(() => {
-      document.getElementById('frying-timer')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      document.getElementById('frying-timer')?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' })
     }, 100)
   }
 

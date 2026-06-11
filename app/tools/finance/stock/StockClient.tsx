@@ -485,7 +485,7 @@ export default function StockClient() {
               <button type="button" aria-pressed={inputMode === 'shares'} className={`${styles.optionBtn} ${inputMode === 'shares' ? styles.optionActive : ''}`}
                 onClick={() => setInputMode('shares')}>📊 수량 기준</button>
               <button type="button" aria-pressed={inputMode === 'amount'} className={`${styles.optionBtn} ${inputMode === 'amount' ? styles.optionActive : ''}`}
-                onClick={() => setInputMode('amount')}>💴 금액 기준</button>
+                onClick={() => setInputMode('amount')}>💰 금액 기준</button>
             </div>
 
             {inputMode === 'slider' && validBase && (

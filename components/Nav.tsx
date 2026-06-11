@@ -45,8 +45,15 @@ function useBodyScrollLock(isLocked: boolean) {
   }, [isLocked])
 }
 
+// Mac 판별 — userAgentData 우선, navigator.platform 폴백 (mounted 후 호출, HomeClient와 동일 분기)
+function isMacPlatform(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
+  return /mac/i.test(nav.userAgentData?.platform ?? nav.platform ?? '')
+}
+
 const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name' | 'icon'>> = [
-  { name: '연봉 실수령액', href: '/tools/finance/salary',  icon: '💴' },
+  { name: '연봉 실수령액', href: '/tools/finance/salary',  icon: '💰' },
   { name: '나이 계산기',   href: '/tools/date/age',         icon: '🎂' },
   { name: 'BMI 계산기',    href: '/tools/health/bmi',       icon: '⚖️' },
   { name: '로또 생성기',   href: '/tools/life/lotto',       icon: '🎰' },
@@ -131,6 +138,8 @@ export default function Nav() {
   const [highlightIdx, setHighlightIdx] = useState(0)
   const [userNav,     setUserNav]     = useState<UserNav>({ recents: [], favorites: [] })
   const [mounted,     setMounted]     = useState(false)
+  // SSR/첫 페인트 기본값 → mounted 후 실제 플랫폼으로 분기 (hydration 안전)
+  const [isMac,       setIsMac]       = useState(true)
   const pathname  = usePathname()
   const router    = useRouter()
   const searchRef = useRef<HTMLInputElement>(null)
@@ -143,6 +152,7 @@ export default function Nav() {
   // localStorage 초기 로드
   useEffect(() => {
     setUserNav(loadUserNav())
+    setIsMac(isMacPlatform())
     setMounted(true)
   }, [])
 
@@ -370,8 +380,8 @@ export default function Nav() {
           <button
             className={`${styles.searchBtn} ${searchOpen ? styles.searchBtnActive : ''}`}
             onClick={() => setSearchOpen((o) => !o)}
-            aria-label="검색 (Ctrl+K)"
-            title="검색 (Ctrl+K)">
+            aria-label={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}
+            title={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}>
             {searchOpen ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 6L6 18M6 6l12 12"/>

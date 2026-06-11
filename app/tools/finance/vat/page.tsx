@@ -468,7 +468,7 @@ export default function VatPage() {
           <H2>함께 쓰면 좋은 도구</H2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '사업소득과 근로소득 세후 비교' },
+              { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '사업소득과 근로소득 세후 비교' },
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '절세한 금액으로 장기 투자 시뮬레이션' },
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '사업 운영자금 대출 이자 계산' },
               { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '사업 잉여금 투자 시 평단 관리' },

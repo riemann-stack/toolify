@@ -248,7 +248,7 @@ export default function FreelanceTaxPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/finance/salary',      icon: '💴', name: '연봉 실수령액 계산기', desc: '본업 + 부업 합산 시 실수령' },
+              { href: '/tools/finance/salary',      icon: '💰', name: '연봉 실수령액 계산기', desc: '본업 + 부업 합산 시 실수령' },
               { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기',       desc: '국민연금·건강보험 (전액 소득공제)' },
               { href: '/tools/finance/vat',         icon: '🧾', name: '부가세 계산기',         desc: '별개 세금 (분기·반기 신고)' },
               { href: '/tools/finance/severance',   icon: '💼', name: '퇴직금 실수령액 계산기', desc: '퇴직 후 프리랜서 전환 시' },

@@ -170,6 +170,13 @@ type WindowPresetId = typeof OPENING_PRESETS[number]['id']
 
 export default function WallpaperClient() {
   const [tab, setTab] = useState<TabId>('simple')
+  /* 마지막으로 사용한 계산 탭 — 견적 탭이 어느 결과를 기준으로 할지 결정 */
+  const [lastCalcTab, setLastCalcTab] = useState<'simple' | 'detail'>('simple')
+
+  function switchTab(t: TabId) {
+    setTab(t)
+    if (t === 'simple' || t === 'detail') setLastCalcTab(t)
+  }
 
   /* 공통 입력 (탭 1·2 결과와 탭 3 견적 모두 공유) */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
@@ -285,8 +292,11 @@ export default function WallpaperClient() {
   }, [t2Rooms])
 
   /* ─── 탭 3 견적 ─── */
-  const usedRolls = tab === 'detail' ? t2Total.rolls : t1.finalRolls
-  const usedArea = tab === 'detail' ? t2Total.area : t1.totalArea
+  /* 마지막 계산 탭이 상세이고 결과가 있으면 상세 결과를, 아니면 간편 결과를 견적에 사용 */
+  const quoteSource: 'simple' | 'detail' =
+    lastCalcTab === 'detail' && t2Total.rolls > 0 ? 'detail' : 'simple'
+  const usedRolls = quoteSource === 'detail' ? t2Total.rolls : t1.finalRolls
+  const usedArea = quoteSource === 'detail' ? t2Total.area : t1.totalArea
   const pricePerRoll = parseComma(pricePerRollStr)
   const wpTotalCost = pricePerRoll * usedRolls
   const pasteKg = usedRolls * 3
@@ -410,9 +420,9 @@ export default function WallpaperClient() {
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
-        <button type="button" role="tab" aria-selected={tab === 'simple'} className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'detail'} className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => setTab('detail')}>상세 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'quote'} className={`${styles.tabBtn} ${tab === 'quote' ? styles.tabActive : ''}`}  onClick={() => setTab('quote')}>비용 견적</button>
+        <button type="button" role="tab" aria-selected={tab === 'simple'} className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => switchTab('simple')}>간편 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'detail'} className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => switchTab('detail')}>상세 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'quote'} className={`${styles.tabBtn} ${tab === 'quote' ? styles.tabActive : ''}`}  onClick={() => switchTab('quote')}>비용 견적</button>
       </div>
 
       {/* ────────────── 탭 1: 간편 계산 ────────────── */}
@@ -666,7 +676,7 @@ export default function WallpaperClient() {
                 return (
                   <svg className={styles.floorPlanSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     {/* 방 둘레 */}
-                    <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="#fff" strokeWidth={2} />
+                    <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="var(--border-hover)" strokeWidth={2} />
                     {/* 시공 라인 (둘레 점선) */}
                     <rect x={x0 + 4} y={y0 + 4} width={drawW - 8} height={drawH - 8} fill="none" stroke="var(--accent)" strokeWidth={1} strokeDasharray="5 4" opacity={0.7} />
                     {/* 가로 치수 */}
@@ -857,10 +867,10 @@ export default function WallpaperClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>견적 기준</span>
-              <span className={styles.cardLabelHint}>{tab === 'quote' ? `현재 ${usedRolls}롤 적용 (간편 계산 결과)` : ''}</span>
+              <span className={styles.cardLabelHint}>{`현재 ${usedRolls}롤 적용 (${quoteSource === 'detail' ? '상세' : '간편'} 계산 결과)`}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              간편 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
+              {quoteSource === 'detail' ? '상세' : '간편'} 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
             </p>
 
             <span className={styles.subLabel}>벽지 1롤 가격</span>

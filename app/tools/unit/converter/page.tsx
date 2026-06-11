@@ -52,7 +52,7 @@ const FAQ_LD = [
               },
               {
                 q: '근무시간 변환은 어떻게 계산되나요?',
-                a: '한국 근로기준법 기준으로 <strong>주 40시간 = 월 209시간 = 연 2,508시간</strong>입니다 (주 40시간 + 주휴 8시간 = 주 48시간 × 4.345주 ≈ 209시간/월). 시급·연봉 환산은 <a href="/tools/finance/salary" style="color: var(--accent); text-decoration: underline">연봉 실수령액 계산기</a>의 [시급] 탭에서 야근·출퇴근 포함 체감 시급까지 계산할 수 있습니다.',
+                a: '한국 근로기준법 기준으로 <strong>주 40시간 = 월 209시간 = 연 2,508시간</strong>입니다 (주 40시간 + 주휴 8시간 = 주 48시간 × 4.345주 ≈ 209시간/월). 시급·연봉 환산은 <a href="/tools/finance/salary" style="color: var(--accent); text-decoration: underline">연봉 실수령액 계산기</a>의 \'체감 시급 보기\' 옵션에서 야근·출퇴근 포함 체감 시급까지 계산할 수 있습니다.',
               },
               {
                 q: 'kgf/cm²와 bar는 어떻게 다른가요?',
@@ -267,7 +267,7 @@ export default function ConverterPage() {
             </table>
           </div>
           <div style={{ background: 'rgba(255,138,62,0.06)', border: '1px solid rgba(255,138,62,0.40)', borderRadius: 10, padding: '12px 16px', fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
-            ⚠️ <strong style={{ color: '#FFA63E' }}>약품·소독액 안전 안내</strong><br />
+            ⚠️ <strong style={{ color: 'var(--warning)' }}>약품·소독액 안전 안내</strong><br />
             • 락스(차아염소산나트륨)·과산화수소·산성 세제는 저농도라도 피부·호흡기·눈을 자극합니다. 사용 시 환기·장갑·고글 착용 필수.<br />
             • <strong>산성 세제 + 염소계 표백제 절대 혼합 금지</strong> — 유독한 염소 가스(Cl₂)가 발생합니다. 락스 + 식초·구연산·변기세정제 혼합 사고가 자주 보고됩니다.<br />
             • 정확한 사용 농도·반응 시간·헹굼 방법은 <strong>제조사 라벨</strong> 또는 <strong>식품의약품안전처(KFDA)·질병관리청(KDCA)</strong> 가이드를 따르세요.<br />
@@ -348,7 +348,7 @@ export default function ConverterPage() {
               { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',     desc: 'mAh·Wh + 비행기 반입' },
               { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 변환기',       desc: 'km/L·L/100km·mpg' },
               { href: '/tools/unit/tire-pressure', icon: '🛞', name: '타이어 공기압 변환기',   desc: 'psi·kPa·bar + 차량별' },
-              { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기',   desc: '시급·근무시간 환산' },
+              { href: '/tools/finance/salary',     icon: '💰', name: '연봉 실수령액 계산기',   desc: '시급·근무시간 환산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

@@ -325,7 +325,7 @@ export default function CardInstallmentPage() {
             {[
               { href: '/tools/finance/loan',       icon: '💳', name: '대출이자 계산기',        desc: '원리금균등·원금균등 비교' },
               { href: '/tools/finance/compound',   icon: '📈', name: '복리 계산기',            desc: '거치식·적립식 복리 수익' },
-              { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기',   desc: '2026년 기준 세후 월 실수령액' },
+              { href: '/tools/finance/salary',     icon: '💰', name: '연봉 실수령액 계산기',   desc: '2026년 기준 세후 월 실수령액' },
               { href: '/tools/finance/car-cost',   icon: '🚗', name: '자동차 유지비 계산기',   desc: '유류비·보험·소모품·감가상각' },
               { href: '/tools/finance/cost-rate',  icon: '🍽️', name: '음식점 원가율 계산기',     desc: '재료비·배달 수수료·실질 원가율' },
               { href: '/tools/finance/vat',        icon: '🧾', name: '부가세 계산기',          desc: '공급가액·부가세 역산 계산' },

@@ -43,7 +43,7 @@
 .tabActiveDrink  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
 .tabActivePerson { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 .tabActivePrepaid{ background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
-.tabActiveShare  { background: rgba(255,228,0,0.12);  color: #FFE400; font-weight: 700; }
+.tabActiveShare  { background: #FFE400;  color: #3C1E1E; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
@@ -321,23 +321,6 @@
   .actionBtn:hover { background: rgba(14,165,233,0.18); }
 }
 
-.bigBtn {
-  background: var(--accent);
-  border: none;
-  border-radius: 12px;
-  padding: 13px 18px;
-  font-size: 14px;
-  color: #000;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 800;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-}@media (hover: hover) {
-  .bigBtn:hover { background: #d8ff5e; }
-}
-.bigBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-
 .miniBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -409,7 +392,7 @@
 }
 @media (max-width: 480px) { .heroDual { grid-template-columns: 1fr; } }
 .heroDualBox {
-  background: rgba(0,0,0,0.20);
+  background: rgba(255,255,255,0.65);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;

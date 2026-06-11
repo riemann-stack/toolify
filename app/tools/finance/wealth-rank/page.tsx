@@ -333,7 +333,7 @@ export default function WealthRankPage() {
             {[
               { href: '/tools/finance/savings', icon: '💰', name: '저축액 계산기', desc: '저축률·한국 평균 비교' },
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기', desc: '자산 불리기 시뮬' },
-              { href: '/tools/finance/salary', icon: '💴', name: '연봉 실수령액 계산기', desc: '월 실수령 계산' },
+              { href: '/tools/finance/salary', icon: '💰', name: '연봉 실수령액 계산기', desc: '월 실수령 계산' },
               { href: '/tools/finance/real-estate', icon: '🏘️', name: '부동산 수익률 계산기', desc: '자기자본 수익률' },
             ].map((t, i) => (
               <Link key={i} href={t.href} style={{ ...card, display: 'block', textDecoration: 'none', padding: '14px 16px' }}>

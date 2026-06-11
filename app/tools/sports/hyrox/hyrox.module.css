@@ -117,7 +117,7 @@
 }
 .shareRun  { background: #A16207; }
 .shareStation { background: #0EA5E9; }
-.shareRox  { background: #94A3B8; }
+.shareRox  { background: var(--muted); }
 .shareLegend {
   display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px;
   font-family: 'Noto Sans KR', sans-serif; font-size: 12px; color: var(--muted);

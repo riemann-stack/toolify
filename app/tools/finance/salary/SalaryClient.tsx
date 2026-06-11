@@ -23,7 +23,7 @@ const comma = (v: string): string => {
 type Tab = 'main' | 'reverse'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'main',    name: '실수령액',  icon: '💴' },
+  { id: 'main',    name: '실수령액',  icon: '💰' },
   { id: 'reverse', name: '역산',      icon: '🔄' },
 ]
 
@@ -608,7 +608,7 @@ export default function SalaryClient() {
                 <button className={styles.copyBtn} onClick={() => {
                   setAnnualMan(comma(String(reverseResult.grossYearly / 10_000)))
                   setTab('main')
-                }}>💴 실수령 탭으로 적용</button>
+                }}>💰 실수령 탭으로 적용</button>
               </div>
             </>
           )}

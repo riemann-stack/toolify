@@ -89,7 +89,7 @@ function getSplits(distanceKm: number): SplitRow[] {
 const QUICK_PACES = [
   { mm: 4, ss: 0,  label: '엘리트',    color: '#DC2626' },
   { mm: 4, ss: 30, label: '서브3',     color: '#EA580C' },
-  { mm: 5, ss: 0,  label: '준중급',    color: '#FFD93E' },
+  { mm: 5, ss: 0,  label: '준중급',    color: '#A16207' },
   { mm: 5, ss: 30, label: '중급',      color: '#0EA5E9' },
   { mm: 6, ss: 0,  label: '가벼운 조깅', color: '#059669' },
   { mm: 6, ss: 30, label: '조깅',      color: '#0891B2' },
@@ -319,8 +319,11 @@ export default function PaceClient() {
                     <button key={`${q.mm}-${q.ss}`}
                       className={`${styles.quickChip} ${active ? styles.quickChipActive : ''}`}
                       onClick={() => setQuickPace(q.mm, q.ss)}
-                      style={active ? { borderColor: q.color, color: q.color } : { color: q.color + 'cc' }}>
-                      {q.mm}:{String(q.ss).padStart(2, '0')}
+                      style={active ? { borderColor: q.color } : undefined}>
+                      <span className={styles.quickChipMain}>
+                        <span className={styles.quickChipDot} style={{ background: q.color }} aria-hidden="true" />
+                        {q.mm}:{String(q.ss).padStart(2, '0')}
+                      </span>
                       <span className={styles.quickChipSub}>{q.label}</span>
                     </button>
                   )

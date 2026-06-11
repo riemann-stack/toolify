@@ -16,6 +16,11 @@ import {
 type Tab = 'age' | 'dday' | 'stats' | 'milestone' | 'culture'
 type RefPreset = 'today' | 'eoy' | 'eoyNext' | 'custom'
 
+/* D-day 색 등급 — 전 탭 공통 기준: ≤30일 빨강 / ≤90일 노랑 / 그 외 */
+const DDAY_CLOSE_DAYS = 30
+const DDAY_MID_DAYS = 90
+const ddayClass = (d: number) => d <= DDAY_CLOSE_DAYS ? s.ddayClose : d <= DDAY_MID_DAYS ? s.ddayMid : s.ddayFar
+
 const currentYear = new Date().getFullYear()
 const yearsRange = Array.from({ length: 110 }, (_, i) => currentYear - i)
 const monthsRange = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -303,8 +308,6 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
     ...upcomingAges.map(u => ({ name: u.label, date: u.date, daysUntil: u.daysUntil, icon: u.icon })),
   ].sort((a, b) => a.daysUntil - b.daysUntil).slice(0, 10)
 
-  const ddayClass = (d: number) => d <= 30 ? s.ddayClose : d <= 100 ? s.ddayMid : s.ddayFar
-
   return (
     <>
       {/* 메인 D-day 히어로 */}
@@ -487,7 +490,6 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
   })
   const nextAgeMs = ageItems.find(it => !it.passed)
 
-  const ddayClass = (d: number) => d <= 30 ? s.ddayClose : d <= 365 ? s.ddayMid : s.ddayFar
   const fmtDday = (d: number) => d < 0 ? `D+${Math.abs(d).toLocaleString()}` : `D-${d.toLocaleString()}`
 
   return (

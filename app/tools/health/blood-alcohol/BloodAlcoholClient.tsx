@@ -854,7 +854,10 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
               {fmtTimeMin(result.morningMin)}
             </span>
             <span className={s.timelineLabel} style={{ fontWeight: 700 }}>
-              내일 운전 예정 — BAC {fmtBAC(result.morningBAC)}
+              내일 운전 예정 — BAC {fmtBAC(result.morningBAC)}{' '}
+              <span style={{ color: result.status === 'safe' ? '#059669' : '#DC2626' }}>
+                {result.status === 'safe' ? '✓ 완전 분해' : '✕ 운전 불가'}
+              </span>
             </span>
           </div>
         </div>

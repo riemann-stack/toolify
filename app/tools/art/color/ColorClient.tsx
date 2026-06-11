@@ -42,7 +42,6 @@ const PRESETS = [
   { name: '아이보리', hex: '#FFFFF0' },
   { name: '회색',     hex: '#737373' },
   { name: 'Toolify',  hex: '#0891B2' },
-  { name: '액센트',   hex: '#0EA5E9' },
 ]
 
 /* localStorage 히스토리 */

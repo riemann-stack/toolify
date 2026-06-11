@@ -33,7 +33,7 @@ export default function HomeIntro() {
 
   return (
     <section
-      aria-label="youtil 소개"
+      aria-label="Youtil 소개"
       style={{
         maxWidth: '900px',
         margin: '24px auto 0',
@@ -44,9 +44,9 @@ export default function HomeIntro() {
       }}
     >
       <div>
-        <h2 style={h2}>youtil — 자주 쓰는 계산을 한 곳에서</h2>
+        <h2 style={h2}>Youtil — 자주 쓰는 계산을 한 곳에서</h2>
         <p style={p}>
-          youtil(유틸)은 연봉·대출·세금부터 건강·요리·여행까지, 일상에서 반복되는 계산과 변환을 한 곳에 모은 무료 도구 사이트입니다.
+          Youtil(유틸)은 연봉·대출·세금부터 건강·요리·여행까지, 일상에서 반복되는 계산과 변환을 한 곳에 모은 무료 도구 사이트입니다.
           복잡한 공식을 외우거나 여러 사이트를 뒤질 필요 없이, 필요한 값을 입력하면 바로 결과를 보여 주는 것을 목표로
           현재 {totalTools}가지 도구를 11개 카테고리로 제공합니다.
         </p>

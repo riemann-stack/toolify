@@ -39,7 +39,7 @@ export default function RecipeClient() {
   return (
     <div className={s.wrap}>
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
           { href: '/tools/cooking/microwave', label: '전자레인지 환산' },

@@ -386,7 +386,7 @@ export default function LoanPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '월 납입액 감당 가능한지 소득 확인' },
+              { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '월 납입액 감당 가능한지 소득 확인' },
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',           desc: '이자 절약분 재투자 시 미래 자산' },
               { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',         desc: '사업자 대출 시 세금 계산' },
               { href: '/tools/unit/area',        icon: '🏠', name: '평수 변환기',     desc: '담보 물건 면적 단위 변환' },

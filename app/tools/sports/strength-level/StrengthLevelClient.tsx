@@ -34,7 +34,7 @@ const BASE: Record<LiftKey, number[]> = {
 
 /* 레벨명 — index 0 = 초보 미만(입문) */
 const LEVELS = ['입문', '초보', '중급', '상급', '엘리트']
-const LEVEL_COLORS = ['#94A3B8', '#059669', '#0EA5E9', '#EA580C', '#DC2626']
+const LEVEL_COLORS = ['var(--muted)', '#059669', '#0EA5E9', '#EA580C', '#DC2626']
 
 /* 연령 보정 (1RM 계산기와 동일) */
 const AGE_FACTOR: Record<AgeGroup, number> = { '20s': 1, '30s': 0.95, '40s': 0.85, '50s': 0.75, '60s': 0.65 }

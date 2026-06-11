@@ -426,7 +426,7 @@ export default function CarCostPage() {
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/finance/salary" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
-          <div style={{ fontSize: '22px', marginBottom: '6px' }}>💴</div>
+          <div style={{ fontSize: '22px', marginBottom: '6px' }}>💰</div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>연봉 실수령액 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>월급 대비 차 유지비 비율</div>
         </Link>

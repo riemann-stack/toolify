@@ -158,7 +158,7 @@ export default function PacePage() {
               },
               {
                 d: '10km',
-                color: '#FFD93E',
+                color: '#A16207',
                 strategy: '일정 페이스 + 후반 스퍼트',
                 points: [
                   '0~2km : 목표 페이스 +3~5초 (워밍업 가속)',

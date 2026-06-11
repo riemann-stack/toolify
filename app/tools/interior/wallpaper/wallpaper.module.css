@@ -127,7 +127,6 @@
   box-sizing: border-box;
 }
 .pyungSelect:focus { border-color: var(--accent); }
-.pyungSelect option { background: #1a1a1a; color: var(--text); }
 
 /* ── m 직접 입력 (가로 × 세로) ── */
 .dimRow {

@@ -383,7 +383,7 @@ export default function InheritancePage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>부동산 자금 계획</div>
         </Link>
         <Link href="/tools/finance/salary" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
-          <div style={{ fontSize: '22px', marginBottom: '6px' }}>💴</div>
+          <div style={{ fontSize: '22px', marginBottom: '6px' }}>💰</div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>연봉 실수령액</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>세후 소득 파악</div>
         </Link>

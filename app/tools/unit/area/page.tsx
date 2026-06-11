@@ -126,7 +126,7 @@ export default function AreaPage() {
             {[
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '14개 분야 + 한국 전통 단위' },
               { href: '/tools/finance/loan',       icon: '💳', name: '대출이자 계산기',       desc: '주택담보·전세자금 대출' },
-              { href: '/tools/finance/salary',     icon: '💴', name: '연봉 실수령액 계산기', desc: '월 실수령으로 평수 결정' },
+              { href: '/tools/finance/salary',     icon: '💰', name: '연봉 실수령액 계산기', desc: '월 실수령으로 평수 결정' },
               { href: '/tools/finance/compound',   icon: '📈', name: '복리 계산기',           desc: '청약·전세금 적립 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{

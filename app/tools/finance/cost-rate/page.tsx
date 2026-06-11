@@ -312,7 +312,7 @@ export default function CostRatePage() {
               { href: '/tools/life/unit-price',     icon: '🏷️', name: '단가 비교 계산기',         desc: '식자재 가성비 단가 비교' },
               { href: '/tools/finance/car-cost',    icon: '🚗', name: '자동차 유지비 계산기',    desc: '배달 차량 비용 계산' },
               { href: '/tools/life/dutch',          icon: '🍻', name: '더치페이 계산기',          desc: '회식·미팅 정산' },
-              { href: '/tools/finance/salary',      icon: '💴', name: '연봉 실수령액 계산기',    desc: '직원 인건비 계산' },
+              { href: '/tools/finance/salary',      icon: '💰', name: '연봉 실수령액 계산기',    desc: '직원 인건비 계산' },
             ].map((t, i) => (
               <Link
                 key={i}

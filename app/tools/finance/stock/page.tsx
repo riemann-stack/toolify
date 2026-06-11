@@ -409,7 +409,7 @@ export default function StockPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '평단 낮춘 후 장기 보유하면 얼마나 불어날까?' },
-              { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '매월 투자 가능한 금액 파악' },
+              { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '매월 투자 가능한 금액 파악' },
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '투자 대출 시 이자 비용 (신중)' },
               { href: '/tools/finance/dividend', icon: '💰', name: '월배당 자산 계산기',   desc: '배당주 장기 보유 시 월배당 목표' },
             ].map(t => (
