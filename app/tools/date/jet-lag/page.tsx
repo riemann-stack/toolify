@@ -134,7 +134,7 @@ export default function JetLagPage() {
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '13px', color: 'var(--muted)' }}>{item.title}</span>
-                <code style={{ fontFamily: 'Syne, monospace', fontSize: '14px', color: 'var(--accent)', fontWeight: 700 }}>{item.formula}</code>
+                <code style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--accent)', fontWeight: 700 }}>{item.formula}</code>
               </div>
             ))}
           </div>

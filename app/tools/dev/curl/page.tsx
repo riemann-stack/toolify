@@ -60,7 +60,7 @@ const codeStyle: React.CSSProperties = {
   background: 'var(--bg3)',
   padding: '2px 6px',
   borderRadius: '4px',
-  fontFamily: 'Syne, SF Mono, Consolas, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12.5px',
   color: '#0EA5E9',
 }
@@ -291,7 +291,7 @@ export default function CurlPage() {
         <div style={faqAnswer}>
           <strong>네, 완벽히 지원</strong>합니다. Chrome/Firefox DevTools의 &quot;Copy as cURL&quot;이 생성하는 다중 라인 형식 그대로 붙여넣어도 동작합니다.<br />
           예시:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`curl 'https://api.example.com/data' \\
   -H 'accept: application/json' \\
   -H 'authorization: Bearer XXX' \\
@@ -347,7 +347,7 @@ export default function CurlPage() {
         <div style={faqAnswer}>
           GraphQL은 일반 HTTP POST + JSON body이므로 <strong>완벽히 변환</strong>됩니다.<br />
           예시 cURL:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`curl -X POST 'https://api.github.com/graphql' \\
   -H 'Authorization: Bearer TOKEN' \\
   -d '{

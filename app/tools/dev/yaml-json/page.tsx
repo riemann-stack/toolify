@@ -62,7 +62,7 @@ const codeStyle: React.CSSProperties = {
   background: 'var(--bg3)',
   padding: '2px 6px',
   borderRadius: '4px',
-  fontFamily: 'Syne, SF Mono, Consolas, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12.5px',
   color: '#0EA5E9',
 }
@@ -261,7 +261,7 @@ export default function YamlJsonPage() {
         <div style={faqAnswer}>
           <strong>YAML 멀티 도큐먼트 구분자</strong>입니다. 한 파일에 여러 YAML 도큐먼트를 담을 때 사용해요.<br />
           K8s에서는 <strong>Deployment + Service + ConfigMap</strong>을 한 파일에 묶을 때 자주 씁니다:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`apiVersion: v1
 kind: Pod
 metadata:
@@ -296,7 +296,7 @@ metadata:
         <div style={faqAnswer}>
           <strong>YAML의 참조 메커니즘</strong>입니다. 같은 데이터를 여러 곳에서 재사용해 중복을 줄여요.<br />
           예시:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`defaults: &defaults
   timeout: 30
   retries: 3

@@ -548,7 +548,6 @@ export function formatEok(n: number): string {
 
 export function parseAmount(s: string): number {
   if (!s) return 0
-  const cleaned = s.replace(/[^\d]/g, '')
-  const n = parseInt(cleaned, 10)
+  const n = parseFloat(s.replace(/,/g, ''))
   return Number.isFinite(n) ? n : 0
 }

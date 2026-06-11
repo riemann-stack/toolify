@@ -14,6 +14,12 @@ import {
 /* 공제 표 셀용 — 천단위 콤마만 (원 단위는 카드 라벨에 표기, 큰 금액도 열에 맞게) */
 const wn = (n: number) => Math.round(n).toLocaleString('ko-KR')
 
+/* 금액 입력 — 실시간 천 단위 콤마 (dsr 패턴) */
+const comma = (v: string): string => {
+  const n = v.replace(/[^\d]/g, '')
+  return n ? parseInt(n, 10).toLocaleString('ko-KR') : ''
+}
+
 type Tab = 'main' | 'reverse'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
@@ -36,7 +42,7 @@ export default function SalaryClient() {
   const [tab, setTab] = useState<Tab>('main')
 
   /* 공통 입력 */
-  const [annualMan, setAnnualMan] = useState('5000')
+  const [annualMan, setAnnualMan] = useState('5,000')
   const [dependents, setDependents] = useState(1)
   const [childrenCount, setChildrenCount] = useState(0)
 
@@ -185,8 +191,8 @@ export default function SalaryClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>세전 연봉 (만원)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              placeholder="5000" value={annualMan} onChange={e => setAnnualMan(e.target.value)} />
+            <input className={styles.numInput} type="text" inputMode="numeric"
+              placeholder="5,000" value={annualMan} onChange={e => setAnnualMan(comma(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
           <div className={styles.optionRow5} style={{ marginTop: 8 }}>
@@ -194,7 +200,7 @@ export default function SalaryClient() {
               <button key={p.value} type="button"
                 aria-pressed={parseAmount(annualMan) * 10_000 === p.value}
                 className={`${styles.optionBtn} ${parseAmount(annualMan) * 10_000 === p.value ? styles.optionActive : ''}`}
-                onClick={() => setAnnualMan(String(p.value / 10_000))}>
+                onClick={() => setAnnualMan(comma(String(p.value / 10_000)))}>
                 {p.label}
               </button>
             ))}
@@ -258,8 +264,8 @@ export default function SalaryClient() {
             기타 비과세 직접 입력
           </summary>
           <div className={styles.inputRow} style={{ marginTop: 8 }}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              placeholder="0" value={extraNonTaxable} onChange={e => setExtraNonTaxable(e.target.value)} />
+            <input className={styles.numInput} type="text" inputMode="numeric"
+              placeholder="0" value={extraNonTaxable} onChange={e => setExtraNonTaxable(comma(e.target.value))} />
             <span className={styles.unit}>원/월</span>
           </div>
         </details>
@@ -527,8 +533,8 @@ export default function SalaryClient() {
           <div className={styles.card}>
             <label className={styles.cardLabel}>원하는 월 실수령액 (만원)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
-                placeholder="300" value={targetNetMan} onChange={e => setTargetNetMan(e.target.value)} />
+              <input className={styles.numInput} type="text" inputMode="numeric"
+                placeholder="300" value={targetNetMan} onChange={e => setTargetNetMan(comma(e.target.value))} />
               <span className={styles.unit}>만원/월</span>
             </div>
             <div className={styles.optionRow5} style={{ marginTop: 8 }}>
@@ -592,7 +598,7 @@ export default function SalaryClient() {
                   {copied ? '✓ 복사됨' : '📋 복사'}
                 </button>
                 <button className={styles.copyBtn} onClick={() => {
-                  setAnnualMan(String(reverseResult.grossYearly / 10_000))
+                  setAnnualMan(comma(String(reverseResult.grossYearly / 10_000)))
                   setTab('main')
                 }}>💴 실수령 탭으로 적용</button>
               </div>

@@ -60,7 +60,7 @@ const codeStyle: React.CSSProperties = {
   background: 'var(--bg3)',
   padding: '2px 6px',
   borderRadius: '4px',
-  fontFamily: 'Syne, SF Mono, Consolas, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12.5px',
   color: '#0EA5E9',
 }
@@ -150,9 +150,9 @@ export default function HttpStatusPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: row[4], fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, monospace' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'Syne, monospace', fontSize: 12 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -217,7 +217,7 @@ export default function HttpStatusPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 12.5 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Syne, monospace', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -338,7 +338,7 @@ export default function HttpStatusPage() {
           • <strong>Spring Boot</strong>: @Valid 실패 시 기본 400 (수동 422 권장)<br />
           • <strong>Rails ActiveRecord</strong>: validation 실패 시 422<br />
           REST 베스트 프랙티스는 <strong>422 사용</strong>으로 의미 명확화. 응답 본문에 필드별 오류 배열 포함:
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`{ "detail": [
   { "loc": ["body", "email"], "msg": "invalid email", "type": "value_error.email" }
 ]}`}

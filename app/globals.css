@@ -11,8 +11,10 @@
   --border-hover:  #cbd5e1;   /* slate-300 — hover/focus */
 
   --text:          #0f172a;   /* slate-900 — primary text */
-  --muted:         #64748b;   /* slate-500 — secondary text */
+  --muted:         #5f6f85;   /* secondary text — --bg 위 대비 4.74:1 (AA) */
   --muted-strong:  #475569;   /* slate-600 — small text needing contrast */
+
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
   --accent:        #0EA5E9;   /* sky-500 — primary brand */
   --accent-hover:  #0284C7;   /* sky-600 — hover state */
@@ -61,6 +63,24 @@ body {
 }
 
 a { text-decoration: none; color: inherit; }
+
+/* ── 모바일 입력·터치 기본기 ───────────────────────────── */
+/* iOS Safari는 16px 미만 input/select 포커스 시 화면을 자동 확대함 — 모바일에서 일괄 16px 보장 */
+@media (max-width: 640px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  select:not([multiple]):not([size]),
+  textarea:not([data-allow-small]) {
+    font-size: 16px;
+  }
+}
+
+/* 더블탭 줌·300ms 탭 지연 제거 — 연타 도구(탭 템포·반응속도)에 필수, 전 버튼 무해 */
+button { touch-action: manipulation; }
+
+/* 터치 기기에서 버튼 최소 높이 확보 (Apple HIG 44px) */
+@media (pointer: coarse) {
+  button { min-height: 44px; }
+}
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }

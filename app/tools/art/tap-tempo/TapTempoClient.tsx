@@ -105,8 +105,8 @@ function TapTempoTab() {
       <div className={styles.tapCard}>
         <button
           className={styles.tapButton}
-          onClick={doTap}
-          onTouchStart={(e) => { e.preventDefault(); doTap() }}
+          onPointerDown={doTap}
+          style={{ touchAction: 'manipulation' }}
           aria-label="탭하여 BPM 측정"
         >
           <span key={rippleKey} className={styles.ripple} aria-hidden />
@@ -576,8 +576,8 @@ function RhythmTestTab() {
           <div className={styles.testStageLabel}>🎯 같은 속도로 탭하세요 — {taps.length}/8</div>
           <button
             className={styles.testTapBtn}
-            onClick={handleTap}
-            onTouchStart={(e) => { e.preventDefault(); handleTap() }}
+            onPointerDown={handleTap}
+            style={{ touchAction: 'manipulation' }}
           >
             TAP
           </button>

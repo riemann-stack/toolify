@@ -12,6 +12,12 @@ import {
   won, formatEok, parseAmount,
 } from './loanUtils'
 
+/* 금액 입력 — 실시간 천 단위 콤마 (dsr 패턴) */
+const comma = (v: string): string => {
+  const n = v.replace(/[^\d]/g, '')
+  return n ? parseInt(n, 10).toLocaleString('ko-KR') : ''
+}
+
 type Tab = 'main' | 'prepay' | 'refi' | 'rate' | 'reverse' | 'compare'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
@@ -39,7 +45,7 @@ export default function LoanClient() {
   const [tab, setTab] = useState<Tab>('main')
 
   /* 공통 입력 */
-  const [principal, setPrincipal] = useState('30000')  // 만원
+  const [principal, setPrincipal] = useState('30,000')  // 만원
   const [rate, setRate] = useState('4.3')
   const [months, setMonths] = useState('360')
   const [graceMonths, setGraceMonths] = useState(0)
@@ -85,7 +91,7 @@ export default function LoanClient() {
   }, [activeResult, showAll])
 
   /* ─── 탭 2: 중도상환 ─── */
-  const [prepaymentAmount, setPrepaymentAmount] = useState('1000')
+  const [prepaymentAmount, setPrepaymentAmount] = useState('1,000')
   const [prepaymentMonth, setPrepaymentMonth] = useState(24)
   const [prepaymentMode, setPrepaymentMode] = useState<PrepaymentMode>('reduce-period')
   const [prepaymentFeeRate, setPrepaymentFeeRate] = useState(1.2)
@@ -104,7 +110,7 @@ export default function LoanClient() {
 
   /* ─── 탭 3: 갈아타기 ─── */
   const [refiCurrentRate, setRefiCurrentRate] = useState('5.0')
-  const [refiRemaining, setRefiRemaining] = useState('25000')   // 만원
+  const [refiRemaining, setRefiRemaining] = useState('25,000')   // 만원
   const [refiRemainMonths, setRefiRemainMonths] = useState('300')
   const [refiNewRate, setRefiNewRate] = useState('4.0')
   const [refiNewMonths, setRefiNewMonths] = useState('300')
@@ -137,7 +143,7 @@ export default function LoanClient() {
   const [revMonthly, setRevMonthly] = useState('100')   // 만원
   const [revRate, setRevRate] = useState('4.5')
   const [revMonths, setRevMonths] = useState('360')
-  const [revIncome, setRevIncome] = useState('5000')      // 만원
+  const [revIncome, setRevIncome] = useState('5,000')      // 만원
   const [revOtherDebt, setRevOtherDebt] = useState('0')  // 만원
 
   const reverseResult = useMemo(() => {
@@ -245,8 +251,8 @@ export default function LoanClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel}>대출 원금 (만원)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              placeholder="30000" value={principal} onChange={e => setPrincipal(e.target.value)} />
+            <input className={styles.numInput} type="text" inputMode="numeric"
+              placeholder="30,000" value={principal} onChange={e => setPrincipal(comma(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
           {parseAmount(principal) > 0 && (
@@ -407,8 +413,8 @@ export default function LoanClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>중도상환 금액 (만원)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
-                  placeholder="1000" value={prepaymentAmount} onChange={e => setPrepaymentAmount(e.target.value)} />
+                <input className={styles.numInput} type="text" inputMode="numeric"
+                  placeholder="1,000" value={prepaymentAmount} onChange={e => setPrepaymentAmount(comma(e.target.value))} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
@@ -502,7 +508,7 @@ export default function LoanClient() {
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>잔액 (만원)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" value={refiRemaining} onChange={e => setRefiRemaining(e.target.value)} />
+                  <input className={styles.numInput} type="text" inputMode="numeric" value={refiRemaining} onChange={e => setRefiRemaining(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>
@@ -548,15 +554,15 @@ export default function LoanClient() {
             <div className={styles.threeCol}>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>중도상환수수료</span>
-                <input className={styles.numInput} type="number" value={refiPrepayFee} onChange={e => setRefiPrepayFee(e.target.value)} />
+                <input className={styles.numInput} type="text" inputMode="numeric" value={refiPrepayFee} onChange={e => setRefiPrepayFee(comma(e.target.value))} />
               </div>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>취급수수료</span>
-                <input className={styles.numInput} type="number" value={refiOriginFee} onChange={e => setRefiOriginFee(e.target.value)} />
+                <input className={styles.numInput} type="text" inputMode="numeric" value={refiOriginFee} onChange={e => setRefiOriginFee(comma(e.target.value))} />
               </div>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>인지·등록세</span>
-                <input className={styles.numInput} type="number" value={refiOtherFees} onChange={e => setRefiOtherFees(e.target.value)} />
+                <input className={styles.numInput} type="text" inputMode="numeric" value={refiOtherFees} onChange={e => setRefiOtherFees(comma(e.target.value))} />
               </div>
             </div>
           </div>
@@ -663,7 +669,7 @@ export default function LoanClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>월 상환 가능액 (만원)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" value={revMonthly} onChange={e => setRevMonthly(e.target.value)} />
+                <input className={styles.numInput} type="text" inputMode="numeric" value={revMonthly} onChange={e => setRevMonthly(comma(e.target.value))} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
@@ -705,14 +711,14 @@ export default function LoanClient() {
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>연소득 (만원)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" value={revIncome} onChange={e => setRevIncome(e.target.value)} />
+                  <input className={styles.numInput} type="text" inputMode="numeric" value={revIncome} onChange={e => setRevIncome(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>기타 대출 월 상환 (만원)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" value={revOtherDebt} onChange={e => setRevOtherDebt(e.target.value)} />
+                  <input className={styles.numInput} type="text" inputMode="numeric" value={revOtherDebt} onChange={e => setRevOtherDebt(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>

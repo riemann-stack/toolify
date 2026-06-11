@@ -60,7 +60,7 @@ const codeStyle: React.CSSProperties = {
   background: 'var(--bg3)',
   padding: '2px 6px',
   borderRadius: '4px',
-  fontFamily: 'Syne, SF Mono, Consolas, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12.5px',
 }
 
@@ -153,7 +153,7 @@ export default function RegexPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px' }}><code style={codeStyle}>{row[0]}</code></td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'Syne, monospace', fontSize: 12 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -176,7 +176,7 @@ export default function RegexPage() {
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               번호로 참조 (<code style={codeStyle}>$1</code>, <code style={codeStyle}>$2</code>, ...). 위치 순서대로 자동 번호.
             </p>
-            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'Syne, monospace' }}>
+            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-mono)' }}>
 {`패턴: (\\w+)@(\\w+\\.\\w+)
 매치: "hello@example.com"
 $1 = "hello"
@@ -189,7 +189,7 @@ $2 = "example.com"
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               이름으로 참조 (<code style={codeStyle}>{`$<user>`}</code>). 가독성 ↑, ES2018+ 표준.
             </p>
-            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'Syne, monospace' }}>
+            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-mono)' }}>
 {`패턴: (?<user>\\w+)@(?<domain>\\w+\\.\\w+)
 매치: "hello@example.com"
 groups.user   = "hello"
@@ -201,7 +201,7 @@ groups.domain = "example.com"`}
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               그룹화만 하고 캡처는 하지 않음. <strong>성능 ↑·번호 절약</strong>.
             </p>
-            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'Syne, monospace' }}>
+            <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-mono)' }}>
 {`패턴: (?:https?|ftp):\\/\\/(\\w+)
 매치: "https://example.com"
 $1 = "example" (도메인만 캡처)
@@ -237,7 +237,7 @@ $1 = "example" (도메인만 캡처)
                   <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: '#0EA5E9', fontWeight: 700 }}>{row[0]}</code></td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -318,7 +318,7 @@ $1 = "example" (도메인만 캡처)
         <div style={faqAnswer}>
           ES2018부터 추가된 기능으로, 그룹에 <strong>이름</strong>을 붙여 가독성을 높입니다.<br />
           예시:<br />
-          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'Syne, monospace', color: 'var(--text)', marginTop: 6 }}>
+          <pre style={{ background: 'var(--bg3)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', marginTop: 6 }}>
 {`패턴: (?<year>\\d{4})-(?<month>\\d{2})-(?<day>\\d{2})
 매치: "2026-05-15"
 match.groups.year   = "2026"

@@ -616,7 +616,7 @@ export default function FightWeightClient() {
 
           {/* 단계 요약 */}
           {needToLose > 0 && (
-            <div className={styles.kpiGrid} style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            <div className={styles.kpiGrid}>
               <div className={styles.kpiCard}>
                 <span className={`${styles.phaseChip} ${styles.chipFat}`}>체지방</span>
                 <div className={styles.kpiValue} style={{ marginTop: 6 }}>{fatPhaseLoss.toFixed(2)}<span style={{ fontSize: 12, color: 'var(--muted)', marginLeft: 4 }}>kg</span></div>

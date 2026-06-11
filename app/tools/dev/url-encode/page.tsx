@@ -61,7 +61,7 @@ const codeStyle: React.CSSProperties = {
   background: 'var(--bg3)',
   padding: '2px 6px',
   borderRadius: '4px',
-  fontFamily: 'Syne, SF Mono, Consolas, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12.5px',
   color: '#0EA5E9',
 }
@@ -142,17 +142,17 @@ export default function UrlEncodePage() {
             <tbody>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURIComponent</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>A-Z a-z 0-9 - _ . ! ~ * &apos; ( )</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>A-Z a-z 0-9 - _ . ! ~ * &apos; ( )</td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)' }}>쿼리 값·경로 세그먼트 (권장)</td>
               </tr>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURI</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)' }}>전체 URL 인코딩</td>
               </tr>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>escape</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Syne, monospace', fontSize: 11.5 }}>영숫자 + @*+-./_</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 11.5 }}>영숫자 + @*+-./_</td>
                 <td style={{ padding: '8px 10px', color: '#DB2777', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
               </tr>
             </tbody>
@@ -190,9 +190,9 @@ export default function UrlEncodePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', fontSize: 22, fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: 'var(--text)' }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: 'var(--muted)', fontSize: 12 }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'Syne, monospace', color: '#0EA5E9', fontWeight: 700 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--muted)', fontSize: 12 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#0EA5E9', fontWeight: 700 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>

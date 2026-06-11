@@ -396,7 +396,7 @@ export default function GolfCostClient() {
       <div className={`${s.card} ${s.cardAccent}`}>
         <span className={s.cardLabel}>🚗 교통비</span>
         <div className={s.subLabel}>교통 수단</div>
-        <div className={s.courseGrid} style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className={`${s.courseGrid} ${s.courseGrid4}`}>
           {([
             { key: 'self', label: '자차' },
             { key: 'carpool', label: '카풀' },
