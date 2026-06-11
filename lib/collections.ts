@@ -97,7 +97,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '더치페이 정산, 사다리·랜덤 뽑기, 술자리 페이스 관리까지 — 모임을 매끄럽게.',
     intro: '회식 자리에서 센스 있는 사람은 따로 있죠. 계산은 1/N로 깔끔하게, 게임은 사다리·랜덤으로 공정하게, 술자리는 내 페이스를 알고 안전하게 — 분위기를 살리는 도구를 모았습니다.',
     emoji: '🍻',
-    color: '#CA8A04',
+    color: '#A16207',
     seasonMonths: [12],
     steps: [
       { title: '정산·게임', note: '더치페이로 N빵을 정확히 나누고, 사다리타기·랜덤 뽑기로 메뉴나 순서를 공정하게 정하세요.', toolHrefs: ['/tools/life/dutch', '/tools/life/ladder', '/tools/life/random'] },
@@ -155,7 +155,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '실수령 월급·전월세·방 면적부터 라면 물양·빨래 건조·단가 비교까지.',
     intro: '처음 독립하면 챙길 게 한둘이 아니죠. 월급에서 실제로 손에 쥐는 돈부터, 방 크기에 맞는 살림, 장 볼 때 더 싼 선택까지 — 1인 가구의 시작을 돕는 도구를 모았습니다.',
     emoji: '🧰',
-    color: '#CA8A04',
+    color: '#A16207',
     seasonMonths: [2, 3],
     steps: [
       { title: '돈 관리', note: '연봉 실수령액과 4대보험 공제를 확인하고, 매달 얼마를 모을 수 있을지 계획하세요.', toolHrefs: ['/tools/finance/salary', '/tools/finance/4-insurance', '/tools/finance/savings'] },

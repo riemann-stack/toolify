@@ -77,7 +77,7 @@ export default function JsonPage() {
             overflowX: 'auto',
           }}>
             <div><span style={{ color: 'var(--muted)' }}># JSON 기본 데이터 타입</span></div>
-            <div><span style={{ color: '#0891B2' }}>&quot;string&quot;</span> · <span style={{ color: '#CA8A04' }}>123</span> · <span style={{ color: '#9333EA' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
+            <div><span style={{ color: '#0891B2' }}>&quot;string&quot;</span> · <span style={{ color: '#A16207' }}>123</span> · <span style={{ color: '#9333EA' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
             <div><span style={{ color: 'var(--muted)' }}>{'{ object }'}</span> · <span style={{ color: 'var(--muted)' }}>{'[ array ]'}</span></div>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function JsonPage() {
               { t: 'YAML',    c: '#0891B2', d: 'Kubernetes·Docker Compose·GitHub Actions·Ansible 설정 파일 표준' },
               { t: 'CSV',     c: '#059669', d: '엑셀·Google Sheets·DB import에 사용. 객체 배열 → 평탄화된 표' },
               { t: '키 정렬',  c: 'var(--accent)', d: '두 JSON 비교(diff) 시 키 순서 차이를 제거하고 의미 차이만 비교' },
-              { t: '이스케이프', c: '#CA8A04', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
+              { t: '이스케이프', c: '#A16207', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>

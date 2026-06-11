@@ -150,7 +150,7 @@
 }
 .ctrlBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .ctrlBtnActive {
-  background: var(--accent) !important; color: #ffffff !important;
+  background: var(--accent-strong) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 .ctrlBtnLink {
@@ -207,7 +207,7 @@
   .sigBtn:hover { color: var(--text); }
 }
 .sigBtnActive {
-  background: var(--accent) !important; color: #ffffff !important;
+  background: var(--accent-strong) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 
@@ -231,7 +231,7 @@
 }
 .playBtn {
   padding: 13px 40px; border-radius: 10px;
-  background: var(--accent); border: 1px solid var(--accent);
+  background: var(--accent-strong); border: 1px solid var(--accent);
   color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
@@ -275,7 +275,7 @@
 .testInfoText strong { color: var(--accent); font-weight: 700; }
 .startBtn {
   padding: 14px; border-radius: 12px;
-  background: var(--accent); border: 1px solid var(--accent);
+  background: var(--accent-strong); border: 1px solid var(--accent);
   color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {

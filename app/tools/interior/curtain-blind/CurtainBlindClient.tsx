@@ -558,9 +558,9 @@ export default function CurtainBlindClient() {
                       return (
                         <>
                           {/* 봉 */}
-                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#CA8A04" strokeWidth="2.5" />
-                          <circle cx={rodX1} cy={rodY} r="3" fill="#CA8A04" />
-                          <circle cx={rodX2} cy={rodY} r="3" fill="#CA8A04" />
+                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#A16207" strokeWidth="2.5" />
+                          <circle cx={rodX1} cy={rodY} r="3" fill="#A16207" />
+                          <circle cx={rodX2} cy={rodY} r="3" fill="#A16207" />
                           {/* 커튼 패널 */}
                           {panels}
                         </>
@@ -578,8 +578,8 @@ export default function CurtainBlindClient() {
                       for (let i = 1; i < slatCount; i++) {
                         slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? '#9B59B6' : '#0891B2'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
                       }
-                      const fillColor = productId === 'blind' ? 'rgba(8,145,178,0.18)' : productId === 'roll' ? 'rgba(202,138,4,0.18)' : 'rgba(155,89,182,0.18)'
-                      const strokeColor = productId === 'blind' ? '#0891B2' : productId === 'roll' ? '#CA8A04' : '#9B59B6'
+                      const fillColor = productId === 'blind' ? 'rgba(8,145,178,0.18)' : productId === 'roll' ? 'rgba(161,98,7,0.18)' : 'rgba(155,89,182,0.18)'
+                      const strokeColor = productId === 'blind' ? '#0891B2' : productId === 'roll' ? '#A16207' : '#9B59B6'
                       return (
                         <>
                           <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="1.5" />
@@ -609,7 +609,7 @@ export default function CurtainBlindClient() {
                     {/* 라벨 — 항상 마지막에 그려서 패널 위에 보이도록 (z-order) */}
                     {/* 봉 라벨 — 커튼 모드일 때만 위쪽에 분리 배치 */}
                     {isCurtain && (
-                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#CA8A04" fontSize="11" fontFamily="monospace" fontWeight="700">
+                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#A16207" fontSize="11" fontFamily="monospace" fontWeight="700">
                         봉 {fmt(result.rodLength)}cm
                       </text>
                     )}
@@ -682,8 +682,8 @@ export default function CurtainBlindClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>롤스크린 vs 로만쉐이드</span></div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #CA8A04', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#CA8A04', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #A16207', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>

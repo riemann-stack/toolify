@@ -123,7 +123,7 @@ export default function BmrPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { name: '① Mifflin-St Jeor (1990)', tag: '널리 권장', tagColor: '#059669', desc: '1990년 건강한 성인 498명 데이터 기반. 일반 성인에 비교적 정확 (±5~10%). 입력: 키·체중·나이·성별.' },
-              { name: '② Harris-Benedict (1919·1984 개정)', tag: '임상 다용', tagColor: '#CA8A04', desc: '원전 1919년·개정판 1984년(Roza-Shizgal). 본 도구는 개정판 계수 사용. 정확도 ±10%. Mifflin보다 약간 높게 추정. 의료/연구 기록 일관성 ↑.' },
+              { name: '② Harris-Benedict (1919·1984 개정)', tag: '임상 다용', tagColor: '#A16207', desc: '원전 1919년·개정판 1984년(Roza-Shizgal). 본 도구는 개정판 계수 사용. 정확도 ±10%. Mifflin보다 약간 높게 추정. 의료/연구 기록 일관성 ↑.' },
               { name: '③ Katch-McArdle', tag: '체지방률 정확 시', tagColor: '#0891B2', desc: '체지방률 정확 입력 시 ±3~5%. 운동선수·체성분 검사 받은 사람에게 정확. 입력: 체중·체지방률.' },
               { name: '④ Cunningham', tag: 'LBM 정확 시', tagColor: '#EA580C', desc: '제지방량(LBM) 정확 입력 시 ±3~5%. 근육량 많은 사람에게 정확. 입력: LBM.' },
             ].map((f, i) => (
@@ -257,8 +257,8 @@ export default function BmrPage() {
             <li>· 직업 활동량(사무·서비스·육체노동) 무시</li>
             <li>· 일일 걸음 수 반영 X</li>
           </ul>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#CA8A04', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
             <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
               <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>

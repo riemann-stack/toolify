@@ -69,7 +69,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 40px;
 }
-.segActive { background: var(--accent); color: #fff; }
+.segActive { background: var(--accent-strong); color: #fff; }
 
 /* ── pill(연령) ── */
 .pillRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -88,7 +88,7 @@
   min-height: 36px;
 }
 @media (hover: hover) { .pill:hover { border-color: var(--accent); color: var(--text); } }
-.pillActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 .helpText {
   font-size: 11.5px;
@@ -99,8 +99,8 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(135deg, rgba(202,138,4,0.12) 0%, rgba(220,38,38,0.05) 100%);
-  border: 1px solid rgba(202,138,4,0.3);
+  background: linear-gradient(135deg, rgba(161,98,7,0.12) 0%, rgba(220,38,38,0.05) 100%);
+  border: 1px solid rgba(161,98,7,0.3);
   border-radius: 14px;
   padding: 24px 22px;
   text-align: center;
@@ -183,7 +183,7 @@
   transition: border-color 0.18s, background 0.18s;
 }
 @media (hover: hover) { .copyBtn:hover { border-color: var(--accent); } }
-.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
+.copied { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 /* ── 빈 상태 ── */
 .emptyHint {
@@ -210,7 +210,7 @@
   transition: all 0.15s; white-space: nowrap;
 }
 @media (hover: hover) { .tabBtn:hover { color: var(--text); } }
-.tabActive { background: var(--bg3); color: var(--accent); border: 1px solid rgba(202,138,4,0.35); }
+.tabActive { background: var(--bg3); color: var(--accent); border: 1px solid rgba(161,98,7,0.35); }
 
 /* ── 시도 전략 ── */
 .attemptList { display: flex; flex-direction: column; gap: 10px; }
@@ -223,11 +223,11 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800; color: var(--text);
 }
 .attN { font-size: 10px; font-weight: 700; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
-.attThird { border-color: rgba(202,138,4,0.45); background: rgba(202,138,4,0.1); color: var(--accent); }
+.attThird { border-color: rgba(161,98,7,0.45); background: rgba(161,98,7,0.1); color: var(--accent); }
 .projBox {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px;
   margin-top: 14px; padding: 12px 14px; border-radius: 10px;
-  background: rgba(202,138,4,0.1); border: 1px solid rgba(202,138,4,0.3);
+  background: rgba(161,98,7,0.1); border: 1px solid rgba(161,98,7,0.3);
   font-size: 14px; color: var(--text);
 }
 .projBox strong { font-family: 'Inter', system-ui, sans-serif; color: var(--accent); }

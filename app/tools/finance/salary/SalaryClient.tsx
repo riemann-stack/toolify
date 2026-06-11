@@ -406,7 +406,7 @@ export default function SalaryClient() {
             <div style={{ position: 'relative', paddingBottom: 36, marginTop: 8 }}>
               <div className={styles.percentileBar}>
                 <div className={styles.percentileSeg} style={{ background: '#EA580C' }}>하위 10%</div>
-                <div className={styles.percentileSeg} style={{ background: '#CA8A04' }}>25%</div>
+                <div className={styles.percentileSeg} style={{ background: '#A16207' }}>25%</div>
                 <div className={styles.percentileSeg} style={{ background: '#0891B2' }}>50%</div>
                 <div className={styles.percentileSeg} style={{ background: '#059669' }}>75%</div>
                 <div className={styles.percentileSeg} style={{ background: 'var(--accent)' }}>상위 10%</div>
@@ -493,7 +493,7 @@ export default function SalaryClient() {
                   {[
                     { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
                     { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
-                    { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#CA8A04',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
+                    { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#A16207',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
                     { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
                   ].map((row, i) => (
                     <div key={i} className={styles.hourlyRow}>
@@ -559,9 +559,9 @@ export default function SalaryClient() {
           {reverseResult && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(202,138,4,0.30)', background: 'rgba(202,138,4,0.06)' }}>
+                style={{ borderColor: 'rgba(161,98,7,0.30)', background: 'rgba(161,98,7,0.06)' }}>
                 <div className={styles.heroLabel}>필요 세전 연봉</div>
-                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
+                <div className={styles.heroNum} style={{ color: '#A16207' }}>
                   {formatEok(reverseResult.grossYearly)}
                 </div>
                 <div className={styles.heroSub}>

@@ -18,7 +18,7 @@
   color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   min-height: 48px;
 }
-.modeActive { background: var(--accent); color: #fff; }
+.modeActive { background: var(--accent-strong); color: #fff; }
 
 /* ── 카드 ── */
 .card {
@@ -45,7 +45,7 @@
   color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
   min-height: 40px; white-space: nowrap;
 }
-.segActive { background: var(--accent); color: #fff; }
+.segActive { background: var(--accent-strong); color: #fff; }
 
 /* ── 입출력 ── */
 .ioHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -89,7 +89,7 @@
 .playRow { display: flex; gap: 10px; margin-bottom: 14px; }
 .playBtn {
   flex: 1; appearance: none; -webkit-appearance: none;
-  background: var(--accent); border: none; border-radius: 10px;
+  background: var(--accent-strong); border: none; border-radius: 10px;
   padding: 13px; font-size: 15px; font-weight: 800; color: #fff;
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 50px;
 }

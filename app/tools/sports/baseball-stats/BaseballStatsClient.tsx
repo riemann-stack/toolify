@@ -41,7 +41,7 @@ const WAR_TIERS: Array<{ range: string; label: string; color: string }> = [
   { range: '5.0~5.9',  label: '골든글러브 경쟁 후보', color: '#059669' },
   { range: '4.0~4.9',  label: '실력으로 인정받는 리그 올스타급', color: '#0891B2' },
   { range: '3.0~3.9',  label: '팀의 간판급 주전', color: '#0EA5E9' },
-  { range: '2.0~2.9',  label: '팀의 평균적인 주전 (밥값)', color: '#CA8A04' },
+  { range: '2.0~2.9',  label: '팀의 평균적인 주전 (밥값)', color: '#A16207' },
   { range: '1.0~1.9',  label: '준주전·플래툰 백업', color: '#EA580C' },
   { range: '0 이하',    label: '백업·대체선수 수준', color: '#DC2626' },
 ]
@@ -100,7 +100,7 @@ function n(v: string): number {
 }
 
 /* 색상 팔레트 — 타격 분포 파이 */
-const PIE_COLORS = ['#0EA5E9', '#0891B2', '#EA580C', '#CA8A04']
+const PIE_COLORS = ['#0EA5E9', '#0891B2', '#EA580C', '#A16207']
 
 /* ─────────────────────────────────────────────────────────
  * 메인
@@ -264,7 +264,7 @@ export default function BaseballStatsClient() {
     if (v >= 150) return { label: 'MVP·리그 최정상', color: '#7C3AED' }
     if (v >= 130) return { label: '올스타급', color: '#059669' }
     if (v >= 115) return { label: '간판 주전', color: '#0891B2' }
-    if (v >= 95)  return { label: '평균 주전', color: '#CA8A04' }
+    if (v >= 95)  return { label: '평균 주전', color: '#A16207' }
     if (v >= 80)  return { label: '평균 이하', color: '#EA580C' }
     return { label: '백업·교체', color: '#DC2626' }
   }

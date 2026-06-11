@@ -111,7 +111,7 @@ export default function FightWeightPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
               { sport: '복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
-              { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#CA8A04' },
+              { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#A16207' },
               { sport: 'ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
               { sport: '킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#0891B2' },
               { sport: '유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
@@ -210,7 +210,7 @@ export default function FightWeightPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04', fontWeight: 700 }}>적극 (1.5%/주)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontWeight: 700 }}>적극 (1.5%/주)</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700 }}>위험 (2%/주)</th>
                 </tr>
               </thead>
@@ -225,7 +225,7 @@ export default function FightWeightPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                   </tr>
                 ))}

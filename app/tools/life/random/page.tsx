@@ -134,7 +134,7 @@ export default function RandomPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
               예: A=3, B=1, C=2 → 총합 6
-              <br />→ A: <strong style={{ color: '#CA8A04' }}>3/6 = 50%</strong>, B: <strong style={{ color: '#CA8A04' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: '#CA8A04' }}>2/6 ≈ 33%</strong>
+              <br />→ A: <strong style={{ color: '#A16207' }}>3/6 = 50%</strong>, B: <strong style={{ color: '#A16207' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: '#A16207' }}>2/6 ≈ 33%</strong>
             </p>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>

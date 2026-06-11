@@ -19,7 +19,7 @@ const COSMIC_SECOND_REAL_YEARS = COSMIC_MINUTE_REAL_YEARS / 60 // 약 437.5년
 type CatKey = 'cosmic' | 'solar' | 'earth' | 'life' | 'human' | 'civilization' | 'now'
 const CATEGORIES: Record<CatKey, { name: string; color: string; cls: string; borderCls: string }> = {
   cosmic:       { name: '우주 진화',  color: '#9B59B6', cls: s.catCosmic,       borderCls: s.borderCosmic },
-  solar:        { name: '태양계',     color: '#CA8A04', cls: s.catSolar,        borderCls: s.borderSolar },
+  solar:        { name: '태양계',     color: '#A16207', cls: s.catSolar,        borderCls: s.borderSolar },
   earth:        { name: '지구',       color: '#0891B2', cls: s.catEarth,        borderCls: s.borderEarth },
   life:         { name: '생명·진화',  color: '#059669', cls: s.catLife,         borderCls: s.borderLife },
   human:        { name: '인류 진화',  color: '#EA580C', cls: s.catHuman,        borderCls: s.borderHuman },
@@ -281,7 +281,7 @@ export default function CosmicCalendarClient() {
     const items = [
       { label: '우주 1년',       cosmicSec: 365.25 * 24 * 3600,                color: '#9B59B6', desc: '138억 년' },
       { label: '공룡 시대',      cosmicSec: (165_000_000 / COSMIC_SECOND_REAL_YEARS), color: '#EA580C', desc: '약 4.4일' },
-      { label: '인류 등장',      cosmicSec: (300_000   / COSMIC_SECOND_REAL_YEARS),   color: '#CA8A04', desc: '약 11.4분' },
+      { label: '인류 등장',      cosmicSec: (300_000   / COSMIC_SECOND_REAL_YEARS),   color: '#A16207', desc: '약 11.4분' },
       { label: '인류 문명',      cosmicSec: (12_000    / COSMIC_SECOND_REAL_YEARS),   color: '#059669', desc: '약 27.5초' },
       { label: '내 나이',        cosmicSec: myLife.cosmicSeconds,             color: '#0D9488', desc: `약 ${round(myLife.cosmicSeconds, 3)}초` },
     ]

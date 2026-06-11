@@ -72,7 +72,7 @@ export default function NumberBasePage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 자리값 (오른쪽이 0번째)</span></div>
             <div><span style={{ color: 'var(--accent)' }}>2진수</span>:  1, 2, 4, 8, 16, 32, 64, 128, 256, ...</div>
-            <div><span style={{ color: '#CA8A04' }}>8진수</span>:  1, 8, 64, 512, 4096, ...</div>
+            <div><span style={{ color: '#A16207' }}>8진수</span>:  1, 8, 64, 512, 4096, ...</div>
             <div><span style={{ color: '#0891B2' }}>10진수</span>: 1, 10, 100, 1000, 10000, ...</div>
             <div><span style={{ color: '#EA580C' }}>16진수</span>: 1, 16, 256, 4096, 65536, ...</div>
           </div>
@@ -99,8 +99,8 @@ export default function NumberBasePage() {
                 <br />8비트(1바이트) = 16진수 2자리 (예: 0xFF)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #CA8A04', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#CA8A04', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #A16207', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#A16207', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
               <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 3자리 = 8진수 1자리</strong>
                 <br />000 = 0 / 111 = 7
@@ -263,7 +263,7 @@ export default function NumberBasePage() {
             {[
               { range: '0~31',   label: '제어 문자',   c: '#A8A29E', d: 'NUL, TAB(9), LF(10), CR(13), ESC(27) 등' },
               { range: '32',     label: '공백 (SPACE)', c: '#0D9488', d: '문자열 구분' },
-              { range: '48~57',  label: '숫자 0~9',     c: '#CA8A04', d: 'ord(\'0\') = 48' },
+              { range: '48~57',  label: '숫자 0~9',     c: '#A16207', d: 'ord(\'0\') = 48' },
               { range: '65~90',  label: '대문자 A~Z',   c: 'var(--accent)', d: 'ord(\'A\') = 65' },
               { range: '97~122', label: '소문자 a~z',   c: '#0891B2', d: 'ord(\'a\') = 97 (대문자+32)' },
               { range: '127',    label: 'DEL',          c: '#DC2626', d: '구식 천공카드 삭제 표시' },
@@ -318,7 +318,7 @@ export default function NumberBasePage() {
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', color: '#EA580C', fontFamily: 'var(--font-mono)' }}>{r.h}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
                   </tr>
                 ))}
               </tbody>

@@ -58,7 +58,7 @@ const ENVIRONMENTS: { id: EnvId; name: string; mult: number; icon: string; cls: 
 // UV 등급
 const UV_LEVELS: { range: [number, number]; level: string; color: string; icon: string; advice: string; heroCls: string; quickCls: string }[] = [
   { range: [0, 2],   level: '낮음',     color: '#059669', icon: '🟢', advice: '특별한 보호 불필요. 야외 활동 무리 없음.',                heroCls: s.heroLow,     quickCls: s.uvQuickLow },
-  { range: [3, 5],   level: '보통',     color: '#CA8A04', icon: '🟡', advice: '오전 10시~오후 4시 차단제·모자 권장.',                  heroCls: s.heroMid,     quickCls: s.uvQuickMid },
+  { range: [3, 5],   level: '보통',     color: '#A16207', icon: '🟡', advice: '오전 10시~오후 4시 차단제·모자 권장.',                  heroCls: s.heroMid,     quickCls: s.uvQuickMid },
   { range: [6, 7],   level: '높음',     color: '#EA580C', icon: '🟠', advice: '차단제·모자·긴 옷 필수. 그늘 활용.',                    heroCls: s.heroHigh,    quickCls: s.uvQuickHigh },
   { range: [8, 10],  level: '매우 높음', color: '#DC2626', icon: '🔴', advice: '오전 10시~오후 4시 야외 활동 자제. 추가 보호 필수.',     heroCls: s.heroVHigh,   quickCls: s.uvQuickVHigh },
   { range: [11, 20], level: '위험',     color: '#9B59B6', icon: '🟣', advice: '가능한 외출 자제. 모든 보호 수단 필수.',                heroCls: s.heroExtreme, quickCls: s.uvQuickExtreme },
@@ -720,7 +720,7 @@ export default function UvProtectionClient() {
               {[
                 { s: '봄 (3~5월)',   r: '5~8',  level: '보통~높음',   c: '#EA580C' },
                 { s: '여름 (6~8월)', r: '8~11', level: '매우 높음~위험', c: '#DC2626' },
-                { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#CA8A04' },
+                { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#A16207' },
                 { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#059669' },
               ].map((r, i) => (
                 <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>

@@ -87,7 +87,7 @@ export default function RecipePage() {
             ].map((it, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700 }}>{it.label}</p>
-                <p style={{ fontSize: '15px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
+                <p style={{ fontSize: '15px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, margin: '2px 0' }}>{it.val}</p>
                 <p style={{ fontSize: '11.5px', color: 'var(--muted)' }}>{it.desc}</p>
               </div>
             ))}
@@ -169,7 +169,7 @@ export default function RecipePage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>🍞 베이킹</p>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#A16207', marginBottom: '6px' }}>🍞 베이킹</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 비율 매우 중요 (±5%)</li>
                 <li>· 정확한 값 그대로 사용</li>

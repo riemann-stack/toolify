@@ -147,7 +147,7 @@ export default function VocalRangePage() {
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
             <li>· <strong style={{ color: '#059669' }}>원키</strong> — 키 변경 없이 부를 수 있는 곡</li>
-            <li>· <strong style={{ color: '#CA8A04' }}>±1~2 키</strong> — 살짝 조정으로 안정적</li>
+            <li>· <strong style={{ color: '#A16207' }}>±1~2 키</strong> — 살짝 조정으로 안정적</li>
             <li>· <strong style={{ color: '#EA580C' }}>±3~6 키</strong> — 큰 폭 조정 필요 (편곡 영향 있음)</li>
           </ul>
           <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>

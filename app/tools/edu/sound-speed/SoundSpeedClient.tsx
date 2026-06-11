@@ -377,8 +377,8 @@ export default function SoundSpeedClient() {
             <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet">
               <defs>
                 <radialGradient id="lightning" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"  stopColor="#CA8A04" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#CA8A04" stopOpacity="0" />
+                  <stop offset="0%"  stopColor="#A16207" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#A16207" stopOpacity="0" />
                 </radialGradient>
               </defs>
 

@@ -231,7 +231,7 @@ export default function AreaClient() {
                   <td>약 84.96㎡ <small style={{ color: 'var(--muted)' }}>(약 25.7평)</small></td>
                 </tr>
                 <tr>
-                  <td><strong style={{ color: '#CA8A04' }}>주거공용</strong></td>
+                  <td><strong style={{ color: '#A16207' }}>주거공용</strong></td>
                   <td>계단·복도·엘리베이터</td>
                   <td>약 25㎡</td>
                 </tr>

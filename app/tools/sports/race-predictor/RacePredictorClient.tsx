@@ -28,7 +28,7 @@ const SUB_GOALS = [
 const PACE_ZONES = [
   { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: 0.59, color: '#0891B2' },
   { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.70, color: '#0EA5E9' },
-  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.78, color: '#CA8A04' },
+  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.78, color: '#A16207' },
   { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.85, color: '#EA580C' },
   { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 0.93, color: '#DC2626' },
 ]

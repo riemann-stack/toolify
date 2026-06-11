@@ -16,7 +16,7 @@ export interface Category {
 
 export const categories: Category[] = [
   {
-    id: 'finance', icon: '💰', name: '금융·재테크', color: '#059669',
+    id: 'finance', icon: '💰', name: '금융·재테크', color: 'var(--cat-finance)',
     tools: [
       { href: '/tools/finance/salary',   icon: '💴', name: '연봉 실수령액 계산기', desc: '세금·4대보험 떼고 통장에 진짜 꽂히는 그 월급. 2026년 최신 기준 자동 + 인상률·시급 환산.', badge: 'hot' },
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확하게.' },
@@ -46,7 +46,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'health', icon: '🏃', name: '건강·웰빙', color: '#0891B2',
+    id: 'health', icon: '🏃', name: '건강·웰빙', color: 'var(--cat-health)',
     tools: [
       { href: '/tools/health/bmi',           icon: '⚖️', name: 'BMI 계산기',                 desc: '키·몸무게로 비만도와 정상 체중 범위. 허리둘레·체지방률 추정까지 한 화면에.' },
       { href: '/tools/health/bmr',           icon: '🔥', name: '기초대사량 계산기',          desc: '기초대사량과 하루 총 소비 칼로리 + 운동일/휴식일별 목표 칼로리 자동.' },
@@ -62,7 +62,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'cooking', icon: '🍳', name: '요리·식품', color: '#D97706',
+    id: 'cooking', icon: '🍳', name: '요리·식품', color: 'var(--cat-cooking)',
     tools: [
       { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '인분만 바꾸면 모든 재료가 비례 자동. 큰술↔g↔ml 환산과 장보기 리스트까지.' },
       { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',    desc: '냉장·전자레인지·찬물·실온 4가지 해동법 비교 + 식품별 위험도와 시작·완료 시각.' },
@@ -86,7 +86,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'life', icon: '🎲', name: '생활·재미', color: '#EA580C',
+    id: 'life', icon: '🎲', name: '생활·재미', color: 'var(--cat-life)',
     tools: [
       { href: '/tools/life/lotto',         icon: '🎰', name: '로또 번호 생성기', desc: '8가지 생성 모드 + 번호 분석 + 가상 추첨으로 1등 체감. 당첨금 세후까지.', badge: 'hot' },
       { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기', desc: '룰렛 회전으로 점심·벌칙부터 팀 나누기·자리 배치까지. 모바일에서도 빠른 칩 입력.' },
@@ -110,7 +110,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'sports', icon: '⛳', name: '스포츠', color: '#CA8A04',
+    id: 'sports', icon: '⛳', name: '스포츠', color: 'var(--cat-sports)',
     tools: [
       { href: '/tools/sports/fight-weight',    icon: '🥊', name: '격투기 체급 계산기',     desc: '복싱·UFC·MMA 체급별 감량 계획과 D-day 일정 + 위험도 자동 경고.' },
       { href: '/tools/sports/baseball-stats',  icon: '⚾', name: '야구 타율 계산기',   desc: '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교.' },
@@ -135,7 +135,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'interior', icon: '🏠', name: '주거·인테리어', color: '#EA580C',
+    id: 'interior', icon: '🏠', name: '주거·인테리어', color: 'var(--cat-interior)',
     tools: [
       { href: '/tools/interior/room-area',     icon: '📐', name: '공간 면적 계산기',           desc: '벽·바닥·천장·평수·부피 한 번에 — 도배·페인트·에어컨 평형 계산의 기본.', badge: 'hot' },
       { href: '/tools/interior/ventilation',   icon: '💨', name: '환기량 계산기',     desc: '공간 부피·인원으로 필요 환기량 + 공기청정기 CADR 매칭과 창문 환기 시간.', badge: 'new' },
@@ -155,7 +155,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'unit', icon: '📐', name: '단위·변환', color: '#7C3AED',
+    id: 'unit', icon: '📐', name: '단위·변환', color: 'var(--cat-unit)',
     tools: [
       { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',         desc: '길이·무게·온도·압력·당도 등 14가지 분야를 한 번에. 척·치·푼·평·정보·근·돈·홉 같은 한국 전통 도량형도 변환.', badge: 'hot' },
       { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',          desc: '아파트 평형·전용·공급·계약면적 환산 + 평형별 방 크기 가이드.' },
@@ -170,7 +170,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'date', icon: '📅', name: '날짜·시간', color: '#DB2777',
+    id: 'date', icon: '📅', name: '날짜·시간', color: 'var(--cat-date)',
     tools: [
       { href: '/tools/date/server-time', icon: '⏱️', name: '실시간 서버 시간', desc: '수강신청·티켓팅을 위한 NTP 동기화 KST를 밀리초로. 카운트다운·알림음 포함.', badge: 'new' },
       { href: '/tools/date/age',         icon: '🎂', name: '나이 계산기', desc: '만 나이·D-day·1만일 기념·생일 카운트다운 + 인생 시간 통계까지 한 화면에.' },
@@ -185,7 +185,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'art', icon: '🎨', name: '예술·창작', color: '#9333EA',
+    id: 'art', icon: '🎨', name: '예술·창작', color: 'var(--cat-art)',
     tools: [
       /* 🎵 음악 */
       { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기', desc: '마이크로 실시간 음정 감지로 내 최저·최고음 측정 + 한국 노래 30+곡 키 매칭.', badge: 'new' },
@@ -211,7 +211,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'edu', icon: '🔬', name: '교육·학습', color: '#0D9488',
+    id: 'edu', icon: '🔬', name: '교육·학습', color: 'var(--cat-edu)',
     tools: [
       { href: '/tools/edu/planet-comparison', icon: '🪐', name: '행성 비교 계산기', desc: '8개 행성에서 내 몸무게·나이·하루 길이가 어떻게 달라지는지 시각화.', badge: 'hot' },
       { href: '/tools/edu/cosmic-calendar',   icon: '🌌', name: '코스믹 캘린더',     desc: '138억 년 우주 역사를 1년 달력으로 압축한 인터랙티브 타임라인.' },
@@ -227,7 +227,7 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: 'dev', icon: '🖥️', name: '개발자', color: '#0EA5E9',
+    id: 'dev', icon: '🖥️', name: '개발자', color: 'var(--cat-dev)',
     tools: [
       { href: '/tools/dev/base64',    icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드.' },
       { href: '/tools/dev/tech-stack', icon: '🛠️', name: '기술 스택 추천기', desc: '프로젝트 시나리오로 Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천.', badge: 'new' },

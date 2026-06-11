@@ -115,7 +115,7 @@ export default function HyroxPage() {
                     ['⑧ 런 ', '월 볼 (Wall Balls)', '100/75회'],
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#CA8A04', fontWeight: 700 }}>1km</span></td>
+                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#A16207', fontWeight: 700 }}>1km</span></td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                       <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
                     </tr>

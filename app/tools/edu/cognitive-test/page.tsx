@@ -114,7 +114,7 @@ export default function CognitiveTestPage() {
                   { e: '🚀 매우 빠름', r: '~ 200ms', n: '최상위 (프로 게이머·F1 드라이버)', c: '#0D9488' },
                   { e: '✨ 빠름',       r: '201~250ms', n: '상위', c: '#059669' },
                   { e: '⭐ 평균',       r: '251~300ms', n: '일반 성인', c: 'var(--accent)' },
-                  { e: '👍 평균 이하',   r: '301~350ms', n: '일상에 무리 없음', c: '#CA8A04' },
+                  { e: '👍 평균 이하',   r: '301~350ms', n: '일상에 무리 없음', c: '#A16207' },
                   { e: '🐢 느림',       r: '351ms+',   n: '피로·집중 부족·고령일 가능성', c: '#EA580C' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>

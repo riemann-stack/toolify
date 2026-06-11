@@ -52,7 +52,7 @@
 .leagueAmateur { border-color: var(--border); }
 .leagueCustom { border-color: var(--border); }
 .leagueActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
@@ -187,7 +187,7 @@
 
 /* 색상 강조 (안타·홈런 등) */
 .cellH       { border-left: 3px solid var(--accent); }
-.cellHR      { border-left: 3px solid #CA8A04; }
+.cellHR      { border-left: 3px solid #A16207; }
 .cellWalk    { border-left: 3px solid #0891B2; }
 .cellOut     { border-left: 3px solid #EA580C; }
 .cellRun     { border-left: 3px solid #059669; }
@@ -256,7 +256,7 @@
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.lvMVP    { background: rgba(202,138,4,0.15);   color: #CA8A04; }
+.lvMVP    { background: rgba(161,98,7,0.15);   color: #A16207; }
 .lvAllStar{ background: var(--accent-dim);       color: var(--accent); }
 .lvRegular{ background: rgba(16,185,129,0.15);  color: #059669; }
 .lvAvg    { background: rgba(15,23,42,0.04); color: var(--muted); }

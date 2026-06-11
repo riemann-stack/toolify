@@ -130,7 +130,7 @@ export default function BmiPage() {
                 {[
                   ['저체중',     '18.5 미만',   '18.5 미만',   '낮음 (영양불량 위험)', '#0891B2'],
                   ['정상',       '18.5 ~ 24.9', '18.5 ~ 22.9', '보통',                '#059669'],
-                  ['과체중',     '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음',           '#CA8A04'],
+                  ['과체중',     '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음',           '#A16207'],
                   ['비만 1단계', '30.0 ~ 34.9', '25.0 ~ 29.9', '높음',                '#EA580C'],
                   ['비만 2단계', '35.0 ~ 39.9', '30.0 ~ 34.9', '매우 높음',           '#DC2626'],
                   ['비만 3단계', '40.0 이상',   '35.0 이상',   '고도 위험',           '#CC4444'],
@@ -179,7 +179,7 @@ export default function BmiPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{height}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669' }}>{normal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#CA8A04' }}>{over}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207' }}>{over}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: '#DC2626' }}>{obese}</td>
                   </tr>
                 ))}
@@ -241,7 +241,7 @@ export default function BmiPage() {
             <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>BMI + 허리둘레 종합 — 4가지 경우</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px', fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.7 }}>
               <p>✅ <strong style={{ color: '#059669' }}>BMI 정상 + 허리 정상</strong> — 건강한 체형. 현재 상태 유지 권장.</p>
-              <p>⚠️ <strong style={{ color: '#CA8A04' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
+              <p>⚠️ <strong style={{ color: '#A16207' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
               <p>⚠️ <strong style={{ color: '#0891B2' }}>BMI 비만 + 허리 정상</strong> — 근육 우세형 가능성. 체성분 검사 권장.</p>
               <p>🔴 <strong style={{ color: '#DC2626' }}>BMI 비만 + 허리 비만</strong> — 종합 비만. 의료 상담 필요.</p>
             </div>

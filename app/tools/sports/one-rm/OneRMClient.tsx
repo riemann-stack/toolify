@@ -67,7 +67,7 @@ const INTENSITIES: { pct: number; reps: string; purpose: string; type: 'strong' 
 const PLATE_COLORS: Record<number, string> = {
   25:   '#FF4646',
   20:   '#0891B2',
-  15:   '#CA8A04',
+  15:   '#A16207',
   10:   '#EA580C',
   5:    '#059669',
   2.5:  '#0EA5E9',

@@ -46,7 +46,7 @@
 }
 .keyBtnSharp { background: color-mix(in srgb, var(--bg3) 55%, #000 45%); }
 .keyBtnActive {
-  background: var(--accent) !important; color: #ffffff !important;
+  background: var(--accent-strong) !important; color: #ffffff !important;
   border-color: var(--accent) !important; font-weight: 700;
 }@media (hover: hover) {
   .keyBtnActive:hover { color: #ffffff !important; }
@@ -74,7 +74,7 @@
   .fretBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .fretBtnActive {
-  background: var(--accent); color: #ffffff;
+  background: var(--accent-strong); color: #ffffff;
   border-color: var(--accent);
 }@media (hover: hover) {
   .fretBtnActive:hover { color: #ffffff; }
@@ -200,7 +200,7 @@
 }@media (hover: hover) {
   .semiBtn:hover { color: var(--text); }
 }
-.semiBtnActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.semiBtnActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* ── 피아노 ── */
 .pianoWrap {

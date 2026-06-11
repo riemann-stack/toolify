@@ -43,7 +43,7 @@
 .tabActive    { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveDday      { background: rgba(220,38,38,0.18);  color: #DC2626; font-weight: 700; }
 .tabActiveStats     { background: rgba(155,89,182,0.12);   color: #9333EA; font-weight: 700; }
-.tabActiveMilestone { background: rgba(202,138,4,0.18);    color: #CA8A04; font-weight: 700; }
+.tabActiveMilestone { background: rgba(161,98,7,0.18);    color: #A16207; font-weight: 700; }
 .tabActiveCulture   { background: rgba(8,145,178,0.18);   color: #0891B2; font-weight: 700; }
 
 /* ── 카드 ── */
@@ -168,12 +168,12 @@
 }
 
 .birthdayBanner {
-  background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(202,138,4,0.18));
+  background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(161,98,7,0.18));
   border: 1px solid rgba(220,38,38,0.50);
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 14px;
-  color: #CA8A04;
+  color: #A16207;
   font-weight: 700;
   text-align: center;
   font-family: 'Noto Sans KR', sans-serif;
@@ -354,7 +354,7 @@
   font-variant-numeric: tabular-nums;
 }
 .ddayClose { color: #DC2626; }
-.ddayMid   { color: #CA8A04; }
+.ddayMid   { color: #A16207; }
 .ddayFar   { color: var(--muted); }
 
 /* ───────── 인생 통계 탭 ───────── */
@@ -469,9 +469,9 @@
   opacity: 0.55;
 }
 .milestoneNext {
-  background: rgba(202,138,4,0.14);
-  border-color: #CA8A04;
-  box-shadow: 0 0 0 3px rgba(202,138,4,0.18);
+  background: rgba(161,98,7,0.14);
+  border-color: #A16207;
+  box-shadow: 0 0 0 3px rgba(161,98,7,0.18);
 }
 .milestoneIcon { font-size: 18px; text-align: center; }
 .milestoneName { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
@@ -539,8 +539,8 @@
 }
 
 .traditionalCard {
-  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(234,88,12,0.14));
-  border: 1px solid rgba(202,138,4,0.30);
+  background: linear-gradient(140deg, rgba(161,98,7,0.14), rgba(234,88,12,0.14));
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 14px;
   padding: 20px 22px;
   text-align: center;
@@ -548,7 +548,7 @@
 .traditionalHanja {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 36px;
-  color: #CA8A04;
+  color: #A16207;
   font-weight: 800;
   margin-bottom: 6px;
   letter-spacing: 4px;

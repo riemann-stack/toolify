@@ -97,12 +97,12 @@
 }
 .catDaily       { border-color: var(--accent); }
 .catEnvironment { border-color: rgba(16,185,129,0.40); }
-.catBusiness    { border-color: rgba(202,138,4,0.40); }
+.catBusiness    { border-color: rgba(161,98,7,0.40); }
 .catEducation   { border-color: rgba(155,89,182,0.40); }
 .catActive { font-weight: 700; }
 .catDaily.catActive       { background: var(--accent-dim);     color: var(--accent); }
 .catEnvironment.catActive { background: rgba(16,185,129,0.18); color: #059669; }
-.catBusiness.catActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; }
+.catBusiness.catActive    { background: rgba(161,98,7,0.18);  color: #A16207; }
 .catEducation.catActive   { background: rgba(155,89,182,0.12); color: #9333EA; }
 
 /* ── 템플릿 카드 ── */
@@ -127,7 +127,7 @@
 }
 .tplDaily       { border-left-color: var(--accent); }
 .tplEnvironment { border-left-color: #059669; }
-.tplBusiness    { border-left-color: #CA8A04; }
+.tplBusiness    { border-left-color: #A16207; }
 .tplEducation   { border-left-color: #9B59B6; }
 
 .templateHeader {
@@ -420,7 +420,7 @@
 }
 .scenarioLow  { border-top-color: #0891B2; background: rgba(8,145,178,0.14); }
 .scenarioBase { border-top-color: var(--accent); background: var(--accent-dim); }
-.scenarioHigh { border-top-color: #CA8A04; background: rgba(202,138,4,0.14); }
+.scenarioHigh { border-top-color: #A16207; background: rgba(161,98,7,0.14); }
 .scenarioLabel {
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -431,7 +431,7 @@
 }
 .scenarioLow  .scenarioLabel { color: #0891B2; }
 .scenarioBase .scenarioLabel { color: var(--accent); }
-.scenarioHigh .scenarioLabel { color: #CA8A04; }
+.scenarioHigh .scenarioLabel { color: #A16207; }
 
 .scenarioName { font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
 .scenarioValue {
@@ -443,7 +443,7 @@
 }
 .scenarioLow  .scenarioValue { color: #0891B2; }
 .scenarioBase .scenarioValue { color: var(--accent); }
-.scenarioHigh .scenarioValue { color: #CA8A04; }
+.scenarioHigh .scenarioValue { color: #A16207; }
 .scenarioUnit { font-size: 12px; color: var(--muted); margin-left: 3px; }
 .scenarioDesc { font-size: 11px; color: var(--muted); margin-top: 6px; font-style: italic; }
 
@@ -490,7 +490,7 @@
   transition: width 0.4s ease;
 }
 .fillHigh { background: linear-gradient(90deg, #DC2626, #EA580C); }
-.fillMid  { background: linear-gradient(90deg, #CA8A04, #FFC857); }
+.fillMid  { background: linear-gradient(90deg, #A16207, #FFC857); }
 .fillLow  { background: linear-gradient(90deg, var(--accent), #0D9488); }
 .sensitivityValue {
   font-family: 'Inter', system-ui, sans-serif;

@@ -674,7 +674,7 @@ export default function RoomAreaClient() {
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>부피</p>
-                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#CA8A04', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
+                    <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800, color: '#A16207', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
                   </div>
                 </div>
               </div>

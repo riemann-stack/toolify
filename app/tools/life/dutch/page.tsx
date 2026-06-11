@@ -143,8 +143,8 @@ export default function DutchPage() {
             <li>각 그룹 안에서 가장 많이 받을·낼 사람을 매칭해 송금</li>
             <li>최소 송금 = (정산할 인원) − (합이 0인 그룹 수)</li>
           </ol>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px', background: 'rgba(202,138,4,0.06)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 10, padding: '11px 14px' }}>
-            💡 <strong style={{ color: '#CA8A04' }}>예시</strong> — 5명의 잔액이 −60,000 / −50,000 / +20,000 / +40,000 / +50,000원일 때
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px', background: 'rgba(161,98,7,0.06)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 10, padding: '11px 14px' }}>
+            💡 <strong style={{ color: '#A16207' }}>예시</strong> — 5명의 잔액이 −60,000 / −50,000 / +20,000 / +40,000 / +50,000원일 때
             <br />· 낼 사람이 받을 사람에게 제각각 보내면 최대 6건
             <br />· 알고리즘: (−50,000 ↔ +50,000) 1건 + (−60,000 ↔ +20,000·+40,000) 2건 = <strong>총 3건</strong>
             <br />단순 그리디만 쓰면 4건이 되는데, 합이 0인 그룹을 찾아 3건까지 줄입니다.

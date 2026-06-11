@@ -838,7 +838,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--accent); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -977,7 +977,7 @@
 /* 저장 버튼·기록 */
 .saveBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 8px;
   padding: 12px;

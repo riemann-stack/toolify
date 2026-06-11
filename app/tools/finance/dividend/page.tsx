@@ -275,7 +275,7 @@ export default function DividendPage() {
             🎯 월 적립 역산 — &ldquo;월배당 100만 만들려면 월 얼마?&rdquo;
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            「월 적립 역산」 탭은 목표 월배당 + 기간 + 시드 + 배당 재투자 가정을 받아 <strong style={{ color: '#CA8A04' }}>이진 탐색</strong>으로 필요 월 적립액을 계산하고,
+            「월 적립 역산」 탭은 목표 월배당 + 기간 + 시드 + 배당 재투자 가정을 받아 <strong style={{ color: '#A16207' }}>이진 탐색</strong>으로 필요 월 적립액을 계산하고,
             결과를 4단계(매우 합리적/합리적/도전적/비현실적) 배지로 평가합니다.
           </p>
 
@@ -284,7 +284,7 @@ export default function DividendPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>월배당 100만 목표 + 시드 1,000만</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>월 적립 필요</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>월 적립 필요</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>현실성</th>
                 </tr>
               </thead>
@@ -300,7 +300,7 @@ export default function DividendPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -397,7 +397,7 @@ export default function DividendPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
             {[
               { name: 'ISA 계좌',     color: '#0891B2',  desc: '200~400만 비과세 + 9.9% 분리과세 · 종합과세 비포함 · 연 2,000만 한도 / 총 1억' },
-              { name: '연금저축',     color: '#CA8A04',  desc: '5.5% 분리과세 (55세 이후) + 16.5% 세액공제 · 연 600만 한도' },
+              { name: '연금저축',     color: '#A16207',  desc: '5.5% 분리과세 (55세 이후) + 16.5% 세액공제 · 연 600만 한도' },
               { name: 'IRP',          color: '#9333EA',  desc: '연금저축 합산 연 900만 한도 · 추가 300만 세액공제' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>

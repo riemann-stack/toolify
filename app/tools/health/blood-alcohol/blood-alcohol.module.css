@@ -156,7 +156,7 @@
   letter-spacing: 0.04em;
 }
 .statusSafe { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
-.statusCaution { background: rgba(202,138,4,0.15); color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.statusCaution { background: rgba(161,98,7,0.15); color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
 .statusWarn { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
 .statusDanger { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
 .statusCrit { background: rgba(220,38,38,0.2); color: #FF3E3E; border: 1px solid rgba(220,38,38,0.5); }

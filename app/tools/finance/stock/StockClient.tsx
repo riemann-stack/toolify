@@ -758,7 +758,7 @@ export default function StockClient() {
               <div className={styles.heroSub}>
                 필요 자금 약 {formatEok(reverseResult.requiredAmount ?? 0)}
               </div>
-              <div className={styles.rateBadge} style={{ background: 'rgba(202,138,4,0.10)', color: '#CA8A04', borderColor: 'rgba(202,138,4,0.40)' }}>
+              <div className={styles.rateBadge} style={{ background: 'rgba(161,98,7,0.10)', color: '#A16207', borderColor: 'rgba(161,98,7,0.40)' }}>
                 추가 후 본전까지 {formatPct(reverseResult.breakEvenRiseAfter ?? 0)} 상승 필요
               </div>
             </div>

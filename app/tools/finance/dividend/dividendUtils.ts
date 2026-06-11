@@ -178,7 +178,7 @@ export function reverseCalcMonthlyContribution(input: ReverseInput): ReverseResu
     feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'; feasibilityColor = '#0891B2'
     feasibilityNote = '월 30~80만 — 안정적 직장인에게 적합'
   } else if (requiredMonthly < 2_000_000) {
-    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = '#CA8A04'
+    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = '#A16207'
     feasibilityNote = '월 80~200만 — 부담 큼 · 기간 늘리기 검토'
   } else {
     feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'; feasibilityColor = '#DC2626'
@@ -223,7 +223,7 @@ export function evaluateComprehensiveTax(
   if (pct < 50) {
     level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
   } else if (pct < 80) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#CA8A04'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#A16207'
   } else if (pct < 100) {
     level = 'near'; levelLabel = '🟠 한도 임박'; levelColor = '#EA580C'
   } else {

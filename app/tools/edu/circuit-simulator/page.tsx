@@ -74,15 +74,15 @@ export default function CircuitSimulatorPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: '#0D9488' }}>V</span> = <span style={{ color: '#CA8A04' }}>I</span> × <span style={{ color: '#EA580C' }}>R</span></div>
+            <div><span style={{ color: '#0D9488' }}>V</span> = <span style={{ color: '#A16207' }}>I</span> × <span style={{ color: '#EA580C' }}>R</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>전압(V) = 전류(A) × 저항(Ω)</div>
             <div></div>
-            <div><span style={{ color: '#CA8A04' }}>I</span> = V / R   <span style={{ color: 'var(--muted)' }}>(전류 = 전압 ÷ 저항)</span></div>
+            <div><span style={{ color: '#A16207' }}>I</span> = V / R   <span style={{ color: 'var(--muted)' }}>(전류 = 전압 ÷ 저항)</span></div>
             <div><span style={{ color: '#EA580C' }}>R</span> = V / I   <span style={{ color: 'var(--muted)' }}>(저항 = 전압 ÷ 전류)</span></div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 9V 건전지 + 100Ω 저항 →
-            전류 = <strong style={{ color: '#CA8A04' }}>9 / 100 = 0.09A = 90mA</strong>
+            전류 = <strong style={{ color: '#A16207' }}>9 / 100 = 0.09A = 90mA</strong>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ export default function CircuitSimulatorPage() {
               <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>━ 직렬 (Series)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>저항이 한 줄로 연결</li>
-                <li>모든 저항에 <strong style={{ color: '#CA8A04' }}>같은 전류</strong></li>
+                <li>모든 저항에 <strong style={{ color: '#A16207' }}>같은 전류</strong></li>
                 <li>전압이 각 저항에 분배 (V = V₁ + V₂ + ...)</li>
                 <li>합성 저항 = R₁ + R₂ + ... (커짐)</li>
                 <li>한 곳 끊어지면 전체 작동 X</li>
@@ -246,7 +246,7 @@ export default function CircuitSimulatorPage() {
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 예시 (5V + 빨간 LED)</span></div>
             <div>V_LED = 2V, I_LED = 20mA</div>
-            <div>R = (5 − 2) / 0.02 = <span style={{ color: '#CA8A04' }}>150Ω</span></div>
+            <div>R = (5 − 2) / 0.02 = <span style={{ color: '#A16207' }}>150Ω</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>안전 마진을 위해 220Ω 권장 (전류 약간 낮아짐 → LED 수명 ↑)</div>
           </div>
           <div style={{ overflowX: 'auto', marginTop: 12 }}>
@@ -269,8 +269,8 @@ export default function CircuitSimulatorPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.b}</td>
                   </tr>
                 ))}
               </tbody>

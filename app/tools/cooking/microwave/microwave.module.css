@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -117,7 +117,7 @@
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
 .pill:disabled { opacity: 0.5; cursor: not-allowed; }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* 히어로 */
 .hero {
@@ -144,7 +144,7 @@
 .playBtn {
   display: inline-block;
   margin-top: 14px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 99px;

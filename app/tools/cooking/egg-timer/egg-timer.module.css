@@ -280,7 +280,7 @@
   .pill:hover { color: var(--text); border-color: var(--accent); }
 }
 .pillActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -467,7 +467,7 @@
 }
 .timerStartBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;

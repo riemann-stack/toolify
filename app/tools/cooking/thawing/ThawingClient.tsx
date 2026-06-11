@@ -475,7 +475,7 @@ function ThawTab() {
                 </div>
                 <div className={s.reverseResultRow}>
                   <span>해동 시작 권장</span>
-                  <span style={{ color: '#CA8A04', fontSize: 16 }}>{reverseInfo.display}</span>
+                  <span style={{ color: '#A16207', fontSize: 16 }}>{reverseInfo.display}</span>
                 </div>
                 <div className={s.reverseResultRow}>
                   <span>현재 시점 대비</span>

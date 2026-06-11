@@ -322,7 +322,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.resultTagOn { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 800; }
+.resultTagOn { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 800; }
 
 /* SVG */
 .ladderSvg {
@@ -470,12 +470,12 @@
   text-align: center;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .reverseCard:hover { transform: translateY(-2px); border-color: #CA8A04; }
+  .reverseCard:hover { transform: translateY(-2px); border-color: #A16207; }
 }
 .reverseLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
 .reverseResult { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
-.reverseRevealed { background: rgba(202,138,4,0.18); border-color: #CA8A04; }
-.reverseRevealed .reverseResult { color: #CA8A04; }
+.reverseRevealed { background: rgba(161,98,7,0.18); border-color: #A16207; }
+.reverseRevealed .reverseResult { color: #A16207; }
 .reverseAnswer {
   font-size: 12.5px;
   color: var(--accent);

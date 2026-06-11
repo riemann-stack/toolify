@@ -243,8 +243,8 @@ export default function LoanPage() {
             중도상환 효과 — 잔여 원금 ↓ → 이자 ↓. 단, 중도상환수수료가 발생하므로 <strong style={{ color: 'var(--text)' }}>순절감 = 줄어든 이자 − 수수료</strong>로 계산해야 합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>✅ 중도상환이 유리한 경우</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+              <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#A16207', marginBottom: '6px' }}>✅ 중도상환이 유리한 경우</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
                 <li>· 3년 이상 지났을 때 (수수료 0%)</li>
                 <li>· 금리 높은 시점</li>

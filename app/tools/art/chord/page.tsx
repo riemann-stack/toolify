@@ -125,7 +125,7 @@ export default function ChordPage() {
               { sym: 'maj7',  desc: '장7도 포함. 밝고 안정적인 느낌',                  color: '#059669' },
               { sym: 'm7',    desc: '단3도 + 단7도. 재즈에서 매우 자주 사용',           color: '#0891B2' },
               { sym: '7',     desc: '도미넌트7. 장3도 + 단7도. 해결 욕구가 있는 긴장감', color: '#EA580C' },
-              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: '#CA8A04' },
+              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: '#A16207' },
               { sym: 'add9',  desc: '기존 코드에 9도(=옥타브 위 2도) 추가. 색채감',       color: '#0EA5E9' },
               { sym: 'b5',    desc: '5도를 반음 낮춤. 긴장 또는 블루스적 색채',         color: '#DC2626' },
               { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: '#DC2626' },
@@ -212,7 +212,7 @@ export default function ChordPage() {
                 deg: 'Ⅰ → Ⅴ → Ⅵm → Ⅲm → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → G → Am → Em → F → C → F → G',
                 desc: '파헬벨 카논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
-                color: '#CA8A04',
+                color: '#A16207',
               },
             ].map((p, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}30`, borderRadius: '12px', padding: '16px 20px' }}>

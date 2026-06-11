@@ -196,7 +196,7 @@ export function calcMaintenance(input: MaintenanceInput): MaintenanceResult {
   const breakdown = [
     { key: 'fuel', label: input.fuelType === 'ev' ? '충전비' : '유류비', icon: input.fuelType === 'ev' ? '🔌' : '🛢️', value: fuelMonthly, color: '#EA580C' },
     { key: 'ins',  label: '보험료',     icon: '🛡️', value: insuranceMonthly, color: '#0891B2' },
-    { key: 'tax',  label: '자동차세',   icon: '🏛️', value: carTaxMonthly,    color: '#CA8A04' },
+    { key: 'tax',  label: '자동차세',   icon: '🏛️', value: carTaxMonthly,    color: '#A16207' },
     { key: 'park', label: '주차비',     icon: '🅿️', value: input.parkingMonthly, color: '#9B59B6' },
     { key: 'loan', label: '할부금',     icon: '💳', value: input.loanMonthly, color: '#0EA5E9' },
     { key: 'var',  label: '소모품·정비', icon: '🔧', value: variableMonthly,  color: '#059669' },

@@ -32,8 +32,8 @@
 .statValue { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
 .bestRound {
   font-size: 12px; color: var(--muted); margin: 12px 0 0;
-  padding: 8px 10px; background: rgba(202,138,4,0.14); border-radius: 8px;
-  border-left: 3px solid #CA8A04;
+  padding: 8px 10px; background: rgba(161,98,7,0.14); border-radius: 8px;
+  border-left: 3px solid #A16207;
 }
 .encourageHint {
   font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 10px 0 0;
@@ -45,7 +45,7 @@
 /* ── 입력 폼 큰 버튼 ── */
 .bigSaveBtn {
   width: 100%; margin-top: 14px;
-  background: var(--accent); color: #ffffff; border: none;
+  background: var(--accent-strong); color: #ffffff; border: none;
   padding: 14px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
@@ -53,7 +53,7 @@
   .bigSaveBtn:hover { opacity: 0.88; }
 }
 .smallSaveBtn {
-  background: var(--accent); color: #ffffff; border: none;
+  background: var(--accent-strong); color: #ffffff; border: none;
   padding: 10px 14px; border-radius: 10px;
   font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; min-height: 44px; white-space: nowrap;
@@ -219,7 +219,7 @@
   font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.04em;
 }
-.gradeScratch { background: rgba(202,138,4,0.15); color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.gradeScratch { background: rgba(161,98,7,0.15); color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
 .gradeLow     { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
 .gradeMid     { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
 .gradeHigh    { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
@@ -292,7 +292,7 @@
   font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700;
   padding: 1px 6px; border-radius: 4px; min-width: 20px;
 }
-.pointEagle  { background: rgba(202,138,4,0.15); color: #CA8A04; }
+.pointEagle  { background: rgba(161,98,7,0.15); color: #A16207; }
 .pointBirdie { background: rgba(16,185,129,0.15); color: #059669; }
 .pointPar    { background: rgba(14,165,233,0.15); color: var(--accent); }
 .pointBogey  { background: rgba(234,88,12,0.15); color: #EA580C; }

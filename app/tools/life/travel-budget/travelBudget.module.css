@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -113,7 +113,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* 도시 그리드 (탭 1) */
 .cityGrid {
@@ -220,7 +220,7 @@
 /* 자동 채우기 버튼 */
 .autoBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -476,7 +476,7 @@
 .styleComparePer strong { color: var(--text); font-weight: 700; }
 .styleSelectBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;

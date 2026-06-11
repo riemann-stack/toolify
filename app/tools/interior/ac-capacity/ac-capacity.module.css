@@ -242,8 +242,8 @@
 .spSmallRoom { border-color: rgba(155,89,182,0.30); }
 .spKitchen   { border-color: rgba(220,38,38,0.40); }
 .spOffice    { border-color: rgba(8,145,178,0.40); }
-.spWorkplace { border-color: rgba(202,138,4,0.40); }
-.spShop      { border-color: rgba(202,138,4,0.40); }
+.spWorkplace { border-color: rgba(161,98,7,0.40); }
+.spShop      { border-color: rgba(161,98,7,0.40); }
 .spStudio    { border-color: rgba(16,185,129,0.40); }
 .spLiving.spActive    { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .spBedroom.spActive,
@@ -251,7 +251,7 @@
 .spKitchen.spActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .spOffice.spActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 .spWorkplace.spActive,
-.spShop.spActive      { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.spShop.spActive      { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
 .spStudio.spActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
 
 /* ── 향 4개 ── */
@@ -282,11 +282,11 @@
 .dirBtn small { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .dirBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.dirSouth     { border-color: rgba(202,138,4,0.40); }
+.dirSouth     { border-color: rgba(161,98,7,0.40); }
 .dirEastWest  { border-color: rgba(234,88,12,0.40); }
 .dirNorth     { border-color: rgba(8,145,178,0.40); }
 .dirUnknown   { border-color: var(--border); }
-.dirSouth.dirActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.dirSouth.dirActive    { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
 .dirEastWest.dirActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
 .dirNorth.dirActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 .dirUnknown.dirActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }

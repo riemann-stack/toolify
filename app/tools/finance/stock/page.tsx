@@ -108,8 +108,8 @@ export default function StockPage() {
                 필요 상승률 = (본전 가격 ÷ 현재가 − 1) × 100%
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.20)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '12px', color: '#CA8A04', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>목표 평단 역산 공식</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.20)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '12px', color: '#A16207', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>목표 평단 역산 공식</p>
               <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, letterSpacing: '0.3px' }}>
                 필요 추가 수량 = 보유 수량 × (기존 평단 − 목표 평단) ÷ (목표 평단 − 현재가)
               </p>
@@ -167,7 +167,7 @@ export default function StockPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시나리오</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>가정</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>1년 후 손익</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>1년 후 손익</th>
                 </tr>
               </thead>
               <tbody>
@@ -310,7 +310,7 @@ export default function StockPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
               { range: '0~10%',  level: '🟢 안전',       color: '#059669', desc: '한 종목 10% 이내 — 분산 적정' },
-              { range: '10~20%', level: '🟡 주의',       color: '#CA8A04', desc: '약간 집중 — 추가 매수 신중히' },
+              { range: '10~20%', level: '🟡 주의',       color: '#A16207', desc: '약간 집중 — 추가 매수 신중히' },
               { range: '20~30%', level: '🟠 집중 위험',  color: '#EA580C', desc: '집중 위험 — 비중 관리 필요' },
               { range: '30%+',   level: '🔴 매우 위험',  color: '#DC2626', desc: '분산 권장 / 추가 매수 비권장' },
             ].map((s, i) => (

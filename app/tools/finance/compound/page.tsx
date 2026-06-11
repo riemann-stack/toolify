@@ -207,7 +207,7 @@ export default function CompoundPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             대부분의 사람은 「얼마를 적립할까」가 아니라 「언제까지 얼마를 모으고 싶다」로 생각합니다.
-            본 도구의 <strong style={{ color: '#CA8A04' }}>목표 역산</strong> 기능은 목표 금액·기간·수익률을 고정하고
+            본 도구의 <strong style={{ color: '#A16207' }}>목표 역산</strong> 기능은 목표 금액·기간·수익률을 고정하고
             필요한 월 적립액을 <strong style={{ color: 'var(--text) ' }}>이진 탐색(Binary Search)</strong>으로 계산합니다.
           </p>
 
@@ -218,7 +218,7 @@ export default function CompoundPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>목표</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>기간</th>
                   <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>수익률</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontWeight: 700 }}>월 적립액 (초기 0)</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>월 적립액 (초기 0)</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +234,7 @@ export default function CompoundPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -347,7 +347,7 @@ export default function CompoundPage() {
             {[
               { name: '보수적 4%',  color: '#0891B2', desc: '예금·국채·채권 중심 장기 평균', warn: '낮은 변동성' },
               { name: '기준 7%',    color: 'var(--accent)', desc: 'S&P500 100년 평균(인플레이션 반영 후 약 7%)', warn: '연구용 표준' },
-              { name: '낙관적 10%', color: '#CA8A04', desc: 'S&P500 명목 평균 · 주식형 펀드 장기', warn: '연 -30%~+40% 변동' },
+              { name: '낙관적 10%', color: '#A16207', desc: 'S&P500 명목 평균 · 주식형 펀드 장기', warn: '연 -30%~+40% 변동' },
               { name: '공격적 13%', color: '#EA580C', desc: '성장주·테크주 (역사적 예외값)', warn: '⚠ 단기 -50%도 가능' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>

@@ -77,7 +77,7 @@ export default function ReviewIntervalPage() {
                 {[
                   { t: '학습 직후',   r: '100%', c: '#0D9488' },
                   { t: '20분 후',     r: '약 58%', c: '#059669' },
-                  { t: '1시간 후',    r: '약 44%', c: '#CA8A04' },
+                  { t: '1시간 후',    r: '약 44%', c: '#A16207' },
                   { t: '1일 후',      r: '약 33%', c: '#EA580C' },
                   { t: '6일 후',      r: '약 25%', c: '#EA580C' },
                   { t: '31일 후',     r: '약 21%', c: '#DC2626' },
@@ -102,7 +102,7 @@ export default function ReviewIntervalPage() {
             marginTop: 12,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 단순 모델</span></div>
-            <div><span style={{ color: '#0D9488' }}>R(t)</span> = e^(−t/<span style={{ color: '#CA8A04' }}>S</span>) × 100</div>
+            <div><span style={{ color: '#0D9488' }}>R(t)</span> = e^(−t/<span style={{ color: '#A16207' }}>S</span>) × 100</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>R: 기억 유지율(%) · t: 경과 시간 · S: 기억 안정도</div>
           </div>
         </div>

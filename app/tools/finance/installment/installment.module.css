@@ -187,13 +187,13 @@
   margin-top: 4px;
 }
 .typeFree    { border-color: rgba(16,185,129,0.40); }
-.typePartial { border-color: rgba(202,138,4,0.40); }
+.typePartial { border-color: rgba(161,98,7,0.40); }
 .typePaid    { border-color: rgba(220,38,38,0.40); }
 .typeFree.typeActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
-.typePartial.typeActive { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.typePartial.typeActive { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
 .typePaid.typeActive    { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .typeFree    .typeBadge { background: rgba(16,185,129,0.18);  color: #059669; }
-.typePartial .typeBadge { background: rgba(202,138,4,0.18);   color: #CA8A04; }
+.typePartial .typeBadge { background: rgba(161,98,7,0.18);   color: #A16207; }
 .typePaid    .typeBadge { background: rgba(220,38,38,0.18); color: #DC2626; }
 
 .rateRow {

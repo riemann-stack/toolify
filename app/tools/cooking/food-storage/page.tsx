@@ -140,7 +140,7 @@ export default function FoodStoragePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                icon: '🌡️', name: '실온 보관',  c: '#CA8A04',
+                icon: '🌡️', name: '실온 보관',  c: '#A16207',
                 temp: '15~25°C, 직사광선 X',
                 tips: [
                   '바나나·토마토·양파·마늘·감자 등은 실온이 더 적합',

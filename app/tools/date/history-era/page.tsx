@@ -243,7 +243,7 @@ export default function HistoryEraPage() {
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>서기</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#059669',     fontWeight: 600 }}>🇰🇷 한국</th>
                   <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#0891B2',     fontWeight: 600 }}>🇯🇵 일본</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#CA8A04',     fontWeight: 600 }}>🇨🇳 중국</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#A16207',     fontWeight: 600 }}>🇨🇳 중국</th>
                 </tr>
               </thead>
               <tbody>

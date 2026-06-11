@@ -127,7 +127,7 @@ export type DdayCategory = {
 }
 export const DDAY_CATEGORIES: DdayCategory[] = [
   { id: 'exam',        name: '시험·자격증',  emoji: '📚', color: '#0891B2' },
-  { id: 'travel',      name: '여행',         emoji: '✈️', color: '#CA8A04' },
+  { id: 'travel',      name: '여행',         emoji: '✈️', color: '#A16207' },
   { id: 'anniversary', name: '기념일',       emoji: '🎉', color: '#DC2626' },
   { id: 'work',        name: '업무·프로젝트', emoji: '💼', color: '#9B59B6' },
   { id: 'sport',       name: '운동·대회',    emoji: '🏃', color: '#059669' },

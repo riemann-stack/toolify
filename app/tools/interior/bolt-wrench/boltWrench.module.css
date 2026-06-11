@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -85,7 +85,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* 시스템 그리드 (볼트 종류·너트·와셔·키트) */
 .systemGrid {

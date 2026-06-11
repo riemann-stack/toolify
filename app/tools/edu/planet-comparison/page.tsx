@@ -196,7 +196,7 @@ export default function PlanetComparisonPage() {
               { p: '수성·금성', t: '2~5분',   c: '#FFC857' },
               { p: '화성',     t: '13분',    c: '#DC2626' },
               { p: '목성',     t: '35분',    c: '#EA580C' },
-              { p: '토성',     t: '71분',    c: '#CA8A04' },
+              { p: '토성',     t: '71분',    c: '#A16207' },
               { p: '천왕성',   t: '2.5시간', c: '#0D9488' },
               { p: '해왕성',   t: '4시간',   c: '#3E5BFF' },
               { p: '프록시마 센타우리', t: '4.2년', c: '#9B59B6' },
@@ -243,7 +243,7 @@ export default function PlanetComparisonPage() {
                   { p: '지구', c: '#0891B2', r: '-88~58°C',    avg: '15°C',  d: '생명체 거주 가능' },
                   { p: '화성', c: '#DC2626', r: '-143~35°C',   avg: '-65°C', d: '추움' },
                   { p: '목성', c: '#EA580C', r: '-145°C',       avg: '-145°C', d: '가스 행성 — 표면 없음' },
-                  { p: '토성', c: '#CA8A04', r: '-178°C',       avg: '-178°C', d: '가스 행성' },
+                  { p: '토성', c: '#A16207', r: '-178°C',       avg: '-178°C', d: '가스 행성' },
                   { p: '천왕성', c: '#0D9488', r: '-224°C',      avg: '-224°C', d: '가장 추운 행성' },
                   { p: '해왕성', c: '#3E5BFF', r: '-218°C',      avg: '-218°C', d: '얼음 행성' },
                 ].map((r, i) => (
@@ -273,7 +273,7 @@ export default function PlanetComparisonPage() {
               { t: '금성', d: '비너스 익스프레스 (ESA) · 아카츠키 (JAXA) 등', c: '#FFC857' },
               { t: '화성', d: '큐리오시티·퍼서비어런스·인저뉴어티 헬리콥터 활동 중', c: '#DC2626' },
               { t: '목성', d: '주노 (NASA, 현재 활동 중) · Europa Clipper 진행 중', c: '#EA580C' },
-              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#CA8A04' },
+              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#A16207' },
               { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#0D9488' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>

@@ -41,13 +41,13 @@ const SEVERITY_LABEL: Record<Severity, string> = {
 
 const SEVERITY_BORDER: Record<Severity, string> = {
   safe:    'rgba(16,185,129,0.40)',
-  caution: 'rgba(202,138,4,0.40)',
+  caution: 'rgba(161,98,7,0.40)',
   warning: 'rgba(234,88,12,0.40)',
   danger:  '#DC2626',
 }
 const SEVERITY_BG: Record<Severity, string> = {
   safe:    'rgba(16,185,129,0.06)',
-  caution: 'rgba(202,138,4,0.06)',
+  caution: 'rgba(161,98,7,0.06)',
   warning: 'rgba(234,88,12,0.06)',
   danger:  'rgba(220,38,38,0.10)',
 }
@@ -544,7 +544,7 @@ export default function WeightLossClient() {
                 <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
                   단 {macros.protein.percent}%
                 </div>
-                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#CA8A04' }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#A16207' }}>
                   지 {macros.fat.percent}%
                 </div>
                 <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#EA580C' }}>
@@ -561,7 +561,7 @@ export default function WeightLossClient() {
                   <span>{fmt(macros.protein.kcal)}</span>
                   <span>{macros.protein.percent}%</span>
                 </div>
-                <div className={styles.macroRow} style={{ borderLeftColor: '#CA8A04' }}>
+                <div className={styles.macroRow} style={{ borderLeftColor: '#A16207' }}>
                   <span>🥑 지방 ({fatRatio}%)</span>
                   <span>{macros.fat.g}g</span>
                   <span>{fmt(macros.fat.kcal)}</span>
@@ -617,14 +617,14 @@ export default function WeightLossClient() {
               <div className={styles.hero}
                 style={{
                   borderColor: targetDateResult.feasibility === 'safe' ? '#059669' :
-                               targetDateResult.feasibility === 'caution' ? '#CA8A04' :
+                               targetDateResult.feasibility === 'caution' ? '#A16207' :
                                targetDateResult.feasibility === 'aggressive' ? '#EA580C' : '#DC2626',
                   background: targetDateResult.feasibility === 'safe' ? 'rgba(16,185,129,0.06)' :
-                              targetDateResult.feasibility === 'caution' ? 'rgba(202,138,4,0.06)' :
+                              targetDateResult.feasibility === 'caution' ? 'rgba(161,98,7,0.06)' :
                               targetDateResult.feasibility === 'aggressive' ? 'rgba(234,88,12,0.06)' : 'rgba(220,38,38,0.10)',
                 }}>
                 <div className={styles.heroLabel}>{targetDateResult.totalWeeks.toFixed(1)}주 안에 {fmt1(cw - tw)}kg 감량</div>
-                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
+                <div className={styles.heroNum} style={{ color: '#A16207' }}>
                   {fmt(targetDateResult.dailyDeficit)}<span className={styles.heroNumUnit}>kcal/일</span>
                 </div>
                 <div className={styles.heroSub}>
@@ -663,7 +663,7 @@ export default function WeightLossClient() {
                 <div className={styles.altTable}>
                   {alternatives.map((alt, i) => {
                     const color = alt.feasibility === 'safe' ? '#059669' :
-                                  alt.feasibility === 'caution' ? '#CA8A04' :
+                                  alt.feasibility === 'caution' ? '#A16207' :
                                   alt.feasibility === 'aggressive' ? '#EA580C' : '#DC2626'
                     return (
                       <div key={i}

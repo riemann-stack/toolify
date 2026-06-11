@@ -68,7 +68,7 @@
 .baseSelect:focus { border-color: var(--accent); }
 
 .nowBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 10px;
   padding: 10px 16px;

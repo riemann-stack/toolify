@@ -79,7 +79,7 @@ export default function TimezonePage() {
             ].map((s) => (
               <div key={s.n} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent)', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
+                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-strong)', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
                   <strong style={{ fontSize: '14px', color: 'var(--text)' }}>{s.t}</strong>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{s.d}</p>

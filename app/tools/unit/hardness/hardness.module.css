@@ -190,7 +190,7 @@
 .inputTag {
   font-size: 9.5px;
   font-weight: 800;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   padding: 1px 6px;
   border-radius: 999px;
@@ -275,7 +275,7 @@
 .refMatchBadge {
   font-size: 10px;
   font-weight: 800;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   padding: 2px 7px;
   border-radius: 999px;

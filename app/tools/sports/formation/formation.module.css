@@ -364,7 +364,7 @@
 }
 .modalRow { display: flex; flex-direction: column; gap: 4px; }
 .modalDone {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;

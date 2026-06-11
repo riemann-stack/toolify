@@ -101,7 +101,7 @@ export default function PregnancyPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { period: '1삼분기 (1~13주)', color: '#CA8A04', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
+              { period: '1삼분기 (1~13주)', color: '#A16207', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
               { period: '2삼분기 (14~27주)', color: '#059669', items: ['입덧 감소, 안정기 진입', '태동 시작 (18~22주)', '성별 확인 가능 (초음파)', '정밀 초음파, 기형아 2차 검사'] },
               { period: '3삼분기 (28~40주)', color: '#EA580C', items: ['태아 급성장 (체중·폐 발달)', '분만 준비 교육 권장', 'GBS 검사, NST(태아심박동 검사)', '출산 준비 (입원 가방 등)'] },
             ].map((t, i) => (
@@ -199,7 +199,7 @@ export default function PregnancyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
-                period: '1삼분기 (1~13주)', color: '#CA8A04',
+                period: '1삼분기 (1~13주)', color: '#A16207',
                 items: ['산부인과 등록·정기 검진 시작', '엽산 섭취 시작 (산부인과 상담)', '음주·흡연·카페인 제한', '직장·보험 검토', '입덧 기록·식이 조절'],
               },
               {

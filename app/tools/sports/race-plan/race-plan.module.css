@@ -44,7 +44,7 @@
   cursor: pointer; font-family: 'Inter', system-ui, sans-serif; min-height: 40px;
   transition: all 0.15s;
 }@media (hover: hover) { .distBtn:hover { border-color: var(--accent); } }
-.distActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+.distActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 .customWrap {
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 99px; padding: 0 12px 0 14px;
@@ -154,7 +154,7 @@
 .actionRow { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
 @media (max-width: 380px) { .actionRow { grid-template-columns: 1fr; } }
 .shareBtn {
-  background: var(--accent); color: #fff; border: none; padding: 14px 18px; border-radius: 10px;
+  background: var(--accent-strong); color: #fff; border: none; padding: 14px 18px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
   min-height: 48px; transition: all 0.15s;
 }@media (hover: hover) { .shareBtn:hover { opacity: 0.88; } }

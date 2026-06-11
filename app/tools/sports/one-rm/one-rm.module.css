@@ -47,8 +47,8 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }@media (hover: hover) {
-  .tabActive:hover { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }@media (hover: hover) {
+  .tabActive:hover { background: var(--accent-strong); color: #ffffff; }
 }
 
 /* ── 필드 ── */
@@ -94,7 +94,7 @@
   align-items: center;
 }
 .exerciseBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -120,7 +120,7 @@
   font-weight: 700;
 }
 .unitBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
 }
 
@@ -206,7 +206,7 @@
   font-weight: 600;
 }
 .pillActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }

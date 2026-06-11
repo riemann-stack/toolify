@@ -484,7 +484,7 @@ export function calcDSR(input: DsrInput): DsrResult {
     description = 'DSR 한도(40%)에 근접합니다. 다른 대출 추가 시 한도 초과 가능.'
   } else if (dsr > 25) {
     riskLevel = 'caution'; riskLabel = '🟡 주의'
-    riskColor = '#CA8A04'
+    riskColor = '#A16207'
     description = '월 상환 부담이 있는 편입니다. 비상금·생활비 여유를 점검하세요.'
   }
   return { dsr: Math.round(dsr * 10) / 10, riskLevel, riskLabel, riskColor, description }

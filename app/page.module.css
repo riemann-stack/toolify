@@ -162,7 +162,7 @@
   .discoverTab:hover { color: var(--text); }
 }
 .discoverTabActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   box-shadow: 0 1px 3px rgba(14,165,233,0.25);
 }
@@ -420,7 +420,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-radius: 8px;
   padding: 8px 14px;
@@ -563,32 +563,32 @@
 
 .cat_dev .catName { color: var(--cat-dev); }
 .cat_dev::before  { background: var(--cat-dev); }@media (hover: hover) {
-  .cat_dev:hover    { border-color: rgba(14,165,233,0.3); background: rgba(14,165,233,0.14); }
+  .cat_dev:hover    { border-color: rgba(2,132,199,0.3); background: rgba(2,132,199,0.14); }
 }
 
-.cat_music::before { background: #9333EA; }@media (hover: hover) {
-  .cat_music:hover   { border-color: rgba(147,51,234,0.3); background: rgba(147,51,234,0.04); }
+.cat_music::before { background: var(--cat-art); }@media (hover: hover) {
+  .cat_music:hover   { border-color: rgba(147,51,234,0.3); background: rgba(147,51,234,0.14); }
 }
 
-.cat_cooking::before { background: #D97706; }@media (hover: hover) {
+.cat_cooking::before { background: var(--cat-cooking); }@media (hover: hover) {
   .cat_cooking:hover   { border-color: rgba(217,119,6,0.3); background: rgba(217,119,6,0.14); }
 }
 
-.cat_sports::before { background: #CA8A04; }@media (hover: hover) {
-  .cat_sports:hover   { border-color: rgba(202,138,4,0.3); background: rgba(202,138,4,0.04); }
+.cat_sports::before { background: var(--cat-sports); }@media (hover: hover) {
+  .cat_sports:hover   { border-color: rgba(161,98,7,0.3); background: rgba(161,98,7,0.14); }
 }
 
-.cat_interior::before { background: #EA580C; }@media (hover: hover) {
+.cat_interior::before { background: var(--cat-interior); }@media (hover: hover) {
   .cat_interior:hover   { border-color: rgba(234,88,12,0.3); background: rgba(234,88,12,0.14); }
 }
 
-.cat_art .catName { color: #9333EA; }
-.cat_art::before  { background: #9333EA; }@media (hover: hover) {
+.cat_art .catName { color: var(--cat-art); }
+.cat_art::before  { background: var(--cat-art); }@media (hover: hover) {
   .cat_art:hover    { border-color: rgba(147,51,234,0.3); background: rgba(147,51,234,0.14); }
 }
 
-.cat_edu .catName { color: #0D9488; }
-.cat_edu::before  { background: #0D9488; }@media (hover: hover) {
+.cat_edu .catName { color: var(--cat-edu); }
+.cat_edu::before  { background: var(--cat-edu); }@media (hover: hover) {
   .cat_edu:hover    { border-color: rgba(13,148,136,0.3); background: rgba(13,148,136,0.14); }
 }
 

@@ -25,7 +25,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 46px;
 }
-.modeActive { background: var(--accent); color: #fff; }
+.modeActive { background: var(--accent-strong); color: #fff; }
 
 /* ── 카드 ── */
 .card {
@@ -70,7 +70,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 40px;
 }
-.segActive { background: var(--accent); color: #fff; }
+.segActive { background: var(--accent-strong); color: #fff; }
 
 /* ── 드롭다운 ── */
 .selectWrap { position: relative; }
@@ -103,8 +103,8 @@
 
 /* ── 히어로(결과) ── */
 .hero {
-  background: linear-gradient(135deg, rgba(202,138,4,0.1) 0%, rgba(234,88,12,0.05) 100%);
-  border: 1px solid rgba(202,138,4,0.3);
+  background: linear-gradient(135deg, rgba(161,98,7,0.1) 0%, rgba(234,88,12,0.05) 100%);
+  border: 1px solid rgba(161,98,7,0.3);
   border-radius: 14px;
   padding: 22px;
   text-align: center;

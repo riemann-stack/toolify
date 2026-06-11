@@ -120,7 +120,7 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   font-weight: 700;
 }

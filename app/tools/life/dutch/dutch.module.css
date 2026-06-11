@@ -42,7 +42,7 @@
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveDrink  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
 .tabActivePerson { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
-.tabActivePrepaid{ background: rgba(202,138,4,0.18);  color: #CA8A04; font-weight: 700; }
+.tabActivePrepaid{ background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
 .tabActiveShare  { background: rgba(255,228,0,0.12);  color: #FFE400; font-weight: 700; }
 
 /* ── 카드 ── */
@@ -454,8 +454,8 @@
 }
 
 .remainderHint {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 12.5px;
@@ -463,7 +463,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.remainderHint strong { color: #CA8A04; }
+.remainderHint strong { color: #A16207; }
 
 .resultActions {
   display: grid;
@@ -660,7 +660,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 4px solid #CA8A04;
+  border-left: 4px solid #A16207;
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
@@ -675,7 +675,7 @@
 .transferAmount {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #CA8A04;
+  color: #A16207;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }

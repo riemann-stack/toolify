@@ -298,10 +298,10 @@
 
 .ingFlour    { border-left-color: var(--accent); }
 .ingLiquid   { border-left-color: #0891B2; }
-.ingSalt     { border-left-color: #CA8A04; }
+.ingSalt     { border-left-color: #A16207; }
 .ingYeast    { border-left-color: #9B59B6; }
 .ingSugar    { border-left-color: #EA580C; }
-.ingFat      { border-left-color: #CA8A04; }
+.ingFat      { border-left-color: #A16207; }
 .ingOther    { border-left-color: var(--muted); }
 
 .removeBtn {
@@ -341,10 +341,10 @@
 .dotIcon { width: 8px; height: 8px; border-radius: 50%; }
 .dotFlour    { background: var(--accent); }
 .dotLiquid   { background: #0891B2; }
-.dotSalt     { background: #CA8A04; }
+.dotSalt     { background: #A16207; }
 .dotYeast    { background: #9B59B6; }
 .dotSugar    { background: #EA580C; }
-.dotFat      { background: #CA8A04; }
+.dotFat      { background: #A16207; }
 .dotOther    { background: var(--muted); }
 
 /* ── HERO ── */
@@ -403,8 +403,8 @@
 
 .metricHydration { border-top-color: #0891B2; }
 .metricHydration .metricValue { color: #0891B2; }
-.metricSalt      { border-top-color: #CA8A04; }
-.metricSalt      .metricValue { color: #CA8A04; }
+.metricSalt      { border-top-color: #A16207; }
+.metricSalt      .metricValue { color: #A16207; }
 .metricYeast     { border-top-color: #9B59B6; }
 .metricYeast     .metricValue { color: #9333EA; }
 .metricSugar     { border-top-color: #EA580C; }
@@ -582,14 +582,14 @@
 
 /* 식감 설명 카드 */
 .textureCard {
-  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(202,138,4,0.30);
+  background: linear-gradient(140deg, rgba(161,98,7,0.14), rgba(8,145,178,0.14));
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 14px;
   padding: 16px 18px;
 }
 .textureLabel {
   font-size: 11px;
-  color: #CA8A04;
+  color: #A16207;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
@@ -602,7 +602,7 @@
   line-height: 1.85;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.textureBody strong { color: #CA8A04; font-weight: 700; }
+.textureBody strong { color: #A16207; font-weight: 700; }
 .textureTags {
   display: flex;
   flex-wrap: wrap;
@@ -610,9 +610,9 @@
   margin-top: 10px;
 }
 .textureTag {
-  background: rgba(202,138,4,0.18);
-  border: 1px solid rgba(202,138,4,0.30);
-  color: #CA8A04;
+  background: rgba(161,98,7,0.18);
+  border: 1px solid rgba(161,98,7,0.30);
+  color: #A16207;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 11.5px;

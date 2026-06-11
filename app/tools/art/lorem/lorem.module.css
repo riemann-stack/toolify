@@ -189,7 +189,7 @@
 }
 .codeBlock .key { color: #0891B2; }
 .codeBlock .str { color: #059669; }
-.codeBlock .num { color: #CA8A04; }
+.codeBlock .num { color: #A16207; }
 .codeBlock .comment { color: var(--muted); font-style: italic; }
 
 /* ── UI 요소 카드 그리드 ── */
@@ -263,7 +263,7 @@
   .dataTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .dataTypeBtn small { display: block; font-size: 22px; margin-bottom: 4px; }
-.dataTypeActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.dataTypeActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
 
 .formatRow {
   display: grid;
@@ -285,7 +285,7 @@
 }@media (hover: hover) {
   .formatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.formatActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.formatActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
 
 .checkRow {
   display: flex;
@@ -363,7 +363,7 @@
   font-size: 14px;
   color: var(--accent);
 }
-.previewRating { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.previewRating { color: #A16207; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── UX 라이팅 시나리오 ── */
 .scenarioGrid {

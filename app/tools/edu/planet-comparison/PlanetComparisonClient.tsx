@@ -80,7 +80,7 @@ const PLANETS: Planet[] = [
     yearDays: 10_759.22, dayHours: 10.7,
     surfaceTempC: { min: -178, max: -178, avg: -178 },
     distanceFromSunKm: 1_434_000_000, distanceFromEarthAvgKm: 1_280_000_000,
-    lightTimeMinutes: 71, color: '#CA8A04', borderCls: s.borderSaturn,
+    lightTimeMinutes: 71, color: '#A16207', borderCls: s.borderSaturn,
     funFact: '아름다운 고리는 얼음과 암석. 밀도가 매우 낮아 큰 욕조에 넣으면 둥둥 뜹니다.' },
   { id: 'uranus', name: '천왕성', emoji: '♅', nameEn: 'Uranus',
     radiusKm: 25_362,   radiusRatio: 3.98,  gravityRatio: 0.889,
@@ -136,7 +136,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 토성 고리 (뒤쪽 절반) */}
       {planet.id === 'saturn' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#CA8A04" strokeWidth="2" opacity="0.55" />
+        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="2" opacity="0.55" />
       )}
 
       <circle cx={cx} cy={cy} r={r} fill={`url(#${id})`} stroke={planet.color} strokeWidth="0.5" opacity="0.95" />
@@ -145,7 +145,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {planet.id === 'saturn' && (
         <path
           d={`M ${cx - r * 1.55} ${cy} A ${r * 1.55} ${r * 0.30} 0 0 0 ${cx + r * 1.55} ${cy}`}
-          fill="none" stroke="#CA8A04" strokeWidth="2.5" opacity="0.9"
+          fill="none" stroke="#A16207" strokeWidth="2.5" opacity="0.9"
         />
       )}
 
@@ -307,7 +307,7 @@ export default function PlanetComparisonClient() {
             <g key={p.id}>
               {/* 행성 */}
               {p.id === 'saturn' && (
-                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#CA8A04" strokeWidth="1.5" opacity="0.7" />
+                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="1.5" opacity="0.7" />
               )}
               <circle cx={cx} cy={cy} r={r} fill={p.color} opacity="0.95" />
               <ellipse cx={cx - r * 0.3} cy={cy - r * 0.3} rx={r * 0.3} ry={r * 0.15} fill="#fff" opacity="0.30" />

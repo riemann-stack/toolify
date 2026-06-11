@@ -113,7 +113,7 @@
 .recordSelect option { background: #1a1a1a; }
 .recordSaveBtn {
   width: 100%; margin-top: 14px;
-  background: var(--accent); color: #ffffff; border: none;
+  background: var(--accent-strong); color: #ffffff; border: none;
   padding: 12px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
@@ -357,7 +357,7 @@
   font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.04em;
 }
-.gradeTop  { background: rgba(202,138,4,0.15); color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.gradeTop  { background: rgba(161,98,7,0.15); color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
 .gradeHigh { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
 .gradeMid  { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
 .gradeLow  { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }

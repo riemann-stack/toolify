@@ -99,7 +99,7 @@ export default function AgePage() {
               {
                 title: '세는 나이',
                 tag: '한국 전통',
-                color: '#CA8A04',
+                color: '#A16207',
                 rows: [
                   { k: '계산 방법', v: '태어나자마자 1세, 1월 1일 +1살' },
                   { k: '적용 범위', v: '일상 대화' },

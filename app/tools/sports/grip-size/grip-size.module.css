@@ -166,7 +166,7 @@
   position: absolute;
   left: 0; top: 6px;
   width: 22px; height: 22px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-radius: 50%;
   font-family: 'Inter', system-ui, sans-serif;
@@ -303,7 +303,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .resultBadge {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 11.5px;

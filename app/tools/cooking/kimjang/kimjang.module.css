@@ -258,7 +258,7 @@
   font-weight: 800;
 }
 .variantActive .variantCheck {
-  background: var(--accent);
+  background: var(--accent-strong);
   border-color: var(--accent);
   color: #ffffff;
 }
@@ -414,7 +414,7 @@
 }
 .copyBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;

@@ -303,8 +303,8 @@ export default function LightingClient() {
         {/* 조명 점 */}
         {positions.map((p, i) => (
           <g key={`l-${i}`}>
-            <circle cx={p.x} cy={p.y} r={5} fill="#CA8A04" stroke="#fff" strokeWidth={1} />
-            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#CA8A04" strokeWidth={0.6} opacity={0.5} />
+            <circle cx={p.x} cy={p.y} r={5} fill="#A16207" stroke="#fff" strokeWidth={1} />
+            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.5} />
           </g>
         ))}
         {/* 조명 개수 라벨 */}

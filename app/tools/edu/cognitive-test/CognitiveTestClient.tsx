@@ -14,7 +14,7 @@ const STROOP_COLORS = [
   { name: '빨강', code: '#FF4444' },
   { name: '파랑', code: '#3E5BFF' },
   { name: '초록', code: '#059669' },
-  { name: '노랑', code: '#CA8A04' },
+  { name: '노랑', code: '#A16207' },
   { name: '보라', code: '#9B59B6' },
   { name: '주황', code: '#EA580C' },
 ]
@@ -24,7 +24,7 @@ const REACTION_GRADES: Grade[] = [
   { key: 'excellent', label: '매우 빠름',   emoji: '🚀', range: [0, 200],     color: '#0D9488' },
   { key: 'fast',      label: '빠름',         emoji: '✨', range: [201, 250],   color: '#059669' },
   { key: 'avg',       label: '평균',         emoji: '⭐', range: [251, 300],   color: 'var(--accent)' },
-  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: '#CA8A04' },
+  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: '#A16207' },
   { key: 'slow',      label: '느림',         emoji: '🐢', range: [351, 9999],  color: '#EA580C' },
 ]
 function getReactionGrade(ms: number): Grade {

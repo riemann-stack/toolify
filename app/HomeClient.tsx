@@ -151,7 +151,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                             {category && (
                               <span
                                 className={styles.searchItemCat}
-                                style={{ color: category.color, borderColor: category.color + '55' }}
+                                style={{ color: category.color, borderColor: `color-mix(in srgb, ${category.color} 33%, transparent)` }}
                               >
                                 {category.icon} {category.name}
                               </span>

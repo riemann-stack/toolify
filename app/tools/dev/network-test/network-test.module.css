@@ -82,7 +82,7 @@
 }
 
 .runBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 12px;

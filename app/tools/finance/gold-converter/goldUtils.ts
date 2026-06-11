@@ -37,7 +37,7 @@ export interface KaratDef {
 }
 
 export const KARATS: KaratDef[] = [
-  { key: '24k',  label: '24K',  ratio: 1.000, desc: '순금 100% 기준점 (실물 품위 999~999.9 = 99.9~99.99%) — 골드바·돌반지·투자', color: '#CA8A04' },
+  { key: '24k',  label: '24K',  ratio: 1.000, desc: '순금 100% 기준점 (실물 품위 999~999.9 = 99.9~99.99%) — 골드바·돌반지·투자', color: '#A16207' },
   { key: '22k',  label: '22K',  ratio: 0.917, desc: '91.7% — 동남아 결혼반지',                color: '#FFC940' },
   { key: '21k',  label: '21K',  ratio: 0.875, desc: '87.5% — 중동 보석',                      color: '#FFB938' },
   { key: '18k',  label: '18K',  ratio: 0.750, desc: '75.0% — 한국 결혼반지·보석 표준',         color: '#E8A838' },

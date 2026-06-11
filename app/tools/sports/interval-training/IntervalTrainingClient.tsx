@@ -987,7 +987,7 @@ export default function IntervalTrainingClient() {
                   <tr>
                     <td>후반</td>
                     <td>{fmtMS(yassoCalc.secondHalfAvg)}</td>
-                    <td style={{ color: yassoCalc.decline < 5 ? '#059669' : yassoCalc.decline < 10 ? '#CA8A04' : '#DC2626' }}>
+                    <td style={{ color: yassoCalc.decline < 5 ? '#059669' : yassoCalc.decline < 10 ? '#A16207' : '#DC2626' }}>
                       {yassoCalc.decline > 0 ? '+' : ''}{yassoCalc.decline.toFixed(1)}초
                     </td>
                   </tr>
@@ -1047,7 +1047,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
               </p>
             </div>
           )}
@@ -1178,7 +1178,7 @@ export default function IntervalTrainingClient() {
                       const totalKm = fastKm + 3 // 워밍업·쿨다운
                       const phaseColor =
                         w.phase === 'adapt'   ? '#059669' :
-                        w.phase === 'develop' ? '#CA8A04' :
+                        w.phase === 'develop' ? '#A16207' :
                         w.phase === 'recover' ? '#0891B2' :
                         w.phase === 'peak'    ? '#DC2626' :
                         '#EA580C'
@@ -1226,7 +1226,7 @@ export default function IntervalTrainingClient() {
                 const totalKm = fastKm + 3
                 const phaseColor =
                   w.phase === 'adapt'   ? '#059669' :
-                  w.phase === 'develop' ? '#CA8A04' :
+                  w.phase === 'develop' ? '#A16207' :
                   w.phase === 'recover' ? '#0891B2' :
                   w.phase === 'peak'    ? '#DC2626' :
                   '#EA580C'

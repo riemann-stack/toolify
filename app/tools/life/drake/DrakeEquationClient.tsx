@@ -693,8 +693,8 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
       )}
 
       {/* 태양 (지구 위치) */}
-      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#CA8A04" />
-      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#CA8A04" strokeWidth={0.6} opacity={0.6} />
+      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#A16207" />
+      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.6} />
     </svg>
   )
 }

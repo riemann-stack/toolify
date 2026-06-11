@@ -178,7 +178,7 @@ export default function LightingPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif' }}>{r.lm.toLocaleString()} lm</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.inc}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.hal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.led}</td>
                   </tr>
                 ))}

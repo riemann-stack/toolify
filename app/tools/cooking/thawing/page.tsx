@@ -146,7 +146,7 @@ export default function ThawingPage() {
               { range: '0~4°C',     label: '냉장 안전', color: '#0891B2', desc: '세균 증식 억제' },
               { range: '4~60°C',    label: '⚠ 위험 온도대', color: '#DC2626', desc: '세균 급증' },
               { range: '60~74°C',   label: '조리 구간', color: '#EA580C', desc: '가열 살균' },
-              { range: '74°C 이상', label: '조리 완료', color: '#CA8A04', desc: '중심부 가열 완료' },
+              { range: '74°C 이상', label: '조리 완료', color: '#A16207', desc: '중심부 가열 완료' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}30`, borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 800, color: item.color, marginBottom: '4px' }}>{item.range}</p>

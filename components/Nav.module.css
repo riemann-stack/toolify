@@ -195,7 +195,7 @@
 }@media (hover: hover) {
   .megaItemFav:hover { background: var(--bg2); color: var(--accent); }
 }
-.megaItemFavActive { color: #CA8A04; opacity: 1; }
+.megaItemFavActive { color: #A16207; opacity: 1; }
 
 /* 배지 */
 .badgeNew, .badgeHot {
@@ -225,7 +225,7 @@
   gap: 6px;
   height: 36px;
   padding: 0 14px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: 1px solid var(--accent);
   border-radius: 8px;

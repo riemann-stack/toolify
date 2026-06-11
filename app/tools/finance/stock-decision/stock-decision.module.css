@@ -83,7 +83,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* ── 필드 ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -127,7 +127,7 @@
   .dirBtn:hover { border-color: var(--accent); color: var(--text); }
 }
 .dirBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -268,7 +268,7 @@
   appearance: none;
   -webkit-appearance: none;
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 10px;
   padding: 14px;
@@ -400,7 +400,7 @@
   -webkit-appearance: none;
   width: 40px;
   flex-shrink: 0;
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 8px;
   font-size: 18px;
@@ -455,7 +455,7 @@
   backface-visibility: hidden;
 }
 .coinHeads {
-  background: radial-gradient(circle at 30% 30%, #CA8A04 0%, #C8A52E 100%);
+  background: radial-gradient(circle at 30% 30%, #A16207 0%, #C8A52E 100%);
   color: #4A3500;
 }
 .coinTails {
@@ -504,7 +504,7 @@
   50% { transform: translateY(-4px); }
 }
 .cubeChosen {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
   transform: translateY(-8px) scale(1.1);
@@ -679,7 +679,7 @@
   transition: all 0.3s;
 }
 .catCubeChosen {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
   transform: scale(0.92);

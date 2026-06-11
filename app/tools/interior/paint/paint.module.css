@@ -257,11 +257,11 @@
 }
 .partWalls   { border-color: rgba(14,165,233,0.45); }
 .partCeiling { border-color: rgba(8,145,178,0.45); }
-.partDoors   { border-color: rgba(202,138,4,0.45); }
+.partDoors   { border-color: rgba(161,98,7,0.45); }
 .partFrame   { border-color: rgba(155,89,182,0.45); }
 .partWalls.partActive   { background: var(--accent-dim);      border-color: var(--accent); }
 .partCeiling.partActive { background: rgba(8,145,178,0.18); border-color: #0891B2; }
-.partDoors.partActive   { background: rgba(202,138,4,0.18);  border-color: #CA8A04; }
+.partDoors.partActive   { background: rgba(161,98,7,0.18);  border-color: #A16207; }
 .partFrame.partActive   { background: rgba(155,89,182,0.10); border-color: #9B59B6; }
 
 /* ── 창문·문 프리셋 ── */
@@ -326,7 +326,7 @@
 }
 .pntWater   { border-color: rgba(14,165,233,0.40); }
 .pntOil     { border-color: rgba(234,88,12,0.40); }
-.pntEnamel  { border-color: rgba(202,138,4,0.40); }
+.pntEnamel  { border-color: rgba(161,98,7,0.40); }
 .pntExterior { border-color: rgba(8,145,178,0.40); }
 .pntPrimer  { border-color: rgba(234,88,12,0.40); }
 .pntEco     { border-color: rgba(16,185,129,0.40); }
@@ -334,7 +334,7 @@
 
 .pntWater.pntActive    { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
 .pntOil.pntActive      { background: rgba(234,88,12,0.18);  border-color: #EA580C;       color: #EA580C; }
-.pntEnamel.pntActive   { background: rgba(202,138,4,0.18);   border-color: #CA8A04;       color: #CA8A04; }
+.pntEnamel.pntActive   { background: rgba(161,98,7,0.18);   border-color: #A16207;       color: #A16207; }
 .pntExterior.pntActive { background: rgba(8,145,178,0.18);  border-color: #0891B2;       color: #0891B2; }
 .pntPrimer.pntActive   { background: rgba(234,88,12,0.18);  border-color: #EA580C;       color: #EA580C; }
 .pntEco.pntActive      { background: rgba(16,185,129,0.18);  border-color: #059669;       color: #059669; }
@@ -365,7 +365,7 @@
 }
 .bgWater   { background: rgba(14,165,233,0.15); color: var(--accent); }
 .bgOil     { background: rgba(234,88,12,0.15); color: #EA580C; }
-.bgEnamel  { background: rgba(202,138,4,0.15);  color: #CA8A04; }
+.bgEnamel  { background: rgba(161,98,7,0.15);  color: #A16207; }
 .bgExterior{ background: rgba(8,145,178,0.15); color: #0891B2; }
 .bgPrimer  { background: rgba(234,88,12,0.15); color: #EA580C; }
 .bgEco     { background: rgba(16,185,129,0.15); color: #059669; }
@@ -393,13 +393,13 @@
 }
 .brandSamhwa     { border-color: rgba(220,38,38,0.40); }
 .brandKcc        { border-color: rgba(8,145,178,0.40); }
-.brandNoroo      { border-color: rgba(202,138,4,0.40); }
+.brandNoroo      { border-color: rgba(161,98,7,0.40); }
 .brandDunn       { border-color: rgba(14,165,233,0.40); }
 .brandBenjamin   { border-color: rgba(155,89,182,0.40); }
 
 .brandSamhwa.brandActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .brandKcc.brandActive      { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
-.brandNoroo.brandActive    { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.brandNoroo.brandActive    { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
 .brandDunn.brandActive     { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .brandBenjamin.brandActive { background: rgba(155,89,182,0.10); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 

@@ -93,7 +93,7 @@ export default function GolfCostPage() {
                   { type: '퍼블릭 주중',  color: '#059669', green: '8~12만',   cart: '8~10만',  caddie: '12~14만' },
                   { type: '퍼블릭 주말',  color: '#0EA5E9', green: '12~16만',  cart: '8~10만',  caddie: '12~14만' },
                   { type: '세미퍼블릭',   color: '#0891B2', green: '14~20만',  cart: '10~12만', caddie: '13~15만' },
-                  { type: '회원제(비회원)', color: '#CA8A04', green: '20~30만',  cart: '10~12만', caddie: '14~16만' },
+                  { type: '회원제(비회원)', color: '#A16207', green: '20~30만',  cart: '10~12만', caddie: '14~16만' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: row.color }}>{row.type}</td>
@@ -149,8 +149,8 @@ export default function GolfCostPage() {
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 캐디피 16만을 아꼈지만, 그린피 차이로 비용이 비슷해질 수 있습니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(202,138,4,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#CA8A04', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 25만(인당) · 카트비 4만(팀) · 캐디피 14만(팀) + 팁 6만 · 식사 2만 · 자차
               </p>
@@ -160,7 +160,7 @@ export default function GolfCostPage() {
                 캐디피 14만 + 팁 6만 = 20만<br/>
                 식사 2만 × 4 = 8만<br/>
                 교통비 8만 (자차 카풀)<br/>
-                <span style={{ color: '#CA8A04' }}>팀 합계 = 140만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 35만원</strong>
+                <span style={{ color: '#A16207' }}>팀 합계 = 140만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 35만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 회원 동반(그린피 할인) 여부에 따라 1인당 10~15만원이 줄어들 수 있습니다.</p>
             </div>

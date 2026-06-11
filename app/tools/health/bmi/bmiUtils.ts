@@ -21,7 +21,7 @@ export const BMI_CATEGORIES: Record<Standard, BmiCategory[]> = {
       desc: '영양 부족 위험. 적정 영양 섭취 권장.' },
     { id: 'normal',      min: 18.5, max: 25.0, name: '정상',     color: '#059669',
       desc: '건강 체중 범위. 균형 잡힌 식단 + 규칙적 운동 유지.' },
-    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: '#CA8A04',
+    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: '#A16207',
       desc: '대사질환 위험 약간 증가. 체중 관리 권장.' },
     { id: 'obese-1',     min: 30.0, max: 35.0, name: '비만 1단계', color: '#EA580C',
       desc: '대사질환·심혈관 위험 증가.' },
@@ -35,7 +35,7 @@ export const BMI_CATEGORIES: Record<Standard, BmiCategory[]> = {
       desc: '영양 부족 위험.' },
     { id: 'normal',      min: 18.5, max: 23.0, name: '정상',     color: '#059669',
       desc: '건강 체중 범위 (한국 기준).' },
-    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: '#CA8A04',
+    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: '#A16207',
       desc: '한국인 기준 건강 위험 시작 구간.' },
     { id: 'obese-1',     min: 25.0, max: 30.0, name: '비만 1단계', color: '#EA580C',
       desc: '대사질환 위험 증가.' },
@@ -232,7 +232,7 @@ export function combinedJudgment(
     if (isAbdominalObese)
       return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
                desc: 'BMI는 낮지만 허리둘레가 높습니다. 근육량 부족 + 복부 지방이 의심되니 근력 운동 + 균형 잡힌 식단을 권장합니다.',
-               color: '#CA8A04' }
+               color: '#A16207' }
     return { kind: 'underweight', emoji: '🔵', title: '저체중',
              desc: 'BMI가 정상보다 낮습니다. 허리둘레는 정상 범위지만, 충분한 영양 섭취와 근력 운동으로 건강 체중 회복을 권장합니다.',
              color: '#0891B2' }
@@ -247,7 +247,7 @@ export function combinedJudgment(
                color: '#059669' }
     return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
              desc: 'BMI는 정상이지만 허리둘레가 높습니다. 근육 부족 + 복부 지방 가능성이 있어 근력 운동 + 식단 점검을 권장합니다.',
-             color: '#CA8A04' }
+             color: '#A16207' }
   }
 
   // 과체중/비만 전단계 (정상 상한 ~ 비만 시작). 한국 23~24.9 / WHO 25~29.9
@@ -255,7 +255,7 @@ export function combinedJudgment(
     if (!isAbdominalObese)
       return { kind: 'overweight', emoji: '⚠️', title: '과체중 (경계)',
                desc: 'BMI가 과체중(비만 전단계) 범위입니다. 허리둘레는 정상이지만, 식습관·활동량을 점검해 정상 체중 유지를 권장합니다.',
-               color: '#CA8A04' }
+               color: '#A16207' }
     return { kind: 'overweight', emoji: '🟠', title: '과체중 + 복부비만',
              desc: 'BMI가 과체중이고 허리둘레도 높습니다. 대사질환 위험이 커지기 전에 체중·복부 지방 관리를 권장합니다.',
              color: '#EA580C' }
@@ -307,7 +307,7 @@ export function classifyBodyFat(bf: number, gender: Gender): {
   const r = BODY_FAT_RANGES[gender]
   if (bf < r.excellent)    return { name: '우수',     color: '#0891B2', rangeText: gender === 'male' ? '<10%' : '<18%' }
   if (bf < r.good)         return { name: '좋음',     color: '#059669', rangeText: gender === 'male' ? '10~15%' : '18~23%' }
-  if (bf < r.average)      return { name: '평균',     color: '#CA8A04', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
+  if (bf < r.average)      return { name: '평균',     color: '#A16207', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
   if (bf < r.aboveAverage) return { name: '평균 이상', color: '#EA580C', rangeText: gender === 'male' ? '20~25%' : '28~33%' }
   if (bf < r.poor)         return { name: '높음',     color: '#DC2626', rangeText: gender === 'male' ? '25~30%' : '33~38%' }
   return                          { name: '위험',     color: '#CC4444', rangeText: gender === 'male' ? '>30%' : '>38%' }

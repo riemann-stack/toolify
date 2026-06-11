@@ -306,20 +306,20 @@
 .matPvc       { border-color: rgba(16,185,129,0.40); }
 .matMdf       { border-color: var(--accent); }
 .matWood      { border-color: rgba(155,89,182,0.40); }
-.matGypsum    { border-color: rgba(202,138,4,0.40); }
+.matGypsum    { border-color: rgba(161,98,7,0.40); }
 .matStyrene   { border-color: rgba(8,145,178,0.40); }
 .matCustom    { border-color: var(--border); }
 
 .matPvc.matActive       { background: rgba(16,185,129,0.18); border-color: #059669; }
 .matMdf.matActive       { background: var(--accent-dim);     border-color: var(--accent); }
 .matWood.matActive      { background: rgba(155,89,182,0.12); border-color: #9B59B6; }
-.matGypsum.matActive    { background: rgba(202,138,4,0.18);  border-color: #CA8A04; }
+.matGypsum.matActive    { background: rgba(161,98,7,0.18);  border-color: #A16207; }
 .matStyrene.matActive   { background: rgba(8,145,178,0.18); border-color: #0891B2; }
 .matCustom.matActive    { background: var(--accent-dim);     border-color: var(--accent); }
 .matPvc.matActive .matName       { color: #059669; }
 .matMdf.matActive .matName       { color: var(--accent); }
 .matWood.matActive .matName      { color: #9333EA; }
-.matGypsum.matActive .matName    { color: #CA8A04; }
+.matGypsum.matActive .matName    { color: #A16207; }
 .matStyrene.matActive .matName   { color: #0891B2; }
 .matCustom.matActive .matName    { color: var(--accent); }
 

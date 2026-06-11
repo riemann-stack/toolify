@@ -285,7 +285,7 @@
   flex-shrink: 0;
 }
 .chkChecked .chkBox {
-  background: var(--accent);
+  background: var(--accent-strong);
   border-color: var(--accent);
   color: #ffffff;
 }

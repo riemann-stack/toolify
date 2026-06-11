@@ -408,7 +408,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { background: rgba(14,165,233,0.2); }
 }
-.copyBtn.copied { background: var(--accent); color: #ffffff; }
+.copyBtn.copied { background: var(--accent-strong); color: #ffffff; }
 
 .shopList {
   font-family: 'Inter', ui-monospace, SFMono-Regular, monospace;
@@ -500,7 +500,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 식이 제한 칩 */
 .dietaryRow { display: flex; gap: 6px; flex-wrap: wrap; }

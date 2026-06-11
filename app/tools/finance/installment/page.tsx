@@ -154,7 +154,7 @@ export default function CardInstallmentPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '🟢 무이자 할부', c: '#059669', items: ['이자 0원', '카드사·가맹점이 부담', '가전·가구·여행 시즌 자주 제공', '보통 2~12개월 (24개월까지)', '사용자에게 가장 유리'] },
-              { t: '🟡 부분 무이자', c: '#CA8A04', items: ['일부 회차만 무이자', '예: 6개월 중 4회차까지 무이자', '후반에 이자 발생', '24개월 무이자 광고 다수가 부분 무이자'] },
+              { t: '🟡 부분 무이자', c: '#A16207', items: ['일부 회차만 무이자', '예: 6개월 중 4회차까지 무이자', '후반에 이자 발생', '24개월 무이자 광고 다수가 부분 무이자'] },
               { t: '🔴 유이자 할부', c: '#DC2626', items: ['연 14~20% 수수료', '시중 대출 금리보다 높음', '24개월+ 시 원금의 20% 이자', '가능하면 피하기'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>

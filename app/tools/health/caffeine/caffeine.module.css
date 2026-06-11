@@ -222,7 +222,7 @@
   .catTab:hover { color: var(--text); }
 }
 .catTabActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   border-color: var(--accent);
   color: #ffffff;
   font-weight: 700;
@@ -295,7 +295,7 @@
 }
 .customInput:focus, .customMg:focus { border-color: var(--accent); }
 .customAddBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;

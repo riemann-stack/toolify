@@ -62,8 +62,8 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }@media (hover: hover) {
-  .tabActive:hover { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }@media (hover: hover) {
+  .tabActive:hover { background: var(--accent-strong); color: #ffffff; }
 }
 
 /* ── 영양제 카드 ── */
@@ -205,7 +205,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .timeBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }

@@ -229,7 +229,7 @@
 
 .actionBtn {
   flex: 1;
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 12px;
   padding: 14px;
@@ -490,7 +490,7 @@
 }
 .treeKey     { color: #0891B2; }
 .treeStr     { color: #059669; }
-.treeNum     { color: #CA8A04; }
+.treeNum     { color: #A16207; }
 .treeBool    { color: #9333EA; }
 .treeNull    { color: var(--muted); font-style: italic; }
 .treeBracket { color: var(--muted); }
@@ -602,7 +602,7 @@
   padding: 12px 14px;
 }
 .baseBin { border-left-color: var(--accent); }
-.baseOct { border-left-color: #CA8A04; }
+.baseOct { border-left-color: #A16207; }
 .baseDec { border-left-color: #0891B2; }
 .baseHex { border-left-color: #EA580C; }
 
@@ -620,7 +620,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .baseBin .baseCardLabel { color: var(--accent); }
-.baseOct .baseCardLabel { color: #CA8A04; }
+.baseOct .baseCardLabel { color: #A16207; }
 .baseDec .baseCardLabel { color: #0891B2; }
 .baseHex .baseCardLabel { color: #EA580C; }
 

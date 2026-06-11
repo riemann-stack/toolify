@@ -181,7 +181,7 @@ export default function RoofPage() {
         {[
           { len: '0~30cm', use: '최소 (모던 주택·창고)', color: '#0891B2' },
           { len: '60~90cm', use: '표준 (단독주택)', color: '#059669' },
-          { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#CA8A04' },
+          { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#A16207' },
           { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#EA580C' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>

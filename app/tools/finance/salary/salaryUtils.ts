@@ -281,8 +281,8 @@ export interface Percentile {
 }
 
 export function getSalaryPercentile(yearly: number): Percentile {
-  if (yearly >= 100_000_000) return { percentile: 95, description: '상위 5%',     color: '#CA8A04' }
-  if (yearly >= 80_000_000)  return { percentile: 90, description: '상위 10%',    color: '#CA8A04' }
+  if (yearly >= 100_000_000) return { percentile: 95, description: '상위 5%',     color: '#A16207' }
+  if (yearly >= 80_000_000)  return { percentile: 90, description: '상위 10%',    color: '#A16207' }
   if (yearly >= 70_000_000)  return { percentile: 80, description: '상위 20%',    color: '#059669' }
   if (yearly >= 55_000_000)  return { percentile: 65, description: '상위 35%',    color: '#059669' }
   if (yearly >= 45_000_000)  return { percentile: 50, description: '중위 (50%)',  color: '#0891B2' }

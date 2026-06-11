@@ -473,7 +473,7 @@ function TimelineList({ result }: { result: ScheduleResult }) {
             <span className={s.tlBody}>
               {step.name}
               {step.guide && <small>{step.guide}</small>}
-              {step.warning && <small style={{ color: '#CA8A04' }}>⚠️ {step.warning}</small>}
+              {step.warning && <small style={{ color: '#A16207' }}>⚠️ {step.warning}</small>}
             </span>
             <span className={s.tlDuration}>{fmtDuration(step.duration)}</span>
           </div>

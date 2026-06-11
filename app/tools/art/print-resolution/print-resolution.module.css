@@ -25,7 +25,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 46px;
 }
-.modeActive { background: var(--accent); color: #fff; }
+.modeActive { background: var(--accent-strong); color: #fff; }
 
 /* ── 카드 ── */
 .card {

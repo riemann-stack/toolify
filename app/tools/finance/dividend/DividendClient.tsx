@@ -549,7 +549,7 @@ export default function DividendClient() {
                           <tr key={yr} className={String(yr) === revYears ? styles.bestRow : ''}>
                             <td>{yr}년{String(yr) === revYears && ' ⭐'}</td>
                             {row.map((c, i) => (
-                              <td key={i} style={{ color: c.m === null ? 'var(--muted)' : (c.m < 800_000 ? '#059669' : c.m < 2_000_000 ? '#CA8A04' : '#DC2626') }}>
+                              <td key={i} style={{ color: c.m === null ? 'var(--muted)' : (c.m < 800_000 ? '#059669' : c.m < 2_000_000 ? '#A16207' : '#DC2626') }}>
                                 {c.m === null ? '—' : `${Math.round(c.m / 10_000)}만`}
                               </td>
                             ))}

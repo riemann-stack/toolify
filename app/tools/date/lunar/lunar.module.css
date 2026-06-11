@@ -42,7 +42,7 @@
   .dirBtn:hover { color: var(--text); }
 }
 .dirActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   font-weight: 700;
 }

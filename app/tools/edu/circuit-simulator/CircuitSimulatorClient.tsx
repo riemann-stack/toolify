@@ -186,14 +186,14 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
           const y = wireY - 30 - rectH / 2
           return (
             <g key={r.id}>
-              <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#CA8A04" strokeWidth="2" rx="2" />
+              <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#A16207" strokeWidth="2" rx="2" />
               {/* 지그재그 inside */}
               <polyline
                 points={`${x + 4},${y + rectH / 2} ${x + 8},${y + 4} ${x + 14},${y + rectH - 4} ${x + 20},${y + 4} ${x + 26},${y + rectH - 4} ${x + 32},${y + 4} ${x + 38},${y + rectH - 4} ${x + 42},${y + rectH / 2} ${x + rectW - 4},${y + rectH / 2}`}
-                fill="none" stroke="#CA8A04" strokeWidth="1.5"
+                fill="none" stroke="#A16207" strokeWidth="1.5"
               />
               {/* 라벨 */}
-              <text x={cx} y={y - 18} fontSize="12" fill="#CA8A04" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label}</text>
+              <text x={cx} y={y - 18} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label}</text>
               <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">{fmtR(r.resistance)}</text>
               <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0D9488" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>{fmtV(r.voltage)}</text>
               <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? '#DC2626' : 'var(--muted)'} textAnchor="middle" fontFamily="Inter, system-ui, sans-serif">
@@ -262,13 +262,13 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
             <circle cx={branchX1} cy={branchY} r="3" fill="var(--text)" />
             <circle cx={branchX2} cy={branchY} r="3" fill="var(--text)" />
             {/* 저항 */}
-            <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#CA8A04" strokeWidth="2" rx="2" />
+            <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#A16207" strokeWidth="2" rx="2" />
             <polyline
               points={`${x + 4},${y + rectH / 2} ${x + 8},${y + 4} ${x + 14},${y + rectH - 4} ${x + 20},${y + 4} ${x + 26},${y + rectH - 4} ${x + 32},${y + 4} ${x + 38},${y + rectH - 4} ${x + 42},${y + rectH / 2} ${x + rectW - 4},${y + rectH / 2}`}
-              fill="none" stroke="#CA8A04" strokeWidth="1.5"
+              fill="none" stroke="#A16207" strokeWidth="1.5"
             />
-            <text x={cx} y={y - 6} fontSize="12" fill="#CA8A04" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
-            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="#CA8A04" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>I = {fmtA(r.current)}</text>
+            <text x={cx} y={y - 6} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily="Inter, system-ui, sans-serif" fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
+            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="#A16207" fontFamily="Inter, system-ui, sans-serif" fontWeight={700}>I = {fmtA(r.current)}</text>
           </g>
         )
       })}
@@ -841,7 +841,7 @@ export default function CircuitSimulatorClient() {
             </div>
             <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
               회로: <strong style={{ color: '#0D9488' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
-              {' '}저항 <strong style={{ color: '#CA8A04' }}>{resistors.length}개</strong> ·
+              {' '}저항 <strong style={{ color: '#A16207' }}>{resistors.length}개</strong> ·
               {' '}전원 <strong style={{ color: '#0D9488' }}>{fmtV(voltage)}</strong>
             </p>
           </div>

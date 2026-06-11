@@ -161,7 +161,7 @@ export default function SchengenClient() {
 
   const usedPct = calc ? Math.min(100, (calc.used / LIMIT) * 100) : 0
   const over = calc ? calc.remaining < 0 : false
-  const remainColor = !calc ? 'var(--text)' : over ? '#DC2626' : calc.remaining <= 10 ? '#EA580C' : calc.remaining <= 30 ? '#CA8A04' : '#059669'
+  const remainColor = !calc ? 'var(--text)' : over ? '#DC2626' : calc.remaining <= 10 ? '#EA580C' : calc.remaining <= 30 ? '#A16207' : '#059669'
 
   return (
     <div className={s.wrap}>

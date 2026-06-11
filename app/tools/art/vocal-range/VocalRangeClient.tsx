@@ -447,7 +447,7 @@ export default function VocalRangeClient() {
             {falsettoHighMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>가성 최고</span>
-                <span className={styles.stepValueNote} style={{ color: '#CA8A04' }}>
+                <span className={styles.stepValueNote} style={{ color: '#A16207' }}>
                   {midiToNote(falsettoHighMidi).name} ({midiToNote(falsettoHighMidi).korean})
                 </span>
               </div>
@@ -508,7 +508,7 @@ export default function VocalRangeClient() {
                   {lowNote.korean} ~ {highNote.korean}
                 </div>
                 {falsettoNote && (
-                  <div className={styles.heroKorean} style={{ color: '#CA8A04' }}>
+                  <div className={styles.heroKorean} style={{ color: '#A16207' }}>
                     가성 최고: {falsettoNote.name} ({falsettoNote.korean})
                   </div>
                 )}
@@ -551,7 +551,7 @@ export default function VocalRangeClient() {
                 </div>
                 <div className={styles.pianoLegend}>
                   <span><i style={{ background: 'rgba(16,185,129,0.55)' }} />진성 음역</span>
-                  {falsettoNote && <span><i style={{ background: 'rgba(202,138,4,0.55)' }} />가성 음역</span>}
+                  {falsettoNote && <span><i style={{ background: 'rgba(161,98,7,0.55)' }} />가성 음역</span>}
                   <span><i style={{ background: 'rgba(255,107,217,0.85)' }} />현재 음 (실시간)</span>
                 </div>
               </div>

@@ -131,7 +131,7 @@
 }@media (hover: hover) {
   .storageBtn:hover { color: var(--text); }
 }
-.storageBtnRoom.storageBtnActive    { background: rgba(202,138,4,0.15);  border-color: rgba(202,138,4,0.4);  color: #CA8A04; }
+.storageBtnRoom.storageBtnActive    { background: rgba(161,98,7,0.15);  border-color: rgba(161,98,7,0.4);  color: #A16207; }
 .storageBtnFridge.storageBtnActive  { background: rgba(8,145,178,0.15); border-color: rgba(8,145,178,0.4); color: #0891B2; }
 .storageBtnFreezer.storageBtnActive { background: rgba(155,89,182,0.15); border-color: rgba(155,89,182,0.4); color: #BB7FE0; }
 .storageBtnKimchi.storageBtnActive  { background: rgba(14,165,233,0.15); border-color: rgba(14,165,233,0.4); color: var(--accent); }
@@ -148,7 +148,7 @@
 
 .formActionRow { display: flex; gap: 8px; margin-top: 4px; }
 .submitBtn {
-  flex: 1; background: var(--accent); border: none; border-radius: 10px;
+  flex: 1; background: var(--accent-strong); border: none; border-radius: 10px;
   padding: 12px; cursor: pointer; color: #ffffff;
   font-size: 14px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
   transition: opacity 0.15s;
@@ -194,7 +194,7 @@
   display: inline-block; padding: 3px 9px; border-radius: 12px;
   font-size: 11px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif;
 }
-.storageBadgeRoom    { background: rgba(202,138,4,0.15);  color: #CA8A04; border: 1px solid rgba(202,138,4,0.4); }
+.storageBadgeRoom    { background: rgba(161,98,7,0.15);  color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
 .storageBadgeFridge  { background: rgba(8,145,178,0.15); color: #0891B2; border: 1px solid rgba(8,145,178,0.4); }
 .storageBadgeFreezer { background: rgba(155,89,182,0.15); color: #BB7FE0; border: 1px solid rgba(155,89,182,0.4); }
 .storageBadgeKimchi  { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
@@ -254,7 +254,7 @@
 .freezeText { font-size: 12px; color: var(--text); line-height: 1.6; flex: 1; min-width: 200px; }
 .freezeText strong { color: #BB7FE0; }
 .freezeBtn {
-  background: var(--accent); color: #ffffff; border: none; border-radius: 8px;
+  background: var(--accent-strong); color: #ffffff; border: none; border-radius: 8px;
   padding: 7px 14px; font-size: 12px; font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
   transition: opacity 0.15s; white-space: nowrap;

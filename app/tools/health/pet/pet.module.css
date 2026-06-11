@@ -281,7 +281,7 @@
   position: relative;
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(to right, #0891B2 0%, #0891B2 20%, #059669 25%, #059669 55%, #CA8A04 60%, #CA8A04 75%, #DC2626 80%, #DC2626 100%);
+  background: linear-gradient(to right, #0891B2 0%, #0891B2 20%, #059669 25%, #059669 55%, #A16207 60%, #A16207 75%, #DC2626 80%, #DC2626 100%);
   border: 1px solid var(--border);
   margin-bottom: 12px;
 }
@@ -340,7 +340,7 @@
 }
 .lifeFill {
   height: 100%;
-  background: linear-gradient(to right, #0891B2, #059669, #CA8A04, #EA580C);
+  background: linear-gradient(to right, #0891B2, #059669, #A16207, #EA580C);
   transition: width 0.3s;
 }
 .lifeAxis {

@@ -122,7 +122,7 @@ export default function FermiEstimatePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '💼 비즈니스·창업', items: ['신사업 시장 규모 (TAM·SAM·SOM)', '매출·고객 수 예측', '광고·마케팅 효과 추정'], c: '#CA8A04' },
+              { t: '💼 비즈니스·창업', items: ['신사업 시장 규모 (TAM·SAM·SOM)', '매출·고객 수 예측', '광고·마케팅 효과 추정'], c: '#A16207' },
               { t: '🎓 교육·면접',     items: ['컨설팅 면접 (맥킨지·BCG·베인)', 'MBA 케이스 스터디', '논리적 사고 훈련'], c: '#9B59B6' },
               { t: '📊 정책·연구',     items: ['환경 영향 평가', '인구 통계 추정', '자원 사용량 예측'], c: '#059669' },
               { t: '🌍 일상 호기심',   items: ['"지구 모래알 수"', '"평생 먹는 밥의 양"', '"한국 전체 자판기 수"'], c: 'var(--accent)' },
@@ -150,7 +150,7 @@ export default function FermiEstimatePage() {
             {[
               { l: '🟦 보수적', d: '낮은 가정', c: '#0891B2' },
               { l: '🟢 기준',  d: '평균 가정', c: 'var(--accent)' },
-              { l: '🟡 낙관적', d: '높은 가정', c: '#CA8A04' },
+              { l: '🟡 낙관적', d: '높은 가정', c: '#A16207' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4 }}>{g.l}</p>
@@ -172,7 +172,7 @@ export default function FermiEstimatePage() {
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>보수적: <strong style={{ color: '#0891B2' }}>94만 잔</strong></li>
               <li>기준: <strong style={{ color: 'var(--accent)' }}>169만 잔</strong></li>
-              <li>낙관적: <strong style={{ color: '#CA8A04' }}>263만 잔</strong></li>
+              <li>낙관적: <strong style={{ color: '#A16207' }}>263만 잔</strong></li>
             </ul>
             → 진짜 답은 이 범위 안에 있을 가능성이 높습니다.
           </div>
@@ -217,8 +217,8 @@ export default function FermiEstimatePage() {
             </ul>
           </div>
           <div style={{
-            background: 'rgba(202,138,4,0.05)',
-            border: '1px solid rgba(202,138,4,0.30)',
+            background: 'rgba(161,98,7,0.05)',
+            border: '1px solid rgba(161,98,7,0.30)',
             borderRadius: 12,
             padding: '14px 18px',
             fontSize: 13,
@@ -226,7 +226,7 @@ export default function FermiEstimatePage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⭐ <strong style={{ color: '#CA8A04' }}>답변 평가 기준:</strong>
+            ⭐ <strong style={{ color: '#A16207' }}>답변 평가 기준:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>① 논리 구조 (변수 분해의 합리성)</li>
               <li>② 가정의 타당성 (출처·근거)</li>
@@ -234,7 +234,7 @@ export default function FermiEstimatePage() {
               <li>④ 결과 검증·해석</li>
               <li>⑤ 의사소통 (명확한 설명)</li>
             </ul>
-            <p style={{ marginTop: 8, fontSize: 12.5, color: '#CA8A04', fontWeight: 700 }}>
+            <p style={{ marginTop: 8, fontSize: 12.5, color: '#A16207', fontWeight: 700 }}>
               ※ 정확한 답이 중요하지 않음 — <strong>사고 과정</strong>을 평가받음
             </p>
           </div>
@@ -250,7 +250,7 @@ export default function FermiEstimatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'TAM', n: 'Total Addressable Market', d: '전체 시장 규모. "이 제품이 모든 사람에게 팔린다면?" 가장 큰 추정값.', c: '#CA8A04' },
+              { t: 'TAM', n: 'Total Addressable Market', d: '전체 시장 규모. "이 제품이 모든 사람에게 팔린다면?" 가장 큰 추정값.', c: '#A16207' },
               { t: 'SAM', n: 'Serviceable Available Market', d: '실제 도달 가능한 시장. "내 회사가 서비스 가능한 범위?" TAM의 일부.', c: '#EA580C' },
               { t: 'SOM', n: 'Serviceable Obtainable Market', d: '실제 점유 가능한 시장. "현실적으로 얼마를 가져올 수 있나?" SAM의 일부.', c: '#DC2626' },
             ].map((g, i) => (
@@ -272,7 +272,7 @@ export default function FermiEstimatePage() {
             lineHeight: 2,
             marginTop: 12,
           }}>
-            <div><span style={{ color: '#CA8A04' }}>TAM</span> = 인구 × 1인당 소비</div>
+            <div><span style={{ color: '#A16207' }}>TAM</span> = 인구 × 1인당 소비</div>
             <div><span style={{ color: '#EA580C' }}>SAM</span> = TAM × 도달 비율</div>
             <div><span style={{ color: '#DC2626' }}>SOM</span> = SAM × 점유 비율</div>
           </div>

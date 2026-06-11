@@ -250,7 +250,7 @@
 }
 .flVinyl       { border-color: rgba(16,185,129,0.40); }
 .flLaminate    { border-color: var(--accent); }
-.flEngineered  { border-color: rgba(202,138,4,0.40); }
+.flEngineered  { border-color: rgba(161,98,7,0.40); }
 .flHardwood    { border-color: rgba(155,89,182,0.40); }
 .flDecoTile    { border-color: rgba(8,145,178,0.40); }
 .flPorcelain   { border-color: rgba(220,38,38,0.40); }
@@ -258,7 +258,7 @@
 
 .flVinyl.flActive       { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; }
 .flLaminate.flActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); }
-.flEngineered.flActive  { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; }
+.flEngineered.flActive  { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; }
 .flHardwood.flActive    { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; }
 .flDecoTile.flActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; }
 .flPorcelain.flActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; }
@@ -267,7 +267,7 @@
 
 .bgVinyl       { background: rgba(16,185,129,0.15); color: #059669; }
 .bgLaminate    { background: rgba(14,165,233,0.15); color: var(--accent); }
-.bgEngineered  { background: rgba(202,138,4,0.15);  color: #CA8A04; }
+.bgEngineered  { background: rgba(161,98,7,0.15);  color: #A16207; }
 .bgHardwood    { background: rgba(155,89,182,0.15); color: #9333EA; }
 .bgDecoTile    { background: rgba(8,145,178,0.15); color: #0891B2; }
 .bgPorcelain   { background: rgba(220,38,38,0.15); color: #DC2626; }
@@ -304,12 +304,12 @@
 .brandKcc        { border-color: rgba(220,38,38,0.40); }
 .brandLg         { border-color: rgba(14,165,233,0.40); }
 .brandHansol     { border-color: rgba(8,145,178,0.40); }
-.brandDonghwa    { border-color: rgba(202,138,4,0.40); }
+.brandDonghwa    { border-color: rgba(161,98,7,0.40); }
 .brandPungsan    { border-color: rgba(155,89,182,0.40); }
 .brandKcc.brandActive       { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .brandLg.brandActive        { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .brandHansol.brandActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
-.brandDonghwa.brandActive   { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.brandDonghwa.brandActive   { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
 .brandPungsan.brandActive   { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
 
 /* ── 시공 방식 4종 ── */

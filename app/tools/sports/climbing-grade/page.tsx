@@ -200,8 +200,8 @@ export default function ClimbingGradePage() {
         <div>
           <h2 style={sectionTitle}>🧗 볼더링 vs 루트 — 무엇이 다른가요?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #CA8A04' }}>
-              <p style={{ fontSize: '13px', color: '#CA8A04', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
+            <div style={{ ...card, borderTop: '3px solid #A16207' }}>
+              <p style={{ fontSize: '13px', color: '#A16207', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>짧고 강한 문제(보통 4~12동작)</li>
                 <li>로프 없이 매트 위에서</li>

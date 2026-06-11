@@ -611,7 +611,7 @@ function GuideTab() {
             {
               title: '골드바',
               emoji: '🪙',
-              color: '#CA8A04',
+              color: '#A16207',
               recommend: '선물·증여·실물 보유',
               vat: '10% 부담 ✗',
               capitalGain: '비과세 ✓',

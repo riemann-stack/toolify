@@ -98,7 +98,7 @@
   text-align: left;
   transition: all .15s;
 }@media (hover: hover) {
-  .scenarioCard:hover { border-color: #CA8A04; }
+  .scenarioCard:hover { border-color: #A16207; }
 }
 .scenarioEmoji { font-size: 22px; flex-shrink: 0; }
 .scenarioLabel {
@@ -350,7 +350,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 32px;
   font-weight: 800;
-  color: #CA8A04;
+  color: #A16207;
   letter-spacing: -0.02em;
   margin: 0 0 6px;
 }
@@ -463,7 +463,7 @@
   .preset:hover { color: var(--text); border-color: var(--accent); }
 }
 .presetActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -497,7 +497,7 @@
   .productBtn:hover { color: var(--text); border-color: var(--accent); }
 }
 .productBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -809,7 +809,7 @@
   color: var(--text);
 }
 .assetTotalSub { font-size: 11px; color: var(--muted) !important; }
-.assetTotalAccent strong { color: #CA8A04 !important; }
+.assetTotalAccent strong { color: #A16207 !important; }
 
 /* 비교 카드 */
 .comparisonGrid {
@@ -899,7 +899,7 @@
   flex-shrink: 0;
   width: 28px;
   height: 28px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-radius: 50%;
   display: flex;

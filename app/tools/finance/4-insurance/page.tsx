@@ -80,7 +80,7 @@ export default function FourInsurancePage() {
                   { n: '장기요양보험*',     c: '#EA580C', t: '0.9448%', e: '0.4724%', r: '0.4724%' },
                   { n: '고용보험 (실업급여)', c: '#0891B2', t: '1.8%',  e: '0.9%',  r: '0.9%' },
                   { n: '고용보험 (사업주 추가)', c: '#0891B2', t: '0.25~0.85%', e: '0%', r: '0.25~0.85%' },
-                  { n: '산재보험',          c: '#CA8A04', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
+                  { n: '산재보험',          c: '#A16207', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, boxShadow: `inset 3px 0 0 0 ${r.c}`, paddingLeft: 16 }}>{r.n}</td>
@@ -134,7 +134,7 @@ export default function FourInsurancePage() {
               { n: '건강보험',     c: '#DC2626', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
               { n: '장기요양보험', c: '#EA580C', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
               { n: '고용보험',     c: '#0891B2', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },
-              { n: '산재보험',     c: '#CA8A04', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
+              { n: '산재보험',     c: '#A16207', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.n}</p>

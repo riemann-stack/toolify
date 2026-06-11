@@ -30,7 +30,7 @@ const mk = (id: string, name: string, shortName: string, low: string, high: stri
 export const VOCAL_RANGES: VocalRange[] = [
   mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '이정·김광진',   '#0891B2', 'male'),
   mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', '#059669', 'male'),
-  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     '#CA8A04', 'male'),
+  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     '#A16207', 'male'),
   mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '폴 포츠',        '#EA580C', 'male'),
   mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         '#9333EA', 'female'),
   mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역',         '아이유 (저음)',   '#DB2777', 'female'),

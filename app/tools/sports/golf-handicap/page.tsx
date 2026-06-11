@@ -193,7 +193,7 @@ export default function GolfHandicapPage() {
               { range: '110~125', level: '보통 코스',  color: '#0891B2', sub: '한국 주요 골프장 평균 구간' },
               { range: '125~140', level: '어려운 코스', color: '#EA580C', sub: '좁은 페어웨이, 많은 해저드' },
               { range: '140~155', level: '최상급 난이도', color: '#DC2626', sub: '대회 세팅·프로 토너먼트 코스' },
-              { range: '113',     level: '표준 기준값', color: '#CA8A04', sub: '공식 기준점, 평균 난이도' },
+              { range: '113',     level: '표준 기준값', color: '#A16207', sub: '공식 기준점, 평균 난이도' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '10px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 700, color: item.color, marginBottom: '4px' }}>{item.range}</p>
@@ -217,7 +217,7 @@ export default function GolfHandicapPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
             {[
-              { range: '≤ 0',    name: '스크래치',     color: '#CA8A04', sub: '프로 수준' },
+              { range: '≤ 0',    name: '스크래치',     color: '#A16207', sub: '프로 수준' },
               { range: '0~9',    name: '로우 핸디캐퍼',  color: '#059669', sub: '상급자' },
               { range: '10~18',  name: '미드 핸디캐퍼',  color: '#0EA5E9', sub: '중급자' },
               { range: '19~28',  name: '하이 핸디캐퍼',  color: '#EA580C', sub: '입문~초급' },

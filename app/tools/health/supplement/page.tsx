@@ -200,7 +200,7 @@ export default function SupplementPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#CA8A04' }}>🟡 목표 미달</strong></td><td style={cell}>식사(등푸른 생선) 보충 고려</td></tr>
+                <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#A16207' }}>🟡 목표 미달</strong></td><td style={cell}>식사(등푸른 생선) 보충 고려</td></tr>
                 <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#059669' }}>🟢 목표 범위</strong></td><td style={cell}>WHO·심장협회 참고 목표 (공식 RDA 미설정)</td></tr>
                 <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 목표보다 높음</strong></td><td style={cell}>심혈관 목적 고용량은 의사 상담</td></tr>
                 <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 권고 한도 초과</strong></td><td style={cell}>FDA 권고 한도(총 3,000mg) 초과 — 출혈 위험 ↑</td></tr>

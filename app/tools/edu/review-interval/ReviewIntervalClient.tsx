@@ -751,7 +751,7 @@ export default function ReviewIntervalClient() {
             📚 <strong>점수별 동작:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li><strong style={{ color: '#DC2626' }}>0~2점:</strong> 처음부터 다시 시작 (간격 1일, 횟수 0)</li>
-              <li><strong style={{ color: '#CA8A04' }}>3점:</strong> 간격 약간 증가, EF 약간 ↓</li>
+              <li><strong style={{ color: '#A16207' }}>3점:</strong> 간격 약간 증가, EF 약간 ↓</li>
               <li><strong style={{ color: '#059669' }}>4점:</strong> 간격 정상 증가, EF 유지</li>
               <li><strong style={{ color: 'var(--accent)' }}>5점:</strong> 간격 크게 증가, EF 상승</li>
             </ul>

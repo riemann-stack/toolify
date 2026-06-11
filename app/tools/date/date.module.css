@@ -277,7 +277,7 @@
 .dateInput:focus { border-color: rgba(14,165,233,0.5); }
 
 .addBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 10px;
   padding: 11px 18px;

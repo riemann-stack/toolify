@@ -35,7 +35,7 @@ export const TAILWIND_COLORS: Record<string, Record<string, string>> = {
   },
   yellow: {
     '50':'#FEFCE8','100':'#FEF9C3','200':'#FEF08A','300':'#FDE047','400':'#FACC15',
-    '500':'#EAB308','600':'#CA8A04','700':'#A16207','800':'#854D0E','900':'#713F12','950':'#422006',
+    '500':'#EAB308','600':'#A16207','700':'#A16207','800':'#854D0E','900':'#713F12','950':'#422006',
   },
   lime: {
     '50':'#F7FEE7','100':'#ECFCCB','200':'#D9F99D','300':'#BEF264','400':'#A3E635',
@@ -111,7 +111,7 @@ export const GRADIENT_PRESETS: { name: string; stops: { hex: string; pos: number
   { name: 'Twilight', stops: [{ hex: '#8B5CF6', pos: 0 }, { hex: '#3B82F6', pos: 100 }], angle: 135 },
   { name: 'Aurora',   stops: [{ hex: '#059669', pos: 0 }, { hex: '#0891B2', pos: 50 }, { hex: '#A855F7', pos: 100 }], angle: 135 },
   { name: 'Berry',    stops: [{ hex: '#EC4899', pos: 0 }, { hex: '#A855F7', pos: 100 }], angle: 135 },
-  { name: 'Citrus',   stops: [{ hex: '#CA8A04', pos: 0 }, { hex: '#FF6B00', pos: 100 }], angle: 135 },
+  { name: 'Citrus',   stops: [{ hex: '#A16207', pos: 0 }, { hex: '#FF6B00', pos: 100 }], angle: 135 },
   { name: 'Mint',     stops: [{ hex: '#059669', pos: 0 }, { hex: '#0891B2', pos: 100 }], angle: 90 },
   { name: 'Mono',     stops: [{ hex: '#FAFAFA', pos: 0 }, { hex: '#1F2937', pos: 100 }], angle: 135 },
 ]

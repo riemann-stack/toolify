@@ -50,7 +50,7 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveTarget { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveTarget { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
 .tabActiveWaist  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
 .tabActiveSim    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 .tabActiveBf     { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
@@ -374,8 +374,8 @@
 
 /* 정보 박스 */
 .infoBox {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -383,7 +383,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.infoBox strong { color: #CA8A04; }
+.infoBox strong { color: #A16207; }
 
 .detailGrid {
   display: grid;

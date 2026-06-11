@@ -369,7 +369,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
   const interpretation = useMemo(() => {
     if (ratio >= 7)   return { msg: '대비비가 매우 우수합니다. 모든 텍스트 크기와 UI에서 사용 가능합니다.', color: '#059669' }
     if (ratio >= 4.5) return { msg: '일반 텍스트(AA)와 큰 텍스트(AAA) 기준을 통과합니다. 충분한 가독성입니다.', color: '#0EA5E9' }
-    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: '#CA8A04' }
+    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: '#A16207' }
     return                   { msg: '대비비가 낮아 가독성이 떨어집니다. 일반 본문에는 권장하지 않습니다.', color: '#DC2626' }
   }, [ratio])
 
@@ -422,7 +422,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       {/* 대비비 결과 */}
       <div className={styles.contrastHero}>
         <div className={styles.contrastValue}
-          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? '#059669' : grade.level === 'AA Large' ? '#CA8A04' : '#DC2626' }}>
+          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? '#059669' : grade.level === 'AA Large' ? '#A16207' : '#DC2626' }}>
           {ratio.toFixed(2)} : 1
         </div>
         <div className={styles.contrastLabel}>WCAG 대비비 — 등급 {grade.level}</div>

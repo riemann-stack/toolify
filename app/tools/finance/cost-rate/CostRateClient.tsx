@@ -28,7 +28,7 @@ interface Ingredient {
 /* breakdown 색상 팔레트 */
 const C = {
   ingredient: '#EA580C',
-  packaging:  '#CA8A04',
+  packaging:  '#A16207',
   commission: '#DC2626',
   delivery:   '#9B59B6',
   ad:         '#0891B2',

@@ -92,7 +92,7 @@
 
 /* ── 결과 복사 버튼 ── */
 .copyBtn {
-  width: 100%; background: var(--accent); color: #ffffff; border: none;
+  width: 100%; background: var(--accent-strong); color: #ffffff; border: none;
   padding: 14px; border-radius: 10px;
   font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;

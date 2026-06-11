@@ -63,7 +63,7 @@
    ══════════════════════════════════════════════ */
 .goalCheck {
   position: absolute; top: 6px; right: 8px;
-  background: var(--accent); color: #ffffff;
+  background: var(--accent-strong); color: #ffffff;
   font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -109,7 +109,7 @@
   .customDistBtn:hover { color: var(--text); border-color: var(--accent); }
 }
 .customDistBtnActive {
-  background: var(--accent) !important; color: #ffffff !important;
+  background: var(--accent-strong) !important; color: #ffffff !important;
   border-color: var(--accent) !important;
 }
 @media (max-width: 480px) {
@@ -296,9 +296,9 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeRecord { border-color: rgba(202,138,4,0.40); }
+.modeRecord { border-color: rgba(161,98,7,0.40); }
 .modeTarget { border-color: rgba(8,145,178,0.40); }
-.modeRecord.modeActive { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.modeRecord.modeActive { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }
 .modeTarget.modeActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
 
 /* ── 시간 입력 (분:초 / 시:분:초) ── */
@@ -329,7 +329,7 @@
   text-align: center;
   box-sizing: border-box;
 }
-.timeInput:focus { border-color: #CA8A04; }
+.timeInput:focus { border-color: #A16207; }
 .timeInput::-webkit-outer-spin-button,
 .timeInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .timeInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -356,7 +356,7 @@
   box-sizing: border-box;
   margin-bottom: 8px;
 }
-.distSelect:focus { border-color: #CA8A04; }
+.distSelect:focus { border-color: #A16207; }
 .distSelect option { background: #1a1a1a; color: var(--text); }
 
 .recordTabs {
@@ -378,11 +378,11 @@
 }@media (hover: hover) {
   .recordTabBtn:hover { color: var(--text); }
 }
-.recordTabActive { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.recordTabActive { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }
 
 .vdotShow {
   font-size: 12px;
-  color: #CA8A04;
+  color: #A16207;
   margin-top: 6px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -461,7 +461,7 @@
   position: absolute;
   top: -8px;
   right: -2px;
-  background: #CA8A04;
+  background: #A16207;
   color: #000;
   font-size: 9px;
   padding: 1px 6px;
@@ -473,7 +473,7 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(202,138,4,0.40);
+  border: 1px solid rgba(161,98,7,0.40);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
@@ -484,7 +484,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #CA8A04;
+  color: #A16207;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -517,9 +517,9 @@
   font-weight: 600;
 }
 .lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
-.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #CA8A04; font-size: 14px; }
+.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #A16207; font-size: 14px; }
 .lapTable td:nth-child(3) { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
-.lapTable .standardRow td { background: rgba(202,138,4,0.04); }
+.lapTable .standardRow td { background: rgba(161,98,7,0.04); }
 .lapCopyBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -531,14 +531,14 @@
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.12s;
 }@media (hover: hover) {
-  .lapCopyBtn:hover { color: #CA8A04; border-color: #CA8A04; }
+  .lapCopyBtn:hover { color: #A16207; border-color: #A16207; }
 }
-.lapCopyBtn.copied { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; }
+.lapCopyBtn.copied { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; }
 
 /* ── 추천 훈련 카드 ── */
 .recoCard {
-  background: rgba(202,138,4,0.05);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.05);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 14px;
   padding: 18px 22px;
 }
@@ -546,7 +546,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: #CA8A04;
+  color: #A16207;
   margin-bottom: 12px;
 }
 .recoRow {
@@ -629,7 +629,7 @@
   margin-top: 8px;
 }
 .relLow    { background: rgba(234,88,12,0.15); color: #EA580C; }
-.relMid    { background: rgba(202,138,4,0.15); color: #CA8A04; }
+.relMid    { background: rgba(161,98,7,0.15); color: #A16207; }
 .relHigh   { background: rgba(16,185,129,0.15); color: #059669; }
 
 /* ── 야소 800 안내 카드 ── */
@@ -672,7 +672,7 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.yassoTable td:first-child { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.yassoTable td:first-child { color: #A16207; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 .yassoTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .yassoTable td:last-child { color: var(--muted); font-size: 12px; }
 
@@ -696,7 +696,7 @@
   text-align: center;
   box-sizing: border-box;
 }
-.splitInput:focus { border-color: #CA8A04; }
+.splitInput:focus { border-color: #A16207; }
 
 /* ── 슬라이더 ── */
 .sliderRow {
@@ -707,14 +707,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #CA8A04;
+  accent-color: #A16207;
 }
 .sliderValue {
   min-width: 64px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #CA8A04;
+  color: #A16207;
   text-align: right;
 }
 
@@ -792,6 +792,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #CA8A04; color: #CA8A04; }
+  .copyBtn:hover { border-color: #A16207; color: #A16207; }
 }
-.copied { background: rgba(202,138,4,0.12); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.copied { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }

@@ -180,7 +180,7 @@ export default function LadderPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#CA8A04', marginBottom: '6px' }}>🎲 랜덤 추첨기 (별도 도구)</p>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#A16207', marginBottom: '6px' }}>🎲 랜덤 추첨기 (별도 도구)</p>
               <ul style={{ fontSize: '12.5px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 1명 또는 N명 선택</li>
                 <li>· 가중치·룰렛 가능</li>

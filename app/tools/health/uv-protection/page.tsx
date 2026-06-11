@@ -153,7 +153,7 @@ export default function UvProtectionPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
               { r: '0~2',  l: '낮음',     c: '#059669', w: 16,  d: '특별한 보호 불필요' },
-              { r: '3~5',  l: '보통',     c: '#CA8A04', w: 40,  d: '오전 10~오후 4시 차단제 권장' },
+              { r: '3~5',  l: '보통',     c: '#A16207', w: 40,  d: '오전 10~오후 4시 차단제 권장' },
               { r: '6~7',  l: '높음',     c: '#EA580C', w: 56,  d: '차단제·모자·긴 옷 필수' },
               { r: '8~10', l: '매우 높음', c: '#DC2626', w: 80,  d: '오전 10~오후 4시 야외 자제' },
               { r: '11+',  l: '위험',     c: '#9B59B6', w: 100, d: '가능한 외출 자제' },
@@ -201,7 +201,7 @@ export default function UvProtectionPage() {
             <tbody>
               {[
                 { s: '없음',    b: '0%',    p: '100%', c: '#DC2626' },
-                { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: '#CA8A04' },
+                { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: '#A16207' },
                 { s: 'SPF 30',  b: '96.7%', p: '3.3%', c: 'var(--accent)' },
                 { s: 'SPF 50',  b: '98.0%', p: '2.0%', c: '#059669' },
                 { s: 'SPF 70+', b: '98.6%', p: '1.4%', c: '#9B59B6' },
@@ -272,8 +272,8 @@ export default function UvProtectionPage() {
             자외선과 피부 건강
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #CA8A04', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#CA8A04', fontWeight: 700, marginBottom: 8 }}>⏱️ 단기 영향</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #A16207', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: '#A16207', fontWeight: 700, marginBottom: 8 }}>⏱️ 단기 영향</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일광화상 (홍반·통증·물집)</li>
                 <li>일사병</li>

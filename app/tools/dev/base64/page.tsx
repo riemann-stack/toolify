@@ -98,7 +98,7 @@ export default function Base64Page() {
               { t: '📧 이메일 첨부파일',      c: 'var(--accent)', d: 'MIME 표준에서 이미지·문서를 7-bit ASCII로 안전하게 전송' },
               { t: '🔑 JWT 토큰',            c: '#0891B2',       d: 'JSON Web Token의 헤더·페이로드를 URL-safe Base64로 인코딩' },
               { t: '🖼️ 이미지 Data URI',     c: '#059669',       d: 'HTML/CSS에 이미지를 직접 임베드 (data:image/png;base64,...)' },
-              { t: '🔐 HTTP Basic 인증',     c: '#CA8A04',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
+              { t: '🔐 HTTP Basic 인증',     c: '#A16207',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
               { t: '📦 PDF 임베드',          c: '#EA580C',       d: 'API 응답에 PDF 바이너리를 텍스트로 포함' },
               { t: '🔒 PEM 인증서',          c: '#9B59B6',       d: 'X.509 인증서·SSH 키를 텍스트 파일로 저장' },
             ].map((g, i) => (

@@ -259,7 +259,7 @@
 .itemTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #DC2626; padding-left: 14px; }
 .itemTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #EA580C; padding-left: 14px; }
 .itemTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #0891B2; padding-left: 14px; }
-.itemTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #CA8A04; padding-left: 14px; }
+.itemTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #A16207; padding-left: 14px; }
 
 .itemTable tr.totalRow td {
   background: var(--accent-dim);
@@ -307,7 +307,7 @@
 .dualTable tr.rowHealth td:first-child    { box-shadow: inset 3px 0 0 0 #DC2626; padding-left: 14px; }
 .dualTable tr.rowLtc td:first-child       { box-shadow: inset 3px 0 0 0 #EA580C; padding-left: 14px; }
 .dualTable tr.rowUnemp td:first-child     { box-shadow: inset 3px 0 0 0 #0891B2; padding-left: 14px; }
-.dualTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #CA8A04; padding-left: 14px; }
+.dualTable tr.rowWorkers td:first-child   { box-shadow: inset 3px 0 0 0 #A16207; padding-left: 14px; }
 .dualTable tr.totalRow td {
   border-top: 2px solid var(--border);
   border-bottom: none;
@@ -533,7 +533,7 @@
 }
 .statusYes  { background: rgba(16,185,129,0.14); color: #059669; }
 .statusNo   { background: rgba(220,38,38,0.18); color: #DC2626; }
-.statusOnly { background: rgba(202,138,4,0.14);  color: #CA8A04; }
+.statusOnly { background: rgba(161,98,7,0.14);  color: #A16207; }
 
 /* 회사 총 인건비 박스 */
 .companyCostCard {

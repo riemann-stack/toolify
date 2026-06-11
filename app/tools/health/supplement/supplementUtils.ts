@@ -36,7 +36,7 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
   if (total < OMEGA3_GUIDELINES.minDaily) {
     status = 'under'
     statusLabel = '🟡 목표 미달'
-    statusColor = '#CA8A04'
+    statusColor = '#A16207'
     interpretation = `${total}mg은 일반적 섭취 목표(250~500mg)에 못 미칩니다. EPA·DHA는 공식 권장량(RDA)이 없으며, 식사(등푸른 생선) 보충이나 용량 증가를 고려할 수 있습니다.`
   } else if (total <= OMEGA3_GUIDELINES.idealMax) {
     status = 'meet'

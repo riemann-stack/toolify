@@ -218,7 +218,7 @@ export function evaluateBody(species: Species, weight: number, size: DogSize): B
     if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: '#059669',
       message: '일반적인 고양이 정상 체중 범위입니다 (3.0~5.5kg).',
       range: { min: 3.0, max: 5.5, sizeName: '고양이' } }
-    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#CA8A04',
+    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#A16207',
       message: '관절·심장 부담이 늘어납니다. 사료량 10~15% 감량 + 놀이 시간 ↑ 권장.' }
     return                     { status: 'obese',       label: '비만', color: '#DC2626',
       message: '비만은 당뇨·관절염 위험이 큽니다. 수의사 상담 후 감량 계획을 권장합니다.' }
@@ -237,7 +237,7 @@ export function evaluateBody(species: Species, weight: number, size: DogSize): B
       message: `${range.name}견 정상 체중 범위입니다 (${range.min}~${range.max}kg).`,
       range: r }
   if (weight <= range.max * 1.25)
-    return { status: 'overweight', label: '과체중', color: '#CA8A04',
+    return { status: 'overweight', label: '과체중', color: '#A16207',
       message: `${range.name}견 정상 범위(${range.min}~${range.max}kg)를 초과했습니다. 사료량 10~15% 감량을 권장합니다.`,
       range: r }
   return     { status: 'obese', label: '비만', color: '#DC2626',

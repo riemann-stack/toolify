@@ -96,7 +96,7 @@ export default function BaseballStatsPage() {
               </thead>
               <tbody>
                 {[
-                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: '#CA8A04', who: '이정후·트라웃 시즌급' },
+                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: '#A16207', who: '이정후·트라웃 시즌급' },
                   { ops: '0.900~1.000',  lv: '✅ 올스타급',     cls: '#0EA5E9', who: 'KBO 상위 5%' },
                   { ops: '0.800~0.900',  lv: '주전급',          cls: '#059669', who: 'KBO 상위 20%' },
                   { ops: '0.700~0.800',  lv: '평균',            cls: '#B8B8B0', who: '리그 평균 수준' },
@@ -145,7 +145,7 @@ export default function BaseballStatsPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: '#CA8A04' },
+              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: '#A16207' },
               { name: 'BABIP', kor: '인플레이 타율', formula: '(H − HR) ÷ (AB − K − HR + SF)', tip: '인플레이 타구의 타율. 0.300 평균, 0.350+ 운빨 의심, 0.250- 불운.', color: '#0891B2' },
               { name: 'wOBA', kor: '가중 출루율', formula: '타격 행위별 가중치 통합', tip: '출루율보다 정확한 타자 가치 측정. 0.370+ 엘리트급.', color: '#0EA5E9' },
               { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: '#EA580C' },

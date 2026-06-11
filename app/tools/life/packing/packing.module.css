@@ -44,7 +44,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
@@ -98,7 +98,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* 기온 그리드 — 데스크탑 6열, 모바일 3열 × 2행 */
 .climateRow {
@@ -345,7 +345,7 @@
 }
 
 .copyBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 99px;
@@ -473,7 +473,7 @@
   line-height: 1.6;
 }
 .scenarioApply {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;

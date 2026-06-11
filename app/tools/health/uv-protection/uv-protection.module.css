@@ -79,8 +79,8 @@
   background: linear-gradient(90deg,
     #059669 0%,
     #059669 13%,
-    #CA8A04 13%,
-    #CA8A04 33%,
+    #A16207 13%,
+    #A16207 33%,
     #EA580C 33%,
     #EA580C 47%,
     #DC2626 47%,
@@ -169,12 +169,12 @@
 }
 .uvQuickActive { font-weight: 700; }
 .uvQuickLow      { border-color: rgba(16,185,129,0.40); }
-.uvQuickMid      { border-color: rgba(202,138,4,0.40); }
+.uvQuickMid      { border-color: rgba(161,98,7,0.40); }
 .uvQuickHigh     { border-color: rgba(234,88,12,0.40); }
 .uvQuickVHigh    { border-color: rgba(220,38,38,0.40); }
 .uvQuickExtreme  { border-color: rgba(155,89,182,0.40); }
 .uvQuickLow.uvQuickActive      { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; }
-.uvQuickMid.uvQuickActive      { background: rgba(202,138,4,0.18);  color: #CA8A04; border-color: #CA8A04; }
+.uvQuickMid.uvQuickActive      { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; }
 .uvQuickHigh.uvQuickActive     { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; }
 .uvQuickVHigh.uvQuickActive    { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; }
 .uvQuickExtreme.uvQuickActive  { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; }
@@ -295,13 +295,13 @@
 }
 
 .spfNone     { border-color: rgba(220,38,38,0.40); }
-.spf15       { border-color: rgba(202,138,4,0.40); }
+.spf15       { border-color: rgba(161,98,7,0.40); }
 .spf30       { border-color: var(--accent); }
 .spf50       { border-color: rgba(16,185,129,0.50); }
 .spf70       { border-color: rgba(155,89,182,0.40); }
 
 .spfNone.spfActive   { background: rgba(220,38,38,0.18); border-color: #DC2626; color: #DC2626; }
-.spf15.spfActive     { background: rgba(202,138,4,0.18);  border-color: #CA8A04; color: #CA8A04; }
+.spf15.spfActive     { background: rgba(161,98,7,0.18);  border-color: #A16207; color: #A16207; }
 .spf30.spfActive     { background: var(--accent-dim);     border-color: var(--accent); color: var(--accent); }
 .spf50.spfActive     { background: rgba(16,185,129,0.18); border-color: #059669; color: #059669; }
 .spf70.spfActive     { background: rgba(155,89,182,0.12); border-color: #9B59B6; color: #9333EA; }
@@ -421,7 +421,7 @@
   animation: fadeUp 0.3s ease;
 }
 .heroLow      { background: rgba(16,185,129,0.14);  border: 1px solid #059669; }
-.heroMid      { background: rgba(202,138,4,0.14);   border: 1px solid #CA8A04; }
+.heroMid      { background: rgba(161,98,7,0.14);   border: 1px solid #A16207; }
 .heroHigh     { background: rgba(234,88,12,0.14);  border: 1px solid #EA580C; }
 .heroVHigh    { background: rgba(220,38,38,0.14); border: 1px solid #DC2626; }
 .heroExtreme  { background: rgba(155,89,182,0.08);  border: 1px solid #9B59B6; }
@@ -437,7 +437,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .heroLow      .heroLevelLabel { background: rgba(16,185,129,0.18);  color: #059669; }
-.heroMid      .heroLevelLabel { background: rgba(202,138,4,0.18);   color: #CA8A04; }
+.heroMid      .heroLevelLabel { background: rgba(161,98,7,0.18);   color: #A16207; }
 .heroHigh     .heroLevelLabel { background: rgba(234,88,12,0.18);  color: #EA580C; }
 .heroVHigh    .heroLevelLabel { background: rgba(220,38,38,0.18); color: #DC2626; }
 .heroExtreme  .heroLevelLabel { background: rgba(155,89,182,0.18);  color: #9333EA; }
@@ -450,7 +450,7 @@
   line-height: 1;
 }
 .heroLow      .heroNum { color: #059669; }
-.heroMid      .heroNum { color: #CA8A04; }
+.heroMid      .heroNum { color: #A16207; }
 .heroHigh     .heroNum { color: #EA580C; }
 .heroVHigh    .heroNum { color: #DC2626; }
 .heroExtreme  .heroNum { color: #9333EA; }
@@ -531,8 +531,8 @@
 
 /* ── 재도포 카운트다운 ── */
 .reapplyCard {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 14px;
   padding: 16px 20px;
 }
@@ -540,7 +540,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 13.5px;
-  color: #CA8A04;
+  color: #A16207;
   margin-bottom: 8px;
 }
 .reapplyTimer {
@@ -559,18 +559,18 @@
 }
 .reapplyValue small { font-size: 14px; color: var(--muted); margin-left: 6px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
 .reapplyBtn {
-  background: rgba(202,138,4,0.18);
-  border: 1px solid #CA8A04;
+  background: rgba(161,98,7,0.18);
+  border: 1px solid #A16207;
   border-radius: 8px;
   padding: 8px 14px;
   font-size: 12.5px;
-  color: #CA8A04;
+  color: #A16207;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .reapplyBtn:hover { background: rgba(202,138,4,0.20); }
+  .reapplyBtn:hover { background: rgba(161,98,7,0.20); }
 }
 
 /* ── 활동별 가이드 (탭 2) ── */
@@ -615,7 +615,7 @@
 .activitySection ul li strong { color: #0891B2; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 .actBorderRunning  { border-left-color: #059669; }
-.actBorderGolf     { border-left-color: #CA8A04; }
+.actBorderGolf     { border-left-color: #A16207; }
 .actBorderBeach    { border-left-color: #0891B2; }
 .actBorderHiking   { border-left-color: #EA580C; }
 .actBorderSki      { border-left-color: #DC2626; }

@@ -40,7 +40,7 @@
 }
 .tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveBack    { background: rgba(155,89,182,0.12); color: #9333EA; font-weight: 700; }
-.tabActivePreset  { background: rgba(202,138,4,0.18);  color: #CA8A04; font-weight: 700; }
+.tabActivePreset  { background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
 .tabActiveRecipe  { background: rgba(16,185,129,0.18); color: #059669; font-weight: 700; }
 
 /* ── 카드 ── */
@@ -186,7 +186,7 @@
   height: 18px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, #0891B2 0%, #0891B2 25%, #059669 35%, #059669 55%, #CA8A04 65%, #EA580C 80%, #DC2626 100%);
+  background: linear-gradient(to right, #0891B2 0%, #0891B2 25%, #059669 35%, #059669 55%, #A16207 65%, #EA580C 80%, #DC2626 100%);
   border-radius: 999px;
   outline: none;
   cursor: pointer;
@@ -224,7 +224,7 @@
 }
 .tempCold   { background: rgba(8,145,178,0.14);  border: 1px solid rgba(8,145,178,0.30);  color: #0891B2; }
 .tempNormal { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.30);  color: #059669; }
-.tempFast   { background: rgba(202,138,4,0.14);   border: 1px solid rgba(202,138,4,0.30);   color: #CA8A04; }
+.tempFast   { background: rgba(161,98,7,0.14);   border: 1px solid rgba(161,98,7,0.30);   color: #A16207; }
 .tempDanger { background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.30); color: #DC2626; }
 
 /* 옵션 토글 */
@@ -241,7 +241,7 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(202,138,4,0.14));
+  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(161,98,7,0.14));
   border: 1px solid rgba(14,165,233,0.30);
   border-radius: 16px;
   padding: 24px 22px;
@@ -290,7 +290,7 @@
   font-variant-numeric: tabular-nums;
 }
 .heroBack .heroTimeValue { color: #9333EA; }
-.heroDayLabel { font-size: 11px; color: #CA8A04; margin-left: 6px; }
+.heroDayLabel { font-size: 11px; color: #A16207; margin-left: 6px; }
 
 .heroTotal {
   margin-top: 12px;
@@ -349,23 +349,23 @@
 .tlChecked  { opacity: 0.45; }
 .tlChecked .tlBody { text-decoration: line-through; }
 
-.tlTempSensitive { border-left-color: #CA8A04; }
+.tlTempSensitive { border-left-color: #A16207; }
 .tlCold          { border-left-color: #0891B2; }
 .tlBake          { border-left-color: #DC2626; }
 .tlFold          { border-left-color: rgba(14,165,233,0.6); }
-.tlObservation { background: rgba(202,138,4,0.14); }
+.tlObservation { background: rgba(161,98,7,0.14); }
 
 .tlDayBreak {
   text-align: center;
   font-size: 11px;
-  color: #CA8A04;
+  color: #A16207;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 0;
-  border-top: 1px dashed rgba(202,138,4,0.30);
-  border-bottom: 1px dashed rgba(202,138,4,0.30);
+  border-top: 1px dashed rgba(161,98,7,0.30);
+  border-bottom: 1px dashed rgba(161,98,7,0.30);
   margin: 4px 0;
 }
 
@@ -420,8 +420,8 @@
 }
 
 .presetNote {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.25);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.25);
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 12.5px;
@@ -429,7 +429,7 @@
   line-height: 1.7;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.presetNote strong { color: #CA8A04; }
+.presetNote strong { color: #A16207; }
 
 /* 액션 버튼 */
 .actionBtn {
@@ -499,8 +499,8 @@
 
 /* 관찰 가이드 카드 */
 .observeBox {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 12.5px;
@@ -508,7 +508,7 @@
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.observeBox strong { color: #CA8A04; }
+.observeBox strong { color: #A16207; }
 
 /* 내 레시피 카드 */
 .recipeGrid {
@@ -607,7 +607,7 @@
 .ddtCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #CA8A04;
+  border-left: 4px solid #A16207;
   border-radius: 14px;
   padding: 18px 20px;
   display: flex;
@@ -617,7 +617,7 @@
 .ddtTitle {
   font-size: 13px;
   font-weight: 700;
-  color: #CA8A04;
+  color: #A16207;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-family: 'Noto Sans KR', sans-serif;
@@ -661,7 +661,7 @@
   box-sizing: border-box;
   font-variant-numeric: tabular-nums;
 }
-.ddtNumInput:focus { border-color: #CA8A04; }
+.ddtNumInput:focus { border-color: #A16207; }
 
 .mixRow {
   display: grid;
@@ -685,12 +685,12 @@
 }
 .mixBtn strong { display: block; color: var(--text); font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
 .mixBtn small { display: block; color: var(--muted); font-size: 10.5px; }
-.mixActive { background: rgba(202,138,4,0.18); border-color: #CA8A04; }
-.mixActive strong { color: #CA8A04; }
+.mixActive { background: rgba(161,98,7,0.18); border-color: #A16207; }
+.mixActive strong { color: #A16207; }
 
 .ddtResult {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 12px;
   padding: 14px 18px;
   text-align: center;
@@ -710,7 +710,7 @@
   font-size: clamp(40px, 8vw, 56px);
   letter-spacing: -1px;
   line-height: 1;
-  color: #CA8A04;
+  color: #A16207;
   font-variant-numeric: tabular-nums;
 }
 .ddtResultUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }

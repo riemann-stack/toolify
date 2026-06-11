@@ -268,7 +268,7 @@
   .calCellEmpty:hover { border-color: transparent; }
 }
 .calCellSelected {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   font-weight: 800;
 }
@@ -320,7 +320,7 @@
 }
 .svc18 { border-color: rgba(16,185,129,0.40); }
 .svc20 { border-color: rgba(14,165,233,0.40); }
-.svc21 { border-color: rgba(202,138,4,0.40); }
+.svc21 { border-color: rgba(161,98,7,0.40); }
 .svc23 { border-color: rgba(234,88,12,0.40); }
 .svc34 { border-color: rgba(220,38,38,0.40); }
 .svc36 { border-color: rgba(155,89,182,0.40); }
@@ -328,7 +328,7 @@
 
 .svc18.serviceActive  { background: rgba(16,185,129,0.18);  color: #059669; border-color: #059669; font-weight: 700; }
 .svc20.serviceActive  { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.svc21.serviceActive  { background: rgba(202,138,4,0.18);   color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.svc21.serviceActive  { background: rgba(161,98,7,0.18);   color: #A16207; border-color: #A16207; font-weight: 700; }
 .svc23.serviceActive  { background: rgba(234,88,12,0.18);  color: #EA580C; border-color: #EA580C; font-weight: 700; }
 .svc34.serviceActive  { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
 .svc36.serviceActive  { background: rgba(155,89,182,0.15);  color: #9333EA; border-color: #9B59B6; font-weight: 700; }

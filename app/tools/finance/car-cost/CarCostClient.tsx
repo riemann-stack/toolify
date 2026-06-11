@@ -817,7 +817,7 @@ export default function CarCostClient() {
             <strong>💡 본인 상황별 추천:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>자금 충분 + 5년+ 보유: <strong style={{ color: 'var(--accent)' }}>현금 구매</strong></li>
-              <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#CA8A04' }}>할부</strong></li>
+              <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#A16207' }}>할부</strong></li>
               <li>사업자 (비용 처리·절세): <strong style={{ color: '#EA580C' }}>리스</strong></li>
               <li>관리 편함 + 신차 자주: <strong style={{ color: '#9333EA' }}>장기렌트</strong></li>
             </ul>

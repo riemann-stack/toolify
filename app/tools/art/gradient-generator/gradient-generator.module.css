@@ -247,7 +247,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--accent); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* ── Mesh corners ───────────── */
 .meshGrid {
@@ -525,7 +525,7 @@
   .codeTab:hover { color: var(--text); }
 }
 .codeTabActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -614,7 +614,7 @@
   flex-wrap: wrap;
 }
 .primaryBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;

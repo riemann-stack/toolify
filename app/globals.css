@@ -16,23 +16,30 @@
 
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
-  --accent:        #0EA5E9;   /* sky-500 — primary brand */
-  --accent-hover:  #0284C7;   /* sky-600 — hover state */
-  --accent-dim:    rgba(14,165,233,0.18);  /* dim accent background */
+  --accent:        #0284C7;   /* sky-600 — primary brand (흰 배경 4.10:1, 대형 텍스트 AA) */
+  --accent-hover:  #0369A1;   /* sky-700 — hover state */
+  --accent-ink:    #0369A1;   /* sky-700 — 캡션급(≤14px) accent 텍스트용 (5.93:1) */
+  --accent-strong: #0369A1;   /* sky-700 — 솔리드 버튼 배경 (흰 글자 5.93:1) */
+  --accent-dim:    rgba(2,132,199,0.18);  /* dim accent background */
   --accent-light:  #e0f2fe;   /* sky-100 — soft background tint */
 
-  /* category accent colors — 600-level for AA contrast on white */
-  --cat-finance: #059669;     /* emerald-600 */
-  --cat-health:  #0891B2;     /* cyan-600 */
-  --cat-life:    #EA580C;     /* orange-600 */
-  --cat-unit:    #7C3AED;     /* violet-600 */
-  --cat-date:    #DB2777;     /* pink-600 */
-  --cat-dev:     #0284C7;     /* sky-600 */
+  /* category accent colors — 600-level for AA contrast on white (전 11종, lib/tools.ts와 단일 소스) */
+  --cat-finance:  #059669;    /* emerald-600 */
+  --cat-health:   #0891B2;    /* cyan-600 */
+  --cat-cooking:  #D97706;    /* amber-600 */
+  --cat-life:     #EA580C;    /* orange-600 */
+  --cat-sports:   #A16207;    /* yellow-700 — 600(#A16207)은 2.94:1 AA 미달이라 700 사용 */
+  --cat-interior: #EA580C;    /* orange-600 (life와 공유) */
+  --cat-unit:     #7C3AED;    /* violet-600 */
+  --cat-date:     #DB2777;    /* pink-600 */
+  --cat-art:      #9333EA;    /* purple-600 */
+  --cat-edu:      #0D9488;    /* teal-600 */
+  --cat-dev:      #0284C7;    /* sky-600 */
 
-  /* semantic */
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger:  #EF4444;
+  /* semantic — 실사용 600레벨 기준 (텍스트 AA 안전값) */
+  --success: #059669;         /* emerald-600, 4.5:1 */
+  --warning: #B45309;         /* amber-700, 5.0:1 — 600레벨은 텍스트 AA 미달 */
+  --danger:  #DC2626;         /* red-600, 4.5:1 */
   --danger-soft: #fef2f2;
 }
 
@@ -79,6 +86,15 @@ a { text-decoration: none; color: inherit; }
 
 /* 더블탭 줌·300ms 탭 지연 제거 — 연타 도구(탭 템포·반응속도)에 필수, 전 버튼 무해 */
 button { touch-action: manipulation; }
+
+/* 키보드 포커스 가시화 (WCAG 2.4.7) — 모듈의 outline:none 162곳을 이기기 위해 !important */
+*:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px;
+}
+
+/* 계산 결과 숫자 정렬 — Inter·JetBrains Mono 모두 tnum 지원, 한글 무영향 */
+body { font-variant-numeric: tabular-nums; }
 
 /* 터치 기기에서 버튼 최소 높이 확보 (Apple HIG 44px) */
 @media (pointer: coarse) {

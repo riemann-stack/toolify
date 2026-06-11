@@ -133,7 +133,7 @@ export default function WeightLossPage() {
             {[
               { range: 'BMI 18.5 미만', name: '저체중 ⚠️', color: '#0891B2', desc: '권장하지 않음 — 골밀도·면역력·호르몬 위험' },
               { range: 'BMI 18.5~22.9', name: '정상 (한국 권장)', color: '#059669', desc: '건강한 목표 범위' },
-              { range: 'BMI 23.0~24.9', name: '과체중 (한국)', color: '#CA8A04', desc: '한국 기준 건강 위험 시작' },
+              { range: 'BMI 23.0~24.9', name: '과체중 (한국)', color: '#A16207', desc: '한국 기준 건강 위험 시작' },
               { range: 'BMI 25.0+', name: '비만', color: '#EA580C', desc: '대사질환 위험 ↑' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}40`, borderRadius: 10, padding: '10px 13px' }}>
@@ -168,7 +168,7 @@ export default function WeightLossPage() {
                 {[
                   ['300kcal',   '약 0.27kg', '약 1.2kg', '매우 안전', '#059669'],
                   ['500kcal',   '약 0.45kg', '약 2.0kg', '안전 권장', '#059669'],
-                  ['700kcal',   '약 0.64kg', '약 2.7kg', '적극 감량', '#CA8A04'],
+                  ['700kcal',   '약 0.64kg', '약 2.7kg', '적극 감량', '#A16207'],
                   ['1,000kcal', '약 0.91kg', '약 3.9kg', '주의 필요', '#EA580C'],
                   ['1,500kcal', '약 1.36kg', '약 5.9kg', '위험',      '#DC2626'],
                 ].map(([deficit, weekly, monthly, level, color], i) => (
@@ -250,7 +250,7 @@ export default function WeightLossPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { name: '식단만 (100%)', icon: '🥗', color: '#CA8A04', desc: '빠르지만 근손실 ↑·정체기 빠름' },
+              { name: '식단만 (100%)', icon: '🥗', color: '#A16207', desc: '빠르지만 근손실 ↑·정체기 빠름' },
               { name: '운동만 (100%)', icon: '🏃', color: '#EA580C', desc: '너무 많은 운동 시간 필요·부상 위험 ↑' },
               { name: '균형 (식단 60% + 운동 40%) ★', icon: '⚖️', color: '#059669', desc: '근육 유지 + 심혈관 건강 + 지속 가능' },
             ].map((m, i) => (

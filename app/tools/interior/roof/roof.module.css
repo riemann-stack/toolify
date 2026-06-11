@@ -50,7 +50,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 입력 */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; min-width: 0; }
@@ -118,7 +118,7 @@
 }@media (hover: hover) {
   .quickChip:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quickChipActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.quickChipActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* 슬라이더 */
 .sliderRow {
@@ -218,7 +218,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeBtnActive { background: var(--accent); color: #ffffff; }
+.modeBtnActive { background: var(--accent-strong); color: #ffffff; }
 
 /* 시각화 */
 .vizWrap {

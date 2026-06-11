@@ -39,8 +39,8 @@
 .infoBox strong { color: #0891B2; }
 
 .adviceBox {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.30);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 12.5px;
@@ -48,7 +48,7 @@
   line-height: 1.75;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.adviceBox strong { color: #CA8A04; }
+.adviceBox strong { color: #A16207; }
 
 /* ─── 탭 (4개) ─── */
 .tabs {
@@ -76,7 +76,7 @@
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveTopping   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActivePreset    { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActivePreset    { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
 .tabActiveNutrition { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 
 /* 카드 */
@@ -262,7 +262,7 @@
 }
 .heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
 .heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
-.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroGold   { background: rgba(161,98,7,0.14); border-color: rgba(161,98,7,0.30); }
 .heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
 
 .heroLabel {
@@ -283,7 +283,7 @@
   color: var(--accent);
 }
 .heroNumOrange { color: #EA580C; }
-.heroNumGold   { color: #CA8A04; }
+.heroNumGold   { color: #A16207; }
 .heroNumCyan   { color: #0891B2; }
 .heroSub  { font-size: 14px; color: var(--text); margin-top: 12px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
 .heroDesc { font-size: 12.5px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
@@ -422,7 +422,7 @@
   height: 100%;
   background: linear-gradient(90deg, var(--accent), #0891B2);
 }
-.nutritionBarFillWarn { background: linear-gradient(90deg, #CA8A04, #EA580C); }
+.nutritionBarFillWarn { background: linear-gradient(90deg, #A16207, #EA580C); }
 .nutritionBarFillDanger { background: linear-gradient(90deg, #EA580C, #DC2626); }
 
 /* 라면 프리셋 카테고리별 그리드 */

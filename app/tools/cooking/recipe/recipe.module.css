@@ -39,7 +39,7 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveConvert{ background: rgba(202,138,4,0.18);  color: #CA8A04; font-weight: 700; }
+.tabActiveConvert{ background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
 .tabActiveSaved  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
 .tabActiveShop   { background: rgba(16,185,129,0.18); color: #059669; font-weight: 700; }
 
@@ -520,13 +520,13 @@
   transition: all 0.12s;
   text-align: center;
 }@media (hover: hover) {
-  .convertBox:hover { border-color: #CA8A04; }
+  .convertBox:hover { border-color: #A16207; }
 }
 .convertBoxValue {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 22px;
-  color: #CA8A04;
+  color: #A16207;
   font-variant-numeric: tabular-nums;
 }
 .convertBoxUnit { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-top: 2px; }
@@ -553,7 +553,7 @@
 .quickRefTable td:nth-child(2), .quickRefTable td:nth-child(3) {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  color: #CA8A04;
+  color: #A16207;
   font-variant-numeric: tabular-nums;
 }
 

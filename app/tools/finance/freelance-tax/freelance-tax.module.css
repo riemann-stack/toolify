@@ -382,7 +382,7 @@
   border-radius: 99px;
   letter-spacing: 0.08em;
 }
-.bestBadge { background: var(--accent); color: #ffffff; }
+.bestBadge { background: var(--accent-strong); color: #ffffff; }
 .currentBadge { background: rgba(8, 145, 178, 0.2); color: #0891B2; }
 .scenarioLabel {
   font-size: 14px;
@@ -665,7 +665,7 @@
   flex-shrink: 0;
   width: 32px;
   height: 32px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-radius: 50%;
   display: flex;

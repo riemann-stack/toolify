@@ -157,7 +157,7 @@ export function evaluateRisk(input: RiskInput): RiskResult {
     level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
     recommendation = '안전한 해동 조건입니다. 식품 안전 가이드를 따라 진행하세요.'
   } else if (score <= 2) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#CA8A04'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#A16207'
     recommendation = '약간의 주의가 필요합니다. 권장 사항을 따라 진행하세요.'
   } else if (score <= 4) {
     level = 'warning'; levelLabel = '🟠 위험'; levelColor = '#EA580C'

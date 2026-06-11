@@ -41,7 +41,7 @@
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveQuick  { background: rgba(8,145,178,0.18);  color: #0891B2; font-weight: 700; }
-.tabActivePace   { background: rgba(202,138,4,0.18);   color: #CA8A04; font-weight: 700; }
+.tabActivePace   { background: rgba(161,98,7,0.18);   color: #A16207; font-weight: 700; }
 .tabActiveDiff   { background: rgba(155,89,182,0.10);  color: #9333EA; font-weight: 700; }
 .tabActiveBiz    { background: rgba(16,185,129,0.18);  color: #059669; font-weight: 700; }
 
@@ -272,7 +272,7 @@
   border-left-color: #DC2626;
   box-shadow: 0 0 0 2px rgba(220,38,38,0.20);
 }
-.ddaySoon { border-left-color: #CA8A04; }
+.ddaySoon { border-left-color: #A16207; }
 .ddayPast { opacity: 0.55; }
 
 .ddayHeader {
@@ -330,7 +330,7 @@
   font-variant-numeric: tabular-nums;
 }
 .ddayHeroUrgent { color: #DC2626; animation: pulseHero 1.6s ease-in-out infinite; }
-.ddayHeroSoon { color: #CA8A04; }
+.ddayHeroSoon { color: #A16207; }
 .ddayHeroPast { color: var(--muted); }
 
 @keyframes pulseHero {
@@ -357,7 +357,7 @@
   margin-bottom: 6px;
 }
 .badgeUrgent  { background: rgba(220,38,38,0.15); color: #DC2626; }
-.badgeSoon    { background: rgba(202,138,4,0.15);   color: #CA8A04; }
+.badgeSoon    { background: rgba(161,98,7,0.15);   color: #A16207; }
 .badgeOk      { background: rgba(16,185,129,0.15);  color: #059669; }
 .badgePast    { background: rgba(176,176,176,0.10); color: var(--muted); }
 
@@ -395,8 +395,8 @@
 }
 
 .ddayPace {
-  background: rgba(202,138,4,0.14);
-  border: 1px solid rgba(202,138,4,0.25);
+  background: rgba(161,98,7,0.14);
+  border: 1px solid rgba(161,98,7,0.25);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 11.5px;
@@ -407,7 +407,7 @@
   justify-content: space-between;
   align-items: center;
 }
-.ddayPace strong { color: #CA8A04; font-family: 'Inter', system-ui, sans-serif; }
+.ddayPace strong { color: #A16207; font-family: 'Inter', system-ui, sans-serif; }
 
 .empty {
   text-align: center;
@@ -453,7 +453,7 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumUrgent { color: #DC2626; text-shadow: 0 0 30px rgba(220,38,38,0.30); }
-.heroNumSoon { color: #CA8A04; text-shadow: 0 0 30px rgba(202,138,4,0.30); }
+.heroNumSoon { color: #A16207; text-shadow: 0 0 30px rgba(161,98,7,0.30); }
 .heroSub {
   font-size: 13px;
   color: var(--muted);
@@ -542,8 +542,8 @@
 
 /* ─────── 페이스 ─────── */
 .paceHero {
-  background: linear-gradient(140deg, rgba(202,138,4,0.14), rgba(234,88,12,0.14));
-  border: 1px solid rgba(202,138,4,0.30);
+  background: linear-gradient(140deg, rgba(161,98,7,0.14), rgba(234,88,12,0.14));
+  border: 1px solid rgba(161,98,7,0.30);
   border-radius: 16px;
   padding: 24px 22px;
   text-align: center;
@@ -552,7 +552,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(40px, 9vw, 56px);
-  color: #CA8A04;
+  color: #A16207;
   line-height: 1;
   margin-bottom: 6px;
   font-variant-numeric: tabular-nums;
@@ -657,7 +657,7 @@
 .paceGoalBtn small { display: block; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
   .paceGoalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.paceGoalActive { background: rgba(202,138,4,0.18); color: #CA8A04; border-color: #CA8A04; font-weight: 700; }
+.paceGoalActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
 
 /* ─────── 두 날짜 사이 ─────── */
 .diffHero {

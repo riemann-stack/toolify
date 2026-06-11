@@ -105,7 +105,7 @@
 .urlInput:focus { border-color: var(--accent); }
 @media (max-width: 640px) { .urlInput { font-size: 16px; } }
 .fetchBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;

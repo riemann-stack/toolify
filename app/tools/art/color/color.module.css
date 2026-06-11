@@ -45,7 +45,7 @@
 /* 탭별 색조 */
 .tabActiveA11y     { background: rgba(220,38,38,0.18);  color: #DC2626; font-weight: 700; }
 .tabActivePalette  { background: rgba(155,89,182,0.12);   color: #9333EA; font-weight: 700; }
-.tabActiveCss      { background: rgba(202,138,4,0.18);    color: #CA8A04; font-weight: 700; }
+.tabActiveCss      { background: rgba(161,98,7,0.18);    color: #A16207; font-weight: 700; }
 .tabActiveGradient { background: rgba(8,145,178,0.18);   color: #0891B2; font-weight: 700; }
 .tabActiveExtract  { background: rgba(16,185,129,0.18);   color: #059669; font-weight: 700; }
 

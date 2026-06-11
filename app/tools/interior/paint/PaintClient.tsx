@@ -1156,7 +1156,7 @@ export default function PaintClient() {
 function CanSvg({ size }: { size: number }) {
   // 사이즈별 크기 비례 (18L > 4L > 2L > 1L)
   const dim = size === 18 ? 56 : size === 4 ? 38 : size === 2 ? 30 : 24
-  const color = size === 18 ? '#0EA5E9' : size === 4 ? '#059669' : size === 2 ? '#0891B2' : '#CA8A04'
+  const color = size === 18 ? '#0EA5E9' : size === 4 ? '#059669' : size === 2 ? '#0891B2' : '#A16207'
   return (
     <svg width={dim} height={dim * 1.1} viewBox="0 0 50 56" aria-hidden="true">
       {/* 손잡이 */}

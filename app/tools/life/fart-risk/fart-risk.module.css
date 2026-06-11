@@ -170,7 +170,7 @@
 }
 .foodEmoji { font-size: 18px; line-height: 1; }
 .foodActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
@@ -319,7 +319,7 @@
   color: #ffffff;
   flex-shrink: 0;
 }
-.rank1 { background: #CA8A04; }
+.rank1 { background: #A16207; }
 .rank2 { background: #C0C0C0; }
 .rank3 { background: #CD7F32; color: #fff; }
 .topEmoji { font-size: 22px; }
@@ -447,7 +447,7 @@
 }
 @media (max-width: 480px) { .actionRow { grid-template-columns: 1fr; } }
 .shareBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   padding: 14px 18px;
@@ -505,7 +505,7 @@
 }@media (hover: hover) {
   .portionBtn:hover { border-color: rgba(14,165,233,0.3); }
 }
-.portionActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+.portionActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 /* ── 안내 힌트 카드 ── */
 .hintCard {

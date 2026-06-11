@@ -54,10 +54,10 @@
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
 .tabActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
 }@media (hover: hover) {
-  .tabActive:hover { background: var(--accent); color: #ffffff; }
+  .tabActive:hover { background: var(--accent-strong); color: #ffffff; }
 }
 @media (max-width: 640px) {
   .tabs {
@@ -126,7 +126,7 @@
   .unitBtn:hover { color: var(--text); }
 }
 .unitBtnActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }@media (hover: hover) {

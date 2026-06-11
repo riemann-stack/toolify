@@ -222,7 +222,7 @@
   .preset:hover { color: var(--text); border-color: var(--accent); }
 }
 .presetActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
 }
@@ -311,7 +311,7 @@
   padding: 2px 8px;
   border-radius: 99px;
   letter-spacing: 0.08em;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
 }
 .resultLabel {

@@ -47,12 +47,14 @@ export function buildMetadata({
       url: path,
       title: fullTitle,
       description,
-      // images는 app/opengraph-image.png 가 자동 적용
+      // 파일 컨벤션(app/opengraph-image.png)은 루트에만 적용되고 하위 라우트엔 주입되지 않음 — 명시 지정 (metadataBase가 절대 URL로 확장)
+      images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Youtil — 자주 쓰는 계산기와 무료 온라인 도구 모음' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description,
+      images: ['/opengraph-image.png'],
     },
     ...(noIndex && {
       robots: {

@@ -34,7 +34,7 @@
 }@media (hover: hover) {
   .notationBtn:hover { color: var(--text); }
 }
-.notationBtnActive { background: var(--accent); color: #ffffff; }
+.notationBtnActive { background: var(--accent-strong); color: #ffffff; }
 
 /* ── 12개 키 그리드 ── */
 .keyGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -50,7 +50,7 @@
 }
 .keyBtnSharp { background: color-mix(in srgb, var(--bg3) 55%, #000 45%); }
 .keyBtnActive {
-  background: var(--accent) !important; color: #ffffff !important;
+  background: var(--accent-strong) !important; color: #ffffff !important;
   border-color: var(--accent) !important; font-weight: 700;
 }@media (hover: hover) {
   .keyBtnActive:hover { color: #ffffff !important; }
@@ -80,7 +80,7 @@
   .typeBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .typeBtnActive {
-  background: var(--accent) !important;
+  background: var(--accent-strong) !important;
   border-color: var(--accent) !important;
   color: #ffffff !important;
 }
@@ -114,7 +114,7 @@
   letter-spacing: 0.02em; line-height: 1;
 }
 .chipRoot {
-  background: var(--accent); color: #ffffff;
+  background: var(--accent-strong); color: #ffffff;
   border-color: var(--accent);
 }
 .chipDeg { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }

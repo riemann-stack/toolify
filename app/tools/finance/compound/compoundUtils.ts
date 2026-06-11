@@ -27,7 +27,7 @@ export interface ReturnScenario {
 export const RETURN_SCENARIOS: ReturnScenario[] = [
   { id: 'conservative', name: '보수적', rate: 4,  desc: '예금·채권 중심',          color: '#0891B2' },
   { id: 'moderate',     name: '기준',   rate: 7,  desc: 'S&P500 100년 평균',       color: 'var(--accent)' },
-  { id: 'optimistic',   name: '낙관적', rate: 10, desc: '주식형 펀드 장기 평균',    color: '#CA8A04' },
+  { id: 'optimistic',   name: '낙관적', rate: 10, desc: '주식형 펀드 장기 평균',    color: '#A16207' },
   { id: 'aggressive',   name: '공격적', rate: 13, desc: '성장주 (고위험·고수익)',  color: '#EA580C', warning: '큰 변동성' },
 ]
 
@@ -207,7 +207,7 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
     feasibilityNote = '월 소득의 10~15% 수준 — 일반 직장인 가능'
   } else if (requiredMonthly < 1_500_000) {
     feasibility = 'tight'; feasibilityLabel = '🟡 도전적'
-    feasibilityColor = '#CA8A04'
+    feasibilityColor = '#A16207'
     feasibilityNote = '월 소득의 25% 이상 — 검토 필요'
   } else {
     feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'

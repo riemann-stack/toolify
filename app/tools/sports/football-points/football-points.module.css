@@ -35,7 +35,7 @@
   .leagueBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .leagueActive {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent);
   font-weight: 700;
@@ -135,7 +135,7 @@
   text-align: center;
 }
 .wdlWin  { border-left: 3px solid #059669; }
-.wdlDraw { border-left: 3px solid #CA8A04; }
+.wdlDraw { border-left: 3px solid #A16207; }
 .wdlLoss { border-left: 3px solid #DC2626; }
 .wdlLabel {
   font-size: 11px;
@@ -503,7 +503,7 @@
   color: var(--text);
 }
 .scWin  { color: #059669; }
-.scDraw { color: #CA8A04; }
+.scDraw { color: #A16207; }
 .scLoss { color: #DC2626; }
 .scPts  { color: var(--accent); }
 
@@ -767,7 +767,7 @@
   font-weight: 800;
   text-align: center;
 }
-.rankGold   { color: #CA8A04; }
+.rankGold   { color: #A16207; }
 .rankSilver { color: #C0C0C0; }
 .rankBronze { color: #CD7F32; }
 .rankOther  { color: var(--muted); }

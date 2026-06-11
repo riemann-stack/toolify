@@ -66,7 +66,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: var(--accent); color: #ffffff; }
+.tabActive { background: var(--accent-strong); color: #ffffff; }
 
 /* ── 필드·input ── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -115,7 +115,7 @@
 }@media (hover: hover) {
   .pill:hover { background: var(--bg2); color: var(--text); }
 }
-.pillActive { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+.pillActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent); }
 
 /* ── 품목 그리드 ── */
 .itemGrid {
@@ -309,7 +309,7 @@
 }
 .saveRow .input { flex: 1; }
 .saveBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -354,7 +354,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 32px;
 }@media (hover: hover) {
-  .loadBtn:hover { background: var(--accent); color: #ffffff; }
+  .loadBtn:hover { background: var(--accent-strong); color: #ffffff; }
 }
 .removeBtn {
   background: transparent;

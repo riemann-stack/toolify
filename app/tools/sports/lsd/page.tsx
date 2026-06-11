@@ -62,7 +62,7 @@ export default function LsdPage() {
         {/* 2. 너무 빨리 뛰면 안 되는 이유 */}
         <section>
           <h2 style={sectionTitle}>이지런을 너무 빨리 뛰면 안 되는 이유</h2>
-          <div style={{ ...card, borderLeft: `3px solid #CA8A04`, marginBottom: 12 }}>
+          <div style={{ ...card, borderLeft: `3px solid #A16207`, marginBottom: 12 }}>
             <p style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>🚦 회색지대(Gray Zone) = 정크 마일</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               마라톤 페이스보다 살짝 느린 &ldquo;힘들진 않은데 회복도 안 되는&rdquo; 애매한 속도입니다. 대부분의 아마추어가 매일 여기서 달립니다 — 충분히 느리지 않아 유산소 적응은 약하고, 충분히 빠르지도 않아 자극도 부족하며, 피로만 누적돼 부상·정체로 이어집니다.

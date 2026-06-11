@@ -178,7 +178,7 @@ export default function RamenPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { emoji: '⚫', name: '짜파게티', color: '#CA8A04', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
+              { emoji: '⚫', name: '짜파게티', color: '#A16207', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
               { emoji: '🔥', name: '불닭볶음면', color: '#DC2626', steps: ['600ml로 끓이기 (5분)', '8큰술 남기고 따라냄', '액상소스 + 후레이크 + 김 비비기'] },
               { emoji: '❄️', name: '비빔면', color: '#0891B2', steps: ['600ml로 면만 익히기 (3분)', '물 전부 따라내고 찬물에 헹굼', '비빔장 + 비비기'] },
             ].map((s, i) => (

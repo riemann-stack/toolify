@@ -55,7 +55,7 @@ export interface QualityBand { min: number; label: string; color: string; desc: 
 export const QUALITY_BANDS: QualityBand[] = [
   { min: 300, label: '고품질',      color: '#059669', desc: '사진·고급 인쇄에 충분' },
   { min: 200, label: '우수',        color: '#0EA5E9', desc: '일반 인쇄에 적합' },
-  { min: 150, label: '보통',        color: '#CA8A04', desc: '포스터·근거리 OK, 사진은 다소 아쉬움' },
+  { min: 150, label: '보통',        color: '#A16207', desc: '포스터·근거리 OK, 사진은 다소 아쉬움' },
   { min: 72,  label: '낮음',        color: '#EA580C', desc: '대형·원거리 인쇄 전용' },
   { min: 0,   label: '인쇄 부적합', color: '#DC2626', desc: '화면용 — 인쇄 시 흐려짐' },
 ]

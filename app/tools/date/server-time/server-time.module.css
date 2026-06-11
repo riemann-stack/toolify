@@ -336,7 +336,7 @@
 }
 .urlInput:focus { border-color: var(--accent); }
 .extMeasureBtn {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 8px;

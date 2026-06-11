@@ -220,7 +220,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 3px solid #CA8A04;
+  border-left: 3px solid #A16207;
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -230,7 +230,7 @@
 .resistorLabel {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
-  color: #CA8A04;
+  color: #A16207;
   font-size: 14px;
 }
 .resistorValueRow {
@@ -242,7 +242,7 @@
 .resistorValueRow input[type=range] {
   flex: 1;
   min-width: 0;
-  accent-color: #CA8A04;
+  accent-color: #A16207;
 }
 .resistorValueDisplay {
   font-family: 'Inter', system-ui, sans-serif;
@@ -365,8 +365,8 @@
 }
 .resVoltage      { border-top-color: #0D9488; }
 .resVoltage      .resultValue { color: #0D9488; }
-.resCurrent      { border-top-color: #CA8A04; }
-.resCurrent      .resultValue { color: #CA8A04; }
+.resCurrent      { border-top-color: #A16207; }
+.resCurrent      .resultValue { color: #A16207; }
 .resResistance   { border-top-color: #EA580C; }
 .resResistance   .resultValue { color: #EA580C; }
 .resPower        { border-top-color: #DC2626; }
@@ -392,7 +392,7 @@
   font-weight: 600;
 }
 .analysisTable td:first-child {
-  color: #CA8A04;
+  color: #A16207;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
 }
@@ -403,7 +403,7 @@
   white-space: nowrap;
 }
 .analysisTable .colVoltage { color: #0D9488; }
-.analysisTable .colCurrent { color: #CA8A04; }
+.analysisTable .colCurrent { color: #A16207; }
 .analysisTable .colPower   { color: #DC2626; }
 .analysisTable .powerWarn  { color: #DC2626 !important; background: rgba(220,38,38,0.14); }
 

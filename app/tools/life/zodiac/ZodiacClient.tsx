@@ -253,7 +253,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <div className={styles.lunarCaveat}>
                   📅 <strong>1~2월 출생</strong> — 음력 설(보통 1/21~2/20)이나 입춘(2/4경) <strong>이전</strong> 출생이라면
                   전통적으로 <strong>{profile.prevChinese.emoji} {profile.prevChinese.name}띠 · {profile.prevGanji.hanja}({profile.prevGanji.hangul})</strong>(전년 기준)일 수 있습니다.
-                  정확히는 <Link href="/tools/date/lunar" style={{ color: '#CA8A04', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
+                  정확히는 <Link href="/tools/date/lunar" style={{ color: '#A16207', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
                 </div>
               )}
 
@@ -418,7 +418,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               }`} aria-live="polite">
                 <div className={styles.compatScoreLabel}>종합 궁합 (재미용)</div>
                 <div className={styles.compatScoreNum}
-                  style={{ color: compatResult.overall >= 4 ? '#059669' : compatResult.overall >= 3 ? '#CA8A04' : '#DC2626' }}>
+                  style={{ color: compatResult.overall >= 4 ? '#059669' : compatResult.overall >= 3 ? '#A16207' : '#DC2626' }}>
                   {compatResult.overall.toFixed(1)} / 5.0
                 </div>
                 <div className={styles.starRow} role="img" aria-label={`5점 만점에 ${compatResult.overall.toFixed(1)}점`}>
@@ -561,7 +561,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                               const aZ = getZodiacByYear(a.year)
                               const bZ = getZodiacByYear(b.year)
                               const ev = evalZodiacPair(aZ.name, bZ.name)
-                              const color = ev.score >= 4 ? '#059669' : ev.score === 3 ? '#CA8A04' : '#DC2626'
+                              const color = ev.score >= 4 ? '#059669' : ev.score === 3 ? '#A16207' : '#DC2626'
                               const icon = ev.score >= 4 ? '🟢' : ev.score === 3 ? '🟡' : '🔴'
                               return (
                                 <td key={b.id} style={{ color, fontSize: 11 }}>

@@ -787,7 +787,7 @@ export default function DutchClient() {
             <>
               <div className={styles.hero} aria-live="polite">
                 <div className={styles.heroLabel}>{prepaidResult.minimal ? '최소 송금 횟수' : '필요 송금 횟수 (근사)'}</div>
-                <div className={styles.heroNum} style={{ color: '#CA8A04' }}>
+                <div className={styles.heroNum} style={{ color: '#A16207' }}>
                   {prepaidResult.transferCount}<span className={styles.heroNumUnit}>건</span>
                 </div>
                 <div className={styles.heroSub}>

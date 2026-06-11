@@ -161,7 +161,7 @@
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
 .tabActiveTests    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 .tabActiveFetal    { background: rgba(219,39,119,0.12); color: #DB2777; font-weight: 700; }
-.tabActiveChecklist{ background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveChecklist{ background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
 .tabActiveReverse  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
 
 /* 위급 경고 박스 */
@@ -308,7 +308,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .testRowUpcoming { border-left-color: var(--border); }
-.testRowCurrent  { border-left-color: #CA8A04; background: rgba(202,138,4,0.14); }
+.testRowCurrent  { border-left-color: #A16207; background: rgba(161,98,7,0.14); }
 .testRowPast     { border-left-color: var(--muted); opacity: 0.55; }
 .testName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; overflow-wrap: anywhere; }
 .testRowPast .testName { text-decoration: line-through; color: var(--muted); }
@@ -329,7 +329,7 @@
   text-align: right;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.testStatusCurrent { color: #CA8A04; font-weight: 700; }
+.testStatusCurrent { color: #A16207; font-weight: 700; }
 
 /* 태아 크기 카드 (큰) */
 .fetalBig {
@@ -463,7 +463,7 @@
 }
 .progressBarBigFill {
   height: 100%;
-  background: linear-gradient(to right, #CA8A04, #059669, #EA580C);
+  background: linear-gradient(to right, #A16207, #059669, #EA580C);
   transition: width 0.3s;
 }
 

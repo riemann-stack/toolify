@@ -175,9 +175,9 @@ export default function BakingSchedulePage() {
         {/* 6. 반죽 상태 판단 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반죽 상태 판단 — 시간보다 중요</h2>
-          <div style={{ background: 'rgba(202,138,4,0.06)', border: '1px solid rgba(202,138,4,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(161,98,7,0.06)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13.5px', color: 'var(--text)', lineHeight: 1.85 }}>
-              ⭐ <strong style={{ color: '#CA8A04' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: '#CA8A04' }}>반죽 상태를 함께 확인</strong>하세요.
+              ⭐ <strong style={{ color: '#A16207' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: '#A16207' }}>반죽 상태를 함께 확인</strong>하세요.
             </p>
           </div>
           <div className={s.guideGrid2} style={{ gap: '10px' }}>

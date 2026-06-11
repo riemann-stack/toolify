@@ -371,7 +371,7 @@
 
 .copyBtn {
   width: 100%;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   border: none;
   border-radius: 10px;

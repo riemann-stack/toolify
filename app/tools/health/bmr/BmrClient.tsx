@@ -593,7 +593,7 @@ export default function BmrClient() {
                         <div className={styles.budgetSeg} style={{ width: `${bmrPct}%`, background: '#0891B2' }}>
                           <span>BMR</span><b>{fmt(bmr)}</b>
                         </div>
-                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: '#CA8A04' }}>
+                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: '#A16207' }}>
                           <span>활동</span><b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (
@@ -612,7 +612,7 @@ export default function BmrClient() {
                           기본 생명유지 (BMR) <b>{fmt(bmr)}</b>
                         </div>
                         <div className={styles.budgetLegendItem}>
-                          <span className={styles.budgetSwatch} style={{ background: '#CA8A04' }} />
+                          <span className={styles.budgetSwatch} style={{ background: '#A16207' }} />
                           일상 활동·운동 <b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (

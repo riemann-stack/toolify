@@ -294,7 +294,7 @@ export default function SalaryPage() {
             {[
               { name: '세전 시급', desc: '공식 시급 — 연봉 ÷ (12 × 209h)', color: 'var(--muted)' },
               { name: '세후 시급', desc: '실수령 ÷ 209h — 약 86~91% 수준', color: 'var(--accent)' },
-              { name: '야근 포함', desc: '실수령 ÷ (근무 + 야근) — 야근 많을수록 ↓', color: '#CA8A04' },
+              { name: '야근 포함', desc: '실수령 ÷ (근무 + 야근) — 야근 많을수록 ↓', color: '#A16207' },
               { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 노동 시간 — 출퇴근 90분이면 약 20%↓', color: '#EA580C' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.color}40`, borderRadius: 10, padding: '11px 14px' }}>

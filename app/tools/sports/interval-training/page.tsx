@@ -167,7 +167,7 @@ export default function IntervalTrainingPage() {
                   { d: '2km',          u: '역치·하프',       r: '3~4회',  c: '600m 조깅' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.u}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.c}</td>
@@ -193,14 +193,14 @@ export default function IntervalTrainingPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>800m × 10회 평균</span> = <strong style={{ color: '#CA8A04' }}>X분 Y초</strong></div>
-            <div><span style={{ color: 'var(--muted)' }}>예상 풀코스</span>     = <strong style={{ color: '#CA8A04' }}>X시간 Y분</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>800m × 10회 평균</span> = <strong style={{ color: '#A16207' }}>X분 Y초</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>예상 풀코스</span>     = <strong style={{ color: '#A16207' }}>X시간 Y분</strong></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 미국 러닝 코치 Bart Yasso가 제시한 풀코스 예측 훈련법</div>
           </div>
           <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
             {[
               { i: '3:00/800m', m: '3:00:00 풀코스', c: '#059669' },
-              { i: '3:30/800m', m: '3:30:00 풀코스', c: '#CA8A04' },
+              { i: '3:30/800m', m: '3:30:00 풀코스', c: '#A16207' },
               { i: '4:00/800m', m: '4:00:00 풀코스', c: '#EA580C' },
               { i: '4:30/800m', m: '4:30:00 풀코스', c: '#DC2626' },
             ].map((r, i) => (
@@ -250,7 +250,7 @@ export default function IntervalTrainingPage() {
                   { t: '16:00', v: 60, i: '3:14', r: '1:18' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.i}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
@@ -289,7 +289,7 @@ export default function IntervalTrainingPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            💡 회복 중에는 <strong style={{ color: '#CA8A04' }}>완전 정지보다 가벼운 조깅이 효과적</strong>입니다 (젖산 제거 가속화).
+            💡 회복 중에는 <strong style={{ color: '#A16207' }}>완전 정지보다 가벼운 조깅이 효과적</strong>입니다 (젖산 제거 가속화).
           </div>
         </div>
 
@@ -308,7 +308,7 @@ export default function IntervalTrainingPage() {
               { d: '1600m', l: '4바퀴 (1마일)' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
-                <p style={{ fontSize: 16, color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
+                <p style={{ fontSize: 16, color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 800 }}>{r.d}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{r.l}</p>
               </div>
             ))}
@@ -322,7 +322,7 @@ export default function IntervalTrainingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '📅 훈련 빈도', c: '#CA8A04', items: ['초보: 주 1회', '중급: 주 1~2회', '고급: 주 2~3회'] },
+              { t: '📅 훈련 빈도', c: '#A16207', items: ['초보: 주 1회', '중급: 주 1~2회', '고급: 주 2~3회'] },
               { t: '🚫 금기 사항',  c: '#DC2626', items: ['주간 거리 15% 이상 고강도 X', '전날 장거리주·고강도 후 X', '통증·이상 시 즉시 중단', '부상 회복 직후 점진적 ↑'] },
               { t: '✅ 준비 운동',  c: '#059669', items: ['워밍업 1.5~3km 가벼운 조깅', '동적 스트레칭 5~10분', '인터벌 후 쿨다운 1.5~3km'] },
             ].map((g, i) => (
@@ -390,7 +390,7 @@ export default function IntervalTrainingPage() {
                   { d: '1.6km',  t: '6:57', l: '1:44.3',  track: '4바퀴 (1마일)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.track}</td>
@@ -430,7 +430,7 @@ export default function IntervalTrainingPage() {
                   { d: '2~3km',    e: '🔵 T 페이스 (역치)',                    t: '하프·풀코스 지구력' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#CA8A04', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.e}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
                   </tr>

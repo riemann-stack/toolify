@@ -91,7 +91,7 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.presetActive { background: var(--accent); color: #fff; border-color: var(--accent); }
+.presetActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 /* ── 결과 ── */
 .result {

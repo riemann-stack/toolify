@@ -99,7 +99,7 @@ export default function SoundSpeedPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div>거리(m) = <span style={{ color: '#0D9488' }}>음속</span> × <span style={{ color: '#CA8A04' }}>시간(초)</span></div>
+            <div>거리(m) = <span style={{ color: '#0D9488' }}>음속</span> × <span style={{ color: '#A16207' }}>시간(초)</span></div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 빠른 추정 공식</span></div>
             <div>거리(km) ≈ 시간(초) ÷ 3</div>
@@ -188,8 +188,8 @@ export default function SoundSpeedPage() {
                   { m: '바닷물',   s: 1_531,  r: '4.5배',  c: '#0891B2' },
                   { m: '나무',     s: 3_300,  r: '9.6배',  c: '#EA580C' },
                   { m: '벽돌',     s: 3_650,  r: '10.6배', c: '#EA580C' },
-                  { m: '구리',     s: 4_600,  r: '13배',   c: '#CA8A04' },
-                  { m: '강철',     s: 5_960,  r: '17배',   c: '#CA8A04' },
+                  { m: '구리',     s: 4_600,  r: '13배',   c: '#A16207' },
+                  { m: '강철',     s: 5_960,  r: '17배',   c: '#A16207' },
                   { m: '다이아몬드', s: 12_000, r: '35배',   c: '#9333EA' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>

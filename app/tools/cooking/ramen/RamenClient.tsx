@@ -488,9 +488,9 @@ export default function RamenClient() {
           <div className={styles.adviceBox}>
             <strong>💡 짜장·볶음·비빔면 조리법 (일반 라면과 다름):</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
-              <li><strong style={{ color: '#CA8A04' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
-              <li><strong style={{ color: '#CA8A04' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
-              <li><strong style={{ color: '#CA8A04' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
+              <li><strong style={{ color: '#A16207' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
+              <li><strong style={{ color: '#A16207' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
+              <li><strong style={{ color: '#A16207' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
             </ul>
           </div>
         </>

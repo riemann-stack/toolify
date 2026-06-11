@@ -324,7 +324,7 @@ export function recordsToCSV(records: RaceRecord[]): string {
 export function vdotLevel(vdot: number): { tag: string; color: string } {
   if (vdot < 30) return { tag: '입문', color: '#0891B2' }
   if (vdot < 40) return { tag: '중급', color: '#0EA5E9' }
-  if (vdot < 50) return { tag: '상급', color: '#CA8A04' }
+  if (vdot < 50) return { tag: '상급', color: '#A16207' }
   if (vdot < 60) return { tag: '엘리트 준비', color: '#EA580C' }
   return { tag: '엘리트', color: '#DC2626' }
 }

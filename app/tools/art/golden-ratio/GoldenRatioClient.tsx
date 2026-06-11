@@ -551,7 +551,7 @@ export default function GoldenRatioClient() {
 const RATIO_PRESETS = [
   { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       color: '#0EA5E9' },
   { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       color: '#0891B2' },
-  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#CA8A04' },
+  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#A16207' },
   { name: '4:3',           ratio: 1.333, sub: '구식 TV·아이패드',       color: '#9B59B6' },
   { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     color: '#E11D48' },
   { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      color: '#059669' },

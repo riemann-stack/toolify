@@ -458,10 +458,10 @@ export default function LoanClient() {
           {prepayResult && (
             <>
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(202,138,4,0.40)', background: 'rgba(202,138,4,0.06)' }}>
+                style={{ borderColor: 'rgba(161,98,7,0.40)', background: 'rgba(161,98,7,0.06)' }}>
                 <div className={styles.heroLabel}>순절감액</div>
                 <div className={styles.heroNum}
-                  style={{ color: prepayResult.netSaving > 0 ? '#CA8A04' : '#DC2626' }}>
+                  style={{ color: prepayResult.netSaving > 0 ? '#A16207' : '#DC2626' }}>
                   {prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}
                 </div>
                 <div className={styles.heroSub}>
@@ -477,7 +477,7 @@ export default function LoanClient() {
                   <div className={styles.detailRow}><span>중도상환 후 총 이자</span><span>{formatEok(prepayResult.newTotalInterest)}</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>줄어드는 이자</span><span>−{formatEok(prepayResult.interestSaved)}</span></div>
                   <div className={styles.detailRow}><span>중도상환수수료</span><span>+{won(prepayResult.prepaymentFee)}</span></div>
-                  <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>순절감액</span><span style={{ color: prepayResult.netSaving > 0 ? '#CA8A04' : '#DC2626' }}>{prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}</span></div>
+                  <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>순절감액</span><span style={{ color: prepayResult.netSaving > 0 ? '#A16207' : '#DC2626' }}>{prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}</span></div>
                   {prepaymentMode === 'reduce-period' && prepayResult.monthsShortened > 0 && (
                     <div className={styles.detailRow}><span>단축되는 기간</span><span>{prepayResult.monthsShortened}개월 ({(prepayResult.monthsShortened / 12).toFixed(1)}년)</span></div>
                   )}

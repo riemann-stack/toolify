@@ -313,7 +313,7 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.ddayHeroNum}>D-{next.daysUntil}</div>
         <div className={s.ddayHeroSub}>
           <strong>만 {next.age}세 생일</strong> — {fmtDateKo(next.date)}
-          {next.isWeekend && <span style={{ color: '#CA8A04' }}> · 주말</span>}
+          {next.isWeekend && <span style={{ color: '#A16207' }}> · 주말</span>}
         </div>
 
         <div className={s.countdownLive}>
@@ -369,7 +369,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
   const cosmicItems = [
     { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: '#9B59B6' },
     { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: '#EA580C' },
-    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#CA8A04' },
+    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#A16207' },
     { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: '#059669' },
     { name: '내 인생',           sec: stats.cosmicSeconds,                  color: '#0D9488' },
   ]

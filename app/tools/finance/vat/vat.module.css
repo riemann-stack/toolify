@@ -64,7 +64,7 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveQuote     { background: rgba(202,138,4,0.18); color: #CA8A04; font-weight: 700; }
+.tabActiveQuote     { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
 .tabActiveNet       { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
 .tabActiveInvoice   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
 .tabActiveCompare   { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
@@ -225,7 +225,7 @@
   border-style: solid;
 }
 .heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
-.heroGold   { background: rgba(202,138,4,0.14); border-color: rgba(202,138,4,0.30); }
+.heroGold   { background: rgba(161,98,7,0.14); border-color: rgba(161,98,7,0.30); }
 .heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
 .heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
 .heroPurple { background: rgba(155,89,182,0.04); border-color: rgba(155,89,182,0.30); }
@@ -247,7 +247,7 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumAccent { color: var(--accent); }
-.heroNumGold   { color: #CA8A04; }
+.heroNumGold   { color: #A16207; }
 .heroNumCyan   { color: #0891B2; }
 .heroNumOrange { color: #EA580C; }
 .heroNumPurple { color: #9333EA; }

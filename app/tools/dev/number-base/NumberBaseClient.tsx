@@ -485,7 +485,7 @@ export default function NumberBaseClient() {
                             <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row.l}</td>
                             <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#EA580C', fontWeight: 600 }}>{row.hex}</td>
                             <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontWeight: 600, fontSize: 11 }}>{row.bin}</td>
-                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#CA8A04', fontWeight: 600 }}>{row.oct}</td>
+                            <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#A16207', fontWeight: 600 }}>{row.oct}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -712,7 +712,7 @@ export default function NumberBaseClient() {
                         </td>
                         <td style={{ padding: '8px 10px', textAlign: 'right', color: '#0891B2', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{c.decimal}</td>
                         <td style={{ padding: '8px 10px', textAlign: 'right', color: '#EA580C', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>0x{c.hex}</td>
-                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#CA8A04', fontFamily: 'var(--font-mono)' }}>{c.octal}</td>
+                        <td style={{ padding: '8px 10px', textAlign: 'right', color: '#A16207', fontFamily: 'var(--font-mono)' }}>{c.octal}</td>
                         <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 11 }}>{c.binary}</td>
                       </tr>
                     ))}
@@ -904,7 +904,7 @@ export default function NumberBaseClient() {
             }}>
               <div><span style={{ color: 'var(--muted)' }}># 자리값 (오른쪽이 0번째)</span></div>
               <div><span style={{ color: 'var(--accent)' }}>2진수</span>:  1, 2, 4, 8, 16, 32, ... (2의 거듭제곱)</div>
-              <div><span style={{ color: '#CA8A04' }}>8진수</span>:  1, 8, 64, 512, ... (8의 거듭제곱)</div>
+              <div><span style={{ color: '#A16207' }}>8진수</span>:  1, 8, 64, 512, ... (8의 거듭제곱)</div>
               <div><span style={{ color: '#0891B2' }}>10진수</span>: 1, 10, 100, 1000, ...</div>
               <div><span style={{ color: '#EA580C' }}>16진수</span>: 1, 16, 256, 4096, ... (16의 거듭제곱)</div>
               <div></div>

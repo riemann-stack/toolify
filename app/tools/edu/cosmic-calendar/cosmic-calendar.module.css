@@ -457,7 +457,7 @@
 
 /* 카테고리 색상 텍스트 */
 .catCosmic       { color: #9333EA; }
-.catSolar        { color: #CA8A04; }
+.catSolar        { color: #A16207; }
 .catEarth        { color: #0891B2; }
 .catLife         { color: #059669; }
 .catHuman        { color: #EA580C; }
@@ -477,7 +477,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .eventCard.borderCosmic       { border-left-color: #9B59B6; }
-.eventCard.borderSolar        { border-left-color: #CA8A04; }
+.eventCard.borderSolar        { border-left-color: #A16207; }
 .eventCard.borderEarth        { border-left-color: #0891B2; }
 .eventCard.borderLife         { border-left-color: #059669; }
 .eventCard.borderHuman        { border-left-color: #EA580C; }
