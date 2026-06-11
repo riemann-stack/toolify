@@ -259,7 +259,7 @@ export default function PaintMixClient() {
             <span className={s.cardLabel}>📏 총 분량</span>
             <div className={s.volRow}>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 min={0.1}
                 step={0.1}
                 value={totalAmount}
@@ -596,7 +596,7 @@ function SlotEditor({
             className={s.slider}
           />
           <input
-            type="number" min={0.1} max={10} step={0.1}
+            type="number" inputMode="decimal" min={0.1} max={10} step={0.1}
             value={slot.weight}
             onChange={(e) => onChange({ weight: Math.max(0.1, Math.min(10, Number(e.target.value) || 0.1)) })}
             className={s.weightNum}

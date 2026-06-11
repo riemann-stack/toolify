@@ -131,7 +131,7 @@ export default function HistoricalMoneyClient() {
             />
             <div className={s.sliderHead}>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 min={YEAR_MIN}
                 max={YEAR_MAX - 1}
                 value={pastYear}

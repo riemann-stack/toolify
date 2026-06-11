@@ -704,7 +704,7 @@ function BizTab({ now }: { now: Date }) {
           </div>
           <div>
             <span className={s.inlineLabel}>N일 (음수 가능)</span>
-            <input className={s.numInput} type="number" placeholder="30"
+            <input className={s.numInput} type="number" inputMode="decimal" placeholder="30"
               value={n} onChange={e => setN(e.target.value)} />
           </div>
         </div>

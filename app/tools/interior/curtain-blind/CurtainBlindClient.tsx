@@ -278,9 +278,9 @@ export default function CurtainBlindClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>창문 가로 × 세로 (cm)</span>
             <div className={styles.dimRow}>
-              <input className={styles.bigInput} type="number" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
               <span className={styles.dimSep}>×</span>
-              <input className={styles.bigInput} type="number" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
             </div>
 
             {(productId === 'curtain') && (
@@ -288,7 +288,7 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문 하단 ~ 바닥 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="number" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
                   <span className={styles.unit}>cm</span>
                 </div>
                 {(installId === 'ceiling-recessed' || installId === 'ceiling-mount') && (
@@ -296,7 +296,7 @@ export default function CurtainBlindClient() {
                     <div style={{ height: 8 }} />
                     <span className={styles.subLabel}>천장 높이 (cm)</span>
                     <div className={styles.inputRow}>
-                      <input className={styles.smallInput} type="number" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
+                      <input className={styles.smallInput} type="number" inputMode="decimal" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
                       <span className={styles.unit}>cm</span>
                     </div>
                   </>

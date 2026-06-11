@@ -401,7 +401,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
               </button>
             ))}
             <input
-              type="number" step={0.1} min={0} max={20}
+              type="number" inputMode="decimal" step={0.1} min={0} max={20}
               className={styles.smallNumber}
               value={price.spreadPercent}
               onChange={(e) => updatePrice('spreadPercent', +e.target.value || 0)}
@@ -413,7 +413,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           <label>거래 수수료</label>
           <div className={styles.presetRow}>
             <input
-              type="number" step={0.1} min={0} max={10}
+              type="number" inputMode="decimal" step={0.1} min={0} max={10}
               className={styles.smallNumber}
               value={price.feePercent}
               onChange={(e) => updatePrice('feePercent', +e.target.value || 0)}

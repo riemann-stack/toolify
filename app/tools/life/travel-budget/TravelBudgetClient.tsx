@@ -350,7 +350,7 @@ export default function TravelBudgetClient() {
                   </label>
                   <input
                     id={`tb-item-${it.id}`}
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     aria-label={`${it.label} (만원)`}
                     value={it.v}
@@ -388,7 +388,7 @@ export default function TravelBudgetClient() {
                 <label className={s.fieldLabel} htmlFor="tb-rate">환율 (1{city.currencyUnit}{city.defaultRateBase && city.defaultRateBase > 1 ? `(${city.defaultRateBase})` : ''} = ? 원)</label>
                 <input
                   id="tb-rate"
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   aria-label={`환율 1 ${city.currency} 당 원화`}
                   value={krwRate}

@@ -281,7 +281,7 @@ export default function FootballPointsClient() {
             <label style={{ fontSize: 12, color: 'var(--muted)' }}>총 경기 수</label>
             <input
               className={styles.targetInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={1}
               max={200}
               value={totalGames}
@@ -332,7 +332,7 @@ export default function FootballPointsClient() {
             <p className={styles.wdlLabel}>승</p>
             <input
               className={styles.wdlInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={0}
               value={team.wins}
               onChange={e => setTeam({ ...team, wins: Math.max(0, Number(e.target.value) || 0) })}
@@ -342,7 +342,7 @@ export default function FootballPointsClient() {
             <p className={styles.wdlLabel}>무</p>
             <input
               className={styles.wdlInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={0}
               value={team.draws}
               onChange={e => setTeam({ ...team, draws: Math.max(0, Number(e.target.value) || 0) })}
@@ -352,7 +352,7 @@ export default function FootballPointsClient() {
             <p className={styles.wdlLabel}>패</p>
             <input
               className={styles.wdlInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={0}
               value={team.losses}
               onChange={e => setTeam({ ...team, losses: Math.max(0, Number(e.target.value) || 0) })}
@@ -367,7 +367,7 @@ export default function FootballPointsClient() {
               <span className={`${styles.gfSign} ${styles.gfPositive}`}>+</span>
               <input
                 className={styles.gfInput}
-                type="number"
+                type="number" inputMode="decimal"
                 min={0}
                 value={team.goalsFor}
                 onChange={e => setTeam({ ...team, goalsFor: Math.max(0, Number(e.target.value) || 0) })}
@@ -380,7 +380,7 @@ export default function FootballPointsClient() {
               <span className={`${styles.gfSign} ${styles.gfNegative}`}>−</span>
               <input
                 className={styles.gfInput}
-                type="number"
+                type="number" inputMode="decimal"
                 min={0}
                 value={team.goalsAgainst}
                 onChange={e => setTeam({ ...team, goalsAgainst: Math.max(0, Number(e.target.value) || 0) })}
@@ -494,7 +494,7 @@ export default function FootballPointsClient() {
             </div>
             <input
               className={styles.targetInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={0}
               value={target}
               onChange={e => setTarget(Math.max(0, Number(e.target.value) || 0))}
@@ -641,9 +641,9 @@ export default function FootballPointsClient() {
                   onChange={e => updateRival(i, { name: e.target.value || `라이벌 ${i + 1}` })}
                   placeholder={`라이벌 ${String.fromCharCode(65 + i)}`}
                 />
-                <input className={styles.rivalNumInput} type="number" min={0} value={r.wins}   onChange={e => updateRival(i, { wins:   Math.max(0, Number(e.target.value) || 0) })} title="승" />
-                <input className={styles.rivalNumInput} type="number" min={0} value={r.draws}  onChange={e => updateRival(i, { draws:  Math.max(0, Number(e.target.value) || 0) })} title="무" />
-                <input className={styles.rivalNumInput} type="number" min={0} value={r.losses} onChange={e => updateRival(i, { losses: Math.max(0, Number(e.target.value) || 0) })} title="패" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.wins}   onChange={e => updateRival(i, { wins:   Math.max(0, Number(e.target.value) || 0) })} title="승" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.draws}  onChange={e => updateRival(i, { draws:  Math.max(0, Number(e.target.value) || 0) })} title="무" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.losses} onChange={e => updateRival(i, { losses: Math.max(0, Number(e.target.value) || 0) })} title="패" />
                 <button type="button" className={styles.rivalRemoveBtn} onClick={() => removeRival(i)} aria-label="삭제">✕</button>
               </div>
             ))}
@@ -654,8 +654,8 @@ export default function FootballPointsClient() {
             {rivals.map((r, i) => (
               <div key={`gf-${i}`} className={styles.rivalRow} style={{ gridTemplateColumns: '1.4fr 1fr 1fr' }}>
                 <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center' }}>{r.name}</span>
-                <input className={styles.rivalNumInput} type="number" min={0} value={r.goalsFor}     onChange={e => updateRival(i, { goalsFor:     Math.max(0, Number(e.target.value) || 0) })} title="득점" />
-                <input className={styles.rivalNumInput} type="number" min={0} value={r.goalsAgainst} onChange={e => updateRival(i, { goalsAgainst: Math.max(0, Number(e.target.value) || 0) })} title="실점" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsFor}     onChange={e => updateRival(i, { goalsFor:     Math.max(0, Number(e.target.value) || 0) })} title="득점" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsAgainst} onChange={e => updateRival(i, { goalsAgainst: Math.max(0, Number(e.target.value) || 0) })} title="실점" />
               </div>
             ))}
 

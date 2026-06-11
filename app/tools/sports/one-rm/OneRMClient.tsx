@@ -444,7 +444,7 @@ function CalcTab(props: CalcTabProps) {
               className={`${s.slider} ${reps > 10 ? s.sliderWarn : ''}`}
             />
             <input
-              type="number"
+              type="number" inputMode="decimal"
               min={1}
               max={15}
               value={reps}

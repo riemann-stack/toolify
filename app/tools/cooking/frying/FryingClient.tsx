@@ -349,7 +349,7 @@ export default function FryingClient() {
         )}
         <div className={styles.customTempRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={styles.customTempInput}
             placeholder="직접 입력"
             value={customTemp}

@@ -155,7 +155,7 @@ export default function BatteryClient() {
         <span className={styles.cardLabel}>용량 입력</span>
         <div className={styles.inputRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -197,7 +197,7 @@ export default function BatteryClient() {
         </div>
         <div className={styles.voltCustomRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={styles.voltCustomInput}
             value={customV}
             onChange={e => setCustomV(e.target.value)}

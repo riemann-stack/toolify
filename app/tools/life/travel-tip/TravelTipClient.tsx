@@ -219,11 +219,11 @@ export default function TravelTipClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="tt-amount">결제 금액 ({country.currencyUnit} {country.currency})</label>
-                <input id="tt-amount" type="number" className={s.input} aria-label={`결제 금액 (${country.currency})`} value={amount} onChange={(e) => setAmount(e.target.value)} min={0} step={1} />
+                <input id="tt-amount" type="number" inputMode="decimal" className={s.input} aria-label={`결제 금액 (${country.currency})`} value={amount} onChange={(e) => setAmount(e.target.value)} min={0} step={1} />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="tt-people">인원 수</label>
-                <input id="tt-people" type="number" className={s.input} aria-label="인원 수" value={people} onChange={(e) => setPeople(e.target.value)} min={1} max={20} step={1} />
+                <input id="tt-people" type="number" inputMode="decimal" className={s.input} aria-label="인원 수" value={people} onChange={(e) => setPeople(e.target.value)} min={1} max={20} step={1} />
                 <div className={s.pillRow} style={{ marginTop: 8 }} role="group" aria-label="인원 빠른 선택">
                   {[1, 2, 4, 6, 8].map((p) => (
                     <button key={p} aria-pressed={peopleN === p} className={`${s.pill} ${peopleN === p ? s.pillActive : ''}`} onClick={() => setPeople(String(p))} type="button">
@@ -237,7 +237,7 @@ export default function TravelTipClient() {
               <label className={s.fieldLabel} htmlFor="tt-rate">환율 (1 {country.currency} = ? 원, 기본 {country.defaultRate})</label>
               <input
                 id="tt-rate"
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.input}
                 aria-label={`환율 1 ${country.currency} 당 원화`}
                 value={krwRate}

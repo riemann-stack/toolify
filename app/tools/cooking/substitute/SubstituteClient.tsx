@@ -692,7 +692,7 @@ function SearchTab(props: {
           <div>
             <span className={styles.fieldLabel}>원재료 양</span>
             <input
-              type="number"
+              type="number" inputMode="decimal"
               className={`${styles.input} ${amount && parseFloat(amount) > 0 ? styles.inputFilled : ''}`}
               value={amount}
               onChange={e => setAmount(e.target.value)}

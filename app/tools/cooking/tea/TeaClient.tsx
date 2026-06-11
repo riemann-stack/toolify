@@ -190,7 +190,7 @@ export default function TeaClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>찻잎 (g)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={leafG}
                   onChange={(e) => setLeafG(e.target.value)}
@@ -209,7 +209,7 @@ export default function TeaClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>물 (ml)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={waterMl}
                   onChange={(e) => setWaterMl(e.target.value)}
@@ -339,7 +339,7 @@ export default function TeaClient() {
                   className={s.slider}
                 />
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={actualSec}
                   onChange={(e) => setActualSec(e.target.value)}

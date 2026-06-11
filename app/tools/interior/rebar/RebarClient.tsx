@@ -187,7 +187,7 @@ export default function RebarClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>길이 (m)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={customLen}
                   onChange={(e) => setCustomLen(e.target.value)}
@@ -202,7 +202,7 @@ export default function RebarClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>본수 (개)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={count}
                   onChange={(e) => setCount(e.target.value)}
@@ -214,7 +214,7 @@ export default function RebarClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>절단 로스율 (%)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={lossPct}
                   onChange={(e) => setLossPct(e.target.value)}
@@ -264,7 +264,7 @@ export default function RebarClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>SD400 톤당 단가 (만원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={pricePerTon}
                   onChange={(e) => setPricePerTon(e.target.value)}
@@ -363,7 +363,7 @@ export default function RebarClient() {
                 <div className={s.field}>
                   <label className={s.fieldLabel}>목표 중량 (톤)</label>
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     value={revTons}
                     onChange={(e) => setRevTons(e.target.value)}
@@ -383,7 +383,7 @@ export default function RebarClient() {
                 <div className={s.field}>
                   <label className={s.fieldLabel}>예산 (만원)</label>
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     value={revBudget}
                     onChange={(e) => setRevBudget(e.target.value)}
@@ -481,7 +481,7 @@ export default function RebarClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>총 중량 (kg)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={shipKg}
                   onChange={(e) => setShipKg(e.target.value)}

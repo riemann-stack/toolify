@@ -203,7 +203,7 @@ function DogTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>체중</span>
         <div className={styles.weightRow}>
-          <input type="number" aria-label="체중(kg)" min={0.5} max={80} step={0.5} className={styles.weightInput}
+          <input type="number" inputMode="decimal" aria-label="체중(kg)" min={0.5} max={80} step={0.5} className={styles.weightInput}
             value={weightStr}
             onChange={e => setWeightStr(e.target.value)}
             onBlur={() => { const v = parseFloat(weightStr); setWeightStr(isNaN(v) ? '' : String(Math.max(0.5, Math.min(80, v)))) }} />
@@ -282,7 +282,7 @@ function DogTab() {
           <span style={{ fontSize: '11px', color: 'var(--muted)', alignSelf: 'center' }}>참고용 근사값</span>
         </div>
         <div className={styles.calDenRow}>
-          <input type="number" aria-label="사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
+          <input type="number" inputMode="decimal" aria-label="사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
             value={calDen} onChange={e => setCalDen(Math.max(100, Number(e.target.value)) || 350)} />
           <span className={styles.calDenUnit}>kcal / 100g</span>
         </div>
@@ -381,7 +381,7 @@ function CatTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>체중</span>
         <div className={styles.weightRow}>
-          <input type="number" aria-label="체중(kg)" min={0.5} max={15} step={0.1} className={styles.weightInput}
+          <input type="number" inputMode="decimal" aria-label="체중(kg)" min={0.5} max={15} step={0.1} className={styles.weightInput}
             value={weightStr}
             onChange={e => setWeightStr(e.target.value)}
             onBlur={() => { const v = parseFloat(weightStr); setWeightStr(isNaN(v) ? '' : String(Math.max(0.5, Math.min(15, v)))) }} />
@@ -479,7 +479,7 @@ function CatTab() {
                 ))}
               </div>
               <div className={styles.calDenRow}>
-                <input type="number" aria-label="건식 사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
+                <input type="number" inputMode="decimal" aria-label="건식 사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
                   value={dryDen} onChange={e => setDryDen(Math.max(100, Number(e.target.value)) || 350)} />
                 <span className={styles.calDenUnit}>kcal/100g</span>
               </div>
@@ -496,7 +496,7 @@ function CatTab() {
                 ))}
               </div>
               <div className={styles.calDenRow}>
-                <input type="number" aria-label="습식 사료 칼로리 밀도 (kcal/100g)" min={50} max={200} className={styles.calDenInput}
+                <input type="number" inputMode="decimal" aria-label="습식 사료 칼로리 밀도 (kcal/100g)" min={50} max={200} className={styles.calDenInput}
                   value={wetDen} onChange={e => setWetDen(Math.max(50, Number(e.target.value)) || 90)} />
                 <span className={styles.calDenUnit}>kcal/100g</span>
               </div>

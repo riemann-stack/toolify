@@ -509,7 +509,7 @@ export default function PaintClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" min={1} max={300}
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -519,9 +519,9 @@ export default function PaintClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -530,7 +530,7 @@ export default function PaintClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
@@ -602,15 +602,15 @@ export default function PaintClient() {
                 <div className={styles.openingRow}>
                   <div>
                     <span className={styles.subLabel}>개수</span>
-                    <input className={styles.smallInput} type="number" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>가로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>세로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
                   </div>
                 </div>
               )}
@@ -620,15 +620,15 @@ export default function PaintClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>개수</span>
-                  <input className={styles.smallInput} type="number" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
                 </div>
               </div>
             </div>
@@ -683,7 +683,7 @@ export default function PaintClient() {
                 </div>
                 <div>
                   <span className={styles.subLabel}>1L당 도장 면적 (㎡)</span>
-                  <input className={styles.smallInput} type="number" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(n(e.target.value, 0.5))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(n(e.target.value, 0.5))} />
                 </div>
               </div>
             )}
@@ -880,11 +880,11 @@ export default function PaintClient() {
                   <div className={styles.wallDimRow}>
                     <div>
                       <span className={styles.subLabel}>가로 (m)</span>
-                      <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                     </div>
                     <div>
                       <span className={styles.subLabel}>높이 (m)</span>
-                      <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                     </div>
                   </div>
 
@@ -894,8 +894,8 @@ export default function PaintClient() {
                       <button type="button" className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
                         {o.type === 'window' ? '창문' : '문'}
                       </button>
-                      <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
-                      <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
+                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
+                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
                       <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                     </div>
                   ))}
@@ -912,11 +912,11 @@ export default function PaintClient() {
                 <div className={styles.wallDimRow} style={{ marginTop: 10 }}>
                   <div>
                     <span className={styles.subLabel}>천장 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>천장 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
                   </div>
                 </div>
               )}
@@ -929,7 +929,7 @@ export default function PaintClient() {
                 <div className={styles.openingRow} style={{ marginTop: 6, gridTemplateColumns: '1fr' }}>
                   <div>
                     <span className={styles.subLabel}>문 개수</span>
-                    <input className={styles.smallInput} type="number" min={0} value={r.doorCount} onChange={e => updateRoom(r.id, { doorCount: Math.max(0, Number(e.target.value) || 0) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={r.doorCount} onChange={e => updateRoom(r.id, { doorCount: Math.max(0, Number(e.target.value) || 0) })} />
                   </div>
                 </div>
               )}
@@ -937,7 +937,7 @@ export default function PaintClient() {
               <div style={{ height: 10 }} />
               <span className={styles.subLabel}>기타 면적 (몰딩·걸레받이·가구) (㎡)</span>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="number" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: n(e.target.value) })} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: n(e.target.value) })} />
                 <span className={styles.unit}>㎡</span>
               </div>
 
@@ -1055,28 +1055,28 @@ export default function PaintClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>롤러·트레이 세트 (셀프, 1회)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={1000} min={0} value={rollerCost} onChange={e => setRollerCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={rollerCost} onChange={e => setRollerCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>붓·테이프·커버 (셀프, 1세트)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={1000} min={0} value={brushTapeCost} onChange={e => setBrushTapeCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={brushTapeCost} onChange={e => setBrushTapeCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>사다리 (천장 도장 시)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>전문 시공 인건비 (1L당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={1000} min={0} value={proLaborPerL} onChange={e => setProLaborPerL(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerL} onChange={e => setProLaborPerL(n(e.target.value))} />
               <span className={styles.unit}>원/L</span>
             </div>
           </div>

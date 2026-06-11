@@ -325,7 +325,7 @@ export default function LifeTimeClient() {
           <div className={styles.customRow}>
             <input
               className={styles.customInput}
-              type="number"
+              type="number" inputMode="decimal"
               min={1}
               max={150}
               value={expectancyCustom}
@@ -502,7 +502,7 @@ export default function LifeTimeClient() {
               <p className={styles.actionLabel}>매일 투자 시간 (분)</p>
               <input
                 className={styles.actionInput}
-                type="number"
+                type="number" inputMode="decimal"
                 min={1}
                 max={480}
                 value={actionMin}

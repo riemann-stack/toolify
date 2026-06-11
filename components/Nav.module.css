@@ -474,13 +474,7 @@
 .burgerLineBot { transform: translateY(-7px) rotate(-45deg); }
 
 /* ── 모바일 드로어 ── */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15,23,42,0.4);
-  z-index: 200;
-  backdrop-filter: blur(2px);
-}
+/* (overlay 제거 — 드로어가 전면 패널이고 nav가 그 위라 오버레이는 보이지도 탭되지도 않는 데드 코드였음) */
 
 .drawer {
   position: fixed;

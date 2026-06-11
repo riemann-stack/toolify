@@ -412,3 +412,6 @@
   .chartLabel { font-size: 9px; }
   .resultRow { gap: 10px; }
 }
+@media (max-width: 360px) {
+  .tab { font-size: 11px; }
+}

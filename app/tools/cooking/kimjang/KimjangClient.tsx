@@ -327,7 +327,7 @@ export default function KimjangClient() {
                       </div>
                       <div className={s.ingPriceRow}>
                         <input
-                          type="number"
+                          type="number" inputMode="decimal"
                           className={s.ingPriceInput}
                           value={currentPrice}
                           onChange={e => onPriceEdit(it.ing.id, e.target.value)}

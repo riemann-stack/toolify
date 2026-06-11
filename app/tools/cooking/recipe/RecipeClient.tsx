@@ -439,7 +439,7 @@ function ConvertTab() {
           <input className={s.textInput} type="text" placeholder="재료명 (예: 밀가루)"
             value={name} onChange={e => setName(e.target.value)}
             list="recipe-ingredient-suggestions" />
-          <input className={s.textInput} type="number" step={0.1} min={0} placeholder="양"
+          <input className={s.textInput} type="number" inputMode="decimal" step={0.1} min={0} placeholder="양"
             value={amount} onChange={e => setAmount(e.target.value)} />
           <select className={s.selectInput} value={unit}
             onChange={e => setUnit(e.target.value as UnitKey)}>
@@ -701,7 +701,7 @@ function SavedTab({ active }: { active: boolean }) {
 
           <div>
             <span className={s.subLabel}>기준 인분</span>
-            <input className={s.textInput} type="number" min={0.5} max={50} step={0.5}
+            <input className={s.textInput} type="number" inputMode="decimal" min={0.5} max={50} step={0.5}
               value={basePeople} onChange={e => setBasePeople(e.target.value)} />
           </div>
 
@@ -900,7 +900,7 @@ function ShoppingTab({ active }: { active: boolean }) {
             {recipeChoices.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input className={s.textInput} type="number" min={0.5} max={50} step={0.5}
+            <input className={s.textInput} type="number" inputMode="decimal" min={0.5} max={50} step={0.5}
               value={pickPeople} onChange={e => setPickPeople(e.target.value)} />
             <span style={{ fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap' }}>인분</span>
           </div>

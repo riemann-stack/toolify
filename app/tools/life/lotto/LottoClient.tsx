@@ -644,7 +644,7 @@ function JackpotTab() {
       <div className={s.card}>
         <label className={s.cardLabel}>시작 나이 (선택)</label>
         <div className={s.fieldRow}>
-          <input className={s.numberField} type="number" min={1} max={100}
+          <input className={s.numberField} type="number" inputMode="decimal" min={1} max={100}
             aria-label="시작 나이"
             value={startAge} onChange={e => setStartAge(Math.max(1, Math.min(100, parseInt(e.target.value) || 30)))} />
           <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center', fontFamily: 'Noto Sans KR, sans-serif' }}>

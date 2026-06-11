@@ -180,7 +180,7 @@ export default function KnitGaugeClient() {
               <div className={s.fieldHead}>
                 <label className={s.fieldLabel}>코 수 (가로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={stsInput}
                   min={unit === '1cm' ? 0.5 : 4}
                   max={unit === '1cm' ? 8 : 60}
@@ -205,7 +205,7 @@ export default function KnitGaugeClient() {
               <div className={s.fieldHead}>
                 <label className={s.fieldLabel}>단 수 (세로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={rowsInput}
                   min={unit === '1cm' ? 0.5 : 4}
                   max={unit === '1cm' ? 10 : 80}
@@ -313,7 +313,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>패턴 코 게이지 / 10cm</label>
                 <input
-                  type="number" min={4} max={60} step={0.5}
+                  type="number" inputMode="decimal" min={4} max={60} step={0.5}
                   value={patternStsGauge}
                   onChange={(e) => setPatternStsGauge(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}
@@ -322,7 +322,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>패턴 단 게이지 / 10cm</label>
                 <input
-                  type="number" min={4} max={80} step={0.5}
+                  type="number" inputMode="decimal" min={4} max={80} step={0.5}
                   value={patternRowsGauge}
                   onChange={(e) => setPatternRowsGauge(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}
@@ -333,7 +333,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>패턴 코 수 (예: 시작 코)</label>
                 <input
-                  type="number" min={1} max={1000}
+                  type="number" inputMode="decimal" min={1} max={1000}
                   value={patternSts}
                   onChange={(e) => setPatternSts(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}
@@ -342,7 +342,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>패턴 단 수 (총 길이)</label>
                 <input
-                  type="number" min={1} max={5000}
+                  type="number" inputMode="decimal" min={1} max={5000}
                   value={patternRows}
                   onChange={(e) => setPatternRows(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}
@@ -421,7 +421,7 @@ export default function KnitGaugeClient() {
                 <div className={s.fieldHead}>
                   <label className={s.fieldLabel}>가로 (cm)</label>
                   <input
-                    type="number" min={1} max={300} step={0.5}
+                    type="number" inputMode="decimal" min={1} max={300} step={0.5}
                     value={widthCm}
                     onChange={(e) => setWidthCm(Math.max(1, Number(e.target.value) || 1))}
                     className={s.numInput}
@@ -438,7 +438,7 @@ export default function KnitGaugeClient() {
                 <div className={s.fieldHead}>
                   <label className={s.fieldLabel}>세로 (cm)</label>
                   <input
-                    type="number" min={1} max={300} step={0.5}
+                    type="number" inputMode="decimal" min={1} max={300} step={0.5}
                     value={heightCm}
                     onChange={(e) => setHeightCm(Math.max(1, Number(e.target.value) || 1))}
                     className={s.numInput}
@@ -547,7 +547,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>현재 코 수</label>
                 <input
-                  type="number" min={1} max={1000}
+                  type="number" inputMode="decimal" min={1} max={1000}
                   value={currentSts}
                   onChange={(e) => setCurrentSts(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}
@@ -556,7 +556,7 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>목표 코 수</label>
                 <input
-                  type="number" min={1} max={1000}
+                  type="number" inputMode="decimal" min={1} max={1000}
                   value={targetSts}
                   onChange={(e) => setTargetSts(Math.max(1, Number(e.target.value) || 1))}
                   className={s.numInput}

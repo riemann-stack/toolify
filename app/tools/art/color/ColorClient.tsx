@@ -981,7 +981,7 @@ background: conic-gradient(from 0deg, ${stopStr});`
                 value={s.hex.toUpperCase()}
                 onChange={e => updateStop(i, { hex: e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value })}
                 maxLength={7} />
-              <input type="number" className={styles.gradStopHex} min={0} max={100}
+              <input type="number" inputMode="decimal" className={styles.gradStopHex} min={0} max={100}
                 style={{ textAlign: 'right' }}
                 value={s.pos} onChange={e => updateStop(i, { pos: parseInt(e.target.value) || 0 })} />
               <button className={styles.gradStopRemove}

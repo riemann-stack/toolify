@@ -276,7 +276,7 @@ export default function AcCapacityClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" min={1} max={300}
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -286,9 +286,9 @@ export default function AcCapacityClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -297,7 +297,7 @@ export default function AcCapacityClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
@@ -550,7 +550,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>평형 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(n(e.target.value, 1))} />
                   <span className={styles.unit}>평형</span>
                 </div>
               </>
@@ -559,7 +559,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>BTU/h 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(n(e.target.value, 1000))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(n(e.target.value, 1000))} />
                   <span className={styles.unit}>BTU/h</span>
                 </div>
               </>
@@ -568,7 +568,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>W 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={100} step={100} value={wInput} onChange={e => setWInput(n(e.target.value, 100))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={100} step={100} value={wInput} onChange={e => setWInput(n(e.target.value, 100))} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -577,7 +577,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>kW 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(n(e.target.value, 0.1))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(n(e.target.value, 0.1))} />
                   <span className={styles.unit}>kW</span>
                 </div>
               </>

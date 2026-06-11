@@ -215,7 +215,7 @@ export default function WireClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>소비전력 (kW)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={powerKw}
                   onChange={(e) => setPowerKw(e.target.value)}
@@ -234,7 +234,7 @@ export default function WireClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>배선 거리 (편도, m)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={lengthM}
                   onChange={(e) => setLengthM(e.target.value)}
@@ -418,7 +418,7 @@ export default function WireClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>부하 전류 (A)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={dropI}
                   onChange={(e) => setDropI(e.target.value)}
@@ -430,7 +430,7 @@ export default function WireClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>편도 거리 (m)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={dropL}
                   onChange={(e) => setDropL(e.target.value)}

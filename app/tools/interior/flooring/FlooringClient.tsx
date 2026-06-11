@@ -366,7 +366,7 @@ export default function FlooringClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" min={1} max={300}
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -376,9 +376,9 @@ export default function FlooringClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -407,7 +407,7 @@ export default function FlooringClient() {
               <div className={styles.customSpecRow}>
                 <div>
                   <span className={styles.subLabel}>1박스/단위 면적 (㎡)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0.1} value={customUnitArea} onChange={e => setCustomUnitArea(n(e.target.value, 0.1))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0.1} value={customUnitArea} onChange={e => setCustomUnitArea(n(e.target.value, 0.1))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>1㎡당 가격</span>
@@ -657,11 +657,11 @@ export default function FlooringClient() {
                 <div className={styles.roomDimRow}>
                   <div>
                     <span className={styles.subLabel}>가로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.width} onChange={e => updateRoom(r.id, { width: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.width} onChange={e => updateRoom(r.id, { width: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>세로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.length} onChange={e => updateRoom(r.id, { length: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.length} onChange={e => updateRoom(r.id, { length: n(e.target.value) })} />
                   </div>
                 </div>
 
@@ -794,7 +794,7 @@ export default function FlooringClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>본드·접착제 (1㎡당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={500} min={0} value={adhesiveCostPerSqm} onChange={e => setAdhesiveCostPerSqm(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={500} min={0} value={adhesiveCostPerSqm} onChange={e => setAdhesiveCostPerSqm(n(e.target.value))} />
               <span className={styles.unit}>원/㎡</span>
             </div>
 
@@ -803,25 +803,25 @@ export default function FlooringClient() {
             <div className={styles.roomDimRow}>
               <div>
                 <span className={styles.subLabel}>길이 (m)</span>
-                <input className={styles.smallInput} type="number" min={0} step={0.5} value={moldingMeter} onChange={e => setMoldingMeter(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} step={0.5} value={moldingMeter} onChange={e => setMoldingMeter(n(e.target.value))} />
               </div>
               <div>
                 <span className={styles.subLabel}>m당 가격</span>
-                <input className={styles.smallInput} type="number" min={0} step={500} value={moldingPricePerM} onChange={e => setMoldingPricePerM(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} step={500} value={moldingPricePerM} onChange={e => setMoldingPricePerM(n(e.target.value))} />
               </div>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>보양 시트·커버 (1회)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={5000} min={0} value={protectCost} onChange={e => setProtectCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={protectCost} onChange={e => setProtectCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>전문 시공비 (평당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={5000} min={0} value={proLaborPerPyeong} onChange={e => setProLaborPerPyeong(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={proLaborPerPyeong} onChange={e => setProLaborPerPyeong(n(e.target.value))} />
               <span className={styles.unit}>원/평</span>
             </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, fontSize: 13, color: 'var(--text)', cursor: 'pointer' }}>

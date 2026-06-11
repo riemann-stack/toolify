@@ -253,7 +253,7 @@ export default function MicrowaveClient() {
                   </select>
                   {refCustom && (
                     <input
-                      type="number"
+                      type="number" inputMode="decimal"
                       className={s.compactNum}
                       value={refW}
                       onChange={(e) => setRefW(Number(e.target.value) || 0)}
@@ -267,11 +267,11 @@ export default function MicrowaveClient() {
               <div className={s.compactField}>
                 <label className={s.compactLabel}>기준 시간</label>
                 <div className={s.compactTimeRow}>
-                  <input type="number" className={s.compactNum} value={refMin}
+                  <input type="number" inputMode="decimal" className={s.compactNum} value={refMin}
                     onChange={(e) => setRefMin(e.target.value)} min={0} max={60} step={1}
                     aria-label="분" placeholder="분" />
                   <span className={s.compactColon}>:</span>
-                  <input type="number" className={s.compactNum} value={refSec}
+                  <input type="number" inputMode="decimal" className={s.compactNum} value={refSec}
                     onChange={(e) => setRefSecState(e.target.value)} min={0} max={59} step={5}
                     aria-label="초" placeholder="초" />
                 </div>
@@ -292,7 +292,7 @@ export default function MicrowaveClient() {
                   </select>
                   {myCustom && (
                     <input
-                      type="number"
+                      type="number" inputMode="decimal"
                       className={s.compactNum}
                       value={myW}
                       onChange={(e) => setMyW(Number(e.target.value) || 0)}
@@ -538,7 +538,7 @@ export default function MicrowaveClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>분</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={timerMin}
                   onChange={(e) => setTimerMin(e.target.value)}
@@ -549,7 +549,7 @@ export default function MicrowaveClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>초</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={timerSec}
                   onChange={(e) => setTimerSec(e.target.value)}

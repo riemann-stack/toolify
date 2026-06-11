@@ -412,7 +412,7 @@ export default function CostRateClient() {
                     {ingredients.map(it => (
                       <tr key={it.id} className={styles.ingRow}>
                         <td><input type="text" value={it.name} placeholder="재료명" onChange={e => updateIngredient(it.id, { name: e.target.value })} /></td>
-                        <td><input type="number" min={0} value={it.amount} onChange={e => updateIngredient(it.id, { amount: n(e.target.value) })} /></td>
+                        <td><input type="number" inputMode="decimal" min={0} value={it.amount} onChange={e => updateIngredient(it.id, { amount: n(e.target.value) })} /></td>
                         <td>
                           <select value={it.unit} onChange={e => updateIngredient(it.id, { unit: e.target.value })}>
                             <option value="g">g</option>
@@ -423,7 +423,7 @@ export default function CostRateClient() {
                             <option value="인분">인분</option>
                           </select>
                         </td>
-                        <td><input type="number" min={0} value={it.unitPrice} onChange={e => updateIngredient(it.id, { unitPrice: n(e.target.value) })} /></td>
+                        <td><input type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={e => updateIngredient(it.id, { unitPrice: n(e.target.value) })} /></td>
                         <td><button type="button" className={styles.ingRemove} onClick={() => removeIngredient(it.id)} aria-label="삭제">✕</button></td>
                       </tr>
                     ))}
@@ -717,7 +717,7 @@ export default function CostRateClient() {
               <div key={m.id} className={styles.menuRow}>
                 <input className={styles.textInput} type="text" value={m.name} placeholder="메뉴명" onChange={e => updateMonthlyMenu(m.id, { name: e.target.value })} />
                 <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(m.margin)} onChange={e => updateMonthlyMenu(m.id, { margin: parseComma(e.target.value) })} />
-                <input className={styles.smallInput} type="number" min={0} value={m.daily} onChange={e => updateMonthlyMenu(m.id, { daily: n(e.target.value) })} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={m.daily} onChange={e => updateMonthlyMenu(m.id, { daily: n(e.target.value) })} />
                 <button type="button" className={styles.ingRemove} onClick={() => removeMonthlyMenu(m.id)} aria-label="삭제">✕</button>
               </div>
             ))}
@@ -728,7 +728,7 @@ export default function CostRateClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>영업일 수 / 월</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" min={1} max={31} value={businessDays} onChange={e => setBusinessDaysStr(e.target.value)} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={31} value={businessDays} onChange={e => setBusinessDaysStr(e.target.value)} />
               <span className={styles.unit}>일</span>
             </div>
           </div>

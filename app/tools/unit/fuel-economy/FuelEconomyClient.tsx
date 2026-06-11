@@ -156,7 +156,7 @@ function FuelTab() {
 
         <div className={styles.inputRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -306,7 +306,7 @@ function EvTab() {
 
         <div className={styles.inputRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -380,7 +380,7 @@ function EvTab() {
           <div className={styles.costInputCell}>
             <div className={styles.costInputLabel}>완속 충전 단가 (원/kWh)</div>
             <input
-              type="number"
+              type="number" inputMode="decimal"
               className={styles.costInput}
               value={slowRate}
               onChange={e => setSlowRate(e.target.value)}
@@ -391,7 +391,7 @@ function EvTab() {
           <div className={styles.costInputCell}>
             <div className={styles.costInputLabel}>급속 충전 단가 (원/kWh)</div>
             <input
-              type="number"
+              type="number" inputMode="decimal"
               className={styles.costInput}
               value={fastRate}
               onChange={e => setFastRate(e.target.value)}

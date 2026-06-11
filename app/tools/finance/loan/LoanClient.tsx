@@ -420,7 +420,7 @@ export default function LoanClient() {
             </div>
             <div className={styles.card}>
               <label className={styles.cardLabel}>중도상환 시점 — {prepaymentMonth}개월차 ({(prepaymentMonth / 12).toFixed(1)}년)</label>
-              <input className={styles.slider} type="range" min="1" max={monthsNum - 1} step="1"
+              <input className={styles.slider} type="range" min="6" max={monthsNum - 1} step="6"
                 aria-label={`중도상환 시점 (개월차)`}
                 aria-valuetext={`${prepaymentMonth}개월차`}
                 value={prepaymentMonth} onChange={e => setPrepaymentMonth(parseInt(e.target.value, 10))} />
@@ -515,7 +515,7 @@ export default function LoanClient() {
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>현재 금리 (%)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" step="0.05" value={refiCurrentRate} onChange={e => setRefiCurrentRate(e.target.value)} />
+                  <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiCurrentRate} onChange={e => setRefiCurrentRate(e.target.value)} />
                   <span className={styles.unit}>%</span>
                 </div>
               </div>
@@ -535,7 +535,7 @@ export default function LoanClient() {
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>새 금리 (%)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" step="0.05" value={refiNewRate} onChange={e => setRefiNewRate(e.target.value)} />
+                  <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiNewRate} onChange={e => setRefiNewRate(e.target.value)} />
                   <span className={styles.unit}>%</span>
                 </div>
               </div>
@@ -676,7 +676,7 @@ export default function LoanClient() {
             <div className={styles.card}>
               <label className={styles.cardLabel}>금리 (%)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" step="0.05" value={revRate} onChange={e => setRevRate(e.target.value)} />
+                <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={revRate} onChange={e => setRevRate(e.target.value)} />
                 <span className={styles.unit}>%</span>
               </div>
             </div>

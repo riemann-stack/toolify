@@ -353,7 +353,7 @@ export default function MilitaryClient() {
               />
               <input
                 className={styles.smallNum}
-                type="number"
+                type="number" inputMode="decimal"
                 min={1}
                 max={60}
                 value={customMonths}

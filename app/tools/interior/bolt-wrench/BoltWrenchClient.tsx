@@ -310,7 +310,7 @@ export default function BoltWrenchClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>스패너 사이즈 (mm)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.input}
                 value={revSpanner}
                 onChange={(e) => setRevSpanner(e.target.value)}
@@ -361,7 +361,7 @@ export default function BoltWrenchClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>알렌(육각렌치) 사이즈 (mm)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.input}
                 value={revAllen}
                 onChange={(e) => setRevAllen(e.target.value)}

@@ -184,7 +184,7 @@ export default function JetLagClient() {
             <label className={s.fieldLabel}>비행 시간 (h)</label>
             <input
               className={s.input}
-              type="number"
+              type="number" inputMode="decimal"
               min={1} max={20} step={0.5}
               value={flightHours}
               onChange={(e) => setFlightHours(Math.max(1, Math.min(20, Number(e.target.value) || 1)))}
@@ -194,7 +194,7 @@ export default function JetLagClient() {
             <label className={s.fieldLabel}>체류 일수</label>
             <input
               className={s.input}
-              type="number"
+              type="number" inputMode="decimal"
               min={1} max={90}
               value={stayDays}
               onChange={(e) => setStayDays(Math.max(1, Math.min(90, Number(e.target.value) || 1)))}

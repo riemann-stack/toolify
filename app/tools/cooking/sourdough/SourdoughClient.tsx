@@ -370,7 +370,7 @@ export default function SourdoughClient() {
               </div>
               <div className={styles.customRow}>
                 <span className={styles.customLabel}>직접 입력 1:</span>
-                <input type="number" min={1} step={0.5} value={customRatio}
+                <input type="number" inputMode="decimal" min={1} step={0.5} value={customRatio}
                   onChange={e => setCustomRatio(e.target.value)}
                   className={styles.customInput} placeholder="예: 4" />
                 <span className={styles.customLabel}>:{customRatio || '?'}</span>
@@ -501,7 +501,7 @@ export default function SourdoughClient() {
               </div>
               <div className={styles.customRow}>
                 <span className={styles.customLabel}>직접 입력 1:</span>
-                <input type="number" min={1} step={0.5} value={pCustomRatio}
+                <input type="number" inputMode="decimal" min={1} step={0.5} value={pCustomRatio}
                   onChange={e => setPCustomRatio(e.target.value)}
                   className={styles.customInput} placeholder="예: 4" />
                 <span className={styles.customLabel}>:{pCustomRatio || '?'}</span>

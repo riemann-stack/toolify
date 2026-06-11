@@ -1016,9 +1016,9 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             <div key={d.id} className={s.sessionAlcoholRow}>
               <input type="text" className={s.drinkInputText} value={d.name}
                 onChange={e => updateDrink(ses.id, d.id, 'name', e.target.value)} placeholder="주류" />
-              <input type="number" className={s.drinkInput} value={d.volume}
+              <input type="number" inputMode="decimal" className={s.drinkInput} value={d.volume}
                 onChange={e => updateDrink(ses.id, d.id, 'volume', e.target.value)} placeholder="용량(ml)" />
-              <input type="number" step="0.1" className={s.drinkInput} value={d.abv}
+              <input type="number" inputMode="decimal" step="0.1" className={s.drinkInput} value={d.abv}
                 onChange={e => updateDrink(ses.id, d.id, 'abv', e.target.value)} placeholder="도수(%)" />
               <button type="button" className={s.drinkDelete} onClick={() => removeDrink(ses.id, d.id)}>×</button>
             </div>

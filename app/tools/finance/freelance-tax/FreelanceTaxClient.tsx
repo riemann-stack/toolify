@@ -259,7 +259,7 @@ function QuickCalcTab({ inputs, result, update }: {
         <div className={styles.numberRow}>
           <label>부양가족 (배우자 외)</label>
           <input
-            type="number" min={0} max={10}
+            type="number" inputMode="decimal" min={0} max={10}
             className={styles.smallNumber}
             value={inputs.dependents}
             onChange={(e) => update('dependents', Math.max(0, Math.min(10, +e.target.value || 0)))}

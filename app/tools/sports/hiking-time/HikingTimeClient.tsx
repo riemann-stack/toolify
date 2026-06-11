@@ -290,7 +290,7 @@ export default function HikingTimeClient() {
           <div className={styles.numberRow} style={{ marginTop: 10 }}>
             <label>총 휴식 시간 (분)</label>
             <input
-              type="number" min={0} max={300}
+              type="number" inputMode="decimal" min={0} max={300}
               className={styles.smallNumber}
               value={inputs.manualRestMin}
               onChange={(e) => update('manualRestMin', +e.target.value || 0)}

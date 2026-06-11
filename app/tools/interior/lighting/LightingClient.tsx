@@ -356,7 +356,7 @@ export default function LightingClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" min={1} max={300}
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -366,9 +366,9 @@ export default function LightingClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -377,7 +377,7 @@ export default function LightingClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
@@ -454,7 +454,7 @@ export default function LightingClient() {
             </div>
             <span className={styles.subLabel}>또는 직접 입력 (lm)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(n(e.target.value, 50))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(n(e.target.value, 50))} />
               <span className={styles.unit}>lm</span>
             </div>
           </div>
@@ -561,7 +561,7 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 와트 (W)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={1} step={1} value={inputW} onChange={e => setInputW(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={inputW} onChange={e => setInputW(n(e.target.value, 1))} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -569,7 +569,7 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 루멘 (lm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" min={1} step={50} value={inputLm} onChange={e => setInputLm(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={50} value={inputLm} onChange={e => setInputLm(n(e.target.value, 1))} />
                   <span className={styles.unit}>lm</span>
                 </div>
               </>

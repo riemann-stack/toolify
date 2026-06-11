@@ -439,7 +439,7 @@ export default function WallpaperClient() {
                   <div style={{ marginTop: 8 }}>
                     <input
                       className={styles.smallInput}
-                      type="number"
+                      type="number" inputMode="decimal"
                       min={1}
                       max={300}
                       value={pyungCustom}
@@ -452,9 +452,9 @@ export default function WallpaperClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -463,7 +463,7 @@ export default function WallpaperClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
@@ -491,15 +491,15 @@ export default function WallpaperClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>창문 개수</span>
-                  <input className={styles.smallInput} type="number" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
                 </div>
               </div>
             )}
@@ -509,15 +509,15 @@ export default function WallpaperClient() {
             <div className={styles.openingRow}>
               <div>
                 <span className={styles.subLabel}>개수</span>
-                <input className={styles.smallInput} type="number" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div>
                 <span className={styles.subLabel}>가로 (m)</span>
-                <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
               </div>
               <div>
                 <span className={styles.subLabel}>세로 (m)</span>
-                <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
               </div>
             </div>
           </div>
@@ -552,11 +552,11 @@ export default function WallpaperClient() {
               <div className={styles.customWpRow}>
                 <div>
                   <span className={styles.subLabel}>폭 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(n(e.target.value, 0.1))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(n(e.target.value, 0.1))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>1롤 길이 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(n(e.target.value, 1))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(n(e.target.value, 1))} />
                 </div>
               </div>
             )}
@@ -761,11 +761,11 @@ export default function WallpaperClient() {
                     <div className={styles.wallDimRow}>
                       <div>
                         <span className={styles.subLabel}>가로 (m)</span>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                       </div>
                       <div>
                         <span className={styles.subLabel}>높이 (m)</span>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                       </div>
                     </div>
 
@@ -779,8 +779,8 @@ export default function WallpaperClient() {
                         >
                           {o.type === 'window' ? '창문' : '문'}
                         </button>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} placeholder="가로" />
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} placeholder="세로" />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} placeholder="가로" />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} placeholder="세로" />
                         <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                       </div>
                     ))}
@@ -802,11 +802,11 @@ export default function WallpaperClient() {
                 <div className={styles.wallDimRow} style={{ marginTop: 8 }}>
                   <div>
                     <span className={styles.subLabel}>천장 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>천장 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
                   </div>
                 </div>
               )}
@@ -891,28 +891,28 @@ export default function WallpaperClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>도배풀 단가 (1kg, 보통 5,000원)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={500} min={0} value={pasteUnit} onChange={e => setPasteUnit(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={500} min={0} value={pasteUnit} onChange={e => setPasteUnit(n(e.target.value))} />
               <span className={styles.unit}>원/kg</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>도구비 (벽지칼·롤러·솔, 셀프 시 1회)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={1000} min={0} value={toolCost} onChange={e => setToolCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={toolCost} onChange={e => setToolCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>사다리 (천장 도배 시)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>전문 시공 인건비 (1롤당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={1000} min={0} value={proLaborPerRoll} onChange={e => setProLaborPerRoll(n(e.target.value))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerRoll} onChange={e => setProLaborPerRoll(n(e.target.value))} />
               <span className={styles.unit}>원/롤</span>
             </div>
           </div>

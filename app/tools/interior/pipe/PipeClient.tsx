@@ -416,7 +416,7 @@ export default function PipeClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>유속 (m/s)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.input}
                 value={velocity}
                 onChange={(e) => setVelocity(e.target.value)}

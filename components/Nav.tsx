@@ -383,7 +383,7 @@ export default function Nav() {
             )}
           </button>
 
-          <button className={styles.burger} onClick={() => setMobileOpen((o) => !o)} aria-label="메뉴">
+          <button className={styles.burger} onClick={() => setMobileOpen((o) => !o)} aria-label="메뉴" aria-expanded={mobileOpen}>
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineTop : ''}`} />
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineMid : ''}`} />
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineBot : ''}`} />
@@ -664,7 +664,6 @@ export default function Nav() {
               )}
             </div>
           </div>
-          <div className={styles.overlay} onClick={() => setMobileOpen(false)} />
         </>
       )}
     </>

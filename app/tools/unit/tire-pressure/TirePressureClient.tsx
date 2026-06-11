@@ -144,7 +144,7 @@ function ConvertTab() {
 
         <div className={styles.inputRow}>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -280,7 +280,7 @@ function CheckTab() {
             <div className={styles.dualLabel}>권장 공기압 (매뉴얼 기준)</div>
             <div className={styles.dualInputBox}>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={styles.dualField}
                 value={recPsi}
                 onChange={e => setRecPsi(e.target.value)}
@@ -294,7 +294,7 @@ function CheckTab() {
             <div className={styles.dualLabel}>현재 측정 공기압</div>
             <div className={styles.dualInputBox}>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={styles.dualField}
                 value={curPsi}
                 onChange={e => setCurPsi(e.target.value)}
@@ -663,7 +663,7 @@ function WearTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>트레드(홈) 깊이</span>
         <div className={styles.dualInputBox}>
-          <input type="number" className={styles.dualField} value={tread} onChange={e => setTread(e.target.value)} step="0.5" placeholder="5" />
+          <input type="number" inputMode="decimal" className={styles.dualField} value={tread} onChange={e => setTread(e.target.value)} step="0.5" placeholder="5" />
           <span className={styles.dualUnit}>mm</span>
         </div>
       </div>
@@ -686,14 +686,14 @@ function WearTab() {
           <div className={styles.dualCell}>
             <div className={styles.dualLabel}>장착 후 주행거리</div>
             <div className={styles.dualInputBox}>
-              <input type="number" className={styles.dualField} value={km} onChange={e => setKm(e.target.value)} step="1000" />
+              <input type="number" inputMode="decimal" className={styles.dualField} value={km} onChange={e => setKm(e.target.value)} step="1000" />
               <span className={styles.dualUnit}>km</span>
             </div>
           </div>
           <div className={styles.dualCell}>
             <div className={styles.dualLabel}>사용 연수</div>
             <div className={styles.dualInputBox}>
-              <input type="number" className={styles.dualField} value={years} onChange={e => setYears(e.target.value)} step="1" />
+              <input type="number" inputMode="decimal" className={styles.dualField} value={years} onChange={e => setYears(e.target.value)} step="1" />
               <span className={styles.dualUnit}>년</span>
             </div>
           </div>

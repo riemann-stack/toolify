@@ -326,7 +326,7 @@ export default function RacePredictorClient() {
             </div>
             {baseDist === 'custom' && (
               <div className={styles.customRow}>
-                <input type="number" min={0.5} step={0.1} value={customKm}
+                <input type="number" inputMode="decimal" min={0.5} step={0.1} value={customKm}
                   onChange={(e) => setCustomKm(+e.target.value || 0)}
                   className={styles.customInput} />
                 <span className={styles.unit}>km</span>

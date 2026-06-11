@@ -300,7 +300,7 @@ export default function RoomAreaClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" min={1} max={300}
+                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -310,9 +310,9 @@ export default function RoomAreaClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -321,7 +321,7 @@ export default function RoomAreaClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
@@ -348,15 +348,15 @@ export default function RoomAreaClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>개수</span>
-                  <input className={styles.smallInput} type="number" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
                 </div>
               </div>
             )}
@@ -366,15 +366,15 @@ export default function RoomAreaClient() {
             <div className={styles.openingRow}>
               <div>
                 <span className={styles.subLabel}>개수</span>
-                <input className={styles.smallInput} type="number" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div>
                 <span className={styles.subLabel}>가로 (m)</span>
-                <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
               </div>
               <div>
                 <span className={styles.subLabel}>세로 (m)</span>
-                <input className={styles.smallInput} type="number" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
               </div>
             </div>
           </div>
@@ -603,17 +603,17 @@ export default function RoomAreaClient() {
                 <div className={styles.wallDimRow}>
                   <div>
                     <span className={styles.subLabel}>바닥 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.floorW} onChange={e => updateRoom(r.id, { floorW: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.floorW} onChange={e => updateRoom(r.id, { floorW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>바닥 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" step={0.1} min={0} value={r.floorL} onChange={e => updateRoom(r.id, { floorL: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.floorL} onChange={e => updateRoom(r.id, { floorL: n(e.target.value) })} />
                   </div>
                 </div>
                 <div style={{ height: 8 }} />
                 <span className={styles.subLabel}>천장 높이 (m)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="number" step={0.1} min={1.5} max={5} value={r.h} onChange={e => updateRoom(r.id, { h: Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)) })} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={r.h} onChange={e => updateRoom(r.id, { h: Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)) })} />
                   <span className={styles.unit}>m</span>
                 </div>
 
@@ -623,11 +623,11 @@ export default function RoomAreaClient() {
                     <div className={styles.wallDimRow}>
                       <div>
                         <span className={styles.subLabel}>가로 (m)</span>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                       </div>
                       <div>
                         <span className={styles.subLabel}>높이 (m)</span>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                       </div>
                     </div>
 
@@ -637,8 +637,8 @@ export default function RoomAreaClient() {
                         <button type="button" className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
                           {o.type === 'window' ? '창문' : '문'}
                         </button>
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
-                        <input className={styles.smallInput} type="number" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
                         <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                       </div>
                     ))}

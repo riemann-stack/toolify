@@ -271,6 +271,14 @@ export default function SalaryClient() {
         </details>
       </div>
 
+      {/* 모바일 sticky 미니 결과 바 — 입력 스크롤 중 하단에서 실수령액 확인 (실수령액 탭 전용) */}
+      {tab === 'main' && result && (
+        <div className={styles.stickyBar} aria-hidden="true">
+          <span className={styles.stickyBarLabel}>월 실수령</span>
+          <b className={styles.stickyBarValue}>{won(result.netMonthly)}</b>
+        </div>
+      )}
+
       {tab === 'main' && !valid && (
         <div className={styles.empty}>
           <div className={styles.emptyTitle}>세전 연봉을 입력하세요</div>

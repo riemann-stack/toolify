@@ -683,7 +683,7 @@ export default function BmiClient() {
                 aria-valuetext={`${simWeight.toFixed(1)}kg`}
                 min={Math.max(20, weightKg - 20).toFixed(0)}
                 max={(weightKg + 20).toFixed(0)}
-                step="0.1"
+                step="0.5"
                 value={simWeight}
                 onChange={e => setSimWeight(parseFloat(e.target.value))} />
               <span className={styles.sliderVal}>{simWeight.toFixed(1)}kg</span>

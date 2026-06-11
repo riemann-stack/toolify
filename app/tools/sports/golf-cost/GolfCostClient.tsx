@@ -295,7 +295,7 @@ export default function GolfCostClient() {
         <span className={s.cardLabel}>⛳ 그린피</span>
         <div className={s.subLabel}>1인당 그린피</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -313,7 +313,7 @@ export default function GolfCostClient() {
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{cartMode === 'team' ? '팀당 카트비' : '1인당 카트비'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" value={cartFee || ''} onChange={e => setCartFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" value={cartFee || ''} onChange={e => setCartFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -335,7 +335,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel}>팀당 캐디피</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={caddieFee || ''} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={caddieFee || ''} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
 
@@ -348,7 +348,7 @@ export default function GolfCostClient() {
               ))}
             </div>
             <div className={s.inputRow} style={{ marginTop: 8 }}>
-              <input className={s.numInput} type="number" value={tipAmount || ''} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={tipAmount || ''} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
 
@@ -377,13 +377,13 @@ export default function GolfCostClient() {
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{mealMode === 'each' ? '1인당 식사비' : '팀 식사비 총액'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" value={mealAmount || ''} onChange={e => setMealAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" value={mealAmount || ''} onChange={e => setMealAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>그늘집 비용 (팀당)</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" value={shadeAmount || ''} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" value={shadeAmount || ''} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
@@ -420,14 +420,14 @@ export default function GolfCostClient() {
               <div>
                 <div className={s.subLabel}>왕복 거리</div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" value={tripDistance || ''} onChange={e => setTripDistance(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                  <input className={s.numInput} type="number" inputMode="decimal" value={tripDistance || ''} onChange={e => setTripDistance(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                   <span className={s.unit}>km</span>
                 </div>
               </div>
               <div>
                 <div className={s.subLabel}>연비</div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" step="0.1" value={efficiency || ''} onChange={e => setEfficiency(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                  <input className={s.numInput} type="number" inputMode="decimal" step="0.1" value={efficiency || ''} onChange={e => setEfficiency(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                   <span className={s.unit}>km/L</span>
                 </div>
               </div>
@@ -435,7 +435,7 @@ export default function GolfCostClient() {
             <div style={{ marginTop: 10 }}>
               <div className={s.subLabel}>유가</div>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" value={fuelPrice || ''} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                <input className={s.numInput} type="number" inputMode="decimal" value={fuelPrice || ''} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                 <span className={s.unit}>원/L</span>
               </div>
             </div>
@@ -447,7 +447,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>총 교통비 (유류비·통행료 합산)</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={carpoolTotal || ''} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={carpoolTotal || ''} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>{players}명이 나누면 1인당 {fmt(carpoolTotal / players)}</div>
@@ -458,7 +458,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 버스·셔틀 요금</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={busPerPerson || ''} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={busPerPerson || ''} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(busPerPerson * players)}</div>
@@ -469,7 +469,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 대중교통비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={transitPerPerson || ''} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={transitPerPerson || ''} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(transitPerPerson * players)}</div>
@@ -484,21 +484,21 @@ export default function GolfCostClient() {
           <div>
             <div className={s.subLabel}>장갑/볼/티</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={glovesCost || ''} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={glovesCost || ''} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
           <div>
             <div className={s.subLabel}>로커비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" value={lockerFee || ''} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" value={lockerFee || ''} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>기타</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" value={otherCost || ''} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+          <input className={s.numInput} type="number" inputMode="decimal" value={otherCost || ''} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -538,7 +538,7 @@ export default function GolfCostClient() {
                 />
                 <input
                   className={s.smallNum}
-                  type="number"
+                  type="number" inputMode="decimal"
                   placeholder="손익(+ / −)"
                   value={betPlayers[i]?.amount || ''}
                   onChange={e => {
@@ -594,7 +594,7 @@ export default function GolfCostClient() {
                 />
                 <input
                   className={s.smallNum}
-                  type="number"
+                  type="number" inputMode="decimal"
                   placeholder="조정 (+/−)"
                   value={playerData[i]?.adjustment || ''}
                   onChange={e => {
@@ -787,7 +787,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         <span className={s.cardLabel}>① 회원권 정보</span>
         <div className={s.subLabel}>회원권 가격</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number"
+          <input className={s.numInput} type="number" inputMode="decimal"
             value={membershipPrice || ''}
             onChange={e => setMembershipPrice(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
@@ -805,7 +805,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>연회비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number"
+              <input className={s.numInput} type="number" inputMode="decimal"
                 value={annualFee || ''}
                 onChange={e => setAnnualFee(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
@@ -814,7 +814,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>보유 기간</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number"
+              <input className={s.numInput} type="number" inputMode="decimal"
                 value={holdingYears || ''}
                 onChange={e => setHoldingYears(parseAmount(e.target.value))} />
               <span className={s.unit}>년</span>
@@ -823,7 +823,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         </div>
         <div className={s.subLabel} style={{ marginTop: 14 }}>매각 시 잔존가치 (예상)</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number"
+          <input className={s.numInput} type="number" inputMode="decimal"
             value={resaleValue || ''}
             onChange={e => setResaleValue(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
@@ -837,7 +837,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>비회원 1인당 비용</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number"
+              <input className={s.numInput} type="number" inputMode="decimal"
                 value={nonMemberCost || ''}
                 onChange={e => setNonMemberCost(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
@@ -849,7 +849,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>회원 1인당 비용</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number"
+              <input className={s.numInput} type="number" inputMode="decimal"
                 value={memberRoundCost || ''}
                 onChange={e => setMemberRoundCost(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>

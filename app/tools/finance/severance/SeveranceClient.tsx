@@ -241,11 +241,11 @@ export default function SeveranceClient() {
         <div className={s.row2}>
           <div className={s.field}>
             <label className={s.fieldLabel}>주 소정 근로시간 (시간)</label>
-            <input type="number" className={s.input} value={weekHours} onChange={(e) => setWeekHours(e.target.value)} min={1} max={70} step={1} />
+            <input type="number" inputMode="decimal" className={s.input} value={weekHours} onChange={(e) => setWeekHours(e.target.value)} min={1} max={70} step={1} />
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>1일 소정 근로시간 (시간)</label>
-            <input type="number" className={s.input} value={dailyHours} onChange={(e) => setDailyHours(e.target.value)} min={1} max={12} step={0.5} />
+            <input type="number" inputMode="decimal" className={s.input} value={dailyHours} onChange={(e) => setDailyHours(e.target.value)} min={1} max={12} step={0.5} />
           </div>
         </div>
         <div className={s.helpText}>
@@ -305,11 +305,11 @@ export default function SeveranceClient() {
                     <p className={s.monthLabel}>{mLabel} 급여</p>
                     <div className={s.field}>
                       <label className={s.fieldLabel}>기본급 (만원)</label>
-                      <input type="number" className={s.input} value={baseGetter} onChange={(e) => baseSetter(e.target.value)} min={0} max={5000} step={1} />
+                      <input type="number" inputMode="decimal" className={s.input} value={baseGetter} onChange={(e) => baseSetter(e.target.value)} min={0} max={5000} step={1} />
                     </div>
                     <div className={s.field}>
                       <label className={s.fieldLabel}>고정수당 (식대·교통 등, 만원)</label>
-                      <input type="number" className={s.input} value={allowGetter} onChange={(e) => allowSetter(e.target.value)} min={0} max={500} step={1} />
+                      <input type="number" inputMode="decimal" className={s.input} value={allowGetter} onChange={(e) => allowSetter(e.target.value)} min={0} max={500} step={1} />
                     </div>
                   </div>
                 )
@@ -327,12 +327,12 @@ export default function SeveranceClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>최근 1년 상여금 총액 (만원)</label>
-                <input type="number" className={s.input} value={yearlyBonus} onChange={(e) => setYearlyBonus(e.target.value)} min={0} max={20000} step={10} />
+                <input type="number" inputMode="decimal" className={s.input} value={yearlyBonus} onChange={(e) => setYearlyBonus(e.target.value)} min={0} max={20000} step={10} />
                 <p className={s.helpText}>상여금 × 3/12 만큼 평균임금에 반영</p>
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>미사용 연차수당 (만원)</label>
-                <input type="number" className={s.input} value={unusedLeave} onChange={(e) => setUnusedLeave(e.target.value)} min={0} max={5000} step={10} />
+                <input type="number" inputMode="decimal" className={s.input} value={unusedLeave} onChange={(e) => setUnusedLeave(e.target.value)} min={0} max={5000} step={10} />
                 <p className={s.helpText}>연차수당 × 3/12 만큼 평균임금에 반영</p>
               </div>
             </div>
@@ -422,7 +422,7 @@ export default function SeveranceClient() {
             <span className={s.cardLabel}>월 통상임금 입력</span>
             <div className={s.field}>
               <label className={s.fieldLabel}>월 통상임금 (기본급 + 고정수당, 만원)</label>
-              <input type="number" className={s.input} value={monthlyOrdinary} onChange={(e) => setMonthlyOrdinary(e.target.value)} min={0} max={5000} step={1} />
+              <input type="number" inputMode="decimal" className={s.input} value={monthlyOrdinary} onChange={(e) => setMonthlyOrdinary(e.target.value)} min={0} max={5000} step={1} />
               <p className={s.helpText}>
                 통상임금 = 변동성 없는 정기·일률·고정 지급분 (기본급 + 직책수당·식대 등 고정수당)
               </p>
@@ -617,21 +617,21 @@ export default function SeveranceClient() {
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>마지막 월급 (실수령, 만원)</label>
-                <input type="number" className={s.input} value={lastSalary} onChange={(e) => setLastSalary(e.target.value)} min={0} max={5000} step={10} />
+                <input type="number" inputMode="decimal" className={s.input} value={lastSalary} onChange={(e) => setLastSalary(e.target.value)} min={0} max={5000} step={10} />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>미사용 연차수당 (만원)</label>
-                <input type="number" className={s.input} value={extraLeave} onChange={(e) => setExtraLeave(e.target.value)} min={0} max={5000} step={10} />
+                <input type="number" inputMode="decimal" className={s.input} value={extraLeave} onChange={(e) => setExtraLeave(e.target.value)} min={0} max={5000} step={10} />
               </div>
             </div>
             <div className={s.row2}>
               <div className={s.field}>
                 <label className={s.fieldLabel}>4대보험 정산 (만원, 환급은 음수)</label>
-                <input type="number" className={s.input} value={insuranceAdj} onChange={(e) => setInsuranceAdj(e.target.value)} min={-200} max={500} step={1} />
+                <input type="number" inputMode="decimal" className={s.input} value={insuranceAdj} onChange={(e) => setInsuranceAdj(e.target.value)} min={-200} max={500} step={1} />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>기타 공제 (만원)</label>
-                <input type="number" className={s.input} value={otherDeduct} onChange={(e) => setOtherDeduct(e.target.value)} min={0} max={500} step={1} />
+                <input type="number" inputMode="decimal" className={s.input} value={otherDeduct} onChange={(e) => setOtherDeduct(e.target.value)} min={0} max={500} step={1} />
               </div>
             </div>
           </div>

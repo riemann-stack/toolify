@@ -179,7 +179,7 @@ function LengthTab() {
             <div className={s.configField}>
               <label className={s.configLabel}>root font-size (px)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.configInput}
                 value={cfg.rootFontSize}
                 onChange={(e) => setCfg({ ...cfg, rootFontSize: parseFloat(e.target.value) || 0 })}
@@ -188,7 +188,7 @@ function LengthTab() {
             <div className={s.configField}>
               <label className={s.configLabel}>parent font-size (px)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.configInput}
                 value={cfg.parentFontSize}
                 onChange={(e) => setCfg({ ...cfg, parentFontSize: parseFloat(e.target.value) || 0 })}
@@ -198,7 +198,7 @@ function LengthTab() {
               <label className={s.configLabel}>viewport width (px)</label>
               <div className={s.configRow}>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.configInput}
                   value={cfg.viewportWidth}
                   onChange={(e) => setCfg({ ...cfg, viewportWidth: parseFloat(e.target.value) || 0 })}
@@ -214,7 +214,7 @@ function LengthTab() {
               <label className={s.configLabel}>viewport height (px)</label>
               <div className={s.configRow}>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.configInput}
                   value={cfg.viewportHeight}
                   onChange={(e) => setCfg({ ...cfg, viewportHeight: parseFloat(e.target.value) || 0 })}
@@ -229,7 +229,7 @@ function LengthTab() {
             <div className={s.configField}>
               <label className={s.configLabel}>기준값 base (px) — % 계산용</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.configInput}
                 value={cfg.baseValue}
                 onChange={(e) => setCfg({ ...cfg, baseValue: parseFloat(e.target.value) || 0 })}
@@ -339,7 +339,7 @@ function LineHeightTab() {
         <div className={s.field}>
           <label className={s.fieldLabel}>font-size (px)</label>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={s.input}
             value={fontSize}
             min={1}
@@ -474,7 +474,7 @@ function LetterSpacingTab() {
       <div className={s.card}>
         <div className={s.field}>
           <label className={s.fieldLabel}>font-size (px)</label>
-          <input type="number" className={s.input} value={fontSize} min={1} onChange={(e) => setFontSize(e.target.value)} />
+          <input type="number" inputMode="decimal" className={s.input} value={fontSize} min={1} onChange={(e) => setFontSize(e.target.value)} />
         </div>
         <div className={s.field}>
           <label className={s.fieldLabel}>letter-spacing 값 (음수 허용)</label>
@@ -631,9 +631,9 @@ function AspectTab() {
           <div className={s.field}>
             <label className={s.fieldLabel}>width × height (px)</label>
             <div className={s.whPair}>
-              <input type="number" className={s.input} value={w} min={1} onChange={(e) => setW(e.target.value)} />
+              <input type="number" inputMode="decimal" className={s.input} value={w} min={1} onChange={(e) => setW(e.target.value)} />
               <span className={s.whSep}>×</span>
-              <input type="number" className={s.input} value={h} min={1} onChange={(e) => setH(e.target.value)} />
+              <input type="number" inputMode="decimal" className={s.input} value={h} min={1} onChange={(e) => setH(e.target.value)} />
             </div>
           </div>
         )}
@@ -840,19 +840,19 @@ function ClampTab() {
         <div className={s.configPanel} style={{ border: 'none', padding: 0, background: 'transparent', marginTop: 0 }}>
           <div className={s.configField}>
             <label className={s.configLabel}>최솟값 (px)</label>
-            <input type="number" className={s.configInput} value={minPx} onChange={(e) => setMinPx(e.target.value)} />
+            <input type="number" inputMode="decimal" className={s.configInput} value={minPx} onChange={(e) => setMinPx(e.target.value)} />
           </div>
           <div className={s.configField}>
             <label className={s.configLabel}>최댓값 (px)</label>
-            <input type="number" className={s.configInput} value={maxPx} onChange={(e) => setMaxPx(e.target.value)} />
+            <input type="number" inputMode="decimal" className={s.configInput} value={maxPx} onChange={(e) => setMaxPx(e.target.value)} />
           </div>
           <div className={s.configField}>
             <label className={s.configLabel}>최소 viewport (px)</label>
-            <input type="number" className={s.configInput} value={minVw} onChange={(e) => setMinVw(e.target.value)} />
+            <input type="number" inputMode="decimal" className={s.configInput} value={minVw} onChange={(e) => setMinVw(e.target.value)} />
           </div>
           <div className={s.configField}>
             <label className={s.configLabel}>최대 viewport (px)</label>
-            <input type="number" className={s.configInput} value={maxVw} onChange={(e) => setMaxVw(e.target.value)} />
+            <input type="number" inputMode="decimal" className={s.configInput} value={maxVw} onChange={(e) => setMaxVw(e.target.value)} />
           </div>
         </div>
 

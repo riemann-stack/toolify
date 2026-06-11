@@ -123,15 +123,15 @@ export default function RoomModeClient() {
         <div className={s.row3}>
           <div className={s.field}>
             <label className={s.fieldLabel}>가로 W (m)</label>
-            <input type="number" className={s.input} value={W} onChange={(e) => setW(e.target.value)} min={0.5} max={20} step={0.1} />
+            <input type="number" inputMode="decimal" className={s.input} value={W} onChange={(e) => setW(e.target.value)} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>세로 L (m)</label>
-            <input type="number" className={s.input} value={L} onChange={(e) => setL(e.target.value)} min={0.5} max={20} step={0.1} />
+            <input type="number" inputMode="decimal" className={s.input} value={L} onChange={(e) => setL(e.target.value)} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel}>높이 H (m)</label>
-            <input type="number" className={s.input} value={H} onChange={(e) => setH(e.target.value)} min={2} max={6} step={0.05} />
+            <input type="number" inputMode="decimal" className={s.input} value={H} onChange={(e) => setH(e.target.value)} min={2} max={6} step={0.05} />
           </div>
         </div>
         <div className={s.field}>

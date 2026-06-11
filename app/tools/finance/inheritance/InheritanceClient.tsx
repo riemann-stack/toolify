@@ -856,7 +856,7 @@ function HeirsTab(p: HeirsTabProps) {
                       <td>{(h.legalShare * 100).toFixed(1)}%</td>
                       <td>{formatShortKRW(h.legalShareAmount)}</td>
                       <td>
-                        <input className={s.heirRatioInput} type="number" step="1" min={0} max={100}
+                        <input className={s.heirRatioInput} type="number" inputMode="decimal" step="1" min={0} max={100}
                           value={(h.actualRatio * 100).toFixed(1)}
                           onChange={e => {
                             const v = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0))

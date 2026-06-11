@@ -436,7 +436,7 @@ export default function GradientGeneratorClient() {
                       maxLength={7}
                     />
                     <input
-                      type="number"
+                      type="number" inputMode="decimal"
                       min={0} max={100} step={1}
                       value={s.pos}
                       onChange={(e) => updateStop(s.id, { pos: Math.max(0, Math.min(100, +e.target.value || 0)) })}

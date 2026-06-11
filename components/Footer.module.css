@@ -78,6 +78,10 @@
   color: var(--muted);
   text-decoration: none;
   transition: color 0.15s;
+  /* 시각 레이아웃 유지하며 터치 영역만 확장 (WCAG 2.5.8) */
+  display: inline-block;
+  padding: 8px 4px;
+  margin: -8px -4px;
 }@media (hover: hover) {
   .link:hover { color: var(--text); }
 }

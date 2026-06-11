@@ -219,7 +219,7 @@ export default function FruitSyrupClient() {
         {ratioCustom && (
           <div className={s.inputRow} style={{ marginTop: 10 }}>
             <span className={s.unit} style={{ marginRight: 8 }}>1 :</span>
-            <input type="number" min={0.1} max={2} step={0.1} className={s.numInput} style={{ maxWidth: 120 }}
+            <input type="number" inputMode="decimal" min={0.1} max={2} step={0.1} className={s.numInput} style={{ maxWidth: 120 }}
               value={ratio} onChange={e => setRatio(Math.min(2, Math.max(0, parseFloat(e.target.value) || 0)))} />
           </div>
         )}

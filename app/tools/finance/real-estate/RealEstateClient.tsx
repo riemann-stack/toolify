@@ -343,7 +343,7 @@ export default function RealEstateClient() {
         <div className={styles.inputRow}>
           <input
             className={styles.numInput}
-            type="number"
+            type="number" inputMode="decimal"
             min={1}
             max={600}
             value={holdMonths}
@@ -394,7 +394,7 @@ export default function RealEstateClient() {
             <div className={styles.inputRow}>
               <input
                 className={styles.numInput}
-                type="number"
+                type="number" inputMode="decimal"
                 min={0}
                 max={100}
                 value={ltv}
@@ -448,7 +448,7 @@ export default function RealEstateClient() {
         <div className={styles.inputRow}>
           <input
             className={styles.smallInput}
-            type="number"
+            type="number" inputMode="decimal"
             step="0.1"
             min={0}
             value={loanRate}
@@ -665,7 +665,7 @@ export default function RealEstateClient() {
                 <div className={styles.inputRow}>
                   <input
                     className={styles.smallInput}
-                    type="number"
+                    type="number" inputMode="decimal"
                     min={0}
                     placeholder={String(holdMonths)}
                     value={rentMonthsCustom ?? ''}
@@ -682,7 +682,7 @@ export default function RealEstateClient() {
                 <div className={styles.inputRow}>
                   <input
                     className={styles.smallInput}
-                    type="number"
+                    type="number" inputMode="decimal"
                     min={0}
                     value={vacancyMonths}
                     onChange={e => setVacancyMonths(Math.max(0, Number(e.target.value) || 0))}

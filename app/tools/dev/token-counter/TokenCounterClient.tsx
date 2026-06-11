@@ -172,7 +172,7 @@ export default function TokenCounterClient() {
               ))}
             </div>
             <input
-              type="number" min={1} max={10_000_000} step={1}
+              type="number" inputMode="decimal" min={1} max={10_000_000} step={1}
               className={s.bulkInput}
               value={bulkCalls}
               onChange={(e) => setBulkCalls(Math.max(1, Math.min(10_000_000, parseInt(e.target.value) || 1)))}

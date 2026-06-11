@@ -254,7 +254,7 @@ export default function BrewClient() {
               <div className={s.field} style={{ marginTop: 12 }}>
                 <label className={s.fieldLabel}>{isEspresso ? '원두 인풋 (g)' : '원두 (g)'}</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={coffeeG}
                   onChange={(e) => setCoffeeG(e.target.value)}
@@ -274,7 +274,7 @@ export default function BrewClient() {
               <div className={s.field} style={{ marginTop: 12 }}>
                 <label className={s.fieldLabel}>물 (ml)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={waterMl}
                   onChange={(e) => setWaterMl(e.target.value)}
@@ -296,7 +296,7 @@ export default function BrewClient() {
                   <div className={s.field}>
                     <label className={s.fieldLabel}>잔수</label>
                     <input
-                      type="number"
+                      type="number" inputMode="decimal"
                       className={s.input}
                       value={cups}
                       onChange={(e) => setCups(e.target.value)}
@@ -313,7 +313,7 @@ export default function BrewClient() {
                   <div className={s.field}>
                     <label className={s.fieldLabel}>1잔 ml</label>
                     <input
-                      type="number"
+                      type="number" inputMode="decimal"
                       className={s.input}
                       value={mlPerCup}
                       onChange={(e) => setMlPerCup(e.target.value)}
@@ -401,7 +401,7 @@ export default function BrewClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>원두 (g)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={coffeeG}
                   onChange={(e) => setCoffeeG(e.target.value)}
@@ -411,7 +411,7 @@ export default function BrewClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>비율 (1:N)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={pourRatio}
                   onChange={(e) => setPourRatio(parseFloat(e.target.value) || 16)}
@@ -644,7 +644,7 @@ export default function BrewClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>원두 100g 가격 (원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={pricePer100g}
                   onChange={(e) => setPricePer100g(e.target.value)}

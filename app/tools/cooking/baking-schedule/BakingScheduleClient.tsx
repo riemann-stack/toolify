@@ -342,7 +342,7 @@ function DDTPanel(p: CommonInputsProps) {
       <div className={s.ddtFieldRow}>
         <div className={s.ddtField}>
           <span className={s.ddtFieldLabel}>목표 반죽 온도 (℃)</span>
-          <input type="number" className={s.ddtNumInput} step={0.5} min={18} max={30}
+          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={18} max={30}
             value={p.targetDoughC}
             onChange={e => p.setTargetDoughC(Number(e.target.value) || 25)} />
           {preset?.ddtTargetC !== undefined && (
@@ -354,7 +354,7 @@ function DDTPanel(p: CommonInputsProps) {
 
         <div className={s.ddtField}>
           <span className={s.ddtFieldLabel}>밀가루 온도 (℃)</span>
-          <input type="number" className={s.ddtNumInput} step={0.5} min={0} max={40}
+          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
             value={p.flourTempC ?? p.roomTempC}
             onChange={e => {
               const v = e.target.value
@@ -369,7 +369,7 @@ function DDTPanel(p: CommonInputsProps) {
       {hasLevain && (
         <div className={s.ddtField}>
           <span className={s.ddtFieldLabel}>{prefermentName} 온도 (℃)</span>
-          <input type="number" className={s.ddtNumInput} step={0.5} min={0} max={40}
+          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
             value={p.levainTempC ?? p.roomTempC}
             onChange={e => {
               const v = e.target.value

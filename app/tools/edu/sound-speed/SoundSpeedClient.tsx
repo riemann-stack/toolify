@@ -700,15 +700,15 @@ export default function SoundSpeedClient() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
                   <div>
                     <span className={s.subLabel}>가로 (W)</span>
-                    <input className={s.bigInput} type="number" min="1" max="200" step="1" value={roomW} onChange={e => setRoomW(parseFloat(e.target.value) || 1)} />
+                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="200" step="1" value={roomW} onChange={e => setRoomW(parseFloat(e.target.value) || 1)} />
                   </div>
                   <div>
                     <span className={s.subLabel}>세로 (D)</span>
-                    <input className={s.bigInput} type="number" min="1" max="200" step="1" value={roomD} onChange={e => setRoomD(parseFloat(e.target.value) || 1)} />
+                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="200" step="1" value={roomD} onChange={e => setRoomD(parseFloat(e.target.value) || 1)} />
                   </div>
                   <div>
                     <span className={s.subLabel}>높이 (H)</span>
-                    <input className={s.bigInput} type="number" min="1" max="50" step="0.5" value={roomH} onChange={e => setRoomH(parseFloat(e.target.value) || 1)} />
+                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="50" step="0.5" value={roomH} onChange={e => setRoomH(parseFloat(e.target.value) || 1)} />
                   </div>
                 </div>
               </div>

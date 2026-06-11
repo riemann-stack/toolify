@@ -356,7 +356,7 @@ function EraToADTab() {
       <div className={styles.fieldRow}>
         <label className={styles.fieldLabel}>{inputLabel}</label>
         <input
-          type="number" min={1} className={styles.numInput}
+          type="number" inputMode="decimal" min={1} className={styles.numInput}
           value={yearStr} onChange={e => setYearStr(e.target.value)}
           placeholder={placeholder}
         />
@@ -411,7 +411,7 @@ function ADToEraTab() {
     <div className={styles.section}>
       <div className={styles.bceRow}>
         <input
-          type="number" min={1} className={styles.numInputWide}
+          type="number" inputMode="decimal" min={1} className={styles.numInputWide}
           value={yearStr} onChange={e => setYearStr(e.target.value)}
           placeholder="연도 입력 (예: 1446)"
         />

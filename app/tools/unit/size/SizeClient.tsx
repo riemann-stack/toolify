@@ -355,7 +355,7 @@ function MeasureField({ label, unit, value, onChange, placeholder }: {
       <span className={styles.measureLabel}>{label}</span>
       <div className={styles.measureInputWrap}>
         <input
-          type="number"
+          type="number" inputMode="decimal"
           className={`${styles.measureInput} ${value ? styles.measureInputFilled : ''}`}
           value={value}
           onChange={e => onChange(e.target.value)}

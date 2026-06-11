@@ -205,7 +205,7 @@ export default function SavingsClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>월 실수령액</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={income}
                   onChange={(e) => setIncome(e.target.value)}
@@ -218,7 +218,7 @@ export default function SavingsClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>부수입 (임대·배당·부업)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={extraIncome}
                   onChange={(e) => setExtraIncome(e.target.value)}
@@ -239,7 +239,7 @@ export default function SavingsClient() {
                     <span className={s.expenseDesc}>{e.desc}</span>
                   </label>
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     value={expenses[e.id]}
                     onChange={(ev) => updateExpense(e.id, ev.target.value)}
@@ -264,7 +264,7 @@ export default function SavingsClient() {
                     <span className={s.expenseDesc}>{e.desc}</span>
                   </label>
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     value={expenses[e.id]}
                     onChange={(ev) => updateExpense(e.id, ev.target.value)}
@@ -420,7 +420,7 @@ export default function SavingsClient() {
                     </div>
                     <div className={s.jarInput}>
                       <input
-                        type="number"
+                        type="number" inputMode="decimal"
                         className={s.input}
                         value={jarUser[j.id]}
                         onChange={(e) => updateJar(j.id, e.target.value)}
@@ -478,7 +478,7 @@ export default function SavingsClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>목표 금액 (만원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={goalAmount}
                   onChange={(e) => setGoalAmount(e.target.value)}
@@ -489,7 +489,7 @@ export default function SavingsClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>목표 기간 (년)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={goalYears}
                   onChange={(e) => setGoalYears(e.target.value)}
@@ -507,7 +507,7 @@ export default function SavingsClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>예상 연 수익률 (%)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 className={s.input}
                 value={goalRate}
                 onChange={(e) => setGoalRate(e.target.value)}

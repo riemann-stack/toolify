@@ -510,7 +510,7 @@ export default function ExposureClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>초점거리 (mm)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   min={8}
                   max={400}
                   value={focalLength}

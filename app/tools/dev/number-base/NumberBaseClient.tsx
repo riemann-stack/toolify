@@ -584,7 +584,7 @@ export default function NumberBaseClient() {
               <label className={s.cardLabel}>2의 보수 (음수 표현, {bitWidth}-bit)</label>
             </div>
             <input
-              type="number"
+              type="number" inputMode="decimal"
               className={s.textarea}
               style={{ resize: 'none', minHeight: 'unset', height: 'auto', padding: '12px 16px', fontSize: 18, textAlign: 'center', fontFamily: 'var(--font-mono)' }}
               value={tcInput}
@@ -625,18 +625,18 @@ export default function NumberBaseClient() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
               <div>
                 <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>A (10진수)</span>
-                <input type="number" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opA} onChange={e => setOpA(e.target.value)} />
+                <input type="number" inputMode="decimal" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opA} onChange={e => setOpA(e.target.value)} />
               </div>
               {(op === 'AND' || op === 'OR' || op === 'XOR') && (
                 <div>
                   <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>B (10진수)</span>
-                  <input type="number" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opB} onChange={e => setOpB(e.target.value)} />
+                  <input type="number" inputMode="decimal" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opB} onChange={e => setOpB(e.target.value)} />
                 </div>
               )}
               {(op === 'LSHIFT' || op === 'RSHIFT') && (
                 <div>
                   <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>이동 수 (bits)</span>
-                  <input type="number" min="0" max="32" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opShift} onChange={e => setOpShift(e.target.value)} />
+                  <input type="number" inputMode="decimal" min="0" max="32" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opShift} onChange={e => setOpShift(e.target.value)} />
                 </div>
               )}
             </div>

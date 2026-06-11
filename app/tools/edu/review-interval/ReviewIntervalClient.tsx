@@ -682,11 +682,11 @@ export default function ReviewIntervalClient() {
               </div>
               <div>
                 <span className={s.subLabel}>이전 복습 횟수</span>
-                <input className={s.bigInput} type="number" min="0" max="20" step="1" value={sm2Reps} onChange={e => setSm2Reps(parseInt(e.target.value) || 0)} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0" max="20" step="1" value={sm2Reps} onChange={e => setSm2Reps(parseInt(e.target.value) || 0)} />
               </div>
               <div>
                 <span className={s.subLabel}>이전 간격 (일)</span>
-                <input className={s.bigInput} type="number" min="1" max="365" step="1" value={sm2Interval} onChange={e => setSm2Interval(e.target.value)} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="365" step="1" value={sm2Interval} onChange={e => setSm2Interval(e.target.value)} />
               </div>
             </div>
             <div style={{ marginTop: 14 }}>
@@ -960,15 +960,15 @@ export default function ReviewIntervalClient() {
               </div>
               <div>
                 <span className={s.subLabel}>학습 항목 수 (단어/페이지/챕터 등)</span>
-                <input className={s.bigInput} type="number" min="1" step="1" value={totalItems} onChange={e => setTotalItems(e.target.value)} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="1" step="1" value={totalItems} onChange={e => setTotalItems(e.target.value)} />
               </div>
               <div>
                 <span className={s.subLabel}>하루 공부 가능 시간 (시간)</span>
-                <input className={s.bigInput} type="number" min="0.5" max="16" step="0.5" value={dailyHours} onChange={e => setDailyHours(e.target.value)} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="16" step="0.5" value={dailyHours} onChange={e => setDailyHours(e.target.value)} />
               </div>
               <div>
                 <span className={s.subLabel}>항목당 평균 학습 시간 (분)</span>
-                <input className={s.bigInput} type="number" min="0.5" max="60" step="0.5" value={minPerItem} onChange={e => setMinPerItem(e.target.value)} />
+                <input className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="60" step="0.5" value={minPerItem} onChange={e => setMinPerItem(e.target.value)} />
               </div>
             </div>
           </div>

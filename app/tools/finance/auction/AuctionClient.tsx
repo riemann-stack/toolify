@@ -180,7 +180,7 @@ export default function AuctionClient() {
         <div className={s.field}>
           <label className={s.fieldLabel}>낙찰가 (만원)</label>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             className={s.input}
             value={priceMan}
             onChange={(e) => setPriceMan(e.target.value)}
@@ -285,7 +285,7 @@ export default function AuctionClient() {
                         <div className={s.autoValue}>{fmt(value, 0)} 만원</div>
                       ) : (
                         <input
-                          type="number"
+                          type="number" inputMode="decimal"
                           className={s.input}
                           value={costs[c.id]}
                           onChange={(e) => updateCost(c.id, e.target.value)}
@@ -314,7 +314,7 @@ export default function AuctionClient() {
                     <span className={s.costDesc}>{c.desc}</span>
                   </label>
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     className={s.input}
                     value={costs[c.id]}
                     onChange={(e) => updateCost(c.id, e.target.value)}
@@ -415,7 +415,7 @@ export default function AuctionClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>대출 금리 (연 %)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={ratePct}
                   onChange={(e) => setRatePct(e.target.value)}
@@ -427,7 +427,7 @@ export default function AuctionClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>대출 기간 (년)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={years}
                   onChange={(e) => setYears(e.target.value)}
@@ -442,7 +442,7 @@ export default function AuctionClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>본인 연소득 (만원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={income}
                   onChange={(e) => setIncome(e.target.value)}
@@ -454,7 +454,7 @@ export default function AuctionClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>기존 월 상환액 (만원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={existingMonth}
                   onChange={(e) => setExistingMonth(e.target.value)}
@@ -464,7 +464,7 @@ export default function AuctionClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel}>보유 현금 (만원)</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   className={s.input}
                   value={cashOwn}
                   onChange={(e) => setCashOwn(e.target.value)}

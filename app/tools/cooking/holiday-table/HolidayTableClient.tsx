@@ -321,7 +321,7 @@ export default function HolidayTableClient() {
                       </div>
                       <div className={s.itemPriceRow}>
                         <input
-                          type="number"
+                          type="number" inputMode="decimal"
                           className={s.itemPriceInput}
                           value={currentPrice}
                           onChange={e => onPriceEdit(r.item.id, e.target.value)}

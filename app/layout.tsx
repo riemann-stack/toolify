@@ -6,7 +6,7 @@ import Footer from '@/components/Footer'
 import SiteJsonLd from '@/components/SiteJsonLd'
 import AutoAds from '@/components/AutoAds'
 
-// 모바일 뷰포트 + 다크 테마 시각화 (status bar / 모바일 브라우저 UI)
+// 모바일 뷰포트 + 라이트 테마 시각화 (status bar / 모바일 브라우저 UI)
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
