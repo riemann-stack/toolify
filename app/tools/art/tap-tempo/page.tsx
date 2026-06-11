@@ -105,20 +105,24 @@ export default function TapTempoPage() {
 
         {/* ── 3. 장르별 BPM ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            장르별 대표 BPM 범위
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            장르별 대표 BPM 범위 — 측정값 검증용
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            탭으로 측정한 BPM이 장르의 통상 범위에서 크게 벗어난다면(특히 절반·2배) 강박을 잘못 잡았을 가능성이 큽니다.
+            장르별 곡 느낌과 함께 탭 기준을 어디에 두면 좋은지 정리했습니다.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { genre: '느린 발라드',    bpm: '60~75',    color: '#0891B2', desc: '감성 발라드, R&B 슬로잼' },
-              { genre: '팝 발라드',      bpm: '76~95',    color: '#0891B2', desc: '한국 발라드 표준 템포' },
-              { genre: '댄스팝',         bpm: '96~115',   color: '#0EA5E9', desc: '미드템포 팝, K-POP 발라드' },
-              { genre: '일반 팝·록',     bpm: '116~128',  color: '#0EA5E9', desc: '아이돌 댄스곡, 밴드 록' },
-              { genre: 'EDM·하우스',     bpm: '122~132',  color: '#EA580C', desc: '클럽 하우스, 빅룸 EDM' },
-              { genre: '디스코·펑크',    bpm: '110~130',  color: '#EA580C', desc: '레트로 디스코, 재즈 펑크' },
-              { genre: '힙합·트랩',      bpm: '130~170',  color: '#DB2777', desc: '트랩(하프타임 체감 65~85)' },
-              { genre: '드럼앤베이스',   bpm: '170~180',  color: '#DB2777', desc: 'DnB, 정글 빠른 비트' },
-              { genre: '하드스타일·스피드코어', bpm: '150~',  color: '#9333EA', desc: '하드댄스, 스피드코어' },
+              { genre: '느린 발라드',    bpm: '60~75',    color: '#0891B2', desc: '감성 발라드, R&B 슬로잼 — 탭 간격이 1초 안팎으로 길어 8분음표를 따라가면 2배로 측정됨. 강박에만 탭' },
+              { genre: '팝 발라드',      bpm: '76~95',    color: '#0891B2', desc: '한국 발라드 표준 템포 — 보컬 멜로디 대신 드럼 강박 기준으로 탭' },
+              { genre: '댄스팝',         bpm: '96~115',   color: '#0EA5E9', desc: '미드템포 팝, K-POP 발라드 — 측정값이 범위의 2배면 8분음표를 탭한 것' },
+              { genre: '일반 팝·록',     bpm: '116~128',  color: '#0EA5E9', desc: '아이돌 댄스곡, 밴드 록 — 킥·스네어가 또렷해 측정이 쉬운 구간' },
+              { genre: 'EDM·하우스',     bpm: '122~132',  color: '#EA580C', desc: '클럽 하우스, 빅룸 EDM — 매 박마다 들어가는 킥에 맞춰 탭하면 정확' },
+              { genre: '디스코·펑크',    bpm: '110~130',  color: '#EA580C', desc: '레트로 디스코, 재즈 펑크 — 하이햇 대신 킥·기타 스트로크 기준' },
+              { genre: '힙합·트랩',      bpm: '130~170',  color: '#DB2777', desc: '트랩(하프타임 체감 65~85) — 측정값이 절반으로 나오면 2배 해서 확인' },
+              { genre: '드럼앤베이스',   bpm: '170~180',  color: '#DB2777', desc: 'DnB, 정글 빠른 비트 — 드럼이 절반 속도로 들리는 하프타임 장르' },
+              { genre: '하드스타일·스피드코어', bpm: '150~',  color: '#9333EA', desc: '하드댄스, 스피드코어 — 너무 빠르면 강박만 세어 측정 후 2배' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: item.color, fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>{item.genre}</p>
@@ -127,6 +131,10 @@ export default function TapTempoPage() {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            측정한 BPM으로 딜레이·리버브 ms 값을 설정하려면 <Link href="/tools/art/bpm" style={{ color: 'var(--accent)', fontWeight: 600 }}>BPM 딜레이 계산기</Link>를 이용하세요 —
+            위 측정 결과의 &lsquo;🎛️ 이 BPM으로 딜레이 계산&rsquo; 버튼을 누르면 측정값이 자동으로 넘어갑니다. 장르별 4분음표·점8분음표 딜레이 ms 표도 그 페이지에 있습니다.
+          </p>
         </div>
 
         {/* ── 4. 사용 팁 ── */}

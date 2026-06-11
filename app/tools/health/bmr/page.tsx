@@ -354,7 +354,7 @@ export default function BmrPage() {
               {
                 title: '체중 감량 (다이어트)',
                 color: '#0891B2',
-                content: 'TDEE에서 300~500kcal를 줄이면 주당 0.3~0.5kg 감량이 가능합니다. 하루 500kcal 부족 시 1주일에 약 0.5kg 감량 효과가 있습니다. 1,200kcal(여성) / 1,500kcal(남성) 이하로는 내리지 않는 것을 권장합니다.',
+                content: 'TDEE보다 적게 섭취해 칼로리 적자를 만드는 것이 감량의 기본 원리입니다. 일반적으로 TDEE의 10~20%(약 300~500kcal) 적자가 무난하며, 1,200kcal(여성) / 1,500kcal(남성) 이하로는 내리지 않는 것을 권장합니다.',
               },
               {
                 title: '체중 유지',
@@ -373,6 +373,9 @@ export default function BmrPage() {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
+            ⓘ 하루 적자별 주당 감량 페이스, 목표 체중까지의 구체적 기간 설계와 정체기·요요 방지 전략은 <Link href="/tools/health/weightloss" style={{ color: 'var(--accent)' }}>체중 감량 기간 계산기</Link>에서 확인하세요.
+          </p>
         </section>
 
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}

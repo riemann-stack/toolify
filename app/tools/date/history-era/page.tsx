@@ -76,7 +76,7 @@ const FAQ_LD = [
               },
               {
                 q: '60갑자가 60년마다 정말 같이 반복되나요?',
-                a: '네, 정확히 60년. 10천간 + 12지지의 LCM(10, 12) = 60. 음양 유효성 검증 필수. 환갑(60세) = 본인 출생 간지가 다시 돌아오는 해입니다. 예: 2024 = 갑진년(용) / 2025 = 을사년(뱀) / 2026 = 병오년(말) / ... / 2084 = 갑자년 (다시 시작). 본 도구 상단 [📅 오늘은 무슨 해?] 카드로 매년 자동 표시.',
+                a: '네, 정확히 60년입니다. 10천간과 12지지의 최소공배수 LCM(10, 12) = 60이기 때문입니다. 예를 들어 2026년 = 병오년(말띠)이고, 60년 뒤인 2086년에 다시 병오년이 됩니다. 환갑(60세)은 본인 출생 간지가 다시 돌아오는 해입니다. 본 도구 상단 [📅 오늘은 무슨 해?] 카드로 매년 자동 표시되며, 천간·지지 구성과 연도별 간지·띠 일람은 양력 음력 변환기(/tools/date/lunar)를 참고하세요.',
               },
               {
                 q: '한국에서 어떤 기년법을 어떻게 쓰나요?',
@@ -175,26 +175,11 @@ export default function HistoryEraPage() {
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자(六十甲子)란?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            10개의 천간(甲~癸)과 12개의 지지(子~亥)를 순서대로 짝지어 만드는 60개의 간지 조합입니다.
-            최소공배수 LCM(10, 12) = 60이기 때문에 60년마다 같은 간지가 반복됩니다.
-            천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술), 음이면 음이어야 하므로 유효 조합은 60개입니다.
+            10개의 천간(甲~癸)과 12개의 지지(子~亥)를 순서대로 짝지어 60년마다 반복되는 연도 표기입니다 (예: 2026년 = 병오년).
+            천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술), 음이면 음이어야 하므로 갑축(甲丑) 같은 조합은 존재하지 않습니다 — 본 도구의 [간지 변환] 탭이 이를 자동 검증합니다.
+            천간·지지의 전체 구성과 띠·환갑 등 60갑자 순환 원리는{' '}
+            <Link href="/tools/date/lunar" style={{ color: 'var(--accent)', fontWeight: 600 }}>양력 음력 변환기</Link>에서 자세히 다룹니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px', marginBottom: '16px' }}>
-            {[
-              { stem:'갑(甲)', branch:'자(子)', year:2024, animal:'용 → 쥐 → ... 쥐' },
-              { stem:'을(乙)', branch:'사(巳)', year:2025, animal:'뱀의 해' },
-              { stem:'병(丙)', branch:'오(午)', year:2026, animal:'말의 해' },
-              { stem:'정(丁)', branch:'미(未)', year:2027, animal:'양의 해' },
-              { stem:'무(戊)', branch:'신(申)', year:2028, animal:'원숭이 해' },
-              { stem:'기(己)', branch:'유(酉)', year:2029, animal:'닭의 해' },
-            ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: '#DB2777', marginBottom: '4px' }}>{item.year}</p>
-                <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{item.stem}{item.branch}년</p>
-                <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{item.animal}</p>
-              </div>
-            ))}
-          </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
             <p style={{ fontSize: '12px', color: '#DB2777', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>간지 공식</p>
             <p style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.7 }}>

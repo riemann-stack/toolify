@@ -130,39 +130,48 @@ export default async function BpmPage({
           </p>
         </div>
 
-        {/* ── 2. 주요 BPM별 딜레이 타임 표 ── */}
+        {/* ── 2. 장르별 딜레이 설정 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            장르별 BPM 및 4분음표 딜레이 타임 참고표
+          <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            장르별 딜레이 타임 설정 참고표
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            장르의 통상 BPM 범위를 기준으로 자주 쓰는 딜레이 타임을 미리 계산한 표입니다(60,000 ÷ BPM × 배수).
+            4분음표는 비트와 딱 맞는 기본 딜레이, 점8분음표(×0.75)는 핑퐁·슬랩백 딜레이에서 리듬감을 줄 때 많이 쓰는 설정입니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['장르', 'BPM 범위', '4분음표', '8분음표', '16분음표'].map((h, i) => (
+                  {['장르', 'BPM 범위', '4분음표 딜레이', '점8분음표 딜레이', '8분음표 딜레이'].map((h, i) => (
                     <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['발라드·슬로우', '60~70 BPM', '857~1000ms', '429~500ms', '214~250ms', '#0891B2'],
-                  ['팝·R&B',        '80~100 BPM', '600~750ms',  '300~375ms', '150~188ms', '#059669'],
-                  ['댄스·팝',       '120 BPM',    '500ms',      '250ms',     '125ms',     '#0EA5E9'],
-                  ['UK 하우스',     '128~130 BPM','461~469ms',  '231~234ms', '115~117ms', '#EA580C'],
-                  ['드럼앤베이스',  '160~180 BPM','333~375ms',  '167~188ms', '83~94ms',   '#DB2777'],
-                ].map(([genre, bpmRange, q, e, s, color], i) => (
+                  ['발라드·슬로우', '60~70 BPM', '857~1000ms', '643~750ms', '429~500ms', '#0891B2'],
+                  ['팝·R&B',        '80~100 BPM', '600~750ms',  '450~563ms', '300~375ms', '#059669'],
+                  ['댄스·팝',       '120 BPM',    '500ms',      '375ms',     '250ms',     '#0EA5E9'],
+                  ['UK 하우스',     '128~130 BPM','461~469ms',  '346~352ms', '231~234ms', '#EA580C'],
+                  ['드럼앤베이스',  '160~180 BPM','333~375ms',  '250~281ms', '167~188ms', '#DB2777'],
+                ].map(([genre, bpmRange, q, d, e, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{genre}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{bpmRange}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 700 }}>{q}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{d}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{e}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{s}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+            점8분음표 딜레이는 8분음표 × 1.5 = 4분음표 × 0.75로 계산합니다(예: 120 BPM → 250 × 1.5 = 375ms).
+            내 곡의 BPM을 모르면 <Link href="/tools/art/tap-tempo" style={{ color: 'var(--accent)', fontWeight: 600 }}>탭 템포 계산기</Link>에서 박자에 맞춰 탭해 측정하세요 —
+            측정 결과의 &lsquo;이 BPM으로 딜레이 계산&rsquo; 버튼을 누르면 이 계산기에 자동 입력됩니다. 장르별 BPM 구분과 측정 요령도 그 페이지에서 다룹니다.
+          </p>
         </div>
 
         {/* ── 3. DAW 설정 팁 ── */}

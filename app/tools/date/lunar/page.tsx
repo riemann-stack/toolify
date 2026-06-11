@@ -145,8 +145,13 @@ export default function LunarPage() {
         {/* 3. 60갑자 — 천간 · 지지 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자 — 천간(10) × 지지(12)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             동아시아 전통 연도 표기. 천간 10개와 지지 12개를 순차로 조합해 60년마다 한 번 순환합니다 — 그래서 만 60세 환갑(還甲)은 「자기 출생 간지로 돌아오는」 의미.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            주기가 60년인 이유는 <strong style={{ color: 'var(--text)' }}>10과 12의 최소공배수가 60</strong>이기 때문입니다.
+            또한 천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술)끼리만 짝지어지므로 120개가 아닌 <strong style={{ color: 'var(--text)' }}>60개 조합</strong>만 존재합니다 — 갑축(甲丑)·을자(乙子) 같은 간지는 없습니다.
+            천간의 오행·색과 지지의 동물이 결합해 「청룡(갑진)」 「붉은 말(병오)」 같은 별칭이 만들어집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 12, padding: '14px 18px' }}>

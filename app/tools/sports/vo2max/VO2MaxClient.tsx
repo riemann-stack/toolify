@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './vo2max.module.css'
@@ -364,6 +365,8 @@ export default function VO2MaxClient() {
           </div>
           <p className={s.fieldHint}>
             ⚠️ Riegel·Daniels 공식 기반 추정 — 실제 페이스는 훈련량·환경·전략에 따라 달라집니다.
+            실제 레이스 기록 기반 정밀 예측(3공식 평균·환경/연령 보정·목표 역산)은{' '}
+            <Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent)' }}>마라톤 기록 계산기</Link>에서 확인하세요.
           </p>
         </div>
       )}
