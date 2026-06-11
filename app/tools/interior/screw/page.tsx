@@ -99,7 +99,8 @@ export default function ScrewPage() {
       {/* 1. 나사 종류 가이드 */}
       <h2 style={sectionTitle}>🔩 7가지 나사 종류 가이드</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div className="tableScroll">
+        <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th style={headCell}>종류</th>
@@ -117,6 +118,7 @@ export default function ScrewPage() {
             <tr><td style={cell}><strong>🧱 석고피스</strong></td><td style={cell}>전용</td><td style={cell}>석고보드 시공 (벽체·천장)</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* 2. 탭드릴 vs 관통홀 vs 파일럿홀 */}
@@ -141,7 +143,8 @@ export default function ScrewPage() {
         결합률(Thread Engagement) = 나사산이 모재와 얼마나 깊게 맞물리는지. 높을수록 강한 결합·낮을수록 분리 쉬움.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div className="tableScroll">
+        <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th style={headCell}>결합률</th>
@@ -171,6 +174,7 @@ export default function ScrewPage() {
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
         💡 100%에 가까울수록 탭이 부러질 위험 ↑ — 표준 75%가 강도와 가공성의 최적 균형. 본 도구의 결합률 옵션 활용.
@@ -199,7 +203,8 @@ export default function ScrewPage() {
         한국 가정에서 자주 쓰이는 셀프 설치 시나리오와 추천 규격입니다. 벽재(석고/콘크리트/목재)에 따라 칼블록·앵커 필요 여부가 다릅니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div className="tableScroll">
+        <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th style={headCell}>시나리오</th>
@@ -218,6 +223,7 @@ export default function ScrewPage() {
             <tr><td style={cell}>🔧 일반 기계·DIY</td><td style={cell}>금속</td><td style={cell}>M5~M8 표준 미터 (KS 8.8 등급)</td><td style={cell}>M6 가장 흔함 (탭드릴 5.0mm)</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
         💡 한국 아파트 벽은 대부분 <strong style={{ color: 'var(--text)' }}>콘크리트(외벽) + 석고보드(내벽 마감)</strong> 조합. 무거운 물건은 반드시 스터드 또는 콘크리트에 고정. 석고만으로는 5kg 이내가 안전선입니다.

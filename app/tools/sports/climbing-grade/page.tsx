@@ -98,7 +98,7 @@ export default function ClimbingGradePage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
             V-scale과 Font 사이에는 공인된 단일 표준이 없으며, 아래는 널리 쓰이는 <strong style={{ color: 'var(--text)' }}>통용 근사 변환</strong>입니다. (위 변환기와 동일한 데이터)
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -132,7 +132,7 @@ export default function ClimbingGradePage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
             미국 YDS, 유럽 French(스포츠 표준), 중부 유럽 UIAA의 <strong style={{ color: 'var(--text)' }}>통용 근사 변환</strong>입니다. UIAA는 특히 근사적입니다. (위 변환기와 동일한 데이터)
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>

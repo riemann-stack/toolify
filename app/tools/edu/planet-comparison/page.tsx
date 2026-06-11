@@ -94,7 +94,7 @@ export default function PlanetComparisonPage() {
             <div><span style={{ color: 'var(--muted)' }}>몸무게(W)</span> = <span style={{ color: 'var(--muted)' }}>질량(m)</span> × <span style={{ color: 'var(--muted)' }}>중력 가속도(g)</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 질량은 행성에 가도 변하지 않음 (질량 ≠ 몸무게)</div>
           </div>
-          <div style={{ overflowX: 'auto', marginTop: 12 }}>
+          <div className="tableScroll" style={{ marginTop: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -227,7 +227,7 @@ export default function PlanetComparisonPage() {
           <h2 style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             각 행성 표면 온도
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>

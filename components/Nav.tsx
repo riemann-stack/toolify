@@ -39,7 +39,8 @@ function useBodyScrollLock(isLocked: boolean) {
       document.body.style.top          = original.top
       document.body.style.width        = original.width
       document.body.style.paddingRight = original.paddingRight
-      window.scrollTo(0, scrollY)
+      // behavior 미지정 시 html의 scroll-behavior:smooth를 따라 복원이 애니메이션됨 — 즉시 복원 강제
+      window.scrollTo({ top: scrollY, behavior: 'instant' })
     }
   }, [isLocked])
 }

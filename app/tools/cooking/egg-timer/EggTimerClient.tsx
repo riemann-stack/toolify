@@ -36,6 +36,8 @@ export default function EggTimerClient() {
   const audioCtxRef = useRef<AudioContext | null>(null)
   const lastTickRef = useRef<number>(0)
   const isInstapotRunRef = useRef(false)  // 타이머 시작 시 인스턴트팟 여부 고정 (5-5-5 자연감압 단계)
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null)  // 화면 자동 잠금 방지
+  const origTitleRef = useRef<string | null>(null)           // 완료 시 탭 제목 원복용
 
   /* localStorage 복원 */
   useEffect(() => {
@@ -104,6 +106,59 @@ export default function EggTimerClient() {
     }
   }
 
+  /* 진동 — iOS Safari는 미지원이라 자동 무시됨 */
+  const vibrate = () => {
+    try {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate([300, 100, 300, 100, 300])
+      }
+    } catch { /* ignore */ }
+  }
+
+  /* Wake Lock — 조리 중 화면 자동 잠금 방지 (미지원 브라우저·저전력 모드는 무시) */
+  const requestWakeLock = async () => {
+    try {
+      if (typeof navigator === 'undefined' || !('wakeLock' in navigator)) return
+      if (wakeLockRef.current && !wakeLockRef.current.released) return
+      wakeLockRef.current = await navigator.wakeLock.request('screen')
+    } catch { /* ignore */ }
+  }
+  const releaseWakeLock = () => {
+    try { wakeLockRef.current?.release() } catch { /* ignore */ }
+    wakeLockRef.current = null
+  }
+
+  /* 완료 시 탭 제목 변경 — 다른 탭/홈 화면에 있던 사용자에게 표시 */
+  const flashTitle = () => {
+    if (typeof document === 'undefined') return
+    if (origTitleRef.current === null) origTitleRef.current = document.title
+    document.title = '🥚 완료! — ' + origTitleRef.current
+  }
+  const restoreTitle = () => {
+    if (typeof document === 'undefined' || origTitleRef.current === null) return
+    document.title = origTitleRef.current
+    origTitleRef.current = null
+  }
+
+  /* 잠금 화면·다른 탭에서 복귀 시: Wake Lock은 자동 해제되므로 재획득 + 제목 원복 */
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState !== 'visible') return
+      restoreTitle()
+      if (running) requestWakeLock()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [running])
+
+  /* 언마운트 — Wake Lock 해제 + 제목 원복 */
+  useEffect(() => {
+    return () => {
+      releaseWakeLock()
+      restoreTitle()
+    }
+  }, [])
+
   /* 타이머 동작 */
   useEffect(() => {
     if (!running) {
@@ -124,6 +179,8 @@ export default function EggTimerClient() {
           setRunning(false)
           if (phase === 'cooking') {
             beep(3, 880, 0.25)
+            vibrate()
+            flashTitle()
             if (isInstapotRunRef.current) {
               // 인스턴트팟 5-5-5: 압력 5분 → 자연 감압 5분 → 얼음물 5분
               notify('🥚 압력 조리 완료!', '자연 감압 5분이 진행됩니다')
@@ -143,6 +200,8 @@ export default function EggTimerClient() {
             }
           } else if (phase === 'releasing') {
             beep(3, 770, 0.25)
+            vibrate()
+            flashTitle()
             notify('♨️ 자연 감압 완료', '이제 얼음물에 5분 식히세요')
             setTimeout(() => {
               setPhase('cooling')
@@ -151,7 +210,10 @@ export default function EggTimerClient() {
             }, 800)
           } else {
             beep(3, 660, 0.25)
+            vibrate()
+            flashTitle()
             notify('❄️ 식히기 완료', '이제 껍질을 벗기세요')
+            releaseWakeLock()
             setPhase('idle')
           }
           return 0
@@ -177,9 +239,11 @@ export default function EggTimerClient() {
   /* 타이머 컨트롤 */
   const startTimer = () => {
     isInstapotRunRef.current = inputs.methodId === 'instapot'
+    restoreTitle()
     setPhase('cooking')
     setRemaining(result.totalSec)
     setRunning(true)
+    requestWakeLock()
     const ctx = getAudio()
     if (ctx && ctx.state === 'suspended') ctx.resume()
     // 알림 권한 요청
@@ -189,9 +253,13 @@ export default function EggTimerClient() {
       }
     }
   }
-  const pauseTimer = () => setRunning(false)
+  const pauseTimer = () => {
+    setRunning(false)
+    releaseWakeLock()
+  }
   const resumeTimer = () => {
     setRunning(true)
+    requestWakeLock()
     const ctx = getAudio()
     if (ctx && ctx.state === 'suspended') ctx.resume()
   }
@@ -199,6 +267,8 @@ export default function EggTimerClient() {
     setRunning(false)
     setRemaining(0)
     setPhase('idle')
+    releaseWakeLock()
+    restoreTitle()
   }
 
   /* 완료 시각 — now+초를 분 단위 시계로. 타이머 진행 중에는 now+remaining이라 값이 밀리지 않음 */

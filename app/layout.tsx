@@ -81,6 +81,11 @@ export default function RootLayout({
         {/* 폰트 CDN preconnect — fonts.googleapis CSS + fonts.gstatic 폰트 파일 모두 단축 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* 폰트 CSS — HTML 파싱 시점에 발견되도록 <link>로 로드 (globals.css @import 체인 대체) */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        />
 
         {/* Google Analytics */}
         <Script

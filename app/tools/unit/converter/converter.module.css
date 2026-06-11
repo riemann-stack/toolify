@@ -107,6 +107,9 @@
   cursor: pointer;
   min-width: 130px;
 }
+@media (max-width: 640px) {
+  .unitSelect { min-height: 48px; }
+}
 
 /* ── 결과 그리드 ── */
 .resultGrid {

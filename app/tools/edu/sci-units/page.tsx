@@ -82,7 +82,7 @@ export default function SciUnitsPage() {
         {/* 2. SI 접두어 표 */}
         <section>
           <h2 style={h2}>SI 접두어 (지수 ↔ 기호)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -174,7 +174,7 @@ export default function SciUnitsPage() {
         {/* 3-2. 물리 상수표 (계산기 '물리 상수표' 탭과 동일 데이터) */}
         <section>
           <h2 style={h2}>주요 물리 상수표 (CODATA 2022)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
