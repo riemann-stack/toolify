@@ -139,9 +139,9 @@ export default function FormationPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>인원</th>
-                    <th style={headCell}>추천 포메이션</th>
-                    <th style={headCell}>특징·활용</th>
+                    <th scope="col" style={headCell}>인원</th>
+                    <th scope="col" style={headCell}>추천 포메이션</th>
+                    <th scope="col" style={headCell}>특징·활용</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -186,9 +186,9 @@ export default function FormationPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>약어</th>
-                    <th style={headCell}>풀네임 · 역할</th>
-                    <th style={headCell}>대표 선수</th>
+                    <th scope="col" style={headCell}>약어</th>
+                    <th scope="col" style={headCell}>풀네임 · 역할</th>
+                    <th scope="col" style={headCell}>대표 선수</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -220,9 +220,9 @@ export default function FormationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>시대</th>
-                  <th style={headCell}>주류 포메이션</th>
-                  <th style={headCell}>특징</th>
+                  <th scope="col" style={headCell}>시대</th>
+                  <th scope="col" style={headCell}>주류 포메이션</th>
+                  <th scope="col" style={headCell}>특징</th>
                 </tr>
               </thead>
               <tbody>
@@ -268,9 +268,9 @@ export default function FormationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>번호</th>
-                  <th style={headCell}>전통 포지션</th>
-                  <th style={headCell}>대표 선수</th>
+                  <th scope="col" style={headCell}>번호</th>
+                  <th scope="col" style={headCell}>전통 포지션</th>
+                  <th scope="col" style={headCell}>대표 선수</th>
                 </tr>
               </thead>
               <tbody>

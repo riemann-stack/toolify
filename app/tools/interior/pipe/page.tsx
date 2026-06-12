@@ -178,8 +178,8 @@ export default function PipePage() {
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ textAlign: 'left', padding: '6px 0', color: 'var(--muted)', fontSize: 11 }}>호칭</th>
-                <th style={{ textAlign: 'right', padding: '6px 0', color: 'var(--muted)', fontSize: 11 }}>권장 단열재 두께</th>
+                <th scope="col" style={{ textAlign: 'left', padding: '6px 0', color: 'var(--muted)', fontSize: 11 }}>호칭</th>
+                <th scope="col" style={{ textAlign: 'right', padding: '6px 0', color: 'var(--muted)', fontSize: 11 }}>권장 단열재 두께</th>
               </tr>
             </thead>
             <tbody>

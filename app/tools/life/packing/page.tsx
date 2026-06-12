@@ -103,11 +103,11 @@ export default function PackingPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>일수</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>상의</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>하의</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>속옷·양말</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>총 무게</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>일수</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>상의</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>하의</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>속옷·양말</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>총 무게</th>
               </tr>
             </thead>
             <tbody>
@@ -179,10 +179,10 @@ export default function PackingPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>캐리어</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>크기</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>용량</th>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>적합한 일수</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>캐리어</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>크기</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>용량</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>적합한 일수</th>
               </tr>
             </thead>
             <tbody>

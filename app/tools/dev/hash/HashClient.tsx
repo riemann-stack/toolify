@@ -468,11 +468,11 @@ export default function HashClient() {
             <table className={s.compareTable}>
               <thead>
                 <tr>
-                  <th>알고리즘</th>
-                  <th>출력</th>
-                  <th>안전성</th>
-                  <th>속도</th>
-                  <th>용도</th>
+                  <th scope="col">알고리즘</th>
+                  <th scope="col">출력</th>
+                  <th scope="col">안전성</th>
+                  <th scope="col">속도</th>
+                  <th scope="col">용도</th>
                 </tr>
               </thead>
               <tbody>
@@ -509,9 +509,9 @@ export default function HashClient() {
             <table className={s.compareTable}>
               <thead>
                 <tr>
-                  <th>용도</th>
-                  <th>권장 알고리즘</th>
-                  <th>비고</th>
+                  <th scope="col">용도</th>
+                  <th scope="col">권장 알고리즘</th>
+                  <th scope="col">비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -549,9 +549,9 @@ export default function HashClient() {
             <table className={s.compareTable}>
               <thead>
                 <tr>
-                  <th>알고리즘</th>
-                  <th>macOS / Linux</th>
-                  <th>Windows (PowerShell)</th>
+                  <th scope="col">알고리즘</th>
+                  <th scope="col">macOS / Linux</th>
+                  <th scope="col">Windows (PowerShell)</th>
                 </tr>
               </thead>
               <tbody>

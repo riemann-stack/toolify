@@ -268,11 +268,11 @@ export default function GpaConverterClient() {
           <table className={s.table}>
             <thead>
               <tr>
-                <th>평어</th>
-                <th>백분율</th>
-                <th>한국 4.5</th>
-                <th>한국 4.3</th>
-                <th>미국 4.0</th>
+                <th scope="col">평어</th>
+                <th scope="col">백분율</th>
+                <th scope="col">한국 4.5</th>
+                <th scope="col">한국 4.3</th>
+                <th scope="col">미국 4.0</th>
               </tr>
             </thead>
             <tbody>

@@ -266,7 +266,7 @@ export default function YamlJsonClient() {
                   <button className={s.smBtn} onClick={() => copy('result', convertResult?.result || '')} disabled={!convertResult?.success}>
                     {copiedKey === 'result' ? '✓' : '📋'}
                   </button>
-                  <button className={s.smBtn} onClick={download} disabled={!convertResult?.success}>
+                  <button className={s.smBtn} onClick={download} disabled={!convertResult?.success} aria-label="파일로 저장">
                     💾
                   </button>
                 </div>
@@ -435,7 +435,7 @@ export default function YamlJsonClient() {
             <span className={s.cardLabel}>📊 YAML vs JSON 차이</span>
             <table className={s.compareTable}>
               <thead>
-                <tr><th>항목</th><th>YAML</th><th>JSON</th></tr>
+                <tr><th scope="col">항목</th><th scope="col">YAML</th><th scope="col">JSON</th></tr>
               </thead>
               <tbody>
                 {[

@@ -171,10 +171,10 @@ export default function PaintMixPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주색</th>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>보색</th>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>혼합 결과</th>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주색</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>보색</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>혼합 결과</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
               </tr>
             </thead>
             <tbody>
@@ -211,9 +211,9 @@ export default function PaintMixPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '20%' }}>분류</th>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '32%' }}>색 이름</th>
-                <th style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>비율</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '20%' }}>분류</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, width: '32%' }}>색 이름</th>
+                <th scope="col" style={{ padding: '7px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>비율</th>
               </tr>
             </thead>
             <tbody>

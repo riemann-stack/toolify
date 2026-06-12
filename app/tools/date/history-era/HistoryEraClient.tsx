@@ -429,7 +429,7 @@ function ADToEraTab() {
             <div style={{ overflowX: 'auto', marginTop: '14px' }}>
               <table className={styles.eraTable}>
                 <thead>
-                  <tr><th>연호</th><th>재위·기년</th><th>구분</th></tr>
+                  <tr><th scope="col">연호</th><th scope="col">재위·기년</th><th scope="col">구분</th></tr>
                 </thead>
                 <tbody>
                   {matches.map((m, i) => (

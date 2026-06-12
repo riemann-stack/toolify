@@ -106,9 +106,9 @@ export default function ClimbingGradePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={th}>V등급 (미국)</th>
-                  <th style={th}>Font (퐁텐블로)</th>
-                  <th style={th}>난이도</th>
+                  <th scope="col" style={th}>V등급 (미국)</th>
+                  <th scope="col" style={th}>Font (퐁텐블로)</th>
+                  <th scope="col" style={th}>난이도</th>
                 </tr>
               </thead>
               <tbody>
@@ -140,10 +140,10 @@ export default function ClimbingGradePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={th}>YDS (미국)</th>
-                  <th style={th}>French (프렌치)</th>
-                  <th style={th}>UIAA</th>
-                  <th style={th}>난이도</th>
+                  <th scope="col" style={th}>YDS (미국)</th>
+                  <th scope="col" style={th}>French (프렌치)</th>
+                  <th scope="col" style={th}>UIAA</th>
+                  <th scope="col" style={th}>난이도</th>
                 </tr>
               </thead>
               <tbody>

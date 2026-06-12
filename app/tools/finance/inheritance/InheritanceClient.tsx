@@ -840,13 +840,13 @@ function HeirsTab(p: HeirsTabProps) {
               <table className={s.heirsTable}>
                 <thead>
                   <tr>
-                    <th>상속인</th>
-                    <th>법정 비율</th>
-                    <th>법정 금액</th>
-                    <th>실제 비율 (협의)</th>
-                    <th>실제 금액</th>
-                    <th>세금 부담</th>
-                    <th>세후 취득</th>
+                    <th scope="col">상속인</th>
+                    <th scope="col">법정 비율</th>
+                    <th scope="col">법정 금액</th>
+                    <th scope="col">실제 비율 (협의)</th>
+                    <th scope="col">실제 금액</th>
+                    <th scope="col">세금 부담</th>
+                    <th scope="col">세후 취득</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -896,10 +896,10 @@ function HeirsTab(p: HeirsTabProps) {
               <table className={s.heirsTable} style={{ minWidth: 480 }}>
                 <thead>
                   <tr>
-                    <th>상속인</th>
-                    <th>유류분 비율</th>
-                    <th>유류분 금액</th>
-                    <th>유류분 침해 여부</th>
+                    <th scope="col">상속인</th>
+                    <th scope="col">유류분 비율</th>
+                    <th scope="col">유류분 금액</th>
+                    <th scope="col">유류분 침해 여부</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -940,10 +940,10 @@ function HeirsTab(p: HeirsTabProps) {
           <table className={s.heirsTable} style={{ minWidth: 520 }}>
             <thead>
               <tr>
-                <th>가족 구성</th>
-                <th>배우자</th>
-                <th>자녀</th>
-                <th>부모</th>
+                <th scope="col">가족 구성</th>
+                <th scope="col">배우자</th>
+                <th scope="col">자녀</th>
+                <th scope="col">부모</th>
               </tr>
             </thead>
             <tbody>
@@ -1041,10 +1041,10 @@ function SplitTab(p: SplitTabProps) {
           <table className={s.heirsTable} style={{ minWidth: 560 }}>
             <thead>
               <tr>
-                <th>방식</th>
-                <th>총 증여세</th>
-                <th>1인당 세금</th>
-                <th>세후 수령</th>
+                <th scope="col">방식</th>
+                <th scope="col">총 증여세</th>
+                <th scope="col">1인당 세금</th>
+                <th scope="col">세후 수령</th>
               </tr>
             </thead>
             <tbody>
@@ -1191,7 +1191,7 @@ function CompareTab(p: CompareTabProps) {
         <div className={s.heirsTableWrap}>
           <table className={s.heirsTable} style={{ minWidth: 420 }}>
             <thead>
-              <tr><th>과세표준</th><th>세율</th><th>누진공제</th></tr>
+              <tr><th scope="col">과세표준</th><th scope="col">세율</th><th scope="col">누진공제</th></tr>
             </thead>
             <tbody>
               {TAX_BRACKETS.map((b, i) => (

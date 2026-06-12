@@ -401,9 +401,9 @@ function TradeoffTable({ rec }: { rec: Recommendation }) {
       <table className={styles.tradeoffTable}>
         <thead>
           <tr>
-            <th>측면</th>
+            <th scope="col">측면</th>
             {stacks.map((s, i) => (
-              <th key={s.id}>{i === 0 ? '⭐ ' : ''}{s.label}</th>
+              <th scope="col" key={s.id}>{i === 0 ? '⭐ ' : ''}{s.label}</th>
             ))}
           </tr>
         </thead>
@@ -546,13 +546,13 @@ function GuideTab() {
             <table className={styles.guideTable}>
               <thead>
                 <tr>
-                  <th>스택</th>
-                  <th>속도</th>
-                  <th>비용</th>
-                  <th>학습</th>
-                  <th>한국</th>
-                  <th>월 비용</th>
-                  <th>학습 기간</th>
+                  <th scope="col">스택</th>
+                  <th scope="col">속도</th>
+                  <th scope="col">비용</th>
+                  <th scope="col">학습</th>
+                  <th scope="col">한국</th>
+                  <th scope="col">월 비용</th>
+                  <th scope="col">학습 기간</th>
                 </tr>
               </thead>
               <tbody>

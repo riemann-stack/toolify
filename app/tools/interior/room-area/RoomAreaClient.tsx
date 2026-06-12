@@ -693,7 +693,7 @@ export default function RoomAreaClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.summaryTable}>
                 <thead>
-                  <tr><th>방</th><th>바닥</th><th>벽 (실)</th><th>부피</th></tr>
+                  <tr><th scope="col">방</th><th scope="col">바닥</th><th scope="col">벽 (실)</th><th scope="col">부피</th></tr>
                 </thead>
                 <tbody>
                   {t2RoomCalcs.map(r => (

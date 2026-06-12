@@ -107,7 +107,7 @@ export default function HikingTimePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['공식', '발표', '핵심 가정', '한국 적합도', '특징'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -141,7 +141,7 @@ export default function HikingTimePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['카테고리', '항목', '보정값', '설명'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -173,7 +173,7 @@ export default function HikingTimePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['산', '대표 코스', '거리', '표고차', '난이도', '시간'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>

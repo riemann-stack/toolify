@@ -441,8 +441,8 @@ export default function UvProtectionClient() {
             <table className={s.scenarioTable}>
               <thead>
                 <tr>
-                  <th>조건</th>
-                  <th>화상 위험 시간 (추정 범위)</th>
+                  <th scope="col">조건</th>
+                  <th scope="col">화상 위험 시간 (추정 범위)</th>
                 </tr>
               </thead>
               <tbody>
@@ -605,10 +605,10 @@ export default function UvProtectionClient() {
               <table className={s.refTable} style={{ minWidth: 460 }}>
                 <thead>
                   <tr>
-                    <th>SPF</th>
-                    <th>UVB 차단율</th>
-                    <th>통과율</th>
-                    <th>특성</th>
+                    <th scope="col">SPF</th>
+                    <th scope="col">UVB 차단율</th>
+                    <th scope="col">통과율</th>
+                    <th scope="col">특성</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -636,9 +636,9 @@ export default function UvProtectionClient() {
               <table className={s.refTable} style={{ minWidth: 480 }}>
                 <thead>
                   <tr>
-                    <th>UV 지수</th>
-                    <th>위험도</th>
-                    <th>권장 행동</th>
+                    <th scope="col">UV 지수</th>
+                    <th scope="col">위험도</th>
+                    <th scope="col">권장 행동</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -667,10 +667,10 @@ export default function UvProtectionClient() {
               <table className={s.refTable} style={{ minWidth: 520 }}>
                 <thead>
                   <tr>
-                    <th>피부 타입</th>
-                    <th>한국인 비율</th>
-                    <th>무보호 시간</th>
-                    <th>SPF 30 적용</th>
+                    <th scope="col">피부 타입</th>
+                    <th scope="col">한국인 비율</th>
+                    <th scope="col">무보호 시간</th>
+                    <th scope="col">SPF 30 적용</th>
                   </tr>
                 </thead>
                 <tbody>

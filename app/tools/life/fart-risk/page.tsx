@@ -196,9 +196,9 @@ export default function FartRiskPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626',     fontWeight: 600 }}>🔴 고FODMAP (양·종류 주의)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#059669',     fontWeight: 600 }}>🟢 저FODMAP (대체)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>카테고리</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626',     fontWeight: 600 }}>🔴 고FODMAP (양·종류 주의)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#059669',     fontWeight: 600 }}>🟢 저FODMAP (대체)</th>
                 </tr>
               </thead>
               <tbody>
@@ -239,10 +239,10 @@ export default function FartRiskPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>종류</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>단백질</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>유당</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>가스 위험</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>종류</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>단백질</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>유당</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>가스 위험</th>
                 </tr>
               </thead>
               <tbody>

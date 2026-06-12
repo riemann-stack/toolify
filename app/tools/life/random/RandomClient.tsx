@@ -337,7 +337,7 @@ function RouletteTab() {
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
                 <span className={s.weightPct} style={{ color: '#DC2626' }}>×{it.weight}</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
-                  disabled={items.length <= 2}>×</button>
+                  disabled={items.length <= 2} aria-label="항목 삭제">×</button>
               </div>
             ))}
           </div>
@@ -444,7 +444,7 @@ function WeightedTab() {
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
                 <span className={s.weightPct}>{pct.toFixed(1)}%</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
-                  disabled={items.length <= 2}>×</button>
+                  disabled={items.length <= 2} aria-label={`항목 ${idx + 1} 삭제`}>×</button>
               </div>
             )
           })}
@@ -988,7 +988,7 @@ function FairnessTab() {
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
                 <span className={s.weightPct} style={{ color: '#059669' }}>{expected.toFixed(1)}%</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
-                  disabled={items.length <= 2}>×</button>
+                  disabled={items.length <= 2} aria-label={`항목 ${idx + 1} 삭제`}>×</button>
               </div>
             )
           })}

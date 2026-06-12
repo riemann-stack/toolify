@@ -77,10 +77,10 @@ export default function CleaningPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
               <thead>
                 <tr>
-                  <th style={headCell}>세제</th>
-                  <th style={headCell}>구분</th>
-                  <th style={headCell}>잘 맞는 오염</th>
-                  <th style={headCell}>핵심 주의</th>
+                  <th scope="col" style={headCell}>세제</th>
+                  <th scope="col" style={headCell}>구분</th>
+                  <th scope="col" style={headCell}>잘 맞는 오염</th>
+                  <th scope="col" style={headCell}>핵심 주의</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,9 +126,9 @@ export default function CleaningPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
               <thead>
                 <tr>
-                  <th style={headCell}>재질</th>
-                  <th style={headCell}>피해야 할 세제</th>
-                  <th style={headCell}>권장</th>
+                  <th scope="col" style={headCell}>재질</th>
+                  <th scope="col" style={headCell}>피해야 할 세제</th>
+                  <th scope="col" style={headCell}>권장</th>
                 </tr>
               </thead>
               <tbody>

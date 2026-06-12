@@ -69,7 +69,7 @@ export default function CharCountPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['인코딩', '한글 1자', '영문 1자', '이모지', '주요 사용처'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 4 ? 'left' : 'right'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 4 ? 'left' : 'right'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -160,7 +160,7 @@ export default function CharCountPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['상황', '권장 글자수', '비고'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 1 ? 'right' : 'left'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 1 ? 'right' : 'left'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

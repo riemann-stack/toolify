@@ -102,10 +102,10 @@ export default function HolidayTablePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>구분</th>
-                  <th style={headCell}>시기</th>
-                  <th style={headCell}>대상</th>
-                  <th style={headCell}>특징</th>
+                  <th scope="col" style={headCell}>구분</th>
+                  <th scope="col" style={headCell}>시기</th>
+                  <th scope="col" style={headCell}>대상</th>
+                  <th scope="col" style={headCell}>특징</th>
                 </tr>
               </thead>
               <tbody>

@@ -3,6 +3,8 @@
    BMR 4공식, 정밀 활동, 운동일/휴식일, 목표별 칼로리, 안전 검증
    ────────────────────────────────────────────────────── */
 
+import { KCAL_PER_KG } from '../weightloss/weightLossUtils'
+
 export type Gender = 'male' | 'female'
 
 /* ─── BMR 공식 4종 ─── */
@@ -224,7 +226,7 @@ export function calcGoalCalories(tdee: number, goalId: string): GoalResult | nul
   if (!goal) return null
   const daily = Math.round(tdee * (1 + goal.adjust))
   const dailyDelta = daily - tdee
-  const weeklyChangeKg = (dailyDelta * 7) / 7700  // 1kg 체지방 ≈ 7,700kcal
+  const weeklyChangeKg = (dailyDelta * 7) / KCAL_PER_KG  // 1kg 체지방 ≈ 7,700kcal
   return {
     id: goal.id,
     name: goal.name,

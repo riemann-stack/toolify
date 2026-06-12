@@ -137,9 +137,9 @@ export default function SleepDebtPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>연령</th>
-                  <th style={headCell}>권장 시간</th>
-                  <th style={headCell}>비고</th>
+                  <th scope="col" style={headCell}>연령</th>
+                  <th scope="col" style={headCell}>권장 시간</th>
+                  <th scope="col" style={headCell}>비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -190,9 +190,9 @@ export default function SleepDebtPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>전략</th>
-                  <th style={headCell}>효과</th>
-                  <th style={headCell}>비고</th>
+                  <th scope="col" style={headCell}>전략</th>
+                  <th scope="col" style={headCell}>효과</th>
+                  <th scope="col" style={headCell}>비고</th>
                 </tr>
               </thead>
               <tbody>

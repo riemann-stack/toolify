@@ -677,11 +677,11 @@ export default function IntervalTrainingClient() {
               <table className={s.lapTable}>
                 <thead>
                   <tr>
-                    <th>거리</th>
-                    <th>랩타임</th>
-                    <th>1바퀴(400m)</th>
-                    <th>트랙</th>
-                    <th></th>
+                    <th scope="col">거리</th>
+                    <th scope="col">랩타임</th>
+                    <th scope="col">1바퀴(400m)</th>
+                    <th scope="col">트랙</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -824,9 +824,9 @@ export default function IntervalTrainingClient() {
               <table className={s.recoveryTable}>
                 <thead>
                   <tr>
-                    <th>강도</th>
-                    <th>회복 시간</th>
-                    <th>회복 거리</th>
+                    <th scope="col">강도</th>
+                    <th scope="col">회복 시간</th>
+                    <th scope="col">회복 거리</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -976,9 +976,9 @@ export default function IntervalTrainingClient() {
               <table className={s.recoveryTable}>
                 <thead>
                   <tr>
-                    <th>구간</th>
-                    <th>평균 800m</th>
-                    <th>차이</th>
+                    <th scope="col">구간</th>
+                    <th scope="col">평균 800m</th>
+                    <th scope="col">차이</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1028,7 +1028,7 @@ export default function IntervalTrainingClient() {
               </div>
               <table className={s.yassoTable}>
                 <thead>
-                  <tr><th>주차</th><th>메뉴</th><th>비고</th></tr>
+                  <tr><th scope="col">주차</th><th scope="col">메뉴</th><th scope="col">비고</th></tr>
                 </thead>
                 <tbody>
                   {[
@@ -1165,12 +1165,12 @@ export default function IntervalTrainingClient() {
                 <table className={s.scheduleTable}>
                   <thead>
                     <tr>
-                      <th>주차</th>
-                      <th>메뉴</th>
-                      <th style={{ textAlign: 'right' }}>페이스</th>
-                      <th>회복</th>
-                      <th style={{ textAlign: 'right' }}>총거리</th>
-                      <th style={{ textAlign: 'center' }}>강도</th>
+                      <th scope="col">주차</th>
+                      <th scope="col">메뉴</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>페이스</th>
+                      <th scope="col">회복</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>총거리</th>
+                      <th scope="col" style={{ textAlign: 'center' }}>강도</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -7,7 +7,7 @@ import { todayStr } from '@/lib/date'
 import s from './one-rm.module.css'
 import {
   generateWarmup, suggestRestForIntensity, rpeAdjustReps, adjustLevels,
-  AGE_BAND_LABEL,
+  AGE_BAND_LABEL, BIG3_BASE_LEVELS,
   type Gender, type AgeBand, type WarmupSet,
 } from './oneRMUtils'
 
@@ -26,9 +26,9 @@ interface Exercise {
 }
 
 const EXERCISES: Exercise[] = [
-  { key: 'bench',         emoji: '🏋️', name: '벤치프레스',     levels: { 초보: 0.5,  중급: 1.0,  상급: 1.25, 엘리트: 1.5 } },
-  { key: 'squat',         emoji: '🦵', name: '스쿼트',         levels: { 초보: 0.75, 중급: 1.25, 상급: 1.5,  엘리트: 2.0 } },
-  { key: 'deadlift',      emoji: '💀', name: '데드리프트',     levels: { 초보: 1.0,  중급: 1.5,  상급: 2.0,  엘리트: 2.5 } },
+  { key: 'bench',         emoji: '🏋️', name: '벤치프레스',     levels: BIG3_BASE_LEVELS.bench },
+  { key: 'squat',         emoji: '🦵', name: '스쿼트',         levels: BIG3_BASE_LEVELS.squat },
+  { key: 'deadlift',      emoji: '💀', name: '데드리프트',     levels: BIG3_BASE_LEVELS.deadlift },
   { key: 'ohp',           emoji: '🏋️', name: '오버헤드프레스', levels: { 초보: 0.35, 중급: 0.65, 상급: 0.85, 엘리트: 1.1 } },
   { key: 'row',           emoji: '🔙', name: '바벨로우',       levels: { 초보: 0.5,  중급: 0.9,  상급: 1.15, 엘리트: 1.4 } },
   { key: 'incline-bench', emoji: '📐', name: '인클라인 벤치',  levels: { 초보: 0.4,  중급: 0.85, 상급: 1.05, 엘리트: 1.3 } },
@@ -568,9 +568,9 @@ function CalcTab(props: CalcTabProps) {
             <table className={s.resultTable}>
               <thead>
                 <tr>
-                  <th>공식</th>
-                  <th>1RM 추정값</th>
-                  <th>특징</th>
+                  <th scope="col">공식</th>
+                  <th scope="col">1RM 추정값</th>
+                  <th scope="col">특징</th>
                 </tr>
               </thead>
               <tbody>
@@ -798,10 +798,10 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 <table className={s.resultTable}>
                   <thead>
                     <tr>
-                      <th>세트</th>
-                      <th>중량</th>
-                      <th>반복</th>
-                      <th>휴식</th>
+                      <th scope="col">세트</th>
+                      <th scope="col">중량</th>
+                      <th scope="col">반복</th>
+                      <th scope="col">휴식</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -832,9 +832,9 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
             <table className={s.resultTable}>
               <thead>
                 <tr>
-                  <th>목표 반복수</th>
-                  <th>예상 중량</th>
-                  <th>강도</th>
+                  <th scope="col">목표 반복수</th>
+                  <th scope="col">예상 중량</th>
+                  <th scope="col">강도</th>
                 </tr>
               </thead>
               <tbody>

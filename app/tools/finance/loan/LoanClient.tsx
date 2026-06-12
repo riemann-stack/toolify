@@ -121,14 +121,17 @@ export default function LoanClient() {
 
   const refiResult = useMemo(() => {
     const remaining = parseAmount(refiRemaining) * 10_000
-    if (remaining <= 0) return null
+    const remainingMonths = parseInt(refiRemainMonths, 10) || 0
+    const newMonths = parseInt(refiNewMonths, 10) || 0
+    // 잔여/신규 개월 0이면 비현실적인 월상환액이 표시됨 — 개월 > 0일 때만 계산
+    if (remaining <= 0 || remainingMonths <= 0 || newMonths <= 0) return null
     return simulateRefinance({
       remainingPrincipal: remaining,
       currentRate: parseFloat(refiCurrentRate) || 0,
-      remainingMonths: parseInt(refiRemainMonths, 10) || 0,
+      remainingMonths,
       currentPrepaymentFee: parseAmount(refiPrepayFee) * 10_000,
       newRate: parseFloat(refiNewRate) || 0,
-      newMonths: parseInt(refiNewMonths, 10) || 0,
+      newMonths,
       newOriginationFee: parseAmount(refiOriginFee) * 10_000,
       newOtherFees: parseAmount(refiOtherFees) * 10_000,
     })

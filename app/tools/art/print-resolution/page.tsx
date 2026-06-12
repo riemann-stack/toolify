@@ -111,10 +111,10 @@ export default function PrintResolutionPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={th}>DPI</th>
-                  <th style={th}>용도</th>
-                  <th style={th}>보는 거리</th>
-                  <th style={th}>예시</th>
+                  <th scope="col" style={th}>DPI</th>
+                  <th scope="col" style={th}>용도</th>
+                  <th scope="col" style={th}>보는 거리</th>
+                  <th scope="col" style={th}>예시</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,10 +141,10 @@ export default function PrintResolutionPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={th}>규격</th>
-                  <th style={th}>크기(cm)</th>
-                  <th style={th}>300DPI 픽셀</th>
-                  <th style={th}>화소</th>
+                  <th scope="col" style={th}>규격</th>
+                  <th scope="col" style={th}>크기(cm)</th>
+                  <th scope="col" style={th}>300DPI 픽셀</th>
+                  <th scope="col" style={th}>화소</th>
                 </tr>
               </thead>
               <tbody>

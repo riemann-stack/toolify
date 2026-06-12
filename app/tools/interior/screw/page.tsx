@@ -107,9 +107,9 @@ export default function ScrewPage() {
         <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>종류</th>
-              <th style={headCell}>표준</th>
-              <th style={headCell}>주 사용처</th>
+              <th scope="col" style={headCell}>종류</th>
+              <th scope="col" style={headCell}>표준</th>
+              <th scope="col" style={headCell}>주 사용처</th>
             </tr>
           </thead>
           <tbody>
@@ -151,10 +151,10 @@ export default function ScrewPage() {
         <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>결합률</th>
-              <th style={headCell}>탭드릴 직경</th>
-              <th style={headCell}>특징</th>
-              <th style={headCell}>적합</th>
+              <th scope="col" style={headCell}>결합률</th>
+              <th scope="col" style={headCell}>탭드릴 직경</th>
+              <th scope="col" style={headCell}>특징</th>
+              <th scope="col" style={headCell}>적합</th>
             </tr>
           </thead>
           <tbody>
@@ -211,10 +211,10 @@ export default function ScrewPage() {
         <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>시나리오</th>
-              <th style={headCell}>벽재</th>
-              <th style={headCell}>권장 나사</th>
-              <th style={headCell}>추가 필요</th>
+              <th scope="col" style={headCell}>시나리오</th>
+              <th scope="col" style={headCell}>벽재</th>
+              <th scope="col" style={headCell}>권장 나사</th>
+              <th scope="col" style={headCell}>추가 필요</th>
             </tr>
           </thead>
           <tbody>

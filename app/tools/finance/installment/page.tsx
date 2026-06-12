@@ -119,7 +119,7 @@ export default function CardInstallmentPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['할부 기간', '일반 등급', '우수 등급'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 6px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 6px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

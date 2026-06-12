@@ -370,9 +370,9 @@ export default function PaceClient() {
                     <table className={styles.splitTable}>
                       <thead>
                         <tr>
-                          <th>거리</th>
-                          <th style={{ textAlign: 'right' }}>누적 시간</th>
-                          <th>비고</th>
+                          <th scope="col">거리</th>
+                          <th scope="col" style={{ textAlign: 'right' }}>누적 시간</th>
+                          <th scope="col">비고</th>
                         </tr>
                       </thead>
                       <tbody>

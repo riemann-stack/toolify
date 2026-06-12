@@ -73,7 +73,7 @@ export default function PetPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['실제 나이', '소형견 (~10kg)', '중형견 (10~25kg)', '대형견 (25kg~)'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -97,7 +97,7 @@ export default function PetPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['실제 나이', '사람 나이', '생애 단계'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -157,8 +157,8 @@ export default function PetPage() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                      <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
-                      <th style={{ padding: '6px 8px', textAlign: 'center', color: 'var(--accent)', fontWeight: 600 }}>계수</th>
+                      <th scope="col" style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
+                      <th scope="col" style={{ padding: '6px 8px', textAlign: 'center', color: 'var(--accent)', fontWeight: 600 }}>계수</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -264,10 +264,10 @@ export default function PetPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
-                  <th style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>평균 수명</th>
-                  <th style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>최장수</th>
-                  <th style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>평균 수명</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>최장수</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
                 </tr>
               </thead>
               <tbody>

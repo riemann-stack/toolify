@@ -318,10 +318,10 @@ export default function CustomsClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>품목</th>
-                    <th>관세율</th>
-                    <th>목록통관</th>
-                    <th>HS Code</th>
+                    <th scope="col">품목</th>
+                    <th scope="col">관세율</th>
+                    <th scope="col">목록통관</th>
+                    <th scope="col">HS Code</th>
                   </tr>
                 </thead>
                 <tbody>

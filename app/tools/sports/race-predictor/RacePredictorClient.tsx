@@ -431,7 +431,7 @@ export default function RacePredictorClient() {
                   <>
                     <table className={styles.envTable}>
                       <thead>
-                        <tr><th>요인</th><th>조건</th><th>영향</th><th>추가 시간</th></tr>
+                        <tr><th scope="col">요인</th><th scope="col">조건</th><th scope="col">영향</th><th scope="col">추가 시간</th></tr>
                       </thead>
                       <tbody>
                         {env.factors.map((f, i) => (
@@ -527,12 +527,12 @@ export default function RacePredictorClient() {
                 <table className={styles.predTable}>
                   <thead>
                     <tr>
-                      <th>거리</th>
-                      <th>Riegel</th>
-                      <th>VDOT</th>
-                      <th>Cameron</th>
-                      <th className={styles.avgCol}>평균</th>
-                      <th>페이스</th>
+                      <th scope="col">거리</th>
+                      <th scope="col">Riegel</th>
+                      <th scope="col">VDOT</th>
+                      <th scope="col">Cameron</th>
+                      <th scope="col" className={styles.avgCol}>평균</th>
+                      <th scope="col">페이스</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -626,7 +626,7 @@ export default function RacePredictorClient() {
               <section>
                 <label className={styles.label}>거리별 필요 기록</label>
                 <table className={styles.predTable}>
-                  <thead><tr><th>거리</th><th>필요 기록</th><th>페이스</th></tr></thead>
+                  <thead><tr><th scope="col">거리</th><th scope="col">필요 기록</th><th scope="col">페이스</th></tr></thead>
                   <tbody>
                     {([
                       { key: '5k',   km: 5,        label: '5km',  sec: requiredAbilities['5k'] },
@@ -732,7 +732,7 @@ export default function RacePredictorClient() {
               <div className={styles.tableWrap}>
                 <table className={styles.splitsTable}>
                   <thead>
-                    <tr><th>구간</th><th>페이스/km</th><th>구간 시간</th><th>누적</th></tr>
+                    <tr><th scope="col">구간</th><th scope="col">페이스/km</th><th scope="col">구간 시간</th><th scope="col">누적</th></tr>
                   </thead>
                   <tbody>
                     {splits.map((s, i) => (
@@ -783,7 +783,7 @@ export default function RacePredictorClient() {
           <section className={styles.koreaCard}>
             <p className={styles.gapTitle}>📅 한국 마라톤 시즌 가이드</p>
             <table className={styles.envTable}>
-              <thead><tr><th>시즌</th><th>평균 기온</th><th>평가</th><th>주요 대회</th></tr></thead>
+              <thead><tr><th scope="col">시즌</th><th scope="col">평균 기온</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
               <tbody>
                 {KOREA_SEASONS.map((s) => (
                   <tr key={s.name}>

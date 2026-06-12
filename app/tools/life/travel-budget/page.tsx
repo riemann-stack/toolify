@@ -103,10 +103,10 @@ export default function TravelBudgetPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>도시</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🎒 배낭</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🧳 중간</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🥂 럭셔리</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>도시</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🎒 배낭</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🧳 중간</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>🥂 럭셔리</th>
               </tr>
             </thead>
             <tbody>
@@ -154,11 +154,11 @@ export default function TravelBudgetPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>지역</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>LCC 비수기</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>LCC 성수기</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>풀서비스 비수기</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>풀서비스 성수기</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>지역</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>LCC 비수기</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>LCC 성수기</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>풀서비스 비수기</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>풀서비스 성수기</th>
               </tr>
             </thead>
             <tbody>

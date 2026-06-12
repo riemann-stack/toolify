@@ -133,9 +133,9 @@ export default function ScalePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>도수</th>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>C Major 예시</th>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>기능</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>도수</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>C Major 예시</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>기능</th>
               </tr>
             </thead>
             <tbody>

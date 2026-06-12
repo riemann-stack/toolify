@@ -100,7 +100,7 @@ export default function SizePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['사이트', '사이즈 가이드 위치', '치수 단위', '무료 반품'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 11 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -183,7 +183,7 @@ export default function SizePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['한국', 'US', 'EU', 'UK', '가슴(cm)'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -213,7 +213,7 @@ export default function SizePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['한국', 'US', 'EU', 'UK', '가슴(cm)'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>

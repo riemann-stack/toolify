@@ -387,12 +387,12 @@ export default function RamenClient() {
               <table className={styles.nutritionTable}>
                 <thead>
                   <tr>
-                    <th>토핑</th>
-                    <th>물양 보정</th>
-                    <th>칼로리</th>
-                    <th>단백질</th>
-                    <th>나트륨</th>
-                    <th>투입 타이밍</th>
+                    <th scope="col">토핑</th>
+                    <th scope="col">물양 보정</th>
+                    <th scope="col">칼로리</th>
+                    <th scope="col">단백질</th>
+                    <th scope="col">나트륨</th>
+                    <th scope="col">투입 타이밍</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -419,9 +419,9 @@ export default function RamenClient() {
               <table className={styles.nutritionTable}>
                 <thead>
                   <tr>
-                    <th>익힘</th>
-                    <th>봉지 대비</th>
-                    <th>설명</th>
+                    <th scope="col">익힘</th>
+                    <th scope="col">봉지 대비</th>
+                    <th scope="col">설명</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -522,10 +522,10 @@ export default function RamenClient() {
               <table className={styles.nutritionTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th>1봉</th>
-                    <th>합계 ({count}개{toppings.length > 0 ? '+토핑' : ''})</th>
-                    <th>WHO/권장 대비</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">1봉</th>
+                    <th scope="col">합계 ({count}개{toppings.length > 0 ? '+토핑' : ''})</th>
+                    <th scope="col">WHO/권장 대비</th>
                   </tr>
                 </thead>
                 <tbody>

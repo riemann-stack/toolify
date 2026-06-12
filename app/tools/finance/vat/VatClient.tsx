@@ -343,12 +343,12 @@ export default function VatClient() {
               <table className={styles.quoteTable}>
                 <thead>
                   <tr>
-                    <th>품목</th>
-                    <th>수량</th>
-                    <th>단가</th>
-                    <th>공급가액</th>
-                    <th>부가세</th>
-                    <th>합계</th>
+                    <th scope="col">품목</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">단가</th>
+                    <th scope="col">공급가액</th>
+                    <th scope="col">부가세</th>
+                    <th scope="col">합계</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -624,11 +624,11 @@ export default function VatClient() {
             <table className={styles.invoiceItemTable}>
               <thead>
                 <tr>
-                  <th>품목명</th>
-                  <th>수량</th>
-                  <th>단가</th>
-                  <th>공급가액</th>
-                  <th>세액</th>
+                  <th scope="col">품목명</th>
+                  <th scope="col">수량</th>
+                  <th scope="col">단가</th>
+                  <th scope="col">공급가액</th>
+                  <th scope="col">세액</th>
                 </tr>
               </thead>
               <tbody>

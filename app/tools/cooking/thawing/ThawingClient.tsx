@@ -326,7 +326,7 @@ function ThawTab() {
             <div style={{ overflowX: 'auto', marginTop: 10 }}>
               <table className={s.microCompareTable}>
                 <thead>
-                  <tr><th>출력</th><th>해동 시간</th></tr>
+                  <tr><th scope="col">출력</th><th scope="col">해동 시간</th></tr>
                 </thead>
                 <tbody>
                   {MICROWAVE_POWERS.map(p => (
@@ -704,7 +704,7 @@ function ThermometerBox() {
         <div className={s.cardTitle} style={{ marginBottom: 0 }}>🌡️ 식품 안전 온도 구간</div>
         <span className={s.thermRule}>⚠ 2시간 규칙 · 위험 온도대 2시간 초과 노출 시 폐기 권장</span>
       </div>
-      <svg className={s.thermSvg} viewBox="0 0 560 80" preserveAspectRatio="xMidYMid meet">
+      <svg className={s.thermSvg} viewBox="0 0 560 80" preserveAspectRatio="xMidYMid meet" role="img" aria-label="식품 안전 온도 구간 도해">
         {/* 4구간 바 */}
         {[
           { x: 0,   w: 140, color: '#0284C7', label: '냉동', range: '−24~−18°C' },

@@ -393,10 +393,10 @@ export default function HikingTimeClient() {
             <table className={styles.sunTable}>
               <thead>
                 <tr>
-                  <th>월</th>
-                  <th>서울 (일출/일몰)</th>
-                  <th>부산</th>
-                  <th>제주</th>
+                  <th scope="col">월</th>
+                  <th scope="col">서울 (일출/일몰)</th>
+                  <th scope="col">부산</th>
+                  <th scope="col">제주</th>
                 </tr>
               </thead>
               <tbody>

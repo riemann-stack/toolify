@@ -526,9 +526,9 @@ export default function ChordClient() {
                 <table className={s.matchTable}>
                   <thead>
                     <tr>
-                      <th>코드명</th>
-                      <th>구성음</th>
-                      <th style={{ textAlign: 'right' }}>일치율</th>
+                      <th scope="col">코드명</th>
+                      <th scope="col">구성음</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>일치율</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -586,10 +586,10 @@ export default function ChordClient() {
               <table className={s.diatonicTable}>
                 <thead>
                   <tr>
-                    <th>도수</th>
-                    <th>코드명</th>
-                    <th>구성음</th>
-                    <th style={{ textAlign: 'right' }}>기능</th>
+                    <th scope="col">도수</th>
+                    <th scope="col">코드명</th>
+                    <th scope="col">구성음</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>기능</th>
                   </tr>
                 </thead>
                 <tbody>

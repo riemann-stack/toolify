@@ -186,6 +186,8 @@ type AgeTabProps = {
   setCustomRef: (s: string) => void
 }
 function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCustomRef }: AgeTabProps) {
+  // 기준일이 생년월일보다 빠르면 '만 -24세' 같은 음수 나이가 노출됨 — 결과 대신 안내
+  const refBeforeBirth = refDate.getTime() < birth.getTime()
   const age   = calcAge(birth, refDate)
   const koAge = calcKoreanAge(birth, refDate)
   const yrAge = calcYearAge(birth, refDate)
@@ -203,43 +205,52 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
         <div className={s.birthdayBanner}>🎉 오늘은 생일입니다! 축하드립니다!</div>
       )}
 
-      {/* 만 나이 히어로 */}
-      <div className={s.ageHero}>
-        <div className={s.ageHeroLabel}>만 나이 (기준일: {refKor})</div>
-        <div className={s.ageHeroNum}>
-          {age}<span className={s.ageHeroUnit}>세</span>
+      {refBeforeBirth ? (
+        <div className={s.empty}>
+          기준일({fmtDateKo(refDate, false)})이 생년월일({fmtDateKo(birth, false)})보다 빠릅니다.
+          기준일을 생년월일 이후 날짜로 선택해 주세요.
         </div>
-        <div className={s.ageHeroSub}>
-          {fmtDateKo(birth)}생 · 다음 생일까지 <strong style={{ color: 'var(--accent)' }}>D-{next.daysUntil}</strong>
-        </div>
-      </div>
+      ) : (
+        <>
+          {/* 만 나이 히어로 */}
+          <div className={s.ageHero}>
+            <div className={s.ageHeroLabel}>만 나이 (기준일: {refKor})</div>
+            <div className={s.ageHeroNum}>
+              {age}<span className={s.ageHeroUnit}>세</span>
+            </div>
+            <div className={s.ageHeroSub}>
+              {fmtDateKo(birth)}생 · 다음 생일까지 <strong style={{ color: 'var(--accent)' }}>D-{next.daysUntil}</strong>
+            </div>
+          </div>
 
-      {/* 3가지 나이 비교 */}
-      <div className={s.card}>
-        <label className={s.cardLabel}>
-          3가지 나이 비교
-          <span className={s.cardLabelHint}>한국에서 통용되는 계산법</span>
-        </label>
-        <div className={s.compareGrid}>
-          <div className={`${s.compareCard} ${s.compareCardActive}`}>
-            <div className={s.compareLabel}>만 나이</div>
-            <div className={s.compareNum}>{age}세</div>
-            <div className={s.compareSub}>법령·계약 표준</div>
+          {/* 3가지 나이 비교 */}
+          <div className={s.card}>
+            <label className={s.cardLabel}>
+              3가지 나이 비교
+              <span className={s.cardLabelHint}>한국에서 통용되는 계산법</span>
+            </label>
+            <div className={s.compareGrid}>
+              <div className={`${s.compareCard} ${s.compareCardActive}`}>
+                <div className={s.compareLabel}>만 나이</div>
+                <div className={s.compareNum}>{age}세</div>
+                <div className={s.compareSub}>법령·계약 표준</div>
+              </div>
+              <div className={s.compareCard}>
+                <div className={s.compareLabel}>세는 나이</div>
+                <div className={s.compareNum}>{koAge}세</div>
+                <div className={s.compareSub}>한국 전통 방식</div>
+              </div>
+              <div className={s.compareCard}>
+                <div className={s.compareLabel}>연 나이</div>
+                <div className={s.compareNum}>{yrAge}세</div>
+                <div className={s.compareSub}>병역법·학년 등</div>
+              </div>
+            </div>
           </div>
-          <div className={s.compareCard}>
-            <div className={s.compareLabel}>세는 나이</div>
-            <div className={s.compareNum}>{koAge}세</div>
-            <div className={s.compareSub}>한국 전통 방식</div>
-          </div>
-          <div className={s.compareCard}>
-            <div className={s.compareLabel}>연 나이</div>
-            <div className={s.compareNum}>{yrAge}세</div>
-            <div className={s.compareSub}>병역법·학년 등</div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      {/* 기준일 변경 */}
+      {/* 기준일 변경 — 빈 상태에서도 수정 가능해야 함 */}
       <div className={s.card}>
         <label className={s.cardLabel}>기준일 변경</label>
         <div className={s.refRow}>
@@ -254,23 +265,25 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
       </div>
 
       {/* 생일 정보 */}
-      <div className={s.infoGrid3}>
-        <div className={s.infoCard}>
-          <div className={s.infoNum}>{calcDaysAlive(birth, refDate).toLocaleString()}</div>
-          <div className={s.infoLabel}>태어난 지</div>
-          <div className={s.infoSub}>일째</div>
+      {!refBeforeBirth && (
+        <div className={s.infoGrid3}>
+          <div className={s.infoCard}>
+            <div className={s.infoNum}>{calcDaysAlive(birth, refDate).toLocaleString()}</div>
+            <div className={s.infoLabel}>태어난 지</div>
+            <div className={s.infoSub}>일째</div>
+          </div>
+          <div className={s.infoCard}>
+            <div className={s.infoNum}>{next.daysUntil}</div>
+            <div className={s.infoLabel}>다음 생일까지</div>
+            <div className={s.infoSub}>일 ({next.dayOfWeek}요일{next.isWeekend ? ' · 주말' : ''})</div>
+          </div>
+          <div className={s.infoCard}>
+            <div className={s.infoNum}>{['일', '월', '화', '수', '목', '금', '토'][birth.getDay()]}</div>
+            <div className={s.infoLabel}>태어난 요일</div>
+            <div className={s.infoSub}>{fmtDate(birth)}</div>
+          </div>
         </div>
-        <div className={s.infoCard}>
-          <div className={s.infoNum}>{next.daysUntil}</div>
-          <div className={s.infoLabel}>다음 생일까지</div>
-          <div className={s.infoSub}>일 ({next.dayOfWeek}요일{next.isWeekend ? ' · 주말' : ''})</div>
-        </div>
-        <div className={s.infoCard}>
-          <div className={s.infoNum}>{['일', '월', '화', '수', '목', '금', '토'][birth.getDay()]}</div>
-          <div className={s.infoLabel}>태어난 요일</div>
-          <div className={s.infoSub}>{fmtDate(birth)}</div>
-        </div>
-      </div>
+      )}
     </>
   )
 }

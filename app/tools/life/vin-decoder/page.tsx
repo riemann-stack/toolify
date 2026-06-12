@@ -65,7 +65,7 @@ export default function VinDecoderPage() {
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
-          <thead><tr><th style={headCell}>자리</th><th style={headCell}>구분</th><th style={headCell}>의미</th></tr></thead>
+          <thead><tr><th scope="col" style={headCell}>자리</th><th scope="col" style={headCell}>구분</th><th scope="col" style={headCell}>의미</th></tr></thead>
           <tbody>
             <tr><td style={codeCell}>1–3</td><td style={cell}>WMI</td><td style={cell}>제조국 + 제조사 (World Manufacturer Identifier)</td></tr>
             <tr><td style={codeCell}>4–8</td><td style={cell}>VDS</td><td style={cell}>차종·차체·엔진·등급 (제조사별 자체 코드)</td></tr>
@@ -82,7 +82,7 @@ export default function VinDecoderPage() {
       <p style={para}>첫 글자는 차량이 만들어진 <strong style={{ color: 'var(--text)' }}>지역·국가</strong>를 나타냅니다. 같은 브랜드라도 생산 공장이 다른 나라면 첫 글자가 달라집니다.</p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 420 }}>
-          <thead><tr><th style={headCell}>첫 글자</th><th style={headCell}>지역</th><th style={headCell}>예</th></tr></thead>
+          <thead><tr><th scope="col" style={headCell}>첫 글자</th><th scope="col" style={headCell}>지역</th><th scope="col" style={headCell}>예</th></tr></thead>
           <tbody>
             <tr><td style={codeCell}>J–R</td><td style={cell}>아시아</td><td style={cell}>K 한국, J 일본, L 중국</td></tr>
             <tr><td style={codeCell}>S–Z</td><td style={cell}>유럽</td><td style={cell}>W 독일, V 프랑스·스페인, Z 이탈리아, S 영국</td></tr>
@@ -99,7 +99,7 @@ export default function VinDecoderPage() {
       <p style={para}>1~3번째 자리로 제조사를 식별합니다. 아래는 일부 예시이며, 도구의 <strong style={{ color: 'var(--text)' }}>[제조사 사전]</strong> 탭에서 더 많은 코드를 검색할 수 있습니다.</p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
-          <thead><tr><th style={headCell}>코드</th><th style={headCell}>제조사</th><th style={headCell}>코드</th><th style={headCell}>제조사</th></tr></thead>
+          <thead><tr><th scope="col" style={headCell}>코드</th><th scope="col" style={headCell}>제조사</th><th scope="col" style={headCell}>코드</th><th scope="col" style={headCell}>제조사</th></tr></thead>
           <tbody>
             <tr><td style={codeCell}>KMH</td><td style={cell}>현대 (승용)</td><td style={codeCell}>JHM</td><td style={cell}>혼다</td></tr>
             <tr><td style={codeCell}>KM8</td><td style={cell}>현대 (SUV·MPV)</td><td style={codeCell}>JT</td><td style={cell}>토요타</td></tr>

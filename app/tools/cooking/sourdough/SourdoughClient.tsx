@@ -590,10 +590,10 @@ export default function SourdoughClient() {
               <table className={styles.compTable}>
                 <thead>
                   <tr>
-                    <th>온도</th>
-                    <th>1:1:1</th>
-                    <th>1:2:2</th>
-                    <th>1:3:3</th>
+                    <th scope="col">온도</th>
+                    <th scope="col">1:1:1</th>
+                    <th scope="col">1:2:2</th>
+                    <th scope="col">1:3:3</th>
                   </tr>
                 </thead>
                 <tbody>

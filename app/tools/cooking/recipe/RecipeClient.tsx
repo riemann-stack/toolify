@@ -502,7 +502,7 @@ function ConvertTab() {
         </label>
         <table className={s.quickRefTable}>
           <thead>
-            <tr><th>재료</th><th>1컵</th><th>1큰술</th></tr>
+            <tr><th scope="col">재료</th><th scope="col">1컵</th><th scope="col">1큰술</th></tr>
           </thead>
           <tbody>
             {QUICK_REF.map(r => (

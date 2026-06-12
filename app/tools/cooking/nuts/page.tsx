@@ -99,11 +99,11 @@ export default function NutsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 420 }}>
           <thead>
             <tr>
-              <th style={headCell}>견과류</th>
-              <th style={headCell}>1회</th>
-              <th style={headCell}>알 수</th>
-              <th style={headCell}>칼로리</th>
-              <th style={headCell}>핵심 영양소</th>
+              <th scope="col" style={headCell}>견과류</th>
+              <th scope="col" style={headCell}>1회</th>
+              <th scope="col" style={headCell}>알 수</th>
+              <th scope="col" style={headCell}>칼로리</th>
+              <th scope="col" style={headCell}>핵심 영양소</th>
             </tr>
           </thead>
           <tbody>
@@ -168,10 +168,10 @@ export default function NutsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
           <thead>
             <tr>
-              <th style={headCell}>믹스</th>
-              <th style={headCell}>구성</th>
-              <th style={headCell}>총량</th>
-              <th style={headCell}>특징</th>
+              <th scope="col" style={headCell}>믹스</th>
+              <th scope="col" style={headCell}>구성</th>
+              <th scope="col" style={headCell}>총량</th>
+              <th scope="col" style={headCell}>특징</th>
             </tr>
           </thead>
           <tbody>
@@ -219,8 +219,8 @@ export default function NutsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
-              <th style={headCell}>대상</th>
-              <th style={headCell}>주의사항</th>
+              <th scope="col" style={headCell}>대상</th>
+              <th scope="col" style={headCell}>주의사항</th>
             </tr>
           </thead>
           <tbody>
@@ -248,10 +248,10 @@ export default function NutsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
           <thead>
             <tr>
-              <th style={headCell}>견과류</th>
-              <th style={headCell}>1g당 평균</th>
-              <th style={headCell}>1회분(28g) 단가</th>
-              <th style={headCell}>가성비</th>
+              <th scope="col" style={headCell}>견과류</th>
+              <th scope="col" style={headCell}>1g당 평균</th>
+              <th scope="col" style={headCell}>1회분(28g) 단가</th>
+              <th scope="col" style={headCell}>가성비</th>
             </tr>
           </thead>
           <tbody>
@@ -299,9 +299,9 @@ export default function NutsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>보관 방법</th>
-              <th style={headCell}>장소</th>
-              <th style={headCell}>기간</th>
+              <th scope="col" style={headCell}>보관 방법</th>
+              <th scope="col" style={headCell}>장소</th>
+              <th scope="col" style={headCell}>기간</th>
             </tr>
           </thead>
           <tbody>

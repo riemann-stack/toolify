@@ -110,9 +110,9 @@ export default function CarTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>시점</th>
-                  <th style={headCell}>세금·비용</th>
-                  <th style={headCell}>핵심</th>
+                  <th scope="col" style={headCell}>시점</th>
+                  <th scope="col" style={headCell}>세금·비용</th>
+                  <th scope="col" style={headCell}>핵심</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,9 +148,9 @@ export default function CarTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>차종</th>
-                  <th style={headCell}>취득세율</th>
-                  <th style={headCell}>비고</th>
+                  <th scope="col" style={headCell}>차종</th>
+                  <th scope="col" style={headCell}>취득세율</th>
+                  <th scope="col" style={headCell}>비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,9 +179,9 @@ export default function CarTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>배기량</th>
-                  <th style={headCell}>cc당 단가</th>
-                  <th style={headCell}>예시</th>
+                  <th scope="col" style={headCell}>배기량</th>
+                  <th scope="col" style={headCell}>cc당 단가</th>
+                  <th scope="col" style={headCell}>예시</th>
                 </tr>
               </thead>
               <tbody>
@@ -208,9 +208,9 @@ export default function CarTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>지역</th>
-                  <th style={headCell}>매입 비율</th>
-                  <th style={headCell}>3,000만 원 차 즉시 매도 실비</th>
+                  <th scope="col" style={headCell}>지역</th>
+                  <th scope="col" style={headCell}>매입 비율</th>
+                  <th scope="col" style={headCell}>3,000만 원 차 즉시 매도 실비</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,9 +237,9 @@ export default function CarTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>연료</th>
-                  <th style={headCell}>L당 세금</th>
-                  <th style={headCell}>월 1,500km 주행 시 연간</th>
+                  <th scope="col" style={headCell}>연료</th>
+                  <th scope="col" style={headCell}>L당 세금</th>
+                  <th scope="col" style={headCell}>월 1,500km 주행 시 연간</th>
                 </tr>
               </thead>
               <tbody>

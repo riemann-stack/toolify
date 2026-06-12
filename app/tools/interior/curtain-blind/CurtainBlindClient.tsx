@@ -649,7 +649,7 @@ export default function CurtainBlindClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.compareTable}>
                 <thead>
-                  <tr><th>종류</th><th>특징</th><th>추천 공간</th><th>주름 배수</th></tr>
+                  <tr><th scope="col">종류</th><th scope="col">특징</th><th scope="col">추천 공간</th><th scope="col">주름 배수</th></tr>
                 </thead>
                 <tbody>
                   <tr><td>일반 커튼</td><td>천 + 주름, 풍성함</td><td>거실·침실</td><td>×2</td></tr>
@@ -667,7 +667,7 @@ export default function CurtainBlindClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.compareTable}>
                 <thead>
-                  <tr><th>종류</th><th>특징</th><th>추천 공간</th><th></th></tr>
+                  <tr><th scope="col">종류</th><th scope="col">특징</th><th scope="col">추천 공간</th><th scope="col"></th></tr>
                 </thead>
                 <tbody>
                   <tr><td>가로형 (베네치안)</td><td>슬랫 각도 조절</td><td>거실·사무실</td><td>—</td></tr>

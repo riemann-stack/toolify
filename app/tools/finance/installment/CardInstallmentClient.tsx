@@ -648,11 +648,11 @@ export default function CardInstallmentClient() {
                 <table className={s.scheduleTable}>
                   <thead>
                     <tr>
-                      <th>회차</th>
-                      <th>납부액</th>
-                      <th>원금</th>
-                      <th>이자</th>
-                      <th>잔액</th>
+                      <th scope="col">회차</th>
+                      <th scope="col">납부액</th>
+                      <th scope="col">원금</th>
+                      <th scope="col">이자</th>
+                      <th scope="col">잔액</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -872,11 +872,11 @@ export default function CardInstallmentClient() {
                 <table className={s.compareTable}>
                   <thead>
                     <tr>
-                      <th>개월</th>
-                      <th>월 납부액</th>
-                      <th>총 납부액</th>
-                      <th>총 이자</th>
-                      <th>부담률</th>
+                      <th scope="col">개월</th>
+                      <th scope="col">월 납부액</th>
+                      <th scope="col">총 납부액</th>
+                      <th scope="col">총 이자</th>
+                      <th scope="col">부담률</th>
                     </tr>
                   </thead>
                   <tbody>

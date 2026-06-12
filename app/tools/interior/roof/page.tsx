@@ -100,10 +100,10 @@ export default function RoofPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>형태</th>
-              <th style={headCell}>특징</th>
-              <th style={headCell}>장점</th>
-              <th style={headCell}>주 사용처</th>
+              <th scope="col" style={headCell}>형태</th>
+              <th scope="col" style={headCell}>특징</th>
+              <th scope="col" style={headCell}>장점</th>
+              <th scope="col" style={headCell}>주 사용처</th>
             </tr>
           </thead>
           <tbody>
@@ -150,10 +150,10 @@ export default function RoofPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>물매</th>
-              <th style={headCell}>경사각</th>
-              <th style={headCell}>경사 배율 (자재 면적/평면)</th>
-              <th style={headCell}>특징</th>
+              <th scope="col" style={headCell}>물매</th>
+              <th scope="col" style={headCell}>경사각</th>
+              <th scope="col" style={headCell}>경사 배율 (자재 면적/평면)</th>
+              <th scope="col" style={headCell}>특징</th>
             </tr>
           </thead>
           <tbody>
@@ -207,9 +207,9 @@ export default function RoofPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>자재</th>
-              <th style={headCell}>일반 단가 (원/㎡)</th>
-              <th style={headCell}>특징</th>
+              <th scope="col" style={headCell}>자재</th>
+              <th scope="col" style={headCell}>일반 단가 (원/㎡)</th>
+              <th scope="col" style={headCell}>특징</th>
             </tr>
           </thead>
           <tbody>

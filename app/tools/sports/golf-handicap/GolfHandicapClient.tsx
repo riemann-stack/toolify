@@ -981,11 +981,11 @@ function RecordsTab() {
             <table className={s.recordsTable}>
               <thead>
                 <tr>
-                  <th>날짜</th>
-                  <th>골프장</th>
-                  <th style={{ textAlign: 'right' }}>그로스</th>
-                  <th style={{ textAlign: 'right' }}>디퍼</th>
-                  <th></th>
+                  <th scope="col">날짜</th>
+                  <th scope="col">골프장</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>그로스</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>디퍼</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>

@@ -150,11 +150,11 @@ export default function KnitGaugePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>CYC</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>이름</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>코 수 / 10cm</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>바늘 mm</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>대표 작품</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>CYC</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>이름</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>코 수 / 10cm</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>바늘 mm</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>대표 작품</th>
               </tr>
             </thead>
             <tbody>
@@ -196,11 +196,11 @@ export default function KnitGaugePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
               </tr>
             </thead>
             <tbody>
@@ -229,11 +229,11 @@ export default function KnitGaugePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
               </tr>
             </thead>
             <tbody>
@@ -260,11 +260,11 @@ export default function KnitGaugePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사이즈</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>가슴(cm)</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>길이</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>소매</th>
+                <th scope="col" style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>어깨</th>
               </tr>
             </thead>
             <tbody>

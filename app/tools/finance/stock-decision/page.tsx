@@ -141,8 +141,8 @@ export default function StockDecisionPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: 'var(--bg3)' }}>
-              <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '12px', color: 'var(--muted)', fontWeight: 700 }}>편향</th>
-              <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '12px', color: 'var(--muted)', fontWeight: 700 }}>전형적 증상</th>
+              <th scope="col" style={{ padding: '10px 14px', textAlign: 'left', fontSize: '12px', color: 'var(--muted)', fontWeight: 700 }}>편향</th>
+              <th scope="col" style={{ padding: '10px 14px', textAlign: 'left', fontSize: '12px', color: 'var(--muted)', fontWeight: 700 }}>전형적 증상</th>
             </tr>
           </thead>
           <tbody>

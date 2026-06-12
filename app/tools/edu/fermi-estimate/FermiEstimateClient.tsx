@@ -450,7 +450,7 @@ export default function FermiEstimateClient() {
                     onChange={e => updateVar(v.id, { name: e.target.value })}
                     placeholder="변수 이름"
                   />
-                  <button className={s.varDeleteBtn} onClick={() => removeVar(v.id)} disabled={vars.length <= 1} type="button">×</button>
+                  <button className={s.varDeleteBtn} onClick={() => removeVar(v.id)} disabled={vars.length <= 1} type="button" aria-label={`변수 ${letter} 삭제`}>×</button>
                 </div>
                 <div className={s.varValueRow}>
                   <input

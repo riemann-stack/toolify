@@ -430,10 +430,10 @@ export default function TravelBudgetClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th>1인</th>
-                    <th>총액</th>
-                    <th>비중</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">1인</th>
+                    <th scope="col">총액</th>
+                    <th scope="col">비중</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -651,10 +651,10 @@ export default function TravelBudgetClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>스타일</th>
-                    <th>총액</th>
-                    <th>1인</th>
-                    <th>배낭 대비</th>
+                    <th scope="col">스타일</th>
+                    <th scope="col">총액</th>
+                    <th scope="col">1인</th>
+                    <th scope="col">배낭 대비</th>
                   </tr>
                 </thead>
                 <tbody>

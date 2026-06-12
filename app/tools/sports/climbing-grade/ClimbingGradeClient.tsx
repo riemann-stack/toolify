@@ -105,8 +105,8 @@ export default function ClimbingGradeClient() {
           <table className={s.table}>
             <thead>
               <tr>
-                {systems.map((x) => <th key={x.id}>{x.label}</th>)}
-                <th>난이도</th>
+                {systems.map((x) => <th scope="col" key={x.id}>{x.label}</th>)}
+                <th scope="col">난이도</th>
               </tr>
             </thead>
             <tbody>

@@ -638,9 +638,9 @@ export default function CarCostClient() {
               <table className={s.breakdownTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th style={{ textAlign: 'right' }}>월 환산</th>
-                    <th style={{ textAlign: 'right' }}>비율</th>
+                    <th scope="col">항목</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>월 환산</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>비율</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -906,8 +906,8 @@ export default function CarCostClient() {
               <table className={s.carCompareTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    {carCompareResults.map(c => <th key={c.name}>{c.name}</th>)}
+                    <th scope="col">항목</th>
+                    {carCompareResults.map(c => <th scope="col" key={c.name}>{c.name}</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -986,12 +986,12 @@ export default function CarCostClient() {
               <table className={s.carCompareTable}>
                 <thead>
                   <tr>
-                    <th>연료</th>
-                    <th>차량가</th>
-                    <th>연 연료비</th>
-                    <th>{fYears}년 연료비</th>
-                    <th>{fYears}년 감가</th>
-                    <th>{fYears}년 총비용</th>
+                    <th scope="col">연료</th>
+                    <th scope="col">차량가</th>
+                    <th scope="col">연 연료비</th>
+                    <th scope="col">{fYears}년 연료비</th>
+                    <th scope="col">{fYears}년 감가</th>
+                    <th scope="col">{fYears}년 총비용</th>
                   </tr>
                 </thead>
                 <tbody>

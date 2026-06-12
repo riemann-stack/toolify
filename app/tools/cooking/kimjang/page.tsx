@@ -117,10 +117,10 @@ export default function KimjangPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>재료</th>
-                  <th style={headCell}>1포기당</th>
-                  <th style={headCell}>4인 12포기</th>
-                  <th style={headCell}>비고</th>
+                  <th scope="col" style={headCell}>재료</th>
+                  <th scope="col" style={headCell}>1포기당</th>
+                  <th scope="col" style={headCell}>4인 12포기</th>
+                  <th scope="col" style={headCell}>비고</th>
                 </tr>
               </thead>
               <tbody>

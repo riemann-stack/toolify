@@ -534,7 +534,7 @@ export default function FootballPointsClient() {
               <table className={styles.scenarioTable}>
                 <thead>
                   <tr>
-                    <th>승</th><th>무</th><th>패</th><th>획득 승점</th>
+                    <th scope="col">승</th><th scope="col">무</th><th scope="col">패</th><th scope="col">획득 승점</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -670,7 +670,7 @@ export default function FootballPointsClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.compareTable}>
                 <thead>
-                  <tr><th>팀</th><th>경기</th><th>승점</th><th>득실</th><th>격차</th></tr>
+                  <tr><th scope="col">팀</th><th scope="col">경기</th><th scope="col">승점</th><th scope="col">득실</th><th scope="col">격차</th></tr>
                 </thead>
                 <tbody>
                   <tr className={styles.ourRow}>

@@ -423,7 +423,7 @@ export default function RegexClient() {
             <span className={s.cardLabel}>🚩 flags 6종</span>
             <table className={s.cheatTable}>
               <thead>
-                <tr><th>flag</th><th>의미</th><th>설명</th></tr>
+                <tr><th scope="col">flag</th><th scope="col">의미</th><th scope="col">설명</th></tr>
               </thead>
               <tbody>
                 {ALL_FLAGS.map((f) => (
@@ -443,7 +443,7 @@ export default function RegexClient() {
               <span className={s.cardLabel}>{sec.emoji} {sec.title}</span>
               <table className={s.cheatTable}>
                 <thead>
-                  <tr><th>구문</th><th>설명</th><th>예시</th></tr>
+                  <tr><th scope="col">구문</th><th scope="col">설명</th><th scope="col">예시</th></tr>
                 </thead>
                 <tbody>
                   {sec.rows.map((r, ri) => (

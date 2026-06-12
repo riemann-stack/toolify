@@ -590,7 +590,7 @@ export default function MicrowaveClient() {
               const dashOffset = circumference * (1 - pct)
               return (
                 <div className={s.timerWrap}>
-                  <svg viewBox="0 0 200 200" width="220" height="220">
+                  <svg viewBox="0 0 200 200" width="220" height="220" role="img" aria-label="남은 시간 원형 타이머">
                     <circle cx={100} cy={100} r={r} stroke="var(--bg3)" strokeWidth="14" fill="none" />
                     <circle
                       cx={100} cy={100} r={r}

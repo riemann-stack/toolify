@@ -629,7 +629,7 @@ export default function CircuitSimulatorClient() {
                   >
                     {POWER_RATINGS.map(p => (<option key={p.value} value={p.value}>{p.label}</option>))}
                   </select>
-                  <button className={s.removeBtn} onClick={() => removeResistor(r.id)} disabled={resistors.length <= 1} type="button">×</button>
+                  <button className={s.removeBtn} onClick={() => removeResistor(r.id)} disabled={resistors.length <= 1} type="button" aria-label={`저항 ${r.label} 삭제`}>×</button>
                 </div>
               ))}
             </div>
@@ -672,12 +672,12 @@ export default function CircuitSimulatorClient() {
               <table className={s.analysisTable}>
                 <thead>
                   <tr>
-                    <th>저항</th>
-                    <th>값</th>
-                    <th>전압</th>
-                    <th>전류</th>
-                    <th>전력</th>
-                    <th>정격</th>
+                    <th scope="col">저항</th>
+                    <th scope="col">값</th>
+                    <th scope="col">전압</th>
+                    <th scope="col">전류</th>
+                    <th scope="col">전력</th>
+                    <th scope="col">정격</th>
                   </tr>
                 </thead>
                 <tbody>

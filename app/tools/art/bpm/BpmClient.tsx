@@ -84,10 +84,10 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th className={styles.th}>음표</th>
-                  <th className={styles.th}>기본</th>
-                  <th className={styles.th}>점음표 ×1.5</th>
-                  <th className={styles.th}>셋잇단음표 ×⅔</th>
+                  <th scope="col" className={styles.th}>음표</th>
+                  <th scope="col" className={styles.th}>기본</th>
+                  <th scope="col" className={styles.th}>점음표 ×1.5</th>
+                  <th scope="col" className={styles.th}>셋잇단음표 ×⅔</th>
                 </tr>
               </thead>
               <tbody>

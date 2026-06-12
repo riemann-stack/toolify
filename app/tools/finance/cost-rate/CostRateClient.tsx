@@ -401,11 +401,11 @@ export default function CostRateClient() {
                 <table className={styles.ingredientTable}>
                   <thead>
                     <tr>
-                      <th>재료명</th>
-                      <th style={{ width: 54 }}>양</th>
-                      <th style={{ width: 52 }}>단위</th>
-                      <th style={{ width: 66 }}>단위당가</th>
-                      <th style={{ width: 28 }}></th>
+                      <th scope="col">재료명</th>
+                      <th scope="col" style={{ width: 54 }}>양</th>
+                      <th scope="col" style={{ width: 52 }}>단위</th>
+                      <th scope="col" style={{ width: 66 }}>단위당가</th>
+                      <th scope="col" style={{ width: 28 }}></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -599,7 +599,7 @@ export default function CostRateClient() {
               <div style={{ overflowX: 'auto' }}>
                 <table className={styles.compareTable}>
                   <thead>
-                    <tr><th>채널</th><th>실수령액</th><th>실질 원가율</th><th>마진율</th></tr>
+                    <tr><th scope="col">채널</th><th scope="col">실수령액</th><th scope="col">실질 원가율</th><th scope="col">마진율</th></tr>
                   </thead>
                   <tbody>
                     {channelCompare.map((r, i) => (

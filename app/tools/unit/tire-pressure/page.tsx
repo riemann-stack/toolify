@@ -114,7 +114,7 @@ export default function TirePressurePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['차종', 'psi', 'kPa', 'bar'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -194,7 +194,7 @@ export default function TirePressurePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['시기', '기온 변화', '공기압 변화', '대응'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -281,7 +281,7 @@ export default function TirePressurePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['표기', '의미', '예시 (205/55R16)'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>

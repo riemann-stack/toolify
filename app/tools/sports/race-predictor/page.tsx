@@ -117,10 +117,10 @@ export default function RacePredictorPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>기준 → 목표</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>Riegel</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>VDOT</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>Cameron</th>
+              <th scope="col" style={headCell}>기준 → 목표</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>Riegel</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>VDOT</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>Cameron</th>
             </tr>
           </thead>
           <tbody>
@@ -154,10 +154,10 @@ export default function RacePredictorPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>요인</th>
-              <th style={headCell}>구간</th>
-              <th style={headCell}>영향</th>
-              <th style={headCell}>비고</th>
+              <th scope="col" style={headCell}>요인</th>
+              <th scope="col" style={headCell}>구간</th>
+              <th scope="col" style={headCell}>영향</th>
+              <th scope="col" style={headCell}>비고</th>
             </tr>
           </thead>
           <tbody>
@@ -190,11 +190,11 @@ export default function RacePredictorPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>풀 목표</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>VDOT</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>5km</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>10km</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>하프</th>
+              <th scope="col" style={headCell}>풀 목표</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>VDOT</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>5km</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>10km</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>하프</th>
             </tr>
           </thead>
           <tbody>
@@ -219,12 +219,12 @@ export default function RacePredictorPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>구분</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>20대</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>30대</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>40대</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>50대</th>
-              <th style={{ ...headCell, textAlign: 'center' }}>60대+</th>
+              <th scope="col" style={headCell}>구분</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>20대</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>30대</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>40대</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>50대</th>
+              <th scope="col" style={{ ...headCell, textAlign: 'center' }}>60대+</th>
             </tr>
           </thead>
           <tbody>

@@ -700,7 +700,7 @@ export default function NumberBaseClient() {
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--border)' }}>
                       {['문자', '10진', '16진', '8진', '2진'].map((h, i) => (
-                        <th key={i} style={{ padding: '8px 10px', textAlign: i === 0 ? 'center' : 'right', color: 'var(--muted)', fontSize: 11, fontWeight: 600 }}>{h}</th>
+                        <th scope="col" key={i} style={{ padding: '8px 10px', textAlign: i === 0 ? 'center' : 'right', color: 'var(--muted)', fontSize: 11, fontWeight: 600 }}>{h}</th>
                       ))}
                     </tr>
                   </thead>

@@ -112,7 +112,7 @@ export default function HistoryEraPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['연호','한자','원년 (서기)','공식','비고'].map((h, i) => (
-                    <th key={i} style={{ padding: '9px 10px', textAlign: i < 2 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: i < 2 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -152,7 +152,7 @@ export default function HistoryEraPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['대수','왕명','재위 (서기)','재위 년수','주요 사건'].map((h, i) => (
-                    <th key={i} style={{ padding: '8px 10px', textAlign: i < 2 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '8px 10px', textAlign: i < 2 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -201,9 +201,9 @@ export default function HistoryEraPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시대</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>기간</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>주요 사건</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시대</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>기간</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>주요 사건</th>
                 </tr>
               </thead>
               <tbody>
@@ -240,10 +240,10 @@ export default function HistoryEraPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>서기</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#059669',     fontWeight: 600 }}>🇰🇷 한국</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#0891B2',     fontWeight: 600 }}>🇯🇵 일본</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: '#A16207',     fontWeight: 600 }}>🇨🇳 중국</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>서기</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: '#059669',     fontWeight: 600 }}>🇰🇷 한국</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: '#0891B2',     fontWeight: 600 }}>🇯🇵 일본</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: '#A16207',     fontWeight: 600 }}>🇨🇳 중국</th>
                 </tr>
               </thead>
               <tbody>
@@ -280,9 +280,9 @@ export default function HistoryEraPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>연도</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>사건</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>당시 연호</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>연도</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>사건</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>당시 연호</th>
                 </tr>
               </thead>
               <tbody>

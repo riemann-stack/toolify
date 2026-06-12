@@ -92,9 +92,9 @@ export default function GiftMoneyPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={th}>관계</th>
-                  <th style={th}>🎉 축의금</th>
-                  <th style={th}>🕊️ 부의금</th>
+                  <th scope="col" style={th}>관계</th>
+                  <th scope="col" style={th}>🎉 축의금</th>
+                  <th scope="col" style={th}>🕊️ 부의금</th>
                 </tr>
               </thead>
               <tbody>

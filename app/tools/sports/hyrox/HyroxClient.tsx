@@ -205,7 +205,7 @@ export default function HyroxClient() {
             <div className={s.cardLabel}><span>구간 분할 (누적 시간)</span></div>
             <table className={s.splitTable}>
               <thead>
-                <tr><th>구간</th><th>시간</th><th>누적</th></tr>
+                <tr><th scope="col">구간</th><th scope="col">시간</th><th scope="col">누적</th></tr>
               </thead>
               <tbody>
                 {splits.map((r, i) => (
@@ -267,11 +267,11 @@ export default function HyroxClient() {
               <table className={s.wTable}>
                 <thead>
                   <tr>
-                    <th>스테이션</th>
-                    <th>Open 남</th>
-                    <th>Open 여</th>
-                    <th>Pro 남</th>
-                    <th>Pro 여</th>
+                    <th scope="col">스테이션</th>
+                    <th scope="col">Open 남</th>
+                    <th scope="col">Open 여</th>
+                    <th scope="col">Pro 남</th>
+                    <th scope="col">Pro 여</th>
                   </tr>
                 </thead>
                 <tbody>

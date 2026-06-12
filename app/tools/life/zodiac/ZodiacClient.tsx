@@ -509,13 +509,13 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                   <table className={styles.familyTable}>
                     <thead>
                       <tr>
-                        <th>관계</th>
-                        <th>이름</th>
-                        <th>생년월일</th>
-                        <th>띠</th>
-                        <th>별자리</th>
-                        <th>60갑자</th>
-                        <th></th>
+                        <th scope="col">관계</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">생년월일</th>
+                        <th scope="col">띠</th>
+                        <th scope="col">별자리</th>
+                        <th scope="col">60갑자</th>
+                        <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -548,8 +548,8 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                     <table className={styles.familyTable}>
                       <thead>
                         <tr>
-                          <th></th>
-                          {family.map(f => <th key={f.id}>{f.name}</th>)}
+                          <th scope="col"></th>
+                          {family.map(f => <th scope="col" key={f.id}>{f.name}</th>)}
                         </tr>
                       </thead>
                       <tbody>

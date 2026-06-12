@@ -661,11 +661,11 @@ export default function KnitGaugeClient() {
               <table className={s.dataTable}>
                 <thead>
                   <tr>
-                    <th>mm</th>
-                    <th>US</th>
-                    <th>UK</th>
-                    <th>실 굵기</th>
-                    <th>코/10cm</th>
+                    <th scope="col">mm</th>
+                    <th scope="col">US</th>
+                    <th scope="col">UK</th>
+                    <th scope="col">실 굵기</th>
+                    <th scope="col">코/10cm</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -696,11 +696,11 @@ export default function KnitGaugeClient() {
               <table className={s.dataTable}>
                 <thead>
                   <tr>
-                    <th>CYC</th>
-                    <th>이름</th>
-                    <th>코/10cm</th>
-                    <th>바늘 mm</th>
-                    <th>예시</th>
+                    <th scope="col">CYC</th>
+                    <th scope="col">이름</th>
+                    <th scope="col">코/10cm</th>
+                    <th scope="col">바늘 mm</th>
+                    <th scope="col">예시</th>
                   </tr>
                 </thead>
                 <tbody>

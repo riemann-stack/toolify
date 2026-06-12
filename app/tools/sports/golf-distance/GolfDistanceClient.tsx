@@ -504,11 +504,11 @@ function EstimateView({
           <table className={s.distanceTable}>
             <thead>
               <tr>
-                <th>클럽</th>
-                <th style={{ textAlign: 'right' }}>내 비거리</th>
-                <th style={{ textAlign: 'right' }}>평균</th>
-                <th style={{ textAlign: 'right' }}>차이</th>
-                <th style={{ textAlign: 'center' }}>상태</th>
+                <th scope="col">클럽</th>
+                <th scope="col" style={{ textAlign: 'right' }}>내 비거리</th>
+                <th scope="col" style={{ textAlign: 'right' }}>평균</th>
+                <th scope="col" style={{ textAlign: 'right' }}>차이</th>
+                <th scope="col" style={{ textAlign: 'center' }}>상태</th>
               </tr>
             </thead>
             <tbody>
@@ -599,10 +599,10 @@ function AnalysisView({
             <table className={s.gapTable}>
               <thead>
                 <tr>
-                  <th>구간</th>
-                  <th style={{ textAlign: 'right' }}>간격</th>
-                  <th style={{ textAlign: 'center' }}>판정</th>
-                  <th>제안</th>
+                  <th scope="col">구간</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>간격</th>
+                  <th scope="col" style={{ textAlign: 'center' }}>판정</th>
+                  <th scope="col">제안</th>
                 </tr>
               </thead>
               <tbody>
@@ -814,9 +814,9 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
             <table className={s.envChangeTable}>
               <thead>
                 <tr>
-                  <th>요인</th>
-                  <th>설명</th>
-                  <th style={{ textAlign: 'right' }}>변화</th>
+                  <th scope="col">요인</th>
+                  <th scope="col">설명</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>변화</th>
                 </tr>
               </thead>
               <tbody>
@@ -1010,11 +1010,11 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
             <table className={s.distanceTable}>
               <thead>
                 <tr>
-                  <th>날짜</th>
-                  <th>장소</th>
-                  <th style={{ textAlign: 'right' }}>DR</th>
-                  <th style={{ textAlign: 'right' }}>7I</th>
-                  <th></th>
+                  <th scope="col">날짜</th>
+                  <th scope="col">장소</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>DR</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>7I</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>

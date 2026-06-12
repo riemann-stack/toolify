@@ -327,7 +327,7 @@ export default function HttpStatusClient() {
             <span className={s.cardLabel}>📊 5+1 카테고리 의미</span>
             <table className={s.guideTable}>
               <thead>
-                <tr><th>카테고리</th><th>범위</th><th>의미</th><th>대표 코드</th></tr>
+                <tr><th scope="col">카테고리</th><th scope="col">범위</th><th scope="col">의미</th><th scope="col">대표 코드</th></tr>
               </thead>
               <tbody>
                 {(['1xx', '2xx', '3xx', '4xx', '5xx', 'nonstandard'] as CategoryKey[]).map((cat) => {
@@ -391,7 +391,7 @@ export default function HttpStatusClient() {
             <span className={s.cardLabel}>🛠️ 프레임워크별 기본 응답 코드</span>
             <table className={s.guideTable}>
               <thead>
-                <tr><th>프레임워크</th><th>패턴</th><th>기본 응답</th></tr>
+                <tr><th scope="col">프레임워크</th><th scope="col">패턴</th><th scope="col">기본 응답</th></tr>
               </thead>
               <tbody>
                 <tr><td><strong>🍃 Spring Boot</strong></td><td><code className={s.codeMono}>@PostMapping</code></td><td>200 OK (또는 ResponseEntity로 201)</td></tr>

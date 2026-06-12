@@ -486,7 +486,7 @@ export default function CycleClient() {
             <span className={s.cardLabel}>🏃 phase별 운동 강도 (일반 안내)</span>
             <table className={s.guideTable}>
               <thead>
-                <tr><th>Phase</th><th>운동 강도</th></tr>
+                <tr><th scope="col">Phase</th><th scope="col">운동 강도</th></tr>
               </thead>
               <tbody>
                 <tr><td>🩸 생리기</td><td>가볍게 (회복 중심)</td></tr>

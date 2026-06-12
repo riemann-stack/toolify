@@ -417,7 +417,7 @@ export default function VinDecoderClient() {
             <span className={styles.cardLabel}>연식 코드 전체표 (30년 주기)</span>
             <table className={styles.yearTable}>
               <thead>
-                <tr><th>코드</th><th>1차 (1980~)</th><th>2차 (2010~)</th></tr>
+                <tr><th scope="col">코드</th><th scope="col">1차 (1980~)</th><th scope="col">2차 (2010~)</th></tr>
               </thead>
               <tbody>
                 {YEAR_TABLE.map((row) => (

@@ -120,7 +120,7 @@ export default function LifeTimePage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['구분', '기대수명', '건강수명'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

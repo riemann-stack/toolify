@@ -332,6 +332,8 @@ export default function FormationClient() {
           className={s.pitchSvg}
           preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="축구 포메이션 배치도"
         >
           {/* 잔디 그라데이션 (세로 스트라이프) */}
           <defs>

@@ -495,12 +495,12 @@ export default function PlanetComparisonClient() {
           <table className={s.compareTable} style={{ minWidth: 540 }}>
             <thead>
               <tr>
-                <th>행성</th>
-                <th>반지름</th>
-                <th>지구 대비</th>
-                <th>중력</th>
-                <th>내 몸무게</th>
-                <th>점프</th>
+                <th scope="col">행성</th>
+                <th scope="col">반지름</th>
+                <th scope="col">지구 대비</th>
+                <th scope="col">중력</th>
+                <th scope="col">내 몸무게</th>
+                <th scope="col">점프</th>
               </tr>
             </thead>
             <tbody>
@@ -571,11 +571,11 @@ export default function PlanetComparisonClient() {
           <table className={s.compareTable} style={{ minWidth: 540 }}>
             <thead>
               <tr>
-                <th>행성</th>
-                <th>1년</th>
-                <th>1일</th>
-                <th>내 나이</th>
-                <th>1년 동안 생일</th>
+                <th scope="col">행성</th>
+                <th scope="col">1년</th>
+                <th scope="col">1일</th>
+                <th scope="col">내 나이</th>
+                <th scope="col">1년 동안 생일</th>
               </tr>
             </thead>
             <tbody>
@@ -637,9 +637,9 @@ export default function PlanetComparisonClient() {
           <table className={s.compareTable} style={{ minWidth: 460 }}>
             <thead>
               <tr>
-                <th>행성</th>
-                <th>거리 (지구로부터)</th>
-                <th>빛 도달 시간</th>
+                <th scope="col">행성</th>
+                <th scope="col">거리 (지구로부터)</th>
+                <th scope="col">빛 도달 시간</th>
               </tr>
             </thead>
             <tbody>

@@ -132,7 +132,7 @@ export default function VatPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['구분', '일반과세자', '간이과세자', '면세사업자'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: h === '구분' ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: h === '구분' ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -163,9 +163,9 @@ export default function VatPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>업종</th>
-                    <th style={{ padding: '6px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>부가가치율</th>
-                    <th style={{ padding: '6px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>실효 세율</th>
+                    <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>업종</th>
+                    <th scope="col" style={{ padding: '6px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>부가가치율</th>
+                    <th scope="col" style={{ padding: '6px 10px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>실효 세율</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -239,8 +239,8 @@ export default function VatPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>실입금 100만원 받으려면</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>청구액</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>실입금 100만원 받으려면</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>청구액</th>
                 </tr>
               </thead>
               <tbody>
@@ -328,8 +328,8 @@ export default function VatPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#9333EA', fontWeight: 700 }}>추천</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상황</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#9333EA', fontWeight: 700 }}>추천</th>
                 </tr>
               </thead>
               <tbody>
@@ -365,9 +365,9 @@ export default function VatPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>사업자 유형</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>발급 의무</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#EA580C', fontWeight: 700 }}>발급 방법</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>사업자 유형</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>발급 의무</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#EA580C', fontWeight: 700 }}>발급 방법</th>
                 </tr>
               </thead>
               <tbody>

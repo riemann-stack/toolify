@@ -182,7 +182,7 @@ function ConstantsTab() {
       <div style={{ overflowX: 'auto' }}>
         <table className={s.constTable}>
           <thead>
-            <tr><th>기호</th><th>이름</th><th>값</th><th>단위</th></tr>
+            <tr><th scope="col">기호</th><th scope="col">이름</th><th scope="col">값</th><th scope="col">단위</th></tr>
           </thead>
           <tbody>
             {CONSTANTS.map(c => (

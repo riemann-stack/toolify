@@ -91,9 +91,9 @@ export default function VentilationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>공간</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#E89757', fontWeight: 700 }}>권장 ACH</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>출처·비고</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>공간</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#E89757', fontWeight: 700 }}>권장 ACH</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>출처·비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -136,9 +136,9 @@ export default function VentilationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>한국 표시면적</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>대략 CADR</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 공간 부피</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>한국 표시면적</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>대략 CADR</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 공간 부피</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,9 +197,9 @@ export default function VentilationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#059669', fontWeight: 700 }}>ACH 범위</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#059669', fontWeight: 700 }}>ACH 범위</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -230,9 +230,9 @@ export default function VentilationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>ppm</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>등급</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>영향</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>ppm</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>등급</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>영향</th>
                 </tr>
               </thead>
               <tbody>

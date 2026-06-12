@@ -380,11 +380,11 @@ export default function WireClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>sq</th>
-                    <th>HIV 기본 (A)</th>
-                    <th>보정 후 (A)</th>
-                    <th>적정 차단기</th>
-                    <th>보호 부하 ({voltage}V)</th>
+                    <th scope="col">sq</th>
+                    <th scope="col">HIV 기본 (A)</th>
+                    <th scope="col">보정 후 (A)</th>
+                    <th scope="col">적정 차단기</th>
+                    <th scope="col">보호 부하 ({voltage}V)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -469,7 +469,7 @@ export default function WireClient() {
             </p>
 
             {/* SVG 게이지 */}
-            <svg viewBox="0 0 400 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }}>
+            <svg viewBox="0 0 400 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }} role="img" aria-label="전압 강하율 게이지">
               <rect x="0" y="20" width="400" height="20" rx="10" fill="var(--bg3)" />
               <rect x="0" y="20" width={Math.min((dropPct / 5) * 400, 400)} height="20" rx="10"
                 fill={dropPct <= dropLimit ? '#0D9488' : dropPct <= 5 ? '#D97706' : '#DB2777'} />
@@ -491,10 +491,10 @@ export default function WireClient() {
                 <table className={s.detailTable}>
                   <thead>
                     <tr>
-                      <th>전선</th>
-                      <th>강하 V</th>
-                      <th>강하%</th>
-                      <th>판정</th>
+                      <th scope="col">전선</th>
+                      <th scope="col">강하 V</th>
+                      <th scope="col">강하%</th>
+                      <th scope="col">판정</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -564,9 +564,9 @@ export default function WireClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>차단기</th>
-                    <th>최소 전선</th>
-                    <th>보호 부하 (kW)</th>
+                    <th scope="col">차단기</th>
+                    <th scope="col">최소 전선</th>
+                    <th scope="col">보호 부하 (kW)</th>
                   </tr>
                 </thead>
                 <tbody>

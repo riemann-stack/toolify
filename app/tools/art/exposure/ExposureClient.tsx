@@ -456,9 +456,9 @@ export default function ExposureClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>효과</th>
-                  <th>권장 셔터</th>
-                  <th>권장 ND (대낮 기준)</th>
+                  <th scope="col">효과</th>
+                  <th scope="col">권장 셔터</th>
+                  <th scope="col">권장 ND (대낮 기준)</th>
                 </tr>
               </thead>
               <tbody>
@@ -545,9 +545,9 @@ export default function ExposureClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>프레임레이트</th>
-                  <th>권장 셔터</th>
-                  <th>설명</th>
+                  <th scope="col">프레임레이트</th>
+                  <th scope="col">권장 셔터</th>
+                  <th scope="col">설명</th>
                 </tr>
               </thead>
               <tbody>
@@ -639,10 +639,10 @@ export default function ExposureClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>축</th>
-                  <th>밝게 (값 ↓)</th>
-                  <th>어둡게 (값 ↑)</th>
-                  <th>부작용</th>
+                  <th scope="col">축</th>
+                  <th scope="col">밝게 (값 ↓)</th>
+                  <th scope="col">어둡게 (값 ↑)</th>
+                  <th scope="col">부작용</th>
                 </tr>
               </thead>
               <tbody>

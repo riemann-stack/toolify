@@ -194,10 +194,10 @@ export default function RoomModeClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>주파수</th>
-                    <th>종류</th>
-                    <th>차수 (p,q,r)</th>
-                    <th>강도</th>
+                    <th scope="col">주파수</th>
+                    <th scope="col">종류</th>
+                    <th scope="col">차수 (p,q,r)</th>
+                    <th scope="col">강도</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -256,7 +256,7 @@ export default function RoomModeClient() {
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
-                  <tr><th>위치</th><th>가로 (W)</th><th>세로 (L)</th><th>점수</th></tr>
+                  <tr><th scope="col">위치</th><th scope="col">가로 (W)</th><th scope="col">세로 (L)</th><th scope="col">점수</th></tr>
                 </thead>
                 <tbody>
                   <tr>

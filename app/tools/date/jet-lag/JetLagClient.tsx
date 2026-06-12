@@ -351,10 +351,10 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
             <table className={s.table}>
               <thead>
                 <tr>
-                  <th>날짜</th>
-                  <th>권장 취침</th>
-                  <th>권장 기상</th>
-                  <th>조정량</th>
+                  <th scope="col">날짜</th>
+                  <th scope="col">권장 취침</th>
+                  <th scope="col">권장 기상</th>
+                  <th scope="col">조정량</th>
                 </tr>
               </thead>
               <tbody>
@@ -777,11 +777,11 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
             <table className={s.scheduleTable}>
               <thead>
                 <tr>
-                  <th>일차</th>
-                  <th>예상 상태</th>
-                  <th>권장 취침</th>
-                  <th>권장 기상</th>
-                  <th>핵심 팁</th>
+                  <th scope="col">일차</th>
+                  <th scope="col">예상 상태</th>
+                  <th scope="col">권장 취침</th>
+                  <th scope="col">권장 기상</th>
+                  <th scope="col">핵심 팁</th>
                 </tr>
               </thead>
               <tbody>

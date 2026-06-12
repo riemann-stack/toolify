@@ -257,10 +257,10 @@ function LengthTab() {
           <table className={s.resultTable}>
             <thead>
               <tr>
-                <th>단위</th>
-                <th>결과값</th>
-                <th>CSS 선언</th>
-                <th></th>
+                <th scope="col">단위</th>
+                <th scope="col">결과값</th>
+                <th scope="col">CSS 선언</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -382,10 +382,10 @@ function LineHeightTab() {
             <table className={s.resultTable}>
               <thead>
                 <tr>
-                  <th>형식</th>
-                  <th>값</th>
-                  <th>비고</th>
-                  <th></th>
+                  <th scope="col">형식</th>
+                  <th scope="col">값</th>
+                  <th scope="col">비고</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -497,10 +497,10 @@ function LetterSpacingTab() {
             <table className={s.resultTable}>
               <thead>
                 <tr>
-                  <th>형식</th>
-                  <th>값</th>
-                  <th>CSS</th>
-                  <th></th>
+                  <th scope="col">형식</th>
+                  <th scope="col">값</th>
+                  <th scope="col">CSS</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -1027,7 +1027,7 @@ function TimeAngleTab() {
           <>
             <table className={s.resultTable}>
               <thead>
-                <tr><th>단위</th><th>값</th><th></th></tr>
+                <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
               <tbody>
                 <tr><td className={s.unitCell}>ms</td><td className={s.valCell}>{fmt(ms, 4)}ms</td>
@@ -1092,7 +1092,7 @@ function TimeAngleTab() {
           <>
             <table className={s.resultTable}>
               <thead>
-                <tr><th>단위</th><th>값</th><th></th></tr>
+                <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
               <tbody>
                 {angRows.map((r) => (

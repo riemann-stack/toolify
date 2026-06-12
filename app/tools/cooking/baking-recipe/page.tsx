@@ -99,9 +99,9 @@ export default function BakingRecipePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>품목</th>
-              <th style={headCell}>기준</th>
-              <th style={headCell}>황금비율</th>
+              <th scope="col" style={headCell}>품목</th>
+              <th scope="col" style={headCell}>기준</th>
+              <th scope="col" style={headCell}>황금비율</th>
             </tr>
           </thead>
           <tbody>
@@ -131,9 +131,9 @@ export default function BakingRecipePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>재료</th>
-              <th style={headCell}>↑ 많아질 때</th>
-              <th style={headCell}>↓ 적어질 때</th>
+              <th scope="col" style={headCell}>재료</th>
+              <th scope="col" style={headCell}>↑ 많아질 때</th>
+              <th scope="col" style={headCell}>↓ 적어질 때</th>
             </tr>
           </thead>
           <tbody>
@@ -157,9 +157,9 @@ export default function BakingRecipePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>틀</th>
-              <th style={headCell}>1개당 / 1틀 용량</th>
-              <th style={headCell}>참고</th>
+              <th scope="col" style={headCell}>틀</th>
+              <th scope="col" style={headCell}>1개당 / 1틀 용량</th>
+              <th scope="col" style={headCell}>참고</th>
             </tr>
           </thead>
           <tbody>
@@ -202,9 +202,9 @@ export default function BakingRecipePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th style={headCell}>구분</th>
-                <th style={headCell}>🍞 베이커 퍼센트</th>
-                <th style={headCell}>🧁 베이킹 레시피 (본 도구)</th>
+                <th scope="col" style={headCell}>구분</th>
+                <th scope="col" style={headCell}>🍞 베이커 퍼센트</th>
+                <th scope="col" style={headCell}>🧁 베이킹 레시피 (본 도구)</th>
               </tr>
             </thead>
             <tbody>

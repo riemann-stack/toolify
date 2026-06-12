@@ -129,9 +129,9 @@ export default function StockPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>항목</th>
-                    <th style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>물타기 전</th>
-                    <th style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>물타기 후</th>
+                    <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>항목</th>
+                    <th scope="col" style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>물타기 전</th>
+                    <th scope="col" style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>물타기 후</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -166,9 +166,9 @@ export default function StockPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시나리오</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>가정</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>1년 후 손익</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>시나리오</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>가정</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>1년 후 손익</th>
                 </tr>
               </thead>
               <tbody>
@@ -227,9 +227,9 @@ export default function StockPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>현재 손실률</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>추천 차수</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>현재 손실률</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>추천 차수</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -268,9 +268,9 @@ export default function StockPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>증권사</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>매수 수수료</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>매수+매도+거래세</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>증권사</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>매수 수수료</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>매수+매도+거래세</th>
                 </tr>
               </thead>
               <tbody>

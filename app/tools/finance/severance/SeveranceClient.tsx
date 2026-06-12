@@ -556,10 +556,10 @@ export default function SeveranceClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>퇴사일</th>
-                    <th>재직일수</th>
-                    <th>예상 퇴직금</th>
-                    <th>차이</th>
+                    <th scope="col">퇴사일</th>
+                    <th scope="col">재직일수</th>
+                    <th scope="col">예상 퇴직금</th>
+                    <th scope="col">차이</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -864,7 +864,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, alignItems: 'center', justifyItems: 'center' }}>
-      <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }}>
+      <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }} role="img" aria-label="퇴직 시 입금·공제 구성 도넛 차트">
         {slices.map(({ d, cum }) => {
           const startAngle = (cum / total) * Math.PI * 2 - Math.PI / 2
           const endAngle = ((cum + d.value) / total) * Math.PI * 2 - Math.PI / 2

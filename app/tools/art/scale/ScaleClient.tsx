@@ -253,9 +253,9 @@ export default function ScaleClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>도수</th>
-                    <th>음</th>
-                    <th>주파수 (Hz)</th>
+                    <th scope="col">도수</th>
+                    <th scope="col">음</th>
+                    <th scope="col">주파수 (Hz)</th>
                   </tr>
                 </thead>
                 <tbody>

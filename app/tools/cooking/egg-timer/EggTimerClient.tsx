@@ -33,6 +33,7 @@ export default function EggTimerClient() {
   const [remaining, setRemaining] = useState(0)
   const [running, setRunning] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const phaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)  // 800ms 페이즈 전환 예약 — 리셋 시 취소용
   const audioCtxRef = useRef<AudioContext | null>(null)
   const lastTickRef = useRef<number>(0)
   const isInstapotRunRef = useRef(false)  // 타이머 시작 시 인스턴트팟 여부 고정 (5-5-5 자연감압 단계)
@@ -115,6 +116,14 @@ export default function EggTimerClient() {
     } catch { /* ignore */ }
   }
 
+  /* 페이즈 전환 예약 취소 — 리셋 후 다음 페이즈 타이머가 멋대로 시작하는 경합 차단 */
+  const clearPhaseTimeout = () => {
+    if (phaseTimeoutRef.current) {
+      clearTimeout(phaseTimeoutRef.current)
+      phaseTimeoutRef.current = null
+    }
+  }
+
   /* Wake Lock — 조리 중 화면 자동 잠금 방지 (미지원 브라우저·저전력 모드는 무시) */
   const requestWakeLock = async () => {
     try {
@@ -151,9 +160,10 @@ export default function EggTimerClient() {
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [running])
 
-  /* 언마운트 — Wake Lock 해제 + 제목 원복 */
+  /* 언마운트 — 페이즈 전환 예약 취소 + Wake Lock 해제 + 제목 원복 */
   useEffect(() => {
     return () => {
+      clearPhaseTimeout()
       releaseWakeLock()
       restoreTitle()
     }
@@ -184,7 +194,8 @@ export default function EggTimerClient() {
             if (isInstapotRunRef.current) {
               // 인스턴트팟 5-5-5: 압력 5분 → 자연 감압 5분 → 얼음물 5분
               notify('🥚 압력 조리 완료!', '자연 감압 5분이 진행됩니다')
-              setTimeout(() => {
+              phaseTimeoutRef.current = setTimeout(() => {
+                phaseTimeoutRef.current = null
                 setPhase('releasing')
                 setRemaining(5 * 60)
                 setRunning(true)
@@ -192,7 +203,8 @@ export default function EggTimerClient() {
             } else {
               notify('🥚 계란 완성!', '얼음물에 식히기를 시작하세요')
               // 5분 식히기 자동 시작
-              setTimeout(() => {
+              phaseTimeoutRef.current = setTimeout(() => {
+                phaseTimeoutRef.current = null
                 setPhase('cooling')
                 setRemaining(5 * 60)
                 setRunning(true)
@@ -203,7 +215,8 @@ export default function EggTimerClient() {
             vibrate()
             flashTitle()
             notify('♨️ 자연 감압 완료', '이제 얼음물에 5분 식히세요')
-            setTimeout(() => {
+            phaseTimeoutRef.current = setTimeout(() => {
+              phaseTimeoutRef.current = null
               setPhase('cooling')
               setRemaining(5 * 60)
               setRunning(true)
@@ -238,6 +251,7 @@ export default function EggTimerClient() {
 
   /* 타이머 컨트롤 */
   const startTimer = () => {
+    clearPhaseTimeout()
     isInstapotRunRef.current = inputs.methodId === 'instapot'
     restoreTitle()
     setPhase('cooking')
@@ -264,6 +278,7 @@ export default function EggTimerClient() {
     if (ctx && ctx.state === 'suspended') ctx.resume()
   }
   const cancelTimer = () => {
+    clearPhaseTimeout()
     setRunning(false)
     setRemaining(0)
     setPhase('idle')

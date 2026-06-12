@@ -162,9 +162,9 @@ export default function CarCostPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>운전자 구분</th>
-              <th style={headCell}>연 보험료 평균</th>
-              <th style={headCell}>비고</th>
+              <th scope="col" style={headCell}>운전자 구분</th>
+              <th scope="col" style={headCell}>연 보험료 평균</th>
+              <th scope="col" style={headCell}>비고</th>
             </tr>
           </thead>
           <tbody>
@@ -187,9 +187,9 @@ export default function CarCostPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>배기량</th>
-              <th style={headCell}>연 자동차세</th>
-              <th style={headCell}>대상 예시</th>
+              <th scope="col" style={headCell}>배기량</th>
+              <th scope="col" style={headCell}>연 자동차세</th>
+              <th scope="col" style={headCell}>대상 예시</th>
             </tr>
           </thead>
           <tbody>
@@ -219,10 +219,10 @@ export default function CarCostPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>보유 기간</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>총 감가</th>
-                <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>1년당 감가</th>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>보유 기간</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>총 감가</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>1년당 감가</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
               </tr>
             </thead>
             <tbody>
@@ -261,10 +261,10 @@ export default function CarCostPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 평균</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
-              <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>월 평균</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>특징</th>
             </tr>
           </thead>
           <tbody>
@@ -310,11 +310,11 @@ export default function CarCostPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>연료</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>차량가</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700 }}>5년 연료비</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>5년 감가</th>
-              <th style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>연료</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>차량가</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700 }}>5년 연료비</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>5년 감가</th>
+              <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>5년 총비용</th>
             </tr>
           </thead>
           <tbody>
@@ -344,9 +344,9 @@ export default function CarCostPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>차종 예시</th>
-              <th style={headCell}>월 유지비 (감가 제외)</th>
-              <th style={headCell}>월 유지비 (감가 포함)</th>
+              <th scope="col" style={headCell}>차종 예시</th>
+              <th scope="col" style={headCell}>월 유지비 (감가 제외)</th>
+              <th scope="col" style={headCell}>월 유지비 (감가 포함)</th>
             </tr>
           </thead>
           <tbody>

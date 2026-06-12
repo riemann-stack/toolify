@@ -476,10 +476,10 @@ export default function IpoDepositClient() {
               <table className={s.scenarioTable}>
                 <thead>
                   <tr>
-                    <th>경쟁률</th>
-                    <th>청약 주수</th>
-                    <th>필요 증거금</th>
-                    <th>예상 비례</th>
+                    <th scope="col">경쟁률</th>
+                    <th scope="col">청약 주수</th>
+                    <th scope="col">필요 증거금</th>
+                    <th scope="col">예상 비례</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -3,12 +3,15 @@
 
 import { useEffect, useState } from 'react'
 import styles from './strength-level.module.css'
+import {
+  AGE_BAND_LABEL, AGE_FACTOR, FEMALE_FACTOR, BIG3_BASE_LEVELS,
+  type AgeBand, type LevelTable,
+} from '../one-rm/oneRMUtils'
 
 /* ─────────────────────────────────────────────────────────
  * 타입 & 기준 데이터
  * ───────────────────────────────────────────────────────── */
 type Sex = 'male' | 'female'
-type AgeGroup = '20s' | '30s' | '40s' | '50s' | '60s'
 type LiftKey = 'squat' | 'bench' | 'deadlift'
 type TabKey = 'level' | 'attempt' | 'plate' | 'record'
 
@@ -25,20 +28,17 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'record',  label: '내 기록' },
 ]
 
-/* 20대 남성 기준 체중 대비 기준값 [초보, 중급, 상급, 엘리트] — 1RM 계산기와 동일 */
+/* 20대 남성 기준 체중 대비 기준값 [초보, 중급, 상급, 엘리트] — 1RM 계산기와 단일 소스 공유 */
+const toThresholds = (t: LevelTable): number[] => [t.초보, t.중급, t.상급, t.엘리트]
 const BASE: Record<LiftKey, number[]> = {
-  squat:    [0.75, 1.25, 1.5, 2.0],
-  bench:    [0.5,  1.0,  1.25, 1.5],
-  deadlift: [1.0,  1.5,  2.0, 2.5],
+  squat:    toThresholds(BIG3_BASE_LEVELS.squat),
+  bench:    toThresholds(BIG3_BASE_LEVELS.bench),
+  deadlift: toThresholds(BIG3_BASE_LEVELS.deadlift),
 }
 
 /* 레벨명 — index 0 = 초보 미만(입문) */
 const LEVELS = ['입문', '초보', '중급', '상급', '엘리트']
 const LEVEL_COLORS = ['var(--muted)', '#059669', '#0EA5E9', '#EA580C', '#DC2626']
-
-/* 연령 보정 (1RM 계산기와 동일) */
-const AGE_FACTOR: Record<AgeGroup, number> = { '20s': 1, '30s': 0.95, '40s': 0.85, '50s': 0.75, '60s': 0.65 }
-const AGE_LABEL: Record<AgeGroup, string> = { '20s': '20대', '30s': '30대', '40s': '40대', '50s': '50대', '60s': '60대+' }
 
 /* ─────────────────────────────────────────────────────────
  * 헬퍼
@@ -148,7 +148,7 @@ function saveRecs(r: Rec[]): void {
 export default function StrengthLevelClient() {
   const [tab, setTab] = useState<TabKey>('level')
   const [sex, setSex] = useState<Sex>('male')
-  const [age, setAge] = useState<AgeGroup>('20s')
+  const [age, setAge] = useState<AgeBand>('20-30')
   const [bwStr, setBwStr] = useState('75')
   const [squatStr, setSquatStr] = useState('100')
   const [benchStr, setBenchStr] = useState('70')
@@ -166,7 +166,7 @@ export default function StrengthLevelClient() {
   const bench = num(benchStr)
   const dead = num(deadStr)
   const total = squat + bench + dead
-  const factor = (sex === 'female' ? 0.7 : 1) * AGE_FACTOR[age]
+  const factor = (sex === 'female' ? FEMALE_FACTOR : 1) * AGE_FACTOR[age]
 
   const liftVals: Record<LiftKey, number> = { squat, bench, deadlift: dead }
   const perLift = LIFTS.map(({ key, label, emoji }) => {
@@ -209,7 +209,7 @@ export default function StrengthLevelClient() {
   function handleCopy() {
     const txt = [
       '── 파워리프팅 ──',
-      `${sex === 'male' ? '남성' : '여성'} · ${AGE_LABEL[age]} · 체중 ${fmtKg(bw)}kg`,
+      `${sex === 'male' ? '남성' : '여성'} · ${AGE_BAND_LABEL[age]} · 체중 ${fmtKg(bw)}kg`,
       `스쿼트 ${fmtKg(squat)} / 벤치 ${fmtKg(bench)} / 데드 ${fmtKg(dead)} (kg)`,
       `3대 합: ${fmtKg(total)}kg (체중 ${totalRatio.toFixed(2)}배) · 종합 ${LEVELS[overallIdx]}`,
       `DOTS ${dotsScore.toFixed(1)} · Wilks ${wilksScore.toFixed(1)} · IPF GL ${ipfScore.toFixed(1)}`,
@@ -262,10 +262,10 @@ export default function StrengthLevelClient() {
         <div className={styles.field}>
           <span className={styles.fieldLabel}>연령대</span>
           <div className={styles.pillRow} role="group" aria-label="연령대">
-            {(Object.keys(AGE_LABEL) as AgeGroup[]).map((a) => (
+            {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((a) => (
               <button key={a} type="button" aria-pressed={age === a}
                 className={`${styles.pill} ${age === a ? styles.pillActive : ''}`} onClick={() => setAge(a)}>
-                {AGE_LABEL[a]}
+                {AGE_BAND_LABEL[a]}
               </button>
             ))}
           </div>
@@ -365,7 +365,7 @@ export default function StrengthLevelClient() {
               ))}
             </div>
             <p className={styles.helpText}>
-              {sex === 'female' ? '여성' : '남성'} · {AGE_LABEL[age]} 기준 보정(계수 {factor.toFixed(3)}×). 점수는 참고·발전용이며 타인과 비교해 압박받을 필요는 없습니다.
+              {sex === 'female' ? '여성' : '남성'} · {AGE_BAND_LABEL[age]} 기준 보정(계수 {factor.toFixed(3)}×). 점수는 참고·발전용이며 타인과 비교해 압박받을 필요는 없습니다.
             </p>
           </div>
 

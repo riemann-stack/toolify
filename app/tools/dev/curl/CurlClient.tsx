@@ -247,7 +247,7 @@ export default function CurlClient() {
               <span className={s.cardLabel}>🔎 Query Parameters ({parsed.queryParams.length})</span>
               <table className={s.kvTable}>
                 <thead>
-                  <tr><th>key</th><th>value</th></tr>
+                  <tr><th scope="col">key</th><th scope="col">value</th></tr>
                 </thead>
                 <tbody>
                   {parsed.queryParams.map((q, i) => (
@@ -267,7 +267,7 @@ export default function CurlClient() {
               <span className={s.cardLabel}>📋 Headers ({parsed.headers.length})</span>
               <table className={s.kvTable}>
                 <thead>
-                  <tr><th>key</th><th>value</th></tr>
+                  <tr><th scope="col">key</th><th scope="col">value</th></tr>
                 </thead>
                 <tbody>
                   {parsed.headers.map((h, i) => (
@@ -306,7 +306,7 @@ export default function CurlClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>🍪 Cookies ({parsed.cookies.length})</span>
               <table className={s.kvTable}>
-                <thead><tr><th>name</th><th>value</th></tr></thead>
+                <thead><tr><th scope="col">name</th><th scope="col">value</th></tr></thead>
                 <tbody>
                   {parsed.cookies.map((c, i) => (
                     <tr key={i}>
@@ -333,7 +333,7 @@ export default function CurlClient() {
               )}
               {parsed.bodyType === 'urlencode' && parsed.bodyForm && (
                 <table className={s.kvTable}>
-                  <thead><tr><th>name</th><th>value</th></tr></thead>
+                  <thead><tr><th scope="col">name</th><th scope="col">value</th></tr></thead>
                   <tbody>
                     {parsed.bodyForm.map((f, i) => (
                       <tr key={i}><td className={s.kvKey}>{f.key}</td><td className={s.kvValue}><code>{f.value}</code></td></tr>
@@ -343,7 +343,7 @@ export default function CurlClient() {
               )}
               {parsed.bodyType === 'multipart' && parsed.bodyMultipart && (
                 <table className={s.kvTable}>
-                  <thead><tr><th>name</th><th>type</th><th>value/path</th></tr></thead>
+                  <thead><tr><th scope="col">name</th><th scope="col">type</th><th scope="col">value/path</th></tr></thead>
                   <tbody>
                     {parsed.bodyMultipart.map((m, i) => (
                       <tr key={i}>
@@ -432,7 +432,7 @@ export default function CurlClient() {
             <div className={s.tableWrap}>
               <table className={s.guideTable}>
                 <thead>
-                  <tr><th>옵션</th><th>긴 형식</th><th>의미</th><th>예시</th></tr>
+                  <tr><th scope="col">옵션</th><th scope="col">긴 형식</th><th scope="col">의미</th><th scope="col">예시</th></tr>
                 </thead>
                 <tbody>
                   {[
@@ -470,7 +470,7 @@ export default function CurlClient() {
             <div className={s.tableWrap}>
               <table className={s.guideTable}>
                 <thead>
-                  <tr><th>항목</th><th>fetch</th><th>axios</th><th>Python requests</th><th>Node http</th><th>Go</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">fetch</th><th scope="col">axios</th><th scope="col">Python requests</th><th scope="col">Node http</th><th scope="col">Go</th></tr>
                 </thead>
                 <tbody>
                   {[

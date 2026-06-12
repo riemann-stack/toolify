@@ -1064,10 +1064,10 @@ export default function BakerPercentClient() {
               <table className={s.summaryTable}>
                 <thead>
                   <tr>
-                    <th>재료</th>
-                    <th>카테고리</th>
-                    <th>무게</th>
-                    <th>%</th>
+                    <th scope="col">재료</th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">무게</th>
+                    <th scope="col">%</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1260,10 +1260,10 @@ export default function BakerPercentClient() {
               <table className={s.summaryTable}>
                 <thead>
                   <tr>
-                    <th>재료</th>
-                    <th>카테고리</th>
-                    <th>무게</th>
-                    <th>%</th>
+                    <th scope="col">재료</th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">무게</th>
+                    <th scope="col">%</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1398,10 +1398,10 @@ export default function BakerPercentClient() {
               <table className={s.dualTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th style={{ textAlign: 'right' }}>본반죽</th>
-                    <th style={{ textAlign: 'right' }}>프리퍼먼트</th>
-                    <th style={{ textAlign: 'right' }}>전체</th>
+                    <th scope="col">항목</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>본반죽</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>프리퍼먼트</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>전체</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1479,7 +1479,7 @@ export default function BakerPercentClient() {
         </div>
         <table className={s.hydroGuide}>
           <thead>
-            <tr><th>수분율</th><th>특성</th><th>빵 종류 예시</th></tr>
+            <tr><th scope="col">수분율</th><th scope="col">특성</th><th scope="col">빵 종류 예시</th></tr>
           </thead>
           <tbody>
             <tr className={s.hydroLow}><td>50~60%</td><td>단단함, 다루기 쉬움</td><td>베이글, 비스킷</td></tr>

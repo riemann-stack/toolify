@@ -156,9 +156,9 @@ export default function CustomsPage() {
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>국가</th>
-                <th style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>면세 한도</th>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>인기 사이트</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>국가</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>면세 한도</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>인기 사이트</th>
               </tr>
             </thead>
             <tbody>

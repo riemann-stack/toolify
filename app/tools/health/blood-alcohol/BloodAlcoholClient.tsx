@@ -1078,7 +1078,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             <div style={{ overflowX: 'auto' }}>
               <table className={s.cumTable}>
                 <thead>
-                  <tr><th>자리</th><th>시간</th><th>음주</th><th>알코올(g)</th></tr>
+                  <tr><th scope="col">자리</th><th scope="col">시간</th><th scope="col">음주</th><th scope="col">알코올(g)</th></tr>
                 </thead>
                 <tbody>
                   {sessions.map((ses, idx) => {
@@ -1146,9 +1146,9 @@ function GuideTab() {
           <table className={s.cumTable}>
             <thead>
               <tr>
-                <th>BAC (g/dL)</th>
-                <th>한국 처벌</th>
-                <th>신체·정신 영향</th>
+                <th scope="col">BAC (g/dL)</th>
+                <th scope="col">한국 처벌</th>
+                <th scope="col">신체·정신 영향</th>
               </tr>
             </thead>
             <tbody>
@@ -1173,10 +1173,10 @@ function GuideTab() {
           <table className={s.cumTable}>
             <thead>
               <tr>
-                <th>직군</th>
-                <th>면허정지</th>
-                <th>면허취소</th>
-                <th>비고</th>
+                <th scope="col">직군</th>
+                <th scope="col">면허정지</th>
+                <th scope="col">면허취소</th>
+                <th scope="col">비고</th>
               </tr>
             </thead>
             <tbody>

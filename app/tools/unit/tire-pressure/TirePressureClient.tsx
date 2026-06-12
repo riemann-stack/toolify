@@ -359,9 +359,9 @@ function CheckTab() {
           <table className={styles.refTable}>
             <thead>
               <tr>
-                <th>차종</th>
-                <th>psi</th>
-                <th>kPa</th>
+                <th scope="col">차종</th>
+                <th scope="col">psi</th>
+                <th scope="col">kPa</th>
               </tr>
             </thead>
             <tbody>
@@ -548,7 +548,7 @@ function SizeTab() {
                 {/* 속도 구간별 — 계기판 표시 → 실제 속도 */}
                 <div style={{ overflowX: 'auto', marginTop: 12 }}>
                   <table className={styles.refTable}>
-                    <thead><tr><th>계기판 표시</th><th>실제 속도</th></tr></thead>
+                    <thead><tr><th scope="col">계기판 표시</th><th scope="col">실제 속도</th></tr></thead>
                     <tbody>
                       {[40, 60, 80, 100, 120].map(v => (
                         <tr key={v}>
@@ -597,7 +597,7 @@ function SizeTab() {
             {options.length > 0 ? (
               <div style={{ overflowX: 'auto' }}>
                 <table className={styles.refTable}>
-                  <thead><tr><th>사이즈</th><th>휠</th><th>외경</th><th>차이</th></tr></thead>
+                  <thead><tr><th scope="col">사이즈</th><th scope="col">휠</th><th scope="col">외경</th><th scope="col">차이</th></tr></thead>
                   <tbody>
                     {options.map((o, i) => (
                       <tr key={i}>

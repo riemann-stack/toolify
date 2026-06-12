@@ -217,8 +217,8 @@ export default function BoltWrenchClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th>값</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">값</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -256,11 +256,11 @@ export default function BoltWrenchClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>강도등급</th>
-                    <th>4.8</th>
-                    <th>8.8</th>
-                    <th>10.9</th>
-                    <th>12.9</th>
+                    <th scope="col">강도등급</th>
+                    <th scope="col">4.8</th>
+                    <th scope="col">8.8</th>
+                    <th scope="col">10.9</th>
+                    <th scope="col">12.9</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -439,10 +439,10 @@ export default function BoltWrenchClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>인치</th>
-                    <th>mm</th>
-                    <th>ISO 매칭</th>
-                    <th>옛 JIS 매칭</th>
+                    <th scope="col">인치</th>
+                    <th scope="col">mm</th>
+                    <th scope="col">ISO 매칭</th>
+                    <th scope="col">옛 JIS 매칭</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -509,10 +509,10 @@ export default function BoltWrenchClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>사이즈</th>
-                    <th>스패너 (ISO)</th>
-                    <th>표준 높이</th>
-                    <th>박형 높이</th>
+                    <th scope="col">사이즈</th>
+                    <th scope="col">스패너 (ISO)</th>
+                    <th scope="col">표준 높이</th>
+                    <th scope="col">박형 높이</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -559,11 +559,11 @@ export default function BoltWrenchClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>볼트</th>
-                    <th>평와셔 d</th>
-                    <th>평와셔 D</th>
-                    <th>평와셔 t</th>
-                    <th>스프링 d/D/t</th>
+                    <th scope="col">볼트</th>
+                    <th scope="col">평와셔 d</th>
+                    <th scope="col">평와셔 D</th>
+                    <th scope="col">평와셔 t</th>
+                    <th scope="col">스프링 d/D/t</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -591,11 +591,11 @@ export default function BoltWrenchClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>사이즈</th>
-                    <th>스패너</th>
-                    <th>알렌(소켓캡)</th>
-                    <th>너트 높이</th>
-                    <th>참고 토크 (8.8)</th>
+                    <th scope="col">사이즈</th>
+                    <th scope="col">스패너</th>
+                    <th scope="col">알렌(소켓캡)</th>
+                    <th scope="col">너트 높이</th>
+                    <th scope="col">참고 토크 (8.8)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -648,8 +648,8 @@ export default function BoltWrenchClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>공구 종류</th>
-                    <th>사이즈 / 스펙</th>
+                    <th scope="col">공구 종류</th>
+                    <th scope="col">사이즈 / 스펙</th>
                   </tr>
                 </thead>
                 <tbody>

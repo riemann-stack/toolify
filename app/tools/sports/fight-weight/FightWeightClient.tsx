@@ -387,7 +387,7 @@ export default function FightWeightClient() {
         <div style={{ overflowX: 'auto' }}>
           <table className={styles.classTable}>
             <thead>
-              <tr><th>체급</th><th>kg</th><th>lbs</th></tr>
+              <tr><th scope="col">체급</th><th scope="col">kg</th><th scope="col">lbs</th></tr>
             </thead>
             <tbody>
               {s.classes.map((c, i) => (
@@ -660,7 +660,7 @@ export default function FightWeightClient() {
               <div style={{ overflowX: 'auto' }}>
                 <table className={styles.scheduleTable}>
                   <thead>
-                    <tr><th>D-day</th><th>목표 체중</th><th>단계</th><th>권장 활동</th></tr>
+                    <tr><th scope="col">D-day</th><th scope="col">목표 체중</th><th scope="col">단계</th><th scope="col">권장 활동</th></tr>
                   </thead>
                   <tbody>
                     {schedule.map((r, i) => (

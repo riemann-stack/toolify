@@ -117,11 +117,11 @@ export default function StrengthLevelPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>종목</th>
-              <th style={headCell}>초보</th>
-              <th style={headCell}>중급</th>
-              <th style={headCell}>상급</th>
-              <th style={headCell}>엘리트</th>
+              <th scope="col" style={headCell}>종목</th>
+              <th scope="col" style={headCell}>초보</th>
+              <th scope="col" style={headCell}>중급</th>
+              <th scope="col" style={headCell}>상급</th>
+              <th scope="col" style={headCell}>엘리트</th>
             </tr>
           </thead>
           <tbody>
@@ -146,10 +146,10 @@ export default function StrengthLevelPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
-              <th style={headCell}>구분</th>
-              <th style={headCell}>Wilks</th>
-              <th style={headCell}>DOTS</th>
-              <th style={headCell}>IPF GL</th>
+              <th scope="col" style={headCell}>구분</th>
+              <th scope="col" style={headCell}>Wilks</th>
+              <th scope="col" style={headCell}>DOTS</th>
+              <th scope="col" style={headCell}>IPF GL</th>
             </tr>
           </thead>
           <tbody>
@@ -187,8 +187,8 @@ export default function StrengthLevelPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>점수</th>
-              <th style={headCell}>해석</th>
+              <th scope="col" style={headCell}>점수</th>
+              <th scope="col" style={headCell}>해석</th>
             </tr>
           </thead>
           <tbody>
@@ -211,12 +211,12 @@ export default function StrengthLevelPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>구분</th>
-              <th style={headCell}>20대</th>
-              <th style={headCell}>30대</th>
-              <th style={headCell}>40대</th>
-              <th style={headCell}>50대</th>
-              <th style={headCell}>60대+</th>
+              <th scope="col" style={headCell}>구분</th>
+              <th scope="col" style={headCell}>20대</th>
+              <th scope="col" style={headCell}>30대</th>
+              <th scope="col" style={headCell}>40대</th>
+              <th scope="col" style={headCell}>50대</th>
+              <th scope="col" style={headCell}>60대+</th>
             </tr>
           </thead>
           <tbody>

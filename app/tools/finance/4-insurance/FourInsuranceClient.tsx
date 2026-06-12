@@ -379,7 +379,7 @@ export default function FourInsuranceClient() {
               </div>
               <table className={s.itemTable}>
                 <thead>
-                  <tr><th>항목</th><th>요율</th><th>공제액</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">요율</th><th scope="col">공제액</th></tr>
                 </thead>
                 <tbody>
                   <tr className={s.rowPension}><td>국민연금</td><td>{empCalc.rates.pension.employee}%</td><td>{fmtKRW(empCalc.pensionEmp)}</td></tr>
@@ -533,9 +533,9 @@ export default function FourInsuranceClient() {
                 <table className={s.dualTable} style={{ minWidth: 460 }}>
                   <thead>
                     <tr>
-                      <th>항목</th>
-                      <th style={{ textAlign: 'right' }}>근로자</th>
-                      <th style={{ textAlign: 'right' }}>사업주</th>
+                      <th scope="col">항목</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>근로자</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>사업주</th>
                     </tr>
                   </thead>
                   <tbody>

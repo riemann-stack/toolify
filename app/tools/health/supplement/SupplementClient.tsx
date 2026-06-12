@@ -654,14 +654,14 @@ function AnalysisTab({ sups, lifeStage }: { sups: Supplement[]; lifeStage: LifeS
           <table className={s.resultTable}>
             <thead>
               <tr>
-                <th>성분</th>
+                <th scope="col">성분</th>
                 {productNames.map((n, i) => (
-                  <th key={i} style={{ fontSize: 11 }}>{n}</th>
+                  <th scope="col" key={i} style={{ fontSize: 11 }}>{n}</th>
                 ))}
-                <th>합계</th>
-                <th>권장량</th>
-                <th>상한</th>
-                <th>상태</th>
+                <th scope="col">합계</th>
+                <th scope="col">권장량</th>
+                <th scope="col">상한</th>
+                <th scope="col">상태</th>
               </tr>
             </thead>
             <tbody>

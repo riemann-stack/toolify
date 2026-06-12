@@ -629,9 +629,9 @@ export default function GolfCostClient() {
         <table className={s.breakdownTable}>
           <thead>
             <tr>
-              <th>항목</th>
-              <th style={{ textAlign: 'right' }}>팀 총액</th>
-              <th style={{ textAlign: 'right' }}>1인당</th>
+              <th scope="col">항목</th>
+              <th scope="col" style={{ textAlign: 'right' }}>팀 총액</th>
+              <th scope="col" style={{ textAlign: 'right' }}>1인당</th>
             </tr>
           </thead>
           <tbody>
@@ -889,9 +889,9 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         <table className={s.breakdownTable}>
           <thead>
             <tr>
-              <th>항목</th>
-              <th style={{ textAlign: 'right' }}>회원</th>
-              <th style={{ textAlign: 'right' }}>비회원</th>
+              <th scope="col">항목</th>
+              <th scope="col" style={{ textAlign: 'right' }}>회원</th>
+              <th scope="col" style={{ textAlign: 'right' }}>비회원</th>
             </tr>
           </thead>
           <tbody>

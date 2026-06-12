@@ -337,10 +337,10 @@ export default function PackingClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>캐리어</th>
-                    <th>크기</th>
-                    <th>용량</th>
-                    <th>적합한 일수</th>
+                    <th scope="col">캐리어</th>
+                    <th scope="col">크기</th>
+                    <th scope="col">용량</th>
+                    <th scope="col">적합한 일수</th>
                   </tr>
                 </thead>
                 <tbody>

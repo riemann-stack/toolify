@@ -551,7 +551,7 @@ export default function ScrewClient() {
             <span className={s.cardLabel}>📋 표준 인치 ↔ mm 변환표</span>
             <table className={s.compactTable}>
               <thead>
-                <tr><th>인치</th><th>mm</th><th>인치</th><th>mm</th></tr>
+                <tr><th scope="col">인치</th><th scope="col">mm</th><th scope="col">인치</th><th scope="col">mm</th></tr>
               </thead>
               <tbody>
                 {[
@@ -601,14 +601,14 @@ export default function ScrewClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>호칭</th>
-                    <th>외경</th>
-                    <th>피치 (표준)</th>
-                    <th>피치 (정밀)</th>
-                    <th>탭드릴 75%</th>
-                    <th>관통홀 (일반)</th>
-                    <th>육각</th>
-                    <th>스패너</th>
+                    <th scope="col">호칭</th>
+                    <th scope="col">외경</th>
+                    <th scope="col">피치 (표준)</th>
+                    <th scope="col">피치 (정밀)</th>
+                    <th scope="col">탭드릴 75%</th>
+                    <th scope="col">관통홀 (일반)</th>
+                    <th scope="col">육각</th>
+                    <th scope="col">스패너</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -636,12 +636,12 @@ export default function ScrewClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>호칭</th>
-                    <th>외경 (mm)</th>
-                    <th>TPI</th>
-                    <th>피치 (mm)</th>
-                    <th>탭드릴</th>
-                    <th>관통홀</th>
+                    <th scope="col">호칭</th>
+                    <th scope="col">외경 (mm)</th>
+                    <th scope="col">TPI</th>
+                    <th scope="col">피치 (mm)</th>
+                    <th scope="col">탭드릴</th>
+                    <th scope="col">관통홀</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -667,10 +667,10 @@ export default function ScrewClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>호칭</th>
-                    <th>산둘레</th>
-                    <th>외경 (mm)</th>
-                    <th>탭드릴</th>
+                    <th scope="col">호칭</th>
+                    <th scope="col">산둘레</th>
+                    <th scope="col">외경 (mm)</th>
+                    <th scope="col">탭드릴</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -694,9 +694,9 @@ export default function ScrewClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>피스 직경</th>
-                    <th>경질목 (오크·메이플)</th>
-                    <th>연질목 (소나무·삼나무)</th>
+                    <th scope="col">피스 직경</th>
+                    <th scope="col">경질목 (오크·메이플)</th>
+                    <th scope="col">연질목 (소나무·삼나무)</th>
                   </tr>
                 </thead>
                 <tbody>

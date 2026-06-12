@@ -518,18 +518,3 @@ export function saveSaved(items: SavedNumber[]) {
 export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
 }
-
-/* ─── 사행성 안내 dismiss localStorage ─── */
-const NOTICE_KEY = 'youtil-lotto-notice-dismissed-v1'
-export function isNoticeDismissed(): boolean {
-  if (typeof window === 'undefined') return false
-  return localStorage.getItem(NOTICE_KEY) === '1'
-}
-export function dismissNotice() {
-  if (typeof window === 'undefined') return
-  try { localStorage.setItem(NOTICE_KEY, '1') } catch { /* */ }
-}
-export function reopenNotice() {
-  if (typeof window === 'undefined') return
-  try { localStorage.removeItem(NOTICE_KEY) } catch { /* */ }
-}

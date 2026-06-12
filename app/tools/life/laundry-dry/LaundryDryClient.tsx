@@ -790,10 +790,10 @@ function ComboTab({ baselineHours, env, envCtx }: { baselineHours: number; env: 
                 <table className={styles.compareTable}>
                   <thead>
                     <tr>
-                      <th>#</th>
-                      <th>조합</th>
-                      <th style={{ textAlign: 'right' }}>시간</th>
-                      <th style={{ textAlign: 'right' }}>전기료</th>
+                      <th scope="col">#</th>
+                      <th scope="col">조합</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>시간</th>
+                      <th scope="col" style={{ textAlign: 'right' }}>전기료</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -946,10 +946,10 @@ function TargetTab({ baselineHours, now, envCtx }: { baselineHours: number; now:
               <table className={styles.compareTable}>
                 <thead>
                   <tr>
-                    <th>시나리오</th>
-                    <th>장비</th>
-                    <th style={{ textAlign: 'right' }}>시간</th>
-                    <th style={{ textAlign: 'right' }}>전기료</th>
+                    <th scope="col">시나리오</th>
+                    <th scope="col">장비</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>시간</th>
+                    <th scope="col" style={{ textAlign: 'right' }}>전기료</th>
                   </tr>
                 </thead>
                 <tbody>

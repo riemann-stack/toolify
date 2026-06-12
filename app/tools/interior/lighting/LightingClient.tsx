@@ -594,7 +594,7 @@ export default function LightingClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.convertTable}>
                 <thead>
-                  <tr><th>종류</th><th>1L당 효율</th><th>같은 밝기 W</th><th>수명</th></tr>
+                  <tr><th scope="col">종류</th><th scope="col">1L당 효율</th><th scope="col">같은 밝기 W</th><th scope="col">수명</th></tr>
                 </thead>
                 <tbody>
                   {convertResult.rows.map(r => (
@@ -652,7 +652,7 @@ export default function LightingClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.guideTable}>
                 <thead>
-                  <tr><th>공간</th><th>권장 lux</th><th>색온도</th></tr>
+                  <tr><th scope="col">공간</th><th scope="col">권장 lux</th><th scope="col">색온도</th></tr>
                 </thead>
                 <tbody>
                   {SPACE_TYPES.map(s => (
@@ -702,7 +702,7 @@ export default function LightingClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.convertTable}>
                 <thead>
-                  <tr><th>루멘</th><th>백열전구</th><th>할로겐</th><th>형광등</th><th>LED</th></tr>
+                  <tr><th scope="col">루멘</th><th scope="col">백열전구</th><th scope="col">할로겐</th><th scope="col">형광등</th><th scope="col">LED</th></tr>
                 </thead>
                 <tbody>
                   {[

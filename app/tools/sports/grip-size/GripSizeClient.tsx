@@ -356,10 +356,10 @@ export default function GripSizeClient() {
           <table className={s.gripTable}>
             <thead>
               <tr>
-                <th>손바닥+약지 (cm)</th>
-                <th>테니스 (EU·US)</th>
-                <th>배드민턴</th>
-                <th>스쿼시</th>
+                <th scope="col">손바닥+약지 (cm)</th>
+                <th scope="col">테니스 (EU·US)</th>
+                <th scope="col">배드민턴</th>
+                <th scope="col">스쿼시</th>
               </tr>
             </thead>
             <tbody>

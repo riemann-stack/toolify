@@ -446,7 +446,7 @@ function ShoeView({ gender, mm, setMm, search, setSearch }: { gender: Gender; mm
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국 (mm)', 'US', 'UK', 'EU'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['한국 (mm)', 'US', 'UK', 'EU'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -518,7 +518,7 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
           <table className={styles.table}>
             <thead>
               <tr>
-                {['한국', 'US', 'EU', '가슴 (cm)', '셔츠목 (인치)'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+                {['한국', 'US', 'EU', '가슴 (cm)', '셔츠목 (인치)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -571,7 +571,7 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국', 'US', 'EU', 'UK', '가슴 (cm)', '허리 (cm)'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['한국', 'US', 'EU', 'UK', '가슴 (cm)', '허리 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -639,7 +639,7 @@ function BottomView({ gender, waist, setWaist, search, setSearch }: { gender: Ge
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국', 'US 인치', 'EU', '허리 (cm)'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['한국', 'US 인치', 'EU', '허리 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -740,7 +740,7 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
           <table className={styles.table}>
             <thead>
               <tr>
-                {['한국', 'US', 'EU', '밑가슴 (cm)'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+                {['한국', 'US', 'EU', '밑가슴 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -768,7 +768,7 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
           <table className={styles.table}>
             <thead>
               <tr>
-                {['한국', 'US', 'EU', 'UK', '컵 차이 (cm)'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+                {['한국', 'US', 'EU', 'UK', '컵 차이 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -844,7 +844,7 @@ function RingView({ mm, setMm, search, setSearch }: { mm: string; setMm: (v: str
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국 호', '안지름', '둘레', 'US', 'UK', 'EU', '일본'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['한국 호', '안지름', '둘레', 'US', 'UK', 'EU', '일본'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -916,7 +916,7 @@ function HatView({ cm, setCm, search, setSearch }: { cm: string; setCm: (v: stri
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국', '머리 (cm)', 'US', 'UK', 'EU', '메모'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['한국', '머리 (cm)', 'US', 'UK', 'EU', '메모'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -989,7 +989,7 @@ function GloveView({ gender, cm, setCm, search, setSearch }: { gender: Gender; c
         <table className={styles.table}>
           <thead>
             <tr>
-              {['손둘레 (cm)', '한국', 'US', 'EU'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['손둘레 (cm)', '한국', 'US', 'EU'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -1055,7 +1055,7 @@ function BeltView({ cm, setCm, search, setSearch }: { cm: string; setCm: (v: str
         <table className={styles.table}>
           <thead>
             <tr>
-              {['허리 (cm)', '한국 인치', 'US 인치', 'EU'].map(h => <th key={h} className={styles.th}>{h}</th>)}
+              {['허리 (cm)', '한국 인치', 'US 인치', 'EU'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>

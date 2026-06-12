@@ -180,10 +180,10 @@ export default function AreaClient() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>전용면적</th>
-                  <th>평수</th>
-                  <th>일반 호칭</th>
-                  <th>가구 유형</th>
+                  <th scope="col">전용면적</th>
+                  <th scope="col">평수</th>
+                  <th scope="col">일반 호칭</th>
+                  <th scope="col">가구 유형</th>
                 </tr>
               </thead>
               <tbody>
@@ -219,9 +219,9 @@ export default function AreaClient() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>면적 종류</th>
-                  <th>포함 항목</th>
-                  <th>예 (84㎡ 기준)</th>
+                  <th scope="col">면적 종류</th>
+                  <th scope="col">포함 항목</th>
+                  <th scope="col">예 (84㎡ 기준)</th>
                 </tr>
               </thead>
               <tbody>
@@ -284,10 +284,10 @@ export default function AreaClient() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>평형</th>
-                  <th>방 개수</th>
-                  <th>거실 크기</th>
-                  <th>추천 가구</th>
+                  <th scope="col">평형</th>
+                  <th scope="col">방 개수</th>
+                  <th scope="col">거실 크기</th>
+                  <th scope="col">추천 가구</th>
                 </tr>
               </thead>
               <tbody>

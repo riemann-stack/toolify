@@ -92,10 +92,10 @@ export default function SupplementPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
                 <tr>
-                  <th style={headCell}>영양소</th>
-                  <th style={headCell}>권장량</th>
-                  <th style={headCell}>상한량</th>
-                  <th style={headCell}>초과 주의사항</th>
+                  <th scope="col" style={headCell}>영양소</th>
+                  <th scope="col" style={headCell}>권장량</th>
+                  <th scope="col" style={headCell}>상한량</th>
+                  <th scope="col" style={headCell}>초과 주의사항</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,9 +194,9 @@ export default function SupplementPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>EPA + DHA 합산</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>구간</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>설명</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>EPA + DHA 합산</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>구간</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>설명</th>
                 </tr>
               </thead>
               <tbody>
@@ -223,9 +223,9 @@ export default function SupplementPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626', fontWeight: 700 }}>주의 영양제</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>대응</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626', fontWeight: 700 }}>주의 영양제</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>대응</th>
                 </tr>
               </thead>
               <tbody>

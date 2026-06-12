@@ -590,7 +590,7 @@ function SimTab() {
           <div className={styles.compareTable}>
             <table>
               <thead>
-                <tr><th></th><th>이론값</th><th>실제({validN.toLocaleString()}회)</th><th>오차</th></tr>
+                <tr><th scope="col"></th><th scope="col">이론값</th><th scope="col">실제({validN.toLocaleString()}회)</th><th scope="col">오차</th></tr>
               </thead>
               <tbody>
                 <tr>
@@ -826,7 +826,7 @@ function WhyTab() {
         <div className={styles.genTable}>
           <table>
             <thead>
-              <tr><th>문 수</th><th>유지 승률</th><th>바꾸기 승률</th></tr>
+              <tr><th scope="col">문 수</th><th scope="col">유지 승률</th><th scope="col">바꾸기 승률</th></tr>
             </thead>
             <tbody>
               {[

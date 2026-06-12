@@ -120,10 +120,10 @@ export default function CaffeinePage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>음료</th>
-                    <th style={headCell}>용량</th>
-                    <th style={headCell}>카페인</th>
-                    <th style={headCell}>비교</th>
+                    <th scope="col" style={headCell}>음료</th>
+                    <th scope="col" style={headCell}>용량</th>
+                    <th scope="col" style={headCell}>카페인</th>
+                    <th scope="col" style={headCell}>비교</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -184,10 +184,10 @@ export default function CaffeinePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>대상</th>
-                  <th style={headCell}>일일 권장 최대</th>
-                  <th style={headCell}>아메리카노 환산</th>
-                  <th style={headCell}>출처</th>
+                  <th scope="col" style={headCell}>대상</th>
+                  <th scope="col" style={headCell}>일일 권장 최대</th>
+                  <th scope="col" style={headCell}>아메리카노 환산</th>
+                  <th scope="col" style={headCell}>출처</th>
                 </tr>
               </thead>
               <tbody>

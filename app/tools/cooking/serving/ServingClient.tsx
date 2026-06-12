@@ -540,10 +540,10 @@ export default function ServingClient() {
                 <table className={styles.fridgeTable}>
                   <thead>
                     <tr>
-                      <th>재료</th>
-                      <th>필요량</th>
-                      <th>보유</th>
-                      <th>사야 할 양</th>
+                      <th scope="col">재료</th>
+                      <th scope="col">필요량</th>
+                      <th scope="col">보유</th>
+                      <th scope="col">사야 할 양</th>
                     </tr>
                   </thead>
                   <tbody>

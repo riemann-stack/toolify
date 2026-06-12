@@ -432,7 +432,7 @@ export default function BrewClient() {
           {/* SVG 타임라인 */}
           <div className={s.card}>
             <span className={s.cardLabel}>타임라인 (0~210초)</span>
-            <svg viewBox="0 0 420 80" width="100%" style={{ maxWidth: 600 }}>
+            <svg viewBox="0 0 420 80" width="100%" style={{ maxWidth: 600 }} role="img" aria-label="추출 단계 타임라인 그래프">
               {schedule.map((step, i) => {
                 const x1 = (step.startSec / 210) * 420
                 const w = ((step.endSec - step.startSec) / 210) * 420
@@ -514,7 +514,7 @@ export default function BrewClient() {
             </div>
 
             {/* SVG 게이지 */}
-            <svg viewBox="0 0 420 70" width="100%" style={{ marginTop: 12, maxWidth: 600 }}>
+            <svg viewBox="0 0 420 70" width="100%" style={{ marginTop: 12, maxWidth: 600 }} role="img" aria-label="추출 비율 농도 게이지">
               <defs>
                 <linearGradient id="intensityGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#DB2777" />

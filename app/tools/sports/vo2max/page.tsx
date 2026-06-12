@@ -116,11 +116,11 @@ export default function VO2MaxPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>방법</th>
-                    <th style={headCell}>소요</th>
-                    <th style={headCell}>난이도</th>
-                    <th style={headCell}>정확도</th>
-                    <th style={headCell}>특징</th>
+                    <th scope="col" style={headCell}>방법</th>
+                    <th scope="col" style={headCell}>소요</th>
+                    <th scope="col" style={headCell}>난이도</th>
+                    <th scope="col" style={headCell}>정확도</th>
+                    <th scope="col" style={headCell}>특징</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -187,12 +187,12 @@ export default function VO2MaxPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>연령</th>
-                    <th style={headCell}>매우 미흡</th>
-                    <th style={headCell}>미흡</th>
-                    <th style={headCell}>평균</th>
-                    <th style={headCell}>우수</th>
-                    <th style={headCell}>매우 우수</th>
+                    <th scope="col" style={headCell}>연령</th>
+                    <th scope="col" style={headCell}>매우 미흡</th>
+                    <th scope="col" style={headCell}>미흡</th>
+                    <th scope="col" style={headCell}>평균</th>
+                    <th scope="col" style={headCell}>우수</th>
+                    <th scope="col" style={headCell}>매우 우수</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -213,12 +213,12 @@ export default function VO2MaxPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>연령</th>
-                    <th style={headCell}>매우 미흡</th>
-                    <th style={headCell}>미흡</th>
-                    <th style={headCell}>평균</th>
-                    <th style={headCell}>우수</th>
-                    <th style={headCell}>매우 우수</th>
+                    <th scope="col" style={headCell}>연령</th>
+                    <th scope="col" style={headCell}>매우 미흡</th>
+                    <th scope="col" style={headCell}>미흡</th>
+                    <th scope="col" style={headCell}>평균</th>
+                    <th scope="col" style={headCell}>우수</th>
+                    <th scope="col" style={headCell}>매우 우수</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -286,9 +286,9 @@ export default function VO2MaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>연령 / 성별</th>
-                  <th style={headCell}>평균 VO₂max</th>
-                  <th style={headCell}>일반 운동 가이드</th>
+                  <th scope="col" style={headCell}>연령 / 성별</th>
+                  <th scope="col" style={headCell}>평균 VO₂max</th>
+                  <th scope="col" style={headCell}>일반 운동 가이드</th>
                 </tr>
               </thead>
               <tbody>

@@ -256,10 +256,10 @@ export default function UnitPriceClient() {
             <table className={s.compareTable}>
               <thead>
                 <tr>
-                  <th>상품</th>
-                  <th className={s.numCol}>실결제</th>
-                  <th className={s.numCol}>총 용량</th>
-                  <th className={s.numCol}>단가</th>
+                  <th scope="col">상품</th>
+                  <th scope="col" className={s.numCol}>실결제</th>
+                  <th scope="col" className={s.numCol}>총 용량</th>
+                  <th scope="col" className={s.numCol}>단가</th>
                 </tr>
               </thead>
               <tbody>

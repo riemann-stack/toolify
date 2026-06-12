@@ -1,7 +1,10 @@
 /* ──────────────────────────────────────────────────────
    health/weightloss/weightLossUtils.ts
    안전 감량 속도, BMI 체크, 목표일 역산, 정체기, 운동 시간, 매크로
+   BMI 계산·분류 단일 소스: ../bmi/bmiUtils
    ────────────────────────────────────────────────────── */
+
+import { calcBMI, classifyBMI } from '../bmi/bmiUtils'
 
 export type Gender = 'male' | 'female'
 export type Severity = 'safe' | 'caution' | 'warning' | 'danger'
@@ -92,21 +95,12 @@ export const DANGER_THRESHOLDS = {
   underBMIWarn:       18.5,
 }
 
-const KCAL_PER_KG = 7700  // 1kg 체지방 ≈ 7,700kcal
+export const KCAL_PER_KG = 7700  // 1kg 체지방 ≈ 7,700kcal
 
-/* ─── BMI ─── */
-export function calcBMI(height: number, weight: number): number {
-  if (height <= 0) return 0
-  const m = height / 100
-  return weight / (m * m)
-}
-
+/* ─── BMI — 분류는 bmiUtils(한국 기준) 재사용 ─── */
 export function bmiCategoryName(bmi: number): { name: string; color: string; isUnder: boolean } {
-  if (bmi < 18.5) return { name: '저체중', color: '#0891B2', isUnder: true }
-  if (bmi < 23.0) return { name: '정상',   color: '#059669', isUnder: false }
-  if (bmi < 25.0) return { name: '과체중', color: '#A16207', isUnder: false }
-  if (bmi < 30.0) return { name: '비만 1단계', color: '#EA580C', isUnder: false }
-  return { name: '비만 2~3단계', color: '#DC2626', isUnder: false }
+  const cat = classifyBMI(bmi, 'KOREA')
+  return { name: cat.name, color: cat.color, isUnder: cat.id === 'underweight' }
 }
 
 /* ─── 메인 입력·결과 타입 ─── */

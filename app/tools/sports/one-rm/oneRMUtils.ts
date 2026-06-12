@@ -26,6 +26,18 @@ export const AGE_FACTOR: Record<AgeBand, number> = {
 export const FEMALE_FACTOR = 0.70
 
 // ─────────────────────────────────────────────────────────────
+// 3대 운동 기준 수준표 (남성 20대, 체중 대비 배수)
+// — 1RM 계산기·3대 측정기(strength-level)가 공유하는 단일 소스
+// ─────────────────────────────────────────────────────────────
+export type LevelTable = { 초보: number; 중급: number; 상급: number; 엘리트: number }
+
+export const BIG3_BASE_LEVELS: Record<'squat' | 'bench' | 'deadlift', LevelTable> = {
+  squat:    { 초보: 0.75, 중급: 1.25, 상급: 1.5,  엘리트: 2.0 },
+  bench:    { 초보: 0.5,  중급: 1.0,  상급: 1.25, 엘리트: 1.5 },
+  deadlift: { 초보: 1.0,  중급: 1.5,  상급: 2.0,  엘리트: 2.5 },
+}
+
+// ─────────────────────────────────────────────────────────────
 // 워밍업 자동 생성
 // ─────────────────────────────────────────────────────────────
 export type WarmupSet = {

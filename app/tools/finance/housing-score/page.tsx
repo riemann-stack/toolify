@@ -110,10 +110,10 @@ export default function HousingScorePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>영역</th>
-                  <th style={headCell}>최대</th>
-                  <th style={headCell}>비중</th>
-                  <th style={headCell}>핵심</th>
+                  <th scope="col" style={headCell}>영역</th>
+                  <th scope="col" style={headCell}>최대</th>
+                  <th scope="col" style={headCell}>비중</th>
+                  <th scope="col" style={headCell}>핵심</th>
                 </tr>
               </thead>
               <tbody>
@@ -159,8 +159,8 @@ export default function HousingScorePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>무주택 기간</th>
-                  <th style={headCell}>점수</th>
+                  <th scope="col" style={headCell}>무주택 기간</th>
+                  <th scope="col" style={headCell}>점수</th>
                 </tr>
               </thead>
               <tbody>
@@ -209,8 +209,8 @@ export default function HousingScorePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>부양가족 수 (본인 제외)</th>
-                  <th style={headCell}>점수</th>
+                  <th scope="col" style={headCell}>부양가족 수 (본인 제외)</th>
+                  <th scope="col" style={headCell}>점수</th>
                 </tr>
               </thead>
               <tbody>
@@ -233,9 +233,9 @@ export default function HousingScorePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>구분</th>
-                  <th style={headCell}>가점 기준</th>
-                  <th style={headCell}>1순위 조건</th>
+                  <th scope="col" style={headCell}>구분</th>
+                  <th scope="col" style={headCell}>가점 기준</th>
+                  <th scope="col" style={headCell}>1순위 조건</th>
                 </tr>
               </thead>
               <tbody>
@@ -269,10 +269,10 @@ export default function HousingScorePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>지역</th>
-                  <th style={headCell}>평균 당첨</th>
-                  <th style={headCell}>최저 당첨</th>
-                  <th style={headCell}>대표 단지</th>
+                  <th scope="col" style={headCell}>지역</th>
+                  <th scope="col" style={headCell}>평균 당첨</th>
+                  <th scope="col" style={headCell}>최저 당첨</th>
+                  <th scope="col" style={headCell}>대표 단지</th>
                 </tr>
               </thead>
               <tbody>
@@ -312,9 +312,9 @@ export default function HousingScorePage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>유형</th>
-                    <th style={headCell}>공급 비율</th>
-                    <th style={headCell}>핵심 자격</th>
+                    <th scope="col" style={headCell}>유형</th>
+                    <th scope="col" style={headCell}>공급 비율</th>
+                    <th scope="col" style={headCell}>핵심 자격</th>
                   </tr>
                 </thead>
                 <tbody>

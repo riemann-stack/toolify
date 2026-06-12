@@ -162,7 +162,7 @@ export default function StockDecisionClient() {
       {/* 헤더 마스코트 */}
       <div className={s.mascotHeader}>
         <div className={s.mascotImgWrap}>
-          <Image src="/images/stock-decision/chinchilla-face.png" alt="친칠라 마스코트"
+          <Image src="/images/stock-decision/chinchilla-face.webp" alt="친칠라 마스코트"
             fill sizes="80px" className={s.mascotImg} priority />
         </div>
         <div className={s.mascotText}>
@@ -537,7 +537,7 @@ function ChinchillaStage({ running, pickedIdx, options }: { running: boolean; pi
         ))}
       </div>
       <div className={`${s.chin} ${running ? s.chinScurry : ''} ${pickedIdx !== null && !running ? s.chinHappy : ''}`}>
-        <Image src="/images/stock-decision/chinchilla-body.png" alt="친칠라"
+        <Image src="/images/stock-decision/chinchilla-body.webp" alt="친칠라"
           fill sizes="100px" className={s.chinImg} />
       </div>
     </div>
@@ -613,7 +613,7 @@ function CatPawStage({ running, pickedIdx, options }: { running: boolean; picked
       </div>
       <div className={`${s.paw} ${running ? s.pawWiggle : ''} ${pickedIdx !== null && !running ? s.pawTap : ''}`}
         style={pickedIdx !== null && !running ? { left: `${(pickedIdx + 0.5) * (100 / options.length)}%` } : undefined}>
-        <Image src="/images/stock-decision/cat-paw.png" alt="고양이 발"
+        <Image src="/images/stock-decision/cat-paw.webp" alt="고양이 발"
           fill sizes="70px" className={s.pawImg} />
       </div>
     </div>

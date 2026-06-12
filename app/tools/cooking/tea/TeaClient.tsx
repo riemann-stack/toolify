@@ -307,7 +307,7 @@ export default function TeaClient() {
               <div className={s.tableScroll}>
                 <table className={s.detailTable}>
                   <thead>
-                    <tr><th>항목</th><th>핫 추출</th><th>냉침</th></tr>
+                    <tr><th scope="col">항목</th><th scope="col">핫 추출</th><th scope="col">냉침</th></tr>
                   </thead>
                   <tbody>
                     <tr><td>카페인</td><td className={s.cellMono}>{fmt(caffeine, 0)} mg</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(caffeine * 0.6, 0)} mg (−40%)</td></tr>
@@ -348,7 +348,7 @@ export default function TeaClient() {
                 />
               </div>
 
-              <svg viewBox="0 0 420 60" width="100%" style={{ maxWidth: 600 }}>
+              <svg viewBox="0 0 420 60" width="100%" style={{ maxWidth: 600 }} role="img" aria-label="우림 시간 탄닌 추출 게이지">
                 <defs>
                   <linearGradient id="tanninGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#0D9488" />
@@ -455,11 +455,11 @@ export default function TeaClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>차</th>
-                    <th>온도</th>
-                    <th>1탕</th>
-                    <th>비율</th>
-                    <th>카페인</th>
+                    <th scope="col">차</th>
+                    <th scope="col">온도</th>
+                    <th scope="col">1탕</th>
+                    <th scope="col">비율</th>
+                    <th scope="col">카페인</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -512,9 +512,9 @@ export default function TeaClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>다구</th>
-                    <th>설명</th>
-                    <th>추천 차</th>
+                    <th scope="col">다구</th>
+                    <th scope="col">설명</th>
+                    <th scope="col">추천 차</th>
                   </tr>
                 </thead>
                 <tbody>

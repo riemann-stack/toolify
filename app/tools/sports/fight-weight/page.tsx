@@ -172,7 +172,7 @@ export default function FightWeightPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['단체', '계체 시각', '재수화 시간', '특이사항'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -208,10 +208,10 @@ export default function FightWeightPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontWeight: 700 }}>적극 (1.5%/주)</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700 }}>위험 (2%/주)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontWeight: 700 }}>적극 (1.5%/주)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700 }}>위험 (2%/주)</th>
                 </tr>
               </thead>
               <tbody>

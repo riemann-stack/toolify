@@ -130,7 +130,7 @@ export default function DsrPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['구분', '적용률', '변동형 가산(예시)', '특징'].map((hh, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
                   ))}
                 </tr>
               </thead>

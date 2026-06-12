@@ -629,7 +629,7 @@ export default function ReviewIntervalClient() {
             <div className={s.tableScroll}>
               <table className={s.scheduleTable}>
                 <thead>
-                  <tr><th>회차</th><th>복습일</th><th>간격</th><th>권장 시간</th></tr>
+                  <tr><th scope="col">회차</th><th scope="col">복습일</th><th scope="col">간격</th><th scope="col">권장 시간</th></tr>
                 </thead>
                 <tbody>
                   {simpleSchedule.map((r, i) => {
@@ -1019,7 +1019,7 @@ export default function ReviewIntervalClient() {
                 <div className={s.tableScroll}>
                   <table className={s.scheduleTable}>
                     <thead>
-                      <tr><th>일자</th><th>신규</th><th>복습</th><th>총 시간</th></tr>
+                      <tr><th scope="col">일자</th><th scope="col">신규</th><th scope="col">복습</th><th scope="col">총 시간</th></tr>
                     </thead>
                     <tbody>
                       {dailySchedule.map((d, i) => {

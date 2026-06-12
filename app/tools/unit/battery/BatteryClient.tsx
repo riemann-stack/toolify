@@ -279,9 +279,9 @@ export default function BatteryClient() {
           <table className={styles.refTable}>
             <thead>
               <tr>
-                <th>mAh</th>
-                <th>Wh (3.7V)</th>
-                <th>반입 가능?</th>
+                <th scope="col">mAh</th>
+                <th scope="col">Wh (3.7V)</th>
+                <th scope="col">반입 가능?</th>
               </tr>
             </thead>
             <tbody>

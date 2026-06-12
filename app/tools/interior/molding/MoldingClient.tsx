@@ -539,11 +539,11 @@ export default function MoldingClient() {
               <table className={s.analysisTable}>
                 <thead>
                   <tr>
-                    <th>종류</th>
-                    <th>기본</th>
-                    <th>+여유</th>
-                    <th>총 길이</th>
-                    <th>개수</th>
+                    <th scope="col">종류</th>
+                    <th scope="col">기본</th>
+                    <th scope="col">+여유</th>
+                    <th scope="col">총 길이</th>
+                    <th scope="col">개수</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -635,11 +635,11 @@ export default function MoldingClient() {
               <table className={s.refTable}>
                 <thead>
                   <tr>
-                    <th>평수</th>
-                    <th>둘레</th>
-                    <th>천장 몰딩</th>
-                    <th>걸레받이*</th>
-                    <th>예상 자재비</th>
+                    <th scope="col">평수</th>
+                    <th scope="col">둘레</th>
+                    <th scope="col">천장 몰딩</th>
+                    <th scope="col">걸레받이*</th>
+                    <th scope="col">예상 자재비</th>
                   </tr>
                 </thead>
                 <tbody>

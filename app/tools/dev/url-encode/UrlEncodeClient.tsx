@@ -321,7 +321,7 @@ export default function UrlEncodeClient() {
               </span>
               <table className={s.koreanTable}>
                 <thead>
-                  <tr><th>글자</th><th>코드포인트</th><th>UTF-8 bytes</th><th>URL 인코딩</th></tr>
+                  <tr><th scope="col">글자</th><th scope="col">코드포인트</th><th scope="col">UTF-8 bytes</th><th scope="col">URL 인코딩</th></tr>
                 </thead>
                 <tbody>
                   {koreanAnalysis.slice(0, 50).map((k, i) => (
@@ -615,7 +615,7 @@ export default function UrlEncodeClient() {
             <div className={s.tableWrap}>
               <table className={s.compareTable}>
                 <thead>
-                  <tr><th>함수</th><th>인코드 안 함</th><th>인코드 함</th><th>사용처</th></tr>
+                  <tr><th scope="col">함수</th><th scope="col">인코드 안 함</th><th scope="col">인코드 함</th><th scope="col">사용처</th></tr>
                 </thead>
                 <tbody>
                   <tr>
@@ -661,7 +661,7 @@ export default function UrlEncodeClient() {
             <div className={s.tableWrap}>
               <table className={s.compareTable}>
                 <thead>
-                  <tr><th>글자</th><th>코드포인트</th><th>UTF-8</th><th>URL 인코딩</th></tr>
+                  <tr><th scope="col">글자</th><th scope="col">코드포인트</th><th scope="col">UTF-8</th><th scope="col">URL 인코딩</th></tr>
                 </thead>
                 <tbody>
                   <tr><td className={s.koreanChar}>한</td><td className={s.codeMono}>U+D55C</td><td className={s.codeMono}>3 bytes</td><td className={s.monoAccent}>%ED%95%9C</td></tr>

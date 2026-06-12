@@ -375,13 +375,13 @@ export default function CarTaxClient() {
           <table className={s.yearlyTable}>
             <thead>
               <tr>
-                <th>경과</th>
-                <th>자동차세</th>
-                <th>지방교육세</th>
-                {result.annualEnvFee > 0 && <th>환경부담금</th>}
-                {result.annualFuelTax > 0 && <th>유류세</th>}
-                <th>연 합계</th>
-                <th>누적</th>
+                <th scope="col">경과</th>
+                <th scope="col">자동차세</th>
+                <th scope="col">지방교육세</th>
+                {result.annualEnvFee > 0 && <th scope="col">환경부담금</th>}
+                {result.annualFuelTax > 0 && <th scope="col">유류세</th>}
+                <th scope="col">연 합계</th>
+                <th scope="col">누적</th>
               </tr>
             </thead>
             <tbody>

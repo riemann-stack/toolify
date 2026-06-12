@@ -202,7 +202,7 @@ export default function PipeClient() {
             <div>
               <table className={s.detailTable}>
                 <thead>
-                  <tr><th>항목</th><th>값</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">값</th></tr>
                 </thead>
                 <tbody>
                   <tr className={s.cellSubtitle}><td colSpan={2}>치수</td></tr>
@@ -292,10 +292,10 @@ export default function PipeClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>재질</th>
-                    <th>외경 OD</th>
-                    <th>내경 ID</th>
-                    <th>두께 t</th>
+                    <th scope="col">재질</th>
+                    <th scope="col">외경 OD</th>
+                    <th scope="col">내경 ID</th>
+                    <th scope="col">두께 t</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -459,8 +459,8 @@ export default function PipeClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>용도</th>
-                    <th>권장 유속 (m/s)</th>
+                    <th scope="col">용도</th>
+                    <th scope="col">권장 유속 (m/s)</th>
                   </tr>
                 </thead>
                 <tbody>

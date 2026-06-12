@@ -103,9 +103,9 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>공식</th>
-              <th style={headCell}>식</th>
-              <th style={headCell}>특징</th>
+              <th scope="col" style={headCell}>공식</th>
+              <th scope="col" style={headCell}>식</th>
+              <th scope="col" style={headCell}>특징</th>
             </tr>
           </thead>
           <tbody>
@@ -145,10 +145,10 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>RPE</th>
-              <th style={headCell}>RIR (남은 횟수)</th>
-              <th style={headCell}>체감</th>
-              <th style={headCell}>본 도구 보정</th>
+              <th scope="col" style={headCell}>RPE</th>
+              <th scope="col" style={headCell}>RIR (남은 횟수)</th>
+              <th scope="col" style={headCell}>체감</th>
+              <th scope="col" style={headCell}>본 도구 보정</th>
             </tr>
           </thead>
           <tbody>
@@ -198,12 +198,12 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>구분</th>
-              <th style={headCell}>20대</th>
-              <th style={headCell}>30대</th>
-              <th style={headCell}>40대</th>
-              <th style={headCell}>50대</th>
-              <th style={headCell}>60대+</th>
+              <th scope="col" style={headCell}>구분</th>
+              <th scope="col" style={headCell}>20대</th>
+              <th scope="col" style={headCell}>30대</th>
+              <th scope="col" style={headCell}>40대</th>
+              <th scope="col" style={headCell}>50대</th>
+              <th scope="col" style={headCell}>60대+</th>
             </tr>
           </thead>
           <tbody>
@@ -239,11 +239,11 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>세트</th>
-              <th style={headCell}>강도</th>
-              <th style={headCell}>반복</th>
-              <th style={headCell}>휴식</th>
-              <th style={headCell}>목적</th>
+              <th scope="col" style={headCell}>세트</th>
+              <th scope="col" style={headCell}>강도</th>
+              <th scope="col" style={headCell}>반복</th>
+              <th scope="col" style={headCell}>휴식</th>
+              <th scope="col" style={headCell}>목적</th>
             </tr>
           </thead>
           <tbody>
@@ -298,11 +298,11 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>종목</th>
-              <th style={headCell}>초보</th>
-              <th style={headCell}>중급</th>
-              <th style={headCell}>상급</th>
-              <th style={headCell}>엘리트</th>
+              <th scope="col" style={headCell}>종목</th>
+              <th scope="col" style={headCell}>초보</th>
+              <th scope="col" style={headCell}>중급</th>
+              <th scope="col" style={headCell}>상급</th>
+              <th scope="col" style={headCell}>엘리트</th>
             </tr>
           </thead>
           <tbody>
@@ -333,10 +333,10 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>강도</th>
-              <th style={headCell}>반복</th>
-              <th style={headCell}>목표</th>
-              <th style={headCell}>휴식</th>
+              <th scope="col" style={headCell}>강도</th>
+              <th scope="col" style={headCell}>반복</th>
+              <th scope="col" style={headCell}>목표</th>
+              <th scope="col" style={headCell}>휴식</th>
             </tr>
           </thead>
           <tbody>
@@ -376,10 +376,10 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>프로그램</th>
-              <th style={headCell}>대상</th>
-              <th style={headCell}>구조</th>
-              <th style={headCell}>1RM 활용</th>
+              <th scope="col" style={headCell}>프로그램</th>
+              <th scope="col" style={headCell}>대상</th>
+              <th scope="col" style={headCell}>구조</th>
+              <th scope="col" style={headCell}>1RM 활용</th>
             </tr>
           </thead>
           <tbody>
@@ -435,10 +435,10 @@ export default function OneRMPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>총 중량</th>
-              <th style={headCell}>한쪽 원판</th>
-              <th style={headCell}>총 중량</th>
-              <th style={headCell}>한쪽 원판</th>
+              <th scope="col" style={headCell}>총 중량</th>
+              <th scope="col" style={headCell}>한쪽 원판</th>
+              <th scope="col" style={headCell}>총 중량</th>
+              <th scope="col" style={headCell}>한쪽 원판</th>
             </tr>
           </thead>
           <tbody>

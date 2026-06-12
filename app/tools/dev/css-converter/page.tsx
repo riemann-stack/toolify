@@ -72,9 +72,9 @@ export default function CssConverterPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>변환</th>
-                  <th style={headCell}>공식</th>
-                  <th style={headCell}>예시 (root 16px)</th>
+                  <th scope="col" style={headCell}>변환</th>
+                  <th scope="col" style={headCell}>공식</th>
+                  <th scope="col" style={headCell}>예시 (root 16px)</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,9 +104,9 @@ export default function CssConverterPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>항목</th>
-                  <th style={headCell}>rem</th>
-                  <th style={headCell}>em</th>
+                  <th scope="col" style={headCell}>항목</th>
+                  <th scope="col" style={headCell}>rem</th>
+                  <th scope="col" style={headCell}>em</th>
                 </tr>
               </thead>
               <tbody>
@@ -208,8 +208,8 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>Figma 표기</th>
-                  <th style={headCell}>CSS 변환</th>
+                  <th scope="col" style={headCell}>Figma 표기</th>
+                  <th scope="col" style={headCell}>CSS 변환</th>
                 </tr>
               </thead>
               <tbody>

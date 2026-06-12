@@ -807,9 +807,9 @@ export default function CosmicCalendarClient() {
               <table className={s.compressionTable} style={{ minWidth: 460 }}>
                 <thead>
                   <tr>
-                    <th>사건</th>
-                    <th>실제 연도</th>
-                    <th>{compressionMode === '1year' ? '코스믹 날짜' : compressionMode === '24hours' ? '24시간 시각' : '거리'}</th>
+                    <th scope="col">사건</th>
+                    <th scope="col">실제 연도</th>
+                    <th scope="col">{compressionMode === '1year' ? '코스믹 날짜' : compressionMode === '24hours' ? '24시간 시각' : '거리'}</th>
                   </tr>
                 </thead>
                 <tbody>

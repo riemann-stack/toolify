@@ -540,8 +540,8 @@ export default function DividendClient() {
                     <table className={styles.compareTable} style={{ minWidth: 480 }}>
                       <thead>
                         <tr>
-                          <th>기간 \ 수익률</th>
-                          {reverseScenarioTable.rates.map(r => <th key={r}>{r}%</th>)}
+                          <th scope="col">기간 \ 수익률</th>
+                          {reverseScenarioTable.rates.map(r => <th scope="col" key={r}>{r}%</th>)}
                         </tr>
                       </thead>
                       <tbody>
@@ -671,8 +671,8 @@ export default function DividendClient() {
               <table className={styles.compareTable} style={{ minWidth: 420 }}>
                 <thead>
                   <tr>
-                    <th>금융소득 구간</th>
-                    <th>세율</th>
+                    <th scope="col">금융소득 구간</th>
+                    <th scope="col">세율</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -803,11 +803,11 @@ export default function DividendClient() {
               <table className={styles.compareTable} style={{ minWidth: 480 }}>
                 <thead>
                   <tr>
-                    <th>자산</th>
-                    <th>투자금</th>
-                    <th>수익률</th>
-                    <th>주기</th>
-                    <th>연 배당 (세후)</th>
+                    <th scope="col">자산</th>
+                    <th scope="col">투자금</th>
+                    <th scope="col">수익률</th>
+                    <th scope="col">주기</th>
+                    <th scope="col">연 배당 (세후)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -910,11 +910,11 @@ export default function DividendClient() {
                 <table className={styles.compareTable}>
                   <thead>
                     <tr>
-                      <th>계좌</th>
-                      <th>연 세금</th>
-                      <th>{savingsYears}년 누적 세금</th>
-                      <th>{savingsYears}년 세액공제</th>
-                      <th>일반 대비 이득</th>
+                      <th scope="col">계좌</th>
+                      <th scope="col">연 세금</th>
+                      <th scope="col">{savingsYears}년 누적 세금</th>
+                      <th scope="col">{savingsYears}년 세액공제</th>
+                      <th scope="col">일반 대비 이득</th>
                     </tr>
                   </thead>
                   <tbody>

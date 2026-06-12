@@ -351,9 +351,9 @@ export default function AuctionClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th>금액</th>
-                    <th>비중</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">금액</th>
+                    <th scope="col">비중</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -731,7 +731,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
   }, [])
 
   return (
-    <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }}>
+    <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 220 }} role="img" aria-label="총 투자 비용 구성 도넛 차트">
       {slices.map(({ d, cum }) => {
         const startAngle = (cum / total) * Math.PI * 2 - Math.PI / 2
         const endAngle = ((cum + d.value) / total) * Math.PI * 2 - Math.PI / 2

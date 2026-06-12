@@ -762,11 +762,11 @@ function GuideTab() {
               <table className={s.guideTable}>
                 <thead>
                   <tr>
-                    <th>식재료</th>
-                    <th style={{ textAlign: 'center' }}>실온</th>
-                    <th style={{ textAlign: 'center' }}>냉장</th>
-                    <th style={{ textAlign: 'center' }}>냉동</th>
-                    <th>주의사항</th>
+                    <th scope="col">식재료</th>
+                    <th scope="col" style={{ textAlign: 'center' }}>실온</th>
+                    <th scope="col" style={{ textAlign: 'center' }}>냉장</th>
+                    <th scope="col" style={{ textAlign: 'center' }}>냉동</th>
+                    <th scope="col">주의사항</th>
                   </tr>
                 </thead>
                 <tbody>

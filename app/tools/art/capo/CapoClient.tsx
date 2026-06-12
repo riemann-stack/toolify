@@ -190,10 +190,10 @@ function CapoTab() {
           <table className={styles.chordTable}>
             <thead>
               <tr>
-                <th className={styles.thDegree}>도수</th>
-                <th className={styles.thOriginal}>원키 코드 ({targetKey})</th>
+                <th scope="col" className={styles.thDegree}>도수</th>
+                <th scope="col" className={styles.thOriginal}>원키 코드 ({targetKey})</th>
                 {[0,1,2,3,4,5,6,7].map(f => (
-                  <th
+                  <th scope="col"
                     key={f}
                     className={`${styles.thFret} ${fret === f ? styles.thFretActive : ''} ${recommendedFrets.has(f) ? styles.thFretRec : ''}`}
                   >
@@ -415,9 +415,9 @@ function TransposeTab() {
           <table className={styles.chordTable}>
             <thead>
               <tr>
-                <th className={styles.thDegree}>도수</th>
-                <th className={styles.thOriginal}>원키 ({origKey})</th>
-                <th className={styles.thNewKey}>새 키 ({newKey})</th>
+                <th scope="col" className={styles.thDegree}>도수</th>
+                <th scope="col" className={styles.thOriginal}>원키 ({origKey})</th>
+                <th scope="col" className={styles.thNewKey}>새 키 ({newKey})</th>
               </tr>
             </thead>
             <tbody>

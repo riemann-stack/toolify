@@ -307,9 +307,9 @@ function RecipeTab(props: RecipeTabProps) {
         <table className={s.recipeTable}>
           <thead>
             <tr>
-              <th>재료</th>
-              <th>비율 %</th>
-              <th>무게 g</th>
+              <th scope="col">재료</th>
+              <th scope="col">비율 %</th>
+              <th scope="col">무게 g</th>
             </tr>
           </thead>
           <tbody>
@@ -633,9 +633,9 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
         <table className={s.recipeTable} style={{ marginTop: 12 }}>
           <thead>
             <tr>
-              <th>재료</th>
-              <th>현재 g</th>
-              <th>환산 g</th>
+              <th scope="col">재료</th>
+              <th scope="col">현재 g</th>
+              <th scope="col">환산 g</th>
             </tr>
           </thead>
           <tbody>

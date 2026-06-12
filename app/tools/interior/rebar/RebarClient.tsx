@@ -437,10 +437,10 @@ export default function RebarClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>규격</th>
-                    <th>kg/m</th>
-                    <th>1본({revLength}m)</th>
-                    <th>{fmtKg(targetKg)} 본수</th>
+                    <th scope="col">규격</th>
+                    <th scope="col">kg/m</th>
+                    <th scope="col">1본({revLength}m)</th>
+                    <th scope="col">{fmtKg(targetKg)} 본수</th>
                   </tr>
                 </thead>
                 <tbody>

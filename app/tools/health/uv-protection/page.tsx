@@ -114,7 +114,7 @@ export default function UvProtectionPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['타입', '특징', '한국인 비율', '화상 경향'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 2 ? 'right' : 'left'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : (i === 2 ? 'right' : 'left'), color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -194,7 +194,7 @@ export default function UvProtectionPage() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 {['SPF', 'UVB 차단율', '통과율'].map((h, i) => (
-                  <th key={i} style={{ padding: '10px 8px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  <th scope="col" key={i} style={{ padding: '10px 8px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                 ))}
               </tr>
             </thead>

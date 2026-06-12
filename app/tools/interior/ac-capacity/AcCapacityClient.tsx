@@ -612,7 +612,7 @@ export default function AcCapacityClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.refTable}>
                 <thead>
-                  <tr><th>평형</th><th>BTU/h</th><th>kW</th><th>사용 공간</th></tr>
+                  <tr><th scope="col">평형</th><th scope="col">BTU/h</th><th scope="col">kW</th><th scope="col">사용 공간</th></tr>
                 </thead>
                 <tbody>
                   {[
@@ -659,7 +659,7 @@ export default function AcCapacityClient() {
               <span className={styles.cardLabelHint}>천장 2.4m, 4인 가구 기준</span>
             </div>
             <table className={styles.guideTable}>
-              <thead><tr><th>거실 평수</th><th>추천 평형</th></tr></thead>
+              <thead><tr><th scope="col">거실 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
                 <tr><td>5평</td><td>9~11평형</td></tr>
                 <tr><td>7평</td><td>11~13평형</td></tr>
@@ -672,7 +672,7 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>🛏️ 침실 추천 평형</span></div>
             <table className={styles.guideTable}>
-              <thead><tr><th>침실 평수</th><th>추천 평형</th></tr></thead>
+              <thead><tr><th scope="col">침실 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
                 <tr><td>3평 작은방</td><td>6평형</td></tr>
                 <tr><td>5평 일반 침실</td><td>6~9평형</td></tr>
@@ -684,7 +684,7 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>🍳 주방·다이닝 (조리 발열 고려)</span></div>
             <table className={styles.guideTable}>
-              <thead><tr><th>주방 평수</th><th>추천 평형</th></tr></thead>
+              <thead><tr><th scope="col">주방 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
                 <tr><td>5평 주방</td><td>11~13평형</td></tr>
                 <tr><td>7평 주방</td><td>13~15평형</td></tr>
@@ -695,7 +695,7 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>🏠 원룸 (전체 공간)</span></div>
             <table className={styles.guideTable}>
-              <thead><tr><th>원룸 평수</th><th>추천 평형</th></tr></thead>
+              <thead><tr><th scope="col">원룸 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
                 <tr><td>5~7평 원룸</td><td>6~9평형</td></tr>
                 <tr><td>8~12평 원룸</td><td>9~13평형</td></tr>

@@ -623,7 +623,7 @@ export default function FlooringClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.refTable}>
                 <thead>
-                  <tr><th>평수</th><th>면적</th><th>필요 {fl.unitLabel}</th></tr>
+                  <tr><th scope="col">평수</th><th scope="col">면적</th><th scope="col">필요 {fl.unitLabel}</th></tr>
                 </thead>
                 <tbody>
                   {refTable.map((r, i) => (
@@ -723,7 +723,7 @@ export default function FlooringClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.summaryTable}>
                 <thead>
-                  <tr><th>방</th><th>면적</th><th>바닥재</th><th>단위</th><th>비용</th></tr>
+                  <tr><th scope="col">방</th><th scope="col">면적</th><th scope="col">바닥재</th><th scope="col">단위</th><th scope="col">비용</th></tr>
                 </thead>
                 <tbody>
                   {t2Rooms.map(r => (
@@ -763,7 +763,7 @@ export default function FlooringClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.priceGuideTable}>
                 <thead>
-                  <tr><th>바닥재</th><th>1㎡당 가격</th><th>추천 공간</th></tr>
+                  <tr><th scope="col">바닥재</th><th scope="col">1㎡당 가격</th><th scope="col">추천 공간</th></tr>
                 </thead>
                 <tbody>
                   <tr><td>장판 (PVC)</td><td>8,000~15,000원</td><td>임대·저예산</td></tr>
@@ -835,7 +835,7 @@ export default function FlooringClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.quoteTable}>
                 <thead>
-                  <tr><th>항목</th><th>단가</th><th>수량</th><th>합계</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">단가</th><th scope="col">수량</th><th scope="col">합계</th></tr>
                 </thead>
                 <tbody>
                   <tr className={styles.selfRow}>

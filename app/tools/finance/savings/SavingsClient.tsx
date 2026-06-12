@@ -296,7 +296,7 @@ export default function SavingsClient() {
             )}
 
             {/* SVG 게이지 */}
-            <svg viewBox="0 0 420 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }}>
+            <svg viewBox="0 0 420 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }} role="img" aria-label="저축률 게이지">
               <defs>
                 <linearGradient id="rateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#DB2777" />
@@ -554,10 +554,10 @@ export default function SavingsClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>연차</th>
-                    <th>누적 적립</th>
-                    <th>누적 잔액 (이자 포함)</th>
-                    <th>이자 발생</th>
+                    <th scope="col">연차</th>
+                    <th scope="col">누적 적립</th>
+                    <th scope="col">누적 잔액 (이자 포함)</th>
+                    <th scope="col">이자 발생</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -642,10 +642,10 @@ export default function SavingsClient() {
               <table className={s.compactTable}>
                 <thead>
                   <tr>
-                    <th>상품</th>
-                    <th>연 한도</th>
-                    <th>기간</th>
-                    <th>최대 절세 효과</th>
+                    <th scope="col">상품</th>
+                    <th scope="col">연 한도</th>
+                    <th scope="col">기간</th>
+                    <th scope="col">최대 절세 효과</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -733,7 +733,7 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
   )
 
   return (
-    <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 200 }}>
+    <svg viewBox="0 0 200 200" width="100%" style={{ maxWidth: 200 }} role="img" aria-label="예산 배분 비율 도넛 차트">
       {slices.map(({ datum: d, cumStart }) => {
         const startAngle = (cumStart / total) * Math.PI * 2 - Math.PI / 2
         const endAngle = ((cumStart + d.value) / total) * Math.PI * 2 - Math.PI / 2

@@ -117,10 +117,10 @@ export default function GripSizePage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>방법</th>
-                    <th style={headCell}>방식</th>
-                    <th style={headCell}>장점</th>
-                    <th style={headCell}>단점</th>
+                    <th scope="col" style={headCell}>방법</th>
+                    <th scope="col" style={headCell}>방식</th>
+                    <th scope="col" style={headCell}>장점</th>
+                    <th scope="col" style={headCell}>단점</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,10 +155,10 @@ export default function GripSizePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>인치</th>
-                  <th style={headCell}>유럽 (EU)</th>
-                  <th style={headCell}>미국 (US)</th>
-                  <th style={headCell}>대상</th>
+                  <th scope="col" style={headCell}>인치</th>
+                  <th scope="col" style={headCell}>유럽 (EU)</th>
+                  <th scope="col" style={headCell}>미국 (US)</th>
+                  <th scope="col" style={headCell}>대상</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,10 +176,10 @@ export default function GripSizePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>등급</th>
-                  <th style={headCell}>지름 (인치)</th>
-                  <th style={headCell}>글러브 호수 (한국)</th>
-                  <th style={headCell}>대상</th>
+                  <th scope="col" style={headCell}>등급</th>
+                  <th scope="col" style={headCell}>지름 (인치)</th>
+                  <th scope="col" style={headCell}>글러브 호수 (한국)</th>
+                  <th scope="col" style={headCell}>대상</th>
                 </tr>
               </thead>
               <tbody>
@@ -196,9 +196,9 @@ export default function GripSizePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={headCell}>등급</th>
-                  <th style={headCell}>그립 둘레</th>
-                  <th style={headCell}>대상</th>
+                  <th scope="col" style={headCell}>등급</th>
+                  <th scope="col" style={headCell}>그립 둘레</th>
+                  <th scope="col" style={headCell}>대상</th>
                 </tr>
               </thead>
               <tbody>

@@ -119,9 +119,9 @@ export default function NetworkTestPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '500px' }}>
                 <thead>
                   <tr>
-                    <th style={headCell}>지표</th>
-                    <th style={headCell}>의미</th>
-                    <th style={headCell}>티켓팅 권장</th>
+                    <th scope="col" style={headCell}>지표</th>
+                    <th scope="col" style={headCell}>의미</th>
+                    <th scope="col" style={headCell}>티켓팅 권장</th>
                   </tr>
                 </thead>
                 <tbody>

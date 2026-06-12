@@ -104,9 +104,9 @@ export default function AuctionPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>항목</th>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>일반 금액</th>
-                <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>구분</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>항목</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>일반 금액</th>
+                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>구분</th>
               </tr>
             </thead>
             <tbody>
@@ -150,10 +150,10 @@ export default function AuctionPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주택 가격</th>
-                <th style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>실거주 1주택</th>
-                <th style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>2주택 (조정)</th>
-                <th style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>3주택+ / 법인</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>주택 가격</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>실거주 1주택</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>2주택 (조정)</th>
+                <th scope="col" style={{ padding: '6px 0', textAlign: 'right', color: 'var(--muted)', fontSize: 11 }}>3주택+ / 법인</th>
               </tr>
             </thead>
             <tbody>

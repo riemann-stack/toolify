@@ -836,7 +836,7 @@ export default function WallpaperClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.summaryTable}>
                 <thead>
-                  <tr><th>방</th><th>시공 면적</th><th>필요 롤</th></tr>
+                  <tr><th scope="col">방</th><th scope="col">시공 면적</th><th scope="col">필요 롤</th></tr>
                 </thead>
                 <tbody>
                   {t2Rooms.map(r => (
@@ -932,7 +932,7 @@ export default function WallpaperClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.quoteTable}>
                 <thead>
-                  <tr><th>항목</th><th>단가</th><th>수량</th><th>합계</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">단가</th><th scope="col">수량</th><th scope="col">합계</th></tr>
                 </thead>
                 <tbody>
                   <tr className={styles.selfRow}>

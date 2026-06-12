@@ -393,10 +393,10 @@ function DilutionTab() {
             <table className={styles.compareTable}>
               <thead>
                 <tr>
-                  <th>희석재료</th>
-                  <th>도수</th>
-                  <th style={{ textAlign: 'right' }}>추가량</th>
-                  <th style={{ textAlign: 'right' }}>최종</th>
+                  <th scope="col">희석재료</th>
+                  <th scope="col">도수</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>추가량</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>최종</th>
                 </tr>
               </thead>
               <tbody>
@@ -477,10 +477,10 @@ function EquivTab() {
           <table className={styles.compareTable}>
             <thead>
               <tr>
-                <th>술</th>
-                <th>도수</th>
-                <th style={{ textAlign: 'right' }}>환산량</th>
-                <th style={{ textAlign: 'right' }}>{glass.id === 'soju-glass' ? '비교' : '잔'}</th>
+                <th scope="col">술</th>
+                <th scope="col">도수</th>
+                <th scope="col" style={{ textAlign: 'right' }}>환산량</th>
+                <th scope="col" style={{ textAlign: 'right' }}>{glass.id === 'soju-glass' ? '비교' : '잔'}</th>
               </tr>
             </thead>
             <tbody>
@@ -655,10 +655,10 @@ function PartyTab() {
             <table className={styles.compareTable}>
               <thead>
                 <tr>
-                  <th>술</th>
-                  <th>갯수</th>
-                  <th style={{ textAlign: 'right' }}>총 ml</th>
-                  <th style={{ textAlign: 'right' }}>알코올</th>
+                  <th scope="col">술</th>
+                  <th scope="col">갯수</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>총 ml</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>알코올</th>
                 </tr>
               </thead>
               <tbody>
@@ -781,10 +781,10 @@ export default function AlcoholClient() {
             <table className={styles.compareTable}>
               <thead>
                 <tr>
-                  <th>술</th>
-                  <th>도수</th>
-                  <th style={{ textAlign: 'right' }}>환산량</th>
-                  <th style={{ textAlign: 'right' }}>병/캔 환산</th>
+                  <th scope="col">술</th>
+                  <th scope="col">도수</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>환산량</th>
+                  <th scope="col" style={{ textAlign: 'right' }}>병/캔 환산</th>
                 </tr>
               </thead>
               <tbody>

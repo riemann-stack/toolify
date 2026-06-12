@@ -103,9 +103,9 @@ export default function ServerTimePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>사이트</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>주요 시각</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--accent)', fontWeight: 700 }}>권장 새로고침</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>사이트</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>주요 시각</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--accent)', fontWeight: 700 }}>권장 새로고침</th>
                 </tr>
               </thead>
               <tbody>

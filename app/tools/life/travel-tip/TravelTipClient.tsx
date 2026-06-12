@@ -447,10 +447,10 @@ export default function TravelTipClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>국가</th>
-                    <th>분류</th>
-                    <th>권장 팁</th>
-                    <th>비고</th>
+                    <th scope="col">국가</th>
+                    <th scope="col">분류</th>
+                    <th scope="col">권장 팁</th>
+                    <th scope="col">비고</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -546,10 +546,10 @@ export default function TravelTipClient() {
               <table className={s.detailTable}>
                 <thead>
                   <tr>
-                    <th>항목</th>
-                    <th>국가</th>
-                    <th>일별 횟수</th>
-                    <th>1회 금액</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">국가</th>
+                    <th scope="col">일별 횟수</th>
+                    <th scope="col">1회 금액</th>
                   </tr>
                 </thead>
                 <tbody>

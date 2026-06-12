@@ -101,7 +101,7 @@ export default async function BpmPage({
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['음표', '배수', '기본 (ms)', '점음표 ×1.5 (ms)', '셋잇단 ×⅔ (ms)'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -144,7 +144,7 @@ export default async function BpmPage({
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['장르', 'BPM 범위', '4분음표 딜레이', '점8분음표 딜레이', '8분음표 딜레이'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -210,7 +210,7 @@ export default async function BpmPage({
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['리버브 타입', '통용 프리딜레이 범위', '비고'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>

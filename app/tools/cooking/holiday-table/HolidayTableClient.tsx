@@ -394,7 +394,7 @@ export default function HolidayTableClient() {
 /* ─── 차례상 5열 배치 SVG ─── */
 function CharyeLayoutSvg() {
   return (
-    <svg viewBox="0 0 500 280" className={s.charyeSvg} preserveAspectRatio="xMidYMid meet">
+    <svg viewBox="0 0 500 280" className={s.charyeSvg} preserveAspectRatio="xMidYMid meet" role="img" aria-label="차례상 5열 배치도">
       {/* 상 외곽 (격자) */}
       <rect x="20" y="20" width="460" height="240" rx="8"
         fill="rgba(217,119,6,0.04)" stroke="#D97706" strokeWidth="2" />

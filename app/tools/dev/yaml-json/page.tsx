@@ -139,9 +139,9 @@ export default function YamlJsonPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>항목</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#0891B2', fontSize: 11 }}>YAML</th>
-                <th style={{ padding: '8px 10px', textAlign: 'left', color: '#0D9488', fontSize: 11 }}>JSON</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>항목</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: '#0891B2', fontSize: 11 }}>YAML</th>
+                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: '#0D9488', fontSize: 11 }}>JSON</th>
               </tr>
             </thead>
             <tbody>

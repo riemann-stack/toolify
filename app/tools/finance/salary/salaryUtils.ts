@@ -357,13 +357,18 @@ export function buildNetTargetTable(
 /* ─── 포맷 헬퍼 ─── */
 export const won = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원'
 
+// loanUtils.formatEok과 동작 통일 (음수 부호 처리·1만 미만은 원 단위 폴백)
 export function formatEok(n: number): string {
-  if (n >= 100_000_000) {
-    const eok = Math.floor(n / 100_000_000)
-    const man = Math.floor((n % 100_000_000) / 10_000)
-    return man > 0 ? `${eok}억 ${man.toLocaleString()}만원` : `${eok}억원`
+  if (Math.abs(n) >= 100_000_000) {
+    const eok = Math.floor(Math.abs(n) / 100_000_000)
+    const man = Math.floor((Math.abs(n) % 100_000_000) / 10_000)
+    const sign = n < 0 ? '-' : ''
+    return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
-  return Math.floor(n / 10_000).toLocaleString() + '만원'
+  if (Math.abs(n) >= 10_000) {
+    return `${Math.round(n / 10_000).toLocaleString('ko-KR')}만원`
+  }
+  return won(n)
 }
 
 export function parseAmount(s: string): number {

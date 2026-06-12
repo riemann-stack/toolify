@@ -351,7 +351,7 @@ export default function SoundSpeedClient() {
             <div className={s.tableScroll}>
               <table className={s.compareTable} style={{ minWidth: 460 }}>
                 <thead>
-                  <tr><th>시간</th><th>거리 (m)</th><th>거리 (km)</th><th>안전 등급</th></tr>
+                  <tr><th scope="col">시간</th><th scope="col">거리 (m)</th><th scope="col">거리 (km)</th><th scope="col">안전 등급</th></tr>
                 </thead>
                 <tbody>
                   {[1, 3, 5, 10, 15, 30].map(t => {
@@ -374,7 +374,7 @@ export default function SoundSpeedClient() {
 
           {/* 음파 시각화 SVG — 모바일 친화 (400×240, 큰 폰트, 컴팩트 배치) */}
           <div className={s.waveWrap}>
-            <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet">
+            <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet" role="img" aria-label="번개와 천둥 음파 전파 도해">
               <defs>
                 <radialGradient id="lightning" cx="50%" cy="50%" r="50%">
                   <stop offset="0%"  stopColor="#A16207" stopOpacity="1" />
@@ -479,7 +479,7 @@ export default function SoundSpeedClient() {
             <div className={s.tableScroll}>
               <table className={s.compareTable} style={{ minWidth: 480 }}>
                 <thead>
-                  <tr><th>거리</th><th>실제 거리</th><th>소리 시간</th><th>빛 시간</th></tr>
+                  <tr><th scope="col">거리</th><th scope="col">실제 거리</th><th scope="col">소리 시간</th><th scope="col">빛 시간</th></tr>
                 </thead>
                 <tbody>
                   {COMMON_DISTANCES.map(d => {
@@ -583,7 +583,7 @@ export default function SoundSpeedClient() {
             <div className={s.tableScroll}>
               <table className={s.compareTable} style={{ minWidth: 480 }}>
                 <thead>
-                  <tr><th>대상</th><th>속도 (km/h)</th><th>마하</th></tr>
+                  <tr><th scope="col">대상</th><th scope="col">속도 (km/h)</th><th scope="col">마하</th></tr>
                 </thead>
                 <tbody>
                   {VEHICLE_SPEEDS.map((v, i) => {

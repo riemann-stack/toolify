@@ -88,7 +88,7 @@ export default function FreelanceTaxPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['과세표준', '세율', '누진공제'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -128,7 +128,7 @@ export default function FreelanceTaxPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['업종', '단순경비율', '기준경비율', '한도 매출'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -170,7 +170,7 @@ export default function FreelanceTaxPage() {
             <table style={dedTable}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['항목', '한도', '효과'].map(h => (<th key={h} style={dedTh}>{h}</th>))}
+                  {['항목', '한도', '효과'].map(h => (<th scope="col" key={h} style={dedTh}>{h}</th>))}
                 </tr>
               </thead>
               <tbody>
@@ -195,7 +195,7 @@ export default function FreelanceTaxPage() {
             <table style={dedTable}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['항목', '한도', '효과'].map(h => (<th key={h} style={dedTh}>{h}</th>))}
+                  {['항목', '한도', '효과'].map(h => (<th scope="col" key={h} style={dedTh}>{h}</th>))}
                 </tr>
               </thead>
               <tbody>

@@ -126,9 +126,9 @@ export default function InheritancePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>관계</th>
-              <th style={headCell}>10년 공제 한도</th>
-              <th style={headCell}>비고</th>
+              <th scope="col" style={headCell}>관계</th>
+              <th scope="col" style={headCell}>10년 공제 한도</th>
+              <th scope="col" style={headCell}>비고</th>
             </tr>
           </thead>
           <tbody>
@@ -162,9 +162,9 @@ export default function InheritancePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>과세표준</th>
-              <th style={headCell}>세율</th>
-              <th style={headCell}>누진공제</th>
+              <th scope="col" style={headCell}>과세표준</th>
+              <th scope="col" style={headCell}>세율</th>
+              <th scope="col" style={headCell}>누진공제</th>
             </tr>
           </thead>
           <tbody>
@@ -191,10 +191,10 @@ export default function InheritancePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>가족 구성</th>
-              <th style={headCell}>배우자</th>
-              <th style={headCell}>자녀</th>
-              <th style={headCell}>부모</th>
+              <th scope="col" style={headCell}>가족 구성</th>
+              <th scope="col" style={headCell}>배우자</th>
+              <th scope="col" style={headCell}>자녀</th>
+              <th scope="col" style={headCell}>부모</th>
             </tr>
           </thead>
           <tbody>
@@ -234,10 +234,10 @@ export default function InheritancePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>배우자 실제 상속</th>
-              <th style={headCell}>적용 공제</th>
-              <th style={headCell}>과세표준</th>
-              <th style={headCell}>상속세 (대략)</th>
+              <th scope="col" style={headCell}>배우자 실제 상속</th>
+              <th scope="col" style={headCell}>적용 공제</th>
+              <th scope="col" style={headCell}>과세표준</th>
+              <th scope="col" style={headCell}>상속세 (대략)</th>
             </tr>
           </thead>
           <tbody>

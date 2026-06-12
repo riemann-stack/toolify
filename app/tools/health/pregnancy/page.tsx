@@ -130,9 +130,9 @@ export default function PregnancyPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '9px 10px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>검사</th>
-                  <th style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>주차</th>
-                  <th style={{ padding: '9px 10px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>목적</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>검사</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>주차</th>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>목적</th>
                 </tr>
               </thead>
               <tbody>

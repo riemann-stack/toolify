@@ -120,7 +120,7 @@ export default function Base64Page() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['항목', '표준 Base64', 'URL-safe (RFC 4648 §5)'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -242,7 +242,7 @@ export default function Base64Page() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['인코딩', '결과', '주요 용도'].map((h, i) => (
-                    <th key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

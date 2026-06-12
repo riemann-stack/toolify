@@ -103,9 +103,9 @@ export default function IpoDepositPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>구분</th>
-              <th style={headCell}>균등배정</th>
-              <th style={headCell}>비례배정</th>
+              <th scope="col" style={headCell}>구분</th>
+              <th scope="col" style={headCell}>균등배정</th>
+              <th scope="col" style={headCell}>비례배정</th>
             </tr>
           </thead>
           <tbody>
@@ -130,9 +130,9 @@ export default function IpoDepositPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>청약 주수 구간</th>
-              <th style={headCell}>단위</th>
-              <th style={headCell}>예시</th>
+              <th scope="col" style={headCell}>청약 주수 구간</th>
+              <th scope="col" style={headCell}>단위</th>
+              <th scope="col" style={headCell}>예시</th>
             </tr>
           </thead>
           <tbody>
@@ -157,9 +157,9 @@ export default function IpoDepositPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>이론 배정</th>
-              <th style={headCell}>5사6입 결과</th>
-              <th style={headCell}>설명</th>
+              <th scope="col" style={headCell}>이론 배정</th>
+              <th scope="col" style={headCell}>5사6입 결과</th>
+              <th scope="col" style={headCell}>설명</th>
             </tr>
           </thead>
           <tbody>
@@ -211,9 +211,9 @@ export default function IpoDepositPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>단계</th>
-              <th style={headCell}>일자</th>
-              <th style={headCell}>설명</th>
+              <th scope="col" style={headCell}>단계</th>
+              <th scope="col" style={headCell}>일자</th>
+              <th scope="col" style={headCell}>설명</th>
             </tr>
           </thead>
           <tbody>

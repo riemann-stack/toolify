@@ -963,7 +963,7 @@ export default function PaintClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.summaryTable}>
                 <thead>
-                  <tr><th>공간</th><th>부위</th><th>면적</th><th>회수</th><th>페인트</th></tr>
+                  <tr><th scope="col">공간</th><th scope="col">부위</th><th scope="col">면적</th><th scope="col">회수</th><th scope="col">페인트</th></tr>
                 </thead>
                 <tbody>
                   {t2Rows.length === 0 && (
@@ -1086,7 +1086,7 @@ export default function PaintClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.quoteTable}>
                 <thead>
-                  <tr><th>항목</th><th>단가</th><th>수량</th><th>합계</th></tr>
+                  <tr><th scope="col">항목</th><th scope="col">단가</th><th scope="col">수량</th><th scope="col">합계</th></tr>
                 </thead>
                 <tbody>
                   <tr className={styles.selfRow}>

@@ -601,7 +601,7 @@ export default function BaseballStatsClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.legendTable}>
                 <thead>
-                  <tr><th>선수</th><th>AVG</th><th>OBP</th><th>SLG</th><th>OPS</th></tr>
+                  <tr><th scope="col">선수</th><th scope="col">AVG</th><th scope="col">OBP</th><th scope="col">SLG</th><th scope="col">OPS</th></tr>
                 </thead>
                 <tbody>
                   <tr className={styles.ourRow}>

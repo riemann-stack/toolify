@@ -82,9 +82,9 @@ export default function VocalRangePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>분류</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center', color: '#9333EA', fontWeight: 700 }}>음역</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>예시 (한국 가수)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>분류</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#9333EA', fontWeight: 700 }}>음역</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>예시 (한국 가수)</th>
                 </tr>
               </thead>
               <tbody>

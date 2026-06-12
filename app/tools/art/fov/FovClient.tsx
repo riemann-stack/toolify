@@ -267,10 +267,10 @@ export default function FovClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>거리</th>
-                  <th>가로</th>
-                  <th>세로</th>
-                  <th>비고</th>
+                  <th scope="col">거리</th>
+                  <th scope="col">가로</th>
+                  <th scope="col">세로</th>
+                  <th scope="col">비고</th>
                 </tr>
               </thead>
               <tbody>
@@ -324,10 +324,10 @@ export default function FovClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>35mm 환산</th>
-                  <th>{getSensor(compareSensorId).label} 실제</th>
-                  <th>수평 화각</th>
-                  <th>분류</th>
+                  <th scope="col">35mm 환산</th>
+                  <th scope="col">{getSensor(compareSensorId).label} 실제</th>
+                  <th scope="col">수평 화각</th>
+                  <th scope="col">분류</th>
                 </tr>
               </thead>
               <tbody>
@@ -405,9 +405,9 @@ export default function FovClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>35mm 환산</th>
+                  <th scope="col">35mm 환산</th>
                   {SENSORS.slice(0, 5).map((sm) => (
-                    <th key={sm.id}>{sm.label.split(' ')[0]} (×{sm.cropFactor})</th>
+                    <th scope="col" key={sm.id}>{sm.label.split(' ')[0]} (×{sm.cropFactor})</th>
                   ))}
                 </tr>
               </thead>

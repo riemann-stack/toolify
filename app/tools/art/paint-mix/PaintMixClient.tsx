@@ -323,10 +323,10 @@ export default function PaintMixClient() {
             <table className={s.dataTable}>
               <thead>
                 <tr>
-                  <th>색</th>
-                  <th>비율</th>
-                  <th>분량 ({UNIT_LABELS[unit]})</th>
-                  <th>%</th>
+                  <th scope="col">색</th>
+                  <th scope="col">비율</th>
+                  <th scope="col">분량 ({UNIT_LABELS[unit]})</th>
+                  <th scope="col">%</th>
                 </tr>
               </thead>
               <tbody>

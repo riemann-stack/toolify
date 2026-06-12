@@ -466,11 +466,11 @@ export default function BuildupClient() {
                   <table className={s.paceTable}>
                     <thead>
                       <tr>
-                        <th>구간</th>
-                        <th>거리</th>
-                        <th>페이스</th>
-                        <th>누적</th>
-                        <th>강도</th>
+                        <th scope="col">구간</th>
+                        <th scope="col">거리</th>
+                        <th scope="col">페이스</th>
+                        <th scope="col">누적</th>
+                        <th scope="col">강도</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -597,7 +597,7 @@ export default function BuildupClient() {
                 <span className={s.cardLabel}>📊 강도별 페이스</span>
                 <table className={s.paceTable}>
                   <thead>
-                    <tr><th>강도</th><th>페이스</th><th>사용</th></tr>
+                    <tr><th scope="col">강도</th><th scope="col">페이스</th><th scope="col">사용</th></tr>
                   </thead>
                   <tbody>
                     {(['E', 'M', 'T', 'I', 'R'] as Intensity[]).map((k) => {

@@ -104,10 +104,10 @@ export default function BuildupPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>훈련</th>
-              <th style={headCell}>구조</th>
-              <th style={headCell}>주효과</th>
-              <th style={headCell}>예시</th>
+              <th scope="col" style={headCell}>훈련</th>
+              <th scope="col" style={headCell}>구조</th>
+              <th scope="col" style={headCell}>주효과</th>
+              <th scope="col" style={headCell}>예시</th>
             </tr>
           </thead>
           <tbody>
@@ -144,10 +144,10 @@ export default function BuildupPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>거리</th>
-              <th style={headCell}>구간</th>
-              <th style={headCell}>프로파일 추천</th>
-              <th style={headCell}>활용</th>
+              <th scope="col" style={headCell}>거리</th>
+              <th scope="col" style={headCell}>구간</th>
+              <th scope="col" style={headCell}>프로파일 추천</th>
+              <th scope="col" style={headCell}>활용</th>
             </tr>
           </thead>
           <tbody>

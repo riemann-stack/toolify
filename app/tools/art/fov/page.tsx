@@ -115,10 +115,10 @@ export default function FovPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>센서</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>크기 (mm)</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>크롭 팩터</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>50mm → 환산</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>센서</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>크기 (mm)</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>크롭 팩터</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>50mm → 환산</th>
               </tr>
             </thead>
             <tbody>
@@ -225,10 +225,10 @@ export default function FovPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>풀프레임 + 50mm</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>가로 시야</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>세로 시야</th>
-                <th style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>풀프레임 + 50mm</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>가로 시야</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>세로 시야</th>
+                <th scope="col" style={{ padding: '6px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>활용</th>
               </tr>
             </thead>
             <tbody>

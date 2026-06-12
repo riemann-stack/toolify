@@ -142,8 +142,8 @@ export default function WealthRankPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <thead>
                 <tr>
-                  <th style={th}>구간</th>
-                  <th style={{ ...th, textAlign: 'right' }}>순자산 기준선</th>
+                  <th scope="col" style={th}>구간</th>
+                  <th scope="col" style={{ ...th, textAlign: 'right' }}>순자산 기준선</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,8 +172,8 @@ export default function WealthRankPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <thead>
                   <tr>
-                    <th style={th}>가구주 연령대</th>
-                    <th style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
+                    <th scope="col" style={th}>가구주 연령대</th>
+                    <th scope="col" style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -193,8 +193,8 @@ export default function WealthRankPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <thead>
                   <tr>
-                    <th style={th}>지역 (상위)</th>
-                    <th style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
+                    <th scope="col" style={th}>지역 (상위)</th>
+                    <th scope="col" style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -220,10 +220,10 @@ export default function WealthRankPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={th}>순자산 분위</th>
-                  <th style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
-                  <th style={{ ...th, textAlign: 'right' }}>평균 자산</th>
-                  <th style={{ ...th, textAlign: 'right' }}>실물자산 비중</th>
+                  <th scope="col" style={th}>순자산 분위</th>
+                  <th scope="col" style={{ ...th, textAlign: 'right' }}>평균 순자산</th>
+                  <th scope="col" style={{ ...th, textAlign: 'right' }}>평균 자산</th>
+                  <th scope="col" style={{ ...th, textAlign: 'right' }}>실물자산 비중</th>
                 </tr>
               </thead>
               <tbody>
@@ -253,8 +253,8 @@ export default function WealthRankPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th style={th}>성인 1인 순자산</th>
-                  <th style={{ ...th, textAlign: 'right' }}>비중</th>
+                  <th scope="col" style={th}>성인 1인 순자산</th>
+                  <th scope="col" style={{ ...th, textAlign: 'right' }}>비중</th>
                 </tr>
               </thead>
               <tbody>

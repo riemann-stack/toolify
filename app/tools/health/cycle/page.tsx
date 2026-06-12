@@ -103,9 +103,9 @@ export default function CyclePage() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={headCell}>Phase</th>
-              <th style={headCell}>일자 (28일 기준)</th>
-              <th style={headCell}>일반 특징</th>
+              <th scope="col" style={headCell}>Phase</th>
+              <th scope="col" style={headCell}>일자 (28일 기준)</th>
+              <th scope="col" style={headCell}>일반 특징</th>
             </tr>
           </thead>
           <tbody>

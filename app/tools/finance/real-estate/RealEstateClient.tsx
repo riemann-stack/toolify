@@ -897,7 +897,7 @@ export default function RealEstateClient() {
         </div>
         <table className={styles.leverageTable}>
           <thead>
-            <tr><th></th><th>대출 사용</th><th>전액 현금</th></tr>
+            <tr><th scope="col"></th><th scope="col">대출 사용</th><th scope="col">전액 현금</th></tr>
           </thead>
           <tbody>
             <tr>
