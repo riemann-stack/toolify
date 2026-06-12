@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './egg-timer.module.css'
 import {
@@ -563,6 +563,10 @@ export default function EggTimerClient() {
 
 /* ─── 노른자 단면 SVG ─── */
 function YolkSvg({ stage, size = 64 }: { stage: DonenessStage; size?: number }) {
+  // 같은 단계 일러스트가 페이지에 2회 렌더될 수 있어 gradient id는 인스턴스별 고유해야 함
+  // (useId의 특수문자는 SVG url(#…) 참조를 깨뜨리므로 영숫자만 남김)
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+  const gradId = `yg-${stage.id}-${uid}`
   const r = size / 2
   // 흰자 둥글게, 노른자 중앙
   // 텍스처에 따라 다름
@@ -581,15 +585,15 @@ function YolkSvg({ stage, size = 64 }: { stage: DonenessStage; size?: number }) 
       )}
       {/* 노른자 */}
       <defs>
-        <radialGradient id={`yg-${stage.id}`} cx="50%" cy="40%" r="60%">
+        <radialGradient id={gradId} cx="50%" cy="40%" r="60%">
           <stop offset="0%" stopColor={stage.yolkColor} stopOpacity={isLiquid ? 0.6 : 1} />
           <stop offset="100%" stopColor={stage.yolkColor} stopOpacity={yolkOpacity} />
         </radialGradient>
       </defs>
       {wavy ? (
-        <circle cx={r} cy={r} r={yolkR} fill={`url(#yg-${stage.id})`} stroke={stage.yolkColor} strokeOpacity={0.4} strokeWidth="1" />
+        <circle cx={r} cy={r} r={yolkR} fill={`url(#${gradId})`} stroke={stage.yolkColor} strokeOpacity={0.4} strokeWidth="1" />
       ) : (
-        <circle cx={r} cy={r} r={yolkR} fill={`url(#yg-${stage.id})`} />
+        <circle cx={r} cy={r} r={yolkR} fill={`url(#${gradId})`} />
       )}
       {/* 흐름 노른자: 작은 흐름 표시 */}
       {isLiquid && (
