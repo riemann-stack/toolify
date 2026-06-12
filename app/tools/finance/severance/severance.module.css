@@ -379,6 +379,18 @@
 }
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }
 
+/* ─────── 빈 상태 (날짜 미입력) ─────── */
+.empty {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 36px 20px;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
 /* iOS zoom 방지 */
 @media (max-width: 640px) {
   .input { font-size: 16px; min-height: 48px; }

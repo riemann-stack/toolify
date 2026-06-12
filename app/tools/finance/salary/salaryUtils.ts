@@ -1,7 +1,7 @@
 /* ──────────────────────────────────────────────────────
    finance/salary/salaryUtils.ts
    2026년 실수령액·역산·인상 시뮬·시급·연봉표·비과세
-   ※ 4대보험 요율은 lib/salaryCalc.ts와 동일 (2026 최신, 27년 만 인상 반영)
+   ※ 요율 개정 시 app/tools/finance/4-insurance/FourInsuranceClient.tsx의 RATES[2026]도 함께 갱신할 것 (동일 수치의 살아있는 쌍둥이)
    ────────────────────────────────────────────────────── */
 
 /* ─── 2026년 4대보험 요율 (근로자 부담분) ─── */
@@ -76,15 +76,18 @@ function earnedTaxCredit(computedTax: number, annualGross: number): number {
   return Math.min(credit, limit)
 }
 
-/** 월 원천징수 소득세 근사. annualPension = 국민연금 본인부담 연액(연금보험료공제) */
+/** 월 원천징수 소득세 근사.
+    annualPension = 국민연금 본인부담 연액 (연금보험료공제, 소득세법 §51의3)
+    annualOtherInsurance = 건강·장기요양·고용보험 본인부담 연액 (보험료 특별소득공제, 소득세법 §52 — 전액 공제) */
 function getMonthlyIncomeTax(
-  taxableMonthly: number, dependents: number, childrenCount: number, annualPension: number,
+  taxableMonthly: number, dependents: number, childrenCount: number,
+  annualPension: number, annualOtherInsurance: number,
 ): number {
   const annualGross = taxableMonthly * 12
   if (annualGross <= 0) return 0
   const earnedIncome = Math.max(0, annualGross - earnedIncomeDeduction(annualGross))
   const personalDeduction = 1_500_000 * Math.max(1, dependents)  // 기본공제 (본인+부양 1인당 150만)
-  const taxBase = Math.max(0, earnedIncome - personalDeduction - annualPension)
+  const taxBase = Math.max(0, earnedIncome - personalDeduction - annualPension - annualOtherInsurance)
   const computedTax = progressiveTax(taxBase)
   const credit = earnedTaxCredit(computedTax, annualGross)
   // 자녀세액공제 (8~20세): 1명 25만·2명 55만·3명 이상 55만 + 40만/명
@@ -145,7 +148,10 @@ export function calcSalary(input: SalaryInput): SalaryResult {
     : 0
   const totalInsurance = pension + health + longTermCare + employment
 
-  const incomeTax = getMonthlyIncomeTax(taxableMonthly, input.dependents, input.childrenCount, pension * 12)
+  const incomeTax = getMonthlyIncomeTax(
+    taxableMonthly, input.dependents, input.childrenCount,
+    pension * 12, (health + longTermCare + employment) * 12,
+  )
   const localTax = Math.floor(incomeTax * 0.1 / 10) * 10
   const totalTax = incomeTax + localTax
 

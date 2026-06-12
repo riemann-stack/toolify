@@ -53,7 +53,8 @@ export default function LoanClient() {
 
   const principalWon = parseAmount(principal) * 10_000
   const rateNum = parseFloat(rate) || 0
-  const monthsNum = parseInt(months, 10) || 0
+  // 상한 600개월(50년) — 극단 입력의 스케줄 배열 비대·프리즈 방지
+  const monthsNum = Math.min(600, parseInt(months, 10) || 0)
   // 프리셋 제거됨 — 주담대 기본 금리 참조만 유지
   const presetId = 'mortgage'
 

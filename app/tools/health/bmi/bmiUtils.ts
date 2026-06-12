@@ -291,13 +291,20 @@ export function estimateBodyFat(input: BodyFatInput): number | null {
     if (waist <= neck) return null
     const v = 86.010 * Math.log10(w - n)
             - 70.041 * Math.log10(h) + 36.76
-    return Math.round(v * 10) / 10
+    return clampBodyFat(v)
   }
   if (!hip || hip <= 0) return null
   if (waist + hip <= neck) return null
   const hp = hip / 2.54
   const v = 163.205 * Math.log10(w + hp - n)
           - 97.684 * Math.log10(h) - 78.387
+  return clampBodyFat(v)
+}
+
+/* Navy 공식은 허리-목 차가 작으면 큰 음수로 발산 — 생리적 범위(2~75%) 밖이면
+   입력 오류로 보고 null 반환 (클라이언트의 기존 '입력 확인' 경로 사용) */
+function clampBodyFat(v: number): number | null {
+  if (!Number.isFinite(v) || v < 2 || v > 75) return null
   return Math.round(v * 10) / 10
 }
 

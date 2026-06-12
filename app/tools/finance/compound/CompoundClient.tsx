@@ -68,7 +68,8 @@ export default function CompoundClient() {
   /* ─── 파싱 ─── */
   const principalNum    = manToWon(principal)
   const contributionNum = manToWon(contribution)
-  const yearsNum        = parseInt(years) || 0
+  // 상한 100년 — 극단 입력의 Infinity 표시·역산 이진탐색 프리즈 방지
+  const yearsNum        = Math.min(100, parseInt(years) || 0)
   const goalNum         = manToWon(goal)
   const inflationNum    = parseFloat(inflationRate) || 0
 

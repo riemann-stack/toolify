@@ -116,7 +116,8 @@ export default function SavingsClient() {
 
   /* 목표 역산 — 음수·0 입력 방어 */
   const goalMan = Math.max(0, parseFloat(goalAmount) || 0)
-  const yearsN = Math.max(1, parseFloat(goalYears) || 1)
+  // 상한 60년 — 극단 입력의 Infinity 표시 방지
+  const yearsN = Math.min(60, Math.max(1, parseFloat(goalYears) || 1))
   const rateN = Math.max(0, parseFloat(goalRate) || 0)
   const monthlyNeeded = useMemo(() => monthlyForGoal(goalMan, yearsN, rateN), [goalMan, yearsN, rateN])
   const growth = useMemo(() => simulateGrowth(monthlyNeeded, yearsN, rateN), [monthlyNeeded, yearsN, rateN])

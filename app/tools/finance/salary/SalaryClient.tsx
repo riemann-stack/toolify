@@ -233,7 +233,7 @@ export default function SalaryClient() {
             ))}
           </div>
           <p className={styles.cardLabelHint} style={{ marginTop: 4, fontSize: 11 }}>
-            ⓘ 5명 이상 동일 처리 · 자녀 1명당 월 12,500원 추가 공제
+            ⓘ 5명 이상 동일 처리 · 자녀 1명당 연 25만원(월 약 2.1만원) 세액공제
           </p>
         </div>
       </div>

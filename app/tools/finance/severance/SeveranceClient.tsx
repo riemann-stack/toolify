@@ -26,6 +26,13 @@ function todayIso(): string {
 function isoOffset(days: number): string {
   return isoDate(addDays(new Date(), days))
 }
+/** YYYY-MM-DD 형식 + 유효한 날짜인지 (계산 게이트·localStorage 복원 검증용)
+ *  round-trip 비교로 '2026-02-31' 같은 롤오버 날짜(엔진에 따라 3/3로 해석)도 차단 */
+function isValidIso(iso: unknown): iso is string {
+  if (typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false
+  const d = parseDate(iso)
+  return !Number.isNaN(d.getTime()) && isoDate(d) === iso
+}
 
 export default function SeveranceClient() {
   const [tab, setTab] = useState<Tab>('calc')
@@ -71,8 +78,8 @@ export default function SeveranceClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (j.startIso) setStartIso(j.startIso)
-      if (j.endIso) setEndIso(j.endIso)
+      if (isValidIso(j.startIso)) setStartIso(j.startIso)
+      if (isValidIso(j.endIso)) setEndIso(j.endIso)
       if (j.weekHours) setWeekHours(j.weekHours)
       if (j.dailyHours) setDailyHours(j.dailyHours)
       if (j.m1Base) setM1Base(j.m1Base)
@@ -99,6 +106,8 @@ export default function SeveranceClient() {
   /* 계산 */
   const startDate = parseDate(startIso)
   const endDate = parseDate(endIso)
+  /* 날짜 유효성 게이트 — 빈 값(SSG 첫 렌더 포함)·잘못된 날짜·퇴사일≤입사일이면 결과를 렌더하지 않음 */
+  const datesValid = isValidIso(startIso) && isValidIso(endIso) && endDate.getTime() > startDate.getTime()
   const weekHrs = parseFloat(weekHours) || 0
   const dailyHrs = parseFloat(dailyHours) || 8
 
@@ -249,13 +258,19 @@ export default function SeveranceClient() {
           </div>
         </div>
         <div className={s.helpText}>
-          📅 재직일수: <strong className={s.cellAccent}>{eligibility.daysWorked.toLocaleString()}일</strong>
-          {' · '}<strong>{eligibility.yearsRaw.toFixed(2)}년</strong>
+          {datesValid ? (
+            <>
+              📅 재직일수: <strong className={s.cellAccent}>{eligibility.daysWorked.toLocaleString()}일</strong>
+              {' · '}<strong>{eligibility.yearsRaw.toFixed(2)}년</strong>
+            </>
+          ) : (
+            <>📅 입사일과 퇴사일을 입력하면 재직일수가 계산됩니다</>
+          )}
         </div>
       </div>
 
-      {/* 적격성 경고 */}
-      {!eligibility.eligible && (
+      {/* 적격성 경고 — 날짜가 유효할 때만 판정 (NaN 비교는 자격 충족으로 오판됨) */}
+      {datesValid && !eligibility.eligible && (
         <div className={s.warnCardStrong}>
           <strong>🚨 법정 퇴직금 발생 X</strong>
           <p>
@@ -264,15 +279,20 @@ export default function SeveranceClient() {
           </p>
         </div>
       )}
-      {eligibility.warnings.length > 0 && (
+      {datesValid && eligibility.warnings.length > 0 && (
         <div className={s.warnCard}>
           <strong>⚠️ 주의</strong>
           <p>{eligibility.warnings.join(' · ')}</p>
         </div>
       )}
 
+      {/* 날짜 미입력·오류 — 결과 대신 빈 상태 안내 */}
+      {!datesValid && (
+        <div className={s.empty}>입사일과 퇴사일을 입력하세요 (퇴사일은 입사일 이후)</div>
+      )}
+
       {/* ════════ 탭 1: 퇴직금 계산 ════════ */}
-      {tab === 'calc' && (
+      {datesValid && tab === 'calc' && (
         <>
           {/* 산정기간 자동 표시 */}
           <div className={s.card}>
@@ -416,7 +436,7 @@ export default function SeveranceClient() {
       )}
 
       {/* ════════ 탭 2: 평균 vs 통상 비교 ════════ */}
-      {tab === 'compare' && (
+      {datesValid && tab === 'compare' && (
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>월 통상임금 입력</span>
@@ -485,7 +505,7 @@ export default function SeveranceClient() {
       )}
 
       {/* ════════ 탭 3: 퇴사일 시뮬레이터 ════════ */}
-      {tab === 'sim' && (
+      {datesValid && tab === 'sim' && (
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>퇴사일 ±90일 슬라이더</span>
@@ -577,7 +597,7 @@ export default function SeveranceClient() {
       )}
 
       {/* ════════ 탭 4: 퇴사월 총 입금액 ════════ */}
-      {tab === 'total' && (
+      {datesValid && tab === 'total' && (
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>퇴직 제도 모드</span>

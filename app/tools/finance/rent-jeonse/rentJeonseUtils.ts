@@ -127,6 +127,8 @@ export function estimateMarginalRate(salary: number): number {
   if (salary <= 88_000_000) return 0.264  // 24%
   if (salary <= 150_000_000) return 0.385 // 35%
   if (salary <= 300_000_000) return 0.418 // 38%
+  if (salary <= 500_000_000) return 0.440 // 40%
+  if (salary <= 1_000_000_000) return 0.462 // 42%
   return 0.495                            // 45%
 }
 
