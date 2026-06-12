@@ -581,7 +581,7 @@ export default function CarCostClient() {
           </div>
 
           {/* ── 결과 히어로 ── */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <div className={s.heroLead}>내 차는 하루에 약</div>
             <div className={s.heroNum}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) / 30.5)}</div>
             <div className={s.heroLead} style={{ marginTop: 6, marginBottom: 0 }}>씩 쓰고 있어요</div>

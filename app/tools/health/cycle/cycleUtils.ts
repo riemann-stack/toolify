@@ -3,6 +3,8 @@
 // 모든 데이터는 localStorage only · 서버 X
 // ─────────────────────────────────────────────────────────────
 
+import { todayStr } from '@/lib/date'
+
 export type Phase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal'
 
 export const PHASE_META: Record<Phase, { label: string; emoji: string; color: string; bgColor: string }> = {
@@ -299,7 +301,7 @@ export function saveCycleData(data: UserCycleSettings): void {
   if (typeof window === 'undefined') return
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      ...data, updatedAt: new Date().toISOString().slice(0, 10),
+      ...data, updatedAt: todayStr(),
     }))
   } catch { /* quota */ }
 }

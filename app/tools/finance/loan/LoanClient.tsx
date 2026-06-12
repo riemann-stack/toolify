@@ -250,9 +250,9 @@ export default function LoanClient() {
       {/* 공통 입력 — 2열 그리드 (모바일 1열) */}
       <div className={styles.twoCol}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>대출 원금 (만원)</label>
+          <label className={styles.cardLabel} htmlFor="loan-principal">대출 원금 (만원)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="text" inputMode="numeric"
+            <input id="loan-principal" className={styles.numInput} type="text" inputMode="numeric"
               placeholder="30,000" value={principal} onChange={e => setPrincipal(comma(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
@@ -263,12 +263,12 @@ export default function LoanClient() {
           )}
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="loan-rate">
             연 금리 (%)
             <span className={styles.cardLabelHint}>한국 평균 표시</span>
           </label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="loan-rate" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="4.3" value={rate} step="0.05"
               onChange={e => setRate(e.target.value)} />
             <span className={styles.unit}>%</span>
@@ -284,9 +284,9 @@ export default function LoanClient() {
           })()}
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>대출 기간 (개월)</label>
+          <label className={styles.cardLabel} htmlFor="loan-period">대출 기간 (개월)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="loan-period" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="240" value={months} onChange={e => setMonths(e.target.value)} />
             <span className={styles.unit}>개월</span>
           </div>
@@ -301,9 +301,9 @@ export default function LoanClient() {
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>거치기간 (개월)</label>
+          <label className={styles.cardLabel} htmlFor="loan-grace">거치기간 (개월)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="loan-grace" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="0" value={graceMonths || ''}
               onChange={e => setGraceMonths(parseInt(e.target.value) || 0)} />
             <span className={styles.unit}>개월</span>
@@ -412,9 +412,9 @@ export default function LoanClient() {
 
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>중도상환 금액 (만원)</label>
+              <label className={styles.cardLabel} htmlFor="loan-amount">중도상환 금액 (만원)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="text" inputMode="numeric"
+                <input id="loan-amount" className={styles.numInput} type="text" inputMode="numeric"
                   placeholder="1,000" value={prepaymentAmount} onChange={e => setPrepaymentAmount(comma(e.target.value))} />
                 <span className={styles.unit}>만원</span>
               </div>
@@ -668,23 +668,23 @@ export default function LoanClient() {
 
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>월 상환 가능액 (만원)</label>
+              <label className={styles.cardLabel} htmlFor="loan-f6">월 상환 가능액 (만원)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="text" inputMode="numeric" value={revMonthly} onChange={e => setRevMonthly(comma(e.target.value))} />
+                <input id="loan-f6" className={styles.numInput} type="text" inputMode="numeric" value={revMonthly} onChange={e => setRevMonthly(comma(e.target.value))} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>금리 (%)</label>
+              <label className={styles.cardLabel} htmlFor="loan-rate-2">금리 (%)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={revRate} onChange={e => setRevRate(e.target.value)} />
+                <input id="loan-rate-2" className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={revRate} onChange={e => setRevRate(e.target.value)} />
                 <span className={styles.unit}>%</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>기간 (개월)</label>
+              <label className={styles.cardLabel} htmlFor="loan-period-2">기간 (개월)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" value={revMonths} onChange={e => setRevMonths(e.target.value)} />
+                <input id="loan-period-2" className={styles.numInput} type="number" value={revMonths} onChange={e => setRevMonths(e.target.value)} />
                 <span className={styles.unit}>개월</span>
               </div>
             </div>

@@ -114,14 +114,14 @@ export default function AreaClient() {
         <>
           <div className={styles.fieldRow}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>제곱미터 (㎡)</label>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <label className={styles.cardLabel} htmlFor="area-f1">제곱미터 (㎡)</label>
+              <input id="area-f1" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="84" value={sqm} onChange={e => handleSqmChange(e.target.value)} />
               <span className={styles.unit}>㎡</span>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>평</label>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <label className={styles.cardLabel} htmlFor="area-f2">평</label>
+              <input id="area-f2" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="25.41" value={pyeong} onChange={e => handlePyeongChange(e.target.value)} />
               <span className={styles.unit}>평</span>
             </div>
@@ -142,7 +142,7 @@ export default function AreaClient() {
 
           {result && (
             <>
-              <div className={styles.hero}>
+              <div className={styles.hero} role="status">
                 <div className={styles.heroLabel}>면적 변환 결과</div>
                 <div className={styles.heroNum}>
                   {fmt(result.sqm)}<span className={styles.heroUnit}>㎡</span>

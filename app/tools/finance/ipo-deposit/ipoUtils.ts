@@ -218,7 +218,8 @@ export function loadMemos(): IpoMemo[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    return JSON.parse(raw) as IpoMemo[]
+    const arr = JSON.parse(raw) as IpoMemo[]
+    return Array.isArray(arr) ? arr : []
   } catch { return [] }
 }
 export function saveMemos(memos: IpoMemo[]): void {

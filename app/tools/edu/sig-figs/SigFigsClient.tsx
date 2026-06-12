@@ -150,12 +150,12 @@ function ErrorTab() {
             <div className={s.cardLabel}><span>측정값 vs 참값(이론값)</span></div>
             <div className={s.twoCol}>
               <div>
-                <label className={s.miniLabel}>측정값</label>
-                <input className={s.numInput} type="number" inputMode="decimal" value={measured} onChange={(e) => setMeasured(e.target.value)} placeholder="9.78" />
+                <label className={s.miniLabel} htmlFor="sig-figs-f1">측정값</label>
+                <input id="sig-figs-f1" className={s.numInput} type="number" inputMode="decimal" value={measured} onChange={(e) => setMeasured(e.target.value)} placeholder="9.78" />
               </div>
               <div>
-                <label className={s.miniLabel}>참값(이론·인정값)</label>
-                <input className={s.numInput} type="number" inputMode="decimal" value={trueVal} onChange={(e) => setTrueVal(e.target.value)} placeholder="9.81" />
+                <label className={s.miniLabel} htmlFor="sig-figs-f2">참값(이론·인정값)</label>
+                <input id="sig-figs-f2" className={s.numInput} type="number" inputMode="decimal" value={trueVal} onChange={(e) => setTrueVal(e.target.value)} placeholder="9.81" />
               </div>
             </div>
           </div>
@@ -178,12 +178,12 @@ function ErrorTab() {
             <div className={s.cardLabel}><span>측정값 ± 절대불확도</span></div>
             <div className={s.twoCol}>
               <div>
-                <label className={s.miniLabel}>측정값</label>
-                <input className={s.numInput} type="number" inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} placeholder="25.4" />
+                <label className={s.miniLabel} htmlFor="sig-figs-f3">측정값</label>
+                <input id="sig-figs-f3" className={s.numInput} type="number" inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} placeholder="25.4" />
               </div>
               <div>
-                <label className={s.miniLabel}>절대불확도 δ</label>
-                <input className={s.numInput} type="number" inputMode="decimal" value={absErr} onChange={(e) => setAbsErr(e.target.value)} placeholder="0.3" />
+                <label className={s.miniLabel} htmlFor="sig-figs-f4">절대불확도 δ</label>
+                <input id="sig-figs-f4" className={s.numInput} type="number" inputMode="decimal" value={absErr} onChange={(e) => setAbsErr(e.target.value)} placeholder="0.3" />
               </div>
             </div>
           </div>
@@ -249,8 +249,8 @@ function PropagateTab() {
         <div className={s.cardLabel}><span>측정값 A ± δA</span></div>
         <div className={s.twoCol}>
           <div>
-            <label className={s.miniLabel}>A</label>
-            <input className={s.numInput} type="number" inputMode="decimal" value={a} onChange={(e) => setA(e.target.value)} placeholder="12.0" />
+            <label className={s.miniLabel} htmlFor="sig-figs-f5">A</label>
+            <input id="sig-figs-f5" className={s.numInput} type="number" inputMode="decimal" value={a} onChange={(e) => setA(e.target.value)} placeholder="12.0" />
           </div>
           <div>
             <label className={s.miniLabel}>δA (불확도)</label>
@@ -269,12 +269,12 @@ function PropagateTab() {
           <div className={s.cardLabel}><span>측정값 B ± δB</span></div>
           <div className={s.twoCol}>
             <div>
-              <label className={s.miniLabel}>B</label>
-              <input className={s.numInput} type="number" inputMode="decimal" value={b} onChange={(e) => setB(e.target.value)} placeholder="3.40" />
+              <label className={s.miniLabel} htmlFor="sig-figs-f6">B</label>
+              <input id="sig-figs-f6" className={s.numInput} type="number" inputMode="decimal" value={b} onChange={(e) => setB(e.target.value)} placeholder="3.40" />
             </div>
             <div>
-              <label className={s.miniLabel}>δB (불확도)</label>
-              <input className={s.numInput} type="number" inputMode="decimal" value={db} onChange={(e) => setDb(e.target.value)} placeholder="0.05" />
+              <label className={s.miniLabel} htmlFor="sig-figs-f7">δB (불확도)</label>
+              <input id="sig-figs-f7" className={s.numInput} type="number" inputMode="decimal" value={db} onChange={(e) => setDb(e.target.value)} placeholder="0.05" />
             </div>
           </div>
         </div>

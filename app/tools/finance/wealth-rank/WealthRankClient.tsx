@@ -246,7 +246,7 @@ export default function WealthRankClient() {
       {/* 결과 */}
       {hasInput && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{result.basisLabel} 중 내 순자산은</p>
             <p className={s.heroValue}>
               상위 <strong>{topLabel}</strong>

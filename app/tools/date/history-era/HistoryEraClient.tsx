@@ -331,8 +331,8 @@ function EraToADTab() {
 
       {eraType === 'joseon' ? (
         <div className={styles.fieldRow}>
-          <label className={styles.fieldLabel}>왕</label>
-          <select className={styles.select} value={kingIdx}
+          <label className={styles.fieldLabel} htmlFor="history-era-f1">왕</label>
+          <select id="history-era-f1" className={styles.select} value={kingIdx}
             onChange={e => { setKingIdx(Number(e.target.value)); setYearStr('') }}>
             {JOSEON_KINGS.map((k, i) => (
               <option key={i} value={i}>{k.num}대 {k.name} ({k.startAD}~{k.endAD})</option>
@@ -341,8 +341,8 @@ function EraToADTab() {
         </div>
       ) : (
         <div className={styles.fieldRow}>
-          <label className={styles.fieldLabel}>연호</label>
-          <select className={styles.select} value={eraId}
+          <label className={styles.fieldLabel} htmlFor="history-era-f2">연호</label>
+          <select id="history-era-f2" className={styles.select} value={eraId}
             onChange={e => { setEraId(e.target.value); setYearStr('') }}>
             {(ERAS_BY[eraType] ?? []).map(e => (
               <option key={e.id} value={e.id}>

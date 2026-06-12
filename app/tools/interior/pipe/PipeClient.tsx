@@ -179,7 +179,7 @@ export default function PipeClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>
               {matMeta.label} · {size}
             </p>
@@ -388,8 +388,8 @@ export default function PipeClient() {
 
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>재질</label>
-                <select
+                <label className={s.fieldLabel} htmlFor="pipe-f1">재질</label>
+                <select id="pipe-f1"
                   className={s.input}
                   value={flowMaterial}
                   onChange={(e) => setFlowMaterial(e.target.value as Material)}
@@ -400,8 +400,8 @@ export default function PipeClient() {
                 </select>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>호칭</label>
-                <select
+                <label className={s.fieldLabel} htmlFor="pipe-f2">호칭</label>
+                <select id="pipe-f2"
                   className={s.input}
                   value={flowSize}
                   onChange={(e) => setFlowSize(e.target.value as PipeSize)}
@@ -414,8 +414,8 @@ export default function PipeClient() {
             </div>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>유속 (m/s)</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="pipe-f3">유속 (m/s)</label>
+              <input id="pipe-f3"
                 type="number" inputMode="decimal"
                 className={s.input}
                 value={velocity}

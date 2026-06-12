@@ -884,12 +884,12 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>
+            <label className={styles.cardLabel} htmlFor="lorem-f1">
               문단 수
               <span className={styles.cardLabelHint}>{pCount}개</span>
             </label>
             <div className={styles.sliderRow}>
-              <input type="range" min={1} max={20} value={pCount} onChange={e => setPCount(parseInt(e.target.value))} />
+              <input id="lorem-f1" type="range" min={1} max={20} value={pCount} onChange={e => setPCount(parseInt(e.target.value))} />
               <span className={styles.sliderValue}>{pCount}</span>
             </div>
           </div>
@@ -935,12 +935,12 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>
+            <label className={styles.cardLabel} htmlFor="lorem-count">
               생성 개수
               <span className={styles.cardLabelHint}>{uiCount}개</span>
             </label>
             <div className={styles.sliderRow}>
-              <input type="range" min={1} max={30} value={uiCount} onChange={e => setUiCount(parseInt(e.target.value))} />
+              <input id="lorem-count" type="range" min={1} max={30} value={uiCount} onChange={e => setUiCount(parseInt(e.target.value))} />
               <span className={styles.sliderValue}>{uiCount}</span>
             </div>
           </div>
@@ -1010,12 +1010,12 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>
+            <label className={styles.cardLabel} htmlFor="lorem-f3">
               레코드 수
               <span className={styles.cardLabelHint}>{dCount}개</span>
             </label>
             <div className={styles.sliderRow}>
-              <input type="range" min={1} max={50} value={dCount} onChange={e => setDCount(parseInt(e.target.value))} />
+              <input id="lorem-f3" type="range" min={1} max={50} value={dCount} onChange={e => setDCount(parseInt(e.target.value))} />
               <span className={styles.sliderValue}>{dCount}</span>
             </div>
           </div>
@@ -1060,12 +1060,12 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>
+            <label className={styles.cardLabel} htmlFor="lorem-f4">
               카드 수
               <span className={styles.cardLabelHint}>{cardCount}개</span>
             </label>
             <div className={styles.sliderRow}>
-              <input type="range" min={2} max={12} value={cardCount} onChange={e => setCardCount(parseInt(e.target.value))} />
+              <input id="lorem-f4" type="range" min={2} max={12} value={cardCount} onChange={e => setCardCount(parseInt(e.target.value))} />
               <span className={styles.sliderValue}>{cardCount}</span>
             </div>
           </div>

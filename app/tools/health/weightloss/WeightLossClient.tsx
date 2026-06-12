@@ -218,33 +218,33 @@ export default function WeightLossClient() {
       {/* 공통 입력 — Row 1: 4열 (현재·목표·키·나이) */}
       <div className={styles.fieldRow4}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>현재 체중</label>
+          <label className={styles.cardLabel} htmlFor="weightloss-weight">현재 체중</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="weightloss-weight" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="70" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} />
             <span className={styles.unit}>kg</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>목표 체중</label>
+          <label className={styles.cardLabel} htmlFor="weightloss-weight-2">목표 체중</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="weightloss-weight-2" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="63" value={targetWeight} onChange={e => setTargetWeight(e.target.value)} />
             <span className={styles.unit}>kg</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>키</label>
+          <label className={styles.cardLabel} htmlFor="weightloss-height">키</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="weightloss-height" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="170" value={height} onChange={e => setHeight(e.target.value)} />
             <span className={styles.unit}>cm</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>나이</label>
+          <label className={styles.cardLabel} htmlFor="weightloss-age">나이</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="weightloss-age" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="30" value={age} onChange={e => setAge(e.target.value)} />
             <span className={styles.unit}>세</span>
           </div>
@@ -265,21 +265,21 @@ export default function WeightLossClient() {
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="weightloss-tdee-bmr">
             <span>TDEE</span>
             <a href="/tools/health/bmr" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'underline', textTransform: 'none', letterSpacing: 0, fontWeight: 400, display: 'block', marginTop: 2 }}>
               BMR 계산기로 계산하기 →
             </a>
           </label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="weightloss-tdee-bmr" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="2200" value={tdee} onChange={e => setTdee(e.target.value)} />
             <span className={styles.unit}>kcal</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>시작일</label>
-          <input className={styles.dateInput} type="date"
+          <label className={styles.cardLabel} htmlFor="weightloss-start">시작일</label>
+          <input id="weightloss-start" className={styles.dateInput} type="date"
             value={startDate} onChange={e => setStartDate(e.target.value)} />
         </div>
       </div>
@@ -598,8 +598,8 @@ export default function WeightLossClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>목표 날짜</label>
-            <input className={styles.dateInput} type="date"
+            <label className={styles.cardLabel} htmlFor="weightloss-date">목표 날짜</label>
+            <input id="weightloss-date" className={styles.dateInput} type="date"
               value={targetDate} onChange={e => setTargetDate(e.target.value)} />
             <div className={styles.optionRow4} style={{ marginTop: 8 }}>
               {[28, 56, 84, 112].map(days => (

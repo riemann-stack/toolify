@@ -539,7 +539,8 @@ export default function CardInstallmentClient() {
             </div>
           </div>
 
-          {/* HERO */}
+          {/* HERO — 상시 래퍼: 첫 결과부터 스크린리더 낭독 */}
+          <div role="status">
           {parseComma(amount) > 0 && (
             <div className={s.hero}>
               <p className={s.heroLead}>월 납부액</p>
@@ -561,6 +562,7 @@ export default function CardInstallmentClient() {
               )}
             </div>
           )}
+          </div>
 
           {/* 분석 표 */}
           {parseComma(amount) > 0 && (

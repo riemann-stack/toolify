@@ -62,7 +62,8 @@ function loadEntries(): SleepEntry[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    return JSON.parse(raw) as SleepEntry[]
+    const arr = JSON.parse(raw) as SleepEntry[]
+    return Array.isArray(arr) ? arr : []
   } catch { return [] }
 }
 function saveEntries(arr: SleepEntry[]) {

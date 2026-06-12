@@ -111,9 +111,9 @@ export default function CarTaxClient() {
         <div className={s.cardLabel}>🚗 1. 차량 정보</div>
 
         <div className={s.field}>
-          <label>차량 가격 (출고가)</label>
+          <label htmlFor="car-tax-price">차량 가격 (출고가)</label>
           <div className={s.priceRow}>
-            <input type="text" inputMode="numeric"
+            <input id="car-tax-price" type="text" inputMode="numeric"
               className={s.numInput}
               placeholder="30,000,000"
               value={carPrice ? carPrice.toLocaleString('ko-KR') : ''}
@@ -140,8 +140,8 @@ export default function CarTaxClient() {
 
         <div className={s.grid2} style={{ marginTop: 14 }}>
           <div className={s.field}>
-            <label>연료</label>
-            <select className={s.select}
+            <label htmlFor="car-tax-f2">연료</label>
+            <select id="car-tax-f2" className={s.select}
               value={fuelType}
               onChange={e => setFuelType(e.target.value as FuelType)}
               disabled={carType === 'ev'}
@@ -152,8 +152,8 @@ export default function CarTaxClient() {
             </select>
           </div>
           <div className={s.field}>
-            <label>배기량 (cc) {carType === 'ev' && '— 전기차 N/A'}</label>
-            <input type="number" inputMode="numeric"
+            <label htmlFor="car-tax-cc">배기량 (cc) {carType === 'ev' && '— 전기차 N/A'}</label>
+            <input id="car-tax-cc" type="number" inputMode="numeric"
               className={s.numInput}
               value={cc}
               disabled={carType === 'ev'}
@@ -164,8 +164,8 @@ export default function CarTaxClient() {
 
         <div className={s.grid2} style={{ marginTop: 14 }}>
           <div className={s.field}>
-            <label>경과 년수</label>
-            <input type="number" inputMode="numeric"
+            <label htmlFor="car-tax-f4">경과 년수</label>
+            <input id="car-tax-f4" type="number" inputMode="numeric"
               className={s.numInput}
               value={yearsSinceReg} min={0} max={20} step={1}
               onChange={e => setYearsSinceReg(parseInt(e.target.value) || 0)} />
@@ -175,8 +175,8 @@ export default function CarTaxClient() {
             </div>
           </div>
           <div className={s.field}>
-            <label>거주 지역</label>
-            <select className={s.select}
+            <label htmlFor="car-tax-f5">거주 지역</label>
+            <select id="car-tax-f5" className={s.select}
               value={regionId}
               onChange={e => setRegionId(e.target.value as RegionId)}>
               {REGIONS.map(r => (
@@ -194,9 +194,9 @@ export default function CarTaxClient() {
         <div className={s.cardLabel}>⛽ 2. 운행 정보 — 유류세 추정용</div>
         <div className={s.grid2}>
           <div className={s.field}>
-            <label>월 주행거리</label>
+            <label htmlFor="car-tax-distance">월 주행거리</label>
             <div className={s.priceRow}>
-              <input type="number" inputMode="numeric"
+              <input id="car-tax-distance" type="number" inputMode="numeric"
                 className={s.numInput}
                 value={monthlyKm} min={0} max={5000} step={100}
                 onChange={e => setMonthlyKm(parseInt(e.target.value) || 0)} />
@@ -204,8 +204,8 @@ export default function CarTaxClient() {
             </div>
           </div>
           <div className={s.field}>
-            <label>연비 ({fuelType === 'electric' ? 'km/kWh' : 'km/L'})</label>
-            <input type="text" inputMode="decimal"
+            <label htmlFor="car-tax-f7">연비 ({fuelType === 'electric' ? 'km/kWh' : 'km/L'})</label>
+            <input id="car-tax-f7" type="text" inputMode="decimal"
               className={s.numInput}
               placeholder="12"
               value={fuelType === 'electric' ? '' : effStr}

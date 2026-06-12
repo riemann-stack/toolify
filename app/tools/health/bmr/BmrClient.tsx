@@ -196,17 +196,17 @@ export default function BmrClient() {
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>키</label>
+          <label className={styles.cardLabel} htmlFor="bmr-height">키</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="bmr-height" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="170" value={height} onChange={e => setHeight(e.target.value)} />
             <span className={styles.unit}>cm</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>체중</label>
+          <label className={styles.cardLabel} htmlFor="bmr-weight">체중</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="bmr-weight" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="65" value={weight} onChange={e => setWeight(e.target.value)} />
             <span className={styles.unit}>kg</span>
           </div>

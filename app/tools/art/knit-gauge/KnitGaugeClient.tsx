@@ -311,8 +311,8 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>📋 패턴 정보 (도안에서)</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>패턴 코 게이지 / 10cm</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-cm">패턴 코 게이지 / 10cm</label>
+                <input id="knit-gauge-cm"
                   type="number" inputMode="decimal" min={4} max={60} step={0.5}
                   value={patternStsGauge}
                   onChange={(e) => setPatternStsGauge(Math.max(1, Number(e.target.value) || 1))}
@@ -320,8 +320,8 @@ export default function KnitGaugeClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>패턴 단 게이지 / 10cm</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-cm-2">패턴 단 게이지 / 10cm</label>
+                <input id="knit-gauge-cm-2"
                   type="number" inputMode="decimal" min={4} max={80} step={0.5}
                   value={patternRowsGauge}
                   onChange={(e) => setPatternRowsGauge(Math.max(1, Number(e.target.value) || 1))}
@@ -331,8 +331,8 @@ export default function KnitGaugeClient() {
             </div>
             <div className={s.gridTwo}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>패턴 코 수 (예: 시작 코)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-start">패턴 코 수 (예: 시작 코)</label>
+                <input id="knit-gauge-start"
                   type="number" inputMode="decimal" min={1} max={1000}
                   value={patternSts}
                   onChange={(e) => setPatternSts(Math.max(1, Number(e.target.value) || 1))}
@@ -340,8 +340,8 @@ export default function KnitGaugeClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>패턴 단 수 (총 길이)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-length">패턴 단 수 (총 길이)</label>
+                <input id="knit-gauge-length"
                   type="number" inputMode="decimal" min={1} max={5000}
                   value={patternRows}
                   onChange={(e) => setPatternRows(Math.max(1, Number(e.target.value) || 1))}
@@ -457,10 +457,10 @@ export default function KnitGaugeClient() {
             {bodyPart.ease !== undefined && (
               <div className={s.field}>
                 <div className={s.fieldHead}>
-                  <label className={s.fieldLabel}>신축 보정 (negative ease)</label>
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-negative-ease">신축 보정 (negative ease)</label>
                   <span className={s.easeValue}>{(easeUser * 100).toFixed(0)}%</span>
                 </div>
-                <input
+                <input id="knit-gauge-negative-ease"
                   type="range" min={-0.20} max={0.10} step={0.01}
                   value={easeUser}
                   onChange={(e) => setEaseUser(Number(e.target.value))}
@@ -545,8 +545,8 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>🔢 늘림 / 줄임 균등 분배</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>현재 코 수</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-current">현재 코 수</label>
+                <input id="knit-gauge-current"
                   type="number" inputMode="decimal" min={1} max={1000}
                   value={currentSts}
                   onChange={(e) => setCurrentSts(Math.max(1, Number(e.target.value) || 1))}
@@ -554,8 +554,8 @@ export default function KnitGaugeClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>목표 코 수</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-goal">목표 코 수</label>
+                <input id="knit-gauge-goal"
                   type="number" inputMode="decimal" min={1} max={1000}
                   value={targetSts}
                   onChange={(e) => setTargetSts(Math.max(1, Number(e.target.value) || 1))}
@@ -604,8 +604,8 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>🧶 실 양 추정기</span>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>실 굵기 (CYC)</label>
-              <select value={yarnId} onChange={(e) => setYarnId(e.target.value as YarnId)} className={s.select}>
+              <label className={s.fieldLabel} htmlFor="knit-gauge-cyc">실 굵기 (CYC)</label>
+              <select id="knit-gauge-cyc" value={yarnId} onChange={(e) => setYarnId(e.target.value as YarnId)} className={s.select}>
                 {YARN_WEIGHTS.map((y) => (
                   <option key={y.id} value={y.id}>{y.label}</option>
                 ))}
@@ -613,8 +613,8 @@ export default function KnitGaugeClient() {
             </div>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>작품 종류</label>
-              <select value={projectId} onChange={(e) => setProjectId(e.target.value as ProjectId)} className={s.select}>
+              <label className={s.fieldLabel} htmlFor="knit-gauge-f9">작품 종류</label>
+              <select id="knit-gauge-f9" value={projectId} onChange={(e) => setProjectId(e.target.value as ProjectId)} className={s.select}>
                 {PROJECTS.map((p) => (
                   <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>
                 ))}
@@ -624,8 +624,8 @@ export default function KnitGaugeClient() {
             {/* 사이즈 (스웨터·가디건만) */}
             {(projectId === 'sweater' || projectId === 'cardigan') && (
               <div className={s.field}>
-                <label className={s.fieldLabel}>사이즈</label>
-                <select value={yarnSizeId} onChange={(e) => setYarnSizeId(e.target.value)} className={s.select}>
+                <label className={s.fieldLabel} htmlFor="knit-gauge-f10">사이즈</label>
+                <select id="knit-gauge-f10" value={yarnSizeId} onChange={(e) => setYarnSizeId(e.target.value)} className={s.select}>
                   <optgroup label="여성">
                     {SIZES_FEMALE.map((sz) => <option key={sz.id} value={sz.id}>{sz.label}</option>)}
                   </optgroup>

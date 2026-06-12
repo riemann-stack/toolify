@@ -654,12 +654,14 @@ function SearchTab(props: {
               onFocus={() => setShowSuggestions(true)}
             />
             {showSuggestions && searchTerm.trim() && (
-              <div className={styles.suggestions}>
+              <div className={styles.suggestions} role="listbox" aria-label="재료 검색 결과">
                 {suggestions.length === 0 ? (
                   <div className={styles.searchEmpty}>일치하는 재료가 없습니다. 카테고리에서 선택해 보세요.</div>
                 ) : (
                   suggestions.map(s => (
-                    <div key={s.key} className={styles.suggestionItem} onClick={() => handleSelect(s.key)}>
+                    <div key={s.key} className={styles.suggestionItem} onClick={() => handleSelect(s.key)}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(s.key) } }}
+                      role="option" aria-selected={s.key === selectedKey} tabIndex={0}>
                       <span className={styles.suggestionEmoji}>{s.emoji}</span>
                       <span>{s.original}</span>
                       <span className={styles.suggestionMeta}>{s.via ? `${s.via} 대체` : s.category}</span>

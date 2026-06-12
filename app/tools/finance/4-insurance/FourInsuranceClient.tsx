@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
+import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
 import { useMemo, useState } from 'react'
 import s from './four-insurance.module.css'
 
@@ -22,32 +23,9 @@ const fmtComma = (v: string): string => {
 }
 
 // ─────────────────────────────────────────────
-// 4대보험 요율 (2025 / 2026)
+// 4대보험 요율 (2025 / 2026) — 단일 소스 lib/krInsuranceRates.ts
 // ─────────────────────────────────────────────
-type RateSet = {
-  pension:    { total: number; employee: number; employer: number; minBase: number; maxBase: number }
-  health:     { total: number; employee: number; employer: number }
-  ltc:        { rateOfSalary: number; employee: number; employer: number }
-  unemp:      { employee: number; employer: number; extra: { under150: number; under1000: number; over1000: number } }
-  workersCompAvg: number
-}
-
-const RATES: Record<2025 | 2026, RateSet> = {
-  2025: {
-    pension: { total: 9.0,  employee: 4.5,    employer: 4.5,    minBase: 390_000,  maxBase: 6_170_000 },
-    health:  { total: 7.09, employee: 3.545,  employer: 3.545 },
-    ltc:     { rateOfSalary: 0.9182, employee: 0.4591,  employer: 0.4591 },
-    unemp:   { employee: 0.9, employer: 0.9, extra: { under150: 0.25, under1000: 0.65, over1000: 0.85 } },
-    workersCompAvg: 1.43,
-  },
-  2026: {
-    pension: { total: 9.5,  employee: 4.75,   employer: 4.75,   minBase: 400_000,  maxBase: 6_370_000 },
-    health:  { total: 7.19, employee: 3.595,  employer: 3.595 },
-    ltc:     { rateOfSalary: 0.9448, employee: 0.4724,  employer: 0.4724 },
-    unemp:   { employee: 0.9, employer: 0.9, extra: { under150: 0.25, under1000: 0.65, over1000: 0.85 } },
-    workersCompAvg: 1.43,
-  },
-}
+const RATES = INSURANCE_RATES
 
 // 산재보험 업종 예시 (% 단위)
 const WORKERS_COMP_INDUSTRIES = [
@@ -60,8 +38,8 @@ const WORKERS_COMP_INDUSTRIES = [
   { key: 'custom',        name: '직접 입력',      rate: 0.10 },
 ]
 
-// 2026년 최저시급 (참고)
-const MIN_WAGE_2026 = 10440
+// 2026년 최저시급 (참고) — lib/krInsuranceRates 단일 소스 (고용노동부 고시 10,320원)
+const MIN_WAGE_2026 = MIN_HOURLY_WAGE[2026]
 
 // ─────────────────────────────────────────────
 // 핵심 계산

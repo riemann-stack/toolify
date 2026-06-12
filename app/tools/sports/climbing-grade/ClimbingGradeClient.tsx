@@ -85,7 +85,7 @@ export default function ClimbingGradeClient() {
       </div>
 
       {/* 결과 */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <span className={s.bandBadge} style={{ background: band.color }}>{band.label}</span>
         <div className={s.systemGrid} style={{ gridTemplateColumns: `repeat(${systems.length}, 1fr)` }}>
           {systems.map((x) => (

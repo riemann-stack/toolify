@@ -189,9 +189,9 @@ export default function SalaryClient() {
       {/* 세전 연봉 — 실수령액 탭에서만 필요 */}
       {tab === 'main' && (
         <div className={styles.card}>
-          <label className={styles.cardLabel}>세전 연봉 (만원)</label>
+          <label className={styles.cardLabel} htmlFor="salary-salary">세전 연봉 (만원)</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="text" inputMode="numeric"
+            <input id="salary-salary" className={styles.numInput} type="text" inputMode="numeric"
               placeholder="5,000" value={annualMan} onChange={e => setAnnualMan(comma(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
@@ -437,17 +437,17 @@ export default function SalaryClient() {
             <>
               <div className={styles.fieldRow}>
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>주 근무 시간 — {weeklyHours}시간</label>
+                  <label className={styles.cardLabel} htmlFor="salary-time">주 근무 시간 — {weeklyHours}시간</label>
                   <div className={styles.sliderRow}>
-                    <input className={styles.slider} type="range" min="20" max="60" step="1"
+                    <input id="salary-time" className={styles.slider} type="range" min="20" max="60" step="1"
                       value={weeklyHours} onChange={e => setWeeklyHours(parseInt(e.target.value, 10))} />
                     <span className={styles.sliderVal}>{weeklyHours}h</span>
                   </div>
                 </div>
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>주 야근 — {weeklyOvertime}시간</label>
+                  <label className={styles.cardLabel} htmlFor="salary-time-2">주 야근 — {weeklyOvertime}시간</label>
                   <div className={styles.sliderRow}>
-                    <input className={styles.slider} type="range" min="0" max="30" step="1"
+                    <input id="salary-time-2" className={styles.slider} type="range" min="0" max="30" step="1"
                       value={weeklyOvertime} onChange={e => setWeeklyOvertime(parseInt(e.target.value, 10))} />
                     <span className={styles.sliderVal}>{weeklyOvertime}h</span>
                   </div>
@@ -456,17 +456,17 @@ export default function SalaryClient() {
 
               <div className={styles.fieldRow}>
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>일일 출퇴근 — {dailyCommute}분</label>
+                  <label className={styles.cardLabel} htmlFor="salary-f4">일일 출퇴근 — {dailyCommute}분</label>
                   <div className={styles.sliderRow}>
-                    <input className={styles.slider} type="range" min="0" max="180" step="5"
+                    <input id="salary-f4" className={styles.slider} type="range" min="0" max="180" step="5"
                       value={dailyCommute} onChange={e => setDailyCommute(parseInt(e.target.value, 10))} />
                     <span className={styles.sliderVal}>{dailyCommute}분</span>
                   </div>
                 </div>
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>연차 사용 — {vacationDays}일</label>
+                  <label className={styles.cardLabel} htmlFor="salary-f5">연차 사용 — {vacationDays}일</label>
                   <div className={styles.sliderRow}>
-                    <input className={styles.slider} type="range" min="0" max="30" step="1"
+                    <input id="salary-f5" className={styles.slider} type="range" min="0" max="30" step="1"
                       value={vacationDays} onChange={e => setVacationDays(parseInt(e.target.value, 10))} />
                     <span className={styles.sliderVal}>{vacationDays}일</span>
                   </div>
@@ -539,9 +539,9 @@ export default function SalaryClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>원하는 월 실수령액 (만원)</label>
+            <label className={styles.cardLabel} htmlFor="salary-f6">원하는 월 실수령액 (만원)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="text" inputMode="numeric"
+              <input id="salary-f6" className={styles.numInput} type="text" inputMode="numeric"
                 placeholder="300" value={targetNetMan} onChange={e => setTargetNetMan(comma(e.target.value))} />
               <span className={styles.unit}>만원/월</span>
             </div>

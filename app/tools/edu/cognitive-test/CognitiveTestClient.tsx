@@ -495,6 +495,8 @@ export default function CognitiveTestClient() {
                 s.stageEarly
               }`}
               onClick={reactionStageClick}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reactionStageClick() } }}
+              role="button" aria-label="반응 속도 테스트 영역 — 초록색이 되면 누르세요" tabIndex={0}
             >
               {rPhase === 'idle' && (
                 <>

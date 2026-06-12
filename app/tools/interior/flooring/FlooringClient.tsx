@@ -490,7 +490,7 @@ export default function FlooringClient() {
           </div>
 
           {/* HERO */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>필요한 {fl.unitLabel}</p>
             <p className={styles.heroNum}>{calc.requiredUnits}<span className={styles.heroUnit}>{fl.unitLabel}</span></p>
             <p className={styles.heroSub}>

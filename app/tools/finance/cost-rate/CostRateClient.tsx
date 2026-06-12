@@ -526,7 +526,7 @@ export default function CostRateClient() {
       {/* ──────────────────────── 탭 1: 원가율 계산 결과 ──────────────────────── */}
       {tab === 'main' && price > 0 && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>
               <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: '#0891B2' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
             </p>

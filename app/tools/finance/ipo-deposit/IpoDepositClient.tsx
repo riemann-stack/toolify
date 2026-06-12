@@ -208,8 +208,8 @@ export default function IpoDepositClient() {
         <div className={s.card}>
           <span className={s.cardLabel}>공통 입력</span>
           <div className={s.field}>
-            <label className={s.fieldLabel}>공모가 (원)</label>
-            <input type="number" inputMode="numeric" min={0} className={s.input}
+            <label className={s.fieldLabel} htmlFor="ipo-deposit-f1">공모가 (원)</label>
+            <input id="ipo-deposit-f1" type="number" inputMode="numeric" min={0} className={s.input}
               value={publicPrice} onChange={(e) => setPublicPrice(e.target.value)} />
             <div className={s.quickRow}>
               {PRICE_QUICK.map((v) => (
@@ -221,8 +221,8 @@ export default function IpoDepositClient() {
           </div>
 
           <div className={s.field}>
-            <label className={s.fieldLabel}>비례경쟁률 (예: 500 → 500:1)</label>
-            <input type="number" inputMode="numeric" min={0} className={s.input}
+            <label className={s.fieldLabel} htmlFor="ipo-deposit-f2">비례경쟁률 (예: 500 → 500:1)</label>
+            <input id="ipo-deposit-f2" type="number" inputMode="numeric" min={0} className={s.input}
               value={competition} onChange={(e) => setCompetition(e.target.value)} />
             <div className={s.quickRow}>
               {COMP_QUICK.map((v) => (
@@ -509,71 +509,71 @@ export default function IpoDepositClient() {
             <p className={s.cardSub}>본 메모는 본인 브라우저에만 저장 · 종목 추천 X · 일정 자동 알림 X · 정확 일정은 증권신고서 확인.</p>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>종목명 / 티커</label>
-              <input type="text" maxLength={30} className={s.input}
+              <label className={s.fieldLabel} htmlFor="ipo-deposit-f3">종목명 / 티커</label>
+              <input id="ipo-deposit-f3" type="text" maxLength={30} className={s.input}
                 placeholder="예: 가상의IPO"
                 value={memoForm.ticker ?? ''}
                 onChange={(e) => setMemoForm((p) => ({ ...p, ticker: e.target.value }))} />
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>공모가 (원)</label>
-                <input type="number" inputMode="numeric" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f4">공모가 (원)</label>
+                <input id="ipo-deposit-f4" type="number" inputMode="numeric" className={s.input}
                   value={memoForm.publicPrice ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, publicPrice: +e.target.value || 0 }))} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>경쟁률 (마감 후)</label>
-                <input type="number" inputMode="numeric" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f5">경쟁률 (마감 후)</label>
+                <input id="ipo-deposit-f5" type="number" inputMode="numeric" className={s.input}
                   value={memoForm.competition ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, competition: +e.target.value || undefined }))} />
               </div>
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>내 증거금 (원)</label>
-                <input type="number" inputMode="numeric" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f6">내 증거금 (원)</label>
+                <input id="ipo-deposit-f6" type="number" inputMode="numeric" className={s.input}
                   value={memoForm.myDeposit ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, myDeposit: +e.target.value || 0 }))} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>예상 배정 (주)</label>
-                <input type="number" inputMode="numeric" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f7">예상 배정 (주)</label>
+                <input id="ipo-deposit-f7" type="number" inputMode="numeric" className={s.input}
                   value={memoForm.expectedAllocation ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, expectedAllocation: +e.target.value || undefined }))} />
               </div>
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>청약일</label>
-                <input type="date" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f8">청약일</label>
+                <input id="ipo-deposit-f8" type="date" className={s.input}
                   value={memoForm.subscriptionDate ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, subscriptionDate: e.target.value }))} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>환불일</label>
-                <input type="date" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f9">환불일</label>
+                <input id="ipo-deposit-f9" type="date" className={s.input}
                   value={memoForm.refundDate ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, refundDate: e.target.value }))} />
               </div>
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>납입일</label>
-                <input type="date" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f10">납입일</label>
+                <input id="ipo-deposit-f10" type="date" className={s.input}
                   value={memoForm.paymentDate ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, paymentDate: e.target.value }))} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>상장일</label>
-                <input type="date" className={s.input}
+                <label className={s.fieldLabel} htmlFor="ipo-deposit-f11">상장일</label>
+                <input id="ipo-deposit-f11" type="date" className={s.input}
                   value={memoForm.listingDate ?? ''}
                   onChange={(e) => setMemoForm((p) => ({ ...p, listingDate: e.target.value }))} />
               </div>
             </div>
             <div className={s.field} style={{ marginBottom: 0 }}>
-              <label className={s.fieldLabel}>메모</label>
-              <input type="text" maxLength={100} className={s.input}
+              <label className={s.fieldLabel} htmlFor="ipo-deposit-memo">메모</label>
+              <input id="ipo-deposit-memo" type="text" maxLength={100} className={s.input}
                 placeholder="증권사·우대조건·기타"
                 value={memoForm.notes ?? ''}
                 onChange={(e) => setMemoForm((p) => ({ ...p, notes: e.target.value }))} />

@@ -2,6 +2,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
 
@@ -197,7 +198,7 @@ export default function IntervalTrainingClient() {
     try {
       const data = {
         r5min, r5sec, r10min, r10sec, rHh, rHmin, rHsec, recordType, weeklyKm,
-        lastSavedAt: new Date().toISOString().slice(0, 10),
+        lastSavedAt: todayStr(),
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     } catch {}
@@ -647,22 +648,24 @@ export default function IntervalTrainingClient() {
           </div>
 
           {/* HERO */}
-          {intervalPaceSec > 0 && (
-            <div className={s.hero}>
-              <p className={s.heroLead}>인터벌 페이스</p>
-              <div>
-                <span className={s.heroNum}>{fmtMS(intervalPaceSec)}</span>
-                <span className={s.heroUnit}>/km</span>
+          <div role="status">
+            {intervalPaceSec > 0 && (
+              <div className={s.hero}>
+                <p className={s.heroLead}>인터벌 페이스</p>
+                <div>
+                  <span className={s.heroNum}>{fmtMS(intervalPaceSec)}</span>
+                  <span className={s.heroUnit}>/km</span>
+                </div>
+                <p className={s.heroSub}>
+                  {inputMode === 'record' && vdotInfo.vdot > 0 && (
+                    <>VDOT <span className={s.heroSubAccent}>{vdotInfo.vdot.toFixed(1)}</span> 러너 · </>
+                  )}
+                  {GOALS.find(g => g.key === goal)?.label} 목적 ·
+                  {' '}<span className={s.heroSubAccent}>{GOAL_INTENSITY[goal]} 페이스</span>
+                </p>
               </div>
-              <p className={s.heroSub}>
-                {inputMode === 'record' && vdotInfo.vdot > 0 && (
-                  <>VDOT <span className={s.heroSubAccent}>{vdotInfo.vdot.toFixed(1)}</span> 러너 · </>
-                )}
-                {GOALS.find(g => g.key === goal)?.label} 목적 ·
-                {' '}<span className={s.heroSubAccent}>{GOAL_INTENSITY[goal]} 페이스</span>
-              </p>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* 거리별 랩타임 */}
           {lapRows.length > 0 && intervalPaceSec > 0 && (

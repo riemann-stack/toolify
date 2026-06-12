@@ -233,10 +233,10 @@ export default function PregnancyClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.label}>
+        <label className={styles.label} htmlFor="pregnancy-f1">
           태명 <span className={styles.labelHint}>선택</span>
         </label>
-        <input className={styles.dateInput} type="text"
+        <input id="pregnancy-f1" className={styles.dateInput} type="text"
           placeholder="예: 콩이, 복덩이, 하늘이..."
           value={babyName} maxLength={10}
           onChange={e => setBabyName(e.target.value)} />
@@ -624,8 +624,8 @@ export default function PregnancyClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.label}>출산 예정일</label>
-            <input className={styles.dateInput} type="date"
+            <label className={styles.label} htmlFor="pregnancy-f2">출산 예정일</label>
+            <input id="pregnancy-f2" className={styles.dateInput} type="date"
               value={reverseDate}
               onChange={e => setReverseDate(e.target.value)} />
           </div>

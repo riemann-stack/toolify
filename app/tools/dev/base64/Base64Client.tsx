@@ -308,6 +308,8 @@ export default function Base64Client() {
               onDrop={handleFileDrop}
               onDragOver={e => e.preventDefault()}
               onClick={() => fileInputRef.current?.click()}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click() } }}
+              role="button" aria-label="인코딩할 파일 선택" tabIndex={0}
             >
               <p style={{ fontSize: 22, marginBottom: 6 }}>📁</p>
               <p style={{ marginBottom: 4 }}>파일을 여기에 드래그하거나 클릭해서 선택</p>

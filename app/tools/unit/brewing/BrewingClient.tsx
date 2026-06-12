@@ -170,8 +170,8 @@ export default function BrewingClient() {
         <span className={s.cardLabel}>3. 발효 ABV 계산 (OG·FG)</span>
         <div className={s.row2}>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>OG (발효 전 SG)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="brewing-og-sg">OG (발효 전 SG)</label>
+            <input id="brewing-og-sg"
               type="number" inputMode="decimal" step={0.001} min={0.99} max={1.20}
               className={s.input}
               value={ogSg}
@@ -182,8 +182,8 @@ export default function BrewingClient() {
             )}
           </div>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>FG (발효 후 SG)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="brewing-fg-sg">FG (발효 후 SG)</label>
+            <input id="brewing-fg-sg"
               type="number" inputMode="decimal" step={0.001} min={0.98} max={1.10}
               className={s.input}
               value={fgSg}
@@ -215,8 +215,8 @@ export default function BrewingClient() {
         <span className={s.cardLabel}>4. ABV ↔ Proof</span>
         <div className={s.row2}>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>ABV (%)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="brewing-abv">ABV (%)</label>
+            <input id="brewing-abv"
               type="number" inputMode="decimal" step={0.1} min={0} max={100}
               className={s.input}
               value={abvInput}

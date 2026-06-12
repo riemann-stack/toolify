@@ -771,7 +771,7 @@ export default function RealEstateClient() {
       )}
 
       {/* 히어로 — 세전 수익 */}
-      <div className={styles.hero}>
+      <div className={styles.hero} role="status">
         <p className={styles.heroLead}>예상 세전 수익</p>
         <p className={`${styles.heroNum} ${isLoss ? styles.heroNumLoss : ''}`}>
           {profitBeforeTax >= 0 ? '+' : ''}{fmtKRW(profitBeforeTax)}

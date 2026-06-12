@@ -98,9 +98,9 @@ export default function ViscosityClient() {
         <span className={s.cardLabel}>2. 값 · 밀도 · 측정 온도</span>
         <div className={s.inputGrid}>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>점도 값</label>
+            <label className={s.fieldLabel} htmlFor="viscosity-f1">점도 값</label>
             <div className={s.inputRow}>
-              <input
+              <input id="viscosity-f1"
                 type="number"
                 inputMode="decimal"
                 step="0.01"
@@ -113,9 +113,9 @@ export default function ViscosityClient() {
             </div>
           </div>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>밀도 ρ (g/cm³)</label>
+            <label className={s.fieldLabel} htmlFor="viscosity-cm">밀도 ρ (g/cm³)</label>
             <div className={s.inputRow}>
-              <input
+              <input id="viscosity-cm"
                 type="number"
                 inputMode="decimal"
                 step="0.01"

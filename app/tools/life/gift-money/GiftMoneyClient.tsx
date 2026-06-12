@@ -80,7 +80,7 @@ export default function GiftMoneyClient() {
       </div>
 
       {/* 결과 */}
-      <div className={s.hero} style={{ background: `linear-gradient(135deg, ${accent}1a 0%, ${accent}0d 100%)`, borderColor: `${accent}4d` }}>
+      <div className={s.hero} role="status" style={{ background: `linear-gradient(135deg, ${accent}1a 0%, ${accent}0d 100%)`, borderColor: `${accent}4d` }}>
         <p className={s.heroLead}>추천 {isWedding ? '축의금' : '부의금'}</p>
         <p className={s.heroValue} style={{ color: accent }}>{res.recommend}만원</p>
         <p className={s.heroWon}>{won(res.recommend)}원</p>

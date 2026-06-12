@@ -288,7 +288,7 @@ export default function CycleClient() {
           {result && (
             <>
               {/* 히어로 */}
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>다음 생리 예정일</p>
                 <p className={s.heroValue}>{fmtKor(result.nextPeriodDate)}</p>
                 <p className={s.heroDDay}>

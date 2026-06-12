@@ -267,7 +267,7 @@ function GiftTab(p: GiftTabProps) {
       </div>
 
       {/* 결과 */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLead}>예상 증여세 (신고 세액공제 3% 반영)</div>
         <div className={s.heroNum}>{formatShortKRW(result.finalTax)}</div>
         <div className={s.heroSub}>= {formatKRW(result.finalTax)}</div>

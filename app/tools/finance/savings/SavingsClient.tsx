@@ -171,8 +171,8 @@ export default function SavingsClient() {
             <span className={s.cardLabel}>가구·연령</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>가구 구성</label>
-                <select
+                <label className={s.fieldLabel} htmlFor="savings-f1">가구 구성</label>
+                <select id="savings-f1"
                   className={s.select}
                   value={household}
                   onChange={(e) => setHousehold(e.target.value as Household)}
@@ -183,8 +183,8 @@ export default function SavingsClient() {
                 </select>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>연령대·상황</label>
-                <select
+                <label className={s.fieldLabel} htmlFor="savings-age">연령대·상황</label>
+                <select id="savings-age"
                   className={s.select}
                   value={ageGroup}
                   onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
@@ -204,8 +204,8 @@ export default function SavingsClient() {
             <span className={s.cardLabel}>월 수입 (만원)</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>월 실수령액</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="savings-f3">월 실수령액</label>
+                <input id="savings-f3"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={income}
@@ -217,8 +217,8 @@ export default function SavingsClient() {
                 </p>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>부수입 (임대·배당·부업)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="savings-income">부수입 (임대·배당·부업)</label>
+                <input id="savings-income"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={extraIncome}
@@ -280,7 +280,7 @@ export default function SavingsClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{isDeficit ? '월 수지 진단 (적자)' : '저축 가능액 진단'}</p>
             <p className={s.heroValue} style={{ color: isDeficit ? '#DC2626' : grade.color }}>
               {isDeficit ? '⚠️' : grade.emoji} <strong>{isDeficit ? `적자 ${fmtMan(Math.abs(savings))}` : fmtMan(savings)}</strong>
@@ -477,8 +477,8 @@ export default function SavingsClient() {
             <span className={s.cardLabel}>목표 입력</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>목표 금액 (만원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="savings-amount">목표 금액 (만원)</label>
+                <input id="savings-amount"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={goalAmount}
@@ -488,8 +488,8 @@ export default function SavingsClient() {
                 <p className={s.helpText}>= {fmtMan(goalMan)}</p>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>목표 기간 (년)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="savings-period">목표 기간 (년)</label>
+                <input id="savings-period"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={goalYears}
@@ -506,8 +506,8 @@ export default function SavingsClient() {
               </div>
             </div>
             <div className={s.field}>
-              <label className={s.fieldLabel}>예상 연 수익률 (%)</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="savings-yield">예상 연 수익률 (%)</label>
+              <input id="savings-yield"
                 type="number" inputMode="decimal"
                 className={s.input}
                 value={goalRate}

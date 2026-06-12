@@ -93,9 +93,9 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
 
         <div className={styles.inputGrid}>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>긴 변 (A)</label>
+            <label className={styles.fieldLabel} htmlFor="golden-ratio-f1">긴 변 (A)</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="golden-ratio-f1"
                 className={styles.numInput}
                 type="number"
                 inputMode="decimal"
@@ -108,9 +108,9 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
             </div>
           </div>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>짧은 변 (B)</label>
+            <label className={styles.fieldLabel} htmlFor="golden-ratio-f2">짧은 변 (B)</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="golden-ratio-f2"
                 className={styles.numInput}
                 type="number"
                 inputMode="decimal"
@@ -123,9 +123,9 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
             </div>
           </div>
           <div className={styles.fieldGroup} style={{ gridColumn: '1 / -1' }}>
-            <label className={styles.fieldLabel}>전체 길이 (T = A + B)</label>
+            <label className={styles.fieldLabel} htmlFor="golden-ratio-length">전체 길이 (T = A + B)</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="golden-ratio-length"
                 className={styles.numInput}
                 type="number"
                 inputMode="decimal"
@@ -267,9 +267,9 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
         <div className={styles.cardLabel}>가로·세로 입력</div>
         <div className={styles.inputGrid}>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>가로 (W)</label>
+            <label className={styles.fieldLabel} htmlFor="golden-ratio-f4">가로 (W)</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="golden-ratio-f4"
                 className={styles.numInput}
                 type="number" inputMode="decimal"
                 placeholder="1920"
@@ -279,9 +279,9 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
             </div>
           </div>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>세로 (H)</label>
+            <label className={styles.fieldLabel} htmlFor="golden-ratio-f5">세로 (H)</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="golden-ratio-f5"
                 className={styles.numInput}
                 type="number" inputMode="decimal"
                 placeholder="1080"

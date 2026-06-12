@@ -3,6 +3,8 @@
    2026년 월세 vs 전세 vs 반전세 비교
    ────────────────────────────────────────────────────── */
 
+import { marginalRate } from '@/lib/krIncomeTax'
+
 export type Option = 'jeonse' | 'monthly' | 'semi'
 
 export interface CityAvg {
@@ -121,15 +123,8 @@ export function jeonseLoanDeduction(annualPaid: number, marginalRate: number): n
 
 /* ─── 한계세율 추정 (총급여 → 추정) ─── */
 export function estimateMarginalRate(salary: number): number {
-  // 매우 단순화 (근로소득 기준)
-  if (salary <= 14_000_000) return 0.066  // 6% × 1.1 (지방세)
-  if (salary <= 50_000_000) return 0.165  // 15%
-  if (salary <= 88_000_000) return 0.264  // 24%
-  if (salary <= 150_000_000) return 0.385 // 35%
-  if (salary <= 300_000_000) return 0.418 // 38%
-  if (salary <= 500_000_000) return 0.440 // 40%
-  if (salary <= 1_000_000_000) return 0.462 // 42%
-  return 0.495                            // 45%
+  // 매우 단순화 (근로소득 기준) — 총급여를 과세표준으로 간주, 지방세 10% 포함
+  return marginalRate(salary, { localTax: true })
 }
 
 /* ─── 전세 옵션 계산 ─── */

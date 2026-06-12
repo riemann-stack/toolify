@@ -400,7 +400,7 @@ export default function FootballPointsClient() {
       {/* ─────────────────────────── 탭 1: 승점 계산 ─────────────────────────── */}
       {tab === 'main' && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>현재 승점</p>
             <p className={styles.heroNum}>
               {stats.points}<span className={styles.heroUnit}>점</span>

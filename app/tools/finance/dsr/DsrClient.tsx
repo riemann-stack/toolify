@@ -51,12 +51,12 @@ export default function DsrClient() {
         if (j.loan) setLoan(j.loan)
         if (j.rate) setRate(j.rate)
         if (j.years) setYears(j.years)
-        if (j.method) setMethod(j.method)
-        if (j.rateType) setRateType(j.rateType)
+        if (j.method === 'equal' || j.method === 'principal') setMethod(j.method)
+        if (['variable', 'mixed', 'periodic', 'fixed'].includes(j.rateType)) setRateType(j.rateType)
         if (j.dsrLimit) setDsrLimit(j.dsrLimit)
         if (j.ltvLimit) setLtvLimit(j.ltvLimit)
         if (j.baseStress) setBaseStress(j.baseStress)
-        if (j.phase) setPhase(j.phase)
+        if (j.phase === 1 || j.phase === 2 || j.phase === 3) setPhase(j.phase)
       }
     } catch {}
     setHydrated(true)
@@ -119,44 +119,44 @@ export default function DsrClient() {
         </div>
         <div className={s.inputGrid}>
           <div className={s.field}>
-            <label className={s.fieldLabel}>연소득 <span className={s.fieldHint}>세전</span></label>
+            <label className={s.fieldLabel} htmlFor="dsr-income">연소득 <span className={s.fieldHint}>세전</span></label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="numeric" value={income} onChange={e => setIncome(comma(e.target.value))} />
+              <input id="dsr-income" className={s.numInput} inputMode="numeric" value={income} onChange={e => setIncome(comma(e.target.value))} />
               <span className={s.unit}>만원</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>기존 대출 연 상환액 <span className={s.fieldHint}>원리금/년</span></label>
+            <label className={s.fieldLabel} htmlFor="dsr-f2">기존 대출 연 상환액 <span className={s.fieldHint}>원리금/년</span></label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="numeric" value={existing} onChange={e => setExisting(comma(e.target.value))} />
+              <input id="dsr-f2" className={s.numInput} inputMode="numeric" value={existing} onChange={e => setExisting(comma(e.target.value))} />
               <span className={s.unit}>만원</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>주택 가격</label>
+            <label className={s.fieldLabel} htmlFor="dsr-price">주택 가격</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="numeric" value={homePrice} onChange={e => setHomePrice(comma(e.target.value))} />
+              <input id="dsr-price" className={s.numInput} inputMode="numeric" value={homePrice} onChange={e => setHomePrice(comma(e.target.value))} />
               <span className={s.unit}>만원</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>희망 대출 금액</label>
+            <label className={s.fieldLabel} htmlFor="dsr-amount">희망 대출 금액</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="numeric" value={loan} onChange={e => setLoan(comma(e.target.value))} />
+              <input id="dsr-amount" className={s.numInput} inputMode="numeric" value={loan} onChange={e => setLoan(comma(e.target.value))} />
               <span className={s.unit}>만원</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>대출 금리</label>
+            <label className={s.fieldLabel} htmlFor="dsr-rate">대출 금리</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="decimal" value={rate} onChange={e => setRate(e.target.value)} />
+              <input id="dsr-rate" className={s.numInput} inputMode="decimal" value={rate} onChange={e => setRate(e.target.value)} />
               <span className={s.unit}>% / 년</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>대출 만기</label>
+            <label className={s.fieldLabel} htmlFor="dsr-f6">대출 만기</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="numeric" value={years} onChange={e => setYears(e.target.value)} />
+              <input id="dsr-f6" className={s.numInput} inputMode="numeric" value={years} onChange={e => setYears(e.target.value)} />
               <span className={s.unit}>년</span>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function DsrClient() {
       </div>
 
       {/* 최종 한도 히어로 */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLabel}>예상 최대 대출 한도</div>
         <div className={s.heroNum}>{fmtManwon(r.finalMaxLoan)}</div>
         <p className={s.heroSub}>
@@ -275,23 +275,23 @@ export default function DsrClient() {
         <summary>규제 기준값 직접 수정 (DSR 한도·LTV 한도·스트레스 금리)</summary>
         <div className={s.inputGrid} style={{ marginTop: 4 }}>
           <div className={s.field}>
-            <label className={s.fieldLabel}>DSR 한도 <span className={s.fieldHint}>은행 40 / 2금융 50</span></label>
+            <label className={s.fieldLabel} htmlFor="dsr-dsr">DSR 한도 <span className={s.fieldHint}>은행 40 / 2금융 50</span></label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="decimal" value={dsrLimit} onChange={e => setDsrLimit(e.target.value)} />
+              <input id="dsr-dsr" className={s.numInput} inputMode="decimal" value={dsrLimit} onChange={e => setDsrLimit(e.target.value)} />
               <span className={s.unit}>%</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>LTV 한도 <span className={s.fieldHint}>비규제 70 / 생애최초 80</span></label>
+            <label className={s.fieldLabel} htmlFor="dsr-ltv">LTV 한도 <span className={s.fieldHint}>비규제 70 / 생애최초 80</span></label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="decimal" value={ltvLimit} onChange={e => setLtvLimit(e.target.value)} />
+              <input id="dsr-ltv" className={s.numInput} inputMode="decimal" value={ltvLimit} onChange={e => setLtvLimit(e.target.value)} />
               <span className={s.unit}>%</span>
             </div>
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>기준 스트레스 금리 <span className={s.fieldHint}>하한 1.5 ~ 상한 3.0</span></label>
+            <label className={s.fieldLabel} htmlFor="dsr-rate-2">기준 스트레스 금리 <span className={s.fieldHint}>하한 1.5 ~ 상한 3.0</span></label>
             <div className={s.inputRow}>
-              <input className={s.numInput} inputMode="decimal" value={baseStress} onChange={e => setBaseStress(e.target.value)} />
+              <input id="dsr-rate-2" className={s.numInput} inputMode="decimal" value={baseStress} onChange={e => setBaseStress(e.target.value)} />
               <span className={s.unit}>%p</span>
             </div>
           </div>

@@ -188,7 +188,7 @@ export default function ScaleClient() {
       {/* ════════ 탭 1: 스케일 ════════ */}
       {tab === 'scale' && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{scale.emoji} {noteName(rootKey, acc)} {scale.label}</p>
             <p className={s.heroValue}>
               {scaleNotesNames.join(' - ')}
@@ -516,7 +516,10 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
     const textColor = isInScale ? '#0D0D0D' : '#666'
 
     whiteKeys.push(
-      <g key={`w-${w}`} onClick={() => onPlayNote(noteIdx, 4 + octaveOffset)} style={{ cursor: 'pointer' }}>
+      <g key={`w-${w}`} onClick={() => onPlayNote(noteIdx, 4 + octaveOffset)}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(noteIdx, 4 + octaveOffset) } }}
+        role="button" aria-label={`${noteName(noteIdx, acc)} 재생`} tabIndex={0}
+        style={{ cursor: 'pointer' }}>
         <rect
           x={w * whiteW}
           y={0}
@@ -561,7 +564,10 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
         const octaveOffset = Math.floor(w / 7)
 
         blackKeys.push(
-          <g key={`b-${w}-${bIdx}`} onClick={() => onPlayNote(bIdx, 4 + octaveOffset)} style={{ cursor: 'pointer' }}>
+          <g key={`b-${w}-${bIdx}`} onClick={() => onPlayNote(bIdx, 4 + octaveOffset)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(bIdx, 4 + octaveOffset) } }}
+            role="button" aria-label={`${noteName(bIdx, acc)} 재생`} tabIndex={0}
+            style={{ cursor: 'pointer' }}>
             <rect
               x={xLeft}
               y={0}

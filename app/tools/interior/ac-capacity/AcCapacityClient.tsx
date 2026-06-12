@@ -392,7 +392,7 @@ export default function AcCapacityClient() {
           </div>
 
           {/* HERO */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>추천 에어컨 평형</p>
             <p className={styles.heroNum}>{calc.matched}<span className={styles.heroUnit}>평형</span></p>
             <p className={styles.heroSub}>

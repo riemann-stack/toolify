@@ -508,8 +508,8 @@ export default function ExposureClient() {
             <span className={s.cardLabel}>⭐ 별 사진 500 룰 (점광원 한계 셔터)</span>
             <div className={s.starInputs}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>초점거리 (mm)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="exposure-mm">초점거리 (mm)</label>
+                <input id="exposure-mm"
                   type="number" inputMode="decimal"
                   min={8}
                   max={400}
@@ -519,8 +519,8 @@ export default function ExposureClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>센서 크기</label>
-                <select value={crop} onChange={(e) => setCrop(e.target.value as CropFactor)} className={s.input}>
+                <label className={s.fieldLabel} htmlFor="exposure-f2">센서 크기</label>
+                <select id="exposure-f2" value={crop} onChange={(e) => setCrop(e.target.value as CropFactor)} className={s.input}>
                   {CROPS.map((c) => (
                     <option key={c.id} value={c.id}>{c.label} (×{c.factor})</option>
                   ))}

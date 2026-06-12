@@ -608,15 +608,17 @@ export default function ReviewIntervalClient() {
           </div>
 
           {/* HERO */}
-          {simpleSchedule.length > 0 && (
-            <div className={s.hero}>
-              <p className={s.heroLead}>다음 복습일</p>
-              <p className={s.heroNum}>{fmtKorean(simpleSchedule[0].date)}</p>
-              <p className={s.heroSub}>
-                <strong>{dDay(simpleSchedule[0].date)}</strong> · 1차 복습 ({simpleSchedule[0].interval}일 후)
-              </p>
-            </div>
-          )}
+          <div role="status">
+            {simpleSchedule.length > 0 && (
+              <div className={s.hero}>
+                <p className={s.heroLead}>다음 복습일</p>
+                <p className={s.heroNum}>{fmtKorean(simpleSchedule[0].date)}</p>
+                <p className={s.heroSub}>
+                  <strong>{dDay(simpleSchedule[0].date)}</strong> · 1차 복습 ({simpleSchedule[0].interval}일 후)
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* 일정 표 */}
           <div className={s.card}>

@@ -178,8 +178,8 @@ export default function AuctionClient() {
       <div className={s.card}>
         <span className={s.cardLabel}>물건·명의·지역</span>
         <div className={s.field}>
-          <label className={s.fieldLabel}>낙찰가 (만원)</label>
-          <input
+          <label className={s.fieldLabel} htmlFor="auction-f1">낙찰가 (만원)</label>
+          <input id="auction-f1"
             type="number" inputMode="decimal"
             className={s.input}
             value={priceMan}
@@ -332,7 +332,7 @@ export default function AuctionClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>총 투자금</p>
             <p className={s.heroValue}>
               <strong>{fmtMan(totalInvest)}</strong>
@@ -413,8 +413,8 @@ export default function AuctionClient() {
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>대출 금리 (연 %)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="auction-rate">대출 금리 (연 %)</label>
+                <input id="auction-rate"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={ratePct}
@@ -425,8 +425,8 @@ export default function AuctionClient() {
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>대출 기간 (년)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="auction-period">대출 기간 (년)</label>
+                <input id="auction-period"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={years}
@@ -440,8 +440,8 @@ export default function AuctionClient() {
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>본인 연소득 (만원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="auction-income">본인 연소득 (만원)</label>
+                <input id="auction-income"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={income}
@@ -452,8 +452,8 @@ export default function AuctionClient() {
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>기존 월 상환액 (만원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="auction-f5">기존 월 상환액 (만원)</label>
+                <input id="auction-f5"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={existingMonth}
@@ -462,8 +462,8 @@ export default function AuctionClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>보유 현금 (만원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="auction-f6">보유 현금 (만원)</label>
+                <input id="auction-f6"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={cashOwn}

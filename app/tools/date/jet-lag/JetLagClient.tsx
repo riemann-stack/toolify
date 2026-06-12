@@ -153,18 +153,18 @@ export default function JetLagClient() {
         {/* 출발지·도착지 */}
         <div className={s.row2}>
           <div>
-            <label className={s.fieldLabel}>출발 도시</label>
+            <label className={s.fieldLabel} htmlFor="jet-lag-f1">출발 도시</label>
             <div className={s.selectWrap}>
-              <select className={s.select} value={fromIdx} onChange={(e) => setFromIdx(Number(e.target.value))}>
+              <select id="jet-lag-f1" className={s.select} value={fromIdx} onChange={(e) => setFromIdx(Number(e.target.value))}>
                 {CITIES.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
               </select>
               <span className={s.selectArrow}>▼</span>
             </div>
           </div>
           <div>
-            <label className={s.fieldLabel}>도착 도시</label>
+            <label className={s.fieldLabel} htmlFor="jet-lag-f2">도착 도시</label>
             <div className={s.selectWrap}>
-              <select className={s.select} value={toIdx} onChange={(e) => setToIdx(Number(e.target.value))}>
+              <select id="jet-lag-f2" className={s.select} value={toIdx} onChange={(e) => setToIdx(Number(e.target.value))}>
                 {CITIES.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
               </select>
               <span className={s.selectArrow}>▼</span>
@@ -174,15 +174,15 @@ export default function JetLagClient() {
 
         {/* 이륙 시각 — 단독 전체폭 (모바일 가로 오버플로우 방지) */}
         <div style={{ marginTop: 10 }}>
-          <label className={s.fieldLabel}>이륙 시각 (출발지)</label>
-          <input className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="jet-lag-time">이륙 시각 (출발지)</label>
+          <input id="jet-lag-time" className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
         </div>
 
         {/* 비행 시간 + 체류 일수 — 1줄 */}
         <div className={s.row2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>비행 시간 (h)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="jet-lag-time-2">비행 시간 (h)</label>
+            <input id="jet-lag-time-2"
               className={s.input}
               type="number" inputMode="decimal"
               min={1} max={20} step={0.5}
@@ -191,8 +191,8 @@ export default function JetLagClient() {
             />
           </div>
           <div>
-            <label className={s.fieldLabel}>체류 일수</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="jet-lag-f5">체류 일수</label>
+            <input id="jet-lag-f5"
               className={s.input}
               type="number" inputMode="decimal"
               min={1} max={90}
@@ -205,18 +205,18 @@ export default function JetLagClient() {
         {/* 평소 취침·기상 */}
         <div className={s.row2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>평소 취침</label>
+            <label className={s.fieldLabel} htmlFor="jet-lag-f6">평소 취침</label>
             <div className={s.selectWrap}>
-              <select className={s.select} value={bedtime} onChange={(e) => setBedtime(e.target.value)}>
+              <select id="jet-lag-f6" className={s.select} value={bedtime} onChange={(e) => setBedtime(e.target.value)}>
                 {BEDTIME_CHOICES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <span className={s.selectArrow}>▼</span>
             </div>
           </div>
           <div>
-            <label className={s.fieldLabel}>평소 기상</label>
+            <label className={s.fieldLabel} htmlFor="jet-lag-f7">평소 기상</label>
             <div className={s.selectWrap}>
-              <select className={s.select} value={waketime} onChange={(e) => setWaketime(e.target.value)}>
+              <select id="jet-lag-f7" className={s.select} value={waketime} onChange={(e) => setWaketime(e.target.value)}>
                 {WAKETIME_CHOICES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <span className={s.selectArrow}>▼</span>

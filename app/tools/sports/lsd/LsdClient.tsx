@@ -171,7 +171,7 @@ export default function LsdClient() {
       {/* ── 결과: 이지 페이스 ── */}
       {pace ? (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <div className={s.heroLead}>나의 이지·LSD 페이스</div>
             <div className={s.heroNum}>{fmtPace(pace.easyFast)} ~ {fmtPace(pace.easySlow)}</div>
             <div className={s.heroSub}>분 / km · 이 구간 안에서 &lsquo;대화 가능한&rsquo; 속도로</div>

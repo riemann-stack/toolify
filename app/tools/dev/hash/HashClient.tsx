@@ -245,6 +245,8 @@ export default function HashClient() {
             onDragLeave={() => setDragOver(false)}
             onDrop={onDrop}
             onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click() } }}
+            role="button" aria-label="해시를 계산할 파일 선택" tabIndex={0}
           >
             <p className={s.dropZoneIcon}>📁</p>
             <p className={s.dropZoneText}>

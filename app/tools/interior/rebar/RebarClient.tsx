@@ -185,8 +185,8 @@ export default function RebarClient() {
               </div>
             ) : (
               <div className={s.field}>
-                <label className={s.fieldLabel}>길이 (m)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="rebar-length">길이 (m)</label>
+                <input id="rebar-length"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={customLen}
@@ -200,8 +200,8 @@ export default function RebarClient() {
 
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>본수 (개)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="rebar-f2">본수 (개)</label>
+                <input id="rebar-f2"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={count}
@@ -212,8 +212,8 @@ export default function RebarClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>절단 로스율 (%)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="rebar-f3">절단 로스율 (%)</label>
+                <input id="rebar-f3"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={lossPct}
@@ -262,8 +262,8 @@ export default function RebarClient() {
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>SD400 톤당 단가 (만원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="rebar-sd400">SD400 톤당 단가 (만원)</label>
+                <input id="rebar-sd400"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={pricePerTon}
@@ -284,7 +284,7 @@ export default function RebarClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{size} · {length}m × {countN}본</p>
             <p className={s.heroValue}>
               총 중량 <strong>{fmtKg(finalKg)}</strong>
@@ -361,8 +361,8 @@ export default function RebarClient() {
             <div className={s.row2}>
               {revMode === 'weight' ? (
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>목표 중량 (톤)</label>
-                  <input
+                  <label className={s.fieldLabel} htmlFor="rebar-goal">목표 중량 (톤)</label>
+                  <input id="rebar-goal"
                     type="number" inputMode="decimal"
                     className={s.input}
                     value={revTons}
@@ -381,8 +381,8 @@ export default function RebarClient() {
                 </div>
               ) : (
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>예산 (만원)</label>
-                  <input
+                  <label className={s.fieldLabel} htmlFor="rebar-budget">예산 (만원)</label>
+                  <input id="rebar-budget"
                     type="number" inputMode="decimal"
                     className={s.input}
                     value={revBudget}
@@ -479,8 +479,8 @@ export default function RebarClient() {
             <span className={s.cardLabel}>운반할 철근</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>총 중량 (kg)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="rebar-kg">총 중량 (kg)</label>
+                <input id="rebar-kg"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={shipKg}

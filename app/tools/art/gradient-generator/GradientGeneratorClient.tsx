@@ -335,8 +335,8 @@ export default function GradientGeneratorClient() {
           <section className={styles.controls}>
             {(cfg.type === 'linear' || cfg.type === 'repeating-linear' || cfg.type === 'conic') && (
               <div className={styles.sliderRow}>
-                <label>각도 <strong>{cfg.angle}°</strong></label>
-                <input
+                <label htmlFor="gradient-generator-f1">각도 <strong>{cfg.angle}°</strong></label>
+                <input id="gradient-generator-f1"
                   type="range" min={0} max={360} step={1} value={cfg.angle}
                   onChange={(e) => setCfg({ ...cfg, angle: +e.target.value })}
                   className={styles.slider}
@@ -351,8 +351,8 @@ export default function GradientGeneratorClient() {
               </div>
             )}
             <div className={styles.sliderRow}>
-              <label>노이즈 <strong>{cfg.noise}%</strong></label>
-              <input
+              <label htmlFor="gradient-generator-f2">노이즈 <strong>{cfg.noise}%</strong></label>
+              <input id="gradient-generator-f2"
                 type="range" min={0} max={100} step={1} value={cfg.noise}
                 onChange={(e) => setCfg({ ...cfg, noise: +e.target.value })}
                 className={styles.slider}

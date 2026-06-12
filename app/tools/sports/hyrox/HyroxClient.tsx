@@ -174,7 +174,7 @@ export default function HyroxClient() {
       {/* ───────── 탭 1: 완주 시간 예측 ───────── */}
       {tab === 'predict' && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <div className={s.heroLabel}>예상 완주 시간</div>
             <div className={s.heroNum}>{fmtTime(result.totalSec)}</div>
             <p className={s.heroSub}>

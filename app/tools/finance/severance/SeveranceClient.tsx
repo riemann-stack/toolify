@@ -239,22 +239,22 @@ export default function SeveranceClient() {
         <span className={s.cardLabel}>근무 기간 · 소정 근로시간</span>
         <div className={s.row2}>
           <div className={s.field}>
-            <label className={s.fieldLabel}>입사일</label>
-            <input type="date" className={s.input} value={startIso} onChange={(e) => setStartIso(e.target.value)} />
+            <label className={s.fieldLabel} htmlFor="severance-f1">입사일</label>
+            <input id="severance-f1" type="date" className={s.input} value={startIso} onChange={(e) => setStartIso(e.target.value)} />
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>퇴사일</label>
-            <input type="date" className={s.input} value={endIso} onChange={(e) => setEndIso(e.target.value)} />
+            <label className={s.fieldLabel} htmlFor="severance-f2">퇴사일</label>
+            <input id="severance-f2" type="date" className={s.input} value={endIso} onChange={(e) => setEndIso(e.target.value)} />
           </div>
         </div>
         <div className={s.row2}>
           <div className={s.field}>
-            <label className={s.fieldLabel}>주 소정 근로시간 (시간)</label>
-            <input type="number" inputMode="decimal" className={s.input} value={weekHours} onChange={(e) => setWeekHours(e.target.value)} min={1} max={70} step={1} />
+            <label className={s.fieldLabel} htmlFor="severance-time">주 소정 근로시간 (시간)</label>
+            <input id="severance-time" type="number" inputMode="decimal" className={s.input} value={weekHours} onChange={(e) => setWeekHours(e.target.value)} min={1} max={70} step={1} />
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>1일 소정 근로시간 (시간)</label>
-            <input type="number" inputMode="decimal" className={s.input} value={dailyHours} onChange={(e) => setDailyHours(e.target.value)} min={1} max={12} step={0.5} />
+            <label className={s.fieldLabel} htmlFor="severance-time-2">1일 소정 근로시간 (시간)</label>
+            <input id="severance-time-2" type="number" inputMode="decimal" className={s.input} value={dailyHours} onChange={(e) => setDailyHours(e.target.value)} min={1} max={12} step={0.5} />
           </div>
         </div>
         <div className={s.helpText}>
@@ -346,13 +346,13 @@ export default function SeveranceClient() {
             <span className={s.cardLabel}>상여금 · 연차수당</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>최근 1년 상여금 총액 (만원)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={yearlyBonus} onChange={(e) => setYearlyBonus(e.target.value)} min={0} max={20000} step={10} />
+                <label className={s.fieldLabel} htmlFor="severance-f5">최근 1년 상여금 총액 (만원)</label>
+                <input id="severance-f5" type="number" inputMode="decimal" className={s.input} value={yearlyBonus} onChange={(e) => setYearlyBonus(e.target.value)} min={0} max={20000} step={10} />
                 <p className={s.helpText}>상여금 × 3/12 만큼 평균임금에 반영</p>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>미사용 연차수당 (만원)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={unusedLeave} onChange={(e) => setUnusedLeave(e.target.value)} min={0} max={5000} step={10} />
+                <label className={s.fieldLabel} htmlFor="severance-f6">미사용 연차수당 (만원)</label>
+                <input id="severance-f6" type="number" inputMode="decimal" className={s.input} value={unusedLeave} onChange={(e) => setUnusedLeave(e.target.value)} min={0} max={5000} step={10} />
                 <p className={s.helpText}>연차수당 × 3/12 만큼 평균임금에 반영</p>
               </div>
             </div>
@@ -441,8 +441,8 @@ export default function SeveranceClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>월 통상임금 입력</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>월 통상임금 (기본급 + 고정수당, 만원)</label>
-              <input type="number" inputMode="decimal" className={s.input} value={monthlyOrdinary} onChange={(e) => setMonthlyOrdinary(e.target.value)} min={0} max={5000} step={1} />
+              <label className={s.fieldLabel} htmlFor="severance-f7">월 통상임금 (기본급 + 고정수당, 만원)</label>
+              <input id="severance-f7" type="number" inputMode="decimal" className={s.input} value={monthlyOrdinary} onChange={(e) => setMonthlyOrdinary(e.target.value)} min={0} max={5000} step={1} />
               <p className={s.helpText}>
                 통상임금 = 변동성 없는 정기·일률·고정 지급분 (기본급 + 직책수당·식대 등 고정수당)
               </p>
@@ -636,22 +636,22 @@ export default function SeveranceClient() {
             <span className={s.cardLabel}>마지막 월급·수당·공제</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>마지막 월급 (실수령, 만원)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={lastSalary} onChange={(e) => setLastSalary(e.target.value)} min={0} max={5000} step={10} />
+                <label className={s.fieldLabel} htmlFor="severance-salary">마지막 월급 (실수령, 만원)</label>
+                <input id="severance-salary" type="number" inputMode="decimal" className={s.input} value={lastSalary} onChange={(e) => setLastSalary(e.target.value)} min={0} max={5000} step={10} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>미사용 연차수당 (만원)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={extraLeave} onChange={(e) => setExtraLeave(e.target.value)} min={0} max={5000} step={10} />
+                <label className={s.fieldLabel} htmlFor="severance-f9">미사용 연차수당 (만원)</label>
+                <input id="severance-f9" type="number" inputMode="decimal" className={s.input} value={extraLeave} onChange={(e) => setExtraLeave(e.target.value)} min={0} max={5000} step={10} />
               </div>
             </div>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>4대보험 정산 (만원, 환급은 음수)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={insuranceAdj} onChange={(e) => setInsuranceAdj(e.target.value)} min={-200} max={500} step={1} />
+                <label className={s.fieldLabel} htmlFor="severance-f10">4대보험 정산 (만원, 환급은 음수)</label>
+                <input id="severance-f10" type="number" inputMode="decimal" className={s.input} value={insuranceAdj} onChange={(e) => setInsuranceAdj(e.target.value)} min={-200} max={500} step={1} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>기타 공제 (만원)</label>
-                <input type="number" inputMode="decimal" className={s.input} value={otherDeduct} onChange={(e) => setOtherDeduct(e.target.value)} min={0} max={500} step={1} />
+                <label className={s.fieldLabel} htmlFor="severance-f11">기타 공제 (만원)</label>
+                <input id="severance-f11" type="number" inputMode="decimal" className={s.input} value={otherDeduct} onChange={(e) => setOtherDeduct(e.target.value)} min={0} max={500} step={1} />
               </div>
             </div>
           </div>

@@ -211,8 +211,8 @@ export default function ScrewClient() {
               <span className={s.cardLabel}>② {system === 'wood' ? '목재피스' : '석고피스'} 사이즈</span>
               <div className={s.row2}>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>직경 (mm)</label>
-                  <input type="number" inputMode="decimal" min={2} max={10} step={0.5}
+                  <label className={s.fieldLabel} htmlFor="screw-mm">직경 (mm)</label>
+                  <input id="screw-mm" type="number" inputMode="decimal" min={2} max={10} step={0.5}
                     className={s.input}
                     value={woodDiameter}
                     onChange={(e) => setWoodDiameter(parseFloat(e.target.value) || 3.5)} />
@@ -225,8 +225,8 @@ export default function ScrewClient() {
                   </div>
                 </div>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>길이 (mm)</label>
-                  <input type="number" inputMode="numeric" min={10} max={150} step={5}
+                  <label className={s.fieldLabel} htmlFor="screw-mm-2">길이 (mm)</label>
+                  <input id="screw-mm-2" type="number" inputMode="numeric" min={10} max={150} step={5}
                     className={s.input}
                     value={woodLength}
                     onChange={(e) => setWoodLength(parseInt(e.target.value) || 30)} />

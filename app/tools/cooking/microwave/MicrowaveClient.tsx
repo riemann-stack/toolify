@@ -307,7 +307,7 @@ export default function MicrowaveClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{refW}W {fmtSec(refSecTotal)} → {myW}W</p>
             <p className={s.heroValue}>
               <strong>{fmtSec(convertedSec)}</strong>
@@ -428,8 +428,8 @@ export default function MicrowaveClient() {
                 )}
                 <div className={s.row2}>
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>인분 ({portionN}인분 → 시간 ×{portionFactor(portionN).toFixed(2)})</label>
-                    <input
+                    <label className={s.fieldLabel} htmlFor="microwave-time">인분 ({portionN}인분 → 시간 ×{portionFactor(portionN).toFixed(2)})</label>
+                    <input id="microwave-time"
                       type="range"
                       min={1}
                       max={5}
@@ -536,8 +536,8 @@ export default function MicrowaveClient() {
             <span className={s.cardLabel}>시간 입력</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>분</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="microwave-f2">분</label>
+                <input id="microwave-f2"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={timerMin}
@@ -547,8 +547,8 @@ export default function MicrowaveClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>초</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="microwave-f3">초</label>
+                <input id="microwave-f3"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={timerSec}

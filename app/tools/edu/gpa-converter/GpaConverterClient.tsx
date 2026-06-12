@@ -152,7 +152,8 @@ export default function GpaConverterClient() {
         </div>
       </div>
 
-      {/* 히어로 */}
+      {/* 히어로 — 상시 래퍼: 첫 결과부터 스크린리더 낭독 */}
+      <div role="status">
       {valid && (
         <div className={s.hero}>
           <div className={s.heroLabel}>{METHODS.find(m => m.id === activeMethod)?.name} 결과</div>
@@ -173,6 +174,7 @@ export default function GpaConverterClient() {
           </div>
         </div>
       )}
+      </div>
 
       {/* 3-방식 비교 */}
       {valid && (
@@ -211,8 +213,8 @@ export default function GpaConverterClient() {
         <div className={s.reverseRow}>
           <div className={s.reverseInputs}>
             <div>
-              <label className={s.miniLabel}>목표 US GPA</label>
-              <input
+              <label className={s.miniLabel} htmlFor="gpa-converter-us-gpa">목표 US GPA</label>
+              <input id="gpa-converter-us-gpa"
                 type="number" inputMode="decimal" step={0.01} min={0} max={4.0}
                 className={s.gpaInput}
                 value={reverseUs}
@@ -220,8 +222,8 @@ export default function GpaConverterClient() {
               />
             </div>
             <div>
-              <label className={s.miniLabel}>변환할 한국 만점</label>
-              <select
+              <label className={s.miniLabel} htmlFor="gpa-converter-f2">변환할 한국 만점</label>
+              <select id="gpa-converter-f2"
                 className={s.select}
                 value={reverseScale}
                 onChange={(e) => setReverseScale(e.target.value as ScaleId)}

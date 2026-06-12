@@ -262,9 +262,9 @@ export default function DividendClient() {
 
       {/* ─── 공통 입력 (모든 탭에서 표시) ─── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>목표 월배당금</label>
+        <label className={styles.cardLabel} htmlFor="dividend-goal">목표 월배당금</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="dividend-goal"
             className={`${styles.numInput} ${styles.numInputBig}`}
             type="text" inputMode="numeric"
             placeholder="1,000,000"
@@ -288,9 +288,9 @@ export default function DividendClient() {
 
       <div className={styles.twoCol}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>예상 연 배당수익률</label>
+          <label className={styles.cardLabel} htmlFor="dividend-yield">예상 연 배당수익률</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="dividend-yield" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="4.5" step={0.1} min={0.1} max={30}
               value={rate} onChange={e => setRate(e.target.value)} />
             <span className={styles.unit}>%</span>
@@ -306,9 +306,9 @@ export default function DividendClient() {
         </div>
 
         <div className={styles.card}>
-          <label className={styles.cardLabel}>배당소득세율</label>
+          <label className={styles.cardLabel} htmlFor="dividend-income">배당소득세율</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="dividend-income" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="15.4" step={0.1} min={0} max={99}
               value={tax} onChange={e => setTax(e.target.value)} />
             <span className={styles.unit}>%</span>
@@ -341,9 +341,9 @@ export default function DividendClient() {
       {tab === 'goal' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>현재 투자금 (선택)</label>
+            <label className={styles.cardLabel} htmlFor="dividend-invest">현재 투자금 (선택)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="text" inputMode="numeric"
+              <input id="dividend-invest" className={styles.numInput} type="text" inputMode="numeric"
                 placeholder="50,000,000"
                 value={current}
                 onChange={e => setCurrent(fmtNumInput(e.target.value))} />
@@ -446,9 +446,9 @@ export default function DividendClient() {
         <>
           <div className={styles.twoCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>목표 달성 기간</label>
+              <label className={styles.cardLabel} htmlFor="dividend-period">목표 달성 기간</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-period" className={styles.numInput} type="number" inputMode="numeric"
                   value={revYears} onChange={e => setRevYears(e.target.value)} />
                 <span className={styles.unit}>년</span>
               </div>
@@ -462,9 +462,9 @@ export default function DividendClient() {
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>현재 투자금 (시드)</label>
+              <label className={styles.cardLabel} htmlFor="dividend-invest-2">현재 투자금 (시드)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="text" inputMode="numeric"
+                <input id="dividend-invest-2" className={styles.numInput} type="text" inputMode="numeric"
                   placeholder="0"
                   value={current}
                   onChange={e => setCurrent(fmtNumInput(e.target.value))} />
@@ -476,9 +476,9 @@ export default function DividendClient() {
 
           <div className={styles.twoCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>예상 시세 차익 (CAGR)</label>
+              <label className={styles.cardLabel} htmlFor="dividend-cagr">예상 시세 차익 (CAGR)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal" step={0.5}
+                <input id="dividend-cagr" className={styles.numInput} type="number" inputMode="decimal" step={0.5}
                   value={capGain} onChange={e => setCapGain(e.target.value)} />
                 <span className={styles.unit}>%/년</span>
               </div>
@@ -578,9 +578,9 @@ export default function DividendClient() {
         <>
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>예상 연 배당금</label>
+              <label className={styles.cardLabel} htmlFor="dividend-f8">예상 연 배당금</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="text" inputMode="numeric"
+                <input id="dividend-f8" className={styles.numInput} type="text" inputMode="numeric"
                   placeholder={formatKRW(autoAnnualDividend)}
                   value={annualDividend}
                   onChange={e => setAnnualDividend(fmtNumInput(e.target.value))} />
@@ -589,17 +589,17 @@ export default function DividendClient() {
               <p className={styles.cardDesc}>비워두면 목표 월배당 × 12 자동 사용</p>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>예상 연 이자소득</label>
+              <label className={styles.cardLabel} htmlFor="dividend-interest">예상 연 이자소득</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-interest" className={styles.numInput} type="number" inputMode="numeric"
                   value={annualInterest} onChange={e => setAnnualInterest(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>기타 금융소득</label>
+              <label className={styles.cardLabel} htmlFor="dividend-income-2">기타 금융소득</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-income-2" className={styles.numInput} type="number" inputMode="numeric"
                   value={otherFinancial} onChange={e => setOtherFinancial(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
@@ -866,25 +866,25 @@ export default function DividendClient() {
         <>
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>비교 기간</label>
+              <label className={styles.cardLabel} htmlFor="dividend-period-2">비교 기간</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-period-2" className={styles.numInput} type="number" inputMode="numeric"
                   value={savingsYears} onChange={e => setSavingsYears(e.target.value)} />
                 <span className={styles.unit}>년</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>연 적립액</label>
+              <label className={styles.cardLabel} htmlFor="dividend-f12">연 적립액</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-f12" className={styles.numInput} type="number" inputMode="numeric"
                   value={savingsAnnualContribution} onChange={e => setSavingsAnnualContribution(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>본인 총급여 (세액공제용)</label>
+              <label className={styles.cardLabel} htmlFor="dividend-f13">본인 총급여 (세액공제용)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="dividend-f13" className={styles.numInput} type="number" inputMode="numeric"
                   value={totalIncomeMan} onChange={e => setTotalIncomeMan(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>

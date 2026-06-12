@@ -122,21 +122,21 @@ export default function RoomModeClient() {
         </div>
         <div className={s.row3}>
           <div className={s.field}>
-            <label className={s.fieldLabel}>가로 W (m)</label>
-            <input type="number" inputMode="decimal" className={s.input} value={W} onChange={(e) => setW(e.target.value)} min={0.5} max={20} step={0.1} />
+            <label className={s.fieldLabel} htmlFor="room-mode-f1">가로 W (m)</label>
+            <input id="room-mode-f1" type="number" inputMode="decimal" className={s.input} value={W} onChange={(e) => setW(e.target.value)} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>세로 L (m)</label>
-            <input type="number" inputMode="decimal" className={s.input} value={L} onChange={(e) => setL(e.target.value)} min={0.5} max={20} step={0.1} />
+            <label className={s.fieldLabel} htmlFor="room-mode-f2">세로 L (m)</label>
+            <input id="room-mode-f2" type="number" inputMode="decimal" className={s.input} value={L} onChange={(e) => setL(e.target.value)} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
-            <label className={s.fieldLabel}>높이 H (m)</label>
-            <input type="number" inputMode="decimal" className={s.input} value={H} onChange={(e) => setH(e.target.value)} min={2} max={6} step={0.05} />
+            <label className={s.fieldLabel} htmlFor="room-mode-height">높이 H (m)</label>
+            <input id="room-mode-height" type="number" inputMode="decimal" className={s.input} value={H} onChange={(e) => setH(e.target.value)} min={2} max={6} step={0.05} />
           </div>
         </div>
         <div className={s.field}>
-          <label className={s.fieldLabel}>온도 ({tempC}°C → 음속 {fmt(c, 1)} m/s)</label>
-          <input type="range" min={-10} max={40} step={1} value={tempC} onChange={(e) => setTempC(e.target.value)} className={s.slider} />
+          <label className={s.fieldLabel} htmlFor="room-mode-temp">온도 ({tempC}°C → 음속 {fmt(c, 1)} m/s)</label>
+          <input id="room-mode-temp" type="range" min={-10} max={40} step={1} value={tempC} onChange={(e) => setTempC(e.target.value)} className={s.slider} />
         </div>
         <p className={s.helpText}>
           체적 <strong>{fmt(Wn * Ln * Hn, 1)} m³</strong> ·
@@ -148,7 +148,7 @@ export default function RoomModeClient() {
       {/* ════════ 탭 1: 모드 분석 ════════ */}
       {tab === 'modes' && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>📊 룸 모드 분석</p>
             <p className={s.heroValue}>
               총 <strong>{modes.length}개</strong> 모드 (20~300Hz)

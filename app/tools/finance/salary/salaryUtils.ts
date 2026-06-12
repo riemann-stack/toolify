@@ -1,19 +1,27 @@
 /* ──────────────────────────────────────────────────────
    finance/salary/salaryUtils.ts
    2026년 실수령액·역산·인상 시뮬·시급·연봉표·비과세
-   ※ 요율 개정 시 app/tools/finance/4-insurance/FourInsuranceClient.tsx의 RATES[2026]도 함께 갱신할 것 (동일 수치의 살아있는 쌍둥이)
+   요율·세율표 단일 소스: lib/krInsuranceRates.ts · lib/krIncomeTax.ts
    ────────────────────────────────────────────────────── */
 
-/* ─── 2026년 4대보험 요율 (근로자 부담분) ─── */
+import { progressiveTax } from '@/lib/krIncomeTax'
+import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
+
+/* ─── 2026년 4대보험 요율 (근로자 부담분) — lib/krInsuranceRates에서 파생 ─── */
+const R26 = INSURANCE_RATES[2026]
+/** %값 → 소수 (부동소수 오차 제거: % 기준 소수 6자리 반올림. 예: 0.9/100 → 정확히 0.009) */
+const frac = (pct: number) => Math.round(pct * 1e6) / 1e8
+
 export const RATES_2026 = {
-  nationalPension:    0.0475,    // 국민연금 4.75% (2026년 인상 반영)
-  healthInsurance:    0.03595,   // 건강보험 3.595%
-  longTermCareRatio:  0.1314,    // 장기요양 = 건강보험료의 13.14%
-  employmentIns:      0.009,     // 고용보험 0.9%
+  nationalPension:    frac(R26.pension.employee),   // 국민연금 4.75% (2026년 인상 반영)
+  healthInsurance:    frac(R26.health.employee),    // 건강보험 3.595%
+  longTermCareRatio:  Math.round(R26.ltc.rateOfSalary / R26.health.total * 1e4) / 1e4,
+                                                    // 장기요양 = 건강보험료의 13.14% (0.9448 ÷ 7.19)
+  employmentIns:      frac(R26.unemp.employee),     // 고용보험 0.9%
 }
 
 // 국민연금 기준소득월액 상한 (2026년)
-export const NP_MAX_MONTHLY = 6_370_000
+export const NP_MAX_MONTHLY = R26.pension.maxBase
 
 /* ─── 비과세 항목 ─── */
 export interface NonTaxableItem {
@@ -50,18 +58,7 @@ function earnedIncomeDeduction(annualGross: number): number {
   return Math.min(d, 20_000_000)
 }
 
-// 종합소득세 산출세액 (과세표준, 누진공제 방식)
-function progressiveTax(taxBase: number): number {
-  if (taxBase <= 0)             return 0
-  if (taxBase <= 14_000_000)    return taxBase * 0.06
-  if (taxBase <= 50_000_000)    return taxBase * 0.15 - 1_260_000
-  if (taxBase <= 88_000_000)    return taxBase * 0.24 - 5_760_000
-  if (taxBase <= 150_000_000)   return taxBase * 0.35 - 15_440_000
-  if (taxBase <= 300_000_000)   return taxBase * 0.38 - 19_940_000
-  if (taxBase <= 500_000_000)   return taxBase * 0.40 - 25_940_000
-  if (taxBase <= 1_000_000_000) return taxBase * 0.42 - 35_940_000
-  return taxBase * 0.45 - 65_940_000
-}
+// 종합소득세 산출세액: lib/krIncomeTax.progressiveTax (누진공제 방식) 사용
 
 // 근로소득세액공제 (산출세액 기준 + 총급여별 한도)
 function earnedTaxCredit(computedTax: number, annualGross: number): number {
@@ -276,8 +273,8 @@ export function calcHourlyWage(input: HourlyInput): HourlyResult {
   }
 }
 
-// 2026 최저시급 (참고)
-export const MIN_HOURLY_WAGE_2026 = 10_320
+// 2026 최저시급 (참고) — lib/krInsuranceRates 단일 소스에서 파생
+export const MIN_HOURLY_WAGE_2026 = MIN_HOURLY_WAGE[2026]
 
 /* ─── 연봉 분포 ─── */
 export interface Percentile {

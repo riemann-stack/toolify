@@ -410,9 +410,9 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           </div>
         </div>
         <div className={styles.numberRow}>
-          <label>거래 수수료</label>
+          <label htmlFor="gold-converter-f1">거래 수수료</label>
           <div className={styles.presetRow}>
-            <input
+            <input id="gold-converter-f1"
               type="number" inputMode="decimal" step={0.1} min={0} max={10}
               className={styles.smallNumber}
               value={price.feePercent}

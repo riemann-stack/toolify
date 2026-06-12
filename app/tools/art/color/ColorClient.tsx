@@ -770,10 +770,10 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
   return (
     <>
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <label className={styles.cardLabel} htmlFor="color-css-prefix">
           색상 이름 (CSS 변수 prefix)
         </label>
-        <input className={styles.colorNameInput} type="text"
+        <input id="color-css-prefix" className={styles.colorNameInput} type="text"
           value={colorName} onChange={e => setColorName(e.target.value.replace(/[^a-zA-Z0-9-]/g, '') || 'primary')}
           placeholder="primary" maxLength={20} />
       </div>
@@ -954,13 +954,13 @@ background: conic-gradient(from 0deg, ${stopStr});`
 
       {(type === 'linear' || type === 'conic') && (
         <div className={styles.card}>
-          <label className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="color-f2">
             각도
             <span className={styles.cardLabelHint}>{angle}°</span>
           </label>
           <div className={styles.gradAngleRow}>
             <span style={{ fontSize: 11, color: 'var(--muted)' }}>0°</span>
-            <input className={styles.gradAngleSlider} type="range" min={0} max={360}
+            <input id="color-f2" className={styles.gradAngleSlider} type="range" min={0} max={360}
               value={angle} onChange={e => setAngle(parseInt(e.target.value))} />
             <span className={styles.gradAngleValue}>{angle}°</span>
           </div>
@@ -1170,6 +1170,8 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
         <div
           className={`${styles.dropArea} ${dragActive ? styles.dropAreaActive : ''}`}
           onClick={() => fileRef.current?.click()}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileRef.current?.click() } }}
+          role="button" aria-label="이미지 파일 선택" tabIndex={0}
           onDragOver={e => { e.preventDefault(); setDragActive(true) }}
           onDragLeave={() => setDragActive(false)}
           onDrop={onDrop}>

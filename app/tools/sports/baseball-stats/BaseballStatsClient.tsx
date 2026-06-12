@@ -450,7 +450,7 @@ export default function BaseballStatsClient() {
           </div>
 
           {/* 히어로 */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>OPS</p>
             <p className={styles.heroNum}>{calc.ops.toFixed(3)}</p>
             <span className={`${styles.heroBadge} ${opsLv.cls}`}>{opsLv.label}</span>

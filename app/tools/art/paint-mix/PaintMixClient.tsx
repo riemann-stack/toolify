@@ -441,8 +441,8 @@ export default function PaintMixClient() {
                 <div className={s.adjustBlock}>
                   <p className={s.adjustLabel}>🎚️ 미세 조정</p>
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>흰색 추가 — {whiteAdd} parts</label>
-                    <input type="range" min={0} max={5} step={1}
+                    <label className={s.fieldLabel} htmlFor="paint-mix-parts">흰색 추가 — {whiteAdd} parts</label>
+                    <input id="paint-mix-parts" type="range" min={0} max={5} step={1}
                       value={whiteAdd}
                       onChange={(e) => setWhiteAdd(Number(e.target.value))}
                       className={s.slider}
@@ -712,7 +712,10 @@ function ColorWheel({ selectedIdx, onSelect }: { selectedIdx: number; onSelect: 
         const yi1 = cy + rInner * Math.sin(a1)
         const isSelected = i === selectedIdx
         return (
-          <g key={i} onClick={() => onSelect(i)} style={{ cursor: 'pointer' }}>
+          <g key={i} onClick={() => onSelect(i)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(i) } }}
+            role="button" aria-label={`${c.name} 선택`} aria-pressed={isSelected} tabIndex={0}
+            style={{ cursor: 'pointer' }}>
             <path
               d={`M ${xi0} ${yi0} L ${x0} ${y0} A ${R} ${R} 0 0 1 ${x1} ${y1} L ${xi1} ${yi1} A ${rInner} ${rInner} 0 0 0 ${xi0} ${yi0} Z`}
               fill={c.hex}

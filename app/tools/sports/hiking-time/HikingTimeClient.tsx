@@ -257,14 +257,14 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>🕐 시작·일몰 시각</p>
         <div className={styles.timeRow}>
           <div className={styles.timeInputBlock}>
-            <label>출발 시각</label>
-            <input type="time" className={styles.timeInput}
+            <label htmlFor="hiking-time-time">출발 시각</label>
+            <input id="hiking-time-time" type="time" className={styles.timeInput}
               value={inputs.startTime}
               onChange={(e) => update('startTime', e.target.value)} />
           </div>
           <div className={styles.timeInputBlock}>
-            <label>일몰 시각</label>
-            <input type="time" className={styles.timeInput}
+            <label htmlFor="hiking-time-time-2">일몰 시각</label>
+            <input id="hiking-time-time-2" type="time" className={styles.timeInput}
               value={inputs.sunsetTime}
               onChange={(e) => update('sunsetTime', e.target.value)} />
           </div>
@@ -288,8 +288,8 @@ export default function HikingTimeClient() {
         </div>
         {inputs.restMode === 'manual' && (
           <div className={styles.numberRow} style={{ marginTop: 10 }}>
-            <label>총 휴식 시간 (분)</label>
-            <input
+            <label htmlFor="hiking-time-time-3">총 휴식 시간 (분)</label>
+            <input id="hiking-time-time-3"
               type="number" inputMode="decimal" min={0} max={300}
               className={styles.smallNumber}
               value={inputs.manualRestMin}

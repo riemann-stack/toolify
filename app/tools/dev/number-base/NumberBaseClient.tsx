@@ -581,9 +581,9 @@ export default function NumberBaseClient() {
           {/* 2의 보수 */}
           <div className={s.card}>
             <div className={s.cardTop}>
-              <label className={s.cardLabel}>2의 보수 (음수 표현, {bitWidth}-bit)</label>
+              <label className={s.cardLabel} htmlFor="number-base-bit">2의 보수 (음수 표현, {bitWidth}-bit)</label>
             </div>
-            <input
+            <input id="number-base-bit"
               type="number" inputMode="decimal"
               className={s.textarea}
               style={{ resize: 'none', minHeight: 'unset', height: 'auto', padding: '12px 16px', fontSize: 18, textAlign: 'center', fontFamily: 'var(--font-mono)' }}

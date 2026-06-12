@@ -145,25 +145,25 @@ export default function VentilationClient() {
       {/* 공통 입력 */}
       <div className={styles.fieldRow3}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>면적</label>
+          <label className={styles.cardLabel} htmlFor="ventilation-area">면적</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="ventilation-area" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="20" value={area} onChange={e => setArea(e.target.value)} />
             <span className={styles.unit}>㎡</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>천장 높이</label>
+          <label className={styles.cardLabel} htmlFor="ventilation-height">천장 높이</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="ventilation-height" className={styles.numInput} type="number" inputMode="decimal"
               placeholder="2.4" value={ceilingHeight} onChange={e => setCeilingHeight(e.target.value)} />
             <span className={styles.unit}>m</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>인원 수</label>
+          <label className={styles.cardLabel} htmlFor="ventilation-people">인원 수</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="ventilation-people" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="2" value={occupants} min={0} max={50}
               onChange={e => setOccupants(Math.max(0, parseInt(e.target.value, 10) || 0))} />
             <span className={styles.unit}>명</span>
@@ -189,11 +189,11 @@ export default function VentilationClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <label className={styles.cardLabel} htmlFor="ventilation-ach">
           목표 ACH (시간당 환기 횟수) — {targetAch.toFixed(1)} 회/h
         </label>
         <div className={styles.sliderRow}>
-          <input className={styles.slider} type="range"
+          <input id="ventilation-ach" className={styles.slider} type="range"
             min="0.3" max="15" step="0.1"
             value={targetAch} onChange={e => setTargetAch(parseFloat(e.target.value))} />
           <span className={styles.sliderVal}>{targetAch.toFixed(1)}</span>
@@ -311,9 +311,9 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>현재 풍량 (제품 사양)</label>
+            <label className={styles.cardLabel} htmlFor="ventilation-current">현재 풍량 (제품 사양)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
+              <input id="ventilation-current" className={styles.numInput} type="number" inputMode="numeric"
                 placeholder="120" value={currentAirflow} onChange={e => setCurrentAirflow(e.target.value)} />
               <span className={styles.unit}>㎥/h</span>
             </div>
@@ -455,14 +455,14 @@ export default function VentilationClient() {
 
           <div className={styles.fieldRow}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>체류 시간 — {co2Duration}분</label>
-              <input className={styles.slider} type="range"
+              <label className={styles.cardLabel} htmlFor="ventilation-time">체류 시간 — {co2Duration}분</label>
+              <input id="ventilation-time" className={styles.slider} type="range"
                 min="10" max="240" step="10"
                 value={co2Duration} onChange={e => setCo2Duration(parseInt(e.target.value, 10))} />
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>환기량 ({co2Airflow === 0 ? '무환기' : `${co2Airflow}㎥/h`})</label>
-              <input className={styles.slider} type="range"
+              <label className={styles.cardLabel} htmlFor="ventilation-f7">환기량 ({co2Airflow === 0 ? '무환기' : `${co2Airflow}㎥/h`})</label>
+              <input id="ventilation-f7" className={styles.slider} type="range"
                 min="0" max="500" step="10"
                 value={co2Airflow} onChange={e => setCo2Airflow(parseInt(e.target.value, 10))} />
             </div>

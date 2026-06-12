@@ -410,7 +410,7 @@ export default function FermiEstimateClient() {
     // 계산식 문자열
     const calcStr = vars.map(v => `${v.name} ${formatNumber(v.value)}`).join(' × ')
     return (
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <p className={s.heroLead}>{question || '추정 결과'} (기준 시나리오)</p>
         <div>
           <span className={s.heroNum}>약 {f.value}</span>

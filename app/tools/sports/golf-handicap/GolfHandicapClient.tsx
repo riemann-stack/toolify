@@ -127,18 +127,20 @@ function HandicapIndexTab({
   return (
     <div className={s.section}>
       {/* 히어로 결과 */}
-      {handicapIndex !== null && grade && (
-        <div className={s.hero}>
-          <div className={s.heroLeft}>
-            <div className={s.heroLabel}>Handicap Index</div>
-            <div className={s.heroNum}>{handicapIndex.toFixed(1)}</div>
-            <div className={s.heroSub}>{validRounds.length}라운드 중 최저 {usedCount}개 평균 × 0.96</div>
+      <div role="status">
+        {handicapIndex !== null && grade && (
+          <div className={s.hero}>
+            <div className={s.heroLeft}>
+              <div className={s.heroLabel}>Handicap Index</div>
+              <div className={s.heroNum}>{handicapIndex.toFixed(1)}</div>
+              <div className={s.heroSub}>{validRounds.length}라운드 중 최저 {usedCount}개 평균 × 0.96</div>
+            </div>
+            <div className={s.heroRight}>
+              <span className={`${s.gradeBadge} ${grade.cls}`}>{grade.label}</span>
+            </div>
           </div>
-          <div className={s.heroRight}>
-            <span className={`${s.gradeBadge} ${grade.cls}`}>{grade.label}</span>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* 라운드 입력 */}
       <div className={s.card}>
@@ -317,32 +319,32 @@ function CourseHandicapTab({
 
         <div className={s.grid2}>
           <div>
-            <label className={s.fieldLabel}>코스 레이팅 (CR)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-cr">코스 레이팅 (CR)</label>
+            <input id="golf-handicap-cr"
               type="number" inputMode="decimal" step="0.1"
               className={s.bigInput}
               value={cr} onChange={e => setCr(e.target.value)}
             />
           </div>
           <div>
-            <label className={s.fieldLabel}>슬로프 레이팅</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f2">슬로프 레이팅</label>
+            <input id="golf-handicap-f2"
               type="number" inputMode="numeric"
               className={s.bigInput}
               value={sr} onChange={e => setSr(e.target.value)}
             />
           </div>
           <div>
-            <label className={s.fieldLabel}>파 (Par)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-par">파 (Par)</label>
+            <input id="golf-handicap-par"
               type="number" inputMode="numeric"
               className={s.bigInput}
               value={par} onChange={e => setPar(e.target.value)}
             />
           </div>
           <div>
-            <label className={s.fieldLabel}>그로스 스코어 (선택)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f4">그로스 스코어 (선택)</label>
+            <input id="golf-handicap-f4"
               type="number" inputMode="numeric"
               className={s.bigInput}
               value={gross} onChange={e => setGross(e.target.value)}
@@ -459,8 +461,8 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
 
         <div className={s.grid2} style={{ marginBottom: mode === 'stroke' ? 0 : '12px' }}>
           <div>
-            <label className={s.fieldLabel}>코스 핸디캡</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f5">코스 핸디캡</label>
+            <input id="golf-handicap-f5"
               type="number" inputMode="numeric"
               className={s.bigInput}
               value={courseHandicap} onChange={e => setCourseHandicap(e.target.value)}
@@ -814,8 +816,8 @@ function RecordsTab() {
 
         {courses.length > 0 && (
           <div style={{ marginBottom: 12 }}>
-            <label className={s.fieldLabel}>저장된 골프장 빠른 선택</label>
-            <select
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f6">저장된 골프장 빠른 선택</label>
+            <select id="golf-handicap-f6"
               className={s.bigInput}
               value={courseSelect}
               onChange={e => {
@@ -835,13 +837,13 @@ function RecordsTab() {
 
         <div className={s.grid2}>
           <div>
-            <label className={s.fieldLabel}>날짜</label>
-            <input type="date" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-date">날짜</label>
+            <input id="golf-handicap-date" type="date" className={s.bigInput}
               value={date} onChange={e => setDate(e.target.value)} />
           </div>
           <div>
-            <label className={s.fieldLabel}>골프장 (선택)</label>
-            <input type="text" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f8">골프장 (선택)</label>
+            <input id="golf-handicap-f8" type="text" className={s.bigInput}
               value={courseInput}
               onChange={e => setCourseInput(e.target.value)}
               placeholder="스카이힐 청주" maxLength={40} />
@@ -850,8 +852,8 @@ function RecordsTab() {
 
         <div className={s.grid2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>티</label>
-            <select className={s.bigInput} value={tee}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f9">티</label>
+            <select id="golf-handicap-f9" className={s.bigInput} value={tee}
               onChange={e => setTee(e.target.value as TeeColor)}>
               {(Object.keys(TEE_LABEL) as TeeColor[]).map(t => (
                 <option key={t} value={t}>{TEE_LABEL[t]}</option>
@@ -871,26 +873,26 @@ function RecordsTab() {
 
         <div className={s.grid2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>코스 레이팅 (CR)</label>
-            <input type="text" inputMode="decimal" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-cr-2">코스 레이팅 (CR)</label>
+            <input id="golf-handicap-cr-2" type="text" inputMode="decimal" className={s.bigInput}
               value={cr} onChange={e => setCr(e.target.value.replace(/[^0-9.]/g, ''))} />
           </div>
           <div>
-            <label className={s.fieldLabel}>슬로프</label>
-            <input type="text" inputMode="numeric" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f11">슬로프</label>
+            <input id="golf-handicap-f11" type="text" inputMode="numeric" className={s.bigInput}
               value={slope} onChange={e => setSlope(e.target.value.replace(/[^0-9]/g, ''))} />
           </div>
         </div>
 
         <div className={s.grid2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>파</label>
-            <input type="text" inputMode="numeric" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f12">파</label>
+            <input id="golf-handicap-f12" type="text" inputMode="numeric" className={s.bigInput}
               value={par} onChange={e => setPar(e.target.value.replace(/[^0-9]/g, ''))} />
           </div>
           <div>
-            <label className={s.fieldLabel}>그로스 스코어 *</label>
-            <input type="text" inputMode="numeric" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f13">그로스 스코어 *</label>
+            <input id="golf-handicap-f13" type="text" inputMode="numeric" className={s.bigInput}
               value={grossScore}
               onChange={e => setGrossScore(e.target.value.replace(/[^0-9]/g, ''))}
               placeholder="92" />
@@ -899,8 +901,8 @@ function RecordsTab() {
 
         <div className={s.grid2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel}>날씨 (선택)</label>
-            <select className={s.bigInput} value={weather}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-f14">날씨 (선택)</label>
+            <select id="golf-handicap-f14" className={s.bigInput} value={weather}
               onChange={e => setWeather(e.target.value as Weather)}>
               {(Object.keys(WEATHER_LABEL) as Weather[]).map(w => (
                 <option key={w} value={w}>{WEATHER_LABEL[w]}</option>

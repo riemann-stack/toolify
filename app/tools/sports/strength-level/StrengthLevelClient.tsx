@@ -307,7 +307,7 @@ export default function StrengthLevelClient() {
       {/* ── 탭: 수준·점수 ── */}
       {tab === 'level' && (valid ? (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLabel}>3대 합 (스쿼트+벤치+데드)</p>
             <p className={styles.heroValue}><strong>{fmtKg(total)}</strong> kg</p>
             <p className={styles.heroSub}>체중의 {totalRatio.toFixed(2)}배</p>

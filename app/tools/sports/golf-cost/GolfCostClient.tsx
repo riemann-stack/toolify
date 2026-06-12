@@ -513,7 +513,8 @@ export default function GolfCostClient() {
           <div
             className={`${s.toggleSwitch} ${bettingOn ? s.toggleSwitchOn : ''}`}
             onClick={() => setBettingOn(!bettingOn)}
-            role="button"
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBettingOn(!bettingOn) } }}
+            role="switch" aria-checked={bettingOn} aria-label="내기 정산 포함"
             tabIndex={0}
           >
             <div className={s.toggleKnob} />
@@ -569,7 +570,8 @@ export default function GolfCostClient() {
           <div
             className={`${s.toggleSwitch} ${perPlayerOn ? s.toggleSwitchOn : ''}`}
             onClick={() => setPerPlayerOn(!perPlayerOn)}
-            role="button"
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPerPlayerOn(!perPlayerOn) } }}
+            role="switch" aria-checked={perPlayerOn} aria-label="참여자별 정산 포함"
             tabIndex={0}
           >
             <div className={s.toggleKnob} />
@@ -615,7 +617,7 @@ export default function GolfCostClient() {
       </div>
 
       {/* ── 결과 ── */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLead}>오늘 라운딩 1인당 비용</div>
         <div className={s.heroNum}>{fmt(perPerson)}</div>
         <div className={s.heroSub}>팀 총액 {fmt(teamTotal)} · {players}명 기준</div>

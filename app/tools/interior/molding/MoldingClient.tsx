@@ -512,7 +512,8 @@ export default function MoldingClient() {
             </div>
           </div>
 
-          {/* ── HERO ── */}
+          {/* ── HERO — 상시 래퍼: 첫 결과부터 스크린리더 낭독 ── */}
+          <div role="status">
           {selectedTypes.size > 0 && dims.perimeter > 0 && (
             <div className={s.hero}>
               <p className={s.heroLead}>필요한 몰딩</p>
@@ -526,6 +527,7 @@ export default function MoldingClient() {
               </p>
             </div>
           )}
+          </div>
 
           {/* ── 종류별 분석 표 ── */}
           {selectedTypes.size > 0 && dims.perimeter > 0 && (

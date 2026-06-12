@@ -4,6 +4,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import styles from './race-predictor.module.css'
 import {
   DISTS, TARGETS, QUICK_TIMES,
@@ -256,7 +257,7 @@ export default function RacePredictorClient() {
 
   const addRecordFromCurrent = () => {
     if (!validBase || !vdot) return
-    const today = new Date().toISOString().slice(0, 10)
+    const today = todayStr()
     const rec: RaceRecord = {
       id: Math.random().toString(36).slice(2, 10),
       date: today,
@@ -275,7 +276,7 @@ export default function RacePredictorClient() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-race-records-${new Date().toISOString().slice(0, 10)}.csv`
+    a.download = `youtil-race-records-${todayStr()}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -411,18 +412,18 @@ export default function RacePredictorClient() {
             {envOn && (
               <div className={styles.optionBody}>
                 <div className={styles.sliderRow}>
-                  <label>기온 <strong>{temp}°C</strong></label>
-                  <input type="range" min={-10} max={35} step={1} value={temp}
+                  <label htmlFor="race-predictor-f1">기온 <strong>{temp}°C</strong></label>
+                  <input id="race-predictor-f1" type="range" min={-10} max={35} step={1} value={temp}
                     onChange={(e) => setTemp(+e.target.value)} className={styles.slider} />
                 </div>
                 <div className={styles.sliderRow}>
-                  <label>습도 <strong>{humidity}%</strong></label>
-                  <input type="range" min={30} max={95} step={5} value={humidity}
+                  <label htmlFor="race-predictor-f2">습도 <strong>{humidity}%</strong></label>
+                  <input id="race-predictor-f2" type="range" min={30} max={95} step={5} value={humidity}
                     onChange={(e) => setHumidity(+e.target.value)} className={styles.slider} />
                 </div>
                 <div className={styles.sliderRow}>
-                  <label>고도 <strong>{elevation}m</strong></label>
-                  <input type="range" min={0} max={3000} step={50} value={elevation}
+                  <label htmlFor="race-predictor-f3">고도 <strong>{elevation}m</strong></label>
+                  <input id="race-predictor-f3" type="range" min={0} max={3000} step={50} value={elevation}
                     onChange={(e) => setElevation(+e.target.value)} className={styles.slider} />
                 </div>
 

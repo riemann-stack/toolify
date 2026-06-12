@@ -199,8 +199,8 @@ export default function StockDecisionClient() {
               ))}
             </div>
             <div className={s.field} style={{ marginTop: 14, marginBottom: 0 }}>
-              <label className={s.fieldLabel}>종목명 (선택 · 본인만 보는 메모 · 저장 X)</label>
-              <input type="text" maxLength={20} className={s.input}
+              <label className={s.fieldLabel} htmlFor="stock-decision-memo">종목명 (선택 · 본인만 보는 메모 · 저장 X)</label>
+              <input id="stock-decision-memo" type="text" maxLength={20} className={s.input}
                 placeholder="예: ABC전자"
                 value={stockName} onChange={(e) => setStockName(e.target.value)} />
               <p className={s.fieldHint}>⚠️ 종목 정보 검색·추천 X. 본인 판단 보조용 메모만.</p>

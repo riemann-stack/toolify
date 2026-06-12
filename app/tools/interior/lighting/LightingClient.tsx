@@ -460,7 +460,7 @@ export default function LightingClient() {
           </div>
 
           {/* 결과 — HERO */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>필요 조명 개수</p>
             <p className={styles.heroNum}>{calc.lightCount}<span className={styles.heroUnit}>개</span></p>
             <p className={styles.heroSub}>

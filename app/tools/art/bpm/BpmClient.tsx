@@ -37,9 +37,9 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
     <div className={styles.wrap}>
       {/* BPM 입력 */}
       <div className={styles.inputCard}>
-        <label className={styles.inputLabel}>BPM (템포)</label>
+        <label className={styles.inputLabel} htmlFor="bpm-bpm">BPM (템포)</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="bpm-bpm"
             className={styles.bpmInput}
             type="number"
             inputMode="decimal"
@@ -67,7 +67,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
       {bpmNum && quarterMs !== null ? (
         <>
           {/* 히어로: 4분음표 */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <div className={styles.heroLabel}>4분음표 딜레이 타임</div>
             <div className={styles.heroNum}>{quarterMs}</div>
             <div className={styles.heroUnit}>ms</div>

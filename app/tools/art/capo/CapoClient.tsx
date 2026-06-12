@@ -157,7 +157,7 @@ function CapoTab() {
       </div>
 
       {/* 결과 히어로 */}
-      <div className={styles.hero}>
+      <div className={styles.hero} role="status">
         <div className={styles.heroLabel}>
           카포 {fret === 0 ? '없음' : `${fret}프렛`}에서
         </div>

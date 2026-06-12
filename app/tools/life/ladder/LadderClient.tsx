@@ -2,6 +2,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import s from './ladder.module.css'
 import {
@@ -526,7 +527,7 @@ function SavedGamesSection({
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-ladder-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `youtil-ladder-${todayStr()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }

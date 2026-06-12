@@ -2,6 +2,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import s from './recipe.module.css'
 import {
@@ -242,8 +243,8 @@ function ScaleTab() {
 
       {/* 레시피 제목 */}
       <div className={s.card}>
-        <label className={s.cardLabel}>레시피 제목</label>
-        <input className={s.textInput} type="text"
+        <label className={s.cardLabel} htmlFor="recipe-title">레시피 제목</label>
+        <input id="recipe-title" className={s.textInput} type="text"
           value={recipeTitle} onChange={e => setRecipeTitle(e.target.value)}
           placeholder="예: 우리집 김치찌개" maxLength={30} />
       </div>
@@ -627,7 +628,7 @@ function SavedTab({ active }: { active: boolean }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-recipes-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `youtil-recipes-${todayStr()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }

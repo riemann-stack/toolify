@@ -239,7 +239,7 @@ export default function FruitSyrupClient() {
       </div>
 
       {/* ── 결과 ── */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLead}>{fruit.name} {fmtG(weight)}g 에 필요한 설탕</div>
         <div className={s.heroNum}>{fmtG(calc.sugar)}<span className={s.heroUnit}>g</span></div>
         <div className={s.heroSub}>과일 : 설탕 = 1 : {ratio}</div>

@@ -3,6 +3,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import s from './one-rm.module.css'
 import {
   generateWarmup, suggestRestForIntensity, rpeAdjustReps, adjustLevels,
@@ -213,7 +214,7 @@ export default function OneRMClient() {
 
   const addRecord = () => {
     if (!oneRMRounded || oneRMRounded <= 0) return
-    const today = new Date().toISOString().slice(0, 10)
+    const today = todayStr()
     const rec: HistoryRecord = {
       id: Math.random().toString(36).slice(2, 10),
       date: today,
@@ -514,8 +515,8 @@ function CalcTab(props: CalcTabProps) {
         </div>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>체중 (선택, kg) — 수준 판정용</label>
-          <input type="number" inputMode="decimal" className={s.input} placeholder="75" value={bodyWeight} min={0} onChange={(e) => setBodyWeight(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="one-rm-kg">체중 (선택, kg) — 수준 판정용</label>
+          <input id="one-rm-kg" type="number" inputMode="decimal" className={s.input} placeholder="75" value={bodyWeight} min={0} onChange={(e) => setBodyWeight(e.target.value)} />
         </div>
 
         <div className={s.field} style={{ marginBottom: 0 }}>
@@ -544,7 +545,7 @@ function CalcTab(props: CalcTabProps) {
 
       {oneRMs && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>예상 1RM</p>
             <p className={s.heroValue}>약 {fmt(oneRMDisplay, roundUnit < 1 ? 1 : 0)}{unit}</p>
             <p className={s.heroRange}>

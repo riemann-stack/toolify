@@ -119,7 +119,7 @@ export default function TokenCounterClient() {
       </div>
 
       {/* 히어로 */}
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLabel}>예상 토큰 수 (GPT-4o 기준)</div>
         <div className={s.heroNum}>{fmtTokens(heroTokens)}</div>
         <div className={s.heroSub}>

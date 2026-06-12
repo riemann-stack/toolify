@@ -1,6 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import { useMemo, useState } from 'react'
 import styles from './fight-weight.module.css'
 
@@ -202,7 +203,7 @@ export default function FightWeightClient() {
   // 계체 예정일 (default: 30일 후)
   const [weighInDate, setWeighInDate] = useState(() => {
     const d = new Date(); d.setDate(d.getDate() + 30)
-    return d.toISOString().split('T')[0]
+    return todayStr(d)
   })
 
   const [targetClassName, setTargetClassName] = useState('')
@@ -399,6 +400,16 @@ export default function FightWeightClient() {
                     setTab('plan')
                     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setSportId(s.id)
+                      setTargetClassName(c.name)
+                      setTab('plan')
+                      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
+                  role="button" aria-label={`${c.name} 체급으로 계획 세우기`} tabIndex={0}
                 >
                   <td>{c.name}{c.forGender === 'female' && ' (여)'}</td>
                   <td>{c.limit === Infinity ? '무제한' : c.limit.toFixed(2)}</td>
@@ -500,17 +511,19 @@ export default function FightWeightClient() {
           )}
 
           {/* 현재 체급 */}
-          {currentClass && (
-            <div className={styles.hero}>
-              <p className={styles.heroLead}>현재 체급 · {sport.label}{gender === 'female' ? ' (여)' : ''}</p>
-              <p className={styles.heroClassName}>{currentClass.name}</p>
-              <p className={styles.heroSub}>
-                체중 {weight}kg · {currentClass.limit === Infinity ? '무제한급' : `한도 ${currentClass.limit}kg 이하`}
-                {currentClass.limit !== Infinity && weight <= currentClass.limit && ` · 한도까지 ${(currentClass.limit - weight).toFixed(1)}kg`}
-                {currentClass.limit !== Infinity && weight > currentClass.limit && ` · ${(weight - currentClass.limit).toFixed(1)}kg 초과`}
-              </p>
-            </div>
-          )}
+          <div role="status">
+            {currentClass && (
+              <div className={styles.hero}>
+                <p className={styles.heroLead}>현재 체급 · {sport.label}{gender === 'female' ? ' (여)' : ''}</p>
+                <p className={styles.heroClassName}>{currentClass.name}</p>
+                <p className={styles.heroSub}>
+                  체중 {weight}kg · {currentClass.limit === Infinity ? '무제한급' : `한도 ${currentClass.limit}kg 이하`}
+                  {currentClass.limit !== Infinity && weight <= currentClass.limit && ` · 한도까지 ${(currentClass.limit - weight).toFixed(1)}kg`}
+                  {currentClass.limit !== Infinity && weight > currentClass.limit && ` · ${(weight - currentClass.limit).toFixed(1)}kg 초과`}
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* 체급 사다리 */}
           {ladder.length > 0 && (

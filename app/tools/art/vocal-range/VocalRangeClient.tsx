@@ -496,7 +496,7 @@ export default function VocalRangeClient() {
             </div>
           ) : (
             <>
-              <div className={styles.hero}>
+              <div className={styles.hero} role="status">
                 <div className={styles.heroLabel}>당신의 음역대</div>
                 <div className={styles.heroRange}>
                   {lowNote.name} <span style={{ color: 'var(--muted)', fontSize: '0.7em' }}>~</span> {highNote.name}

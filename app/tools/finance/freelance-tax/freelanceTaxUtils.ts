@@ -3,7 +3,9 @@
    2026년 프리랜서 종합소득세 계산
    ────────────────────────────────────────────────────── */
 
-/* ─── 종합소득세 누진세율 (2026년 기준) ─── */
+import { BRACKETS_2026 } from '@/lib/krIncomeTax'
+
+/* ─── 종합소득세 누진세율 (2026년 기준) — lib/krIncomeTax에서 파생 ─── */
 export interface TaxBracket {
   min: number      // 과세표준 하한 (원, 미만)
   max: number      // 과세표준 상한 (원, 이하)
@@ -12,16 +14,18 @@ export interface TaxBracket {
   label: string
 }
 
-export const PROGRESSIVE_BRACKETS: TaxBracket[] = [
-  { min:           0, max:  14_000_000, rate: 0.06, deduction:          0, label: '~ 1,400만' },
-  { min:  14_000_000, max:  50_000_000, rate: 0.15, deduction:  1_260_000, label: '~ 5,000만' },
-  { min:  50_000_000, max:  88_000_000, rate: 0.24, deduction:  5_760_000, label: '~ 8,800만' },
-  { min:  88_000_000, max: 150_000_000, rate: 0.35, deduction: 15_440_000, label: '~ 1.5억' },
-  { min: 150_000_000, max: 300_000_000, rate: 0.38, deduction: 19_940_000, label: '~ 3억' },
-  { min: 300_000_000, max: 500_000_000, rate: 0.40, deduction: 25_940_000, label: '~ 5억' },
-  { min: 500_000_000, max: 1_000_000_000, rate: 0.42, deduction: 35_940_000, label: '~ 10억' },
-  { min: 1_000_000_000, max: Infinity,  rate: 0.45, deduction: 65_940_000, label: '10억 초과' },
+const BRACKET_LABELS = [
+  '~ 1,400만', '~ 5,000만', '~ 8,800만', '~ 1.5억',
+  '~ 3억', '~ 5억', '~ 10억', '10억 초과',
 ]
+
+export const PROGRESSIVE_BRACKETS: TaxBracket[] = BRACKETS_2026.map((b, i) => ({
+  min: i === 0 ? 0 : BRACKETS_2026[i - 1].upTo,
+  max: b.upTo,
+  rate: b.rate,
+  deduction: b.deduction,
+  label: BRACKET_LABELS[i],
+}))
 
 /* ─── 단순경비율 업종 (2026년 국세청 발표 기준) ─── */
 export interface IndustryPreset {

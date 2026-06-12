@@ -185,7 +185,9 @@ function TreeNode({ node, nodeKey, isLast = true }: TreeProps) {
     return (
       <div>
         <span>
-          <span className={s.treeToggle} onClick={() => setOpen(!open)}>{open ? '▾' : '▸'}</span>
+          <span className={s.treeToggle} onClick={() => setOpen(!open)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(!open) } }}
+            role="button" aria-expanded={open} aria-label={open ? '접기' : '펼치기'} tabIndex={0}>{open ? '▾' : '▸'}</span>
           {nodeKey !== undefined && <span className={s.treeKey}>&quot;{nodeKey}&quot;</span>}
           {nodeKey !== undefined && <span className={s.treeBracket}>: </span>}
           <span className={s.treeBracket}>{open1}</span>

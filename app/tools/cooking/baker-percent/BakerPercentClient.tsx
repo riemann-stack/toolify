@@ -850,19 +850,21 @@ export default function BakerPercentClient() {
           </div>
 
           {/* HERO */}
-          {analysis1.flourTotal > 0 && (
-            <div className={s.hero}>
-              <p className={s.heroLead}>총 반죽량</p>
-              <div>
-                <span className={s.heroNum}>{fmt(analysis1.totalWeight)}</span>
-                <span className={s.heroUnit}>g</span>
+          <div role="status">
+            {analysis1.flourTotal > 0 && (
+              <div className={s.hero}>
+                <p className={s.heroLead}>총 반죽량</p>
+                <div>
+                  <span className={s.heroNum}>{fmt(analysis1.totalWeight)}</span>
+                  <span className={s.heroUnit}>g</span>
+                </div>
+                <p className={s.heroSub}>
+                  밀가루 <span className={s.heroSubAccent}>{fmt(analysis1.flourTotal)}g (100%)</span> ·
+                  {' '}수분율 <span className={s.heroSubAccent}>{round1(analysis1.hydration)}%</span>
+                </p>
               </div>
-              <p className={s.heroSub}>
-                밀가루 <span className={s.heroSubAccent}>{fmt(analysis1.flourTotal)}g (100%)</span> ·
-                {' '}수분율 <span className={s.heroSubAccent}>{round1(analysis1.hydration)}%</span>
-              </p>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* 핵심 지표 */}
           {analysis1.flourTotal > 0 && (

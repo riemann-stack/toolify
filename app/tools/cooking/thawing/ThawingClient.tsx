@@ -266,9 +266,9 @@ function ThawTab() {
         <span className={s.cardLabel}>2. 두께 / 무게</span>
         <div className={s.row2}>
           <div>
-            <label className={s.fieldLabel}>두께 (cm)</label>
+            <label className={s.fieldLabel} htmlFor="thawing-cm">두께 (cm)</label>
             <div className={s.valueRow}>
-              <input
+              <input id="thawing-cm"
                 type="number" inputMode="decimal" step="0.5" min={0.5} max={20}
                 className={s.valueInput}
                 value={thickness} onChange={e => setThickness(e.target.value)}
@@ -277,9 +277,9 @@ function ThawTab() {
             </div>
           </div>
           <div>
-            <label className={s.fieldLabel}>무게 (g)</label>
+            <label className={s.fieldLabel} htmlFor="thawing-weight">무게 (g)</label>
             <div className={s.valueRow}>
-              <input
+              <input id="thawing-weight"
                 type="number" inputMode="decimal" step="50" min={50} max={5000}
                 className={s.valueInput}
                 value={weight} onChange={e => setWeight(e.target.value)}
@@ -353,6 +353,8 @@ function ThawTab() {
                 key={m.key}
                 className={`${s.methodCard} ${m.cardCls} ${isSelected ? s.methodSelected : ''}`}
                 onClick={() => setMethod(m.key)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setMethod(m.key) } }}
+                role="button" aria-pressed={isSelected} tabIndex={0}
               >
                 <div className={s.methodHead}>
                   <div>
@@ -576,9 +578,9 @@ function FreezeTab() {
         <span className={s.cardLabel}>2. 두께 / 무게</span>
         <div className={s.row2}>
           <div>
-            <label className={s.fieldLabel}>두께 (cm)</label>
+            <label className={s.fieldLabel} htmlFor="thawing-cm-2">두께 (cm)</label>
             <div className={s.valueRow}>
-              <input
+              <input id="thawing-cm-2"
                 type="number" inputMode="decimal" step="0.5" min={0.5} max={20}
                 className={s.valueInput}
                 value={thickness} onChange={e => setThickness(e.target.value)}
@@ -587,9 +589,9 @@ function FreezeTab() {
             </div>
           </div>
           <div>
-            <label className={s.fieldLabel}>무게 (g)</label>
+            <label className={s.fieldLabel} htmlFor="thawing-weight-2">무게 (g)</label>
             <div className={s.valueRow}>
-              <input
+              <input id="thawing-weight-2"
                 type="number" inputMode="decimal" step="50" min={50} max={5000}
                 className={s.valueInput}
                 value={weight} onChange={e => setWeight(e.target.value)}

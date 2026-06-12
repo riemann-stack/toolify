@@ -294,8 +294,8 @@ export default function SourdoughClient() {
             <h3 className={styles.secTitle}>1. 기본 정보</h3>
 
             <div className={styles.field}>
-              <label className={styles.label}>시작한 지 며칠째</label>
-              <select className={styles.select} value={day} onChange={e => setDay(+e.target.value)}>
+              <label className={styles.label} htmlFor="sourdough-start">시작한 지 며칠째</label>
+              <select id="sourdough-start" className={styles.select} value={day} onChange={e => setDay(+e.target.value)}>
                 {Array.from({ length: 30 }, (_, i) => i + 1).map(d => (
                   <option key={d} value={d}>{d}일차</option>
                 ))}
@@ -303,10 +303,10 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>
+              <label className={styles.label} htmlFor="sourdough-current">
                 현재 온도 <span className={styles.tempVal} data-zone={tempZone(temp)}>{temp}°C</span>
               </label>
-              <input type="range" min={15} max={35} value={temp}
+              <input id="sourdough-current" type="range" min={15} max={35} value={temp}
                 onChange={e => setTemp(+e.target.value)}
                 className={styles.tempSlider} />
               <div className={styles.tempLabels}>
@@ -529,10 +529,10 @@ export default function SourdoughClient() {
             <h3 className={styles.secTitle}>2. 환경</h3>
 
             <div className={styles.field}>
-              <label className={styles.label}>
+              <label className={styles.label} htmlFor="sourdough-current-2">
                 현재 온도 <span className={styles.tempVal} data-zone={tempZone(pTemp)}>{pTemp}°C</span>
               </label>
-              <input type="range" min={15} max={35} value={pTemp}
+              <input id="sourdough-current-2" type="range" min={15} max={35} value={pTemp}
                 onChange={e => setPTemp(+e.target.value)}
                 className={styles.tempSlider} />
               <div className={styles.tempLabels}>

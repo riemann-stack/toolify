@@ -156,8 +156,8 @@ export default function WireClient() {
             {/* 전압강하 한도 — 전력→전선 · 전압강하 탭 */}
             {(tab === 'pw' || tab === 'drop') && (
               <div className={s.field}>
-                <label className={s.fieldLabel}>적용 (전압강하 한도)</label>
-                <select className={s.input} value={app} onChange={(e) => setApp(e.target.value as Application)}>
+                <label className={s.fieldLabel} htmlFor="wire-f1">적용 (전압강하 한도)</label>
+                <select id="wire-f1" className={s.input} value={app} onChange={(e) => setApp(e.target.value as Application)}>
                   {(Object.keys(DROP_LIMIT) as Application[]).map((a) => (
                     <option key={a} value={a}>{DROP_LIMIT[a].label} ({DROP_LIMIT[a].pct}%)</option>
                   ))}
@@ -169,32 +169,32 @@ export default function WireClient() {
             {(tab === 'pw' || tab === 'reverse') && (
               <>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>부하 종류</label>
-                  <select className={s.input} value={load} onChange={(e) => setLoad(e.target.value as LoadType)}>
+                  <label className={s.fieldLabel} htmlFor="wire-f2">부하 종류</label>
+                  <select id="wire-f2" className={s.input} value={load} onChange={(e) => setLoad(e.target.value as LoadType)}>
                     {(Object.keys(LOAD_PF) as LoadType[]).map((l) => (
                       <option key={l} value={l}>{LOAD_PF[l].label}</option>
                     ))}
                   </select>
                 </div>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>전선 종류</label>
-                  <select className={s.input} value={kind} onChange={(e) => setKind(e.target.value as WireKind)}>
+                  <label className={s.fieldLabel} htmlFor="wire-f3">전선 종류</label>
+                  <select id="wire-f3" className={s.input} value={kind} onChange={(e) => setKind(e.target.value as WireKind)}>
                     {WIRE_KINDS.map((k) => (
                       <option key={k.id} value={k.id}>{k.label}</option>
                     ))}
                   </select>
                 </div>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>부설 환경</label>
-                  <select className={s.input} value={env} onChange={(e) => setEnv(e.target.value as Environment)}>
+                  <label className={s.fieldLabel} htmlFor="wire-f4">부설 환경</label>
+                  <select id="wire-f4" className={s.input} value={env} onChange={(e) => setEnv(e.target.value as Environment)}>
                     {(Object.keys(ENV_FACTOR) as Environment[]).map((ev) => (
                       <option key={ev} value={ev}>{ENV_FACTOR[ev].label}</option>
                     ))}
                   </select>
                 </div>
                 <div className={s.field}>
-                  <label className={s.fieldLabel}>주위 온도</label>
-                  <select className={s.input} value={tempC} onChange={(e) => setTempC(Number(e.target.value) as 30 | 40 | 50)}>
+                  <label className={s.fieldLabel} htmlFor="wire-temp">주위 온도</label>
+                  <select id="wire-temp" className={s.input} value={tempC} onChange={(e) => setTempC(Number(e.target.value) as 30 | 40 | 50)}>
                     <option value={30}>30°C</option>
                     <option value={40}>40°C</option>
                     <option value={50}>50°C</option>
@@ -213,8 +213,8 @@ export default function WireClient() {
             <span className={s.cardLabel}>부하 입력</span>
             <div className={s.row2Tight}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>소비전력 (kW)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="wire-kw">소비전력 (kW)</label>
+                <input id="wire-kw"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={powerKw}
@@ -232,8 +232,8 @@ export default function WireClient() {
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>배선 거리 (편도, m)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="wire-distance">배선 거리 (편도, m)</label>
+                <input id="wire-distance"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={lengthM}
@@ -254,7 +254,7 @@ export default function WireClient() {
           </div>
 
           {/* 결과 카드 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{powerKw}kW · {voltage}V {phase === 'three' ? '삼상' : '단상'} · {LOAD_PF[load].label}</p>
             <p className={s.heroValue}>
               예상 전류 <strong>{fmt(current, 1)} A</strong>
@@ -416,8 +416,8 @@ export default function WireClient() {
             <span className={s.cardLabel}>전압강하 계산 입력</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>부하 전류 (A)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="wire-f8">부하 전류 (A)</label>
+                <input id="wire-f8"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={dropI}
@@ -428,8 +428,8 @@ export default function WireClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>편도 거리 (m)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="wire-distance-2">편도 거리 (m)</label>
+                <input id="wire-distance-2"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={dropL}

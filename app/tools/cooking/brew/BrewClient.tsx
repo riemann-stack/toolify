@@ -201,8 +201,8 @@ export default function BrewClient() {
               </div>
             </div>
             <div className={s.field}>
-              <label className={s.fieldLabel}>또는 직접 (1:{ratio.toFixed(1)})</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="brew-f1">또는 직접 (1:{ratio.toFixed(1)})</label>
+              <input id="brew-f1"
                 type="range"
                 min={sliderMin}
                 max={sliderMax}
@@ -272,8 +272,8 @@ export default function BrewClient() {
 
             {effMode === 'water' && (
               <div className={s.field} style={{ marginTop: 12 }}>
-                <label className={s.fieldLabel}>물 (ml)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="brew-ml">물 (ml)</label>
+                <input id="brew-ml"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={waterMl}
@@ -294,8 +294,8 @@ export default function BrewClient() {
               <>
                 <div className={s.row2} style={{ marginTop: 12 }}>
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>잔수</label>
-                    <input
+                    <label className={s.fieldLabel} htmlFor="brew-f3">잔수</label>
+                    <input id="brew-f3"
                       type="number" inputMode="decimal"
                       className={s.input}
                       value={cups}
@@ -311,8 +311,8 @@ export default function BrewClient() {
                     </div>
                   </div>
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>1잔 ml</label>
-                    <input
+                    <label className={s.fieldLabel} htmlFor="brew-ml-2">1잔 ml</label>
+                    <input id="brew-ml-2"
                       type="number" inputMode="decimal"
                       className={s.input}
                       value={mlPerCup}
@@ -339,7 +339,7 @@ export default function BrewClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{m.emoji} {m.shortName} · 1:{ratio.toFixed(1)}</p>
             <div className={s.heroResult} style={isEspresso ? { gridTemplateColumns: 'repeat(2, 1fr)' } : undefined}>
               <div className={s.heroBlock}>
@@ -399,8 +399,8 @@ export default function BrewClient() {
             </p>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>원두 (g)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="brew-f5">원두 (g)</label>
+                <input id="brew-f5"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={coffeeG}
@@ -409,8 +409,8 @@ export default function BrewClient() {
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>비율 (1:N)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="brew-ratio">비율 (1:N)</label>
+                <input id="brew-ratio"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={pourRatio}
@@ -501,8 +501,8 @@ export default function BrewClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>비율 강도 진단</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>비율 (1:{ratio.toFixed(1)})</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="brew-ratio-2">비율 (1:{ratio.toFixed(1)})</label>
+              <input id="brew-ratio-2"
                 type="range"
                 min={5}
                 max={25}
@@ -642,8 +642,8 @@ export default function BrewClient() {
             <span className={s.cardLabel}>원두·카페 가격 입력</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>원두 100g 가격 (원)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="brew-price">원두 100g 가격 (원)</label>
+                <input id="brew-price"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={pricePer100g}

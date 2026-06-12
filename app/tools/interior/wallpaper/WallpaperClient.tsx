@@ -606,7 +606,7 @@ export default function WallpaperClient() {
       {/* ────────────── 탭 1 결과 ────────────── */}
       {tab === 'simple' && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>필요한 벽지</p>
             <p className={styles.heroNum}>{t1.finalRolls}<span className={styles.heroUnit}>롤</span></p>
             <p className={styles.heroSub}>{wp.name} 기준 (로스율 {lossPct}% 포함)</p>

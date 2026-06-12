@@ -730,7 +730,7 @@ export default function PaintClient() {
       {/* ────────────── 탭 1 결과 ────────────── */}
       {tab === 'simple' && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>필요한 페인트</p>
             <p className={styles.heroNum}>{fmt(t1.requiredPaint, 1)}<span className={styles.heroUnit}>L</span></p>
             <p className={styles.heroSub}>{paintName} · {coats}회 도장 · 로스율 {lossPct}% 포함</p>

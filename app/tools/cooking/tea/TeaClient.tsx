@@ -188,8 +188,8 @@ export default function TeaClient() {
             <span className={s.cardLabel}>찻잎 · 물</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>찻잎 (g)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="tea-f1">찻잎 (g)</label>
+                <input id="tea-f1"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={leafG}
@@ -207,8 +207,8 @@ export default function TeaClient() {
                 </div>
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>물 (ml)</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="tea-ml">물 (ml)</label>
+                <input id="tea-ml"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={waterMl}

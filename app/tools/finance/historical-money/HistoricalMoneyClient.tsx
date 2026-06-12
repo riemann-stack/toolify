@@ -160,14 +160,14 @@ export default function HistoricalMoneyClient() {
           </div>
 
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>
+            <label className={s.fieldLabel} htmlFor="historical-money-amount">
               금액
               <span className={s.fieldHint}>
                 단위: {direction === 'past_to_now' ? pastEra.symbol : currentEra.symbol}
               </span>
             </label>
             <div className={s.amountRow}>
-              <input
+              <input id="historical-money-amount"
                 type="number"
                 inputMode="numeric"
                 min={0}
@@ -194,7 +194,8 @@ export default function HistoricalMoneyClient() {
         </div>
       </div>
 
-      {/* 결과 */}
+      {/* 결과 — 상시 래퍼: 첫 결과부터 스크린리더 낭독 */}
+      <div role="status">
       {result && valid && (
         <div className={s.hero}>
           <div className={s.heroIn}>
@@ -222,6 +223,7 @@ export default function HistoricalMoneyClient() {
           </div>
         </div>
       )}
+      </div>
 
       {/* 시대별 가치 시계열 */}
       {result && valid && decadeSeries.length > 1 && (

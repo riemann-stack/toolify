@@ -5,6 +5,8 @@
    과거 배당이 미래 배당을 보장하지 않습니다.
    ────────────────────────────────────────────────────── */
 
+import { BRACKETS_2026, marginalRate } from '@/lib/krIncomeTax'
+
 /* ─── 한국 배당 세제 (2026년 기준) ─── */
 export interface TaxAccount {
   id: string
@@ -48,7 +50,7 @@ export const TAX_ACCOUNTS: TaxAccount[] = [
 /* ─── 종합과세 한도 ─── */
 export const COMPREHENSIVE_TAX_THRESHOLD = 20_000_000   // 연 2,000만
 
-/* ─── 종합과세 누진세율 (지방세 포함) ─── */
+/* ─── 종합과세 누진세율 (지방세 포함) — lib/krIncomeTax에서 파생 ─── */
 export interface ProgressiveBracket {
   min: number
   max: number
@@ -56,16 +58,22 @@ export interface ProgressiveBracket {
   label: string
 }
 
-export const PROGRESSIVE_BRACKETS: ProgressiveBracket[] = [
-  { min: 0,            max: 14_000_000,    rate: 0.066, label: '~ 1,400만 (6.6%)' },
-  { min: 14_000_000,   max: 50_000_000,    rate: 0.165, label: '1,400만 ~ 5,000만 (16.5%)' },
-  { min: 50_000_000,   max: 88_000_000,    rate: 0.264, label: '5,000만 ~ 8,800만 (26.4%)' },
-  { min: 88_000_000,   max: 150_000_000,   rate: 0.385, label: '8,800만 ~ 1.5억 (38.5%)' },
-  { min: 150_000_000,  max: 300_000_000,   rate: 0.418, label: '1.5억 ~ 3억 (41.8%)' },
-  { min: 300_000_000,  max: 500_000_000,   rate: 0.440, label: '3억 ~ 5억 (44%)' },
-  { min: 500_000_000,  max: 1_000_000_000, rate: 0.462, label: '5억 ~ 10억 (46.2%)' },
-  { min: 1_000_000_000, max: Infinity,     rate: 0.495, label: '10억 초과 (49.5%)' },
+const BRACKET_LABELS = [
+  '~ 1,400만 (6.6%)', '1,400만 ~ 5,000만 (16.5%)', '5,000만 ~ 8,800만 (26.4%)',
+  '8,800만 ~ 1.5억 (38.5%)', '1.5억 ~ 3억 (41.8%)', '3억 ~ 5억 (44%)',
+  '5억 ~ 10억 (46.2%)', '10억 초과 (49.5%)',
 ]
+
+export const PROGRESSIVE_BRACKETS: ProgressiveBracket[] = BRACKETS_2026.map((b, i) => {
+  const min = i === 0 ? 0 : BRACKETS_2026[i - 1].upTo
+  return {
+    min,
+    max: b.upTo,
+    // 구간 내부의 한 점에서 지방세 포함 한계세율 조회 (예: 0.15 → 0.165)
+    rate: marginalRate(Number.isFinite(b.upTo) ? b.upTo : min + 1, { localTax: true }),
+    label: BRACKET_LABELS[i],
+  }
+})
 
 /* ─── 배당 주기 ─── */
 export type Frequency = 'monthly' | 'quarterly' | 'semi' | 'annual'

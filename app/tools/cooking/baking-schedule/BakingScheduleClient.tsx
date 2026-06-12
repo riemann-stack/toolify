@@ -524,8 +524,8 @@ function ForwardTab(p: CommonInputsProps) {
       <CommonInputs {...p} />
 
       <div className={s.card}>
-        <label className={s.cardLabel}>시작 시간</label>
-        <input className={s.dateInput} type="datetime-local" value={startStr}
+        <label className={s.cardLabel} htmlFor="baking-schedule-time">시작 시간</label>
+        <input id="baking-schedule-time" className={s.dateInput} type="datetime-local" value={startStr}
           onChange={e => setStartStr(e.target.value)} />
       </div>
 
@@ -533,7 +533,7 @@ function ForwardTab(p: CommonInputsProps) {
 
       {result && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <div className={s.heroEmoji}>{result.preset.icon}</div>
             <div className={s.heroTitle}>{result.preset.name}</div>
             <div className={s.heroMeta}>
@@ -625,8 +625,8 @@ function BackwardTab(p: CommonInputsProps) {
       <CommonInputs {...p} />
 
       <div className={s.card}>
-        <label className={s.cardLabel}>완성 시간 (먹고 싶은 시간)</label>
-        <input className={s.dateInput} type="datetime-local" value={endStr}
+        <label className={s.cardLabel} htmlFor="baking-schedule-time-2">완성 시간 (먹고 싶은 시간)</label>
+        <input id="baking-schedule-time-2" className={s.dateInput} type="datetime-local" value={endStr}
           onChange={e => setEndStr(e.target.value)} />
       </div>
 

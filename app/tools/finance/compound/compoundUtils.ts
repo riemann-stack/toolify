@@ -87,6 +87,12 @@ export function calcCompound(input: CompoundInput): CompoundResult {
   const periodFee = (input.feeRate ?? 0) / 100 / cf.periodsPerYear
   const netRate = periodRate - periodFee
 
+  // 시뮬레이션 스텝 = 복리주기·납입주기 중 촘촘한 쪽으로 통일.
+  // 복리 정의(명목율/주기)는 보존: stepRate = (1+netRate)^(cf/steps) - 1
+  // → 1년(steps스텝) 누적 시 정확히 (1+netRate)^cf (기존 연환산과 동일).
+  const stepsPerYear = Math.max(cf.periodsPerYear, ctf.periodsPerYear)
+  const stepRate = Math.pow(1 + netRate, cf.periodsPerYear / stepsPerYear) - 1
+
   let balance = input.principal
   let totalContribution = input.principal
   let totalInterest = 0
@@ -100,16 +106,21 @@ export function calcCompound(input: CompoundInput): CompoundResult {
     const adjustedContribution = input.contribution
       * Math.pow(1 + (input.annualIncreaseRate ?? 0) / 100, year - 1)
 
-    // 한 해 안의 복리 주기 시뮬
-    for (let p = 0; p < cf.periodsPerYear; p++) {
-      // 이 복리 주기에 일어나는 납입 횟수 (분수도 가능)
-      const contribPerPeriod = ctf.periodsPerYear / cf.periodsPerYear
-      const contribAmount = adjustedContribution * contribPerPeriod
-      balance += contribAmount
-      totalContribution += contribAmount
-      yearlyContribution += contribAmount
+    // 한 해 안의 스텝 시뮬 — 납입은 납입주기 '시작' 시점에만 투입 (annuity-due 관행 보존)
+    let contribMade = 0
+    for (let s = 0; s < stepsPerYear; s++) {
+      // k번째(0-base) 납입 시점 = k/ctf년 → 스텝 floor(k·steps/ctf) 시작부
+      while (
+        contribMade < ctf.periodsPerYear &&
+        Math.floor((contribMade * stepsPerYear) / ctf.periodsPerYear) === s
+      ) {
+        balance += adjustedContribution
+        totalContribution += adjustedContribution
+        yearlyContribution += adjustedContribution
+        contribMade++
+      }
 
-      const interest = balance * netRate
+      const interest = balance * stepRate
       balance += interest
       totalInterest += interest
       yearlyInterest += interest

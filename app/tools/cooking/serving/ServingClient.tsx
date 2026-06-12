@@ -288,8 +288,8 @@ export default function ServingClient() {
 
           {/* 재료 선택 — accordion + 검색 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>🍴 재료 선택 (복수 선택)</label>
-            <input type="text" className={styles.searchInput}
+            <label className={styles.cardLabel} htmlFor="serving-f1">🍴 재료 선택 (복수 선택)</label>
+            <input id="serving-f1" type="text" className={styles.searchInput}
               placeholder="🔍 재료 검색 (예: 삼겹살, 파스타)…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}

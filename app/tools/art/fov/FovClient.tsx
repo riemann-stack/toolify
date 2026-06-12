@@ -209,16 +209,16 @@ export default function FovClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>📐 카메라 + 렌즈 + 거리</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>센서</label>
-              <select value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
+              <label className={s.fieldLabel} htmlFor="fov-f1">센서</label>
+              <select id="fov-f1" value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
                 {SENSORS.map((sm) => (
                   <option key={sm.id} value={sm.id}>{sm.label} (×{sm.cropFactor})</option>
                 ))}
               </select>
             </div>
             <div className={s.field}>
-              <label className={s.fieldLabel}>실제 초점거리 (mm) — {fmt(focalLength, 0)} mm · 35mm 환산 {fmt(fl35, 0)}mm</label>
-              <input type="range" min={4} max={800} step={1}
+              <label className={s.fieldLabel} htmlFor="fov-mm-mm-mm-mm">실제 초점거리 (mm) — {fmt(focalLength, 0)} mm · 35mm 환산 {fmt(fl35, 0)}mm</label>
+              <input id="fov-mm-mm-mm-mm" type="range" min={4} max={800} step={1}
                 value={focalLength}
                 onChange={(e) => setFocalLength(Number(e.target.value))}
                 className={s.slider} />

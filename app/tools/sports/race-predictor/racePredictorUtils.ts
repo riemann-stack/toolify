@@ -288,7 +288,8 @@ export function loadRecords(): RaceRecord[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    return JSON.parse(raw) as RaceRecord[]
+    const arr = JSON.parse(raw) as RaceRecord[]
+    return Array.isArray(arr) ? arr : []
   } catch { return [] }
 }
 

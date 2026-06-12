@@ -135,8 +135,8 @@ export default function RoofClient() {
             <span className={s.cardLabel}>② 건물 치수 (m)</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>가로 (정면)</label>
-                <input type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
+                <label className={s.fieldLabel} htmlFor="roof-f1">가로 (정면)</label>
+                <input id="roof-f1" type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
                   value={L} onChange={(e) => setL(e.target.value)} />
               </div>
               <div className={s.field}>
@@ -267,7 +267,7 @@ export default function RoofClient() {
           {result && (
             <>
               {/* 히어로 */}
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>
                   {ROOF_TYPES.find((r) => r.key === type)?.emoji} {ROOF_TYPES.find((r) => r.key === type)?.label}
                   {' '}({numL}m × {numW}m{type !== 'flat' && `, ${fmtMoemae(currentMoemae)}`})

@@ -179,7 +179,7 @@ export default function BoltWrenchClient() {
           </div>
 
           {/* 메인 결과 카드 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>
               {BOLT_TYPES.find((t) => t.id === boltType)!.emoji} {size}{' '}
               {BOLT_TYPES.find((t) => t.id === boltType)!.label}
@@ -308,8 +308,8 @@ export default function BoltWrenchClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>스패너 / 소켓 사이즈 → 볼트</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>스패너 사이즈 (mm)</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="bolt-wrench-mm">스패너 사이즈 (mm)</label>
+              <input id="bolt-wrench-mm"
                 type="number" inputMode="decimal"
                 className={s.input}
                 value={revSpanner}
@@ -359,8 +359,8 @@ export default function BoltWrenchClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>알렌렌치 사이즈 → 볼트</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>알렌(육각렌치) 사이즈 (mm)</label>
-              <input
+              <label className={s.fieldLabel} htmlFor="bolt-wrench-mm-2">알렌(육각렌치) 사이즈 (mm)</label>
+              <input id="bolt-wrench-mm-2"
                 type="number" inputMode="decimal"
                 className={s.input}
                 value={revAllen}

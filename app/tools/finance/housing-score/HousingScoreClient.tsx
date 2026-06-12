@@ -174,8 +174,8 @@ export default function HousingScoreClient() {
 
         <div className={s.fieldRow}>
           <div className={s.field}>
-            <label>생년월일</label>
-            <input type="date" className={s.dateInput}
+            <label htmlFor="housing-score-birth">생년월일</label>
+            <input id="housing-score-birth" type="date" className={s.dateInput}
               value={birthDate} max={today}
               onChange={e => setBirthDate(e.target.value)} />
           </div>
@@ -200,8 +200,8 @@ export default function HousingScoreClient() {
 
         {marriedStatus === 'married' && (
           <div className={s.field} style={{ marginTop: 10 }}>
-            <label>혼인 신고일</label>
-            <input type="date" className={s.dateInput}
+            <label htmlFor="housing-score-f2">혼인 신고일</label>
+            <input id="housing-score-f2" type="date" className={s.dateInput}
               value={marriedDate} max={today}
               onChange={e => setMarriedDate(e.target.value)} />
           </div>
@@ -370,8 +370,8 @@ export default function HousingScoreClient() {
 
         <div className={s.fieldRow}>
           <div className={s.field}>
-            <label>가입일</label>
-            <input type="date" className={s.dateInput}
+            <label htmlFor="housing-score-f3">가입일</label>
+            <input id="housing-score-f3" type="date" className={s.dateInput}
               value={bankbookJoinDate} max={today}
               onChange={e => setBankbookJoinDate(e.target.value)} />
           </div>

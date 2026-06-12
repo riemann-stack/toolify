@@ -4,6 +4,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import s from './buildup.module.css'
 import {
   PROFILE_LABEL, PROFILE_DESC, INTENSITY_LABEL,
@@ -177,7 +178,7 @@ export default function BuildupClient() {
   const [copied, setCopied] = useState<'md' | 'watch' | null>(null)
   const buildMarkdown = (): string => {
     if (!result) return ''
-    const today = new Date().toISOString().slice(0, 10)
+    const today = todayStr()
     const sessionKm = warmupNumKm + result.totalKm + cooldownNumKm
     const warmSec = warmupNumKm * startSec
     const coolSec = cooldownNumKm * startSec
@@ -257,7 +258,7 @@ export default function BuildupClient() {
       startPace, endPace, profile, splitMode,
       warmupKm: warmupNumKm,
       cooldownKm: cooldownNumKm,
-      createdAt: new Date().toISOString().slice(0, 10),
+      createdAt: todayStr(),
     }
     setRoutines((p) => [r, ...p])
     setRoutineNameDraft('')
@@ -271,7 +272,7 @@ export default function BuildupClient() {
     if (typeof r.warmupKm === 'number') setWarmupKm(String(r.warmupKm))
     if (typeof r.cooldownKm === 'number') setCooldownKm(String(r.cooldownKm))
     setRoutines((p) => p.map((x) => x.id === r.id
-      ? { ...x, lastUsed: new Date().toISOString().slice(0, 10) }
+      ? { ...x, lastUsed: todayStr() }
       : x,
     ))
     setTab('design')
@@ -282,7 +283,7 @@ export default function BuildupClient() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-buildup-routines-${new Date().toISOString().slice(0, 10)}.csv`
+    a.download = `youtil-buildup-routines-${todayStr()}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -317,8 +318,8 @@ export default function BuildupClient() {
             <span className={s.cardLabel}>📐 빌드업 본체</span>
             <div className={s.coreInputGrid}>
               <div className={`${s.field} ${s.distanceField}`}>
-                <label className={s.fieldLabel}>총 거리 (km)</label>
-                <input type="number" inputMode="decimal" min={0.5} step={0.5} className={s.input}
+                <label className={s.fieldLabel} htmlFor="buildup-km">총 거리 (km)</label>
+                <input id="buildup-km" type="number" inputMode="decimal" min={0.5} step={0.5} className={s.input}
                   value={totalKm} onChange={(e) => setTotalKm(e.target.value)} />
               </div>
               <PaceField label="시작 페이스" value={startPace} onChange={setStartPace} />
@@ -336,13 +337,13 @@ export default function BuildupClient() {
             <span className={s.cardLabel}>🌱 웜업·쿨다운 (선택)</span>
             <div className={s.warmCoolGrid}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>웜업 (km)</label>
-                <input type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
+                <label className={s.fieldLabel} htmlFor="buildup-km-2">웜업 (km)</label>
+                <input id="buildup-km-2" type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
                   value={warmupKm} onChange={(e) => setWarmupKm(e.target.value)} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>쿨다운 (km)</label>
-                <input type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
+                <label className={s.fieldLabel} htmlFor="buildup-km-3">쿨다운 (km)</label>
+                <input id="buildup-km-3" type="number" inputMode="decimal" min={0} max={5} step={0.5} className={s.input}
                   value={cooldownKm} onChange={(e) => setCooldownKm(e.target.value)} />
               </div>
             </div>

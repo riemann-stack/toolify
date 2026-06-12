@@ -122,7 +122,7 @@ export default function PrintResolutionClient() {
           </div>
 
           {/* 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLead}>필요한 최소 해상도 · {dpi} DPI</p>
             <p className={s.heroValue}><strong>{fmt(pxW)}</strong> × <strong>{fmt(pxH)}</strong> px</p>
             <p className={s.heroSub}>약 {mp.toFixed(1)} 메가픽셀 · {cm1(sizeMM.w)}×{cm1(sizeMM.h)}cm</p>

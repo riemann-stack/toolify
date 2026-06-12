@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import styles from './pace.module.css'
 
 type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill'
@@ -140,7 +141,7 @@ export default function PaceClient() {
     try {
       const data = {
         paceMin, paceSec, dist,
-        lastSaved: new Date().toISOString().slice(0, 10),
+        lastSaved: todayStr(),
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     } catch {}

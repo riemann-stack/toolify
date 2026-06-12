@@ -137,8 +137,8 @@ function LengthTab() {
     <>
       <div className={s.card}>
         <div className={s.field}>
-          <label className={s.fieldLabel}>입력값</label>
-          <input
+          <label className={s.fieldLabel} htmlFor="css-converter-f1">입력값</label>
+          <input id="css-converter-f1"
             type="number"
             inputMode="decimal"
             className={s.input}
@@ -177,8 +177,8 @@ function LengthTab() {
         {showCfg && (
           <div className={s.configPanel}>
             <div className={s.configField}>
-              <label className={s.configLabel}>root font-size (px)</label>
-              <input
+              <label className={s.configLabel} htmlFor="css-converter-root-font-size-px">root font-size (px)</label>
+              <input id="css-converter-root-font-size-px"
                 type="number" inputMode="decimal"
                 className={s.configInput}
                 value={cfg.rootFontSize}
@@ -186,8 +186,8 @@ function LengthTab() {
               />
             </div>
             <div className={s.configField}>
-              <label className={s.configLabel}>parent font-size (px)</label>
-              <input
+              <label className={s.configLabel} htmlFor="css-converter-parent-font-size-px">parent font-size (px)</label>
+              <input id="css-converter-parent-font-size-px"
                 type="number" inputMode="decimal"
                 className={s.configInput}
                 value={cfg.parentFontSize}
@@ -195,9 +195,9 @@ function LengthTab() {
               />
             </div>
             <div className={s.configField}>
-              <label className={s.configLabel}>viewport width (px)</label>
+              <label className={s.configLabel} htmlFor="css-converter-viewport-width-px">viewport width (px)</label>
               <div className={s.configRow}>
-                <input
+                <input id="css-converter-viewport-width-px"
                   type="number" inputMode="decimal"
                   className={s.configInput}
                   value={cfg.viewportWidth}
@@ -211,9 +211,9 @@ function LengthTab() {
               </div>
             </div>
             <div className={s.configField}>
-              <label className={s.configLabel}>viewport height (px)</label>
+              <label className={s.configLabel} htmlFor="css-converter-viewport-height-px">viewport height (px)</label>
               <div className={s.configRow}>
-                <input
+                <input id="css-converter-viewport-height-px"
                   type="number" inputMode="decimal"
                   className={s.configInput}
                   value={cfg.viewportHeight}
@@ -337,8 +337,8 @@ function LineHeightTab() {
     <>
       <div className={s.card}>
         <div className={s.field}>
-          <label className={s.fieldLabel}>font-size (px)</label>
-          <input
+          <label className={s.fieldLabel} htmlFor="css-converter-font-size-px">font-size (px)</label>
+          <input id="css-converter-font-size-px"
             type="number" inputMode="decimal"
             className={s.input}
             value={fontSize}
@@ -348,8 +348,8 @@ function LineHeightTab() {
         </div>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>line-height 값</label>
-          <input
+          <label className={s.fieldLabel} htmlFor="css-converter-line-height">line-height 값</label>
+          <input id="css-converter-line-height"
             type="number"
             inputMode="decimal"
             className={s.input}
@@ -473,12 +473,12 @@ function LetterSpacingTab() {
     <>
       <div className={s.card}>
         <div className={s.field}>
-          <label className={s.fieldLabel}>font-size (px)</label>
-          <input type="number" inputMode="decimal" className={s.input} value={fontSize} min={1} onChange={(e) => setFontSize(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="css-converter-font-size-px-2">font-size (px)</label>
+          <input id="css-converter-font-size-px-2" type="number" inputMode="decimal" className={s.input} value={fontSize} min={1} onChange={(e) => setFontSize(e.target.value)} />
         </div>
         <div className={s.field}>
-          <label className={s.fieldLabel}>letter-spacing 값 (음수 허용)</label>
-          <input type="number" inputMode="decimal" className={s.input} value={value} onChange={(e) => setValue(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="css-converter-letter-spacing">letter-spacing 값 (음수 허용)</label>
+          <input id="css-converter-letter-spacing" type="number" inputMode="decimal" className={s.input} value={value} onChange={(e) => setValue(e.target.value)} />
         </div>
         <div className={s.field}>
           <label className={s.fieldLabel}>현재 단위</label>
@@ -624,8 +624,8 @@ function AspectTab() {
 
         {mode === 'ratio' ? (
           <div className={s.field}>
-            <label className={s.fieldLabel}>비율 (예: 16:9 또는 16/9)</label>
-            <input type="text" className={s.input} value={ratio} onChange={(e) => setRatio(e.target.value)} placeholder="16:9" />
+            <label className={s.fieldLabel} htmlFor="css-converter-ratio">비율 (예: 16:9 또는 16/9)</label>
+            <input id="css-converter-ratio" type="text" className={s.input} value={ratio} onChange={(e) => setRatio(e.target.value)} placeholder="16:9" />
           </div>
         ) : (
           <div className={s.field}>
@@ -839,20 +839,20 @@ function ClampTab() {
       <div className={s.card}>
         <div className={s.configPanel} style={{ border: 'none', padding: 0, background: 'transparent', marginTop: 0 }}>
           <div className={s.configField}>
-            <label className={s.configLabel}>최솟값 (px)</label>
-            <input type="number" inputMode="decimal" className={s.configInput} value={minPx} onChange={(e) => setMinPx(e.target.value)} />
+            <label className={s.configLabel} htmlFor="css-converter-px">최솟값 (px)</label>
+            <input id="css-converter-px" type="number" inputMode="decimal" className={s.configInput} value={minPx} onChange={(e) => setMinPx(e.target.value)} />
           </div>
           <div className={s.configField}>
-            <label className={s.configLabel}>최댓값 (px)</label>
-            <input type="number" inputMode="decimal" className={s.configInput} value={maxPx} onChange={(e) => setMaxPx(e.target.value)} />
+            <label className={s.configLabel} htmlFor="css-converter-px-2">최댓값 (px)</label>
+            <input id="css-converter-px-2" type="number" inputMode="decimal" className={s.configInput} value={maxPx} onChange={(e) => setMaxPx(e.target.value)} />
           </div>
           <div className={s.configField}>
-            <label className={s.configLabel}>최소 viewport (px)</label>
-            <input type="number" inputMode="decimal" className={s.configInput} value={minVw} onChange={(e) => setMinVw(e.target.value)} />
+            <label className={s.configLabel} htmlFor="css-converter-viewport-px">최소 viewport (px)</label>
+            <input id="css-converter-viewport-px" type="number" inputMode="decimal" className={s.configInput} value={minVw} onChange={(e) => setMinVw(e.target.value)} />
           </div>
           <div className={s.configField}>
-            <label className={s.configLabel}>최대 viewport (px)</label>
-            <input type="number" inputMode="decimal" className={s.configInput} value={maxVw} onChange={(e) => setMaxVw(e.target.value)} />
+            <label className={s.configLabel} htmlFor="css-converter-viewport-px-2">최대 viewport (px)</label>
+            <input id="css-converter-viewport-px-2" type="number" inputMode="decimal" className={s.configInput} value={maxVw} onChange={(e) => setMaxVw(e.target.value)} />
           </div>
         </div>
 
@@ -865,8 +865,8 @@ function ClampTab() {
             </div>
           </div>
           <div className={s.field} style={{ margin: 0, minWidth: 160 }}>
-            <label className={s.fieldLabel}>CSS 속성</label>
-            <select className={s.select} value={prop} onChange={(e) => setProp(e.target.value)}>
+            <label className={s.fieldLabel} htmlFor="css-converter-css">CSS 속성</label>
+            <select id="css-converter-css" className={s.select} value={prop} onChange={(e) => setProp(e.target.value)}>
               {CLAMP_PROPS.map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
@@ -1005,8 +1005,8 @@ function TimeAngleTab() {
         <p className={s.sectionTitle}>⏱️ 시간 변환 (ms ↔ s)</p>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>값</label>
-          <input type="number" inputMode="decimal" className={s.input} value={tVal} min={0} onChange={(e) => setTVal(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="css-converter-f16">값</label>
+          <input id="css-converter-f16" type="number" inputMode="decimal" className={s.input} value={tVal} min={0} onChange={(e) => setTVal(e.target.value)} />
         </div>
         <div className={s.field}>
           <label className={s.fieldLabel}>단위</label>
@@ -1070,8 +1070,8 @@ function TimeAngleTab() {
         <p className={s.sectionTitle}>🔄 각도 변환 (deg ↔ rad ↔ turn ↔ grad)</p>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>값</label>
-          <input type="number" inputMode="decimal" className={s.input} value={aVal} onChange={(e) => setAVal(e.target.value)} />
+          <label className={s.fieldLabel} htmlFor="css-converter-f17">값</label>
+          <input id="css-converter-f17" type="number" inputMode="decimal" className={s.input} value={aVal} onChange={(e) => setAVal(e.target.value)} />
         </div>
         <div className={s.field}>
           <label className={s.fieldLabel}>단위</label>

@@ -383,7 +383,7 @@ export default function ChordClient() {
           </div>
 
           {/* Hero */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <div className={s.heroLabel}>Chord</div>
             <div className={s.heroChord}>{chordFullStr}</div>
             <div className={s.heroSub}>{chordNotes.length}음 코드</div>
@@ -537,7 +537,9 @@ export default function ChordClient() {
                       return (
                         <tr key={i} className={full ? s.matchRowFull : ''}>
                           <td>
-                            <span className={s.matchChord} onClick={() => goToFind(m.root, m.type)}>
+                            <span className={s.matchChord} onClick={() => goToFind(m.root, m.type)}
+                              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFind(m.root, m.type) } }}
+                              role="button" aria-label={`${m.displayName} 상세 보기`} tabIndex={0}>
                               {m.displayName}
                             </span>
                           </td>
@@ -605,6 +607,8 @@ export default function ChordClient() {
                         key={i}
                         className={`${s.diatonicRow} ${rowCls}`}
                         onClick={() => goToFind(d.root, d.type)}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFind(d.root, d.type) } }}
+                        role="button" aria-label={`${d.name} 상세 보기`} tabIndex={0}
                       >
                         <td className={s.tdRoman}>{d.degree}</td>
                         <td className={s.tdChord}>{d.name}</td>

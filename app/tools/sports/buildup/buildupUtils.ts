@@ -450,7 +450,8 @@ export function loadRoutines(): BuildupRoutine[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as BuildupRoutine[]) : []
+    const arr = raw ? (JSON.parse(raw) as BuildupRoutine[]) : []
+    return Array.isArray(arr) ? arr : []
   } catch { return [] }
 }
 export function saveRoutines(routines: BuildupRoutine[]): void {

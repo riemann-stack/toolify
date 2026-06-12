@@ -410,7 +410,7 @@ export default function CurtainBlindClient() {
           )}
 
           {/* 결과 — HERO */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>{PRODUCTS.find(p => p.id === productId)?.label} 추천 사이즈</p>
             {result.type === 'curtain' ? (
               <div className={styles.heroDual}>

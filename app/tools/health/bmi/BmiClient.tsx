@@ -266,28 +266,28 @@ export default function BmiClient() {
       {/* 공통 입력 — 키·체중·성별·나이·기준 */}
       <div className={styles.fieldRow}>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="bmi-height">
             키
             <button type="button" aria-label="키 단위 전환"
               className={`${styles.unitToggle} ${styles.unitToggleActive}`}
               onClick={toggleHeightUnit}>{unitH}</button>
           </label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="bmi-height" className={styles.numInput} type="number" inputMode="decimal"
               placeholder={unitH === 'cm' ? '170' : '67'}
               value={height} onChange={e => setHeight(e.target.value)} />
             <span className={styles.unit}>{unitH}</span>
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="bmi-weight">
             체중
             <button type="button" aria-label="체중 단위 전환"
               className={`${styles.unitToggle} ${styles.unitToggleActive}`}
               onClick={toggleWeightUnit}>{unitW}</button>
           </label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal"
+            <input id="bmi-weight" className={styles.numInput} type="number" inputMode="decimal"
               placeholder={unitW === 'kg' ? '65' : '143'}
               value={weight} onChange={e => setWeight(e.target.value)} />
             <span className={styles.unit}>{unitW}</span>
@@ -308,9 +308,9 @@ export default function BmiClient() {
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>나이 <span className={styles.cardLabelHint}>선택</span></label>
+          <label className={styles.cardLabel} htmlFor="bmi-age">나이 <span className={styles.cardLabelHint}>선택</span></label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="bmi-age" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="30" value={age} onChange={e => setAge(e.target.value)} />
             <span className={styles.unit}>세</span>
           </div>
@@ -505,23 +505,23 @@ export default function BmiClient() {
           {/* 허리 + 목 (1줄) */}
           <div className={styles.fieldRow}>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>
+              <label className={styles.cardLabel} htmlFor="bmi-f4">
                 허리둘레
                 <button type="button" aria-label="둘레 단위 전환"
                   className={`${styles.unitToggle} ${styles.unitToggleActive}`}
                   onClick={toggleWaistUnit}>{unitWaist}</button>
               </label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal"
+                <input id="bmi-f4" className={styles.numInput} type="number" inputMode="decimal"
                   placeholder={unitWaist === 'cm' ? '82' : '32'}
                   value={waist} onChange={e => setWaist(e.target.value)} />
                 <span className={styles.unit}>{unitWaist}</span>
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>목둘레 <span className={styles.cardLabelHint}>체지방용</span></label>
+              <label className={styles.cardLabel} htmlFor="bmi-bodyfat">목둘레 <span className={styles.cardLabelHint}>체지방용</span></label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal"
+                <input id="bmi-bodyfat" className={styles.numInput} type="number" inputMode="decimal"
                   placeholder={unitWaist === 'cm' ? '38' : '15'}
                   value={neck} onChange={e => setNeck(e.target.value)} />
                 <span className={styles.unit}>{unitWaist}</span>
@@ -531,9 +531,9 @@ export default function BmiClient() {
 
           {gender === 'female' && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>엉덩이둘레 <span className={styles.cardLabelHint}>여성 체지방용</span></label>
+              <label className={styles.cardLabel} htmlFor="bmi-bodyfat-2">엉덩이둘레 <span className={styles.cardLabelHint}>여성 체지방용</span></label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal"
+                <input id="bmi-bodyfat-2" className={styles.numInput} type="number" inputMode="decimal"
                   placeholder={unitWaist === 'cm' ? '95' : '37'}
                   value={hip} onChange={e => setHip(e.target.value)} />
                 <span className={styles.unit}>{unitWaist}</span>

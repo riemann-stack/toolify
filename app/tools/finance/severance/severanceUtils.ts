@@ -1,5 +1,7 @@
 /* 퇴직금 실수령액 계산기 — 데이터·계산 유틸 (2023 개정 세법 반영) */
 
+import { progressiveTax } from '@/lib/krIncomeTax'
+
 export type PensionMode = 'normal' | 'db' | 'dc' | 'irp'
 
 /* ─────────────────────────────────────────────
@@ -44,18 +46,17 @@ export function addMonths(d: Date, months: number): Date {
   return r
 }
 
-/** 퇴사 전 3개월 산정기간
- *  퇴사일이 5월 31일이면 → 3월 1일 ~ 5월 30일 (3개월 전 → 퇴사 전날, 약 91일)
+/** 퇴사 전 3개월 산정기간 — 퇴사일(마지막 재직일) 포함
+ *  checkEligibility의 재직일수 해석(퇴사일 포함)과 동일 기준.
+ *  예: 퇴사일 12월 31일 → 10월 1일 ~ 12월 31일 (92일)
  */
 export function calcThreeMonthPeriod(exitDate: Date): { start: Date; end: Date; days: number } {
-  const end = addDays(exitDate, -1)        // 퇴사 전날
-  const start = addMonths(end, -3)         // 3개월 전 같은 날 (월말 클램프)
-  // 3개월 전 + 1일로 설정 (3개월 = 약 89~92일)
-  const startCorrected = addDays(start, 1)
+  const end = new Date(exitDate)              // 퇴사일 포함
+  const start = addDays(addMonths(end, -3), 1) // 3개월 전 같은 날(월말 클램프) + 1일
   return {
-    start: startCorrected,
+    start,
     end,
-    days: daysBetween(startCorrected, end),
+    days: daysBetween(start, end),
   }
 }
 
@@ -158,31 +159,11 @@ export function envDeduction(envWageMan: number): number {
   return 15170 + (envWageMan - 30000) * 0.35
 }
 
-/** 누진세율 (만원 기준)
- *  소득세법 §55 (2025 기준)
- */
-const TAX_BRACKETS = [
-  { up: 1400,   rate: 0.06,  cumPrev: 0 },
-  { up: 5000,   rate: 0.15,  cumPrev: 84 },     // 1400 × 6% = 84
-  { up: 8800,   rate: 0.24,  cumPrev: 624 },    // 84 + (5000-1400)×15%
-  { up: 15000,  rate: 0.35,  cumPrev: 1536 },
-  { up: 30000,  rate: 0.38,  cumPrev: 3706 },
-  { up: 50000,  rate: 0.40,  cumPrev: 9406 },
-  { up: 100000, rate: 0.42,  cumPrev: 17406 },
-  { up: Infinity, rate: 0.45, cumPrev: 38406 },
-]
-
-/** 과세표준 → 산출세액 (만원) */
+/** 과세표준 → 산출세액 (만원)
+ *  누진세율표 단일 소스: lib/krIncomeTax (원 단위) → 만원 단위 환산 적용 */
 export function calcIncomeTax(taxableMan: number): number {
   if (taxableMan <= 0) return 0
-  let prevUp = 0
-  for (const b of TAX_BRACKETS) {
-    if (taxableMan <= b.up) {
-      return b.cumPrev + (taxableMan - prevUp) * b.rate
-    }
-    prevUp = b.up
-  }
-  return 0
+  return progressiveTax(taxableMan * 10_000) / 10_000
 }
 
 /** 퇴직소득세 (만원) — 2023 개정 */

@@ -238,7 +238,8 @@ export function loadHistory(): DiagnoseHistory[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as DiagnoseHistory[]) : []
+    const arr = raw ? (JSON.parse(raw) as DiagnoseHistory[]) : []
+    return Array.isArray(arr) ? arr : []
   } catch { return [] }
 }
 export function saveHistory(history: DiagnoseHistory[]): void {

@@ -168,9 +168,9 @@ function QuickCalcTab({ inputs, result, update }: {
       </section>
 
       <section>
-        <label className={styles.label}>연 총 매출 <span className={styles.labelSub}>(원천징수 전)</span></label>
+        <label className={styles.label} htmlFor="freelance-tax-revenue">연 총 매출 <span className={styles.labelSub}>(원천징수 전)</span></label>
         <div className={styles.amountRow}>
-          <input
+          <input id="freelance-tax-revenue"
             type="text"
             inputMode="numeric"
             className={styles.amountInput}
@@ -257,8 +257,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
 
         <div className={styles.numberRow}>
-          <label>부양가족 (배우자 외)</label>
-          <input
+          <label htmlFor="freelance-tax-f2">부양가족 (배우자 외)</label>
+          <input id="freelance-tax-f2"
             type="number" inputMode="decimal" min={0} max={10}
             className={styles.smallNumber}
             value={inputs.dependents}
@@ -268,8 +268,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
 
         <div className={styles.numberRow}>
-          <label>국민연금 납부액</label>
-          <input
+          <label htmlFor="freelance-tax-f3">국민연금 납부액</label>
+          <input id="freelance-tax-f3"
             type="text"
             inputMode="numeric"
             className={styles.midInput}
@@ -280,8 +280,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
 
         <div className={styles.numberRow}>
-          <label>건강보험료</label>
-          <input
+          <label htmlFor="freelance-tax-f4">건강보험료</label>
+          <input id="freelance-tax-f4"
             type="text"
             inputMode="numeric"
             className={styles.midInput}
@@ -292,8 +292,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
 
         <div className={styles.numberRow}>
-          <label>노란우산공제 <span className={styles.smallNote}>(한도 {fmtKRW(yellowUmbrellaLimit(result.businessIncome))})</span></label>
-          <input
+          <label htmlFor="freelance-tax-f5">노란우산공제 <span className={styles.smallNote}>(한도 {fmtKRW(yellowUmbrellaLimit(result.businessIncome))})</span></label>
+          <input id="freelance-tax-f5"
             type="text"
             inputMode="numeric"
             className={styles.midInput}
@@ -306,8 +306,8 @@ function QuickCalcTab({ inputs, result, update }: {
         <p className={styles.gapTitle} style={{ marginTop: 14 }}>💸 세액공제</p>
 
         <div className={styles.numberRow}>
-          <label>연금저축 납입액 <span className={styles.smallNote}>(한도 600만)</span></label>
-          <input
+          <label htmlFor="freelance-tax-saving">연금저축 납입액 <span className={styles.smallNote}>(한도 600만)</span></label>
+          <input id="freelance-tax-saving"
             type="text"
             inputMode="numeric"
             className={styles.midInput}
@@ -318,8 +318,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
 
         <div className={styles.numberRow}>
-          <label>기부금</label>
-          <input
+          <label htmlFor="freelance-tax-f7">기부금</label>
+          <input id="freelance-tax-f7"
             type="text"
             inputMode="numeric"
             className={styles.midInput}
@@ -356,8 +356,8 @@ function QuickCalcTab({ inputs, result, update }: {
         </div>
         {inputs.withholdingMode === 'manual' && (
           <div className={styles.numberRow} style={{ marginTop: 10 }}>
-            <label>원천징수액</label>
-            <input
+            <label htmlFor="freelance-tax-f8">원천징수액</label>
+            <input id="freelance-tax-f8"
               type="text"
               inputMode="numeric"
               className={styles.midInput}

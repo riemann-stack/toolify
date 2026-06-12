@@ -234,7 +234,7 @@ export default function SchengenClient() {
       {/* 결과 */}
       {calc && (
         <>
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLead}>최근 180일 잔여 체류 가능일</p>
             <div className={s.heroValue} style={{ color: remainColor }}>
               {over ? 0 : calc.remaining}<span className={s.heroUnit}>일</span>
