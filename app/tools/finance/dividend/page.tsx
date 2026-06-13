@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dividend',
-  title: '월배당 목표 자산 계산기 2026 — 배당 FIRE·역산·포트폴리오·종합과세 | Youtil',
+  title: '월배당 목표 자산 계산기 2026 — 배당 FIRE·역산·포트폴리오·종합과세',
   description: '매달 받고 싶은 배당액에서 필요한 원금·월 적립액 자동 역산. 포트폴리오, 종합과세 경계, ISA·연금저축 절세 시나리오 비교.',
   keywords: [
     '월배당계산기', '배당투자계산기', '월배당목표자산', 'FIRE계산기', '배당FIRE',

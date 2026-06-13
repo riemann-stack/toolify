@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/inheritance',
-  title: '상속·증여세 계산기 2026 — 분배·배우자공제·10년 주기 절세 | Youtil',
+  title: '상속·증여세 계산기 2026 — 분배·배우자공제·10년 주기 절세',
   description: '관계별 공제·10년 합산·배우자 공제 반영한 정확한 상속·증여세. 상속인별 분배와 분산 증여 시뮬레이션으로 절세 전략까지.',
   keywords: [
     '상속세계산기', '증여세계산기', '상속증여비교', '증여세공제', '상속세공제',

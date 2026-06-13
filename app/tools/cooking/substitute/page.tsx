@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/substitute',
-  title: '식재료 대체 계산기 — 버터·설탕·계란·생크림·한국 식재료 50종+ | Youtil',
+  title: '식재료 대체 계산기 — 버터·설탕·계란·생크림·한국 식재료 50종+',
   description: '버터·설탕·계란·생크림·참기름·고추장·된장 등 50+ 식재료 대체 비율. 비건·글루텐프리 옵션과 한국 식재료 14종+.',
   keywords: [
     '식재료대체', '버터대신오일', '설탕대신꿀', '생크림대체',

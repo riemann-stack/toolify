@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/car-cost',
-  title: '자동차 유지비 계산기 — 5년·10년 비용·구매 방식 비교·전기차 vs 가솔린 | Youtil',
+  title: '자동차 유지비 계산기 — 5년·10년 비용·구매 방식 비교·전기차 vs 가솔린',
   description: '유류·보험·세금·소모품·감가까지 합한 연간 진짜 비용. 차종 비교, 전기 vs 가솔린, 카쉐어링 손익분기점 자동 계산.',
   keywords: [
     '자동차 유지비 계산기', '자동차 1km당 비용', '전기차 vs 가솔린', '자동차 할부 vs 리스',

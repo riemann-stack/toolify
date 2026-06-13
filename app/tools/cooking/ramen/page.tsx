@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/ramen',
-  title: '라면 물양 계산기 — 18종 제품별 물양·조리시간·칼로리·나트륨 | Youtil',
+  title: '라면 물양 계산기 — 18종 제품별 물양·조리시간·칼로리·나트륨',
   description: '신라면·짜파게티·불닭·진짬뽕·열라면 등 한국 라면 18종 제품별 권장 물양·조리 시간·칼로리·나트륨(제조사 표기 기준). 개수·국물 농도·토핑까지 자동 보정.',
   keywords: [
     '라면 물양', '라면 물 ml', '라면 2개 물양', '라면 3개 물양', '라면 4개 물양',

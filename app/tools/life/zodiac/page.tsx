@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/life/zodiac',
-  title: '띠·별자리 계산기 — 60갑자·궁합·탄생석·가족 비교 | Youtil',
+  title: '띠·별자리 계산기 — 60갑자·궁합·탄생석·가족 비교',
   description: '내 띠·별자리·60갑자·오행·탄생석 통합 카드 + 두 사람 궁합 시뮬(삼합·육합·충)과 가족 띠 비교까지.',
   keywords: [
     '띠계산기', '별자리계산기', '12간지', '60갑자', '띠궁합', '생년월일띠',

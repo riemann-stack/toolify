@@ -6,7 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
-  title: '영양제 중복 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전 | Youtil',
+  title: '영양제 중복 체크 계산기 — 중복 합산·상한·약물 상호작용·임산부 안전',
   description: '복용 중인 영양제 50종 자동 합산 → 상한 초과·약물 상호작용 경고. 오메가3 EPA+DHA, 임산부·고령자 안전 체크.',
   keywords: [
     '영양제중복체크', '영양제성분체크', '영양제같이먹어도되나', '비타민D중복', '영양제상한량',

@@ -293,7 +293,7 @@ export default function BmiPage() {
             {[
               { icon: '⚡', color: '#0EA5E9', title: '체중과 러닝 기록의 관계',   content: '스포츠 과학 연구에 따르면 체중 1kg 감량 시 10km 레이스에서 약 2~3분, 마라톤에서 약 8~12분 기록이 향상될 수 있습니다. 단, 이는 근육량을 유지한 상태의 체지방 감량일 때 해당합니다.' },
               { icon: '⚠️', color: '#EA580C', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
-              { icon: '🎯', color: '#0891B2', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다. 자신의 적정 체중을 확인하고 건강한 러닝 라이프를 즐기세요!' },
+              { icon: '🎯', color: '#0891B2', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다.' },
             ].map((tip, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${tip.color}30`, borderRadius: '12px', padding: '16px 20px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{tip.icon}</span>

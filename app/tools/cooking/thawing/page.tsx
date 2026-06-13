@@ -6,7 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/thawing',
-  title: '해동 시간 계산기 — 식품별·두께별·전자레인지 W별 해동 가이드 | Youtil',
+  title: '해동 시간 계산기 — 식품별·두께별·전자레인지 W별 해동 가이드',
   description: '냉장·전자레인지·찬물·실온 4가지 해동법 비교 + 식품별 위험도, 시작·완료 시각 자동, 두께·무게별 정확한 시간.',
   keywords: [
     '해동시간계산기', '고기해동시간', '냉동해동계산기', '냉장해동시간',

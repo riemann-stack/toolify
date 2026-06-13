@@ -8,7 +8,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/vat',
-  title: '부가세 계산기 2026 — 역산·견적서·실입금·세금계산서·일반 간이 비교 | Youtil',
+  title: '부가세 계산기 2026 — 역산·견적서·실입금·세금계산서·일반 간이 비교',
   description: '공급가·세액·합계 자유 역산으로 견적서·세금계산서 그대로. 프리랜서·사업자용 부가세 + 일반 vs 간이과세·실입금 역산까지.',
   keywords: [
     '부가세계산기', 'vat계산기', '부가가치세계산기', '공급가액역산',

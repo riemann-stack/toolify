@@ -7,7 +7,7 @@ import styles from './egg-timer.module.css'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/egg-timer',
-  title: '계란 삶는 시간 계산기 — 반숙·완숙·잼노른자 8단계 + 한국 요리 프리셋 + 실시간 타이머 (라면·김밥·장조림·라멘 아지타마)',
+  title: '계란 삶는 시간 계산기 — 반숙·완숙·잼노른자 8단계 + 한국 요리 프리셋 타이머',
   description:
     '반숙·완숙·잼노른자 8단계 익힘 + 한국 계란 크기·시작 온도·조리법·고도 자동 보정. 한국 요리 10종 프리셋과 실시간 타이머.',
   keywords: [

@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
-  title: '주식 물타기 계산기 — 평단·역산·분할매수·회복·손절 비교 | Youtil',
+  title: '주식 물타기 계산기 — 평단·역산·분할매수·회복·손절 비교',
   description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율 반영 원화 손익까지 (양도세는 참고 가이드).',
   keywords: [
     '주식물타기계산기', '평단가계산기', '평단가역산', '분할매수계산기',

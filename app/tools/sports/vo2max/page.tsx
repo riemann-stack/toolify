@@ -352,7 +352,6 @@ export default function VO2MaxPage() {
                 <li>50대 마라톤 러너의 VO₂max는 비활동 25세 청년과 비슷 (40~45)</li>
                 <li>70대 마스터즈 챔피언은 평균 30대 수준 유지 가능 (40+)</li>
               </ul>
-              VO₂max는 노화의 가장 강력한 지표지만 동시에 가장 통제 가능한 지표입니다.
             </div>
           </details>
 
