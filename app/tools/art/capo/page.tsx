@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/art/capo',
   title: '기타 카포 계산기 — 카포 위치별 코드 변환·쉬운 코드 추천',
-  description: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천. 어쿠스틱 기타 연주 필수.',
+  description: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천. 노래 키를 바꿔 부르거나 어려운 코드를 피할 때.',
   keywords: ['기타카포계산기', '카포위치계산', '기타전조계산기', '코드변환계산기', '카포코드표', '기타코드이동', '전조계산기'],
 })
 

@@ -8,7 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/cooking/baker-percent',
   title: '베이커 퍼센트 계산기 — 제빵 배합비·수분율·르방 자동 계산',
-  description: '밀가루 100% 기준 모든 재료 비율 자동 + 수분율·르방. 빵 종류별 프리셋 8종으로 제빵 배합비를 정확하게.',
+  description: '밀가루 100% 기준 모든 재료 비율 자동 + 수분율·르방. 빵 종류별 프리셋 8종으로 제빵 배합비 계산.',
   keywords: ['베이커퍼센트', '제빵배합비', '제빵계산기', '수분율계산', '하이드레이션', '사워도우배합', '바게트레시피', '르방계산', '제빵퍼센트'],
 })
 

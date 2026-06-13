@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/cooking/sourdough',
   title: '사워도우 스타터 계산기 — 르방 안정화 진단·피크 시간 예측',
-  description: '스타터 안정화 진단 + 피크 시간 예측 + 급이 일정 자동 스케줄러로 사워도우 르방 관리를 체계적으로.',
+  description: '스타터 안정화 진단 + 피크 시간 예측 + 급이 일정 자동 스케줄러로 사워도우 르방 관리.',
   keywords: ['사워도우스타터계산기', '르방피크시간', '사워도우안정화', '르방계산기', '사워도우급이', '르방스타터', '천연발효빵계산기'],
 })
 

@@ -202,7 +202,6 @@ export default function BmrPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             BMR에 아래 활동 계수를 곱하면 하루 총 소비 칼로리(TDEE)가 됩니다.
-            자신의 활동 수준을 솔직하게 평가할수록 더 정확한 결과를 얻을 수 있습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
