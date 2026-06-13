@@ -272,6 +272,14 @@ export default function RacePredictorPage() {
         </ul>
       </div>
 
+      {/* 운영자 노트 — 날씨·코스 실전 변수 */}
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--accent)', borderRadius: '14px', padding: '18px 20px', marginBottom: '8px' }}>
+        <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-ink)', marginBottom: '8px' }}>🏃 직접 뛰어보니 — 같은 몸도 날씨로 갈린다</p>
+        <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8 }}>
+          2026년 2월 밀양 하프(기온 20도 안팎·업힐 많은 코스)에서 1:51대를 뛰었는데, 2주 뒤 3월 고양 하프(기온 0~3도·평지)에서는 1:44대가 나왔습니다. 2주 사이 훈련이 크게 늘었을 리 없으니, 7분 차이는 거의 날씨와 코스 몫입니다. 예측기 숫자는 &lsquo;선선한 날씨·평탄한 코스&rsquo; 기준에 가깝다고 보고, 더운 날이나 업힐 코스면 그만큼 여유를 두세요.
+        </p>
+      </div>
+
       {/* 8. FAQ — accordion */}
       <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
       <FaqJsonLd items={FAQ_LD} />

@@ -109,6 +109,9 @@ export default function TirePressurePage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             정확한 값은 <strong style={{ color: 'var(--text)' }}>운전석 도어 안쪽 스티커</strong>나 차량 매뉴얼이 우선입니다. 아래는 일반적인 참고 범위입니다.
           </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+            예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 주유소에서 한참 달린 뒤 재면 타이어가 데워져 5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>

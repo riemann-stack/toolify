@@ -221,6 +221,14 @@ export default function CharCountPage() {
           </div>
         </div>
 
+        {/* 운영자 노트 — 자가출판 분량 */}
+        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 16 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>📖 자가출판 분량, 글자수로 가늠하기</p>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            종이책은 판형·글자 크기에 따라 다르지만 대략 한 페이지에 1,000자 정도 들어갑니다. 참고로 제가 쓰고 있는 만세력 책을 이 도구로 세어보니 323,364자였는데, 그대로 환산하면 약 320페이지짜리 책이 됩니다. 전자책은 기기·폰트 설정마다 페이지가 달라져 글자수로 보는 편이 정확합니다.
+          </p>
+        </div>
+
         {/* ── 7. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
