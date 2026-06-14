@@ -143,7 +143,7 @@
   text-align: center;
 }
 .notEligibleIcon { font-size: 30px; margin: 0 0 8px; }
-.notEligibleTitle { font-size: 16px; font-weight: 700; color: #D97706; margin: 0 0 8px; font-family: 'Noto Sans KR', sans-serif; }
+.notEligibleTitle { font-size: 16px; font-weight: 700; color: var(--warning); margin: 0 0 8px; font-family: 'Noto Sans KR', sans-serif; }
 .notEligibleSub { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.7; }
 .notEligibleSub strong { color: var(--text); }
 
@@ -285,7 +285,7 @@
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 크로스링크 */

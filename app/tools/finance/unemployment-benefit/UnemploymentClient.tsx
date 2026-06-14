@@ -241,11 +241,10 @@ export default function UnemploymentClient() {
       {/* 임금 입력 */}
       <div className={s.card}>
         <span className={s.cardLabel}>퇴직 전 임금 (세전)</span>
-        <div className={s.tabs} role="tablist" aria-label="임금 입력 방식">
+        <div className={s.tabs} role="group" aria-label="임금 입력 방식">
           <button
             type="button"
-            role="tab"
-            aria-selected={wageMode === 'simple'}
+            aria-pressed={wageMode === 'simple'}
             className={`${s.tab} ${wageMode === 'simple' ? s.tabActive : ''}`}
             onClick={() => setWageMode('simple')}
           >
@@ -253,8 +252,7 @@ export default function UnemploymentClient() {
           </button>
           <button
             type="button"
-            role="tab"
-            aria-selected={wageMode === 'detail'}
+            aria-pressed={wageMode === 'detail'}
             className={`${s.tab} ${wageMode === 'detail' ? s.tabActive : ''}`}
             onClick={() => setWageMode('detail')}
           >

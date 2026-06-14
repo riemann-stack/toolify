@@ -63,6 +63,7 @@ export default function NationalPensionClient() {
 
   /* localStorage 복원 — 무검증 as 금지: 타입·범위·enum 검증 */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
@@ -80,6 +81,7 @@ export default function NationalPensionClient() {
 
   /* 저장 */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(
         STORAGE_KEY,
@@ -134,7 +136,7 @@ export default function NationalPensionClient() {
 
   /* 손익분기 — UI 단순 누적 교차 (보정·통계 미재계산, result.monthly만 사용) */
   const breakEven = useMemo(() => {
-    if (mode === 'normal' || !result.eligible || adjustYearsN <= 0) return null
+    if (mode === 'normal' || !result.eligible || incomeN <= 0 || adjustYearsN <= 0) return null
     return calcBreakEven(
       normalResult.monthly,
       result.monthly,
@@ -142,7 +144,7 @@ export default function NationalPensionClient() {
       adjustYearsN,
       mode,
     )
-  }, [mode, result.eligible, result.monthly, normalResult.monthly, startAge, adjustYearsN])
+  }, [mode, result.eligible, result.monthly, normalResult.monthly, startAge, adjustYearsN, incomeN])
 
   const monthlyDiff = result.monthly - normalResult.monthly // 정상 대비 월액 차
 
@@ -170,7 +172,8 @@ export default function NationalPensionClient() {
     } catch {}
   }
 
-  const incomeClamped = incomeN !== result.B // lib이 41만~659만으로 클램프했는지
+  const hasIncome = incomeN > 0 // 소득 입력 전에는 결과를 숨겨 '빈칸→숫자' 오해 방지
+  const incomeClamped = incomeN > 0 && incomeN !== result.B // lib이 41만~659만으로 클램프했는지 (빈칸은 제외)
 
   return (
     <div className={s.wrap}>
@@ -328,7 +331,25 @@ export default function NationalPensionClient() {
       </div>
 
       {/* ── 결과: 히어로 ── */}
-      {result.eligible ? (
+      {!result.eligible ? (
+        <div className={s.notEligible}>
+          <p className={s.notEligibleIcon} aria-hidden>⏳</p>
+          <p className={s.notEligibleTitle}>아직 수급 자격 전입니다</p>
+          <p className={s.notEligibleSub}>
+            가입 <strong>10년(120개월) 이상</strong>부터 노령연금을 받습니다.
+            <br />
+            현재 입력 <strong>{totalMonths}개월</strong> — {NP_MIN_COVERAGE_MONTHS - totalMonths}개월 더 가입하면 수급 자격이 생깁니다.
+          </p>
+        </div>
+      ) : !hasIncome ? (
+        <div className={s.notEligible}>
+          <p className={s.notEligibleIcon} aria-hidden>💰</p>
+          <p className={s.notEligibleTitle}>평균 소득월액을 입력하세요</p>
+          <p className={s.notEligibleSub}>
+            평균 기준소득월액(B)을 입력하면 예상 노령연금액이 계산됩니다.
+          </p>
+        </div>
+      ) : (
         <div className={s.hero}>
           <p className={s.heroLabel}>월 예상 노령연금액 (세전)</p>
           <p className={s.heroValue} role="status">
@@ -343,20 +364,10 @@ export default function NationalPensionClient() {
             {copied ? '✅ 복사됨' : '📋 결과 요약 복사'}
           </button>
         </div>
-      ) : (
-        <div className={s.notEligible}>
-          <p className={s.notEligibleIcon} aria-hidden>⏳</p>
-          <p className={s.notEligibleTitle}>아직 수급 자격 전입니다</p>
-          <p className={s.notEligibleSub}>
-            가입 <strong>10년(120개월) 이상</strong>부터 노령연금을 받습니다.
-            <br />
-            현재 입력 <strong>{totalMonths}개월</strong> — {NP_MIN_COVERAGE_MONTHS - totalMonths}개월 더 가입하면 수급 자격이 생깁니다.
-          </p>
-        </div>
       )}
 
       {/* ── 내역 분해 ── */}
-      {result.eligible && (
+      {result.eligible && hasIncome && (
         <div className={s.card}>
           <span className={s.cardLabel}>예상액 내역 분해</span>
           <div className={s.tableScroll}>
@@ -421,7 +432,7 @@ export default function NationalPensionClient() {
       )}
 
       {/* ── 조기/연기 참고 비교 + 손익분기 ── */}
-      {result.eligible && mode !== 'normal' && adjustYearsN > 0 && (
+      {result.eligible && hasIncome && mode !== 'normal' && adjustYearsN > 0 && (
         <div className={s.card}>
           <span className={s.cardLabel}>정상수령과 비교 (참고)</span>
           <div className={s.compareCard}>

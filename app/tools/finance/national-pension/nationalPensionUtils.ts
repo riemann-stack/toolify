@@ -7,11 +7,6 @@ export function fmtWon(n: number): string {
   return Math.round(n).toLocaleString('ko-KR')
 }
 
-/** 만원 단위 환산 표시 (예: 6,120,000 → "612.0만원") — 보조 라벨용 */
-export function fmtMan(won: number): string {
-  return `${(won / 10000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}만원`
-}
-
 /** 콤마 입력 → 숫자 (자릿수만 추출) */
 export function parseAmount(raw: string): number {
   const digits = raw.replace(/[^0-9]/g, '')
@@ -33,12 +28,8 @@ export function adjustPct(factor: number): string {
 }
 
 export interface BreakEven {
-  /** 손익분기까지 도달하는 '정상수령 개시 후' 개월수 (정상 기준 시점부터) */
-  monthsAfterNormalStart: number
   /** 손익분기 만 나이 (정상 개시연령 기준). 교차 없으면 null */
   ageAtCrossover: number | null
-  /** 교차가 평생 발생하지 않는지 (조기수령이 항상 손해/이득인 비교 불가 케이스) */
-  noCrossover: boolean
 }
 
 /**
@@ -60,7 +51,7 @@ export function calcBreakEven(
   adjustYears: number,
   mode: 'early' | 'defer',
 ): BreakEven {
-  const empty: BreakEven = { monthsAfterNormalStart: 0, ageAtCrossover: null, noCrossover: true }
+  const empty: BreakEven = { ageAtCrossover: null }
   if (adjustYears <= 0 || normalMonthly <= 0 || altMonthly <= 0) return empty
 
   const headMonths = adjustYears * 12 // 정상보다 먼저/늦게 시작하는 개월수
@@ -72,11 +63,7 @@ export function calcBreakEven(
     const denom = normalMonthly - altMonthly
     if (denom <= 0) return empty // 감액인데 정상 이하가 아니면 비교 불가
     const tAfterNormalStart = (headMonths * altMonthly) / denom // 정상 개시 후 개월
-    return {
-      monthsAfterNormalStart: tAfterNormalStart,
-      ageAtCrossover: normalStartAge + tAfterNormalStart / 12,
-      noCrossover: false,
-    }
+    return { ageAtCrossover: normalStartAge + tAfterNormalStart / 12 }
   }
 
   // defer: 연기 시작은 정상보다 headMonths 늦음. 정상은 그 사이 (normalMonthly × headMonths) 선취.
@@ -86,9 +73,5 @@ export function calcBreakEven(
   if (gain <= 0) return empty
   const tAfterDeferStart = (normalMonthly * headMonths) / gain
   const monthsAfterNormalStart = headMonths + tAfterDeferStart
-  return {
-    monthsAfterNormalStart,
-    ageAtCrossover: normalStartAge + monthsAfterNormalStart / 12,
-    noCrossover: false,
-  }
+  return { ageAtCrossover: normalStartAge + monthsAfterNormalStart / 12 }
 }
