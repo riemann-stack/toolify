@@ -1,0 +1,317 @@
+/* 1주택 양도소득세 계산기 전용 표시 스타일.
+   ※ 법정 수치(세율·공제율·임계액)는 절대 여기 두지 않는다 — 전부 ./capitalGainsUtils, @/lib/krIncomeTax.
+   토큰만 사용. national-pension 도구의 스타일 어휘를 그대로 따른다. */
+
+/* Disclaimer가 바로 위에 오므로 flex wrap에 상단 여백 필요 */
+.wrap { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 입력 */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.input:focus { border-color: var(--accent); }
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+
+/* 단위 붙은 입력 (거주기간 년 등) */
+.inputUnit { position: relative; }
+.inputUnit .input { padding-right: 38px; }
+.unitSuffix {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--muted);
+  pointer-events: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 라디오 세그먼트 (주택 종류) */
+.segment {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 5px;
+}
+.seg {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}@media (hover: hover) {
+  .seg:hover { color: var(--text); }
+}
+.segActive { background: var(--accent-strong); color: #ffffff; }
+
+/* 토글 스위치 줄 (1세대1주택) */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+}
+.toggleLabel { font-size: 14px; color: var(--text); font-weight: 600; }
+.toggleLabel span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+/* 체크박스 줄 (거주요건 충족) */
+.checkRow { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; }
+.checkRow input { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+.checkRow label { font-size: 14px; color: var(--text); cursor: pointer; line-height: 1.6; }
+.checkRow label span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* 보유기간 자동산출 표시 줄 */
+.holdInfo {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.holdInfo strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+
+/* ── 히어로 (주 결과) — clamp(44px,11vw,72px) ── */
+.hero {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.10) 0%, rgba(13, 148, 136, 0.06) 100%);
+  border: 1px solid rgba(8, 145, 178, 0.3);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+.heroValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px);
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.heroUnit {
+  font-size: 0.36em;
+  font-weight: 700;
+  color: var(--muted);
+  margin-left: 0.12em;
+  letter-spacing: 0;
+}
+
+/* 비과세 히어로 (요건 충족 가정·확정 아님) */
+.heroFree {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(5, 150, 105, 0.05) 100%);
+  border: 1px solid rgba(5, 150, 105, 0.4);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.heroFreeIcon { font-size: 30px; margin: 0 0 8px; }
+.heroFreeValue {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(34px, 9vw, 56px);
+  font-weight: 800;
+  color: var(--success);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.heroFreeSub { font-size: 13px; color: var(--muted); margin: 12px 0 0; line-height: 1.7; }
+.heroFreeSub strong { color: var(--text); }
+
+/* 배지 */
+.badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.badgeFree { background: rgba(5, 150, 105, 0.12); color: var(--success); border: 1px solid rgba(5, 150, 105, 0.35); }
+.badgeApportion { background: rgba(8, 145, 178, 0.10); color: var(--accent); border: 1px solid rgba(8, 145, 178, 0.3); }
+.badgeShort { background: rgba(220, 38, 38, 0.08); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.3); }
+
+/* 보조 결과 줄 */
+.subline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+.subline strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+
+/* 복사 버튼 */
+.copyBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: 16px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+}
+
+/* 도움말 */
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.cellAccent { color: var(--accent); }
+
+/* 상세표 */
+.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--bg3);
+}
+.detailTable td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.detailTable td:nth-child(n+2) {
+  text-align: right;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.detailTable tr:last-child td { border-bottom: none; }
+.rowNote td:first-child { color: var(--muted); font-size: 12px; }
+.rowSub td:first-child { padding-left: 22px; color: var(--muted); }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMinus { color: var(--danger); }
+.cellTotal td {
+  background: rgba(13, 148, 136, 0.06);
+  font-weight: 700;
+}
+.cellTotal td:nth-child(n+2) { color: var(--accent); }
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tableScroll table { min-width: 380px; }
+
+/* 적용근거 칩 */
+.basisRow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.basisChip {
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.basisChip strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+
+/* 공제율 표 펼침 */
+.formulaDetails > summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  padding: 4px 0;
+}
+.formulaDetails > summary::-webkit-details-marker { display: none; }
+.formulaDetails > summary::before { content: '▸ '; color: var(--accent); }
+.formulaDetails[open] > summary::before { content: '▾ '; }
+
+/* 안내 박스 */
+.tipBox {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.tipBox strong { color: var(--accent); }
+
+/* 크로스링크 */
+.crossLink {
+  display: block;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}@media (hover: hover) {
+  .crossLink:hover { border-color: var(--accent); color: var(--accent); }
+}
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input, .select { font-size: 16px; min-height: 48px; }
+}

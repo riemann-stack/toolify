@@ -1,0 +1,348 @@
+/* @hover-wrapped */
+/* Disclaimer가 page.tsx에서 Client 바로 위 → margin-top 16px */
+.wrap { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* ── 입력 ── */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.input:focus { border-color: var(--accent); }
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+
+/* 단위 붙은 입력 (금액 '원', 수 '명') */
+.inputUnit { position: relative; }
+.inputUnit .input { padding-right: 38px; }
+.unitSuffix {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--muted);
+  pointer-events: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 세그먼트 (기납부세액 모드) */
+.segment {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 5px;
+}
+.seg {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}@media (hover: hover) {
+  .seg:hover { color: var(--text); }
+}
+.segActive { background: var(--accent-strong); color: #ffffff; }
+
+/* 체크박스 줄 */
+.checkRow { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+.checkRow input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.checkRow label { font-size: 14px; color: var(--text); cursor: pointer; }
+
+/* ── 접기 그룹 (모바일 다입력 정리) ── */
+.group {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+.group > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.group > summary::-webkit-details-marker { display: none; }
+.groupChevron {
+  margin-left: auto;
+  color: var(--muted);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.group[open] > summary .groupChevron { transform: rotate(180deg); }
+.groupIcon { font-size: 16px; flex-shrink: 0; }
+.groupHint {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.groupBody { padding: 4px 20px 20px; }
+.groupNote {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 14px;
+  line-height: 1.7;
+}
+.groupNote strong { color: var(--text); }
+
+/* ── 히어로 (정산 결과) — 부호별 success/danger ── */
+.hero {
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.heroRefund {
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.12) 0%, rgba(22, 163, 74, 0.05) 100%);
+  border: 1px solid rgba(22, 163, 74, 0.32);
+}
+.heroPay {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border: 1px solid rgba(220, 38, 38, 0.32);
+}
+.heroEven {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+.heroValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.heroValRefund { color: var(--success); }
+.heroValPay { color: var(--danger); }
+.heroValEven { color: var(--text); }
+.heroUnit {
+  font-size: 0.36em;
+  font-weight: 700;
+  color: var(--muted);
+  margin-left: 0.12em;
+  letter-spacing: 0;
+}
+.heroSign {
+  font-size: 0.36em;
+  font-weight: 700;
+  margin-right: 0.14em;
+  letter-spacing: 0;
+}
+
+/* 보조 결과 줄 */
+.subline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+.subline strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+
+/* 추정 배지 */
+.estBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--warning);
+  background: rgba(217, 119, 6, 0.12);
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* 결정세액·기납부·과표 3분할 카드 */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) { .statGrid { grid-template-columns: 1fr; } }
+.statBox {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.statLabel { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+.statValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.statSub { font-size: 12px; color: var(--muted); margin: 6px 0 0; line-height: 1.6; }
+.statSub strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+
+/* 복사 버튼 */
+.copyBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: 16px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
+}
+
+/* 도움말 */
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.cellAccent { color: var(--accent); }
+
+/* 팁·코멘트 박스 */
+.tipBox {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 11px 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.tipBox strong { color: var(--accent); }
+.tipBox + .tipBox { margin-top: 8px; }
+
+/* 신용카드 문턱 안내 */
+.thresholdHit {
+  background: rgba(22, 163, 74, 0.07);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+.thresholdHit strong { color: var(--success); }
+.thresholdMiss {
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+.thresholdMiss strong { color: var(--warning); }
+
+/* 상세표 (공제 내역 분해) */
+.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--bg3);
+}
+.detailTable td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.detailTable td:nth-child(n+2) {
+  text-align: right;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.detailTable tr:last-child td { border-bottom: none; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.sectionRow td {
+  background: var(--bg3);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.cellTotal td {
+  background: rgba(8, 145, 178, 0.06);
+  font-weight: 700;
+}
+.cellMuted { color: var(--muted); }
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tableScroll table { min-width: 360px; }
+
+/* 크로스링크 */
+.crossLink {
+  display: block;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}@media (hover: hover) {
+  .crossLink:hover { border-color: var(--accent); color: var(--accent); }
+}
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input { font-size: 16px; min-height: 48px; }
+}

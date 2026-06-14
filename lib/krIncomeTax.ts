@@ -39,3 +39,29 @@ export function marginalRate(taxBase: number, opts?: { localTax?: boolean }): nu
   const b = bracketOf(Math.max(0, taxBase))
   return opts?.localTax ? Math.round(b.rate * 1.1 * 10_000) / 10_000 : b.rate
 }
+
+/* ── 근로소득 (salary·year-end-tax 공유 단일소스, 2024~2026 동일) ── */
+
+/** 근로소득공제 (총급여 → 공제액, 상한 2,000만원). 소득세법 §47 */
+export function earnedIncomeDeduction(annualGross: number): number {
+  let d: number
+  if (annualGross <= 5_000_000)        d = annualGross * 0.7
+  else if (annualGross <= 15_000_000)  d = 3_500_000 + (annualGross - 5_000_000) * 0.4
+  else if (annualGross <= 45_000_000)  d = 7_500_000 + (annualGross - 15_000_000) * 0.15
+  else if (annualGross <= 100_000_000) d = 12_000_000 + (annualGross - 45_000_000) * 0.05
+  else                                 d = 14_750_000 + (annualGross - 100_000_000) * 0.02
+  return Math.min(d, 20_000_000)
+}
+
+/** 근로소득세액공제 (산출세액 기준 + 총급여별 한도). 소득세법 §59 */
+export function earnedTaxCredit(computedTax: number, annualGross: number): number {
+  const credit = computedTax <= 1_300_000
+    ? computedTax * 0.55
+    : 715_000 + (computedTax - 1_300_000) * 0.30
+  let limit: number
+  if (annualGross <= 33_000_000)       limit = 740_000
+  else if (annualGross <= 70_000_000)  limit = Math.max(660_000, 740_000 - (annualGross - 33_000_000) * 0.008)
+  else if (annualGross <= 120_000_000) limit = Math.max(500_000, 660_000 - (annualGross - 70_000_000) * 0.5)
+  else                                 limit = Math.max(200_000, 500_000 - (annualGross - 120_000_000) * 0.5)
+  return Math.min(credit, limit)
+}

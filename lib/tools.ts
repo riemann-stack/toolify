@@ -19,6 +19,7 @@ export const categories: Category[] = [
     id: 'finance', icon: '💰', name: '금융·재테크', color: 'var(--cat-finance)',
     tools: [
       { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '세금·4대보험 떼고 통장에 진짜 꽂히는 그 월급. 2026년 최신 기준 자동 + 인상률·시급 환산.', badge: 'hot' },
+      { href: '/tools/finance/year-end-tax', icon: '🧮', name: '연말정산 계산기', desc: '총급여·신용카드·연금저축·의료비·월세 공제로 결정세액과 기납부세액을 비교해 예상 환급·추가납부액 추정. 2026년 기준.', badge: 'new' },
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확하게.' },
       { href: '/tools/finance/dsr',      icon: '🏦', name: 'DSR·LTV·스트레스DSR 계산기', desc: '연소득·집값·금리 한 번 입력으로 DSR·LTV·스트레스DSR 동시 계산. 변동/혼합/고정 금리별 최대 대출 한도까지.', badge: 'new' },
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치·적립·증액·인플레이션 반영. 시간이 만드는 자산을 시나리오별로 비교.' },
@@ -30,6 +31,8 @@ export const categories: Category[] = [
       { href: '/tools/finance/car-tax',  icon: '🧾', name: '자동차 세금 종합 계산기', desc: '취득세·자동차세·유류세·공채·환경부담금까지 — 자동차 관련 모든 세금 한 화면에. 친환경차·다자녀·장애인 감면 + 5/10년 누적 시뮬.', badge: 'new' },
       { href: '/tools/finance/historical-money', icon: '💰', name: '한국 화폐가치 환산기', desc: '1960년 50환, 1980년 1만원의 현재 가치는? 圓·환·원 화폐사 + 1945~2026 구매력 환산. 짜장면·집값·월급 시대별 비교.', badge: 'new' },
       { href: '/tools/finance/real-estate', icon: '🏘️', name: '부동산 수익률 계산기', desc: '매매가·임대·대출 레버리지 반영한 자기자본 수익률. 진짜 남는 돈을 확인.' },
+      { href: '/tools/finance/capital-gains-tax', icon: '🏠', name: '1주택 양도소득세 계산기', desc: '1세대 1주택 양도세를 12억 비과세·고가주택 안분·장기보유특별공제(최대 80%)·단기 중과세율까지 단계별로. 2026 국세청 기준.', badge: 'new' },
+      { href: '/tools/finance/property-holding-tax', icon: '🏡', name: '주택 보유세 계산기', desc: '공시가격으로 재산세·종합부동산세·도시지역분·농특세까지. 1세대 1주택 특례와 고령·장기보유 세액공제 반영한 2026 보유세 추정.', badge: 'new' },
       { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기', desc: '84점 만점(무주택 32 + 부양가족 35 + 통장 17) 자동 + 최근 평균 당첨 가점 비교 + 가점 향상 시뮬 + 5가지 특공 자가진단 (2025 기준).', badge: 'new' },
       { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·배달 수수료·포장재 반영한 실질 원가율과 마진. 메뉴 가격 결정에 바로.' },
       { href: '/tools/finance/installment', icon: '💳', name: '카드 할부 계산기', desc: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로.' },

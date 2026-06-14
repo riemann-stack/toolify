@@ -56,7 +56,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#059669',
     steps: [
       { title: '자금·대출 계획', note: 'DSR로 받을 수 있는 대출 한도를 먼저 확인하고, 월 상환액과 청약 가점을 함께 따져보세요. 경매로 접근한다면 낙찰가 외 부대비용도 미리.', toolHrefs: ['/tools/finance/dsr', '/tools/finance/loan', '/tools/finance/housing-score', '/tools/finance/auction'] },
-      { title: '집 고르기', note: '전세와 월세 중 무엇이 유리한지, 매매 시 기대 수익률은 어느 정도인지 비교하고, 평형·전용면적도 환산해 보세요.', toolHrefs: ['/tools/finance/rent-jeonse', '/tools/finance/real-estate', '/tools/unit/area'] },
+      { title: '집 고르기', note: '전세와 월세 중 무엇이 유리한지, 매매 시 기대 수익률과 매년 내는 보유세(재산세·종부세)는 얼마인지 따져보고, 평형·전용면적도 환산해 보세요.', toolHrefs: ['/tools/finance/rent-jeonse', '/tools/finance/real-estate', '/tools/finance/property-holding-tax', '/tools/unit/area'] },
       { title: '셀프 인테리어', note: '벽·바닥 면적을 정확히 재면 도배지·페인트·바닥재를 낭비 없이 주문할 수 있습니다.', toolHrefs: ['/tools/interior/room-area', '/tools/interior/paint', '/tools/interior/wallpaper', '/tools/interior/flooring'] },
       { title: '쾌적한 환경 만들기', note: '환기량과 공기청정기 용량, 공간별 조명 밝기, 에어컨 평형, 커튼·블라인드 사이즈까지 맞춰 집을 쾌적하게 완성하세요.', toolHrefs: ['/tools/interior/ventilation', '/tools/interior/lighting', '/tools/interior/ac-capacity', '/tools/interior/curtain-blind'] },
     ],
@@ -114,7 +114,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#DC2626',
     seasonMonths: [1, 12],
     steps: [
-      { title: '소득·세금 점검', note: '올해 연봉 실수령액을 다시 확인하고, 프리랜서는 종합소득세를, 퇴직·상속이 있었다면 퇴직소득세·상속증여세까지 미리 가늠해 두세요.', toolHrefs: ['/tools/finance/salary', '/tools/finance/freelance-tax', '/tools/finance/severance', '/tools/finance/inheritance'] },
+      { title: '소득·세금 점검', note: '연말정산으로 환급·추가납부를 미리 보고, 연봉 실수령액을 다시 확인하세요. 프리랜서는 종합소득세를, 집을 팔았거나 퇴직·상속이 있었다면 양도세·퇴직소득세·상속증여세까지 미리 가늠해 두세요.', toolHrefs: ['/tools/finance/year-end-tax', '/tools/finance/salary', '/tools/finance/freelance-tax', '/tools/finance/capital-gains-tax', '/tools/finance/severance', '/tools/finance/inheritance'] },
       { title: '날짜·계획', note: '만 나이 통일 이후 내 나이를 정확히 확인하고, 새해 목표일까지 D-day를 세어보세요.', toolHrefs: ['/tools/date/age', '/tools/date/dday'] },
     ],
   },

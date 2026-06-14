@@ -4,7 +4,7 @@
    요율·세율표 단일 소스: lib/krInsuranceRates.ts · lib/krIncomeTax.ts
    ────────────────────────────────────────────────────── */
 
-import { progressiveTax } from '@/lib/krIncomeTax'
+import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from '@/lib/krIncomeTax'
 import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
 
 /* ─── 2026년 4대보험 요율 (근로자 부담분) — lib/krInsuranceRates에서 파생 ─── */
@@ -48,30 +48,7 @@ export const NON_TAXABLE_ITEMS: NonTaxableItem[] = [
    근로소득공제·과세표준·세액공제를 반영한 연 결정세액 방식으로 교체 (실제 연봉계산기와 정합) */
 
 // 근로소득공제 (총급여 기준, 2024~2026 동일)
-function earnedIncomeDeduction(annualGross: number): number {
-  let d: number
-  if (annualGross <= 5_000_000)        d = annualGross * 0.7
-  else if (annualGross <= 15_000_000)  d = 3_500_000 + (annualGross - 5_000_000) * 0.4
-  else if (annualGross <= 45_000_000)  d = 7_500_000 + (annualGross - 15_000_000) * 0.15
-  else if (annualGross <= 100_000_000) d = 12_000_000 + (annualGross - 45_000_000) * 0.05
-  else                                 d = 14_750_000 + (annualGross - 100_000_000) * 0.02
-  return Math.min(d, 20_000_000)
-}
-
-// 종합소득세 산출세액: lib/krIncomeTax.progressiveTax (누진공제 방식) 사용
-
-// 근로소득세액공제 (산출세액 기준 + 총급여별 한도)
-function earnedTaxCredit(computedTax: number, annualGross: number): number {
-  const credit = computedTax <= 1_300_000
-    ? computedTax * 0.55
-    : 715_000 + (computedTax - 1_300_000) * 0.30
-  let limit: number
-  if (annualGross <= 33_000_000)       limit = 740_000
-  else if (annualGross <= 70_000_000)  limit = Math.max(660_000, 740_000 - (annualGross - 33_000_000) * 0.008)
-  else if (annualGross <= 120_000_000) limit = Math.max(500_000, 660_000 - (annualGross - 70_000_000) * 0.5)
-  else                                 limit = Math.max(200_000, 500_000 - (annualGross - 120_000_000) * 0.5)
-  return Math.min(credit, limit)
-}
+// 근로소득공제·근로소득세액공제·산출세액(progressiveTax)은 lib/krIncomeTax.ts 단일소스 사용
 
 /** 월 원천징수 소득세 근사.
     annualPension = 국민연금 본인부담 연액 (연금보험료공제, 소득세법 §51의3)
