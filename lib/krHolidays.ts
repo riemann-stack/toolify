@@ -95,6 +95,7 @@ export const KOREAN_HOLIDAYS: Record<number, Holiday[]> = {
     { date: '2030-02-02', name: '설날 연휴' },
     { date: '2030-02-03', name: '설날' },
     { date: '2030-02-04', name: '설날 연휴' },
+    { date: '2030-02-05', name: '설날 대체공휴일' },
     { date: '2030-03-01', name: '삼일절' },
     { date: '2030-05-05', name: '어린이날' },
     { date: '2030-05-06', name: '어린이날 대체공휴일' },

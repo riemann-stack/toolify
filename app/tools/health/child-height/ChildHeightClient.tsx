@@ -99,7 +99,7 @@ export default function ChildHeightClient() {
   const copy = async () => {
     if (!result) return
     const sexLabel = sex === 'male' ? '아들' : '딸'
-    const text = `${sexLabel} 예상 키 약 ${result.th.toFixed(1)}cm (범위 ${result.low.toFixed(0)}~${result.high.toFixed(0)}cm) — 중간부모키(MPH) 추정, 의학 진단 아님`
+    const text = `${sexLabel} 예상 키 약 ${result.th.toFixed(1)}cm (범위 ${result.low.toFixed(1)}~${result.high.toFixed(1)}cm) — 중간부모키(MPH) 추정, 의학 진단 아님`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -211,7 +211,7 @@ export default function ChildHeightClient() {
           <div className={styles.card}>
             <span className={styles.cardLabel}>예측 범위 (±{BAND}cm)</span>
             <div className={styles.bandLabel}>
-              약 {result.low.toFixed(0)} ~ {result.high.toFixed(0)}cm
+              약 {result.low.toFixed(1)} ~ {result.high.toFixed(1)}cm
             </div>
             <div className={styles.bandSub}>약 3~97 백분위에 해당하는 분포 범위</div>
             <div className={styles.bandGauge}>
@@ -220,9 +220,9 @@ export default function ChildHeightClient() {
               <div className={styles.bandMarker} style={{ left: `${markerPct}%` }} />
             </div>
             <div className={styles.bandTicks}>
-              <span>{result.low.toFixed(0)}</span>
+              <span>{result.low.toFixed(1)}</span>
               <span>{result.th.toFixed(1)}</span>
-              <span>{result.high.toFixed(0)}</span>
+              <span>{result.high.toFixed(1)}</span>
             </div>
           </div>
 
@@ -266,7 +266,7 @@ export default function ChildHeightClient() {
                     <span className={styles.compareCardUnit}>cm</span>
                   </div>
                   <div className={styles.compareCardBand}>
-                    {round1(result.maleTh - BAND).toFixed(0)} ~ {round1(result.maleTh + BAND).toFixed(0)}cm
+                    {round1(result.maleTh - BAND).toFixed(1)} ~ {round1(result.maleTh + BAND).toFixed(1)}cm
                   </div>
                 </div>
                 <div className={styles.compareCard}>
@@ -276,7 +276,7 @@ export default function ChildHeightClient() {
                     <span className={styles.compareCardUnit}>cm</span>
                   </div>
                   <div className={styles.compareCardBand}>
-                    {round1(result.femaleTh - BAND).toFixed(0)} ~ {round1(result.femaleTh + BAND).toFixed(0)}cm
+                    {round1(result.femaleTh - BAND).toFixed(1)} ~ {round1(result.femaleTh + BAND).toFixed(1)}cm
                   </div>
                 </div>
               </div>

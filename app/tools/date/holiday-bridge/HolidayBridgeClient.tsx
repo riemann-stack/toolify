@@ -47,6 +47,7 @@ export default function HolidayBridgeClient() {
   const addCompany = () => {
     const v = companyInput.trim()
     if (!YMD_RE.test(v)) return
+    if (!v.startsWith(`${settings.year}-`)) return // 선택 연도 밖 날짜는 계산에 안 잡히므로 차단
     if (settings.companyHolidays.includes(v)) { setCompanyInput(''); return }
     update({ companyHolidays: [...settings.companyHolidays, v].sort() })
     setCompanyInput('')
@@ -88,6 +89,9 @@ export default function HolidayBridgeClient() {
 
   const remaining = settings.k - (isFocus ? focusUsedK : spreadUsedK)
 
+  // 선택 연도에 해당하는 회사 휴일만 노출 (다른 해 날짜는 계산에 안 잡혀 칩만 남는 혼선 방지)
+  const yearCompany = settings.companyHolidays.filter(d => d.startsWith(`${settings.year}-`))
+
   return (
     <div className={s.wrap}>
       {/* 입력 카드 */}
@@ -107,7 +111,6 @@ export default function HolidayBridgeClient() {
               value={kText}
               onChange={e => onKChange(e.target.value)}
               placeholder="3"
-              aria-label="보유 연차 일수"
             />
           </div>
 
@@ -126,20 +129,20 @@ export default function HolidayBridgeClient() {
                 value={companyInput}
                 onChange={e => setCompanyInput(e.target.value)}
               />
-              <button className={s.addBtn} onClick={addCompany} disabled={!YMD_RE.test(companyInput)}>
+              <button type="button" className={s.addBtn} onClick={addCompany} disabled={!YMD_RE.test(companyInput)}>
                 추가
               </button>
             </div>
           </div>
         </div>
 
-        {/* 회사휴일 칩 */}
-        {settings.companyHolidays.length > 0 && (
+        {/* 회사휴일 칩 (선택 연도분만) */}
+        {yearCompany.length > 0 && (
           <div className={s.chipRow}>
-            {settings.companyHolidays.map(d => (
+            {yearCompany.map(d => (
               <span key={d} className={s.chip}>
                 {longKo(d)}
-                <button className={s.chipX} onClick={() => removeCompany(d)} aria-label={`${d} 삭제`}>×</button>
+                <button type="button" className={s.chipX} onClick={() => removeCompany(d)} aria-label={`${d} 삭제`}>×</button>
               </span>
             ))}
           </div>
@@ -151,6 +154,7 @@ export default function HolidayBridgeClient() {
           <div className={s.segment} role="group" aria-label="탐색 연도">
             {([2026, 2027] as const).map(y => (
               <button
+                type="button"
                 key={y}
                 className={`${s.segBtn} ${settings.year === y ? s.segBtnActive : ''}`}
                 onClick={() => update({ year: y })}
@@ -163,6 +167,7 @@ export default function HolidayBridgeClient() {
           <div className={s.segment} role="group" aria-label="분기 선택">
             {([['year', '연간'], ['q1', '1분기'], ['q2', '2분기'], ['q3', '3분기'], ['q4', '4분기']] as [PeriodMode, string][]).map(([p, label]) => (
               <button
+                type="button"
                 key={p}
                 className={`${s.segBtn} ${settings.period === p ? s.segBtnActive : ''}`}
                 onClick={() => update({ period: p })}
@@ -180,6 +185,7 @@ export default function HolidayBridgeClient() {
           <div className={s.segment} role="group" aria-label="연차 사용 전략">
             {([['focus', '최대 한 방'], ['spread', '골고루 분산']] as ['focus' | 'spread', string][]).map(([v, label]) => (
               <button
+                type="button"
                 key={v}
                 className={`${s.segBtn} ${settings.strategy === v ? s.segBtnActive : ''}`}
                 onClick={() => update({ strategy: v })}
@@ -364,7 +370,7 @@ function PlanCard({ plan, rank, onCopy, active }: { plan: Plan; rank: string; on
         <span>연차 0 대비 +<strong>{plan.gained}일</strong></span>
       </div>
       <div className={s.planActions}>
-        <button className={s.ghostBtn} onClick={onCopy}>요약 복사</button>
+        <button type="button" className={s.ghostBtn} onClick={onCopy}>요약 복사</button>
       </div>
     </div>
   )

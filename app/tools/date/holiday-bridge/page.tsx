@@ -169,7 +169,7 @@ export default function HolidayBridgePage() {
         <div>
           <h2 style={h2Style}>연차를 몰아 쓸까, 분산할까 — 효율배수로 따지기</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            같은 연차라도 어디에 쓰느냐에 따라 결과가 다릅니다. 판단 기준은 <strong style={{ color: 'var(--text)' }}>효율배수 = 총 연속일수 ÷ 사용 연차</strong>입니다. 추석 앞에 연차 3개를 몰면 9일(3배)이지만, 같은 3개를 짧은 징검다리 세 곳에 흩으면 한 곳당 4~5일짜리가 여러 개 생깁니다.
+            같은 연차라도 어디에 쓰느냐에 따라 결과가 다릅니다. 판단 기준은 <strong style={{ color: 'var(--text)' }}>효율배수 = 총 연속일수 ÷ 사용 연차</strong>입니다. 추석 앞에 연차 3개를 몰면 9일(3배)이지만, 같은 연차를 짧은 징검다리 여러 곳에 흩으면 한 곳당 4~5일짜리 휴식을 여러 번 만들 수 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             <div style={{ ...cardBg, padding: '14px 16px' }}>
@@ -181,7 +181,7 @@ export default function HolidayBridgePage() {
             <div style={{ ...cardBg, padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>골고루 분산</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75 }}>
-                연중 여러 번 — 연차를 겹치지 않는 구간 여러 곳에 나눠 4~5일짜리 휴식을 분기마다 확보합니다. 자주 쉬고 싶을 때 적합합니다.
+                연중 여러 번 — 연차를 겹치지 않는 여러 구간에 나눠 4~5일짜리 휴식을 연중 여러 번 확보합니다. 자주 쉬고 싶을 때 적합합니다.
               </p>
             </div>
           </div>

@@ -185,7 +185,7 @@ export interface Plan {
   cost: number          // 사용 연차(평일 수)
   leaveDates: string[]  // 실제 연차 사용 날짜 'YYYY-MM-DD'
   efficiency: number    // totalDays / cost (cost 0이면 Infinity 대신 totalDays로 표기)
-  gained: number        // 연차 0 기준 대비 추가 획득일 = totalDays - (자연 run 길이 합)
+  gained: number        // 연차 0 대비 추가 확보한 연속휴일 = totalDays − (구간 내 최장 자연 연휴)
 }
 
 /** 두 인덱스 사이의 WORKDAY(연차 후보) 날짜 추출 */
@@ -204,9 +204,10 @@ function makePlan(days: DayInfo[], runs: OffRun[], a: number, b: number): Plan {
   const cost = gapBetween(runs, a, b)
   const totalDays = bRunObj.endIdx - aRunObj.startIdx + 1
   const leaveDates = leaveDatesBetween(days, aRunObj.startIdx, bRunObj.endIdx)
-  // 자연 run 길이 합 (a..b 구간의 OFF run 합) — 추가 획득일 산정용
-  let naturalDays = 0
-  for (let i = a; i <= b; i++) naturalDays += runs[i].days
+  // 구간 내 가장 긴 자연 연휴 = 연차 0일 때 이미 누렸을 최장 연속휴일.
+  // 추가 획득일 = 다리를 놓아 늘어난 연속휴일(이 값만큼 '더' 길게 쉰다).
+  let maxNatural = 0
+  for (let i = a; i <= b; i++) if (runs[i].days > maxNatural) maxNatural = runs[i].days
   return {
     aRun: a,
     bRun: b,
@@ -216,7 +217,7 @@ function makePlan(days: DayInfo[], runs: OffRun[], a: number, b: number): Plan {
     cost,
     leaveDates,
     efficiency: cost > 0 ? totalDays / cost : totalDays,
-    gained: totalDays - naturalDays,
+    gained: totalDays - maxNatural,
   }
 }
 
@@ -311,8 +312,9 @@ export function spreadPlans(plans: Plan[], k: number): { plans: Plan[]; usedK: n
     budget -= p.cost
   }
 
-  // 1차: 한 창이 예산을 통째로 삼키지 않도록 per-window cap(=올림(k/2)) 적용 → 골고루 분산 유도
-  const cap = Math.max(1, Math.ceil(k / 2))
+  // 1차: 한 창이 예산을 통째로 삼키지 않도록 per-window cap 적용 → 여러 구간으로 분산 유도.
+  //      효율(gained/cost) 높은 짧은 징검다리부터 채워 분산성을 높인다.
+  const cap = Math.max(1, Math.floor(k / 3))
   for (const p of pool.slice().sort(byRatio)) {
     if (budget <= 0) break
     if (p.cost > cap || p.cost > budget) continue

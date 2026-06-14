@@ -81,11 +81,3 @@ export function diffFromKrAverage(th: number, sex: Sex): number {
 export function round1(n: number): number {
   return Math.round(n * 10) / 10
 }
-
-/** 한 번의 입력으로 남아·여아 두 결과를 동시에 (비교 모드용) */
-export function predictBoth(fH: number, mH: number): { male: number; female: number } {
-  return {
-    male: predictHeight(fH, mH, 'male'),
-    female: predictHeight(fH, mH, 'female'),
-  }
-}
