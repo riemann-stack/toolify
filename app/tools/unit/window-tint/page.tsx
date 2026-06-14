@@ -9,15 +9,15 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/window-tint',
-  title: '선팅 투과율(VLT) 계산기 — 곱셈식·법규 70/40·차광률',
+  title: '썬팅 투과율(VLT) 계산기 — 곱셈식·법규 70/40·차광률',
   description: '원유리 × 필름 농도를 곱해 실제 가시광선 투과율(VLT)을 계산합니다. 표기값이 필름 자체값인지 부착 후 합산값인지 토글로 구분, 도로교통법 앞면 70%·옆면 40% 기준과 자동 대조, 차광률·덧방·야간 시인성까지.',
   keywords: [
-    '선팅 투과율 계산',
+    '썬팅 투과율 계산',
     '틴팅 VLT 계산기',
-    '선팅 농도 35 투과율',
-    '앞유리 선팅 기준 70',
-    '운전석 선팅 40',
-    '선팅 곱셈 계산',
+    '썬팅 농도 35 투과율',
+    '앞유리 썬팅 기준 70',
+    '운전석 썬팅 40',
+    '선팅 투과율',
     '차광률 계산',
   ],
 })
@@ -32,7 +32,7 @@ const FAQ_LD = [
     a: '빛이 유리를 통과한 뒤 필름을 또 통과하기 때문입니다. 원유리에서 75%가 통과하고, 그중 35%가 필름을 통과하면 75% × 35% = 26.25%가 남습니다. 더하면(75+35) 100%가 넘어 말이 안 됩니다. 필름을 한 겹 더 덧방하면 그 값도 다시 곱합니다.',
   },
   {
-    q: '앞유리와 운전석 옆면 선팅 기준은 몇 %인가요?',
+    q: '앞유리와 운전석 옆면 썬팅 기준은 몇 %인가요?',
     a: '도로교통법 시행령 제28조상 <strong>앞면(앞유리) 70% 이상</strong>, <strong>운전석·조수석(1열) 옆면 40% 이상</strong>의 가시광선 투과율을 확보해야 합니다. 즉 농도가 그 아래로 짙으면 기준 미달입니다. 뒷유리와 2열 이후 옆면은 투과율 제한이 없습니다.',
   },
   {
@@ -54,7 +54,7 @@ export default function WindowTintPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪟 선팅 투과율(VLT) 계산기
+        🪟 썬팅 투과율(VLT) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         원유리와 필름 농도를 <strong style={{ color: 'var(--text)' }}>곱해서</strong> 실제 가시광선 투과율을 구합니다. 표기값이 필름 자체값인지 부착 후 합산값인지 구분하고, 앞면 70%·옆면 40% 법규 기준과 바로 대조합니다.
@@ -68,7 +68,6 @@ export default function WindowTintPage() {
 
       <Disclaimer
         variant="default"
-        open
         sources={[{ label: '국가법령정보센터 — 도로교통법 시행령', href: 'https://www.law.go.kr/' }]}
       >
         곱셈식 추정 참고용입니다. 실제 투과율은 유리·필름 종류·시공·측정장비에 따라 다르고, 시중 필름 표기는 부착 후 측정값일 수 있어 차이가 날 수 있습니다. 최종 적합 여부는 자동차 정기검사·투과율 측정기로 확인하세요.
@@ -88,7 +87,7 @@ export default function WindowTintPage() {
             VLT란? — 투과율·농도·차광률 정리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
-            VLT(Visible Light Transmission)는 <strong style={{ color: 'var(--text)' }}>가시광선 투과율</strong>, 즉 유리·필름을 통과해 들어오는 빛의 비율(%)입니다. 선팅 가게에서 말하는 &lsquo;농도 35&rsquo;가 바로 이 투과율을 가리킵니다.
+            VLT(Visible Light Transmission)는 <strong style={{ color: 'var(--text)' }}>가시광선 투과율</strong>, 즉 유리·필름을 통과해 들어오는 빛의 비율(%)입니다. 썬팅 가게에서 말하는 &lsquo;농도 35&rsquo;가 바로 이 투과율을 가리킵니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
@@ -156,7 +155,7 @@ export default function WindowTintPage() {
         {/* ── 4. 한국 법규 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국 선팅 법규 — 앞면 70% · 옆면 40%
+            한국 썬팅 법규 — 앞면 70% · 옆면 40%
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
             <strong style={{ color: 'var(--text)' }}>도로교통법 시행령 제28조</strong>는 운전에 직접 영향을 주는 창의 최소 투과율을 정합니다.

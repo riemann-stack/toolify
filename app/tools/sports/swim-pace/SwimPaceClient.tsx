@@ -191,7 +191,7 @@ export default function SwimPaceClient() {
 
   return (
     <div className={styles.wrap}>
-      <Disclaimer variant="default" open
+      <Disclaimer variant="default"
         related={[
           { href: '/tools/sports/pace', label: '러닝 페이스' },
           { href: '/tools/sports/interval-training', label: '인터벌 훈련' },

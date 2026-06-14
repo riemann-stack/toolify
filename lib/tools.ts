@@ -164,7 +164,7 @@ export const categories: Category[] = [
       { href: '/tools/unit/battery',       icon: '🔋', name: '배터리 용량 변환기',         desc: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정.' },
       { href: '/tools/unit/fuel-economy',  icon: '⛽', name: '연비 변환기',           desc: 'km/L·L/100km·mpg 변환 + 전기차 전비와 연료별 100km 비용 비교.' },
       { href: '/tools/unit/tire-pressure', icon: '🛞', name: '타이어 계산기',       desc: '공기압(psi·kPa·bar) 변환·체크 + 규격 해석·인치업·트레드 마모·DOT 제조주차 교체시기.' },
-      { href: '/tools/unit/window-tint',   icon: '🪟', name: '선팅 투과율(VLT) 계산기', desc: '원유리 × 필름 농도를 곱해 실제 가시광선 투과율 계산 + 앞면 70%·옆면 40% 법규 대조·차광률·야간 시인성.', badge: 'new' },
+      { href: '/tools/unit/window-tint',   icon: '🪟', name: '썬팅 투과율(VLT) 계산기', desc: '원유리 × 필름 농도를 곱해 실제 가시광선 투과율 계산 + 앞면 70%·옆면 40% 법규 대조·차광률·야간 시인성.', badge: 'new' },
       { href: '/tools/unit/hardness',      icon: '🛠️', name: '경도(Hardness) 변환기',  desc: 'HRC·HRB·HV·HB·인장강도 동시 환산 (ASTM E140 강철 표). 칼 강재·공구·금속 가공 — 칼덕·메이커·엔지니어용.', badge: 'new' },
       { href: '/tools/unit/viscosity',     icon: '🛢️', name: '점도(Viscosity) 변환기', desc: 'cP·cSt·SUS·Pa·s 동시 환산 + SAE J300 엔진오일(0W-20·5W-30 등)·ISO VG 산업 윤활유 등급 매칭. 자동차 DIY·산업 정비용.', badge: 'new' },
       { href: '/tools/unit/brewing',       icon: '🍺', name: '양조 도수·당도 변환기',   desc: 'Brix·Plato·SG·Baumé·Oechsle 5종 동시 환산 + OG/FG 기반 ABV·Proof + pH/TA 참고. 자가양조·홈와인·잼·치즈 메이커용.', badge: 'new' },

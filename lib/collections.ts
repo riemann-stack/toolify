@@ -259,7 +259,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#475569',
     steps: [
       { title: '사기 전 비용 점검', note: '유류·보험·세금·감가까지 더한 연간 유지비, 취득세·자동차세, 할부 이자를 미리 계산해 예산을 잡으세요.', toolHrefs: ['/tools/finance/car-cost', '/tools/finance/car-tax', '/tools/finance/installment'] },
-      { title: '출고 후 관리', note: '연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요. 선팅은 합산 투과율이 법규(앞 70%·옆 40%) 안에 드는지 확인하세요.', toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity', '/tools/unit/window-tint'] },
+      { title: '출고 후 관리', note: '연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요. 썬팅은 합산 투과율이 법규(앞 70%·옆 40%) 안에 드는지 확인하세요.', toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity', '/tools/unit/window-tint'] },
     ],
   },
   {
