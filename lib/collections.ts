@@ -201,6 +201,7 @@ export const COLLECTIONS: Collection[] = [
     steps: [
       { title: '인코딩·해시', note: '텍스트·URL·진법을 변환하고, MD5·SHA 해시와 HMAC 서명·파일 무결성을 확인하세요.', toolHrefs: ['/tools/dev/base64', '/tools/dev/url-encode', '/tools/dev/number-base', '/tools/dev/hash'] },
       { title: '데이터·포맷', note: 'JSON·YAML을 정렬·검증·상호 변환하고, CSS 단위를 바꾸고, 정규식을 실시간으로 테스트하세요.', toolHrefs: ['/tools/dev/json', '/tools/dev/yaml-json', '/tools/dev/css-converter', '/tools/dev/regex'] },
+      { title: '토큰·스케줄·입력', note: 'JWT 클레임과 만료 시각을 확인하고, 크론 표현식을 한국어로 해석하고, 한영키 오타를 복원하세요.', toolHrefs: ['/tools/dev/jwt', '/tools/dev/cron', '/tools/dev/keyboard-layout'] },
       { title: 'API·네트워크', note: 'cURL을 fetch·axios·Python 코드로 바꾸고, HTTP 상태 코드를 해석하고, 회선 품질을 진단하세요.', toolHrefs: ['/tools/dev/curl', '/tools/dev/http-status', '/tools/dev/network-test'] },
       { title: '웹·AI 개발', note: '공유 카드(OG)를 미리 확인하고, AI 토큰 수·API 비용을 추정하고, 프로젝트 기술 스택을 추천받으세요.', toolHrefs: ['/tools/dev/og-preview', '/tools/dev/token-counter', '/tools/dev/tech-stack'] },
     ],

@@ -243,6 +243,9 @@ export const categories: Category[] = [
       { href: '/tools/dev/network-test', icon: '🌐', name: '인터넷 회선 진단', desc: '핑·지터·실패율·다운로드 + 인터파크·예스24·멜론·KBO 응답으로 티켓팅 적합도 판정.', badge: 'new' },
       { href: '/tools/dev/token-counter', icon: '🪙', name: 'AI 토큰 카운터', desc: 'GPT·Claude·Gemini 토큰 수와 컨텍스트 사용량 동시 추정 + 입력·출력 단가 반영 API 비용. 한국어 비효율 인사이트.', badge: 'new' },
       { href: '/tools/dev/og-preview', icon: '🖼️', name: 'OG 미리보기 시뮬레이터', desc: '카카오톡·페이스북·X·LinkedIn·Slack에서 공유될 때의 카드를 한 화면에. 메타태그 검증 + 코드 생성 + 카카오톡 캐시 가이드.', badge: 'new' },
+      { href: '/tools/dev/keyboard-layout', icon: '⌨️', name: '한영타 변환기', desc: '한영키 안 누르고 친 오타 복원 (dkssud → 안녕). 영문↔한글 양방향 + 겹받침·겹모음 처리.', badge: 'new' },
+      { href: '/tools/dev/jwt', icon: '🔑', name: 'JWT 디코더', desc: 'JWT header·payload 클레임 표시 + exp·iat·nbf KST 환산·만료 여부. 서명 검증은 안 함, 전부 브라우저 처리.', badge: 'new' },
+      { href: '/tools/dev/cron', icon: '⏱️', name: 'Cron 표현식 생성기·해석기', desc: '크론 표현식을 한국어로 해석하고 다음 실행 시각을 KST로 계산. 빌더·프리셋·요일/월 별칭 지원.', badge: 'new' },
     ],
   },
 ]
