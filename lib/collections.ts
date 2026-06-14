@@ -72,7 +72,7 @@ export const COLLECTIONS: Collection[] = [
     seasonMonths: [1, 2, 9, 10],
     steps: [
       { title: '상차림·인원', note: '참석 인원에 맞춰 상차림 양과 장보기 분량을 가늠하세요.', toolHrefs: ['/tools/cooking/holiday-table', '/tools/cooking/serving', '/tools/cooking/kimjang'] },
-      { title: '날짜·일정', note: '설·추석은 음력 기준이라 해마다 양력 날짜가 달라집니다. D-day로 남은 날도 세어보세요.', toolHrefs: ['/tools/date/lunar', '/tools/date/dday'] },
+      { title: '날짜·일정', note: '설·추석은 음력 기준이라 해마다 양력 날짜가 달라집니다. D-day로 남은 날을 세고, 연차를 붙여 명절 연휴를 길게 늘려보세요.', toolHrefs: ['/tools/date/lunar', '/tools/date/dday', '/tools/date/holiday-bridge'] },
       { title: '비용 정산', note: '차례 비용이나 가족 여행비는 더치페이로 깔끔하게 나누면 뒤탈이 없습니다.', toolHrefs: ['/tools/life/dutch'] },
     ],
   },

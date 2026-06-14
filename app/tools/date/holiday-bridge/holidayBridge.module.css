@@ -1,0 +1,332 @@
+/* 징검다리 연휴 플래너 — 토큰만 사용, 신규 hex 금지 */
+
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── 입력 카드 ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cardLabel {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.field { display: flex; flex-direction: column; gap: 8px; }
+.fieldLabel {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.fieldHint { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+/* 숫자·텍스트 입력 */
+.numInput, .dateInput {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 16px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dateInput { font-family: 'Noto Sans KR', sans-serif; }
+.numInput:focus, .dateInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* ── 세그먼트 ── */
+.segment {
+  display: flex;
+  gap: 4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  flex-wrap: wrap;
+}
+.segBtn {
+  flex: 1 1 auto;
+  min-width: 56px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 6px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+@media (hover: hover) { .segBtn:hover { color: var(--text); } }
+.segBtnActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 토글 ── */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
+.toggleText { display: flex; flex-direction: column; gap: 2px; }
+.toggleLabel { font-size: 13px; color: var(--text); font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+.toggleHint { font-size: 11px; color: var(--muted); }
+.switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  padding: 0;
+}
+.switchOn { background: var(--accent-strong); border-color: var(--accent-strong); }
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.switchOn .knob { transform: translateX(18px); }
+
+/* 회사휴일 칩 */
+.chipRow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.chipX {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+.addRow { display: flex; gap: 8px; align-items: stretch; }
+.addBtn {
+  flex: 0 0 auto;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+}
+.addBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── 히어로 ── */
+.hero {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.heroTop { font-size: 13px; color: var(--muted); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.heroNum {
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent-ink);
+  letter-spacing: -2px;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 4px; letter-spacing: 0; }
+.heroSub {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.heroSub strong { color: var(--text); font-weight: 700; }
+.heroEmpty { font-size: 15px; color: var(--muted); padding: 8px 0; }
+
+/* ── 플랜 카드 ── */
+.sectionTitle {
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 4px 0 2px;
+}
+.sectionHint { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.6; }
+.planList { display: flex; flex-direction: column; gap: 10px; }
+.planCard {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.planCardActive { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim); }
+.planTop { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.planRange { font-size: 15px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.planRank {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-radius: 999px;
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+}
+.planMeta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
+.planMeta strong { color: var(--text); font-weight: 700; }
+.planMeta .big { color: var(--accent-ink); font-weight: 800; font-size: 14px; }
+.leaveChips { display: flex; flex-wrap: wrap; gap: 6px; }
+.leaveChip {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent-dim);
+  border-radius: 8px;
+  padding: 4px 9px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.planActions { display: flex; gap: 8px; flex-wrap: wrap; }
+.ghostBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+}
+@media (hover: hover) { .ghostBtn:hover { border-color: var(--accent); } }
+
+/* ── 공짜 연휴 ── */
+.freeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+.freeCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.freeDays { font-size: 18px; font-weight: 800; color: var(--success); font-family: 'Inter', sans-serif; }
+.freeDays span { font-size: 12px; font-weight: 600; }
+.freeName { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 2px; font-family: 'Noto Sans KR', sans-serif; }
+.freeRange { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── 캘린더 ── */
+.calWrap { display: flex; flex-direction: column; gap: 12px; }
+.calMonths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  gap: 14px;
+  min-width: 660px;
+}
+@media (max-width: 720px) { .calMonths { grid-template-columns: repeat(2, minmax(200px, 1fr)); min-width: 440px; } }
+.calMonth { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.calMonthTitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.calGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.calDow { font-size: 10px; color: var(--muted); text-align: center; padding: 2px 0; font-weight: 600; }
+.calCell {
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 0;
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  line-height: 1.2;
+}
+.calHoliday { color: var(--danger); font-weight: 700; }
+.calWeekend { color: var(--muted); }
+.calLeave { background: var(--accent-strong); color: #fff; font-weight: 800; }
+.calNatural { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
+.calEmpty { visibility: hidden; }
+.calLegend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--muted); }
+.legendItem { display: inline-flex; align-items: center; gap: 5px; }
+.legendDot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: 0 0 auto; }
+
+/* ── 토스트 ── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 999px;
+  z-index: 50;
+  font-family: 'Noto Sans KR', sans-serif;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* ── 잔여 연차 ── */
+.remainBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.remainBar strong { color: var(--accent-ink); font-weight: 800; }
