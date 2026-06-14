@@ -130,7 +130,7 @@ export const COLLECTIONS: Collection[] = [
     steps: [
       { title: '내 몸 기준 알기', note: '기초대사량과 BMI로 현재 상태와 하루 권장 열량을 먼저 파악하세요.', toolHrefs: ['/tools/health/bmr', '/tools/health/bmi'] },
       { title: '근력 운동', note: '1RM(최대 중량)을 추정해 무게와 반복수를 안전하게 설계하고, 3대 측정으로 내 근력 레벨이 어디쯤인지 확인하세요.', toolHrefs: ['/tools/sports/one-rm', '/tools/sports/strength-level'] },
-      { title: '러닝·유산소', note: '이지 페이스(LSD)로 토대를 쌓고, 빌드업·인터벌로 강도를 올리고, 목표 기록과 심폐능력(VO2max)을 예측하세요.', toolHrefs: ['/tools/sports/pace', '/tools/sports/lsd', '/tools/sports/buildup', '/tools/sports/interval-training', '/tools/sports/race-predictor', '/tools/sports/vo2max'] },
+      { title: '러닝·유산소', note: '이지 페이스(LSD)로 토대를 쌓고, 빌드업·인터벌로 강도를 올리고, 목표 기록과 심폐능력(VO2max)을 예측하세요. 수영이라면 100m 페이스와 SWOLF로 효율을 점검하세요.', toolHrefs: ['/tools/sports/pace', '/tools/sports/lsd', '/tools/sports/buildup', '/tools/sports/interval-training', '/tools/sports/race-predictor', '/tools/sports/vo2max', '/tools/sports/swim-pace'] },
       { title: '회복·컨디셔닝', note: '운동만큼 회복도 실력입니다. 쌓인 수면 부채를 확인하고, 카페인은 취침을 방해하지 않게 섭취 타이밍을 조절하세요.', toolHrefs: ['/tools/health/sleep-debt', '/tools/health/caffeine'] },
     ],
   },
@@ -259,7 +259,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#475569',
     steps: [
       { title: '사기 전 비용 점검', note: '유류·보험·세금·감가까지 더한 연간 유지비, 취득세·자동차세, 할부 이자를 미리 계산해 예산을 잡으세요.', toolHrefs: ['/tools/finance/car-cost', '/tools/finance/car-tax', '/tools/finance/installment'] },
-      { title: '출고 후 관리', note: '연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요.', toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity'] },
+      { title: '출고 후 관리', note: '연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요. 선팅은 합산 투과율이 법규(앞 70%·옆 40%) 안에 드는지 확인하세요.', toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity', '/tools/unit/window-tint'] },
     ],
   },
   {

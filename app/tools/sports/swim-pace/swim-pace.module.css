@@ -1,0 +1,221 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px; box-sizing: border-box;
+}
+.cardLabel {
+  display: block; font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+}
+.cardDesc { font-size: 13px; color: var(--muted); line-height: 1.7; margin: -4px 0 14px; }
+
+/* ── 풀 길이 토글 ── */
+.poolToggle {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px 16px;
+}
+.poolLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.poolBtns { display: flex; gap: 8px; flex-wrap: wrap; }
+.poolBtn {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 16px; font-size: 13px; color: var(--muted); cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}@media (hover: hover) {
+  .poolBtn:hover { border-color: var(--border-hover); color: var(--text); }
+}
+.poolBtnActive {
+  background: var(--accent-dim); border-color: var(--accent); color: var(--accent-ink);
+  font-weight: 700;
+}
+
+/* ── 거리 × 왕복수 ── */
+.distGrid, .swolfRow, .soRow {
+  display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
+}
+.field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 120px; }
+.fieldHint { font-size: 11px; color: var(--muted); }
+.eqSign {
+  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--accent); padding-bottom: 14px;
+}
+.inputBox {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0 14px; min-height: 50px; box-sizing: border-box;
+}
+.amountInput {
+  flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 20px; font-weight: 700;
+  color: var(--text); padding: 12px 0; letter-spacing: -0.5px;
+}
+.amountInput::placeholder { color: var(--muted); font-weight: 400; }
+.inputUnit { font-size: 13px; color: var(--muted); flex-shrink: 0; }
+
+.quickDist, .strokeRow {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border);
+}
+.strokeRow { margin-top: 0; padding-top: 0; border-top: none; margin-bottom: 14px; }
+
+/* ── 칩 ── */
+.chip {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 999px;
+  padding: 8px 14px; font-size: 13px; color: var(--muted); cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 600; transition: all 0.15s;
+}@media (hover: hover) {
+  .chip:hover { border-color: var(--accent); color: var(--accent-ink); }
+}
+.chipActive {
+  background: var(--accent-dim); border-color: var(--accent);
+  color: var(--accent-ink); font-weight: 700;
+}
+
+/* ── 페이스 입력 ── */
+.paceRow { display: flex; align-items: center; gap: 8px; }
+.paceInput {
+  width: 80px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 10px; font-size: 26px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); outline: none; text-align: center; box-sizing: border-box;
+}
+.paceInput:focus { border-color: var(--accent); }
+.paceInput::placeholder { color: var(--muted); font-weight: 400; }
+.paceSep { font-size: 28px; font-weight: 700; color: var(--muted); }
+.paceUnit { font-size: 14px; color: var(--muted); margin-left: 4px; }
+
+.quickRow {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border);
+}
+.quickLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── 히어로 ── */
+.heroCard {
+  background: var(--bg2); border: 1px solid var(--accent);
+  border-radius: 14px; padding: 22px 24px; text-align: center;
+}
+.heroSwitch {
+  display: inline-flex; gap: 4px; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px;
+  margin-bottom: 14px;
+}
+.heroSwitchBtn {
+  border: none; background: transparent; border-radius: 999px;
+  padding: 7px 16px; font-size: 12px; color: var(--muted); cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 600; transition: all 0.15s;
+}
+.heroSwitchActive { background: var(--accent-strong); color: #fff; }
+.hero { line-height: 1.05; }
+.heroNum {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px); font-weight: 800;
+  color: var(--accent); letter-spacing: -2px;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+/* ── 총기록 → 페이스 역산 ── */
+.timeRow { display: flex; gap: 10px; }
+.timeField { display: flex; flex-direction: column; gap: 6px; align-items: center; flex: 1; }
+.timeInput {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 8px; font-size: 22px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); outline: none; text-align: center;
+}
+.timeInput:focus { border-color: var(--accent); }
+.timeInput::placeholder { color: var(--muted); font-weight: 400; }
+.timeLabel { font-size: 12px; color: var(--muted); }
+.revealRow {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);
+}
+.revealLabel { font-size: 12px; color: var(--muted); }
+.revealVal {
+  font-family: 'Inter', system-ui, sans-serif; font-size: 24px; font-weight: 800;
+  color: var(--accent); letter-spacing: -1px;
+}
+.revealUnit { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 4px; }
+.applyBtn {
+  margin-left: auto; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--accent-ink);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; transition: all 0.15s;
+}@media (hover: hover) {
+  .applyBtn:hover { border-color: var(--accent); }
+}
+
+/* ── 정보 2칸 ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.infoCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; text-align: center;
+}
+.infoLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.infoVal { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.infoUnit { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 4px; }
+
+/* ── 거리별 예상기록 표 ── */
+.tableScroll { border-radius: 10px; }
+.predTable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.predTable th {
+  padding: 9px 12px; text-align: left; color: var(--muted);
+  font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
+}
+.predTable td { padding: 11px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.predTable tr:last-child td { border-bottom: none; }
+.tdLabel { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
+.tdVal {
+  text-align: right; font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800; color: var(--accent); font-size: 15px;
+}
+.tdSub { text-align: right; font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 13px; }
+.tableNote { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
+
+/* ── SWOLF ── */
+.swolfResult {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);
+}
+.swolfScore { font-family: 'Inter', system-ui, sans-serif; font-size: 36px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.swolfDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ── send-off ── */
+.paceRowSm {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0 12px; min-height: 50px; box-sizing: border-box; justify-content: center;
+}
+.paceInputSm {
+  width: 52px; background: transparent; border: none; outline: none;
+  font-size: 20px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  color: var(--text); text-align: center;
+}
+.paceInputSm::placeholder { color: var(--muted); font-weight: 400; }
+.paceSepSm { font-size: 20px; font-weight: 700; color: var(--muted); }
+.soResult {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);
+}
+.soLabel { font-size: 12px; color: var(--muted); }
+.soVal { font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.soSub { font-size: 12px; color: var(--muted); }
+
+/* ── 복사 ── */
+.copyBtn {
+  width: 100%; background: var(--accent-strong); color: #fff; border: none;
+  padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+}@media (hover: hover) {
+  .copyBtn:hover { opacity: 0.88; }
+}
+.copyBtnDone { background: var(--success); }
+
+@media (max-width: 480px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .applyBtn { margin-left: 0; }
+}
