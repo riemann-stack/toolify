@@ -1,0 +1,319 @@
+/* @hover-wrapped */
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* 입력 */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.fieldLabel { font-size: 12px; color: var(--muted); font-weight: 600; }
+.input,
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  outline: none;
+}
+.input:focus,
+.select:focus { border-color: var(--accent); }
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.input[type="date"] { font-family: 'Noto Sans KR', sans-serif; }
+.select { font-family: 'Noto Sans KR', sans-serif; cursor: pointer; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+
+/* 토글 (임금 입력 방식) */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+}
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px;
+}
+@media (hover: hover) {
+  .tab:hover { background: var(--bg3); color: var(--text); }
+}
+.tabActive { background: var(--accent-strong); color: #ffffff; }
+
+/* 체크 토글 (장애인·사유) */
+.checkRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+.checkRow input { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.checkLabel { font-size: 13px; color: var(--text); font-weight: 600; line-height: 1.5; }
+.checkDesc { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; line-height: 1.6; }
+
+/* 월별 카드 (상세 모드) */
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.monthCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.monthLabel {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.monthCard .input { padding: 8px 10px; font-size: 14px; }
+
+/* 히어로 — 주 결과 */
+.hero {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.10) 0%, rgba(3, 105, 161, 0.06) 100%);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+.heroValue {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px);
+  font-weight: 800;
+  color: var(--accent-ink);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 4px; }
+.heroSub { font-size: 13px; color: var(--muted); margin: 12px 0 0; line-height: 1.7; }
+.heroSub strong { color: var(--text); }
+
+/* 배지 */
+.badgeRow { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.badgeUpper { background: rgba(217, 119, 6, 0.12); color: var(--warning); border: 1px solid rgba(217, 119, 6, 0.35); }
+.badgeLower { background: rgba(3, 105, 161, 0.12); color: var(--accent-ink); border: 1px solid rgba(3, 105, 161, 0.3); }
+.badgeWage { background: rgba(220, 38, 38, 0.10); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.3); }
+
+/* 결과 요약 그리드 */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.statCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.statLabel { font-size: 12px; color: var(--muted); margin: 0 0 6px; line-height: 1.5; }
+.statValue {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.statValue .unit { font-size: 13px; font-weight: 700; color: var(--muted); margin-left: 3px; }
+.statSub { margin: 4px 0 0; font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* 도움말 */
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.cellAccent { color: var(--accent-ink); }
+
+.tipBox {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.75;
+}
+.tipBox strong { color: var(--accent-ink); }
+
+/* 상세표 */
+.detailTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detailTable th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--bg3);
+}
+.detailTable td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.detailTable td:nth-child(n+2) {
+  text-align: right;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.detailTable tr:last-child td { border-bottom: none; }
+.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+
+/* 소정급여일수 표 — 현재 셀/행 하이라이트 */
+.daysTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 520px; }
+.daysTable th, .daysTable td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.daysTable thead th {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: var(--bg3);
+}
+.daysTable tbody th {
+  text-align: left;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg3);
+}
+.daysTable td {
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.daysTable tr:last-child td, .daysTable tr:last-child th { border-bottom: none; }
+.rowActive { background: rgba(5, 150, 105, 0.05); }
+.cellActive {
+  background: var(--accent-strong);
+  color: #ffffff !important;
+  font-weight: 800;
+  border-radius: 4px;
+}
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* 안내·경고 */
+.noteCard {
+  background: rgba(3, 105, 161, 0.05);
+  border: 1px solid rgba(3, 105, 161, 0.22);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+}
+.noteCard strong { display: block; color: var(--accent-ink); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.noteCard p { margin: 0; color: var(--muted); line-height: 1.75; }
+.noteCard p strong { display: inline; color: var(--text); margin: 0; }
+
+.warnCard {
+  background: rgba(217, 119, 6, 0.06);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+}
+.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard p { margin: 0; color: var(--muted); line-height: 1.75; }
+.warnCard p strong { display: inline; color: var(--text); margin: 0; }
+
+/* 초기화 버튼 */
+.resetBtn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+@media (hover: hover) {
+  .resetBtn:hover { border-color: var(--accent); }
+}
+
+/* 크로스링크 */
+.crossLink {
+  display: block;
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+@media (hover: hover) {
+  .crossLink:hover { border-color: var(--accent); color: var(--accent-ink); }
+}
+
+/* iOS zoom 방지 */
+@media (max-width: 640px) {
+  .input, .select { font-size: 16px; min-height: 48px; }
+}

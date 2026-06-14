@@ -40,6 +40,8 @@ export const categories: Category[] = [
       { href: '/tools/finance/wealth-rank', icon: '🏆', name: '자산 순위 계산기', desc: '내 순자산이 상위 몇 %? 전국·시도·연령대·세계 기준 + 상위 10%·1% 진입선. 2025 가계금융복지조사·UBS 기반.', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 비용 계산기', desc: '낙찰가 + 취득세·명도·체납·수리·대출까지 진짜 들어가는 비용을 시나리오별로.', badge: 'new' },
       { href: '/tools/finance/severance', icon: '💼', name: '퇴직금 실수령액 계산기', desc: '입사·퇴사일과 3개월 급여로 퇴직금·퇴직소득세·실수령 자동. DB/DC/IRP 4모드.', badge: 'new' },
+      { href: '/tools/finance/unemployment-benefit', icon: '🪂', name: '실업급여 계산기', desc: '퇴직 전 3개월 급여·나이·고용보험 가입기간으로 2026 구직급여 1일액·소정급여일수·총수급액. 상한 68,100·하한 66,048원.', badge: 'new' },
+      { href: '/tools/finance/national-pension', icon: '🧓', name: '국민연금 예상 수령액 계산기', desc: '가입기간·평균소득·생년으로 노령연금 월 예상액 추정 + 조기수령 감액·연기연금 가산·부양가족연금. 2026 A값 기준.', badge: 'new' },
       { href: '/tools/finance/freelance-tax', icon: '💼', name: '프리랜서 종합소득세 계산기', desc: '업종별 단순경비율·8단계 누진세 자동 + 노란우산·연금 절세 시나리오 5종 비교.', badge: 'new' },
       { href: '/tools/finance/rent-jeonse', icon: '🏠', name: '월세·전세 비교 계산기', desc: '전세·월세·반전세 3옵션 동시 비교. 대출이자·기회비용·세액공제 반영한 손익분기.', badge: 'new' },
       { href: '/tools/finance/gold-converter', icon: '🪙', name: '금 단위·가격 계산기', desc: '돈·g·트로이온스·푼·냥 9단위 + 14K/18K/24K 환산. 시세 기반 실거래가까지.', badge: 'new' },
