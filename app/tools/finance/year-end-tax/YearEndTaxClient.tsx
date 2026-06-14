@@ -9,6 +9,9 @@ import {
   STANDARD_TAX_CREDIT,
   RENT_GROSS_CAP,
   PENSION_CREDIT_GROSS_CUT,
+  PENSION_CREDIT_RATE_HIGH,
+  PENSION_CREDIT_RATE_LOW,
+  MEDICAL_FLOOR_RATE,
   type YearEndInput,
 } from '@/lib/krYearEndTax'
 import s from './yearEndTax.module.css'
@@ -208,7 +211,7 @@ export default function YearEndTaxClient() {
   const psEligible = Math.min(parseAmount(pensionSavings), PENSION_SAVINGS_LIMIT)
   const pensionCurrent = Math.min(psEligible + parseAmount(irp), PENSION_TOTAL_LIMIT)
   const pensionHeadroom = Math.max(0, PENSION_TOTAL_LIMIT - pensionCurrent)
-  const pensionRate = grossN <= PENSION_CREDIT_GROSS_CUT ? 0.15 : 0.12
+  const pensionRate = grossN <= PENSION_CREDIT_GROSS_CUT ? PENSION_CREDIT_RATE_HIGH : PENSION_CREDIT_RATE_LOW
   const pensionExtraRefund = Math.round(pensionHeadroom * pensionRate)
 
   /* 복사 요약 */
@@ -549,7 +552,7 @@ export default function YearEndTaxClient() {
         </summary>
         <div className={s.groupBody}>
           <p className={s.groupNote}>의료비는 총급여 <strong>3% 초과분</strong>만 공제(공제율 15%) · 교육비·기부금 공제율 15%(기부금 1천만 초과분 30%).</p>
-          {amountInput('yet-medical', '의료비', medical, setMedical, '0', <>총급여 3%(약 {manwon(grossN * 0.03)}만원) 넘는 분부터 공제</>)}
+          {amountInput('yet-medical', '의료비', medical, setMedical, '0', <>총급여 3%(약 {manwon(grossN * MEDICAL_FLOOR_RATE)}만원) 넘는 분부터 공제</>)}
           {amountInput('yet-education', '교육비', education, setEducation)}
           {amountInput('yet-donation', '기부금', donation, setDonation)}
         </div>

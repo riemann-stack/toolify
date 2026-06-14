@@ -72,7 +72,7 @@ const FAQ_LD = [
   },
   {
     q: '1년 안에 팔면 양도세율이 얼마인가요?',
-    a: '주택·조합원입주권을 <strong>보유 1년 미만</strong>에 팔면 단기 중과로 세율 <strong>70%</strong>, <strong>1년 이상 2년 미만</strong>이면 <strong>60%</strong>가 적용됩니다. 분양권도 단기 보유 시 중과됩니다. 2년 이상 보유해야 6~45% 기본 누진세율이 적용되고, 비과세·장기보유특별공제도 보유 2년 이상부터 따질 수 있습니다. 단기 매도는 세 부담이 매우 크므로 보유기간 관리가 중요합니다.',
+    a: '주택·조합원입주권을 <strong>보유 1년 미만</strong>에 팔면 단기 중과로 세율 <strong>70%</strong>, <strong>1년 이상 2년 미만</strong>이면 <strong>60%</strong>가 적용됩니다. 분양권도 단기 보유 시 중과됩니다. 만 2년 이상 보유해야 6~45% 기본 누진세율과 비과세 자격이 적용되고, 장기보유특별공제는 보유 3년(거주분 특례는 거주 2년)부터 따질 수 있습니다. 단기 매도는 세 부담이 매우 크므로 보유기간 관리가 중요합니다.',
   },
   {
     q: '양도소득 기본공제 250만원은 매년 받나요?',
@@ -192,7 +192,7 @@ export default function CapitalGainsTaxPage() {
         <div>
           <h2 style={sectionTitle}>단기 보유 중과세율과 기본세율</h2>
           <p style={para}>
-            보유기간이 짧으면 세율이 크게 올라갑니다. 주택·조합원입주권을 <strong style={strong}>1년 미만</strong> 보유 후 팔면 <strong style={strong}>70%</strong>, <strong style={strong}>1년 이상 2년 미만</strong>이면 <strong style={strong}>60%</strong>가 적용됩니다. 2년 이상 보유해야 아래 6~45% 기본 누진세율로 과세되고, 비과세·장기보유특별공제도 이때부터 의미가 있습니다.
+            보유기간이 짧으면 세율이 크게 올라갑니다. 주택·조합원입주권을 <strong style={strong}>1년 미만</strong> 보유 후 팔면 <strong style={strong}>70%</strong>, <strong style={strong}>1년 이상 2년 미만</strong>이면 <strong style={strong}>60%</strong>가 적용됩니다. 만 2년 이상 보유해야 아래 6~45% 기본 누진세율로 과세되고 비과세 자격이 생기며, 장기보유특별공제는 보유 3년부터(거주분 특례는 거주 2년부터) 의미가 있습니다.
           </p>
           <div style={tableWrap}>
             <table style={table}>

@@ -47,13 +47,18 @@ function isValidIso(iso: string): boolean {
   const d = parseIso(iso)
   return !Number.isNaN(d.getTime())
 }
-/** 보유기간(년) = (양도일 − 취득일) 일수 / 365.25. 음수면 0 */
-function holdYearsOf(acquireIso: string, saleIso: string): number {
-  if (!isValidIso(acquireIso) || !isValidIso(saleIso)) return 0
-  const ms = parseIso(saleIso).getTime() - parseIso(acquireIso).getTime()
-  if (ms <= 0) return 0
-  const days = Math.floor(ms / 86_400_000)
-  return days / 365.25
+/** 보유기간 = 달력 기준 만(滿) 연·월. 양도세는 취득일의 N년 후 같은 날에 만 N년이 되는
+ *  '생일 계산식'을 쓰므로, 일수/365.25(윤년 미포함 시 만 1·2년이 경계 미달로 떨어짐)이 아니라
+ *  연·월·일 분해로 산정한다. years(만 연수)가 단기세율·비과세·장특공 경계 판정의 기준. */
+function holdPeriod(acquireIso: string, saleIso: string): { years: number; months: number } {
+  if (!isValidIso(acquireIso) || !isValidIso(saleIso)) return { years: 0, months: 0 }
+  const a = parseIso(acquireIso)
+  const s = parseIso(saleIso)
+  if (s.getTime() <= a.getTime()) return { years: 0, months: 0 }
+  let total = (s.getFullYear() - a.getFullYear()) * 12 + (s.getMonth() - a.getMonth())
+  if (s.getDate() < a.getDate()) total -= 1 // 일(day)이 덜 찼으면 직전 달까지만 만(滿)으로 인정
+  total = Math.max(0, total)
+  return { years: Math.floor(total / 12), months: total % 12 }
 }
 function fmtPct(rate: number): string {
   return `${(Math.round(rate * 1000) / 10).toLocaleString('ko-KR')}%`
@@ -124,7 +129,8 @@ export default function CapitalGainsClient() {
   const isPresale = propertyType === 'presale'
 
   const datesValid = isValidIso(acquireDate) && isValidIso(saleDate) && parseIso(saleDate).getTime() > parseIso(acquireDate).getTime()
-  const holdYears = useMemo(() => holdYearsOf(acquireDate, saleDate), [acquireDate, saleDate])
+  const period = useMemo(() => holdPeriod(acquireDate, saleDate), [acquireDate, saleDate])
+  const holdYears = period.years // 만 연수 — calc 경계 판정 기준
 
   /* 1세대1주택·거주는 주택일 때만 의미 — 분양권이면 강제 false 전달 */
   const effOneHouse = !isPresale && oneHouse
@@ -150,17 +156,15 @@ export default function CapitalGainsClient() {
   const hasInputs = saleN > 0 && acquireN > 0 && datesValid
   const noGain = hasInputs && result.totalGain <= 0
 
-  /* 적용세율 표기: 단기면 70/60%, 2년 이상이면 한계세율(과표 구간) */
-  const displayRate = result.shortTerm
-    ? result.appliedRate
-    : marginalRate(result.taxBase)
+  /* 적용세율 표기: 단기면 70/60%(리터럴), 2년 이상이면 한계세율(과표 구간) */
+  const displayRate = marginalRate(result.taxBase)
   const rateLabel = result.shortTerm === 'under1'
     ? `${fmtPct(CG_SHORT_UNDER1_RATE)} (1년 미만 단기 중과)`
     : result.shortTerm === 'under2'
       ? `${fmtPct(CG_SHORT_UNDER2_RATE)} (2년 미만 단기 중과)`
       : `${fmtPct(displayRate)} (한계세율)`
 
-  const holdYearsLabel = holdYears > 0 ? `${holdYears.toFixed(2)}년` : '—'
+  const holdYearsLabel = period.years > 0 || period.months > 0 ? `만 ${period.years}년 ${period.months}개월` : '—'
 
   /* 복사 요약 */
   const summary = useMemo(() => {
@@ -267,8 +271,8 @@ export default function CapitalGainsClient() {
         </div>
         <p className={s.holdInfo}>
           {datesValid ? (
-            <>보유기간 <strong>{holdYearsLabel}</strong> (취득일·양도일로 자동 산출 · 일수÷365.25)
-              {holdYears < 2 && <> · <span style={{ color: 'var(--danger)' }}>2년 미만 → 단기 중과세율 적용</span></>}
+            <>보유기간 <strong>{holdYearsLabel}</strong> (취득일·양도일로 자동 산출 · 달력 만 연수 기준)
+              {holdYears < 2 && <> · <span style={{ color: 'var(--danger)' }}>만 2년 미만 → 단기 중과세율 적용</span></>}
             </>
           ) : (
             <span style={{ color: 'var(--warning)' }}>양도일이 취득일보다 늦어야 합니다.</span>

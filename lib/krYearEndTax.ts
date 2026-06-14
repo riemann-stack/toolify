@@ -31,6 +31,8 @@ export const RENT_RATE_LOW = 0.17 // 총급여 5,500만↓
 export const RENT_RATE_HIGH = 0.15 // 5,500만~8,000만
 export const RENT_GROSS_CAP = 80_000_000 // 월세 세액공제 총급여 상한
 export const PENSION_CREDIT_GROSS_CUT = 55_000_000 // 연금/월세 고율 적용 총급여 경계
+export const PENSION_CREDIT_RATE_HIGH = 0.15 // 총급여 5,500만↓ 연금계좌 세액공제율
+export const PENSION_CREDIT_RATE_LOW = 0.12 // 총급여 5,500만↑
 export const LOCAL_TAX_RATE = 0.1 // 지방소득세 10%
 
 /** 자녀세액공제(8~20세): 1명 25만·2명 55만·3명↑ 55만+40만/추가 */
@@ -147,7 +149,7 @@ export function calcYearEnd(input: YearEndInput): YearEndResult {
   // 연금계좌
   const ps = Math.min(Math.max(0, input.pensionSavings), PENSION_SAVINGS_LIMIT)
   const pensionEligible = Math.min(ps + Math.max(0, input.irp), PENSION_TOTAL_LIMIT)
-  const pensionRate = gross <= PENSION_CREDIT_GROSS_CUT ? 0.15 : 0.12
+  const pensionRate = gross <= PENSION_CREDIT_GROSS_CUT ? PENSION_CREDIT_RATE_HIGH : PENSION_CREDIT_RATE_LOW
   const pensionAccountCredit = Math.round(pensionEligible * pensionRate)
 
   // 특별세액공제

@@ -183,10 +183,13 @@ export interface HoldingTaxResult {
 }
 
 export function calcHoldingTax(input: HoldingTaxInput): HoldingTaxResult {
-  const property = calcPropertyTax(input.publicPrice, input.oneHouse, input.urbanArea)
+  // 1세대1주택 혜택(재산세 특례·종부세 12억 공제·세액공제)은 보유주택 1채일 때만 유효.
+  // 모순 입력(oneHouse=true & houses>=2) 방어를 위해 단일 진입점에서 정규화.
+  const oneHouse = input.oneHouse && input.houses === 1
+  const property = calcPropertyTax(input.publicPrice, oneHouse, input.urbanArea)
   // 중복공제 약식 산정에는 재산세 '표준세율' 본세를 사용(특례세율과 무관하게 표준 기준)
   const stdBase = marginalTax(property.taxBase, PROP_STD_BANDS)
-  const comp = calcCompTax(input.publicPrice, input.houses, input.oneHouse, input.holdYears, input.age, stdBase)
+  const comp = calcCompTax(input.publicPrice, input.houses, oneHouse, input.holdYears, input.age, stdBase)
   const total = property.total + comp.total
   const effectiveRate = input.publicPrice > 0 ? total / input.publicPrice : 0
   return { property, comp, total, effectiveRate, monthly: Math.round(total / 12) }
