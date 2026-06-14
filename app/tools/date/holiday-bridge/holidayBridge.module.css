@@ -1,6 +1,6 @@
 /* 징검다리 연휴 플래너 — 토큰만 사용, 신규 hex 금지 */
 
-.wrap { display: flex; flex-direction: column; gap: 14px; }
+.wrap { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
 
 /* ── 입력 카드 ── */
 .card {

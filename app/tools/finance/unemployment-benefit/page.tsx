@@ -255,10 +255,9 @@ export default function UnemploymentBenefitPage() {
           </p>
         </div>
 
-        {/* ── 면책 (하단 단일 배치, 펼침) ── */}
+        {/* ── 면책 (하단 단일 배치) ── */}
         <Disclaimer
           variant="finance"
-          open
           sources={[
             { label: '고용노동부(moel.go.kr)', href: 'https://www.moel.go.kr/' },
             { label: '고용보험(ei.go.kr)', href: 'https://www.ei.go.kr/' },

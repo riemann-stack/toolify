@@ -113,7 +113,6 @@ export default function NationalPensionPage() {
 
       <Disclaimer
         variant="finance"
-        open
         sources={[{ label: '국민연금공단(nps.or.kr)', href: 'https://www.nps.or.kr/' }]}
       >
         본 계산기는 국민연금공단 간단계산 산식(1.29×(A+B)×지급률)을 단순화한 추정값입니다. 실제 연금액은 가입연도별 재평가율·소득대체율·비례상수 가중과 기준소득월액 이력에 따라 달라지며, 수급 자격(최소 가입 10년)·정확한 금액은 「내 곁에 국민연금」 앱 또는 국민연금공단(1355)에서 확인하세요. 수급 가능 여부를 단정하지 않습니다.

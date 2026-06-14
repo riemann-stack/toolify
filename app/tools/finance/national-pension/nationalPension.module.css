@@ -1,5 +1,5 @@
 /* @hover-wrapped */
-.wrap { display: flex; flex-direction: column; gap: 14px; }
+.wrap { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
 
 .card {
   background: var(--bg2);

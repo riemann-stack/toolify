@@ -94,7 +94,6 @@ export default function ChildHeightPage() {
 
       <Disclaimer
         variant="medical"
-        open
         sources={[
           { label: 'Tanner et al., 중간부모키 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5440182/' },
           { label: '질병관리청 소아청소년 성장도표', href: 'https://knhanes.kdca.go.kr/' },
