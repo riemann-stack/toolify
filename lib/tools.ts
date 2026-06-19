@@ -121,6 +121,7 @@ export const categories: Category[] = [
       { href: '/tools/sports/fight-weight',    icon: '🥊', name: '격투기 체급 계산기',     desc: '복싱·UFC·MMA 체급별 감량 계획과 D-day 일정 + 위험도 자동 경고.' },
       { href: '/tools/sports/baseball-stats',  icon: '⚾', name: '야구 타율 계산기',   desc: '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교.' },
       { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점 계산기',  desc: '남은 경기 시나리오로 목표 승점 달성 가능성 + 라이벌 추격 자동 계산.' },
+      { href: '/tools/sports/league-scenarios', icon: '⚽', name: '축구 순위 경우의 수 계산기', desc: '조별리그·잔여 경기 순위 경우의 수 — 자력/타력 진출 조건과 대회별 타이브레이커(월드컵·K리그·챔스 골득실·승자승).', badge: 'new' },
       { href: '/tools/sports/formation',       icon: '⚽', name: '축구 포메이션 생성기', desc: '5·7·9·11인제 22+ 포메이션 + 명단 칩 입력으로 그라운드 위에 시각화. PNG 다운로드.', badge: 'new' },
       { href: '/tools/sports/pace',            icon: '🏃', name: '러닝 페이스 계산기',     desc: '페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 5km·10km·하프·풀 스플릿.' },
       { href: '/tools/sports/race-predictor',  icon: '🏅', name: '마라톤 기록 계산기', desc: '5km·10km·하프 기록으로 풀코스 예상 시간 + 기온·고도·연령 자동 보정.', badge: 'hot' },
