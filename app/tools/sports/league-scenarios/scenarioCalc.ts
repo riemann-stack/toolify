@@ -30,6 +30,9 @@ export const teamPoints = (t: Pick<Team, 'win' | 'draw'>) => t.win * 3 + t.draw
 export const teamPlayed = (t: Team) => t.win + t.draw + t.loss
 export const teamGD = (t: Team) => t.gf - t.ga
 
+/** 두 팀의 순서무관 키 (맞대결 중복·완전성 판정용) */
+const pairKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`)
+
 /** 한 조합 적용 후 각 팀의 확정 집계 (승점·다승). 스코어 미입력이라 gf/ga는 현재값 유지. */
 interface FinalTeam {
   id: string
@@ -84,6 +87,12 @@ function headToHeadPoints(
   const known: { home: string; away: string; result: Outcome }[] = []
   for (const p of played) if (set.has(p.home) && set.has(p.away)) known.push(p)
   remaining.forEach((mt, i) => { if (set.has(mt.home) && set.has(mt.away)) known.push({ ...mt, result: combo[i] }) })
+  // ⚠️ 그룹 내 모든 팀쌍의 맞대결을 알아야 승자승 확정 가능 — 빠진 쌍이 있으면(이 그룹과 무관한
+  //    played만 입력됐거나 일부 맞대결 미입력) 0점으로 가정하지 않고 null(불확정)로 정직 처리.
+  const pairs = new Set<string>()
+  for (const k of known) pairs.add(pairKey(k.home, k.away))
+  const needed = (groupIds.length * (groupIds.length - 1)) / 2
+  if (pairs.size < needed) return null
   for (const k of known) {
     const d = applyOutcome(k.result)
     pts.set(k.home, (pts.get(k.home) ?? 0) + d.hPts)
@@ -249,11 +258,16 @@ export interface ScenarioResult {
   focusName: string
 }
 
+export const MAX_COMBO_ROWS = 300 // 표시·반환용 보유 상한 — 전수 카운트는 그대로, 17만개 배열 보유만 방지
+
 export function calcScenarios(input: ScenarioInput): ScenarioResult {
-  const { teams, remaining, competition, advance, focusId } = input
+  const { teams, competition, advance, focusId } = input
   const played = input.played ?? []
-  const hasFullPlayed = (input.played?.length ?? 0) > 0
+  const hasFullPlayed = played.length > 0
   const focusName = teams.find((t) => t.id === focusId)?.name ?? focusId
+  // 같은 팀쌍이 맞대결(played)과 잔여(remaining)에 동시 입력되면 모순 → played(실제 결과) 우선, 잔여에서 제거
+  const playedPairs = new Set(played.map((p) => pairKey(p.home, p.away)))
+  const remaining = input.remaining.filter((m) => !playedPairs.has(pairKey(m.home, m.away)))
   const n = remaining.length
   const tooMany = n > MAX_REMAINING_FULL
 
@@ -264,37 +278,38 @@ export function calcScenarios(input: ScenarioInput): ScenarioResult {
     }
   }
 
-  const combos: ComboResult[] = []
-  let advanceCount = 0; let eliminatedCount = 0; let undeterminedCount = 0
+  // focus 자신의 잔여 경기 인덱스(자력/타력 분기용)
+  const ownIdx = remaining.map((m, i) => (m.home === focusId || m.away === focusId ? i : -1)).filter((i) => i >= 0)
+  const ownMatches = ownIdx.map((i) => remaining[i])
+
+  const combos: ComboResult[] = [] // 표시용(상한 보유)
+  const ownAgg = new Map<string, { adv: number; elim: number; und: number; total: number }>()
+  let advanceCount = 0; let eliminatedCount = 0; let undeterminedCount = 0; let total = 0
   for (const combo of allCombos(n)) {
     const r = evalCombo(teams, remaining, combo, competition, advance, focusId, played, hasFullPlayed)
-    combos.push(r)
+    total++
+    if (combos.length < MAX_COMBO_ROWS) combos.push(r)
     if (r.focusStatus === 'advance') advanceCount++
     else if (r.focusStatus === 'eliminated') eliminatedCount++
     else undeterminedCount++
+    // 자력/타력 집계(전체 조합 보유 없이 누적)
+    const key = ownIdx.map((i) => combo[i]).join('|')
+    let agg = ownAgg.get(key)
+    if (!agg) { agg = { adv: 0, elim: 0, und: 0, total: 0 }; ownAgg.set(key, agg) }
+    agg.total++
+    if (r.focusStatus === 'advance') agg.adv++
+    else if (r.focusStatus === 'eliminated') agg.elim++
+    else agg.und++
   }
-  const total = combos.length || 1
 
-  // 자력/타력: focus 자신의 잔여 경기 인덱스
-  const ownIdx = remaining.map((m, i) => (m.home === focusId || m.away === focusId ? i : -1)).filter((i) => i >= 0)
-  const ownMatches = ownIdx.map((i) => remaining[i])
-  const byOwn = new Map<string, ComboResult[]>()
-  for (const c of combos) {
-    const key = ownIdx.map((i) => c.combo[i]).join('|')
-    if (!byOwn.has(key)) byOwn.set(key, [])
-    byOwn.get(key)!.push(c)
-  }
   const selfPaths: SelfPath[] = []
-  for (const [key, group] of byOwn) {
+  for (const [key, agg] of ownAgg) {
     const ownOutcomes = key === '' ? [] : (key.split('|') as Outcome[])
-    const adv = group.filter((c) => c.focusStatus === 'advance').length
-    const elim = group.filter((c) => c.focusStatus === 'eliminated').length
-    const und = group.filter((c) => c.focusStatus === 'undetermined').length
     let verdict: SelfPath['verdict']
-    if (adv === group.length) verdict = 'always_advance'
-    else if (elim === group.length) verdict = 'always_eliminated'
+    if (agg.adv === agg.total) verdict = 'always_advance'
+    else if (agg.elim === agg.total) verdict = 'always_eliminated'
     else verdict = 'depends'
-    selfPaths.push({ ownOutcomes, ownMatches, verdict, advanceCount: adv, total: group.length, undeterminedCount: und })
+    selfPaths.push({ ownOutcomes, ownMatches, verdict, advanceCount: agg.adv, total: agg.total, undeterminedCount: agg.und })
   }
   // 정렬: 항상진출 → 갈림 → 항상탈락
   const vrank = { always_advance: 0, depends: 1, always_eliminated: 2 }
@@ -302,8 +317,8 @@ export function calcScenarios(input: ScenarioInput): ScenarioResult {
   const selfAdvancePossible = selfPaths.some((p) => p.verdict === 'always_advance')
 
   return {
-    total: combos.length, advanceCount, eliminatedCount, undeterminedCount,
-    advanceProbability: advanceCount / total,
+    total, advanceCount, eliminatedCount, undeterminedCount,
+    advanceProbability: total > 0 ? advanceCount / total : 0,
     selfAdvancePossible, selfPaths, combos, tooMany: false, focusName,
   }
 }

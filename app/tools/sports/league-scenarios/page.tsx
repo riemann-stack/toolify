@@ -127,7 +127,7 @@ export default function LeagueScenariosPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { t: '자력 예시', d: '2승 한 팀이 마지막 경기를 이기면 7점으로 조 1위 확정 — 다른 경기 무관.' },
+              { t: '자력 예시', d: '2승(승점 6) 한 팀이 마지막 경기를 이기면 9점으로 조 1위 확정 — 다른 경기 무관.' },
               { t: '타력 예시', d: '우리가 이겨도 같은 승점 팀이 생겨, 그 팀이 다른 경기서 지거나 비겨야 올라가는 경우.' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>

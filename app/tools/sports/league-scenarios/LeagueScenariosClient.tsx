@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import s from './league-scenarios.module.css'
 import {
-  calcScenarios, teamPoints, teamGD, teamPlayed,
+  calcScenarios, teamPoints, teamGD,
   type Team, type Match, type Outcome, type PlayedMatch, type SelfPath,
 } from './scenarioCalc'
 import {
@@ -33,12 +33,14 @@ function makeTeam(name: string): Team {
   return { id: newId(), name, win: 0, draw: 0, loss: 0, gf: 0, ga: 0 }
 }
 
-/* 프리셋 팀 수에 맞춘 기본 순위표 (월드컵 등 4팀 예시 한국 포함, 그 외 일반 팀명) */
+/* 프리셋 팀 수에 맞춘 기본 순위표 (월드컵 등 4팀 예시 한국 포함, 그 외 일반 팀명).
+   ★ 기본 팀 id는 결정적(t0·t1…) — SSR/클라이언트 동일 보장(Date.now 기반 id의 하이드레이션 불일치 방지)
+     + teams와 focusId가 같은 id를 갖게 함(초기 focusId 유령 id 버그 방지). 사용자 추가 팀만 newId(). */
 function defaultTeams(count: number): Team[] {
   const sample = ['대한민국', '포르투갈', '우루과이', '가나']
   const arr: Team[] = []
   for (let i = 0; i < Math.min(count, 8); i++) {
-    arr.push(makeTeam(sample[i] ?? `팀 ${String.fromCharCode(65 + i)}`))
+    arr.push({ id: `t${i}`, name: sample[i] ?? `팀 ${String.fromCharCode(65 + i)}`, win: 0, draw: 0, loss: 0, gf: 0, ga: 0 })
   }
   return arr
 }
@@ -235,14 +237,18 @@ export default function LeagueScenariosClient() {
     [played],
   )
 
+  // 무거운 전수 계산(잔여 11경기=3^11)을 지연값으로 — 입력 타이핑 응답성 유지(낮은 우선순위로 재계산)
+  const dTeams = useDeferredValue(teams)
+  const dRemaining = useDeferredValue(validRemaining)
+  const dPlayed = useDeferredValue(validPlayed)
   const result = useMemo(() => calcScenarios({
-    teams,
-    remaining: validRemaining,
-    played: validPlayed.length > 0 ? validPlayed : undefined,
+    teams: dTeams,
+    remaining: dRemaining,
+    played: dPlayed.length > 0 ? dPlayed : undefined,
     competition,
-    advance: Math.max(1, Math.min(teams.length, advance)),
+    advance: Math.max(1, Math.min(dTeams.length, advance)),
     focusId,
-  }), [teams, validRemaining, validPlayed, competition, advance, focusId])
+  }), [dTeams, dRemaining, dPlayed, competition, advance, focusId])
 
   const advanceLabel = advance >= teams.length ? '잔류' : `상위 ${advance}위 진출`
 
@@ -347,7 +353,7 @@ export default function LeagueScenariosClient() {
               {teams.map((t, i) => (
                 <tr key={t.id}>
                   <td>
-                    <label htmlFor={`ls-name-${t.id}`} className="srOnly" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>팀 {i + 1} 이름</label>
+                    <label htmlFor={`ls-name-${t.id}`} style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>팀 {i + 1} 이름</label>
                     <input
                       id={`ls-name-${t.id}`}
                       className={s.teamNameInput}
@@ -405,7 +411,7 @@ export default function LeagueScenariosClient() {
               onChange={(e) => updateMatch(i, { home: e.target.value })}
               aria-label={`잔여 경기 ${i + 1} 홈팀`}
             >
-              {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              {teams.filter((t) => t.id !== m.away).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
             <span className={s.vs}>vs</span>
             <select
@@ -414,7 +420,7 @@ export default function LeagueScenariosClient() {
               onChange={(e) => updateMatch(i, { away: e.target.value })}
               aria-label={`잔여 경기 ${i + 1} 원정팀`}
             >
-              {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              {teams.filter((t) => t.id !== m.home).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
             <button type="button" className={s.rowDel} onClick={() => removeMatch(i)} aria-label={`잔여 경기 ${i + 1} 삭제`}>×</button>
           </div>
@@ -511,6 +517,11 @@ export default function LeagueScenariosClient() {
           <p className={s.noticeTitle}>잔여 경기가 너무 많습니다 (12경기 이상)</p>
           전체 경우의 수(3<sup>{validRemaining.length}</sup>가지)가 너무 커서 전수 계산이 어렵습니다.
           관심 팀과 직접 관련된 경기 위주로 잔여 경기를 줄여보세요.
+        </div>
+      ) : validRemaining.length === 0 ? (
+        <div className={s.notice}>
+          <p className={s.noticeTitle}>잔여 경기를 추가하세요</p>
+          남은 경기(홈 vs 원정)를 입력하면 {result.focusName}의 진출 경우의 수와 자력/타력 조건을 계산합니다.
         </div>
       ) : (
         <>

@@ -160,7 +160,6 @@
 .pathCond {
   font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.5; margin: 0 0 2px;
 }
-.pathCondHi { font-family: 'Inter', system-ui, sans-serif; }
 .pathVerdict { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
 .pathVerdict strong { color: var(--accent); }
 .selfTag {
